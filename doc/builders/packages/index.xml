@@ -8,7 +8,7 @@
  <xi:include href="citrix.xml" />
  <xi:include href="dlib.xml" />
  <xi:include href="eclipse.xml" />
- <xi:include href="elm.xml" />
+ <xi:include href="elm.section.xml" />
  <xi:include href="emacs.section.xml" />
  <xi:include href="firefox.section.xml" />
  <xi:include href="fish.section.xml" />
