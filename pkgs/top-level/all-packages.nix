@@ -8915,6 +8915,11 @@ in
     withSystemd = true;
   };
 
+  unbound-full = unbound.override {
+    withSystemd = true;
+    withDoH = true;
+  };
+
   unicorn = callPackage ../development/libraries/unicorn { };
 
   units = callPackage ../tools/misc/units {
