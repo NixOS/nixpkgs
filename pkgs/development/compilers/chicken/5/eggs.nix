@@ -317,5 +317,20 @@ rec {
       
     ];
   };
+
+  srfi-69 = eggDerivation {
+    name = "srfi-69-0.4.1";
+
+    src = fetchegg {
+      name = "srfi-69";
+      version = "0.4.1";
+      sha256 = "1l102kppncz27acsr4jyi46q0r7g2lb6gdbkd6p3h1xmvwcnk2hl";
+    };
+
+    buildInputs = [
+      
+    ];
+  };
+
 }
 
