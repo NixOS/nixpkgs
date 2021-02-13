@@ -9,7 +9,7 @@
 , desktop-file-utils
 , wrapGAppsHook
 , gst_all_1
-, pipewire
+, pulseaudio
 , gtk3
 , glib
 , glibmm
@@ -45,13 +45,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "5.0.0";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1zs13bivxlgcb24lz1pgmgy2chcjxnmn4lz7g1n0ygiaaj4c30xj";
+    sha256 = "19sndxvszafbd1l2033g2irpx2jrwi5bpbx8r35047wi0z7djiag";
   };
 
   nativeBuildInputs = [
@@ -66,14 +66,14 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pipewire
+    pulseaudio
     glib
     glibmm
     gtk3
     gtkmm3
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base # gst-fft
-    gst_all_1.gst-plugins-good # spectrum plugin
+    gst_all_1.gst-plugins-good # pulsesrc
     gst_all_1.gst-plugins-bad
     lilv lv2 serd sord sratom
     libbs2b
