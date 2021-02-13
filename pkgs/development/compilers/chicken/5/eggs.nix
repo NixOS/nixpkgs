@@ -155,6 +155,20 @@ rec {
     ];
   };
 
+  miscmacros = eggDerivation {
+    name = "miscmacros-1.0";
+
+    src = fetchegg {
+      name = "miscmacros";
+      version = "1.0";
+      sha256 = "0n2ia4ib4f18hcbkm5byph07ncyx61pcpfp2qr5zijf8ykp8nbvr";
+    };
+
+    buildInputs = [
+      
+    ];
+  };
+
   srfi-1 = eggDerivation {
     name = "srfi-1-0.5.1";
 
