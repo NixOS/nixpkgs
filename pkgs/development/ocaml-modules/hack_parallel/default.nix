@@ -21,7 +21,7 @@ buildDunePackage rec {
 
   buildInputs = [ core ppx_deriving ppxlib sexplib ];
 
-  patches = [ ./dune-static-libs.patch ];
+  patches = [ ./dune-static-libs.diff ];
 
   meta = with lib; {
     description = "The core parallel and shared memory library used by Hack, Flow, and Pyre";
