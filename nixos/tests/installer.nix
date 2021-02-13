@@ -325,10 +325,13 @@ let
             curl
           ]
           ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-          ++ optionals (bootLoader == "grub" && grubVersion == 2) [
-            (pkgs.grub2.override { zfsSupport = true; })
-            (pkgs.grub2_efi.override { zfsSupport = true; })
-          ];
+          ++ optionals (bootLoader == "grub" && grubVersion == 2) (let
+            zfsSupport = lib.any (x: x == "zfs")
+              (extraInstallerConfig.boot.supportedFilesystems or []);
+          in [
+            (pkgs.grub2.override { inherit zfsSupport; })
+            (pkgs.grub2_efi.override { inherit zfsSupport; })
+          ]);
 
           nix.binaryCaches = mkForce [ ];
           nix.extraOptions = ''
