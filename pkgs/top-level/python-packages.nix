@@ -6673,6 +6673,8 @@ in {
 
   radio_beam = callPackage ../development/python-modules/radio_beam { };
 
+  radiotherm = callPackage ../development/python-modules/radiotherm { };
+
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
 
   rainbowstream = callPackage ../development/python-modules/rainbowstream { };
