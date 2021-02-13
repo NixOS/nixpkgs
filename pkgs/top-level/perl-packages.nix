@@ -21922,15 +21922,14 @@ let
       url = "mirror://cpan/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz";
       sha256 = "4bd29a17f0c2c792d12c1005b3c276f2ab0fae39c00859ae1741d7941846a488";
     };
-    propagatedBuildInputs = [ pkgs.glibc TextCharWidth ];
+    buildInputs = [ pkgs.glibcLocales ];
+    propagatedBuildInputs = [ TextCharWidth ];
     preConfigure = ''
       substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc.bin}/bin/locale'
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
       license = with lib.licenses; [ artistic1 gpl2 ];
-      # bogus use of glibc, pretty sure, think this is what we have glibcLocales for?
-      broken = stdenv.hostPlatform.libc != "glibc";
     };
   };
 
