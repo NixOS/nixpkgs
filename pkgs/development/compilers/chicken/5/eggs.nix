@@ -2,6 +2,24 @@
 rec {
   inherit (pkgs) eggDerivation fetchegg;
 
+  apropos = eggDerivation {
+    name = "apropos-3.6.0";
+
+    src = fetchegg {
+      name = "apropos";
+      version = "3.6.0";
+      sha256 = "0jq5d4zijbf5dw2vsfn89smp7zjpgp82y5hs10xkysf831x7l551";
+    };
+
+    buildInputs = [
+      srfi-1
+      srfi-13
+      check-errors
+      string-utils
+      symbol-utils
+    ];
+  };
+
   args = eggDerivation {
     name = "args-1.6.0";
 
