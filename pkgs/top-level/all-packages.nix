@@ -18112,7 +18112,11 @@ in
 
   libpulseaudio = libpulseaudio-vanilla;
 
-  pulseeffects = callPackage ../applications/audio/pulseeffects {
+  pulseeffects-pw = callPackage ../applications/audio/pulseeffects {
+    boost = boost172;
+  };
+
+  pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
     boost = boost172;
   };
 
@@ -22715,7 +22719,7 @@ in
 
   ht = callPackage ../applications/editors/ht { };
 
-  ht-rust = callPackage ../tools/networking/ht-rust {
+  xh = callPackage ../tools/networking/xh {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
