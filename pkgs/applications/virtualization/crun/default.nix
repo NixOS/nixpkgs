@@ -11,6 +11,7 @@
 , yajl
 , nixosTests
 , criu
+, system
 }:
 
 let
@@ -48,7 +49,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
-  buildInputs = [ criu libcap libseccomp systemd yajl ];
+  buildInputs = [ libcap libseccomp systemd yajl ]
+    # Criu currently only builds on x86_64-linux
+    ++ lib.optional (lib.elem system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
 

@@ -55,7 +55,7 @@ in
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which util-linux pkg-config python ]
+    nativeBuildInputs = [ which pkg-config python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
     configureFlags = let
