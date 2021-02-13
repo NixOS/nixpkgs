@@ -542,6 +542,8 @@ in {
 
   augeas = callPackage ../development/python-modules/augeas { inherit (pkgs) augeas; };
 
+  auroranoaa = callPackage ../development/python-modules/auroranoaa { };
+
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
   authheaders = callPackage ../development/python-modules/authheaders { };
@@ -4031,6 +4033,8 @@ in {
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
   metaphone = callPackage ../development/python-modules/metaphone { };
+
+  metar = callPackage ../development/python-modules/metar { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
