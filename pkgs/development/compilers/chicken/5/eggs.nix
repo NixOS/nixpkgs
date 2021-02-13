@@ -351,5 +351,19 @@ rec {
     ];
   };
 
+  symbol-utils = eggDerivation {
+    name = "symbol-utils-2.1.0";
+
+    src = fetchegg {
+      name = "symbol-utils";
+      version = "2.1.0";
+      sha256 = "17nq8bj18f3bbf3mdfx1m8agy97izn1xcl8ymvgvvd5g384b2xil";
+    };
+
+    buildInputs = [
+      check-errors
+    ];
+  };
+
 }
 
