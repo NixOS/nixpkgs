@@ -290,6 +290,20 @@ rec {
     ];
   };
 
+  srfi-18 = eggDerivation {
+    name = "srfi-18-0.1.6";
+
+    src = fetchegg {
+      name = "srfi-18";
+      version = "0.1.6";
+      sha256 = "00lykm5lqbrcxl3dab9dqwimpgm36v4ys2957k3vdlg4xdb1abfa";
+    };
+
+    buildInputs = [
+      
+    ];
+  };
+
   srfi-37 = eggDerivation {
     name = "srfi-37-1.4";
 
