@@ -332,5 +332,24 @@ rec {
     ];
   };
 
+  string-utils = eggDerivation {
+    name = "string-utils-2.4.0";
+
+    src = fetchegg {
+      name = "string-utils";
+      version = "2.4.0";
+      sha256 = "09m3s0p199r2nmvc8qnqvbxjbq967gvwqrzp236wsw3hdcil6p8v";
+    };
+
+    buildInputs = [
+      srfi-1
+      srfi-13
+      srfi-69
+      miscmacros
+      check-errors
+      utf8
+    ];
+  };
+
 }
 
