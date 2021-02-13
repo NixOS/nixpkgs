@@ -322,6 +322,8 @@ in {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
+  algopy = callPackage ../development/python-modules/algopy { };
+
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
   alot = callPackage ../development/python-modules/alot { };
@@ -4477,6 +4479,8 @@ in {
   numba = callPackage ../development/python-modules/numba { };
 
   numcodecs = callPackage ../development/python-modules/numcodecs { inherit (pkgs) gcc8; };
+
+  numdifftools = callPackage ../development/python-modules/numdifftools { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
