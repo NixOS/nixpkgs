@@ -1,6 +1,5 @@
 { lib, fetchFromGitHub, fetchpatch, stdenv, bitlbee, autoconf, automake, libtool, pkg-config, glib, json-glib }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-facebook";
   version = "1.2.1";
