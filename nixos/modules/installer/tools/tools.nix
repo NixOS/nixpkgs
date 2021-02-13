@@ -87,8 +87,8 @@ in
 
     desktopConfiguration = mkOption {
       internal = true;
-      type = types.str;
-      default = "";
+      type = types.listOf types.lines;
+      default = [];
       description = ''
         Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
         saves to <literal>/etc/nixos/configuration.nix</literal>.
