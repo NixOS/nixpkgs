@@ -36,6 +36,20 @@ rec {
     ];
   };
 
+  base64 = eggDerivation {
+    name = "base64-1.0";
+
+    src = fetchegg {
+      name = "base64";
+      version = "1.0";
+      sha256 = "01lid9wxf94nr7gmskamxlfngack1hyxig8rl9swwgnbmz9qgysi";
+    };
+
+    buildInputs = [
+      srfi-13
+    ];
+  };
+
   matchable = eggDerivation {
     name = "matchable-1.1";
 
