@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     mv * $out/
+    runHook postInstall
   '';
 
   passthru.tests = {
