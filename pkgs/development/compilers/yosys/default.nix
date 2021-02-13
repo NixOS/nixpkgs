@@ -103,5 +103,12 @@ stdenv.mkDerivation rec {
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
+    #In file included from kernel/driver.cc:20:
+    #./kernel/yosys.h:42:10: fatal error: 'map' file not found
+    ##include <map>
+
+    #https://github.com/YosysHQ/yosys/issues/681
+    #https://github.com/YosysHQ/yosys/issues/2011
+    broken = stdenv.isDarwin;
   };
 }
