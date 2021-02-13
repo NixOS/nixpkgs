@@ -28,7 +28,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} Lib/fontParts/fontshell/test.py
+    runHook postCheck
   '';
   checkInputs = [ pytest ];
 
