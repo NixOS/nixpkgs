@@ -31,6 +31,8 @@ in runCommand podman.name {
   name = "${podman.pname}-wrapper-${podman.version}";
   inherit (podman) pname version passthru;
 
+  preferLocalBuild = true;
+
   meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
 
   outputs = [
