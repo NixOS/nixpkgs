@@ -19,6 +19,8 @@ buildDunePackage rec {
     sha256 = "051hbnj4lvvfdb3vs14apl7kwpdn9rbalnllfdc4xnhv3rzzxsyk";
   };
 
+  useDune2 = true;
+
   buildInputs = [ core ppx_deriving ppxlib sexplib ];
 
   patches = [ ./dune-static-libs.diff ];

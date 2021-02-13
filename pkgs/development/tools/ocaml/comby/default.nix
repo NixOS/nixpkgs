@@ -31,6 +31,8 @@ buildDunePackage rec {
     sha256 = "15pyfal1y4djhq616s05f03ifwsh6l9l0wmh34jhhyks7zafvq3r";
   };
 
+  useDune2 = true;
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pcre
