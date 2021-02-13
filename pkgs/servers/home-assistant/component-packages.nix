@@ -858,8 +858,8 @@
     "traccar" = ps: with ps; [ aiohttp-cors stringcase ]; # missing inputs: pytraccar
     "trackr" = ps: with ps; [ ]; # missing inputs: pytrackr
     "tradfri" = ps: with ps; [ ]; # missing inputs: pytradfri[async]
-    "trafikverket_train" = ps: with ps; [ ]; # missing inputs: pytrafikverket
-    "trafikverket_weatherstation" = ps: with ps; [ ]; # missing inputs: pytrafikverket
+    "trafikverket_train" = ps: with ps; [ pytrafikverket ];
+    "trafikverket_weatherstation" = ps: with ps; [ pytrafikverket ];
     "transmission" = ps: with ps; [ transmissionrpc ];
     "transport_nsw" = ps: with ps; [ ]; # missing inputs: PyTransportNSW
     "travisci" = ps: with ps; [ ]; # missing inputs: TravisPy
