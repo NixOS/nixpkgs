@@ -97,6 +97,20 @@ rec {
     ];
   };
 
+  iset = eggDerivation {
+    name = "iset-2.2";
+
+    src = fetchegg {
+      name = "iset";
+      version = "2.2";
+      sha256 = "0yfkcd07cw6xnnqfbbvjy81x0vc54k40vdjp2m7gwxx64is6m3rz";
+    };
+
+    buildInputs = [
+      
+    ];
+  };
+
   matchable = eggDerivation {
     name = "matchable-1.1";
 
