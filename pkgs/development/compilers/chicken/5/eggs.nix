@@ -384,5 +384,21 @@ rec {
     ];
   };
 
+  uri-generic = eggDerivation {
+    name = "uri-generic-3.2";
+
+    src = fetchegg {
+      name = "uri-generic";
+      version = "3.2";
+      sha256 = "1lpvnk1mnhmrga149km7ygpy7fkq7z2pvw0mvpx2aql03l8gpdsj";
+    };
+
+    buildInputs = [
+      matchable
+      srfi-1
+      srfi-14
+    ];
+  };
+
 }
 
