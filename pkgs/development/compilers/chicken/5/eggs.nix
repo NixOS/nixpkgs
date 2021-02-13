@@ -50,6 +50,20 @@ rec {
     ];
   };
 
+  check-errors = eggDerivation {
+    name = "check-errors-3.2.0";
+
+    src = fetchegg {
+      name = "check-errors";
+      version = "3.2.0";
+      sha256 = "0d0hpq1nmwyvbg162bqzgk62f70rin0pxsr5a3pgx6xin5i3ngah";
+    };
+
+    buildInputs = [
+      
+    ];
+  };
+
   matchable = eggDerivation {
     name = "matchable-1.1";
 
