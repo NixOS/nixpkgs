@@ -46,6 +46,7 @@ let
     path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
+    xserverEnabled = config.services.xserver.enable;
   };
 
   nixos-option =
@@ -145,6 +146,8 @@ in
         #   font = "Lat2-Terminus16";
         #   keyMap = "us";
         # };
+
+      $xserverConfig
 
       $desktopConfiguration
         # Configure keymap in X11
