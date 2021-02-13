@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libav, libxslt }:
+{ stdenv, fetchurl, pkgconfig, ffmpeg, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "unpaper";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libav libxslt ];
+  buildInputs = [ ffmpeg libxslt ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.flameeyes.eu/projects/unpaper";

@@ -1,16 +1,16 @@
-{ config, stdenv, lib, callPackage, fetchurl, nss_3_44 }:
+{ config, stdenv, lib, callPackage, fetchurl, rustPackages_1_44, rustPackages_1_49 }:
 
 let
-  common = opts: callPackage (import ./common.nix opts) {};
+  commonCP = opts: callPackage (import ./common.nix opts);
 in
 
 rec {
-  firefox = common rec {
+  firefox = commonCP rec {
     pname = "firefox";
-    ffversion = "84.0.2";
+    ffversion = "85.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2cxybnrcr0n75hnw18rrymw1jsd5crqfgnpk10hywbmnkdc72fx5sk51cg890pzwfiagicxfxsacnm3f6g8135k0wsz4294xjjwkm1z";
+      sha512 = "0i0x1jvwrjvbdz90dgmf7lw3qj56y37nf5h3qs55263d0jgvnkqfc5dgjfzrq51z5a546lmbs4p97qiaf2p3d5wiv3lx8cw43n74axd";
     };
 
     meta = {
@@ -27,14 +27,16 @@ rec {
       attrPath = "firefox-unwrapped";
       versionKey = "ffversion";
     };
-  };
+  }
+  { inherit (rustPackages_1_49) cargo rustc; }
+  ;
 
-  firefox-esr-78 = common rec {
+  firefox-esr-78 = commonCP rec {
     pname = "firefox-esr";
-    ffversion = "78.6.1esr";
+    ffversion = "78.7.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "3kq9vb0a8qblqk995xqhghw5d694mr1cjd5alkkwxbdjhpc1mck0ayn40xjph0znga6qdcq8l366p0by8ifbsdhv0x39ng8nvx9jvdf";
+      sha512 = "138dcfpdkp78yqgygac212vg5fm5ich2a82p7258ch8hk6bpvpdxbws4sdqwljs92x831dblcsshwkl06vh48899489gx87mdkqd0nm";
     };
 
     meta = {
@@ -51,5 +53,7 @@ rec {
       attrPath = "firefox-esr-78-unwrapped";
       versionKey = "ffversion";
     };
-  };
+  }
+  { inherit (rustPackages_1_44) cargo rustc; }
+  ;
 }

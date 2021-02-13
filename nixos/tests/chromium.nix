@@ -51,7 +51,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
   testScript = let
     xdo = name: text: let
       xdoScript = pkgs.writeText "${name}.xdo" text;
-    in "${pkgs.xdotool}/bin/xdotool '${xdoScript}'";
+    in "${pkgs.xdotool}/bin/xdotool ${xdoScript}";
   in ''
     import shlex
     from contextlib import contextmanager, _GeneratorContextManager
@@ -76,95 +76,59 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
 
     def create_new_win():
+        """Creates a new Chromium window."""
         with machine.nested("Creating a new Chromium window"):
-            machine.execute(
+            machine.wait_until_succeeds(
                 ru(
-                    "${xdo "new-window" ''
+                    "${xdo "create_new_win-select_main_window" ''
                       search --onlyvisible --name "startup done"
                       windowfocus --sync
                       windowactivate --sync
                     ''}"
                 )
             )
-            machine.execute(
+            machine.send_key("ctrl-n")
+            # Wait until the new window appears:
+            machine.wait_until_succeeds(
                 ru(
-                    "${xdo "new-window" ''
-                      key Ctrl+n
-                    ''}"
-                )
-            )
-
-
-    def close_win():
-        def try_close(_):
-            status, _ = machine.execute(
-                ru(
-                    "${xdo "close-window" ''
-                      search --onlyvisible --name "new tab"
+                    "${xdo "create_new_win-wait_for_window" ''
+                      search --onlyvisible --name "New Tab"
                       windowfocus --sync
                       windowactivate --sync
                     ''}"
                 )
             )
-            if status == 0:
-                machine.execute(
-                    ru(
-                        "${xdo "close-window" ''
-                          key Ctrl+w
-                        ''}"
-                    )
-                )
-            for _ in range(1, 20):
-                status, out = machine.execute(
-                    ru(
-                        "${xdo "wait-for-close" ''
-                          search --onlyvisible --name "new tab"
-                        ''}"
-                    )
-                )
-                if status != 0:
-                    return True
-                machine.sleep(1)
-                return False
-
-        retry(try_close)
 
 
-    def wait_for_new_win():
-        ret = False
-        with machine.nested("Waiting for new Chromium window to appear"):
-            for _ in range(1, 20):
-                status, out = machine.execute(
-                    ru(
-                        "${xdo "wait-for-window" ''
-                          search --onlyvisible --name "new tab"
-                          windowfocus --sync
-                          windowactivate --sync
-                        ''}"
-                    )
-                )
-                if status == 0:
-                    ret = True
-                    machine.sleep(10)
-                    break
-                machine.sleep(1)
-        return ret
-
-
-    def create_and_wait_for_new_win():
-        for _ in range(1, 3):
-            create_new_win()
-            if wait_for_new_win():
-                return True
-        assert False, "new window did not appear within 60 seconds"
+    def close_new_tab_win():
+        """Closes the Chromium window with the title "New Tab"."""
+        machine.wait_until_succeeds(
+            ru(
+                "${xdo "close_new_tab_win-select_main_window" ''
+                  search --onlyvisible --name "New Tab"
+                  windowfocus --sync
+                  windowactivate --sync
+                ''}"
+            )
+        )
+        machine.send_key("ctrl-w")
+        # Wait until the closed window disappears:
+        machine.wait_until_fails(
+            ru(
+                "${xdo "close_new_tab_win-wait_for_close" ''
+                  search --onlyvisible --name "New Tab"
+                ''}"
+            )
+        )
 
 
     @contextmanager
     def test_new_win(description):
-        create_and_wait_for_new_win()
+        create_new_win()
         with machine.nested(description):
             yield
-        close_win()
+        # Close the newly created window:
+        machine.send_key("ctrl-w")
 
 
     machine.wait_for_x()
@@ -191,9 +155,11 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         )
     )
 
-    create_and_wait_for_new_win()
+    create_new_win()
+    # Optional: Wait for the new tab page to fully load before taking the screenshot:
+    machine.wait_for_text("Web Store")
     machine.screenshot("empty_windows")
-    close_win()
+    close_new_tab_win()
 
     machine.screenshot("startup_done")
 
@@ -201,7 +167,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         machine.succeed(
             ru(
                 "${xdo "type-url" ''
-                  search --sync --onlyvisible --name "new tab"
+                  search --sync --onlyvisible --name "New Tab"
                   windowfocus --sync
                   type --delay 1000 "chrome://sandbox"
                 ''}"
@@ -211,7 +177,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         machine.succeed(
             ru(
                 "${xdo "submit-url" ''
-                  search --sync --onlyvisible --name "new tab"
+                  search --sync --onlyvisible --name "New Tab"
                   windowfocus --sync
                   key --delay 1000 Return
                 ''}"
@@ -223,7 +189,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         machine.succeed(
             ru(
                 "${xdo "find-window" ''
-                  search --sync --onlyvisible --name "sandbox status"
+                  search --sync --onlyvisible --name "Sandbox Status"
                   windowfocus --sync
                 ''}"
             )
@@ -257,7 +223,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         machine.succeed(
             ru(
                 "${xdo "find-window-after-copy" ''
-                  search --onlyvisible --name "sandbox status"
+                  search --onlyvisible --name "Sandbox Status"
                 ''}"
             )
         )

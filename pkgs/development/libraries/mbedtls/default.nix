@@ -11,14 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mbedtls";
-  name = "mbedtls-${version}";
-  version = "2.16.3"; # nixpkgs-update: no auto update
+  version = "2.16.9"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = "${pname}-${version}";
-    sha256 = "1mzh92yyz93099a1gb2wvwc76jv12d1k1wg9k3dimbgczxgrkirc";
+    sha256 = "0mz7n373b8d287crwi6kq2hb8ryyi228j38h25744lqai23qj5cf";
   };
 
   nativeBuildInputs = [ cmake ninja perl python ];

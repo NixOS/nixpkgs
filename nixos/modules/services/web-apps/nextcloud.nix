@@ -228,7 +228,8 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          The full path to a file that contains the admin's password.
+          The full path to a file that contains the admin's password. Must be
+          readable by user <literal>nextcloud</literal>.
         '';
       };
 
@@ -476,6 +477,28 @@ in {
           path = [ occ ];
           script = ''
             chmod og+x ${cfg.home}
+
+            ${optionalString (c.dbpassFile != null) ''
+              if [ ! -r "${c.dbpassFile}" ]; then
+                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                exit 1
+              fi
+              if [ -z "$(<${c.dbpassFile})" ]; then
+                echo "dbpassFile ${c.dbpassFile} is empty!"
+                exit 1
+              fi
+            ''}
+            ${optionalString (c.adminpassFile != null) ''
+              if [ ! -r "${c.adminpassFile}" ]; then
+                echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                exit 1
+              fi
+              if [ -z "$(<${c.adminpassFile})" ]; then
+                echo "adminpassFile ${c.adminpassFile} is empty!"
+                exit 1
+              fi
+            ''}
+
             ln -sf ${cfg.package}/apps ${cfg.home}/
 
             # create nextcloud directories.

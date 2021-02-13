@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, docutils, pkgconfig
-, kerberos, keyutils, pam, talloc }:
+, kerberos, keyutils, pam, talloc, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "cifs-utils";
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook docutils pkgconfig ];
 
   buildInputs = [ kerberos keyutils pam talloc ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-14342.patch";
+      url = "https://attachments.samba.org/attachment.cgi?id=16148";
+      sha256 = "1xw3d11wb1l8a89jhdp6hhy987nq0gafxfhx5jdhcc5nazahc7s4";
+    })
+  ];
 
   makeFlags = [ "root_sbindir=$(out)/sbin" ];
 

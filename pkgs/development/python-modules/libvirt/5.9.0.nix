@@ -18,6 +18,10 @@ buildPythonPackage rec {
     nosetests
   '';
 
+  passthru = {
+    inherit libvirt;
+  };
+
   meta = with stdenv.lib; {
     homepage = "http://www.libvirt.org/";
     description = "libvirt Python bindings";

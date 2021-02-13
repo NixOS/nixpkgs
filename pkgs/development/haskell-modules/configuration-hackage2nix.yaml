@@ -9053,7 +9053,6 @@ broken-packages:
   - read-bounded
   - read-ctags
   - read-io
-  - readline
   - readline-statevar
   - readme-lhs
   - readpyc
