@@ -16532,8 +16532,7 @@ let
 
     nativeBuildInputs = with pkgs; [ autoPatchelfHook libGL.dev glibc.dev mesa_glu.dev ];
 
-    buildInputs = [ DevelChecklib TestDeep TestException TestWarn ] ++
-                  (with pkgs; [ gsl freeglut xorg.libXmu xorg.libXi ]);
+    buildInputs = [ DevelChecklib TestDeep TestException TestWarn pkgs.gsl pkgs.freeglut pkgs.xorg.libXmu pkgs.xorg.libXi ];
 
     propagatedBuildInputs = [
       AstroFITSHeader
@@ -23818,7 +23817,6 @@ let
   XSLoader = null; # part of Perl 5.26
 
   Carp = null; # part of Perl 5.28
-  ExtUtilsCBuilder = null; # part of Perl 5.28
   ExtUtilsParseXS = null; # part of Perl 5.28
   FilterSimple = null; # part of Perl 5.28
   IOSocketIP = null; # part of Perl 5.28
