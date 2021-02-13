@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with python.pkgs; [ sphinx numpy sip pyqt5 matplotlib ase ];
 
-  dontWrapQtApps = true;
-
   meta = with lib; {
     description = "Scientific visualization and analysis software for atomistic simulation data";
     homepage = "https://www.ovito.org";
