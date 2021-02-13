@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index ffee41b4..bab6f019 100644
+index 429ac249..b973b2d3 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -318,8 +318,8 @@ alsa_dep = (get_option('pipewire-alsa')
+@@ -358,8 +358,8 @@ alsa_dep = (get_option('pipewire-alsa')
      ? dependency('alsa', version : '>=1.1.7')
      : dependency('', required: false))
  
@@ -14,7 +14,7 @@ index ffee41b4..bab6f019 100644
  installed_tests_template = files('template.test.in')
  
 diff --git a/meson_options.txt b/meson_options.txt
-index f03033c3..32df6c53 100644
+index 200a8fa2..b205a4f6 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -18,6 +18,9 @@ option('installed_tests',
