@@ -2,6 +2,20 @@
 rec {
   inherit (pkgs) eggDerivation fetchegg;
 
+  address-info = eggDerivation {
+    name = "address-info-1.0.5";
+
+    src = fetchegg {
+      name = "address-info";
+      version = "1.0.5";
+      sha256 = "1nv87ghfv8szmi2l0rybrgrds6fs5w6jxafqslnzw0mw5sfj6jyk";
+    };
+
+    buildInputs = [
+      srfi-1
+    ];
+  };
+
   apropos = eggDerivation {
     name = "apropos-3.6.0";
 
