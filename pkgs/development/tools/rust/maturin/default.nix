@@ -29,7 +29,15 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Build and publish crates with pyo3 bindings as python packages";
+    description = "Build and publish Rust crates Python packages";
+    longDescription = ''
+      Build and publish Rust crates with PyO3, rust-cpython, and
+      cffi bindings as well as Rust binaries as Python packages.
+
+      This project is meant as a zero-configuration replacement for
+      setuptools-rust and Milksnake. It supports building wheels for
+      Python and can upload them to PyPI.
+    '';
     homepage = "https://github.com/PyO3/maturin";
     license = licenses.mit;
     maintainers = [ maintainers.danieldk ];
