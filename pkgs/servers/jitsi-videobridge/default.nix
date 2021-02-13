@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     substituteInPlace usr/share/jitsi-videobridge/jvb.sh \
       --replace "exec java" "exec ${jre_headless}/bin/java"
 
@@ -30,6 +31,7 @@ stdenv.mkDerivation {
     # work around https://github.com/jitsi/jitsi-videobridge/issues/1547
     wrapProgram $out/bin/jitsi-videobridge \
       --set VIDEOBRIDGE_GC_TYPE G1GC
+    runHook postInstall
   '';
 
   passthru.tests = {
