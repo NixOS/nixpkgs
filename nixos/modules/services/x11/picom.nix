@@ -61,6 +61,14 @@ in {
       '';
     };
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.picom;
+      description = ''
+        The Picom derivation to use.
+      '';
+    };
+
     experimentalBackends = mkOption {
       type = types.bool;
       default = false;
@@ -310,14 +318,14 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}"
+        ExecStart = "${cfg.package}/bin/picom --config ${configFile}"
           + (optionalString cfg.experimentalBackends " --experimental-backends");
         RestartSec = 3;
         Restart = "always";
       };
     };
 
-    environment.systemPackages = [ pkgs.picom ];
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
