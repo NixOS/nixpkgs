@@ -29389,6 +29389,8 @@ in
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
+  ssh-tools = callPackage ../applications/misc/ssh-tools { };
+
   auto-cpufreq = callPackage ../tools/system/auto-cpufreq {  };
 
   thermald = callPackage ../tools/system/thermald { };
