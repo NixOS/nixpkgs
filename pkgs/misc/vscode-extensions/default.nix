@@ -689,6 +689,18 @@ let
         };
       };
 
+      tomoki1207.pdf = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pdf";
+          publisher = "tomoki1207";
+          version = "1.1.0";
+          sha256 = "0pcs4iy77v4f04f8m9w2rpdzfq7sqbspr7f2sm1fv7bm515qgsvb";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tyriar.sort-lines = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "sort-lines";
