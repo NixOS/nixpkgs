@@ -400,5 +400,20 @@ rec {
     ];
   };
 
+  utf8 = eggDerivation {
+    name = "utf8-3.6.2";
+
+    src = fetchegg {
+      name = "utf8";
+      version = "3.6.2";
+      sha256 = "10wzp3qmwik4gx3hhaqm2n83wza0rllgy57363h5ccv8fga5nnm6";
+    };
+
+    buildInputs = [
+      srfi-69
+      iset
+      regex
+    ];
+  };
 }
 
