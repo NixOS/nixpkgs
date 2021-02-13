@@ -171,6 +171,20 @@ rec {
     ];
   };
 
+  message-digest-primitive = eggDerivation {
+    name = "message-digest-primitive-4.3.2";
+
+    src = fetchegg {
+      name = "message-digest-primitive";
+      version = "4.3.2";
+      sha256 = "1wfmyyp1fv0sz70m0rgzbhkiqgzjc15ppz7fwmpnxg12rvfzdvq0";
+    };
+
+    buildInputs = [
+      check-errors
+    ];
+  };
+
   miscmacros = eggDerivation {
     name = "miscmacros-1.0";
 
