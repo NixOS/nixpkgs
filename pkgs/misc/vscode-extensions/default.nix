@@ -745,6 +745,18 @@ let
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
       WakaTime.vscode-wakatime = callPackage ./wakatime {};
+
+      wholroyd.jinja = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jinja";
+          publisher = "wholroyd";
+          version = "0.0.8";
+          sha256 = "1ln9gly5bb7nvbziilnay4q448h9npdh7sd9xy277122h0qawkci";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
     };
 
     aliases = self: super: {
