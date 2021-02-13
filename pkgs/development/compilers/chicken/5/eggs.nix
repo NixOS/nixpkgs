@@ -482,6 +482,21 @@ rec {
     ];
   };
 
+  tcp6 = eggDerivation {
+    name = "tcp6-0.2.1";
+
+    src = fetchegg {
+      name = "tcp6";
+      version = "0.2.1";
+      sha256 = "14dynnjgac28f46v781hi6kam326q6rh57pf0pvl0chdva4hlf3q";
+    };
+
+    buildInputs = [
+      socket
+      srfi-1
+    ];
+  };
+
   uri-common = eggDerivation {
     name = "uri-common-2.0";
 
