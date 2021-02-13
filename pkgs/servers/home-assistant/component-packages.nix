@@ -681,7 +681,7 @@
     "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
     "ring" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: ring_doorbell
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
-    "risco" = ps: with ps; [ ]; # missing inputs: pyrisco
+    "risco" = ps: with ps; [ pyrisco ];
     "rmvtransport" = ps: with ps; [ PyRMVtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
