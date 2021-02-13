@@ -25,6 +25,8 @@ let
     ES_ENABLED = if (cfg.elasticsearch.host != null) then "true" else "false";
     ES_HOST = cfg.elasticsearch.host;
     ES_PORT = toString(cfg.elasticsearch.port);
+
+    TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
   // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
   // cfg.extraConfig;
@@ -177,6 +179,16 @@ in {
         '';
         default = "/var/lib/mastodon/secrets/vapid-private-key";
         type = lib.types.str;
+      };
+
+      trustedProxy = lib.mkOption {
+        description = ''
+          You need to set it to the IP from which your reverse proxy sends requests to Mastodon's web process,
+          otherwise Mastodon will record the reverse proxy's own IP as the IP of all requests, which would be
+          bad because IP addresses are used for important rate limits and security functions.
+        '';
+        type = lib.types.str;
+        default = "127.0.0.1";
       };
 
       redis = {
