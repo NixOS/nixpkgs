@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://taskwarrior.org";
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
