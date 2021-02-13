@@ -707,6 +707,7 @@ let
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
+    mparser-comby =  callPackage ../development/ocaml-modules/mparser/comby.nix { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 

@@ -9,7 +9,7 @@
 , core
 , hack_parallel
 , ocaml_lwt
-, mparser
+, mparser-comby
 , opium
 , patdiff
 , ppx_deriving_yojson
@@ -41,7 +41,7 @@ buildDunePackage rec {
     core
     hack_parallel
     ocaml_lwt
-    mparser
+    mparser-comby
     opium
     patdiff
     ppx_deriving_yojson
