@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
+      "--sysconfdir=/etc"
     ]
     # disable sysctl check on darwin.
     ++ optional stdenv.isDarwin "--cpu=x86_64"
