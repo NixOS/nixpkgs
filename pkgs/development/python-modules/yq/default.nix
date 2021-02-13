@@ -3,16 +3,11 @@
 , buildPythonPackage
 , fetchPypi
 , substituteAll
-, pkgs
 , argcomplete
 , pyyaml
 , xmltodict
-# Test inputs
-, coverage
-, flake8
 , jq
-, pytest
-, toml
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -27,12 +22,13 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./jq-path.patch;
-      jq = "${lib.getBin pkgs.jq}/bin/jq";
+      jq = "${lib.getBin jq}/bin/jq";
     })
   ];
 
   postPatch = ''
-    substituteInPlace test/test.py --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
+    substituteInPlace test/test.py \
+      --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
   '';
 
   propagatedBuildInputs = [
@@ -41,16 +37,11 @@ buildPythonPackage rec {
     argcomplete
   ];
 
-  doCheck = true;
-
   checkInputs = [
-   pytest
-   coverage
-   flake8
-   toml
+   pytestCheckHook
   ];
 
-  checkPhase = "pytest ./test/test.py";
+  pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "yq" ];
 
@@ -59,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Command-line YAML processor - jq wrapper for YAML documents";
     homepage = "https://github.com/kislyuk/yq";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.womfoo ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ womfoo SuperSandro2000 ];
   };
 }

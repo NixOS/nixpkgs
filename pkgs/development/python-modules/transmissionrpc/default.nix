@@ -15,10 +15,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Python implementation of the Transmission bittorent client RPC protocol";
     homepage = "https://pypi.python.org/pypi/transmissionrpc/";
     license = licenses.mit;
   };
-
 }

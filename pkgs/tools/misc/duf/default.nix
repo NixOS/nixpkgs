@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0icxy6wbqjqawr6i5skwp1z37fq303p8f95crd8lwn6pjjiqzk4i";
 
-  buildFlagsArray = [ "-ldflags=" "-s -w -X=main.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X=main.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/muesli/duf/";

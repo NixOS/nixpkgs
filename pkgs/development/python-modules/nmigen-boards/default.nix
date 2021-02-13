@@ -26,6 +26,9 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
   '';
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Board and connector definitions for nMigen";
     homepage = "https://github.com/nmigen/nmigen-boards";

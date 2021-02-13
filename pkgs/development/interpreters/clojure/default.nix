@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.763";
+  version = "1.10.2.774";
 
   src = fetchurl {
+    # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "042d5bk59wv145fvjrk72g4hvaq7j2p4a2d1pg13b433qfkchgia";
+    sha256 = "0z3j8m9k7prmx6n3kpyhj04pjdg7y0plyxv4kp7789shanr6y4qp";
   };
 
   nativeBuildInputs = [
@@ -20,6 +21,8 @@ stdenv.mkDerivation rec {
       binPath = lib.makeBinPath [ rlwrap jdk ];
     in
     ''
+      runHook preInstall
+
       clojure_lib_dir=$out
       bin_dir=$out/bin
 
@@ -38,6 +41,8 @@ stdenv.mkDerivation rec {
       wrapProgram $bin_dir/clj --prefix PATH : $out/bin:${binPath}
 
       installManPage clj.1 clojure.1
+
+      runHook postInstall
     '';
 
   doInstallCheck = true;

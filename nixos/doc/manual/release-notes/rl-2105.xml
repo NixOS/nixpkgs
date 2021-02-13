@@ -2,14 +2,14 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="sec-release-21.03">
- <title>Release 21.03 (“Okapi”, 2021.03/??)</title>
+         xml:id="sec-release-21.05">
+ <title>Release 21.05 (“Okapi”, 2021.05/??)</title>
 
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="sec-release-21.03-highlights">
+         xml:id="sec-release-21.05-highlights">
   <title>Highlights</title>
 
   <para>
@@ -20,7 +20,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     Support is planned until the end of October 2021, handing over to 21.09.
+     Support is planned until the end of December 2021, handing over to 21.11.
     </para>
    </listitem>
    <listitem>
@@ -46,7 +46,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="sec-release-21.03-new-services">
+         xml:id="sec-release-21.05-new-services">
   <title>New Services</title>
 
   <para>
@@ -82,7 +82,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="sec-release-21.03-incompatibilities">
+         xml:id="sec-release-21.05-incompatibilities">
   <title>Backward Incompatibilities</title>
 
   <para>
@@ -501,7 +501,7 @@ self: super:
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="sec-release-21.03-notable-changes">
+         xml:id="sec-release-21.05-notable-changes">
   <title>Other Notable Changes</title>
 
   <itemizedlist>
