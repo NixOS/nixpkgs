@@ -18083,7 +18083,7 @@ in
 
   libpulseaudio = libpulseaudio-vanilla;
 
-  pulseeffects = callPackage ../applications/audio/pulseeffects {
+  pulseeffects-pw = callPackage ../applications/audio/pulseeffects {
     boost = boost172;
   };
 
