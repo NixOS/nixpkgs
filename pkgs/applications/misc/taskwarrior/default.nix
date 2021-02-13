@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchurl {
     url = "https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${version}/task-${version}.tar.gz";
-    sha256 = "0ipfl9k4l9vls07v64idfvffw68ca1hpv0dv01plmgdryb54bzk3";
+    sha256 = "0fwnxshhlha21hlgg5z1ad01w13zm1hlmncs274y5n8i15gdfhvj";
   };
 
   nativeBuildInputs = [ cmake libuuid gnutls ];
