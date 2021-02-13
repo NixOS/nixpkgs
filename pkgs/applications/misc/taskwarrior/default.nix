@@ -1,15 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libuuid, gnutls }:
+{ lib, stdenv, fetchurl, cmake, libuuid, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
   version = "2.5.2";
 
-  src = fetchFromGitHub {
-    owner = "GothenburgBitFactory";
-    repo = "taskwarrior";
-    rev = "v${version}";
-    sha256 = "0jv5b56v75qhdqbrfsddfwizmbizcsv3mn8gp92nckwlx9hrk5id";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${version}/task-${version}.tar.gz";
+    sha256 = "0ipfl9k4l9vls07v64idfvffw68ca1hpv0dv01plmgdryb54bzk3";
   };
 
   nativeBuildInputs = [ cmake libuuid gnutls ];
