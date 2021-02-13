@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.4.0";
+  version = "1.4.1";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "kbr";
     repo = pname;
     rev = version;
-    sha256 = "1p8dqcc75xfhyvc9izjzz8c7qfrdkjkrkj36j7ms5fimn5bwk70q";
+    sha256 = "1v8gyr91ddinxgl7507hw64snsvcpm3r7bmdjw2v5v6rmc0wl06s";
   };
 
   disabled = pythonOlder "3.6";
