@@ -23,13 +23,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ln -s ${openssl.out}/lib/libcrypto.so.* .
     ln -s ${openssl.out}/lib/libssl.so.* .
     common-lisp.sh --script scripts/build.lisp
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     INSTALL_ROOT=$out sh install.sh
+
+    runHook postInstall
   '';
 
   # fixupPhase results in fatal error in SBCL, `Can't find sbcl.core`
