@@ -22,8 +22,12 @@ buildGoModule rec {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "141ii271w2azvhl8ragrgzmir9iq9npl8wmh5dr31kvq4z4syxw1";
+    sha256 = "1dsriw2vjzjaddxdhl3wbj2ppnsyi29f4bjwc8lzyz20wfwx4ay4";
   };
+
+  patches = [
+    ./remove-unconfigured-runtime-warn.patch
+  ];
 
   vendorSha256 = null;
 
