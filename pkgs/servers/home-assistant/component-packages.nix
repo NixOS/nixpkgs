@@ -518,7 +518,7 @@
     "mqtt_json" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "mqtt_room" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "mqtt_statestream" = ps: with ps; [ aiohttp-cors paho-mqtt ];
-    "msteams" = ps: with ps; [ ]; # missing inputs: pymsteams
+    "msteams" = ps: with ps; [ pymsteams ];
     "mvglive" = ps: with ps; [ PyMVGLive ];
     "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
