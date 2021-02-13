@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchurl, dpkg, jre_headless, nixosTests }:
+{ lib, stdenv, fetchurl, dpkg, jre_headless, nixosTests }:
 
 let
   pname = "jicofo";
@@ -16,6 +16,7 @@ stdenv.mkDerivation {
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
 
   installPhase = ''
+    runHook preInstall
     substituteInPlace usr/share/jicofo/jicofo.sh \
       --replace "exec java" "exec ${jre_headless}/bin/java"
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation {
     mv etc $out/
     cp ${./logging.properties-journal} $out/etc/jitsi/jicofo/logging.properties-journal
     ln -s $out/share/jicofo/jicofo.sh $out/bin/jicofo
+    runHook postInstall
   '';
 
   passthru.tests = {
