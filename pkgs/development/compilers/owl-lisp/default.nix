@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, coreutils, which }:
+{ lib, stdenv, fetchFromGitLab, which }:
 
 stdenv.mkDerivation rec {
   pname = "owl-lisp";
@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  prePatch = ''
-    substituteInPlace Makefile \
-      --replace /usr $out
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" "CC=cc" ];
 
   # tests are run as part of the compilation process
   doCheck = false;
@@ -26,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://gitlab.com/owl-lisp/owl";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }
