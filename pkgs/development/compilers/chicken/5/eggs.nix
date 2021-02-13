@@ -297,6 +297,23 @@ rec {
     ];
   };
 
+  socket = eggDerivation {
+    name = "socket-0.3.3";
+
+    src = fetchegg {
+      name = "socket";
+      version = "0.3.3";
+      sha256 = "04wfxrwjizvf1jdpfqp3r7381rp9lscrm3z21ihq2dc2lfzjgrxw";
+    };
+
+    buildInputs = [
+      srfi-13
+      srfi-18
+      foreigners
+      feature-test
+    ];
+  };
+
   spiffy = eggDerivation {
     name = "spiffy-6.3";
 
