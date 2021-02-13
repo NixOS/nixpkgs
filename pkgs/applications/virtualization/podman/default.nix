@@ -25,6 +25,10 @@ buildGoModule rec {
     sha256 = "141ii271w2azvhl8ragrgzmir9iq9npl8wmh5dr31kvq4z4syxw1";
   };
 
+  patches = [
+    ./remove-unconfigured-runtime-warn.patch
+  ];
+
   vendorSha256 = null;
 
   doCheck = false;
