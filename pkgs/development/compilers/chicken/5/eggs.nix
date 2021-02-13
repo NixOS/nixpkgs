@@ -78,6 +78,25 @@ rec {
     ];
   };
 
+  intarweb = eggDerivation {
+    name = "intarweb-2.0.1";
+
+    src = fetchegg {
+      name = "intarweb";
+      version = "2.0.1";
+      sha256 = "0md226jikqhj993cw17588ipmnz0v7l34zrvylamyrs6zbvj3scm";
+    };
+
+    buildInputs = [
+      srfi-1
+      srfi-13
+      srfi-14
+      defstruct
+      uri-common
+      base64
+    ];
+  };
+
   matchable = eggDerivation {
     name = "matchable-1.1";
 
