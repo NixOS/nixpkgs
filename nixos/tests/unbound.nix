@@ -27,6 +27,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         # disable the root anchor update as we do not have internet access during
         # the test execution
         services.unbound.enableRootTrustAnchor = false;
+
+        # we want to test the full-variant of the package to also get DoH support
+        services.unbound.package = pkgs.unbound-full;
       };
     };
 
@@ -81,13 +84,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         networking.firewall.allowedTCPPorts = [
           53 # regular DNS
           853 # DNS over TLS
+          443 # DNS over HTTPS
         ];
         networking.firewall.allowedUDPPorts = [ 53 ];
 
         services.unbound = {
           enable = true;
           allowedAccess = [ "192.168.0.0/24" "fd21::/64" "::1" "127.0.0.0/8" ];
-          interfaces = [ "::1" "127.0.0.1" "192.168.0.2" "fd21::2" "192.168.0.2@853" "fd21::2@853" "::1@853" "127.0.0.1@853" ];
+          interfaces = [ "::1" "127.0.0.1" "192.168.0.2" "fd21::2"
+                         "192.168.0.2@853" "fd21::2@853" "::1@853" "127.0.0.1@853"
+                         "192.168.0.2@443" "fd21::2@443" "::1@443" "127.0.0.1@443" ];
           forwardAddresses = [
             (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv6.addresses).address
             (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv4.addresses).address
@@ -216,6 +222,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
                           zone,
                           expected,
                           ["+tcp", "+tls"] + args,
+                      )
+                      query(
+                          machine,
+                          remote,
+                          query_type,
+                          zone,
+                          expected,
+                          ["+https"] + args,
                       )
 
 
