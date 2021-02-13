@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "diet";
   version = "0.4";
 
+  useDune2 = true;
+
   src = fetchurl {
     url =
       "https://github.com/mirage/ocaml-diet/releases/download/v${version}/diet-v${version}.tbz";
