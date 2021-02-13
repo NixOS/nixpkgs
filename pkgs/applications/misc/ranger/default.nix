@@ -24,18 +24,12 @@ python3Packages.buildPythonApplication rec {
         ranger/data/scope.sh
     ''}
 
-    substituteInPlace ranger/data/scope.sh \
-      --replace "/bin/echo" "echo"
-
     substituteInPlace ranger/__init__.py \
       --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
 
-    for i in ranger/config/rc.conf doc/config/rc.conf ; do
-      substituteInPlace $i --replace /usr/share $out/share
-    done
-
     # give file previews out of the box
     substituteInPlace ranger/config/rc.conf \
+      --replace /usr/share $out/share \
       --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
   '' + lib.optionalString imagePreviewSupport ''
     substituteInPlace ranger/ext/img_display.py \
