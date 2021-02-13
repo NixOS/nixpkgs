@@ -191,6 +191,16 @@ in {
         default = "127.0.0.1";
       };
 
+      enableUnixSocket = lib.mkOption {
+        description = ''
+          Instead of binding to an IP address like 127.0.0.1, you may bind to a Unix socket. This variable
+          is process-specific, e.g. you need different values for every process, and it works for both web (Puma)
+          processes and streaming API (Node.js) processes.
+        '';
+        type = lib.types.bool;
+        default = true;
+      };
+
       redis = {
         createLocally = lib.mkOption {
           description = "Configure local Redis server for Mastodon.";
@@ -427,9 +437,10 @@ in {
         ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
       description = "Mastodon streaming";
       wantedBy = [ "multi-user.target" ];
-      environment = env // {
-        PORT = toString(cfg.streamingPort);
-      };
+      environment = env // (if cfg.enableUnixSocket
+        then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
+        else { PORT = toString(cfg.streamingPort); }
+      );
       serviceConfig = {
         ExecStart = "${pkgs.nodejs-slim}/bin/node streaming";
         Restart = "always";
@@ -441,6 +452,9 @@ in {
         PrivateTmp = true;
         LogsDirectory = "mastodon";
         StateDirectory = "mastodon";
+        # Runtime directory and mode
+        RuntimeDirectory = "mastodon-streaming";
+        RuntimeDirectoryMode = "0750";
       };
     };
 
@@ -450,9 +464,10 @@ in {
         ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
       description = "Mastodon web";
       wantedBy = [ "multi-user.target" ];
-      environment = env // {
-        PORT = toString(cfg.webPort);
-      };
+      environment = env // (if cfg.enableUnixSocket
+        then { SOCKET = "/run/mastodon-web/web.socket"; }
+        else { PORT = toString(cfg.webPort); }
+      );
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/puma -C config/puma.rb";
         Restart = "always";
@@ -464,6 +479,9 @@ in {
         PrivateTmp = true;
         LogsDirectory = "mastodon";
         StateDirectory = "mastodon";
+        # Runtime directory and mode
+        RuntimeDirectory = "mastodon-web";
+        RuntimeDirectoryMode = "0750";
       };
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
@@ -507,12 +525,12 @@ in {
         };
 
         locations."@proxy" = {
-          proxyPass = "http://127.0.0.1:${toString(cfg.webPort)}";
+          proxyPass = (if cfg.enableUnixSocket then "http://unix:/run/mastodon-web/web.socket" else "http://127.0.0.1:${toString(cfg.webPort)}");
           proxyWebsockets = true;
         };
 
         locations."/api/v1/streaming/" = {
-          proxyPass = "http://127.0.0.1:${toString(cfg.streamingPort)}/";
+          proxyPass = (if cfg.enableUnixSocket then "http://unix:/run/mastodon-streaming/streaming.socket" else "http://127.0.0.1:${toString(cfg.streamingPort)}/");
           proxyWebsockets = true;
         };
       };
@@ -544,6 +562,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package mastodonEnv ])
+      (lib.mkIf cfg.configureNginx {${config.services.nginx.user}.extraGroups = [ cfg.user ];})
     ];
 
     users.groups.mastodon = lib.mkIf (cfg.group == "mastodon") { };
