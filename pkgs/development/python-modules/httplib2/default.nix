@@ -1,13 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyparsing
+}:
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8af66c1c52c7ffe1aa5dc4bcd7c769885254b0756e6e69f953c7f0ab49a70ba3";
+    sha256 = "sha256-4NQo2tQ8ctvOfRY7d1P/x6OcCX5niO8Q9BmNtpuS8I4=";
   };
+
+  propagatedBuildInputs = [ pyparsing ];
 
   # Needs setting up
   doCheck = false;
