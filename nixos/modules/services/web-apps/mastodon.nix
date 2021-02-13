@@ -367,6 +367,7 @@ in {
       '' else "") + ''
         EOF
       '';
+      environment = env;
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;

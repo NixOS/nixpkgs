@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , rustPlatform
-, darwin
+, Security
 , libiconv
 }:
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1viph7ki6f2akc5mpbgycacndmxnv088ybfji2bfdbi5jnpyavvs";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   doInstallCheck = true;
   installCheckPhase = ''

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkg-config
 , makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
-, libutempter ? null, withUtempter ? stdenv.isLinux }:
+, withUtempter ? stdenv.isLinux, libutempter }:
 
 stdenv.mkDerivation rec {
   pname = "mosh";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
     longDescription = ''
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [viric];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.unix;
   };
 }

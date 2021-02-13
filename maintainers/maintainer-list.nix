@@ -9433,6 +9433,12 @@
       fingerprint = "556A 403F B0A2 D423 F656  3424 8489 B911 F9ED 617B";
     }];
   };
+  tmountain = {
+    email = "tinymountain@gmail.com";
+    github = "tmountain";
+    githubId = 135297;
+    name = "Travis Whitton";
+  };
   tmplt = {
     email = "tmplt@dragons.rocks";
     github = "tmplt";

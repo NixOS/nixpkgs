@@ -115,6 +115,7 @@ mapAliases ({
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
+  cups-googlecloudprint = throw "Google Cloudprint is officially discontinued since Jan 2021, more info https://support.google.com/chrome/a/answer/9633006";
   cquery = throw "cquery has been removed because it is abandoned by upstream. Consider switching to clangd or ccls instead."; # added 2020-06-15
   cv = progress; # added 2015-09-06
   d1x_rebirth = dxx-rebirth; # added 2018-04-25
@@ -846,7 +847,7 @@ mapAliases ({
 
   todolist = throw "todolist is now ultralist."; # added 2020-12-27
 
-  /* Cleanup before 21.03 */
+  /* Cleanup before 21.05 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
 

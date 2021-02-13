@@ -1,17 +1,19 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AojemBU3BUuMqokLH9mhYf+sH5Q+zSYeoGmuI5/6vPw=";
+    sha256 = "sha256-mnatEvojma1+cOVllTAzDVxl5luRGleLE6GNPnQUNWQ=";
   };
 
-  cargoSha256 = "sha256-TFSD+G0i5EAu7D7gOtRzwFxO214CBPdh2Y6rRt39FVo=";
+  cargoSha256 = "sha256-B07itUftDj3yVMDc/2VetwYs74fZBa1tmeELbbQ39P0=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     homepage = "https://proxy.vulpes.one/gemini/gem.limpet.net/agate";

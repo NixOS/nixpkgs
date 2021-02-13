@@ -297,6 +297,8 @@ in
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
+  dockle = callPackage ../development/tools/dockle { };
+
   docui = callPackage ../tools/misc/docui { };
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
@@ -705,7 +707,9 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
-  agate = callPackage ../servers/gemini/agate { };
+  agate = callPackage ../servers/gemini/agate {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   agda-pkg = callPackage ../development/tools/agda-pkg { };
 
@@ -1333,7 +1337,9 @@ in
 
   gremlin-console = callPackage ../applications/misc/gremlin-console { };
 
-  grex = callPackage ../tools/misc/grex { };
+  grex = callPackage ../tools/misc/grex {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
 
@@ -3992,7 +3998,9 @@ in
 
   eva = callPackage ../tools/misc/eva { };
 
-  exa = callPackage ../tools/misc/exa { };
+  exa = callPackage ../tools/misc/exa {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   exempi = callPackage ../development/libraries/exempi {
     stdenv = if stdenv.isi686 then gcc6Stdenv else stdenv;
@@ -8379,7 +8387,9 @@ in
 
   toilet = callPackage ../tools/misc/toilet { };
 
-  tokei = callPackage ../development/tools/misc/tokei { };
+  tokei = callPackage ../development/tools/misc/tokei {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
 
@@ -8428,6 +8438,8 @@ in
   trezord = callPackage ../servers/trezord { };
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
+
+  trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
@@ -10057,7 +10069,7 @@ in
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8103;
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8104;
 
   inherit (haskellPackages) ghc;
 
@@ -10190,6 +10202,8 @@ in
     # than peek into its version).
     inherit (emacs.pkgs.melpaStablePackages) irony;
   };
+
+  holo-build = callPackage ../tools/package-management/holo-build { };
 
   hugs = callPackage ../development/interpreters/hugs { };
 
@@ -12657,7 +12671,7 @@ in
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
-  qtcreator = libsForQt514.callPackage ../development/tools/qtcreator { };
+  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
 
@@ -28579,8 +28593,6 @@ in
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
 
-  cups-googlecloudprint = callPackage ../misc/cups/drivers/googlecloudprint { };
-
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
@@ -29385,6 +29397,8 @@ in
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
+
+  ssh-tools = callPackage ../applications/misc/ssh-tools { };
 
   auto-cpufreq = callPackage ../tools/system/auto-cpufreq {  };
 
