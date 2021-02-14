@@ -10958,7 +10958,7 @@ let
     pname = "LaTeXML";
     version = "0.8.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/B/BR/BRMILLER/LaTeXML-0.8.5.tar.gz";
       sha256 = "0dr69rgl4si9i9ww1r4dc7apgb7y6f7ih808w4g0924cvz823s0x";
     };
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
