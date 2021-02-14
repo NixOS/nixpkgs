@@ -5344,6 +5344,8 @@ in {
 
   pycxx = callPackage ../development/python-modules/pycxx { };
 
+  pydaikin = callPackage ../development/python-modules/pydaikin { };
+
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };

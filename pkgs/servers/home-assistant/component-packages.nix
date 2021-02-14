@@ -145,7 +145,7 @@
     "crimereports" = ps: with ps; [ ]; # missing inputs: crimereports
     "cups" = ps: with ps; [ pycups ];
     "currencylayer" = ps: with ps; [ ];
-    "daikin" = ps: with ps; [ ]; # missing inputs: pydaikin
+    "daikin" = ps: with ps; [ pydaikin ];
     "danfoss_air" = ps: with ps; [ ]; # missing inputs: pydanfossair
     "darksky" = ps: with ps; [ python-forecastio ];
     "datadog" = ps: with ps; [ datadog ];
