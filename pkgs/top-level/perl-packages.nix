@@ -13609,12 +13609,12 @@ let
 
   MojoliciousPluginStatus = buildPerlPackage {
     pname = "Mojolicious-Plugin-Status";
-    version = "1.13";
+    version = "1.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.13.tar.gz";
-      sha256 = "19xdv6bpmg1gl39dmm59lagvx6jkdzckj4idmqz8gf2y64ca2k4f";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.14.tar.gz";
+      sha256 = "0gly73vfd4ncdcfcaidcly9sm7662s3ga5jikvmh6qbs3fr8lsrk";
     };
-    propagatedBuildInputs = [ BSDResource CpanelJSONXS FileMap Mojolicious ];
+    propagatedBuildInputs = [ BSDResource FileMap Mojolicious Sereal ];
     meta = {
       homepage = "https://github.com/mojolicious/mojo-status";
       description = "Mojolicious server status plugin";
