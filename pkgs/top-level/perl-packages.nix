@@ -1347,7 +1347,7 @@ let
       sha256 = "ee66bbf814f0dc3d1e80680e050fad10b1e018fed7929f653ed40e088b2aa295";
     };
     buildInputs = [ FileSlurp ];
-    propagatedBuildInputs = [ ClassLoad DirSelf FileShareDir ModulePluggable MooseXGetopt namespaceclean  ];
+    propagatedBuildInputs = [ DirSelf FileShareDir ModulePluggable MooseXGetopt ];
     meta = {
       homepage = "https://metacpan.org/release/Bot-Training";
       description = "Plain text training material for bots like Hailo and AI::MegaHAL";
