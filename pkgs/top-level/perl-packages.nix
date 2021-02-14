@@ -13293,8 +13293,8 @@ let
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Module-Install-ReadmeFromPod-0.30.tar.gz";
       sha256 = "79f6df5536619faffbda696bdd25ccad17c469bf32e51cd3e613366d49400169";
     };
-    buildInputs = [ TestInDistDir ];
-    propagatedBuildInputs = [ CaptureTiny IOAll ModuleInstall PodMarkdown ];
+    buildInputs = [ CaptureTiny TestInDistDir ];
+    propagatedBuildInputs = [ IOAll ModuleInstall PodMarkdown ];
     meta = {
       homepage = "https://github.com/bingos/module-install-readmefrompod/";
       description = "A Module::Install extension to automatically convert POD to a README";
