@@ -9066,10 +9066,11 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-TrayIcon-0.07.tar.gz";
       sha256 = "0m25jrxsj5qjvqs8j90mkbk0fpps0d9wpn3pm6gdl4z6lscjpz1r";
     };
-    propagatedBuildInputs = [ pkgs.gtk2 Gtk2 ];
+    propagatedBuildInputs = [ pkgs.gtk2 Pango ];
     meta = {
       license = lib.licenses.gpl2;
     };
+    buildInputs = [ Gtk2 ];
   };
 
   Gtk2AppIndicator = buildPerlPackage {
