@@ -18616,6 +18616,9 @@ with pkgs;
     s6-man-pages = callPackage ../data/documentation/s6-man-pages {
       inherit buildManPages;
     };
+    s6-networking-man-pages = callPackage ../data/documentation/s6-networking-man-pages {
+      inherit buildManPages;
+    };
 
     mdevd = callPackage ../os-specific/linux/mdevd { };
     nsss = callPackage ../development/libraries/nsss { };
@@ -23029,6 +23032,8 @@ with pkgs;
   open-fonts = callPackage ../data/fonts/open-fonts { };
 
   s6-man-pages = skawarePackages.s6-man-pages;
+
+  s6-networking-man-pages = skawarePackages.s6-networking-man-pages;
 
   scientifica = callPackage ../data/fonts/scientifica { };
 
