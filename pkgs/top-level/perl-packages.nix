@@ -11270,7 +11270,7 @@ let
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.17.tar.gz";
       sha256 = "10r1q2xfba59w818li5xaj6jlph9qla7vb99ir1ampq5n8g0s5i6";
     };
-    buildInputs = [ TestDeep ];
+
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
       homepage = "https://github.com/jhthorsen/linkembedder";
