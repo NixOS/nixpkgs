@@ -15491,7 +15491,7 @@ let
       url = "mirror://cpan/authors/id/I/IV/IVAN/Net-SCP-0.08.reprise.tar.gz";
       sha256 = "88a9b2df69e769e5855a408b19f61915b82e8fe070ab5cf4d525dd3b8bbe31c1";
     };
-    propagatedBuildInputs = [ pkgs.openssl ];
+    propagatedBuildInputs = [ pkgs.openssl NetSSH StringShellQuote ];
     patchPhase = ''
       sed -i 's|$scp = "scp";|$scp = "${pkgs.openssh}/bin/scp";|' SCP.pm
     '';
@@ -15499,7 +15499,7 @@ let
       description = "Simple wrappers around ssh and scp commands.";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ NetSSH StringShellQuote ];
+
   };
 
   NetServer = buildPerlPackage {
