@@ -1153,7 +1153,7 @@ let
       url = "mirror://cpan/authors/id/T/TE/TEEJAY/Autodia-2.14.tar.gz";
       sha256 = "08pl5y18nsvy8ihfzdsbd8rz6a8al09wqfna07zdjfdyib42b0dc";
     };
-    propagatedBuildInputs = [ TemplateToolkit XMLSimple ];
+    propagatedBuildInputs = [ DBI TemplateToolkit XMLSimple ];
 
     meta = {
       description = "AutoDia, create UML diagrams from source code";
@@ -1173,7 +1173,7 @@ let
       homepage = "http://www.aarontrevena.co.uk/opensource/autodia/";
       license = lib.licenses.gpl2Plus;
     };
-    buildInputs = [ DBI ];
+
   };
 
   autovivification = buildPerlPackage {
