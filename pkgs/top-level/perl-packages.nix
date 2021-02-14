@@ -9208,8 +9208,8 @@ let
       url = "mirror://cpan/authors/id/A/AV/AVAR/Hailo-0.75.tar.gz";
       sha256 = "bba99cb0cfa3ee8632dd89906c6e6fa05fe6bb367f2282e88909cefd8f9174c2";
     };
-    buildInputs = [ BotTrainingMegaHAL BotTrainingStarCraft DataSection FileSlurp PodSection TestException TestExpect TestOutput TestScript TestScriptRun ];
-    propagatedBuildInputs = [ ClassLoad DBDSQLite DataDump DirSelf FileCountLines GetoptLongDescriptive IOInteractive IPCSystemSimple ListMoreUtils Moose MooseXGetopt MooseXStrictConstructor MooseXTypes RegexpCommon TermSk namespaceclean ];
+    buildInputs = [ BotTraining BotTrainingMegaHAL BotTrainingStarCraft DataSection FileSlurp PodSection TestException TestExpect TestOutput TestScript TestScriptRun ];
+    propagatedBuildInputs = [ DBDSQLite DataDump DirSelf FileCountLines IOInteractive IPCSystemSimple ListMoreUtils MooseXGetopt MooseXStrictConstructor MooseXTypes RegexpCommon TermSk ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postPatch = ''
       patchShebangs bin
