@@ -42,16 +42,28 @@ let
       sha256 = "0fspinnpyk1c9ay0h3wl8d4bbm6aswlypnrw2c7pk2i4mh981b4b";
     };
   };
+
+  # Derived from vst3.wrap
+  vst3 = rec {
+    version = "e2fbb41f28a4b311f2fc7d28e9b4330eec1802b6";
+    src = fetchFromGitHub {
+      owner = "robbert-vdh";
+      repo = "vst3sdk";
+      rev = version;
+      fetchSubmodules = true;
+      sha256 = "1fqpylkbljifwdw2z75agc0yxnhmv4b09fxs3rvlw1qmm5mwx0p2";
+    };
+  };
 in stdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "2.2.1";
+  version = "3.0.0";
 
   # NOTE: Also update yabridgectl's cargoSha256 when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    sha256 = "0fg3r12hk8xm4698pbw9rjzcgrmibc2l3651pj96w0dzn6kyxi2g";
+    sha256 = "0ha7jhnkd2i49q5rz2hp7sq6hv19bir99x51hs6nvvcf16hlf2bp";
   };
 
   # Unpack subproject sources
@@ -62,11 +74,12 @@ in stdenv.mkDerivation rec {
     cp -R --no-preserve=mode,ownership ${function2.src} function2-${function2.version}
     tar -xf function2-patch-${function2.version}.tar.xz
     cp -R --no-preserve=mode,ownership ${tomlplusplus.src} tomlplusplus
+    cp -R --no-preserve=mode,ownership ${vst3.src} vst3
   )'';
 
-  patches = [
-    ./include-mutex.patch
-  ];
+  postPatch = ''
+    patchShebangs .
+  '';
 
   nativeBuildInputs = [
     meson
@@ -100,7 +113,8 @@ in stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/lib"
     cp yabridge-group.exe{,.so} "$out/bin"
     cp yabridge-host.exe{,.so} "$out/bin"
-    cp libyabridge.so "$out/lib"
+    cp libyabridge-vst2.so "$out/lib"
+    cp libyabridge-vst3.so "$out/lib"
   '';
 
   meta = with lib; {
