@@ -13,6 +13,14 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-9hYiyZ34atmSL7JvuXyiGU7HR4E6qN7bGZlyU+hP+FU=";
 
+  subPackages = [ "cmd" ];
+
+  buildFlagsArray = [ "-ldflags=-w -s -X main.gitTag=${src.rev} -X main.gitCommit=${src.rev} -X main.gitBranch=master" ];
+
+  postInstall = ''
+    mv $out/bin/cmd $out/bin/pgcenter
+  '';
+
   doCheck = false;
 
   meta = with lib; {
