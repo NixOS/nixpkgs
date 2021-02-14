@@ -4038,6 +4038,8 @@ in {
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
+  metar = callPackage ../development/python-modules/metar { };
+
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   micawber = callPackage ../development/python-modules/micawber { };
@@ -4917,6 +4919,8 @@ in {
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
+
+  pynws = callPackage ../development/python-modules/pynws { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
