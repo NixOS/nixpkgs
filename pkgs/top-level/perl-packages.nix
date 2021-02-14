@@ -21294,15 +21294,15 @@ let
     pname = "Test-UNIXSock";
     version = "0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FU/FUJIWARA/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/F/FU/FUJIWARA/Test-UNIXSock-0.4.tar.gz";
       sha256 = "0gwgd2w16dsppmf1r6yc17ipvs8b62ybsiz2dyzwy4il236b8c1p";
     };
     meta = {
       description = "Testing UNIX domain socket program";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ ModuleBuildTiny ];
-    propagatedBuildInputs = [ TestSharedFork TestTCP ];
+    buildInputs = [ ModuleBuildTiny TestSharedFork ];
+    propagatedBuildInputs = [ TestTCP ];
   };
 
   TestTime = buildPerlPackage {
