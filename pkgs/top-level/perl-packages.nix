@@ -7001,8 +7001,8 @@ let
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Stuffer-0.018.tar.gz";
       sha256 = "02wapphmcqbl1sg32x2az863lz5bb2dlckibxfqrjdlny27a406h";
     };
-    buildInputs = [ Moo TestFatal ];
-    propagatedBuildInputs = [ EmailMIME EmailSender ModuleRuntime ParamsUtil ];
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ EmailMIME EmailSender ];
     meta = {
       homepage = "https://github.com/rjbs/Email-Stuffer";
       description = "A more casual approach to creating and sending Email:: emails";
