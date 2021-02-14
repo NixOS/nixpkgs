@@ -375,9 +375,6 @@ in
 
         serviceConfig = mkMerge [
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-            User = "postgres";
-            Group = "postgres";
-            RuntimeDirectory = "postgresql";
             Type = if versionAtLeast cfg.package.version "9.6"
                    then "notify"
                    else "simple";
@@ -392,8 +389,41 @@ in
             TimeoutSec = 120;
 
             ExecStart = "${postgresql}/bin/postgres";
+
+            # User and group
+            User = "postgres";
+            Group = "postgres";
+            # Runtime directory and mode
+            RuntimeDirectory = "postgresql";
+            RuntimeDirectoryMode = "0755";
+            # Capabilities
+            CapabilityBoundingSet = "";
+            # Security
+            NoNewPrivileges = true;
+            # Sandboxing
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            PrivateTmp = false; # Fixme, nixos/tests/postgresql-wal-receiver uses the /tmp directory for test.
+            PrivateDevices = true;
+            ProtectHostname = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            PrivateMounts = true;
+            # System Call Filtering
+            SystemCallArchitectures = "native";
           }
+          (mkIf (cfg.dataDir != "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+            # Access write directories
+            ReadWritePaths = [ cfg.dataDir ];
+          })
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+            # State directory and mode
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
             StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
           })
