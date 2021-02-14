@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsflash";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    hash = "sha256-5GuQoLMQ6p4B5vnY5Viad3rjkyZX3aWeVeycozM7pCE=";
+    hash = "sha256-TeheK14COX1NIrql74eI8Wx4jtpUP1eO5mugT5LzlPY=";
   };
 
-  cargoHash = "sha256-xBH3+VTV6hlF1sg/Iaw6Z64Z8VpUhpbAHn/S/L9ymOI=";
+  cargoHash = "sha256-Fbj4sabrwpfa0QNEN4l91y/6AuPIKu7QPzYNUO6RtU0=";
 
   patches = [
     # Post install tries to generate an icon cache & update the
