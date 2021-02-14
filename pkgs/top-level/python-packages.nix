@@ -202,6 +202,8 @@ in {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aioambient = callPackage ../development/python-modules/aioambient { };
+
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
   ailment = callPackage ../development/python-modules/ailment { };
@@ -4627,8 +4629,6 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
-  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito { inherit python; });
-
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
@@ -5124,6 +5124,8 @@ in {
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
+  proxmoxer = callPackage ../development/python-modules/proxmoxer { };
+
   psautohint = callPackage ../development/python-modules/psautohint { };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -5348,6 +5350,8 @@ in {
   pycurl = callPackage ../development/python-modules/pycurl { };
 
   pycxx = callPackage ../development/python-modules/pycxx { };
+
+  pydaikin = callPackage ../development/python-modules/pydaikin { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
@@ -5677,6 +5681,8 @@ in {
 
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
 
+  pymsteams = callPackage ../development/python-modules/pymsteams { };
+
   py-multibase = callPackage ../development/python-modules/py-multibase { };
 
   py-multicodec = callPackage ../development/python-modules/py-multicodec { };
@@ -5886,6 +5892,8 @@ in {
   pyreport = callPackage ../development/python-modules/pyreport { };
 
   pyres = callPackage ../development/python-modules/pyres { };
+
+  pyrisco = callPackage ../development/python-modules/pyrisco { };
 
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
@@ -6496,6 +6504,8 @@ in {
 
   pytorchWithoutCuda = self.pytorch.override { cudaSupport = false; };
 
+  pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
+
   pytrends = callPackage ../development/python-modules/pytrends { };
 
   pytricia = callPackage ../development/python-modules/pytricia { };
@@ -6679,6 +6689,8 @@ in {
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud { };
 
   radio_beam = callPackage ../development/python-modules/radio_beam { };
+
+  radiotherm = callPackage ../development/python-modules/radiotherm { };
 
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
 
@@ -7579,6 +7591,8 @@ in {
   supervisor = callPackage ../development/python-modules/supervisor { };
 
   sure = callPackage ../development/python-modules/sure { };
+
+  surepy = callPackage ../development/python-modules/surepy { };
 
   survey = callPackage ../development/python-modules/survey { };
 

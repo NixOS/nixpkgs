@@ -48,6 +48,7 @@ in runCommand podman.name {
   ln -s ${podman.man} $man
 
   mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/lib $out/lib
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
     --prefix PATH : ${binPath}

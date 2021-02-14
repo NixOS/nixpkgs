@@ -25,6 +25,10 @@ buildGoModule rec {
 
   outputs = [ "out" "man" ];
 
+  patches = [
+    ../../../applications/virtualization/podman/remove-unconfigured-runtime-warn.patch
+  ];
+
   vendorSha256 = null;
 
   doCheck = false;
