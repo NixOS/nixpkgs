@@ -892,7 +892,7 @@ let
     pname = "Astro-FITS-Header";
     version = "3.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/Astro-FITS-Header-3.07.tar.gz";
       sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
     };
     meta = {
