@@ -6757,6 +6757,8 @@ in
     opendylan-bootstrap = opendylan_bin;
   };
 
+  ophis = python3Packages.callPackage ../development/compilers/ophis { };
+
   opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
 
   open-ecard = callPackage ../tools/security/open-ecard { };
