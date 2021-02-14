@@ -3102,7 +3102,7 @@ let
       sha256 = "1hgiynpy7q4gbx1d9pwnzdzil36k13vjxhscalj710ikcddvjz92";
     };
     buildInputs = [ PodCoverageTrustPod TestPerlCritic ];
-    propagatedBuildInputs = [ CaptureTiny RefUtil SubExporter TermReadKey YAML ];
+    propagatedBuildInputs = [ CaptureTiny RefUtil TermReadKey YAML ];
     meta = {
       homepage = "https://github.com/reyjrar/CLI-Helpers";
       description = "Subroutines for making simple command line scripts";
