@@ -5674,6 +5674,8 @@ in {
 
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
 
+  pymsteams = callPackage ../development/python-modules/pymsteams { };
+
   py-multibase = callPackage ../development/python-modules/py-multibase { };
 
   py-multicodec = callPackage ../development/python-modules/py-multicodec { };
