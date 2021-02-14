@@ -3083,6 +3083,10 @@ in {
 
   hypothesis = if isPy3k then callPackage ../development/python-modules/hypothesis { } else self.hypothesis_4;
 
+  hypothesmith = callPackage ../development/python-modules/hypothesmith {
+    libcst = self.libcst.override { doCheck = false; };
+  };
+
   hyppo = callPackage ../development/python-modules/hyppo { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
