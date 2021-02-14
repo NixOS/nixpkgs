@@ -1,6 +1,6 @@
-{ ripgrep, git, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub, writeTextDir
-, lib, stdenv, runCommandNoCC, remarshal, formats, spacevim_config ? import ./init.nix }:
-with stdenv;
+{ ripgrep, git, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub
+, lib, stdenv, formats, spacevim_config ? import ./init.nix }:
+
 let
   format = formats.toml {};
   vim-customized = vim_configurable.customize {
@@ -11,7 +11,7 @@ let
     vimrcConfig.packages.myVimPackage = with vimPlugins; { start = [ ]; };
   };
   spacevimdir = format.generate "init.toml" spacevim_config;
-in mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "spacevim";
   version = "1.5.0";
   src = fetchFromGitHub {
