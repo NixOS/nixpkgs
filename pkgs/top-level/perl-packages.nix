@@ -16552,21 +16552,9 @@ let
 
     nativeBuildInputs = with pkgs; [ autoPatchelfHook libGL.dev glibc.dev mesa_glu.dev ];
 
-    buildInputs = [ DevelChecklib TestDeep TestException TestWarn pkgs.gsl pkgs.freeglut pkgs.xorg.libXmu pkgs.xorg.libXi ];
+    buildInputs = [ pkgs.gsl pkgs.freeglut pkgs.xorg.libXmu pkgs.xorg.libXi DevelChecklib TestDeep TestException TestWarn ];
 
-    propagatedBuildInputs = [
-      AstroFITSHeader
-      ConvertUU
-      ExtUtilsF77
-      FileMap
-      Inline
-      InlineC
-      ListMoreUtils
-      ModuleCompile
-      OpenGL
-      PodParser
-      TermReadKey
-    ];
+    propagatedBuildInputs = [ AstroFITSHeader ConvertUU FileMap InlineC ListMoreUtils ModuleCompile OpenGL PodParser TermReadKey ];
 
     meta = {
       homepage = "http://pdl.perl.org/";
