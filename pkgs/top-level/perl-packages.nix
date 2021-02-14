@@ -15399,7 +15399,7 @@ let
       url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-Server-Test-0.22.tar.gz";
       sha256 = "13idip7jky92v4adw60jn2gcc3zf339gsdqlnc9nnvqzbxxp285i";
     };
-    propagatedBuildInputs = [ NetLDAP NetLDAPServer TestMore DataDump NetLDAPSID ];
+    propagatedBuildInputs = [ DataDump NetLDAPSID NetLDAPServer ];
     meta = {
       description= "test Net::LDAP code";
       license = with lib.licenses; [ artistic1 ];
