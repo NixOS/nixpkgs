@@ -618,7 +618,7 @@ let
       sha256 = "1axvmdmg4hw89z2fi3p95jwblnzvbrvnfmxqn1p5cvf8nlj15phr";
     };
     buildInputs = [ ModuleBuildTiny ];
-    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstall ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy ModuleCPANfile ParsePMFile ParallelPipes locallib ];
+    propagatedBuildInputs = [ CommandRunner ExtUtilsInstall FileCopyRecursive MenloLegacy ParallelPipes YAMLPP ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/cpm
