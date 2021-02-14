@@ -43,8 +43,32 @@ let
     LogsDirectoryMode = "0750";
     # Access write directories
     UMask = "0027";
+    # Capabilities
+    CapabilityBoundingSet = "";
+    # Security
+    NoNewPrivileges = true;
     # Sandboxing
+    ProtectSystem = "strict";
+    ProtectHome = true;
     PrivateTmp = true;
+    PrivateDevices = true;
+    PrivateUsers = true;
+    ProtectClock = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectControlGroups = true;
+    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+    RestrictNamespaces = true;
+    LockPersonality = true;
+    MemoryDenyWriteExecute = false;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    PrivateMounts = true;
+    # System Call Filtering
+    SystemCallArchitectures = "native";
+    SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @reboot @resources @setuid @swap";
   };
 
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
