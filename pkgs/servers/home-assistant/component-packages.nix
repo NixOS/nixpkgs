@@ -27,7 +27,7 @@
     "alpha_vantage" = ps: with ps; [ ]; # missing inputs: alpha_vantage
     "amazon_polly" = ps: with ps; [ boto3 ];
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
-    "ambient_station" = ps: with ps; [ ]; # missing inputs: aioambient
+    "ambient_station" = ps: with ps; [ aioambient ];
     "amcrest" = ps: with ps; [ amcrest ha-ffmpeg ];
     "ampio" = ps: with ps; [ ]; # missing inputs: asmog
     "android_ip_webcam" = ps: with ps; [ ]; # missing inputs: pydroid-ipcam
@@ -145,7 +145,7 @@
     "crimereports" = ps: with ps; [ ]; # missing inputs: crimereports
     "cups" = ps: with ps; [ pycups ];
     "currencylayer" = ps: with ps; [ ];
-    "daikin" = ps: with ps; [ ]; # missing inputs: pydaikin
+    "daikin" = ps: with ps; [ pydaikin ];
     "danfoss_air" = ps: with ps; [ ]; # missing inputs: pydanfossair
     "darksky" = ps: with ps; [ python-forecastio ];
     "datadog" = ps: with ps; [ datadog ];
@@ -518,7 +518,7 @@
     "mqtt_json" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "mqtt_room" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "mqtt_statestream" = ps: with ps; [ aiohttp-cors paho-mqtt ];
-    "msteams" = ps: with ps; [ ]; # missing inputs: pymsteams
+    "msteams" = ps: with ps; [ pymsteams ];
     "mvglive" = ps: with ps; [ PyMVGLive ];
     "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
@@ -637,7 +637,7 @@
     "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
     "prowl" = ps: with ps; [ ];
     "proximity" = ps: with ps; [ ];
-    "proxmoxve" = ps: with ps; [ ]; # missing inputs: proxmoxer
+    "proxmoxve" = ps: with ps; [ proxmoxer ];
     "proxy" = ps: with ps; [ pillow ];
     "ps4" = ps: with ps; [ ]; # missing inputs: pyps4-2ndscreen
     "pulseaudio_loopback" = ps: with ps; [ pulsectl ];
@@ -658,7 +658,7 @@
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch
     "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa rachiopy ];
     "radarr" = ps: with ps; [ ];
-    "radiotherm" = ps: with ps; [ ]; # missing inputs: radiotherm
+    "radiotherm" = ps: with ps; [ radiotherm ];
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
     "raincloud" = ps: with ps; [ ]; # missing inputs: raincloudy
     "rainforest_eagle" = ps: with ps; [ ]; # missing inputs: eagle200_reader uEagle
@@ -681,7 +681,7 @@
     "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
     "ring" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: ring_doorbell
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
-    "risco" = ps: with ps; [ ]; # missing inputs: pyrisco
+    "risco" = ps: with ps; [ pyrisco ];
     "rmvtransport" = ps: with ps; [ PyRMVtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
@@ -796,7 +796,7 @@
     "sun" = ps: with ps; [ ];
     "supervisord" = ps: with ps; [ ];
     "supla" = ps: with ps; [ ]; # missing inputs: asyncpysupla
-    "surepetcare" = ps: with ps; [ ]; # missing inputs: surepy
+    "surepetcare" = ps: with ps; [ surepy ];
     "swiss_hydrological_data" = ps: with ps; [ swisshydrodata ];
     "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
@@ -858,8 +858,8 @@
     "traccar" = ps: with ps; [ aiohttp-cors stringcase ]; # missing inputs: pytraccar
     "trackr" = ps: with ps; [ ]; # missing inputs: pytrackr
     "tradfri" = ps: with ps; [ ]; # missing inputs: pytradfri[async]
-    "trafikverket_train" = ps: with ps; [ ]; # missing inputs: pytrafikverket
-    "trafikverket_weatherstation" = ps: with ps; [ ]; # missing inputs: pytrafikverket
+    "trafikverket_train" = ps: with ps; [ pytrafikverket ];
+    "trafikverket_weatherstation" = ps: with ps; [ pytrafikverket ];
     "transmission" = ps: with ps; [ transmissionrpc ];
     "transport_nsw" = ps: with ps; [ ]; # missing inputs: PyTransportNSW
     "travisci" = ps: with ps; [ ]; # missing inputs: TravisPy
