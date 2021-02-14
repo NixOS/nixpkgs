@@ -6497,6 +6497,8 @@ in {
 
   pytorchWithoutCuda = self.pytorch.override { cudaSupport = false; };
 
+  pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
+
   pytrends = callPackage ../development/python-modules/pytrends { };
 
   pytricia = callPackage ../development/python-modules/pytricia { };
