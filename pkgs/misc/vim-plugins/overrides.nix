@@ -7,9 +7,7 @@
 , ruby
 , which
 , fetchFromGitHub
-, fetchgit
 , fetchurl
-, fetchzip
 , fetchpatch
 , llvmPackages
 , rustPlatform
