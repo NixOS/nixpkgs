@@ -15017,7 +15017,7 @@ let
       sha256 = "1lwy1ijrhibi087p3q5zvadhkq0slfrzfhb76cmkx4mpyv5v4l8f";
     };
     buildInputs = [ HTTPCookies TestIdentity TestMetricsAny TestRefcount ];
-    propagatedBuildInputs = [ Future HTTPMessage IOAsync MetricsAny StructDumb URI ];
+    propagatedBuildInputs = [ HTTPMessage IOAsync MetricsAny ];
     preCheck = lib.optionalString stdenv.isDarwin ''
       # network tests fail on Darwin/sandbox, so disable these
       rm -f t/20local-connect.t t/22local-connect-pipeline.t t/23local-connect-redir.t
