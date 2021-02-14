@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
 , xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config
-, which, python3, makeWrapper, docbook_xml_dtd_45 }:
+, which, python3, makeWrapper, docbook_xml_dtd_45, perl }:
 
 stdenv.mkDerivation rec {
   pname = "criu";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [ pkg-config docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython perl ];
   buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet iptables ];
   propagatedBuildInputs = with python3.pkgs; [ python python3.pkgs.protobuf ];
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Userspace checkpoint/restore for Linux";
     homepage    = "https://criu.org";
     license     = licenses.gpl2;
-    platforms   = [ "x86_64-linux" ];
+    platforms   = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = [ maintainers.thoughtpolice ];
   };
 }
