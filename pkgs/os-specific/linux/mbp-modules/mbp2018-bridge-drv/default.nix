@@ -1,0 +1,34 @@
+{ lib, stdenv, kernel, fetchFromGitHub, }:
+
+stdenv.mkDerivation rec {
+  name = "mbp2018-bridge-drv";
+  version = "b43fcc069da73e051072fde24af4014c9c487286";
+
+  src = fetchFromGitHub {
+    owner = "MCMrARM";
+    repo = "mbp2018-bridge-drv";
+    rev = "0.01";
+    sha256 = "0ac2l51ybfrvg8m36x67rsvgjqs1vwp7c89ssvbjkrcq3y4qdb53";
+  };
+
+  buildPhase = ''
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
+      M=$(pwd) modules
+  '';
+
+  installPhase = ''
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build  \
+      INSTALL_MOD_PATH=$out M=$(pwd) modules_install
+  '';
+
+  meta = with lib; {
+    description = "A driver for MacBook models 2018 and newer, which makes the keyboard, mouse and audio output work.";
+    longDescription = ''
+      A driver for MacBook models 2018 and newer, implementing the VHCI (required for mouse/keyboard/etc.) and audio functionality.
+    '';
+    homepage = "https://github.com/MCMrARM/mbp2018-bridge-drv";
+    license = lib.licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ ];
+  };
+}
