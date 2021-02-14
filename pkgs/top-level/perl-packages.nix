@@ -13336,6 +13336,19 @@ let
     };
   };
 
+  ModuleLoad = buildPerlPackage {
+    pname = "Module-Load";
+    version = "0.36";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Module-Load-0.36.tar.gz";
+      sha256 = "1q7nprvnc0p470cwks6a5w3qnhzr73c28kjjz64hw8hbq05049fq";
+    };
+    meta = {
+      description = "Load modules in a DWIM style";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ModuleManifest = buildPerlPackage {
     pname = "Module-Manifest";
     version = "1.09";
@@ -17923,8 +17936,9 @@ let
       url = "mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.82.tar.gz";
       sha256 = "0wwffn9bvny5a9p61ckzk55m083gmlx4r4znjzw3ylvc2c6ynyaj";
     };
-    propagatedBuildInputs = [ XMLParser ];
+    propagatedBuildInputs = [ ModuleLoad ScalarListUtils XMLParser ];
     doCheck = false;
+    buildInputs = [ ExtUtilsMakeMaker TestSimple13 ];
   };
 
   ReturnValue = buildPerlPackage {
