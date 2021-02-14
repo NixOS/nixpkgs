@@ -19761,7 +19761,7 @@ let
     pname = "Term-ReadPassword";
     version = "0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PH/PHOENIX/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/P/PH/PHOENIX/Term-ReadPassword-0.11.tar.gz";
       sha256 = "08s3zdqbr01qf4h8ryc900qq1cjcdlyy2dq0gppzzy9mbcs6da71";
     };
 
