@@ -13,6 +13,7 @@
 , leveldb, oathToolkit
 , libnl, libcap_ng
 , rdkafka
+, nixosTests
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -199,6 +200,7 @@ in rec {
     meta = getMeta "Distributed storage system";
 
     passthru.version = version;
+    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
