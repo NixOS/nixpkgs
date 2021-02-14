@@ -17361,6 +17361,7 @@ let
       url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.74.tar.gz";
       sha256 = "12559997r7wbhhs0p6cdxdzv7rzviv0nx1hq0dby8q481apn489f";
     };
+    propagatedBuildInputs = [ PodSimple ];
   };
 
   PodCoverage = buildPerlPackage {
