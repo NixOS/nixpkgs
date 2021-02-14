@@ -8279,12 +8279,12 @@ let
     pname = "vimux";
     version = "2021-02-14";
     src = fetchFromGitHub {
-      owner = "ostera";
+      owner = "preservim";
       repo = "vimux";
       rev = "3693ec6f129fa10b1f3435829645c4607584c3ab";
       sha256 = "1pmcablswp2q32xc1njzfh5vxbani4a8n95k0jzhq0cz8w4ssxpw";
     };
-    meta.homepage = "https://github.com/ostera/vimux/";
+    meta.homepage = "https://github.com/preservim/vimux/";
   };
 
   vimwiki = buildVimPluginFrom2Nix {
