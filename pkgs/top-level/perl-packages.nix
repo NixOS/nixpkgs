@@ -23318,13 +23318,10 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Filter-Sort-1.01.tar.gz";
-      sha256 = "sha256-UQWF85pJFszV+o1UXpYXnJHq9vx8l6QBp1aOhBFi+l8=";
+      sha256 = "0pzsc88q93jnlw0s95vwzkvfm4cw2yb5wm4dzbawq5j9kbrqa1ai";
     };
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    propagatedBuildInputs = [
-      XMLSAX
-      XMLSAXWriter
-    ];
+    propagatedBuildInputs = [ XMLSAX XMLSAXWriter ];
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/xmlsort
     '';
