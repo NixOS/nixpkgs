@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ./fix-failing-test.patch
   ];
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib"
     substituteInPlace configure --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib"
     substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
