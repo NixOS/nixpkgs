@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  outputs = [ "out" "dev" ];
+
   meta = with lib; {
     description = "A tool for automating interactive applications";
     homepage = "http://expect.sourceforge.net/";
