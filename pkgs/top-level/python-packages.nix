@@ -546,6 +546,8 @@ in {
 
   augeas = callPackage ../development/python-modules/augeas { inherit (pkgs) augeas; };
 
+  auroranoaa = callPackage ../development/python-modules/auroranoaa { };
+
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
   authheaders = callPackage ../development/python-modules/authheaders { };
@@ -2858,6 +2860,8 @@ in {
   else
     callPackage ../development/python-modules/gunicorn { };
 
+  guppy3 = callPackage ../development/python-modules/guppy3 { };
+
   gurobipy = if stdenv.hostPlatform.system == "x86_64-darwin" then
     callPackage ../development/python-modules/gurobipy/darwin.nix { inherit (pkgs.darwin) cctools insert_dylib; }
   else if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -4036,6 +4040,8 @@ in {
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
+  metar = callPackage ../development/python-modules/metar { };
+
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   micawber = callPackage ../development/python-modules/micawber { };
@@ -4920,6 +4926,8 @@ in {
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
+
+  pynws = callPackage ../development/python-modules/pynws { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
