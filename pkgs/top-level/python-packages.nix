@@ -546,6 +546,8 @@ in {
 
   augeas = callPackage ../development/python-modules/augeas { inherit (pkgs) augeas; };
 
+  auroranoaa = callPackage ../development/python-modules/auroranoaa { };
+
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
   authheaders = callPackage ../development/python-modules/authheaders { };
