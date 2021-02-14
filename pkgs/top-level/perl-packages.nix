@@ -10122,12 +10122,13 @@ let
       url = "mirror://cpan/authors/id/K/KU/KURIHARA/Imager-QRCode-0.035.tar.gz";
       sha256 = "2a848deba29eb3942c44709a6853e318acab0c468cbfedbb9baae54760032513";
     };
-    propagatedBuildInputs = [ Imager ];
+
     meta = {
       description = "Generate QR Code with Imager using libqrencode";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
     };
+    buildInputs = [ Imager ];
   };
 
   ImageInfo = buildPerlPackage {
