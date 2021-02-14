@@ -16072,7 +16072,7 @@ let
       url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.39.tar.gz";
       sha256 = "1d914qnnpiyimfi57crzb6r31nl613g2k48frs9h821f25azarci";
     };
-    buildInputs = [ CPANMetaCheck TestFatal TestNeeds TestRequires ];
+    buildInputs = [ CPANMetaCheck TestFatal TestNeeds VariableMagic ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
     meta = {
       description = "Routines for manipulating stashes";
