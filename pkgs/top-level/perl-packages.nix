@@ -15791,6 +15791,7 @@ let
       description = "Perl extension to model fractions";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestWarn ];
   };
 
   NumberMisc = buildPerlModule {
