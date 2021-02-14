@@ -10874,10 +10874,10 @@ let
 
   JSONParse = buildPerlPackage {
     pname = "JSON-Parse";
-    version = "0.60";
+    version = "0.61";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BK/BKB/JSON-Parse-0.60.tar.gz";
-      sha256 = "0s8yafc7b55jj7maw055m6ndx77gf0xljd697znrbzyngdp95drq";
+      url = "mirror://cpan/authors/id/B/BK/BKB/JSON-Parse-0.61.tar.gz";
+      sha256 = "01i87xnbbakigsbssb52c44r01d620fn7bwn5sxcp6zg1gkmb3nf";
     };
     meta = {
       description = "Read JSON into a Perl variable";
