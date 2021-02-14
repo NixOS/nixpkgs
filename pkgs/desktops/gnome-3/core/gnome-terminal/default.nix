@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.38.2";
+  version = "3.38.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "J73cnQumFMhuXstPVMdevDQV4oh6zZFEIFdUj9MgZhg=";
+    sha256 = "EaWw1jXxX9znUINRpRD79OkqpTMVKlD/DHhF4xAuR2Q=";
   };
 
   buildInputs = [
