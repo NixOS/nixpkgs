@@ -736,8 +736,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Game.Resources";
-    version = "2020.1202.0";
-    sha256 = "1m5156gkyyhf52ii6y7yqmsgpwcxn6zgji3nnyny6lk9glmc9vvs";
+    version = "2021.211.1";
+    sha256 = "0rqv5blmyzvcpk0b1r6fzr1bla62kr2fwkr1f9ahir9zafvk2wmm";
   })
   (fetchNuGet {
     name = "ppy.osuTK.NS20";
