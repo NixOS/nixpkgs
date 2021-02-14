@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.10";
+  version = "3.12";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "17smrxjdgbbzbzakik30vj46q4iib85ksqhb82jr4vjp57akszh9";
+    sha256 = "0n51ng1f8yf5zfsnh8s0pj9bnw6icb2r0y78gl2kzijaghhzlhvd";
   };
 
   postPatch = ''
@@ -31,12 +31,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-build-mb-len-max.patch
     ./path-to-cat.patch
-    # mailquota.c:277: undefined reference to `get_size'
-    # https://lists.gnu.org/archive/html/bug-mailutils/2020-08/msg00002.html
-    (fetchpatch {
-      url = "http://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=37713b42a501892469234b90454731d8d8b7a3e6";
-      sha256 = "1mwj77nxvf4xvqf26yjs59jyksnizj0lmbymbzg4kmqynzq3zjny";
-    })
     # Fix cross-compilation
     # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html
     (fetchpatch {
