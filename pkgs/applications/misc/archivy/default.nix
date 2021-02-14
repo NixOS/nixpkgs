@@ -5,11 +5,11 @@ watchdog, wtforms, html2text, flask-compress }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "archivy";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "FDyUfahjv4zqOVFr0nRhcgxr7mskFP1W/PlhZWx/6E8=";
+    sha256 = "53a43e26e9081ac266412d8643c66c07c289c4639bbaec374fd5147441253a4f";
   };
 
   # Relax some dependencies
