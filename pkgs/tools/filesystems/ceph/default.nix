@@ -9,7 +9,7 @@
 , babeltrace, gperf
 , gtest
 , cunit, snappy
-, rocksdb, makeWrapper
+, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
 , rdkafka
@@ -146,7 +146,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
@@ -171,12 +171,10 @@ in rec {
 
     cmakeFlags = [
       "-DWITH_PYTHON3=ON"
-      "-DWITH_SYSTEM_ROCKSDB=OFF"
+      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-
       "-DWITH_SYSTEM_BOOST=ON"
-      "-DWITH_SYSTEM_ROCKSDB=ON"
       "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
