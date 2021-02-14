@@ -12774,6 +12774,8 @@ in
 
   scss-lint = callPackage ../development/tools/scss-lint { };
 
+  segger-ozone = callPackage ../development/tools/misc/segger-ozone { };
+
   shadowenv = callPackage ../tools/misc/shadowenv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -25370,6 +25372,8 @@ in
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
 
   testssl = callPackage ../applications/networking/testssl { };
+
+  lavalauncher = callPackage ../applications/misc/lavalauncher { };
 
   ulauncher = callPackage ../applications/misc/ulauncher { };
 
