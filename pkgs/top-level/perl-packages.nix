@@ -20297,7 +20297,7 @@ let
     propagatedBuildInputs = [ SubUplevel ];
   };
 
-  TestExpect = buildPerlPackage {
+  TestExpect = buildPerlModule {
     pname = "Test-Expect";
     version = "0.34";
     src = fetchurl {
