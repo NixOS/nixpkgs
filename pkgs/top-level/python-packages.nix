@@ -5886,6 +5886,8 @@ in {
 
   pyres = callPackage ../development/python-modules/pyres { };
 
+  pyrisco = callPackage ../development/python-modules/pyrisco { };
+
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
   PyRMVtransport = callPackage ../development/python-modules/PyRMVtransport { };
