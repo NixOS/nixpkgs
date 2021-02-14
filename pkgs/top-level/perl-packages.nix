@@ -14077,7 +14077,7 @@ let
       sha256 = "2ae5b1e3da5abc0e4006278ecbcfa8fa7c224ea5529a6a688acbb229c09e6a5f";
     };
     buildInputs = [ TestFatal TestRequires ];
-    propagatedBuildInputs = [ Moo SubHandlesVia ];
+    propagatedBuildInputs = [ ModuleRuntime Moo SubHandlesVia ];
     meta = {
       description = "Easily translate Moose code to Moo";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
