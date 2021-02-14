@@ -25364,6 +25364,8 @@ in
 
   testssl = callPackage ../applications/networking/testssl { };
 
+  lavalauncher = callPackage ../applications/misc/lavalauncher { };
+
   ulauncher = callPackage ../applications/misc/ulauncher { };
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
