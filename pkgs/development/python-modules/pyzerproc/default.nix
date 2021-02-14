@@ -5,7 +5,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
-, pytest-cov
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -13,19 +12,18 @@
 
 buildPythonPackage rec {
   pname = "pyzerproc";
-  version = "0.4.6";
+  version = "0.4.8";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
     rev = version;
-    sha256 = "1qlxvvy9fyff56dvc46nsd5ngkxqhdi7s4gwfndj7dn76j81srpq";
+    sha256 = "sha256-PNvkgjPcBbnETjWpVF3De9O9IprdpCke0nWvJ9Tju1M=";
   };
 
-  # Remove pytest-runner, https://github.com/emlove/pyzerproc/pull/1
-  patchPhase = ''
-    substituteInPlace setup.py --replace "'pytest-runner'," ""
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
   '';
 
   propagatedBuildInputs = [
@@ -34,11 +32,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
     pytest-asyncio
-    pytest-cov
     pytest-mock
     pytestCheckHook
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    asynctest
   ];
 
   pythonImportsCheck = [ "pyzerproc" ];
