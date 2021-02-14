@@ -13098,6 +13098,8 @@ in
 
   amrwb = callPackage ../development/libraries/amrwb { };
 
+  ansi2html = with python3.pkgs; toPythonApplication ansi2html;
+
   anttweakbar = callPackage ../development/libraries/AntTweakBar { };
 
   appstream = callPackage ../development/libraries/appstream { };
