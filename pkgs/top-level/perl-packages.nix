@@ -20871,7 +20871,7 @@ let
     pname = "Test-PerlTidy";
     version = "20200930";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20200930.tar.gz";
       sha256 = "1djpfi57s1j6mqb0ii2ca1sj3ym7jjab018inp6vdmsyfjcnhvwz";
     };
     propagatedBuildInputs = [ PathTiny PerlTidy TextDiff ];
