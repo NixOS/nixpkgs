@@ -10299,7 +10299,7 @@ let
       sha256 = "0c7363a7f1a08805bd1b2cf2b1a42a950ca71914c2aedbdd985970e011331a21";
     };
     buildInputs = [ TestIdentity ];
-    propagatedBuildInputs = [ Future IOAsync IOSocketSSL ];
+    propagatedBuildInputs = [ IOAsync IOSocketSSL ];
     meta = {
       description = "Use SSL/TLS with IO::Async";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
