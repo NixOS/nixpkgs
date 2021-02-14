@@ -19245,7 +19245,7 @@ in
 
     tbs = callPackage ../os-specific/linux/tbs { };
 
-    mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { inherit kernel; };
+    mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { };
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
