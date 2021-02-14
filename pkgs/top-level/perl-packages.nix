@@ -15468,6 +15468,7 @@ let
     meta = {
       description = "Check a remote host for reachability";
     };
+    buildInputs = [ TestCPANMeta TestKwalitee TestPod TestPodCoverage ];
   };
 
   NetDNSResolverProgrammable = buildPerlPackage {
