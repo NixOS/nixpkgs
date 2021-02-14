@@ -5119,6 +5119,8 @@ in {
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
+  proxmoxer = callPackage ../development/python-modules/proxmoxer { };
+
   psautohint = callPackage ../development/python-modules/psautohint { };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };

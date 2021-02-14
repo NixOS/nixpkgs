@@ -637,7 +637,7 @@
     "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
     "prowl" = ps: with ps; [ ];
     "proximity" = ps: with ps; [ ];
-    "proxmoxve" = ps: with ps; [ ]; # missing inputs: proxmoxer
+    "proxmoxve" = ps: with ps; [ proxmoxer ];
     "proxy" = ps: with ps; [ pillow ];
     "ps4" = ps: with ps; [ ]; # missing inputs: pyps4-2ndscreen
     "pulseaudio_loopback" = ps: with ps; [ pulsectl ];
