@@ -3517,7 +3517,7 @@ let
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Config-Tiny-2.26.tgz";
       sha256 = "0pyggn3yq9ffjnw3i1n5r9kg4b90jw926apbvzxq8y7cpa8k5dc3";
     };
-    buildInputs = [ TestPod ];
+
   };
 
   ConfigVersioned = buildPerlPackage {
