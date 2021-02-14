@@ -7573,6 +7573,8 @@ in {
 
   sure = callPackage ../development/python-modules/sure { };
 
+  surepy = callPackage ../development/python-modules/surepy { };
+
   survey = callPackage ../development/python-modules/survey { };
 
   suseapi = callPackage ../development/python-modules/suseapi { };

@@ -796,7 +796,7 @@
     "sun" = ps: with ps; [ ];
     "supervisord" = ps: with ps; [ ];
     "supla" = ps: with ps; [ ]; # missing inputs: asyncpysupla
-    "surepetcare" = ps: with ps; [ ]; # missing inputs: surepy
+    "surepetcare" = ps: with ps; [ surepy ];
     "swiss_hydrological_data" = ps: with ps; [ swisshydrodata ];
     "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
