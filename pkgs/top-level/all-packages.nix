@@ -3094,6 +3094,8 @@ in
 
   chunksync = callPackage ../tools/backup/chunksync { };
 
+  cicero-tui = callPackage ../tools/misc/cicero-tui { };
+
   cipherscan = callPackage ../tools/security/cipherscan {
     openssl = if stdenv.hostPlatform.system == "x86_64-linux"
       then openssl-chacha
