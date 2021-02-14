@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "3.10.0";
+  version = "4.0.0";
   # rev is the 3.9.3 commit, mainly for kustomize version command output
   rev = "602ad8aa98e2e17f6c9119e027a09757e63c8bec";
 
@@ -17,13 +17,13 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    sha256 = "1qr0mi83df8d9qd2svyr1h26pg97qi67nnygrkydnp8an28k48hi";
+    sha256 = "sha256-R/JIK5OJ4sg9/yYga3nBiuy4c4ByOx/NsLi/y9MeXzo=";
   };
 
   # avoid finding test and development commands
   sourceRoot = "source/kustomize";
 
-  vendorSha256 = "0p2j8mm7jpladpm6v3451g38n5bax0g368dk5h5r5gmkr6srxdy4";
+  vendorSha256 = "sha256-MIVN1sRm5Y83tJTpGm0wCFV2xJU+vv7pHBm06JjUThU=";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
