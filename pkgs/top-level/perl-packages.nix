@@ -17347,7 +17347,7 @@ let
       url = "mirror://cpan/authors/id/B/BL/BLILBURNE/Pod-Abstract-0.20.tar.gz";
       sha256 = "956ef7bb884c55456e2fb6e7f229f9a87dd50a61d700500c738db8f2ba277f87";
     };
-    propagatedBuildInputs = [ IOString TaskWeaken PodParser ];
+    propagatedBuildInputs = [ IOString PodParser TaskWeaken ];
     meta = {
       description = "An abstract, tree-based interface to perl POD documents";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
