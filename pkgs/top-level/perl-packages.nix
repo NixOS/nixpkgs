@@ -18812,7 +18812,7 @@ let
         sha256 = "0rggwcp7rfnp3zhnxpn5pb878v2dhpk3x6682w9dnsym92gjrij5";
       })
     ];
-    buildInputs = [ TestBase ModuleBuildTiny ModuleInstallGithubMeta ModuleInstallRepository ModuleInstallReadmeFromPod ModuleInstallReadmeMarkdownFromPod YAML ];
+    buildInputs = [ CaptureTiny ModuleBuildTiny ModuleInstallGithubMeta ModuleInstallReadmeFromPod ModuleInstallReadmeMarkdownFromPod ModuleInstallRepository TestBase YAML ];
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
       homepage = "https://github.com/yappo/p5-String-Diff";
