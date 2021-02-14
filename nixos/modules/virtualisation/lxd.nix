@@ -170,7 +170,7 @@ in {
       "kernel.keys.maxkeys" = 2000;
     };
 
-    boot.kernelModules = [ "veth" "xt_comment" "xt_MASQUERADE" ]
+    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" ]
       ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }
