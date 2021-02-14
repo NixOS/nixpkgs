@@ -29,17 +29,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    graphviz
-  ];
+  buildInputs = [ graphviz ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest --pyargs pygraphviz
