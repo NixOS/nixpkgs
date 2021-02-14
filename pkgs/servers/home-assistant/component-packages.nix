@@ -658,7 +658,7 @@
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch
     "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa rachiopy ];
     "radarr" = ps: with ps; [ ];
-    "radiotherm" = ps: with ps; [ ]; # missing inputs: radiotherm
+    "radiotherm" = ps: with ps; [ radiotherm ];
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
     "raincloud" = ps: with ps; [ ]; # missing inputs: raincloudy
     "rainforest_eagle" = ps: with ps; [ ]; # missing inputs: eagle200_reader uEagle
