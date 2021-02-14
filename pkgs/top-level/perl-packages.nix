@@ -20828,12 +20828,12 @@ let
 
   TestOutput = buildPerlPackage {
     pname = "Test-Output";
-    version = "1.032";
+    version = "1.033";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-Output-1.032.tar.gz";
-      sha256 = "0kp4x0f9ib2frds3v2gs0rggjm6p4drgzklw81l0gf7bnppki2k8";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-Output-1.033.tar.gz";
+      sha256 = "0vjm62c7g3xxs3h4lba55dnpr4pg71yrhkdg5b9glxdh80klia7n";
     };
-    propagatedBuildInputs = [ CaptureTiny SubExporter ];
+    propagatedBuildInputs = [ CaptureTiny ];
   };
 
   TestPAUSEPermissions = buildPerlPackage {
