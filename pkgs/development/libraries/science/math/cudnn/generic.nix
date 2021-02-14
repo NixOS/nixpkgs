@@ -25,9 +25,12 @@ stdenv.mkDerivation {
   installPhase = ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "$p:${lib.makeLibraryPath [ stdenv.cc.cc ]}" $1
+      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc ]}:\$ORIGIN/" $1
     }
-    fixRunPath lib64/libcudnn.so
+
+    for lib in lib64/lib*.so; do
+      fixRunPath $lib
+    done
 
     mkdir -p $out
     cp -a include $out/include
