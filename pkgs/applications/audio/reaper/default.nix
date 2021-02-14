@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     XDG_DATA_HOME="$out/share" ./install-reaper.sh \
       --install $out/opt \
       --integrate-user-desktop
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
     ln -s $out/opt/REAPER/reamote-server $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
