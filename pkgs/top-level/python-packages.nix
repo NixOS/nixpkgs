@@ -8047,6 +8047,8 @@ in {
 
   typogrify = callPackage ../development/python-modules/typogrify { };
 
+  tzdata = callPackage ../development/python-modules/tzdata { };
+
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
   uamqp = callPackage ../development/python-modules/uamqp {
