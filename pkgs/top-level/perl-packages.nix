@@ -12347,7 +12347,7 @@ let
        url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-Lite-0.19.tar.gz";
        sha256 = "06hm4vgihxr7m4jrq558phnnxy4am6ifba447j0h4p6jym5h7xih";
      };
-     propagatedBuildInputs = [ MathBigInt ];
+
      meta = {
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
