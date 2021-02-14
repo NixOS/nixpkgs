@@ -22171,7 +22171,7 @@ let
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Throwable-0.200013.tar.gz";
       sha256 = "184gdcwxqwnkrx5md968v1ny70pq6blzpkihccm3bpdxnpgd11wr";
     };
-    propagatedBuildInputs = [ DevelStackTrace Moo ];
+    propagatedBuildInputs = [ DevelStackTrace ModuleRuntime Moo ];
     meta = {
       homepage = "https://github.com/rjbs/Throwable";
       description = "A role for classes that can be thrown";
