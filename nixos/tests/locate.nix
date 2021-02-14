@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     nodes = rec {
       a = {
         environment.systemPackages = with pkgs; [ sshfs ];
-        fileSystems = lib.mkVMOverride {
+        virtualisation.fileSystems = {
           "/ssh" = {
             device = "alice@b:/";
             fsType = "fuse.sshfs";
