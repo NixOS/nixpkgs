@@ -29,7 +29,7 @@ let
 
         # Setup regular fileSystems machinery to ensure forceImportAll can be
         # tested via the regular service units.
-        fileSystems = lib.mkVMOverride {
+        virtualisation.fileSystems = {
           "/forcepool" = {
             device = "forcepool";
             fsType = "zfs";

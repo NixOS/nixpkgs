@@ -454,7 +454,7 @@ in {
         authentication = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = "Authentitcation type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
+          description = "Authentication type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
         };
 
         enableStartTLSAuto = mkOption {
