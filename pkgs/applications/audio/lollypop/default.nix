@@ -106,7 +106,7 @@ python3.pkgs.buildPythonApplication rec  {
     description = "A modern music player for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Lollypop";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ worldofpeace lovesegfault ];
     platforms = platforms.linux;
   };
 }
