@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
-      M=$(pwd) modules
+      -j$NIX_BUILD_CORES M=$(pwd) modules
   '';
 
   installPhase = ''
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MCMrARM/mbp2018-bridge-drv";
     license = lib.licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.hlolli ];
   };
 }
