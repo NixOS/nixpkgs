@@ -21278,6 +21278,18 @@ let
     };
   };
 
+  TestTaint = buildPerlPackage {
+    pname = "Test-Taint";
+    version = "1.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Test-Taint-1.08.tar.gz";
+      sha256 = "0zd946qam0yffpciqqd9xhn92gdplyh3mii4a1w96b1max14snax";
+    };
+    meta = {
+      description = "Checks for taintedness of variables";
+    };
+  };
+
   TestTempDirTiny = buildPerlPackage {
     pname = "Test-TempDir-Tiny";
     version = "0.018";
@@ -23074,7 +23086,7 @@ let
       description = "Handy web browsing in a Perl object";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ CGI HTTPServerSimple PathTiny TestDeep TestFatal TestOutput TestWarnings ];
+    buildInputs = [ CGI HTTPServerSimple PathTiny TestDeep TestException TestFatal TestMemoryCycle TestNoWarnings TestOutput TestTaint TestWarnings ];
   };
 
   WWWMechanizeCGI = buildPerlPackage {
