@@ -1,0 +1,115 @@
+# This file contains the GNU Octave add-on packages set.
+# Each attribute is an Octave library.
+# Expressions for the Octave libraries are supposed to be in `pkgs/development/octave-modules/<name>/default.nix`.
+
+# When contributing a new package, if that package has a dependency on another
+# octave package, then you DO NOT need to explicitly list it as such when
+# performing the callPackage. It will be passed implicitly.
+# In addition, try to use the same dependencies as the ones octave needs, which
+# should ensure greater compatibility between Octave itself and its packages.
+
+# Like python-packages.nix, packages from top-level.nix are not in the scope
+# of the `callPackage` used for packages here. So, when we do need packages
+# from outside, we can `inherit` them from `pkgs`.
+{ pkgs
+, lib
+, stdenv
+, fetchurl
+, newScope
+, octave
+}:
+
+with lib;
+
+makeScope newScope (self:
+  let
+    inherit (octave) blas lapack gfortran python texinfo gnuplot;
+
+    callPackage = self.callPackage;
+
+    buildOctavePackage = callPackage ../development/interpreters/octave/build-octave-package.nix {
+      inherit lib stdenv;
+      inherit octave;
+      inherit computeRequiredOctavePackages;
+    };
+
+    wrapOctave = callPackage ../development/interpreters/octave/wrap-octave.nix {
+      inherit octave;
+      inherit (pkgs) makeSetupHook makeWrapper;
+    };
+
+    # Given a list of required Octave package derivations, get a list of
+    # ALL required Octave packages needed for the ones specified to run.
+    computeRequiredOctavePackages = drvs: let
+      # Check whether a derivation is an octave package
+      hasOctavePackage = drv: drv?isOctavePackage;
+      packages = filter hasOctavePackage drvs;
+    in unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
+
+  in {
+
+    inherit callPackage buildOctavePackage computeRequiredOctavePackages;
+
+    inherit (callPackage ../development/interpreters/octave/hooks { })
+      writeRequiredOctavePackagesHook;
+
+    arduino = callPackage ../development/octave-modules/arduino {
+      inherit (pkgs) arduino;
+      # Full arduino right now. Might be able to use pkgs.arduino-core
+      # Needs arduinoIDE as a runtime dependency.
+    };
+
+    audio = callPackage ../development/octave-modules/audio {
+      rtmidi = pkgs.rtmidi;
+    };
+
+    bim = callPackage ../development/octave-modules/bim { };
+
+    bsltl = callPackage ../development/octave-modules/bsltl { };
+
+    cgi = callPackage ../development/octave-modules/cgi { };
+
+    communications = callPackage ../development/octave-modules/communications {
+      hdf5 = pkgs.hdf5;
+    };
+
+    control = callPackage ../development/octave-modules/control { };
+
+    io = callPackage ../development/octave-modules/io {
+      unzip = pkgs.unzip;
+    };
+
+    level-set = callPackage ../development/octave-modules/level-set { };
+
+    linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
+
+    ltfat = callPackage ../development/octave-modules/ltfat {
+      fftw = pkgs.fftw;
+      fftwSinglePrec = pkgs.fftwSinglePrec;
+      fftwFloat = pkgs.fftwFloat;
+      fftwLongDouble = pkgs.fftwLongDouble;
+      portaudio = pkgs.portaudio;
+      jre = pkgs.jre;
+    };
+
+    signal = callPackage ../development/octave-modules/signal { };
+
+    symbolic = callPackage ../development/octave-modules/symbolic {
+      # Need to use sympy 1.5.1 for https://github.com/cbm755/octsympy/issues/1023
+      # It has been addressed, but not merged yet.
+      pythonEnv = (let
+        overridenPython = let
+          packageOverrides = self: super: {
+            sympy = super.sympy.overridePythonAttrs (old: rec {
+              version = pkgs.python2Packages.sympy.version;
+              src = pkgs.python2Packages.sympy.src;
+            });
+          };
+        in python.override {inherit packageOverrides; self = overridenPython; };
+      in overridenPython.withPackages (ps: [
+        ps.sympy
+        ps.mpmath
+      ]));
+    };
+
+  })
