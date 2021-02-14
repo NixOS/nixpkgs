@@ -1743,6 +1743,8 @@ in
 
   bsod = callPackage ../misc/emulators/bsod { };
 
+  py65 = python3Packages.callPackage ../misc/emulators/py65 { };
+
   simh = callPackage ../misc/emulators/simh { };
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
