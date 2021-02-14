@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitLab, glib, gettext, substituteAll, gnome-menus }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-arc-menu";
+  pname = "gnome-shell-arcmenu";
   version = "5";
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   uuid = "arcmenu@arcmenu.com";
 
   meta = with lib; {
-    description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow.";
+    description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dkabot ];
     homepage = "https://gitlab.com/arcmenu/ArcMenu";
