@@ -8,6 +8,7 @@
 , libGL
 , libGLU
 , libjpeg
+, ncurses
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cacert wrapGAppsHook ];
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
 
   preConfigure = ''
     unset AR
