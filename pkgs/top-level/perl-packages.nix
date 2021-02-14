@@ -3792,6 +3792,7 @@ let
       description = "CPanel fork of JSON::XS, fast and correct serializing";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ CPANChanges ClassXSAccessor JSON JSONXS ListMoreUtils Mojolicious PerlMinimumVersion PodSpellCommonMistakes TestCPANMeta TestCheckChanges TestKwalitee TestLeakTrace TestMinimumVersion TestPod TestPodCoverage TestSpelling TextCSV_XS commonsense ];
   };
 
   CPANChanges = buildPerlPackage {
@@ -17636,6 +17637,22 @@ let
     buildInputs = [ FileShareDirInstall TestDeep ];
   };
 
+  PodSpellCommonMistakes = buildPerlModule {
+    pname = "Pod-Spell-CommonMistakes";
+    version = "1.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AP/APOCAL/Pod-Spell-CommonMistakes-1.002.tar.gz";
+      sha256 = "0cj469sxai566gnmavw72pikp8wrf2h8bp9bpa9ginj9q1vfma9b";
+    };
+    propagatedBuildInputs = [ IOStringy PodSpell ];
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      description = "Catches common typos in POD";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/apocalypse/perl-pod-spell-commonmistakes";
+    };
+  };
+
   PodStrip = buildPerlModule {
      pname = "Pod-Strip";
      version = "1.100";
@@ -20197,6 +20214,20 @@ let
      };
   };
 
+  TestCheckChanges = buildPerlModule {
+    pname = "Test-CheckChanges";
+    version = "0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAM/Test-CheckChanges-0.14.tar.gz";
+      sha256 = "1i2ldzzsx4h3hd68038d6nr9p9ralidg9r5ld2aiw90bcwpqsrs3";
+    };
+    buildInputs = [ ModuleBuildDeprecated ];
+    meta = {
+      description = "Check that the Changes file matches the distribution.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestDataSplit = buildPerlModule {
     pname = "Test-Data-Split";
     version = "0.2.2";
@@ -21229,6 +21260,21 @@ let
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ TestDeep TestTrap ];
+  };
+
+  TestSpelling = buildPerlPackage {
+    pname = "Test-Spelling";
+    version = "0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/Test-Spelling-0.25.tar.gz";
+      sha256 = "0q5wymyla8z3gkhkblvicjijwspq2yfli8rjd3hn4wsd7bq5kiiq";
+    };
+    propagatedBuildInputs = [ IPCRun3 PodSpell ];
+    meta = {
+      description = "Check for spelling errors in POD files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/genio/test-spelling";
+    };
   };
 
   TestSubCalls = buildPerlPackage {
