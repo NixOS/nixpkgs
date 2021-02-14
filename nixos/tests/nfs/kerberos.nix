@@ -40,7 +40,7 @@ in
         networking.domain = "nfs.test";
         networking.hostName = "client";
 
-        fileSystems = lib.mkVMOverride
+        virtualisation.fileSystems =
           { "/data" = {
               device  = "server.nfs.test:/";
               fsType  = "nfs";

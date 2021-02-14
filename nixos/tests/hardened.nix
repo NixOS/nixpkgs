@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
       boot.initrd.postDeviceCommands = ''
         ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
       '';
-      fileSystems = lib.mkVMOverride {
+      virtualisation.fileSystems = {
         "/efi" = {
           device = "/dev/disk/by-label/EFISYS";
           fsType = "vfat";
