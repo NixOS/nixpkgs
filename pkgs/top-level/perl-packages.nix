@@ -13825,7 +13825,7 @@ let
       sha256 = "0ii2rzzs0wfc697d7v3s76fi1y3kl7p1hvxbv330i1vq2nqpfjvi";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassMethodModifiers ModuleRuntime RoleTiny SubQuote ];
+    propagatedBuildInputs = [ ClassMethodModifiers RoleTiny SubQuote ];
     meta = {
       description = "Minimalist Object Orientation (with Moose compatibility)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
