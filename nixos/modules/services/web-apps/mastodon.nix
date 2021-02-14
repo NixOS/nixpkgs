@@ -417,7 +417,7 @@ in {
 
     systemd.services.mastodon-init-db = lib.mkIf cfg.automaticMigrations {
       script = ''
-        if [ `psql mastodon -c \
+        if [ `psql ${cfg.database.name} -c \
                 "select count(*) from pg_class c \
                 join pg_namespace s on s.oid = c.relnamespace \
                 where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
