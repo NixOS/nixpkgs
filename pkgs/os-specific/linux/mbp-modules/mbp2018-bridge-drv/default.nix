@@ -1,7 +1,7 @@
 { lib, stdenv, kernel, fetchFromGitHub, }:
 
 stdenv.mkDerivation rec {
-  name = "mbp2018-bridge-drv";
+  pname = "mbp2018-bridge-drv";
   version = "b43fcc069da73e051072fde24af4014c9c487286";
 
   src = fetchFromGitHub {
