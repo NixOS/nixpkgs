@@ -10280,7 +10280,7 @@ let
     version = "0.78";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.78.tar.gz";
-      sha256 = "sha256-P7UYhZd7hiGKiepC84yvvOWCO/SPqqLRhaGGwqNYNmw=";
+      sha256 = "0v1nb2iw51m1hp8s5algyhxq5rdwmy6g6hpai65231kvjy2iid9z";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [ Future StructDumb ];
