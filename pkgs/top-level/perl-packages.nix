@@ -21173,11 +21173,12 @@ let
       url = "mirror://cpan/authors/id/S/SU/SUNNAVY/Test-Script-Run-0.08.tar.gz";
       sha256 = "1fef216e70bc425ace3e2c4370dfcdddb5e798b099efba2679244a4d5bc1ab0a";
     };
-    propagatedBuildInputs = [ IPCRun3 TestException ];
+    propagatedBuildInputs = [ IPCRun3 ];
     meta = {
       description = "Test scripts with run";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestException ];
   };
 
   TestSharedFork = buildPerlPackage {
