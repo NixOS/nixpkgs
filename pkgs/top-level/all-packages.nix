@@ -18602,6 +18602,10 @@ with pkgs;
     skalibs = callPackage ../development/libraries/skalibs { };
     execline = callPackage ../tools/misc/execline { };
 
+    execline-man-pages = callPackage ../data/documentation/execline-man-pages {
+      inherit buildManPages;
+    };
+
     s6 = callPackage ../tools/system/s6 { };
     s6-dns = callPackage ../tools/networking/s6-dns { };
     s6-linux-init = callPackage ../os-specific/linux/s6-linux-init { };
@@ -22502,6 +22506,8 @@ with pkgs;
     { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   envdir = callPackage ../tools/misc/envdir-go { };
+
+  execline-man-pages = skawarePackages.execline-man-pages;
 
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
