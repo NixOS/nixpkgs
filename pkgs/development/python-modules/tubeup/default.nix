@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Youtube (and other video site) to Internet Archive Uploader";
     homepage = "https://github.com/bibanon/tubeup";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.marsam ];
   };
 }
