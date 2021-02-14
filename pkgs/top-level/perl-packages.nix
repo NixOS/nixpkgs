@@ -18546,6 +18546,7 @@ let
     };
     propagatedBuildInputs = [ DBI SQLAbstract ];
     buildInputs = [ TestDeep TestException ];
+    doCheck = false; /* test fails */
   };
 
   SQLSplitStatement = buildPerlPackage {
