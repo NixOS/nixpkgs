@@ -142,10 +142,10 @@ let
 
   AlgorithmDiff = buildPerlPackage {
     pname = "Algorithm-Diff";
-    version = "1.1903";
+    version = "1.201";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1903.tar.gz";
-      sha256 = "0l8pk7ziz72d022hsn4xldhhb9f5649j5cgpjdibch0xng24ms1h";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Algorithm-Diff-1.201.tar.gz";
+      sha256 = "0z9ahh6rnxsh71xysh13xl9rf3p7cgpvjgkz43q9wpb4h9cxl8h0";
     };
     buildInputs = [ pkgs.unzip ];
   };
