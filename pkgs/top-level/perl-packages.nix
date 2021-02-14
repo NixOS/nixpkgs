@@ -16625,10 +16625,10 @@ let
     pname = "Perl-Critic-Moose";
     version = "1.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Perl-Critic-Moose-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Perl-Critic-Moose-1.05.tar.gz";
       sha256 = "0092z583c3q3gqry693ck3ibkzby04a1g8lpw9zz2hr6qhi8xssj";
     };
-    propagatedBuildInputs = [ PerlCritic Readonly namespaceautoclean ];
+    propagatedBuildInputs = [ PerlCritic namespaceautoclean ];
     meta = {
       description = "Policies for Perl::Critic concerned with using Moose";
       license = lib.licenses.artistic1;
