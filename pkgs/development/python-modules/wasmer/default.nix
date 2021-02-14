@@ -1,63 +1,34 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, maturin
 , buildPythonPackage
-, isPy38
-, python
 }:
 let
   pname = "wasmer";
   version = "1.0.0";
-
-  wheel = rustPlatform.buildRustPackage rec {
-    inherit pname version;
-
-    src = fetchFromGitHub {
-      owner = "wasmerio";
-      repo = "wasmer-python";
-      rev = version;
-      hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
-    };
-
-    cargoHash = "sha256-txOOia1C4W+nsXuXp4EytEn82CFfSmiOYwRLC4WPImc=";
-
-    nativeBuildInputs = [ maturin python ];
-
-    preBuild = ''
-      cd packages/api
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-      maturin build --release --manylinux off --strip
-      runHook postBuild
-    '';
-
-    postBuild = ''
-      cd ../..
-    '';
-
-    doCheck = false;
-
-    installPhase = ''
-      runHook preInstall
-      install -Dm644 -t $out target/wheels/*.whl
-      runHook postInstall
-    '';
-  };
-
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   inherit pname version;
 
-  format = "wheel";
-  src = wheel;
+  src = fetchFromGitHub {
+    owner = "wasmerio";
+    repo = "wasmer-python";
+    rev = version;
+    hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
+  };
 
-  unpackPhase = ''
-    mkdir -p dist
-    cp $src/*.whl dist
-  '';
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-txOOia1C4W+nsXuXp4EytEn82CFfSmiOYwRLC4WPImc=";
+  };
+
+  format = "pyproject";
+
+  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+
+  buildAndTestSubdir = "packages/api";
+
+  doCheck = false;
 
   pythonImportsCheck = [ "wasmer" ];
 
