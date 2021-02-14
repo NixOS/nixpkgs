@@ -226,6 +226,7 @@ self: super: builtins.intersectAttrs super {
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
+  telegraph = dontCheck super.telegraph;
   typed-process = dontCheck super.typed-process;
   js-jquery = dontCheck super.js-jquery;
   hPDB-examples = dontCheck super.hPDB-examples;
