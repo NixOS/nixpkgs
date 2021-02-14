@@ -218,9 +218,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "2";
+      patch = "3";
     };
-    sha256 = "1l98b7s9sf16a5w8y0fdn7a489l3gpykjasws1j67bahhc6li2c1";
+    sha256 = "0di3dr5ry4r0hwxh4fbqjhyl5im948wdby0bhijzsxx83c2qhd7n";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -234,9 +234,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "2";
+      patch = "3";
     };
-    sha256 = "03f1fdw6yk2mypa9pbmgk26r8y1hhmw801l6g36zry9zsvz7aqgx";
+    sha256 = "1bq5i2mqgjjfc4rhxgxm6ihwa76vn2qapd7l59ri7xp01p522gd2";
     pythonVersion = "3.6";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -251,9 +251,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "2";
+      patch = "3";
     };
-    sha256 = "0fx1kp13cgx3rijd0zf8rdjbai6mfhc9is4xfc7kl5cpd88hhkwd"; # linux64
+    sha256 = "1cfpdyvbvzwc0ynjr7248jhwgcpl7073wlp7w3g2v4fnrh1bc4pl"; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
   };
@@ -264,9 +264,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "2";
+      patch = "3";
     };
-    sha256 = "10xdx7q04fzy4v4rbj9bbdw8g9y68qgaih7z2n0s5aknj0bizafp"; # linux64
+    sha256 = "02lys9bjky9bqg6ggv8djirbd3zzcsq7755v4yvwm0k4a7fmzf2g"; # linux64
     pythonVersion = "3.6";
     inherit passthruFun;
   };
