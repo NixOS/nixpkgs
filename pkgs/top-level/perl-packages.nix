@@ -10895,7 +10895,7 @@ let
       sha256 = "0jrhpjscgwl2a07cgb0f5xwnbnhh3vp97fi0rwjnrfkhynl4av7l";
     };
     buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
+    propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML YAMLPP ];
     meta = {
       homepage = "https://github.com/mojolicious/json-validator";
       description = "Validate data against a JSON schema";
