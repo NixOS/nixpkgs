@@ -21,7 +21,6 @@
 , libusb1
 , libmtp
 , xdg-utils
-, makeDesktopItem
 , removeReferencesTo
 }:
 
