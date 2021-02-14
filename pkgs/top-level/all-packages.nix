@@ -4228,6 +4228,8 @@ in
     python = python2;
   };
 
+  fontfor = callPackage ../tools/misc/fontfor { };
+
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     python = python3;
