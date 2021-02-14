@@ -7213,6 +7213,8 @@ in
 
   prettyping = callPackage ../tools/networking/prettyping { };
 
+  pritunl-ssh = callPackage ../tools/networking/pritunl-ssh { };
+
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
