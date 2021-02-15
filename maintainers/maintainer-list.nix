@@ -3587,6 +3587,12 @@
     githubId = 443978;
     name = "Gabriel Volpe";
   };
+  gytis-ivaskevicius = {
+    name = "Gytis Ivaskevicius";
+    email = "me@gytis.io";
+    github = "gytis-ivaskevicius";
+    githubId = 23264966;
+  };
   hakuch = {
     email = "hakuch@gmail.com";
     github = "hakuch";
