@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , fetchpatch
 , rPackages
-, rWrapper
 , buildPythonPackage
 , biopython
 , numpy
