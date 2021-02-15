@@ -1708,6 +1708,8 @@ in {
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
+  desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
+
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
