@@ -15,13 +15,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.6498"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6574"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "67033ed8e05eb70860ac6af2b83deab0256c11eb";
-    sha256 = "1lg0cybbrf0x3jl10jwdwcg1zyhxsqfdnwnsvdm1lah75xg15ymw";
+    rev = "80ed8596c165127fb52026c697a9b6b515dabbd4";
+    sha256 = "0jhrl8g9fbz3w2hzmy9jm22cvjfa0x5vh3912rz1rvnd41qb9vs8";
   };
 
   nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    export DOTNET_NOLOGO=1
 
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"
