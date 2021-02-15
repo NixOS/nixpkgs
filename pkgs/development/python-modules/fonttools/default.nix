@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.19.1";
+  version = "4.20.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "16jz3g4jzfdc43hs33b59vzd9m233qgflvy3ycdynifqk16lqsp2";
+    sha256 = "0yj83vsjh23g7gkmq6svbgc898x3qgygkhvpcbpycvmpwxxqxh1v";
   };
 
   # all dependencies are optional, but
