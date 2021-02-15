@@ -1,3 +1,5 @@
+declare -a checkFlags
+
 cargoCheckHook() {
     echo "Executing cargoCheckHook"
 
@@ -34,4 +36,6 @@ cargoCheckHook() {
     runHook postCheck
 }
 
-checkPhase=cargoCheckHook
+if [ -z "${checkPhase-}" ]; then
+  checkPhase=cargoCheckHook
+fi
