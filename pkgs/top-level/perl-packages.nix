@@ -4749,6 +4749,7 @@ let
       sha256 = "8fa0ed0101d04e661821a7b78e8d62ce3e19b299275bbfed178e2ba8912663ea";
     };
     buildInputs = [ ModuleBuildXSUtil TestRequires ];
+    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       homepage = "https://github.com/msgpack/msgpack-perl";
       description = "MessagePack serializing/deserializing";
@@ -8023,6 +8024,7 @@ let
     };
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
     buildInputs = [ TestFatal TestWarnings ];
+    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Memory mapping made simple and safe.";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -8510,7 +8512,7 @@ let
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseSublike ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Deferred subroutine syntax for futures";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11860,6 +11862,7 @@ let
       substituteInPlace Build.PL \
         --replace "libsystemd-journal" "libsystemd"
     '';
+    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Send messages to a systemd journal";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -18024,7 +18027,7 @@ let
     };
   };
 
-    RPM2 = buildPerlModule {
+  RPM2 = buildPerlModule {
     pname = "RPM2";
     version = "1.4";
     src = fetchurl {
@@ -18032,6 +18035,7 @@ let
       sha256 = "5ecb42aa69324e6f4088abfae07313906e5aabf2f46f1204f3f1de59155bb636";
     };
     buildInputs = [ pkgs.pkg-config pkgs.rpm ];
+    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     doCheck = false; # Tries to open /var/lib/rpm
     meta = {
       description = "Perl bindings for the RPM Package Manager API";
@@ -22800,6 +22804,7 @@ let
       description = "Encoding and decoding of UTF-8 encoding form";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
+      broken = stdenv.isi686; # tests failed with "Use of code point 0x80000000 is not allowed; the permissible max is 0x7FFFFFFF at t/080_super.t line 28."
     };
   };
 
@@ -23458,6 +23463,9 @@ let
     };
     buildInputs = [ pkgs.pkg-config pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
+    meta = {
+      broken = stdenv.isi686; # tests failed
+    };
   };
 
   XMLMini = buildPerlPackage {
@@ -23744,7 +23752,7 @@ let
       sha256 = "0cl76hf840saw66bf05lskb7avrkdhpkrjljakq52qbciw8sk46d";
     };
     buildInputs = [ TestFatal ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "XS functions to assist in parsing sub-like syntax";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
