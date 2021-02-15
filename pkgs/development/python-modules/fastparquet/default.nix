@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner,
-thrift, pytest, python-snappy, lz4, zstd }:
+thrift, pytestCheckHook, python-snappy, lz4, zstd }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
@@ -20,7 +20,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ numba numpy pandas thrift ];
-  checkInputs = [ pytest python-snappy lz4 zstd ];
+  checkInputs = [ pytestCheckHook python-snappy lz4 zstd ];
+
+  pythonImportsCheck = [ "fastparquet" ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";
