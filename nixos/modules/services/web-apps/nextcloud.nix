@@ -594,10 +594,10 @@ in {
             priority = 210;
             extraConfig = ''
               location = /.well-known/carddav {
-                return 301 $scheme://$host/remote.php/dav;
+                return 301 /remote.php/dav;
               }
               location = /.well-known/caldav {
-                return 301 $scheme://$host/remote.php/dav;
+                return 301 /remote.php/dav;
               }
               try_files $uri $uri/ =404;
             '';
