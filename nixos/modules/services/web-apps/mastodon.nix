@@ -25,9 +25,27 @@ let
     ES_ENABLED = if (cfg.elasticsearch.host != null) then "true" else "false";
     ES_HOST = cfg.elasticsearch.host;
     ES_PORT = toString(cfg.elasticsearch.port);
+
+    TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
   // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
   // cfg.extraConfig;
+
+  cfgService = {
+    # User and group
+    User = cfg.user;
+    Group = cfg.group;
+    # State directory and mode
+    StateDirectory = "mastodon";
+    StateDirectoryMode = "0750";
+    # Logs directory and mode
+    LogsDirectory = "mastodon";
+    LogsDirectoryMode = "0750";
+    # Access write directories
+    UMask = "0027";
+    # Sandboxing
+    PrivateTmp = true;
+  };
 
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
@@ -177,6 +195,26 @@ in {
         '';
         default = "/var/lib/mastodon/secrets/vapid-private-key";
         type = lib.types.str;
+      };
+
+      trustedProxy = lib.mkOption {
+        description = ''
+          You need to set it to the IP from which your reverse proxy sends requests to Mastodon's web process,
+          otherwise Mastodon will record the reverse proxy's own IP as the IP of all requests, which would be
+          bad because IP addresses are used for important rate limits and security functions.
+        '';
+        type = lib.types.str;
+        default = "127.0.0.1";
+      };
+
+      enableUnixSocket = lib.mkOption {
+        description = ''
+          Instead of binding to an IP address like 127.0.0.1, you may bind to a Unix socket. This variable
+          is process-specific, e.g. you need different values for every process, and it works for both web (Puma)
+          processes and streaming API (Node.js) processes.
+        '';
+        type = lib.types.bool;
+        default = true;
       };
 
       redis = {
@@ -370,19 +408,16 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        User = cfg.user;
-        Group = cfg.group;
         WorkingDirectory = cfg.package;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
-      };
+      } // cfgService;
+
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.mastodon-init-db = lib.mkIf cfg.automaticMigrations {
       script = ''
-        if [ `psql mastodon -c \
+        if [ `psql ${cfg.database.name} -c \
                 "select count(*) from pg_class c \
                 join pg_namespace s on s.oid = c.relnamespace \
                 where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
@@ -397,14 +432,9 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        User = cfg.user;
-        Group = cfg.group;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
         WorkingDirectory = cfg.package;
-      };
+      } // cfgService;
       after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else []);
       wantedBy = [ "multi-user.target" ];
     };
@@ -415,21 +445,20 @@ in {
         ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
       description = "Mastodon streaming";
       wantedBy = [ "multi-user.target" ];
-      environment = env // {
-        PORT = toString(cfg.streamingPort);
-      };
+      environment = env // (if cfg.enableUnixSocket
+        then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
+        else { PORT = toString(cfg.streamingPort); }
+      );
       serviceConfig = {
         ExecStart = "${pkgs.nodejs-slim}/bin/node streaming";
         Restart = "always";
         RestartSec = 20;
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.package;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
-      };
+        WorkingDirectory = cfg.package;
+        # Runtime directory and mode
+        RuntimeDirectory = "mastodon-streaming";
+        RuntimeDirectoryMode = "0750";
+      } // cfgService;
     };
 
     systemd.services.mastodon-web = {
@@ -438,21 +467,20 @@ in {
         ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
       description = "Mastodon web";
       wantedBy = [ "multi-user.target" ];
-      environment = env // {
-        PORT = toString(cfg.webPort);
-      };
+      environment = env // (if cfg.enableUnixSocket
+        then { SOCKET = "/run/mastodon-web/web.socket"; }
+        else { PORT = toString(cfg.webPort); }
+      );
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/puma -C config/puma.rb";
         Restart = "always";
         RestartSec = 20;
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.package;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
-      };
+        WorkingDirectory = cfg.package;
+        # Runtime directory and mode
+        RuntimeDirectory = "mastodon-web";
+        RuntimeDirectoryMode = "0750";
+      } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
 
@@ -469,14 +497,9 @@ in {
         ExecStart = "${cfg.package}/bin/sidekiq -c 25 -r ${cfg.package}";
         Restart = "always";
         RestartSec = 20;
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.package;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
-      };
+        WorkingDirectory = cfg.package;
+      } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
 
@@ -495,12 +518,12 @@ in {
         };
 
         locations."@proxy" = {
-          proxyPass = "http://127.0.0.1:${toString(cfg.webPort)}";
+          proxyPass = (if cfg.enableUnixSocket then "http://unix:/run/mastodon-web/web.socket" else "http://127.0.0.1:${toString(cfg.webPort)}");
           proxyWebsockets = true;
         };
 
         locations."/api/v1/streaming/" = {
-          proxyPass = "http://127.0.0.1:${toString(cfg.streamingPort)}/";
+          proxyPass = (if cfg.enableUnixSocket then "http://unix:/run/mastodon-streaming/streaming.socket" else "http://127.0.0.1:${toString(cfg.streamingPort)}/");
           proxyWebsockets = true;
         };
       };
@@ -532,6 +555,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package mastodonEnv ])
+      (lib.mkIf cfg.configureNginx {${config.services.nginx.user}.extraGroups = [ cfg.user ];})
     ];
 
     users.groups.mastodon = lib.mkIf (cfg.group == "mastodon") { };
