@@ -4,6 +4,7 @@
 , rustPlatform
 , asciidoctor
 , installShellFiles
+, pkg-config
 , Security
 , withPCRE2 ? true
 , pcre2 ? null
@@ -24,9 +25,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = lib.optional withPCRE2 "--features pcre2";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [ asciidoctor installShellFiles ]
+    ++ lib.optional withPCRE2 pkg-config;
   buildInputs = (lib.optional withPCRE2 pcre2)
-  ++ (lib.optional stdenv.isDarwin Security);
+    ++ (lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
     installManPage $releaseDir/build/ripgrep-*/out/rg.1
