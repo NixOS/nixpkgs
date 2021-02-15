@@ -125,6 +125,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "IDEA";
+      extraLdPath = [ zlib ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/idea/";
         inherit description license;
@@ -135,7 +136,7 @@ let
           as IntelliJ.
         '';
         maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux ++ platforms.darwin;
+        platforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" ];
       };
     });
 
