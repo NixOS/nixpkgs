@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
-, pytestrunner
 , click
 , dateparser
 , pandas
