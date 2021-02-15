@@ -4,8 +4,6 @@
 , xgboost
 , dask
 , distributed
-, pytest
-, scikitlearn
 }:
 
 buildPythonPackage rec {
@@ -17,14 +15,10 @@ buildPythonPackage rec {
     sha256 = "3fbe1bf4344dc74edfbe9f928c7e3e6acc26dc57cefd8da8ae56a15469c6941c";
   };
 
-  checkInputs = [ pytest scikitlearn ];
   propagatedBuildInputs = [ xgboost dask distributed ];
 
-  checkPhase = ''
-    py.test dask_xgboost/tests/test_core.py
-  '';
-
   doCheck = false;
+  pythonImportsCheck = [ "dask-xdgboost" ];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-xgboost";
