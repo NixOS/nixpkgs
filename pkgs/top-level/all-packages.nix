@@ -642,7 +642,9 @@ in
 
   referencesByPopularity = callPackage ../build-support/references-by-popularity { };
 
-  removeReferencesTo = callPackage ../build-support/remove-references-to { };
+  removeReferencesTo = callPackage ../build-support/remove-references-to {
+    inherit (darwin) signingUtils;
+  };
 
   vmTools = callPackage ../build-support/vm { };
 
