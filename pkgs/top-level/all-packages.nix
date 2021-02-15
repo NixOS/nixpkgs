@@ -19288,6 +19288,8 @@ in
 
     tbs = callPackage ../os-specific/linux/tbs { };
 
+    macbook15-spi-driver = callPackage ../os-specific/linux/mbp-modules/macbook15-spi-driver { };
+
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
     nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
