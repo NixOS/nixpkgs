@@ -80,6 +80,33 @@ The fetcher will verify that the `Cargo.lock` file is in sync with the `src`
 attribute, and fail the build if not. It will also will compress the vendor
 directory into a tar.gz archive.
 
+The tarball with vendored dependencies contains a directory with the
+package's `name`, which is normally composed of `pname` and
+`version`. This means that the vendored dependencies hash
+(`cargoSha256`/`cargoHash`) is dependent on the package name and
+version. The `cargoDepsName` attribute can be used to use another name
+for the directory of vendored dependencies. For example, the hash can
+be made invariant to the version by setting `cargoDepsName` to
+`pname`:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "broot";
+  version = "1.2.0";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "1mqaynrqaas82f5957lx31x80v74zwmwmjxxlbywajb61vh00d38";
+  };
+
+  cargoHash = "sha256-JmBZcDVYJaK1cK05cxx5BrnGWp4t8ca6FLUbvIot67s=";
+  cargoDepsName = pname;
+
+  # ...
+}
+```
+
+
 ### Cross compilation
 
 By default, Rust packages are compiled for the host platform, just like any
