@@ -1,6 +1,6 @@
 { lib, python3Packages }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
   version = "1.2.1";
 
