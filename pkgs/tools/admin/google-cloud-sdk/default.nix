@@ -21,18 +21,18 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "09pv1xvycgfai151z6kbsggyldcd3cx6x1p04dcim2xrawqvng6s";
+      sha256 = "135xbaz6q4565mklxjmm4mybm5qayvz34m0bdg609597kxw6l97j";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1iybbvxjny33mw3h2f81fdvsvp65xa62c2qrzjv8hkrqkw69ckrp";
+      sha256 = "1i4cp6kyqbqj0fnmwx11bq6a1k4hrhyxz9qifr1qjfi7n8ybqrqy";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "325.0.0";
+  version = "327.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -41,11 +41,15 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ jq ];
 
   patches = [
+    # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
     ./gcloud-path.patch
+    # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/google-cloud-sdk
     cp -R * .install $out/google-cloud-sdk/
 
@@ -91,6 +95,8 @@ in stdenv.mkDerivation rec {
       jq -c . $path > $path.min
       mv $path.min $path
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
