@@ -2,8 +2,8 @@
 , lib
 , buildPackages
 , cacert
-, cargo
 , cargoBuildHook
+, cargoCheckHook
 , cargoInstallHook
 , cargoSetupHook
 , fetchCargoTarball
@@ -42,7 +42,6 @@
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}
-, cargoParallelTestThreads ? true
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
 , __internal_dontAddSysroot ? false
@@ -105,8 +104,15 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++
-    [ cacert git cargo cargoBuildHook cargoInstallHook cargoSetupHook rustc ];
+  nativeBuildInputs = nativeBuildInputs ++ [
+    cacert
+    git
+    cargoBuildHook
+    cargoCheckHook
+    cargoInstallHook
+    cargoSetupHook
+    rustc
+  ];
 
   buildInputs = buildInputs ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
@@ -125,18 +131,6 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
     runHook preConfigure
     runHook postConfigure
   '';
-
-  checkPhase = args.checkPhase or (let
-    argstr = "${lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
-    threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
-  in ''
-    ${lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
-    runHook preCheck
-    echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -j $NIX_BUILD_CORES ${argstr} -- --test-threads=${threads} ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
-    runHook postCheck
-    ${lib.optionalString (buildAndTestSubdir != null) "popd"}
-  '');
 
   doCheck = args.doCheck or true;
 
