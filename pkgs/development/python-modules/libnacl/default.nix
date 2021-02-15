@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-nttR9PQimhqd2pByJ5IJzJ4RmSI4y7lcX7a7jcK+vqc=";
   };
 
-  propagatedBuildInputs = [ libsodium ];
+  buildInputs = [ libsodium ];
 
   postPatch =
     let soext = stdenv.hostPlatform.extensions.sharedLibrary; in
