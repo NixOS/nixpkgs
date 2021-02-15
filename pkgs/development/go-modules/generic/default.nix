@@ -34,14 +34,16 @@
 , meta ? {}
 
 # Not needed with buildGoModule
-, goPackagePath ? null
+, goPackagePath ? ""
 
 , ... }@args':
 
 with builtins;
 
+assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
+
 let
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "disabled" ];
+  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" ];
 
   go-modules = if vendorSha256 != null then stdenv.mkDerivation (let modArgs = {
 
@@ -240,7 +242,5 @@ let
                     [ lib.maintainers.kalbasit ];
     };
   });
-in if (goPackagePath != null) then
-  throw "`goPackagePath` not needed with `buildGoModule`"
-else
+in
   package
