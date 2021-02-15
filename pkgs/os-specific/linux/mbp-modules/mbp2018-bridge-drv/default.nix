@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MCMrARM";
     repo = "mbp2018-bridge-drv";
-    rev = "0.01";
+    rev = "${version}";
     sha256 = "0ac2l51ybfrvg8m36x67rsvgjqs1vwp7c89ssvbjkrcq3y4qdb53";
   };
 
