@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [texinfo];
 
-  patchPhase = ''
+  postpatch = ''
     # SBCL checks whether files are up-to-date in many places..
     # Unfortunately, same timestamp is not good enough
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
