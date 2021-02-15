@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.15.0";
+  version = "0.15.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rfhr84km8k5gj0036b2pznwmc8macx56vkxc3aksvns95dksl0s";
+    sha256 = "1p33xfzcy60qqca3rplzbh8h4x7x9l77vi6zbyy9md5z2a0q4ikq";
   };
 
   buildInputs = [
