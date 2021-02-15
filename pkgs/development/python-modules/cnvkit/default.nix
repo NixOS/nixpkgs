@@ -55,11 +55,6 @@ buildPythonPackage rec {
     rPackages.DNAcopy
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
-  '';
-
   checkInputs = [ R ];
 
   checkPhase = ''
