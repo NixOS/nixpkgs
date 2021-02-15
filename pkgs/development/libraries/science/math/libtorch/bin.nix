@@ -8,7 +8,6 @@
 , fixDarwinDylibNames
 
 , cudaSupport
-, nvidia_x11
 }:
 
 let
@@ -24,12 +23,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs =
     if stdenv.isDarwin then [ fixDarwinDylibNames ]
-    else [ addOpenGLRunpath patchelf ]
-      ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
-
-  buildInputs = [
-    stdenv.cc.cc
-  ] ++ lib.optionals cudaSupport [ nvidia_x11 ];
+    else [ patchelf ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -56,8 +50,7 @@ in stdenv.mkDerivation {
   '';
 
   postFixup = let
-    libPaths = [ stdenv.cc.cc.lib ]
-      ++ lib.optionals cudaSupport [ nvidia_x11 ];
+    libPaths = [ stdenv.cc.cc.lib ];
     rpath = lib.makeLibraryPath libPaths;
   in lib.optionalString stdenv.isLinux ''
     find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
