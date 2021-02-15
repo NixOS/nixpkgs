@@ -1,5 +1,5 @@
 { lib
-, gnuradioMinimal
+, gnuradio3_8Minimal
 , fetchFromGitHub
 , pkg-config
 , cmake
@@ -8,7 +8,7 @@
 , liquid-dsp
 }:
 
-gnuradioMinimal.pkgs.mkDerivation rec {
+gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "inspectrum";
   version = "0.2.3";
 

@@ -3,7 +3,7 @@
 , cmake
 , pkg-config
 , qt5
-, gnuradioMinimal
+, gnuradio3_8Minimal
 , log4cpp
 , mpir
 , fftwFloat
@@ -17,7 +17,7 @@
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
-gnuradioMinimal.pkgs.mkDerivation rec {
+gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
   version = "2.14.4";
 
@@ -39,10 +39,10 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     fftwFloat
     alsaLib
     libjack2
-    gnuradioMinimal.unwrapped.boost
+    gnuradio3_8Minimal.unwrapped.boost
     qt5.qtbase
     qt5.qtsvg
-    gnuradioMinimal.pkgs.osmosdr
+    gnuradio3_8Minimal.pkgs.osmosdr
     rtl-sdr
     hackrf
   ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];

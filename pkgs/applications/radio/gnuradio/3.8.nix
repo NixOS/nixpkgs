@@ -7,6 +7,7 @@
 , pkg-config
 , volk
 , cppunit
+, swig
 , orc
 , boost
 , log4cpp
@@ -22,9 +23,6 @@
 , uhd
 , SDL
 , gsl
-, libsodium
-, libsndfile
-, libunwind
 , cppzmq
 , zeromq
 # Needed only if qt-gui is disabled, from some reason
@@ -43,15 +41,16 @@
 , overrideSrc ? {}
 , pname ? "gnuradio"
 , versionAttr ? {
-  major = "3.9";
-  minor = "0";
+  major = "3.8";
+  minor = "2";
   patch = "0";
 }
+# We use our build of volk and not the one bundled with the release
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 =  "ZjQzioAuWrd8jsYOnLNH1mK4n9EbrjgvPX3mTzVFdLk=";
+  sourceSha256 =  "SFDjtyQRp0fXijZukpLYtISpx8imxedlYN9mRibv1eA=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -61,7 +60,6 @@ let
         orc
       ];
       runtime = [
-        volk
         boost
         log4cpp
         mpir
@@ -74,13 +72,24 @@ let
         six
       ];
     };
+    volk = {
+      cmakeEnableFlag = "VOLK";
+      runtime = [
+        volk
+      ];
+    };
     doxygen = {
       native = [ doxygen ];
       cmakeEnableFlag = "DOXYGEN";
     };
+    sphinx = {
+      pythonNative = with python.pkgs; [ sphinx ];
+      cmakeEnableFlag = "SPHINX";
+    };
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
       native = [
+        swig
         python
       ];
       cmakeEnableFlag = "PYTHON";
@@ -89,23 +98,17 @@ let
       native = [ cppunit ];
       cmakeEnableFlag = "TESTING";
     };
-    post-install = {
-      cmakeEnableFlag = "POSTINSTALL";
-    };
     gnuradio-runtime = {
       cmakeEnableFlag = "GNURADIO_RUNTIME";
-      pythonRuntime = [
-        python.pkgs.pybind11
-      ];
     };
     gr-ctrlport = {
       # Thrift support is not really working well, and even the patch they
       # recommend applying on 0.9.2 won't apply. See:
-      # https://github.com/gnuradio/gnuradio/blob/v3.9.0.0/gnuradio-runtime/lib/controlport/thrift/README
-      runtime = [
-        libunwind
-      ];
+      # https://github.com/gnuradio/gnuradio/blob/v3.8.2.0/gnuradio-runtime/lib/controlport/thrift/README
       cmakeEnableFlag = "GR_CTRLPORT";
+      native = [
+        swig
+      ];
     };
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
@@ -114,15 +117,11 @@ let
         numpy
         pygobject3
       ];
-      native = [
-        python.pkgs.pytest
-      ];
       runtime = [
         gtk3
         pango
         gobject-introspection
         cairo
-        libsndfile
       ];
       cmakeEnableFlag = "GRC";
     };
@@ -168,9 +167,7 @@ let
       cmakeEnableFlag = "GR_TRELLIS";
     };
     gr-uhd = {
-      runtime = [
-        uhd
-      ];
+      runtime = [ uhd ];
       cmakeEnableFlag = "GR_UHD";
     };
     gr-utils = {
@@ -183,28 +180,21 @@ let
       ];
       cmakeEnableFlag = "GR_MODTOOL";
     };
-    gr-blocktool = {
-      cmakeEnableFlag = "GR_BLOCKTOOL";
-    };
     gr-video-sdl = {
       runtime = [ SDL ];
       cmakeEnableFlag = "GR_VIDEO_SDL";
     };
-    # codec2 and gsm support is broken with gr3.9: https://github.com/gnuradio/gnuradio/issues/4278
-    # gr-vocoder = {
-      # runtime = [ codec2 gsm ];
-      # cmakeEnableFlag = "GR_VOCODER";
-    # };
+    gr-vocoder = {
+      runtime = [ codec2 gsm ];
+      cmakeEnableFlag = "GR_VOCODER";
+    };
     gr-wavelet = {
       cmakeEnableFlag = "GR_WAVELET";
-      runtime = [ gsl libsodium ];
+      runtime = [ gsl ];
     };
     gr-zeromq = {
       runtime = [ cppzmq zeromq ];
       cmakeEnableFlag = "GR_ZEROMQ";
-    };
-    gr-network = {
-      cmakeEnableFlag = "GR_NETWORK";
     };
   };
   shared = (import ./shared.nix {
@@ -234,7 +224,6 @@ stdenv.mkDerivation rec {
     src
     nativeBuildInputs
     buildInputs
-    cmakeFlags
     disallowedReferences
     stripDebugList
     doCheck
@@ -250,16 +239,46 @@ stdenv.mkDerivation rec {
   } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
     inherit (libsForQt5) qwt;
   };
+  cmakeFlags = shared.cmakeFlags
+    # From some reason, if these are not set, libcodec2 and gsm are not
+    # detected properly. NOTE: qradiolink needs libcodec2 to be detected in
+    # order to build, see https://github.com/qradiolink/qradiolink/issues/67
+    ++ lib.optionals (hasFeature "gr-vocoder" features) [
+      "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
+      "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
+      "-DLIBCODEC2_HAS_FREEDV_API=ON"
+      "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
+      "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
+    ]
+    ++ lib.optionals (hasFeature "volk" features && volk != null) [
+      "-DENABLE_INTERNAL_VOLK=OFF"
+    ]
+  ;
 
   postInstall = shared.postInstall
-    # This is the only python reference worth removing, if needed.
-    # Even if python support is enabled, and we don't care about this
-    # reference, pybind's path is not properly set. See:
-    # https://github.com/gnuradio/gnuradio/issues/4380
+    # This is the only python reference worth removing, if needed (3.7 doesn't
+    # set that reference).
     + lib.optionalString (!hasFeature "python-support" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
-      ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;
+  patches = [
+    # Don't install python referencing files if python support is disabled.
+    # See: https://github.com/gnuradio/gnuradio/pull/3839
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/4a4fd570b398b0b50fe875fcf0eb9c9db2ea5c6e.diff";
+      sha256 = "xz2E0ji6zfdOAhjfPecAcaVOIls1XP8JngLkBbBBW5Q=";
+    })
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/dbc8ad7e7361fddc7b1dbc267c07a776a3f9664b.diff";
+      sha256 = "tQcCpcUbJv3yqAX8rSHN/pAuBq4ueEvoVo7sNzZGvf4=";
+    })
+    # Needed to use boost 1.7x, see:
+    # https://github.com/gnuradio/gnuradio/issues/3720
+    # https://github.com/gnuradio/gnuradio/pull/3967
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/cbcb968358fad56f3646619b258f18b0e6693a07.diff";
+      sha256 = "1ajf4797f869lqv436xw61s29qdbn7f01i0970kfxv3yahd34p9v";
+    })
+  ];
 }

@@ -3,7 +3,7 @@
 , libpulseaudio
 , libconfig
 # Needs a gnuradio built with qt gui support
-, gnuradio
+, gnuradio3_8
 # Not gnuradioPackages'
 , codec2
 , log4cpp
@@ -18,7 +18,7 @@
 , speexdsp
 }:
 
-gnuradio.pkgs.mkDerivation rec {
+gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
   version = "0.8.5-2";
 
@@ -44,28 +44,28 @@ gnuradio.pkgs.mkDerivation rec {
   '';
 
   buildInputs = [
-    gnuradio.unwrapped.boost
+    gnuradio3_8.unwrapped.boost
     codec2
     log4cpp
     gmp
     libpulseaudio
     libconfig
     gsm
-    gnuradio.pkgs.osmosdr
+    gnuradio3_8.pkgs.osmosdr
     libopus
     libjpeg
     speex
     speexdsp
-    gnuradio.qt.qtbase
-    gnuradio.qt.qtmultimedia
+    gnuradio3_8.qt.qtbase
+    gnuradio3_8.qt.qtmultimedia
     libftdi
     libsndfile
-    gnuradio.qwt
+    gnuradio3_8.qwt
   ];
   nativeBuildInputs = [
     protobuf
-    gnuradio.qt.qmake
-    gnuradio.qt.wrapQtAppsHook
+    gnuradio3_8.qt.qmake
+    gnuradio3_8.qt.wrapQtAppsHook
   ];
 
   enableParallelBuilding = true;
