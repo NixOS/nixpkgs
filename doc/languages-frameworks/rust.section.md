@@ -293,6 +293,8 @@ attributes can also be used:
   variable `buildAndTestSubdir` can be used to build a crate in a
   Cargo workspace. Additional maturin flags can be passed through
   `maturinBuildFlags`.
+* `cargoInstallHook`: install binaries and static/shared libraries
+  that were built using `cargoBuildHook`.
 
 ### Examples
 

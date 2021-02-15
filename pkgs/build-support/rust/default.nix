@@ -4,6 +4,7 @@
 , cacert
 , cargo
 , cargoBuildHook
+, cargoInstallHook
 , cargoSetupHook
 , fetchCargoTarball
 , runCommandNoCC
@@ -87,9 +88,6 @@ let
     originalCargoToml = src + /Cargo.toml; # profile info is later extracted
   };
 
-  releaseDir = "target/${shortTarget}/${buildType}";
-  tmpDir = "${releaseDir}-tmp";
-
 in
 
 # Tests don't currently work for `no_std`, and all custom sysroots are currently built without `std`.
@@ -99,16 +97,16 @@ assert useSysroot -> !(args.doCheck or true);
 stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
-  inherit buildAndTestSubdir cargoDeps releaseDir tmpDir;
+  inherit buildAndTestSubdir cargoDeps;
 
   cargoBuildFlags = lib.concatStringsSep " " cargoBuildFlags;
 
-  cargoBuildType = "--${buildType}";
+  cargoBuildType = buildType;
 
   patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++
-    [ cacert git cargo cargoBuildHook cargoSetupHook rustc ];
+    [ cacert git cargo cargoBuildHook cargoInstallHook cargoSetupHook rustc ];
 
   buildInputs = buildInputs ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
@@ -143,36 +141,6 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
   doCheck = args.doCheck or true;
 
   strictDeps = true;
-
-  installPhase = args.installPhase or ''
-    runHook preInstall
-
-    # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
-    # the pre/postBuild-hooks that need to be taken into account before gathering
-    # all binaries to install.
-    mkdir -p $tmpDir
-    cp -r $releaseDir/* $tmpDir/
-    bins=$(find $tmpDir \
-      -maxdepth 1 \
-      -type f \
-      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
-
-    # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${tmpDir}$')
-    for target in "''${targets[@]}"; do
-      rm -rf "$target/../../${buildType}"
-      ln -srf "$target" "$target/../../"
-    done
-    mkdir -p $out/bin $out/lib
-
-    xargs -r cp -t $out/bin <<< $bins
-    find $tmpDir \
-      -maxdepth 1 \
-      -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
-      -print0 | xargs -r -0 cp -t $out/lib
-    rmdir --ignore-fail-on-non-empty $out/lib $out/bin
-    runHook postInstall
-  '';
 
   passthru = { inherit cargoDeps; } // (args.passthru or {});
 

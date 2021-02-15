@@ -36,6 +36,15 @@ in {
       };
     } ./cargo-build-hook.sh) {};
 
+  cargoInstallHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-install-hook.sh";
+      deps = [ ];
+      substitutions = {
+        inherit shortTarget;
+      };
+    } ./cargo-install-hook.sh) {};
+
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-setup-hook.sh";
