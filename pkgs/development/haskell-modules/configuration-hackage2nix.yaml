@@ -6443,7 +6443,6 @@ broken-packages:
   - hinduce-classifier
   - hinduce-classifier-decisiontree
   - hinduce-examples
-  - hinit
   - hinquire
   - hinstaller
   - hint-server
