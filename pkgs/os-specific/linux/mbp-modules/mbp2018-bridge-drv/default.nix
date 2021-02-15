@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       A driver for MacBook models 2018 and newer, implementing the VHCI (required for mouse/keyboard/etc.) and audio functionality.
     '';
     homepage = "https://github.com/MCMrARM/mbp2018-bridge-drv";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ lib.maintainers.hlolli ];
   };
