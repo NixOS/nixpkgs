@@ -25,9 +25,9 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.send_chars("pass1\n")
     machine.send_chars("touch login-ok\n")
     machine.wait_for_file("/home/alice/login-ok")
-    verify_user_activation_run_count(0)  # Wrong!  Should be 1
+    verify_user_activation_run_count(1)
 
     machine.succeed("/run/current-system/bin/switch-to-configuration test")
-    verify_user_activation_run_count(1)  # Wrong!  Should be 2
+    verify_user_activation_run_count(2)
   '';
 })
