@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sidplay-residfp/${pname}/${majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "04vdrrkh5y9x9rrmj6gdp242ah70b4sslwqfby8wp2riis4hr9z0";
+    sha256 = "sha256-4Swaenpe6oBVl3aerHCtF0wEXtSo+sto5f4LnBgDp6w=";
   };
 
   nativeBuildInputs = [ pkg-config ]
