@@ -4,15 +4,20 @@
 , buildPackages
 , pkgsBuildTarget
 , fetchpatch
+, callPackage
 }:
 
 let
 
   inherit (lib) optionals optionalString;
 
+  go_bootstrap = callPackage ./bootstrap.nix {
+    inherit Security;
+  };
+
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
-    cp -rf ${buildPackages.go_bootstrap}/* $out/
+    cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
