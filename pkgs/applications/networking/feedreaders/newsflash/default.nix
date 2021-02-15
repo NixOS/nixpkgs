@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsflash";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    sha256 = "1z47h23g87dqmr9sfjl36fs5xjm2wj7z2bri9g0a4jcpwzl5awsd";
+    sha256 = "sha256-5GuQoLMQ6p4B5vnY5Viad3rjkyZX3aWeVeycozM7pCE=";
   };
 
-  cargoSha256 = "0rnrdh9ganj63hf9j890yj9pahcgza95z7x020w72mbb4648hq26";
+  cargoSha256 = "sha256-xBH3+VTV6hlF1sg/Iaw6Z64Z8VpUhpbAHn/S/L9ymOI=";
 
   patches = [
     ./no-post-install.patch
