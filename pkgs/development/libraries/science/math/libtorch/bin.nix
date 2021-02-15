@@ -8,9 +8,16 @@
 , fixDarwinDylibNames
 
 , cudaSupport
+, cudatoolkit_10_2
+, cudnn_cudatoolkit_10_2
 }:
 
 let
+  # The binary libtorch distribution statically links the CUDA
+  # toolkit. This means that we do not need to provide CUDA to
+  # this derivation. However, we should ensure on version bumps
+  # that the CUDA toolkit for `passthru.tests` is still
+  # up-to-date.
   version = "1.7.1";
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
@@ -50,8 +57,7 @@ in stdenv.mkDerivation {
   '';
 
   postFixup = let
-    libPaths = [ stdenv.cc.cc.lib ];
-    rpath = lib.makeLibraryPath libPaths;
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in lib.optionalString stdenv.isLinux ''
     find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
@@ -101,7 +107,11 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  passthru.tests.cmake = callPackage ./test { };
+  passthru.tests.cmake = callPackage ./test {
+    inherit cudaSupport;
+    cudatoolkit = cudatoolkit_10_2;
+    cudnn = cudnn_cudatoolkit_10_2;
+  };
 
   meta = with lib; {
     description = "C++ API of the PyTorch machine learning framework";
