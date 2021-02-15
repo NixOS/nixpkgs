@@ -1,3 +1,5 @@
+declare -a cargoBuildFlags
+
 cargoBuildHook() {
     echo "Executing cargoBuildHook"
 

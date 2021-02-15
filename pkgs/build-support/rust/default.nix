@@ -36,7 +36,6 @@
 , nativeBuildInputs ? []
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
-, cargoBuildFlags ? []
 , buildType ? "release"
 , meta ? {}
 , cargoVendorDir ? null
@@ -97,8 +96,6 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
   inherit buildAndTestSubdir cargoDeps;
-
-  cargoBuildFlags = lib.concatStringsSep " " cargoBuildFlags;
 
   cargoBuildType = buildType;
 
