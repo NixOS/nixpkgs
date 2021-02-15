@@ -46,11 +46,6 @@ buildPythonPackage rec {
     ipython
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'numba==0.43'" "'numba'"
-  '';
-
   # avoid collecting local files
   preCheck = ''
     cd clifford/test
