@@ -120,6 +120,12 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     '';
   };
 
+  signingUtils = callPackage ../os-specific/darwin/signing-utils { };
+
+  autoSignDarwinBinariesHook = pkgs.makeSetupHook {
+    deps = [ self.signingUtils ];
+  } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
+
   maloader = callPackage ../os-specific/darwin/maloader {
   };
 
