@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, libressl, libxml2, cmake, z3, substituteAll,
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.38.1";
+  version = "0.38.3";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "1hk810k9h3bl641pgw91y4x2qw67rvbapx6p2pk9qz5p7nfcn7qh";
+    sha256 = "14kivmyphi7gbd7mgd4cnsiwl4cl7wih8kwzh7n79s2s4c5hj4ak";
 
 # Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
 # LLVM.  (The submodule is a specific tag in the LLVM source tree).
@@ -95,7 +95,7 @@ stdenv.mkDerivation (rec {
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \
-      --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 libressl (placeholder "out") ]}"
+      --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]}"
   '';
 
   # Stripping breaks linking for ponyc
