@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchgit
 , makeWrapper, autoreconfHook, fetchpatch
-, coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
+, coreutils, libxml2, gnutls, perl, python3, attr, glib, docutils
 , iproute, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, iptables, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     bash-completion pkg-config
-    libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
+    libxml2 gnutls perl python3 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
   ] ++ optionals stdenv.isLinux [
     audit libpciaccess lvm2 util-linux systemd libnl numad zfs
@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
-    patchShebangs . # fixes /usr/bin/python references
+    patchShebangs .
   ''
   + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
 
