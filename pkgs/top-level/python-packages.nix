@@ -7261,6 +7261,8 @@ in {
 
   skorch = callPackage ../development/python-modules/skorch { };
 
+  slack-sdk = callPackage ../development/python-modules/slack-sdk { };
+
   slackclient = callPackage ../development/python-modules/slackclient { };
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };

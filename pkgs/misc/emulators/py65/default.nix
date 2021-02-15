@@ -21,6 +21,5 @@ buildPythonApplication rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; all;
   };
 }
