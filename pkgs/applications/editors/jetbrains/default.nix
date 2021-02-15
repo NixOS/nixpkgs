@@ -135,7 +135,7 @@ let
           with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
           as IntelliJ.
         '';
-        maintainers = with maintainers; [ edwtjo ];
+        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius ];
         platforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" ];
       };
     });
