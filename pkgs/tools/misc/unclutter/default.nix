@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   buildInputs = [xlibsWrapper];
 
-  buildFlags = [ "CC=cc" ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     mkdir -pv "$out/bin"

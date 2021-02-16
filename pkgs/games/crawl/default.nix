@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
+  makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=${stdenv.cc.targetPrefix}cc" "FORCE_CXX=${stdenv.cc.targetPrefix}c++" "HOSTCXX=${stdenv.cc.targetPrefix}c++"
                 "FORCE_PKGCONFIG=y"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
                 "DATADIR=${placeholder "out"}"
