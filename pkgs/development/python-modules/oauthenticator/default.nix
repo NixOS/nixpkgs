@@ -1,41 +1,42 @@
 { lib
 , buildPythonPackage
-, jupyterhub
-, globus-sdk
-, mwoauth
-, codecov
-, flake8
-, pyjwt
-, pytest
-, pytestcov
-, pytest-tornado
-, requests-mock
 , pythonOlder
 , fetchPypi
+, google_api_python_client
+, google-auth-oauthlib
+, jupyterhub
+, mwoauth
+, pyjwt
+, pytest-asyncio
+, pytestCheckHook
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "0.12.3";
+  version = "0.13.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f86e18e954ae37796ee149fe01ab0be0707d9e0415d62336ba3447e7b4383461";
+    sha256 = "5202adcd96ddbbccbc267da02f2d14e977300c81291aaa77be4fd9f2e27cfa37";
   };
 
-  checkPhase = ''
-    py.test oauthenticator/tests
-  '';
+  propagatedBuildInputs = [
+    jupyterhub
+  ];
 
-  # No tests in archive
-  doCheck = false;
+  pytestFlagsArray = [ "oauthenticator/tests" ];
 
-  checkInputs = [  globus-sdk mwoauth codecov flake8 pytest
-    pytestcov pytest-tornado requests-mock pyjwt ];
-
-  propagatedBuildInputs = [ jupyterhub ];
-
-  disabled = pythonOlder "3.4";
+  checkInputs = [
+    google_api_python_client
+    google-auth-oauthlib
+    mwoauth
+    pyjwt
+    pytest-asyncio
+    pytestCheckHook
+    requests-mock
+  ];
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";
