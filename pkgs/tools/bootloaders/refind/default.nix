@@ -14,17 +14,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.12.0";
+  version = "0.13.0";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1i5p3sir3mx4i2q5w78360xn2kbgsj8rmgrqvsvag1zzr5dm1f3v";
+    sha256 = "0zivlcw1f3zwnrwvbhwq6gg781hh72g2bhc2cxcsb2zmg7q8in65";
   };
 
   patches = [
     ./0001-toolchain.patch
-    ./0001-Fix-GCC-10-compile-problem.patch
   ];
 
   buildInputs = [ gnu-efi ];
