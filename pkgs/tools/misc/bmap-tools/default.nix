@@ -2,13 +2,13 @@
 
 python2Packages.buildPythonApplication rec {
   pname = "bmap-tools";
-  version = "3.4";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "bmap-tools";
     rev = "v${version}";
-    sha256 = "0p0pdwvyf9b4czi1pnhclm1ih8kw78nk2sj4if5hwi7s5423wk5q";
+    sha256 = "01xzrv5nvd2nvj91lz4x9s91y9825j9pj96z0ap6yvy3w2dgvkkl";
   };
 
   # tests fail only on hydra.
