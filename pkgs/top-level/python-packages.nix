@@ -412,6 +412,8 @@ in {
 
   apsw = callPackage ../development/python-modules/apsw { };
 
+  aqualogic = callPackage ../development/python-modules/aqualogic { };
+
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
   archinfo = callPackage ../development/python-modules/archinfo { };
