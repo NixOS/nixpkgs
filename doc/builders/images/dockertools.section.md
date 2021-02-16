@@ -8,6 +8,9 @@ This function is analogous to the `docker build` command, in that it can be used
 
 The parameters of `buildImage` with relative example values are described below:
 
+[]{#ex-dockerTools-buildImage}
+[]{#ex-dockerTools-buildImage-runAsRoot}
+
 ```nix
 buildImage {
   name = "redis";
@@ -47,7 +50,7 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `runAsRoot` is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied `contents` derivation. This can be similarly seen as `RUN ...` in a `Dockerfile`.
 
-  ::: {.note} Using this parameter requires the `kvm` device to be available. :::
+> **_NOTE:_** Using this parameter requires the `kvm` device to be available.
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [ Docker Image Specification v1.2.0 ](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
@@ -59,9 +62,9 @@ The resulting repository will only list the single image `image/tag`. In the cas
 
 It is possible to inspect the arguments with which an image was built using its `buildArgs` attribute.
 
-::: {.note} If you see errors similar to `getProtocolByName: does not exist (no such protocol name: tcp)` you may need to add `pkgs.iana-etc` to `contents`. :::
+> **_NOTE:_** If you see errors similar to `getProtocolByName: does not exist (no such protocol name: tcp)` you may need to add `pkgs.iana-etc` to `contents`.
 
-::: {.note} If you see errors similar to `Error_Protocol ("certificate has unknown CA",True,UnknownCa)` you may need to add `pkgs.cacert` to `contents`. :::
+> **_NOTE:_** If you see errors similar to `Error_Protocol ("certificate has unknown CA",True,UnknownCa)` you may need to add `pkgs.cacert` to `contents`.
 
 By default `buildImage` will use a static date of one second past the UNIX Epoch. This allows `buildImage` to produce binary reproducible images. When listing images with `docker images`, the newly created images will be listed like this:
 
@@ -255,7 +258,7 @@ $ nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr
 
 This function is analogous to the `docker export` command, in that it can be used to flatten a Docker image that contains multiple layers. It is in fact the result of the merge of all the layers of the image. As such, the result is suitable for being imported in Docker with `docker import`.
 
-::: {.note} Using this function requires the `kvm` device to be available. :::
+> **_NOTE:_** Using this function requires the `kvm` device to be available.
 
 The parameters of `exportImage` are the following:
 
