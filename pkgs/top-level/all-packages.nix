@@ -23403,7 +23403,7 @@ in
 
   wrapHelm = callPackage ../applications/networking/cluster/helm/wrapper.nix { };
 
-  kubernetes-helm-wrapped = wrapHelm kubernetes-helm-unwrapped {};
+  kubernetes-helm-wrapped = wrapHelm kubernetes-helm {};
 
   kubernetes-helmPlugins = dontRecurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
 
