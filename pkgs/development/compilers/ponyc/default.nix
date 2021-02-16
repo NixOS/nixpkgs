@@ -24,7 +24,7 @@ stdenv.mkDerivation (rec {
   };
 
   ponygbenchmark = fetchurl {
-    url = https://github.com/google/benchmark/archive/v1.5.0.tar.gz;
+    url = "https://github.com/google/benchmark/archive/v1.5.0.tar.gz";
     sha256 = "06i2cr4rj126m1zfz0x1rbxv1mw1l7a11mzal5kqk56cdrdicsiw";
     name = "v1.5.0.tar.gz";
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation (rec {
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
       googletest = fetchurl {
-        url = https://github.com/google/googletest/archive/release-1.8.1.tar.gz;
+        url = "https://github.com/google/googletest/archive/release-1.8.1.tar.gz";
         sha256 = "17147961i01fl099ygxjx4asvjanwdd446nwbq9v8156h98zxwcv";
         name = "release-1.8.1.tar.gz";
       };
