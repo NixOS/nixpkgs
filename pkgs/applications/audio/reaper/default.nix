@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.21";
+  version = "6.23";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "11nvfjfrri9y0k7n7psz3yk1l7mxp9f6yi69pq7hvn9d4n26p5vd";
+    sha256 = "1s9c8prqk38738hjaixiy8ljp94cqw7jq3160890477jyk6cvicd";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     XDG_DATA_HOME="$out/share" ./install-reaper.sh \
       --install $out/opt \
       --integrate-user-desktop
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
     ln -s $out/opt/REAPER/reamote-server $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
