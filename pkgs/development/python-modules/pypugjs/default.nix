@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, six, chardet, nose
+{ lib, buildPythonPackage, fetchPypi, six, chardet, nose
 , django, jinja2, tornado, pyramid, pyramid_mako, Mako }:
 
 buildPythonPackage rec {
