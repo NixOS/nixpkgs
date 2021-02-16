@@ -450,7 +450,7 @@ in {
         else { PORT = toString(cfg.streamingPort); }
       );
       serviceConfig = {
-        ExecStart = "${pkgs.nodejs-slim}/bin/node streaming";
+        ExecStart = "${cfg.package}/run-streaming.sh";
         Restart = "always";
         RestartSec = 20;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
