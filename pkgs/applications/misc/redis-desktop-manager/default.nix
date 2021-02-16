@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
-, qtsvg, qttools, qtquick1, qtcharts
+, qtquickcontrols2, qtsvg, qttools, qtquick1, qtcharts
 , qmake
 }:
 
@@ -28,7 +28,7 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
-    qtquick1 qtquickcontrols qtsvg qttools qtcharts
+    qtquick1 qtquickcontrols qtquickcontrols2 qtsvg qttools qtcharts
   ];
 
   dontUseQmakeConfigure = true;
