@@ -2,7 +2,6 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , python
 , numpy
 , qiskit-terra
