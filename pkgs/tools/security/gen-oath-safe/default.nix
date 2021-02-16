@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase =
     let
