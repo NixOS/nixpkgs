@@ -21,12 +21,10 @@ stdenv.mkDerivation rec {
       linux = "linux";
       darwin = "bpf";
     }.${stdenv.hostPlatform.parsed.kernel.name})
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-universal"
   ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform)
     [ "ac_cv_linux_vers=2" ];
-
-  prePatch = optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace " -arch i386" ""
-  '';
 
   postInstall = ''
     if [ "$dontDisableStatic" -ne "1" ]; then
