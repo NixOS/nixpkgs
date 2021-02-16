@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnet-sdk_5, dotnetPackages, dotnetCorePackages, cacert
-, SDL2, libX11, ffmpeg, openal, libsoundio
+, SDL2, libX11, libgdiplus, ffmpeg, openal, libsoundio
 , gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
@@ -9,19 +9,20 @@ let
     SDL2
     gtk3
     libX11
+    libgdiplus
     ffmpeg
     openal
     libsoundio
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.6574"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6659"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "80ed8596c165127fb52026c697a9b6b515dabbd4";
-    sha256 = "0jhrl8g9fbz3w2hzmy9jm22cvjfa0x5vh3912rz1rvnd41qb9vs8";
+    rev = "ad7d22777f60f58f96d4f5bca879134b6924390a";
+    sha256 = "16wi8qlz8hq8n3ycmmi6rm4j70l0v4wv76nvm1ka5aswv5xdwams";
   };
 
   nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
@@ -108,4 +109,5 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
   };
+  passthru.updateScript = ./updater.sh;
 }
