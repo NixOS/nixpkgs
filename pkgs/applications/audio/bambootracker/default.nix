@@ -1,7 +1,7 @@
 { mkDerivation
 , lib
-, stdenv
 , fetchFromGitHub
+, fetchpatch
 , qmake
 , pkg-config
 , qttools
@@ -21,10 +21,15 @@ mkDerivation rec {
     sha256 = "0iddqfw951dw9xpl4w7310sl4z544507ppb12i8g4fzvlxfw2ifc";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace BambooTracker/BambooTracker.pro \
-      --replace '# Temporary known-error downgrades here' 'CPP_WARNING_FLAGS += -Wno-missing-braces'
-  '';
+  # TODO Remove when updating past 0.4.6
+  # Fixes build failure on darwin
+  patches = [
+    (fetchpatch {
+      name = "bambootracker-Add_braces_in_initialization_of_std-array.patch";
+      url = "https://github.com/rerrahkr/BambooTracker/commit/0fc96c60c7ae6c2504ee696bb7dec979ac19717d.patch";
+      sha256 = "1z28af46mqrgnyrr4i8883gp3wablkk8rijnj0jvpq01s4m2sfjn";
+    })
+  ];
 
   nativeBuildInputs = [ qmake qttools pkg-config ];
 
@@ -40,6 +45,5 @@ mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
-    broken = stdenv.isDarwin;
   };
 }
