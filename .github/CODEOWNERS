@@ -186,8 +186,9 @@
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio
 
-# VsCode Extensions
+# VSCode extensions, and documentation
 /pkgs/misc/vscode-extensions   @jonringer
+/doc/languages-frameworks/vscode.section.md @cideM
 
 # Prometheus exporter modules and tests
 /nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz

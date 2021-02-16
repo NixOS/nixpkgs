@@ -32,4 +32,5 @@
  <xi:include href="texlive.section.xml" />
  <xi:include href="titanium.section.xml" />
  <xi:include href="vim.section.xml" />
+ <xi:include href="vscode.section.xml" />
 </chapter>
