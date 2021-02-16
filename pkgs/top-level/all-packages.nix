@@ -3398,11 +3398,6 @@ in
 
   cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
   inherit (cudaPackages)
-    cudatoolkit_6
-    cudatoolkit_6_5
-    cudatoolkit_7
-    cudatoolkit_7_5
-    cudatoolkit_8
     cudatoolkit_9
     cudatoolkit_9_0
     cudatoolkit_9_1
@@ -3420,10 +3415,6 @@ in
 
   cudnnPackages = callPackages ../development/libraries/science/math/cudnn { };
   inherit (cudnnPackages)
-    cudnn_cudatoolkit_7
-    cudnn_cudatoolkit_7_5
-    cudnn6_cudatoolkit_8
-    cudnn_cudatoolkit_8
     cudnn_cudatoolkit_9
     cudnn_cudatoolkit_9_0
     cudnn_cudatoolkit_9_1
