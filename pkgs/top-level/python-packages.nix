@@ -7020,6 +7020,8 @@ in {
 
   safety = callPackage ../development/python-modules/safety { };
 
+  sagemaker = callPackage ../development/python-modules/sagemaker { };
+
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   sane = callPackage ../development/python-modules/sane {
