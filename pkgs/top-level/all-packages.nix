@@ -5109,9 +5109,7 @@ in
 
   hdf5-blosc = callPackage ../development/libraries/hdf5-blosc { };
 
-  hdfview = callPackage ../tools/misc/hdfview {
-    javac = jdk8; # TODO: https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  hdfview = callPackage ../tools/misc/hdfview { };
 
   hdf_java = callPackage ../tools/misc/hdfjava {
     javac = jdk8; # TODO: https://github.com/NixOS/nixpkgs/pull/89731
