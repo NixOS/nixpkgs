@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl
-, pkg-config, scdoc, wayland
-, wayland-protocols, libxkbcommon
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, scdoc
+, wayland
+, wayland-protocols
+, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
@@ -18,14 +23,14 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/wev";
     description = "Wayland event viewer";
     longDescription = ''
       This is a tool for debugging events on a Wayland window, analagous to the
       X11 tool xev.
     '';
-    homepage = "https://git.sr.ht/~sircmpwn/wev";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
+    platforms = platforms.unix;
   };
 }

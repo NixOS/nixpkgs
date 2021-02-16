@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
-, cairo, libxkbcommon, wayland, wayland-protocols
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, cairo
+, libxkbcommon
+, wayland
+, wayland-protocols
 , buildDocs ? true, scdoc
 }:
 
@@ -33,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Select a region in a Wayland compositor";
     homepage = "https://github.com/emersion/slurp";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ buffet ];
+    platforms = platforms.linux;
   };
 }

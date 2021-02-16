@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland # wayland-scanner
-, wayland-protocols, libseccomp
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, libseccomp
+, wayland # wayland-scanner
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
@@ -21,15 +28,15 @@ stdenv.mkDerivation rec {
   mesonFlags = lib.optional stdenv.isLinux "-Dseccomp=enabled";
 
   meta = with lib; {
+    inherit (src.meta) homepage;
     description = "A lightweight overlay bar for Wayland";
     longDescription = ''
       A lightweight overlay volume/backlight/progress/anything bar for Wayland,
       inspired by xob.
     '';
-    inherit (src.meta) homepage;
     changelog = "https://github.com/francma/wob/releases/tag/${version}";
     license = licenses.isc;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
+    platforms = platforms.unix;
   };
 }
