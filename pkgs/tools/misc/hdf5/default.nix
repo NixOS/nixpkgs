@@ -8,6 +8,8 @@
 , mpiSupport ? false
 , mpi
 , enableShared ? !stdenv.hostPlatform.isStatic
+, javaSupport ? false
+, jdk
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -35,7 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = []
     ++ optional (gfortran != null) gfortran
-    ++ optional (szip != null) szip;
+    ++ optional (szip != null) szip
+    ++ optional javaSupport jdk;
 
   propagatedBuildInputs = []
     ++ optional (zlib != null) zlib
@@ -46,7 +49,8 @@ stdenv.mkDerivation rec {
     ++ optional (gfortran != null) "--enable-fortran"
     ++ optional (szip != null) "--with-szlib=${szip}"
     ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
-    ++ optional enableShared "--enable-shared";
+    ++ optional enableShared "--enable-shared"
+    ++ optional javaSupport "--enable-java";
 
   patches = [
     ./bin-mv.patch
