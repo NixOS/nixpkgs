@@ -1,0 +1,4 @@
+[
+    "@swc/core",
+    "@swc/cli"
+]

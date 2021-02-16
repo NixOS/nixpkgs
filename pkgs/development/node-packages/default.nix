@@ -7,12 +7,17 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-  self = super // {
+  swc = import ./swc/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  self = super // swc // {
     "@angular/cli" = super."@angular/cli".override {
       prePatch = ''
         export NG_CLI_ANALYTICS=false
       '';
     };
+
     bower2nix = super.bower2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
