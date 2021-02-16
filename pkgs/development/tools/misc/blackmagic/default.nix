@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = "${stdenv.shell} ${./helper.sh}";
-  installPhase = ":"; # buildPhase does this.
+  dontInstall = true;
 
   enableParallelBuilding = true;
 
