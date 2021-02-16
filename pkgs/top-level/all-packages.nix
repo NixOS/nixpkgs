@@ -1964,7 +1964,7 @@ in
 
   chntpw = callPackage ../tools/security/chntpw { };
 
-  clipman = callPackage ../tools/misc/clipman { };
+  clipman = callPackage ../tools/wayland/clipman { };
 
   clipster = callPackage ../tools/misc/clipster { };
 
