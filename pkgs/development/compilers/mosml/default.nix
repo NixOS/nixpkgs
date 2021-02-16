@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp perl ];
 
-  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals stdenv.isDarwin [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   src = fetchurl {
     url = "https://github.com/kfl/mosml/archive/ver-${version}.tar.gz";
