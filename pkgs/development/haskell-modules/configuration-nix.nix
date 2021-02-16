@@ -809,5 +809,7 @@ self: super: builtins.intersectAttrs super {
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
 
+  # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
+  # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
   hadolint = disableCabalFlag super.hadolint "static";
 }
