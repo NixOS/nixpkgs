@@ -78,7 +78,7 @@ buildPythonPackage rec {
 
   # dask doesn't do well with large core counts
   checkPhase = ''
-    pytest -n $NIX_BUILD_CORES datashader -k 'not dask.array'
+    pytest -n $NIX_BUILD_CORES datashader -k 'not dask.array and not test_simple_nested'
   '';
 
   meta = with lib; {
