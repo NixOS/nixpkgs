@@ -1968,6 +1968,8 @@ in
 
   kanshi = callPackage ../tools/wayland/kanshi { };
 
+  oguri = callPackage  ../tools/wayland/oguri { };
+
   slurp = callPackage ../tools/wayland/slurp { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
