@@ -12656,6 +12656,8 @@ in
 
   pprof = callPackage ../development/tools/profiling/pprof { };
 
+  pqrs = callPackage ../development/tools/pqrs { };
+
   pyprof2calltree = with python3Packages; toPythonApplication pyprof2calltree;
 
   prelink = callPackage ../development/tools/misc/prelink { };
