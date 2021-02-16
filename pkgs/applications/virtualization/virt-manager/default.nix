@@ -1,9 +1,9 @@
-{ lib, fetchurl, python3Packages, intltool, file
+{ lib, stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3
 , gtksourceview4, docutils
-, spiceSupport ? true, spice-gtk ? null
+, spiceSupport ? !stdenv.isDarwin, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
 }:
 
@@ -26,10 +26,12 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     wrapGAppsHook
-    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    libvirt-glib dconf gnome3.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
-  ] ++ optional spiceSupport spice-gtk;
+  ]
+  ++ optional spiceSupport spice-gtk
+  ++ optionals (!stdenv.isDarwin) [ gtk-vnc vte ];
 
   propagatedBuildInputs = with python3Packages;
     [
@@ -50,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
-    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath ([ cpio file findutils gzip ] ++ optional (!stdenv.isDarwin) e2fsprogs) }")
   '';
 
   # Failed tests
@@ -66,7 +68,7 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     # exclude Darwin since libvirt-glib currently doesn't build there
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

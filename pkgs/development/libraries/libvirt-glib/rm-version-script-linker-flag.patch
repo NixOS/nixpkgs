@@ -1,0 +1,33 @@
+diff -ZNaur a/libvirt-gconfig/Makefile.in b/libvirt-gconfig/Makefile.in
+--- a/libvirt-gconfig/Makefile.in	2019-11-26 13:37:24.000000000 +0100
++++ b/libvirt-gconfig/Makefile.in	2021-02-16 12:14:38.106167715 +0100
+@@ -844,7 +844,6 @@
+ libvirt_gconfig_1_0_la_LDFLAGS = \
+ 			$(COVERAGE_CFLAGS:-f%=-Wc,f%) \
+ 			$(CYGWIN_EXTRA_LDFLAGS) $(MINGW_EXTRA_LDFLAGS) \
+-			-Wl,--version-script=$(srcdir)/libvirt-gconfig.sym \
+ 			-version-info $(LIBVIRT_GLIB_VERSION_INFO)
+ 
+ BUILT_SOURCES = $(GCONFIG_GENERATED_FILES)
+diff -ZNaur a/libvirt-glib/Makefile.in b/libvirt-glib/Makefile.in
+--- a/libvirt-glib/Makefile.in	2019-11-26 13:37:24.000000000 +0100
++++ b/libvirt-glib/Makefile.in	2021-02-16 12:14:58.544075496 +0100
+@@ -437,7 +437,6 @@
+ libvirt_glib_1_0_la_LDFLAGS = \
+ 			$(COVERAGE_CFLAGS:-f%=-Wc,f%) \
+ 			$(CYGWIN_EXTRA_LDFLAGS) $(MINGW_EXTRA_LDFLAGS) \
+-			-Wl,--version-script=$(srcdir)/libvirt-glib.sym \
+ 			-version-info $(LIBVIRT_GLIB_VERSION_INFO)
+ 
+ INTROSPECTION_GIRS = $(am__append_1)
+diff -ZNaur a/libvirt-gobject/Makefile.in b/libvirt-gobject/Makefile.in
+--- a/libvirt-gobject/Makefile.in	2019-11-26 13:37:24.000000000 +0100
++++ b/libvirt-gobject/Makefile.in	2021-02-16 12:15:08.498376955 +0100
+@@ -542,7 +542,6 @@
+ libvirt_gobject_1_0_la_LDFLAGS = \
+ 			$(COVERAGE_CFLAGS:-f%=-Wc,f%) \
+ 			$(CYGWIN_EXTRA_LDFLAGS) $(MINGW_EXTRA_LDFLAGS) \
+-			-Wl,--version-script=$(srcdir)/libvirt-gobject.sym \
+ 			-version-info $(LIBVIRT_GLIB_VERSION_INFO)
+ 
+ BUILT_SOURCES = $(GOBJECT_GENERATED_FILES)

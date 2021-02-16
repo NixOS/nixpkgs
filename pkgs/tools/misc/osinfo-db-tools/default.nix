@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Tools for managing the osinfo database";
     homepage = "https://libosinfo.org/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }
