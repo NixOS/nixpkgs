@@ -11,6 +11,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "01xzrv5nvd2nvj91lz4x9s91y9825j9pj96z0ap6yvy3w2dgvkkl";
   };
 
+  propagatedBuildInputs = with python3Packages; [ six ];
+
   # tests fail only on hydra.
   doCheck = false;
 
