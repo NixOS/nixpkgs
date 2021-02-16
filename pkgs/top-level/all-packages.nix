@@ -6757,6 +6757,8 @@ in
     opendylan-bootstrap = opendylan_bin;
   };
 
+  ophis = python3Packages.callPackage ../development/compilers/ophis { };
+
   opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
 
   open-ecard = callPackage ../tools/security/open-ecard { };
@@ -7457,8 +7459,7 @@ in
 
   redir = callPackage ../tools/networking/redir { };
 
-  # failed to build websocket-driver gem with ruby 2.6, so sticking to 2.5 for now
-  redmine = callPackage ../applications/version-management/redmine { ruby = pkgs.ruby_2_5; };
+  redmine = callPackage ../applications/version-management/redmine { };
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
@@ -8029,7 +8030,9 @@ in
 
   solaar = callPackage ../applications/misc/solaar {};
 
-  solanum = callPackage ../servers/irc/solanum {};
+  solanum = callPackage ../servers/irc/solanum {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
@@ -10145,21 +10148,21 @@ in
 
   go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs stdenv.isAarch64 {
+  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
     stdenv = gcc8Stdenv;
     buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
   });
 
   go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs stdenv.isAarch64 {
+  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
     stdenv = gcc8Stdenv;
     buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
   });
 
   go_2-dev = callPackage ../development/compilers/go/2-dev.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs stdenv.isAarch64 {
+  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
     stdenv = gcc8Stdenv;
     buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
   });
@@ -11489,14 +11492,12 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
     bison = buildPackages.bison_3_5;
   })
-    ruby_2_5
     ruby_2_6
     ruby_2_7;
 
   ruby = ruby_2_6;
   rubyPackages = rubyPackages_2_6;
 
-  rubyPackages_2_5 = recurseIntoAttrs ruby_2_5.gems;
   rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
 
