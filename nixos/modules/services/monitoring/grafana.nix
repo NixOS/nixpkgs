@@ -202,6 +202,7 @@ let
         };
         foldersFromFilesStructure = mkOption {
           type = types.bool;
+          default = true;
           description = "Maintain folder structure";
         };
       };
