@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/" "''${out}/"
   '';
 
+  cmakeFlags = [
+    "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/tev \
       "''${gappsWrapperArgs[@]}" \
