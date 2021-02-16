@@ -70,6 +70,8 @@ jobs:
             qttools5-dev-tools
       - name: "prepare source"
         uses: actions/checkout@v2
+      - name: "prepare artifacts"
+        run: tar xvzf "$BUILDDIR/calamares.tar.gz" -C / --strip-components 1
       - name: "prepare build"
         id: pre_build
         run: |
