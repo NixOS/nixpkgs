@@ -7517,6 +7517,12 @@
     githubId = 18549627;
     name = "Proglodyte";
   };
+  progval = {
+    email = "progval+nix@progval.net";
+    github = "ProgVal";
+    githubId = 406946;
+    name = "Valentin Lorentz";
+  };
   protoben = {
     email = "protob3n@gmail.com";
     github = "protoben";
