@@ -703,7 +703,6 @@ in {
       "d ${cfg.statePath} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/builds 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/config 0750 ${cfg.user} ${cfg.group} -"
-      "d ${cfg.statePath}/config/initializers 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/db 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/log 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/repositories 2770 ${cfg.user} ${cfg.group} -"
@@ -879,10 +878,12 @@ in {
           preStart = ''
             set -eu
 
+            umask u=rwx,g=rx,o=
+
             cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
             rm -rf ${cfg.statePath}/db/*
-            rm -rf ${cfg.statePath}/config/initializers/*
             rm -f ${cfg.statePath}/lib
+            find '${cfg.statePath}/config/' -maxdepth 1 -mindepth 1 -type d -execdir rm -rf {} \;
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
             ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
@@ -929,9 +930,7 @@ in {
                   "${cfg.statePath}/config/gitlab.yml"
               }
 
-              if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
-                rm '${cfg.statePath}/config/secrets.yml'
-              fi
+              rm -f '${cfg.statePath}/config/secrets.yml'
 
               export secret="$(<'${cfg.secrets.secretFile}')"
               export db="$(<'${cfg.secrets.dbFile}')"
