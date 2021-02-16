@@ -200,6 +200,10 @@ let
           type = types.path;
           description = "Path grafana will watch for dashboards";
         };
+        foldersFromFilesStructure = mkOption {
+          type = types.bool;
+          description = "Maintain folder structure";
+        };
       };
     };
   };
