@@ -18,12 +18,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ xgboost dask distributed ];
 
   doCheck = false;
-  pythonImportsCheck = [ "dask-xdgboost" ];
+  pythonImportsCheck = [ "dask_xdgboost" ];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-xgboost";
     description = "Interactions between Dask and XGBoost";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    # TypeError: __init__() got an unexpected keyword argument 'iid'
+    broken = true;
   };
 }
