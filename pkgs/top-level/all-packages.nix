@@ -158,6 +158,8 @@ in
 
   fishnet = callPackage ../servers/fishnet { };
 
+  authy = callPackage ../applications/misc/authy { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
