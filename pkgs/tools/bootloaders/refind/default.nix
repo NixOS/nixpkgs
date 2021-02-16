@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
   ];
 
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin/
     install -d $out/share/refind/drivers_${efiPlatform}/
     install -d $out/share/refind/tools_${efiPlatform}/
@@ -101,6 +104,8 @@ stdenv.mkDerivation rec {
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+
+    runHook postInstall
   '';
 
   meta = with lib; {
