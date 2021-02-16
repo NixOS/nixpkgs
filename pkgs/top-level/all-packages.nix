@@ -1972,6 +1972,8 @@ in
 
   wev = callPackage ../tools/wayland/wev { };
 
+  wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -3857,8 +3859,6 @@ in
   wallutils = callPackage ../tools/graphics/wallutils { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
-
-  wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 

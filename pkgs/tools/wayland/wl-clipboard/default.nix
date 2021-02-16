@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
-, wayland, wayland-protocols }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-protocols
+}:
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard";
@@ -16,8 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ wayland ];
 
   meta = with lib; {
-    description = "Command-line copy/paste utilities for Wayland";
     homepage = "https://github.com/bugaevc/wl-clipboard";
+    description = "Command-line copy/paste utilities for Wayland";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.linux;
