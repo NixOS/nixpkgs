@@ -1976,6 +1976,8 @@ in
 
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
+  wob = callPackage ../tools/wayland/wob { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -3863,8 +3865,6 @@ in
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
-
-  wob = callPackage ../tools/misc/wob { };
 
   wtype = callPackage ../tools/wayland/wtype { };
 
