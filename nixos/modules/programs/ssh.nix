@@ -8,13 +8,27 @@ let
 
   cfg  = config.programs.ssh;
 
-  askPassword = cfg.askPassword;
+  xserverCfg = config.services.xserver;
+
+  x11AskPass = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+
+  defaultAskPassword =
+    # Use neutral askpass program if both are enabled
+    if config.programs.seahorse.enable && xserverCfg.desktopManager.plasma5.enable then
+      x11AskPass
+    else if config.programs.seahorse.enable then
+      # Seahorse ssh-askpass is used in GNOME3 and other gtk desktops
+      "${pkgs.gnome3.seahorse}/libexec/seahorse/ssh-askpass"
+    else if xserverCfg.desktopManager.plasma5.enable then
+      "${pkgs.plasma5.ksshaskpass.out}/bin/ksshaskpass"
+    else
+      x11AskPass;
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper"
     ''
       #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
-      exec ${askPassword}
+      exec ${cfg.askPassword}
     '';
 
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
@@ -35,7 +49,7 @@ in
 
       askPassword = mkOption {
         type = types.str;
-        default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+        default = defaultAskPassword;
         description = "Program used by SSH to ask for passwords.";
       };
 
@@ -297,7 +311,7 @@ in
         fi
       '';
 
-    environment.variables.SSH_ASKPASS = optionalString config.services.xserver.enable askPassword;
+    environment.variables.SSH_ASKPASS = optionalString config.services.xserver.enable cfg.askPassword;
 
   };
 }
