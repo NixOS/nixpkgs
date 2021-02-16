@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     sha256 = hashes.${platform} or (throw "Missing Go bootstrap hash for platform ${platform}");
   };
 
+  # We must preserve the signature on Darwin
+  dontStrip = stdenv.hostPlatform.isDarwin;
+
   installPhase = ''
     mkdir -p $out/share/go $out/bin
     mv bin/* $out/bin
