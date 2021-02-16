@@ -1,4 +1,14 @@
 { lib }:
+
+let
+  inherit (lib.strings)
+    hasPrefix
+    ;
+  inherit (lib.filesystem)
+    pathHasPrefix
+    ;
+in
+
 { # haskellPathsInDir : Path -> Map String Path
   # A map of all haskell packages defined in the given path,
   # identified by having a cabal file with the same name as the
@@ -53,5 +63,25 @@
     else
       dir + "/${name}"
   ) (builtins.readDir dir));
+
+  # pathHasPrefix : Path -> Path -> Bool
+  # pathHasPrefix ancestor somePath
+  #
+  # Return true iff, disregarding trailing slashes,
+  #   - somePath is below ancestor
+  #   - or equal to ancestor
+  #
+  # Equivalently, return true iff you can reach ancestor by starting at somePath
+  # and traversing the `..` node zero or more times.
+  pathHasPrefix = prefixPath: otherPath:
+    let
+      normalizedPathString = pathLike: toString (/. + pathLike);
+      pre = normalizedPathString prefixPath;
+      other = normalizedPathString otherPath;
+    in
+      if pre == "/" # root is the only path that already ends in "/"
+      then true
+      else
+        hasPrefix (pre + "/") (other + "/");
 
 }
