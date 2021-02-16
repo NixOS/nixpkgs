@@ -1968,6 +1968,8 @@ in
 
   kanshi = callPackage ../tools/wayland/kanshi { };
 
+  slurp = callPackage ../tools/wayland/slurp { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -24822,8 +24824,6 @@ in
   slop = callPackage ../tools/misc/slop {};
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
-
-  slurp = callPackage ../tools/misc/slurp { };
 
   sniproxy = callPackage ../applications/networking/sniproxy { };
 
