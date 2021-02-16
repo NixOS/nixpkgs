@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bugaevc/wl-clipboard";
     description = "Command-line copy/paste utilities for Wayland";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.linux;
   };
 }
+# TODO: is wayland-protocols a nativeBuildInput or a buildInput?
