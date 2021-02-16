@@ -1974,6 +1974,8 @@ in
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
+  wlr-randr = callPackage ../tools/wayland/wlr-randr { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -22817,8 +22819,6 @@ in
   };
 
   super-productivity = callPackage ../applications/networking/super-productivity { };
-
-  wlr-randr = callPackage ../tools/misc/wlr-randr { };
 
   wlroots = callPackage ../development/libraries/wlroots { };
 
