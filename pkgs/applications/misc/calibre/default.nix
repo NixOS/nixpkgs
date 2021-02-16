@@ -21,27 +21,25 @@
 , libusb1
 , libmtp
 , xdg-utils
-, makeDesktopItem
 , removeReferencesTo
 }:
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.10.1";
+  version = "5.11.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "18pnqxdyvgmw12yarxhvsgs4jk6c5hp05gf8khybcd78330954v9";
+    sha256 = "sha256-PI+KIMnslhoagv9U6Mcmo9Onfu8clVqASNlDir8JzUw=";
   };
 
   patches = [
-    # Patches from Debian that:
-    # - disable plugin installation (very insecure)
+    # Plugin installation (very insecure) disabled (from Debian)
     ./disable_plugins.patch
-    # - switches the version update from enabled to disabled by default
+    # Automatic version update disabled by default (from Debian)
     ./no_updates_dialog.patch
-    # the unrar patch is not from debian
-  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  ]
+  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   escaped_pyqt5_dir = builtins.replaceStrings ["/"] ["\\/"] (toString python3Packages.pyqt5);
   platform_tag =
@@ -59,8 +57,7 @@ mkDerivation rec {
       setup/build.py
 
     # Remove unneeded files and libs
-    rm -rf resources/calibre-portable.* \
-           src/odf
+    rm -rf src/odf resources/calibre-portable.*
   '';
 
   dontUseQmakeConfigure = true;
@@ -173,11 +170,16 @@ mkDerivation rec {
   disallowedReferences = [ podofo.dev ];
 
   meta = with lib; {
-    description = "Comprehensive e-book software";
     homepage = "https://calibre-ebook.com";
-    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
+    description = "Comprehensive e-book software";
+    longDescription = ''
+      calibre is a powerful and easy to use e-book manager. Users say it’s
+      outstanding and a must-have. It’ll allow you to do nearly everything and
+      it takes things a step beyond normal e-book software. It’s also completely
+      free and open source and great for both casual users and computer experts.
+    '';
+    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
     maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

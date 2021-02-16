@@ -144,7 +144,9 @@ let
 
               postPatch = let
                 ignoreVersionConstraints = [
+                  "emoji"
                   "sentry-sdk"
+                  "watchdog"
                 ];
               in
                 ''

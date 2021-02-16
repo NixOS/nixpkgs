@@ -30,6 +30,7 @@ let
     luarepl
     luasec
     luasocket
+    luautf8
     penlight
     stdlib
     vstruct
@@ -38,11 +39,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.13";
+  version = "0.10.14";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "19k4r7wfszml4dac8cm1hx9rb1im3psigcidz8bdm9j9jzpd01yj";
+    sha256 = "100f6iangpiwlv8k55d134w856r0xwsgw90s1rkkmqa5syziwni5";
   };
 
   configureFlags = [

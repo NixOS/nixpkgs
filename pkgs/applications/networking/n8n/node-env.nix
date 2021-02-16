@@ -1,8 +1,11 @@
 # This file originates from node2nix
 
-{lib, stdenv, nodejs, python2, utillinux, libtool, runCommand, writeTextFile}:
+{lib, stdenv, nodejs, python2, pkgs, libtool, runCommand, writeTextFile}:
 
 let
+  # Workaround to cope with utillinux in Nixpkgs 20.09 and util-linux in Nixpkgs master
+  utillinux = if pkgs ? utillinux then pkgs.utillinux else pkgs.util-linux;
+
   python = if nodejs ? python then nodejs.python else python2;
 
   # Create a tar wrapper that filters all the 'Ignoring unknown extended header keyword' noise
@@ -242,8 +245,8 @@ let
       if(fs.existsSync("./package-lock.json")) {
           var packageLock = JSON.parse(fs.readFileSync("./package-lock.json"));
 
-          if(packageLock.lockfileVersion !== 1) {
-             process.stderr.write("Sorry, I only understand lock file version 1!\n");
+          if(![1, 2].includes(packageLock.lockfileVersion)) {
+             process.stderr.write("Sorry, I only understand lock file versions 1 and 2!\n");
              process.exit(1);
           }
 
@@ -445,8 +448,8 @@ let
       '';
     } // extraArgs);
 
-  # Builds a development shell
-  buildNodeShell =
+  # Builds a node environment (a node_modules folder and a set of binaries)
+  buildNodeDependencies =
     { name
     , packageName
     , version
@@ -465,8 +468,8 @@ let
 
     let
       extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" ];
-
-      nodeDependencies = stdenv.mkDerivation ({
+    in
+      stdenv.mkDerivation ({
         name = "node-dependencies-${name}-${version}";
 
         buildInputs = [ tarWrapper python nodejs ]
@@ -512,6 +515,27 @@ let
           ln -s $out/lib/node_modules/.bin $out/bin
         '';
       } // extraArgs);
+
+  # Builds a development shell
+  buildNodeShell =
+    { name
+    , packageName
+    , version
+    , src
+    , dependencies ? []
+    , buildInputs ? []
+    , production ? true
+    , npmFlags ? ""
+    , dontNpmInstall ? false
+    , bypassCache ? false
+    , reconstructLock ? false
+    , dontStrip ? true
+    , unpackPhase ? "true"
+    , buildPhase ? "true"
+    , ... }@args:
+
+    let
+      nodeDependencies = buildNodeDependencies args;
     in
     stdenv.mkDerivation {
       name = "node-shell-${name}-${version}";
@@ -538,5 +562,6 @@ in
 {
   buildNodeSourceDist = lib.makeOverridable buildNodeSourceDist;
   buildNodePackage = lib.makeOverridable buildNodePackage;
+  buildNodeDependencies = lib.makeOverridable buildNodeDependencies;
   buildNodeShell = lib.makeOverridable buildNodeShell;
 }

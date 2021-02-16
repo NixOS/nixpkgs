@@ -84,7 +84,7 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/alex-3.2.5.patch";
     sha256 = "0q8x49k3jjwyspcmidwr6b84s4y43jbf4wqfxfm6wz8x2dxx6nwh";
   });
-  doctest = appendPatch (dontCheck (doJailbreak super.doctest_0_17)) (pkgs.fetchpatch {
+  doctest = appendPatch (dontCheck (doJailbreak super.doctest_0_18)) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/doctest-0.17.patch";
     sha256 = "16s2jcbk9hsww38i2wzxghbf0zpp5dc35hp6rd2n7d4z5xfavp62";
   });
@@ -99,10 +99,6 @@ self: super: {
   regex-base = appendPatch (doJailbreak super.regex-base) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/regex-base-0.94.0.0.patch";
     sha256 = "0k5fglbl7nnhn8400c4cpnflxcbj9p3xi5prl9jfmszr31jwdy5d";
-  });
-  syb = appendPatch (dontCheck super.syb) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/syb-0.7.1.patch";
-    sha256 = "1407r8xv6bfnmpbw7glfh4smi76a2fc9pkq300c3d9f575708zqr";
   });
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.

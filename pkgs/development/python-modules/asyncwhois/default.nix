@@ -1,20 +1,23 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
 , aiodns
-, tldextract
+, asynctest
+, buildPythonPackage
+, fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
+, tldextract
 }:
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "0.2.3";
-  disabled = pythonOlder "3.6";
+  version = "0.2.4";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "95df90d5be581e3c69398abc6a3ec69a4e568852d9d6df4582bfcc0e22ffb3bb";
+  src = fetchFromGitHub {
+    owner = "pogzyb";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "17w007hjnpggj6jvkv8wxwllxk6mir1q2nhw0dqg7glm4lfbx8kr";
   };
 
   propagatedBuildInputs = [
@@ -22,9 +25,24 @@ buildPythonPackage rec {
     tldextract
   ];
 
-  # tests are only present at GitHub but not the released source tarballs
-  # https://github.com/pogzyb/asyncwhois/issues/10
-  doCheck = false;
+  checkInputs = [
+    asynctest
+    pytestCheckHook
+  ];
+
+  # Disable tests that require network access
+  disabledTests = [
+    "test_pywhois_aio_get_hostname_from_ip"
+    "test_pywhois_get_hostname_from_ip"
+    "test_pywhois_aio_lookup_ipv4"
+    "test_not_found"
+    "test_aio_from_whois_cmd"
+    "test_aio_get_hostname_from_ip"
+    "test_from_whois_cmd"
+    "test_get_hostname_from_ip"
+    "test_whois_query_run"
+  ];
+
   pythonImportsCheck = [ "asyncwhois" ];
 
   meta = with lib; {

@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # tests try to access /proc/ which does not exist on darwin
+  # Cannot locate IVL modules : couldn't get command path from OS.
+  doCheck = !stdenv.isDarwin;
 
   installCheckInputs = [ perl ];
 

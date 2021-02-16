@@ -46,6 +46,7 @@
   ./hardware/cpu/intel-microcode.nix
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
+  ./hardware/i2c.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
   ./hardware/keyboard/zsa.nix
@@ -79,6 +80,7 @@
   ./hardware/video/displaylink.nix
   ./hardware/video/hidpi.nix
   ./hardware/video/nvidia.nix
+  ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
   ./hardware/video/webcam/facetimehd.nix
   ./hardware/xpadneo.nix
@@ -177,7 +179,6 @@
   ./programs/tsm-client.nix
   ./programs/udevil.nix
   ./programs/usbtop.nix
-  ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/waybar.nix
@@ -359,6 +360,7 @@
   ./services/games/terraria.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
+  ./services/hardware/auto-cpufreq.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
@@ -373,6 +375,7 @@
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
+  ./services/hardware/power-profiles-daemon.nix
   ./services/hardware/ratbagd.nix
   ./services/hardware/sane.nix
   ./services/hardware/sane_extra_backends/brscan4.nix
@@ -456,6 +459,7 @@
   ./services/misc/domoticz.nix
   ./services/misc/errbot.nix
   ./services/misc/etcd.nix
+  ./services/misc/etebase-server.nix
   ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
@@ -648,7 +652,6 @@
   ./services/networking/fireqos.nix
   ./services/networking/firewall.nix
   ./services/networking/flannel.nix
-  ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
   ./services/networking/gale.nix
@@ -889,6 +892,7 @@
   ./services/web-apps/jitsi-meet.nix
   ./services/web-apps/keycloak.nix
   ./services/web-apps/limesurvey.nix
+  ./services/web-apps/mastodon.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/miniflux.nix

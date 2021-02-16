@@ -306,6 +306,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU Free Documentation License v1.1 only";
   };
 
+  fdl11Plus = spdx {
+    spdxId = "GFDL-1.1-or-later";
+    fullName = "GNU Free Documentation License v1.1 or later";
+  };
+
   fdl12Only = spdx {
     spdxId = "GFDL-1.2-only";
     fullName = "GNU Free Documentation License v1.2 only";

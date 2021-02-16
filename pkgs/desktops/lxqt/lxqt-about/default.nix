@@ -40,9 +40,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Dialogue window providing information about LXQt and the system it's running on";
     homepage = "https://github.com/lxqt/lxqt-about";
-    license = licenses.lgpl21;
+    description = "Dialogue window providing information about LXQt and the system it's running on";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

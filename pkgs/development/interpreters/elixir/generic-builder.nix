@@ -46,8 +46,7 @@ in
        b=$(basename $f)
         if [ "$b" = mix ]; then continue; fi
         wrapProgram $f \
-          --prefix PATH ":" "${lib.makeBinPath [ erlang coreutils curl bash ]}" \
-          --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
+          --prefix PATH ":" "${lib.makeBinPath [ erlang coreutils curl bash ]}"
       done
 
       substituteInPlace $out/bin/mix \
@@ -69,6 +68,6 @@ in
 
       license = licenses.epl10;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ havvy couchemar ankhers Br1ght0ne ];
+      maintainers = teams.beam.members;
     };
   })

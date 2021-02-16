@@ -326,30 +326,36 @@ in
       };
     };
 
-    services.zfs.zed.settings = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
-      example = literalExample ''
-        {
-          ZED_DEBUG_LOG = "/tmp/zed.debug.log";
+    services.zfs.zed = {
+      enableMail = mkEnableOption "ZED's ability to send emails" // {
+        default = cfgZfs.package.enableMail;
+      };
 
-          ZED_EMAIL_ADDR = [ "root" ];
-          ZED_EMAIL_PROG = "mail";
-          ZED_EMAIL_OPTS = "-s '@SUBJECT@' @ADDRESS@";
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        example = literalExample ''
+          {
+            ZED_DEBUG_LOG = "/tmp/zed.debug.log";
 
-          ZED_NOTIFY_INTERVAL_SECS = 3600;
-          ZED_NOTIFY_VERBOSE = false;
+            ZED_EMAIL_ADDR = [ "root" ];
+            ZED_EMAIL_PROG = "mail";
+            ZED_EMAIL_OPTS = "-s '@SUBJECT@' @ADDRESS@";
 
-          ZED_USE_ENCLOSURE_LEDS = true;
-          ZED_SCRUB_AFTER_RESILVER = false;
-        }
-      '';
-      description = ''
-        ZFS Event Daemon /etc/zfs/zed.d/zed.rc content
+            ZED_NOTIFY_INTERVAL_SECS = 3600;
+            ZED_NOTIFY_VERBOSE = false;
 
-        See
-        <citerefentry><refentrytitle>zed</refentrytitle><manvolnum>8</manvolnum></citerefentry>
-        for details on ZED and the scripts in /etc/zfs/zed.d to find the possible variables
-      '';
+            ZED_USE_ENCLOSURE_LEDS = true;
+            ZED_SCRUB_AFTER_RESILVER = false;
+          }
+        '';
+        description = ''
+          ZFS Event Daemon /etc/zfs/zed.d/zed.rc content
+
+          See
+          <citerefentry><refentrytitle>zed</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+          for details on ZED and the scripts in /etc/zfs/zed.d to find the possible variables
+        '';
+      };
     };
   };
 
@@ -358,6 +364,14 @@ in
   config = mkMerge [
     (mkIf cfgZfs.enabled {
       assertions = [
+        {
+          assertion = cfgZED.enableMail -> cfgZfs.package.enableMail;
+          message = ''
+            To allow ZED to send emails, ZFS needs to be configured to enable
+            this. To do so, one must override the `zfs` package and set
+            `enableMail` to true.
+          '';
+        }
         {
           assertion = config.networking.hostId != null;
           message = "ZFS requires networking.hostId to be set";
@@ -437,7 +451,7 @@ in
       };
 
       services.zfs.zed.settings = {
-        ZED_EMAIL_PROG = mkDefault "${pkgs.mailutils}/bin/mail";
+        ZED_EMAIL_PROG = mkIf cfgZED.enableMail (mkDefault "${pkgs.mailutils}/bin/mail");
         PATH = lib.makeBinPath [
           cfgZfs.package
           pkgs.coreutils
@@ -513,7 +527,7 @@ in
             script = (importLib {
               # See comments at importLib definition.
               zpoolCmd = "${cfgZfs.package}/sbin/zpool";
-              zfsCmd = "${cfgZfs.package}/sbin/zfs";
+              awkCmd = "${pkgs.gawk}/bin/awk";
               inherit cfgZfs;
             }) + ''
               poolImported "${pool}" && exit
@@ -528,7 +542,7 @@ in
                 ${optionalString (if isBool cfgZfs.requestEncryptionCredentials
                                   then cfgZfs.requestEncryptionCredentials
                                   else cfgZfs.requestEncryptionCredentials != []) ''
-                  ${packages.zfsUser}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
+                  ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
                     (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
                          if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
                            continue
@@ -538,10 +552,10 @@ in
                       none )
                         ;;
                       prompt )
-                        ${config.systemd.package}/bin/systemd-ask-password "Enter key for $ds:" | ${packages.zfsUser}/sbin/zfs load-key "$ds"
+                        ${config.systemd.package}/bin/systemd-ask-password "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
                       * )
-                        ${packages.zfsUser}/sbin/zfs load-key "$ds"
+                        ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
                     esac) < /dev/null # To protect while read ds kl in case anything reads stdin
                   done

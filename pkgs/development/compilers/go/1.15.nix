@@ -4,15 +4,20 @@
 , buildPackages
 , pkgsBuildTarget
 , fetchpatch
+, callPackage
 }:
 
 let
 
   inherit (lib) optionals optionalString;
 
+  go_bootstrap = callPackage ./bootstrap.nix {
+    inherit Security;
+  };
+
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
-    cp -rf ${buildPackages.go_bootstrap}/* $out/
+    cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
@@ -36,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.15.7";
+  version = "1.15.8";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1g1a39y1cnvw3y0bjwjms55cz0s9icm8myrgxi295jwfznmb6cc6";
+    sha256 = "1hlphkrsvb5nza5ajm24x4nrhyg4b0afs88kk4jd310hg2vhl32l";
   };
 
   # perl is used for testing go vet

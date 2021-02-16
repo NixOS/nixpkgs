@@ -16,13 +16,13 @@
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc92";
+  version = "1.0.0-rc93";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
+    sha256 = "008d5wkznic80n5q1vwx727qn5ifalc7cydq68hc1gk9wrhna4v4";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
@@ -30,15 +30,13 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
 
-  buildInputs = [ libselinux libseccomp libapparmor apparmor-parser ];
+  buildInputs = [ libselinux libseccomp libapparmor ];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" "BUILDTAGS+=selinux" ];
+  makeFlags = [ "BUILDTAGS+=seccomp" ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
     patchShebangs .
-    substituteInPlace libcontainer/apparmor/apparmor.go \
-      --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
     make ${toString makeFlags} runc man
   '';
 

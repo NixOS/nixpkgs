@@ -538,6 +538,7 @@ in
 
     extraConfig = mkOption {
       default = {};
+      type = types.attrsOf types.anything;
       description = ''
         Extra config to pass to oauth2-proxy.
       '';

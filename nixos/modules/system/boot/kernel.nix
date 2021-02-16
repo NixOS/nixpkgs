@@ -37,10 +37,12 @@ in
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       type = types.unspecified // { merge = mergeEqualOption; };
-      apply = kernelPackages: pkgs.linuxPackagesFor (kernelPackages.kernel.override {
-        inherit randstructSeed;
-        kernelPatches = kernelPackages.kernel.kernelPatches ++ kernelPatches;
-        features = lib.recursiveUpdate kernelPackages.kernel.features features;
+      apply = kernelPackages: kernelPackages.extend (self: super: {
+        kernel = super.kernel.override {
+          inherit randstructSeed;
+          kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          features = lib.recursiveUpdate super.kernel.features features;
+        };
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
@@ -154,6 +156,16 @@ in
       description = "List of modules that are always loaded by the initrd.";
     };
 
+    boot.initrd.includeDefaultModules = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        This option, if set, adds a collection of default kernel modules
+        to <option>boot.initrd.availableKernelModules</option> and
+        <option>boot.initrd.kernelModules</option>.
+      '';
+    };
+
     system.modulesTree = mkOption {
       type = types.listOf types.path;
       internal = true;
@@ -193,7 +205,8 @@ in
   config = mkMerge
     [ (mkIf config.boot.initrd.enable {
         boot.initrd.availableKernelModules =
-          [ # Note: most of these (especially the SATA/PATA modules)
+          optionals config.boot.initrd.includeDefaultModules ([
+            # Note: most of these (especially the SATA/PATA modules)
             # shouldn't be included by default since nixos-generate-config
             # detects them, but I'm keeping them for now for backwards
             # compatibility.
@@ -233,10 +246,11 @@ in
 
             # x86 RTC needed by the stage 2 init script.
             "rtc_cmos"
-          ];
+          ]);
 
         boot.initrd.kernelModules =
-          [ # For LVM.
+          optionals config.boot.initrd.includeDefaultModules [
+            # For LVM.
             "dm_mod"
           ];
       })

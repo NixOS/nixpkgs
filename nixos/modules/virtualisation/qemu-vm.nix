@@ -7,7 +7,7 @@
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
@@ -265,6 +265,8 @@ in
   ];
 
   options = {
+
+    virtualisation.fileSystems = options.fileSystems;
 
     virtualisation.memorySize =
       mkOption {
@@ -659,6 +661,7 @@ in
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
     fileSystems = mkVMOverride (
+      cfg.fileSystems //
       { "/".device = cfg.bootDevice;
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";

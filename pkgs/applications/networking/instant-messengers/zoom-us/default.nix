@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, mkDerivation
 , makeWrapper
 , fetchFromGitHub
 # Dynamic libraries
@@ -32,11 +31,11 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.4.57862.0110";
+  version = "5.5.7011.0206";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "sha256-ZAwXhbZ3nT6PGkSC1vnX2y/XUOZfped0r3OuedI62gY=";
+      sha256 = "00ahly3kjjznn73vcxgm5wj2pxgw6wdk6vzgd8svfmnl5kqq6c02";
     };
   };
   dontUnpack = true;

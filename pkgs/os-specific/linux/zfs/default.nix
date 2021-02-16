@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook269, util-linux, nukeReferences, coreutils
-, perl, buildPackages
+, perl, buildPackages, nixosTests
 , configFile ? "all"
 
 # Userspace dependencies
@@ -8,8 +8,8 @@
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
-, smartmontools, sysstat, sudo
-, pkg-config
+, smartmontools, enableMail ? false
+, sysstat, sudo, pkg-config
 
 # Kernel dependencies
 , kernel ? null
@@ -18,21 +18,17 @@
 
 with lib;
 let
+  smartmon = smartmontools.override { inherit enableMail; };
+
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
-
-  # remove this patch at the next ZFS release (> 2.0.1)
-  reapplyPathSanitizerPatch = fetchpatch {
-    url = "https://github.com/openzfs/zfs/commit/03f036cbccdd8699f5fe8540ef317595a35bceb8.patch";
-    sha256 = "c157bbb6551a4e720c3faba005e1b72e4692d304c6ff5e0e685691bd47197dca";
-  };
 
   common = { version
     , sha256
     , extraPatches ? []
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , incompatibleKernelVersion ? null }:
+    , kernelCompatible ? null }:
 
     stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
@@ -154,7 +150,7 @@ let
       '';
 
       postFixup = let
-        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmontools sysstat ]}:$PATH";
+        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmon sysstat ]}:$PATH";
       in ''
         for i in $out/libexec/zfs/zpool.d/*; do
           sed -i '2i${path}' $i
@@ -162,6 +158,18 @@ let
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
+
+      passthru = {
+        inherit enableMail;
+
+        tests =
+          if isUnstable then [
+            nixosTests.zfs.unstable
+          ] else [
+            nixosTests.zfs.installer
+            nixosTests.zfs.stable
+          ];
+      };
 
       meta = {
         description = "ZFS Filesystem Linux Kernel module";
@@ -175,7 +183,7 @@ let
         platforms = platforms.linux;
         maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
         broken = if
-          buildKernel && (incompatibleKernelVersion != null) && versionAtLeast kernel.version incompatibleKernelVersion
+          buildKernel && (kernelCompatible != null) && !kernelCompatible
           then builtins.trace ''
             Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
             ${lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
@@ -188,26 +196,22 @@ in {
   # ./nixos/modules/tasks/filesystems/zfs.nix needs
   # to be adapted
   zfsStable = common {
-    # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = "4.20";
+    # check the release notes for compatible kernels
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.11";
 
     # this package should point to the latest release.
-    version = "2.0.1";
+    version = "2.0.3";
 
-    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
-
-    extraPatches = [ reapplyPathSanitizerPatch ];
+    sha256 = "sha256-bai7SwJNOsrACcrUxZ4339REhbBPOWyYikHzgHfbONs=";
   };
 
   zfsUnstable = common {
-    # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = "4.19";
+    # check the release notes for compatible kernels
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.11";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.1";
+    version = "2.0.3";
 
-    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
-
-    extraPatches = [ reapplyPathSanitizerPatch ];
+    sha256 = "sha256-bai7SwJNOsrACcrUxZ4339REhbBPOWyYikHzgHfbONs=";
   };
 }

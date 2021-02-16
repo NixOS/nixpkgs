@@ -10,7 +10,7 @@ assert withQt  -> qt5  != null;
 with lib;
 
 let
-  version = "3.4.2";
+  version = "3.4.3";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "1i548w6zv6ni5n22rs90a12aakyq811493dxmadlcsj2krr6i66y";
+    sha256 = "0ar6pxzrcpxdriz437d6ziwlhb8k5wlvrkalp3hgqwzwy1vwqrzl";
   };
 
   cmakeFlags = [
@@ -45,13 +45,7 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
     ++ optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ]
-    # https://code.wireshark.org/review/#/c/23728/
-    ++ lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-      name = "fix-timeout.patch";
-      url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=8b5b843fcbc3e03e0fc45f3caf8cf5fc477e8613;hp=94af9724d140fd132896b650d10c4d060788e4f0";
-      sha256 = "1g2dm7lwsnanwp68b9xr9swspx7hfj4v3z44sz3yrfmynygk8zlv";
-    });
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
   postPatch = ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt

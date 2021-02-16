@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgdata";
-  version = "0.17.13";
+  version = "0.18.0";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bj7ij6k3lxjn62jgh8vabr8vfjs48aylnnl3779warw5iwyzfga";
+    sha256 = "8MIBEvpTcrYsASVvJorvUTGhYd/COGjzk+z3uLN1JYA=";
   };
 
   patches = [

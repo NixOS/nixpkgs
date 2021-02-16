@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, tcl, makeWrapper, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "5.45.4";
   pname = "expect";
+  version = "5.45.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A tool for automating interactive applications";
     homepage = "http://expect.sourceforge.net/";
-    license = "Expect";
+    license = licenses.publicDomain;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

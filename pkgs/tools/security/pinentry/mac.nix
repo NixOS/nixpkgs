@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, xcbuildHook, libiconv, ncurses, Cocoa }:
 
 stdenv.mkDerivation {
-  name = "pinentry-mac-0.9.4";
+  pname = "pinentry-mac";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";

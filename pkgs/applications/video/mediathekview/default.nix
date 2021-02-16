@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "13.7.0";
+  version = "13.7.1";
   pname = "mediathekview";
   src = fetchurl {
     url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
-    sha256 = "sha256-9SQUsxs/Zt7YaZo6FdeEF3MOUO3IbkDGwV5i72/X4bk=";
+    sha256 = "sha256-yFPyj1Mbgj2eJv4DpvfOtPyTbL9gMAXC5TzSx8AV27o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

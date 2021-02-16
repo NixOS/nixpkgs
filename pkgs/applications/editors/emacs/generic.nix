@@ -19,6 +19,7 @@
 , withGTK2 ? false, gtk2-x11 ? null
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
+, withMotif ? false, motif ? null
 , withCsrc ? true
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
@@ -27,6 +28,7 @@
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
+  else if withMotif then "motif"
   else "lucid")
 }:
 
@@ -107,6 +109,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
+    ++ lib.optional (withX && withMotif) motif
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
     ++ lib.optionals nativeComp [ libgccjit ]

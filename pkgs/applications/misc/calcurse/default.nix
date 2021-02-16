@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     patchShebangs .
-    buildPythonPath ${python3Packages.httplib2}
+    buildPythonPath "${python3Packages.httplib2} ${python3Packages.oauth2client}"
     patchPythonScript $out/bin/calcurse-caldav
   '';
 

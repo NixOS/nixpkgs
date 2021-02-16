@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, mpd_clientlib, meson, ninja }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, meson
+, ninja
+, libmpdclient
+}:
 
 stdenv.mkDerivation rec {
   pname = "ashuffle";
@@ -14,7 +22,7 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
   nativeBuildInputs = [ cmake pkg-config meson ninja ];
-  buildInputs = [ mpd_clientlib ];
+  buildInputs = [ libmpdclient ];
 
   meta = with lib; {
     homepage = "https://github.com/joshkunz/ashuffle";

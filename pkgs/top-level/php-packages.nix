@@ -134,6 +134,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     redis = callPackage ../development/php-packages/redis { };
 
+    smbclient = callPackage ../development/php-packages/smbclient { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     v8 = buildPecl {
@@ -508,6 +510,8 @@ lib.makeScope pkgs.newScope (self: with self; {
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xmlrpc";
         buildInputs = [ libxml2 libiconv ];
+        # xmlrpc was unbundled in 8.0 https://php.watch/versions/8.0/xmlrpc
+        enable = lib.versionOlder php.version "8.0";
         configureFlags = [ "--with-xmlrpc" ]
           # Required to build on darwin.
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
@@ -518,7 +522,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xsl";
         buildInputs = [ libxslt libxml2 ];
-        doCheck = !(lib.versionOlder php.version "7.4");
+        doCheck = lib.versionOlder php.version "8.0";
         configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
       { name = "zend_test"; }
       { name = "zip";

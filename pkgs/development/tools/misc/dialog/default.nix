@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , ncurses
 , withLibrary ? false, libtool
 , unicodeSupport ? true
@@ -10,14 +12,11 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "dialog";
-  version = "1.3-20201126";
+  version = "1.3-20210117";
 
   src = fetchurl {
-    urls = [
-      "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz"
-      "https://invisible-mirror.net/archives/dialog/${pname}-${version}.tgz"
-    ];
-    sha256 = "sha256-ySM6bI6jOlniN45RRq4r0TtRl0TP22R690IK2sWtOGY=";
+    url = "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz";
+    sha256 = "PB7Qj0S89vFZ8qpv3nZduU6Jl7Pu+0nYtMhmkWk8Q+E=";
   };
 
   buildInputs = [ ncurses ];

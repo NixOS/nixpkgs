@@ -115,7 +115,7 @@
 , "indium"
 , "insect"
 , "ionic"
-, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v3.7.1.tar.gz"}
+, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v4.5.0.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
@@ -200,6 +200,7 @@
 , "stackdriver-statsd-backend"
 , "stf"
 , "stylelint"
+, "svelte-language-server"
 , "svgo"
 , "swagger"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}

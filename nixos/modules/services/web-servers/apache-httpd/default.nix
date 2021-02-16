@@ -126,10 +126,14 @@ let
     </IfModule>
   '';
 
-  luaSetPaths = ''
+  luaSetPaths = let
+    # support both lua and lua.withPackages derivations
+    luaversion = cfg.package.lua5.lua.luaversion or cfg.package.lua5.luaversion;
+    in
+  ''
     <IfModule mod_lua.c>
-      LuaPackageCPath ${cfg.package.lua5}/lib/lua/${cfg.package.lua5.lua.luaversion}/?.so
-      LuaPackagePath  ${cfg.package.lua5}/share/lua/${cfg.package.lua5.lua.luaversion}/?.lua
+      LuaPackageCPath ${cfg.package.lua5}/lib/lua/${luaversion}/?.so
+      LuaPackagePath  ${cfg.package.lua5}/share/lua/${luaversion}/?.lua
     </IfModule>
   '';
 
@@ -333,7 +337,7 @@ let
 
     ${sslConf}
 
-    ${if cfg.package.luaSupport then luaSetPaths else ""}
+    ${optionalString cfg.package.luaSupport luaSetPaths}
 
     # Fascist default - deny access to everything.
     <Directory />

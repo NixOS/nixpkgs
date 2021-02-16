@@ -70,6 +70,8 @@ with lib;
     '')
 
     (mkRemovedOptionModule [ "services" "seeks" ] "")
+    (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
 
     # Do NOT add any option renames here, see top of the file
   ];

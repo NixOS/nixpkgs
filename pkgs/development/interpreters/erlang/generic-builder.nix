@@ -1,13 +1,11 @@
 { pkgs, lib, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
 , libxml2, libxslt, ncurses, openssl, perl, autoconf
-# TODO: use jdk https://github.com/NixOS/nixpkgs/pull/89731
-, openjdk8 ? null # javacSupport
+, openjdk11 ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null
 , parallelBuild ? false
-, systemd
+, systemd, wxSupport ? true
 }:
-
 { baseName ? "erlang"
 , version
 , sha256 ? null
@@ -18,10 +16,10 @@
 , enableThreads ? true
 , enableSmpSupport ? true
 , enableKernelPoll ? true
-, javacSupport ? false, javacPackages ? [ openjdk8 ]
+, javacSupport ? false, javacPackages ? [ openjdk11 ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
 , withSystemd ? stdenv.isLinux # systemd support in epmd
-, wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
+, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
@@ -38,7 +36,7 @@ assert wxSupport -> (if stdenv.isDarwin
   else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
-assert javacSupport -> openjdk8 != null;
+assert javacSupport -> openjdk11 != null;
 
 let
   inherit (lib) optional optionals optionalAttrs optionalString;
@@ -126,7 +124,7 @@ in stdenv.mkDerivation ({
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sjmackenzie couchemar gleber ];
+    maintainers = teams.beam.members;
     license = licenses.asl20;
   } // meta);
 }

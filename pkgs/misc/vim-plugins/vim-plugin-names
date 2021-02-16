@@ -27,7 +27,6 @@ bakpakin/fennel.vim
 bazelbuild/vim-bazel
 bbchung/clighter8
 benizi/vim-automkdir
-benmills/vimux
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
@@ -129,6 +128,7 @@ fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 fszymanski/deoplete-emoji
 garbas/vim-snipmate
+gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
 GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
@@ -187,6 +187,7 @@ itchyny/lightline.vim
 itchyny/thumbnail.vim
 itchyny/vim-cursorword
 itchyny/vim-gitbranch
+itspriddle/vim-shellcheck
 ivanov/vim-ipython
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
@@ -357,6 +358,7 @@ milkypostman/vim-togglelist
 mindriot101/vim-yapf
 mk12/vim-lean
 mkasa/lushtags
+moll/vim-bbye
 mopp/sky-color-clock.vim
 morhetz/gruvbox
 motus/pig.vim
@@ -429,7 +431,9 @@ octol/vim-cpp-enhanced-highlight
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure
+onsails/lspkind-nvim
 OrangeT/vim-csharp
+ostera/vimux
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
 osyo-manga/vim-over
@@ -481,6 +485,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 RishabhRD/nvim-lsputils
 RishabhRD/popfix
+rmagatti/auto-session@main
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf
@@ -618,6 +623,7 @@ Twinside/vim-hoogle
 tyru/caw.vim
 tyru/open-browser-github.vim
 tyru/open-browser.vim
+tzachar/compe-tabnine@main
 uarun/vim-protobuf
 udalov/kotlin-vim
 ujihisa/neco-look

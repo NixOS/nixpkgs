@@ -6986,6 +6986,23 @@ let
     };
   };
 
+  EmailStuffer = buildPerlPackage {
+    pname = "Email-Stuffer";
+    version = "0.018";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Stuffer-0.018.tar.gz";
+      sha256 = "02wapphmcqbl1sg32x2az863lz5bb2dlckibxfqrjdlny27a406h";
+    };
+    buildInputs = [ Moo TestFatal ];
+    propagatedBuildInputs = [ EmailMIME EmailSender ModuleRuntime ParamsUtil ];
+    meta = {
+      homepage = "https://github.com/rjbs/Email-Stuffer";
+      description = "A more casual approach to creating and sending Email:: emails";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   EmailValid = buildPerlPackage {
     pname = "Email-Valid";
     version = "1.202";
@@ -8463,10 +8480,10 @@ let
 
   FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.47";
+    version = "0.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
-      sha256 = "1ja85hzzl36sjikcyavjqy4m41f2yyrsr1ipypzi5mlw7clhmdi3";
+      sha256 = "077jnf5a07x0p30iqcw3kh53xh3dplhb0jyyyq9b4c79ira3ds6r";
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseSublike ];
@@ -16613,6 +16630,10 @@ let
       description = "Indent and reformat perl scripts";
       license = lib.licenses.gpl2Plus;
     };
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/perltidy
+    '';
   };
 
   PHPSerialization = buildPerlPackage {
@@ -21905,15 +21926,14 @@ let
       url = "mirror://cpan/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz";
       sha256 = "4bd29a17f0c2c792d12c1005b3c276f2ab0fae39c00859ae1741d7941846a488";
     };
-    propagatedBuildInputs = [ pkgs.glibc TextCharWidth ];
+    buildInputs = [ pkgs.glibcLocales ];
+    propagatedBuildInputs = [ TextCharWidth ];
     preConfigure = ''
       substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc.bin}/bin/locale'
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
       license = with lib.licenses; [ artistic1 gpl2 ];
-      # bogus use of glibc, pretty sure, think this is what we have glibcLocales for?
-      broken = stdenv.hostPlatform.libc != "glibc";
     };
   };
 

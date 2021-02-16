@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gleber tazjin ];
+    maintainers = lib.teams.beam.members;
     license = lib.licenses.asl20;
   };
 }

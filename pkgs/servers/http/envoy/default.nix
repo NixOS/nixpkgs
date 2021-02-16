@@ -56,7 +56,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-mct7anzErY9eSujZyGORfRJqzAO9XuFAv04DS8VRZKM=";
+    sha256 = "0q72c2zrl5vc8afkhkwyalb2h0mxn3133d4b9z4gag0p95wbwgc0";
     dontUseCmakeConfigure = true;
     preInstall = ''
       # Strip out the path to the build location (by deleting the comment line).

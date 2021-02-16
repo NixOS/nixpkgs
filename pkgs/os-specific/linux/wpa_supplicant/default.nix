@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/cgit/hostap/patch/?id=7800725afb27397f7d6033d4969e2aeb61af4737";
       sha256 = "0c1la7inf4m5y9gzdjjdnhpkx32pm8vi6m5knih8p77q4mbrdgg8";
     })
+    # P2P: Fix copying of secondary device types for P2P group client (https://w1.fi/security/2020-2/)
+    (fetchurl {
+      name = "CVE-2021-0326.patch";
+      url = "https://w1.fi/security/2020-2/0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch";
+      sha256 = "19f4hx0p547mdx8y8arb3vclwyy4w9c8a6a40ryj7q33730mrmn4";
+    })
   ];
 
   # TODO: Patch epoll so that the dbus actually responds

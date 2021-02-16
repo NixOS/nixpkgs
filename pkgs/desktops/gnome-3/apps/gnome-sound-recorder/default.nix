@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "I5A/c2G+QQhw+6lHIJFnuW9JB2MGQdM8y6qOQvV0tpk=";
+    sha256 = "2Z6k+WPsEInpzVl6fUQ5ihHs7xMeQUInGhyQwVuqRSE=";
   };
 
   nativeBuildInputs = [

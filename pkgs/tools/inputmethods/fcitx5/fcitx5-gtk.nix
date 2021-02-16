@@ -7,6 +7,7 @@
 , gobject-introspection
 , gtk2
 , gtk3
+, gtk4
 , pcre
 , libuuid
 , libselinux
@@ -36,12 +37,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGOBJECT_INTROSPECTION_GIRDIR=share/gir-1.0"
     "-DGOBJECT_INTROSPECTION_TYPELIBDIR=lib/girepository-1.0"
-    # disabled since we currently don't have gtk4 in nixpkgs
-    "-DENABLE_GTK4_IM_MODULE=off"
   ] ++ lib.optional (! withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
 
   buildInputs = [
     gtk3
+    gtk4
     gobject-introspection
     fcitx5
     pcre

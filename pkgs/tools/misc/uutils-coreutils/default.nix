@@ -1,20 +1,21 @@
 { stdenv, fetchFromGitHub, rustPlatform, cargo, cmake, sphinx, lib, prefix ? "uutils-"
 , Security
 }:
+rustPlatform.buildRustPackage rec {
+  pname = "uutils-coreutils";
+  version = "0.0.3";
 
-rustPlatform.buildRustPackage {
-  name = "uutils-coreutils-2019-05-03";
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
-    rev = "036dd812958ace22d973acf7b370f58072049dac";
-    sha256 = "0d9w3iiphhsk7l5l34682wayp90rgq5a3d94l3qdvhcqkfmpg727";
+    rev = version;
+    sha256 = "QWiEHk8aciiwQeyNgrr0M0c1EeAgE3gSqw0ly/YTwTQ=";
   };
 
   # too many impure/platform-dependent tests
   doCheck = false;
 
-  cargoSha256 = "186hwzdpy7j0gw7491qx02vy4di5md47hipf1xxi1qccvmcfghwh";
+  cargoSha256 = "m2a7WNkF5TxjJlytjdoQ/JZIF9gp9qBkH+UU/NVRJzA=";
 
   makeFlags =
     [ "CARGO=${cargo}/bin/cargo" "PREFIX=$(out)" "PROFILE=release" "INSTALLDIR_MAN=$(out)/share/man/man1" ]
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage {
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
     homepage = "https://github.com/uutils/coreutils";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ siraben ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

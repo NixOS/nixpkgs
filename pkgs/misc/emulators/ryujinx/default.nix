@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnet-sdk_5, dotnetPackages, dotnetCorePackages
+, dotnet-sdk_5, dotnetPackages, dotnetCorePackages, cacert
 , SDL2, libX11, ffmpeg, openal, libsoundio
 , gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
@@ -15,16 +15,16 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.6448"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6574"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "9eb0ab05c6e820e113b3c61cbacd9b085b2819c4";
-    sha256 = "168nm7p6lqswmsya6gf3296ligyjabqmbrdzginkcviii643yslz";
+    rev = "80ed8596c165127fb52026c697a9b6b515dabbd4";
+    sha256 = "0jhrl8g9fbz3w2hzmy9jm22cvjfa0x5vh3912rz1rvnd41qb9vs8";
   };
 
-  nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
+  nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
     fetchNuGet = { name, version, sha256 }: fetchurl {
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    export DOTNET_NOLOGO=1
 
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"

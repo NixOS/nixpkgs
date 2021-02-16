@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_TESTS=OFF"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
+    "-DCONFIG_RUNTIME_CPU_DETECT=0"
   ];
 
   postFixup = ''

@@ -4,7 +4,6 @@
 , rustPlatform
 , withFzf ? true
 , fzf
-
   # checkInputs
 , fish
 , powershell
@@ -13,12 +12,10 @@
 , xonsh
 , zsh
 }:
-let
-  version = "0.5.0";
-in
-rustPlatform.buildRustPackage {
+
+rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  inherit version;
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
@@ -55,6 +52,6 @@ rustPlatform.buildRustPackage {
     description = "A fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ysndr cole-h ];
+    maintainers = with maintainers; [ ysndr cole-h SuperSandro2000 ];
   };
 }

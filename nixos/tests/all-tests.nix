@@ -345,7 +345,6 @@ in
   sanoid = handleTest ./sanoid.nix {};
   sbt = handleTest ./sbt.nix {};
   sbt-extras = handleTest ./sbt-extras.nix {};
-  scala = handleTest ./scala.nix {};
   sddm = handleTest ./sddm.nix {};
   searx = handleTest ./searx.nix {};
   service-runner = handleTest ./service-runner.nix {};
@@ -414,6 +413,7 @@ in
   vector = handleTest ./vector.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  vscodium = handleTest ./vscodium.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
   wireguard = handleTest ./wireguard {};
   wordpress = handleTest ./wordpress.nix {};

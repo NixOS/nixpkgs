@@ -15,7 +15,7 @@
 # Services
 , yajl
 # Client support
-, mpd_clientlib
+, libmpdclient
 # Tag support
 , libid3tag
 , nixosTests
@@ -70,7 +70,7 @@ let
     soundcloud    = [ curl yajl ];
     tidal         = [ curl yajl ];
     # Client support
-    libmpdclient  = [ mpd_clientlib ];
+    libmpdclient  = [ libmpdclient ];
     # Tag support
     id3tag        = [ libid3tag ];
     # Misc

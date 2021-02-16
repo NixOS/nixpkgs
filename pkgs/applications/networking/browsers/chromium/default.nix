@@ -12,7 +12,6 @@
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
-, enablePepperFlash ? false
 , enableWideVine ? false
 , enableVaapi ? false # Disabled by default due to unofficial support
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
@@ -44,10 +43,6 @@ let
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
-
-    plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash;
-    };
 
     ungoogled-chromium = callPackage ./ungoogled.nix {};
   };
@@ -166,7 +161,6 @@ in stdenv.mkDerivation {
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
     libPath = lib.makeLibraryPath [ libva pipewire_0_2 ];
 
   in with lib; ''
@@ -174,8 +168,7 @@ in stdenv.mkDerivation {
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
-      ${lib.optionalString enableVaapi "--add-flags --enable-accelerated-video-decode"} \
-      ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
+      ${lib.optionalString enableVaapi "--add-flags --enable-accelerated-video-decode"}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

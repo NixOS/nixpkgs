@@ -7,7 +7,7 @@ with lib.strings;
 let
   withPackages' = {
     pkgs,
-    ghc ? ghcWithPackages (p: with p; [ ieee ])
+    ghc ? ghcWithPackages (p: with p; [ ieee754 ])
   }: let
     pkgs' = if builtins.isList pkgs then pkgs else pkgs self;
     library-file = writeText "libraries" ''
@@ -70,7 +70,7 @@ let
         installPhase = if installPhase != null then installPhase else ''
           runHook preInstall
           mkdir -p $out
-          find \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
+          find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
       };

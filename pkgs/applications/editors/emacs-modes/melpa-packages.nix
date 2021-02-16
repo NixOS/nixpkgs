@@ -610,7 +610,7 @@ let
       };
 
       # Deprecated legacy aliases for backwards compat
-      aliases = lib.listToAttrs (lib.attrValues (lib.mapAttrs (n: v: { name = v; value = builtins.trace "Melpa attribute '${v}' is a legacy alias that will be removed in 21.03, use '${n}' instead" melpaPackages.${n}; }) (lib.filterAttrs (n: v: lib.hasAttr n melpaPackages) {
+      aliases = lib.listToAttrs (lib.attrValues (lib.mapAttrs (n: v: { name = v; value = builtins.trace "Melpa attribute '${v}' is a legacy alias that will be removed in 21.05, use '${n}' instead" melpaPackages.${n}; }) (lib.filterAttrs (n: v: lib.hasAttr n melpaPackages) {
         "auto-complete-clang-async" = "emacsClangCompleteAsync";
         "vterm" = "emacs-libvterm";
         "0xc" = "_0xc";

@@ -73,28 +73,12 @@ let
         --replace /out $out
     '';
   };
-
-  # Can't use the nixpkgs version of go-bindata, it's an ancient
-  # ancestor of this more modern one.
-  bindata = buildGoPackage {
-    pname = "go-bindata";
-    version = "v3.22.0";
-    src = fetchFromGitHub {
-      owner = "kevinburke";
-      repo = "go-bindata";
-      rev = "v3.22.0";
-      sha256 = "10dq77dml5jvvq2jkdq81a9yjg7rncq8iw8r84cc3dz6l9hxzj0x";
-    };
-
-    goPackagePath = "github.com/kevinburke/go-bindata";
-    subPackages = [ "go-bindata" ];
-  };
 in buildGoModule {
   pname = "influxdb";
   version = version;
   src = src;
 
-  nativeBuildInputs = [ bindata pkg-config ];
+  nativeBuildInputs = [ go-bindata pkg-config ];
 
   vendorSha256 = "0lviz7l5zbghyfkp0lvlv8ykpak5hhkfal8d7xwvpsm8q3sghc8a";
   subPackages = [ "cmd/influxd" "cmd/influx" ];

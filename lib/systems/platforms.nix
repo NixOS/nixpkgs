@@ -300,7 +300,7 @@ rec {
       baseConfig = "multi_v7_defconfig";
       DTB = true;
       autoModules = true;
-      PreferBuiltin = true;
+      preferBuiltin = true;
       target = "zImage";
       extraConfig = ''
         # Serial port for Raspberry Pi 3. Upstream forgot to add it to the ARMv7 defconfig.

@@ -20,8 +20,8 @@ let
 
   aixlog = dependency {
     name    = "aixlog";
-    version = "1.2.1";
-    sha256  = "1rh4jib5g41b85bqrxkl5g74hk5ryf187y9fw0am76g59xlymfpr";
+    version = "1.4.0";
+    sha256  = "0f2bs5j1jjajcpa251dslnwkgglaam3b0cm6wdx5l7mbwvnmib2g";
   };
 
   popl = dependency {
@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.20.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "152ic8hlyawcmj9pykb33xc6yx7il6yb9ilmsy6m9nlh40m8yxls";
+    sha256 = "0183hhghzn0fhw2qzc1s009q7miabpcf0pxaqjdscsl8iivxqknd";
   };
 
   nativeBuildInputs = [ cmake pkg-config boost170.dev ];

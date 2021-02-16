@@ -4,22 +4,19 @@
 , requests
 , pytestCheckHook
 , httpretty
+, responses
 }:
 
 buildPythonPackage rec {
   pname = "fixerio";
-  version = "0.1.1";
+  version = "1.0.0-alpha";
 
   src = fetchFromGitHub {
     owner = "amatellanes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1k9ss5jc7sbpkjd2774vbmvljny0wm2lrc8155ha8yk2048jsaxk";
+    sha256 = "009h1mys175xdyznn5bl980vly40544s4ph1zcgqwg2i2ic93gvb";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "requests==2.10.0" "requests"
-  '';
 
   propagatedBuildInputs = [
     requests
@@ -28,6 +25,17 @@ buildPythonPackage rec {
   checkInputs = [
     httpretty
     pytestCheckHook
+    responses
+  ];
+
+  disabledTests = [
+    # tests require network access
+    "test_returns_historical_rates_for_symbols_passed_if_both"
+    "test_returns_historical_rates_for_symbols_passed_in_constructor"
+    "test_returns_historical_rates_for_symbols_passed_in_method"
+    "test_returns_latest_rates_for_symbols_passed_in_constructor"
+    "test_returns_latest_rates_for_symbols_passed_in_method"
+    "test_returns_latest_rates_for_symbols_passed_in_method_if_both"
   ];
 
   pythonImportsCheck = [ "fixerio" ];

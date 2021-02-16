@@ -68,7 +68,7 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net|--impure)
+      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net|--offline|--impure)
         extraBuildFlags+=("$i")
         ;;
       --option)
@@ -145,7 +145,7 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
     elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix:$PATH" "${maybeSudo[@]}" "$@"
+        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix":'$PATH' "${maybeSudo[@]}" "$@"
     else
         ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
     fi

@@ -3,12 +3,12 @@
 let
   inherit (lib.versions) majorMinor;
 in stdenv.mkDerivation rec {
-  version = "2.5.1";
+  version = "2.6";
   pname = "ferm";
 
   src = fetchurl {
     url = "http://ferm.foo-projects.org/download/${majorMinor version}/ferm-${version}.tar.xz";
-    sha256 = "0awl9s243sxgayr2fcmfks8xydhrmb9gy8bd9sfq738dgq7vybjb";
+    sha256 = "sha256-aJVBRl58Bzy9YEyc0Y8RPDHAtBuxJhRyalmxfkQFiIU=";
   };
 
   # perl is used at build time to gather the ferm version.

@@ -244,7 +244,8 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          The full path to a file that contains the admin's password.
+          The full path to a file that contains the admin's password. Must be
+          readable by user <literal>nextcloud</literal>.
         '';
       };
 
@@ -367,7 +368,7 @@ in {
         '')
         ++ (optional (versionOlder cfg.package.version "18") (upgradeWarning 17 "20.03"))
         ++ (optional (versionOlder cfg.package.version "19") (upgradeWarning 18 "20.09"))
-        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.03"));
+        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -379,6 +380,10 @@ in {
             ''
           else if versionOlder stateVersion "20.03" then nextcloud17
           else if versionOlder stateVersion "20.09" then nextcloud18
+          # 21.03 will not be an official release - it was instead 21.05.
+          # This versionOlder statement remains set to 21.03 for backwards compatibility.
+          # See https://github.com/NixOS/nixpkgs/pull/108899 and
+          # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
           else if versionOlder stateVersion "21.03" then nextcloud19
           else nextcloud20
         );
@@ -482,6 +487,28 @@ in {
           path = [ occ ];
           script = ''
             chmod og+x ${cfg.home}
+
+            ${optionalString (c.dbpassFile != null) ''
+              if [ ! -r "${c.dbpassFile}" ]; then
+                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                exit 1
+              fi
+              if [ -z "$(<${c.dbpassFile})" ]; then
+                echo "dbpassFile ${c.dbpassFile} is empty!"
+                exit 1
+              fi
+            ''}
+            ${optionalString (c.adminpassFile != null) ''
+              if [ ! -r "${c.adminpassFile}" ]; then
+                echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                exit 1
+              fi
+              if [ -z "$(<${c.adminpassFile})" ]; then
+                echo "adminpassFile ${c.adminpassFile} is empty!"
+                exit 1
+              fi
+            ''}
+
             ln -sf ${cfg.package}/apps ${cfg.home}/
 
             # create nextcloud directories.
@@ -576,10 +603,10 @@ in {
             priority = 210;
             extraConfig = ''
               location = /.well-known/carddav {
-                return 301 $scheme://$host/remote.php/dav;
+                return 301 /remote.php/dav;
               }
               location = /.well-known/caldav {
-                return 301 $scheme://$host/remote.php/dav;
+                return 301 /remote.php/dav;
               }
               try_files $uri $uri/ =404;
             '';
@@ -587,7 +614,7 @@ in {
           "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
             return 404;
           '';
-          "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)".extraConfig = ''
+          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
             return 404;
           '';
           "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {

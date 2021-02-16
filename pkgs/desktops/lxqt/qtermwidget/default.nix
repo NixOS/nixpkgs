@@ -32,9 +32,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "A terminal emulator widget for Qt 5";
     homepage = "https://github.com/lxqt/qtermwidget";
-    license = licenses.gpl2;
+    description = "A terminal emulator widget for Qt 5";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

@@ -74,6 +74,9 @@ let
   # only redfish for x86_64
   haveRedfish = stdenv.isx86_64;
 
+  # only use msr if x86 (requires cpuid)
+  haveMSR = isx86;
+
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
   # Experimental
@@ -196,6 +199,8 @@ let
       "-Dplugin_redfish=false"
     ] ++ lib.optionals haveFlashrom [
       "-Dplugin_flashrom=true"
+    ] ++ lib.optionals (!haveMSR) [
+      "-Dplugin_msr=false"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
@@ -277,7 +282,6 @@ let
     passthru = {
       filesInstalledToEtc = [
         "fwupd/daemon.conf"
-        "fwupd/redfish.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
@@ -294,6 +298,8 @@ let
         "pki/fwupd-metadata/LVFS-CA.pem"
       ] ++ lib.optionals haveDell [
         "fwupd/remotes.d/dell-esrt.conf"
+      ] ++ lib.optionals haveRedfish [
+        "fwupd/redfish.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf

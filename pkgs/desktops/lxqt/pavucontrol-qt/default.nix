@@ -39,9 +39,9 @@ mkDerivation rec {
   passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
     homepage = "https://github.com/lxqt/pavucontrol-qt";
-    license = licenses.gpl2;
+    description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ romildo ];
   };

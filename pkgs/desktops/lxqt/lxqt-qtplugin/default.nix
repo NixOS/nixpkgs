@@ -47,9 +47,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "LXQt Qt platform integration plugin";
     homepage = "https://github.com/lxqt/lxqt-qtplugin";
-    license = licenses.lgpl21;
+    description = "LXQt Qt platform integration plugin";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

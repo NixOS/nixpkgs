@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, gtk2, menu-cache }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, gtk2
+, menu-cache
+}:
 
 stdenv.mkDerivation rec {
   pname = "openbox-menu";
@@ -12,11 +19,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 menu-cache ];
 
-  patches = [ ./with-svg.patch ];
+  # Enables SVG support by uncommenting the Makefile
+  patches = [ ./000-enable-svg.patch ];
 
-  installPhase = "make install prefix=$out";
+  installFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://fabrice.thiroux.free.fr/openbox-menu_en.html";
     description = "Dynamic XDG menu generator for Openbox";
     longDescription = ''
@@ -24,8 +32,8 @@ stdenv.mkDerivation rec {
       dynamic menu listing installed applications. Most of the work is done by
       the LXDE library menu-cache.
     '';
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.romildo ];
-    platforms   = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.romildo ];
+    platforms   = platforms.unix;
   };
 }
