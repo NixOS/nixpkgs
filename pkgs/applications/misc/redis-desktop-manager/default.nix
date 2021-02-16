@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
+{ mkDerivation, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake
@@ -13,7 +13,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "redis-desktop-manager";
   version = "0.9.1";
 
