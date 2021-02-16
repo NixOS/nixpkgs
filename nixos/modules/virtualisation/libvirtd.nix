@@ -98,6 +98,14 @@ in {
       '';
     };
 
+    ovmfPackage = mkOption {
+      type = types.package;
+      default = pkgs.OVMF;
+      description = ''
+        Specifies the default OVMF loader firmware.
+      '';
+    };
+
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -197,8 +205,8 @@ in {
         done
 
         ${optionalString cfg.qemuOvmf ''
-          ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${cfg.ovmfPackage.fd}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${cfg.ovmfPackage.fd}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
         ''}
       '';
 
