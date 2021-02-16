@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc, wayland }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland
+}:
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
@@ -15,6 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ wayland ];
 
   meta = with lib; {
+    homepage = "https://github.com/emersion/kanshi";
     description = "Dynamic display configuration tool";
     longDescription = ''
       kanshi allows you to define output profiles that are automatically enabled
@@ -24,8 +33,6 @@ stdenv.mkDerivation rec {
       kanshi can be used on Wayland compositors supporting the
       wlr-output-management protocol.
     '';
-    homepage = "https://github.com/emersion/kanshi";
-    downloadPage = "https://github.com/emersion/kanshi";
     license = licenses.mit;
     maintainers = with maintainers; [ balsoft ];
     platforms = platforms.linux;

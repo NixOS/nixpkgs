@@ -1966,6 +1966,8 @@ in
 
   clipman = callPackage ../tools/wayland/clipman { };
 
+  kanshi = callPackage ../tools/wayland/kanshi { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -23121,8 +23123,6 @@ in
   kail = callPackage ../tools/networking/kail {  };
 
   kanboard = callPackage ../applications/misc/kanboard { };
-
-  kanshi = callPackage ../tools/misc/kanshi { };
 
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
 
