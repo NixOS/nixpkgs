@@ -19258,6 +19258,8 @@ in
 
     gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
 
+    hid-playstation = if lib.versionAtLeast kernel.version "5.10" then callPackage ../os-specific/linux/hid-playstation { } else null;
+
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
     e1000e = if lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
