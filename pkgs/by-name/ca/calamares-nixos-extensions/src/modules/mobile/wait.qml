@@ -38,7 +38,7 @@ Page
             anchors.topMargin: 150
             wrapMode: Text.WordWrap
             text: "Formatting and mounting target partition. This may" +
-                  " take up to 20 seconds, please be patient."
+                  " take up to two minutes, please be patient."
             width: 500
         }
     }
