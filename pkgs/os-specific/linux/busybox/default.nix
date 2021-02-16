@@ -118,8 +118,10 @@ stdenv.mkDerivation rec {
     logger() { '$out'/bin/logger "$@"; }\
     ' ${debianDispatcherScript} > ${outDispatchPath}
     chmod 555 ${outDispatchPath}
-    PATH=$out/bin patchShebangs ${outDispatchPath}
+    HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
   '';
+
+  strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
