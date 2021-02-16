@@ -8030,7 +8030,9 @@ in
 
   solaar = callPackage ../applications/misc/solaar {};
 
-  solanum = callPackage ../servers/irc/solanum {};
+  solanum = callPackage ../servers/irc/solanum {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
