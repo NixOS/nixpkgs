@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, python2Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bmap-tools";
   version = "3.6";
 
