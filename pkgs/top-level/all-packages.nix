@@ -1970,13 +1970,23 @@ in
 
   slurp = callPackage ../tools/wayland/slurp { };
 
+  wayland-utils = callPackage ../tools/wayland/wayland-utils { };
+
   wev = callPackage ../tools/wayland/wev { };
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
+  wlsunset = callPackage ../tools/wayland/wlsunset { };
+
   wob = callPackage ../tools/wayland/wob { };
+
+  wshowkeys = callPackage ../tools/wayland/wshowkeys { };
+
+  wtype = callPackage ../tools/wayland/wtype { };
+
+  ydotool = callPackage ../tools/wayland/ydotool { };
 
   clipster = callPackage ../tools/misc/clipster { };
 
@@ -3862,15 +3872,7 @@ in
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
-  wayland-utils = callPackage ../tools/wayland/wayland-utils { };
-
-  wlsunset = callPackage ../tools/wayland/wlsunset { };
-
-  wtype = callPackage ../tools/wayland/wtype { };
-
   wrangler = callPackage ../development/tools/wrangler { };
-
-  wshowkeys = callPackage ../tools/wayland/wshowkeys { };
 
   wsl-open = callPackage ../tools/misc/wsl-open { };
 
@@ -17322,8 +17324,6 @@ in
   yajl = callPackage ../development/libraries/yajl { };
 
   yder = callPackage ../development/libraries/yder { };
-
-  ydotool = callPackage ../tools/wayland/ydotool { };
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
