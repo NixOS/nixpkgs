@@ -23237,6 +23237,8 @@ in
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
 
+  kube-capacity = callPackage ../applications/networking/cluster/kube-capacity { };
+
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
   fluxcd = callPackage ../applications/networking/cluster/fluxcd { };
