@@ -3499,6 +3499,12 @@
     githubId = 6893840;
     name = "Yacine Hmito";
   };
+  graham33 = {
+    email = "graham@grahambennett.org";
+    github = "graham33";
+    githubId = 10908649;
+    name = "Graham Bennett";
+  };
   grahamc = {
     email = "graham@grahamc.com";
     github = "grahamc";
