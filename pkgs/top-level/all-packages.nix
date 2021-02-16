@@ -1976,6 +1976,8 @@ in
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
+  wlogout = callPackage ../tools/wayland/wlogout { };
+
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
