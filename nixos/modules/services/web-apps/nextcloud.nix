@@ -593,6 +593,7 @@ in {
           "^~ /.well-known" = {
             priority = 210;
             extraConfig = ''
+              absolute_redirect off;
               location = /.well-known/carddav {
                 return 301 /remote.php/dav;
               }
