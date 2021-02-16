@@ -2820,6 +2820,19 @@ package-maintainers:
     - finite-typelits
     - pulse-simple
     - simple-affine-space
+  sternenseemann:
+    # also maintain upstream package
+    - spacecookie
+    - gopher-proxy
+    # other packages I can help out for
+    - systemd
+    - fast-logger
+    - Euterpea2
+    - utc
+    - socket
+    - gitit
+    - yarn-lock
+    - yarn2nix
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
