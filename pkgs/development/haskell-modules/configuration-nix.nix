@@ -808,4 +808,6 @@ self: super: builtins.intersectAttrs super {
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
+
+  hadolint = disableCabalFlag super.hadolint "static";
 }
