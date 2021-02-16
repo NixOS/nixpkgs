@@ -3102,6 +3102,8 @@ in
 
   chunksync = callPackage ../tools/backup/chunksync { };
 
+  cicero-tui = callPackage ../tools/misc/cicero-tui { };
+
   cipherscan = callPackage ../tools/security/cipherscan {
     openssl = if stdenv.hostPlatform.system == "x86_64-linux"
       then openssl-chacha
@@ -3479,7 +3481,15 @@ in
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
-  dbeaver = callPackage ../applications/misc/dbeaver { };
+  dbeaver = callPackage ../applications/misc/dbeaver {
+    jdk = jdk11; # AlgorithmId.md5WithRSAEncryption_oid was removed in jdk15
+
+    # TODO: remove once maven uses JDK 11
+    # error: org/eclipse/tycho/core/p2/P2ArtifactRepositoryLayout has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0
+    maven = maven.override {
+      jdk = jdk11;
+    };
+  };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -4244,6 +4254,8 @@ in
   fmbt = callPackage ../development/tools/fmbt {
     python = python2;
   };
+
+  fontfor = callPackage ../tools/misc/fontfor { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -12647,6 +12659,8 @@ in
   postman = callPackage ../development/web/postman {};
 
   pprof = callPackage ../development/tools/profiling/pprof { };
+
+  pqrs = callPackage ../development/tools/pqrs { };
 
   pyprof2calltree = with python3Packages; toPythonApplication pyprof2calltree;
 
