@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, uunf }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, uunf, uucd }:
 
 let
   pname = "uucp";
   version = "13.0.0";
   webpage = "https://erratique.ch/software/${pname}";
   minimumOCamlVersion = "4.03";
+  doCheck = true;
 in
 
 assert lib.assertMsg (lib.versionAtLeast ocaml.version minimumOCamlVersion)
@@ -23,9 +24,21 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ uchar ];
 
-  buildPhase = "${topkg.buildPhase} --with-cmdliner false";
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString doCheck}
+    runHook postBuild
+  '';
 
   inherit (topkg) installPhase;
+
+  inherit doCheck;
+  checkPhase = ''
+    runHook preCheck
+    ${topkg.run} test
+    runHook postCheck
+  '';
+  checkInputs = [ uucd ];
 
   meta = with lib; {
     description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
