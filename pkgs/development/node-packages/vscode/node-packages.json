@@ -1,0 +1,8 @@
+[
+  "vscode-css-languageserver-bin"
+, "vscode-html-languageserver-bin"
+, "vscode-json-languageserver"
+, "vscode-json-languageserver-bin"
+, { "vscode-lldb-build-deps": "../../../misc/vscode-extensions/vscode-lldb/build-deps" }
+, { "rust-analyzer-build-deps": "../../../misc/vscode-extensions/rust-analyzer/build-deps" }
+]

@@ -1,0 +1,4 @@
+[
+  "@antora/cli"
+, "@antora/site-generator-default"
+]

@@ -7,11 +7,79 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
+  antora = import ./antora/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  coc = import ./coc/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  css = import ./css/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  git = import ./git/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  graphql = import ./graphql/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  gulp = import ./gulp/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  json = import ./json/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  purescript = import ./purescript/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  react = import ./react/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  ssb = import ./ssb/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
   swc = import ./swc/composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-  self = super // swc // {
+  textlint = import ./textlint/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  typescript = import ./typescript/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  vega = import ./vega/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  vscode = import ./vscode/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  vue = import ./vue/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  webassemblyjs = import ./webassemblyjs/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  webpack = import ./webpack/composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  self = super // antora // coc // css // git // graphql // gulp // json // purescript // react // ssb // swc // textlint // typescript // vega // vscode // webassemblyjs // webpack // {
     "@angular/cli" = super."@angular/cli".override {
       prePatch = ''
         export NG_CLI_ANALYTICS=false

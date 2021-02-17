@@ -1,0 +1,7 @@
+[
+  "@webassemblyjs/cli"
+, "@webassemblyjs/repl"
+, "@webassemblyjs/wasm-strip"
+, "@webassemblyjs/wasm-text-gen"
+, "@webassemblyjs/wast-refmt"
+]
