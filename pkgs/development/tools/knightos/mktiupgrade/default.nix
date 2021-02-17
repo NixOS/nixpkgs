@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, asciidoc }:
+{ lib, stdenv, fetchFromGitHub, cmake, libxslt, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "mktiupgrade";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "15y3rxvv7ipgc80wrvrpksxzdyqr21ywysc9hg6s7d3w8lqdq8dm";
   };
 
-  nativeBuildInputs = [ asciidoc cmake ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ asciidoc cmake libxslt.bin ];
 
   hardeningDisable = [ "format" ];
 
