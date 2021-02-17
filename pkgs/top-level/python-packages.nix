@@ -5398,6 +5398,8 @@ in {
 
   pyee = callPackage ../development/python-modules/pyee { };
 
+  pyeight = callPackage ../development/python-modules/pyeight { };
+
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };
