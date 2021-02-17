@@ -3,7 +3,6 @@
 , pandas
 , pytestCheckHook
 , scikitlearn
-, tensorflow
 }:
 
 buildPythonPackage rec {

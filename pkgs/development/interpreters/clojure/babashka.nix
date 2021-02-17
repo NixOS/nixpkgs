@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, graalvm11-ce, glibcLocales }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
   version = "0.2.10";
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
     native-image \
       -jar ${src} \
       -H:Name=bb \
-      ${optionalString stdenv.isDarwin ''-H:-CheckToolchain''} \
+      ${lib.optionalString stdenv.isDarwin ''-H:-CheckToolchain''} \
       -H:+ReportExceptionStackTraces \
       -J-Dclojure.spec.skip-macros=true \
       -J-Dclojure.compiler.direct-linking=true \

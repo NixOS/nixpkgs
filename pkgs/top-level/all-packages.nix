@@ -748,6 +748,12 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  yabridge = callPackage ../tools/audio/yabridge {
+    wine = wineWowPackages.minimal;
+  };
+
+  yabridgectl = callPackage ../tools/audio/yabridgectl { };
+
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
@@ -5505,7 +5511,9 @@ in
     plugins = [ ];  # override with the list of desired plugins
   };
 
-  kak-lsp = callPackage ../tools/misc/kak-lsp { };
+  kak-lsp = callPackage ../tools/misc/kak-lsp {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
@@ -7009,7 +7017,9 @@ in
 
   pcimem = callPackage ../os-specific/linux/pcimem { };
 
-  pciutils = callPackage ../tools/system/pciutils { };
+  pciutils = callPackage ../tools/system/pciutils {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pcsclite = callPackage ../tools/security/pcsclite {
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -16669,6 +16679,8 @@ in
 
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
+  shhgit = callPackage ../tools/security/shhgit { };
+
   shhmsg = callPackage ../development/libraries/shhmsg { };
 
   shhopt = callPackage ../development/libraries/shhopt { };
@@ -22548,7 +22560,7 @@ in
   gitit = callPackage ../applications/misc/gitit {};
 
   gkrellm = callPackage ../applications/misc/gkrellm {
-    inherit (darwin) IOKit;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
   glow = callPackage ../applications/editors/glow { };
@@ -24032,6 +24044,8 @@ in
 
   mupdf = callPackage ../applications/misc/mupdf { };
   mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17.nix { };
+
+  muso = callPackage ../applications/audio/muso { };
 
   mystem = callPackage ../applications/misc/mystem { };
 

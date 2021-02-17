@@ -1,5 +1,4 @@
 { lib, fetchgit, buildPythonPackage
-, python
 , buildGoModule
 , srht, minio, pygit2, scmsrht }:
 

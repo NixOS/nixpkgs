@@ -1,8 +1,6 @@
 { stdenv
 , lib
-, python
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , isPyPy
 , R
