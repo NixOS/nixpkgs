@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchPypi , setuptools, pytestCheckHook }:
 
 buildPythonPackage rec {
-
   pname = "lice";
   version = "0.6";
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools ];
 
   checkInputs = [ pytestCheckHook ];
-
-
   meta = with lib; {
     description = "Print license based on selection and user options";
     homepage = "https://github.com/licenses/lice";
