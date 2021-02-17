@@ -142,7 +142,7 @@ let
 
   gitlabEnv = {
     HOME = "${cfg.statePath}/home";
-    UNICORN_PATH = "${cfg.statePath}/";
+    PUMA_PATH = "${cfg.statePath}/";
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
     SCHEMA = "${cfg.statePath}/db/structure.sql";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
@@ -725,8 +725,6 @@ in {
       "L+ /run/gitlab/uploads - - - - ${cfg.statePath}/uploads"
 
       "L+ /run/gitlab/shell-config.yml - - - - ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)}"
-
-      "L+ ${cfg.statePath}/config/unicorn.rb - - - - ${./defaultUnicornConfig.rb}"
     ];
 
     systemd.services.gitlab-sidekiq = {
@@ -873,7 +871,9 @@ in {
             set -eu
 
             chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
-            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
+            if [[ ! -z "$(ls -A '${cfg.statePath}'/config/)" ]]; then
+              chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
+            fi
           '';
           preStart = ''
             set -eu
@@ -956,7 +956,7 @@ in {
           "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}"
           "${pkgs.writeShellScript "gitlab-pre-start" preStart}"
         ];
-        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/unicorn -c ${cfg.statePath}/config/unicorn.rb -E production";
+        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/puma -C ${cfg.statePath}/config/puma.rb -e production";
       };
 
     };
