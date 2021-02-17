@@ -26,8 +26,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy pytorch scikitlearn scipy tabulate tqdm ];
   checkInputs = [ pytest pytestcov flaky pandas pytestCheckHook ];
 
-  # on CPU, these expect artifacts from previous GPU run
   disabledTests = [
+    # on CPU, these expect artifacts from previous GPU run
     "test_load_cuda_params_to_cpu"
     "test_pickle_load"
   ];
@@ -38,5 +38,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
+    # TypeError: __init__() got an unexpected keyword argument 'iid'
+    broken = true;
   };
 }
