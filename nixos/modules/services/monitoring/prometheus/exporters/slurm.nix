@@ -10,10 +10,11 @@ in
   serviceOpts = {
     serviceConfig = {
       ExecStart = ''
-        ${pkgs.prometheus-slurm-exporter}/bin/slurm_exporter \
-          -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+        ${pkgs.prometheus-slurm-exporter}/bin/prometheus-slurm-exporter \
+          --listen-address "${cfg.listenAddress}:${toString cfg.port}" \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
+      Environment = [ "PATH=${pkgs.slurm}/bin/" ];
     };
   };
 }

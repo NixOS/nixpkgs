@@ -699,6 +699,35 @@ let
       '';
     };
 
+    slurm = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("slurmctld.service")
+        succeed("sinfo")
+        wait_for_unit("prometheus-slurm-exporter.service")
+        wait_for_open_port(9341)
+        wait_until_succeeds(
+            "curl -sSf localhost:9341/metrics | grep '{}' | grep -qv ' 0$'".format(
+                "slurm_cpus_idle"
+            )
+        )
+      '';
+      metricProvider = {
+        services.slurm = {
+          server.enable = true;
+          client.enable = true;
+          controlMachine = "slurm";
+          nodeName = [ "slurm CPUs=1 State=UNKNOWN" ];
+          partitionName = [ "debug Nodes=slurm Default=YES MaxTime=INFINITE State=UP" ];
+        };
+        systemd.tmpfiles.rules = [
+          "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
+        ];
+      };
+    };
+
     smokeping = {
       exporterConfig = {
         enable = true;
