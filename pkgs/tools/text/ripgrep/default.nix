@@ -37,8 +37,6 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh complete/_rg
   '';
 
-  passthru.tests = { inherit (nixosTests) ripgrep; };
-
   meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
