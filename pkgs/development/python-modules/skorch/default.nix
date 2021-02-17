@@ -41,5 +41,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
+    # TypeError: __init__() got an unexpected keyword argument 'iid'
+    broken = true;
   };
 }
