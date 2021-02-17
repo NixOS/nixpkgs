@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
+  outputs = [ "out" "doc" "dev" ];
+
   meta = with lib; {
     description = "Source code renderer with syntax highlighting";
     longDescription = ''

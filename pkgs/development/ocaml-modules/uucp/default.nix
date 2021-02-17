@@ -8,8 +8,9 @@ let
   doCheck = true;
 in
 
-assert lib.assertMsg (lib.versionAtLeast ocaml.version minimumOCamlVersion)
-  "${pname} needs at least OCaml ${minimumOCamlVersion}";
+if !(lib.versionAtLeast ocaml.version minimumOCamlVersion)
+then builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
+else
 
 stdenv.mkDerivation {
 

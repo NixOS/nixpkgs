@@ -1075,6 +1075,8 @@ let
 
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
+    sha = callPackage ../development/ocaml-modules/sha { };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     spelll = callPackage ../development/ocaml-modules/spelll { };

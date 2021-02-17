@@ -15,6 +15,9 @@ stdenv.mkDerivation {
 
   makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
 
+  # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
+  cmakeFlags = lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
+
   installPhase = ''
     mkdir -p $bin/bin $out/include $out/lib
 

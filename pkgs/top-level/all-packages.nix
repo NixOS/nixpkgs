@@ -4233,8 +4233,6 @@ in
 
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
-  lprof = callPackage ../tools/graphics/lprof { };
-
   fastlane = callPackage ../tools/admin/fastlane { };
 
   fatresize = callPackage ../tools/filesystems/fatresize {};
@@ -9072,6 +9070,18 @@ in
     libpsl = null;
   };
 
+  wget2 = callPackage ../tools/networking/wget2 {
+    # update breaks grub2
+    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+      version = "20210208";
+      src = fetchgit {
+        url = "https://git.savannah.gnu.org/r/gnulib.git";
+        rev = "0b38e1d69f03d3977d7ae7926c1efeb461a8a971";
+        sha256 = "06bj9y8wcfh35h653yk8j044k7h5g82d2j3z3ib69rg0gy1xagzp";
+      };
+    });
+  };
+
   wg-bond = callPackage ../applications/networking/wg-bond { };
 
   which = callPackage ../tools/system/which { };
@@ -10428,27 +10438,19 @@ in
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
-  knightos-genkfs = callPackage ../development/tools/knightos/genkfs {
-    asciidoc = asciidoc-full;
-  };
+  knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
   knightos-kcc = callPackage ../development/tools/knightos/kcc { };
 
-  knightos-kimg = callPackage ../development/tools/knightos/kimg {
-    asciidoc = asciidoc-full;
-  };
+  knightos-kimg = callPackage ../development/tools/knightos/kimg { };
 
   knightos-kpack = callPackage ../development/tools/knightos/kpack { };
 
-  knightos-mkrom = callPackage ../development/tools/knightos/mkrom {
-    asciidoc = asciidoc-full;
-  };
+  knightos-mkrom = callPackage ../development/tools/knightos/mkrom { };
 
   knightos-patchrom = callPackage ../development/tools/knightos/patchrom { };
 
-  knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade {
-    asciidoc = asciidoc-full;
-  };
+  knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade { };
 
   knightos-scas = callPackage ../development/tools/knightos/scas { };
 
@@ -13878,6 +13880,8 @@ in
 
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
 
+  libhsts = callPackage ../development/libraries/libhsts { };
+
   glbinding = callPackage ../development/libraries/glbinding { };
 
   gle = callPackage ../development/libraries/gle { };
@@ -16372,10 +16376,6 @@ in
   qjson = callPackage ../development/libraries/qjson { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
-
-  qt3 = callPackage ../development/libraries/qt-3 {
-    libpng = libpng12;
-  };
 
   qt4 = qt48;
 
@@ -18876,6 +18876,8 @@ in
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl/legacy.nix { };
 
+  fwanalyzer = callPackage ../tools/filesystems/fwanalyzer { };
+
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
   firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
@@ -19188,6 +19190,13 @@ in
     ];
   };
 
+  linux_5_11 = callPackage ../os-specific/linux/kernel/linux-5.11.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+    ];
+  };
+
   linux-rt_5_10 = callPackage ../os-specific/linux/kernel/linux-rt-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -19446,7 +19455,7 @@ in
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_10;
+  linuxPackages_latest = linuxPackages_5_11;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -19470,6 +19479,7 @@ in
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
+  linuxPackages_5_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_11);
 
   # When adding to the list above:
   # - Update linuxPackages_latest to the latest version
@@ -29139,7 +29149,7 @@ in
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
-  lice = callPackage ../tools/misc/lice {};
+  lice = python3Packages.callPackage ../tools/misc/lice {};
 
   m33-linux = callPackage ../misc/drivers/m33-linux { };
 

@@ -768,6 +768,12 @@
     githubId = 3965744;
     name = "Arthur Lee";
   };
+  arthurteisseire = {
+    email = "arthurteisseire33@gmail.com";
+    github = "arthurteisseire";
+    githubId = 37193992;
+    name = "Arthur Teisseire";
+  };
   arturcygan = {
     email = "arczicygan@gmail.com";
     github = "arcz";
@@ -3586,6 +3592,12 @@
     github = "gvolpe";
     githubId = 443978;
     name = "Gabriel Volpe";
+  };
+  gytis-ivaskevicius = {
+    name = "Gytis Ivaskevicius";
+    email = "me@gytis.io";
+    github = "gytis-ivaskevicius";
+    githubId = 23264966;
   };
   hakuch = {
     email = "hakuch@gmail.com";
