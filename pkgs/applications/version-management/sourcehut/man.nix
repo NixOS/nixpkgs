@@ -1,5 +1,4 @@
 { lib, fetchgit, buildPythonPackage
-, python
 , srht, pygit2 }:
 
 buildPythonPackage rec {
