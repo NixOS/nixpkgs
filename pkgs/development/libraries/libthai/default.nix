@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "libthai";
   version = "0.1.28";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "https://github.com/tlwg/libthai/releases/download/v${version}/libthai-${version}.tar.xz";
     sha256 = "04g93bgxrcnay9fglpq2lj9nr7x1xh06i60m7haip8as9dxs3q7z";
@@ -11,7 +13,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ installShellFiles libdatrie pkg-config ];
+  nativeBuildInputs = [ installShellFiles (lib.getBin libdatrie) pkg-config ];
 
   buildInputs = [ libdatrie ];
 
