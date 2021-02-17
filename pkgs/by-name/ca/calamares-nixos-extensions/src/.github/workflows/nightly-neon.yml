@@ -1,0 +1,100 @@
+name: nightly-neon-xtn
+
+on:
+  schedule:
+    - cron: "52 1 * * *"
+  workflow_dispatch:
+
+env:
+  BUILDDIR: /build
+  SRCDIR: ${{ github.workspace }}
+  CMAKE_ARGS: |
+    -DWEBVIEW_FORCE_WEBKIT=1
+    -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
+    -DWITH_PYTHONQT=OFF"
+    -DCMAKE_BUILD_TYPE=Debug
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: docker://kdeneon/plasma:user
+      options: --tmpfs /build:rw --user 0:0
+    steps:
+      - name: "fetch artifacts"
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: nightly-neon.yml
+          workflow_conclusion: success
+          branch: calamares
+          name: calamares-tarball
+          path: ${{ env.BUILDDIR }}
+          repo: calamares/calamares
+      - name: "prepare env"
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install git-core
+          sudo apt-get -y install \
+            build-essential \
+            cmake \
+            extra-cmake-modules \
+            gettext \
+            kio-dev \
+            libatasmart-dev \
+            libboost-python-dev \
+            libkf5config-dev \
+            libkf5coreaddons-dev \
+            libkf5i18n-dev \
+            libkf5iconthemes-dev \
+            libkf5parts-dev \
+            libkf5service-dev \
+            libkf5solid-dev \
+            libkpmcore-dev \
+            libparted-dev \
+            libpolkit-qt5-1-dev \
+            libqt5svg5-dev \
+            libqt5webkit5-dev \
+            libyaml-cpp-dev \
+            os-prober \
+            pkg-config \
+            python3-dev \
+            qtbase5-dev \
+            qtdeclarative5-dev \
+            qttools5-dev \
+            qttools5-dev-tools
+      - name: "prepare source"
+        uses: actions/checkout@v2
+      - name: "prepare artifacts"
+        run: tar xvzf "$BUILDDIR/calamares.tar.gz" -C / --strip-components 1
+      - name: "prepare build"
+        id: pre_build
+        run: |
+          test -n "$BUILDDIR" || { echo "! \$BUILDDIR not set" ; exit 1 ; }
+          mkdir -p $BUILDDIR
+          test -f $SRCDIR/CMakeLists.txt || { echo "! Missing $SRCDIR/CMakeLists.txt" ; exit 1 ; }
+          echo "::set-output name=message::"`git log -1 --abbrev-commit --pretty=oneline --no-decorate ${{ github.event.head_commit.id }}`
+      - name: "Calamares-Extensions: cmake"
+        working-directory: ${{ env.BUILDDIR }}
+        run: cmake $CMAKE_ARGS $SRCDIR
+      - name: "Calamares-Extensions: make"
+        working-directory: ${{ env.BUILDDIR }}
+        run: make -j2 VERBOSE=1
+      - name: "Calamares-Extensions: install"
+        working-directory: ${{ env.BUILDDIR }}
+        run: make install VERBOSE=1
+      - name: "notify: ok"
+        uses: rectalogic/notify-irc@v1
+        if: ${{ success() && github.repository == 'calamares/calamares-extensions' }}
+        with:
+          server: chat.freenode.net
+          nickname: cala-ci
+          channel: "#calamares"
+          message: "OK ${{ github.workflow }} in ${{ github.repository }} ${{ steps.pre_build.outputs.message }}"
+      - name: "notify: fail"
+        uses: rectalogic/notify-irc@v1
+        if: ${{ failure() && github.repository == 'calamares/calamares' }}
+        with:
+          server: chat.freenode.net
+          nickname: cala-ci
+          channel: "#calamares"
+          message: "FAIL ${{ github.workflow }} in ${{ github.repository }} ${{ steps.pre_build.outputs.message }}"

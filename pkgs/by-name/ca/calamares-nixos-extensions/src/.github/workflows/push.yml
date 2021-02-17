@@ -1,4 +1,4 @@
-name: ci-push
+name: ci-push-xtn
 
 on:
   push:
@@ -93,14 +93,14 @@ jobs:
         if: ${{ success() && github.repository == 'calamares/calamares-extensions' }}
         with:
           server: chat.freenode.net
-          nickname: cala-xtn-ci
+          nickname: cala-ci
           channel: "#calamares"
-          message: "PUSH ${{ github.workflow }} OK ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}"
+          message: "OK ${{ github.workflow }} in ${{ github.repository }} ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}"
       - name: "notify: fail"
         uses: rectalogic/notify-irc@v1
         if: ${{ failure() && github.repository == 'calamares/calamares' }}
         with:
           server: chat.freenode.net
-          nickname: cala-xtn-ci
+          nickname: cala-ci
           channel: "#calamares"
-          message: "PUSH ${{ github.workflow }} FAIL ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}\n.. DIFF ${{ github.event.compare }}"
+          message: "FAIL ${{ github.workflow }} in ${{ github.repository }} ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}\n.. DIFF ${{ github.event.compare }}"
