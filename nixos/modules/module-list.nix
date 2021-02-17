@@ -551,6 +551,7 @@
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
+  ./services/misc/sourcehut
   ./services/misc/spice-vdagentd.nix
   ./services/misc/ssm-agent.nix
   ./services/misc/sssd.nix
