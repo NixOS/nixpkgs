@@ -5,7 +5,6 @@
 , isPy38
 , isPy39
 , python
-, nvidia_x11
 , addOpenGLRunpath
 , future
 , numpy
@@ -52,7 +51,7 @@ in buildPythonPackage {
   '';
 
   postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib nvidia_x11 ];
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
     find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
