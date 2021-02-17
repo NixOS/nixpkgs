@@ -1,10 +1,23 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, python3, sphinx
-, acl, curl, fuse, libselinux, udev, xz, zstd
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, python3
+, sphinx
+, acl
+, curl
+, fuse
+, libselinux
+, udev
+, xz
+, zstd
 , fuseSupport ? true
 , selinuxSupport ? true
 , udevSupport ? true
-, glibcLocales, rsync
+, glibcLocales
+, rsync
 }:
 
 stdenv.mkDerivation {
@@ -19,9 +32,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ acl curl xz zstd ]
-                ++ lib.optionals (fuseSupport) [ fuse ]
-                ++ lib.optionals (selinuxSupport) [ libselinux ]
-                ++ lib.optionals (udevSupport) [ udev ];
+    ++ lib.optionals (fuseSupport) [ fuse ]
+    ++ lib.optionals (selinuxSupport) [ libselinux ]
+    ++ lib.optionals (udevSupport) [ udev ];
   nativeBuildInputs = [ meson ninja pkg-config python3 sphinx ];
   checkInputs = [ glibcLocales rsync ];
 
@@ -34,8 +47,8 @@ stdenv.mkDerivation {
 
   PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
   mesonFlags = lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
-               ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
-               ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
+    ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
+    ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
 
   doCheck = true;
   preCheck = ''
@@ -44,9 +57,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Content-Addressable Data Synchronizer";
-    homepage    = "https://github.com/systemd/casync";
-    license     = licenses.lgpl21;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/systemd/casync";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ flokli ];
   };
 }
