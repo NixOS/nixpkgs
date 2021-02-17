@@ -95,7 +95,7 @@ let
       '';
     };
 
-    coc-imselect = super.coc-imselect.override {
+    coc-imselect = coc.coc-imselect.override {
       meta.broken = since "10";
     };
 
@@ -141,7 +141,7 @@ let
       dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
     });
 
-    git-ssb = super.git-ssb.override {
+    git-ssb = ssb.git-ssb.override {
       buildInputs = [ self.node-gyp-build ];
       meta.broken = since "10";
     };
@@ -264,7 +264,7 @@ let
       '';
     };
 
-    ssb-server = super.ssb-server.override {
+    ssb-server = ssb.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
       meta.broken = since "10";
     };
@@ -297,7 +297,7 @@ let
       '';
     };
 
-    vega-cli = super.vega-cli.override {
+    vega-cli = vega.vega-cli.override {
       nativeBuildInputs = [ pkgs.pkg-config ];
       buildInputs = with pkgs; [
         super.node-pre-gyp
@@ -308,7 +308,7 @@ let
       ];
     };
 
-    vega-lite = super.vega-lite.override {
+    vega-lite = vega.vega-lite.override {
         # npx tries to install vega from scratch at vegalite runtime if it
         # can't find it. We thus replace it with a direct call to the nix
         # derivation. This might not be necessary anymore in future vl
