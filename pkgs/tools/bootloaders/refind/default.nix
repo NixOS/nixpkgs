@@ -15,10 +15,9 @@ in
 stdenv.mkDerivation rec {
   pname = "refind";
   version = "0.13.0";
-  srcName = "refind-src-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
+    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
     sha256 = "0zivlcw1f3zwnrwvbhwq6gg781hh72g2bhc2cxcsb2zmg7q8in65";
   };
 
