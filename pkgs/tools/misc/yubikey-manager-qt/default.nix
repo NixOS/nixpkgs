@@ -11,8 +11,6 @@
 , qtgraphicaleffects
 , qtquickcontrols
 , qtquickcontrols2
-, qtdeclarative
-, qtsvg
 , yubikey-manager
 , yubikey-personalization
 }:

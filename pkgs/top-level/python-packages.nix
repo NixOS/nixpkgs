@@ -6163,6 +6163,8 @@ in {
 
   pytest-httpserver = callPackage ../development/python-modules/pytest-httpserver { };
 
+  pytest-httpx = callPackage ../development/python-modules/pytest-httpx { };
+
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
