@@ -18878,6 +18878,8 @@ in
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl/legacy.nix { };
 
+  fwanalyzer = callPackage ../tools/filesystems/fwanalyzer { };
+
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
   firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
