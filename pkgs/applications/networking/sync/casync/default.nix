@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "casync";
-  version = "2-219-ga8f6c84";
+  version = "2-226-gbd8898e";
 
   src = fetchFromGitHub {
-    owner  = "systemd";
-    repo   = "casync";
-    rev    = "a8f6c841ccfe59ca8c68aad64df170b64042dce8";
-    sha256 = "1i3c9wmpabpmx2wfbcyabmwfa66vz92iq5dlbm89v5mvgavz7bws";
+    owner = "systemd";
+    repo = "casync";
+    rev = "bd8898ed92685e12022dd33a04c87786b5262344";
+    sha256 = "04ibglizjzyd7ih13q6m7ic78n0mzw9nfmb3zd1fcm9j62qlq11i";
   };
 
   buildInputs = [ acl curl xz zstd ]
