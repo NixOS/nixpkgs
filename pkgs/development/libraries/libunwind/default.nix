@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devman" ];
 
+  # libunwind doesn't compile with GCC 10's default behavior; switch back to
+  # the old mode.
+  # TODO: Report/fix this upstream
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   # Without latex2man, no man pages are installed despite being
   # prebuilt in the source tarball.
   configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];

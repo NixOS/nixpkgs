@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     substituteInPlace cmd/wmii.sh.sh --replace "\$(which which)" "${which}/bin/which"
   '';
 
+  # GCC 10 workaround. Upstream looks dead, so we're presumably stuck with
+  # this.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   configurePhase = ''
     for file in $(grep -lr '#!.*sh'); do
       sed -i 's|#!.*sh|#!${dash}/bin/dash|' $file

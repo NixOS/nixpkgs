@@ -429,7 +429,9 @@ self: super:
   });
 
   xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
-    NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg";
+    # -fcommon is workaround for GCC 10 compat.
+    # Can remove if/when upstream fixes it
+    NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg -fcommon";
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {

@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc5.patch ];
 
+  # Compat with GCC 10, which turns off -fcommon by default.
+  # TODO: Report/fix this upstream.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   # The contents of this file comes from the Jamtop file from the
   # root of the ArgyllCMS distribution, rewritten to pick up Nixpkgs
   # library paths. When ArgyllCMS is updated, make sure that changes

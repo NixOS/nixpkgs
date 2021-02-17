@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsepol";
-  version = "3.0";
+  version = "3.0"; # remove -fcommon below after upgrading
   se_release = "20191204";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     "SHLIBDIR=$(out)/lib"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  # Can remove -fcommon once we upgrade to 2020-07-10 / 3.1
+  NIX_CFLAGS_COMPILE = "-Wno-error -fcommon";
 
   passthru = { inherit se_release se_url; };
 

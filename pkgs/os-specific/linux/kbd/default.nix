@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "124swm93dm4ca0pifgkrand3r9gvj3019d4zkfxsj9djpvv0mnaz";
   };
 
+  # GCC 10 enables -fcommon by default. This breaks kbd, so turn it off.
+  # TODO: Report/fix this upstream.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   configureFlags = [
     "--enable-optional-progs"
     "--enable-libkeymap"

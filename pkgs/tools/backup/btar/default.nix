@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
 
   installPhase = "make install PREFIX=$out";
 
+  # GCC 10 workaround - check if still needed when updating
+  NIX_CFLAGS_COMPILE = [ "-fcommon" ];
+
   meta = {
     description = "Tar-compatible block-based archiver";
     license = lib.licenses.gpl3Plus;

@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     eject
   ];
 
+  # Workaround for compat with GCC 10, which sets -fno-common byy default.
+  # TODO: report/fix upstream
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     install -Dm755 pommed/pommed $out/bin/pommed
     install -Dm644 pommed.conf.mactel $out/etc/pommed.conf.mactel

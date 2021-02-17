@@ -17,6 +17,11 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # GCC 10 changed this default, causing cpio not to compile. This was
+  # necessary as of Jan 2021 (version 2.13); if a new release comes out, check
+  # if it's still needed and remove it if not.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/cpio/";
     description = "A program to create or extract from cpio archives";

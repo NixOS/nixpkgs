@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
+  # GCC 10 changed the default here to be more strict, and kexec-tools doesn't
+  # compile. Gentoo has a patch here:
+  # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=a79ebc56e947c3561a98e56f1de792f491846cde
+  # Couldn't immediately find an upstream bug. Eventually we should either
+  # apply that patch or get this fixed upstream.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   patches = [
     # fix build on i686
     # See: https://src.fedoraproject.org/rpms/kexec-tools/c/cb1e5463b5298b064e9b6c86ad6fe3505fec9298

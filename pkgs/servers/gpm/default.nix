@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+  # Workaround for GCC 10 compatibility. Fixed by
+  # https://github.com/telmich/gpm/pull/37, so this can be removed when the
+  # next release comes out.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"

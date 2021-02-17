@@ -193,9 +193,6 @@ let
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
-    # Make -fcommon default on gcc10
-    # TODO: fix all packages (probably 100+) and remove that
-    ++ lib.optional (version >= "10.1.0") "--with-specs=%{!fno-common:%{!fcommon:-fcommon}}"
   ;
 
 in configureFlags

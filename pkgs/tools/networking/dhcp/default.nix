@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
     "-Wno-error=stringop-truncation"
     "-Wno-error=format-overflow"
     "-Wno-error=stringop-overflow=8"
+    # Workaround for GCC 10. Fixed upstream; remove when next release comes out
+    "-fcommon"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];

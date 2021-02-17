@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
    sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
   '';
 
+  # GCC 10 workaround. Upstream looks dead, so we're probably stuck with this
+  # or a patch (Gentoo has one).
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ unzip txt2tags ];
 
   meta = {

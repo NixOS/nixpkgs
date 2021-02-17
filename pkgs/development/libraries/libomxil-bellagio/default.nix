@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  # Fix for #40213, probably permanent, because upstream doesn't seem to be
-  # developed anymore. Alternatively, gcc7Stdenv could be used.
-  NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds -Wno-error=stringop-overflow=8";
+  # Fix for compat with GCC 8 and 10, probably permanent, because upstream
+  # doesn't seem to be developed anymore. Alternatively, gcc7Stdenv could be
+  # used.
+  NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds -Wno-error=stringop-overflow=8 -fcommon";
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/omxil/";

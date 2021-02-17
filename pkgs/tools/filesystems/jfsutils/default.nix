@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Workaround for GCC 10.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
 

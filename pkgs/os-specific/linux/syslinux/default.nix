@@ -63,6 +63,9 @@ stdenv.mkDerivation {
     touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
+  # Workaround for GCC 10 compat. Fedora and Gentoo have patches we could try.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   nativeBuildInputs = [ nasm perl python3 ];
   buildInputs = [ libuuid makeWrapper ];
 

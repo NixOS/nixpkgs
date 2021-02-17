@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # GCC 10 set -fno-common by default. This breaks sharutils, so turn it back
+  # on.
+  # TODO: Report/fix this upstream.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   # GNU Gettext is needed on non-GNU platforms.
   buildInputs = [ coreutils gettext ];
 

@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport libpulseaudio
     ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
+  # Workaround for compat with GCC 10, which set -fno-common by default.
+  # Reported upstream as https://github.com/kcat/openal-soft/issues/519.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   NIX_LDFLAGS = toString ([]
     ++ optional alsaSupport "-lasound"
     ++ optional pulseSupport "-lpulse");

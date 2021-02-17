@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     export HELP2MAN=true
   '';
 
+  # Required for compatibility with GCC 10, which changed the default.
+  # TODO: File an upstream bug.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
     "--disable-rcp"

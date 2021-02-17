@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     "--with-aarch64"
   ];
 
+  NIX_CFLAGS_COMPILE = "-fcommon"; # TODO: remove this when we update to 3.0
+
   enableParallelBuilding = true;
 
   # TODO: Remove the musl patches when

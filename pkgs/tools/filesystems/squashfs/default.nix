@@ -21,6 +21,10 @@ stdenv.mkDerivation {
     ./4k-align.patch
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
+  # GCC 10 workaround. Fixed in upstream's "4.4-git.1" release - once we update
+  # to that, or a later version, we can remove this.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ zlib xz zstd lz4 ];
 
   preBuild = "cd squashfs-tools";
