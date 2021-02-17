@@ -4233,8 +4233,6 @@ in
 
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
-  lprof = callPackage ../tools/graphics/lprof { };
-
   fastlane = callPackage ../tools/admin/fastlane { };
 
   fatresize = callPackage ../tools/filesystems/fatresize {};
@@ -16374,10 +16372,6 @@ in
   qjson = callPackage ../development/libraries/qjson { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
-
-  qt3 = callPackage ../development/libraries/qt-3 {
-    libpng = libpng12;
-  };
 
   qt4 = qt48;
 
