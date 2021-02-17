@@ -12,7 +12,7 @@ haskellPackages.mkDerivation rec {
     sha256 = "sha256-nTSMY8bq0b/JvE/XQGDC4St2sqdni12E5WQU5FXnuCg=";
   };
 
-  buildDepends = [ makeWrapper ];
+  buildTools = [ makeWrapper ];
 
   executableHaskellDepends = with haskellPackages; [
     HUnit blaze-markup blaze-html split ansi-terminal cmark
