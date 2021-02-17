@@ -8221,6 +8221,8 @@ in
 
   swec = callPackage ../tools/networking/swec { };
 
+  swtpm = callPackage ../tools/security/swtpm { };
+
   svn2git = callPackage ../applications/version-management/git-and-tools/svn2git {
     git = gitSVN;
   };
