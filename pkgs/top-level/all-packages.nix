@@ -284,6 +284,7 @@ in
   grsync = callPackage ../applications/misc/grsync { };
 
   dockerTools = callPackage ../build-support/docker {
+    go = go_1_15;
     writePython3 = buildPackages.writers.writePython3;
   };
 
