@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, python3Packages
 , boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
-, fmt, graphviz, llvmPackages ? null
+, fmt, graphviz, llvmPackages, z3
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.1.9";
+  version = "3.2.5";
   pname = "hal-hardware-analyzer";
 
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
     rev = "v${version}";
-    sha256 = "0yvvlx0hq73x20va4csa8kyx3x4z648s6l6qqirzjpmxa1w91xc6";
+    sha256 = "0hc10wbngh4gfiiy9ndkf1y6dclcgy38x1n9k5wpvmf13vdah3zy";
   };
   # make sure bundled dependencies don't get in the way - install also otherwise
   # copies them in full to the output, bloating the package
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt graphviz wrapQtAppsHook ]
+  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt graphviz wrapQtAppsHook z3 ]
     ++ (with python3Packages; [ python pybind11 ])
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
