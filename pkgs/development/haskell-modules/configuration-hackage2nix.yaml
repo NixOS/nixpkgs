@@ -11460,7 +11460,6 @@ broken-packages:
   - xml-conduit-stylist
   - xml-enumerator
   - xml-enumerator-combinators
-  - xml-extractors
   - xml-html-conduit-lens
   - xml-monad
   - xml-parsec
