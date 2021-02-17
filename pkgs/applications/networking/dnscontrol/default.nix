@@ -15,6 +15,8 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  buildFlagsArray = [ "-ldflags=-s -w" ];
+
   meta = with lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
     homepage = "https://stackexchange.github.io/dnscontrol/";

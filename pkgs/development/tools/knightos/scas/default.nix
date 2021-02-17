@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSCAS_LIBRARY=1" ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {

@@ -333,7 +333,6 @@ in
   redis = handleTest ./redis.nix {};
   redmine = handleTest ./redmine.nix {};
   restic = handleTest ./restic.nix {};
-  ripgrep = handleTest ./ripgrep.nix {};
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rspamd = handleTest ./rspamd.nix {};

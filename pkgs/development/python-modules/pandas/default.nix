@@ -20,7 +20,6 @@
 # Test Inputs
 , glibcLocales
 , hypothesis
-, moto
 , pytestCheckHook
 # Darwin inputs
 , runtimeShell
@@ -54,7 +53,7 @@ buildPythonPackage rec {
     xlwt
   ];
 
-  checkInputs = [ pytestCheckHook glibcLocales moto hypothesis ];
+  checkInputs = [ pytestCheckHook glibcLocales hypothesis ];
 
   # doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687

@@ -81,6 +81,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/TileDB-Inc/TileDB-Py";
     license = licenses.mit;
     maintainers = with maintainers; [ fridh ];
+    # tiledb/core.cc:556:30: error: ‘struct std::array<long unsigned int, 2>’ has no member named ‘second’
+    broken = true;
   };
-
 }

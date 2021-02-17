@@ -1,5 +1,4 @@
-{ fetchFromGitHub
-, lib
+{ lib
 , python3
 , enableTelemetry ? false
 }:

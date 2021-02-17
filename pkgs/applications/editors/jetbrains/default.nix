@@ -12,7 +12,7 @@ let
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "CLion";
       meta = with lib; {
@@ -25,7 +25,7 @@ let
         maintainers = with maintainers; [ edwtjo mic92 ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
         (
           cd $out/clion-${version}
@@ -97,7 +97,7 @@ let
     });
 
   buildGoland = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Goland";
       meta = with lib; {
@@ -112,7 +112,7 @@ let
         maintainers = [ maintainers.miltador ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         patchelf --set-interpreter $interp $out/goland*/plugins/go/lib/dlv/linux/dlv
@@ -125,6 +125,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "IDEA";
+      extraLdPath = [ zlib ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/idea/";
         inherit description license;
@@ -134,8 +135,8 @@ let
           with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
           as IntelliJ.
         '';
-        maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux ++ platforms.darwin;
+        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius ];
+        platforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" ];
       };
     });
 
@@ -202,7 +203,7 @@ let
     };
 
   buildRider = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Rider";
       meta = with lib; {
@@ -219,7 +220,7 @@ let
         maintainers = [ maintainers.miltador ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
       patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         mkdir -p lib/ReSharperHost/linux-x64/dotnet/
@@ -241,7 +242,7 @@ let
     });
 
   buildWebStorm = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "WebStorm";
       meta = with lib; {
@@ -255,7 +256,7 @@ let
         maintainers = with maintainers; [ abaldeau ];
         platforms = platforms.linux;
       };
-    }) (attrs: {
+    }).overrideAttrs (attrs: {
       patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
         # Webstorm tries to use bundled jre if available.
         # Lets prevent this for the moment

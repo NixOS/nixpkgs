@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/parallel --subst-var-by coreutils ${coreutils}
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "doc" ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl procps ];

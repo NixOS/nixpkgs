@@ -64,14 +64,17 @@ buildPythonPackage rec {
     PATH=$out/bin:$PATH
   '';
 
-  # disable tests which touch network
-  disabledTests = ''
+  disabledTests = [
+    # disable tests which touch network
     "test_discover"
     "test_filtered_compressed_cache"
     "test_get_dir"
     "test_remote_cat"
     "http"
-  '';
+
+    # broken test
+    "test_read_pattern_with"
+  ];
 
   meta = with lib; {
     description = "Data load and catalog system";

@@ -433,7 +433,6 @@ Olical/aniseed
 Olical/conjure
 onsails/lspkind-nvim
 OrangeT/vim-csharp
-ostera/vimux
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
 osyo-manga/vim-over
@@ -459,6 +458,7 @@ prabirshrestha/vim-lsp
 preservim/nerdcommenter
 preservim/nerdtree
 preservim/tagbar
+preservim/vimux
 psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector

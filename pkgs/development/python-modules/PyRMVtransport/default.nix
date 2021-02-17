@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, flit
-, lxml, httpx
-, pytest, pytestcov, pytest-asyncio, pytest-mock, aresponses
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
+, flit
+, async-timeout
+, lxml
+, httpx
+, pytestCheckHook
+, pytest-asyncio
+, pytest-httpx
 }:
 
 buildPythonPackage rec {
@@ -23,24 +29,18 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    async-timeout
     httpx
     lxml
   ];
 
-  # requires pytest-httpx
-  doCheck = false;
+  pythonImportsCheck = [ "RMVtransport" ];
 
   checkInputs = [
-    pytest
-    pytestcov
+    pytestCheckHook
     pytest-asyncio
-    pytest-mock
-    # pytest-httpx is missing
-    aresponses
+    pytest-httpx
   ];
-  checkPhase = ''
-    pytest --cov=RMVtransport tests
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/cgtobi/PyRMVtransport";
