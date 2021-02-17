@@ -1,10 +1,12 @@
 { lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , fuse # only needed for grub-mount
+, runtimeShell
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? false
 , xenSupport ? false
+, kbdcompSupport ? false, ckbcomp
 }:
 
 with lib;
@@ -52,6 +54,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-bash-completion.patch
   ];
+
+  postPatch = if kbdcompSupport then ''
+    sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
+  '' else ''
+    echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
+    echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
+  '';
 
   nativeBuildInputs = [ bison flex python3 pkg-config autoconf automake ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype gettext lvm2 fuse libtool ]
