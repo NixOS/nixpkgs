@@ -15,7 +15,7 @@ haskellPackages.mkDerivation rec {
   buildDepends = [ makeWrapper ];
 
   executableHaskellDepends = with haskellPackages; [
-    HUnit blaze-markup blaze-html split cmdargs ansi-terminal cmark
+    HUnit blaze-markup blaze-html split ansi-terminal cmark
     edit-distance hashable open-browser optparse-applicative
   ];
 
