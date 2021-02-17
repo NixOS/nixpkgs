@@ -121,9 +121,9 @@ let
       '';
     });
 
-  buildIdea = { name, version, src, license, description, wmClass, ... }:
+  buildIdea = { name, version, src, license, description, wmClass, fhs ? null, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit name version src wmClass jdk fhs;
       product = "IDEA";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/idea/";
@@ -330,6 +330,7 @@ in
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
+    fhs = [ zlib ];
   };
 
   mps = buildMps rec {

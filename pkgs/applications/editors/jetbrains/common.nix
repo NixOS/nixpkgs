@@ -1,9 +1,10 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, patchelf, writeText
 , coreutils, gnugrep, which, git, unzip, libsecret, libnotify
 , vmopts ? null
+, buildFHSUserEnv
 }:
 
-{ name, product, version, src, wmClass, jdk, meta }:
+{ name, product, version, src, wmClass, jdk, meta, fhs ? null }:
 
 with lib;
 
@@ -15,6 +16,12 @@ let loName = toLower product;
                    then ""
                    else "64" )
                + ".vmoptions";
+
+    wrap = lib.optionalString (fhs != null) (buildFHSUserEnv {
+      name = "${loName}-fhs";
+      targetPkgs = pkgs: fhs;
+      runScript = ''/bin/sh'';
+    });
 in
 
 with stdenv; lib.makeOverridable mkDerivation rec {
@@ -82,6 +89,10 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --set ANDROID_JAVA_HOME "$jdk" \
       --set JAVA_HOME "$jdk" \
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
+
+    ${
+      lib.optionalString (wrap != "") "mv $out/bin/${execName} $out/libexec/_${execName} && makeWrapper ${wrap}/bin/${loName}-fhs $out/bin/${execName} --add-flags $out/libexec/_${execName}"
+    }
 
     ln -s "$item/share/applications" $out/share
   '';
