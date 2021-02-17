@@ -23914,7 +23914,9 @@ in
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
-  nncp = callPackage ../tools/misc/nncp { };
+  nncp = callPackage ../tools/misc/nncp {
+    go = go_1_15;
+  };
 
   notion = callPackage ../applications/window-managers/notion { };
 
