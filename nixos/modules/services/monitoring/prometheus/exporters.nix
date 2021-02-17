@@ -51,6 +51,7 @@ let
     "smokeping"
     "sql"
     "surfboard"
+    "systemd"
     "tor"
     "unifi"
     "unifi-poller"
