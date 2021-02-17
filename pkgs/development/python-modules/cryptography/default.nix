@@ -22,18 +22,18 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.4.5"; # Also update the hash in vectors.nix
+  version = "3.4.6"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nykwsifsjca5mbw5j9x0180z8cqyv1g2nplm36h5zji5fl62rsg";
+    sha256 = "11wgsihfq72fav67c3igi0xbhbd6c5dj869byd1jkq0fbcz24cid";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "0bz3ig0pa3lchdd2yh94k9smqa6fwibmkdgd2lza3fw5bx30m5vj";
+    sha256 = "1i0sd2y4a5g1yqwcpw2ycp6p4p8sk5v7clblq756i5864j52v6w1";
   };
 
   cargoRoot = "src/rust";
