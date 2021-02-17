@@ -6747,6 +6747,12 @@
     email = "nfjinjing@gmail.com";
     name = "Jinjing Wang";
   };
+  ngiger = {
+    email = "niklaus.giger@member.fsf.org";
+    github = "ngiger";
+    githubId = 265800;
+    name = "Niklaus Giger";
+  };
   nh2 = {
     email = "mail@nh2.me";
     github = "nh2";
