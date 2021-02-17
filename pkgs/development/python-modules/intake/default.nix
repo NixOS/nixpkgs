@@ -24,7 +24,6 @@
 buildPythonPackage rec {
   pname = "intake";
   version = "0.6.0";
-
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -73,7 +72,7 @@ buildPythonPackage rec {
     "http"
 
     # broken test
-    "test_read_pattern_with"
+    "test_read_pattern"
   ];
 
   meta = with lib; {
