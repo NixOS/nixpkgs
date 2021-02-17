@@ -413,6 +413,22 @@ rec {
     };
   };
 
+  freemarker = buildEclipseUpdateSite rec {
+    name = "freemarker-${version}";
+    version = "1.5.305";
+
+    src = fetchzip {
+      url = "https://github.com/ddekany/jbosstools-freemarker/releases/download/v${version}/freemarker.site-${version}.zip";
+      sha256 = "1qrhi300vk07gi14r445wvy0bvghbjd6c4k7q09pqpaxv6raiczn";
+      stripRoot = false;
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/ddekany/jbosstools-freemarker";
+      description = "Plugin that provides an editor for Apache FreeMarker .ftl (and .ftlh, .ftlx, etc.) files with syntax error markers as you type, syntax highlighting (for the template language only), and some code completion.";
+    };
+  };
+
   gnuarmeclipse = buildEclipseUpdateSite rec {
     name = "gnuarmeclipse-${version}";
     version = "3.1.1-201606210758";
