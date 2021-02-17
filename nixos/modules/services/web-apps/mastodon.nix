@@ -111,7 +111,6 @@ in {
       group = lib.mkOption {
         description = ''
           Group under which mastodon runs.
-          If it is set to "mastodon", a group will be created.
         '';
         type = lib.types.str;
         default = "mastodon";
@@ -555,10 +554,9 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package mastodonEnv ])
-      (lib.mkIf cfg.configureNginx {${config.services.nginx.user}.extraGroups = [ cfg.user ];})
     ];
 
-    users.groups.mastodon = lib.mkIf (cfg.group == "mastodon") { };
+    users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
   };
 
   meta.maintainers = with lib.maintainers; [ happy-river erictapen ];
