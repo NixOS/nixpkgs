@@ -209,7 +209,7 @@
     "ee_brightbox" = ps: with ps; [ ]; # missing inputs: eebrightbox
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ ]; # missing inputs: pythonegardia
-    "eight_sleep" = ps: with ps; [ ]; # missing inputs: pyeight
+    "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ ]; # missing inputs: elgato
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
