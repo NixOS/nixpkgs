@@ -229,6 +229,8 @@ qtModule {
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+    # This build takes a long time; particularly on slow architectures
+    timeout = 24 * 3600;
   };
 
 }
