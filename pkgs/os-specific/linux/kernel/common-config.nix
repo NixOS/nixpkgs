@@ -95,9 +95,7 @@ let
       BLK_CGROUP_IOCOST = whenAtLeast "5.4" yes;
       IOSCHED_DEADLINE = whenOlder "5.0" yes; # Removed in 5.0-RC1
       MQ_IOSCHED_DEADLINE = whenAtLeast "4.11" yes;
-      BFQ_GROUP_IOSCHED = whenAtLeast "4.12" yes;
       MQ_IOSCHED_KYBER = whenAtLeast "4.12" yes;
-      IOSCHED_BFQ = whenAtLeast "4.12" module;
     };
 
     # Enable NUMA.
