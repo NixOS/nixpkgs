@@ -12,7 +12,6 @@
 , tornado
 , ipython_genutils
 , traitlets
-, jupyter
 , jupyter_core
 , jupyter_client
 , nbformat
