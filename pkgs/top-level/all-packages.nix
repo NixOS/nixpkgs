@@ -3257,7 +3257,9 @@ in
   ibus-engines = recurseIntoAttrs {
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
-    bamboo = callPackage ../tools/inputmethods/ibus-engines/ibus-bamboo { };
+    bamboo = callPackage ../tools/inputmethods/ibus-engines/ibus-bamboo {
+      go = go_1_15;
+    };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
