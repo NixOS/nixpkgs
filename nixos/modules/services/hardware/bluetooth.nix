@@ -113,7 +113,7 @@ in
           aliases = [ "dbus-org.bluez.service" ];
           serviceConfig.ExecStart = [
             ""
-            "${package}/libexec/bluetooth/bluetoothd ${escapeShellArgs " " args}"
+            "${package}/libexec/bluetooth/bluetoothd ${escapeShellArgs args}"
           ];
           # restarting can leave people without a mouse/keyboard
           unitConfig.X-RestartIfChanged = false;
