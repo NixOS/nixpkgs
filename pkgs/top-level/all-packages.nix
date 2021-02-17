@@ -1286,7 +1286,9 @@ in
 
   gaia = callPackage ../development/libraries/gaia { };
 
-  galene = callPackage ../servers/web-apps/galene {};
+  galene = callPackage ../servers/web-apps/galene {
+    buildGoModule = buildGo115Module;
+  };
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
