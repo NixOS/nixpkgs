@@ -15,12 +15,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "octant";
-  version = "0.16.3";
+  version = "0.17.0";
 
   src = fetchsrc version {
-    x86_64-linux = "sha256-YqwQOfE1Banq9s80grZjALC7Td/P1Y0gMVGG1FXE7vY=";
-    aarch64-linux = "sha256-eMwBgAtjAuxeiLhWzKB8TMMM6xjFI/BL6Rjnd/ksMBs=";
-    x86_64-darwin = "sha256-f7ks77jPGzPPIguleEg9aF2GG+w0ihIgyoiCdZiGeIw=";
+    x86_64-linux = "sha256-kYS8o97HBjNgwmrG4fjsqFWxZy6ATFOhxt6j3KMZbEc=";
+    aarch64-linux = "sha256-/Tpna2Y8+PQt+SeOJ9NDweRWGiQXU/sN+Wh/vLYQPwM=";
+    x86_64-darwin = "sha256-aOUmnD+l/Cc5qTiHxFLBjCatszmPdUc4YYZ6Oy5DT3U=";
   };
 
   dontConfigure = true;
@@ -30,6 +30,14 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -D octant $out/bin/octant
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/octant --help
+    $out/bin/octant version | grep "${version}"
+    runHook postInstallCheck
   '';
 
   dontPatchELF = true;
