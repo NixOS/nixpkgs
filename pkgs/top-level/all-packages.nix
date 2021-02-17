@@ -10438,27 +10438,19 @@ in
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
-  knightos-genkfs = callPackage ../development/tools/knightos/genkfs {
-    asciidoc = asciidoc-full;
-  };
+  knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
   knightos-kcc = callPackage ../development/tools/knightos/kcc { };
 
-  knightos-kimg = callPackage ../development/tools/knightos/kimg {
-    asciidoc = asciidoc-full;
-  };
+  knightos-kimg = callPackage ../development/tools/knightos/kimg { };
 
   knightos-kpack = callPackage ../development/tools/knightos/kpack { };
 
-  knightos-mkrom = callPackage ../development/tools/knightos/mkrom {
-    asciidoc = asciidoc-full;
-  };
+  knightos-mkrom = callPackage ../development/tools/knightos/mkrom { };
 
   knightos-patchrom = callPackage ../development/tools/knightos/patchrom { };
 
-  knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade {
-    asciidoc = asciidoc-full;
-  };
+  knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade { };
 
   knightos-scas = callPackage ../development/tools/knightos/scas { };
 
