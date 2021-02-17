@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , fetchFromGitHub
 , gettext
 , xorg # for lndir
@@ -24,13 +23,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mailnag";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "pulb";
     repo = "mailnag";
     rev = "v${version}";
-    sha256 = "08jqs3v01a9gkjca9xgjidhdgvnlm4541z9bwh9m3k5p2g76sz96";
+    sha256 = "0m1cyzwzm7z4p2v31dx098a1iar7dbilwyjcxiqnjx05nlmiqvgf";
   };
 
   buildInputs = [

@@ -19,6 +19,7 @@
 , javacSupport ? false, javacPackages ? [ openjdk11 ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
 , withSystemd ? stdenv.isLinux # systemd support in epmd
+, opensslPackage ? openssl
 , wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
@@ -51,7 +52,7 @@ in stdenv.mkDerivation ({
 
   nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
 
-  buildInputs = [ ncurses openssl ]
+  buildInputs = [ ncurses opensslPackage ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
@@ -80,7 +81,7 @@ in stdenv.mkDerivation ({
     ./otp_build autoconf
   '';
 
-  configureFlags = [ "--with-ssl=${openssl.dev}" ]
+  configureFlags = [ "--with-ssl=${lib.getDev opensslPackage}" ]
     ++ optional enableThreads "--enable-threads"
     ++ optional enableSmpSupport "--enable-smp-support"
     ++ optional enableKernelPoll "--enable-kernel-poll"

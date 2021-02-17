@@ -31,6 +31,8 @@ in {
         "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
       ];
 
+      initrd.availableKernelModules = [ "hyperv_keyboard" ];
+
       kernelParams = [
         "video=hyperv_fb:${cfg.videoMode} elevator=noop"
       ];

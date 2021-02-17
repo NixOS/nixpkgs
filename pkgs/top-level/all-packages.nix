@@ -1677,7 +1677,6 @@ in
     else libtensorflow-bin;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix {
-    inherit (linuxPackages) nvidia_x11;
     cudaSupport = config.cudaSupport or false;
   };
 
@@ -7241,6 +7240,8 @@ in
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
+
+  pritunl-ssh = callPackage ../tools/networking/pritunl-ssh { };
 
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
 
@@ -26536,6 +26537,8 @@ in
   blackshades = callPackage ../games/blackshades { };
 
   blobby = callPackage ../games/blobby { };
+
+  blobwars = callPackage ../games/blobwars { };
 
   boohu = callPackage ../games/boohu { };
 
