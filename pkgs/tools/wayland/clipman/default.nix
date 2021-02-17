@@ -1,4 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, wl-clipboard, makeWrapper }:
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, wl-clipboard
+, makeWrapper
+}:
 
 buildGoModule rec {
   pname = "clipman";
@@ -24,9 +29,9 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/yory8/clipman";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ma27 ];
     description = "A simple clipboard manager for Wayland";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
   };
 }

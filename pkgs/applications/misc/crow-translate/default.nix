@@ -1,6 +1,6 @@
 { lib
-
 , mkDerivation
+, nix-update-script
 , fetchFromGitHub
 , substituteAll
 , cmake
@@ -37,22 +37,28 @@ let
     rev = "1.4.1";
     sha256 = "1c6a8mdxms5vh8l7shi2kqdhafbzm50pbz6g1hhgg6qslla0vfn0";
   };
+  circleflags = fetchFromGitHub {
+    owner = "HatScripts";
+    repo = "circle-flags";
+    rev = "v2.0.0";
+    sha256 = "1xz5b6nhcxxzalcgwnw36npap71i70s50g6b63avjgjkwz1ys5j4";
+  };
 in
 mkDerivation rec {
   pname = "crow-translate";
-  version = "2.6.2";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "crow-translate";
     repo = "crow-translate";
     rev = version;
-    sha256 = "1jgpqynmxmh6mrknpk5fh96lbdg799axp4cyn5rvalg3sdxajmqc";
+    sha256 = "sha256-YOsp/noGsYthre18fMyBj9s+YFzdHJfIJzJSm43wiZ0=";
   };
 
   patches = [
     (substituteAll {
       src = ./dont-fetch-external-libs.patch;
-      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator;
+      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator circleflags;
     })
     (substituteAll {
       # See https://github.com/NixOS/nixpkgs/issues/86054
@@ -61,9 +67,22 @@ mkDerivation rec {
     })
   ];
 
+  postPatch = "cp -r ${circleflags}/flags/* data/icons";
+
   nativeBuildInputs = [ cmake extra-cmake-modules qttools ];
 
   buildInputs = [ leptonica tesseract4 qtmultimedia qtx11extras ];
+
+  postInstall = ''
+    substituteInPlace $out/share/applications/io.crow_translate.CrowTranslate.desktop \
+      --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
+  '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";

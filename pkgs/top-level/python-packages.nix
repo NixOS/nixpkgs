@@ -6316,6 +6316,8 @@ in {
 
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
+  python-engineio_3 = callPackage ../development/python-modules/python-engineio/3.nix { };
+
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
   python_fedora = callPackage ../development/python-modules/python_fedora { };
@@ -6455,6 +6457,8 @@ in {
   python-snappy = callPackage ../development/python-modules/python-snappy { inherit (pkgs) snappy; };
 
   python-socketio = callPackage ../development/python-modules/python-socketio { };
+
+  python-socketio_4 = callPackage ../development/python-modules/python-socketio/4.nix { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
