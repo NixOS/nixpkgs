@@ -2810,6 +2810,7 @@ in
 
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
+    buildGoModule = buildGo115Module;
   };
 
   step-cli = callPackage ../tools/security/step-cli { };
