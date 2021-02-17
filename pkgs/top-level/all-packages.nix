@@ -25659,6 +25659,8 @@ in
 
   wad = python3Packages.callPackage ../tools/security/wad { };
 
+  wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
+
   waon = callPackage ../applications/audio/waon { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
