@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   # Computationally very demanding tests
   doCheck = false;
+  pythonImportsCheck= [ "seaborn" ];
 
   meta = {
     description = "Statisitical data visualization";
