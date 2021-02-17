@@ -15588,6 +15588,8 @@ in
     libtoxcore_0_1 libtoxcore_0_2;
   libtoxcore = libtoxcore_0_2;
 
+  libtpms = callPackage ../tools/security/libtpms { };
+
   libtap = callPackage ../development/libraries/libtap { };
 
   libtgvoip = callPackage ../development/libraries/libtgvoip { };
