@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
+  # Causes build failure due to warning
+  # https://github.com/jsoftware/jsource/issues/16
+  NIX_CFLAGS_COMPILE = "-Wno-error=return-local-addr";
+
   buildPhase = ''
     export SOURCE_DIR=$(pwd)
     export HOME=$TMPDIR
