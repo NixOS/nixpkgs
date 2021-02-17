@@ -1,0 +1,40 @@
+# SPDX-FileCopyrightText: 2021 Adriaan de Groot <groot@kde.org>
+# SPDX-License-Identifier: BSD-2-Clause
+---
+componentName:  default
+# image-slideshow
+
+# Branding must define some strings for the welcome page,
+# even though this example is about the slideshow, not the rest.
+strings:
+    productName:         Mirror Linux
+    shortProductName:    Mirror
+    version:
+    shortVersion:
+    versionedName:       Mirror Linux 1.0
+    shortVersionedName:  Mirror 1.0
+    bootloaderEntryName: Mirror
+
+# These images do not exist in this branding example.
+images:
+    productLogo:         "logo.png"
+    productIcon:         "logo.png"
+    productWelcome:      "languages.png"
+
+# Dark-mode for Calamares. The slideshow can access these color values
+# through the Branding object which is always available to QML inside Calamares.
+style:
+   sidebarBackground:    "#36393e"
+   sidebarText:          "#efefef"
+   sidebarTextSelect:    "#2eb69b"
+   sidebarTextHighlight: "#313338"
+
+# The actual slideshow. API version 2 means that the QML is loaded at
+# startup. This is **slightly** slower at startup, but means that by
+# the time we reach the slideshow, it is loaded and ready-to-go.
+#
+# A v2 slideshow **may** have an onActivate() and onLeave() function,
+# although Calamares will complain if it does not.
+slideshow:               "show.qml"
+slideshowAPI:            2
+
