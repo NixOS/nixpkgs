@@ -8134,6 +8134,8 @@ in
 
   stress-ng = callPackage ../tools/system/stress-ng { };
 
+  stressapptest = callPackage ../tools/system/stressapptest { };
+
   stoken = callPackage ../tools/security/stoken (config.stoken or {});
 
   storeBackup = callPackage ../tools/backup/store-backup { };
