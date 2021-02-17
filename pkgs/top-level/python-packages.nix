@@ -3548,6 +3548,8 @@ in {
 
   labelbox = callPackage ../development/python-modules/labelbox { };
 
+  labgrid = callPackage ../development/python-modules/labgrid { };
+
   lammps-cython = callPackage ../development/python-modules/lammps-cython { mpi = pkgs.mpi; };
 
   langcodes = callPackage ../development/python-modules/langcodes { };
