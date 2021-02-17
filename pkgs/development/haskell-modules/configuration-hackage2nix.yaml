@@ -2821,6 +2821,18 @@ package-maintainers:
     - gitit
     - yarn-lock
     - yarn2nix
+  turion:
+    - rhine
+    - rhine-gloss
+    - essence-of-live-coding
+    - essence-of-live-coding-gloss
+    - essence-of-live-coding-pulse
+    - essence-of-live-coding-quickcheck
+    - Agda
+    - dunai
+    - finite-typelits
+    - pulse-simple
+    - simple-affine-space
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
@@ -11473,7 +11485,6 @@ broken-packages:
   - xml-conduit-stylist
   - xml-enumerator
   - xml-enumerator-combinators
-  - xml-extractors
   - xml-html-conduit-lens
   - xml-monad
   - xml-parsec
