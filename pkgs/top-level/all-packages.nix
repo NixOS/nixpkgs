@@ -17039,7 +17039,9 @@ in
 
   tremor = callPackage ../development/libraries/tremor { };
 
-  trillian = callPackage ../tools/misc/trillian { };
+  trillian = callPackage ../tools/misc/trillian {
+    buildGoModule = buildGo115Module;
+  };
 
   twolame = callPackage ../development/libraries/twolame { };
 
