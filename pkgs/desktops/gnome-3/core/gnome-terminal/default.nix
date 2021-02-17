@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libxml2, gnome3, dconf, nautilus
 , gtk3, gsettings-desktop-schemas, vte, gettext, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook, glib, pcre2
+, desktop-file-utils, itstool, wrapGAppsHook, pcre2
 , libxslt, docbook-xsl-nons }:
 
 stdenv.mkDerivation rec {
