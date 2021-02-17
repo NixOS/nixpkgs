@@ -1,19 +1,19 @@
 { lib, fetchPypi, buildPythonPackage, execnet, pytest_6
-, setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
+, setuptools_scm, pytest-forked, filelock, psutil, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.1.0";
+  version = "2.2.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wh6pn66nncfs6ay0n863bgyriwsgppn8flx5l7551j1lbqkinc2";
+    sha256 = "sha256-cYiHKWiS+SaD9qUfJaOuWEmTsG9wds4eH9SC5ZqCIKI=";
   };
 
   nativeBuildInputs = [ setuptools_scm pytest_6 ];
   checkInputs = [ pytest_6 filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil six ];
+  propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
   # pytest6 doesn't allow for new lines
   # capture_deprecated not compatible with latest pytest6
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
+    description = "pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
