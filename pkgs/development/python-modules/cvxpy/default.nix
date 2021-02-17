@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A domain-specific language for modeling convex optimization problems in Python.";
+    description = "A domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxgrp/cvxpy/releases";
     changelog = "https://github.com/cvxgrp/cvxpy/releases/tag/v${version}";
