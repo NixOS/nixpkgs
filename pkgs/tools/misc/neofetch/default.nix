@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub, bash }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "neofetch";
   version = "7.1.0";
 
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0i7wpisipwzk0j62pzaigbiq42y1mn4sbraz4my2jlz6ahwf00kv";
   };
 
-  dontBuild = true;
+  strictDeps = true;
+  buildInputs = [ bash ];
+  postPatch = ''
+    patchShebangs --host neofetch
+  '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
