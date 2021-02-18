@@ -282,7 +282,7 @@ in
   grsync = callPackage ../applications/misc/grsync { };
 
   dockerTools = callPackage ../build-support/docker {
-    go = go_1_15;
+    go = buildPackages.go_1_15;
     writePython3 = buildPackages.writers.writePython3;
   };
 
@@ -10161,28 +10161,28 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
     stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
   go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
     stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
   go_1_16 = callPackage ../development/compilers/go/1.16.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
     stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
   go_2-dev = callPackage ../development/compilers/go/2-dev.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
     stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
   go = go_1_16;

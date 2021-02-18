@@ -13,7 +13,7 @@ let
 
   version = "1.15.8";
 
-  go_bootstrap = callPackage ./bootstrap.nix { };
+  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
