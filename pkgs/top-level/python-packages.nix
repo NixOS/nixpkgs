@@ -3692,6 +3692,8 @@ in {
 
   librosa = callPackage ../development/python-modules/librosa { };
 
+  librouteros = callPackage ../development/python-modules/librouteros { };
+
   libsass = (callPackage ../development/python-modules/libsass { inherit (pkgs) libsass; });
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
