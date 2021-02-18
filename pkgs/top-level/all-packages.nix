@@ -29273,6 +29273,8 @@ in
 
   ricty = callPackage ../data/fonts/ricty { };
 
+  rmfuse = callPackage ../tools/filesystems/rmfuse {};
+
   rmount = callPackage ../tools/filesystems/rmount {};
 
   romdirfs = callPackage ../tools/filesystems/romdirfs {};
