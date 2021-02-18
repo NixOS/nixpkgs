@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , maturin
 , buildPythonPackage
-, isPy38
 , python
 }:
 let

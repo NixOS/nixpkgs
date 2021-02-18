@@ -6,7 +6,6 @@
 , six
 # test dependencies
 , coverage
-, flake8
 , mock
 , nose
 , pycodestyle

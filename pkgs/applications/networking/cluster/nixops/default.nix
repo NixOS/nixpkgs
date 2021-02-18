@@ -2,7 +2,6 @@
 , poetry2nix
 , lib
 , overrides ? (self: super: {})
-, stdenv
 }:
 
 let
