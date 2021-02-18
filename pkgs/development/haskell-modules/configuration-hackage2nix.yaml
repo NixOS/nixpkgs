@@ -2833,6 +2833,8 @@ package-maintainers:
     - gitit
     - yarn-lock
     - yarn2nix
+  poscat:
+    - hinit
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
