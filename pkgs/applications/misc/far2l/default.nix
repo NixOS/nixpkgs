@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash
+{ lib, stdenv, fetchFromGitHub, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash
 , xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick
 , libuchardet, spdlog, xercesc, fmt, openssl, libssh, samba, neon, libnfs, libarchive }:
 
