@@ -180,6 +180,11 @@ let
         default = "";
         description = "Add dashboards to the specified folder";
       };
+      folderUid = mkOption {
+        type = types.str;
+        default = "";
+        description = "Folder UID. will be automatically generated if not specified";
+      };
       type = mkOption {
         type = types.str;
         default = "file";
