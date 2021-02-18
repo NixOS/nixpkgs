@@ -5,8 +5,8 @@ diff -Naur ncompress-4.2.4.2.orig/Makefile.def ncompress-4.2.4.2/Makefile.def
  #	-DDEF_ERRNO=1				Define error (not defined in errno.h).
  #	-DMAXSEG_64K=1 -BITS=16		Support segment processsor like 80286.
  #
--options= $(CFLAGS) $(CPPFLAGS) -DDIRENT=1 -DUSERMEM=800000 -DREGISTERS=3
-+options= $(CFLAGS) $(CPPFLAGS) -DDIRENT=1 -DUSERMEM=800000 -DREGISTERS=3 -DNOFUNCDEF=1
+-options= $(CFLAGS) $(CPPFLAGS) -DUSERMEM=800000
++options= $(CFLAGS) $(CPPFLAGS) -DUSERMEM=800000 -DNOFUNCDEF=1
  
  # libary options
  LBOPT= $(LDFLAGS)
