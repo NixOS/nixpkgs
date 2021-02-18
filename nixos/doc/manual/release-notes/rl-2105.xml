@@ -91,6 +91,16 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     If you are using <option>services.udev.extraRules</option> to assign
+     custom names to network interfaces, this may stop working due to a change
+     in the initialisation of dhcpcd and systemd networkd. To avoid this, either
+     move them to <option>services.udev.initrdRules</option> or see the new
+     <link linkend="sec-custom-ifnames">Assigning custom names</link> section
+     of the NixOS manual for an example using networkd links.
+    </para>
+   </listitem>
     <listitem>
       <para>
         <literal>systemd-journal2gelf</literal> no longer parses json and expects the receiving system to handle it. How to achieve this with Graylog is described in this <link xlink:href="https://github.com/parse-nl/SystemdJournal2Gelf/issues/10">GitHub issue</link>.
