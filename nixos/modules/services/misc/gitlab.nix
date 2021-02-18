@@ -424,7 +424,7 @@ in {
 
         port = mkOption {
           type = types.int;
-          default = 465;
+          default = 25;
           description = "Port of the SMTP server for Gitlab.";
         };
 
@@ -684,7 +684,7 @@ in {
     };
 
     # Use postfix to send out mails.
-    services.postfix.enable = mkDefault true;
+    services.postfix.enable = mkDefault (cfg.smtp.enable && cfg.smtp.address == "localhost");
 
     users.users.${cfg.user} =
       { group = cfg.group;
