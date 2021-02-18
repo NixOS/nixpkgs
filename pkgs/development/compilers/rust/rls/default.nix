@@ -2,7 +2,7 @@
 , openssh, openssl, pkg-config, cmake, zlib, curl, libiconv
 , CoreFoundation, Security }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "rls";
   inherit (rustPlatform.rust.rustc) src version;
 
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
 
   preBuild = ''
     # client tests are flaky
-    rm tests/client.rs
+    rm ${buildAndTestSubdir}/tests/client.rs
   '';
 
   # a nightly compiler is required unless we use this cheat code.

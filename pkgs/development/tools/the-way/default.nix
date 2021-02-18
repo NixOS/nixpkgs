@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-jTZso61Lyt6jprBxBAhvchgOsgM9y1qBleTxUx1jCnE=";
   checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=copy" ];
-  cargoParallelTestThreads = false;
+  dontUseCargoParallelTests = true;
 
   postInstall = ''
     $out/bin/the-way config default tmp.toml

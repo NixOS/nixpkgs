@@ -196,7 +196,7 @@ sometimes it may be necessary to disable this so the tests run consecutively.
 ```nix
 rustPlatform.buildRustPackage {
   /* ... */
-  cargoParallelTestThreads = false;
+  dontUseCargoParallelTests = true;
 }
 ```
 
@@ -293,6 +293,12 @@ attributes can also be used:
   variable `buildAndTestSubdir` can be used to build a crate in a
   Cargo workspace. Additional maturin flags can be passed through
   `maturinBuildFlags`.
+* `cargoCheckHook`: run tests using Cargo. Additional flags can be
+  passed to Cargo using `checkFlags` and `checkFlagsArray`. By
+  default, tests are run in parallel. This can be disabled by setting
+  `dontUseCargoParallelTests`.
+* `cargoInstallHook`: install binaries and static/shared libraries
+  that were built using `cargoBuildHook`.
 
 ### Examples
 

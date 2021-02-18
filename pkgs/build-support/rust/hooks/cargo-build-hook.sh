@@ -1,3 +1,5 @@
+declare -a cargoBuildFlags
+
 cargoBuildHook() {
     echo "Executing cargoBuildHook"
 
@@ -17,15 +19,15 @@ cargoBuildHook() {
       cargo build -j $NIX_BUILD_CORES \
         --target @rustTargetPlatformSpec@ \
         --frozen \
-        ${cargoBuildType} \
+        --${cargoBuildType} \
         ${cargoBuildFlags}
     )
-
-    runHook postBuild
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then
         popd
     fi
+
+    runHook postBuild
 
     echo "Finished cargoBuildHook"
 }

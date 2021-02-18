@@ -36,6 +36,24 @@ in {
       };
     } ./cargo-build-hook.sh) {};
 
+  cargoCheckHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-check-hook.sh";
+      deps = [ cargo ];
+      substitutions = {
+        inherit rustTargetPlatformSpec;
+      };
+    } ./cargo-check-hook.sh) {};
+
+  cargoInstallHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-install-hook.sh";
+      deps = [ ];
+      substitutions = {
+        inherit shortTarget;
+      };
+    } ./cargo-install-hook.sh) {};
+
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-setup-hook.sh";

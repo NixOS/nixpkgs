@@ -12,7 +12,8 @@ rec {
   };
 
   buildRustPackage = callPackage ../../../build-support/rust {
-    inherit rustc cargo cargoBuildHook cargoSetupHook fetchCargoTarball;
+    inherit cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook
+      fetchCargoTarball rustc;
   };
 
   rustcSrc = callPackage ./rust-src.nix {
@@ -26,5 +27,5 @@ rec {
   # Hooks
   inherit (callPackage ../../../build-support/rust/hooks {
     inherit cargo;
-  }) cargoBuildHook cargoSetupHook maturinBuildHook;
+  }) cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook maturinBuildHook;
 }
