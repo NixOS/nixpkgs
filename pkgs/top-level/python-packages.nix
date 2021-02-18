@@ -204,9 +204,11 @@ in {
 
   aioambient = callPackage ../development/python-modules/aioambient { };
 
+  ailment = callPackage ../development/python-modules/ailment { };
+
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
-  ailment = callPackage ../development/python-modules/ailment { };
+  aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
