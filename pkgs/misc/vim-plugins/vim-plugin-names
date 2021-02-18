@@ -93,6 +93,7 @@ dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
 dstein64/nvim-scrollview@main
+dstein64/vim-startuptime
 dylanaraps/wal.vim
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc

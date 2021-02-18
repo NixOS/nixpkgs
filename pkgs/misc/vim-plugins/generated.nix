@@ -7589,6 +7589,18 @@ let
     meta.homepage = "https://github.com/mhinz/vim-startify/";
   };
 
+  vim-startuptime = buildVimPluginFrom2Nix {
+    pname = "vim-startuptime";
+    version = "2021-01-11";
+    src = fetchFromGitHub {
+      owner = "dstein64";
+      repo = "vim-startuptime";
+      rev = "37ab78eb837e3004e3cfb3a8e5ed8f8740f27f13";
+      sha256 = "0x3h47hdbg2gp0ahf0ixkj3nks7qbnm25bmd7hq9k3c7b6912b5a";
+    };
+    meta.homepage = "https://github.com/dstein64/vim-startuptime/";
+  };
+
   vim-stylish-haskell = buildVimPluginFrom2Nix {
     pname = "vim-stylish-haskell";
     version = "2019-11-28";
