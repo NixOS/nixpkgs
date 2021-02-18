@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "gonic";
-  version = "0.12.0";
+  version = "0.12.2";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
-    rev = "6c69bd3be6279f743c83596c4f0fc12798fdb26a";
-    sha256 = "1igb2lbkc1nfxp49id3yxql9sbdqr467661jcgnchcnbayj4d664";
+    rev = "7d420f61a90739cd82a81c2740274c538405d950";
+    sha256 = "0ix33cbhik1580h1jgv6n512dcgip436wmljpiw53c9v438k0ps5";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib alsaLib ];
+  buildInputs = [ taglib alsaLib ] ++ lib.optionals transcodingSupport [ ffmpeg ];
   vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
 
   meta = {
