@@ -1,4 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, nasm
+, openjdk
+, enableJava ? false # whether to build the java wrapper
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -26,11 +28,18 @@ stdenv.mkDerivation rec {
     moveToOutput include/transupp.h $dev_private
   '';
 
-  nativeBuildInputs = [ cmake nasm ];
+  nativeBuildInputs = [
+    cmake
+    nasm
+  ] ++ lib.optionals enableJava [
+    openjdk
+  ];
 
   cmakeFlags = [
     "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
     "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
+  ] ++ lib.optionals enableJava [
+    "-DWITH_JAVA=1"
   ];
 
   doInstallCheck = true;
