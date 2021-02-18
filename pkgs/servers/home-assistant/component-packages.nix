@@ -496,7 +496,7 @@
     "microsoft_face_detect" = ps: with ps; [ aiohttp-cors ];
     "microsoft_face_identify" = ps: with ps; [ aiohttp-cors ];
     "miflora" = ps: with ps; [ bluepy ]; # missing inputs: miflora
-    "mikrotik" = ps: with ps; [ ]; # missing inputs: librouteros
+    "mikrotik" = ps: with ps; [ librouteros ];
     "mill" = ps: with ps; [ ]; # missing inputs: millheater
     "min_max" = ps: with ps; [ ];
     "minecraft_server" = ps: with ps; [ aiodns getmac ]; # missing inputs: mcstatus
