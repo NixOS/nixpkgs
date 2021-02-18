@@ -217,6 +217,14 @@ init_submodules(){
     done
 }
 
+# Fetch extra files from LFS
+init_lfs(){
+    # use --local because the nix-builders are $HOME-less
+    clean_git lfs install --local
+    clean_git lfs fetch
+    clean_git lfs checkout
+}
+
 clone(){
     local top=$PWD
     local dir="$1"
@@ -239,6 +247,9 @@ clone(){
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
         init_submodules
+    fi
+    if test -n "$fetchLFS"; then
+        init_lfs
     fi
 
     if [ -z "$builder" ] && [ -f .topdeps ]; then
@@ -298,11 +309,6 @@ clone_user_rev() {
     local dir="$1"
     local url="$2"
     local rev="${3:-HEAD}"
-
-    if [ -n "$fetchLFS" ]; then
-        HOME=$TMPDIR
-        git lfs install
-    fi
 
     # Perform the checkout.
     case "$rev" in
@@ -396,6 +402,7 @@ print_results() {
   "date": "$(json_escape "$commitDateStrict8601")",
   "path": "$(json_escape "$finalPath")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
+  "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
