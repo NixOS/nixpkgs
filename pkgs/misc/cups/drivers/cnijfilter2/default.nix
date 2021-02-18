@@ -117,7 +117,7 @@ stdenv.mkDerivation {
     description = "Canon InkJet printer drivers for the MG7500, MG6700, MG6600, MG5600, MG2900, MB2000, MB2300, iB4000, MB5000, MB5300, iP110, E450, MX490, E480, MG7700, MG6900, MG6800, MG5700, MG3600, and G3000 series";
     homepage = "https://hk.canon/en/support/0101048401/1";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ cstrahan ];
   };
 }
