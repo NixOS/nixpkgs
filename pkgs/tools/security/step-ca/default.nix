@@ -6,6 +6,7 @@
 , pcsclite
 , PCSC
 , pkg-config
+, hsmSupport ? true
 }:
 
 buildGoModule rec {
@@ -21,14 +22,18 @@ buildGoModule rec {
 
   vendorSha256 = "f1NdszqYYx6X1HqwqG26jjfjXq1gDXLOrh64ccKRQ90=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
   buildInputs =
-    lib.optionals (stdenv.isLinux) [ pcsclite ]
-    ++ lib.optionals (stdenv.isDarwin) [ PCSC ];
+    lib.optionals (hsmSupport && stdenv.isLinux) [ pcsclite ]
+    ++ lib.optionals (hsmSupport && stdenv.isDarwin) [ PCSC ];
 
   postPatch = ''
     substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
+  '';
+
+  preBuild = ''
+    ${lib.optionalString (!hsmSupport) "export CGO_ENABLED=0"}
   '';
 
   postInstall = ''
