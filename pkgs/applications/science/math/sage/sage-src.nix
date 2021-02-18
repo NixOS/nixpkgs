@@ -71,6 +71,9 @@ stdenv.mkDerivation rec {
 
     # fix intermittent errors in sagespawn.pyx: https://trac.sagemath.org/ticket/31052
     ./patches/sagespawn-implicit-casting.patch
+
+    # disable pexpect interrupt test (see https://trac.sagemath.org/ticket/30945)
+    ./patches/disable-pexpect-intermittent-failure.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
