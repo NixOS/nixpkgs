@@ -748,6 +748,8 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  xtrt = callPackage ../tools/archivers/xtrt { };
+
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.minimal;
   };
