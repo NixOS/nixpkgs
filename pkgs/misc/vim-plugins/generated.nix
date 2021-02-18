@@ -4406,6 +4406,18 @@ let
     meta.homepage = "https://github.com/vhda/verilog_systemverilog.vim/";
   };
 
+  vifm-vim = buildVimPluginFrom2Nix {
+    pname = "vifm-vim";
+    version = "2021-02-11";
+    src = fetchFromGitHub {
+      owner = "vifm";
+      repo = "vifm.vim";
+      rev = "122e1941328070346083fa380dd6fba892fbb836";
+      sha256 = "0mqjcrdjcps8r60p958szbvwzxsqxa98c8r9hc42f0k8vwpfscq6";
+    };
+    meta.homepage = "https://github.com/vifm/vifm.vim/";
+  };
+
   vim-abolish = buildVimPluginFrom2Nix {
     pname = "vim-abolish";
     version = "2020-10-30";
