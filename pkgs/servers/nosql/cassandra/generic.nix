@@ -3,6 +3,7 @@
 # generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
 , generation
 , version, sha256
+, extraMeta ? {}
 , ...
 }:
 
@@ -104,5 +105,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = [ maintainers.roberth ];
-  };
+  } // extraMeta;
 }
