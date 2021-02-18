@@ -672,6 +672,30 @@ let
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
       '';
     };
+    rename = {
+      name = "RenameInterface";
+      machine = { pkgs, ... }: {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+        };
+      } //
+      (if networkd
+       then { systemd.network.links."10-custom_name" = {
+                matchConfig.MACAddress = "52:54:00:12:01:01";
+                linkConfig.Name = "custom_name";
+              };
+            }
+       else { services.udev.initrdRules = ''
+               SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="custom_name"
+              '';
+            });
+      testScript = ''
+        machine.succeed("udevadm settle")
+        print(machine.succeed("ip link show dev custom_name"))
+      '';
+    };
     # even with disabled networkd, systemd.network.links should work
     # (as it's handled by udev, not networkd)
     link = {
