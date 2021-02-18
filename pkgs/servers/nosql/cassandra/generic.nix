@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper coreutils ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv * $out
 
@@ -86,6 +88,8 @@ stdenv.mkDerivation rec {
     done
 
     wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
+
+    runHook postInstall
     '';
 
   passthru = {
