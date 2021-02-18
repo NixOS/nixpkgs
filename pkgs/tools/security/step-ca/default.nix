@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , buildGoModule
+, coreutils
 , pcsclite
 , PCSC
 , pkg-config
@@ -25,6 +26,14 @@ buildGoModule rec {
   buildInputs =
     lib.optionals (stdenv.isLinux) [ pcsclite ]
     ++ lib.optionals (stdenv.isDarwin) [ PCSC ];
+
+  postPatch = ''
+    substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
+  '';
+
+  postInstall = ''
+    install -Dm444 -t $out/lib/systemd/system systemd/step-ca.service
+  '';
 
   # Tests fail on darwin with
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted [recovered]
