@@ -139,7 +139,7 @@ url_to_name(){
     fi
 }
 
-# Fetch everything and checkout the right sha1
+# Fetch and checkout the right sha1
 checkout_hash(){
     local hash="$1"
     local ref="$2"
@@ -148,7 +148,7 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
-    clean_git fetch -t ${builder:+--progress} origin || return 1
+    clean_git fetch -t ${builder:+--progress} origin "$hash" || return 1
     clean_git checkout -b "$branchName" "$hash" || return 1
 }
 
