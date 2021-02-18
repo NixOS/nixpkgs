@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "convertdate";
-  version = "2.3.0";
+  version = "2.3.1";
 
   # Tests are not available in the PyPI tarball so use GitHub instead.
   src = fetchFromGitHub {
     owner = "fitnr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "17j188zlp46zmq8qyy4z4f9v25l3zibkwzj8wp4fxqgimjnfj2nr";
+    rev = version;
+    sha256 = "1g8sgd3xc9viy0kb1i4xp6bdn1hzwhrnk8kmismla88scivrhq32";
   };
 
   propagatedBuildInputs = [
