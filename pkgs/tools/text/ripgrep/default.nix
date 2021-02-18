@@ -41,7 +41,8 @@ rustPlatform.buildRustPackage rec {
   installCheckPhase = ''
     file="$(mktemp)"
     echo "abc\nbcd\ncde" > "$file"
-    $out/bin/rg -N 'bcd' "$file" && $out/bin/rg -N 'cd' "$file"
+    $out/bin/rg -N 'bcd' "$file"
+    $out/bin/rg -N 'cd' "$file"
   '';
 
   meta = with lib; {
