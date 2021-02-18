@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, perl, help2man
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, automake, m4, perl, help2man
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,26 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" ];
 
-  nativeBuildInputs = [ perl help2man m4 ];
+  patches = [
+    # Suport macOS version 11.0
+    # https://lists.gnu.org/archive/html/libtool-patches/2020-06/msg00001.html
+    ./libtool2-macos11.patch
+  ];
+
+  # Normally we'd use autoreconfHook, but that includes libtoolize.
+  postPatch = ''
+    aclocal -I m4
+    automake
+    autoconf
+
+    pushd libltdl
+    aclocal -I ../m4
+    automake
+    autoconf
+    popd
+  '';
+
+  nativeBuildInputs = [ perl help2man m4 ] ++ [ autoconf automake ];
   propagatedBuildInputs = [ m4 ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
