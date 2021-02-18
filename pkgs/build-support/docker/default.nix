@@ -770,6 +770,7 @@ rec {
           mkdir $out
 
           tar \
+            --sort name \
             --owner 0 --group 0 --mtime "@$SOURCE_DATE_EPOCH" \
             --hard-dereference \
             -C old_out \

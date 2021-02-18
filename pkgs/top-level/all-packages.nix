@@ -158,6 +158,8 @@ in
 
   fishnet = callPackage ../servers/fishnet { };
 
+  authy = callPackage ../applications/misc/authy { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
@@ -747,6 +749,8 @@ in
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
+
+  xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.minimal;
@@ -1402,6 +1406,8 @@ in
   go-audit = callPackage ../tools/system/go-audit { };
 
   gopass = callPackage ../tools/security/gopass { };
+
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
 
   gospider = callPackage ../tools/security/gospider { };
 
@@ -8161,6 +8167,8 @@ in
 
   stress-ng = callPackage ../tools/system/stress-ng { };
 
+  stressapptest = callPackage ../tools/system/stressapptest { };
+
   stoken = callPackage ../tools/security/stoken (config.stoken or {});
 
   storeBackup = callPackage ../tools/backup/store-backup { };
@@ -12817,7 +12825,7 @@ in
 
   inherit (callPackage ../development/tools/build-managers/shards { })
     shards_0_11
-    shards_0_12
+    shards_0_13
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
@@ -22368,6 +22376,10 @@ in
 
   formatter = callPackage ../applications/misc/formatter { };
 
+  formiko = with python3Packages; callPackage ../applications/editors/formiko {
+    inherit buildPythonApplication;
+  };
+
   foxtrotgps = callPackage ../applications/misc/foxtrotgps { };
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
@@ -23270,6 +23282,8 @@ in
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
+
+  kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
@@ -25303,6 +25317,8 @@ in
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
+  ticker = callPackage ../applications/misc/ticker { };
+
   tickrs = callPackage ../applications/misc/tickrs {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -25705,6 +25721,8 @@ in
   vym = qt5.callPackage ../applications/misc/vym { };
 
   wad = python3Packages.callPackage ../tools/security/wad { };
+
+  wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
 
   waon = callPackage ../applications/audio/waon { };
 
@@ -29273,6 +29291,8 @@ in
 
   ricty = callPackage ../data/fonts/ricty { };
 
+  rmfuse = callPackage ../tools/filesystems/rmfuse {};
+
   rmount = callPackage ../tools/filesystems/rmount {};
 
   romdirfs = callPackage ../tools/filesystems/romdirfs {};
@@ -30030,7 +30050,10 @@ in
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
-  zettlr = callPackage ../applications/misc/zettlr { };
+  zettlr = callPackage ../applications/misc/zettlr {
+    texlive = texlive.combined.scheme-medium;
+    inherit (haskellPackages) pandoc-citeproc;
+  };
 
   unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
 
