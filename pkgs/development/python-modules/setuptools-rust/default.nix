@@ -1,4 +1,5 @@
-{ lib
+{ callPackage
+, lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -22,6 +23,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm ];
 
   propagatedBuildInputs = [ semantic-version setuptools toml ];
+
+  passthru.tests.pyo3 = callPackage ./pyo3-test {};
 
   meta = with lib; {
     description = "Setuptools plugin for Rust support";
