@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
   #    is in Nixpkgs patchelf.
   # 2. Fixup broken libtool for openssl and cyrus_sasl (if it is not disabled)
   preFixup = ''
-    rm -r "$out/var"
+    rm -r $out/var
     rm -r libraries/*/.libs
     rm -r contrib/slapd-modules/passwd/*/.libs
-    for f in "$out/lib/libldap.la" "$out/lib/libldap_r.la"; do
+    for f in $out/lib/libldap.la $out/lib/libldap_r.la; do
       substituteInPlace "$f" --replace '-lssl' '-L${openssl.out}/lib -lssl'
   '' + lib.optionalString withCyrusSasl ''
       substituteInPlace "$f" --replace '-lsasl2' '-L${cyrus_sasl.out}/lib -lsasl2'
