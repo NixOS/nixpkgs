@@ -21612,6 +21612,8 @@ in
     python3Packages = python37Packages;
   };
 
+  cqrlog = callPackage ../applications/radio/cqrlog { };
+
   crun = callPackage ../applications/virtualization/crun {};
 
   csdp = callPackage ../applications/science/math/csdp { };

@@ -3,13 +3,13 @@
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "8.58.2";
+  version = "8.59.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "1ks8rla6hm618dxhr41x1ckzk3jxv0f7vl2547f7f1fl3zqna1zp";
+    sha256 = "sha256-6JVt5hNWvnUm64SFqns1f1+xMP/KyPQ8H93jqXNT8n8=";
   };
 
   vendorSha256 = "0vkw12w7vr0g4hf4f0im79y7l36d3ah01n1vl7siy94si47g8ir5";

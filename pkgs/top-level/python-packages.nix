@@ -1708,6 +1708,8 @@ in {
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
+  desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
+
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
@@ -3872,20 +3874,11 @@ in {
   macropy = callPackage ../development/python-modules/macropy { };
 
   maestral = callPackage ../development/python-modules/maestral {
-
-    # https://github.com/SamSchott/maestral/issues/250#issuecomment-739510048
-    survey = self.survey.overridePythonAttrs (old: rec {
-      version = "2.2.1";
+    keyring = self.keyring.overridePythonAttrs (old: rec {
+      version = "22.0.1";
       src = old.src.override {
         inherit version;
-        sha256 = "sha256-7ubWkqk1vyaJDLMOuKwUx2Bjziyi3HqpaQq4pKp4Z+0=";
-      };
-    });
-    watchdog = self.watchdog.overridePythonAttrs (old: rec {
-      version = "0.10.3";
-      src = old.src.override {
-        inherit version;
-        sha256 = "4214e1379d128b0588021880ccaf40317ee156d4603ac388b9adcf29165e0c04";
+        sha256 = "sha256-mss+FFLtu3VEgisS/SVFkHh2nlYPpR9Bi20Ar6pheN8=";
       };
     });
   };
@@ -5406,6 +5399,8 @@ in {
   pyedimax = callPackage ../development/python-modules/pyedimax { };
 
   pyee = callPackage ../development/python-modules/pyee { };
+
+  pyeight = callPackage ../development/python-modules/pyeight { };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 

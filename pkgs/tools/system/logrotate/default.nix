@@ -14,27 +14,21 @@ stdenv.mkDerivation rec {
   };
 
   # Logrotate wants to access the 'mail' program; to be done.
-  patchPhase = ''
-    sed -i -e 's,[a-z/]\+gzip,${gzip}/bin/gzip,' \
-           -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' configure.ac
-
-    ${lib.optionalString (mailutils != null) ''
-    sed -i -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
-    ''}
-  '';
-
-  autoreconfPhase = ''
-    ./autogen.sh
-  '';
+  configureFlags = [
+    "--with-compress-command=${gzip}/bin/gzip"
+    "--with-uncompress-command=${gzip}/bin/gunzip"
+  ] ++ lib.optionals (mailutils != null) [
+    "--with-default-mail-command=${mailutils}/bin/mail"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fedorahosted.org/releases/l/o/logrotate/";
     description = "Rotates and compresses system logs";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.viric ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.viric ];
+    platforms = platforms.all;
   };
 }

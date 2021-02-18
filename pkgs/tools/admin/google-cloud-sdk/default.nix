@@ -21,24 +21,24 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "135xbaz6q4565mklxjmm4mybm5qayvz34m0bdg609597kxw6l97j";
+      sha256 = "sha256-aHFwcynt4xQ0T1J+OTSxgttU9W3VFJAqCwmQSdVg8Fk=";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1i4cp6kyqbqj0fnmwx11bq6a1k4hrhyxz9qifr1qjfi7n8ybqrqy";
+      sha256 = "sha256-MfldToK7ZfdWZiZnI1qKI1o/dSiUcysxzUkTYMVZ5u4=";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "327.0.0";
+  version = "328.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
-  buildInputs = [ python makeWrapper ];
+  buildInputs = [ python ];
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [ jq makeWrapper ];
 
   patches = [
     # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
