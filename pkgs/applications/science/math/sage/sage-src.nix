@@ -109,6 +109,9 @@ stdenv.mkDerivation rec {
 
     # fix test output with sympy 1.7 (https://trac.sagemath.org/ticket/30985)
     ./patches/sympy-1.7-update.patch
+
+    # workaround until we use sage's fork of threejs, which contains a "version" file
+    ./patches/dont-grep-threejs-version-from-minified-js.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
