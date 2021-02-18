@@ -8934,6 +8934,11 @@ in
 
   ttwatch = callPackage ../tools/misc/ttwatch { };
 
+  turbovnc = callPackage ../tools/admin/turbovnc {
+    # fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc xorg.fontbhlucidatypewriter75dpi ];
+    libjpeg_turbo = libjpeg_turbo.override { enableJava = true; };
+  };
+
   udunits = callPackage ../development/libraries/udunits { };
 
   uftp = callPackage ../servers/uftp {};
