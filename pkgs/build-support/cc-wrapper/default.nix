@@ -487,6 +487,7 @@ stdenv.mkDerivation {
 
     + optionalString stdenv.targetPlatform.isDarwin ''
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
+      echo "-m${targetPlatform.darwinPlatform}-version-min=${targetPlatform.darwinMinVersion}" >> $out/nix-support/cc-cflags-before
     ''
 
     ##
