@@ -44,7 +44,7 @@ let
 
   mathcomp_ = package: let
       mathcomp-deps = if package == "single" then []
-        else map mathcomp_ (head (splitList (pred.equal package) packages));
+        else map mathcomp_ (head (splitList (preds.equal package) packages));
       pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''

@@ -15,11 +15,15 @@ let
     trivial = callLibs ./trivial.nix;
     fixedPoints = callLibs ./fixed-points.nix;
 
+    # control flow
+    switchs = callLibs ./switchs.nix;
+
     # datatypes
     attrsets = callLibs ./attrsets.nix;
     lists = callLibs ./lists.nix;
     strings = callLibs ./strings.nix;
     stringsWithDeps = callLibs ./strings-with-deps.nix;
+    preds = callLibs ./preds.nix;
 
     # packaging
     customisation = callLibs ./customisation.nix;
@@ -71,6 +75,7 @@ let
       toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
+    inherit (self.switchs) switch-if switch;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
@@ -81,7 +86,7 @@ let
       getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
-      concatMap flatten remove findSingle findFirst any all count
+      concatMap flatten remove findSingle findFirst splitList any all count
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
       drop sublist last init crossLists unique intersectLists
