@@ -29967,6 +29967,8 @@ in
 
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 
+  zrepl = callPackage ../tools/backup/zrepl { };
+
   runwayml = callPackage ../applications/graphics/runwayml {};
 
   uhubctl = callPackage ../tools/misc/uhubctl {};
