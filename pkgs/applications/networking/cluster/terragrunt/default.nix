@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.28.6";
+  version = "0.28.7";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
@@ -21,6 +21,14 @@ buildGoModule rec {
     "-w"
     "-X main.VERSION=v${version}"
   ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/terragrunt --help
+    $out/bin/terragrunt --version | grep "v${version}"
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://terragrunt.gruntwork.io";
