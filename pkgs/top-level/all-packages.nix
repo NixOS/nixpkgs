@@ -27324,6 +27324,10 @@ in
 
   typespeed = callPackage ../games/typespeed { };
 
+  uchess = callPackage ../games/uchess {
+    buildGoModule = buildGo116Module;
+  };
+
   udig = callPackage ../applications/gis/udig { };
 
   ufoai = callPackage ../games/ufoai { };
