@@ -643,7 +643,12 @@ let
       XZ_DEC_TEST              = option no;
     };
 
-    criu = optionalAttrs (features.criu or false) ({
+    criu = if (versionAtLeast version "4.19") then {
+      # Unconditionally enabled, because it is required for CRIU and
+      # it provides the kcmp() system call that Mesa depends on.
+      CHECKPOINT_RESTORE  = yes;
+    } else optionalAttrs (features.criu or false) ({
+      # For older kernels, CHECKPOINT_RESTORE is hidden behind EXPERT.
       EXPERT              = yes;
       CHECKPOINT_RESTORE  = yes;
     } // optionalAttrs (features.criu_revert_expert or true) {
