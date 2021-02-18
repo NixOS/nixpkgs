@@ -69,7 +69,7 @@ buildPythonPackage rec {
   '';
 
   # Ignore tests which require network access
-  disabledTestFiles = [
+  disabledTestPaths = [
     "tests/unit/create/test_creator.py"
     "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
   ];
