@@ -3,7 +3,7 @@
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
-, enableStatic ? !enableShared,
+, enableStatic ? !enableShared
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +52,10 @@ stdenv.mkDerivation rec {
     (lib.withFeature icuSupport "icu")
     (lib.withFeatureAs pythonSupport "python" python)
   ];
+
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
 
   enableParallelBuilding = true;
 
