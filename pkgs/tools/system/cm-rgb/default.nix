@@ -6,8 +6,10 @@
 , wrapGAppsHook
 , click
 , hidapi
+, lm_sensors
 , psutil
 , pygobject3
+, pysensors
 }:
 
 buildPythonApplication rec {
@@ -32,8 +34,10 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     click
     hidapi
+    lm_sensors
     psutil
     pygobject3
+    pysensors
   ];
 
   postInstall = ''
