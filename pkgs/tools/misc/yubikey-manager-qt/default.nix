@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pythonPackages.python qtbase qtgraphicaleffects qtquickcontrols qtquickcontrols2 pyotherside ];
 
-  enableParallelBuilding = true;
-
   pythonPath = [ yubikey-manager ];
 
   dontWrapQtApps = true;
