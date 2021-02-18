@@ -504,6 +504,7 @@ rstacruz/vim-closer
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
+sainnhe/sonokai
 sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool

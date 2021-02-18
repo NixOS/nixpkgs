@@ -3815,6 +3815,18 @@ let
     meta.homepage = "https://github.com/gorkunov/smartpairs.vim/";
   };
 
+  sonokai = buildVimPluginFrom2Nix {
+    pname = "sonokai";
+    version = "2021-02-14";
+    src = fetchFromGitHub {
+      owner = "sainnhe";
+      repo = "sonokai";
+      rev = "522571a37d78afe13538a22cfecb8ed9cccb21a3";
+      sha256 = "14jhx428lk4q0s6qgj97q4s03msqhnli8l71rw6541m7gcdhjvjj";
+    };
+    meta.homepage = "https://github.com/sainnhe/sonokai/";
+  };
+
   sourcemap-vim = buildVimPluginFrom2Nix {
     pname = "sourcemap-vim";
     version = "2012-09-19";
