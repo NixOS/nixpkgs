@@ -48,6 +48,7 @@ Options:
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
+      --fetch-lfs     Fetch files from LFS.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --quiet         Only print the final json summary.
 "
