@@ -1,5 +1,5 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, eigen, suitesparse, libGLU
-, qtbase, libqglviewer, makeWrapper }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, eigen, suitesparse, blas
+, lapack, libGLU, qtbase, libqglviewer, makeWrapper }:
 
 mkDerivation rec {
   pname = "g2o";
@@ -18,7 +18,7 @@ mkDerivation rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ eigen suitesparse libGLU qtbase libqglviewer ];
+  buildInputs = [ eigen suitesparse blas lapack libGLU qtbase libqglviewer ];
 
   # Silence noisy warning
   CXXFLAGS = "-Wno-deprecated-copy";
