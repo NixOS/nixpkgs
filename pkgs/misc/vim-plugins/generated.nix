@@ -5762,6 +5762,18 @@ let
     meta.homepage = "https://github.com/mhinz/vim-grepper/";
   };
 
+  vim-gruvbox8 = buildVimPluginFrom2Nix {
+    pname = "vim-gruvbox8";
+    version = "2021-02-06";
+    src = fetchFromGitHub {
+      owner = "lifepillar";
+      repo = "vim-gruvbox8";
+      rev = "a03834cdaa686ef2758f670924fc048148dfd297";
+      sha256 = "1yh5p8s17kd1z4jqk6gd6vmap7f5jwqwhfbq2yi2xi3lb6xpvjc3";
+    };
+    meta.homepage = "https://github.com/lifepillar/vim-gruvbox8/";
+  };
+
   vim-gui-position = buildVimPluginFrom2Nix {
     pname = "vim-gui-position";
     version = "2019-06-06";
