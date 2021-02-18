@@ -13,5 +13,6 @@ buildPythonPackage rec {
     description = "A parser and builder for purl aka. Package URLs for Python 2 and 3.";
     homepage = "https://github.com/package-url/packageurl-python";
     license = licenses.mit;
+    maintainers = with maintainers; [ armijnhemel ];
   };
 }
