@@ -5,8 +5,6 @@ stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
-  patches = [ ./makefile.patch ];
-
   src = fetchurl {
     url = "mirror://sourceforge/project/ncompress/${name}.tar.gz";
     sha256 = "004r086c11sw9vg2j3srgxpz98w8pycjl33bk3pgqnd0s92igrn4";
