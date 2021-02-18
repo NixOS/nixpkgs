@@ -1403,6 +1403,8 @@ in
 
   gopass = callPackage ../tools/security/gopass { };
 
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
+
   gospider = callPackage ../tools/security/gospider { };
 
   browserpass = callPackage ../tools/security/browserpass { };
