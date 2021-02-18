@@ -734,6 +734,12 @@
     githubId = 1296771;
     name = "Anders Riutta";
   };
+  armijnhemel = {
+    email = "armijn@tjaldur.nl";
+    github = "armijnhemel";
+    githubId = 10587952;
+    name = "Armijn Hemel";
+  };
   arnarg = {
     email = "arnarg@fastmail.com";
     github = "arnarg";
