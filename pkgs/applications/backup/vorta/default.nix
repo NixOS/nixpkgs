@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    sha256 = "1amq0fz3xrnxplzd6ih2azx6b4k1w496kcr7f8agfp617f5rkwa5";
+    sha256 = "sha256-nnnGqkT4sAunaT7GPysYQGeV34ZrRFaHK/gJRafvR3U=";
   };
 
   postPatch = ''
