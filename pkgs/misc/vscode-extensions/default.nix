@@ -357,6 +357,8 @@ let
         };
       };
 
+      hashicorp.terraform = callPackage ./terraform {};
+
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "beautify";
