@@ -22,12 +22,12 @@ let
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.5.8";
+  version = "2.5.9";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0zj1g24fi4m84p6zj9yk55v8sbhn0jdpdhp33y12d2msz0qwp2cw";
+    sha256 = "1311dab9cil8hl1qlh01ynrczyjbldcsq1l6ibh818wb5lsgvvl2";
   };
 
   postPatch = ''
