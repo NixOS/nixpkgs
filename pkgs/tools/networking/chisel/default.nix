@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "chisel";
-  version = "1.7.4";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "jpillora";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1vg9tJLYbW8pfPpw3gQ15c9Kwj2lFfblMRhOK4yWKb8=";
+    sha256 = "sha256-hUurgwbSUcNZiSi+eVTG/Ija/yxPeWuvEE5pUiG7Dls=";
   };
 
   vendorSha256 = "sha256-GzsQ6LXxe9UQc13XbsYFOWPe0EzlyHechchKc6xDkAc=";
