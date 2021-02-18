@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+  dontWrapQtApps = true;
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ perl gmp mpfr ]
     ++ lib.optional enableGist qtbase;

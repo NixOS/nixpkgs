@@ -2,6 +2,8 @@
 , xkeyboard_config, libxcb, libxml2
 , python3
 , libX11
+# To enable the "interactive-wayland" subcommand of xkbcli:
+, withWaylandSupport ? false, wayland, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
@@ -13,18 +15,23 @@ stdenv.mkDerivation rec {
     sha256 = "0lmwglj16anhpaq0h830xsl1ivknv75i4lir9bk88aq73s2jy852";
   };
 
+  patches = [
+    ./fix-cross-compilation.patch
+  ];
+
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config yacc doxygen ];
-  buildInputs = [ xkeyboard_config libxcb libxml2 ];
+  nativeBuildInputs = [ meson ninja pkg-config yacc doxygen ]
+    ++ lib.optional withWaylandSupport wayland;
+  buildInputs = [ xkeyboard_config libxcb libxml2 ]
+    ++ lib.optionals withWaylandSupport [ wayland wayland-protocols ];
   checkInputs = [ python3 ];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
-    "-Denable-wayland=false"
-    "-Denable-xkbregistry=false" # Optional, separate library (TODO: Install into extra output)
+    "-Denable-wayland=${lib.boolToString withWaylandSupport}"
   ];
 
   doCheck = true;

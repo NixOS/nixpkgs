@@ -52,6 +52,8 @@ let
 
     buildInputs = [ qtbase qtlocation libXcomposite ];
 
+    dontWrapQtApps = true;
+
     pluginsSubdir = "lib/qt-${qtbase.qtCompatVersion}/plugins";
 
     installPhase = ''

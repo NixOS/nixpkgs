@@ -1,6 +1,9 @@
 { lib, stdenv, fetchurl, fetchzip, pkgs }:
 
 let
+  macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
+  developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
+
   # This attrset can in theory be computed automatically, but for that to work nicely we need
   # import-from-derivation to work properly. Currently it's rather ugly when we try to bootstrap
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
@@ -56,6 +59,9 @@ let
       # neither of those versions are publicly available.
       libplatform   = "125";
       mDNSResponder = "625.41.2";
+
+      # IOKit contains a set of packages with different versions, so we don't have a general version
+      IOKit         = "";
 
       libutil       = "43";
       libunwind     = "35.3";
@@ -135,35 +141,65 @@ let
     };
   };
 
-  fetchApple = version: sha256: name: let
+  fetchApple' = pname: version: sha256: let
     # When cross-compiling, fetchurl depends on libiconv, resulting
     # in an infinite recursion without this. It's not clear why this
     # worked fine when not cross-compiling
-    fetch = if name == "libiconv"
+    fetch = if pname == "libiconv"
       then stdenv.fetchurlBoot
       else fetchurl;
   in fetch {
-    url = "http://www.opensource.apple.com/tarballs/${name}/${name}-${versions.${version}.${name}}.tar.gz";
+    url = "http://www.opensource.apple.com/tarballs/${pname}/${pname}-${version}.tar.gz";
     inherit sha256;
   };
 
-  appleDerivation_ = name: version: sha256: attrs: stdenv.mkDerivation ({
-    inherit version;
-    name = "${name}-${version}";
-    enableParallelBuilding = true;
-    meta = {
-      platforms = lib.platforms.darwin;
-    };
-  } // (if attrs ? srcs then {} else {
-    src  = fetchApple version sha256 name;
-  }) // attrs);
+  fetchApple = sdkName: sha256: pname: let
+    version = versions.${sdkName}.${pname};
+  in fetchApple' pname version sha256;
 
-  applePackage = namePath: version: sha256:
-    let
-      name = builtins.elemAt (lib.splitString "/" namePath) 0;
-      appleDerivation = appleDerivation_ name version sha256;
-      callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation name version; });
-    in callPackage (./. + "/${namePath}");
+  appleDerivation' = pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
+    inherit pname version;
+
+    src = if attrs ? srcs then null else (fetchApple' pname version sha256);
+
+    enableParallelBuilding = true;
+
+    # In rare cases, APPLE may drop some headers quietly on new release.
+    doInstallCheck = attrs ? appleHeaders;
+    passAsFile = [ "appleHeaders" ];
+    installCheckPhase = ''
+      cd $out/include
+
+      result=$(diff -u "$appleHeadersPath" <(find * -type f | sort) --label "Listed in appleHeaders" --label "Found in \$out/include" || true)
+
+      if [ -z "$result" ]; then
+        echo "Apple header list is matched."
+      else
+        echo >&2 "\
+      Apple header list is inconsistent, please ensure no header file is unexpectedly dropped.
+      $result
+      "
+        exit 1
+      fi
+    '';
+
+  } // attrs // {
+    meta = (with lib; {
+      platforms = platforms.darwin;
+      license = licenses.apsl20;
+    }) // (attrs.meta or {});
+  });
+
+  applePackage' = namePath: version: sdkName: sha256: let
+    pname = builtins.head (lib.splitString "/" namePath);
+    appleDerivation = appleDerivation' pname version sdkName sha256;
+    callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation; });
+  in callPackage (./. + "/${namePath}");
+
+  applePackage = namePath: sdkName: sha256: let
+    pname = builtins.head (lib.splitString "/" namePath);
+    version = versions.${sdkName}.${pname};
+  in applePackage' namePath version sdkName sha256;
 
   IOKitSpecs = {
     IOAudioFamily                        = fetchApple "osx-10.10.5" "0ggq7za3iq8g02j16rj67prqhrw828jsw3ah3bxq8a1cvr55aqnq";
@@ -192,10 +228,10 @@ let
   # Only used for bootstrapping. It’s convenient because it was the last version to come with a real makefile.
   adv_cmds-boot = applePackage "adv_cmds/boot.nix" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 
-  packages = {
+  # TODO: shorten this list, we should cut down to a minimum set of bootstrap or necessary packages here.
+  stubPackages = {
     inherit (adv_cmds-boot) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
-    bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "0sgsqjcxbdm2g2zfpc50mzmk4b4ldyw7xvvkwiayhpczg1fga4ff" {};
@@ -207,7 +243,6 @@ let
     dtrace          = applePackage "dtrace"            "osx-10.12.6"     "0hpd6348av463yqf70n3xkygwmf1i5zza8kps4zys52sviqz3a0l" {};
     dyld            = applePackage "dyld"              "osx-10.12.6"     "0q4jmk78b5ajn33blh4agyq6v2a63lpb3fln78az0dy12bnp1qqk" {};
     eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "0iw0qdib59hihyx2275rwq507bq2a06gaj8db4a8z1rkaj1frskh" {};
-    ICU             = applePackage "ICU"               "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" {};
     IOKit           = applePackage "IOKit"             "osx-10.11.6"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};
     libauto         = applePackage "libauto"           "osx-10.9.5"      "17z27yq5d7zfkwr49r7f0vn9pxvj95884sd2k6lq6rfaz9gxqhy3" {};
@@ -254,6 +289,8 @@ let
 
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
-    Security      = applePackage "Security/boot.nix" "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+    Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
   };
+
+  packages = developerToolsPackages_11_3_1 // macosPackages_11_0_1 // stubPackages;
 in packages

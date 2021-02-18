@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, nspr, perl, zlib, sqlite, darwin, fixDarwinDylibNames, buildPackages, ninja
+{ lib, stdenv, fetchurl, nspr, perl, zlib
+, sqlite, ninja
+, darwin, fixDarwinDylibNames, buildPackages
+, useP11kit ? true, p11-kit
 , # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
@@ -137,6 +140,11 @@ in stdenv.mkDerivation rec {
         -e "s,@MOD_PATCH_VERSION@,$NSS_PATCH_VERSION," \
         pkg/pkg-config/nss-config.in > $out/bin/nss-config
     chmod 0755 $out/bin/nss-config
+  '';
+
+  postInstall = lib.optionalString useP11kit ''
+    # Replace built-in trust with p11-kit connection
+    ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi.so
   '';
 
   postFixup = let

@@ -35,6 +35,7 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
   postPatch = ''
     substituteInPlace qscintilla.pro \

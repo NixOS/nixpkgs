@@ -57,6 +57,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls openssl libgcrypt libgpgerror ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "OS abstraction functions used by aqbanking and related tools";
     homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=01&showall=1";

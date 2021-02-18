@@ -35,8 +35,12 @@ in with py.pkgs; buildPythonApplication rec {
     sha256 = "sha256-SwYL2ViwazP2MDZbW9cRThvg6jVOMlkfsbpY6QDsjQY=";
   };
 
+  # https://github.com/aws/aws-cli/issues/4837
+  # https://github.com/aws/aws-cli/pull/5887
   postPatch = ''
-    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
+    substituteInPlace setup.py \
+      --replace "docutils>=0.10,<0.16" "docutils>=0.10" \
+      --replace "PyYAML>=3.10,<5.4" "PyYAML>=3.10"
   '';
 
   # No tests included

@@ -23,6 +23,8 @@ mkDerivation rec {
   # Silence noisy warning
   CXXFLAGS = "-Wno-deprecated-copy";
 
+  dontWrapQtApps = true;
+
   cmakeFlags = [
     # Detection script is broken
     "-DQGLVIEWER_INCLUDE_DIR=${libqglviewer}/include/QGLViewer"

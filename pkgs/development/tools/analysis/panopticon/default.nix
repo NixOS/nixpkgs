@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage rec {
      git
   ];
 
+  dontWrapQtApps = true;
+
   cargoSha256 = "1hdsn011y9invfy7can8c02zwa7birj9y1rxhrj7wyv4gh3659i0";
   doCheck = false;
 

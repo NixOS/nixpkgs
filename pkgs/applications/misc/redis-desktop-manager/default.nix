@@ -32,6 +32,7 @@ mkDerivation rec {
   ];
 
   dontUseQmakeConfigure = true;
+  dontWrapQtApps = true;
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated" ];
 

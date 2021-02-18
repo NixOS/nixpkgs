@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "geos-3.8.1";
+  name = "geos-3.9.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geos/${name}.tar.bz2";
-    sha256 = "1xqpmr10xi0n9sj47fbwc89qb0yr9imh4ybk0jsxpffy111syn22";
+    sha256 = "sha256-vYCCzxL0XydjAZPHi9taPLqEe4HnKyAmg1bCpPwGUmk=";
   };
 
   enableParallelBuilding = true;

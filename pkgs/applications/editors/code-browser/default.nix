@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withQt [ "UI=qt" ]
   ++ lib.optionals withGtk [ "UI=gtk" ];
+
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Folding text editor, designed to hierarchically structure any kind of text file and especially source code";
     homepage = "https://tibleiz.net/code-browser/";

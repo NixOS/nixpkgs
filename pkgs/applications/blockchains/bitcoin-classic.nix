@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  dontWrapQtApps = true;
+
   meta = {
     description = "Peer-to-peer electronic cash system (Classic client)";
     longDescription= ''

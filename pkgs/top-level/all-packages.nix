@@ -15722,9 +15722,7 @@ in
 
   libxmp = callPackage ../development/libraries/libxmp { };
 
-  libxslt = callPackage ../development/libraries/libxslt {
-    python = if stdenv.isDarwin then python2 else python3;
-  };
+  libxslt = callPackage ../development/libraries/libxslt { };
 
   libxsmm = callPackage ../development/libraries/libxsmm { };
 
@@ -19688,6 +19686,9 @@ in
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
+
+  musl-fts = callPackage ../os-specific/linux/musl-fts { };
+  musl-obstack = callPackage ../os-specific/linux/musl-obstack { };
 
   nushell = callPackage ../shells/nushell {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;

@@ -149,7 +149,7 @@ let
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
-        inherit developerBuild decryptSslTraffic;
+        inherit debug developerBuild decryptSslTraffic;
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
@@ -199,6 +199,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
+          inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;

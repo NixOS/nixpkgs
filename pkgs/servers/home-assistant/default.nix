@@ -9,8 +9,7 @@
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
-, packageOverrides ? self: super: {
-}
+, packageOverrides ? self: super: {}
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:

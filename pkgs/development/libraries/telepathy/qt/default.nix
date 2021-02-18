@@ -20,6 +20,8 @@ in stdenv.mkDerivation rec {
   # On 0.9.7, they do not even build with QT4
   cmakeFlags = lib.optional (!doCheck) "-DENABLE_TESTS=OFF";
 
+  dontWrapQtApps = true;
+
   doCheck = false; # giving up for now
 
   meta = with lib; {

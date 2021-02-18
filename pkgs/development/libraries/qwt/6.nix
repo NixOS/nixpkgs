@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Qt widgets for technical applications";
     homepage = "http://qwt.sourceforge.net/";

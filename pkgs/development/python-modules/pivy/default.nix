@@ -29,8 +29,7 @@ buildPythonPackage rec {
   ];
 
   dontUseQmakeConfigure = true;
-  dontUseCmakeConfigure = true;
-
+  dontWrapQtApps =true;
   doCheck = false;
 
   postPatch = ''

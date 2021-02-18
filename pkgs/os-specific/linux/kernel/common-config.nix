@@ -172,6 +172,8 @@ let
                                               (whenAtLeast "4.17" yes) ];
       NF_TABLES_NETDEV            = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
+      NFT_REJECT_NETDEV           = whenAtLeast "5.11" module;
+
       # IP: Netfilter Configuration
       NF_TABLES_IPV4              = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
@@ -248,6 +250,8 @@ let
       DRM_AMDGPU_SI = whenAtLeast "4.9" yes;
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
+      # amdgpu support for RX6000 series
+      DRM_AMD_DC_DCN3_0 = whenAtLeast "5.9.12" yes;
       # Allow device firmware updates
       DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
@@ -356,6 +360,7 @@ let
       F2FS_FS             = module;
       F2FS_FS_SECURITY    = option yes;
       F2FS_FS_ENCRYPTION  = option yes;
+      F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
       NFSD_PNFS              = whenBetween "4.0" "4.6" yes;

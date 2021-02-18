@@ -57,6 +57,8 @@ in stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$(pwd)/lib";
   '';
 
+  dontWrapQtApps = true;
+
   # Shared libraries don't work, because of rpath troubles with the current
   # nixpkgs cmake approach. It wants to call a binary at build time, just
   # built and requiring one of the shared objects.

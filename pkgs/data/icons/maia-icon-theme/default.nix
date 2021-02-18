@@ -35,6 +35,8 @@ stdenv.mkDerivation {
 
   dontDropIconThemeCache = true;
 
+  dontWrapQtApps = true;
+
   postInstall = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme

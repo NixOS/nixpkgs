@@ -23,9 +23,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ ninja python3 ];
   buildInputs = [ curl libxml2 objc4 ICU ];
 
-  sourceRoot = "source/CoreFoundation";
+  postPatch = ''
+    cd CoreFoundation
 
-  patchPhase = ''
     cp ${sysdir-free-system-directories} Base.subproj/CFSystemDirectories.c
 
     # In order, since I can't comment individual lines:
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     # Fix sandbox impurities.
     substituteInPlace ../lib/script.py \
       --replace '/bin/cp' cp
+    patchShebangs --build ../configure
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \

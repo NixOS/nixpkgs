@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     ++ (lib.optionals withQt4 [ qt4 ])
     ++ (lib.optionals withQt5 (with qt5; [ qtbase qttools ]));
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "http://drobilla.net/software/suil";
     description = "A lightweight C library for loading and wrapping LV2 plugin UIs";

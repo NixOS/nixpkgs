@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [libpulseaudio alsaLib pkg-config qt5.qtbase];
   CFLAGS   ="-lasound -lpulse-simple";
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "sound characters as Morse code on the soundcard or console speaker";
     longDescription = ''
