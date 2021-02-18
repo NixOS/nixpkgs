@@ -73,8 +73,8 @@ for arg; do
             --quiet) QUIET=true;;
             --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
-            --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --fetch-lfs) fetchLFS=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
             *)
