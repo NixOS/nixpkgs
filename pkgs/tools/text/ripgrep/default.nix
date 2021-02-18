@@ -37,6 +37,13 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh complete/_rg
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    file="$(mktemp)"
+    echo "abc\nbcd\ncde" > "$file"
+    $out/bin/rg -N 'bcd' "$file" && $out/bin/rg -N 'cd' "$file"
+  '';
+
   meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
