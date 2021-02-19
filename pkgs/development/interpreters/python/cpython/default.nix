@@ -225,6 +225,9 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals (isPy36) [
     # Backport a fix for ctypes.util.find_library.
     ./3.6/find_library.patch
+  ] ++ optionals (isPy38 || isPy39 || isPy310) [
+    # CVE-2021-3177: Buffer overflow in the PyCArg_repr() function in _ctypes/callproc.c.
+    (./. + "/${sourceVersion.major}.${sourceVersion.minor}/CVE-2021-3177.patch")
   ];
 
   postPatch = ''
