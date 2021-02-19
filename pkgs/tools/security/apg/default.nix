@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     substituteInPlace Makefile --replace /usr/local "$out"
   '';
-  makeFlags = lib.optionals stdenv.isDarwin ["CC=cc"];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   patches = [
     ./apg.patch

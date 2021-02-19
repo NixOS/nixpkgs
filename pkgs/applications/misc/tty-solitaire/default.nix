@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = "sed -i -e '/^CFLAGS *?= *-g *$/d' Makefile";
 
-  makeFlags = [ "CC=cc" "PREFIX=${placeholder "out"}" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "Klondike Solitaire in your ncurses terminal";
