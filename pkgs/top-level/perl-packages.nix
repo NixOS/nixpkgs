@@ -14001,6 +14001,25 @@ let
     };
   };
 
+  TestPostgreSQL = buildPerlModule {
+    pname = "Test-PostgreSQL";
+    version = "1.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TJ/TJC/Test-PostgreSQL-1.27.tar.gz";
+      sha256 = "b1bd231693100cc40905fb0ba3173173201621de9c8301f21c5b593b0a46f907";
+    };
+    buildInputs = [ ModuleBuildTiny TestSharedFork pkgs.postgresql ];
+    propagatedBuildInputs = [ DBDPg DBI FileWhich FunctionParameters Moo TieHashMethod TryTiny TypeTiny ];
+
+    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+
+    meta = {
+      homepage = https://github.com/TJC/Test-postgresql;
+      description = "PostgreSQL runner for tests";
+      license = with lib.licenses; [ artistic2 ];
+    };
+  };
+
   TestUseAllModules = buildPerlPackage {
     pname = "Test-UseAllModules";
     version = "0.17";
