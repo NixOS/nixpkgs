@@ -1,26 +1,6 @@
 { self
-, super
 , openssl
 }:
-
-let
-  inherit (super)
-    janePackage
-    ocamlbuild
-    angstrom
-    cryptokit
-    ctypes
-    magic-mime
-    ocaml-migrate-parsetree
-    octavius
-    ounit
-    ppx_deriving
-    re
-    num
-    ppxlib
-    ;
-
-in
 
 with self;
 

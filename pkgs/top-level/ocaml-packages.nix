@@ -1255,23 +1255,20 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
-      super = self;
-      self = self.janeStreet;
+      inherit self;
       inherit (pkgs) openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
-      super = self // {
+      self = self // {
         ppxlib = ppxlib.override { version = "0.8.1"; };
       };
-      self = self.janeStreet;
       inherit (pkgs) openssl;
     }
     else import ../development/ocaml-modules/janestreet {
-      super = self // {
+      self = self // {
         ppxlib = ppxlib.override { version = "0.8.1"; };
       };
-      self = self.janeStreet;
       inherit (pkgs) openssl;
     };
 

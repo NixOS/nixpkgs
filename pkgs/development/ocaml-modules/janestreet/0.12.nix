@@ -1,18 +1,6 @@
 { self
-, super
 , openssl
 }:
-
-let
-  inherit (super)
-    janePackage
-    ctypes
-    num
-    octavius
-    ppxlib
-    re
-    ;
-in
 
 with self;
 
