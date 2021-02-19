@@ -103,6 +103,9 @@ let
 
       # Patch is likely to go away in the next release (if there is any)
       ./CVE-2019-20907.patch
+
+      ./CVE-2021-3177.patch
+
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
