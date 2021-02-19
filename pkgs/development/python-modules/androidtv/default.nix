@@ -7,7 +7,6 @@
 , mock
 , pure-python-adb
 , pytestCheckHook
-, python
 }:
 
 buildPythonPackage rec {

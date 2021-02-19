@@ -22,7 +22,6 @@
 , gnome-color-manager
 , gnome-desktop
 , gnome-online-accounts
-, gnome-session
 , gnome-settings-daemon
 , gnome3
 , grilo

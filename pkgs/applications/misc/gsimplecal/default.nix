@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gsimplecal";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchurl {
     url = "https://github.com/dmedvinsky/gsimplecal/archive/v${version}.tar.gz";
-    sha256 = "1sa05ifjp41xipfspk5n6l3wzpzmp3i45q88l01p4l6k6drsq336";
+    sha256 = "sha256-f19cnTX83LZT2d01B1EdWSaHcfHqpFPTo5glYkAokq8=";
   };
 
   postPatch = ''

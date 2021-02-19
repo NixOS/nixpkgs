@@ -2352,7 +2352,9 @@ in
 
   qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
 
-  fwup = callPackage ../tools/misc/fwup { };
+  fwup = callPackage ../tools/misc/fwup {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
+  };
 
   fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
 
@@ -13782,6 +13784,8 @@ in
 
   ganv = callPackage ../development/libraries/ganv { };
 
+  garble = callPackage ../build-support/go/garble.nix { };
+
   gcab = callPackage ../development/libraries/gcab { };
 
   gcovr = with python3Packages; toPythonApplication gcovr;
@@ -23571,6 +23575,8 @@ in
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
+  mbrola = callPackage ../applications/audio/mbrola { };
+
   mcomix3 = callPackage ../applications/graphics/mcomix3 {};
 
   mcpp = callPackage ../development/compilers/mcpp { };
@@ -24851,6 +24857,8 @@ in
   scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
+
+  secretscanner = callPackage ../tools/security/secretscanner { };
 
   sent = callPackage ../applications/misc/sent { };
 

@@ -7,7 +7,6 @@
 , nbformat
 , sphinx
 , traitlets
-, python
 , isPy3k
 }:
 
