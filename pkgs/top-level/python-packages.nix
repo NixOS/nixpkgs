@@ -6636,6 +6636,8 @@ in {
 
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
+  pyxiaomigateway = callPackage ../development/python-modules/pyxiaomigateway { };
+
   pyxl3 = callPackage ../development/python-modules/pyxl3 { };
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml { });
