@@ -16,7 +16,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0xy1nvqrnifx46g8ch69pk31by0va6hn10wpi1fkrsrgncanjjh1";
   };
 
-  buildInputs = [ unzip xz dpkg libxslt python setuptools makeWrapper curl gnupg diffutils ] ++
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ unzip xz dpkg libxslt python setuptools curl gnupg diffutils ] ++
     (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
 
   preConfigure = ''

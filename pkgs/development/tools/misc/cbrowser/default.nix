@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./backslashes-quotes.diff ];
 
-  buildInputs = [ tk makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tk ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/${name}

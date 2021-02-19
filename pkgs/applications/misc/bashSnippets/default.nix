@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     sha256 = "044nxgd3ic2qr6hgq5nymn3dyf5i4s8mv5z4az6jvwlrjnvbg8cp";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   patchPhase = ''
     patchShebangs install.sh

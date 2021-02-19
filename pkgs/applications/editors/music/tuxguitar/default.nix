@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = metadata.sha256;
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin

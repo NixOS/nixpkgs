@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "16pcyvyhwsx34i0cjkkx906lmrwdd9gvznvqdwlad4ha8l8f8z42";
   };
 
-  buildInputs = [ makeWrapper coreutils gawk util-linux ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ coreutils gawk util-linux ];
 
   installPhase = ''
     install -Dm555 ovpn-learnaddress $out/libexec/openvpn/openvpn-learnaddress

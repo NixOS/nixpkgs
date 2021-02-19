@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   };
 
   dontBuild = true;
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ dpkg makeWrapper ];
 
   unpackPhase = ''
     dpkg -x $src .

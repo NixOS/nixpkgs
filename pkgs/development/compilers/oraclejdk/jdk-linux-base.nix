@@ -83,10 +83,8 @@ let result = stdenv.mkDerivation rec {
       sha256 = sha256.${stdenv.hostPlatform.system};
     };
 
-  nativeBuildInputs = [ file ]
+  nativeBuildInputs = [ file makeWrapper ]
     ++ lib.optional installjce unzip;
-
-  buildInputs = [ makeWrapper ];
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;

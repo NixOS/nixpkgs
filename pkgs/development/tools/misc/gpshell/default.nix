@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "19a77zvyf2vazbv17185s4pynhylk2ky8vhl4i8pg9zww29sicqi";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ globalplatform pcsclite makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ globalplatform pcsclite ];
 
   postFixup = ''
     wrapProgram "$out/bin/gpshell" --prefix LD_LIBRARY_PATH : "${gppcscconnectionplugin}/lib"

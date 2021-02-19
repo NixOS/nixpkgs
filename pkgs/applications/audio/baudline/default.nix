@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     else
       throw "baudline isn't supported (yet?) on ${stdenv.hostPlatform.system}";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # Prebuilt binary distribution.
   # "patchelf --set-rpath" seems to break the application (cannot start), using

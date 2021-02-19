@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mfv1b40n/opXdyj6IXWVf/32sWlS+/DbXIRwE1zX4KM=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     # executables
     install -Dt $out/bin os-prober linux-boot-prober

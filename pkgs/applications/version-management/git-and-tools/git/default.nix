@@ -67,10 +67,10 @@ stdenv.mkDerivation {
         --subst-var-by gettext ${gettext}
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl ]
+  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
     ++ lib.optionals withManual [ asciidoctor texinfo xmlto docbook2x
          docbook_xsl docbook_xsl_ns docbook_xml_dtd_45 libxslt ];
-  buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
+  buildInputs = [curl openssl zlib expat cpio libiconv]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]

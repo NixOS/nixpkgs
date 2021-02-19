@@ -17,7 +17,7 @@ let
   tesseractWithData = tesseractBase.overrideAttrs (_: {
     inherit tesseractBase tessdata;
 
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     buildCommand = ''
       makeWrapper {$tesseractBase,$out}/bin/tesseract --set-default TESSDATA_PREFIX $out/share/tessdata

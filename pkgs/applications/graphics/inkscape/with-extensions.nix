@@ -10,7 +10,7 @@ symlinkJoin {
 
   paths = [ inkscape ] ++ inkscapeExtensions;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     rm -f $out/bin/inkscape

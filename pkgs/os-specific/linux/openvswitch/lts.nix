@@ -19,9 +19,8 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ autoconf libtool automake pkg-config  ];
-  buildInputs = [ makeWrapper util-linux openssl libcap_ng python2
-                  perl procps which ];
+  nativeBuildInputs = [ autoconf libtool automake pkg-config makeWrapper ];
+  buildInputs = [ util-linux openssl libcap_ng python2 perl procps which ];
 
   preConfigure = "./boot.sh";
 

@@ -52,7 +52,7 @@ let
       url = "https://download3.vmware.com/software/view/viewclients/CART21FQ4/VMware-Horizon-Client-Linux-2012-8.1.0-17349998.tar.gz";
       sha256 = "0afda1f3116e75a4e7f89990d8ee60ccea5f3bb8a2360652162fa11c795724ce";
     };
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
       mkdir ext $out
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf

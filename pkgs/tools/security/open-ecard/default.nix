@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   phases = "installPhase";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   desktopItem = makeDesktopItem {
     name = appName;

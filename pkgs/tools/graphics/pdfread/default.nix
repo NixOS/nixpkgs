@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "0mzxpnk97f0ww5ds7h4wsval3g4lnrhv6rhspjs7cy4i41gmk8an";
   };
 
-  buildInputs = [ unzip python makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ unzip python ];
 
   broken = true; # Not found.
 

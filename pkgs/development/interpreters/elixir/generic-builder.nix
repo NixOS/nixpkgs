@@ -20,7 +20,8 @@ in
 
     inherit src version;
 
-    buildInputs = [ erlang makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ erlang ];
 
     LANG = "C.UTF-8";
     LC_TYPE = "C.UTF-8";
