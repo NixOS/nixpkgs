@@ -3,6 +3,7 @@
 # generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
 , generation
 , version, sha256
+, extraMeta ? {}
 , ...
 }:
 
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper coreutils ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv * $out
 
@@ -85,6 +88,8 @@ stdenv.mkDerivation rec {
     done
 
     wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
+
+    runHook postInstall
     '';
 
   passthru = {
@@ -104,5 +109,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = [ maintainers.roberth ];
-  };
+  } // extraMeta;
 }

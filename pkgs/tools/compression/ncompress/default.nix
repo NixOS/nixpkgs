@@ -1,12 +1,13 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "ncompress-5.0";
+  pname = "ncompress";
+  version = "5.0";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ncompress/${name}.tar.gz";
+    url = "mirror://sourceforge/project/ncompress/${pname}-${version}.tar.gz";
     sha256 = "004r086c11sw9vg2j3srgxpz98w8pycjl33bk3pgqnd0s92igrn4";
   };
 

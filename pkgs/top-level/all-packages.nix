@@ -6634,6 +6634,8 @@ in
     graphicalSupport = true;
   };
 
+  nmap-unfree = callPackage ../tools/security/nmap-unfree { };
+
   nmapsi4 = libsForQt514.callPackage ../tools/security/nmap/qt.nix { };
 
   nnn = callPackage ../applications/misc/nnn { };
@@ -27321,6 +27323,10 @@ in
   trigger = callPackage ../games/trigger { };
 
   typespeed = callPackage ../games/typespeed { };
+
+  uchess = callPackage ../games/uchess {
+    buildGoModule = buildGo116Module;
+  };
 
   udig = callPackage ../applications/gis/udig { };
 
