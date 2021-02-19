@@ -22085,6 +22085,19 @@ let
     doCheck = false; /* test fails on some machines */
   };
 
+  TieHashMethod = buildPerlPackage {
+    pname = "Tie-Hash-Method";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Tie-Hash-Method-0.02.tar.gz";
+      sha256 = "d513fbb51413f7ca1e64a1bdce6194df7ec6076dea55066d67b950191eec32a9";
+    };
+    meta = {
+      description = "Tied hash with specific methods overriden by callbacks";
+      license = with lib.licenses; [ artistic1 ];
+    };
+  };
+
   TieRefHash = buildPerlPackage {
     pname = "Tie-RefHash";
     version = "1.40";
