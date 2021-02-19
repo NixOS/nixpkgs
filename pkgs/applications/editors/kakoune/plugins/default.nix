@@ -1,7 +1,7 @@
-{ pkgs, parinfer-rust, rep }:
+{ pkgs, parinfer-rust, rep, kak-lsp }:
 
 {
-  inherit parinfer-rust rep;
+  inherit parinfer-rust rep kak-lsp;
 
   case-kak = pkgs.callPackage ./case.kak.nix { };
   kak-ansi = pkgs.callPackage ./kak-ansi.nix { };
