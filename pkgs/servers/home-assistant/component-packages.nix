@@ -499,7 +499,7 @@
     "mikrotik" = ps: with ps; [ librouteros ];
     "mill" = ps: with ps; [ ]; # missing inputs: millheater
     "min_max" = ps: with ps; [ ];
-    "minecraft_server" = ps: with ps; [ aiodns getmac ]; # missing inputs: mcstatus
+    "minecraft_server" = ps: with ps; [ aiodns getmac mcstatus ];
     "minio" = ps: with ps; [ minio ];
     "mitemp_bt" = ps: with ps; [ ]; # missing inputs: mitemp_bt
     "mjpeg" = ps: with ps; [ ];
