@@ -8910,6 +8910,20 @@ let
     };
   };
 
+  gotofile = buildPerlPackage {
+    pname = "goto-file";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/goto-file-0.005.tar.gz";
+      sha256 = "c6cdd5ee4a6cdcbdbf314d92a4f9985dbcdf9e4258048cae76125c052aa31f77";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Stop parsing the current file and move on to a different one";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Graph = buildPerlPackage {
     pname = "Graph";
     version = "0.9712";
