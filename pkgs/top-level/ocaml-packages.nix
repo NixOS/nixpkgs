@@ -1255,10 +1255,8 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
-      inherit alcotest angstrom angstrom-async base64 cryptokit ctypes
-        dune-configurator faraday inotify janePackage js_of_ocaml
-        js_of_ocaml-ppx lambdasoup magic-mime num octavius ounit
-        ppxlib re tyxml uri-sexp zarith;
+      super = self;
+      self = self.janeStreet;
       inherit (pkgs) openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
