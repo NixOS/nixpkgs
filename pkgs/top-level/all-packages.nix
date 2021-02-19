@@ -13782,6 +13782,8 @@ in
 
   ganv = callPackage ../development/libraries/ganv { };
 
+  garble = callPackage ../build-support/go/garble.nix { };
+
   gcab = callPackage ../development/libraries/gcab { };
 
   gcovr = with python3Packages; toPythonApplication gcovr;
