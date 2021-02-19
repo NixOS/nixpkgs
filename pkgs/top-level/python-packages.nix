@@ -2438,6 +2438,8 @@ in {
 
   fpylll = callPackage ../development/python-modules/fpylll { };
 
+  freebox-api = callPackage ../development/python-modules/freebox-api { };
+
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = if isPy27 then
