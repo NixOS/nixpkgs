@@ -19815,6 +19815,20 @@ let
     };
   };
 
+  Test2PluginMemUsage = buildPerlPackage {
+    pname = "Test2-Plugin-MemUsage";
+    version = "0.002003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-MemUsage-0.002003.tar.gz";
+      sha256 = "5e0662d5a823ae081641f5ce82843111eec1831cd31f883a6c6de54afdf87c25";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Collect and display memory usage information";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Test2PluginNoWarnings = buildPerlPackage {
      pname = "Test2-Plugin-NoWarnings";
      version = "0.09";
