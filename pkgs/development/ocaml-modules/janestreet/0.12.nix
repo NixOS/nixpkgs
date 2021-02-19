@@ -1,13 +1,22 @@
-{ janePackage
-, ctypes
-, num
-, octavius
-, ppxlib
-, re
+{ self
+, super
 , openssl
 }:
 
-rec {
+let
+  inherit (super)
+    janePackage
+    ctypes
+    num
+    octavius
+    ppxlib
+    re
+    ;
+in
+
+with self;
+
+{
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";

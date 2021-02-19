@@ -1261,9 +1261,11 @@ let
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
-      inherit ctypes janePackage num octavius re;
+      super = self // {
+        ppxlib = ppxlib.override { version = "0.8.1"; };
+      };
+      self = self.janeStreet;
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { version = "0.8.1"; };
     }
     else import ../development/ocaml-modules/janestreet {
       inherit janePackage ocamlbuild angstrom ctypes cryptokit;
