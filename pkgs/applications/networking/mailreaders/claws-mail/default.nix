@@ -76,6 +76,44 @@ let
       with python.pkgs; [ python wrapPython pygobject3 ]
     else
       with python.pkgs; [ python wrapPython pygtk pygobject2 ];
+
+  features = [
+    { flags = [ "acpi_notifier-plugin" ]; enabled = enablePluginAcpiNotifier; }
+    { flags = [ "address_keeper-plugin" ]; enabled = enablePluginAddressKeeper; }
+    { flags = [ "archive-plugin" ]; enabled = enablePluginArchive; deps = [ libarchive ]; }
+    { flags = [ "att_remover-plugin" ]; enabled = enablePluginAttRemover; }
+    { flags = [ "attachwarner-plugin" ]; enabled = enablePluginAttachWarner; }
+    { flags = [ "bogofilter-plugin" ]; enabled = enablePluginBogofilter; }
+    { flags = [ "bsfilter-plugin" ]; enabled = enablePluginBsfilter; }
+    { flags = [ "clamd-plugin" ]; enabled = enablePluginClamd; }
+    { flags = [ "dbus" ]; enabled = enableDbus; deps = [ dbus dbus-glib ]; }
+    { flags = [ "dillo-plugin" ]; enabled = enablePluginDillo; }
+    { flags = [ "enchant" ]; enabled = enableEnchant; deps = [ enchant ]; }
+    { flags = [ "fetchinfo-plugin" ]; enabled = enablePluginFetchInfo; }
+    { flags = [ "gnutls" ]; enabled = enableGnuTLS; deps = [ gnutls ]; }
+    { flags = [ "ldap" ]; enabled = enableLdap; deps = [ openldap ]; }
+    { flags = [ "libetpan" ]; enabled = enableLibetpan; deps = [ libetpan ]; }
+    { flags = [ "libravatar-plugin" ]; enabled = enablePluginLibravatar; }
+    { flags = [ "libsm" ]; enabled = enableLibSM; deps = [ libSM ]; }
+    { flags = [ "litehtml_viewer-plugin" ]; enabled = enablePluginLitehtmlViewer; deps = [ gumbo ]; }
+    { flags = [ "mailmbox-plugin" ]; enabled = enablePluginMailmbox; }
+    { flags = [ "managesieve-plugin" ]; enabled = enablePluginManageSieve; }
+    { flags = [ "networkmanager" ]; enabled = enableNetworkManager; deps = [ networkmanager ]; }
+    { flags = [ "newmail-plugin" ]; enabled = enablePluginNewMail; }
+    { flags = [ "notification-plugin" ]; enabled = enablePluginNotification; deps = [ libnotify ] ++ [(if useGtk3 then libcanberra-gtk3 else libcanberra-gtk2)]; }
+    { flags = [ "pdf_viewer-plugin" ]; enabled = enablePluginPdfViewer; deps = [ poppler ]; }
+    { flags = [ "perl-plugin" ]; enabled = enablePluginPerl; deps = [ perl ]; }
+    { flags = [ "pgpcore-plugin" "pgpinline-plugin" "pgpmime-plugin" ]; enabled = enablePluginPgp; deps = [ gnupg gpgme ]; }
+    { flags = [ "python-plugin" ]; enabled = enablePluginPython; }
+    { flags = [ "rssyl-plugin" ]; enabled = enablePluginRssyl; deps = [ libxml2 ]; }
+    { flags = [ "smime-plugin" ]; enabled = enablePluginSmime; }
+    { flags = [ "spam_report-plugin" ]; enabled = enablePluginSpamReport; }
+    { flags = [ "spamassassin-plugin" ]; enabled = enablePluginSpamassassin; }
+    { flags = [ "svg" ]; enabled = enableSvg; deps = [ librsvg ]; }
+    { flags = [ "tnef_parse-plugin" ]; enabled = enablePluginTnefParse; deps = [ libytnef ]; }
+    { flags = [ "valgrind" ]; enabled = enableValgrind; deps = [ valgrind ]; }
+    { flags = [ "vcalendar-plugin" ]; enabled = enablePluginVcalendar; deps = [ libical ]; }
+  ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
   inherit version;
@@ -106,24 +144,7 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ curl gsettings-desktop-schemas glib-networking ]
     ++ [(if useGtk3 then gtk3 else gtk2)]
-    ++ optional  enableLibSM libSM
-    ++ optional  enableGnuTLS gnutls
-    ++ optional  enableEnchant enchant
-    ++ optionals enableDbus [ dbus dbus-glib ]
-    ++ optional  enableLdap openldap
-    ++ optional  enableNetworkManager networkmanager
-    ++ optional  enableLibetpan libetpan
-    ++ optional  enableValgrind valgrind
-    ++ optional  enableSvg librsvg
-    ++ optional  enablePluginArchive libarchive
-    ++ optional  enablePluginLitehtmlViewer gumbo
-    ++ optionals enablePluginNotification [ libnotify ] ++ [(if useGtk3 then libcanberra-gtk3 else libcanberra-gtk2)]
-    ++ optional  enablePluginPerl perl
-    ++ optional  enablePluginPdfViewer poppler
-    ++ optional  enablePluginRssyl libxml2
-    ++ optionals enablePluginPgp [ gnupg gpgme ]
-    ++ optional  enablePluginTnefParse libytnef
-    ++ optional  enablePluginVcalendar libical
+    ++ concatMap (f: optionals f.enabled f.deps) (filter (f: f ? deps) features)
   ;
 
   configureFlags =
@@ -134,48 +155,8 @@ in stdenv.mkDerivation rec {
 
       "--disable-gdata-plugin" # Complains about missing libgdata, even when provided
       "--disable-fancy-plugin" # Missing libwebkit-1.0 library
-    ]
-    ++
-    (map (e: strings.enableFeature (lists.head e) (lists.last e)) [
-      [ enableLibSM "libsm" ]
-      [ enableGnuTLS "gnutls" ]
-      [ enableEnchant "enchant" ]
-      [ enableDbus "dbus" ]
-      [ enableLdap "ldap" ]
-      [ enableNetworkManager "networkmanager" ]
-      [ enableLibetpan "libetpan" ]
-      [ enableValgrind "valgrind" ]
-      [ enableSvg "svg" ]
-
-      [ enablePluginAcpiNotifier "acpi_notifier-plugin" ]
-      [ enablePluginAddressKeeper "address_keeper-plugin" ]
-      [ enablePluginArchive "archive-plugin" ]
-      [ enablePluginAttRemover "att_remover-plugin" ]
-      [ enablePluginAttachWarner "attachwarner-plugin" ]
-      [ enablePluginBogofilter "bogofilter-plugin" ]
-      [ enablePluginBsfilter "bsfilter-plugin" ]
-      [ enablePluginClamd "clamd-plugin" ]
-      [ enablePluginDillo "dillo-plugin" ]
-      [ enablePluginFetchInfo "fetchinfo-plugin" ]
-      [ enablePluginLibravatar "libravatar-plugin" ]
-      [ enablePluginLitehtmlViewer "litehtml_viewer-plugin" ]
-      [ enablePluginMailmbox "mailmbox-plugin" ]
-      [ enablePluginManageSieve "managesieve-plugin" ]
-      [ enablePluginNewMail "newmail-plugin" ]
-      [ enablePluginNotification "notification-plugin" ]
-      [ enablePluginPdfViewer "pdf_viewer-plugin" ]
-      [ enablePluginPerl "perl-plugin" ]
-      [ enablePluginPython "python-plugin" ]
-      [ enablePluginPgp "pgpcore-plugin" ]
-      [ enablePluginPgp "pgpmime-plugin" ]
-      [ enablePluginPgp "pgpinline-plugin" ]
-      [ enablePluginRssyl "rssyl-plugin" ]
-      [ enablePluginSmime "smime-plugin" ]
-      [ enablePluginSpamassassin "spamassassin-plugin" ]
-      [ enablePluginSpamReport "spam_report-plugin" ]
-      [ enablePluginTnefParse "tnef_parse-plugin" ]
-      [ enablePluginVcalendar "vcalendar-plugin" ]
-    ]);
+    ] ++
+    (map (feature: map (flag: strings.enableFeature feature.enabled flag) feature.flags) features);
 
   enableParallelBuilding = true;
 
@@ -194,6 +175,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin orivej oxzi ];
+    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 ];
   };
 }
