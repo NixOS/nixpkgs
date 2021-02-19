@@ -1361,6 +1361,8 @@ in
 
   hime = callPackage ../tools/inputmethods/hime {};
 
+  hinit = haskell.lib.justStaticExecutables haskellPackages.hinit;
+
   hostctl = callPackage ../tools/system/hostctl { };
 
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
