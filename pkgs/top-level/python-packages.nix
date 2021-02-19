@@ -5311,6 +5311,8 @@ in {
 
   pycfdns = callPackage ../development/python-modules/pycfdns { };
 
+  pychannels = callPackage ../development/python-modules/pychannels { };
+
   pychart = callPackage ../development/python-modules/pychart { };
 
   pychef = callPackage ../development/python-modules/pychef { };
