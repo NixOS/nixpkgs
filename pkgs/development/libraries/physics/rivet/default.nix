@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     mathastext
     pgf
     relsize
+    sansmath
     sfmath
     siunitx
     xcolor
