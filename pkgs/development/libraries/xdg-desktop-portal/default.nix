@@ -7,7 +7,6 @@
 , libxml2
 , glib
 , pipewire
-, fontconfig
 , flatpak
 , gsettings-desktop-schemas
 , acl
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     pipewire
-    fontconfig
     flatpak
     acl
     dbus
