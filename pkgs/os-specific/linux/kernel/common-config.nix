@@ -251,7 +251,8 @@ let
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
       # amdgpu support for RX6000 series
-      DRM_AMD_DC_DCN3_0 = whenAtLeast "5.9.12" yes;
+      DRM_AMD_DC_DCN3_0 = whenBetween "5.9.12" "5.11" yes;
+      DRM_AMD_DC_DCN = whenAtLeast "5.11" yes;
       # Allow device firmware updates
       DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {

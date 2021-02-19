@@ -159,6 +159,10 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   '' + lib.optionalString (nativeComp && withNS) ''
     ln -snf $out/lib/emacs/*/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
   '' + lib.optionalString nativeComp ''
+    $out/bin/emacs --batch \
+      -l comp --eval "(mapatoms (lambda (s) \
+                        (when (subr-primitive-p (symbol-function s)) \
+                          (comp-trampoline-compile s))))"
     mkdir -p $out/share/emacs/native-lisp
     $out/bin/emacs --batch \
       --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp\")" \

@@ -91,6 +91,12 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
+    # A regression is present in https://github.com/fwupd/fwupd/commit/fde4b1676a2c64e70bebd88f7720307c62635654
+    # released with 1.5.6.
+    # Fix for the regression: https://github.com/fwupd/fwupd/pull/2902
+    # Maintainer says a new release is to be expected in a few days:
+    #   https://twitter.com/hughsient/status/1362476792297185289
+    # In the mean time, please do not release 1.5.6 and go strait to 1.5.7
     version = "1.5.5";
 
     # libfwupd goes to lib

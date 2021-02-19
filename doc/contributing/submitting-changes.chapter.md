@@ -174,9 +174,12 @@ digraph {
     "staging-next" -> master [color="#E85EB0"] [label="stabilization ends"] [fontcolor="#E85EB0"]
     "staging" -> "staging-next" [color="#E85EB0"] [label="stabilization starts"] [fontcolor="#E85EB0"]
 
-    master -> "staging-next" -> staging [color="#5F5EE8"] [label="every six hours/any time"] [fontcolor="#5F5EE8"]
+    master -> "staging-next" -> staging [color="#5F5EE8"] [label="every six hours (GitHub Action)"] [fontcolor="#5F5EE8"]
 }
 ```
+
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/merge-staging.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours.
+
 
 ### Master branch {#submitting-changes-master-branch}
 
