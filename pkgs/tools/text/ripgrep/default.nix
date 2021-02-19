@@ -1,5 +1,4 @@
 { lib, stdenv
-, nixosTests
 , fetchFromGitHub
 , rustPlatform
 , asciidoctor

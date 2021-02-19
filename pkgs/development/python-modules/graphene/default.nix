@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aniso8601
-, iso8601
 , graphql-core
 , graphql-relay
 , promise

@@ -6,7 +6,6 @@
 , blas
 , catch2
 , cmake
-, conan
 , cython
 , fmt
 , muparserx

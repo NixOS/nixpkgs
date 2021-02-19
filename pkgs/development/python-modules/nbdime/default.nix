@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , hypothesis
 , setuptools_scm
 , six

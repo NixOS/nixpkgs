@@ -47,5 +47,7 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/costrouc/lammps-cython";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ costrouc ];
+    # fails import check
+    broken = true;
   };
 }

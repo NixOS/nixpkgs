@@ -2,14 +2,11 @@
 , substituteAll
 , buildPythonApplication
 , fetchPypi
-, python3Packages
-, pkgs
 , joblib
 , segments
 , attrs
 , espeak-ng
 , pytestCheckHook
-, pytestrunner
 , pytestcov
 }:
 

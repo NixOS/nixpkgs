@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs = [ fuse samba glib attr libsecret ];
 
-  postPatch = ''
-    substituteInPlace src/function.c --replace "attr/xattr.h" "sys/xattr.h"
-  '';
-
   meta = with lib; {
     description = "A FUSE FS for mounting Samba shares";
     maintainers = with maintainers; [ raskin ];
