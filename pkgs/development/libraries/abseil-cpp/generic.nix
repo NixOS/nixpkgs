@@ -1,14 +1,17 @@
+# Version specific attributes
+{ version, sha256 }:
+# Generic attributes
 { lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "abseil-cpp";
-  version = "20200923.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = version;
-    sha256 = "1p4djhm1f011ficbjjxx3n8428p8481p20j4glpaawnpsi362hkl";
+    inherit sha256;
   };
 
   cmakeFlags = [

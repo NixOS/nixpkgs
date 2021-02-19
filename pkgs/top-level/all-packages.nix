@@ -13131,7 +13131,8 @@ in
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  abseil-cpp = callPackage ../development/libraries/abseil-cpp { };
+  abseil-cpp_20200923 = callPackage ../development/libraries/abseil-cpp/20200923.nix { };
+  abseil-cpp = abseil-cpp_20200923;
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
