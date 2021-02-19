@@ -44,25 +44,27 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gradle perl makeWrapper ];
   buildInputs = [ jre ];
 
-  patches = [ ./0001-gradle.patch ];
-
   buildPhase = ''
+    runHook preBuild
     export MA1SD_BUILD_VERSION=${rev}
     export GRADLE_USER_HOME=$(mktemp -d)
 
-    sed -ie "s#REPLACE#mavenLocal(); maven { url '${deps}' }#g" build.gradle
+    sed -ie "s#jcenter()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
     gradle --offline --no-daemon build -x test
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D build/libs/source.jar $out/lib/ma1sd.jar
     makeWrapper ${jre}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "a federated matrix identity server; fork of mxisd";
     homepage = "https://github.com/ma1uta/ma1sd";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;
   };
