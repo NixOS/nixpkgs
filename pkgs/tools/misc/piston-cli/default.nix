@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "bf0hhKb+6+07HhrkFrsWCnUQfsQWOdK/dPTlt9iZTno=";
+    sha256 = "hhOistr5lHF6rIuMpudKwSuBQhaQDzTdelAOCjyVQZk=";
   };
 
   propagatedBuildInputs = with python3Packages; [ rich prompt_toolkit requests pygments ];

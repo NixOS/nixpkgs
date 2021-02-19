@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook269, util-linux, nukeReferences, coreutils
-, perl, buildPackages, nixosTests
+, perl, nixosTests
 , configFile ? "all"
 
 # Userspace dependencies
@@ -9,7 +9,7 @@
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
 , smartmontools, enableMail ? false
-, sysstat, sudo, pkg-config
+, sysstat, pkg-config
 
 # Kernel dependencies
 , kernel ? null

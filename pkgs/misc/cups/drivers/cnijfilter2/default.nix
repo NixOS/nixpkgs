@@ -4,11 +4,11 @@
 stdenv.mkDerivation {
   pname = "cnijfilter2";
 
-  version = "5.70";
+  version = "5.90";
 
   src = fetchzip {
-    url = "http://gdlp01.c-wss.com/gds/0/0100009930/01/cnijfilter2-source-5.70-1.tar.gz";
-    sha256 = "045zjsmaidn1m44ki6m1018gjzbj77gm234n5i2lshxpbzpyh0is";
+    url = "https://gdlp01.c-wss.com/gds/4/0100010484/01/cnijfilter2-source-5.90-1.tar.gz";
+    sha256 = "1bwyv9s6xv18xxp3m04a5fyh628nzcjdjvsgmgqndnk7832h5ani";
   };
 
   buildInputs = [
@@ -115,9 +115,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Canon InkJet printer drivers for the MG7500, MG6700, MG6600, MG5600, MG2900, MB2000, MB2300, iB4000, MB5000, MB5300, iP110, E450, MX490, E480, MG7700, MG6900, MG6800, MG5700, MG3600, and G3000 series";
-    homepage = "http://support-th.canon-asia.com/contents/TH/EN/0100712901.html";
+    homepage = "https://hk.canon/en/support/0101048401/1";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ cstrahan ];
   };
 }

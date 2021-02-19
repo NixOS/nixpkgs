@@ -6,18 +6,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.3.1";
+  version = "1.4.2";
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "v${version}";
-    sha256 = "sha256-2S2sa2/HVt3IRsE98PT2XwpONjaYENBzYW+ezBFrJYI=";
+    sha256 = "sha256-cPH0wD7RL3OifDTD48x58I4qeaLALOMFnfWXjE2/lUQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
-    bugsnag
     click
     markdown2
     maestral

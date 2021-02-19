@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
 buildGoPackage rec {
   pname = "packer";
-  version = "1.6.6";
+  version = "1.7.0";
 
   goPackagePath = "github.com/hashicorp/packer";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-kFDy8Zlx+D5JDyNlAmB/ICTe4K9s6KDbALP5pom5OQg=";
+    sha256 = "sha256-x62C44vTIysk9Lx9HZeTBf8k1+P5hfMIijvTWu3cZrA=";
   };
 
   buildFlagsArray = [ "-ldflags=-s -w" ];

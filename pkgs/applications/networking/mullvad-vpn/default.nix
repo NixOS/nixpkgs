@@ -41,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2021.1";
+  version = "2021.2";
 
   src = fetchurl {
-    url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "1ksa327zaiwmcmzv4n4ycfzc4sqhj2492c5ir0mqlx7x2nnhx6q7";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    sha256 = "sha256-nNZK11MckiQ+z8NDgDc7aJ6yrXWI1hPOvMZkrGwDDgU=";
   };
 
   nativeBuildInputs = [

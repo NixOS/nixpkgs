@@ -52,7 +52,7 @@
     "arwn" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "asterisk_cdr" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asterisk_mbox" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
-    "asuswrt" = ps: with ps; [ ]; # missing inputs: aioasuswrt
+    "asuswrt" = ps: with ps; [ aioasuswrt ];
     "atag" = ps: with ps; [ ]; # missing inputs: pyatag
     "aten_pe" = ps: with ps; [ atenpdu ];
     "atome" = ps: with ps; [ ]; # missing inputs: pyatome
@@ -209,7 +209,7 @@
     "ee_brightbox" = ps: with ps; [ ]; # missing inputs: eebrightbox
     "efergy" = ps: with ps; [ ];
     "egardia" = ps: with ps; [ ]; # missing inputs: pythonegardia
-    "eight_sleep" = ps: with ps; [ ]; # missing inputs: pyeight
+    "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ ]; # missing inputs: elgato
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
@@ -496,7 +496,7 @@
     "microsoft_face_detect" = ps: with ps; [ aiohttp-cors ];
     "microsoft_face_identify" = ps: with ps; [ aiohttp-cors ];
     "miflora" = ps: with ps; [ bluepy ]; # missing inputs: miflora
-    "mikrotik" = ps: with ps; [ ]; # missing inputs: librouteros
+    "mikrotik" = ps: with ps; [ librouteros ];
     "mill" = ps: with ps; [ ]; # missing inputs: millheater
     "min_max" = ps: with ps; [ ];
     "minecraft_server" = ps: with ps; [ aiodns getmac ]; # missing inputs: mcstatus

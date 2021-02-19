@@ -45,7 +45,7 @@ self: super: {
 
   # Take the 3.4.x release candidate.
   cabal-install = assert super.cabal-install.version == "3.2.0.0";
-                  overrideCabal super.cabal-install (drv: {
+                  overrideCabal (doJailbreak super.cabal-install) (drv: {
     postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
     version = "cabal-install-3.4.0.0-rc4";
     editedCabalFile = null;
@@ -54,6 +54,7 @@ self: super: {
       rev = "cabal-install-3.4.0.0-rc4";
       sha256 = "049hllk1d8jid9yg70hmcsdgb0n7hm24p39vavllaahfb0qfimrk";
     };
+    executableHaskellDepends = drv.executableHaskellDepends ++ [ self.regex-base self.regex-posix ];
   });
 
   # Jailbreaks & Version Updates
@@ -62,8 +63,10 @@ self: super: {
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
+  hackage-security = doJailbreak super.hackage-security;
   hashable = overrideCabal (doJailbreak (dontCheck super.hashable)) (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; });
   hashable-time = doJailbreak super.hashable-time;
+  HTTP = overrideCabal (doJailbreak super.HTTP) (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; });
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;

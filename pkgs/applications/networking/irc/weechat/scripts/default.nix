@@ -1,7 +1,11 @@
-{ callPackage, luaPackages, python3Packages }:
+{ callPackage, luaPackages, perlPackages, python3Packages }:
 
 {
   colorize_nicks = callPackage ./colorize_nicks { };
+
+  multiline = callPackage ./multiline {
+    inherit (perlPackages) PodParser;
+  };
 
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
     inherit (luaPackages) cjson luaffi;
