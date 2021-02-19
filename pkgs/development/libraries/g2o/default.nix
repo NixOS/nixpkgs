@@ -43,5 +43,7 @@ mkDerivation rec {
     license = with licenses; [ bsd3 lgpl3 gpl3 ];
     maintainers = with maintainers; [ lopsided98 ];
     platforms = platforms.all;
+    # fatal error: 'qglviewer.h' file not found
+    broken = stdenv.isDarwin;
   };
 }

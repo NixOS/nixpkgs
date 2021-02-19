@@ -95,7 +95,9 @@ let
       BLK_CGROUP_IOCOST = whenAtLeast "5.4" yes;
       IOSCHED_DEADLINE = whenOlder "5.0" yes; # Removed in 5.0-RC1
       MQ_IOSCHED_DEADLINE = whenAtLeast "4.11" yes;
+      BFQ_GROUP_IOSCHED = whenAtLeast "4.12" yes;
       MQ_IOSCHED_KYBER = whenAtLeast "4.12" yes;
+      IOSCHED_BFQ = whenAtLeast "4.12" module;
     };
 
     # Enable NUMA.
@@ -258,6 +260,7 @@ let
       DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
       DRM_AMD_DC_DCN2_1 = whenBetween "5.4" "5.6" yes;
       DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
+      DRM_AMD_DC_DCN = whenAtLeast "5.11" yes;
       DRM_AMD_DC_HDCP = whenAtLeast "5.5" yes;
       DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {

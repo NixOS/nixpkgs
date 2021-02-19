@@ -356,11 +356,11 @@ else {
         if ($suffix eq ".jpg") {
             $suffix = ".jpeg";
         }
-		if ($backgroundColor) {
-			$conf .= "
-		    background_color '$backgroundColor'
-		    ";
-		}
+        if ($backgroundColor) {
+            $conf .= "
+            background_color '$backgroundColor'
+            ";
+        }
         copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath: $!\n";
         $conf .= "
             insmod " . substr($suffix, 1) . "

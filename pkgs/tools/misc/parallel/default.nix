@@ -1,20 +1,13 @@
 { fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20200922";
+  pname = "parallel";
+  version = "20210122";
 
   src = fetchurl {
-    url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "0wj19kwjk0hwm8bk9yfcf3rpr0314lmjy5xxlvvdqnbbc4ml2418";
+    url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
+    sha256 = "1wxkqz6ld1bp0ilvc04vhq99qjay1nl6pbk3qzvp3sjavv9vdwdl";
   };
-
-  patches = [
-    ./fix-max-line-length-allowed.diff
-  ];
-
-  postPatch = ''
-    substituteInPlace src/parallel --subst-var-by coreutils ${coreutils}
-  '';
 
   outputs = [ "out" "man" "doc" ];
 
@@ -23,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${lib.makeBinPath [ procps perl ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils ]}"
   '';
 
   doCheck = true;

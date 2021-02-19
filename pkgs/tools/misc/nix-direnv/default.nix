@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
   # getting sourced, not executed:
   postPatch = ''
     substituteInPlace direnvrc \
-      --replace "grep" "${gnugrep}/bin/grep" \
-      --replace "nix-shell" "${nix}/bin/nix-shell" \
-      --replace "nix-instantiate" "${nix}/bin/nix-instantiate"
+      --replace "\''${NIX_BIN_PREFIX:-}" "\''${NIX_BIN_PREFIX:-${nix}/bin/}" \
+      --replace "grep" "${gnugrep}/bin/grep"
   '';
 
   installPhase = ''
