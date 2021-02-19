@@ -28372,6 +28372,8 @@ in
     cudaSupport = config.cudaSupport or false;
   };
 
+  dap = callPackage ../applications/science/math/dap { };
+
   ecm = callPackage ../applications/science/math/ecm { };
 
   eukleides = callPackage ../applications/science/math/eukleides {
