@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bCvi5xIL6xAtQ9mgf4feh076sAmog/3eGBlgvcLXJyc=";
+    sha256 = "sha256-JeuVrlm6JB8MgSUmgMLQPuPmlKSScSdsVga9jUwLWHM=";
   };
 
   deleteVendor = true;
