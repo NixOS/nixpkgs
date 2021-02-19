@@ -51,6 +51,8 @@ buildPythonPackage rec {
     popd
   '';
 
+  pythonImportsCheck = [ "sopel" ];
+
   meta = with lib; {
     description = "Simple and extensible IRC bot";
     homepage = "http://sopel.chat";
