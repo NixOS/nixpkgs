@@ -70,9 +70,9 @@ let
       { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
     ] ocamlPackages_4_12;
-  ocamlNativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ optional (coqAtLeast "8.14") ocamlPackages.dune_2;
-  ocamlBuildInputs = []
+  ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
+    ++ optional (coqAtLeast "8.14") dune_2;
+  ocamlPropagatedBuildInputs = [ ]
     ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
     ++ optional (!coqAtLeast "8.13") ocamlPackages.num
     ++ optional (coqAtLeast "8.13") ocamlPackages.zarith;
@@ -82,7 +82,8 @@ self = stdenv.mkDerivation {
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlBuildInputs ocamlNativeBuildInputs;
+    inherit ocamlPackages ocamlNativeNuildInputs;
+    inherit ocamlPropagatedBuildInputs ocamlPropagatedNativeBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;
     emacsBufferSetup = pkgs: ''
@@ -136,12 +137,14 @@ self = stdenv.mkDerivation {
     ++ optional buildIde copyDesktopItems
     ++ optional (buildIde && coqAtLeast "8.10") wrapGAppsHook
     ++ optional (!coqAtLeast "8.6") gnumake42;
-  buildInputs = [ ncurses ] ++ ocamlBuildInputs
+  buildInputs = [ ncurses ]
     ++ optionals buildIde
       (if coqAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
   ;
+
+  propagatedBuildInputs = ocamlPropagatedBuildInputs;
 
   postPatch = ''
     UNAME=$(type -tp uname)
