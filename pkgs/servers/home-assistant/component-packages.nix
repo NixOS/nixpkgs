@@ -110,7 +110,7 @@
     "canary" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: py-canary
     "cast" = ps: with ps; [ aiohttp-cors hass-nabucasa mutagen plexapi plexauth plexwebsocket PyChromecast zeroconf ];
     "cert_expiry" = ps: with ps; [ ];
-    "channels" = ps: with ps; [ ]; # missing inputs: pychannels
+    "channels" = ps: with ps; [ pychannels ];
     "circuit" = ps: with ps; [ ]; # missing inputs: circuit-webhook
     "cisco_ios" = ps: with ps; [ pexpect ];
     "cisco_mobility_express" = ps: with ps; [ ciscomobilityexpress ];
