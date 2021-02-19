@@ -133,8 +133,10 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
-        install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+        ${optionalString (cfg.insecure != true) ''
+           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
+           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+        ''}
       '';
 
       serviceConfig = mkMerge [
