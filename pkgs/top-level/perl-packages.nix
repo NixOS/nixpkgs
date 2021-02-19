@@ -19829,6 +19829,21 @@ let
     };
   };
 
+   Test2PluginUUID = buildPerlPackage {
+    pname = "Test2-Plugin-UUID";
+    version = "0.002001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-UUID-0.002001.tar.gz";
+      sha256 = "4c6c8d484d7153d8779dc155a992b203095b5c5aa1cfb1ee8bcedcd0601878c9";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ DataUUID ];
+    meta = {
+      description = "Use REAL UUIDs in Test2";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Test2PluginNoWarnings = buildPerlPackage {
      pname = "Test2-Plugin-NoWarnings";
      version = "0.09";
