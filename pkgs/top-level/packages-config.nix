@@ -8,10 +8,12 @@
   # purposes of the index.
   packageOverrides = super:
   let
+    inherit (super) lib;
     recurseIntoAttrs = sets:
-      super.lib.genAttrs
-        (builtins.filter (set: builtins.hasAttr set super) sets)
-        (set: super.recurseIntoAttrs (builtins.getAttr set super));
+      lib.genAttrs
+        # Recursively filter sets delimited by dots
+        (builtins.filter (set: builtins.foldl' (super: attr: if builtins.hasAttr attr super then super.${attr} else { }) super (lib.splitString "." set) != { }) sets)
+        (set: super.recurseIntoAttrs (builtins.foldl' (super: attr: super.${attr}) super (lib.splitString "." set)));
   in recurseIntoAttrs [
     "roundcubePlugins"
     "emscriptenfastcompPackages"
