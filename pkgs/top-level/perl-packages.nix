@@ -19815,6 +19815,26 @@ let
     };
   };
 
+  Test2Harness = buildPerlPackage {
+    pname = "Test2-Harness";
+    version = "1.000042";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000042.tar.gz";
+      sha256 = "aaf231a68af1a6ffd6a11188875fcf572e373e43c8285945227b9d687b43db2d";
+    };
+
+    checkPhase = ''
+      patchShebangs ./t ./scripts/yath
+      ./scripts/yath test -j $NIX_BUILD_CORES
+    '';
+
+    propagatedBuildInputs = [ DataUUID Importer LongJump ScopeGuard TermTable Test2PluginMemUsage Test2PluginUUID Test2Suite gotofile ];
+    meta = {
+      description = "A new and improved test harness with better Test2 integration";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Test2PluginMemUsage = buildPerlPackage {
     pname = "Test2-Plugin-MemUsage";
     version = "0.002003";
