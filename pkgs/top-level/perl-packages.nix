@@ -11809,6 +11809,20 @@ let
     };
   };
 
+  LongJump = buildPerlPackage {
+    pname = "Long-Jump";
+    version = "0.000001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Long-Jump-0.000001.tar.gz";
+      sha256 = "d5d6456d86992b559d8f66fc90960f919292cd3803c13403faac575762c77af4";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Mechanism for returning to a specific point from a deeply nested stack";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LWP = buildPerlPackage {
     pname = "libwww-perl";
     version = "6.49";
