@@ -34,7 +34,7 @@ buildDunePackage rec {
   meta = {
     description = "Git format and protocol in pure OCaml";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = with lib.maintainers; [ sternenseemann vbgl ];
     homepage = "https://github.com/mirage/ocaml-git";
   };
 }

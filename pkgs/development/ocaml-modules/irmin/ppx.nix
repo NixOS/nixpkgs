@@ -22,6 +22,6 @@ buildDunePackage rec {
     homepage = "https://irmin.org/";
     description = "PPX deriver for Irmin generics";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = with lib.maintainers; [ vbgl sternenseemann ];
   };
 }
