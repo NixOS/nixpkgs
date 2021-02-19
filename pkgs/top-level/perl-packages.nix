@@ -16379,6 +16379,21 @@ let
     };
   };
 
+  PDFBuilder = buildPerlPackage {
+    pname = "PDF-Builder";
+    version = "3.021";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.021.tar.gz";
+      sha256 = "1hc22s5gdspr5nyfmix3cwdzcw7z66pcqxy422ksmbninbzv4z93";
+    };
+    checkInputs = [ TestException TestMemoryCycle ];
+    propagatedBuildInputs = [ FontTTF ];
+    meta = {
+      description = "Facilitates the creation and modification of PDF files";
+      license = lib.licenses.lgpl21Plus;
+    };
+  };
+
   PDL = buildPerlPackage rec {
     pname = "PDL";
     version = "2.025";
