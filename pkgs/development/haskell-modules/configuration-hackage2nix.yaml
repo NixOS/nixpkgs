@@ -6980,6 +6980,7 @@ broken-packages:
   - iban
   - ical
   - iCalendar
+  - ice40-prim
   - IcoGrid
   - iconv-typed
   - ide-backend
@@ -7355,7 +7356,6 @@ broken-packages:
   - keyvaluehash
   - keyword-args
   - khph
-  - ki
   - kicad-data
   - kickass-torrents-dump-parser
   - kickchan
@@ -9426,7 +9426,6 @@ broken-packages:
   - regex-tdfa-pipes
   - regex-tdfa-quasiquoter
   - regex-tdfa-rc
-  - regex-tdfa-text
   - regex-tdfa-unittest
   - regex-tdfa-utf8
   - regex-tre
