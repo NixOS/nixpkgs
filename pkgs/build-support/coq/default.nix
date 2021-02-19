@@ -56,8 +56,15 @@ let
     ] "") + optionalString (v == null) "-broken";
   append-version = p: n: p + display-pkg n "" coqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
-  var-coqlib-install = (optionalString (versions.isGe "8.7" coq.coq-version) "COQMF_") + "COQLIB";
   useDune2 = args.useDune2 or useDune2ifVersion fetched.version;
+  coqlib-flags = switch coq.coq-version [
+    { case = versions.isLe "8.6";
+      out = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ]; }
+  ] [ "COQMF_COQLIB=lib/coq/${coq.coq-version}/" ];
+  docdir-flags = switch coq.coq-version [
+    { case = versions.isLe "8.6";
+      out = [ "DOCDIR=$(out)/share/coq/${coq.coq-version}/" ]; }
+  ] [ "COQMF_DOCDIR=share/coq/${coq.coq-version}/" ];
 in
 
 stdenv.mkDerivation (removeAttrs ({
@@ -84,9 +91,8 @@ stdenv.mkDerivation (removeAttrs ({
 // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
 // (optionalAttrs (!args?installPhase && !args?useMelquiondRemake) {
   installFlags =
-    [ "${var-coqlib-install}=$(out)/lib/coq/${coq.coq-version}/" ] ++
-    optional (match ".*doc$" (args.installTargets or "") != null)
-      "DOCDIR=$(out)/share/coq/${coq.coq-version}/" ++
+    [ "DESTDIR=$(out)" ] ++ coqlib-flags ++
+    optionals (match ".*doc$" (args.installTargets or "") != null) docdir-flags ++
     extraInstallFlags;
 })
 // (optionalAttrs useDune2 {
