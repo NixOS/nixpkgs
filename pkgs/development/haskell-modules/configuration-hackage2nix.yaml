@@ -75,6 +75,8 @@ default-package-overrides:
   - gi-gdkx11 < 4
   - ghcide < 0.7.4 # for hls 0.9.0
   - hls-explicit-imports-plugin < 0.1.0.1 # for hls 0.9.0
+  - hls-plugin-api < 0.7.1.0 # for hls 0.9.0
+  - hls-retrie-plugin < 0.1.1.1 # for hls 0.9.0
 
   # Stackage Nightly 2021-02-12
   - abstract-deque ==0.3
