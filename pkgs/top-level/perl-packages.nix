@@ -8449,6 +8449,20 @@ let
     doCheck = false;
   };
 
+  FunctionParameters = buildPerlPackage {
+    pname = "Function-Parameters";
+    version = "2.001003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.001003.tar.gz";
+      sha256 = "eaa22c6b43c02499ec7db0758c2dd218a3b2ab47a714b2bdf8010b5ee113c242";
+    };
+    buildInputs = [ DirSelf TestFatal ];
+    meta = {
+      description = "Define functions and methods with parameter lists (\"subroutine signatures\")";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Furl = buildPerlModule {
     pname = "Furl";
     version = "3.13";
