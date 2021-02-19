@@ -6493,6 +6493,8 @@ in {
 
   python-vagrant = callPackage ../development/python-modules/python-vagrant { };
 
+  python-velbus = callPackage ../development/python-modules/python-velbus { };
+
   python-vipaccess = callPackage ../development/python-modules/python-vipaccess { };
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
