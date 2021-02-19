@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "ppx_irmin";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    sha256 = "1b6lav5br1b83cwdc3gj9mqkzhlbfjrbyjx0107zvj54m82dbrxb";
+    sha256 = "131pcgmpys6danprcbxzf4pdsl0ka74bpmmxz8db4507cvxhsz3n";
   };
 
   minimumOCamlVersion = "4.08";
@@ -17,9 +17,6 @@ buildDunePackage rec {
     ppx_repr
     ppxlib
   ];
-
-  # tests depend on irmin, would create mutual dependency
-  doCheck = false;
 
   meta = {
     homepage = "https://irmin.org/";
