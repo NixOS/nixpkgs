@@ -3,6 +3,7 @@
 , pkg-config
 , autoreconfHook
 , db48
+, sqlite
 , boost
 , zeromq
 , hexdump
@@ -21,7 +22,7 @@
 
 with stdenv.lib;
 let
-  version = "0.20.1";
+  version = "0.21.0";
   majorMinorVersion = versions.majorMinor version;
   desktop = fetchurl {
     url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorMinorVersion}/debian/bitcoin-qt.desktop";
@@ -37,15 +38,16 @@ stdenv.mkDerivation rec {
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
       "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "4bbd62fd6acfa5e9864ebf37a24a04bc2dcfe3e3222f056056288d854c53b978";
+    sha256 = "1a91202c62ee49fb64d57a52b8d6d01cd392fffcbef257b573800f9289655f37";
   };
 
   nativeBuildInputs =
     [ pkg-config autoreconfHook ]
     ++ optional stdenv.isDarwin hexdump
     ++ optional withGui wrapQtAppsHook;
-  buildInputs = [ db48 boost zlib zeromq miniupnpc libevent ]
+  buildInputs = [ boost zlib zeromq miniupnpc libevent ]
     ++ optionals stdenv.isLinux [ utillinux ]
+    ++ optionals withWallet [ db48 sqlite ]
     ++ optionals withGui [ qtbase qttools qrencode ];
 
   postInstall = optional withGui ''
