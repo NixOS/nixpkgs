@@ -32,13 +32,3 @@ addEmacsVars () {
     fi
   done
 }
-
-if [[ ! -v emacsHookDone ]]; then
-  emacsHookDone=1
-
-  # If this is for a wrapper derivation, emacs and the dependencies are all
-  # run-time dependencies. If this is for precompiling packages into bytecode,
-  # emacs is a compile-time dependency of the package.
-  addEnvHooks "$hostOffset" addEmacsVars
-  addEnvHooks "$targetOffset" addEmacsVars
-fi
