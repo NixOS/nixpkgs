@@ -24852,6 +24852,8 @@ in
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
+  secretscanner = callPackage ../tools/security/secretscanner { };
+
   sent = callPackage ../applications/misc/sent { };
 
   seq24 = callPackage ../applications/audio/seq24 { };
