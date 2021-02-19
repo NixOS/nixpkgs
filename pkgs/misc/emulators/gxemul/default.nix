@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gxemul";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchurl {
     url = "http://gavare.se/gxemul/src/gxemul-${version}.tar.gz";
-    sha256 = "0iqmazfn7ss5n27m1a9n9nps3vzhag1phzb7qw0wgczycmwsq0x7";
+    sha256 = "sha256-FjYE1IiCGOX9vGhYufwewWB9AF6tvsQk86lmPh8phu0=";
   };
 
   configurePhase = "./configure";
