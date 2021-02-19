@@ -9105,6 +9105,26 @@ let
     };
   };
 
+  Gtk3ImageView = buildPerlPackage {
+    pname = "Gtk3-ImageView";
+    version = "6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk3-ImageView-6.tar.gz";
+      sha256 = "0krkif9i3hrgjdskw05pcks40fmb43d21lxf4h8aclv0g8z647f0";
+    };
+    buildInputs = [ pkgs.gtk3 ];
+    propagatedBuildInputs = [ Readonly Gtk3 ];
+    checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    checkPhase = ''
+      ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
+        make test
+    '';
+    meta = {
+      description = "Image viewer widget for Gtk3";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Gtk3SimpleList = buildPerlPackage {
     pname = "Gtk3-SimpleList";
     version = "0.21";
