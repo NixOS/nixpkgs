@@ -8453,6 +8453,20 @@ let
     doCheck = false;
   };
 
+  FunctionParameters = buildPerlPackage {
+    pname = "Function-Parameters";
+    version = "2.001003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.001003.tar.gz";
+      sha256 = "eaa22c6b43c02499ec7db0758c2dd218a3b2ab47a714b2bdf8010b5ee113c242";
+    };
+    buildInputs = [ DirSelf TestFatal ];
+    meta = {
+      description = "Define functions and methods with parameter lists (\"subroutine signatures\")";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Furl = buildPerlModule {
     pname = "Furl";
     version = "3.13";
@@ -13987,6 +14001,25 @@ let
     meta = {
       description = "A Mouse role for setting attributes from a simple configfile";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestPostgreSQL = buildPerlModule {
+    pname = "Test-PostgreSQL";
+    version = "1.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TJ/TJC/Test-PostgreSQL-1.27.tar.gz";
+      sha256 = "b1bd231693100cc40905fb0ba3173173201621de9c8301f21c5b593b0a46f907";
+    };
+    buildInputs = [ ModuleBuildTiny TestSharedFork pkgs.postgresql ];
+    propagatedBuildInputs = [ DBDPg DBI FileWhich FunctionParameters Moo TieHashMethod TryTiny TypeTiny ];
+
+    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+
+    meta = {
+      homepage = https://github.com/TJC/Test-postgresql;
+      description = "PostgreSQL runner for tests";
+      license = with lib.licenses; [ artistic2 ];
     };
   };
 
@@ -22075,6 +22108,19 @@ let
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
     doCheck = false; /* test fails on some machines */
+  };
+
+  TieHashMethod = buildPerlPackage {
+    pname = "Tie-Hash-Method";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Tie-Hash-Method-0.02.tar.gz";
+      sha256 = "d513fbb51413f7ca1e64a1bdce6194df7ec6076dea55066d67b950191eec32a9";
+    };
+    meta = {
+      description = "Tied hash with specific methods overriden by callbacks";
+      license = with lib.licenses; [ artistic1 ];
+    };
   };
 
   TieRefHash = buildPerlPackage {

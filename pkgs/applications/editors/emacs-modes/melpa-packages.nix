@@ -47,6 +47,11 @@ let
       });
     }) else null;
 
+  buildWithGit = pkg: pkg.overrideAttrs (attrs: {
+    nativeBuildInputs =
+      (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
+  });
+
   fix-rtags = pkg:
     if pkg != null then dontConfigure (externalSrc pkg external.rtags)
     else null;
@@ -120,26 +125,9 @@ let
           packageRequires = with self; [ evil ];
         });
 
-        evil-magit = super.evil-magit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        eopengrok = super.eopengrok.overrideAttrs (attrs: {
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
         ess-R-data-view = super.ess-R-data-view.override {
           inherit (self.melpaPackages) ess ctable popup;
         };
-
-        forge = super.forge.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
 
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
@@ -211,113 +199,81 @@ let
           '';
         });
 
-        magit = super.magit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        evil-magit = buildWithGit super.evil-magit;
 
-        magit-find-file = super.magit-find-file.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        eopengrok = buildWithGit super.eopengrok;
 
-        magit-gh-pulls = super.magit-gh-pulls.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        forge = buildWithGit super.forge;
 
-        magit-imerge = super.magit-imerge.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit = buildWithGit super.magit;
 
-        magit-lfs = super.magit-lfs.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-find-file = buildWithGit super.magit-find-file;
 
-        magit-org-todos = super.magit-org-todos.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-gh-pulls = buildWithGit super.magit-gh-pulls;
 
-        magit-tbdiff = super.magit-tbdiff.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-imerge = buildWithGit super.magit-imerge;
 
-        magit-topgit = super.magit-topgit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-lfs = buildWithGit super.magit-lfs;
 
-        magit-vcsh = super.magit-vcsh.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-org-todos = buildWithGit super.magit-org-todos;
 
-        magit-gerrit = super.magit-gerrit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-tbdiff = buildWithGit super.magit-tbdiff;
 
-        magit-annex = super.magit-annex.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-topgit = buildWithGit super.magit-topgit;
 
-        magit-todos = super.magit-todos.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-vcsh = buildWithGit super.magit-vcsh;
 
-        magit-filenotify = super.magit-filenotify.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-gerrit = buildWithGit super.magit-gerrit;
 
-        magit-gitflow = super.magit-gitflow.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-annex = buildWithGit super.magit-annex;
 
-        magithub = super.magithub.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-todos = buildWithGit super.magit-todos;
 
-        magit-svn = super.magit-svn.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-filenotify = buildWithGit super.magit-filenotify;
 
-        kubernetes = super.kubernetes.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magit-gitflow = buildWithGit super.magit-gitflow;
 
-        kubernetes-evil = super.kubernetes-evil.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
+        magithub = buildWithGit super.magithub;
+
+        magit-svn = buildWithGit super.magit-svn;
+
+        kubernetes = buildWithGit super.kubernetes;
+
+        kubernetes-evil = buildWithGit super.kubernetes-evil;
+
+        egg = buildWithGit super.egg;
+
+        kapacitor = buildWithGit super.kapacitor;
+
+        gerrit = buildWithGit super.gerrit;
+
+        gerrit-download = buildWithGit super.gerrit-download;
+
+        github-pullrequest = buildWithGit super.github-pullrequest;
+
+        jist = buildWithGit super.jist;
+
+        mandoku = buildWithGit super.mandoku;
+
+        mandoku-tls = buildWithGit super.mandoku-tls;
+
+        magit-p4 = buildWithGit super.magit-p4;
+
+        magit-rbr = buildWithGit super.magit-rbr;
+
+        magit-diff-flycheck = buildWithGit super.magit-diff-flycheck;
+
+        magit-reviewboard = buildWithGit super.magit-reviewboard;
+
+        magit-patch-changelog = buildWithGit super.magit-patch-changelog;
+
+        magit-circleci = buildWithGit super.magit-circleci;
+
+        magit-delta = buildWithGit super.magit-delta;
+
+        orgit = buildWithGit super.orgit;
+
+        orgit-forge = buildWithGit super.orgit-forge;
 
         # upstream issue: missing file header
         mhc = super.mhc.override {
@@ -462,105 +418,12 @@ let
           propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
         });
 
-        egg = super.egg.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
         # missing dependencies
         evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
           packageRequires = with self; [ evil highlight ];
         });
 
-        kapacitor = super.kapacitor.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        gerrit = super.gerrit.overrideAttrs (attrs: {
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        gerrit-download = super.gerrit-download.overrideAttrs (attrs: {
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        github-pullrequest = super.github-pullrequest.overrideAttrs (attrs: {
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
         helm-rtags = fix-rtags super.helm-rtags;
-
-        jist = super.jist.overrideAttrs (attrs: {
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        mandoku = super.mandoku.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        mandoku-tls = super.mandoku-tls.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        magit-p4 = super.magit-p4.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        magit-rbr = super.magit-rbr.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        magit-diff-flycheck = super.magit-diff-flycheck.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        magit-reviewboard = super.magit-reviewboard.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        magit-patch-changelog = super.magit-patch-changelog.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        magit-circleci = super.magit-circleci.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
-        orgit =
-          (super.orgit.overrideAttrs (attrs: {
-            # searches for Git at build time
-            nativeBuildInputs =
-              (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-          }));
-
-        orgit-forge = super.orgit-forge.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
 
         # tries to write to $HOME
         php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {

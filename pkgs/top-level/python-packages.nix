@@ -7742,6 +7742,8 @@ in {
 
   tensorly = callPackage ../development/python-modules/tensorly { };
 
+  tellduslive = callPackage ../development/python-modules/tellduslive { };
+
   termcolor = callPackage ../development/python-modules/termcolor { };
 
   terminado = callPackage ../development/python-modules/terminado { };
