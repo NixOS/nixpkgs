@@ -56,17 +56,15 @@
 with lib;
 
 let
-  version = "3.17.8";
+  version = if useGtk3 then "3.99.0" else "3.17.8";
 
   # The official release uses gtk2 and contains the version tag.
   gtk2src = {
-    rev = version;
     sha256 = "0l4f8q11iyj8pi120lrapgq51k5j64xf0jlczkzbm99rym752ch5";
   };
 
   # The corresponding commit in the gtk3 branch.
   gtk3src = {
-    rev = "3.99.0";
     sha256 = "176h1swh1zx6dqyzfz470x4a1xicnv0zhy8ir47k7p23g6y17i2k";
   };
 
@@ -119,6 +117,7 @@ in stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchgit ({
+    rev = version;
     url = "git://git.claws-mail.org/claws.git";
   } // (if useGtk3 then gtk3src else gtk2src));
 
