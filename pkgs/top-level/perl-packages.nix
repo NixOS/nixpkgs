@@ -10014,6 +10014,20 @@ let
     };
   };
 
+  ImagePNGLibpng = buildPerlPackage {
+    pname = "Image-PNG-Libpng";
+    version = "0.56";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
+      sha256 = "1nf7qcql7b2w98i859f76q1vb4b2zd0k0ypjbsw7ngs2zzmvzyzs";
+    };
+    buildInputs = [ pkgs.libpng ];
+    meta = {
+      description = "Perl interface to the C library \"libpng\"";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Imager = buildPerlPackage {
     pname = "Imager";
     version = "1.012";
