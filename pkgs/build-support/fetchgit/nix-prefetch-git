@@ -9,6 +9,7 @@ hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
+sparseCheckout=
 fetchLFS=
 builder=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
@@ -48,6 +49,7 @@ Options:
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
+      --sparse-checkout Fetch partially.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --quiet         Only print the final json summary.
 "
@@ -75,6 +77,7 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --sparse-checkout) argfun=set_sparseCheckout;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
             *)
@@ -107,7 +110,6 @@ init_remote(){
     local url=$1
     clean_git init --initial-branch=master
     clean_git remote add origin "$url"
-    ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
@@ -143,12 +145,20 @@ url_to_name(){
 checkout_hash(){
     local hash="$1"
     local ref="$2"
+    local sparseCheckout="$3"
 
     if test -z "$hash"; then
         hash=$(hash_from_ref "$ref")
     fi
 
-    clean_git fetch -t ${builder:+--progress} origin || return 1
+    if test -n "$sparseCheckout"; then
+        clean_git clone --filter=tree:0 --no-checkout --depth=1 "$url" .
+        clean_git sparse-checkout init --cone
+        clean_git sparse-checkout set "$sparseCheckout"
+        clean_git fetch --depth=1 origin "$hash"
+    else
+        clean_git fetch -t ${builder:+--progress} origin || return 1
+    fi
     clean_git checkout -b "$branchName" "$hash" || return 1
 }
 
@@ -156,6 +166,7 @@ checkout_hash(){
 checkout_ref(){
     local hash="$1"
     local ref="$2"
+    local sparseCheckout="$3"
 
     if [[ -n "$deepClone" ]]; then
         # The caller explicitly asked for a deep clone.  Deep clones
@@ -165,13 +176,19 @@ checkout_ref(){
         return 1
     fi
 
-    if test -z "$ref"; then
-        ref=$(ref_from_hash "$hash")
-    fi
-
     if test -n "$ref"; then
-        # --depth option is ignored on http repository.
-        clean_git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
+        if test -z "$ref"; then
+            ref=$(ref_from_hash "$hash")
+        fi
+        if test -n "$sparseCheckout"; then
+            clean_git clone --filter=tree:0 --no-checkout --depth=1 "$url" .
+            clean_git sparse-checkout init --cone
+            clean_git sparse-checkout set "$sparseCheckout"
+            clean_git fetch --depth=1 origin "$hash"
+        else
+            # --depth option is ignored on http repository.
+            clean_git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
+        fi
         clean_git checkout -b "$branchName" FETCH_HEAD || return 1
     else
         return 1
@@ -199,7 +216,7 @@ init_submodules(){
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
         url=$(git config --get "${name}.url")
 
-        clone "$dir" "$url" "$hash" ""
+        clone "$dir" "$url" "$hash" "" ""
     done
 }
 
@@ -209,21 +226,24 @@ clone(){
     local url="$2"
     local hash="$3"
     local ref="$4"
+    local sparseCheckout="$5"
 
     cd "$dir"
 
-    # Initialize the repository.
-    init_remote "$url"
+    if test -z "$sparseCheckout"; then
+        # Initialize the repository.
+        init_remote "$url"
+    fi
 
     # Download data from the repository.
-    checkout_ref "$hash" "$ref" ||
-    checkout_hash "$hash" "$ref" || (
+    checkout_ref "$hash" "$ref" "$sparseCheckout" ||
+    checkout_hash "$hash" "$ref" "$sparseCheckout" || (
         echo 1>&2 "Unable to checkout $hash$ref from $url."
         exit 1
     )
 
     # Checkout linked sources.
-    if test -n "$fetchSubmodules"; then
+    if test -z $sparseCheckout && test -n "$fetchSubmodules"; then
         init_submodules
     fi
 
@@ -284,6 +304,7 @@ clone_user_rev() {
     local dir="$1"
     local url="$2"
     local rev="${3:-HEAD}"
+    local sparseCheckout="$4"
 
     if [ -n "$fetchLFS" ]; then
         HOME=$TMPDIR
@@ -293,16 +314,15 @@ clone_user_rev() {
     # Perform the checkout.
     case "$rev" in
         HEAD|refs/*)
-            clone "$dir" "$url" "" "$rev" 1>&2;;
+            clone "$dir" "$url" "" "$rev" "$sparseCheckout" 1>&2;;
         *)
             if test -z "$(echo "$rev" | tr -d 0123456789abcdef)"; then
-                clone "$dir" "$url" "$rev" "" 1>&2
+                clone "$dir" "$url" "$rev" "" "$sparseCheckout" 1>&2;
             else
                 # if revision is not hexadecimal it might be a tag
-                clone "$dir" "$url" "" "refs/tags/$rev" 1>&2
+                clone "$dir" "$url" "" "refs/tags/$rev" "$sparseCheckout" 1>&2
             fi;;
     esac
-
     pushd "$dir" >/dev/null
     fullRev=$( (git rev-parse "$rev" 2>/dev/null || git rev-parse "refs/heads/$branchName") | tail -n1)
     humanReadableRev=$(git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --)
@@ -405,7 +425,7 @@ fi
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage
     mkdir -p "$out"
-    clone_user_rev "$out" "$url" "$rev"
+    clone_user_rev "$out" "$url" "$rev" "$sparseCheckout"
 else
     if test -z "$hashType"; then
         hashType=sha256

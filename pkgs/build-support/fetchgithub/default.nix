@@ -3,6 +3,7 @@
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, private ? false
 , githubBase ? "github.com", varPrefix ? null
+, sparseCheckout ? null
 , ... # For hash agility
 }@args: assert private -> !fetchSubmodules;
 let
@@ -11,7 +12,7 @@ let
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
-  fetcher = if fetchSubmodules then fetchgit else fetchzip;
+  fetcher = if fetchSubmodules || sparseCheckout != null then fetchgit else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -28,6 +29,7 @@ let
   };
   fetcherArgs = (if fetchSubmodules
     then { inherit rev fetchSubmodules; url = "${baseUrl}.git"; }
+    else if sparseCheckout != null then {inherit rev sparseCheckout; url = "${baseUrl}.git";}
     else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
   ) // passthruAttrs // { inherit name; };
 in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }
