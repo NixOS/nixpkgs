@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , db48
 , boost
@@ -16,6 +16,7 @@
 , qrencode
 , libevent
 , withGui
+, withWallet ? true
 }:
 
 with stdenv.lib;
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ pkgconfig autoreconfHook ]
+    [ pkg-config autoreconfHook ]
     ++ optional stdenv.isDarwin hexdump
     ++ optional withGui wrapQtAppsHook;
   buildInputs = [ db48 boost zlib zeromq miniupnpc libevent ]
@@ -58,8 +59,9 @@ stdenv.mkDerivation rec {
   ] ++ optionals (!doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
-  ]
-  ++ optionals withGui [
+  ] ++ optionals (!withWallet) [
+    "--disable-wallet"
+  ] ++ optionals withGui [
     "--with-gui=qt5"
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
@@ -87,7 +89,7 @@ stdenv.mkDerivation rec {
     homepage = "https://bitcoin.org/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
-    maintainers = with maintainers; [ roconnor AndersonTorres ];
+    maintainers = with maintainers; [ prusnak roconnor ];
     license = licenses.mit;
     platforms = platforms.unix;
   };
