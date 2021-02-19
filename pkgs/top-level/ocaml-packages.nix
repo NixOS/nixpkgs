@@ -1268,11 +1268,11 @@ let
       inherit (pkgs) openssl;
     }
     else import ../development/ocaml-modules/janestreet {
-      inherit janePackage ocamlbuild angstrom ctypes cryptokit;
-      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re;
+      super = self // {
+        ppxlib = ppxlib.override { version = "0.8.1"; };
+      };
+      self = self.janeStreet;
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { version = "0.8.1"; };
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
