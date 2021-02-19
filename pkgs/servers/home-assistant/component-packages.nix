@@ -825,7 +825,7 @@
     "ted5000" = ps: with ps; [ xmltodict ];
     "telegram" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];
     "telegram_bot" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];
-    "tellduslive" = ps: with ps; [ ]; # missing inputs: tellduslive
+    "tellduslive" = ps: with ps; [ tellduslive ];
     "tellstick" = ps: with ps; [ ]; # missing inputs: tellcore-net tellcore-py
     "telnet" = ps: with ps; [ ];
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
