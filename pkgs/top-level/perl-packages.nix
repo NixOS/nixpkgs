@@ -8742,13 +8742,20 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
       sha256 = "0mxg6pz8qfyipw0ypr54alij0c4adzg94f62702b2a6hkp5jhij6";
     };
-    checkInputs = [ pkgs.cairo ];
+    checkInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
+    preCheck = ''
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running tests, the library is not yet installed,
+      # though, so we need to replace the absolute path with a local one during build.
+      # We are using a symlink that we will delete after the execution of the tests.
+      mkdir -p $out/lib
+      ln -s $PWD/build/*.so $out/lib/
+    '';
+    postCheck = ''
+      rm -r $out/lib
+    '';
     meta = {
-      broken = true; # TODO: tests failing because "failed to load libregress.so"
-      # see https://github.com/NixOS/nixpkgs/pull/68115
-      # and https://github.com/NixOS/nixpkgs/issues/68116
-      # adding pkgs.gnome3.gjs does not fix it
       description = "Dynamically create Perl language bindings";
       license = lib.licenses.lgpl2Plus;
     };
