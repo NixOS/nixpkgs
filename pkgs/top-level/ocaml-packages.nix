@@ -1276,11 +1276,13 @@ let
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
-      janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix { defaultVersion = "0.9.0"; };
-      inherit lib ocaml ocamlbuild ctypes cryptokit;
-      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith;
-      inherit (pkgs) stdenv openssl;
+      self = self.janeStreet_0_9_0;
+      super = self // {
+        janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {
+          defaultVersion = "0.9.0";
+        };
+      };
+      inherit (pkgs) stdenv lib openssl;
     };
 
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
