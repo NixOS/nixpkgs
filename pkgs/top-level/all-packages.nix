@@ -619,7 +619,7 @@ in
 
   _1password = callPackage ../applications/misc/1password { };
 
-  _1password-gui = callPackage ../tools/security/1password-gui { };
+  _1password-gui = callPackage ../applications/misc/1password-gui { };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
@@ -28393,6 +28393,8 @@ in
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
     cudaSupport = config.cudaSupport or false;
   };
+
+  dap = callPackage ../applications/science/math/dap { };
 
   ecm = callPackage ../applications/science/math/ecm { };
 
