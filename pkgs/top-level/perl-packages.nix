@@ -8916,6 +8916,22 @@ let
     propagatedBuildInputs = [ HeapFibonacci ];
   };
 
+  GraphicsTIFF = buildPerlPackage {
+    pname = "Graphics-TIFF";
+    version = "9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
+      sha256 = "1n1r9r7f6hp2s6l361pyvb1i1pm9xqy0w9n3z5ygm7j64160kz9a";
+    };
+    buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
+    propagatedBuildInputs = [ Readonly ];
+    checkInputs = [ TestRequires TestDeep pkgs.hexdump ];
+    meta = {
+      description = "Perl extension for the libtiff library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GraphViz = buildPerlPackage {
     pname = "GraphViz";
     version = "2.24";
