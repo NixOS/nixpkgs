@@ -8741,7 +8741,6 @@ let
       sha256 = "005m3inz12xcsd5sr056cm1kbhmxsx2ly88ifbdv6p6cwz0s05kk";
     };
     buildInputs = [ pkgs.glib ];
-    doCheck = false; # tests failing with glib 2.60 https://rt.cpan.org/Public/Bug/Display.html?id=128165
     meta = {
       homepage = "http://gtk2-perl.sourceforge.net/";
       description = "Perl wrappers for the GLib utility and Object libraries";
@@ -8757,13 +8756,20 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
       sha256 = "0mxg6pz8qfyipw0ypr54alij0c4adzg94f62702b2a6hkp5jhij6";
     };
-    checkInputs = [ pkgs.cairo ];
+    checkInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
+    preCheck = ''
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running tests, the library is not yet installed,
+      # though, so we need to replace the absolute path with a local one during build.
+      # We are using a symlink that we will delete after the execution of the tests.
+      mkdir -p $out/lib
+      ln -s $PWD/build/*.so $out/lib/
+    '';
+    postCheck = ''
+      rm -r $out/lib
+    '';
     meta = {
-      broken = true; # TODO: tests failing because "failed to load libregress.so"
-      # see https://github.com/NixOS/nixpkgs/pull/68115
-      # and https://github.com/NixOS/nixpkgs/issues/68116
-      # adding pkgs.gnome3.gjs does not fix it
       description = "Dynamically create Perl language bindings";
       license = lib.licenses.lgpl2Plus;
     };
@@ -8938,6 +8944,22 @@ let
     propagatedBuildInputs = [ HeapFibonacci ];
   };
 
+  GraphicsTIFF = buildPerlPackage {
+    pname = "Graphics-TIFF";
+    version = "9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
+      sha256 = "1n1r9r7f6hp2s6l361pyvb1i1pm9xqy0w9n3z5ygm7j64160kz9a";
+    };
+    buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
+    propagatedBuildInputs = [ Readonly ];
+    checkInputs = [ TestRequires TestDeep pkgs.hexdump ];
+    meta = {
+      description = "Perl extension for the libtiff library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GraphViz = buildPerlPackage {
     pname = "GraphViz";
     version = "2.24";
@@ -9108,6 +9130,26 @@ let
     meta = {
       description = "Perl interface to the 3.x series of the GTK toolkit";
       license = lib.licenses.lgpl21Plus;
+    };
+  };
+
+  Gtk3ImageView = buildPerlPackage {
+    pname = "Gtk3-ImageView";
+    version = "6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk3-ImageView-6.tar.gz";
+      sha256 = "0krkif9i3hrgjdskw05pcks40fmb43d21lxf4h8aclv0g8z647f0";
+    };
+    buildInputs = [ pkgs.gtk3 ];
+    propagatedBuildInputs = [ Readonly Gtk3 ];
+    checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    checkPhase = ''
+      ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
+        make test
+    '';
+    meta = {
+      description = "Image viewer widget for Gtk3";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -10032,6 +10074,20 @@ let
     };
     propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
     meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ImagePNGLibpng = buildPerlPackage {
+    pname = "Image-PNG-Libpng";
+    version = "0.56";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
+      sha256 = "1nf7qcql7b2w98i859f76q1vb4b2zd0k0ypjbsw7ngs2zzmvzyzs";
+    };
+    buildInputs = [ pkgs.libpng ];
+    meta = {
+      description = "Perl interface to the C library \"libpng\"";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -16427,6 +16483,21 @@ let
       sha256 = "7447c4749b02a784f525d3c7ece99d34b0a10475db65096f6316748dd2f9bd09";
     };
     buildInputs = [ TestException TestMemoryCycle ];
+    propagatedBuildInputs = [ FontTTF ];
+    meta = {
+      description = "Facilitates the creation and modification of PDF files";
+      license = lib.licenses.lgpl21Plus;
+    };
+  };
+
+  PDFBuilder = buildPerlPackage {
+    pname = "PDF-Builder";
+    version = "3.021";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.021.tar.gz";
+      sha256 = "1hc22s5gdspr5nyfmix3cwdzcw7z66pcqxy422ksmbninbzv4z93";
+    };
+    checkInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
     meta = {
       description = "Facilitates the creation and modification of PDF files";
