@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [texinfo];
 
   postPatch = ''
+    echo '"${version}.nixos"' > version.lisp-expr
+
     # SBCL checks whether files are up-to-date in many places..
     # Unfortunately, same timestamp is not good enough
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
