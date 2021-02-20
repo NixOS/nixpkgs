@@ -8764,6 +8764,7 @@ let
       # see https://github.com/NixOS/nixpkgs/pull/68115
       # and https://github.com/NixOS/nixpkgs/issues/68116
       # adding pkgs.gnome3.gjs does not fix it
+      # once this is fixed, gscriptor in pcsctools should be enabled again
       description = "Dynamically create Perl language bindings";
       license = lib.licenses.lgpl2Plus;
     };

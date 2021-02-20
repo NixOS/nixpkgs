@@ -20,8 +20,11 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/scriptor \
       --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
-    wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject ]}"
+    # gscriptor requires perlPackages.GlibObjectIntrospection, which is
+    # currently broken once fixed, it should be wrapped with the following
+    # perl packages:
+    # pcscperl GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject
+    rm $out/bin/gscriptor
     wrapProgram $out/bin/ATR_analysis \
       --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/pcsc_scan \
