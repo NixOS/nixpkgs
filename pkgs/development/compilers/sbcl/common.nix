@@ -39,9 +39,6 @@ stdenv.mkDerivation rec {
     # Fix the tests
     sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
-
-    substituteInPlace src/runtime/Config.x86-64-darwin \
-      --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
   ''
   + (if purgeNixReferences
     then
