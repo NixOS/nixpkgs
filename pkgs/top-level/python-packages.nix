@@ -4006,6 +4006,8 @@ in {
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
+  mcstatus = callPackage ../development/python-modules/mcstatus { };
+
   MDP = callPackage ../development/python-modules/mdp { };
 
   measurement = callPackage ../development/python-modules/measurement { };
