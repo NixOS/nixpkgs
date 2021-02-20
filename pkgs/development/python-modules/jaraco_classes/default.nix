@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "jaraco.classes";
-  version = "3.1.0";
+  version = "3.1.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1avsxzm5mwylmy2zbxq3xvn48z5djb0qy3hwv4ryncprivzri1n3";
+    sha256 = "92bf5d4e6957b17f21034c956dc90977f8ef496c3919ccb165f457f0e2f63cac";
   };
 
   pythonNamespaces = [ "jaraco" ];
