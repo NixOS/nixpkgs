@@ -15,7 +15,8 @@ in stdenv.mkDerivation {
 
   phases = [ "buildPhase" "installPhase" ];
 
-  buildInputs = [ why3 makeWrapper ] ++ provers;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ why3 ] ++ provers;
 
   buildPhase = ''
       mkdir -p $out/share/why3/

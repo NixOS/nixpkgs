@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-08nNDZcd/Hhtel9AVcNdTmaq/IECrANHPvIlvfftsmo=";
   };
 
-  buildInputs = [ readline tcp_wrappers pcre makeWrapper gcc ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ readline tcp_wrappers pcre gcc ];
 
   # Expects pre-GCC5 inline semantics
   NIX_CFLAGS_COMPILE = "-std=gnu89";

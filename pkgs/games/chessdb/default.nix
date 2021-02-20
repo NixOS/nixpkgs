@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0brc3wln3bxp979iqj2w1zxpfd0pch8zzazhdmwf7acww4hrsz62";
   };
 
-  buildInputs = [ tcl tk libX11 makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tcl tk libX11 ];
 
   makeFlags = [
     "BINDIR=$(out)/bin"

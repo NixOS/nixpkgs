@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "libunwind";
   inherit version;
 
-  src = fetch pname "0zsixkaiwp007afxlpsf5dc7wfrv8sj9wxzjw6f1r4bjv1rv3cvd";
+  src = fetch pname "1vpqs2c358v8fbr1r8jmzkfqk12jllimjcfmgxga127ksq9b37nj";
 
   nativeBuildInputs = [ cmake ];
 

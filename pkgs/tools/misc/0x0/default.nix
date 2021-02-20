@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1qpylyxrisy3p2lyirfarfj5yzrdjgsgxwf8gqwljpcjn207hr72";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -Dm755 0x0 $out/bin/0x0

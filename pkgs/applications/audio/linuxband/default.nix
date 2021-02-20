@@ -11,8 +11,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1r71h4yg775m4gax4irrvygmrsclgn503ykmc2qwjsxa42ri4n2n";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ makeWrapper MMA libjack2 libsmf python pyGtkGlade pygtksourceview ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ MMA libjack2 libsmf python pyGtkGlade pygtksourceview ];
 
   patchPhase = ''
     sed -i 's@/usr/@${MMA}/@g' src/main/config/linuxband.rc.in

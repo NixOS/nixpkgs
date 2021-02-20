@@ -1,7 +1,37 @@
-{ lib, stdenv, fetchurl, perl, unzip, glibc, zlib, setJavaClassPath, Foundation, openssl }:
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, setJavaClassPath
+, makeWrapper
+# minimum dependencies
+, Foundation
+, alsaLib
+, fontconfig
+, freetype
+, glibc
+, openssl
+, perl
+, unzip
+, xorg
+, zlib
+# runtime dependencies
+, cups
+# runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? true
+, cairo
+, glib
+, gtk3
+}:
 
 let
   platform = if stdenv.isDarwin then "darwin-amd64" else "linux-amd64";
+  runtimeDependencies = [
+    cups
+  ] ++ lib.optionals gtkSupport [
+    cairo glib gtk3
+  ];
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
   common = javaVersion:
     let
       javaVersionPlatform = "${javaVersion}-${platform}";
@@ -50,7 +80,27 @@ let
              url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
         ];
-        nativeBuildInputs = [ unzip perl ];
+
+        buildInputs = lib.optionals stdenv.isLinux [
+          alsaLib # libasound.so wanted by lib/libjsound.so
+          fontconfig
+          freetype
+          openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
+          stdenv.cc.cc.lib # libstdc++.so.6
+          xorg.libX11
+          xorg.libXext
+          xorg.libXi
+          xorg.libXrender
+          xorg.libXtst
+          zlib
+        ];
+
+        # Workaround for libssl.so.10 wanted by TruffleRuby
+        # Resulting TruffleRuby cannot use `openssl` library.
+        autoPatchelfIgnoreMissingDeps = true;
+
+        nativeBuildInputs = [ unzip perl autoPatchelfHook makeWrapper ];
+
         unpackPhase = ''
            unpack_jar() {
              jar=$1
@@ -136,32 +186,25 @@ let
 
         dontStrip = true;
 
-        # copy-paste openjdk's preFixup
         preFixup = ''
+          # We cannot use -exec since wrapProgram is a function but not a
+          # command.
+          for bin in $( find "$out" -executable -type f -not -path '*/languages/ruby/lib/gems/*' ); do
+            if patchelf --print-interpreter "$bin" &> /dev/null || head -n 1 "$bin" | grep '^#!' -q; then
+              wrapProgram "$bin" \
+                --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
+            fi
+          done
+
+          # copy-paste openjdk's preFixup
           # Set JAVA_HOME automatically.
           mkdir -p $out/nix-support
           cat <<EOF > $out/nix-support/setup-hook
             if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
           EOF
-        '';
 
-        postFixup = ''
-          rpath="${ {  "8" = "$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64:$out/jre/languages/ruby/lib/cext";
-                      "11" = "$out/lib/jli:$out/lib/server:$out/lib:$out/languages/ruby/lib/cext";
-                    }.${javaVersion}
-                 }:${
-            lib.makeLibraryPath [
-              stdenv.cc.cc.lib # libstdc++.so.6
-              zlib             # libz.so.1
-            ]}"
-
-          ${lib.optionalString stdenv.isLinux ''
-          for f in $(find $out -type f -perm -0100); do
-            patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f" || true
-            patchelf --set-rpath   "$rpath"                                    "$f" || true
-            if ldd "$f" | fgrep 'not found'; then echo "in file $f"; fi
-          done
-          ''}
+          find "$out" -name libfontmanager.so -exec \
+            patchelf --add-needed libfontconfig.so {} \;
         '';
 
         # $out/bin/native-image needs zlib to build native executables.

@@ -106,7 +106,7 @@ let
 
     preferLocalBuild = true;
 
-    buildInputs = [makeWrapper];
+    nativeBuildInputs = [ makeWrapper ];
     passthru = { unwrapped = neovim; };
 
     meta = neovim.meta // {

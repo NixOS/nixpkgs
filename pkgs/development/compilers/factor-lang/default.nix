@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     ./fuel-dir.patch
   ];
 
-  buildInputs = with xorg; [ git rlwrap curl pkg-config perl makeWrapper
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = with xorg; [ git rlwrap curl pkg-config perl
     libX11 pango cairo gtk2 gdk-pixbuf gtkglext
     mesa libXmu libXt libICE libSM openssl unzip ];
 

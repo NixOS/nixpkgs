@@ -15,8 +15,8 @@ stdenv.mkDerivation  rec {
   # http://permalink.gmane.org/gmane.linux.redhat.fedora.extras.cvs/822346
   patches = [ ./socket.patch ./gcc-47.patch ];
 
-  buildInputs = [ alsaLib gtk2 libjack2 libxml2 makeWrapper
-    pkg-config readline ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ alsaLib gtk2 libjack2 libxml2 readline ];
   propagatedBuildInputs = [ libuuid ];
   NIX_LDFLAGS = "-lm -lpthread -luuid";
 

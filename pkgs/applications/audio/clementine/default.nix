@@ -24,7 +24,7 @@ let
     ./clementine-spotify-blob.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [
     boost
@@ -68,7 +68,7 @@ let
     inherit src patches nativeBuildInputs postPatch;
 
     # gst_plugins needed for setup-hooks
-    buildInputs = buildInputs ++ [ makeWrapper ] ++ gst_plugins;
+    buildInputs = buildInputs ++ gst_plugins;
 
     preConfigure = ''
       rm -rf ext/{,lib}clementine-spotifyblob
@@ -102,7 +102,7 @@ let
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs patches postPatch;
 
-    buildInputs = buildInputs ++ [ libspotify makeWrapper ];
+    buildInputs = buildInputs ++ [ libspotify ];
     # Only build and install the Spotify blob
     preBuild = ''
       cd ext/clementine-spotifyblob

@@ -32,9 +32,9 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-nZxdYXRyv4UejPLHNT/p6CrvW22Koo7rZSi96KRjqFQ=";
   };
 
-  nativeBuildInputs = [ fakegit ];
+  nativeBuildInputs = [ fakegit makeWrapper ];
 
-  buildInputs = [ erlang openssl expat libyaml gd makeWrapper ]
+  buildInputs = [ erlang openssl expat libyaml gd ]
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib

@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0zb5qp04x8w4gn2kvfdfq2p44kmzfcqn7v167dixz6nlyxg41hrw";
   };
 
-  buildInputs = [ tcl tk libX11 zlib makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tcl tk libX11 zlib ];
 
   prePatch = ''
     sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \

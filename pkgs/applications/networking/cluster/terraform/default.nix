@@ -117,7 +117,7 @@ let
         else
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
-            buildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeWrapper ];
 
             buildCommand = pluginDir + ''
               mkdir -p $out/bin/

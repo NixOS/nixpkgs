@@ -21,7 +21,8 @@ in python2Packages.buildPythonApplication {
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ makeWrapper docutils unzip ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ docutils unzip ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   propagatedBuildInputs = [ hg-git dulwich ];

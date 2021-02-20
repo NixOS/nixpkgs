@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1argdzbif1vdmwp5vqbgkadq9ancjmgdm2ncp0qfckni715ss4rh";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib telepathy-glib dbus-glib libxslt telepathy-glib.python (lib.getLib dconf) makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ glib telepathy-glib dbus-glib libxslt telepathy-glib.python (lib.getLib dconf) ];
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-idle" \

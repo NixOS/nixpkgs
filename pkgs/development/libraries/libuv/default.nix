@@ -1,19 +1,20 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.40.0";
+  version = "1.41.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hd0x6i80ca3j0c3a7laygzab5qkgxjkz692jwzrsinsfhvbq0pg";
+    sha256 = "sha256-i6AYD1Ony0L2+3yWK6bxOfwoZEvd9qCg33QSqA7bRXI=";
   };
 
   postPatch = let
     toDisable = [
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
+      "tcp_connect_timeout" # tries to reach out to 8.8.8.8
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines

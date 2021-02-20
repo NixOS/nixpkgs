@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin

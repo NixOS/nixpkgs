@@ -59,7 +59,8 @@ let
       maintainers = with maintainers; [ ewok ];
     };
 
-    buildInputs = [makeWrapper dpkg];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [dpkg];
     phases = [ "unpackPhase" "installPhase" ];
 
     unpackPhase = "dpkg -X $src .";

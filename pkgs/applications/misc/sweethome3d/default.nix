@@ -34,7 +34,8 @@ let
       patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
     '';
 
-    buildInputs = [ ant jdk makeWrapper p7zip gtk3 gsettings-desktop-schemas ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ ant jdk p7zip gtk3 gsettings-desktop-schemas ];
 
     buildPhase = ''
       ant furniture textures help

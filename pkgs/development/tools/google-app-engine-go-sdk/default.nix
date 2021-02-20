@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
         sha256 = "0s8sqyc72lnc7dxd4cl559gyfx83x71jjpsld3i3nbp3mwwamczp";
       };
 
-  buildInputs = [ python makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/

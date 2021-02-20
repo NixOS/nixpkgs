@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ds+N0z7Vfw7xv+nE8RIfFjel81mJgIo1u1KspOHLxKc=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   propagatedBuildInputs = with python3Packages; [ python psutil ];
 
   dontBuild = true;

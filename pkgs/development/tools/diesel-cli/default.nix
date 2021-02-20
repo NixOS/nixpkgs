@@ -9,11 +9,9 @@ assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysq
 
 let
   inherit (lib) optional optionals optionalString;
-  features = ''
-    ${optionalString sqliteSupport "sqlite"} \
-    ${optionalString postgresqlSupport "postgres"} \
-    ${optionalString mysqlSupport "mysql"} \
-  '';
+  features = optional sqliteSupport "sqlite"
+    ++ optional postgresqlSupport "postgres"
+    ++ optional mysqlSupport "mysql";
 in
 
 rustPlatform.buildRustPackage rec {
@@ -35,11 +33,12 @@ rustPlatform.buildRustPackage rec {
     ./allow-warnings.patch
   ];
 
-  cargoBuildFlags = [ "--no-default-features --features \"${features}\"" ];
+  cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
   cargoPatches = [ ./cargo-lock.patch ];
   cargoSha256 = "1vbb7r0dpmq8363i040bkhf279pz51c59kcq9v5qr34hs49ish8g";
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ openssl ]
     ++ optional stdenv.isDarwin Security
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
@@ -47,12 +46,7 @@ rustPlatform.buildRustPackage rec {
     ++ optional postgresqlSupport postgresql
     ++ optionals mysqlSupport [ mysql zlib ];
 
-  # We must `cd diesel_cli`, we cannot use `--package diesel_cli` to build
-  # because --features fails to apply to the package:
-  # https://github.com/rust-lang/cargo/issues/5015
-  # https://github.com/rust-lang/cargo/issues/4753
-  preBuild = "cd diesel_cli";
-  postBuild = "cd ..";
+  buildAndTestSubdir = "diesel_cli";
 
   checkPhase = optionalString sqliteSupport ''
     (cd diesel_cli && cargo check --features sqlite)
@@ -65,7 +59,7 @@ rustPlatform.buildRustPackage rec {
 
   # Fix the build with mariadb, which otherwise shows "error adding symbols:
   # DSO missing from command line" errors for libz and libssl.
-  NIX_LDFLAGS = lib.optionalString mysqlSupport "-lz -lssl -lcrypto";
+  NIX_LDFLAGS = optionalString mysqlSupport "-lz -lssl -lcrypto";
 
   meta = with lib; {
     description = "Database tool for working with Rust projects that use Diesel";

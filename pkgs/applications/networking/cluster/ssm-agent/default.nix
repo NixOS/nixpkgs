@@ -14,7 +14,7 @@ buildGoPackage rec {
     "agent/cli-main"
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     rev    = version;

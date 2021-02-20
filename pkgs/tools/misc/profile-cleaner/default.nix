@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "11sjf4j9dr6ih9jkg6vqq6gkfg6wly4182bi1008bsm1zdmm5iz7";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     PREFIX=\"\" DESTDIR=$out make install

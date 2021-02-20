@@ -49,7 +49,8 @@ in
     sha256 = "1h53gl41ydr7kim6q9ckg3xyhb0rhmwj7jnis0xz6vms52b3h59k";
   };
 
-  buildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ unzip ];
 
   unpackCmd = "unzip $curSrc";
 

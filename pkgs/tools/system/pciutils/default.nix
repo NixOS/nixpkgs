@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, kmod, which
+, hwdata
 , static ? stdenv.hostPlatform.isStatic
 , IOKit
 }:
@@ -30,8 +31,15 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-lib" ];
 
-  # Get rid of update-pciids as it won't work.
-  postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";
+  postInstall = ''
+    # Remove update-pciids as it won't work on nixos
+    rm $out/sbin/update-pciids $out/man/man8/update-pciids.8
+
+    # use database from hwdata instead
+    # (we don't create a symbolic link because we do not want to pull in the
+    # full closure of hwdata)
+    cp --reflink=auto ${hwdata}/share/hwdata/pci.ids $out/share/pci.ids
+  '';
 
   meta = with lib; {
     homepage = "http://mj.ucw.cz/pciutils.html";

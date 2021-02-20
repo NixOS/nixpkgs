@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  buildInputs = [ jdk makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk ];
 
   installPhase = ''
     mkdir -p $out/share/lib/selendroid
