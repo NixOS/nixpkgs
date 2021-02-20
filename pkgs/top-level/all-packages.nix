@@ -13797,7 +13797,10 @@ in
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../build-support/go/garble.nix { };
+  garble = callPackage ../build-support/go/garble.nix {
+    # https://github.com/burrowers/garble/issues/124
+    buildGoModule = buildGo115Module;
+  };
 
   gcab = callPackage ../development/libraries/gcab { };
 

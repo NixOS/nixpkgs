@@ -222,9 +222,9 @@ in with passthru; stdenv.mkDerivation {
       else
         ./3.7/fix-finding-headers-when-cross-compiling.patch
     )
-  ] ++ optionals (isPy36 || isPy37) [
+  ] ++ optionals (isPy36) [
     # Backport a fix for ctypes.util.find_library.
-    ./3.7/find_library.patch
+    ./3.6/find_library.patch
   ];
 
   postPatch = ''
