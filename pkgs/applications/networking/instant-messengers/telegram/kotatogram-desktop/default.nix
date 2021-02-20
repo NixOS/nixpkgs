@@ -1,20 +1,20 @@
 { mkDerivation, lib, fetchFromGitHub, pkg-config, python3, cmake, ninja
 , qtbase, qtimageformats, libdbusmenu, hunspell, xdg-utils, ffmpeg_3, openalSoft
-, lzma, lz4, xxHash, zlib, minizip, openssl, libtgvoip, microsoft_gsl, tl-expected
-, range-v3
+, lzma, lz4, xxHash, zlib, minizip, openssl, libtgvoip, tl-expected
+, range-v3, libopus, alsaLib, libpulseaudio
 }:
 
 with lib;
 
 mkDerivation rec {
   pname = "kotatogram-desktop";
-  version = "1.2";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
     repo = "kotatogram-desktop";
     rev = "k${version}";
-    sha256 = "00pdx3cjhrihf7ihhmszcf159jrzn1bcx20vwiiizs5r1qk8l210";
+    sha256 = "sha256-BSVz8aXy2UdNvlkG8dfXyNlA1K2UUMfV95LdS2GJYn0=";
     fetchSubmodules = true;
   };
 
@@ -22,7 +22,8 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase qtimageformats ffmpeg_3 openalSoft lzma lz4 xxHash libdbusmenu
-    zlib minizip openssl hunspell libtgvoip microsoft_gsl tl-expected range-v3
+    zlib minizip openssl hunspell libtgvoip tl-expected range-v3
+    libopus alsaLib libpulseaudio
   ];
 
   qtWrapperArgs = [
@@ -30,9 +31,12 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DTDESKTOP_API_TEST=ON"
+    "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_VARIANT=OFF"
+    "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
   ];
 
   meta = {
