@@ -7679,6 +7679,8 @@ in {
 
   tag-expressions = callPackage ../development/python-modules/tag-expressions { };
 
+  tahoma-api = callPackage ../development/python-modules/tahoma-api { };
+
   tarman = callPackage ../development/python-modules/tarman { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
