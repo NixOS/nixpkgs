@@ -948,7 +948,7 @@
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xfinity" = ps: with ps; [ ]; # missing inputs: xfinity-gateway
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
-    "xiaomi_aqara" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: PyXiaomiGateway
+    "xiaomi_aqara" = ps: with ps; [ pyxiaomigateway aiohttp-cors netdisco zeroconf ];
     "xiaomi_miio" = ps: with ps; [ construct python-miio ];
     "xiaomi_tv" = ps: with ps; [ ]; # missing inputs: pymitv
     "xmpp" = ps: with ps; [ slixmpp ];
