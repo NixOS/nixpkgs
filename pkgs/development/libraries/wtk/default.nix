@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   libraries = [ xorg.libXpm xorg.libXt xorg.libX11 xorg.libICE xorg.libSM stdenv.cc.cc ];
 

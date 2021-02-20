@@ -10,9 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "00l92k231yb49wijzkspa2l58mapn6vh2dlxnlg0pawjjfv33s6z";
   };
 
-  buildInputs = [
-    unzip
-  ] ++ lib.optionals stdenv.isDarwin [setfile];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = lib.optionals stdenv.isDarwin [setfile];
 
   meta = {
     homepage = "http://muparser.sourceforge.net";

@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     libGLU libGL
     libarchive
     libao
-    unzip
     xdg-utils
     gnome3.adwaita-icon-theme
   ];
@@ -37,6 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
     wrapGAppsHook
+    unzip
   ];
 
   installPhase = ''

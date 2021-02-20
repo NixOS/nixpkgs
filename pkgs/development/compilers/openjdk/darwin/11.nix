@@ -15,7 +15,8 @@ let
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-mac/";
     };
 
-    buildInputs = [ unzip freetype ];
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ freetype ];
 
     installPhase = ''
       mkdir -p $out

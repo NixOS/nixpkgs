@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp f2c.h $out/include
   '';
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   hardeningDisable = [ "format" ];
 

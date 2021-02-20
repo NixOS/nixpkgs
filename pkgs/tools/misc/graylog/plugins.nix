@@ -15,7 +15,7 @@ let
     stdenv.mkDerivation (a // {
       inherit installPhase;
       dontUnpack = true;
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       meta = a.meta // {
         platforms = graylog.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];

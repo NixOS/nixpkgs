@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     ./fuel-dir.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = with xorg; [ git rlwrap curl pkg-config perl
     libX11 pango cairo gtk2 gdk-pixbuf gtkglext
-    mesa libXmu libXt libICE libSM openssl unzip ];
+    mesa libXmu libXt libICE libSM openssl ];
 
   buildPhase = ''
     sed -ie '4i GIT_LABEL = heads/master-${rev}' GNUmakefile

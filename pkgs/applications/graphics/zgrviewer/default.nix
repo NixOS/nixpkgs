@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/zvtm/${pname}/${version}/${pname}-${version}.zip";
     sha256 = "1yg2rck81sqqrgfi5kn6c1bz42dr7d0zqpcsdjhicssi1y159f23";
   };
-  buildInputs = [jre unzip];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [jre];
   buildPhase = "";
   installPhase = ''
     mkdir -p "$out"/{bin,share/java/zvtm/plugins,share/doc/zvtm}

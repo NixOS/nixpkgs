@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   buildPhase = ''
     g++ ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so

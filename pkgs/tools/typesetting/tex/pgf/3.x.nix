@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0kj769hyp4z2zmdv3f8xv443wcfqn5nkkbzxzqgfxjizlz81aav7";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   # Multiple files problem
   unpackPhase = ''

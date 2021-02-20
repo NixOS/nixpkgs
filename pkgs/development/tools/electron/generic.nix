@@ -95,7 +95,7 @@ let
   };
 
   darwin = {
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
 
     buildCommand = ''
       mkdir -p $out/Applications

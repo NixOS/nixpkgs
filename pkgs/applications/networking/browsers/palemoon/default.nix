@@ -43,14 +43,14 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    desktop-file-utils file gnum4 perl pkg-config python2 wget which wrapGAppsHook
+    desktop-file-utils file gnum4 perl pkg-config python2 wget which wrapGAppsHook unzip
   ];
 
   buildInputs = [
     alsaLib bzip2 cairo dbus dbus-glib ffmpeg fontconfig freetype
     gnome2.GConf gtk2 hunspell libevent libjpeg libnotify
     libstartup_notification libGLU libGL
-    libpulseaudio unzip yasm zip zlib
+    libpulseaudio yasm zip zlib
   ]
   ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver

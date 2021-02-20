@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo ];
-  buildInputs = with perlPackages; [ file perl unzip openssl ncurses JSON Tk TermReadKey ];
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo unzip ];
+  buildInputs = with perlPackages; [ file perl openssl ncurses JSON Tk TermReadKey ];
 
   enableParallelBuilding = true;
   doCheck = false;  # tries to use networking

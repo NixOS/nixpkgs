@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   dontStrip = true;
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   phases = "unpackPhase installPhase";
   unpackPhase = "mkdir ${pname}-${version} && cd ${pname}-${version} && unzip -qq ${src}";

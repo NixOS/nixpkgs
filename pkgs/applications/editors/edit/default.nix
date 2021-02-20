@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     sha256 = "0wv8i3ii7cd9bqhjpahwp2g5fcmyk365nc7ncmvl79cxbz3f7y8v";
   };
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-     unzip
      pkg-config
      ncurses
      libX11

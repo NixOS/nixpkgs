@@ -12,8 +12,7 @@ in stdenv.mkDerivation {
   };
 
   propagatedBuildInputs = [ jre ] ;
-  buildInputs = [ unzip ] ;
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
     mkdir -p $out
