@@ -5229,6 +5229,8 @@ in {
 
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
 
+  pyalmond = callPackage ../development/python-modules/pyalmond { };
+
   pyamf = callPackage ../development/python-modules/pyamf { };
 
   pyamg = callPackage ../development/python-modules/pyamg { };
