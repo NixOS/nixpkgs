@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "python-Levenshtein";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0489zzjlfgzpc7vggs7s7db13pld2nlnw7iwgdz1f386i0x2fkjm";
+    sha256 = "dc2395fbd148a1ab31090dd113c366695934b9e85fe5a4b2a032745efd0346f6";
   };
 
   # No tests included in archive
