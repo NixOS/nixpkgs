@@ -16,12 +16,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.1";
+  version = "0.4.3";
   pname = "gpsoauth";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c3f45824d45ac3d06b9d9a0c0eccafe1052505d31ac9a698aef8b00fb0dfc37";
+    sha256 = "b38f654450ec55f130c9414d457355d78030a2c29c5ad8f20b28304a9fc8fad7";
   };
 
   propagatedBuildInputs = [ cffi cryptography enum34 idna ipaddress ndg-httpsclient pyopenssl pyasn1 pycparser pycryptodomex requests six ];
