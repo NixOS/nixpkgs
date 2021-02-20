@@ -9324,7 +9324,7 @@
     name = "Jan Beinke";
   };
   thesola10 = {
-    email = "thesola10@bobile.fr";
+    email = "me@thesola.io";
     github = "thesola10";
     githubId = 7287268;
     keys = [{
