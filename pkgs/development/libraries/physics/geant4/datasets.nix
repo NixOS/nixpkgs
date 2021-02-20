@@ -70,8 +70,8 @@ in
 
     {
       name = "G4PARTICLEXS";
-      version = "3.1";
-      sha256 = "1kg9y0kqn4lma7b0yjpgj7s9n317yqi54ydvq365qphnmm7ahka0";
+      version = "3.1.1";
+      sha256 = "1nmgy8w1s196php7inrkbsi0f690qa2dsyj9s1sp75mndkfpxhb6";
       envvar = "PARTICLEXS";
     }
 
