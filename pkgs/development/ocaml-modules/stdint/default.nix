@@ -21,14 +21,18 @@ buildDunePackage rec {
     })
   ];
 
-  # disable remaining broken tests, see
-  # https://github.com/andrenth/ocaml-stdint/issues/59
+  # 1. disable remaining broken tests, see
+  #    https://github.com/andrenth/ocaml-stdint/issues/59
+  # 2. fix tests to liberal test range
+  #    https://github.com/andrenth/ocaml-stdint/pull/61
   postPatch = ''
     substituteInPlace tests/stdint_test.ml \
       --replace 'test "An integer should perform left-shifts correctly"' \
                 'skip "An integer should perform left-shifts correctly"' \
       --replace 'test "Logical shifts must not sign-extend"' \
-                'skip "Logical shifts must not sign-extend"'
+                'skip "Logical shifts must not sign-extend"' \
+      --replace 'let pos_int = QCheck.map_same_type abs in_range' \
+                'let pos_int = QCheck.int_range 0 maxi'
   '';
 
   doCheck = true;
