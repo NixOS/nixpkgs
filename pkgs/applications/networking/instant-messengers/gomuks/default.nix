@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "169xyd44jyfh5njwmhsmkah8njfgnp9q9c2b13p0ry5saicwm5h5";
+    sha256 = "0g0aa6h6bm00mdgkb38wm66rcrhqfvs2xj9rl04bwprsa05q5lca";
   };
 
-  vendorSha256 = "1l8qnz0qy90zpywfx7pbkqpxg7rkvc9j622zcmkf38kdc1z6w20a";
+  vendorSha256 = "14ya5advpv4q5il235h5dxy8c2ap2yzrvqs0sjqgw0v1vm6vpwdx";
 
   doCheck = false;
 
