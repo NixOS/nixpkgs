@@ -86,7 +86,6 @@ let
                           else if targetPlatform.isWindows then "mcf"
                           else "single"}"
       "--enable-nls"
-      "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
     ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
