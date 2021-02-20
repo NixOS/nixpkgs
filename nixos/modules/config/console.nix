@@ -144,11 +144,16 @@ in
           ''}
         '';
 
-        systemd.services.systemd-vconsole-setup =
-          {
-            before = optional config.services.xserver.enable "display-manager.service";
-            after = [ "systemd-udev-settle.service" ];
+        systemd.services.reload-systemd-vconsole-setup =
+          { description = "Reset console on configuration changes";
+            wantedBy = [ "multi-user.target" ];
             restartTriggers = [ vconsoleConf consoleEnv ];
+            reloadIfChanged = true;
+            serviceConfig =
+              { RemainAfterExit = true;
+                ExecStart = "${pkgs.coreutils}/bin/true";
+                ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
+              };
           };
       }
 
