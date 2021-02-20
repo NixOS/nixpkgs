@@ -264,7 +264,7 @@
     "flick_electric" = ps: with ps; [ ]; # missing inputs: PyFlick
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
-    "flume" = ps: with ps; [ ]; # missing inputs: pyflume
+    "flume" = ps: with ps; [ pyflume ];
     "flunearyou" = ps: with ps; [ ]; # missing inputs: pyflunearyou
     "flux" = ps: with ps; [ ];
     "flux_led" = ps: with ps; [ flux-led ];
