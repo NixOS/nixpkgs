@@ -29,24 +29,24 @@ let
 
   connect-kak = buildKakounePluginFrom2Nix {
     pname = "connect-kak";
-    version = "2020-11-25";
+    version = "2021-02-13";
     src = fetchFromGitHub {
       owner = "alexherbo2";
       repo = "connect.kak";
-      rev = "56fc2476e8cf126fb16654f4a08582f4f76b0d3d";
-      sha256 = "1qzb0rdwyx00b7wc7rlmc7rcgj3vd57jgcbdy56ic3dr8j70mv6v";
+      rev = "0858c0e50c6ca6d214fb088f052385a242548e83";
+      sha256 = "1w4pwybg3v916hcyc49gz0blygv54ivv81x8fxp44ck0sy98idr3";
     };
     meta.homepage = "https://github.com/alexherbo2/connect.kak/";
   };
 
   fzf-kak = buildKakounePluginFrom2Nix {
     pname = "fzf-kak";
-    version = "2020-07-26";
+    version = "2021-01-27";
     src = fetchFromGitHub {
       owner = "andreyorst";
       repo = "fzf.kak";
-      rev = "f23daa698ad95493fbd675ae153e3cac13ef34e9";
-      sha256 = "0q19ynjixy0wx9ygwj26bdm6ilkd820gy21kid73imgvkm6cgx85";
+      rev = "e10de405e2a98e910d0808059200d206ba80f865";
+      sha256 = "1hbsm1k8k0cgv7gxqicvnl22n2lb1plhkanniggk694gll22lq68";
     };
     meta.homepage = "https://github.com/andreyorst/fzf.kak/";
   };
@@ -89,12 +89,12 @@ let
 
   kakoune-extra-filetypes = buildKakounePluginFrom2Nix {
     pname = "kakoune-extra-filetypes";
-    version = "2020-12-08";
+    version = "2021-01-15";
     src = fetchFromGitHub {
       owner = "kakoune-editor";
       repo = "kakoune-extra-filetypes";
-      rev = "9cbd83b91e0a584bdf24e999f828c60dc6365b25";
-      sha256 = "12yg6k63ka8d24vn4vk7wdnxmglcd4b0yq98sghkzwg5jbp1x7vn";
+      rev = "c6f8aaccd8c9cd6b487964c8943416e21fbe7c18";
+      sha256 = "1vkff8xbycfgxv8x09cvc79qcg5fdzn2x77mbmifmkq236khrwrg";
     };
     meta.homepage = "https://github.com/kakoune-editor/kakoune-extra-filetypes/";
   };
@@ -149,12 +149,12 @@ let
 
   powerline-kak = buildKakounePluginFrom2Nix {
     pname = "powerline-kak";
-    version = "2020-11-28";
+    version = "2021-02-15";
     src = fetchFromGitHub {
       owner = "jdugan6240";
       repo = "powerline.kak";
-      rev = "1426af690048ec9c1599d18725758bb954d465d6";
-      sha256 = "1ycg5376rmglkiiz184r8kyjljvfnay8g208fs8b85ilg5xhkrk5";
+      rev = "322a760daa099d519ff50d14c29b27f3e2af00d1";
+      sha256 = "0mb8f8p6g75p05ifp45i0gbq2mib8c8giz7r1xfd0yrwspp4aksc";
     };
     meta.homepage = "https://github.com/jdugan6240/powerline.kak/";
   };
@@ -197,12 +197,12 @@ let
 
   tabs-kak = buildKakounePluginFrom2Nix {
     pname = "tabs-kak";
-    version = "2020-12-27";
+    version = "2021-02-16";
     src = fetchFromGitHub {
       owner = "enricozb";
       repo = "tabs.kak";
-      rev = "2775ab7a1fe3bb850c1de3bcc4111e3d4c24f5d4";
-      sha256 = "1vyg1dgbrrsh4vj5lllp9lhslv6gip4v6vmym4lg5mnqmd82jji1";
+      rev = "1aaa8cd89e404cbbd76d44ff8089de0951612fbf";
+      sha256 = "0dfz6j6yxl65jbh4xvpiy2abr2sdjyalynzhl28y7l1gzqv4ni3j";
     };
     meta.homepage = "https://github.com/enricozb/tabs.kak/";
   };
