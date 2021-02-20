@@ -8378,6 +8378,8 @@ in {
 
   ws4py = callPackage ../development/python-modules/ws4py { };
 
+  wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
+
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
   WSGIProxy = callPackage ../development/python-modules/wsgiproxy { };
