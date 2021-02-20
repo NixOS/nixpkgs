@@ -28,13 +28,19 @@ in stdenv.mkDerivation rec {
   buildInputs = [ vim-customized ];
 
   buildPhase = ''
+    runHook preBuild
     # generate the helptags
     vim -u NONE -c "helptags $(pwd)/doc" -c q
+    runHook postBuild
   '';
 
-  patches = [ ./helptags.patch ];
+  patches = [
+    # Don't generate helptags at runtime into read-only $SPACEVIMDIR
+    ./helptags.patch
+  ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
 
     cp -r $(pwd) $out/SpaceVim
@@ -43,6 +49,7 @@ in stdenv.mkDerivation rec {
     makeWrapper "${vim-customized}/bin/vim" "$out/bin/spacevim" \
         --add-flags "-u $out/SpaceVim/vimrc" --set SPACEVIMDIR "${spacevimdir}/" \
         --prefix PATH : ${lib.makeBinPath [ fzf git ripgrep]}
+    runHook postInstall
   '';
 
   meta = with lib; {
