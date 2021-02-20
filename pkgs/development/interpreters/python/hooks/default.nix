@@ -91,6 +91,11 @@ in rec {
       };
     } ./python-imports-check-hook.sh) {};
 
+  pythonMoveWheelHook = callPackage ({}:
+    makeSetupHook {
+      name = "python-move-wheel-hook.sh";
+    } ./python-move-wheel-hook.sh) {};
+
   pythonNamespacesHook = callPackage ({}:
     makeSetupHook {
       name = "python-namespaces-hook.sh";

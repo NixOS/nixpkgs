@@ -16,6 +16,7 @@
 , pipInstallHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
+, pythonMoveWheelHook
 , pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
@@ -114,6 +115,7 @@ let
       python
       wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+      pythonMoveWheelHook
       pythonRemoveTestsDirHook
     ] ++ lib.optionals catchConflicts [
       setuptools pythonCatchConflictsHook
@@ -166,6 +168,11 @@ let
 
     # Python packages built through cross-compilation are always for the host platform.
     disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+
+    outputs = [
+      "out"
+      "wheel"
+    ];
 
     meta = {
       # default to python's platforms
