@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   preBuild = "
-    makeFlagsArray=(prefix=$out E=echo RANLIB=ranlib INSTALL='install -c')
+    makeFlagsArray=(prefix=$out E=echo RANLIB=${stdenv.cc.targetPrefix}ranlib INSTALL='install -c')
   ";
 
   # Work around a broken Makefile.

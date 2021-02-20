@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = [ "GCC=cc" "CC_STD=-std=c99" "LDFLAGS=-lm" ];
+  makeFlags = [ "GCC=${stdenv.cc.targetPrefix}cc" "CC_STD=-std=c99" "LDFLAGS=-lm" ];
 
   preInstall = ''
     install -d ${placeholder "out"}/bin

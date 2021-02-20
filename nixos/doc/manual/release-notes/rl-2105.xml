@@ -93,6 +93,11 @@
   <itemizedlist>
     <listitem>
       <para>
+        The <literal>systemConfig</literal> kernel parameter is no longer added to boot loader entries. It has been unused since September 2010, but if do have a system generation from that era, you will now be unable to boot into them.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
         <literal>systemd-journal2gelf</literal> no longer parses json and expects the receiving system to handle it. How to achieve this with Graylog is described in this <link xlink:href="https://github.com/parse-nl/SystemdJournal2Gelf/issues/10">GitHub issue</link>.
       </para>
    </listitem>

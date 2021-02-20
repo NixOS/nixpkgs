@@ -1408,7 +1408,12 @@ self: super: {
   # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
-  haskell-language-server = dontCheck super.haskell-language-server;
+  haskell-language-server = overrideCabal (dontCheck super.haskell-language-server) {
+    # 2020-02-19: Override is necessary because of wrong bound on upstream, remove after next hackage update
+    preConfigure = ''
+      substituteInPlace haskell-language-server.cabal --replace "hls-explicit-imports-plugin ==0.1.0.1" "hls-explicit-imports-plugin ==0.1.0.0"
+    '';
+  };
 
   # 2021-02-08: Jailbreaking because of
   # https://github.com/haskell/haskell-language-server/issues/1329
@@ -1502,6 +1507,8 @@ self: super: {
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   heist = doJailbreak super.heist;
 
+  hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_1_1; });
+
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
   snap = doJailbreak super.snap;
 
@@ -1581,4 +1588,7 @@ self: super: {
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
+
+  # Overly strict version bounds: https://github.com/Profpatsch/yarn-lock/issues/8
+  yarn-lock = doJailbreak super.yarn-lock;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

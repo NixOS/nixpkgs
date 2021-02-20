@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
                 "GLOBALCONF=${placeholder "out"}/share/boxes/boxes-config"
   '';
 
-  makeFlags = lib.optionals stdenv.isDarwin [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install -Dm755 -t $out/bin src/boxes

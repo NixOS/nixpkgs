@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1axg8r4g5n5kdqj5013pgck80nni3z172xkg506vz4zx1zcmrm4r";
   };
 
-  buildFlags = [ "CC=cc" ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     mkdir -p $out/bin
