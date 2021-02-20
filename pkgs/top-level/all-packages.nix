@@ -21439,6 +21439,8 @@ in
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
+  bottles = callPackage ../applications/misc/bottles { };
+
   brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
