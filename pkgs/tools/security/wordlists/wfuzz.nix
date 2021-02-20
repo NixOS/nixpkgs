@@ -1,6 +1,6 @@
 { lib
-, pkgs
 , stdenv
+, wfuzz
 }:
 
 let
@@ -8,9 +8,9 @@ let
 
 in stdenv.mkDerivation {
   pname = "wfuzz";
-  version = pkgs.wfuzz.version;
+  inherit (wfuzz) version;
 
-  src = pkgs.wfuzz.src + "/wordlist";
+  src = wfuzz.src + "/wordlist";
 
   installPhase = ''
     mkdir -p $out/share
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
   passthru = { inherit shared; };
 
   meta = with lib; {
-    inherit (pkgs.wfuzz.meta) license homepage;
+    inherit (wfuzz.meta) license homepage;
     maintainers = with maintainers; [ pamplemousse ];
   };
 }

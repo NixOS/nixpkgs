@@ -8,15 +8,19 @@
 let
   _wordlistData =
     [ { name = "dirbuster"; expressionPath = ./dirbuster.nix; }
-      { name = "nmap"; expressionPath = ./nmap.nix; }
+      { name = "nmap"; expressionPath = ./nmap.nix; needsPackage = true; }
       { name = "rockyou"; expressionPath = ./rockyou.nix; }
       { name = "seclists"; expressionPath = ./seclists.nix; }
-      { name = "wfuzz"; expressionPath = ./wfuzz.nix; }
+      { name = "wfuzz"; expressionPath = ./wfuzz.nix; needsPackage = true; }
     ];
 
   scopedWordlists = lib.makeScope pkgs.newScope (self: with self;
     let _packageWithLinkCommandFrom = acc: datum:
-        let p = callPackage datum.expressionPath {};
+      # Some wordlists are based on an already existing `nixpkgs` package; Pass it as parameter of the expression.
+      let parameters = {}
+        // lib.optionalAttrs ((builtins.elem "needsPackage" (builtins.attrNames datum)) && datum.needsPackage) { ${datum.name} = pkgs.${datum.name}; };
+      in
+        let p = callPackage datum.expressionPath parameters;
         in acc // { ${datum.name} = p; };
     in builtins.foldl' _packageWithLinkCommandFrom {} _wordlistData
   );

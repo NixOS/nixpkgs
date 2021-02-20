@@ -1,6 +1,6 @@
 { fetchFromGitHub
 , lib
-, pkgs
+, nmap
 , stdenv
 }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
   passthru = { inherit shared; };
 
   meta = with lib; {
-    inherit (pkgs.nmap.meta) homepage license;
+    inherit (nmap.meta) homepage license;
     maintainers = with maintainers; [ pamplemousse ];
   };
 }
