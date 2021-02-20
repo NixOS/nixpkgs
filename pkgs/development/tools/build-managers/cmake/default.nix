@@ -64,8 +64,6 @@ stdenv.mkDerivation (rec {
       --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
-    substituteInPlace Modules/FindCxxTest.cmake \
-      --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
   ''
   # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
   + ''
