@@ -815,7 +815,7 @@
     "systemmonitor" = ps: with ps; [ psutil ];
     "tado" = ps: with ps; [ python-tado ];
     "tag" = ps: with ps; [ ];
-    "tahoma" = ps: with ps; [ ]; # missing inputs: tahoma-api
+    "tahoma" = ps: with ps; [ tahoma-api ];
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility
     "tankerkoenig" = ps: with ps; [ ]; # missing inputs: pytankerkoenig
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
