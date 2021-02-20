@@ -4584,11 +4584,12 @@ in
   iperf = iperf3;
 
   ipfs = ipfs_0_6;
-  ipfs_latest = ipfs_0_7;
+  ipfs_latest = ipfs_0_8;
   ipfs_0_6 = callPackage ../applications/networking/ipfs/0.6.nix {
     buildGoModule = buildGo114Module;
   };
   ipfs_0_7 = callPackage ../applications/networking/ipfs/0.7.nix { };
+  ipfs_0_8 = callPackage ../applications/networking/ipfs/0.8.nix { };
 
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
