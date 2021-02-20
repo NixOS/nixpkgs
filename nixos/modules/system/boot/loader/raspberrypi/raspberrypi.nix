@@ -12,7 +12,7 @@ let
     if cfg.uboot.enable then
       "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
     else
-      "${builderGeneric} -c";
+      "${builderGeneric} -c -g ${toString cfg.configurationLimit}";
 
   blCfg = config.boot.loader;
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
@@ -59,6 +59,15 @@ in
         default = 2;
         type = types.enum [ 0 1 2 3 4 ];
         description = "";
+      };
+
+      configurationLimit = mkOption {
+        default = 20;
+        example = 10;
+        type = types.int;
+        description = ''
+          Maximum number of generations to copy to the boot disk.
+        '';
       };
 
       uboot = {

@@ -9,17 +9,19 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 
 usage() {
-    echo "usage: $0 -c <path-to-default-configuration> [-d <boot-dir>]" >&2
+    echo "usage: $0 -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>]" >&2
     exit 1
 }
 
 default=                # Default configuration
 target=/boot            # Target directory
+numGenerations=0        # Number of other generations to include in the menu
 
-while getopts "c:d:" opt; do
+while getopts "c:d:g:" opt; do
     case "$opt" in
         c) default="$OPTARG" ;;
         d) target="$OPTARG" ;;
+        g) numGenerations="$OPTARG" ;;
         \?) usage ;;
     esac
 done
@@ -107,7 +109,8 @@ addEntry $default default
 for generation in $(
     (cd /nix/var/nix/profiles && ls -d system-*-link) \
     | sed 's/system-\([0-9]\+\)-link/\1/' \
-    | sort -n -r); do
+    | sort -n -r \
+    | head -n $numGenerations); do
     link=/nix/var/nix/profiles/system-$generation-link
     addEntry $link $generation
 done
