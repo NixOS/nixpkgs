@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ eduardosm ];
     platforms = platforms.linux;
   };
 }
