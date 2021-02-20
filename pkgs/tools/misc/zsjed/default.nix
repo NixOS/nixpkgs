@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  installFlags = "DESTDIR=$out";
+  installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   # zsjed-mkls uses: sort find awk
   postInstall = ''
