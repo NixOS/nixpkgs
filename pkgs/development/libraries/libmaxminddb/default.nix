@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmaxminddb";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchurl {
     url = meta.homepage + "/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fFbnkf8qZVIV5+04ZLH/3X00o4g1d57+1WpC8Fa9WKo=";
+    sha256 = "sha256-UjcHbSUKX3wpfjMcNaQz7qrw3CBeBw5Ns1PJuhDzQKI=";
   };
 
   meta = with lib; {
