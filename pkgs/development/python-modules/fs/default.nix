@@ -20,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "fs";
-  version = "2.4.11";
+  version = "2.4.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc99d476b500f993df8ef697b96dc70928ca2946a455c396a566efe021126767";
+    sha256 = "c10ba188b14d6213a1ca950efd004931abbfa64b294c80bbf1045753831bf42f";
   };
 
   buildInputs = [ glibcLocales ];
