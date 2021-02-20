@@ -11,6 +11,11 @@ buildPythonPackage rec {
     sha256 = "2527423e3a24ccd56951f3ce1b0ebbcc4fa0518c82fca882e696c78726ab9c2f";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pygments < 2.6" "pygments"
+  '';
+
   propagatedBuildInputs = [ docutils pygments setuptools ];
 
   meta = with lib; {
