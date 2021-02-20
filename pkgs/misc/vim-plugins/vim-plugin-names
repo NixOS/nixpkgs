@@ -429,6 +429,7 @@ nvim-treesitter/nvim-treesitter-textobjects
 nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
+ojroques/nvim-lspfuzzy
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure

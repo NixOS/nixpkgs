@@ -3058,6 +3058,18 @@ let
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
 
+  nvim-lspfuzzy = buildVimPluginFrom2Nix {
+    pname = "nvim-lspfuzzy";
+    version = "2020-12-14";
+    src = fetchFromGitHub {
+      owner = "ojroques";
+      repo = "nvim-lspfuzzy";
+      rev = "6b5dc735709aa3c67268d1c310b35f65ee86c7ef";
+      sha256 = "0jbx5mac95nnbm1jnzdhkgxidin17lwg9gyvsqn0qcdly4gl4iqk";
+    };
+    meta.homepage = "https://github.com/ojroques/nvim-lspfuzzy/";
+  };
+
   nvim-lsputils = buildVimPluginFrom2Nix {
     pname = "nvim-lsputils";
     version = "2021-02-05";
