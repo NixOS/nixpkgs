@@ -1,5 +1,5 @@
 { ripgrep, git, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub
-, lib, stdenv, formats, spacevim_config ? import ./init.nix }:
+, lib, stdenv, formats, runCommand, spacevim_config ? import ./init.nix }:
 
 let
   format = formats.toml {};
@@ -10,7 +10,10 @@ let
     # ~/.cache/vimfiles/repos
     vimrcConfig.packages.myVimPackage = with vimPlugins; { start = [ ]; };
   };
-  spacevimdir = format.generate "init.toml" spacevim_config;
+  spacevimdir = runCommand "SpaceVim.d" { } ''
+    mkdir -p $out
+    cp ${format.generate "init.toml" spacevim_config} $out/init.toml
+  '';
 in stdenv.mkDerivation rec {
   pname = "spacevim";
   version = "1.5.0";
@@ -25,13 +28,19 @@ in stdenv.mkDerivation rec {
   buildInputs = [ vim-customized ];
 
   buildPhase = ''
+    runHook preBuild
     # generate the helptags
     vim -u NONE -c "helptags $(pwd)/doc" -c q
+    runHook postBuild
   '';
 
-  patches = [ ./helptags.patch ];
+  patches = [
+    # Don't generate helptags at runtime into read-only $SPACEVIMDIR
+    ./helptags.patch
+  ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
 
     cp -r $(pwd) $out/SpaceVim
@@ -40,6 +49,7 @@ in stdenv.mkDerivation rec {
     makeWrapper "${vim-customized}/bin/vim" "$out/bin/spacevim" \
         --add-flags "-u $out/SpaceVim/vimrc" --set SPACEVIMDIR "${spacevimdir}/" \
         --prefix PATH : ${lib.makeBinPath [ fzf git ripgrep]}
+    runHook postInstall
   '';
 
   meta = with lib; {
