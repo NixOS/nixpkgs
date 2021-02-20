@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "parameterized";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "190f8cc7230eee0b56b30d7f074fd4d165f7c45e6077582d0813c8557e738490";
+    sha256 = "b5e6af67b9e49485e30125b1c8f031ffa81a265ca08bfa73f31551bf03cf68c4";
   };
 
   # Tests require some python3-isms but code works without.
