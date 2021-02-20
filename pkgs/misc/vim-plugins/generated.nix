@@ -2926,6 +2926,18 @@ let
     meta.homepage = "https://github.com/hrsh7th/nvim-compe/";
   };
 
+  nvim-colorizer = buildVimPluginFrom2Nix {
+    pname = "nvim-colorizer";
+    version = "2020-11-09";
+    src = fetchFromGitHub {
+      owner = "norcalli";
+      repo = "nvim-colorizer.lua";
+      rev = "36c610a9717cc9ec426a07c8e6bf3b3abcb139d6";
+      sha256 = "0gvqdfkqf6k9q46r0vcc3nqa6w45gsvp8j4kya1bvi24vhifg2p9";
+    };
+    meta.homepage = "https://github.com/norcalli/nvim-colorizer.lua";
+  };
+
   nvim-completion-manager = buildVimPluginFrom2Nix {
     pname = "nvim-completion-manager";
     version = "2018-07-27";
