@@ -1,0 +1,19 @@
+diff -u zsjed-0.3/Makefile zsjed-0.3.new/Makefile
+--- zsjed-0.3/Makefile	2018-01-01 17:21:55.000000000 +0100
++++ zsjed-0.3.new/Makefile	2021-02-20 12:48:25.988807315 +0100
+@@ -4,13 +4,12 @@
+ .PHONY: all
+ 
+ zsjed-%: %.cxx zsjed_seek.hpp
+-	g++ -std=c++14 -Wall $(CXXFLAGS) -o $@ $<
++	$(CXX) -std=c++14 -Wall $(CXXFLAGS) -o $@ $<
+ 
+ clean:
+ 	@rm -f $(TARGETS)
+ .PHONY: clean
+ 
+ install: $(TARGETS)
+-	mkdir -p $(DESTDIR)/usr/bin
+-	install -t $(DESTDIR)/usr/bin $^ zsjed-mkls
++	install -D -t $(DESTDIR)/bin $^ zsjed-mkls
+ .PHONY: install

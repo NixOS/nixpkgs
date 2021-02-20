@@ -3,7 +3,6 @@
 , fetchurl
 , findutils
 , gawk
-, gcc
 , lib
 , makeWrapper
 , stdenv
@@ -18,9 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "1rcrvrqjsv80ldz7cscqbrf98jb0yd2in97irrzlpask699z5k29";
   };
 
+  patches = [
+    ./zsjed-0.3-Makefile.patch
+  ];
+
   nativeBuildInputs = [
     diffutils
-    gcc
     makeWrapper
   ];
 
@@ -47,15 +49,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  # can't reuse the Makefile 'install' target, as it assumes the wrong prefix
+  installFlags = "DESTDIR=$out";
+
   # zsjed-mkls uses: sort find awk
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/bin zsjed-collect zsjed-clear zsjed-spread zsjed-mkls
+  postInstall = ''
     wrapProgram $out/bin/zsjed-mkls --prefix PATH ":" "${lib.makeBinPath [coreutils findutils gawk]}"
-
-    runHook postInstall
   '';
 
   meta = with lib; {
