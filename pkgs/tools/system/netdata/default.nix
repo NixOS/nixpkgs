@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
+, curl, libcap,  libuuid, lm_sensors, zlib
 , nixosTests
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
@@ -36,6 +36,8 @@ in stdenv.mkDerivation rec {
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
+    # required to prevent plugins from relying on /etc
+    # and /var
     ./no-files-in-etc-and-var.patch
   ];
 
@@ -77,7 +79,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];
   };
