@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Unidecode";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b6aab710c2a1647e928e36d69c21e76b453cd455f4e2621000e54b2a9b8cce8";
+    sha256 = "a039f89014245e0cad8858976293e23501accc9ff5a7bdbc739a14a2b7b85cdc";
   };
 
   LC_ALL="en_US.UTF-8";
