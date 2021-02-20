@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
-    "CC=cc"
-    "CXX=c++"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
     "CFLAGS=-DENABLE_NLS"
   ];
 

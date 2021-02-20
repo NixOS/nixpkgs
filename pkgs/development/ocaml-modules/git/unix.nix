@@ -6,6 +6,7 @@
 , tcpip, awa-mirage, mirage-flow
 , alcotest, alcotest-lwt, base64, cstruct
 , ke, mirage-crypto-rng, ocurl, git-binary
+, ptime
 }:
 
 buildDunePackage {
@@ -13,6 +14,14 @@ buildDunePackage {
   inherit (git) version src minimumOCamlVersion;
 
   useDune2 = true;
+
+  patches = [
+    # https://github.com/mirage/ocaml-git/pull/472
+    (fetchpatch {
+      url = "https://github.com/sternenseemann/ocaml-git/commit/54998331eb9d5c61afe8901fabe0c74c2877f096.patch";
+      sha256 = "12kd45mlfaj4hxh33k9920a22mq1q2sdrin2j41w1angvg00d3my";
+    })
+  ];
 
   buildInputs = [
     awa awa-mirage cmdliner git-cohttp-unix
@@ -26,16 +35,9 @@ buildDunePackage {
   ];
   checkInputs = [
     alcotest alcotest-lwt base64 cstruct ke
-    mirage-crypto-rng ocurl git-binary
+    mirage-crypto-rng ocurl git-binary ptime
   ];
   doCheck = true;
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mirage/ocaml-git/commit/09b41073fa869c0a595e1d8ed7224d539682af1c.patch";
-      sha256 = "1avbxv60gbrll9gny1pl6jwbx5b8282h3frhzy2ghb0fx1pggp6w";
-    })
-  ];
 
   meta = {
     description = "Unix backend for the Git protocol(s)";
