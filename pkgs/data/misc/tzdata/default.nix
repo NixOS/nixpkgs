@@ -42,10 +42,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "ZIC=./zic-native" ];
 
+  # NOTE: in cross-compilation scenarios, this is built for the build platform.
   preInstall = ''
      mv zic.o zic.o.orig
      mv zic zic.orig
-     make $makeFlags cc=${stdenv.cc.targetPrefix}cc AR=${stdenv.cc.targetPrefix}ar zic
+     make $makeFlags cc=cc AR=ar zic
      mv zic zic-native
      mv zic.o.orig zic.o
      mv zic.orig zic
