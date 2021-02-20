@@ -60,7 +60,8 @@ in
       '';
     };
 
-    buildInputs = [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages ++ [ libsecret libXScrnSaver ];
+    buildInputs = [ libsecret libXScrnSaver ]
+      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages);
 
     runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
