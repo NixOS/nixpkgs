@@ -5,10 +5,11 @@
 let deps = lib.makeBinPath [ wget coreutils ];
 
 in stdenv.mkDerivation rec {
-  name = "pcsc-tools-1.5.7";
+  pname = "pcsc-tools";
+  version = "1.5.7";
 
   src = fetchurl {
-    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.bz2";
+    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${pname}-${version}.tar.bz2";
     sha256 = "17b9jxvcxmn007lavan20l25v4jvm6dqc4x9dlqzbg6mjs28zsp0";
   };
 
