@@ -6739,6 +6739,8 @@ in {
 
   rasterio = callPackage ../development/python-modules/rasterio { gdal = pkgs.gdal_2; }; # gdal 3.0 not supported yet
 
+  ratelimit = callPackage ../development/python-modules/ratelimit { };
+
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
   raven = callPackage ../development/python-modules/raven { };
