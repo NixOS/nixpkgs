@@ -192,6 +192,8 @@ in
 
   castxml = callPackage ../development/tools/castxml { };
 
+  cen64 = callPackage ../misc/emulators/cen64 { };
+
   cereal = callPackage ../development/libraries/cereal { };
 
   checkov = callPackage ../development/tools/analysis/checkov {};

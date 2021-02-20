@@ -82,6 +82,12 @@
     githubId = 882455;
     name = "Elliot Cameron";
   };
+  _414owen = {
+    email = "owen@owen.cafe";
+    github = "414owen";
+    githubId = 1714287;
+    name = "Owen Shepherd";
+  };
   _6AA4FD = {
     email = "f6442954@gmail.com";
     github = "6AA4FD";
