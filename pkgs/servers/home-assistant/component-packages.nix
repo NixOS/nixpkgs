@@ -110,7 +110,7 @@
     "canary" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: py-canary
     "cast" = ps: with ps; [ aiohttp-cors hass-nabucasa mutagen plexapi plexauth plexwebsocket PyChromecast zeroconf ];
     "cert_expiry" = ps: with ps; [ ];
-    "channels" = ps: with ps; [ ]; # missing inputs: pychannels
+    "channels" = ps: with ps; [ pychannels ];
     "circuit" = ps: with ps; [ ]; # missing inputs: circuit-webhook
     "cisco_ios" = ps: with ps; [ pexpect ];
     "cisco_mobility_express" = ps: with ps; [ ciscomobilityexpress ];
@@ -499,7 +499,7 @@
     "mikrotik" = ps: with ps; [ librouteros ];
     "mill" = ps: with ps; [ ]; # missing inputs: millheater
     "min_max" = ps: with ps; [ ];
-    "minecraft_server" = ps: with ps; [ aiodns getmac ]; # missing inputs: mcstatus
+    "minecraft_server" = ps: with ps; [ aiodns getmac mcstatus ];
     "minio" = ps: with ps; [ minio ];
     "mitemp_bt" = ps: with ps; [ ]; # missing inputs: mitemp_bt
     "mjpeg" = ps: with ps; [ ];
@@ -523,7 +523,7 @@
     "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
     "myq" = ps: with ps; [ pymyq ];
-    "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: pymysensors
+    "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt pymysensors ];
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
     "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
     "n26" = ps: with ps; [ ]; # missing inputs: n26
@@ -894,7 +894,7 @@
     "vacuum" = ps: with ps; [ ];
     "vallox" = ps: with ps; [ ]; # missing inputs: vallox-websocket-api
     "vasttrafik" = ps: with ps; [ ]; # missing inputs: vtjp
-    "velbus" = ps: with ps; [ ]; # missing inputs: python-velbus
+    "velbus" = ps: with ps; [ python-velbus ];
     "velux" = ps: with ps; [ pyvlx ];
     "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
     "vera" = ps: with ps; [ pyvera ];
@@ -948,7 +948,7 @@
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xfinity" = ps: with ps; [ ]; # missing inputs: xfinity-gateway
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
-    "xiaomi_aqara" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: PyXiaomiGateway
+    "xiaomi_aqara" = ps: with ps; [ pyxiaomigateway aiohttp-cors netdisco zeroconf ];
     "xiaomi_miio" = ps: with ps; [ construct python-miio ];
     "xiaomi_tv" = ps: with ps; [ ]; # missing inputs: pymitv
     "xmpp" = ps: with ps; [ slixmpp ];

@@ -51,27 +51,6 @@ let
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
 
-      # FIXME: This should probably be an assertion now?
-      plugins =
-        let
-          removed = lib.filter (a: builtins.hasAttr a cfg) [
-            "enableAdobeFlash"
-            "enableAdobeReader"
-            "enableBluejeans"
-            "enableDjvu"
-            "enableFriBIDPlugin"
-            "enableGoogleTalkPlugin"
-            "enableMPlayer"
-            "enableVLC"
-            "icedtea"
-            "jre"
-          ];
-        in if removed != [] then
-          throw "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) removed}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins)."
-        else
-          []
-        ;
-
       nativeMessagingHosts =
         ([ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
@@ -164,7 +143,24 @@ let
       #                           #
       #############################
 
-    in stdenv.mkDerivation {
+      # TODO: remove this after the next release (21.03)
+      configPlugins = lib.filter (a: builtins.hasAttr a cfg) [
+        "enableAdobeFlash"
+        "enableAdobeReader"
+        "enableBluejeans"
+        "enableDjvu"
+        "enableFriBIDPlugin"
+        "enableGoogleTalkPlugin"
+        "enableMPlayer"
+        "enableVLC"
+        "icedtea"
+        "jre"
+      ];
+      pluginsError =
+        "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) configPlugins}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins).";
+
+    in if configPlugins != [] then throw pluginsError else
+      (stdenv.mkDerivation {
       inherit pname version;
 
       desktopItem = makeDesktopItem {
@@ -262,12 +258,9 @@ let
 
         makeWrapper "$oldExe" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
-            --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
             --prefix PATH ':' "${xdg-utils}/bin" \
-            --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
@@ -351,9 +344,6 @@ let
 
       preferLocalBuild = true;
 
-      # Let each plugin tell us (through its `mozillaPlugin') attribute
-      # where to find the plugin in its tree.
-      plugins = map (x: x + x.mozillaPlugin) plugins;
       libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
       gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
@@ -362,14 +352,9 @@ let
       disallowedRequisites = [ stdenv.cc ];
 
       meta = browser.meta // {
-        description =
-          browser.meta.description
-          + " (with plugins: "
-          + lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins))
-          + ")";
+        description = browser.meta.description;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
-    };
-in
-  lib.makeOverridable wrapper
+    });
+in lib.makeOverridable wrapper

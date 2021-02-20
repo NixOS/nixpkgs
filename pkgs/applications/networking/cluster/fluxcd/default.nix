@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fluxcd";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "1xxw6zk0lk4is220lydcx57mrsw6pk2rirsp4wjzvawjlv7wdv25";
+    sha256 = "1yrjgjagh7jfzgvnj9wr71mk34x7yf66fwyby73f1pfi2cg49nhp";
   };
 
   vendorSha256 = "0acxbmc4j1fcdja0s9g04f0kd34x54yfqismibfi40m2gzbg6ljr";
