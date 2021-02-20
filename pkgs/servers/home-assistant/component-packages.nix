@@ -950,7 +950,7 @@
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
     "xiaomi_aqara" = ps: with ps; [ pyxiaomigateway aiohttp-cors netdisco zeroconf ];
     "xiaomi_miio" = ps: with ps; [ construct python-miio ];
-    "xiaomi_tv" = ps: with ps; [ ]; # missing inputs: pymitv
+    "xiaomi_tv" = ps: with ps; [ pymitv ];
     "xmpp" = ps: with ps; [ slixmpp ];
     "xs1" = ps: with ps; [ ]; # missing inputs: xs1-api-client
     "yale_smart_alarm" = ps: with ps; [ ]; # missing inputs: yalesmartalarmclient
