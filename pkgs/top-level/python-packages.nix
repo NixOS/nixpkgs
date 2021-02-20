@@ -5718,6 +5718,8 @@ in {
 
   pymyq = callPackage ../development/python-modules/pymyq { };
 
+  pymysensors = callPackage ../development/python-modules/pymysensors { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
