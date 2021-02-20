@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.16.0";
+  version = "0.16.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a0fjmlvadyzsml10g5p1qif7192k0swy5zwjp8v48y5zc3yy56h";
+    sha256 = "2e915463164efa65b60fd1901aceca829b6090082f03082618afca6fb9c8fdf7";
   };
 
   checkInputs = [
