@@ -1,5 +1,5 @@
 { ripgrep, git, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub
-, lib, stdenv, formats, spacevim_config ? import ./init.nix }:
+, lib, stdenv, formats, runCommand, spacevim_config ? import ./init.nix }:
 
 let
   format = formats.toml {};
@@ -10,7 +10,10 @@ let
     # ~/.cache/vimfiles/repos
     vimrcConfig.packages.myVimPackage = with vimPlugins; { start = [ ]; };
   };
-  spacevimdir = format.generate "init.toml" spacevim_config;
+  spacevimdir = runCommand "SpaceVim.d" { } ''
+    mkdir -p $out
+    cp ${format.generate "init.toml" spacevim_config} $out/init.toml
+  '';
 in stdenv.mkDerivation rec {
   pname = "spacevim";
   version = "1.5.0";
