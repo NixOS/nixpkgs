@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-q26NnHSnJ8vVWHwXtFJ90/8xr772x/gW6BRG29wsIeI=";
+    sha256 = "sha256-vz8qqsFc1CETnrqStLyiGZ6w0jy+y5GlwQQgxdyJ5aY=";
   };
 
   vendorSha256 = "sha256-kIMd0xzQ+c+jCpX2+qdD/GcFEirR15PMInbEV184EBU=";
