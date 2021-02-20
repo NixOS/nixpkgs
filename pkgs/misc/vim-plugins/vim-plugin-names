@@ -135,6 +135,7 @@ gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
 glepnir/galaxyline.nvim@main
+glepnir/indent-guides.nvim
 glepnir/lspsaga.nvim@main
 glepnir/oceanic-material
 glepnir/zephyr-nvim@main

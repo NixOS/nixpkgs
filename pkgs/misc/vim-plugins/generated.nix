@@ -1869,6 +1869,18 @@ let
     meta.homepage = "https://github.com/lukas-reineke/indent-blankline.nvim/";
   };
 
+  indent-guides-nvim = buildVimPluginFrom2Nix {
+    pname = "indent-guides-nvim";
+    version = "2021-02-20";
+    src = fetchFromGitHub {
+      owner = "glepnir";
+      repo = "indent-guides.nvim";
+      rev = "4462f3d171de59ce4bbda1fefdda31d76057e096";
+      sha256 = "01zzc445sl1sznliggszsdg1bi4i10s0qnjqp9hmxz3p6a1wd8c6";
+    };
+    meta.homepage = "https://github.com/glepnir/indent-guides.nvim/";
+  };
+
   indentLine = buildVimPluginFrom2Nix {
     pname = "indentLine";
     version = "2021-01-28";
