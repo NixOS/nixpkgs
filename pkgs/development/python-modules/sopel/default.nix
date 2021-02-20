@@ -6,7 +6,6 @@
 , pyenchant
 , pygeoip
 , pytestCheckHook
-, python
 , pytz
 , sqlalchemy
 , xmltodict

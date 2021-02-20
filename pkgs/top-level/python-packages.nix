@@ -4006,6 +4006,8 @@ in {
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
+  mcstatus = callPackage ../development/python-modules/mcstatus { };
+
   MDP = callPackage ../development/python-modules/mdp { };
 
   measurement = callPackage ../development/python-modules/measurement { };
@@ -5311,6 +5313,8 @@ in {
 
   pycfdns = callPackage ../development/python-modules/pycfdns { };
 
+  pychannels = callPackage ../development/python-modules/pychannels { };
+
   pychart = callPackage ../development/python-modules/pychart { };
 
   pychef = callPackage ../development/python-modules/pychef { };
@@ -5717,6 +5721,8 @@ in {
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
 
   pymyq = callPackage ../development/python-modules/pymyq { };
+
+  pymysensors = callPackage ../development/python-modules/pymysensors { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
 
@@ -6493,6 +6499,8 @@ in {
 
   python-vagrant = callPackage ../development/python-modules/python-vagrant { };
 
+  python-velbus = callPackage ../development/python-modules/python-velbus { };
+
   python-vipaccess = callPackage ../development/python-modules/python-vipaccess { };
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
@@ -6635,6 +6643,8 @@ in {
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
+
+  pyxiaomigateway = callPackage ../development/python-modules/pyxiaomigateway { };
 
   pyxl3 = callPackage ../development/python-modules/pyxl3 { };
 
@@ -8371,6 +8381,8 @@ in {
   wrf-python = callPackage ../development/python-modules/wrf-python { };
 
   ws4py = callPackage ../development/python-modules/ws4py { };
+
+  wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
