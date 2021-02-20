@@ -8512,6 +8512,8 @@ in {
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
+  yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
+
   yamale = callPackage ../development/python-modules/yamale { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
