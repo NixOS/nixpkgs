@@ -7983,6 +7983,8 @@ in {
 
   tumpa = callPackage ../development/python-modules/tumpa { };
 
+  tuyaha = callPackage ../development/python-modules/tuyaha { };
+
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
   tvnamer = callPackage ../development/python-modules/tvnamer { };
