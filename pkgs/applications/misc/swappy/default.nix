@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , meson
 , ninja
 , wayland
@@ -13,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swappy";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "jtheoof";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bm184fbzylymh4kr7n8gy9plsdxif8xahc1zmkgdg1a0kwgws2x";
+    sha256 = "12z643c7vzffhjsxaz1lak99i4nwm688pha0hh4pg69jf5wz5xx3";
   };
 
   nativeBuildInputs = [ glib meson ninja pkg-config scdoc ];
