@@ -265,7 +265,7 @@
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
     "flume" = ps: with ps; [ pyflume ];
-    "flunearyou" = ps: with ps; [ ]; # missing inputs: pyflunearyou
+    "flunearyou" = ps: with ps; [ pyflunearyou ];
     "flux" = ps: with ps; [ ];
     "flux_led" = ps: with ps; [ flux-led ];
     "folder" = ps: with ps; [ ];
