@@ -22426,6 +22426,8 @@ in
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  freeplane = callPackage ../applications/misc/freeplane { };
+
   freenet = callPackage ../applications/networking/p2p/freenet {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
