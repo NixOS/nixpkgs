@@ -16,7 +16,7 @@ Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs
 In Nixpkgs, these three platforms are defined as attribute sets under the names `buildPlatform`, `hostPlatform`, and `targetPlatform`. They are always defined as attributes in the standard environment. That means one can access them like:
 
 ```nix
-{ stdenv, fooDep, barDep, .. }: ...stdenv.buildPlatform...
+{ stdenv, fooDep, barDep, ... }: ...stdenv.buildPlatform...
 ```
 
 `buildPlatform`
@@ -99,14 +99,18 @@ Some examples will make this table clearer. Suppose there's some package that is
 
 Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
 
+#### My package fails to find a binutils command (`cc`/`ar`/`ld` etc.) {#cross-qa-fails-to-find-binutils}
+Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
+
+```nix
+makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+```
+
 #### What if my package's build system needs to build a C program to be run under the build environment? {#cross-qa-build-c-program-in-build-environment}
 Add the following to your `mkDerivation` invocation.
 ```nix
 depsBuildBuild = [ buildPackages.stdenv.cc ];
 ```
-
-#### My package fails to find `ar`. {#cross-qa-fails-to-find-ar}
-Many packages assume that an unprefixed `ar` is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefixed `ar`.
 
 ####  My package's testsuite needs to run host platform code. {#cross-testsuite-runs-host-code}
 
