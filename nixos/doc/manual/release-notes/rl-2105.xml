@@ -91,6 +91,16 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     If you are using <option>services.udev.extraRules</option> to assign
+     custom names to network interfaces, this may stop working due to a change
+     in the initialisation of dhcpcd and systemd networkd. To avoid this, either
+     move them to <option>services.udev.initrdRules</option> or see the new
+     <link linkend="sec-custom-ifnames">Assigning custom names</link> section
+     of the NixOS manual for an example using networkd links.
+    </para>
+   </listitem>
     <listitem>
       <para>
         The <literal>systemConfig</literal> kernel parameter is no longer added to boot loader entries. It has been unused since September 2010, but if do have a system generation from that era, you will now be unable to boot into them.

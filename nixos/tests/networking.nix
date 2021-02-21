@@ -35,7 +35,7 @@ let
         extraConfig = flip concatMapStrings vlanIfs (n: ''
           subnet 192.168.${toString n}.0 netmask 255.255.255.0 {
             option routers 192.168.${toString n}.1;
-            range 192.168.${toString n}.2 192.168.${toString n}.254;
+            range 192.168.${toString n}.3 192.168.${toString n}.254;
           }
         '')
         ;
@@ -670,6 +670,30 @@ let
             assert (
                 ipv6Residue is ""
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
+      '';
+    };
+    rename = {
+      name = "RenameInterface";
+      machine = { pkgs, ... }: {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+        };
+      } //
+      (if networkd
+       then { systemd.network.links."10-custom_name" = {
+                matchConfig.MACAddress = "52:54:00:12:01:01";
+                linkConfig.Name = "custom_name";
+              };
+            }
+       else { services.udev.initrdRules = ''
+               SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="custom_name"
+              '';
+            });
+      testScript = ''
+        machine.succeed("udevadm settle")
+        print(machine.succeed("ip link show dev custom_name"))
       '';
     };
     # even with disabled networkd, systemd.network.links should work
