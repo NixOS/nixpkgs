@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform
 , openssl, pkg-config, protobuf
 , Security, libiconv, rdkafka
-, tzdata
+, tzdata, fetchpatch
 
 , features ?
     ((if stdenv.isAarch64
@@ -25,6 +25,15 @@ rustPlatform.buildRustPackage rec {
     rev    = "v${version}";
     sha256 = "0q6x3fvwwh18iyznqlr09n3zppzgw9jaz973s8haz54hnxj16wx0";
   };
+
+  patches = [
+    # Changes tests not to assume the current year is 2020. Should be included
+    # In the next release after v0.11.1
+    (fetchpatch {
+      url = "https://github.com/timberio/vector/commit/1ff96dc57ea8bff0aad29c107335947f612c21b2.patch";
+      sha256 = "0kx01wk8jl3xjrk4s0syn2pjm4sfykqyz35l28lqx2v1q8mac3qd";
+    })
+  ];
 
   cargoSha256 = "Y/vDYXWQ65zZ86vTwP4aCZYCMZuqbz6tpfv4uRkFAzc=";
   nativeBuildInputs = [ pkg-config ];
