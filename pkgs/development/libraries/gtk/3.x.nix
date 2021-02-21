@@ -1,4 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, substituteAll
 , fetchurl
 , fetchpatch
 , pkg-config
@@ -48,6 +50,16 @@
 
 assert cupsSupport -> cups != null;
 
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-3.0";
+    gtk_binary_version = "3.0.0";
+  };
+
+in
+
 stdenv.mkDerivation rec {
   pname = "gtk+3";
   version = "3.24.24";
@@ -56,8 +68,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   setupHooks = [
-    ./hooks/gtk3-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
   src = fetchurl {
