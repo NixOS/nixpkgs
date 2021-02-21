@@ -130,7 +130,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.1.2";
+    version = "3.2.0";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -139,13 +139,9 @@ let
       # the shell's actual version (and what it displays when running `fish
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
-      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1vblmb3x2k2cb0db5jdyflppnlqsm7i6jjaidyhmvaaw7ch2gffm";
+      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
+      sha256 = "sha256-TwKT7Z9qa3fkfUHvq+YvMxnobvyL+DzFhzMET7xvkhE=";
     };
-
-    # We don't have access to the codesign executable, so we patch this out.
-    # For more information, see: https://github.com/fish-shell/fish-shell/issues/6952
-    patches = lib.optional stdenv.isDarwin ./dont-codesign-on-mac.diff;
 
     nativeBuildInputs = [
       cmake
@@ -159,6 +155,8 @@ let
 
     cmakeFlags = [
       "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
+    ] ++ lib.optionals stdenv.isDarwin [
+      "-DMAC_CODESIGN_ID=OFF"
     ];
 
     preConfigure = ''
@@ -179,13 +177,8 @@ let
     postInstall = with lib; ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
-      sed -i "s|which |${which}/bin/which |"               \
-             "$out/share/fish/functions/type.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
           -i "$out/share/fish/functions/fish_prompt.fish"
-      sed -e "s|gettext |${gettext}/bin/gettext |"         \
-          -e "s|which |${which}/bin/which |"               \
-          -i "$out/share/fish/functions/_.fish"
       sed -e "s|uname|${coreutils}/bin/uname|"             \
           -i "$out/share/fish/functions/__fish_pwd.fish"   \
              "$out/share/fish/functions/prompt_pwd.fish"
