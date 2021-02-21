@@ -13,7 +13,6 @@
 , glib
 , dbus
 , alsaLib
-, SDL2
 , libjack2
 , udev
 , libva
@@ -43,7 +42,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.22";
+    version = "0.3.21";
 
     outputs = [
       "out"
@@ -61,7 +60,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      hash = "sha256:1ywna5f5v8s79ivrqfwwc8vy6sn3a2zvfwqyalf1fypj5d90w8g9";
+      hash = "sha256:2YJzPTMPIoQQeNja3F53SD4gtpdSlbD/i77hBWiQfuQ=";
     };
 
     patches = [
@@ -87,7 +86,6 @@ let
       alsaLib
       dbus
       glib
-      SDL2
       libjack2
       libsndfile
       ncurses
