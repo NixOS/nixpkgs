@@ -12,6 +12,7 @@ let
     tryEval
     ;
   inherit (lib)
+    boolToString
     filter
     getAttr
     isString
@@ -89,6 +90,29 @@ let
       filter = path: type: filter path type && orig.filter path type;
       name = if name != null then name else orig.name;
     };
+
+  /*
+    Add logging to a source, for troubleshooting the filtering behavior.
+    Type:
+      sources.trace :: sourceLike -> Source
+  */
+  trace =
+    # Source to debug. The returned source will behave like this source, but also log its filter invocations.
+    src:
+    let
+      attrs = toSourceAttributes src;
+    in
+      fromSourceAttributes (
+        attrs // {
+          filter = path: type:
+            let
+              r = attrs.filter path type;
+            in
+              builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
+        }
+      ) // {
+        satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
+      };
 
   # Filter sources by a list of regular expressions.
   #
@@ -233,5 +257,7 @@ in {
 
     sourceByRegex
     sourceFilesBySuffices
+
+    trace
     ;
 }
