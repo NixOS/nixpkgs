@@ -953,7 +953,7 @@
     "xiaomi_tv" = ps: with ps; [ ]; # missing inputs: pymitv
     "xmpp" = ps: with ps; [ slixmpp ];
     "xs1" = ps: with ps; [ ]; # missing inputs: xs1-api-client
-    "yale_smart_alarm" = ps: with ps; [ ]; # missing inputs: yalesmartalarmclient
+    "yale_smart_alarm" = ps: with ps; [ yalesmartalarmclient ];
     "yamaha" = ps: with ps; [ rxv ];
     "yamaha_musiccast" = ps: with ps; [ ]; # missing inputs: pymusiccast
     "yandex_transport" = ps: with ps; [ ]; # missing inputs: aioymaps
