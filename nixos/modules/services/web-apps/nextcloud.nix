@@ -85,7 +85,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud18" "nextcloud19" "nextcloud20" ];
+      relatedPackages = [ "nextcloud18" "nextcloud19" "nextcloud20" "nextcloud21" ];
     };
 
     maxUploadSize = mkOption {
@@ -362,9 +362,10 @@ in {
           support upgrades that skip multiple versions (i.e. an upgrade from 17 to 19 isn't
           possible, but an upgrade from 18 to 19).
         '')
-        ++ (optional (versionOlder cfg.package.version "20") ''
+        ++ (optional (versionOlder cfg.package.version "21") ''
           The latest Nextcloud release is v20 which can be installed by setting
-          `services.nextcloud.package` to `pkgs.nextcloud20`.
+          `services.nextcloud.package` to `pkgs.nextcloud21`. Please note that if you're
+          on `pkgs.nextcloud19`, you'll have to install `pkgs.nextcloud20` first.
         '');
 
       services.nextcloud.package = with pkgs;
