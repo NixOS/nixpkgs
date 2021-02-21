@@ -159,7 +159,7 @@ checkout_hash(){
     else
         clean_git fetch -t ${builder:+--progress} origin || return 1
     fi
-    
+
     local object_type=$(git cat-file -t "$hash")
     if [[ "$object_type" == "commit" ]]; then
         clean_git checkout -b "$branchName" "$hash" || return 1

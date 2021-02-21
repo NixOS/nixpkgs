@@ -29,7 +29,7 @@ let
     '';
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
-  fetcherArgs = (if useFetchGit || sparseCheckout != null
+  fetcherArgs = (if useFetchGit
     then {
       inherit rev deepClone fetchSubmodules sparseCheckout; url = "${baseUrl}.git";
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
