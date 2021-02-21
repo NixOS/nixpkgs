@@ -113,7 +113,6 @@ in
           "~@memlock"
           "~@resources"
           "~@setuid"
-          "~@sync"
           "~@timer"
         ];
       };
