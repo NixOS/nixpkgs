@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-quality data compression program";
+    homepage = "https://www.sourceware.org/bzip2";
+    changelog = "https://sourceware.org/git/?p=bzip2.git;a=blob;f=CHANGES;hb=HEAD";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];
