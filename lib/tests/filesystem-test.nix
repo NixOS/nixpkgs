@@ -1,8 +1,13 @@
 let
   lib = import ../.;
   inherit (lib) filesystem concatMap;
-  inherit (filesystem) pathHasPrefix pathIntersects;
-  inherit (import ./property-test.nix) forceChecks withItems;
+  inherit (filesystem)
+    pathHasPrefix
+    pathIntersects
+    absolutePathComponentsBetween
+    commonPath
+    ;
+  inherit (import ./property-test.nix) forceChecks withItems throws;
 
   somePaths = [
     /.
@@ -64,4 +69,33 @@ assert forceChecks (
 );
 
 
+########################
+# absolutePathComponentsBetween
+
+assert absolutePathComponentsBetween /a /a/b/c == ["b" "c"];
+assert absolutePathComponentsBetween /a/b /a/b/c == ["c"];
+assert absolutePathComponentsBetween /a/b/c /a/b/c == [];
+assert throws (absolutePathComponentsBetween /a /.);
+assert throws (absolutePathComponentsBetween /a /b);
+
+
+################
+# commonPath
+
+assert commonPath /a /a == /a;
+assert commonPath /a "/a" == /a;
+assert commonPath "/a" /a == /a;
+
+assert commonPath /a /a/b == /a;
+assert commonPath /a/b /a == /a;
+
+assert commonPath /a /a/b == /a;
+assert commonPath /a/b /a/c == /a;
+assert commonPath /a/b /a/c/d == /a;
+assert commonPath /a/b/c /a/b/d == /a/b;
+assert commonPath /a/b/c /a/b/c == /a/b/c;
+assert commonPath /a/b /. == /.;
+assert commonPath /. /. == /.;
+
 {}
+

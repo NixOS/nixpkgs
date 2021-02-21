@@ -84,4 +84,43 @@ in
       else
         hasPrefix (pre + "/") (other + "/");
 
+
+  # commonPath : PathLike -> PathLike -> Path
+  #
+  # Find the common ancestory; the longest prefix path that is common between
+  # the input paths.
+  commonPath = a: b:
+    let
+      b' = /. + b;
+      go = c:
+        if pathHasPrefix c b'
+        then c
+        else go (dirOf c);
+    in
+      go (/. + a);
+
+  # absolutePathComponentsBetween : PathOrString -> PathOrString -> [String]
+  # absolutePathComponentsBetween ancestor descendant
+  #
+  # Returns the path components that form the path from ancestor to descendant.
+  # Will not return ".." components, which is a feature. Throws when ancestor
+  # and descendant arguments aren't in said relation to each other.
+  #
+  # Example:
+  #
+  #   absolutePathComponentsBetween /a     /a/b/c == ["b" "c"]
+  #   absolutePathComponentsBetween /a/b/c /a/b/c == []
+  absolutePathComponentsBetween =
+    ancestor: descendant:
+      let
+        a' = /. + ancestor;
+        go = d:
+          if a' == d
+          then []
+          else if d == /.
+          then throw "absolutePathComponentsBetween: path ${toString ancestor} is not an ancestor of ${toString descendant}"
+          else go (dirOf d) ++ [(baseNameOf d)];
+      in
+        go (/. + descendant);
+
 }

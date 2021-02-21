@@ -78,6 +78,9 @@ let
       true
       items;
 
+  # true iff the argument throws an exception
+  throws = a: ! (builtins.tryEval a).success;
+
 in {
-  inherit forceChecks withItems;
+  inherit forceChecks withItems throws;
 }
