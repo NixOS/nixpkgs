@@ -36,6 +36,7 @@ in
 
 stdenv.mkDerivation {
   pname = "cataclysm-dda";
+  version = "0.E-3";
 
   nativeBuildInputs = [ pkg-config ];
 
