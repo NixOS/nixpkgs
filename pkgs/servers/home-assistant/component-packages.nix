@@ -865,7 +865,7 @@
     "travisci" = ps: with ps; [ ]; # missing inputs: TravisPy
     "trend" = ps: with ps; [ numpy ];
     "tts" = ps: with ps; [ aiohttp-cors mutagen ];
-    "tuya" = ps: with ps; [ ]; # missing inputs: tuyaha
+    "tuya" = ps: with ps; [ tuyaha ];
     "twentemilieu" = ps: with ps; [ ]; # missing inputs: twentemilieu
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
