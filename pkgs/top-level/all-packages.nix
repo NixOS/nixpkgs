@@ -2263,6 +2263,8 @@ in
 
   enca = callPackage ../tools/text/enca { };
 
+  enigma = callPackage ../games/enigma {};
+
   ent = callPackage ../tools/misc/ent { };
 
   envconsul = callPackage ../tools/system/envconsul { };
