@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  pname =  "boto3";
+  pname = "boto3";
   version = "1.17.5"; # N.B: if you change this, change botocore too
 
   src = fetchPypi {
