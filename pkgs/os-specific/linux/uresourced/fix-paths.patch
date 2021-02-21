@@ -1,0 +1,11 @@
+diff --git a/data/meson.build b/data/meson.build
+index b95e997..12d76b4 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -11,5 +11,5 @@ install_data(['org.freedesktop.UResourced.conf'],
+ 
+ install_data(
+     'uresourced.conf',
+-    install_dir: sysconfdir
++    install_dir: join_paths(get_option('prefix'), 'etc')
+ )

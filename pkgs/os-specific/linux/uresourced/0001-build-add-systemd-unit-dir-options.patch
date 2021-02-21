@@ -1,0 +1,49 @@
+From fba01d7b4d5927f511afc8be0699eb5439cc6b86 Mon Sep 17 00:00:00 2001
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Sun, 21 Feb 2021 09:07:59 -0500
+Subject: [PATCH] build: add systemd unit dir options
+
+Also use define variable only for systemdunitdir.
+---
+ meson.build       | 15 +++++++++++++--
+ meson_options.txt |  2 ++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+ create mode 100644 meson_options.txt
+
+diff --git a/meson.build b/meson.build
+index fa3a5de..8d29bb9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -26,8 +26,19 @@ libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
+ gnome  = import('gnome')
+ 
+ systemd_dep = dependency('systemd')
+-systemd_userunitdir = systemd_dep.get_pkgconfig_variable('systemduserunitdir')
+-systemd_systemunitdir = systemd_dep.get_pkgconfig_variable('systemdsystemunitdir')
++
++if get_option('systemdsystemunitdir') != ''
++  systemd_systemunitdir = get_option('systemdsystemunitdir')
++else
++  systemd_systemunitdir = systemd_dep.get_pkgconfig_variable('systemdsystemunitdir')
++endif
++
++if get_option('systemduserunitdir') != ''
++  systemd_userunitdir = get_option('systemduserunitdir')
++else
++  systemd_userunitdir = systemd_dep.get_pkgconfig_variable('systemduserunitdir',
++                                                           define_variable: ['prefix', get_option('prefix')])
++endif
+ 
+ # Detect whether we have memory_recursiveprot
+ if systemd_dep.version().version_compare('>=247')
+diff --git a/meson_options.txt b/meson_options.txt
+new file mode 100644
+index 0000000..456d057
+--- /dev/null
++++ b/meson_options.txt
+@@ -0,0 +1,2 @@
++option('systemdsystemunitdir', type: 'string', value: '', description: 'Directory for systemd service files.')
++option('systemduserunitdir', type: 'string', value: '', description: 'Directory for systemd user service files.')
+-- 
+2.30.0
+
