@@ -12,12 +12,19 @@ let
     tryEval
     ;
   inherit (lib)
+    attrByPath
     boolToString
     filter
     getAttr
     isString
+    mapAttrs
     pathExists
     readFile
+    ;
+  inherit (lib.filesystem)
+    pathHasPrefix
+    pathIntersects
+    absolutePathComponentsBetween
     ;
 
   # Returns the type of a path: regular (for file), symlink, or directory
@@ -90,6 +97,51 @@ let
       filter = path: type: filter path type && orig.filter path type;
       name = if name != null then name else orig.name;
     };
+
+  # sources.union : Source -> Source -> Source
+  # sources.union a b
+  #
+  # Combine the sources such that if a file occurs in a or b, it occurs in the
+  # sources.union a b.
+  #
+  # The root of union a b will be equal that of a.
+  # The root of b in union a b must be within the original source of a
+  # and will be present in union a b.
+  union = left: right:
+    let
+      l = toSourceAttributes (enforceSubpathInvariant left);
+      r = toSourceAttributes (enforceSubpathInvariant right);
+      valid =
+        if pathHasPrefix l.origSrc r.origSrc
+        then x: x
+        else
+          throw "sources.union: The right-hand side must be equal to, or a subpath of the left-hand side, but the input ${toString r.origSrc} is not a subpath of ${toString l.origSrc}.";
+    in valid (
+      fromSourceAttributes {
+        inherit (l) origSrc;
+        # TODO rule out filters that exclude a parent
+        filter = path: type:
+          l.filter path type                # path is in l
+            || pathHasPrefix path r.origSrc # path leads up to r (always include because r.filter may not support paths above r.origSrc)
+            || (                            # path is in r
+              pathHasPrefix r.origSrc path
+                && r.filter path type
+            );
+        name = "source";
+      } // {
+        satisfiesSubpathInvariant = true;
+      }
+    );
+
+  # Identity of sources.union when it comes to the filter function
+  empty = path: cleanSourceWith { src = path; filter = _: _: false; };
+
+  # sources.reparent: Path -> Source -> Source
+  # sources.reparent parent source
+  #
+  # Change source such that the root is at the parent directory, but include
+  # nothing except source and the path leading up to it.
+  reparent = path: source: union (empty path) source;
 
   /*
     Add logging to a source, for troubleshooting the filtering behavior.
@@ -214,7 +266,7 @@ let
   # Internal functions
   #
 
-  # toSourceAttributes : sourceLike -> SourceAttrs
+  # (private) toSourceAttributes : sourceLike -> SourceAttrs
   #
   # Convert any source-like object into a simple, singular representation.
   # We don't expose this representation in order to avoid having a fifth path-
@@ -232,7 +284,7 @@ let
       name = if isFiltered then src.name else "source";
     };
 
-  # fromSourceAttributes : SourceAttrs -> Source
+  # (private) fromSourceAttributes : SourceAttrs -> Source
   #
   # Inverse of toSourceAttributes for Source objects.
   fromSourceAttributes = { origSrc, filter, name }:
@@ -241,6 +293,70 @@ let
       inherit origSrc filter name;
       outPath = builtins.path { inherit filter name; path = origSrc; };
     };
+
+  # (private) enforceSubpathInvariant : Source -> Source
+  #
+  # Enforces
+  #
+  #   forall source, a, b.
+  #   pathHasPrefix source.origSrc a -> source.filter (a + "/${b}") x -> source.filter a x
+  #
+  # which means filter only returns true for paths whose ancestry up to
+  # origSrc is also included.
+  #
+  # This reflects the behavior of filterSource, which is sensible, composes
+  # and provides good performance thanks to early cutoff.
+  #
+  # This invariant is useful in a function like sources.union, which sometimes
+  # queries subpaths of excluded paths.
+  #
+  enforceSubpathInvariant = src:
+    # Avoid memoization if the source claims to satisfy. Helps with chains of
+    # nested sources.union calls.
+    if src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant
+    then src
+    else memoizeSource src;
+
+  # (private) memoizeSource : Source -> Source
+  #
+  # Does the work of enforcing the subpath invariant, while avoiding recomputation.
+  #
+  # See enforceSubpathInvariant
+  memoizeSource = src:
+    let
+      attrs = toSourceAttributes src;
+    in
+      if src?memoized && src.memoized
+      then src
+      else
+        fromSourceAttributes (attrs // {
+          filter = memoizeSourceFilter attrs.origSrc attrs.filter;
+        }) // {
+          memoized = true;
+          satisfiesSubpathInvariant = true;
+        };
+
+  # See memoizeSource
+  memoizeSourceFilter = origSrc: fn:
+    let
+      makeTree = dir:
+        mapAttrs (key: type:
+          let
+            path' = dir + "/${key}";
+          in
+            if fn path' type
+            then
+              if type == "directory"
+              then makeTree path'
+              else true
+            else false
+         ) (builtins.readDir dir);
+
+      # This is where the memoization happens
+      tree = makeTree origSrc;
+    in
+      path: _type:
+        attrByPath (absolutePathComponentsBetween origSrc path) false tree != false;
 
 in {
   inherit
@@ -260,7 +376,10 @@ in {
     sourceByRegex
     sourceFilesBySuffices
 
+    empty
+    reparent
     setName
     trace
+    union
     ;
 }

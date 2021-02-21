@@ -56,6 +56,88 @@ dir="$(nix eval --raw '(with import <nixpkgs/lib>; "${
 EOF
 ) || die "cleanSourceWith + cleanSource"
 
+mkdir -p "$work"/src
+touch "$work"/src/{bar.c,bar.o}
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    union (empty ./.) ./src
+  }")')"
+(cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
+.
+./src
+./src/bar.c
+./src/bar.o
+EOF
+) || die "sources.union: basic"
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    union (empty ./.) (cleanSource ./src)
+  }")')"
+(cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
+.
+./src
+./src/bar.c
+EOF
+) || die "sources.union: filtered rhs"
+
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    union
+      (cleanSourceWith { src = cleanSource ./.;
+                         filter = path: type: baseNameOf path != "src"; })
+      ./src
+  }")'
+)"
+(cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
+.
+./foo.bar
+./README.md
+./src
+./src/bar.c
+./src/bar.o
+EOF
+) || die "sources.union: filtered lhs"
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    union 
+      (cleanSourceWith { src = cleanSource ./.;
+                         filter = path: type: baseNameOf path != "src"; })
+      (cleanSourceWith { src = ./src; 
+                         filter = path: type: !hasSuffix ".c" path; })
+  }")'
+)"
+(cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
+.
+./foo.bar
+./README.md
+./src
+./src/bar.o
+EOF
+) || die "sources.union: lhs filter doesn't influence rhs files"
+
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    union
+      (cleanSourceWith { src = reparent ./. ./src;
+                         filter = path: type: !hasSuffix ".c" path; })
+      (cleanSourceWith { src = cleanSource ./.;
+                         filter = path: type: baseNameOf path != "src"; })
+  }")'
+)"
+(cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
+.
+./foo.bar
+./README.md
+./src
+./src/bar.o
+EOF
+) || die "sources.union: rhs filter doesn't influence lhs files"
+
 dir="$(nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
   setName "anna" (cleanSource ./.)
 }")')"
