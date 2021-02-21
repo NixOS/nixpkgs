@@ -55,7 +55,7 @@ assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.0.2";
+  version = "4.0.3";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "115w3mzwm1xsi1q85qvwfm2yxpsjs2rcajgddzbnwhjicyn0frv2";
+    sha256 = "18mJNyV5C1C9mjuyeIVtnVQ7RLa5uVHXtg573swTGJA=";
   };
 
   nativeBuildInputs = [
