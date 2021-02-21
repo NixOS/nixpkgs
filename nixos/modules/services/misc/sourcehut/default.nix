@@ -192,4 +192,6 @@ in
       webhooks.private-key = mkDefault null;
     };
   };
+  meta.doc = ./sourcehut.xml;
+  meta.maintainers = with maintainers; [ tomberek ];
 }
