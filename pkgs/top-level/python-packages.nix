@@ -8508,8 +8508,6 @@ in {
 
   xmodem = callPackage ../development/python-modules/xmodem { };
 
-  xmpppy = callPackage ../development/python-modules/xmpppy { };
-
   xnd = callPackage ../development/python-modules/xnd { };
 
   xpybutil = callPackage ../development/python-modules/xpybutil { };
