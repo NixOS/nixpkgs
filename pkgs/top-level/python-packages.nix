@@ -5468,6 +5468,8 @@ in {
 
   pyflume = callPackage ../development/python-modules/pyflume { };
 
+  pyflunearyou = callPackage ../development/python-modules/pyflunearyou { };
+
   pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
