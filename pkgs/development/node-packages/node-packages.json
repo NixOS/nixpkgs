@@ -50,6 +50,7 @@
 , "coc-solargraph"
 , "coc-stylelint"
 , "coc-tabnine"
+, "coc-texlab"
 , "coc-tslint"
 , "coc-tslint-plugin"
 , "coc-tsserver"

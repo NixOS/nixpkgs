@@ -69348,6 +69348,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  coc-texlab = nodeEnv.buildNodePackage {
+    name = "coc-texlab";
+    packageName = "coc-texlab";
+    version = "2.3.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-texlab/-/coc-texlab-2.3.0.tgz";
+      sha512 = "1Nph3BgqAbANW1LWa49kscQdt8i55fB304YohKvA2y78DlvxIfG0J7UnbIz+R1HQX0TpvwWdD/wzFP6ll68l8w==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "TexLab extension for coc.nvim";
+      homepage = "https://github.com/fannheyward/coc-texlab#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   coc-tslint = nodeEnv.buildNodePackage {
     name = "coc-tslint";
     packageName = "coc-tslint";
