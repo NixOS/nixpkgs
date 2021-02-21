@@ -23,6 +23,7 @@
 , "clean-css-cli"
 , "clubhouse-cli"
 , "coc-clangd"
+, "coc-cmake"
 , "coc-css"
 , "coc-diagnostic"
 , "coc-emmet"
