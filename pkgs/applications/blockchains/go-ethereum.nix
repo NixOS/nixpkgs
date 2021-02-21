@@ -1,6 +1,12 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
 
-buildGoModule rec {
+let
+  # A list of binaries to put into separate outputs
+  bins = [
+    "geth"
+  ];
+
+in buildGoModule rec {
   pname = "go-ethereum";
   version = "1.9.25";
 
@@ -15,6 +21,13 @@ buildGoModule rec {
   vendorSha256 = "08wgah8gxb5bscm5ca6zkfgssnmw2y2l6k9gfw7gbxyflsx74lya";
 
   doCheck = false;
+
+  outputs = [ "out" ] ++ bins;
+
+  # Move binaries to separate outputs and symlink them back to $out
+  postInstall = lib.concatStringsSep "\n" (
+    builtins.map (bin: "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/") bins
+  );
 
   subPackages = [
     "cmd/abidump"
