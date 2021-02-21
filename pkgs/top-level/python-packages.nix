@@ -5464,6 +5464,8 @@ in {
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
+  pyflume = callPackage ../development/python-modules/pyflume { };
+
   pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
@@ -6746,6 +6748,8 @@ in {
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
   rasterio = callPackage ../development/python-modules/rasterio { gdal = pkgs.gdal_2; }; # gdal 3.0 not supported yet
+
+  ratelimit = callPackage ../development/python-modules/ratelimit { };
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
