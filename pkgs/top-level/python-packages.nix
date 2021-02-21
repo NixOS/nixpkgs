@@ -5137,6 +5137,8 @@ in {
     protobuf = pkgs.protobuf;
   };
 
+  protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
+
   prov = callPackage ../development/python-modules/prov { };
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
@@ -7018,6 +7020,8 @@ in {
 
   safety = callPackage ../development/python-modules/safety { };
 
+  sagemaker = callPackage ../development/python-modules/sagemaker { };
+
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   sane = callPackage ../development/python-modules/sane {
@@ -7329,6 +7333,8 @@ in {
   smartypants = callPackage ../development/python-modules/smartypants { };
 
   smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
+
+  smdebug-rulesconfig = callPackage ../development/python-modules/smdebug-rulesconfig { };
 
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
 
