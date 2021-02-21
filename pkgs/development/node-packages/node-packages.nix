@@ -67411,6 +67411,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  coc-clangd = nodeEnv.buildNodePackage {
+    name = "coc-clangd";
+    packageName = "coc-clangd";
+    version = "0.9.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-clangd/-/coc-clangd-0.9.0.tgz";
+      sha512 = "QmYLkObs561ld4vqvivzgVpGGpjsx+d0+x2slqKPvB80juKfaZbfcBxttkcAa6giB6qKFU4njhyz4pP54JebZg==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "clangd extension for coc.nvim";
+      homepage = "https://github.com/clangd/coc-clangd#readme";
+      license = "Apache-2.0 WITH LLVM-exception";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   coc-css = nodeEnv.buildNodePackage {
     name = "coc-css";
     packageName = "coc-css";

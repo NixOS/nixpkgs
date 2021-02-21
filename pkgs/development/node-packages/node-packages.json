@@ -22,6 +22,7 @@
 , "cdktf-cli"
 , "clean-css-cli"
 , "clubhouse-cli"
+, "coc-clangd"
 , "coc-css"
 , "coc-diagnostic"
 , "coc-emmet"
