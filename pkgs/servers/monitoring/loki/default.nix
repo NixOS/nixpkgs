@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchpatch, makeWrapper, systemd }:
 
 buildGoPackage rec {
   version = "1.6.1";
@@ -19,6 +19,20 @@ buildGoPackage rec {
       '"eth0", "en0", "lo0"' \
       '"lo"'
   '';
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/grafana/loki/pull/2647
+      url = "https://github.com/grafana/loki/commit/85696d00eb5c3aa4aa6289e12b3656a42f581e58.patch";
+      sha256 = "1drkc1qdmfbh243kwd3v58ycgf7pbq1rd9f9j4ahcqbwfkhbi7di";
+    })
+    (fetchpatch {
+      # Fix expected return value in Test_validateDropConfig
+      # https://github.com/grafana/loki/issues/2519
+      url = "https://github.com/grafana/loki/commit/1316c0f0c5cda7c272c4873ea910211476fc1db8.patch";
+      sha256 = "06hwga58qpmivbhyjgyqzb75602hy8212a4b5vh99y9pnn6c913h";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];
