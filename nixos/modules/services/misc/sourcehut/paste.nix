@@ -121,5 +121,12 @@ in
       "paste.sr.ht".oauth-client-secret = mkDefault null;
       "paste.sr.ht".webhooks = mkDefault "redis://${rcfg.bind}:${toString rcfg.port}/5";
     };
+
+    services.nginx.virtualHosts."paste.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.pastesrht}/${pkgs.sourcehut.python.sitePackages}/pastesrht";
+    };
   };
 }

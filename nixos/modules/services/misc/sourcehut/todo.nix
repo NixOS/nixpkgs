@@ -134,5 +134,12 @@ in
 
       "todo.sr.ht::mail".posting-domain = mkDefault "example.org";
     };
+
+    services.nginx.virtualHosts."todo.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.todosrht}/${pkgs.sourcehut.python.sitePackages}/todosrht";
+    };
   };
 }

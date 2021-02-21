@@ -161,5 +161,13 @@ in
       # Uncomment the relevant lines to enable the various sr.ht dispatchers.
       "hg.sr.ht::dispatch"."/run/current-system/sw/bin/hgsrht-keys" = mkDefault "${user}:${user}";
     };
+
+    # TODO: requires testing and addition of hg-specific requirements
+    services.nginx.virtualHosts."hg.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.hgsrht}/${pkgs.sourcehut.python.sitePackages}/hgsrht";
+    };
   };
 }

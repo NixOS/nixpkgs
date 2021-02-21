@@ -201,5 +201,12 @@ in
       "builds.sr.ht::worker".controlcmd = mkDefault "${image_dir}/images/control";
       "builds.sr.ht::worker".timeout = mkDefault "3m";
     };
+
+    services.nginx.virtualHosts."builds.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.buildsrht}/${pkgs.sourcehut.python.sitePackages}/buildsrht";
+    };
   };
 }

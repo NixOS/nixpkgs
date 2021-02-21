@@ -174,5 +174,12 @@ in
       "lists.sr.ht::worker".reject-mimetypes = mkDefault "text/html";
 
     };
+
+    services.nginx.virtualHosts."lists.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.listssrht}/${pkgs.sourcehut.python.sitePackages}/listssrht";
+    };
   };
 }

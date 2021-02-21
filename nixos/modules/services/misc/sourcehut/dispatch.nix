@@ -113,5 +113,12 @@ in
       "dispatch.sr.ht::gitlab".repo-cache = mkDefault "./repo-cache";
       # "dispatch.sr.ht::gitlab"."gitlab.com" = mkDefault "GitLab:application id:secret";
     };
+
+    services.nginx.virtualHosts."dispatch.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.dispatchsrht}/${pkgs.sourcehut.python.sitePackages}/dispatchsrht";
+    };
   };
 }

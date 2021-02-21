@@ -178,9 +178,39 @@ in
       # value. When someone tries to log in as this user, this program is executed
       # and is expected to omit an AuthorizedKeys file.
       #
+      # Discard of the string context is in order to allow derivation-dervied strings.
+      # This is safe if the relevant package is installed which will be the case if the setting is utilized.
+      #
       # Uncomment the relevant lines to enable the various sr.ht dispatchers.
-      "git.sr.ht::dispatch"."/run/current-system/sw/bin/gitsrht-keys" = mkDefault "${user}:${user}";
-      "git.sr.ht::dispatch"."/run/current-system/sw/bin/buildsrht-keys" = mkDefault "buildsrht:buildsrht";
+      "git.sr.ht::dispatch".${builtins.unsafeDiscardStringContext "${pkgs.sourcehut.gitsrht}/bin/gitsrht-keys"} = mkDefault "${user}:${user}";
+      "git.sr.ht::dispatch".${builtins.unsafeDiscardStringContext "${pkgs.sourcehut.buildsrht}/bin/buildsrht-keys"} = mkDefault "buildsrht:buildsrht";
+    };
+
+    services.nginx.virtualHosts."git.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.gitsrht}/${pkgs.sourcehut.python.sitePackages}/gitsrht";
+      extraConfig = ''
+            location = /authorize {
+            proxy_pass http://${cfg.address}:${toString port};
+            proxy_pass_request_body off;
+            proxy_set_header Content-Length "";
+            proxy_set_header X-Original-URI $request_uri;
+        }
+            location ~ ^/([^/]+)/([^/]+)/(HEAD|info/refs|objects/info/.*|git-upload-pack).*$ {
+                auth_request /authorize;
+                root /var/lib/git;
+                fastcgi_pass unix:/run/fcgiwrap.sock;
+                fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
+                fastcgi_param PATH_INFO $uri;
+                fastcgi_param GIT_PROJECT_ROOT $document_root;
+                fastcgi_read_timeout 500s;
+                include ${pkgs.nginx}/conf/fastcgi_params;
+                gzip off;
+            }
+      '';
+
     };
   };
 }

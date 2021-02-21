@@ -110,5 +110,12 @@ in
       "man.sr.ht".oauth-client-id = mkDefault null;
       "man.sr.ht".oauth-client-secret = mkDefault null;
     };
+
+    services.nginx.virtualHosts."man.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.mansrht}/${pkgs.sourcehut.python.sitePackages}/mansrht";
+    };
   };
 }

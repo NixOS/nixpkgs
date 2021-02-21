@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.services.sourcehut;
   cfgIni = cfg.settings;
-  settingsFormat = pkgs.formats.ini {};
+  settingsFormat = pkgs.formats.ini { };
 
   # Specialized python containing all the modules
   python = pkgs.sourcehut.python.withPackages (ps: with ps; [
@@ -35,6 +35,17 @@ in
       ./builds.nix
       ./lists.nix
       ./dispatch.nix
+      (mkRemovedOptionModule [ "services" "sourcehut" "nginx" "enable" ] ''
+        The sourcehut module supports `nginx` as a local reverse-proxy by default and doesn't
+        support other reverse-proxies officially.
+
+        However it's possible to use an alternative reverse-proxy by
+
+          * disabling nginx
+          * adjusting the relevant settings for server addresses and ports directly
+
+        Further details about this can be found in the `Sourcehut`-section of the NixOS-manual.
+      '')
     ];
 
   options.services.sourcehut = {
@@ -53,6 +64,13 @@ in
       example = [ "builds" "dispatch" "git" "hub" "hg" "lists" "man" "meta" "paste" "todo" ];
       description = ''
         Services to enable on the sourcehut network.
+      '';
+    };
+
+    hostName = mkOption {
+      type = types.str;
+      description = ''
+        Host name used by reverse-proxy.
       '';
     };
 
@@ -113,8 +131,11 @@ in
 
     virtualisation.docker.enable = true;
     environment.etc."sr.ht/config.ini".source =
-        settingsFormat.generate "sourcehut-config.ini" (mapAttrsRecursive (
-            path: v: if v == null then "" else v) cfg.settings);
+      settingsFormat.generate "sourcehut-config.ini" (mapAttrsRecursive
+        (
+          path: v: if v == null then "" else v
+        )
+        cfg.settings);
 
     environment.systemPackages = [ cfg.python ];
 

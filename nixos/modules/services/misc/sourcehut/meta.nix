@@ -199,5 +199,12 @@ in
       "meta.sr.ht::billing".stripe-public-key = mkDefault null;
       "meta.sr.ht::billing".stripe-secret-key = mkDefault null;
     };
+
+    services.nginx.virtualHosts."meta.${cfg.hostName}" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
+      locations."/static".root = "${pkgs.sourcehut.metasrht}/${pkgs.sourcehut.python.sitePackages}/metasrht";
+    };
   };
 }
