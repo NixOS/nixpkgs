@@ -14,7 +14,7 @@ let
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || (sparseCheckout != null);
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
-  fetcher = if useFetchGit || sparseCheckout != null then fetchgit else fetchzip;
+  fetcher = if useFetchGit then fetchgit else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
