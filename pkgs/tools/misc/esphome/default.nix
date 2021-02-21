@@ -11,11 +11,11 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.16.0";
+  version = "1.16.2";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0pvwzkdcpjqdf7lh1k3xv1la5v60lhjixzykapl7f2xh71fbm144";
+    sha256 = "1b3g64ksj9w83pr69rmrjp5j1ahaq9bmcm5rhnd9x86na7fk3ic7";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
@@ -23,7 +23,7 @@ in python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     voluptuous pyyaml paho-mqtt colorlog colorama
     tornado protobuf tzlocal pyserial ifaddr
-    protobuf click
+    protobuf click pillow
   ];
 
   # remove all version pinning (E.g tornado==5.1.1 -> tornado)
