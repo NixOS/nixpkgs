@@ -1,20 +1,27 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "darkhttpd";
-  version = "1.12";
+  version = "1.13";
 
-  src = fetchurl {
-    url = "https://unix4lyfe.org/darkhttpd/${pname}-${version}.tar.bz2";
-    sha256 = "0185wlyx4iqiwfigp1zvql14zw7gxfacncii3d15yaxk4av1f155";
+  src = fetchFromGitHub {
+    owner = "emikulic";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0w11xq160q9yyffv4mw9ncp1n0dl50d9plmwxb0yijaaxls9i4sk";
   };
 
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 -t $out/bin darkhttpd
-    install -Dm444 -t $out/share/doc/${pname} README
+    install -Dm444 -t $out/share/doc/${pname} README.md
     head -n 18 darkhttpd.c > $out/share/doc/${pname}/LICENSE
+    runHook postInstall
   '';
 
   meta = with lib; {
