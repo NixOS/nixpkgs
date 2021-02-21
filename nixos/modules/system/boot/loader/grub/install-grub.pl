@@ -164,7 +164,7 @@ sub GrubFs {
     my $fs = GetFs($dir);
     my $path = substr($dir, length($fs->mount));
     if (substr($path, 0, 1) ne "/") {
-      $path = "/$path";
+        $path = "/$path";
     }
     my $search = "";
 
@@ -371,11 +371,11 @@ else {
         if ($suffix eq ".jpg") {
             $suffix = ".jpeg";
         }
-		if ($backgroundColor) {
-			$conf .= "
-		    background_color '$backgroundColor'
-		    ";
-		}
+        if ($backgroundColor) {
+            $conf .= "
+            background_color '$backgroundColor'
+            ";
+        }
         copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath: $!\n";
         $conf .= "
             insmod " . substr($suffix, 1) . "
@@ -399,17 +399,17 @@ else {
             set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
             export theme
             # Load theme fonts, if any
-         ";
+        ";
 
-         find( { wanted => sub {
-             if ($_ =~ /\.pf2$/i) {
-                 $font = File::Spec->abs2rel($File::Find::name, $theme);
-                 $conf .= "
-                     loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/$font
-                 ";
-             }
-         }, no_chdir => 1 }, $theme );
-     }
+        find( { wanted => sub {
+            if ($_ =~ /\.pf2$/i) {
+                $font = File::Spec->abs2rel($File::Find::name, $theme);
+                $conf .= "
+                    loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/$font
+                ";
+            }
+        }, no_chdir => 1 }, $theme );
+    }
 }
 
 $conf .= "$extraConfig\n";
@@ -448,25 +448,25 @@ sub addEntry {
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
-      my $initrdName = basename($initrd);
-      my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
+        my $initrdName = basename($initrd);
+        my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
 
-      mkpath(dirname($initrdSecretsPath), 0, 0755);
-      my $oldUmask = umask;
-      # Make sure initrd is not world readable (won't work if /boot is FAT)
-      umask 0137;
-      my $initrdSecretsPathTemp = File::Temp::mktemp("$initrdSecretsPath.XXXXXXXX");
-      system("$path/append-initrd-secrets", $initrdSecretsPathTemp) == 0 or die "failed to create initrd secrets: $!\n";
-      # Check whether any secrets were actually added
-      if (-e $initrdSecretsPathTemp && ! -z _) {
-        rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
-        $copied{$initrdSecretsPath} = 1;
-        $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
-      } else {
-        unlink $initrdSecretsPathTemp;
-        rmdir dirname($initrdSecretsPathTemp);
-      }
-      umask $oldUmask;
+        mkpath(dirname($initrdSecretsPath), 0, 0755);
+        my $oldUmask = umask;
+        # Make sure initrd is not world readable (won't work if /boot is FAT)
+        umask 0137;
+        my $initrdSecretsPathTemp = File::Temp::mktemp("$initrdSecretsPath.XXXXXXXX");
+        system("$path/append-initrd-secrets", $initrdSecretsPathTemp) == 0 or die "failed to create initrd secrets: $!\n";
+        # Check whether any secrets were actually added
+        if (-e $initrdSecretsPathTemp && ! -z _) {
+            rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
+            $copied{$initrdSecretsPath} = 1;
+            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
+        } else {
+            unlink $initrdSecretsPathTemp;
+            rmdir dirname($initrdSecretsPathTemp);
+        }
+        umask $oldUmask;
     }
 
     my $xen = -e "$path/xen.gz" ? copyToKernelsDir(Cwd::abs_path("$path/xen.gz")) : undef;
@@ -587,7 +587,7 @@ $extraPrepareConfig =~ s/\@bootPath\@/$bootPath/g;
 
 # Run extraPrepareConfig in sh
 if ($extraPrepareConfig ne "") {
-  system((get("shell"), "-c", $extraPrepareConfig));
+    system((get("shell"), "-c", $extraPrepareConfig));
 }
 
 # write the GRUB config.
