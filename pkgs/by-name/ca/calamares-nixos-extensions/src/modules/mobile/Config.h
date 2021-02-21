@@ -156,7 +156,7 @@ private:
     QString m_cmdMount;
     QString m_targetDeviceRoot;
     QString m_targetDeviceRootInternal;
-    bool m_installFromExternalToInternal;
+    bool m_installFromExternalToInternal = false;
 
     /* users job */
     QString m_cmdPasswd;
