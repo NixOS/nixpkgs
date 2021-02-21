@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
   preInstall = ''
      mv zic.o zic.o.orig
      mv zic zic.orig
-     make $makeFlags cc=${stdenv.cc.targetPrefix}cc AR=${stdenv.cc.targetPrefix}ar zic
+     # NOTE: in cross-compilation scenarios, this is built for the build platform.
+     make $makeFlags cc=cc AR=ar zic
      mv zic zic-native
      mv zic.o.orig zic.o
      mv zic.orig zic
