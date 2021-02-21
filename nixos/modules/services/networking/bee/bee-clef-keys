@@ -1,0 +1,28 @@
+#!@shell@
+
+if [ -z ${1} ]; then
+    echo "Usage: $0 [node-id]
+
+Extracts the clef secret keys and the password from the data directory into the user's home directory."
+    exit 1
+fi
+
+sharedDataDir="@dataDir@/@swarm@/"
+dataDir="${sharedDataDir}/$1"
+
+_USER=$(whoami)
+_GROUP=$(id -gn)
+_HOME=$(eval echo ~$USER)
+_DATE=$(date +%s)
+
+sudo sh -c "install -o ${_USER} -g ${_GROUP} ${dataDir}/keystore/$(sudo ls -1 ${dataDir}/keystore/ | head -1) ${_HOME}/bee-clef-key-${_DATE}.json" && \
+  echo "Key exported to ${_HOME}/bee-clef-key-${_DATE}.json"
+if command -v xclip >/dev/null 2>&1; then
+    sudo sh -c "cat ${sharedDataDir}/password | xclip -selection c" && \
+      echo "Password loaded into clipboard and ready to be pasted"
+else
+    sudo sh -c "install -o ${_USER} -g ${_GROUP} @dataDir@/password ${_HOME}/bee-clef-password-${_DATE}.txt" && \
+      echo "Pass exported to ${_HOME}/bee-clef-password-${_DATE}.txt"
+fi
+
+echo "All done."

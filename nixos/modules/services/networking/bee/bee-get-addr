@@ -1,0 +1,57 @@
+#!@shell@
+
+beeConfigFiles=(@beeConfigFiles@)
+
+if [[ -z $1 ]]; then
+    echo "Usage: $0 node-id
+
+Prints the Bee node's Ethereum address."
+    exit 1
+fi
+
+sharedDataDir="@dataDir@"
+dataDir="${sharedDataDir}/$1"
+
+if [[ $(id -u) -ne 0 ]]; then
+    echo "
+This script requires root priviledges, use sudo.
+"
+    exit 1
+fi
+
+if [ ! -d ${dataDir} ]; then
+    echo "something went wrong, couldn't read '${dataDir}'"
+    exit 1
+fi
+
+RESP=$(@package@/bin/bee init --config ${beeConfigFiles[$1]} 2>&1)
+
+case "$RESP" in
+    Error*|*'No such file'*)
+        echo "
+The bee node has returned an error, probably because the bee-clef external signer is enabled, but the node couldn't connect to it.
+
+Check https://docs.ethswarm.org/ for more info.
+
+Fix the configuration and try again.
+
+The node's output was:
+        "
+        echo "$RESP"
+        ;;
+    *)
+        ETH_ADDRESS=$(echo "$RESP" | grep ethereum | cut -d' ' -f6 | tr -d '"')
+
+        echo "
+Please make sure there is sufficient ETH and BZZ available on the node's Ethereum address: $ETH_ADDRESS.
+
+You can get both Goerli ETH and Goerli BZZ via the Bzzaar at https://bzz.ethswarm.org/?transaction=buy&amount=10&slippage=30&receiver=0x$ETH_ADDRESS
+
+Or you can join us on Discord (at https://discord.gg/ykCupZMuww) and ask our bot for a sprinkle in the #faucet-request channel.
+
+Once the node's wallet has received the funds it will begin joining the Swarm network.
+
+See the docs for more at https://docs.ethswarm.org/docs/.
+"
+        ;;
+esac
