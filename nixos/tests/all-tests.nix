@@ -343,7 +343,6 @@ in
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
   sanoid = handleTest ./sanoid.nix {};
-  sbt = handleTest ./sbt.nix {};
   sddm = handleTest ./sddm.nix {};
   searx = handleTest ./searx.nix {};
   service-runner = handleTest ./service-runner.nix {};
