@@ -1,7 +1,7 @@
 {
   imports = [
     ../../profiles/installation-device.nix
-    ./sd-image-aarch64-new-kernel.nix
+    ./sd-image-raspberrypi4.nix
   ];
 
   # the installation media is also the installation target,
