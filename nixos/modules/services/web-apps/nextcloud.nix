@@ -86,7 +86,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud18" "nextcloud19" "nextcloud20" ];
+      relatedPackages = [ "nextcloud19" "nextcloud20" "nextcloud21" ];
     };
 
     maxUploadSize = mkOption {
@@ -348,7 +348,7 @@ in {
       ];
 
       warnings = let
-        latest = 20;
+        latest = 21;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -366,9 +366,9 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "18") (upgradeWarning 17 "20.03"))
         ++ (optional (versionOlder cfg.package.version "19") (upgradeWarning 18 "20.09"))
-        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"));
+        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
+        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -378,14 +378,13 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "20.03" then nextcloud17
           else if versionOlder stateVersion "20.09" then nextcloud18
           # 21.03 will not be an official release - it was instead 21.05.
           # This versionOlder statement remains set to 21.03 for backwards compatibility.
           # See https://github.com/NixOS/nixpkgs/pull/108899 and
           # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
           else if versionOlder stateVersion "21.03" then nextcloud19
-          else nextcloud20
+          else nextcloud21
         );
     }
 

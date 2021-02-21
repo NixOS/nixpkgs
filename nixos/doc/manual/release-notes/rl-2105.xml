@@ -552,14 +552,16 @@ self: super:
    </listitem>
    <listitem>
     <para>
-     The default-version of <literal>nextcloud</literal> is <package>nextcloud20</package>.
+     The default-version of <literal>nextcloud</literal> is <package>nextcloud21</package>.
      Please note that it's <emphasis>not</emphasis> possible to upgrade <literal>nextcloud</literal>
      across multiple major versions! This means that it's e.g. not possible to upgrade
-     from <package>nextcloud18</package> to <package>nextcloud20</package> in a single deploy.
+     from <package>nextcloud18</package> to <package>nextcloud20</package> in a single deploy and
+     most <literal>20.09</literal> users will have to upgrade to <package>nextcloud20</package>
+     first.
     </para>
     <para>
      The package can be manually upgraded by setting <xref linkend="opt-services.nextcloud.package" />
-     to <package>nextcloud20</package>.
+     to <package>nextcloud21</package>.
     </para>
    </listitem>
    <listitem>
