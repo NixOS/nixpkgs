@@ -4,6 +4,7 @@
 , libffi
 , gdbm
 , lzma
+, mime-types
 , ncurses
 , openssl
 , readline
@@ -187,6 +188,8 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+    # Make the mimetypes module refer to the right file
+    ./mimetypes.patch
   ] ++ optionals (isPy35 || isPy36) [
     # Determinism: Write null timestamps when compiling python files.
     ./3.5/force_bytecode_determinism.patch
@@ -247,6 +250,8 @@ in with passthru; stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
+    substituteInPlace Lib/mimetypes.py \
+      --replace "@mime-types@" "${mime-types}"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
