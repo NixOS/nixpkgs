@@ -4,12 +4,12 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "1.0.0.0";
+  version = "1.0.1.0";
   src = fetchFromGitHub {
     owner = "maralorn";
     repo = "nix-output-monitor";
-    sha256 = "0hmrlkanippxhspi6vrqkpp1yc3ix2bnskfn5wispq9939k1m01v";
-    rev = "1.0.0.0";
+    sha256 = "10a3sn5isdb9q13yzdclng35jwfaf4lxrkdxwbhwms1k2ll08qk6";
+    rev = "1.0.1.0";
   };
   isLibrary = true;
   isExecutable = true;
