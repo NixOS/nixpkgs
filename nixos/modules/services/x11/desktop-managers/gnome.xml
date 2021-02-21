@@ -120,6 +120,7 @@
     wmName = "xmonad";
     wmLabel = "XMonad";
     wmCommand = "${pkgs.haskellPackages.xmonad}/bin/xmonad";
+    enableGnomePanel = false;
   }
 ];
 </programlisting>

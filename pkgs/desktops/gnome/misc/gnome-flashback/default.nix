@@ -33,10 +33,9 @@ let
   version = "3.40.0";
 
   # From data/sessions/Makefile.am
-  requiredComponentsCommon = [
-    "gnome-flashback"
-    "gnome-panel"
-  ];
+  requiredComponentsCommon = enableGnomePanel:
+    [ "gnome-flashback" ]
+    ++ lib.optional enableGnomePanel "gnome-panel";
   requiredComponentsGsd = [
     "org.gnome.SettingsDaemon.A11ySettings"
     "org.gnome.SettingsDaemon.Color"
@@ -55,7 +54,8 @@ let
     "org.gnome.SettingsDaemon.Wacom"
     "org.gnome.SettingsDaemon.XSettings"
   ];
-  requiredComponents = wmName: "RequiredComponents=${lib.concatStringsSep ";" ([ wmName ] ++ requiredComponentsCommon ++ requiredComponentsGsd)};";
+  requiredComponents = wmName: enableGnomePanel: "RequiredComponents=${lib.concatStringsSep ";" ([ wmName ] ++ requiredComponentsCommon enableGnomePanel ++ requiredComponentsGsd)};";
+
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
 
@@ -77,7 +77,7 @@ let
     postInstall = ''
       # Check that our expected RequiredComponents match the stock session files, but then don't install them.
       # They can be installed using mkSessionForWm.
-      grep '${requiredComponents "metacity"}' $out/share/gnome-session/sessions/gnome-flashback-metacity.session || (echo "RequiredComponents have changed, please update gnome-flashback/default.nix."; false)
+      grep '${requiredComponents "metacity" true}' $out/share/gnome-session/sessions/gnome-flashback-metacity.session || (echo "RequiredComponents have changed, please update gnome-flashback/default.nix."; false)
 
       rm -r $out/share/gnome-session
       rm -r $out/share/xsessions
@@ -126,7 +126,7 @@ let
         versionPolicy = "odd-unstable";
       };
 
-      mkSessionForWm = { wmName, wmLabel, wmCommand }:
+      mkSessionForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
         let
           wmApplication = writeTextFile {
             name = "gnome-flashback-${wmName}-wm";
@@ -151,7 +151,7 @@ let
             text = ''
               [GNOME Session]
               Name=GNOME Flashback (${wmLabel})
-              ${requiredComponents wmName}
+              ${requiredComponents wmName enableGnomePanel}
             '';
           };
 
@@ -183,11 +183,11 @@ let
           providedSessions = [ "gnome-flashback-${wmName}" ];
         };
 
-      mkSystemdTargetForWm = { wmName }:
-        runCommand "gnome-flashback-${wmName}.target" { } ''
+      mkSystemdTargetForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
+        runCommand "gnome-flashback-${wmName}.target" {} ''
           mkdir -p $out/lib/systemd/user
-          cp "${gnome-flashback}/lib/systemd/user/gnome-session-x11@gnome-flashback-metacity.target" \
-            "$out/lib/systemd/user/gnome-session-x11@gnome-flashback-${wmName}.target"
+          cp -r "${gnome-flashback}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
+            "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d"
         '';
     };
 
