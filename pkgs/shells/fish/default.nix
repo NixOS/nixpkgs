@@ -248,7 +248,7 @@ let
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no
             # tempfile to check)
-            sed -e "s@, mode='w'@, mode='w', delete=False@" -i webconfig.py
+            sed -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
 
             # we delete everything after the fileurl is assigned
             sed -e '/fileurl =/q' -i webconfig.py
