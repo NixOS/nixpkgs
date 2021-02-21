@@ -806,6 +806,7 @@ self: super: {
       "coc-pairs"
       "coc-prettier"
       "coc-python"
+      "coc-pyright"
       "coc-r-lsp"
       "coc-rls"
       "coc-rust-analyzer"
