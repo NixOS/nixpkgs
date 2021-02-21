@@ -8,22 +8,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reddsaver";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "manojkarthick";
     repo = "reddsaver";
     rev = "v${version}";
-    sha256 = "0wiyzbl9vqx5aq3lpaaqkm3ivj77lqd8bmh8ipgshdflgm1z6yvp";
+    sha256 = "0kww3abgvxr7azr7yb8aiw28fz13qb4sn3x7nnz1ihmd4yczi9fg";
   };
 
-  cargoSha256 = "0kw5gk7pf4xkmjffs2jxm6sc4chybns88cii2wlgpyvgn4c3cwaa";
+  cargoSha256 = "09xm22vgmd3dc0wr6n3jczxvhwpcsijwfbv50dz1lnsx57g8mgmd";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  # package does not contain tests as of v0.3.0
+  # package does not contain tests as of v0.3.1
   docCheck = false;
 
   meta = with lib; {

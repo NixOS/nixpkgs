@@ -5231,6 +5231,8 @@ in {
 
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
 
+  pyalmond = callPackage ../development/python-modules/pyalmond { };
+
   pyamf = callPackage ../development/python-modules/pyamf { };
 
   pyamg = callPackage ../development/python-modules/pyamg { };
@@ -5461,6 +5463,8 @@ in {
   pyfnip = callPackage ../development/python-modules/pyfnip { };
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
+
+  pyflume = callPackage ../development/python-modules/pyflume { };
 
   pyfma = callPackage ../development/python-modules/pyfma { };
 
@@ -5693,6 +5697,8 @@ in {
   pymetar = callPackage ../development/python-modules/pymetar { };
 
   pymetno = callPackage ../development/python-modules/pymetno { };
+
+  pymitv = callPackage ../development/python-modules/pymitv { };
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
@@ -6487,6 +6493,8 @@ in {
 
   python-toolbox = callPackage ../development/python-modules/python-toolbox { };
 
+  python-twitch-client = callPackage ../development/python-modules/python-twitch-client { };
+
   python-twitter = callPackage ../development/python-modules/python-twitter { };
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
@@ -6599,6 +6607,8 @@ in {
   pyvlx = callPackage ../development/python-modules/pyvlx { };
 
   pyvmomi = callPackage ../development/python-modules/pyvmomi { };
+
+  pyvolumio = callPackage ../development/python-modules/pyvolumio { };
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
@@ -6738,6 +6748,8 @@ in {
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
   rasterio = callPackage ../development/python-modules/rasterio { gdal = pkgs.gdal_2; }; # gdal 3.0 not supported yet
+
+  ratelimit = callPackage ../development/python-modules/ratelimit { };
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
@@ -7679,6 +7691,8 @@ in {
 
   tag-expressions = callPackage ../development/python-modules/tag-expressions { };
 
+  tahoma-api = callPackage ../development/python-modules/tahoma-api { };
+
   tarman = callPackage ../development/python-modules/tarman { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
@@ -7982,6 +7996,8 @@ in {
   tubeup = callPackage ../development/python-modules/tubeup { };
 
   tumpa = callPackage ../development/python-modules/tumpa { };
+
+  tuyaha = callPackage ../development/python-modules/tuyaha { };
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
@@ -8355,6 +8371,8 @@ in {
   whoosh = callPackage ../development/python-modules/whoosh { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
+
+  wiffi = callPackage ../development/python-modules/wiffi { };
 
   willow = callPackage ../development/python-modules/willow { };
 

@@ -23,7 +23,7 @@
     "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors ];
-    "almond" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pyalmond
+    "almond" = ps: with ps; [ aiohttp-cors pyalmond ];
     "alpha_vantage" = ps: with ps; [ ]; # missing inputs: alpha_vantage
     "amazon_polly" = ps: with ps; [ boto3 ];
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
@@ -264,7 +264,7 @@
     "flick_electric" = ps: with ps; [ ]; # missing inputs: PyFlick
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
-    "flume" = ps: with ps; [ ]; # missing inputs: pyflume
+    "flume" = ps: with ps; [ pyflume ];
     "flunearyou" = ps: with ps; [ ]; # missing inputs: pyflunearyou
     "flux" = ps: with ps; [ ];
     "flux_led" = ps: with ps; [ flux-led ];
@@ -815,7 +815,7 @@
     "systemmonitor" = ps: with ps; [ psutil ];
     "tado" = ps: with ps; [ python-tado ];
     "tag" = ps: with ps; [ ];
-    "tahoma" = ps: with ps; [ ]; # missing inputs: tahoma-api
+    "tahoma" = ps: with ps; [ tahoma-api ];
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility
     "tankerkoenig" = ps: with ps; [ ]; # missing inputs: pytankerkoenig
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
@@ -865,13 +865,13 @@
     "travisci" = ps: with ps; [ ]; # missing inputs: TravisPy
     "trend" = ps: with ps; [ numpy ];
     "tts" = ps: with ps; [ aiohttp-cors mutagen ];
-    "tuya" = ps: with ps; [ ]; # missing inputs: tuyaha
+    "tuya" = ps: with ps; [ tuyaha ];
     "twentemilieu" = ps: with ps; [ ]; # missing inputs: twentemilieu
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
     "twinkly" = ps: with ps; [ ]; # missing inputs: twinkly-client
-    "twitch" = ps: with ps; [ ]; # missing inputs: python-twitch-client
+    "twitch" = ps: with ps; [ python-twitch-client ];
     "twitter" = ps: with ps; [ ]; # missing inputs: TwitterAPI
     "ubus" = ps: with ps; [ ];
     "ue_smart_radio" = ps: with ps; [ ];
@@ -911,7 +911,7 @@
     "vlc_telnet" = ps: with ps; [ ]; # missing inputs: python-telnet-vlc
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
-    "volumio" = ps: with ps; [ ]; # missing inputs: pyvolumio
+    "volumio" = ps: with ps; [ pyvolumio ];
     "volvooncall" = ps: with ps; [ ]; # missing inputs: volvooncall
     "vultr" = ps: with ps; [ vultr ];
     "w800rf32" = ps: with ps; [ ]; # missing inputs: pyW800rf32
@@ -928,7 +928,7 @@
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [ ]; # missing inputs: pywemo
     "whois" = ps: with ps; [ python-whois ];
-    "wiffi" = ps: with ps; [ ]; # missing inputs: wiffi
+    "wiffi" = ps: with ps; [ wiffi ];
     "wilight" = ps: with ps; [ pywilight ];
     "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler python-wink ];
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
@@ -950,7 +950,7 @@
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
     "xiaomi_aqara" = ps: with ps; [ pyxiaomigateway aiohttp-cors netdisco zeroconf ];
     "xiaomi_miio" = ps: with ps; [ construct python-miio ];
-    "xiaomi_tv" = ps: with ps; [ ]; # missing inputs: pymitv
+    "xiaomi_tv" = ps: with ps; [ pymitv ];
     "xmpp" = ps: with ps; [ slixmpp ];
     "xs1" = ps: with ps; [ ]; # missing inputs: xs1-api-client
     "yale_smart_alarm" = ps: with ps; [ yalesmartalarmclient ];
