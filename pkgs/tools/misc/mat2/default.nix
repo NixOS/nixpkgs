@@ -1,4 +1,5 @@
-{ python3Packages, fetchurl, lib, pkgs }:
+{ python3Packages, fetchurl, lib,
+  bubblewrap, cairo, exiftool, ffmpeg, gdk_pixbuf, librsvg, poppler_gi }:
 
 python3Packages.buildPythonPackage rec {
   pname = "mat2";
@@ -12,25 +13,28 @@ python3Packages.buildPythonPackage rec {
     sha256 = "185shmq35y2qj8ydy9l6v53flv536b8hrmv35b6ly22bczfs99yj";
   };
 
-  propagatedBuildInputs =
-    (with python3Packages; [
-      mutagen
-      pygobject3
-    ]) ++ (with pkgs; [
-      bubblewrap
-      cairo
-      exiftool
-      ffmpeg
-      librsvg
-      poppler_gi
-      gdk_pixbuf
-    ]);
+  propagatedBuildInputs = with python3Packages; [
+    # Python deps
+    mutagen
+    pygobject3
+
+    # Deps called through GObject
+    gdk_pixbuf
+    librsvg
+    poppler_gi
+
+    # External binaries called
+    bubblewrap
+    cairo
+    exiftool
+    ffmpeg
+  ];
 
   # Ensures mat2 is executed with the right interpreter.
   patchPhase = "patchShebangs ./mat2";
 
   # TODO: Figure out why the testsuite fails with bwrap present
-  checkInputs = with pkgs; [ exiftool ffmpeg ];
+  checkInputs = [ exiftool ffmpeg ];
   preCheck = "python3 ./mat2 --check-dependencies";
 
   meta = with lib; {
