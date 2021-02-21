@@ -6606,6 +6606,8 @@ in {
 
   pyvmomi = callPackage ../development/python-modules/pyvmomi { };
 
+  pyvolumio = callPackage ../development/python-modules/pyvolumio { };
+
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
   pywal = callPackage ../development/python-modules/pywal { };
