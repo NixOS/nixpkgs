@@ -26,8 +26,12 @@ python3Packages.buildPythonPackage rec {
       gdk_pixbuf
     ]);
 
-  # Test runner seems to have incorrect PATH
-  doCheck = false;
+  # Ensures mat2 is executed with the right interpreter.
+  patchPhase = "patchShebangs ./mat2";
+
+  # TODO: Figure out why the testsuite fails with bwrap present
+  checkInputs = with pkgs; [ exiftool ffmpeg ];
+  preCheck = "python3 ./mat2 --check-dependencies";
 
   meta = with lib; {
     homepage = "https://0xacab.org/jvoisin/${pname}";
