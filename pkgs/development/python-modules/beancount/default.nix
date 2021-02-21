@@ -53,7 +53,7 @@ buildPythonPackage rec {
         financial transaction records in a text file, read them in memory,
         generate a variety of reports from them, and provides a web interface.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ bhipple ];
   };
 }
