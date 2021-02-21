@@ -114,6 +114,8 @@ let
         satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
       };
 
+  setName = name: src: cleanSourceWith { inherit name src; };
+
   # Filter sources by a list of regular expressions.
   #
   # E.g. `src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]`
@@ -258,6 +260,7 @@ in {
     sourceByRegex
     sourceFilesBySuffices
 
+    setName
     trace
     ;
 }

@@ -56,4 +56,9 @@ dir="$(nix eval --raw '(with import <nixpkgs/lib>; "${
 EOF
 ) || die "cleanSourceWith + cleanSource"
 
+dir="$(nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+  setName "anna" (cleanSource ./.)
+}")')"
+echo $dir | grep -- -anna >/dev/null || die "setName"
+
 echo >&2 tests ok
