@@ -5,6 +5,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, pytest-asyncio
 , pytestCheckHook
 , wrapt
 }:
@@ -35,15 +36,11 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  # Not all Home Assistant related check pass
-  # https://github.com/zabuldon/teslajsonpy/issues/121
-  # https://github.com/zabuldon/teslajsonpy/pull/124
-  disabledTests = [
-    "test_values_on_init"
-    "test_get_value_on_init"
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
+
   pythonImportsCheck = [ "teslajsonpy" ];
 
   meta = with lib; {

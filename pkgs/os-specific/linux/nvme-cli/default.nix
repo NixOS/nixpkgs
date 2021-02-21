@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, pkg-config
+, libuuid
+}:
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
@@ -12,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libuuid ];
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 

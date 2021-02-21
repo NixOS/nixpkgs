@@ -23,7 +23,7 @@
     "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors ];
-    "almond" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pyalmond
+    "almond" = ps: with ps; [ aiohttp-cors pyalmond ];
     "alpha_vantage" = ps: with ps; [ ]; # missing inputs: alpha_vantage
     "amazon_polly" = ps: with ps; [ boto3 ];
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
@@ -110,7 +110,7 @@
     "canary" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: py-canary
     "cast" = ps: with ps; [ aiohttp-cors hass-nabucasa mutagen plexapi plexauth plexwebsocket PyChromecast zeroconf ];
     "cert_expiry" = ps: with ps; [ ];
-    "channels" = ps: with ps; [ ]; # missing inputs: pychannels
+    "channels" = ps: with ps; [ pychannels ];
     "circuit" = ps: with ps; [ ]; # missing inputs: circuit-webhook
     "cisco_ios" = ps: with ps; [ pexpect ];
     "cisco_mobility_express" = ps: with ps; [ ciscomobilityexpress ];
@@ -264,7 +264,7 @@
     "flick_electric" = ps: with ps; [ ]; # missing inputs: PyFlick
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
-    "flume" = ps: with ps; [ ]; # missing inputs: pyflume
+    "flume" = ps: with ps; [ pyflume ];
     "flunearyou" = ps: with ps; [ ]; # missing inputs: pyflunearyou
     "flux" = ps: with ps; [ ];
     "flux_led" = ps: with ps; [ flux-led ];
@@ -499,7 +499,7 @@
     "mikrotik" = ps: with ps; [ librouteros ];
     "mill" = ps: with ps; [ ]; # missing inputs: millheater
     "min_max" = ps: with ps; [ ];
-    "minecraft_server" = ps: with ps; [ aiodns getmac ]; # missing inputs: mcstatus
+    "minecraft_server" = ps: with ps; [ aiodns getmac mcstatus ];
     "minio" = ps: with ps; [ minio ];
     "mitemp_bt" = ps: with ps; [ ]; # missing inputs: mitemp_bt
     "mjpeg" = ps: with ps; [ ];
@@ -523,7 +523,7 @@
     "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
     "myq" = ps: with ps; [ pymyq ];
-    "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: pymysensors
+    "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt pymysensors ];
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
     "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
     "n26" = ps: with ps; [ ]; # missing inputs: n26
@@ -815,7 +815,7 @@
     "systemmonitor" = ps: with ps; [ psutil ];
     "tado" = ps: with ps; [ python-tado ];
     "tag" = ps: with ps; [ ];
-    "tahoma" = ps: with ps; [ ]; # missing inputs: tahoma-api
+    "tahoma" = ps: with ps; [ tahoma-api ];
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility
     "tankerkoenig" = ps: with ps; [ ]; # missing inputs: pytankerkoenig
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
@@ -825,7 +825,7 @@
     "ted5000" = ps: with ps; [ xmltodict ];
     "telegram" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];
     "telegram_bot" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];
-    "tellduslive" = ps: with ps; [ ]; # missing inputs: tellduslive
+    "tellduslive" = ps: with ps; [ tellduslive ];
     "tellstick" = ps: with ps; [ ]; # missing inputs: tellcore-net tellcore-py
     "telnet" = ps: with ps; [ ];
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
@@ -865,13 +865,13 @@
     "travisci" = ps: with ps; [ ]; # missing inputs: TravisPy
     "trend" = ps: with ps; [ numpy ];
     "tts" = ps: with ps; [ aiohttp-cors mutagen ];
-    "tuya" = ps: with ps; [ ]; # missing inputs: tuyaha
+    "tuya" = ps: with ps; [ tuyaha ];
     "twentemilieu" = ps: with ps; [ ]; # missing inputs: twentemilieu
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
     "twinkly" = ps: with ps; [ ]; # missing inputs: twinkly-client
-    "twitch" = ps: with ps; [ ]; # missing inputs: python-twitch-client
+    "twitch" = ps: with ps; [ python-twitch-client ];
     "twitter" = ps: with ps; [ ]; # missing inputs: TwitterAPI
     "ubus" = ps: with ps; [ ];
     "ue_smart_radio" = ps: with ps; [ ];
@@ -894,7 +894,7 @@
     "vacuum" = ps: with ps; [ ];
     "vallox" = ps: with ps; [ ]; # missing inputs: vallox-websocket-api
     "vasttrafik" = ps: with ps; [ ]; # missing inputs: vtjp
-    "velbus" = ps: with ps; [ ]; # missing inputs: python-velbus
+    "velbus" = ps: with ps; [ python-velbus ];
     "velux" = ps: with ps; [ pyvlx ];
     "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
     "vera" = ps: with ps; [ pyvera ];
@@ -911,7 +911,7 @@
     "vlc_telnet" = ps: with ps; [ ]; # missing inputs: python-telnet-vlc
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
-    "volumio" = ps: with ps; [ ]; # missing inputs: pyvolumio
+    "volumio" = ps: with ps; [ pyvolumio ];
     "volvooncall" = ps: with ps; [ ]; # missing inputs: volvooncall
     "vultr" = ps: with ps; [ vultr ];
     "w800rf32" = ps: with ps; [ ]; # missing inputs: pyW800rf32
@@ -928,7 +928,7 @@
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [ ]; # missing inputs: pywemo
     "whois" = ps: with ps; [ python-whois ];
-    "wiffi" = ps: with ps; [ ]; # missing inputs: wiffi
+    "wiffi" = ps: with ps; [ wiffi ];
     "wilight" = ps: with ps; [ pywilight ];
     "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler python-wink ];
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
@@ -948,12 +948,12 @@
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xfinity" = ps: with ps; [ ]; # missing inputs: xfinity-gateway
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
-    "xiaomi_aqara" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: PyXiaomiGateway
+    "xiaomi_aqara" = ps: with ps; [ pyxiaomigateway aiohttp-cors netdisco zeroconf ];
     "xiaomi_miio" = ps: with ps; [ construct python-miio ];
-    "xiaomi_tv" = ps: with ps; [ ]; # missing inputs: pymitv
+    "xiaomi_tv" = ps: with ps; [ pymitv ];
     "xmpp" = ps: with ps; [ slixmpp ];
     "xs1" = ps: with ps; [ ]; # missing inputs: xs1-api-client
-    "yale_smart_alarm" = ps: with ps; [ ]; # missing inputs: yalesmartalarmclient
+    "yale_smart_alarm" = ps: with ps; [ yalesmartalarmclient ];
     "yamaha" = ps: with ps; [ rxv ];
     "yamaha_musiccast" = ps: with ps; [ ]; # missing inputs: pymusiccast
     "yandex_transport" = ps: with ps; [ ]; # missing inputs: aioymaps

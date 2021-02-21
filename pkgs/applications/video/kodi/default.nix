@@ -248,10 +248,10 @@ in stdenv.mkDerivation {
     # Need these tools on the build system when cross compiling,
     # hacky, but have found no other way.
     preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      CXX=c++ LD=ld make -C tools/depends/native/JsonSchemaBuilder
+      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make -C tools/depends/native/JsonSchemaBuilder
       cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
 
-      CXX=c++ LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
+      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
       cmakeFlags+=" -DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
     '';
 

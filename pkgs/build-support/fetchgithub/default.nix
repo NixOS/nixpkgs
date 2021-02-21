@@ -1,18 +1,20 @@
 { lib, fetchgit, fetchzip }:
 
 { owner, repo, rev, name ? "source"
-, fetchSubmodules ? false, private ? false
+, fetchSubmodules ? false, leaveDotGit ? null
+, deepClone ? false, private ? false
 , githubBase ? "github.com", varPrefix ? null
 , sparseCheckout ? null
 , ... # For hash agility
-}@args: assert private -> !fetchSubmodules;
+}@args:
 let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
   passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
+  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone;
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
-  fetcher = if fetchSubmodules || sparseCheckout != null then fetchgit else fetchzip;
+  fetcher = if useFetchGit || sparseCheckout != null then fetchgit else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -27,9 +29,14 @@ let
     '';
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
-  fetcherArgs = (if fetchSubmodules
-    then { inherit rev fetchSubmodules; url = "${baseUrl}.git"; }
-    else if sparseCheckout != null then {inherit rev sparseCheckout; url = "${baseUrl}.git";}
+  fetcherArgs = (if useFetchGit || sparseCheckout != null
+    then {
+      inherit rev deepClone fetchSubmodules sparseCheckout; url = "${baseUrl}.git";
+    } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
   ) // passthruAttrs // { inherit name; };
-in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }
+in
+
+assert private -> !useFetchGit;
+
+fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }

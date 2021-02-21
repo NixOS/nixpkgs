@@ -12,9 +12,6 @@ buildDunePackage {
     lwt
   ];
 
-  # mutual dependency on irmin-test
-  doCheck = false;
-
   meta = irmin.meta // {
     description = "Combine different Irmin stores into a single, layered store";
   };

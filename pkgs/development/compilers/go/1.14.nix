@@ -11,9 +11,9 @@ let
 
   inherit (lib) optionals optionalString;
 
-  go_bootstrap = callPackage ./bootstrap.nix {
-    inherit Security;
-  };
+  version = "1.14.15";
+
+  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
@@ -41,7 +41,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.14.15";
+  inherit version;
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
@@ -258,5 +258,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.linux ++ platforms.darwin;
+    knownVulnerabilities = [
+      "Support for Go 1.14 ended with the release of Go 1.16: https://golang.org/doc/devel/release.html#policy"
+    ];
   };
 }

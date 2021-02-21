@@ -91,6 +91,21 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     If you are using <option>services.udev.extraRules</option> to assign
+     custom names to network interfaces, this may stop working due to a change
+     in the initialisation of dhcpcd and systemd networkd. To avoid this, either
+     move them to <option>services.udev.initrdRules</option> or see the new
+     <link linkend="sec-custom-ifnames">Assigning custom names</link> section
+     of the NixOS manual for an example using networkd links.
+    </para>
+   </listitem>
+    <listitem>
+      <para>
+        The <literal>systemConfig</literal> kernel parameter is no longer added to boot loader entries. It has been unused since September 2010, but if do have a system generation from that era, you will now be unable to boot into them.
+      </para>
+    </listitem>
     <listitem>
       <para>
         <literal>systemd-journal2gelf</literal> no longer parses json and expects the receiving system to handle it. How to achieve this with Graylog is described in this <link xlink:href="https://github.com/parse-nl/SystemdJournal2Gelf/issues/10">GitHub issue</link>.
@@ -492,6 +507,15 @@ self: super:
      Additionally, packages <package>flashplayer</package> and
      <package>hal-flash</package> were removed along with the
      <varname>services.flashpolicyd</varname> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>security.rngd</literal> module has been removed.
+      It was disabled by default in 20.09 as it was functionally redundant
+      with krngd in the linux kernel. It is not necessary for any device that the kernel recognises
+      as an hardware RNG, as it will automatically run the krngd task to periodically collect random
+      data from the device and mix it into the kernel's RNG.
     </para>
    </listitem>
   </itemizedlist>
