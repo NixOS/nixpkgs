@@ -928,7 +928,7 @@
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [ ]; # missing inputs: pywemo
     "whois" = ps: with ps; [ python-whois ];
-    "wiffi" = ps: with ps; [ ]; # missing inputs: wiffi
+    "wiffi" = ps: with ps; [ wiffi ];
     "wilight" = ps: with ps; [ pywilight ];
     "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler python-wink ];
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
