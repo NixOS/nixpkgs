@@ -113,6 +113,21 @@
 
   jam-mode = callPackage ./jam-mode { };
 
+  llvm-mode = trivialBuild {
+    pname = "llvm-mode";
+    inherit (external.llvmPackages.llvm) src version;
+
+    dontConfigure = true;
+    buildPhase = ''
+      cp utils/emacs/*.el .
+    '';
+
+    meta = {
+      inherit (external.llvmPackages.llvm.meta) homepage license;
+      description = "Major mode for the LLVM assembler language.";
+    };
+  };
+
   org-mac-link =
     callPackage ./org-mac-link { };
 

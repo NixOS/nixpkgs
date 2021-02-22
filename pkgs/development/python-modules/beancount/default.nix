@@ -1,7 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, beautifulsoup4, bottle, chardet, dateutil
-, google_api_python_client, lxml, oauth2client
-, ply, python_magic, pytest, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, beautifulsoup4
+, bottle
+, chardet
+, dateutil
+, google_api_python_client
+, lxml
+, oauth2client
+, ply
+, pytest
+, python_magic
+, requests
+}:
 
 buildPythonPackage rec {
   version = "2.3.3";
@@ -29,7 +41,7 @@ buildPythonPackage rec {
     python_magic
     requests
     # pytest really is a runtime dependency
-    # https://bitbucket.org/blais/beancount/commits/554e13057551951e113835196770847c788dd592
+    # https://github.com/beancount/beancount/blob/v2/setup.py#L81-L82
     pytest
   ];
 
@@ -41,8 +53,7 @@ buildPythonPackage rec {
         financial transaction records in a text file, read them in memory,
         generate a variety of reports from them, and provides a web interface.
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ bhipple ];
   };
 }
-
