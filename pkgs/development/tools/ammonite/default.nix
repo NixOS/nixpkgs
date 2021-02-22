@@ -52,7 +52,7 @@ let
         sha256 = "06afx4gp5gwm8j9a6whj6h67rf00krn5vwp3xs0dzcpdhybjq2qh";
       };
 
-      nativeBuildInputs = [ zip gnused ];
+      nativeBuildInputs = [ zip gnused scala ];
       postPatch = ''
         substituteInPlace terminal/src/main/scala/ammonite/terminal/Utils.scala \
           --replace '"/usr/bin/tput"'                                 '"${ncurses}/bin/tput"'   \
@@ -61,7 +61,7 @@ let
       '';
 
       buildPhase = ''
-        ${scala}/bin/scalac \
+        scalac \
           -d ammonite_${scala.version}-${version}.jar \
           -cp ${lib.concatStringsSep ":" deps} \
           $(find . -type f -regex '.*\.\(scala\|java\)$' | egrep -v '/test/|/out/|/readme/' | ${filterSourceDirs} ${scala.version}) \
