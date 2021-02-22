@@ -41,7 +41,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C-style arbitrary precision calculator";
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
-    license = licenses.lgpl21Only;
+    # The licensing situation depends on readline (see section 3 of the LGPL)
+    # If linked against readline then GPLv2 otherwise LGPLv2.1
+    license = with licenses; if enableReadline then gpl2Only else lgpl21Only;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
   };
