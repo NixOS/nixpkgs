@@ -2724,7 +2724,6 @@ extra-packages:
   - haskell-lsp == 0.23.0.0             # required by hls-plugin-api 0.7.0.0, 2021-02-08
   - haskell-lsp-types == 0.23.0.0       # required by hls-plugin-api 0.7.0.0, 2021-02-08
   - lsp-test == 0.11.0.7                # required by hls-plugin-api 0.7.0.0, 2021-02-08
-  - megaparsec == 8.0.0                 # required by idris 1.3.3 https://github.com/idris-lang/Idris-dev/issues/4826
 
 package-maintainers:
   peti:

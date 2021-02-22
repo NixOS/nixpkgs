@@ -690,13 +690,18 @@ self: super: {
   # * We need a patch from master to fix compilation with haskeline 0.8.0
   #   which can be removed as soon as idris 1.3.4 hits presumably.
   idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
-    (appendPatch (super.idris.override {
-      megaparsec = self.megaparsec_8_0_0;
-    }) (pkgs.fetchpatch {
-      # compatibility with haskeline >= 0.8
-      url = "https://github.com/idris-lang/Idris-dev/commit/89a87cf666eb8b27190c779e72d0d76eadc1bc14.patch";
-      sha256 = "0fv493zlpgjsf57w0sncd4vqfkabfczp3xazjjmqw54m9rsfix35";
-    }))
+    (appendPatches super.idris [
+      (pkgs.fetchpatch {
+        # compatibility with haskeline >= 0.8
+        url = "https://github.com/idris-lang/Idris-dev/commit/89a87cf666eb8b27190c779e72d0d76eadc1bc14.patch";
+        sha256 = "0fv493zlpgjsf57w0sncd4vqfkabfczp3xazjjmqw54m9rsfix35";
+      }),
+      (pkgs.fetchpatch {
+        # compatibility with megaparsec >= 9
+        url = "https://github.com/idris-lang/Idris-dev/commit/6ea9bc913877d765048d7cdb7fc5aec60b196fac.patch";
+        sha256 = "0yms74d1xdxd1c08dnp45nb1ddzq54n6hqgzxx0r494wy614ir8q";
+      })
+    )
   ));
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
