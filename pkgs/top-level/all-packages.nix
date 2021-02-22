@@ -16360,7 +16360,7 @@ in
     python = python37;
   };
 
-  protobuf = protobuf3_14;
+  protobuf = protobuf3_15;
 
   protobuf3_15 = callPackage ../development/libraries/protobuf/3.15.nix { };
   protobuf3_14 = callPackage ../development/libraries/protobuf/3.14.nix { };
