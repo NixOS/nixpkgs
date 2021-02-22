@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder, black, isort
-, pytestCheckHook, pyyaml, typing-extensions, typing-inspect }:
+, pytestCheckHook, pyyaml, typing-extensions, typing-inspect, dataclasses }:
 
 buildPythonPackage rec {
   pname = "libcst";
@@ -16,7 +16,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ pyyaml typing-inspect ];
+  propagatedBuildInputs = [ pyyaml typing-inspect ]
+    ++ lib.optional (pythonOlder "3.7") dataclasses;
 
   checkInputs = [ black isort pytestCheckHook ];
 

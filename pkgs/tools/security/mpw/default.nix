@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitLab
+{ lib, stdenv, cmake, fetchFromGitLab
 , json_c, libsodium, libxml2, ncurses }:
 
 let
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A stateless password management solution";
     homepage = "https://masterpasswordapp.com/";
     license = licenses.gpl3;

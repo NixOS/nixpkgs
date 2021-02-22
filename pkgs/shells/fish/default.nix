@@ -16,11 +16,21 @@
 , ncurses
 , python3
 , cmake
+, fishPlugins
 
 , runCommand
 , writeText
 , nixosTests
 , useOperatingSystemEtc ? true
+  # An optional string containing Fish code that initializes the environment.
+  # This is run at the very beginning of initialization. If it sets $NIX_PROFILES
+  # then Fish will use that to configure its function, completion, and conf.d paths.
+  # For example:
+  #   fishEnvPreInit = "source /etc/fish/my-env-preinit.fish";
+  # It can also be a function that takes one argument, which is a function that
+  # takes a path to a bash file and converts it to fish. For example:
+  #   fishEnvPreInit = source: source "${nix}/etc/profile.d/nix-daemon.sh";
+, fishEnvPreInit ? null
 }:
 let
   etcConfigAppendix = writeText "config.fish.appendix" ''
@@ -46,8 +56,12 @@ let
     #     source both, but source the more global configuration files earlier
     #     than the more local ones, so that more local configurations inherit
     #     from but override the more global locations.
+    #
+    #     Special care needs to be taken, when fish is called from an FHS user env
+    #     or similar setup, because this configuration file will then be relocated
+    #     to /etc/fish/config.fish, so we test for this case to avoid nontermination.
 
-    if test -f /etc/fish/config.fish
+    if test -f /etc/fish/config.fish && test /etc/fish/config.fish != (status filename)
       source /etc/fish/config.fish
     end
 
@@ -62,8 +76,12 @@ let
     #   2. Before the shell is initialized, so that config snippets can find the commands they use on the PATH
     builtin status --is-login
     or test -z "$__fish_nixos_env_preinit_sourced" -a -z "$ETC_PROFILE_SOURCED" -a -z "$ETC_ZSHENV_SOURCED"
+    ${if fishEnvPreInit != null then ''
+    and begin
+    ${lib.removeSuffix "\n" (if lib.isFunction fishEnvPreInit then fishEnvPreInit sourceWithFenv else fishEnvPreInit)}
+    end'' else ''
     and test -f /etc/fish/nixos-env-preinit.fish
-    and source /etc/fish/nixos-env-preinit.fish
+    and source /etc/fish/nixos-env-preinit.fish''}
     and set -gx __fish_nixos_env_preinit_sourced 1
 
     test -n "$NIX_PROFILES"
@@ -92,6 +110,22 @@ let
         $__nix_profile_paths"/etc/fish/conf.d" \
         $__nix_profile_paths"/share/fish/vendor_conf.d"
     end
+  '';
+
+  # This is wrapped in begin/end in case the user wants to apply redirections.
+  # This does mean the basic usage of sourcing a single file will produce
+  # `begin; begin; …; end; end` but that's ok.
+  sourceWithFenv = path: ''
+    begin # fenv
+      # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
+      # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
+      set fish_function_path ${fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
+      fenv source ${lib.escapeShellArg path}
+      set -l fenv_status $status
+      # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
+      set -e fish_function_path
+      test $fenv_status -eq 0
+    end # fenv
   '';
 
   fish = stdenv.mkDerivation rec {
@@ -195,8 +229,6 @@ let
     '' + ''
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
     '';
-
-    enableParallelBuilding = true;
 
     meta = with lib; {
       description = "Smart and user-friendly command line shell";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchurl
 , nix-update-script
 , python3Packages
@@ -20,13 +20,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.8.0";
+  version = "5.9.0";
 
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "1czxzcxix9iwv1sir1q64j5aavc7lzjjwqpisgdc1kidkwnk05zp";
+    sha256 = "sha256-jRCrkJcjUHDd3wF+Hkxg0QaW7YgIh7zM/KZ4TAH84/U=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
   '';
 
   passthru = {
@@ -110,7 +110,7 @@ python3Packages.buildPythonApplication rec {
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;

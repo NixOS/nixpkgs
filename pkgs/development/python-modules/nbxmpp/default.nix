@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchzip, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl }:
+{ lib, buildPythonPackage, fetchzip, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl }:
 
 let
   pname = "nbxmpp";
@@ -15,10 +15,9 @@ in buildPythonPackage {
   };
 
   buildInputs = [ precis-i18n ];
-  checkInputs = [ gobject-introspection libsoup pygobject3 ];
-  propagatedBuildInputs = [ idna pyopenssl ];
+  propagatedBuildInputs = [ gobject-introspection idna libsoup pygobject3 pyopenssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
     description = "Non-blocking Jabber/XMPP module";
     license = licenses.gpl3;

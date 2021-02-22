@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, pkgconfig, libseccomp }:
+{ lib, stdenv, fetchurl, pkg-config, libseccomp, util-linux, qemu }:
 
-let version = "0.6.7";
+let version = "0.6.8";
 in stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux) libseccomp;
 
   src = fetchurl {
     url =
       "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "05k9adg3440zk5baa6ry8z5dj8d8r8hvzafh2469pdgcnr6h45gr";
+    sha256 = "sha256-zrxNCXJIuEbtE3YNRK8Bxu2koHsQkcF+xItoIyhj9Uc=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -36,6 +36,7 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = true;
+  checkInputs = [ util-linux qemu ];
   checkPhase = if stdenv.hostPlatform.isLinux then
     ''
     patchShebangs tests
@@ -49,10 +50,11 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/solo5/solo5";
     license = licenses.isc;
     maintainers = [ maintainers.ehmry ];
-    platforms = lib.crossLists (arch: os: "${arch}-${os}") [
-      [ "aarch64" "x86_64" ]
-      [ "freebsd" "genode" "linux" "openbsd" ]
-    ];
+    platforms = builtins.map ({arch, os}: "${arch}-${os}")
+      (cartesianProductOfSets {
+        arch = [ "aarch64" "x86_64" ];
+        os = [ "freebsd" "genode" "linux" "openbsd" ];
+      });
   };
 
 }

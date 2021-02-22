@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "rmapi";
@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Go app that allows access to the ReMarkable Cloud API programmatically";
     homepage = "https://github.com/juruen/rmapi";
     changelog = "https://github.com/juruen/rmapi/blob/v${version}/CHANGELOG.md";

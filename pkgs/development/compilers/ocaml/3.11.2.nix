@@ -3,7 +3,7 @@
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
    useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+   inherit (lib) optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     [ (fetchurl {
         name = "0007-Fix-ocamlopt-w.r.t.-binutils-2.21.patch";
         url = "http://caml.inria.fr/mantis/file_download.php?file_id=418&type=bug";
-	sha256 = "612a9ac108bbfce2238aa5634123da162f0315dedb219958be705e0d92dcdd8e";
+        sha256 = "612a9ac108bbfce2238aa5634123da162f0315dedb219958be705e0d92dcdd8e";
       })
     ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://caml.inria.fr/ocaml";
     license = with licenses; [
       qpl /* compiler */

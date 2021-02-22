@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   cmake,
   fetchFromGitHub,
   boost,
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading & writing the E57 file format (fork of E57RefImpl)";
     homepage = "https://github.com/asmaloney/libE57Format";
     license = licenses.boost;

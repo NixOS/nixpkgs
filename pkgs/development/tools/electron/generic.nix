@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , libXScrnSaver
 , makeWrapper
 , fetchurl
@@ -13,13 +13,14 @@
 , libdrm
 , mesa
 , libxkbcommon
+, libappindicator-gtk3
 }:
 
 version: hashes:
 let
   name = "electron-${version}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
@@ -55,8 +56,8 @@ let
     passthru.headers = headersFetcher version hashes.headers;
   };
 
-  electronLibPath = with stdenv.lib; makeLibraryPath (
-    [ libuuid at-spi2-atk at-spi2-core ]
+  electronLibPath = with lib; makeLibraryPath (
+    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
     ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
     ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
   );
@@ -88,7 +89,7 @@ let
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
+        --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
         "''${gappsWrapperArgs[@]}"
     '';
   };

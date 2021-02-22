@@ -29,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, ... } : let
 in {
 
   name = "matrix-synapse";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = teams.matrix.members;
   };
 

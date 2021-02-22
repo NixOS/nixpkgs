@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, makeDesktopItem, pkgconfig, makeWrapper
+{ stdenv, lib, fetchgit, makeDesktopItem, pkg-config, makeWrapper
 # Build
 , python2, autoconf213, yasm, perl
 , unzip, gnome2, gnum4
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnum4 makeWrapper perl pkgconfig python2
+    gnum4 makeWrapper perl pkg-config python2
   ];
 
   buildInputs = [
@@ -104,5 +104,6 @@ in stdenv.mkDerivation rec {
     license     = [ licenses.mpl20 licenses.gpl3 ];
     maintainers = with maintainers; [ TheBrainScrambler ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
+    broken      = true; # 2021-01-07
   };
 }

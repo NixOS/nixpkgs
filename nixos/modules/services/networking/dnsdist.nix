@@ -26,8 +26,7 @@ in {
 
       extraConfig = mkOption {
         type = types.lines;
-        default = ''
-        '';
+        default = "";
         description = ''
           Extra lines to be added verbatim to dnsdist.conf.
         '';

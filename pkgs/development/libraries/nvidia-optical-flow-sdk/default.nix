@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "nvidia-optical-flow-sdk";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     cp -R * $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nvidia optical flow headers for computing the relative motion of pixels between images";
     homepage = "https://developer.nvidia.com/opticalflow-sdk";
     license = licenses.bsd3; # applies to the header files only

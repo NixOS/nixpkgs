@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "unixODBC";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-gui" "--sysconfdir=/etc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ODBC driver manager for Unix";
     homepage = "http://www.unixodbc.org/";
     license = licenses.lgpl2;

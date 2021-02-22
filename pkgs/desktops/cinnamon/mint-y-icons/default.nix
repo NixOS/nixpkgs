@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 , gnome3
 , gnome-icon-theme
 , hicolor-icon-theme
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-y-icons";
     description = "The Mint-Y icon theme";
     license = licenses.gpl3; # from debian/copyright

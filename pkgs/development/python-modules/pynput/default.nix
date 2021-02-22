@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, sphinx, setuptools-lint, xlib, evdev }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, sphinx, setuptools-lint, xlib, evdev }:
 
 buildPythonPackage rec {
   pname = "pynput";
@@ -12,13 +12,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [ sphinx ];
 
   propagatedBuildInputs = [ setuptools-lint xlib ]
-  ++ stdenv.lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.isLinux [
     evdev
   ];
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
     license = licenses.lgpl3;

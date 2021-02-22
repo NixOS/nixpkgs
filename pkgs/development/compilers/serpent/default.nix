@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ... }:
+{ lib, stdenv, fetchFromGitHub, ... }:
 
 stdenv.mkDerivation {
   pname = "serpent";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     mv serpent $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler for the Serpent language for Ethereum";
     longDescription = ''
       Serpent is one of the high-level programming languages used to

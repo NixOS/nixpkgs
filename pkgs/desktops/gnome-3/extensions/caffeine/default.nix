@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, gettext, bash, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, glib, gettext, bash, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-caffeine";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fill the cup to inhibit auto suspend and screensaver";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];

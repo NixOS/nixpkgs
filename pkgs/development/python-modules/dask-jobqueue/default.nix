@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , dask
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     py.test dask_jobqueue/tests/test_jobqueue_core.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dask/dask-jobqueue";
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
     license = licenses.bsd3;

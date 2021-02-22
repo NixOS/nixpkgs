@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib,
   buildPythonPackage,
   fetchPypi,
   inflection,
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
     maintainers = with maintainers; [ ivegotasthma ];

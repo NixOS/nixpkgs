@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "fastrlock";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "9ae1a31f6e069b5f0f28ba63c594d0c952065de0a375f7b491d21ebaccc5166f";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/scoder/fastrlock";
     description = "A fast RLock implementation for CPython";
     license = licenses.mit;

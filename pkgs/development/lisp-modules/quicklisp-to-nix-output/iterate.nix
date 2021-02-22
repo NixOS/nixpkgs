@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''iterate'';
-  version = ''20200610-git'';
+  baseName = "iterate";
+  version = "20200610-git";
 
   parasites = [ "iterate/tests" ];
 
-  description = ''Jonathan Amsterdam's iterator/gatherer/accumulator facility'';
+  description = "Jonathan Amsterdam's iterator/gatherer/accumulator facility";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iterate/2020-06-10/iterate-20200610-git.tgz'';
-    sha256 = ''0xz3v321b8zgjsgak432frs0gmpr2n24sf5gq97qnqvwqfn4infb'';
+    url = "http://beta.quicklisp.org/archive/iterate/2020-06-10/iterate-20200610-git.tgz";
+    sha256 = "0xz3v321b8zgjsgak432frs0gmpr2n24sf5gq97qnqvwqfn4infb";
   };
 
   packageName = "iterate";

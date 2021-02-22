@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gawk, mercury, pandoc, ncurses, gpgme }:
+{ lib, stdenv, fetchFromGitHub, gawk, mercury, pandoc, ncurses, gpgme }:
 
 stdenv.mkDerivation rec {
   pname = "notmuch-bower";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/wangp/bower";
     description = "A curses terminal client for the Notmuch email system";
     maintainers = with maintainers; [ erictapen ];

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     $out/bin/nyxt -h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;

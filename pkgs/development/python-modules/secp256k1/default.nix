@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pkgconfig
+, pkg-config
 , pytest
 , pytestrunner
 , cffi
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "a3b43e02d321c09eafa769a6fc2c156f555cab3a7db62175ef2fd21e16cdf20c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   checkInputs = [ pytest pytestrunner ];
   propagatedBuildInputs = [ cffi secp256k1 ];
 

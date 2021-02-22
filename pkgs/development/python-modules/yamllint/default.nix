@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , nose, pyyaml, pathspec }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # Two test failures
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
     license = licenses.gpl3;

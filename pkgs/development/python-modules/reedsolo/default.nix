@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, cython, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, cython, nose }:
 
 buildPythonPackage rec {
   pname = "reedsolo";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
   checkPhase = "nosetests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure-python universal errors-and-erasures Reed-Solomon Codec";
     homepage = "https://github.com/tomerfiliba/reedsolomon";
     license = licenses.publicDomain;

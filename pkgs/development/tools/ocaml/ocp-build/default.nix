@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ncurses, cmdliner, re }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ncurses, cmdliner, re }:
 let
   version = "1.99.21";
 in
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   export configureFlags="$configureFlags --with-metadir=$OCAMLFIND_DESTDIR"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.typerex.org/ocp-build.html";
     description = "A build tool for OCaml";
     longDescription = ''

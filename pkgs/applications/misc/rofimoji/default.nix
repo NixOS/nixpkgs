@@ -38,6 +38,9 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace 'pyxdg==0.26' 'pyxdg'
   '';
 
+  # no tests executed
+  doCheck = false;
+
   meta = with lib; {
     description = "A simple emoji and character picker for rofi";
     homepage = "https://github.com/fdw/rofimoji";

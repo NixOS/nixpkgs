@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk8, which, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jdk8, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "drip";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A launcher for the Java Virtual Machine intended to be a drop-in replacement for the java command, only faster";
     license = licenses.epl10;
     homepage = "https://github.com/ninjudd/drip";

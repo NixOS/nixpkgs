@@ -7,9 +7,7 @@ Code that is shared with nix-darwin goes in common.nix.
  */
 
 { pkgs, config, lib, ... }:
-
 let
-
   inherit (lib) mkIf mkDefault;
 
   cfg = config.services.hercules-ci-agent;
@@ -21,7 +19,7 @@ in
 {
   imports = [
     ./common.nix
-    (lib.mkRenamedOptionModule ["services" "hercules-ci-agent" "user"] ["systemd" "services" "hercules-ci-agent" "serviceConfig" "User"])
+    (lib.mkRenamedOptionModule [ "services" "hercules-ci-agent" "user" ] [ "systemd" "services" "hercules-ci-agent" "serviceConfig" "User" ])
   ];
 
   config = mkIf cfg.enable {
@@ -80,6 +78,8 @@ in
       isSystemUser = true;
     };
 
-    users.groups.hercules-ci-agent = {};
+    users.groups.hercules-ci-agent = { };
   };
+
+  meta.maintainers = [ lib.maintainers.roberth ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, installShellFiles,
+{ lib, mkDerivation, fetchFromGitHub, installShellFiles,
   qmake, qtbase, poppler, qtmultimedia }:
 
 mkDerivation rec {
@@ -30,7 +30,7 @@ mkDerivation rec {
     installManPage man/*.{1,5}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple dual screen pdf presentation software";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
     license = licenses.gpl3Plus;

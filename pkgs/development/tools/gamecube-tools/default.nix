@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
 , freeimage, libGL }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zvpkzqvl8iv4ndzhkjkmrzpampyzgb91spv0h2x2arl8zy4z7ca";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for gamecube/wii projects";
     homepage = "https://github.com/devkitPro/gamecube-tools/";
     license = licenses.gpl2;

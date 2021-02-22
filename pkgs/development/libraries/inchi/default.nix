@@ -1,4 +1,11 @@
-{ pkgs, fetchurl, stdenv, unzip }:
+{ pkgs
+, fetchurl
+, lib
+, stdenv
+, unzip
+, fixDarwinDylibNames
+}:
+
 stdenv.mkDerivation {
   pname = "inchi";
   version = "1.05";
@@ -7,15 +14,23 @@ stdenv.mkDerivation {
     sha1 = "e3872a46d58cb321a98f4fd4b93a989fb6920b9c";
   };
 
-  nativeBuildInputs = [ pkgs.unzip ];
+  nativeBuildInputs = [ unzip ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
   outputs = [ "out" "doc" ];
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  preConfigure = ''
     cd ./INCHI_API/libinchi/gcc
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace makefile \
+      --replace ",--version-script=libinchi.map" "" \
+      --replace "LINUX_Z_RELRO = ,-z,relro" "" \
+      --replace "-soname" "-install_name" \
+      --replace "gcc" $CC
   '';
   installPhase = ''
+    runHook preInstall
+
     cd ../../..
     mkdir -p $out/lib
     mkdir -p $out/include/inchi
@@ -27,6 +42,10 @@ stdenv.mkDerivation {
     install -m 644 INCHI_BASE/src/*.h $out/include/inchi
 
     runHook postInstall
+  '';
+
+  preFixup = lib.optionalString stdenv.isDarwin ''
+    fixDarwinDylibNames $(find "$out" -name "*.so.*")
   '';
 
   postInstall =
@@ -41,11 +60,10 @@ stdenv.mkDerivation {
       install -m 644 INCHI-1-DOC/*.pdf $doc/share
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.inchi-trust.org/";
     description = "IUPAC International Chemical Identifier library";
     license = licenses.lgpl2Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ rmcgibbo ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, krb5Full, nose, GitPython, mock, git }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, krb5Full, nose, GitPython, mock, git }:
 
 buildPythonPackage rec {
   pname = "CCColUtils";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   doCheck = isPy3k; # needs unpackaged module to run tests on python2
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Kerberos 5 Credential Cache Collection Utilities";
     homepage = "https://pagure.io/cccolutils";
     license = licenses.gpl2;

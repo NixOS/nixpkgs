@@ -207,7 +207,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
 
   postFixup = lib.optionalString (!dontWrapLuaPrograms) ''
     wrapLuaPrograms
-  '' + attrs.postFixup or '''';
+  '' + attrs.postFixup or "";
 
   installPhase = attrs.installPhase or ''
     runHook preInstall

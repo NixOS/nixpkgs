@@ -100,7 +100,7 @@ in
 
       inputConfig = mkOption {
         type = types.lines;
-        default = ''generator { }'';
+        default = "generator { }";
         description = "Logstash input configuration.";
         example = ''
           # Read from journal
@@ -131,7 +131,7 @@ in
 
       outputConfig = mkOption {
         type = types.lines;
-        default = ''stdout { codec => rubydebug }'';
+        default = "stdout { codec => rubydebug }";
         description = "Logstash output configuration.";
         example = ''
           redis { host => ["localhost"] data_type => "list" key => "logstash" codec => json }

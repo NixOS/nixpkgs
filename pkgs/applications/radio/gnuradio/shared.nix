@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python
 , qt
 , gtk
@@ -14,9 +14,7 @@
 , fetchSubmodules
 }:
 
-let
-  lib = stdenv.lib;
-in rec {
+rec {
   version = builtins.concatStringsSep "." (
     lib.attrVals [ "major" "minor" "patch" ] versionAttr
   );
@@ -85,8 +83,7 @@ in rec {
     ++ lib.optionals (hasFeature "gr-uhd" features) [ "share/gnuradio/examples/uhd" ]
     ++ lib.optionals (hasFeature "gr-qtgui" features) [ "share/gnuradio/examples/qt-gui" ]
   ;
-  postInstall = ''
-  ''
+  postInstall = ""
     # Gcc references
     + lib.optionalString (hasFeature "volk" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)
@@ -112,6 +109,7 @@ in rec {
   };
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
+  dontWrapQtApps = true;
   # Tests should succeed, but it's hard to get LD_LIBRARY_PATH right in order
   # for it to happen.
   doCheck = false;

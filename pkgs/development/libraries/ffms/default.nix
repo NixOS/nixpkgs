@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, ffmpeg_3, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, zlib, ffmpeg_3, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ffms";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib ffmpeg_3 ];
 
   # ffms includes a built-in vapoursynth plugin, see:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libffms2.so $out/lib/vapoursynth/libffms2.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/FFMS/ffms2/";
     description = "Libav/ffmpeg based source library for easy frame accurate access";
     license = licenses.mit;

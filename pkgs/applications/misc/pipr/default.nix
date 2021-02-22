@@ -1,9 +1,8 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , rustPlatform
 , bubblewrap
 , makeWrapper
-, lib
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/pipr" --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A commandline-tool to interactively write shell pipelines";
     homepage = "https://github.com/ElKowar/pipr";
     license = licenses.mit;

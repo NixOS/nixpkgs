@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "PyMeeus";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     pytest .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/architest/pymeeus";
     description = "Library of astronomical algorithms";
     license = licenses.lgpl3;

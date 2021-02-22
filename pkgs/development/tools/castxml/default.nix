@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ypj67xrgj228myp7l1gsjw1ja97q68nmj98dsd33srmiayqraj4";
   };
 
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optionals withMan [ python3Packages.sphinx ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals withMan [ python3Packages.sphinx ];
 
   clangVersion = lib.getVersion llvmPackages.clang;
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ctest -E 'cmd.cc-(gnu|msvc)-((c-src-c)|(src-cxx))-cmd'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/CastXML/CastXML";
     license = licenses.asl20;
     description = "Abstract syntax tree XML output tool";

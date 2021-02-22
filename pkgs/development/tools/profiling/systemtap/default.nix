@@ -1,4 +1,4 @@
-{ fetchgit, pkgconfig, gettext, runCommand, makeWrapper
+{ lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
 , elfutils, kernel, gnumake, python2, python2Packages
 }:
 
@@ -10,14 +10,13 @@ let
   version = "4.1";
 
   inherit (kernel) stdenv;
-  inherit (stdenv) lib;
 
   ## stap binaries
   stapBuild = stdenv.mkDerivation {
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
     enableParallelBuilding = true;
   };

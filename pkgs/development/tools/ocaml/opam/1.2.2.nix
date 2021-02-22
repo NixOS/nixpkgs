@@ -82,7 +82,7 @@ in stdenv.mkDerivation {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package manager for OCaml";
     homepage = "http://opam.ocamlpro.com/";
     maintainers = [ maintainers.henrytill ];

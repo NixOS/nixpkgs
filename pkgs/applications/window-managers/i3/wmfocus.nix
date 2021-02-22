@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, rustPlatform
-, xorg, python3, pkgconfig, cairo, libxkbcommon }:
+{ lib, fetchFromGitHub, rustPlatform
+, xorg, python3, pkg-config, cairo, libxkbcommon }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wmfocus";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0rczas6sgcppacz48xx7sarkvc4s2sgcdz6c661d7vcry1y46xms";
 
-  nativeBuildInputs = [ python3 pkgconfig ];
+  nativeBuildInputs = [ python3 pkg-config ];
   buildInputs = [ cairo libxkbcommon xorg.xcbutilkeysyms ];
 
   # For now, this is the only available featureset. This is also why the file is
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   # users.
   cargoBuildFlags = [ "--features i3" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visually focus windows by label";
     homepage = "https://github.com/svenstaro/wmfocus";
     license = licenses.mit;

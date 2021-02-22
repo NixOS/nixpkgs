@@ -1,5 +1,5 @@
 { lib
-, stdenv
+
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -28,8 +28,8 @@ buildPythonPackage rec {
     sha256 = "42c7909953cc5aea91921b47d804b61e14893bf48a2a476ce49a96559a0fa1d3";
   };
 
-  disabled = isPyPy || stdenv.lib.versionOlder django.version "1.11"
-    || stdenv.lib.versionAtLeast django.version "2.0";
+  disabled = isPyPy || lib.versionOlder django.version "1.11"
+    || lib.versionAtLeast django.version "2.0";
 
   buildInputs = [ pyflakes pep8 ];
   propagatedBuildInputs = [ django django_contrib_comments filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4 requests requests_oauthlib future pillow chardet ];

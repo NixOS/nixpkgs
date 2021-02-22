@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , substituteAll
@@ -52,7 +52,7 @@ mkDerivation rec {
     # See https://github.com/NixOS/nixpkgs/issues/85306
     "-DLICENSING_PROVIDER:BOOL=OFF"
     "-DMapper_MANUAL_QTHELP:BOOL=OFF"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # FindGDAL is broken and always finds /Library/Framework unless this is
     # specified
     "-DGDAL_INCLUDE_DIR=${gdal}/include"
@@ -75,7 +75,7 @@ mkDerivation rec {
     ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       OpenOrienteering Mapper is an orienteering mapmaking program
       and provides a free alternative to the existing proprietary solution.

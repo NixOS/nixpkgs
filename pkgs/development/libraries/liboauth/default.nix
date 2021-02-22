@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, nss, nspr, pkgconfig }:
+{ fetchurl, lib, stdenv, nss, nspr, pkg-config }:
 
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ nss nspr ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace "-lnss3" "-L${nss.out}/lib -lnss3"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "C library implementing the OAuth secure authentication protocol";
     homepage = "http://liboauth.sourceforge.net/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, perl, zlib, bzip2, popt }:
+{ lib, stdenv, fetchFromGitHub, cmake, perl, zlib, bzip2, popt }:
 
 stdenv.mkDerivation rec {
   pname = "librsync";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://librsync.sourceforge.net/";
     license = licenses.lgpl2Plus;
     description = "Implementation of the rsync remote-delta algorithm";

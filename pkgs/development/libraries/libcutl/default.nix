@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, xercesc }:
+{ lib, stdenv, fetchurl, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "libcutl";
   version = "1.10.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ utility library from Code Synthesis";
     longDescription = ''
         libcutl is a C++ utility library.
-        It contains a collection of generic and independent components such as 
+        It contains a collection of generic and independent components such as
         meta-programming tests, smart pointers, containers, compiler building blocks, etc.
     '';
     homepage = "https://codesynthesis.com/projects/libcutl/";

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = true;
-  checkPhase = ''HOME=$TMP nosetests'';
+  checkPhase = "HOME=$TMP nosetests";
 
   meta = with lib; {
     description = "Set of packages that Enthought has found useful in creating a number of applications.";

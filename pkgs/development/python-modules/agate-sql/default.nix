@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, agate, sqlalchemy, crate }:
+{ lib, fetchPypi, buildPythonPackage, agate, sqlalchemy, crate }:
 
 buildPythonPackage rec {
     pname = "agate-sql";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
     propagatedBuildInputs = [ agate sqlalchemy crate ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Adds SQL read/write support to agate.";
       homepage    = "https://github.com/wireservice/agate-sql";
       license     = with licenses; [ mit ];

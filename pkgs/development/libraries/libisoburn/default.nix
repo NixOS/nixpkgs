@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, acl, attr, zlib, libburn, libisofs }:
+{ lib, stdenv, fetchurl, acl, attr, zlib, libburn, libisofs }:
 
 stdenv.mkDerivation rec {
   pname = "libisoburn";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ attr zlib libburn libisofs ];
   propagatedBuildInputs = [ acl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libburnia-project.org/";
     description = "Enables creation and expansion of ISO-9660 filesystems on CD/DVD/BD ";
     license = licenses.gpl2Plus;

@@ -24,8 +24,6 @@ let
       sha256 = "1dszbvxlh1npq4nv9s4wv4lcyfgb01k92ncxrrczsxy1dddg86pp";
     };
 
-    enableParallelBuilding = true;
-
     nativeBuildInputs = [ cmake ];
 
     buildInputs = [ SDL2 libGL curl ]
@@ -57,7 +55,7 @@ let
       cp $src/stuff/yq2.cfg $out/share/games/quake2
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
       license = licenses.gpl2;

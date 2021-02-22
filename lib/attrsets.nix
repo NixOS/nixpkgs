@@ -183,6 +183,24 @@ rec {
     else
       [];
 
+  /* Return the cartesian product of attribute set value combinations.
+
+    Example:
+      cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
+      => [
+           { a = 1; b = 10; }
+           { a = 1; b = 20; }
+           { a = 2; b = 10; }
+           { a = 2; b = 20; }
+         ]
+  */
+  cartesianProductOfSets = attrsOfLists:
+    lib.foldl' (listOfAttrs: attrName:
+      concatMap (attrs:
+        map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
+      ) listOfAttrs
+    ) [{}] (attrNames attrsOfLists);
+
 
   /* Utility function that creates a {name, value} pair as expected by
      builtins.listToAttrs.
@@ -493,5 +511,4 @@ rec {
   zipWithNames = zipAttrsWithNames;
   zip = builtins.trace
     "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
-
 }

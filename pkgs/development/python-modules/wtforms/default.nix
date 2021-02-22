@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , markupsafe
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # Django tests are broken "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet."
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";

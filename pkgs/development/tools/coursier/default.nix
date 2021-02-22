@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
+{ lib, stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
 , coreutils, git, gnused, nix, nixfmt }:
 
 let
-  version = "2.0.7";
+  version = "2.0.12";
 
   zshCompletion = fetchurl {
     url =
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "1m6b12cqbwsk4xf2r79y51154j6ws6f0kiw1yj57gylw7pjkgfnk";
+    sha256 = "sha256-SLl8pXGl9612FDEOy1vz/mXTb3+7YAJ/wq/njBL+V+I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,14 +37,7 @@ in stdenv.mkDerivation rec {
     #!${stdenv.shell}
     set -o errexit
     PATH=${
-      stdenv.lib.makeBinPath [
-        common-updater-scripts
-        coreutils
-        git
-        gnused
-        nix
-        nixfmt
-      ]
+      lib.makeBinPath [ common-updater-scripts coreutils git gnused nix nixfmt ]
     }
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
     latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} 'v*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
@@ -62,7 +55,7 @@ in stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://get-coursier.io/";
     description =
       "A Scala library to fetch dependencies from Maven / Ivy repositories";

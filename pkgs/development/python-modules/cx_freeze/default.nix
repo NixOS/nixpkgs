@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # fails to find Console even though it exists on python 3.x
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of scripts and modules for freezing Python scripts into executables";
     homepage = "http://cx-freeze.sourceforge.net/";
     license = licenses.psfl;

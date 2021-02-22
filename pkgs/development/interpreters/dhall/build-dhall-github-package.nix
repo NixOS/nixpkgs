@@ -25,8 +25,10 @@ lib.makePackageOverridable
     }@args:
 
     let
+      versionedName = "${name}-${rev}";
+
       src = fetchFromGitHub ({
-        name = "${name}-source";
+        name = "${versionedName}-source";
 
         inherit owner repo rev;
       } // removeAttrs args [
@@ -45,7 +47,9 @@ lib.makePackageOverridable
 
     in
       buildDhallPackage
-        ( { inherit name dependencies source;
+        ( { inherit dependencies source;
+
+            name = versionedName;
 
             code = "${src}/${prefix}${file}";
           }

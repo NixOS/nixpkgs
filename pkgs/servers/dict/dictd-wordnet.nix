@@ -1,4 +1,4 @@
-{stdenv, python, wordnet, writeScript}:
+{lib, stdenv, python, wordnet, writeScript}:
 
 stdenv.mkDerivation rec {
   version = "542";
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wordnet.princeton.edu/";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

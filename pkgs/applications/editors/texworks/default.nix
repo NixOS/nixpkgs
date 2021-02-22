@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , qtscript, poppler, hunspell
 , withLua ? true, lua
 , withPython ? true, python3 }:
@@ -13,6 +13,14 @@ mkDerivation rec {
     rev = "release-${version}";
     sha256 = "1lw1p4iyzxypvjhnav11g6rwf6gx7kyzwy2iprvv8zzpqcdkjp2z";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-compilation-with-qt-5.15.patch";
+      url = "https://github.com/TeXworks/texworks/commit/a5352a3a94e3685125650b65e6197de060326cc2.patch";
+      sha256 = "0pf7h1m11x0s039bxknm7rxdp9b4g8ch86y38jlyy56c74mw97i6";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ qtscript poppler hunspell ]

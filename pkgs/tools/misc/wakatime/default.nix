@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
+{ lib, python3Packages, fetchFromGitHub, glibcLocales }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "WakaTime command line interface";
     longDescription = ''

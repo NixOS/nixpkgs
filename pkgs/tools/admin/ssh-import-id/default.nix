@@ -1,5 +1,5 @@
 { buildPythonPackage
-, stdenv
+, lib
 , fetchgit
 , requests
 , makeWrapper
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # handlers require main bin, main bin requires handlers
   makeWrapperArgs = [ "--prefix" ":" "$out/bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Retrieves an SSH public key and installs it locally";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mkg20001 ];

@@ -66,10 +66,10 @@ let
             ++ optional service.debugTraceDisabled
             "--debug-trace-disabled"
             ++ map (e: "--env ${escapeShellArg e}") (mapAttrsToList (name: value: "${name}=${value}") service.environmentVariables)
-            ++ optionals (service.executor == "docker") (
+            ++ optionals (hasPrefix "docker" service.executor) (
               assert (
                 assertMsg (service.dockerImage != null)
-                  "dockerImage option is required for docker executor (${name})");
+                  "dockerImage option is required for ${service.executor} executor (${name})");
               [ "--docker-image ${service.dockerImage}" ]
               ++ optional service.dockerDisableCache
               "--docker-disable-cache"

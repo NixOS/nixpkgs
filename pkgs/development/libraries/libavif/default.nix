@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libaom
 , cmake
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     dav1d
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "C implementation of the AV1 Image File Format";
     longDescription = ''
       Libavif aims to be a friendly, portable C implementation of the

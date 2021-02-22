@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vivid";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "10xddr5cccc5cmhn4kwi27h3krmgapd7bqcp4rhjlbhdhsw7qxkx";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A generator for LS_COLORS with support for multiple color themes";
     homepage = "https://github.com/sharkdp/vivid";
     license = with licenses; [ asl20 /* or */ mit ];

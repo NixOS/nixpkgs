@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , fetchpatch
 , mkDerivation
@@ -8,7 +8,7 @@
 , gettext
 , mlt
 , jack1
-, pkgconfig
+, pkg-config
 , qtbase
 , qtmultimedia
 , qtx11extras
@@ -21,21 +21,21 @@
 , common-updater-scripts
 }:
 
-assert stdenv.lib.versionAtLeast mlt.version "6.22.1";
+assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.11.28";
+  version = "21.01.29";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1yr71ihml9wnm7y5pv0gz41l1k6ybd16dk78zxf96kn9b838mzhq";
+    sha256 = "0Q+63IRY4UbiYS+IMnn7hlr6w3IYtWynjBfTBvtWBMo=";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     SDL2
     frei0r
@@ -52,7 +52,7 @@ mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
   qmakeFlags = [
-    "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
+    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
     "SHOTCUT_VERSION=${version}"
     "DEFINES+=SHOTCUT_NOUPGRADE"
   ];
@@ -68,7 +68,7 @@ mkDerivation rec {
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ jack1 SDL2 ]}"
     "--prefix PATH : ${mlt}/bin"
   ];
 
@@ -83,7 +83,7 @@ mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, open source, cross-platform video editor";
     longDescription = ''
       An official binary for Shotcut, which includes all the

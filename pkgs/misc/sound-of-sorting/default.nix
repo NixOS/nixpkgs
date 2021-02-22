@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, SDL2, wxGTK } :
+{ lib, stdenv, fetchFromGitHub, SDL2, wxGTK } :
 
 stdenv.mkDerivation rec {
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     export SDL_CONFIG=${SDL2.dev}/bin/sdl2-config
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audibilization and Visualization of Sorting Algorithms";
     homepage = "https://panthema.net/2013/sound-of-sorting/";
     license = with licenses; gpl3;

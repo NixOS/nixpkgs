@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam }:
+{ lib, stdenv, fetchurl, pam }:
 
 stdenv.mkDerivation {
   name = "vlock-2.2.2";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ pam ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual console locking program";
     license = licenses.gpl2;
     maintainers = [ maintainers.lethalman ];

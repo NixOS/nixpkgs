@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux, zlib }:
+{lib, stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux, zlib }:
 
 let
 
@@ -214,7 +214,7 @@ stdenv.mkDerivation {
       --prefix PATH ":" "$out/bin"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "http://www.canon.com/";
     license = licenses.unfree;

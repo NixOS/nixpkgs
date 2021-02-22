@@ -47,7 +47,7 @@ let
 in {
   name = "lxd";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ patryk27 ];
   };
 

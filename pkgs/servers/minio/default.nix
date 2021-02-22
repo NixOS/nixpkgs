@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "minio";
-  version = "2020-10-18T21-54-12Z";
+  version = "2021-02-19T04-38-02Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "0yva6hwfczq0apg8cl0xvm5xzyazxnic4bh2xxm1nq4iqw2p2177";
+    sha256 = "sha256-Swm8gQeSN84SYE0M03Se9n/clYVT/W/v0GAmRRsL674=";
   };
 
-  vendorSha256 = "185njxpaynnq8yydmkdh1sf6x924p69w7brqwl42ny1gylwv2chp";
+  vendorSha256 = "sha256-7WvR6WHiaFHHBhpPoqnkr9pzFxNpLpZuaB1a/SkLBtc=";
 
   doCheck = false;
 
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   passthru.tests.minio = nixosTests.minio;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.minio.io/";
     description = "An S3-compatible object storage server";
     maintainers = with maintainers; [ eelco bachp ];

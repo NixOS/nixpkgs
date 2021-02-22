@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, autoconf }:
+{ lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
   name = "automake-1.15.1";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     branch = "1.15";
     homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU Automake is a tool for automatically generating
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
       Standards.  Automake requires the use of Autoconf.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

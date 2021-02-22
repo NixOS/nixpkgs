@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nixosTests, which
+{ lib, stdenv, fetchFromGitHub, nixosTests, which
 , pcre2
 , withPython2 ? false, python2
 , withPython3 ? true, python3, ncurses
@@ -7,7 +7,6 @@
 , withPerl530 ? false, perl530
 , withPerl532 ? true, perl532
 , withPerldevel ? false, perldevel
-, withRuby_2_5 ? false, ruby_2_5
 , withRuby_2_6 ? true, ruby_2_6
 , withRuby_2_7 ? false, ruby_2_7
 , withSSL ? true, openssl ? null
@@ -15,7 +14,7 @@
 , withDebug ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   phpConfig = {
@@ -51,7 +50,6 @@ in stdenv.mkDerivation rec {
     ++ optional withPerl530 perl530
     ++ optional withPerl532 perl532
     ++ optional withPerldevel perldevel
-    ++ optional withRuby_2_5 ruby_2_5
     ++ optional withRuby_2_6 ruby_2_6
     ++ optional withRuby_2_7 ruby_2_7
     ++ optional withSSL openssl;
@@ -77,7 +75,6 @@ in stdenv.mkDerivation rec {
     ${optionalString withPerl530    "./configure perl   --module=perl530  --perl=${perl530}/bin/perl"}
     ${optionalString withPerl532    "./configure perl   --module=perl532  --perl=${perl532}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
-    ${optionalString withRuby_2_5   "./configure ruby   --module=ruby25   --ruby=${ruby_2_5}/bin/ruby"}
     ${optionalString withRuby_2_6   "./configure ruby   --module=ruby26   --ruby=${ruby_2_6}/bin/ruby"}
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
   '';

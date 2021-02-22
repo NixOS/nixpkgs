@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildPythonPackage
 , pytestCheckHook
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   preCheck = "rm -rf dist"; # confuses source vs dist imports in pytest
   checkInputs = [ pytestCheckHook pytestcov ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
     homepage = "https://python-semver.readthedocs.io/en/latest/";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , wrapQtAppsHook
@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "4.0.7";
+  version = "4.0.9";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -35,7 +35,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "06vcbj9p96d8v4xjlygzr74lqllb9adn8k0racajzq61ijb0imi2";
+    sha256 = "0cmdyfabllw4wnpqpdxp3l6hjnm0cvkwxn0z8ph4x54sf4zq9iz3";
 
     extraPostFetch = ''
       mv $out ./all
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0k5xf97ga3ixd02g1y6v84hbxd8yhvpj5iz2rhxs8wfnkfwibzh4";
+    sha256 = "1fvjiagi78f32nxgr2rx8jas8hxfvpp1c8fpfcalvykmlhdc2gva";
   };
 
   postUnpack = ''
@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -81,7 +81,7 @@ python3.pkgs.buildPythonApplication {
     keepkey
     trezor
     btchip
-  ] ++ stdenv.lib.optionals enableQt [ pyqt5 qdarkstyle ];
+  ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -94,7 +94,7 @@ python3.pkgs.buildPythonApplication {
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     # Despite setting usr_share above, these files are installed under
     # $out/nix ...
     mv $out/${python3.sitePackages}/nix/store"/"*/share $out
@@ -108,7 +108,7 @@ python3.pkgs.buildPythonApplication {
 
   '';
 
-  postFixup = stdenv.lib.optionalString enableQt ''
+  postFixup = lib.optionalString enableQt ''
     wrapQtApp $out/bin/electrum
   '';
 
@@ -125,7 +125,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
+    inherit lib;
     inherit
       writeScript
       common-updater-scripts
@@ -139,7 +139,7 @@ python3.pkgs.buildPythonApplication {
     ;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from

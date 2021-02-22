@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, dmd, dub }:
+{ lib, stdenv, fetchgit, dmd, dub }:
 
 stdenv.mkDerivation {
   pname = "Literate";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   installPhase = "install -D bin/lit $out/bin/lit";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A literate programming tool for any language";
     homepage    = "http://literate.zbyedidia.webfactional.com/";
     license = licenses.mit;

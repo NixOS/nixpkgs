@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, m4, perl, libarchive, openssl, zlib, bzip2,
+{ stdenv, lib, fetchurl, pkg-config, m4, perl, libarchive, openssl, zlib, bzip2,
 lzma, curl, runtimeShell }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
-  nativeBuildInputs = [ pkgconfig m4 ];
+  nativeBuildInputs = [ pkg-config m4 ];
   buildInputs = [ curl perl libarchive openssl zlib bzip2 lzma ];
 
   postFixup = ''

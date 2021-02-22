@@ -1,9 +1,10 @@
 { lib
 , python3
-, stdenv
+
 , writeTextDir
 , substituteAll
 , fetchpatch
+, installShellFiles
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -62,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
-  # checkInputs = [ ninja pkgconfig ];
+  # checkInputs = [ ninja pkg-config ];
   # checkPhase = "python ./run_project_tests.py";
 
   postFixup = ''
@@ -75,6 +76,13 @@ python3.pkgs.buildPythonApplication rec {
 
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh data/shell-completions/zsh/_meson
+    installShellCompletion --bash data/shell-completions/bash/meson
   '';
 
   meta = with lib; {

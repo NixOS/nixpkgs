@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts dotnet-sdk_3
+#!nix-shell -i bash -p curl jq common-updater-scripts dotnet-sdk_5
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -36,6 +36,3 @@ while read pkg_spec; do
 EOF
 done < <(find ./nuget_tmp.packages -name '*.nuspec' | sort)
 echo "]" >>"$deps_file"
-
-popd
-rm -r "$src"

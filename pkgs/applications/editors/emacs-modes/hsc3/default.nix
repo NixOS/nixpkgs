@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs }:
+{ lib, stdenv, fetchurl, emacs }:
 
 # this package installs the emacs-mode which
 # resides in the hsc3 sources.
@@ -23,6 +23,6 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://rd.slavepianos.org/?t=hsc3";
     description = "hsc3 mode package for Emacs";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, luajit, openssl, perl }:
+{ lib, stdenv, fetchFromGitHub, luajit, openssl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "wrk";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp wrk $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP benchmarking tool";
     homepage = "https://github.com/wg/wrk";
     longDescription = ''

@@ -4,7 +4,6 @@
 , libXdamage, expat }:
 
 let
-  inherit (stdenv) lib;
   LD_LIBRARY_PATH = lib.makeLibraryPath
     [ glib gtk2 gdk-pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
 in
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A sophisticated software modeler";
     homepage = "https://staruml.io/";
     license = licenses.unfree;

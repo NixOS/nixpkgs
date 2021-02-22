@@ -26,11 +26,11 @@ buildPythonApplication rec {
     sha256 = "0apwgj86whrc077dfymvyb4qwj19bawyrx49g4kg364895v0rbbq";
   };
 
-  # pendulum pinning was to prevent PEP517 from trying to build from source
+  # there are already later releases present
   postPatch = ''
     substituteInPlace setup.py \
       --replace "tomlkit>=0.5,<0.6" "tomlkit" \
-      --replace "pendulum>=2.0,<=3.0,!=2.0.5,!=2.1.0" "pendulum"
+      --replace "attrs>=18.2,<19.4" "attrs"
   '';
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, callPackage, runCommandLocal, writeShellScriptBin, stdenv, coreutils, bubblewrap }:
+{ lib, callPackage, runCommandLocal, writeShellScriptBin, coreutils, bubblewrap }:
 
 args @ {
   name
@@ -24,8 +24,6 @@ let
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
-  chrootenv = callPackage ./chrootenv {};
-
   etcBindFlags = let
     files = [
       # NixOS Compatibility
@@ -37,6 +35,8 @@ let
       "hosts"
       "resolv.conf"
       "nsswitch.conf"
+      # User profiles
+      "profiles"
       # Sudo & Su
       "login.defs"
       "sudoers"
@@ -80,6 +80,11 @@ let
     if [[ -d ${env}/etc ]]; then
       for i in ${env}/etc/*; do
         path="/''${i##*/}"
+        # NOTE: we're binding /etc/fonts from the host so we don't want to
+        # override it with a path from the FHS environment.
+        if [[ $path == '/fonts' ]]; then
+          continue
+        fi
         ro_mounts+=(--ro-bind "$i" "/etc$path")
       done
     fi

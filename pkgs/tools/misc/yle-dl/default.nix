@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rtmpdump, php, wget, python3Packages, ffmpeg_3 }:
+{ lib, fetchFromGitHub, rtmpdump, php, wget, python3Packages, ffmpeg_3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "yle-dl";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false; # tests require network access
   checkInputs = with python3Packages; [ ffmpeg_3 pytest pytestrunner ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";
     license = licenses.gpl3Plus;

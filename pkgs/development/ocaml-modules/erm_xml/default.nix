@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "erm_xml is not available for OCaml ${ocaml.version}"
 else
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/hannesm/xml";
     description = "XML Parser for discrete data";
     platforms = ocaml.meta.platforms or [];
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

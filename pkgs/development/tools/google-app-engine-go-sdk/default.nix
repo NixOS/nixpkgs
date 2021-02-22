@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchzip, python3Packages, makeWrapper }:
 
 with python3Packages;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google App Engine SDK for Go";
     version = version;
     homepage = "https://cloud.google.com/appengine/docs/go/";

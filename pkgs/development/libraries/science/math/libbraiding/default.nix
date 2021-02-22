@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # no tests included for now (2018-08-05), but can't hurt to activate
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/miguelmarco/libbraiding/";
     description = "C++ library for computations on braid groups";
     longDescription = ''

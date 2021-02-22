@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "elfkickers";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "02354yn1lh1dxny35ky2d0b44iq302krsqpwk5grr4glma00hhq6";
   };
 
-  makeFlags = [ "CC=cc prefix=$(out)" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc prefix=$(out)" ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.muppetlabs.com/~breadbox/software/elfkickers.html";
     description = "A collection of programs that access and manipulate ELF files";
     platforms = platforms.linux;

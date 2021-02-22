@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
+{ lib, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
 
 buildPythonPackage rec {
   pname = "pivy";
@@ -29,8 +29,7 @@ buildPythonPackage rec {
   ];
 
   dontUseQmakeConfigure = true;
-  dontUseCmakeConfigure = true;
-
+  dontWrapQtApps =true;
   doCheck = false;
 
   postPatch = ''
@@ -38,7 +37,7 @@ buildPythonPackage rec {
       \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/coin3d/pivy/";
     description = "A Python binding for Coin";
     license = licenses.bsd0;

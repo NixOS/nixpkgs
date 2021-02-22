@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   version = "4.2.5";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp README.txt $out/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic test generation for Java";
     homepage = "https://randoop.github.io/randoop/";
     license = licenses.mit;

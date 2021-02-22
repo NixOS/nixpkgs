@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
+{ lib, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
   unidecode, mock, pytest , backports-shutil-which, ConfigArgParse,
   python-daemon, pymsgbox }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     py.test libagent/tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Using hardware wallets as SSH/GPG agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;

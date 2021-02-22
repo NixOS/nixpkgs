@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake
 , alsaLib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch
 , qtbase, qtdeclarative, qtquickcontrols2
 }:
@@ -17,13 +17,15 @@ stdenv.mkDerivation rec {
     qtbase qtdeclarative qtquickcontrols2
   ];
 
+  dontWrapQtApps = true;
+
   cmakeFlags = [
     "-DCMAKE_INCLUDE_PATH=${libjack2}/include/jack;${libpulseaudio.dev}/include/pulse"
     "-DENABLE_JACK=ON"
     "-DENABLE_PULSEAUDIO=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for practicing playing musical scores and ear training";
     homepage = "https://nootka.sourceforge.io/";
     license = licenses.gpl3Plus;

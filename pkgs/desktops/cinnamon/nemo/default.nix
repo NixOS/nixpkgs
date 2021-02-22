@@ -4,8 +4,8 @@
 , gobject-introspection
 , meson
 , ninja
-, pkgconfig
-, stdenv
+, pkg-config
+, lib, stdenv
 , wrapGAppsHook
 , libxml2
 , gtk3
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson
-    pkgconfig
+    pkg-config
     ninja
     wrapGAppsHook
     intltool
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
     license = [ licenses.gpl2 licenses.lgpl2 ];

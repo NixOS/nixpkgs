@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, setuptools-scm
 , can
-, canmatrix }:
+, canmatrix
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "canopen";
@@ -14,17 +16,25 @@ buildPythonPackage rec {
     sha256 = "15d49f1f71e9989dde6e3b75fb8445c76bd223064dfc0ac629fe9ecb0e21fba9";
   };
 
-  propagatedBuildInputs =
-    [ can
-      canmatrix
-    ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ nose ];
+  propagatedBuildInputs = [
+    can
+    canmatrix
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "canopen" ];
 
   meta = with lib; {
     homepage = "https://github.com/christiansandberg/canopen/";
     description = "CANopen stack implementation";
-    license = licenses.lgpl3;
+    license = licenses.mit;
     maintainers = with maintainers; [ sorki ];
   };
 }

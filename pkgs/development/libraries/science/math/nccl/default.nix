@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
+{ lib, stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;

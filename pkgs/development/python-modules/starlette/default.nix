@@ -2,25 +2,25 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , aiofiles
 , graphene
 , itsdangerous
 , jinja2
+, python-multipart
 , pyyaml
 , requests
 , ujson
-, python-multipart
-, pytest
-, uvicorn
-, isPy27
-, darwin
-, databases
 , aiosqlite
+, databases
+, pytestCheckHook
+, pytest-asyncio
+, typing-extensions
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-
   version = "0.13.8";
   disabled = isPy27;
 
@@ -36,22 +36,23 @@ buildPythonPackage rec {
     graphene
     itsdangerous
     jinja2
+    python-multipart
     pyyaml
     requests
     ujson
-    uvicorn
-    python-multipart
-    databases
-  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+  ] ++ lib.optional stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
-    pytest
     aiosqlite
+    databases
+    pytest-asyncio
+    pytestCheckHook
+    typing-extensions
   ];
 
-  checkPhase = ''
-    pytest --ignore=tests/test_graphql.py
-  '';
+  disabledTestFiles = [ "tests/test_graphql.py" ];
+  # https://github.com/encode/starlette/issues/1131
+  disabledTests = [ "test_debug_html" ];
   pythonImportsCheck = [ "starlette" ];
 
   meta = with lib; {

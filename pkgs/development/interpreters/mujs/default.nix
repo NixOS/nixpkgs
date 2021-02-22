@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline }:
+{ lib, stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
   pname = "mujs";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mujs.com/";
     description = "A lightweight, embeddable Javascript interpreter";
     platforms = platforms.unix;

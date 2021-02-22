@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk-pixbuf
+{ lib, stdenv, fetchFromGitLab, intltool, meson, ninja, pkg-config, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk-pixbuf
 , modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobject-introspection, vala
 , withDemoAgent ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig intltool meson ninja wrapGAppsHook python3 vala gobject-introspection
+    pkg-config intltool meson ninja wrapGAppsHook python3 vala gobject-introspection
     # devdoc
     gtk-doc docbook_xsl docbook_xml_dtd_412
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     patchShebangs demo/install-file.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Geolocation framework and some data providers";
     homepage = "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home";
     maintainers = with maintainers; [ raskin ];

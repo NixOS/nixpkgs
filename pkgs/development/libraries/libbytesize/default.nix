@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gettext
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext
 , gtk-doc, libxslt, docbook_xml_dtd_43, docbook_xsl
 , python3, pcre2, gmp, mpfr
 }:
@@ -18,11 +18,11 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig gettext gtk-doc libxslt docbook_xml_dtd_43 docbook_xsl python3 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config gettext gtk-doc libxslt docbook_xml_dtd_43 docbook_xsl python3 ];
 
   buildInputs = [ pcre2 gmp mpfr ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiny library providing a C “class” for working with arbitrary big sizes in bytes";
     homepage = src.meta.homepage;
     license = licenses.lgpl2Plus;

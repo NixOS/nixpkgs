@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper }:
 let
   version = "0.9.1";
   name = "chibi-scheme-${version}";
@@ -9,9 +9,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/ashinn/chibi-scheme";
     description = "Small Footprint Scheme for use as a C Extension Language";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.DerGuteMoritz ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.DerGuteMoritz ];
   };
 
   src = fetchFromGitHub {

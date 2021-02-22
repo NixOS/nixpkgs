@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchzip, buildEnv, makeDesktopItem, runCommand, writeText, pkgconfig
+{ mkDerivation, lib, fetchzip, buildEnv, makeDesktopItem, runCommand, writeText, pkg-config
 , cmake, qmake, cacert, jsoncpp, libX11, libXScrnSaver, lua, openssl, poco
 , qtbase, qtwebengine, qtx11extras, sqlite }:
 
@@ -68,7 +68,7 @@ let
 
     sourceRoot = "source/src";
 
-    nativeBuildInputs = [ qmake pkgconfig ];
+    nativeBuildInputs = [ qmake pkg-config ];
     buildInputs = [ jsoncpp lua openssl poco poco-pc-wrapped sqlite libX11 ];
 
     postPatch = ''
@@ -93,7 +93,7 @@ let
       ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/cacert.pem
     '';
 
-    nativeBuildInputs = [ qmake pkgconfig ];
+    nativeBuildInputs = [ qmake pkg-config ];
 
     buildInputs = [
       bugsnag-qt

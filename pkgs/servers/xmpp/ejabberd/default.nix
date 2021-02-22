@@ -24,12 +24,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "20.03";
+  version = "20.12";
   pname = "ejabberd";
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
-    sha256 = "0i013l9cygmgainfid298n6llhs3mblfklry3jw2a6irvhffym0s";
+    sha256 = "sha256-nZxdYXRyv4UejPLHNT/p6CrvW22Koo7rZSi96KRjqFQ=";
   };
 
   nativeBuildInputs = [ fakegit ];
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0xwgi9hy6y0m8mwznl6px98kdmkcxg98k62zgqbaqd4paks5zwqa";
+    outputHash = "sha256-0/hBgA+9rsDOBcvbROSpc5Xnw4JkYpuLCl2V+lJnieY=";
   };
 
   configureFlags =
@@ -107,15 +107,15 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
-    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
     homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar ajs124 ];
+    maintainers = with maintainers; [ sander abbradar ];
     broken = withElixir;
   };
 }

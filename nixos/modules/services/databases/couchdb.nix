@@ -16,8 +16,7 @@ let
       [admins]
       ${cfg.adminUser} = ${cfg.adminPass}
     '' else
-    ''
-    '') + (if useVersion2 then
+    "") + (if useVersion2 then
     ''
       [chttpd]
     '' else

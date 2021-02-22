@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   buildInputs = [ six pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library of web-related functions";
     homepage = "https://github.com/scrapy/w3lib";
     license = licenses.bsd3;

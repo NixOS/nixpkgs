@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, dune, benchmark }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, dune, benchmark }:
 
 let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.03"
+  if lib.versionAtLeast ocaml.version "4.03"
   then rec {
     version = "0.6.2";
     url = "https://github.com/Chris00/ocaml-rope/releases/download/${version}/rope-${version}.tbz";
@@ -9,7 +9,9 @@ let param =
     buildInputs = [ dune ];
     extra = {
       buildPhase = "dune build -p rope";
-      inherit (dune) installPhase;
+      installPhase = ''
+        dune install --prefix $out --libdir $OCAMLFIND_DESTDIR rope
+      '';
     };
   } else {
     version = "0.5";
@@ -33,7 +35,7 @@ stdenv.mkDerivation ({
     homepage = "http://rope.forge.ocamlcore.org/";
     platforms = ocaml.meta.platforms or [];
     description = ''Ropes ("heavyweight strings") in OCaml'';
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ volth ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ volth ];
   };
 } // param.extra)

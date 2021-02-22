@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
+{lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
 let
   s = # Generated upstream information
   rec {
@@ -42,9 +42,9 @@ stdenv.mkDerivation {
   '';
   meta = {
     inherit (s) version;
-    description = ''Gecko-based programmatically-driven browser'';
-    license = stdenv.lib.licenses.mpl20 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Gecko-based programmatically-driven browser";
+    license = lib.licenses.mpl20 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

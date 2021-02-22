@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, udev
+{ lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, udev
 , qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb-compat-0_1
 , libsndfile, libmad
 }:
@@ -14,7 +14,7 @@ mkDerivation rec {
     sha256 = "PB1Y8N1TrJMcS7A2e1nKjsUlAxOYjdJqBhbyuDCAbGs=";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [
     udev qtmultimedia qtscript alsaLib ola libftdi1 libusb-compat-0_1 libsndfile libmad
   ];
@@ -35,7 +35,7 @@ mkDerivation rec {
     ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;

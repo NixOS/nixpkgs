@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
 
 buildPythonPackage rec {
   pname = "rope";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     NOSE_IGNORE_FILES=type_hinting_test.py nosetests ropetest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
     maintainers = with maintainers; [ goibhniu ];

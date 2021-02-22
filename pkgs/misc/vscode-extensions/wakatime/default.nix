@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , wakatime, vscode-utils }:
 
 let
@@ -17,7 +17,7 @@ in
       cp -rt wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         Visual Studio Code plugin for automatic time tracking and metrics generated
         from your programming activity

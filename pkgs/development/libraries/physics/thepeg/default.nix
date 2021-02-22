@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, fastjet, gsl, hepmc2, lhapdf, rivet, zlib }:
+{ lib, stdenv, fetchurl, boost, fastjet, gsl, hepmc2, lhapdf, rivet, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "thepeg";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Toolkit for High Energy Physics Event Generation";
     homepage = "https://herwig.hepforge.org/";
     license = licenses.gpl3;

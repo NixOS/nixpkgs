@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation {
   pname = "check-uptime";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postInstall = "ln -sr $out/libexec $out/bin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Uptime check plugin for Sensu/Nagios/others";
     homepage    = "https://github.com/madrisan/nagios-plugins-uptime";
     license     = licenses.gpl3;

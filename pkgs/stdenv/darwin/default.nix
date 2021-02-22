@@ -1,7 +1,5 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-# The version of darwin.apple_sdk used for sources provided by apple.
-, appleSdkVersion ? "10.12"
 # Minimum required macOS version, used both for compatibility as well as reproducability.
 , macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
@@ -22,7 +20,7 @@
 assert crossSystem == localSystem;
 
 let
-  inherit (localSystem) system platform;
+  inherit (localSystem) system;
 
   bootstrapClangVersion = "7.1.0";
 
@@ -54,8 +52,6 @@ in rec {
     args    = [ ./unpack-bootstrap-tools.sh ];
 
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
-    reexportedLibrariesFile =
-      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
 
     __impureHostDeps = commonImpureHostDeps;
   };
@@ -84,7 +80,7 @@ in rec {
 
       mkCC = overrides: import ../../build-support/cc-wrapper (
         let args = {
-          inherit shell;
+          inherit lib shell;
           inherit (last) stdenvNoCC;
 
           nativeTools  = false;
@@ -152,7 +148,7 @@ in rec {
         __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
-          inherit macosVersionMin appleSdkVersion platform;
+          inherit macosVersionMin;
         };
         overrides  = self: super: (overrides self super) // {
           inherit ccNoLibcxx;
@@ -167,22 +163,61 @@ in rec {
 
   stage0 = stageFun 0 null {
     overrides = self: super: with stage0; {
-      coreutils = { name = "bootstrap-stage0-coreutils"; outPath = bootstrapTools; };
-      gnugrep   = { name = "bootstrap-stage0-gnugrep";   outPath = bootstrapTools; };
+      coreutils = stdenv.mkDerivation {
+        name = "bootstrap-stage0-coreutils";
+        buildCommand = ''
+          mkdir -p $out
+          ln -s ${bootstrapTools}/bin $out/bin
+        '';
+      };
+
+      gnugrep = stdenv.mkDerivation {
+        name = "bootstrap-stage0-gnugrep";
+        buildCommand = ''
+          mkdir -p $out
+          ln -s ${bootstrapTools}/bin $out/bin
+        '';
+      };
 
       darwin = super.darwin // {
         Libsystem = stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";
           buildCommand = ''
             mkdir -p $out
-            ln -s ${bootstrapTools}/lib $out/lib
+
+            cp -r ${self.darwin.darwin-stubs}/usr/lib $out/lib
+            chmod -R +w $out/lib
+            substituteInPlace $out/lib/libSystem.B.tbd --replace /usr/lib/system $out/lib/system
+
+            ln -s libSystem.B.tbd $out/lib/libSystem.tbd
+
+            for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
+              ln -s libSystem.tbd $out/lib/lib$name.tbd
+            done
+
+            ln -s ${bootstrapTools}/lib/*.o $out/lib
+
+            ln -s ${bootstrapTools}/lib/libresolv.9.dylib $out/lib
+            ln -s libresolv.9.dylib $out/lib/libresolv.dylib
+
             ln -s ${bootstrapTools}/include-Libsystem $out/include
           '';
         };
-        dyld = bootstrapTools;
+
+        darwin-stubs = super.darwin.darwin-stubs.override { inherit (self) stdenv fetchurl; };
+
+        dyld = {
+          name = "bootstrap-stage0-dyld";
+          buildCommand = ''
+            mkdir -p $out
+            ln -s ${bootstrapTools}/lib     $out/lib
+            ln -s ${bootstrapTools}/include $out/include
+          '';
+        };
 
         binutils = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           shell = "${bootstrapTools}/bin/bash";
+          inherit lib;
           inherit (self) stdenvNoCC;
 
           nativeTools  = false;
@@ -194,10 +229,15 @@ in rec {
       };
 
       llvmPackages_7 = {
-        clang-unwrapped = {
+        clang-unwrapped = stdenv.mkDerivation {
           name = "bootstrap-stage0-clang";
-          outPath = bootstrapTools;
           version = bootstrapClangVersion;
+          buildCommand = ''
+            mkdir -p $out/lib
+            ln -s ${bootstrapTools}/bin $out/bin
+            ln -s ${bootstrapTools}/lib/clang $out/lib/clang
+            ln -s ${bootstrapTools}/include $out/include
+          '';
         };
 
         libcxx = stdenv.mkDerivation {
@@ -256,6 +296,7 @@ in rec {
 
       darwin = super.darwin // {
         binutils = darwin.binutils.override {
+          coreutils = self.coreutils;
           libc = self.darwin.Libsystem;
         };
       };
@@ -268,8 +309,8 @@ in rec {
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ libcxx libcxxabi llvmPackages_7.compiler-rt ]) ++
-      (with pkgs.darwin; [ Libsystem ]);
+      (with pkgs; [ coreutils gnugrep libcxx libcxxabi llvmPackages_7.clang-unwrapped llvmPackages_7.compiler-rt ]) ++
+      (with pkgs.darwin; [ darwin-stubs Libsystem ]);
 
     overrides = persistent;
   };
@@ -318,8 +359,8 @@ in rec {
       [ bootstrapTools ] ++
       (with pkgs; [
         xz.bin xz.out libcxx libcxxabi llvmPackages_7.compiler-rt
-        zlib libxml2.out curl.out openssl.out libssh2.out
-        nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
+        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out openssl.out
+        libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
 
@@ -370,8 +411,8 @@ in rec {
       [ bootstrapTools ] ++
       (with pkgs; [
         xz.bin xz.out bash libcxx libcxxabi llvmPackages_7.compiler-rt
-        zlib libxml2.out curl.out openssl.out libssh2.out
-        nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
+        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out openssl.out
+        libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
       (with pkgs.darwin; [ dyld ICU Libsystem locale ]);
 
@@ -482,7 +523,7 @@ in rec {
     extraAttrs = {
       libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-      inherit macosVersionMin appleSdkVersion platform bootstrapTools;
+      inherit macosVersionMin bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [

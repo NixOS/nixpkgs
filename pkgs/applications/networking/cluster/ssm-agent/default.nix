@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, bash, makeWrapper }:
+{ lib, fetchFromGitHub, buildGoPackage, bash, makeWrapper }:
 
 buildGoPackage rec {
   pname   = "amazon-ssm-agent";
@@ -53,7 +53,7 @@ buildGoPackage rec {
     wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bash}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
     homepage    = "https://github.com/aws/amazon-ssm-agent";
     license     = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
 , alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , libSM, libICE, libXext, factorio-utils
 , releaseType
@@ -13,7 +13,7 @@ assert releaseType == "alpha"
 
 let
 
-  inherit (stdenv.lib) importJSON;
+  inherit (lib) importJSON;
 
   helpMsg = ''
 
@@ -42,7 +42,7 @@ let
 
       releaseType=alpha
       version=0.17.74
-      nix-prefetch-url file://$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
+      nix-prefetch-url file://\''$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
   '';
@@ -83,7 +83,7 @@ let
       if !needsAuth then
         fetchurl { inherit name url sha256; }
       else
-        (stdenv.lib.overrideDerivation
+        (lib.overrideDerivation
           (fetchurl {
             inherit name url sha256;
             curlOpts = [
@@ -168,8 +168,8 @@ let
         version 1.0 in mid 2020.
       '';
       homepage = "https://www.factorio.com/";
-      license = stdenv.lib.licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
       platforms = [ "x86_64-linux" ];
     };
   };
@@ -180,7 +180,7 @@ let
 
       buildInputs = [ makeWrapper libpulseaudio ];
 
-      libPath = stdenv.lib.makeLibraryPath [
+      libPath = lib.makeLibraryPath [
         alsaLib
         libpulseaudio
         libX11

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, perl
-, glib, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu
+, glib, luajit, openssl, pcre, pkg-config, sqlite, ragel, icu
 , hyperscan, jemalloc, blas, lapack, lua, libsodium
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vwa7k2s2bkfb8w78z5izkd6ywjbzqysb0grls898y549hm8ii70";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig perl ];
+  nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
     ++ lib.optional withHyperscan hyperscan
     ++ lib.optionals withBlas [ blas lapack ]
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.rspamd = nixosTests.rspamd;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rspamd.com";
     license = licenses.asl20;
     description = "Advanced spam filtering system";

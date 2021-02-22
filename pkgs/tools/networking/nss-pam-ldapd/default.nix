@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, pkgconfig, makeWrapper, autoreconfHook
+{ lib, stdenv, fetchurl
+, pkg-config, makeWrapper, autoreconfHook
 , openldap, python, pam
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dna3r0q6sjhhlkhcp8x2zkslrd4y7701kk6fl5r940sdph1pmyh";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper autoreconfHook ];
+  nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
   buildInputs = [ openldap pam python ];
 
   preConfigure = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/sbin/nslcd --prefix LD_LIBRARY_PATH ":" $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LDAP identity and authentication for NSS/PAM";
     homepage = "https://arthurdejong.org/nss-pam-ldapd/";
     license = licenses.lgpl21;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, linuxHeaders, perl }:
+{ lib, stdenv, fetchurl, buildPackages, linuxHeaders, perl }:
 
 let
   commonMakeFlags = [
@@ -18,17 +18,19 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-reinstall-kernel-headers.patch ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
+  strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" ];
 
   makeFlags = commonMakeFlags ++ [
-    "KLIBCARCH=${stdenv.hostPlatform.platform.kernelArch}"
+    "KLIBCARCH=${stdenv.hostPlatform.linuxArch}"
     "KLIBCKERNELSRC=${linuxHeaders}"
   ] # TODO(@Ericson2314): We now can get the ABI from
     # `stdenv.hostPlatform.parsed.abi`, is this still a good idea?
-    ++ stdenv.lib.optional (stdenv.hostPlatform.platform.kernelArch == "arm") "CONFIG_AEABI=y"
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
+    ++ lib.optional (stdenv.hostPlatform.linuxArch == "arm") "CONFIG_AEABI=y"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
   # Install static binaries as well.
   postInstall = ''

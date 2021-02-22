@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , fetchFromGitHub
 , gettext
 , xorg # for lndir
@@ -24,13 +23,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mailnag";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "pulb";
     repo = "mailnag";
     rev = "v${version}";
-    sha256 = "0q97v9i96br22z3h6r2mz79i68ib8m8x42yxky78szfrf8j60i30";
+    sha256 = "0m1cyzwzm7z4p2v31dx098a1iar7dbilwyjcxiqnjx05nlmiqvgf";
   };
 
   buildInputs = [
@@ -49,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
-    # To later add plugins to 
+    # To later add plugins to
     xorg.lndir
   ];
 

@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , nixosTests
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgdata";
-  version = "0.17.13";
+  version = "0.18.0";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bj7ij6k3lxjn62jgh8vabr8vfjs48aylnnl3779warw5iwyzfga";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "8MIBEvpTcrYsASVvJorvUTGhYd/COGjzk+z3uLN1JYA=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GData API library";
     homepage = "https://wiki.gnome.org/Projects/libgdata";
     maintainers = with maintainers; [ raskin lethalman ] ++ teams.gnome.members;

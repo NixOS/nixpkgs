@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, psutil, docutils }:
+{ lib, buildPythonPackage, fetchPypi, psutil, docutils }:
 
 buildPythonPackage rec {
   pname = "pynisher";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # no tests in the Pypi archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The pynisher is a little module intended to limit a functions resources.";
     homepage = "https://github.com/sfalkner/pynisher";
     license = licenses.mit;

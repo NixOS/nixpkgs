@@ -17,6 +17,8 @@
 let
   buildah = buildah-unwrapped;
 
+  preferLocalBuild = true;
+
   binPath = lib.makeBinPath ([
     runc
     crun

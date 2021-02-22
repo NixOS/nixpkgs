@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, flask }:
+{ lib, buildPythonPackage, fetchFromGitHub, flask }:
 
 buildPythonPackage rec {
   pname = "Flask-Versioned";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flask plugin to rewrite file paths to add version info";
     homepage = "https://github.com/pilt/flask-versioned";
     license = licenses.bsd3;

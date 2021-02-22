@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "sphinxcontrib-htmlhelp is a sphinx extension which ...";
     homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;

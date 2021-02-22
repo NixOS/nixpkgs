@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnet-sdk, dotnet-netcore, dotnetPackages
+, dotnetCorePackages, dotnetPackages, cacert
 , ffmpeg_4, alsaLib, SDL2, lttng-ust, numactl, alsaPlugins
 }:
 
@@ -8,24 +8,31 @@ let
     ffmpeg_4 alsaLib SDL2 lttng-ust numactl
   ];
 
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-net = dotnetCorePackages.net_5_0;
+
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "linux-x64";
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.1204.0";
+  version = "2021.220.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "1yr9rkkmm15lgbfbrvpyp0d66i5v2xs39abw8yv6qlf70qh4bsg5";
+    sha256 = "XGwG/1cWSUNniCrUY1/18KHRtumxIWjfW5x+aYQ6RKU=";
   };
 
   patches = [ ./bypass-tamper-detection.patch ];
   patchFlags = [ "--binary" "-p1" ];
 
-  nativeBuildInputs = [ dotnet-sdk dotnetPackages.Nuget makeWrapper ];
+  nativeBuildInputs = [
+    dotnet-sdk dotnetPackages.Nuget makeWrapper
+    # FIXME: Without `cacert`, we will suffer from https://github.com/NuGet/Announcements/issues/49
+    cacert
+  ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
     fetchNuGet = { name, version, sha256 }: fetchurl {
@@ -40,7 +47,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    export DOTNET_NOLOGO=1
 
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"
@@ -49,7 +56,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $HOME/.nuget/NuGet
     cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
 
-    dotnet restore --source "$PWD/nixos" osu.Desktop
+    dotnet restore --source "$PWD/nixos" osu.Desktop --runtime ${runtimeId}
 
     runHook postConfigure
   '';
@@ -59,6 +66,7 @@ in stdenv.mkDerivation rec {
     dotnet build osu.Desktop \
       --no-restore \
       --configuration Release \
+      --runtime ${runtimeId} \
       -p:Version=${version}
     runHook postBuild
   '';
@@ -69,13 +77,12 @@ in stdenv.mkDerivation rec {
     dotnet publish osu.Desktop \
       --no-build \
       --configuration Release \
+      --runtime ${runtimeId} \
       --no-self-contained \
       --output $out/lib/osu
-    shopt -s extglob
-    rm -r $out/lib/osu/runtimes/!(${runtimeId})
 
     makeWrapper $out/lib/osu/osu\! $out/bin/osu\! \
-      --set DOTNET_ROOT "${dotnet-netcore}" \
+      --set DOTNET_ROOT "${dotnet-net}" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
@@ -91,6 +98,13 @@ in stdenv.mkDerivation rec {
     }}/share/applications $out/share
 
     runHook postInstall
+  '';
+
+  fixupPhase = ''
+    runHook preFixup
+    cp -f ${./osu.runtimeconfig.json} "$out/lib/osu/osu!.runtimeconfig.json"
+    ln -sft $out/lib/osu ${SDL2}/lib/libSDL2${stdenv.hostPlatform.extensions.sharedLibrary}
+    runHook postFixup
   '';
 
   # Strip breaks the executable.

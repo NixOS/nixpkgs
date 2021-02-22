@@ -1,4 +1,4 @@
-{ cmake, fetchFromGitHub, fetchpatch, json_c, libpcap, ncurses, stdenv, libtirpc }:
+{ cmake, fetchFromGitHub, fetchpatch, json_c, libpcap, ncurses, lib, stdenv, libtirpc }:
 
 stdenv.mkDerivation rec {
   pname = "nfstrace";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # requires network access
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://epam.github.io/nfstrace/";
     description = "NFS and CIFS tracing/monitoring/capturing/analyzing tool";
     license = licenses.gpl2;

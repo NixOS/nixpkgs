@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     "${placeholder "out"}/opt/rgp/qt"
   ];
 
+  dontWrapQtApps = true;
+
   installPhase = ''
     mkdir -p $out/opt/rgp $out/bin
     cp -r . $out/opt/rgp/

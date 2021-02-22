@@ -1,4 +1,4 @@
-{ stdenv, cmake, openmw, fetchFromGitHub, luajit, makeWrapper, mygui }:
+{ lib, stdenv, cmake, openmw, fetchFromGitHub, luajit, makeWrapper, mygui }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
 
@@ -61,6 +61,8 @@ in openmw.overrideAttrs (oldAttrs: rec {
     "-DRakNet_LIBRARY_DEBUG=${rakNetLibrary}/lib/libRakNetLibStatic.a"
   ];
 
+  dontWrapQtApps = true;
+
   # https://github.com/TES3MP/openmw-tes3mp/issues/552
   patches = [
     ./tes3mp.patch
@@ -84,7 +86,7 @@ in openmw.overrideAttrs (oldAttrs: rec {
       --run "cd $out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiplayer for TES3:Morrowind based on OpenMW";
     homepage = "https://tes3mp.com/";
     license = licenses.gpl3;

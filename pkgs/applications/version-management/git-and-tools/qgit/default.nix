@@ -16,7 +16,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/tibirna/qgit";
     description = "Graphical front-end to Git";
     maintainers = with maintainers; [ peterhoeg markuskowa ];

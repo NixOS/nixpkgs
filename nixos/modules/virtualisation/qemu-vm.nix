@@ -7,7 +7,7 @@
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
@@ -136,10 +136,8 @@ let
             cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS" || exit 1
             chmod 0644 "$NIX_EFI_VARS" || exit 1
           fi
-        '' else ''
-        ''}
-      '' else ''
-      ''}
+        '' else ""}
+      '' else ""}
 
       cd $TMPDIR
       idx=0
@@ -187,8 +185,7 @@ let
                 efiVars=$out/efi-vars.fd
                 cp ${efiVarsDefault} $efiVars
                 chmod 0644 $efiVars
-              '' else ''
-              ''}
+              '' else ""}
             '';
           buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
@@ -268,6 +265,8 @@ in
   ];
 
   options = {
+
+    virtualisation.fileSystems = options.fileSystems;
 
     virtualisation.memorySize =
       mkOption {
@@ -662,6 +661,7 @@ in
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
     fileSystems = mkVMOverride (
+      cfg.fileSystems //
       { "/".device = cfg.bootDevice;
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";

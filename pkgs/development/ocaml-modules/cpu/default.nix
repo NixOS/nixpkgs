@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, autoconf }:
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, autoconf }:
 
 buildDunePackage rec {
   pname = "cpu";
@@ -18,9 +18,9 @@ buildDunePackage rec {
 
   buildInputs = [ autoconf ];
 
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Core pinning library";
     maintainers = [ maintainers.bcdarwin ];

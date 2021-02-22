@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libX11, libXt, libnsl }:
+{ lib, stdenv, fetchurl, unzip, libX11, libXt, libnsl }:
 
 stdenv.mkDerivation {
   pname = "unicon-lang";
@@ -33,8 +33,8 @@ stdenv.mkDerivation {
     cp -r bin $out/
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A very high level, goal-directed, object-oriented, general purpose applications language'';
+  meta = with lib; {
+    description = "A very high level, goal-directed, object-oriented, general purpose applications language";
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
     license = licenses.gpl2;

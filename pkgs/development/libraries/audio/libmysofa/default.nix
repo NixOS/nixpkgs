@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libmysofa";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCODE_COVERAGE=OFF" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reader for AES SOFA files to get better HRTFs";
     homepage = "https://github.com/hoene/libmysofa";
     license = licenses.bsd3;

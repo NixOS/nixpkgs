@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, libsndfile, pkgconfig, python3, wafHook }:
+{ lib, stdenv, fetchurl, gtk2, libsndfile, pkg-config, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lv2";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0gs7401xz23q9vajqr31aa2db8dvssgyh5zrvr4ipa6wig7yb8wh";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [ gtk2 libsndfile python3 ];
 
-  wafConfigureFlags = stdenv.lib.optionals stdenv.isDarwin [ "--lv2dir=${placeholder "out"}/lib/lv2" ];
+  wafConfigureFlags = lib.optionals stdenv.isDarwin [ "--lv2dir=${placeholder "out"}/lib/lv2" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://lv2plug.in";
     description = "A plugin standard for audio systems";
     license = licenses.mit;

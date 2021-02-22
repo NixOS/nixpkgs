@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   pname = "govers";
-  version = "20160623-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20160623-${lib.strings.substring 0 7 rev}";
   rev = "77fd787551fc5e7ae30696e009e334d52d2d3a43";
 
   goPackagePath = "github.com/rogpeppe/govers";

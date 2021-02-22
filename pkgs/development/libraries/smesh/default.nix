@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, ninja, opencascade }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, ninja, opencascade
+, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "smesh";
@@ -20,9 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ opencascade ];
+  buildInputs = [ opencascade ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extension to OCE providing advanced meshing features";
     homepage = "https://github.com/tpaviot/smesh";
     license = licenses.lgpl21;

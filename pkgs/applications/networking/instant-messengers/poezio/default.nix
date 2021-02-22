@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, pythonOlder
-, pytest, aiodns, slixmpp, pyinotify, potr, mpd2, cffi, pkgconfig, setuptools }:
+, pytest, aiodns, slixmpp, pyinotify, potr, mpd2, cffi, pkg-config, setuptools }:
 buildPythonApplication rec {
     pname = "poezio";
     version = "0.13.1";
@@ -8,7 +8,7 @@ buildPythonApplication rec {
 
     checkInputs = [ pytest ];
     propagatedBuildInputs = [ aiodns slixmpp pyinotify potr mpd2 cffi setuptools ];
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
 
     src = fetchFromGitHub {
       owner = pname;

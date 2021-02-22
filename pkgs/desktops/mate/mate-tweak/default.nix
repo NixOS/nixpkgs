@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , python3Packages
 , intltool
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tweak tool for the MATE Desktop";
     homepage = "https://github.com/ubuntu-mate/mate-tweak";
     changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";

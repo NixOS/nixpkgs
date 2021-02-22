@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pkgconfig, ois, ogre, libX11, boost }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, ois, ogre, libX11, boost }:
 
 stdenv.mkDerivation rec {
   pname = "ogre-paged";
@@ -27,16 +27,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ ois ogre libX11 boost ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [ "-DPAGEDGEOMETRY_BUILD_SAMPLES=OFF" ];
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Paged Geometry for Ogre3D";
     homepage = "https://github.com/RigsOfRods/ogre-paged";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

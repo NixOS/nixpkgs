@@ -1,4 +1,4 @@
-{stdenv, buildPythonPackage, fetchPypi}:
+{lib, buildPythonPackage, fetchPypi}:
 
 buildPythonPackage rec {
   pname = "pyroute2";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # requires root priviledges
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
     license = licenses.asl20;

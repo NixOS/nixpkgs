@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "lxqt-openssh-askpass";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "056bj3ssp4vqapzqg3da3m95vi92043j7mv70lmpznxdwyjwgxc3";
+    sha256 = "163mshrwfwp31bjis66l50krsyp184idw9gyp7pdh047psca5129";
   };
 
   nativeBuildInputs = [
@@ -42,9 +42,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "GUI to query passwords on behalf of SSH agents";
     homepage = "https://github.com/lxqt/lxqt-openssh-askpass";
-    license = licenses.lgpl21;
+    description = "GUI to query passwords on behalf of SSH agents";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

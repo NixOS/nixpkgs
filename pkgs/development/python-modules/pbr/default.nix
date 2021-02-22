@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pbr";
@@ -12,9 +12,9 @@ buildPythonPackage rec {
   # circular dependencies with fixtures
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://docs.openstack.org/developer/pbr/";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     description = "Python Build Reasonableness";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , zlib
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     freeglut
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://geuz.org/gl2ps";
     description = "An OpenGL to PostScript printing library";
     platforms = platforms.all;

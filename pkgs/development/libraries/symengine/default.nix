@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , gmp
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ctest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast symbolic manipulation library";
     homepage = "https://github.com/symengine/symengine";
     platforms = platforms.unix ++ platforms.windows;

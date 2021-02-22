@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
   pname = "minio-exporter";
@@ -25,7 +25,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Prometheus exporter for Minio cloud storage server";
     homepage = "https://github.com/joe-pll/minio-exporter";
     license = licenses.asl20;

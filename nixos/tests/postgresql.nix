@@ -23,7 +23,7 @@ let
   '';
   make-postgresql-test = postgresql-name: postgresql-package: backup-all: makeTest {
     name = postgresql-name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ zagy ];
     };
 

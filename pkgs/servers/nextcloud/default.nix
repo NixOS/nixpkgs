@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 let
   generic = {
@@ -20,7 +20,7 @@ let
       cp -R . $out/
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
@@ -53,12 +53,12 @@ in {
     version = "19.0.6";
     sha256 = "sha256-pqqIayE0OyTailtd2zeYi+G1APjv/YHqyO8jCpq7KJg=";
     extraVulnerabilities = [
-      "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed!"
+      "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed! Please note that both CVEs only affect the file encryption module which is turned off by default. Alternatively, `pkgs.nextcloud20` can be used."
     ];
   };
 
   nextcloud20 = generic {
-    version = "20.0.3";
-    sha256 = "sha256-4PZFBNM49k08Z3NX8AEs+LDtDcQuwI+Vi23E/3Dt8XU=";
+    version = "20.0.7";
+    sha256 = "sha256-jO2Ct3K/CvZ9W+EyPkD5d0KbwKK8yGQJXvx4dnUAtys=";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, perl, help2man
+{ lib, stdenv, fetchurl, m4, perl, help2man
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU Libtool, a generic library support script";
     longDescription = ''
       GNU libtool is a generic library support script.  Libtool hides

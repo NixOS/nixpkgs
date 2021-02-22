@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, ponyc }:
+{lib, stdenv, fetchFromGitHub, ponyc }:
 
 stdenv.mkDerivation rec {
   pname = "pony-stable";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A simple dependency manager for the Pony language";
     homepage = "https://www.ponylang.org";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ dipinhora kamilchm patternspandemic ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dipinhora kamilchm patternspandemic ];
+    platforms = lib.platforms.unix;
   };
 }

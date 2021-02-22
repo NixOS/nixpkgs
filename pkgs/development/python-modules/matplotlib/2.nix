@@ -1,6 +1,6 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
+{ lib, stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
+, freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
 , fetchpatch
 , enableGhostscript ? false, ghostscript ? null, gtk3
 , enableGtk3 ? false, cairo
@@ -39,20 +39,20 @@ buildPythonPackage rec {
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ which sphinx ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+    ++ lib.optional enableGhostscript ghostscript
+    ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
       libpng mock pytz ]
-    ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
-    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt4 ]
-    ++ stdenv.lib.optionals python.isPy2 [ functools32 subprocess32 ];
+    ++ lib.optional (pythonOlder "3.3") backports_functools_lru_cache
+    ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
+    ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
+    ++ lib.optionals enableQt [ pyqt4 ]
+    ++ lib.optionals python.isPy2 [ functools32 subprocess32 ];
 
   setup_cfg = ./setup.cfg;
   preBuild = ''
@@ -67,17 +67,16 @@ buildPythonPackage rec {
   # script.
   postPatch =
     let
-      inherit (stdenv.lib.strings) substring;
-      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${substring 0 3 tk.version}"'';
+      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    stdenv.lib.optionalString enableTk
+    lib.optionalString enableTk
       "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
 
   # Matplotlib needs to be built against a specific version of freetype in
   # order for all of the tests to pass.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
     maintainers = with maintainers; [ lovek323 veprbl ];

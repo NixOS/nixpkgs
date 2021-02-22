@@ -28,17 +28,7 @@ let
     ];
   };
 
-  nixos-rebuild =
-    let fallback = import ./nix-fallback-paths.nix; in
-    makeProg {
-      name = "nixos-rebuild";
-      src = ./nixos-rebuild.sh;
-      inherit (pkgs) runtimeShell;
-      nix = config.nix.package.out;
-      nix_x86_64_linux = fallback.x86_64-linux;
-      nix_i686_linux = fallback.i686-linux;
-      path = makeBinPath [ pkgs.jq ];
-    };
+  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
@@ -46,6 +36,7 @@ let
     path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
+    xserverEnabled = config.services.xserver.enable;
   };
 
   nixos-option =
@@ -97,8 +88,8 @@ in
 
     desktopConfiguration = mkOption {
       internal = true;
-      type = types.str;
-      default = "";
+      type = types.listOf types.lines;
+      default = [];
       description = ''
         Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
         saves to <literal>/etc/nixos/configuration.nix</literal>.
@@ -145,6 +136,8 @@ in
         #   font = "Lat2-Terminus16";
         #   keyMap = "us";
         # };
+
+      $xserverConfig
 
       $desktopConfiguration
         # Configure keymap in X11

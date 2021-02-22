@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "radarr";
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/Radarr \
       --add-flags "$out/share/${pname}-${version}/Radarr.exe" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
     license = licenses.gpl3;

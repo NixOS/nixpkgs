@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     cp r3 $out/bin
   '';
 
-  meta = with stdenv.lib; {
-    description = ''Relative expression based object language, a language where code is data'';
+  meta = with lib; {
+    description = "Relative expression based object language, a language where code is data";
     maintainers = with maintainers; [ vrthra ];
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;

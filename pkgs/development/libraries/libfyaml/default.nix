@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnum4 }:
+{ lib, stdenv, fetchurl, gnum4 }:
 
 stdenv.mkDerivation rec {
   pname = "libfyaml";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gnum4 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pantoniou/libfyaml";
     description = "Fully feature complete YAML parser and emitter, supporting the latest YAML spec and passing the full YAML testsuite";
     license = licenses.mit;

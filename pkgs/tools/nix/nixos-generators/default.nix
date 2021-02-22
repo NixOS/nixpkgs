@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ jq coreutils findutils nix ] }
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of image builders";
     homepage    = "https://github.com/nix-community/nixos-generators";
     license     = licenses.mit;

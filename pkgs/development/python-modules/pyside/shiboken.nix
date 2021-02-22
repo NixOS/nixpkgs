@@ -27,8 +27,6 @@ buildPythonPackage rec {
     sha256 = "0x2lyg52m6a0vn0665pgd1z1qrydglyfxxcggw6xzngpnngb6v5v";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake pkg-config pysideApiextractor pysideGeneratorrunner sphinx qt4 ];
 
   buildInputs = [ python libxml2 libxslt ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://acoustid.org/chromaprint";
     description = "AcoustID audio fingerprinting library";
     maintainers = with maintainers; [ ehmry ];

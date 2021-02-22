@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
+{ lib, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interact with GitLab API";
     homepage = "https://github.com/python-gitlab/python-gitlab";
     license = licenses.lgpl3;

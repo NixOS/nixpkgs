@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-smtp'';
-  version = ''20191130-git'';
+  baseName = "cl-smtp";
+  version = "20191130-git";
 
-  description = ''Common Lisp smtp client.'';
+  description = "Common Lisp smtp client.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl_plus_ssl" args."cl-base64" args."flexi-streams" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-smtp/2019-11-30/cl-smtp-20191130-git.tgz'';
-    sha256 = ''04x1xq1qlsnhl4wdi82l8ds6rl9rzxk72bjf2ja10jay1p6ljvdq'';
+    url = "http://beta.quicklisp.org/archive/cl-smtp/2019-11-30/cl-smtp-20191130-git.tgz";
+    sha256 = "04x1xq1qlsnhl4wdi82l8ds6rl9rzxk72bjf2ja10jay1p6ljvdq";
   };
 
   packageName = "cl-smtp";

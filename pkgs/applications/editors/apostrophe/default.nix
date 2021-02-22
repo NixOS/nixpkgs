@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitLab, meson, ninja, cmake
-, wrapGAppsHook, pkgconfig, desktop-file-utils
+{ lib, stdenv, fetchFromGitLab, meson, ninja, cmake
+, wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
 , shared-mime-info, haskellPackages}:
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     sha256 = "06bl1hc69ixk2vcb2ig74mwid14sl5zq6rfna7lx9na6j3l04879";
   };
 
-  nativeBuildInputs = [ meson ninja cmake pkgconfig desktop-file-utils
+  nativeBuildInputs = [ meson ninja cmake pkg-config desktop-file-utils
     appstream-glib wrapGAppsHook ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/somas/apostrophe";
     description = "A distraction free Markdown editor for GNU/Linux";
     license = licenses.gpl3;

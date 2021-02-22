@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 
-, pkgconfig
+, pkg-config
+, cmake
 
 , zlib
 , libjpeg
@@ -17,17 +18,31 @@ stdenv.mkDerivation rec {
     sha256 = "0d46bdvxdiv59lxnb0xz9ywm8arsr6xsapi5s6y6vnys2wjz6aax";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  cmakeFlags = if stdenv.isDarwin then [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ] else null;
 
-  nativeBuildInputs = [ pkgconfig ];
+  # FreeImage needs this patch
+  patches = [ ./headers.patch ];
+
+  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+
+  postFixup = ''
+    moveToOutput include/tif_dir.h $dev_private
+    moveToOutput include/tif_config.h $dev_private
+    moveToOutput include/tiffiop.h $dev_private
+  '';
+
+  nativeBuildInputs = [ cmake pkg-config ];
 
   propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
 
   enableParallelBuilding = true;
 
-  doCheck = true; # not cross;
+  doInstallCheck = true;
+  installCheckTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "http://download.osgeo.org/libtiff";
     license = licenses.libtiff;

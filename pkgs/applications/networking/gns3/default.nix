@@ -1,7 +1,7 @@
 { callPackage, libsForQt5 }:
 
 let
-  stableVersion = "2.2.17";
+  stableVersion = "2.2.18";
   previewVersion = stableVersion;
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
@@ -26,8 +26,8 @@ let
   };
   mkGui = args: libsForQt5.callPackage (import ./gui.nix (addVersion args // extraArgs)) { };
   mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };
-  guiSrcHash = "0dfyxr983w6lmbcvaf32bnm9cz7y7fp9jfaz8zxp1dvr6dr06cmv";
-  serverSrcHash = "0m5ajd2zkafx89hvp202m351h1dygfc3jssl3m7nd7r42csyi2vj";
+  guiSrcHash = "118z6asl6hsv0777rld4plnrwzkbkh3gb9lg9i6bqrjs93p028fw";
+  serverSrcHash = "0gd37zpvibhlvqqpflpwlrgg8g9rpbxwi9w9fsym00mfwf7sdd3b";
 in {
   guiStable = mkGui {
     stable = true;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf }:
+{ lib, stdenv, fetchurl, automake, autoconf }:
 
 let
   version = "2.0.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     incdir = "/avr/include";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a C runtime library for AVR microcontrollers";
     homepage = "https://savannah.nongnu.org/projects/avr-libc/";
     license = licenses.bsd3;

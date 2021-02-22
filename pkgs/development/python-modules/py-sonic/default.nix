@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "py-sonic";
-  version = "0.7.7";
+  version = "0.7.8";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4cea42a2b0dc2ed0fd8568d6bf0509cfa2675a8b1c347ce9364a00881ebc0272";
+    sha256 = "1nfpiry1jlgcyxcs5zamyfxwdvdiwg4yw0v8jysfc74hm362rg7d";
   };
 
   # package has no tests

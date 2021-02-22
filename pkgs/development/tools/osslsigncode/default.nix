@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , libgsf
-, pkgconfig
+, pkg-config
 , openssl
 , curl
 }:
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0iwxdzqan2bswz62pmwjcyh01vs6ifpdcannw3s192gqzac1lgg3";
   };
 
-  nativeBuildInputs = [ autoreconfHook libgsf pkgconfig openssl curl ];
+  nativeBuildInputs = [ autoreconfHook libgsf pkg-config openssl curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mtrojnar/osslsigncode";
     description = "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
     license = licenses.gpl3Plus;

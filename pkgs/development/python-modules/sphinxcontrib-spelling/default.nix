@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sphinx spelling extension";
     homepage = "https://bitbucket.org/dhellmann/sphinxcontrib-spelling";
     maintainers = with maintainers; [ nand0p ];

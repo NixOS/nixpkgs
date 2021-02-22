@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
        -e 's|java.library.path: .*|java.library.path: "${lib.concatStringsSep ":" extraLibraryPaths}"|' \
        -e 's|storm.log4j2.conf.dir: .*|storm.log4j2.conf.dir: "conf/log4j2"|' \
       defaults.yaml
-    ${if confFile != "" then ''cat ${confFile} >> defaults.yaml'' else ""}
+    ${if confFile != "" then "cat ${confFile} >> defaults.yaml" else ""}
     mv defaults.yaml $out/conf;
 
     # Link to extra jars
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://storm.apache.org";
     description = "Distributed realtime computation system";
     license = licenses.asl20;

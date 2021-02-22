@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , imagemagick7Big
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   passthru.imagemagick = imagemagick7Big;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = [ licenses.mit ];

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, coverage, unittest2 }:
+{ lib, buildPythonPackage, fetchPypi, requests, coverage, unittest2 }:
 
 buildPythonPackage rec {
   pname = "codecov";
@@ -20,9 +20,9 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python report uploader for Codecov";
     homepage = "https://codecov.io/";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
   };
 }

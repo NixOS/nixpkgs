@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "hcloud";
@@ -29,7 +29,7 @@ buildGoModule rec {
   meta = {
     description = "A command-line interface for Hetzner Cloud, a provider for cloud virtual private servers";
     homepage = "https://github.com/hetznercloud/cli";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.zauberpony ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zauberpony ];
   };
 }

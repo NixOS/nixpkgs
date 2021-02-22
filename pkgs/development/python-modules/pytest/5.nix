@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
 , atomicwrites
 , attrs
 , funcsigs
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     six
     toml
     wcwidth
-  ] ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     "pytest"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];

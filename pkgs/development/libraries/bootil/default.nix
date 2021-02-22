@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, premake4 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, premake4 }:
 
 stdenv.mkDerivation {
   name = "bootil-unstable-2015-12-17";
@@ -7,9 +7,9 @@ stdenv.mkDerivation {
     description = "Garry Newman's personal utility library";
     homepage = "https://github.com/garrynewman/bootil";
     # License unsure - see https://github.com/garrynewman/bootil/issues/21
-    license = stdenv.lib.licenses.free;
-    maintainers = [ stdenv.lib.maintainers.abigailbuccaneer ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.abigailbuccaneer ];
+    platforms = lib.platforms.all;
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];
   };

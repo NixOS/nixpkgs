@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # There is no test embedded
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A snapshot of django-filebrowser for the Mezzanine CMS";
     longDescription = ''
       filebrowser_safe was created to provide a snapshot of the

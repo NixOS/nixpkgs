@@ -7,7 +7,7 @@ let
     pname = "linux-headers";
     inherit version;
 
-    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
+    ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
@@ -69,12 +69,12 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "5.9.8"; in
+  linuxHeaders = let version = "5.10.9"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-        sha256 = "19l67gzk97higd2cbggipcb0wi21pv0ag0mc4qh6cqk564xp6mkn";
+        sha256 = "0la7dklpy6xd79fkzavpmlfyrc60kmmwz491msd95dmvv06kwwvz";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

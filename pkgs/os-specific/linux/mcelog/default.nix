@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, util-linux }:
+{ lib, stdenv, fetchFromGitHub, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "mcelog";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
     longDescription = ''
       The mcelog daemon accounts memory and some other errors in various ways

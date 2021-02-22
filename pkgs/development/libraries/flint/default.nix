@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , gmp
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mpir
     mpfr
     ntl
-  ] ++ stdenv.lib.optionals withBlas [
+  ] ++ lib.optionals withBlas [
     openblas
   ];
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--with-mpir=${mpir}"
     "--with-mpfr=${mpfr}"
     "--with-ntl=${ntl}"
-  ] ++ stdenv.lib.optionals withBlas [
+  ] ++ lib.optionals withBlas [
     "--with-blas=${openblas}"
   ];
 
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
   meta = {
     inherit version;
-    description = ''Fast Library for Number Theory'';
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "Fast Library for Number Theory";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
     homepage = "http://www.flintlib.org/";
     downloadPage = "http://www.flintlib.org/downloads.html";
     updateWalker = true;

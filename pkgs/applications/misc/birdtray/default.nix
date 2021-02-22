@@ -3,7 +3,7 @@
   , fetchFromGitHub
 
   , cmake
-  , pkgconfig
+  , pkg-config
   , qtbase
   , qttools
   , qtx11extras
@@ -26,7 +26,7 @@ mkDerivation rec {
     ./fix-qttranslations-path.diff
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     qtbase qttools qtx11extras
   ];

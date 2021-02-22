@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, python, fetchFromGitHub
+{ lib, buildPythonPackage, python, fetchFromGitHub
 , cmake, sip, protobuf, pythonOlder }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Communication library between internal components for Ultimaker software";
     homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.lgpl3Plus;

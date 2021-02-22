@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytestrunner
 , configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing, importlib-metadata
 }:
@@ -14,17 +14,17 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest mock pytestrunner ];
   propagatedBuildInputs = [ pyflakes pycodestyle mccabe ]
-    ++ stdenv.lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ]
-    ++ stdenv.lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+    ++ lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
+    ++ lib.optionals (pythonOlder "3.4") [ enum34 ]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # fixtures fail to initialize correctly
   checkPhase = ''
     py.test tests --ignore=tests/integration/test_checker.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code checking using pep8 and pyflakes";
     homepage = "https://pypi.python.org/pypi/flake8";
     license = licenses.mit;

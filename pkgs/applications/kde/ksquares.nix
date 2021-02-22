@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, libkdegames, kconfig, kcrash, kxmlgui }:
 
 mkDerivation {
-  name = "ksquares";
+  pname = "ksquares";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.ksquares";
     description = "A game of Dots and Boxes";

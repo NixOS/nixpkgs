@@ -1,4 +1,4 @@
-{ fetchFromGitHub, zlib, stdenv }:
+{ fetchFromGitHub, zlib, lib, stdenv }:
 let
   libs-src = fetchFromGitHub {
     owner = "megatokio";
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     mv zasm $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Z80 / 8080 assembler (for unix-style OS)";
     homepage = "https://k1.spdns.de/Develop/Projects/zasm/Distributions/";
     license = licenses.bsd2;

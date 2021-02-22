@@ -4,33 +4,33 @@
 , gnutar, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
-, xdg_utils, yasm, nasm, minizip, libwebp
+, xdg-utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, perl, pkgconfig
+, python2Packages, perl, pkg-config
 , nspr, systemd, kerberos
 , util-linux, alsaLib
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU, libGL
+, libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
 , pipewire_0_2
 , libva
+, libdrm, wayland, mesa, libxkbcommon # Ozone
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-, libdrm ? null, wayland ? null, mesa ? null, libxkbcommon ? null # useOzone
 
 # package customization
-, useOzone ? true
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
+, ungoogled ? false, ungoogled-chromium
 
 , channel
 , upstream-info
@@ -38,7 +38,7 @@
 
 buildFun:
 
-with stdenv.lib;
+with lib;
 
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -88,7 +88,7 @@ let
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libcap
-    xdg_utils minizip libwebp
+    xdg-utils minizip libwebp
     libusb1 re2
     ffmpeg libxslt libxml2
     nasm
@@ -100,19 +100,25 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
+  chromiumVersionAtLeast = min-version:
+    versionAtLeast upstream-info.version min-version;
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
-        stable-version = (importJSON ./upstream-info.json).stable.version;
-    in if versionAtLeast stable-version upto-version
-       then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
+        ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
+    in if versionAtLeast ungoogled-version upto-version
+       then warn "chromium: ungoogled version ${ungoogled-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
        else result;
+
+  ungoogler = ungoogled-chromium {
+    inherit (upstream-info.deps.ungoogled-patches) rev sha256;
+  };
 
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;
-    inherit channel packageName buildType buildPath;
+    inherit packageName buildType buildPath;
 
     src = fetchurl {
       url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
@@ -121,7 +127,7 @@ let
 
     nativeBuildInputs = [
       llvmPackages.lldClang.bintools
-      ninja which python2Packages.python perl pkgconfig
+      ninja which python2Packages.python perl pkg-config
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
     ];
@@ -131,22 +137,26 @@ let
       util-linux alsaLib
       bison gperf kerberos
       glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libGLU libGL
+      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
       pipewire_0_2
       libva
+      libdrm wayland mesa.drivers libxkbcommon
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio
-      ++ optionals useOzone [ libdrm wayland mesa.drivers libxkbcommon ];
+      ++ optional pulseSupport libpulseaudio;
 
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
-      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ];
+      # ++ optional (versionRange "68" "72") (githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
+    ] ++ optional (versionRange "89" "90.0.4402.0") (githubPatch
+      # To fix the build of chromiumBeta and chromiumDev:
+      "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
+      "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
+    );
 
     postPatch = ''
       # remove unused third-party
@@ -185,7 +195,7 @@ let
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
+      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -208,14 +218,18 @@ let
     '' + optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+    '' + optionalString ungoogled ''
+      ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
+      ${ungoogler}/utils/patches.py . ${ungoogler}/patches
+      ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
     '';
 
     gnFlags = mkGnFlags ({
+      is_official_build = true;
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
-      is_official_build = true;
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
 
-      use_vaapi = !stdenv.isAarch64; # TODO: Remove once M88 is released
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
@@ -251,15 +265,34 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-    } // optionalAttrs useOzone {
-      use_ozone = true;
-      use_xkbcommon = true;
-      use_glib = true;
-      use_gtk = true;
-      use_system_libwayland = true;
-      use_system_minigbm = true;
-      use_system_libdrm = true;
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
+    } // optionalAttrs (chromiumVersionAtLeast "89") {
+      # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
+      # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
+      chrome_pgo_phase = 0;
+    } // optionalAttrs (chromiumVersionAtLeast "90") {
+      # Disable build with TFLite library because it fails without additional changes:
+      # ninja: error: '../../chrome/test/data/simple_test.tflite', needed by 'test_data/simple_test.tflite', missing and no known rule to make it
+      # Note: chrome/test/data/simple_test.tflite is in the Git repository but not in chromium-90.0.4400.8.tar.xz
+      # See also chrome/services/machine_learning/README.md
+      build_with_tflite_lib = false;
+    } // optionalAttrs ungoogled {
+      chrome_pgo_phase = 0;
+      enable_hangout_services_extension = false;
+      enable_js_type_check = false;
+      enable_mdns = false;
+      enable_nacl_nonsfi = false;
+      enable_one_click_signin = false;
+      enable_reading_list = false;
+      enable_remoting = false;
+      enable_reporting = false;
+      enable_service_discovery = false;
+      exclude_unwind_tables = true;
+      google_api_key = "";
+      google_default_client_id = "";
+      google_default_client_secret = "";
+      safe_browsing_mode = 0;
+      use_official_google_api_keys = false;
+      use_unofficial_version_number = false;
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''

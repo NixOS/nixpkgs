@@ -111,8 +111,38 @@
 
   helm-words = callPackage ./helm-words { };
 
+  jam-mode = callPackage ./jam-mode { };
+
+  llvm-mode = trivialBuild {
+    pname = "llvm-mode";
+    inherit (external.llvmPackages.llvm) src version;
+
+    dontConfigure = true;
+    buildPhase = ''
+      cp utils/emacs/*.el .
+    '';
+
+    meta = {
+      inherit (external.llvmPackages.llvm.meta) homepage license;
+      description = "Major mode for the LLVM assembler language.";
+    };
+  };
+
   org-mac-link =
     callPackage ./org-mac-link { };
+
+  ott-mode = self.trivialBuild {
+    pname = "ott-mod";
+
+    inherit (external.ott) src version;
+
+    postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
+
+    meta = {
+      description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
+      inherit (external.Agda.meta) homepage license;
+    };
+  };
 
   perl-completion =
     callPackage ./perl-completion { };

@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-colors2'';
-  version = ''20200218-git'';
+  baseName = "cl-colors2";
+  version = "20200218-git";
 
   parasites = [ "cl-colors2/tests" ];
 
-  description = ''Simple color library for Common Lisp'';
+  description = "Simple color library for Common Lisp";
 
   deps = [ args."alexandria" args."cl-ppcre" args."clunit2" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-colors2/2020-02-18/cl-colors2-20200218-git.tgz'';
-    sha256 = ''0rpf8j232qv254zhkvkz3ja20al1kswvcqhvvv0r2ag6dks56j29'';
+    url = "http://beta.quicklisp.org/archive/cl-colors2/2020-02-18/cl-colors2-20200218-git.tgz";
+    sha256 = "0rpf8j232qv254zhkvkz3ja20al1kswvcqhvvv0r2ag6dks56j29";
   };
 
   packageName = "cl-colors2";

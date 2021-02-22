@@ -1,6 +1,11 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , requests
-, responses, pytestCheckHook, pytest, pytestcov, isPy27
+, responses
+, pytestCheckHook
+, pytestcov
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -25,7 +30,7 @@ buildPythonPackage rec {
     "test_transit_without_time"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/googlemaps/google-maps-services-python";
     description = "Python client library for Google Maps API Web Services";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fmt }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt }:
 
 let
   generic = { version, sha256 }:
@@ -14,17 +14,21 @@ let
       };
 
       nativeBuildInputs = [ cmake ];
-      buildInputs = [ fmt ];
+      # spdlog <1.3 uses a bundled version of fmt
+      propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt;
 
       cmakeFlags = [
-        "-DSPDLOG_BUILD_SHARED=ON"
+        "-DSPDLOG_BUILD_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+        "-DSPDLOG_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
         "-DSPDLOG_BUILD_EXAMPLE=OFF"
         "-DSPDLOG_BUILD_BENCH=OFF"
         "-DSPDLOG_BUILD_TESTS=ON"
         "-DSPDLOG_FMT_EXTERNAL=ON"
       ];
 
-      outputs = [ "out" "doc" ];
+      outputs = [ "out" "doc" ]
+        # spdlog <1.4 is header only, no need to split libraries and headers
+        ++ lib.optional (lib.versionAtLeast version "1.4") "dev";
 
       postInstall = ''
         mkdir -p $out/share/doc/spdlog
@@ -34,7 +38,7 @@ let
       doCheck = true;
       preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description    = "Very fast, header only, C++ logging library";
         homepage       = "https://github.com/gabime/spdlog";
         license        = licenses.mit;

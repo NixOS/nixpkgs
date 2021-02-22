@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , boto3, requests, datadog, configparser, python
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # Pypi does not contain tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wrapper around the DogStatsd client";
     homepage    = "https://paperspace.com";
     license     = licenses.mit;

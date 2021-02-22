@@ -13,13 +13,13 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1az11q3wmr8wc7alx9l70wq9am41cm0y17g5gsaqmahws3dxfi8m";
+    sha256 = "1lr9804xyzbs72f9jbbzy1fjqxwrwpb4rp431wqialvms4251d8f";
   };
 
   patches = lib.optional stdenv.isDarwin (substituteAll {
@@ -60,7 +60,7 @@ let ccache = stdenv.mkDerivation rec {
           local cname="$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
             makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
-              --run ${stdenv.lib.escapeShellArg extraConfig} \
+              --run ${lib.escapeShellArg extraConfig} \
               --add-flags ${unwrappedCC}/bin/$cname
           fi
         }
@@ -84,7 +84,7 @@ let ccache = stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";

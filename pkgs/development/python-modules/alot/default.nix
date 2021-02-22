@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, python, fetchFromGitHub, fetchpatch, isPy3k
+{ lib, buildPythonPackage, python, fetchFromGitHub, fetchpatch, isPy3k
 , notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
 , service-identity
 , gnupg ? null, sphinx, awk ? null, procps ? null, future ? null
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;

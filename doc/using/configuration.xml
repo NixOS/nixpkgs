@@ -138,11 +138,11 @@
 </programlisting>
     </para>
     <para>
-     For a more useful example, try the following. This configuration only allows unfree packages named flash player and visual studio code:
+     For a more useful example, try the following. This configuration only allows unfree packages named roon-server and visual studio code:
 <programlisting>
 {
   allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "flashplayer"
+    "roon-server"
     "vscode"
   ];
 }
@@ -157,7 +157,7 @@
      The following example configuration whitelists the licenses <literal>amd</literal> and <literal>wtfpl</literal>:
 <programlisting>
 {
-  whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
+  whitelistedLicenses = with lib.licenses; [ amd wtfpl ];
 }
 </programlisting>
     </para>
@@ -165,7 +165,7 @@
      The following example configuration blacklists the <literal>gpl3Only</literal> and <literal>agpl3Only</literal> licenses:
 <programlisting>
 {
-  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3Only gpl3Only ];
+  blacklistedLicenses = with lib.licenses; [ agpl3Only gpl3Only ];
 }
 </programlisting>
     </para>

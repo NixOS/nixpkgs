@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
 , pandoc, haskellPackages, texlive }:
 
 buildPythonPackage rec {
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     export PATH="${haskellPackages.pandoc-citeproc}/bin:${texlive.combined.scheme-small}/bin:$PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thin wrapper for pandoc";
     homepage = "https://github.com/bebraw/pypandoc";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake, autoconf, xlibsWrapper}:
+{lib, stdenv, fetchurl, automake, autoconf, xlibsWrapper}:
 
 stdenv.mkDerivation {
   name = "libstroke-0.5.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A library for simple gesture recognition";
     homepage = "https://web.archive.org/web/20161204100704/http://etla.net/libstroke/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
     longDescription =
       '' libstroke, last updated in 2001, still successfully provides a basic
@@ -29,6 +29,6 @@ stdenv.mkDerivation {
         easy to work with, and notably used by FVWM.
       '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

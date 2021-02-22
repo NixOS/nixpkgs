@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , pkg-config
 , vala
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
     description = "Single sign-on framework for GNOME";
     platforms = platforms.linux;

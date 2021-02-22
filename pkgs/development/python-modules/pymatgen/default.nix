@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , enum34
 , glibcLocales
 , matplotlib
@@ -52,8 +52,9 @@ buildPythonPackage rec {
 
   # No tests in pypi tarball.
   doCheck = false;
+  pythonImportsCheck = [ "pymatgen" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
     license = licenses.mit;

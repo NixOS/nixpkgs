@@ -6,7 +6,7 @@
 , pytest
 , pycparser
 , psutil
-, pkgconfig
+, pkg-config
 , dotnetbuildhelpers
 , clang
 , glib
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytest
     pycparser
 
-    pkgconfig
+    pkg-config
     dotnetbuildhelpers
     clang
 

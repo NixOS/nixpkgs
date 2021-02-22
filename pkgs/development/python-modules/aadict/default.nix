@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
   checkInputs = [ nose coverage ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/metagriffin/aadict";
     description = "An auto-attribute dict (and a couple of other useful dict functions).";
     maintainers = with maintainers; [ glittershark ];

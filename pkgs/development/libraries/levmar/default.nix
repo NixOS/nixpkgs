@@ -1,5 +1,5 @@
-{ stdenv, fetchurl }:
-        
+{ lib, stdenv, fetchurl }:
+
 stdenv.mkDerivation rec {
   name = "levmar-2.6";
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     cp liblevmar.a $out/lib
   '';
 
-  meta = { 
+  meta = {
     description = "ANSI C implementations of Levenberg-Marquardt, usable also from C++";
     homepage = "https://www.ics.forth.gr/~lourakis/levmar/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

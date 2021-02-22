@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 assert stdenv.hostPlatform == stdenv.buildPlatform -> zlib != null;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official reference implementation for the PNG file format";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng;

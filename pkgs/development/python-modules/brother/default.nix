@@ -4,15 +4,23 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "0.1.18";
+  version = "0.2.1";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "14fiwhgcgymgqsl9kcfb0597rcjxvdknhwbakpdf0xp2ph6cj266";
+    sha256 = "sha256-yOloGkOVhXcTt0PAjf3yWUItN1okO94DndRFsImiuz4=";
   };
+
+  # pytest-error-for-skips is not packaged
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --error-for-skips" ""
+    substituteInPlace setup.py \
+      --replace "\"pytest-error-for-skips\"" ""
+  '';
 
   propagatedBuildInputs = [
     pysnmp

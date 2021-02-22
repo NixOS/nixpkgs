@@ -1,4 +1,4 @@
-{ stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig
+{ stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkg-config
 , pythonSupport ? false, swig ? null, python}:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig file ]
+  nativeBuildInputs = [ autoreconfHook bison flex pkg-config file ]
     ++ lib.optional pythonSupport swig;
 
   postBuild = lib.optionalString (pythonSupport) ''

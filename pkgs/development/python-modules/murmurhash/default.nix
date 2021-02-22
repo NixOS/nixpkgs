@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytest murmurhash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cython bindings for MurmurHash2";
     homepage = "https://github.com/explosion/murmurhash";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ruby, zfs }:
+{ lib, stdenv, fetchFromGitHub, ruby, zfs }:
 
 let version = "0.3.6"; in
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -e 's|cmd.*=.*"zfs |cmd = "${zfs}/sbin/zfs |g' -i $out/lib/zfstools/{dataset,snapshot}.rb
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     inherit (src.meta) homepage;
     description = "OpenSolaris-compatible auto-snapshotting script for ZFS";

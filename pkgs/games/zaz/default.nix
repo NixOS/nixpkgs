@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , SDL
 , SDL_image
 , mesa
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [
     SDL.dev
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "ZAZ_LIBS+=-lvorbisfile"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
     homepage = "http://zaz.sourceforge.net/";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer}:
+{lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer}:
 
 stdenv.mkDerivation {
   name = "vectoroids-1.1.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.newbreedsoftware.com/vectoroids/";
     description = "Clone of the classic arcade game Asteroids by Atari";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

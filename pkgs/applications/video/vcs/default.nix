@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , coreutils, ffmpeg, gawk, gnugrep, gnused, imagemagick, mplayer, util-linux
 , dejavu_fonts
 }:
-with stdenv.lib;
+with lib;
 let
   version = "1.13.4";
   runtimeDeps = [ coreutils ffmpeg gawk gnugrep gnused imagemagick mplayer util-linux ];
@@ -18,7 +18,6 @@ stdenv.mkDerivation {
   unpackCmd = "mkdir src; cp $curSrc src/vcs";
   patches = [ ./fonts.patch ];
   nativeBuildInputs = [ makeWrapper ];
-  doBuild = false;
 
   inherit dejavu_fonts;
   installPhase = ''

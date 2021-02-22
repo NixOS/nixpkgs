@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
+{ lib, stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql57, libgeotiff, python, pythonPackages, proj, geos, openssl
 , libpng }:
 
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

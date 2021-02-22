@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, perl, perlPackages, bluez }:
+{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages, bluez }:
 
 stdenv.mkDerivation  rec {
   pname = "bt-fw-converter";
@@ -25,11 +25,11 @@ stdenv.mkDerivation  rec {
     wrapProgram $out/bin/bt-fw-converter --set PERL5LIB $PERL5LIB
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/winterheart/broadcom-bt-firmware/";
     description = "A tool that converts hex to hcd based on inf file";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];
   };
-} 
+}

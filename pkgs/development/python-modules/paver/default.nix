@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # the tests do not pass
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python-based build/distribution/deployment scripting tool";
     homepage    = "https://github.com/paver/paver";
     maintainers = with maintainers; [ lovek323 ];

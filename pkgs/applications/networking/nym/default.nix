@@ -1,7 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , openssl
 , libredirect
 , writeText
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0zr5nzmglmvn6xfqgvipbzy8nw5cl3nf7zjmghkqdwi6zj9p9272";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 

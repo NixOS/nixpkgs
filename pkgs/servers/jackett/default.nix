@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/Jackett \
       --add-flags "$out/share/${pname}-${version}/JackettConsole.exe" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ curl icu60 openssl zlib ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl icu60 openssl zlib ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "API Support for your favorite torrent trackers";
     homepage = "https://github.com/Jackett/Jackett/";
     license = licenses.gpl2;

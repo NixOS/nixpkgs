@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , pkg-config
@@ -22,18 +22,9 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "097dw1l92l73xah9l56ka5mi3dvx48ffpiv33ni5i5rqw0ng7fc4";
   };
-
-  patches = [
-    # Fix build with Meson 0.55
-    # https://gitlab.gnome.org/GNOME/iagno/-/issues/16
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/iagno/commit/0100bab269f2102f24a6e41202b931da1b6e8dc5.patch";
-      sha256 = "ZW75s+bV45ivwA+SKUN7ejSvnXYEo/kYQjDVvFBA/sg=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -62,7 +53,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
     maintainers = teams.gnome.members;

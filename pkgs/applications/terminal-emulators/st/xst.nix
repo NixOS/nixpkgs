@@ -1,29 +1,25 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libX11, ncurses, libXext, libXft, fontconfig }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, ncurses, libXext, libXft, fontconfig }:
 
-with stdenv.lib;
-
-let
-  version = "0.7.2";
-  name = "xst-${version}";
-in stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "xst";
+  version = "0.8.4.1";
 
   src = fetchFromGitHub {
     owner = "gnotclub";
-    repo = "xst";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1fplgy30gyrwkjsw3z947327r98i13zd1whwkplpj9fzckhb9vs9";
+    sha256 = "nOJcOghtzFkl7B/4XeXptn2TdrGQ4QTKBo+t+9npxOA=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 ncurses libXext libXft fontconfig ];
 
   installPhase = ''
     TERMINFO=$out/share/terminfo make install PREFIX=$out
   '';
 
-  meta = {
-    homepage = "https://github.com/neeasade/xst";
+  meta = with lib; {
+    homepage = "https://github.com/gnotclub/xst";
     description = "Simple terminal fork that can load config from Xresources";
     license = licenses.mit;
     maintainers = [ maintainers.vyp ];

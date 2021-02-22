@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, mutagen, wrapPython, opusTools, mpg123 }:
+{ lib, stdenv, fetchurl, python, mutagen, wrapPython, opusTools, mpg123 }:
 
 let version = "0.12.2"; in
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postFixup = "wrapPythonPrograms";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ehmry/dir2opus";
     maintainers = [ maintainers.ehmry ];
     license = licenses.gpl2;

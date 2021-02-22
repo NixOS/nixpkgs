@@ -1,20 +1,21 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem
+{ lib, stdenv, wrapQtAppsHook, makeDesktopItem
 , fetchFromGitHub
-, cmake, qttools, pkgconfig
+, cmake, qttools, pkg-config
 , qtbase, qtdeclarative, qtgraphicaleffects
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
+, qtmacextras
 , monero, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
 , randomx, zeromq, libgcrypt, libgpgerror
-, hidapi, rapidjson
+, hidapi, rapidjson, quirc
 , trezorSupport ? true
 ,   libusb1  ? null
 ,   protobuf ? null
 ,   python3  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
@@ -27,17 +28,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.1.6";
+  version = "0.17.1.9";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "0kn5wvx2psbdaqmy1cxlbf5l1mdpvh0b6hh9drah3s7nj3654a3r";
+    sha256 = "0143mmxk0jfb5pmjlx6v0knvf8v49kmkpjxlp6rw8lwnlf71xadn";
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig wrapQtAppsHook
+    cmake pkg-config wrapQtAppsHook
     (getDev qttools)
   ];
 
@@ -48,8 +49,9 @@ stdenv.mkDerivation rec {
     monero miniupnpc unbound readline
     randomx libgcrypt libgpgerror
     boost libunwind libsodium pcsclite
-    zeromq hidapi rapidjson
-  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ];
+    zeromq hidapi rapidjson quirc
+  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
+    ++ optionals stdenv.isDarwin [ qtmacextras ];
 
   postUnpack = ''
     # copy monero sources here
@@ -73,6 +75,10 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory(monero)' \
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)'
+
+    # use nixpkgs quirc
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory(external)' ""
   '';
 
   cmakeFlags = [ "-DARCH=${arch}" ];
@@ -105,7 +111,6 @@ stdenv.mkDerivation rec {
     homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
-    badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

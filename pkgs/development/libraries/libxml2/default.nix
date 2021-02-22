@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
-, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
 , enableStatic ? !enableShared,
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
   installFlags = lib.optional pythonSupport
-    "pythondir=\"${placeholder ''py''}/lib/${python.libPrefix}/site-packages\"";
+    "pythondir=\"${placeholder "py"}/lib/${python.libPrefix}/site-packages\"";
 
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"

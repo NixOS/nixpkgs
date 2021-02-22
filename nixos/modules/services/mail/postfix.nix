@@ -25,8 +25,6 @@ let
 
   clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
 
-  smtpTlsSecurityLevel = if cfg.useDane then "dane" else "may";
-
   mainCf = let
     escape = replaceStrings ["$"] ["$$"];
     mkList = items: "\n  " + concatStringsSep ",\n  " items;
@@ -510,14 +508,6 @@ in
         '';
       };
 
-      useDane = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Sets smtp_tls_security_level to "dane" rather than "may". See postconf(5) for details.
-        '';
-      };
-
       sslCert = mkOption {
         type = types.str;
         default = "";
@@ -570,6 +560,7 @@ in
 
       transport = mkOption {
         default = "";
+        type = types.lines;
         description = "
           Entries for the transport map, cf. man-page transport(8).
         ";
@@ -583,6 +574,7 @@ in
 
       dnsBlacklistOverrides = mkOption {
         default = "";
+        type = types.lines;
         description = "contents of check_client_access for overriding dnsBlacklists";
       };
 
@@ -819,13 +811,13 @@ in
       // optionalAttrs cfg.enableHeaderChecks { header_checks = [ "regexp:/etc/postfix/header_checks" ]; }
       // optionalAttrs (cfg.tlsTrustedAuthorities != "") {
         smtp_tls_CAfile = cfg.tlsTrustedAuthorities;
-        smtp_tls_security_level = smtpTlsSecurityLevel;
+        smtp_tls_security_level = mkDefault "may";
       }
       // optionalAttrs (cfg.sslCert != "") {
         smtp_tls_cert_file = cfg.sslCert;
         smtp_tls_key_file = cfg.sslKey;
 
-        smtp_tls_security_level = smtpTlsSecurityLevel;
+        smtp_tls_security_level = mkDefault "may";
 
         smtpd_tls_cert_file = cfg.sslCert;
         smtpd_tls_key_file = cfg.sslKey;
@@ -969,5 +961,9 @@ in
   imports = [
    (mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
      "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.extraConfig.")
+
+   (mkChangedOptionModule [ "services" "postfix" "useDane" ]
+     [ "services" "postfix" "config" "smtp_tls_security_level" ]
+     (config: mkIf config.services.postfix.useDane "dane"))
   ];
 }

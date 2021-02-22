@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "overlayfs";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ bachp ];
+  meta.maintainers = with pkgs.lib.maintainers; [ bachp ];
 
   machine = { pkgs, ... }: {
     virtualisation.emptyDiskImages = [ 512 ];

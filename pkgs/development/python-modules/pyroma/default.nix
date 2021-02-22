@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , docutils, pygments, setuptools
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ docutils pygments setuptools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test your project's packaging friendliness";
     homepage = "https://github.com/regebro/pyroma";
     license = licenses.mit;

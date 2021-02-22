@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, autoconf, libndctl, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, autoconf, libndctl, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1833sq0f1msaqwn31dn1fp37a6d5zp995i9gkazanydmppi2qy0i";
   };
 
-  nativeBuildInputs = [ autoconf pkgconfig ];
+  nativeBuildInputs = [ autoconf pkg-config ];
   buildInputs = [ libndctl ];
   enableParallelBuilding = true;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mv $out/lib     $lib/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Persistent Memory Development Kit";
     homepage    = "https://github.com/pmem/pmdk";
     license     = licenses.lgpl21;

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-pdf'';
-  version = ''20191007-git'';
+  baseName = "cl-pdf";
+  version = "20191007-git";
 
-  description = ''Common Lisp PDF Generation Library'';
+  description = "Common Lisp PDF Generation Library";
 
   deps = [ args."iterate" args."uiop" args."zpb-ttf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-pdf/2019-10-07/cl-pdf-20191007-git.tgz'';
-    sha256 = ''0l0hnxysy7dc4wj50nfwn8x7v188vaxvsvk8kl92zb92lfzgw7cd'';
+    url = "http://beta.quicklisp.org/archive/cl-pdf/2019-10-07/cl-pdf-20191007-git.tgz";
+    sha256 = "0l0hnxysy7dc4wj50nfwn8x7v188vaxvsvk8kl92zb92lfzgw7cd";
   };
 
   packageName = "cl-pdf";

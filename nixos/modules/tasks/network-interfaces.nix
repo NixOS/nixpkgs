@@ -398,6 +398,24 @@ in
       '';
     };
 
+    networking.fqdn = mkOption {
+      readOnly = true;
+      type = types.str;
+      default = if (cfg.hostName != "" && cfg.domain != null)
+        then "${cfg.hostName}.${cfg.domain}"
+        else throw ''
+          The FQDN is required but cannot be determined. Please make sure that
+          both networking.hostName and networking.domain are set properly.
+        '';
+      defaultText = literalExample ''''${networking.hostName}.''${networking.domain}'';
+      description = ''
+        The fully qualified domain name (FQDN) of this host. It is the result
+        of combining networking.hostName and networking.domain. Using this
+        option will result in an evaluation error if the hostname is empty or
+        no domain is specified.
+      '';
+    };
+
     networking.hostId = mkOption {
       default = null;
       example = "4e98920d";

@@ -31,7 +31,7 @@ pythonPackages.callPackage
       inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromPypi moduleName;
 
       inherit (import ./pep425.nix {
-        inherit lib python;
+        inherit lib poetryLib python;
         inherit (pkgs) stdenv;
       }) selectWheel
         ;
@@ -161,7 +161,7 @@ pythonPackages.callPackage
             builtins.fetchGit {
               inherit (source) url;
               rev = source.resolved_reference or source.reference;
-              ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
+              ref = sourceSpec.branch or sourceSpec.rev or (if sourceSpec?tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             }
           )
         else if isUrl then

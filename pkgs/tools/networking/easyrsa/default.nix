@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, openssl, runtimeShell }:
 
 let
   version = "3.0.8";
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
     chmod +x $out/bin/easyrsa-init
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple shell based CA utility";
     homepage = "https://openvpn.net/";
     license = licenses.gpl2;

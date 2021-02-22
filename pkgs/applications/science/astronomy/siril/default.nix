@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, fetchFromGitHub, pkg-config, meson, ninja,
+{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, pkg-config, meson, ninja,
   git, criterion, wrapGAppsHook, gtk3, libconfig, gnuplot, opencv,
   fftwFloat, cfitsio, gsl, exiv2, curl, librtprocess, ffmpeg,
   libraw, libtiff, libpng, libjpeg, libheif, ffms
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     cd nixbld
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.siril.org/";
     description = "Astronomical image processing tool";
     license = licenses.gpl3;

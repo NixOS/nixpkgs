@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.12.2";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0if514zdmbjvvrsa9x5yfvg2b14sz53yaka12g3yhwkq8ls3qk0c";
+    sha256 = "sha256-xIvcHMDBPdmNSp0/aaVDXxCmCpQOtSFG99lyHAWmbY0=";
   };
 
   nativeBuildInputs = [ meson ninja ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Janet programming language";
     homepage = "https://janet-lang.org/";
     license = licenses.mit;

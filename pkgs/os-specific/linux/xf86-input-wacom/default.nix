@@ -1,6 +1,6 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , xorgproto, libX11, libXext, libXi, libXrandr, libXrender
-, ncurses, pkgconfig, xorgserver, udev, libXinerama, pixman }:
+, ncurses, pkg-config, xorgserver, udev, libXinerama, pixman }:
 
 stdenv.mkDerivation rec {
   name = "xf86-input-wacom-0.36.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ xorgproto libX11 libXext libXi libXrandr libXrender
-    ncurses pkgconfig xorgserver udev libXinerama pixman ];
+    ncurses pkg-config xorgserver udev libXinerama pixman ];
 
   preConfigure = ''
     mkdir -p $out/share/X11/xorg.conf.d
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-I${pixman}/include/pixman-1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = [ maintainers.goibhniu ];
     description = "Wacom digitizer driver for X11";
     homepage = "http://linuxwacom.sourceforge.net";

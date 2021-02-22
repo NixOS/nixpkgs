@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, cppo }:
+{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, cppo }:
 
 let version = "1.0"; in
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Optimised functions to read and write int16/32/64";
     homepage = "https://github.com/OCamlPro/ocplib-endian";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

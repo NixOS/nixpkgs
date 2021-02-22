@@ -28,15 +28,19 @@ let
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.191"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.19.5"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zsb9w0bpbwq093ydbh4b5r3287b5l9mrdx549vsv0rspmkr0d7c";
+    sha256 = "sha256-SwYL2ViwazP2MDZbW9cRThvg6jVOMlkfsbpY6QDsjQY=";
   };
 
+  # https://github.com/aws/aws-cli/issues/4837
+  # https://github.com/aws/aws-cli/pull/5887
   postPatch = ''
-    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
+    substituteInPlace setup.py \
+      --replace "docutils>=0.10,<0.16" "docutils>=0.10" \
+      --replace "PyYAML>=3.10,<5.4" "PyYAML>=3.10"
   '';
 
   # No tests included

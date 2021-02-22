@@ -9,7 +9,7 @@
 
 import ./make-test-python.nix ({pkgs, ...}: {
   name = "systemd-networkd-ipv6-prefix-delegation";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ andir ];
   };
   nodes = {

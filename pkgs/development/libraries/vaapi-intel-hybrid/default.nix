@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, cmrt, libdrm, libva, libX11, libGL, wayland }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, cmrt, libdrm, libva, libX11, libGL, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "intel-hybrid-driver";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ cmrt libdrm libva libX11 libGL wayland ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://01.org/linuxmedia";
     description = "Intel driver for the VAAPI library with partial HW acceleration";
     license = licenses.mit;

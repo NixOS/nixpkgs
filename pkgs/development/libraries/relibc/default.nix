@@ -1,7 +1,7 @@
-{ stdenvNoCC, buildPackages, makeRustPlatform }:
+{ lib, stdenvNoCC, buildPackages, makeRustPlatform }:
 
 let
-  rpath = stdenvNoCC.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     buildPackages.stdenv.cc.libc
     "$out"
   ];
@@ -30,7 +30,7 @@ let
           "{}" \;
     '';
 
-    meta.platforms = with stdenvNoCC.lib; platforms.redox ++ platforms.linux;
+    meta.platforms = with lib; platforms.redox ++ platforms.linux;
   };
 
   redoxRustPlatform = buildPackages.makeRustPlatform {
@@ -68,7 +68,7 @@ redoxRustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1fzz7ba3ga57x1cbdrcfrdwwjr70nh4skrpxp4j2gak2c3scj6rz";
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.redox-os.org/redox-os/relibc";
     description = "C Library in Rust for Redox and Linux";
     license = licenses.mit;

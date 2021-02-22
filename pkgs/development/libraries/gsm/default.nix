@@ -1,10 +1,11 @@
-{ stdenv, fetchurl
-, staticSupport ? false # Compile statically (support for packages that look for the static object)
+{ lib, stdenv, fetchurl
+, # Compile statically (support for packages that look for the static object)
+  staticSupport ? stdenv.hostPlatform.isStatic
 }:
 
 let
   inherit (stdenv) isDarwin;
-  inherit (stdenv.lib) optional optionalString;
+  inherit (lib) optional optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
 
   parallelBuild = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lossy speech compression codec";
     homepage    = "http://www.quut.com/gsm/";
     license     = licenses.bsd2;

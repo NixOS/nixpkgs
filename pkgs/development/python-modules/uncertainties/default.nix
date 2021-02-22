@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , nose, numpy, future
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   checkPhase = "python setup.py nosetests -sv";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pythonhosted.org/uncertainties/";
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
     maintainers = with maintainers; [ rnhmjoj ];

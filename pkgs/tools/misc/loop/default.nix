@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage {
   pname = "loop";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
 
   cargoSha256 = "0a3l580ca23vx8isd1qff870ci3p7wf4qrm53jl7nhfjh7rg5a4w";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UNIX's missing `loop` command";
     homepage = "https://github.com/Miserlou/Loop";
     maintainers = with maintainers; [ koral ];

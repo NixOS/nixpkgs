@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , curl
 , darwin
 , hiredis
@@ -49,7 +49,7 @@ let
     aggregation = {};
     amqp = {
       buildInputs = [ yajl ] ++
-        stdenv.lib.optionals stdenv.isLinux [ rabbitmq-c ];
+        lib.optionals stdenv.isLinux [ rabbitmq-c ];
     };
     apache = {
       buildInputs = [ curl ];
@@ -62,7 +62,7 @@ let
     };
     barometer = {};
     battery = {
-      buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+      buildInputs = lib.optionals stdenv.isDarwin [
         darwin.apple_sdk.frameworks.IOKit
       ];
     };
@@ -94,9 +94,9 @@ let
     };
     df = {};
     disk = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [
+      buildInputs = lib.optionals stdenv.isLinux [
         udev
-      ] ++ stdenv.lib.optionals stdenv.isDarwin [
+      ] ++ lib.optionals stdenv.isDarwin [
         darwin.apple_sdk.frameworks.IOKit
       ];
     };
@@ -126,7 +126,7 @@ let
     iptables = {
       buildInputs = [
         libpcap
-      ] ++ stdenv.lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.isLinux [
         iptables libmnl
       ];
     };
@@ -161,14 +161,14 @@ let
     memory = {};
     mic = {};
     modbus = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ libmodbus ];
+      buildInputs = lib.optionals stdenv.isLinux [ libmodbus ];
     };
     mqtt = {
       buildInputs = [ mosquitto ];
     };
     multimeter = {};
     mysql = {
-      buildInputs = stdenv.lib.optionals (libmysqlclient != null) [
+      buildInputs = lib.optionals (libmysqlclient != null) [
         libmysqlclient
       ];
     };
@@ -176,7 +176,7 @@ let
     netlink = {
       buildInputs = [
         libpcap
-      ] ++ stdenv.lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.isLinux [
         libmnl
       ];
     };
@@ -236,20 +236,20 @@ let
       buildInputs = [ rrdtool libxml2 ];
     };
     sensors = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ lm_sensors ];
+      buildInputs = lib.optionals stdenv.isLinux [ lm_sensors ];
     };
     serial = {};
     sigrok = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ libsigrok udev ];
+      buildInputs = lib.optionals stdenv.isLinux [ libsigrok udev ];
     };
     smart = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ libatasmart udev ];
+      buildInputs = lib.optionals stdenv.isLinux [ libatasmart udev ];
     };
     snmp = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ net-snmp ];
+      buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
     };
     snmp_agent = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ net-snmp ];
+      buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
     };
     statsd = {};
     swap = {};
@@ -280,7 +280,7 @@ let
     };
     virt = {
       buildInputs = [ libvirt libxml2 yajl ] ++
-        stdenv.lib.optionals stdenv.isLinux [ lvm2 udev
+        lib.optionals stdenv.isLinux [ lvm2 udev
           # those might be no longer required when https://github.com/NixOS/nixpkgs/pull/51767
           # is merged
           libapparmor numactl libcap_ng

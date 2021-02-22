@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, qt4}:
+{lib, stdenv, fetchurl, cmake, qt4}:
 
 let
   pn = "qimageblitz";
@@ -13,14 +13,15 @@ stdenv.mkDerivation {
     sha256 = "0pnaf3qi7rgkxzs2mssmslb3f9ya4cyx09wzwlis3ppyvf72j0p9";
   };
 
-  buildInputs = [ cmake qt4 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 ];
 
   patches = [ ./qimageblitz-9999-exec-stack.patch ];
 
   meta = {
     description = "Graphical effect and filter library for KDE4";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "http://${pn}.sourceforge.net";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

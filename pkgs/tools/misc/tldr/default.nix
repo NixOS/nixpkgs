@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "tldr";
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ curl libzip ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  makeFlags = ["CC=cc" "LD=cc" "CFLAGS="];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" "CFLAGS="];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplified and community-driven man pages";
     longDescription = ''
       tldr pages gives common use cases for commands, so you don't need to hunt

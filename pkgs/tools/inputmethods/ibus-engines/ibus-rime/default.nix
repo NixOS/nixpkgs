@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, gdk-pixbuf, glib, ibus, libnotify
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gdk-pixbuf, glib, ibus, libnotify
 , librime, brise }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
        --replace '/usr' $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description = "Rime input method engine for IBus";
     homepage = "https://rime.im/";

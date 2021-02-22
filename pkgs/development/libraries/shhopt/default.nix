@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "shhopt-1.1.7";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTBASEDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for parsing command line options";
     homepage = "https://shh.thathost.com/pub-unix/";
     license = licenses.artistic1;

@@ -1,48 +1,60 @@
-{ stdenv, fetchurl, perl, unzip, glibc, zlib, setJavaClassPath }:
+{ lib, stdenv, fetchurl, perl, unzip, glibc, zlib, setJavaClassPath, Foundation, openssl }:
 
 let
+  platform = if stdenv.isDarwin then "darwin-amd64" else "linux-amd64";
   common = javaVersion:
     let
+      javaVersionPlatform = "${javaVersion}-${platform}";
       graalvmXXX-ce = stdenv.mkDerivation rec {
         pname = "graalvm${javaVersion}-ce";
-        version = "20.2.0";
+        version = "21.0.0";
         srcs = [
           (fetchurl {
-             sha256 = {  "8" = "1s64zkkrns1ykh6dwpjrqy0hs9m1bb08cf7ss7msx33h9ivir5b0";
-                        "11" = "0aaf0sjsnlckhgsh3j4lph0shahw6slf4yndqcm2swc8i1dlpdsx";
-                      }.${javaVersion};
-             url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/graalvm-ce-java${javaVersion}-linux-amd64-${version}.tar.gz";
+             sha256 = {  "8-linux-amd64"  = "18q1plrpclp02rlwn3vvv2fcyspvqv2gkzn14f0b59pnladmlv1j";
+                        "11-linux-amd64"  = "1g1xjbr693rimdy2cy6jvz4vgnbnw76wa87xcmaszka206fmpnsc";
+                         "8-darwin-amd64" = "0giv8f7ybdykadzmxjy91i6njbdx6dclyx7g6vyhwk2l1cvxi4li";
+                        "11-darwin-amd64" = "1a8gjp6fp11ms05pd62h1x1ifkkr3wv0hrxic670v90bbps9lsqf";
+                      }.${javaVersionPlatform};
+             url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/graalvm-ce-java${javaVersionPlatform}-${version}.tar.gz";
           })
           (fetchurl {
-             sha256 = {  "8" = "1cisyyzab4pdvzavnivhy9w6dwn36ybaxw40w767m142fbi06m3b";
-                        "11" = "0p4j6mxajmb0xl41c79154pk4vb8bffgg1nmwislahqjky9jkd4j";
-                      }.${javaVersion};
-             url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/native-image-installable-svm-java${javaVersion}-linux-amd64-${version}.jar";
+             sha256 = {  "8-linux-amd64"  = "0hpq2g9hc8b7j4d8a08kq1mnl6pl7a4kwaj0a3gka3d4m6r7cscg";
+                        "11-linux-amd64"  = "0z3hb2bf0lqzw760civ3h1wvx22a75n7baxc0l2i9h5wxas002y7";
+                         "8-darwin-amd64" = "1izbgl4hjg5jyi422xnkx006qnw163r1i1djf76q1plms40y01ph";
+                        "11-darwin-amd64" = "1d9z75gil0if74ndla9yw3xx9i2bfbcs32qa0z6wi5if66cmknb8";
+                      }.${javaVersionPlatform};
+             url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/native-image-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
           (fetchurl {
-             sha256 = {  "8" = "0rwwvk1mkfnl0b50xg7kh6015kjmsw2ra0ckrzmabl88z4bnzh2y";
-                        "11" = "0lc9as2a00j74lp7jby4p10vn5bbkiydzvzk28zfcbsp28p4wvwn";
-                      }.${javaVersion};
-             url    = "https://github.com/oracle/truffleruby/releases/download/vm-${version}/ruby-installable-svm-java${javaVersion}-linux-amd64-${version}.jar";
+             sha256 = {  "8-linux-amd64"  = "122p8psgmzhqnjb2fy1lwghg0kw5qa8xkzgyjp682lwg4j8brz43";
+                        "11-linux-amd64"  = "1vdc90m6s013cbhmj58nb4vyxllbxirw0idlgv0iv9cyhx90hzgz";
+                         "8-darwin-amd64" = "04q0s9xsaskqn9kbhz0mgdk28j2qnxrzqfmw6jn2znr8s8jsc6yp";
+                        "11-darwin-amd64" = "1pw4xd8g5cc9bm52awmm1zxs96ijws43vws7y10wxa6a0nhv7z5f";
+                      }.${javaVersionPlatform};
+             url    = "https://github.com/oracle/truffleruby/releases/download/vm-${version}/ruby-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
           (fetchurl {
-             sha256 = {  "8" = "0mj8p72qgvvrwpsbk0bsqldynlz1wq07icf951wq5xdbr0whj1gz";
-                        "11" = "1lkszqn4islsza011iabayv6riym0dwnkv83pkmk06b230qjfhzb";
-                      }.${javaVersion};
-             url    = "https://github.com/graalvm/graalpython/releases/download/vm-${version}/python-installable-svm-java${javaVersion}-linux-amd64-${version}.jar";
+             sha256 = {  "8-linux-amd64"  = "19m7n4f5jrmsfvgv903sarkcjh55l0nlnw99lvjlcafw5hqzyb91";
+                        "11-linux-amd64"  = "18ibb7l7b4hmbnvyr8j7mrs11mvlsf2j0c8rdd2s93x2114f26ba";
+                         "8-darwin-amd64" = "1zlzi00339kvg4ym2j75ypfkzn8zbwdpriqmkaz4fh28qjmc1dwq";
+                        "11-darwin-amd64" = "0x301i1fimakhi2x29ldr0fsqkb3qs0g9jsmjv27d62dpqx8kgc8";
+                      }.${javaVersionPlatform};
+             url    = "https://github.com/graalvm/graalpython/releases/download/vm-${version}/python-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
           (fetchurl {
-             sha256 = {  "8" = "1br7camk7y8ych43ws57096100f9kzjvqznh2flmws78ipcrrb66";
-                        "11" = "10swxspjvzh0j82lbpy38dckk69lw1pawqkhnj1hxd05ls36fwq5";
-                      }.${javaVersion};
-             url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersion}-linux-amd64-${version}.jar";
+             sha256 = {  "8-linux-amd64"  = "0dlgbg6kri89r9zbk6n0ch3g8356j1g35bwjng87c2y5y0vcw0b5";
+                        "11-linux-amd64"  = "1yby65hww6zmd2g5pjwbq5pv3iv4gfv060b8fq75fjhwrisyj5gd";
+                         "8-darwin-amd64" = "1smdj491g23i3z7p5rybid18nnz8bphrqjkv0lg2ffyrpn8k6g93";
+                        "11-darwin-amd64" = "056zyn0lpd7741k1szzjwwacka0g7rn0j4ypfmav4h1245mjg8lx";
+                      }.${javaVersionPlatform};
+             url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
         ];
         nativeBuildInputs = [ unzip perl ];
         unpackPhase = ''
            unpack_jar() {
              jar=$1
-             unzip -o $jar -d $out
+             unzip -q -o $jar -d $out
              perl -ne 'use File::Path qw(make_path);
                        use File::Basename qw(dirname);
                        if (/^(.+) = (.+)$/) {
@@ -60,7 +72,27 @@ let
 
            mkdir -p $out
            arr=($srcs)
-           tar xf ''${arr[0]} -C $out --strip-components=1
+
+           # The tarball on Linux has the following directory structure:
+           #
+           #   graalvm-ce-java11-20.3.0/*
+           #
+           # while on Darwin it looks like this:
+           #
+           #   graalvm-ce-java11-20.3.0/Contents/Home/*
+           #
+           # We therefor use --strip-components=1 vs 3 depending on the platform.
+           tar xf ''${arr[0]} -C $out --strip-components=${if stdenv.isLinux then "1" else "3"}
+
+           # Sanity check
+           if [ ! -d $out/bin ]; then
+              echo "The `bin` is directory missing after extracting the graalvm"
+              echo "tarball, please compare the directory structure of the"
+              echo "tarball with what happens in the unpackPhase (in particular"
+              echo "with regards to the `--strip-components` flag)."
+              exit 1
+           fi
+
            unpack_jar ''${arr[1]}
            unpack_jar ''${arr[2]}
            unpack_jar ''${arr[3]}
@@ -68,7 +100,7 @@ let
         '';
 
         installPhase = {
-          "8" = ''
+          "8-linux-amd64" = ''
             # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
             substituteInPlace $out/jre/lib/security/java.security \
               --replace file:/dev/random    file:/dev/./urandom \
@@ -76,13 +108,13 @@ let
 
             # provide libraries needed for static compilation
             for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
-              ln -s $f $out/jre/lib/svm/clibraries/linux-amd64/$(basename $f)
+              ln -s $f $out/jre/lib/svm/clibraries/${platform}/$(basename $f)
             done
 
             # allow using external truffle-api.jar and languages not included in the distrubution
             rm $out/jre/lib/jvmci/parentClassLoader.classpath
           '';
-          "11" = ''
+          "11-linux-amd64" = ''
             # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
             substituteInPlace $out/conf/security/java.security \
               --replace file:/dev/random    file:/dev/./urandom \
@@ -90,10 +122,17 @@ let
 
             # provide libraries needed for static compilation
             for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
-              ln -s $f $out/lib/svm/clibraries/linux-amd64/$(basename $f)
+              ln -s $f $out/lib/svm/clibraries/${platform}/$(basename $f)
             done
-           '';
-        }.${javaVersion};
+          '';
+          "8-darwin-amd64" = ''
+            # allow using external truffle-api.jar and languages not included in the distrubution
+            rm $out/jre/lib/jvmci/parentClassLoader.classpath
+          '';
+          "11-darwin-amd64" = ''
+            echo ""
+          '';
+        }.${javaVersionPlatform};
 
         dontStrip = true;
 
@@ -107,28 +146,35 @@ let
         '';
 
         postFixup = ''
-          rpath="${ {  "8" = "$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64";
-                      "11" = "$out/lib/jli:$out/lib/server:$out/lib";
+          rpath="${ {  "8" = "$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64:$out/jre/languages/ruby/lib/cext";
+                      "11" = "$out/lib/jli:$out/lib/server:$out/lib:$out/languages/ruby/lib/cext";
                     }.${javaVersion}
                  }:${
-            stdenv.lib.makeLibraryPath [
+            lib.makeLibraryPath [
               stdenv.cc.cc.lib # libstdc++.so.6
               zlib             # libz.so.1
             ]}"
 
+          ${lib.optionalString stdenv.isLinux ''
           for f in $(find $out -type f -perm -0100); do
             patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f" || true
             patchelf --set-rpath   "$rpath"                                    "$f" || true
-
             if ldd "$f" | fgrep 'not found'; then echo "in file $f"; fi
           done
+          ''}
         '';
 
-        propagatedBuildInputs = [ setJavaClassPath zlib ]; # $out/bin/native-image needs zlib to build native executables
+        # $out/bin/native-image needs zlib to build native executables.
+        propagatedBuildInputs = [ setJavaClassPath zlib ] ++
+          # On Darwin native-image calls clang and it
+          # tries to include <Foundation/Foundation.h>,
+          # and Interactive Ruby (irb) requires OpenSSL
+          # headers.
+          lib.optionals stdenv.hostPlatform.isDarwin [ Foundation openssl ];
 
         doInstallCheck = true;
         installCheckPhase = ''
-          echo ${stdenv.lib.escapeShellArg ''
+          echo ${lib.escapeShellArg ''
                    public class HelloWorld {
                      public static void main(String[] args) {
                        System.out.println("Hello World");
@@ -141,22 +187,44 @@ let
           $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
           # Ahead-Of-Time compilation
-          $out/bin/native-image --no-server HelloWorld
+          $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
           ./helloworld | fgrep 'Hello World'
 
-          # Ahead-Of-Time compilation with --static
-          $out/bin/native-image --no-server --static HelloWorld
-          ./helloworld | fgrep 'Hello World'
-        '';
+          ${lib.optionalString stdenv.isLinux ''
+            # Ahead-Of-Time compilation with --static
+            # --static flag doesn't work for darwin
+            $out/bin/native-image --no-server --static HelloWorld
+            ./helloworld | fgrep 'Hello World'
+          ''}
+
+          echo "Testing interpreted languages"
+          $out/bin/graalpython -c 'print(1 + 1)'
+          $out/bin/ruby -e 'puts(1 + 1)'
+          $out/bin/node -e 'console.log(1 + 1)'
+
+          echo '1 + 1' | $out/bin/graalpython
+
+          ${lib.optionalString stdenv.isLinux ''
+            # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
+            # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
+            # though `openssl` is in `propagatedBuildInputs`. For more details see:
+            # https://github.com/NixOS/nixpkgs/pull/105815
+            echo '1 + 1' | $out/bin/irb
+          ''}
+
+          echo '1 + 1' | $out/bin/node -i
+        ${lib.optionalString (javaVersion == "11") ''
+          echo '1 + 1' | $out/bin/jshell
+        ''}'';
 
         passthru.home = graalvmXXX-ce;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           homepage = "https://www.graalvm.org/";
           description = "High-Performance Polyglot VM";
           license = with licenses; [ upl gpl2Classpath bsd3 ];
           maintainers = with maintainers; [ bandresen volth hlolli glittershark ];
-          platforms = [ "x86_64-linux" ];
+          platforms = [ "x86_64-linux" "x86_64-darwin" ];
         };
       };
     in

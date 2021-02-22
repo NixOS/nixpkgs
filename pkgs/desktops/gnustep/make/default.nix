@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, clang, which, libobjc }:
+{ lib, stdenv, fetchurl, clang, which, libobjc }:
 
 let
   version = "2.8.0";
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A build manager for GNUstep";
     homepage = "http://gnustep.org/";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov matthewbauer ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer ];
+    platforms = lib.platforms.unix;
   };
 }

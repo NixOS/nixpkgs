@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmad }:
+{ lib, stdenv, fetchurl, libmad }:
 
 stdenv.mkDerivation rec {
   pname = "normalize";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmad ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/normalize/";
     description = "Audio file normalizer";
     license = licenses.gpl2;

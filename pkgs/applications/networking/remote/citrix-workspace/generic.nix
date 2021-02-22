@@ -1,4 +1,4 @@
-{ stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
+{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
 , file, atk, alsaLib, cairo, fontconfig, gdk-pixbuf, glib, gnome3, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
@@ -11,8 +11,6 @@
 }:
 
 let
-  inherit (stdenv) lib;
-
   openssl' = symlinkJoin {
     name = "openssl-backwards-compat";
     nativeBuildInputs = [ makeWrapper ];

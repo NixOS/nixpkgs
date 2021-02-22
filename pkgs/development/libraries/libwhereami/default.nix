@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
 
 stdenv.mkDerivation rec {
   pname = "libwhereami";
@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost curl leatherman ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Library to report hypervisor information from inside a VM";
     license = licenses.asl20;

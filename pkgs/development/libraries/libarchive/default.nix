@@ -1,5 +1,5 @@
 {
-  fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
+  fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
 
   # Optional but increases closure only negligibly. Also, while libxml2
@@ -12,28 +12,28 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   pname = "libarchive";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${version}";
-    sha256 = "0dj01ayyac3q5a62rqxyskr4fjiq6iappd85zn3rx64xny5fl07d";
+    sha256 = "sha256-RFPhe4PCq8OLwa6c7ir+5u9jBsUxS5M/fcZYAG9W6R0=";
   };
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs =
-    stdenv.lib.optional stdenv.hostPlatform.isUnix sharutils
+    lib.optional stdenv.hostPlatform.isUnix sharutils
     ++ [ zlib bzip2 openssl xz lzo zstd ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
-    ++ stdenv.lib.optional xarSupport libxml2;
+    ++ lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
+    ++ lib.optional xarSupport libxml2;
 
-  # Without this, pkgconfig-based dependencies are unhappy
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isLinux [ attr acl ];
+  # Without this, pkg-config-based dependencies are unhappy
+  propagatedBuildInputs = lib.optionals stdenv.isLinux [ attr acl ];
 
-  configureFlags = stdenv.lib.optional (!xarSupport) "--without-xml2";
+  configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
   preBuild = if stdenv.isCygwin then ''
     echo "#include <windows.h>" >> config.h
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://libarchive.org";
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = with stdenv.lib.platforms; all;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; all;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

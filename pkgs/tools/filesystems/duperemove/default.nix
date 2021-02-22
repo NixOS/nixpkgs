@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, libgcrypt
-, pkgconfig, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
+{ lib, stdenv, fetchFromGitHub, libgcrypt
+, pkg-config, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1a87mka2sfzhbch2jip6wlvvs0glxq9lqwmyrp359d1rmwwmqiw9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgcrypt glib linuxHeaders sqlite ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple tool for finding duplicated extents and submitting them for deduplication";
     homepage = "https://github.com/markfasheh/duperemove";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, mopidy }:
+{ lib, fetchurl, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for playing music from Spotify";
     license = licenses.asl20;

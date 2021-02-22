@@ -1,9 +1,9 @@
 { fetchurl
 , fetchpatch
-, stdenv
+, lib, stdenv
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , atk
@@ -29,11 +29,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.66.1";
+  version = "1.66.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0k1ld2bc4c3zbyjpfgx15v5n02iywdvm106rys5jqr7zbr2l0hld";
+    url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "vX9fixcSd8wLue4XVLAkC2Lwana4sYyWjPRxs0qzTlk=";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
@@ -105,7 +105,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
       --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
-      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
+      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
 
   checkPhase = ''
@@ -127,7 +127,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JavaScript bindings for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;

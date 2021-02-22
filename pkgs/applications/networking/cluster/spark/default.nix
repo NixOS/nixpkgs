@@ -1,8 +1,8 @@
-{ stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
+{ lib, stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
 , RSupport? true, R
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
   meta = {
     description      = "Apache Spark is a fast and general engine for large-scale data processing";
     homepage         = "http://spark.apache.org";
-    license          = stdenv.lib.licenses.asl20;
-    platforms        = stdenv.lib.platforms.all;
+    license          = lib.licenses.asl20;
+    platforms        = lib.platforms.all;
     maintainers      = with maintainers; [ thoughtpolice offline kamilchm ];
     repositories.git = "git://git.apache.org/spark.git";
   };

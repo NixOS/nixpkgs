@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ lib, stdenv, fetchgit
 , fetchpatch
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ''
   ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace library for the Linux io_uring API";
     homepage    = "https://git.kernel.dk/cgit/liburing/";
     license     = licenses.lgpl21;

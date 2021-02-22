@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , substituteAll
@@ -11,7 +11,6 @@
 , wingpanel
 , orca
 , onboard
-, at-spi2-core
 , elementary-default-settings
 , elementary-settings-daemon
 , runtimeShell
@@ -153,7 +152,7 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Session settings for elementary";
     homepage = "https://github.com/elementary/session-settings";
     license = licenses.lgpl3;

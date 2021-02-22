@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre }:
+{ lib, stdenv, fetchzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   version = "2.6.5";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Java based, open source, static site/blog generator for developers & designers";
     homepage = "https://jbake.org/";
     license = licenses.mit;

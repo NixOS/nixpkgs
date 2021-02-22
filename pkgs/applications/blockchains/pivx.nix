@@ -1,13 +1,13 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook, wrapQtAppsHook ? null
+{ fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook, wrapQtAppsHook ? null
 , openssl, db48, boost, zlib, miniupnpc, gmp
 , qrencode, glib, protobuf, yasm, libevent
 , util-linux, qtbase ? null, qttools ? null
 , enableUpnp ? false
 , disableWallet ? false
-, disableDaemon ? false 
+, disableDaemon ? false
 , withGui ? false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "pivx-${version}";
   version = "4.1.1";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "03ndk46h6093v8s18d5iffz48zhlshq7jrk6vgpjfs6z2iqgd2sy";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
   buildInputs = [ glib gmp openssl db48 yasm boost zlib libevent miniupnpc protobuf util-linux ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
                     ++ optionals withGui [ "--with-gui=yes"
                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                          ];
-  
+
   enableParallelBuilding = true;
   doChecks = true;
   postBuild = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     $out/bin/test_pivx
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source crypto-currency focused on fast private transactions";
     longDescription = ''
       PIVX is an MIT licensed, open source, blockchain-based cryptocurrency with

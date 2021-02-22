@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, libinput, zlib }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake, libinput, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "gebaar-libinput";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ libinput zlib ];
 
   meta = with lib; {

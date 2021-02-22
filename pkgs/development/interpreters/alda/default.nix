@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   pname = "alda";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/alda
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A music programming language for musicians";
     homepage = "https://alda.io";
     license = licenses.epl10;

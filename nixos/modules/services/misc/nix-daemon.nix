@@ -587,10 +587,10 @@ in
 
     nix.systemFeatures = mkDefault (
       [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-      optionals (pkgs.hostPlatform.platform ? gcc.arch) (
-        # a builder can run code for `platform.gcc.arch` and inferior architectures
-        [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++
-        map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.platform.gcc.arch}
+      optionals (pkgs.hostPlatform ? gcc.arch) (
+        # a builder can run code for `gcc.arch` and inferior architectures
+        [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
+        map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
       )
     );
 

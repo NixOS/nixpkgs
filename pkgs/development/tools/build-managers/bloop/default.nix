@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --name bloop.fish --fish ${bloop-fish}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://scalacenter.github.io/bloop/";
     license = licenses.asl20;
     description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";

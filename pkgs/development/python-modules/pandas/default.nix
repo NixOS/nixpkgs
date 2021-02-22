@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -20,18 +20,13 @@
 # Test Inputs
 , glibcLocales
 , hypothesis
-, moto
 , pytestCheckHook
 # Darwin inputs
 , runtimeShell
 , libcxx ? null
 }:
 
-let
-  inherit (stdenv.lib) optional optionals optionalString;
-  inherit (stdenv) isDarwin;
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pandas";
   version = "1.1.5";
 
@@ -41,7 +36,7 @@ in buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ cython ];
-  buildInputs = optional isDarwin libcxx;
+  buildInputs = lib.optional stdenv.isDarwin libcxx;
   propagatedBuildInputs = [
     beautifulsoup4
     bottleneck
@@ -58,15 +53,15 @@ in buildPythonPackage rec {
     xlwt
   ];
 
-  checkInputs = [ pytestCheckHook glibcLocales moto hypothesis ];
+  checkInputs = [ pytestCheckHook glibcLocales hypothesis ];
 
   # doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
-  postPatch = optionalString isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     cpp_sdk="${libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
@@ -76,7 +71,7 @@ in buildPythonPackage rec {
 
   # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
   # release. https://github.com/pandas-dev/pandas/pull/30862
-  setupPyBuildFlags = optionals (!(isPy38 && isDarwin)) [
+  setupPyBuildFlags = lib.optionals (!(isPy38 && stdenv.isDarwin)) [
     # As suggested by
     # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
     "--parallel=$NIX_BUILD_CORES"
@@ -85,7 +80,6 @@ in buildPythonPackage rec {
   doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
   pytestFlagsArray = [
-    "$out/${python.sitePackages}/pandas"
     "--skip-slow"
     "--skip-network"
   ];
@@ -115,18 +109,21 @@ in buildPythonPackage rec {
     "test_constructor_with_embedded_frames"
     # tries to import compiled C extension locally
     "test_missing_required_dependency"
-  ] ++ optionals isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
   ];
 
+  # tests have relative paths, and need to reference compiled C extensions
+  # so change directory where `import .test` is able to be resolved
   preCheck = ''
+    cd $out/${python.sitePackages}/pandas
     export LC_ALL="en_US.UTF-8"
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
-  + optionalString isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     echo "#!${runtimeShell}" > pbcopy
     echo "#!${runtimeShell}" > pbpaste
@@ -134,7 +131,7 @@ in buildPythonPackage rec {
     export PATH=$(pwd):$PATH
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;

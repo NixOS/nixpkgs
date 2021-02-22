@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchCrate
 , installShellFiles
@@ -11,21 +11,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.0.8";
+  version = "1.2.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "06881c8qnh917y2mn5q5qlf86idz17xi2dapsad3m1zbdr53c25j";
+    sha256 = "1mqaynrqaas82f5957lx31x80v74zwmwmjxxlbywajb61vh00d38";
   };
 
-  cargoSha256 = "1k5qm4h028172r7i2pz5l8886qviy7ni83qxn10a8d5hsgalarvx";
+  cargoHash = "sha256-ffFS1myFjoQ6768D4zUytN6F9paWeJJFPFugCrfh4iU=";
 
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
   ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     installManPage man/broot.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     maintainers = with maintainers; [ danieldk ];

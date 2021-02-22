@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qt4, ecl, xorgserver, xkbcomp, xkeyboard_config }:
+{ lib, stdenv, fetchgit, qt4, ecl, xorgserver, xkbcomp, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   version = src.rev;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/eql/build-dir/libeql*.so* $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Embedded Qt Lisp (ECL+Qt)";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

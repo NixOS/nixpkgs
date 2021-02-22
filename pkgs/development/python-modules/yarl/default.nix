@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
@@ -25,7 +24,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet another URL library";
     homepage = "https://github.com/aio-libs/yarl/";
     license = licenses.asl20;

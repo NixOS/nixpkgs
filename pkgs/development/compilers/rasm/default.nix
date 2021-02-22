@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "rasm";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin rasm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.roudoudou.com/rasm/";
     description = "Z80 assembler";
     # use -n option to display all licenses

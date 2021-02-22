@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, qtpy, six, pyqt5, pytest }:
+{ lib, buildPythonPackage, fetchPypi, qtpy, six, pyqt5, pytest }:
 
 buildPythonPackage rec {
   pname = "QtAwesome";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Requires https://github.com/boylea/qtbot
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Iconic fonts in PyQt and PySide applications";
     homepage = "https://github.com/spyder-ide/qtawesome";
     license = licenses.mit;

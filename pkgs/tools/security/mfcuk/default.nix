@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnfc }:
+{ lib, stdenv, fetchurl, pkg-config, libnfc }:
 
 stdenv.mkDerivation {
   pname = "mfcuk";
@@ -9,10 +9,10 @@ stdenv.mkDerivation {
     sha256 = "0m9sy61rsbw63xk05jrrmnyc3xda0c3m1s8pg3sf8ijbbdv9axcp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnfc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MiFare Classic Universal toolKit";
     license = licenses.gpl2;
     homepage = "https://github.com/nfc-tools/mfcuk";

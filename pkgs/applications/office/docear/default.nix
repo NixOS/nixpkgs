@@ -1,4 +1,4 @@
-{stdenv, fetchurl, runtimeShell, makeWrapper
+{lib, stdenv, fetchurl, runtimeShell, makeWrapper
 , oraclejre
 , antialiasFont ? true
 }:
@@ -23,14 +23,14 @@ stdenv.mkDerivation {
 
     # The wrapper ensures oraclejre is used
     makeWrapper ${runtimeShell} $out/bin/docear \
-      --set _JAVA_OPTIONS "${stdenv.lib.optionalString antialiasFont ''-Dswing.aatext=TRUE -Dawt.useSystemAAFontSettings=on''}" \
+      --set _JAVA_OPTIONS "${lib.optionalString antialiasFont "-Dswing.aatext=TRUE -Dawt.useSystemAAFontSettings=on"}" \
       --set JAVA_HOME ${oraclejre.home} \
       --add-flags "$out/share/docear.sh"
 
     chmod 0755 $out/bin/docear
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A unique solution to academic literature management";
     homepage = "http://www.docear.org/";
     # Licenses at: http://www.docear.org/software/download/

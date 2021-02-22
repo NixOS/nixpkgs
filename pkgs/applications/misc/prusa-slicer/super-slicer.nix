@@ -24,21 +24,21 @@ let
     postInstall = ''
       mkdir -p "$out/share/pixmaps/"
       ln -s "$out/share/SuperSlicer/icons/Slic3r.png" "$out/share/pixmaps/${appname}.png"
-      mkdir -p "$out/share/applications"
-      cp "$desktopItem"/share/applications/* "$out/share/applications/"
     '';
 
-    desktopItem = makeDesktopItem {
-      name = appname;
-      exec = "superslicer";
-      icon = appname;
-      comment = description;
-      desktopName = appname;
-      genericName = "3D printer tool";
-      categories = "Development;";
-    };
+    desktopItems = [
+      (makeDesktopItem {
+        name = appname;
+        exec = "superslicer";
+        icon = appname;
+        comment = description;
+        desktopName = appname;
+        genericName = "3D printer tool";
+        categories = "Development;";
+      })
+    ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit description;
       homepage = "https://github.com/supermerili/SuperSlicer";
       license = licenses.agpl3;

@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   pname = "lint";
-  version = "20181026-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20181026-${lib.strings.substring 0 7 rev}";
   rev = "c67002cb31c3a748b7688c27f20d8358b4193582";
 
   goPackagePath = "golang.org/x/lint";
@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://golang.org";
     description = "Linter for Go source code";
     license = licenses.bsd3;

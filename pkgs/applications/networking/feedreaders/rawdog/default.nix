@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "rawdog";
@@ -17,7 +17,7 @@ python2Packages.buildPythonApplication rec {
 
   namePrefix = "";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://offog.org/code/rawdog/";
     description = "RSS Aggregator Without Delusions Of Grandeur";
     license = licenses.gpl2;

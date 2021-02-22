@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "flake8-blind-except";
-  version = "0.1.1";
+  version = "0.2.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16g58mkr3fcn2vlfhp3rlahj93qswc7jd5qrqp748mc26dk3b8xc";
+    sha256 = "02a860a1a19cb602c006a3fe0778035b0d14d3f57929b4b798bc7d6684f204e5";
   };
   meta = {
     homepage = "https://github.com/elijahandrews/flake8-blind-except";

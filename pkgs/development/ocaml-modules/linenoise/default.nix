@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, result }:
+{ lib, fetchFromGitHub, buildDunePackage, result }:
 
 buildDunePackage rec {
   pname = "linenoise";
@@ -17,8 +17,8 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml bindings to linenoise";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://users.aalto.fi/~pat/cliquer.html";
     downloadPage = src.meta.homepage; # autocliquer
     description = "Routines for clique searching";

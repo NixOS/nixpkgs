@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
+{ lib, mkDerivation, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
 
 mkDerivation rec {
   version = "2.1.3";
@@ -51,9 +51,9 @@ mkDerivation rec {
   meta = {
     homepage = "http://www.qtrac.eu/diffpdfc.html";
     description = "Tool for diffing pdf files visually or textually";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ tstrobel ];
+    platforms = with lib.platforms; linux;
     inherit version;
   };
 }

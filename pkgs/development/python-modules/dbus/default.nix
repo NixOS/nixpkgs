@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkgconfig, dbus, dbus-glib, isPyPy
+{ lib, fetchPypi, buildPythonPackage, python, pkg-config, dbus, dbus-glib, isPyPy
 , ncurses, pygobject3, isPy3k }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   disabled = isPyPy;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus dbus-glib ]
     # My guess why it's sometimes trying to -lncurses.
     # It seems not to retain the dependency anyway.

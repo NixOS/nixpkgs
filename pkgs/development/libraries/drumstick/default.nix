@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, pkg-config, wrapQtAppsHook
 , alsaLib, fluidsynth, qtbase, qtsvg, libpulseaudio
 }:
@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake docbook_xml_dtd_45 docbook_xml_dtd_45 docbook_xsl doxygen pkg-config wrapQtAppsHook
   ];
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
     alsaLib fluidsynth libpulseaudio qtbase qtsvg
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ solson ];
     description = "MIDI libraries for Qt5/C++";
     homepage = "http://drumstick.sourceforge.net/";

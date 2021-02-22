@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
 , poetry ? null
-, poetryLib ? import ./lib.nix { inherit lib pkgs; }
+, poetryLib ? import ./lib.nix { inherit lib pkgs; stdenv = pkgs.stdenv; }
 }:
 let
   inherit (poetryLib) isCompatible readTOML moduleName;
@@ -71,7 +71,40 @@ in
 lib.makeScope pkgs.newScope (self: {
 
   # Poetry2nix version
-  version = "1.14.0";
+  version = "1.15.5";
+
+  /* Returns a package of editable sources whose changes will be available without needing to restart the
+     nix-shell.
+     In editablePackageSources you can pass a mapping from package name to source directory to have
+     those packages available in the resulting environment, whose source changes are immediately available.
+
+  */
+  mkPoetryEditablePackage =
+    { projectDir ? null
+    , pyproject ? projectDir + "/pyproject.toml"
+    , python ? pkgs.python3
+    , pyProject ? readTOML pyproject
+      # Example: { my-app = ./src; }
+    , editablePackageSources
+    }:
+      assert editablePackageSources != { };
+      import ./editable.nix {
+        inherit pyProject python pkgs lib poetryLib editablePackageSources;
+      };
+
+  /* Returns a package containing scripts defined in tool.poetry.scripts.
+  */
+  mkPoetryScriptsPackage =
+    { projectDir ? null
+    , pyproject ? projectDir + "/pyproject.toml"
+    , python ? pkgs.python3
+    , pyProject ? readTOML pyproject
+    , scripts ? pyProject.tool.poetry.scripts
+    }:
+      assert scripts != { };
+      import ./shell-scripts.nix {
+        inherit lib python scripts;
+      };
 
   /*
      Returns an attrset { python, poetryPackages, pyProject, poetryLock } for the given pyproject/lockfile.
@@ -84,11 +117,25 @@ lib.makeScope pkgs.newScope (self: {
     , python ? pkgs.python3
     , pwd ? projectDir
     , preferWheels ? false
+      # Example: { my-app = ./src; }
+    , editablePackageSources ? { }
     , __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
     }@attrs:
     let
       poetryPkg = poetry.override { inherit python; };
       pyProject = readTOML pyproject;
+
+      scripts = pyProject.tool.poetry.scripts or { };
+      hasScripts = scripts != { };
+      scriptsPackage = self.mkPoetryScriptsPackage {
+        inherit python scripts;
+      };
+
+      hasEditable = editablePackageSources != { };
+      editablePackage = self.mkPoetryEditablePackage {
+        inherit pyProject python editablePackageSources;
+      };
+
       poetryLock = readTOML poetrylock;
       lockFiles =
         let
@@ -180,10 +227,13 @@ lib.makeScope pkgs.newScope (self: {
 
       inputAttrs = mkInputAttrs { inherit py pyProject; attrs = { }; includeBuildSystem = false; };
 
+      storePackages = builtins.foldl' (acc: v: acc ++ v) [ ] (lib.attrValues inputAttrs);
     in
     {
       python = py;
-      poetryPackages = builtins.foldl' (acc: v: acc ++ v) [ ] (lib.attrValues inputAttrs);
+      poetryPackages = storePackages
+        ++ lib.optional hasScripts scriptsPackage
+        ++ lib.optional hasEditable editablePackage;
       poetryLock = poetryLock;
       inherit pyProject;
     };
@@ -203,38 +253,17 @@ lib.makeScope pkgs.newScope (self: {
     , pwd ? projectDir
     , python ? pkgs.python3
     , preferWheels ? false
-      # Example: { my-app = ./src; }
     , editablePackageSources ? { }
     }:
     let
-      py = self.mkPoetryPackages (
-        {
-          inherit pyproject poetrylock overrides python pwd preferWheels;
-        }
-      );
-
-      inherit (py) pyProject;
-
-      # Add executables from tool.poetry.scripts
-      scripts = pyProject.tool.poetry.scripts or { };
-      hasScripts = scripts != { };
-      scriptsPackage = import ./shell-scripts.nix {
-        inherit scripts lib;
-        inherit (py) python;
+      poetryPython = self.mkPoetryPackages {
+        inherit pyproject poetrylock overrides python pwd preferWheels editablePackageSources;
       };
 
-      hasEditable = editablePackageSources != { };
-      editablePackage = import ./editable.nix {
-        inherit pkgs lib poetryLib editablePackageSources;
-        inherit (py) pyProject python;
-      };
+      inherit (poetryPython) poetryPackages;
 
     in
-    py.python.withPackages (
-      _: py.poetryPackages
-        ++ lib.optional hasEditable editablePackage
-        ++ lib.optional hasScripts scriptsPackage
-    );
+    poetryPython.python.withPackages (_: poetryPackages);
 
   /* Creates a Python application from pyproject.toml and poetry.lock
 

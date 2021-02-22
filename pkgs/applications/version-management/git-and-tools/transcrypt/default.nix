@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk }:
+{ lib, stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "transcrypt";
@@ -22,16 +22,16 @@ stdenv.mkDerivation rec {
     install -m 644 -D contrib/zsh/_transcrypt $out/share/zsh/site-functions/_transcrypt
 
     wrapProgram $out/bin/transcrypt \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git openssl coreutils util-linux gnugrep gnused gawk ]}"
+      --prefix PATH : "${lib.makeBinPath [ git openssl coreutils util-linux gnugrep gnused gawk ]}"
 
     cat > $out/bin/transcrypt-depspathprefix << EOF
     #!${stdenv.shell}
-    echo "${stdenv.lib.makeBinPath [ git openssl coreutils gawk ]}:"
+    echo "${lib.makeBinPath [ git openssl coreutils gawk ]}:"
     EOF
     chmod +x $out/bin/transcrypt-depspathprefix
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Transparently encrypt files within a Git repository";
     longDescription = ''
       A script to configure transparent encryption of sensitive files stored in

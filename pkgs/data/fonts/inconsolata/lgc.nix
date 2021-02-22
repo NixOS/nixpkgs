@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fontforge}:
+{lib, stdenv, fetchFromGitHub, fontforge}:
 
 stdenv.mkDerivation rec {
   pname = "inconsolata-lgc";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/doc/${pname}-${version} LICENSE README
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fork of Inconsolata font, with proper support of Cyrillic and Greek";
     longDescription = ''
       Inconsolata is one of the most suitable font for programmers created by Raph

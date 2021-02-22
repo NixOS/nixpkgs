@@ -4,26 +4,21 @@
 , makeWrapper
 , buildkit
 , cni-plugins
-, extraPackages ? []
+, extraPackages ? [ ]
 }:
 
-let
-  binPath = lib.makeBinPath ([
-    buildkit
-  ] ++ extraPackages);
-in
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.2.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "181qapqgp7zd0imk0zkn4wzpsw292ai2yz9pbiirpjcjx9h26w5h";
+    sha256 = "sha256-lSvYiTh67gK9kJls7VsayV8T3H6RzFEEKe49BOWnUBw=";
   };
 
-  vendorSha256 = "0scywhllxk1m6456wggdmn7sgvy5x3gz2xnyfq9jnvvzap8byr2v";
+  vendorSha256 = "sha256-qywiaNoO3pI7sfyPbwWR8BLd86RvJ2xSWwCJUsm3RkM=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -37,15 +32,25 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/nerdctl \
-      --prefix PATH : "${binPath}" \
+      --prefix PATH : "${lib.makeBinPath ([ buildkit ] ++ extraPackages)}" \
       --prefix CNI_PATH : "${cni-plugins}/bin"
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/nerdctl --help
+    # --version will error without containerd.sock access
+    $out/bin/nerdctl --help | grep "${version}"
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
+    homepage = "https://github.com/AkihiroSuda/nerdctl/";
+    changelog = "https://github.com/AkihiroSuda/nerdctl/releases/tag/v${version}";
     description = "A Docker-compatible CLI for containerd";
-    homepage = src.meta.homepage;
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ jk ];
+    platforms = platforms.linux;
   };
 }

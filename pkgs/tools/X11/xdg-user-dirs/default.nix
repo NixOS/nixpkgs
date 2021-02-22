@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxslt, docbook_xsl, makeWrapper }:
+{ lib, stdenv, fetchurl, libxslt, docbook_xsl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "xdg-user-dirs-0.17";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       --suffix XDG_CONFIG_DIRS : "$out/etc/xdg"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://freedesktop.org/wiki/Software/xdg-user-dirs";
     description = "A tool to help manage well known user directories like the desktop folder and the music folder";
     license = licenses.gpl2;

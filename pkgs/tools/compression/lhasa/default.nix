@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "lhasa-0.3.1";
@@ -13,9 +13,9 @@ stdenv.mkDerivation {
       decompressing .lzh (LHA / LHarc) and .lzs (LArc) archives. The backend for
       the tool is a library, so that it can be reused for other purposes.
     '';
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     homepage = "http://fragglet.github.io/lhasa";
-    maintainers = with stdenv.lib; [ maintainers.sander ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = with lib; [ maintainers.sander ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

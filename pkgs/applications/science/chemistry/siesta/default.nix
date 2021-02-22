@@ -1,6 +1,7 @@
-{ stdenv, fetchurl
-, gfortran, blas, lapack
-, mpi ? null, scalapack
+{ lib, stdenv, fetchurl
+, gfortran, blas, lapack, scalapack
+, useMpi ? false
+, mpi
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ blas lapack gfortran ]
-    ++ (stdenv.lib.optionals (mpi != null) [ mpi scalapack ]);
+    ++ lib.optionals useMpi [ mpi scalapack ];
 
   enableParallelBuilding = true;
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
     cp gfortran.make arch.make
   '';
 
-  preBuild = if (mpi != null) then ''
+  preBuild = if useMpi then ''
     makeFlagsArray=(
         CC="mpicc" FC="mpifort"
         FPPFLAGS="-DMPI" MPI_INTERFACE="libmpi_f90.a" MPI_INCLUDE="."
@@ -46,7 +47,7 @@ stdenv.mkDerivation {
     cp -a siesta $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A first-principles materials simulation code using DFT";
     longDescription = ''
          SIESTA is both a method and its computer program

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , mono
 , gtk-sharp-2_0
 , gettext
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gettext
     makeWrapper
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bless --prefix MONO_PATH : "$MPATH" --prefix LD_LIBRARY_PATH : "$MPATH"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/afrantzis/bless";
     description = "Gtk# Hex Editor";
     maintainers = [ maintainers.mkg20001 ];

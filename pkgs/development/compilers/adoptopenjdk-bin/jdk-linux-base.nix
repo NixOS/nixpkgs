@@ -69,7 +69,7 @@ let result = stdenv.mkDerivation rec {
 
   passthru.home = result;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms

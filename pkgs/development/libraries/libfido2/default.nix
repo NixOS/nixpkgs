@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , cmake
-, pkgconfig
+, pkg-config
 , hidapi
 , libcbor
 , openssl
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "08iizxq3w8mpkwfrfpl59csffc20yz8x398bl3kf23rrr4izk42r";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ hidapi libcbor openssl ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ udev ];
+    ++ lib.optionals stdenv.isLinux [ udev ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
     Provides library functionality for FIDO 2.0, including communication with a device over USB.
     '';

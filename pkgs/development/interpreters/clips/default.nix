@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   version = "6.30";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   installPhase = ''
     install -D -t $out/bin core/clips
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Tool for Building Expert Systems";
     homepage = "http://www.clipsrules.net/";
     longDescription = ''

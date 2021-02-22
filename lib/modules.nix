@@ -895,7 +895,7 @@ rec {
       fromOpt = getAttrFromPath from options;
       toOf = attrByPath to
         (abort "Renaming error: option `${showOption to}' does not exist.");
-      toType = let opt = attrByPath to {} options; in opt.type or null;
+      toType = let opt = attrByPath to {} options; in opt.type or (types.submodule {});
     in
     {
       options = setAttrByPath from (mkOption {

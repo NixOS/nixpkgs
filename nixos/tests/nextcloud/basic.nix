@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ pkgs, ...}: let
   adminuser = "root";
 in {
   name = "nextcloud-basic";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ globin eqyiel ];
   };
 
@@ -15,7 +15,7 @@ in {
         echo "http://nextcloud/remote.php/webdav/ ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
         chmod 600 /tmp/davfs2-secrets
       '';
-      fileSystems = pkgs.lib.mkVMOverride {
+      virtualisation.fileSystems = {
         "/mnt/dav" = {
           device = "http://nextcloud/remote.php/webdav/";
           fsType = "davfs";
@@ -42,6 +42,7 @@ in {
           enable = true;
           startAt = "20:00";
         };
+        phpExtraExtensions = all: [ all.bz2 ];
       };
 
       environment.systemPackages = [ cfg.services.nextcloud.occ ];

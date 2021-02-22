@@ -1,7 +1,8 @@
-{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk2, libX11, libSM, libICE, which
-, IOKit ? null }:
+{ lib, fetchurl, stdenv, gettext, pkg-config, glib, gtk2, libX11, libSM, libICE, which
+, IOKit, copyDesktopItems, makeDesktopItem, wrapGAppsHook
+}:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "gkrellm-2.3.11";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "01lccz4fga40isv09j8rjgr0qy10rff9vj042n6gi6gdv4z69q0y";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ copyDesktopItems pkg-config which wrapGAppsHook ];
   buildInputs = [gettext glib gtk2 libX11 libSM libICE]
     ++ optionals stdenv.isDarwin [ IOKit ];
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   # Makefiles are patched to fix references to `/usr/X11R6' and to add
   # `-lX11' to make sure libX11's store path is in the RPATH.
-  patchPhase = ''
+  postPatch = ''
     echo "patching makefiles..."
     for i in Makefile src/Makefile server/Makefile
     do
@@ -29,6 +30,23 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "STRIP=-s" ];
   installFlags = [ "DESTDIR=$(out)" ];
+
+  # This icon is used by the desktop file.
+  postInstall = ''
+    install -Dm444 -T src/icon.xpm $out/share/pixmaps/gkrellm.xpm
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gkrellm";
+      exec = "gkrellm";
+      icon = "gkrellm";
+      desktopName = "GKrellM";
+      genericName = "System monitor";
+      comment = "The GNU Krell Monitors";
+      categories = "System;Monitor;";
+    })
+  ];
 
   meta = {
     description = "Themeable process stack of system monitors";
@@ -40,7 +58,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://gkrellm.srcbox.net";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ khumba ];
     platforms = platforms.linux;
   };
 }

@@ -48,6 +48,8 @@ in
           subvolume = "/home";
           extraConfig = ''
             ALLOW_USERS="alice"
+            TIMELINE_CREATE=yes
+            TIMELINE_CLEANUP=yes
           '';
         };
       };

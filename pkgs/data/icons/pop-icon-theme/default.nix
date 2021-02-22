@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icon theme for Pop!_OS with a semi-flat design and raised 3D motifs";
     homepage = "https://github.com/pop-os/icon-theme";
     license = with licenses; [ cc-by-sa-40 gpl3 ];

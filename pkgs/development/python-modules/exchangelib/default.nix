@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage,
+{ lib, fetchFromGitHub, buildPythonPackage,
   pythonOlder,
   lxml, tzlocal, python-dateutil, pygments, requests-kerberos,
   defusedxml, cached-property, isodate, requests_ntlm, dnspython,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     oauthlib requests_oauthlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for Microsoft Exchange Web Services (EWS)";
     homepage    = "https://github.com/ecederstrand/exchangelib";
     license     = licenses.bsd2;

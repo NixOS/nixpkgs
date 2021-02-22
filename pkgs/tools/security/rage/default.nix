@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles
 , Foundation, Security }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,10 +16,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     Foundation
     Security
   ];
+
+  # cargo test has an x86-only dependency
+  doCheck = stdenv.hostPlatform.isx86;
 
   postBuild = ''
     cargo run --example generate-docs
@@ -31,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion target/completions/*.{bash,fish,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
     homepage = "https://github.com/str4d/rage";
     changelog = "https://github.com/str4d/rage/releases/tag/v${version}";

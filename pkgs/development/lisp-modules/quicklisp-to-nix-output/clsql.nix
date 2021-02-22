@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clsql'';
-  version = ''20201016-git'';
+  baseName = "clsql";
+  version = "20201016-git";
 
-  description = ''Common Lisp SQL Interface library'';
+  description = "Common Lisp SQL Interface library";
 
   deps = [ args."uffi" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clsql/2020-10-16/clsql-20201016-git.tgz'';
-    sha256 = ''0wzjxcm7df4fipvj5qsqlllai92hkzd4cvlaghvaikcah9r63hv8'';
+    url = "http://beta.quicklisp.org/archive/clsql/2020-10-16/clsql-20201016-git.tgz";
+    sha256 = "0wzjxcm7df4fipvj5qsqlllai92hkzd4cvlaghvaikcah9r63hv8";
   };
 
   packageName = "clsql";

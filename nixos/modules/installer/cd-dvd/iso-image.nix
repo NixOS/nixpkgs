@@ -143,6 +143,13 @@ let
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
+
+    # A variant to boot with a serial console enabled
+    LABEL boot-serial
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+    LINUX /boot/${config.system.boot.loader.kernelFile}
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
+    INITRD /boot/${config.system.boot.loader.initrdFile}
   '';
 
   isolinuxMemtest86Entry = ''
@@ -418,7 +425,12 @@ in
     };
 
     isoImage.squashfsCompression = mkOption {
-      default = "xz -Xdict-size 100%";
+      default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
+                + lib.optionalString (isx86_32 || isx86_64) "-Xbcj x86"
+                # Untested but should also reduce size for these platforms
+                + lib.optionalString (isAarch32 || isAarch64) "-Xbcj arm"
+                + lib.optionalString (isPowerPC) "-Xbcj powerpc"
+                + lib.optionalString (isSparc) "-Xbcj sparc";
       description = ''
         Compression settings to use for the squashfs nix store.
       '';

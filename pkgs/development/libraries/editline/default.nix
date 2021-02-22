@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "editline";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://troglobit.com/editline.html";
     description = "A readline() replacement for UNIX without termcap (ncurses)";
     license = licenses.bsdOriginal;

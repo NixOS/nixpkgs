@@ -1,4 +1,4 @@
-{ fetchFromGitHub, gperf, openssl, readline, zlib, cmake, stdenv }:
+{ fetchFromGitHub, gperf, openssl, readline, zlib, cmake, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   version = "1.7.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gperf openssl readline zlib ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
     license = [ licenses.boost ];

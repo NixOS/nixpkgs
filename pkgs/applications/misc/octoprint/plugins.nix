@@ -23,7 +23,7 @@ in {
       sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
       homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
       license = licenses.agpl3;
@@ -44,7 +44,7 @@ in {
 
     propagatedBuildInputs = with super; [ numpy ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Displays 3D mesh of bed topography report";
       homepage = "https://github.com/jneilliii/OctoPrint-BedLevelVisualizer";
       license = licenses.agpl3;
@@ -63,7 +63,7 @@ in {
       sha256 = "1a7pxlmj1a7blkv97sn1k390pbjcxx2860011pbjcdnli74zpvv5";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
       license = licenses.agpl3;
@@ -82,7 +82,7 @@ in {
       sha256 = "1lbivg3rcjzv8zqvp8n8gcaczxdm7gvd5ihjb6jq0fgf958lv59n";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
       homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
       license = licenses.agpl3;
@@ -101,7 +101,7 @@ in {
       sha256 = "1yjj9lmxbzmzrn7gahw9lj7554fphalbjjp8ns0rr9py3rshwxkm";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Edit gcode on OctoPrint";
       homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
       license = licenses.agpl3;
@@ -120,7 +120,7 @@ in {
       sha256 = "0vx06w9hqwy0k4r8g67y8gdckfdx7wl8ghfx6hmxc1s8fgkghfkc";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Displays GCode documentation for Marlin in the Octoprint terminal command line";
       homepage = "https://github.com/costas-basdekis/MarlinGcodeDocumentation";
       license = licenses.agpl3;
@@ -141,7 +141,7 @@ in {
 
     propagatedBuildInputs = with super; [ paho-mqtt ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Publish printer status MQTT";
       homepage = "https://github.com/OctoPrint/OctoPrint-MQTT";
       license = licenses.agpl3;
@@ -170,7 +170,7 @@ in {
       ./printtimegenius-logging.patch
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Better print time estimation for OctoPrint";
       homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
       license = licenses.agpl3;
@@ -194,7 +194,7 @@ in {
       sed /RPi.GPIO/d -i requirements.txt
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "OctoPrint plugin to control ATX/AUX power supply";
       homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
       license = licenses.agpl3;
@@ -213,7 +213,7 @@ in {
       sha256 = "0hhh5grmn32abkix1b9fr1d0pcpdi2r066iypcxdxcza9qzwjiyi";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
       homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
       license = licenses.agpl3;
@@ -232,7 +232,7 @@ in {
       sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A simple stl viewer tab for OctoPrint";
       homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
       license = licenses.agpl3;
@@ -251,7 +251,7 @@ in {
       sha256 = "0j1qs6kyh947npdy7pqda25fjkqinpas3sy0qyscqlxi558lhvx2";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Beautiful themes for OctoPrint";
       homepage = "https://github.com/birkbjo/OctoPrint-Themeify";
       license = licenses.agpl3;
@@ -270,7 +270,7 @@ in {
       sha256 = "10nxjrixg0i6n6x8ghc1ndshm25c97bvkcis5j9kmlkkzs36i2c6";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Show printers status in window title";
       homepage = "https://github.com/MoonshineSG/OctoPrint-TitleStatus";
       license = licenses.agpl3;
@@ -289,7 +289,7 @@ in {
       sha256 = "1jlqjirc4ygl4k7jp93l2h6b18jap3mzz8sf2g61j9w0kgv9l365";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
       homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
       license = licenses.agpl3;
@@ -308,7 +308,7 @@ in {
       sha256 = "15yg2blbgqp2gdpsqqm8qiiznq5qaq8wss07jimkl0865vrvlz7l";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A plugin for a better integration of Klipper into OctoPrint";
       homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
       license = licenses.agpl3;
@@ -327,7 +327,7 @@ in {
       sha256 = "0p94jwd7kagh3sixhcrqmsgbay4aaf9l1pgyi2b45jym8pvld5n4";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A dashboard for Octoprint";
       homepage = "https://github.com/StefanCohen/OctoPrint-Dashboard";
       license = licenses.agpl3;

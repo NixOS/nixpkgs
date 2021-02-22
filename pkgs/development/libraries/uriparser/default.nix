@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ gtest ];
   doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://uriparser.github.io/";
     description = "Strictly RFC 3986 compliant URI parsing library";
     longDescription = ''

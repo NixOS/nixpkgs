@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
 , substituteAll, gd, geoip, gperftools, jemalloc
 , withDebug ? false
 , withMail ? false
@@ -7,7 +7,7 @@
 , ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "2.3.2";

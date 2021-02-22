@@ -11,7 +11,7 @@
 , runc
 , kmod
 , libseccomp
-, pkgconfig
+, pkg-config
 , ethtool
 , util-linux
 , ipset
@@ -120,7 +120,7 @@ let
   # with generated bindata yet.
   k3sBuildStage1 = buildGoPackage rec {
     name = "k3s-build-1";
-    version = "${k3sVersion}";
+    version = k3sVersion;
 
     goPackagePath = "github.com/rancher/k3s";
 
@@ -128,7 +128,7 @@ let
 
     patches = [ ./patches/0001-Use-rm-from-path-in-go-generate.patch ./patches/0002-Add-nixpkgs-patches.patch ];
 
-    nativeBuildInputs = [ git pkgconfig ];
+    nativeBuildInputs = [ git pkg-config ];
     buildInputs = [ libseccomp ];
 
     buildPhase = ''
@@ -160,7 +160,7 @@ let
   };
   k3sBin = buildGoPackage rec {
     name = "k3s-bin";
-    version = "${k3sVersion}";
+    version = k3sVersion;
 
     goPackagePath = "github.com/rancher/k3s";
 
@@ -168,7 +168,7 @@ let
 
     patches = [ ./patches/0001-Use-rm-from-path-in-go-generate.patch ./patches/0002-Add-nixpkgs-patches.patch ];
 
-    nativeBuildInputs = [ git pkgconfig ];
+    nativeBuildInputs = [ git pkg-config ];
     # These dependencies are embedded as compressed files in k3s at runtime.
     # Propagate them to avoid broken runtime references to libraries.
     propagatedBuildInputs = [ k3sPlugins k3sBuildStage1 runc ];
@@ -223,7 +223,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "k3s";
+  pname = "k3s";
   version = k3sVersion;
 
   # Important utilities used by  the kubelet, see

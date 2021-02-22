@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgs, python3, wrapGAppsHook}:
+{ lib, fetchFromGitHub, pkgs, python3, wrapGAppsHook}:
 
 python3.pkgs.buildPythonApplication {
   pname = "pdf-quench";
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication {
     install -D -T -m 755 src/pdf_quench.py $out/bin/pdf-quench
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxerwang/pdf-quench";
     description = "A visual tool for cropping pdf files";
     platforms = platforms.linux;

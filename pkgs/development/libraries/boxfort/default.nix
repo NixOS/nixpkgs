@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, python37Packages }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, python37Packages }:
 
 stdenv.mkDerivation rec {
   version = "unstable-2019-10-09";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convenient & cross-platform sandboxing C library";
     homepage = "https://github.com/Snaipe/BoxFort";
     license = licenses.mit;

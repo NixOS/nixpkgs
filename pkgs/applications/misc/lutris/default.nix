@@ -101,7 +101,7 @@ in buildPythonApplication rec {
   dontWrapGApps = true;
   makeWrapperArgs = [
     "--prefix PATH : ${binPath}"
-    ''''${gappsWrapperArgs[@]}''
+    "\${gappsWrapperArgs[@]}"
   ];
   # needed for glib-schemas to work correctly (will crash on dialogues otherwise)
   # see https://github.com/NixOS/nixpkgs/issues/56943

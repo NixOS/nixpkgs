@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl }:
+{ lib, stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "bwidget";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sourceforge.net/projects/tcllib";
     description = "High-level widget set for Tcl/Tk";
-    license = stdenv.lib.licenses.tcltk;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.tcltk;
+    platforms = lib.platforms.linux;
   };
 }

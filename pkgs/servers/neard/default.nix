@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, systemd, glib, dbus, libnl, pythonPackages }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, systemd, glib, dbus, libnl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "neard-0.16";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bpdmyxvd3z54p95apz4bjb5jp8hbc04sicjapcryjwa8mh6pbil";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ systemd glib dbus libnl pythonPackages.python pythonPackages.wrapPython ];
   pythonPath = [ pythonPackages.pygobject2 pythonPackages.dbus-python pythonPackages.pygtk ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib/neard "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Near Field Communication manager";
     homepage    = "https://01.org/linux-nfc";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, perl, go }:
+{ lib, stdenv, fetchgit, cmake, perl, go }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 stdenv.mkDerivation {
@@ -12,9 +12,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake perl go ];
-  enableParallelBuilding = true;
 
   makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
+
+  # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
+  cmakeFlags = lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
     mkdir -p $bin/bin $out/include $out/lib
@@ -30,7 +32,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "https://boringssl.googlesource.com";
     platforms   = platforms.all;

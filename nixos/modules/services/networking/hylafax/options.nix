@@ -85,8 +85,8 @@ let
       # Otherwise, we use `false` to provoke
       # an error if hylafax tries to use it.
       c.sendmailPath = mkMerge [
-        (mkIfDefault noWrapper ''${pkgs.coreutils}/bin/false'')
-        (mkIfDefault (!noWrapper) ''${wrapperDir}/${program}'')
+        (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
+        (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
       ];
       importDefaultConfig = file:
         lib.attrsets.mapAttrs
@@ -121,7 +121,7 @@ in
 
   options.services.hylafax = {
 
-    enable = mkEnableOption ''HylaFAX server'';
+    enable = mkEnableOption "HylaFAX server";
 
     autostart = mkOption {
       type = bool;
@@ -139,28 +139,28 @@ in
       type = nullOr str1;
       default = null;
       example = "49";
-      description = ''Country code for server and all modems.'';
+      description = "Country code for server and all modems.";
     };
 
     areaCode = mkOption {
       type = nullOr str1;
       default = null;
       example = "30";
-      description = ''Area code for server and all modems.'';
+      description = "Area code for server and all modems.";
     };
 
     longDistancePrefix = mkOption {
       type = nullOr str;
       default = null;
       example = "0";
-      description = ''Long distance prefix for server and all modems.'';
+      description = "Long distance prefix for server and all modems.";
     };
 
     internationalPrefix = mkOption {
       type = nullOr str;
       default = null;
       example = "00";
-      description = ''International prefix for server and all modems.'';
+      description = "International prefix for server and all modems.";
     };
 
     spoolAreaPath = mkOption {
@@ -267,7 +267,7 @@ in
     spoolExtraInit = mkOption {
       type = lines;
       default = "";
-      example = ''chmod 0755 .  # everyone may read my faxes'';
+      example = "chmod 0755 .  # everyone may read my faxes";
       description = ''
         Additional shell code that is executed within the
         spooling area directory right after its setup.
@@ -345,7 +345,7 @@ in
     faxqclean.doneqMinutes = mkOption {
       type = int1;
       default = 15;
-      example = literalExample ''24*60'';
+      example = literalExample "24*60";
       description = ''
         Set the job
         age threshold (in minutes) that controls how long
@@ -355,7 +355,7 @@ in
     faxqclean.docqMinutes = mkOption {
       type = int1;
       default = 60;
-      example = literalExample ''24*60'';
+      example = literalExample "24*60";
       description = ''
         Set the document
         age threshold (in minutes) that controls how long

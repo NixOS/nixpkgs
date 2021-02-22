@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+{ lib, callPackage, fetchurl, fetchpatch, fetchgit
 , ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
@@ -16,7 +16,7 @@
 assert withInternalSeabios -> !withSeabios;
 assert withInternalOVMF -> !withOVMF;
 
-with stdenv.lib;
+with lib;
 
 # Patching XEN? Check the XSAs at
 # https://xenbits.xen.org/xsa/

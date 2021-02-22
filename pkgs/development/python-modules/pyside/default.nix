@@ -11,8 +11,6 @@ buildPythonPackage rec {
     sha256 = "90f2d736e2192ac69e5a2ac798fce2b5f7bf179269daa2ec262986d488c3b0f7";
   };
 
-  enableParallelBuilding = true;
-
   outputs = [ "out" "dev" ];
 
   preConfigure = ''
@@ -24,6 +22,8 @@ buildPythonPackage rec {
   buildInputs = [ mesa libGL ];
 
   makeFlags = [ "QT_PLUGIN_PATH=${pysideShiboken}/lib/generatorrunner" ];
+
+  dontWrapQtApps = true;
 
   meta = {
     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";

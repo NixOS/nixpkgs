@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, installShellFiles }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
@@ -15,14 +15,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   postInstall = ''
     installManPage doc/watchexec.1
     installShellCompletion --zsh --name _watchexec completions/zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Executes commands in response to file modifications";
     homepage = "https://github.com/watchexec/watchexec";
     license = with licenses; [ asl20 ];

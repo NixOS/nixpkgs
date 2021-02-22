@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ripmime";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE=" -Wno-error ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Attachment extractor for MIME messages";
     maintainers = with maintainers; [ raskin ];
     homepage = "http://www.pldaniels.com/ripmime/";

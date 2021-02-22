@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "leaps";
@@ -19,7 +19,7 @@ buildGoPackage rec {
     description = "A pair programming tool and library written in Golang";
     homepage = "https://github.com/jeffail/leaps/";
     license = "MIT";
-    maintainers = with stdenv.lib.maintainers; [ qknight ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ qknight ];
+    platforms = lib.platforms.unix;
   };
 }

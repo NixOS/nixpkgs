@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, libGL, glew
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
 , xorg , ffmpeg_3, python3 , libjpeg, libpng, libtiff, eigen
 , Carbon ? null, Cocoa ? null
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0pfbaarlsw7f7cmsppm7m13nz0k530wwwyczy2l9k448p3v7x9j0";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen ];
+  nativeBuildInputs = [ cmake pkg-config doxygen ];
 
   buildInputs = [
     libGL
@@ -29,8 +29,6 @@ stdenv.mkDerivation {
     eigen
   ]
   ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
-
-  enableParallelBuilding = true;
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).
@@ -50,8 +48,8 @@ stdenv.mkDerivation {
       graphical data.
     '';
     homepage = "https://github.com/stevenlovegrove/Pangolin";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.expipiplus1 ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.expipiplus1 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libusb-compat-0_1, libusb1, autoconf, automake, libconfuse, pkgconfig
+{ lib, stdenv, fetchgit, libusb-compat-0_1, libusb1, autoconf, automake, libconfuse, pkg-config
 , gccCross ? null
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     sh autogen.sh
   '';
 
-  configureFlags = stdenv.lib.optionals (gccCross != null) [
+  configureFlags = lib.optionals (gccCross != null) [
     "--enable-firmware"
     "CROSS_COMPILE=${gccCross.targetPrefix}"
   ];
@@ -29,15 +29,15 @@ stdenv.mkDerivation {
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
   dontCrossStrip = true;
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [ libusb-compat-0_1 libusb1 libconfuse ] ++
-    stdenv.lib.optional (gccCross != null) gccCross;
+    lib.optional (gccCross != null) gccCross;
 
   meta = {
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [viric];
+    platforms = lib.platforms.x86_64;
   };
 }

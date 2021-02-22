@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , srt
 , ffmpeg_3_4
 , bc
-, pkgconfig
+, pkg-config
 , perl
 , openssl
 , zlib
@@ -12,6 +13,7 @@
 , libopus
 , srtp
 , jemalloc
+, pcre2
 }:
 
 let
@@ -27,21 +29,30 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.10.8";
+  version = "0.10.9-hotfix";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "ec4yvS+4/rTBHGEx2OP0yoNGDtzPucFOcZJ0o0cCAHg=";
+    sha256 = "1fhria0vwqsgmsglv5gn858li33vfy2dwy1f1qdd2jwikskb53am";
   };
+
+  patches = [
+    (fetchpatch {
+      # Needed to fix compilation under GCC 10.
+      url = "https://github.com/AirenSoft/OvenMediaEngine/commit/ad83e1d2226445d649e4b7e0c75106e31af4940d.patch";
+      sha256 = "1zk1rgi1wsjl6gdx3hdmgxlgindv6a3lsnkwcgi87ga9abw4vafw";
+      stripLen = 1;
+    })
+  ];
 
   sourceRoot = "source/src";
   makeFlags = "release CONFIG_LIBRARY_PATHS= CONFIG_PKG_PATHS= GLOBAL_CC=$(CC) GLOBAL_CXX=$(CXX) GLOBAL_LD=$(CXX) SHELL=${stdenv.shell}";
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ bc pkgconfig perl ];
-  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc ];
+  nativeBuildInputs = [ bc pkg-config perl ];
+  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 ];
 
   preBuild = ''
     patchShebangs core/colorg++
@@ -59,10 +70,10 @@ stdenv.mkDerivation rec {
     install -Dm0644 ../misc/conf_examples/Logger.xml $out/share/examples/edge_conf/Logger.xml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source streaming video service with sub-second latency";
     homepage    = "https://ovenmediaengine.com";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ lukegb ];
     platforms   = [ "x86_64-linux" ];
   };

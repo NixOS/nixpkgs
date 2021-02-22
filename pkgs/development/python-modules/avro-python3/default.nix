@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, pycodestyle, isort }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pycodestyle, isort }:
 
 buildPythonPackage rec {
   pname = "avro-python3";

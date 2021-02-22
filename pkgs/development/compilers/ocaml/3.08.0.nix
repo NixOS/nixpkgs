@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   checkTarget = ["opt.opt"];
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,12 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
-, autoconf
-, automake
-, libtool
+, autoreconfHook
 , docbook_xml_dtd_412
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
+, docbook_xml_dtd_45
 , docbook-xsl-nons
 , which
 , libxml2
@@ -49,7 +45,7 @@
 , xorg
 , valgrind
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , dconf
 , gsettings-desktop-schemas
 , librsvg
@@ -57,14 +53,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.8.2";
+  version = "1.10.1";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "eSZiXffCKCpe4aizwxevU9QKZjsbxrGKLch0fiZQhbA=";
+    sha256 = "1dywvfpmszvp2wy5hvpzy8z6gz2gzmi9p302njp52p9vpx14ydf1";
   };
 
   patches = [
@@ -104,24 +100,15 @@ stdenv.mkDerivation rec {
 
     # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
     ./validate-icon-pixbuf.patch
-
-    # Fix `flatpak/test-oci-registry@{user,system}.wrap.test` installed tests.
-    # https://github.com/flatpak/flatpak/pull/3762
-    (fetchpatch {
-      url = "https://github.com/flatpak/flatpak/commit/c1447dadecd50f384b6d11dac18b014245267d00.patch";
-      sha256 = "UAA/wGr8/aMbx5MV+8Ilro2kgKkx2QOn88lDUjCgeDA=";
-    })
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
+    autoreconfHook
     libxml2
-    # TODO: replace with docbook_xml_dtd_45 https://github.com/flatpak/flatpak/pull/3760
+    # Remove 4.1.2 again once the following is merged
+    # https://github.com/flatpak/flatpak/pull/4102
     docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
+    docbook_xml_dtd_45
     docbook-xsl-nons
     which
     gobject-introspection
@@ -132,7 +119,7 @@ stdenv.mkDerivation rec {
     xmlto
     appstream-glib
     yacc
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -147,7 +134,7 @@ stdenv.mkDerivation rec {
     libseccomp
     libsoup
     lzma
-    # zstd # TODO: broken paths in .pc file
+    zstd
     polkit
     python3
     systemd
@@ -196,17 +183,7 @@ stdenv.mkDerivation rec {
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${stdenv.lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
-  '';
-
-  preConfigure = ''
-    # TODO: remove the condition once autogen.sh is shipped in the tarball
-    # https://github.com/flatpak/flatpak/pull/3761
-    if [[ -f autogen.sh ]]; then
-        NOCONFIGURE=1 ./autogen.sh
-    else
-        autoreconf --install --force --verbose
-    fi
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
   '';
 
   passthru = {
@@ -215,10 +192,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

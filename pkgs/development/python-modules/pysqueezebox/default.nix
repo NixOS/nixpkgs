@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder, aiohttp }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, aiohttp }:
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pysqueezebox" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Asynchronous library to control Logitech Media Server";
     homepage = "https://github.com/rajlaud/pysqueezebox";
     license = licenses.asl20;

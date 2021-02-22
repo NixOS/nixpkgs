@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
      "--disable-csharp" "--with-xz"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its
     # own wchar.h file, which does not cope well with the system's
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     xz.bin
   ];
   # HACK, see #10874 (and 14664)
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
+  buildInputs = lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
   };
 }
 
-// stdenv.lib.optionalAttrs stdenv.isDarwin {
+// lib.optionalAttrs stdenv.isDarwin {
   makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

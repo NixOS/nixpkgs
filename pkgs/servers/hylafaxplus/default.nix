@@ -83,10 +83,10 @@ stdenv.mkDerivation {
     openldap  # optional
     pam  # optional
   ];
-  postPatch = ''. ${postPatch}'';
+  postPatch = ". ${postPatch}";
   dontAddPrefix = true;
-  postInstall = ''. ${postInstall}'';
-  postInstallCheck = ''. ${./post-install-check.sh}'';
+  postInstall = ". ${postInstall}";
+  postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";

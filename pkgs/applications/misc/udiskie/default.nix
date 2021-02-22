@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, asciidoc-full, gettext
+{ lib, fetchFromGitHub, asciidoc-full, gettext
 , gobject-introspection, gtk3, libappindicator-gtk3, libnotify, librsvg
 , udisks2, wrapGAppsHook
 , python3Packages
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Removable disk automounter for udisks";
     license = licenses.mit;
     homepage = "https://github.com/coldfix/udiskie";

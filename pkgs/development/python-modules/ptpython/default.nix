@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, pythonOlder, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
 , pygments, importlib-metadata, isPy3k }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # no tests to run
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced Python REPL";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mlieberman85 ];

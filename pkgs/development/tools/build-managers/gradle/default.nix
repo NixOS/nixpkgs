@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
+{ lib, stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
   gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
@@ -46,20 +46,20 @@ rec {
         build-by-convention behavior.
       '';
       homepage = "http://www.gradle.org/";
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.unix;
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.unix;
     };
   };
 
-  gradle_latest = gradle_6_7;
+  gradle_latest = gradle_6_8;
 
-  gradle_6_7 = gradleGen rec {
-    name = "gradle-6.7";
-    nativeVersion = "0.22-milestone-8";
+  gradle_6_8 = gradleGen rec {
+    name = "gradle-6.8.1";
+    nativeVersion = "0.22-milestone-9";
 
     src = fetchurl {
       url = "https://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1i6zm55wzy13wvvmf3804b0rs47yrqqablf4gpf374ls05cpgmca";
+      sha256 = "1zfn7400k39qbiidd5zxay6v5f5xz8x4g7rrf04p71bkmws1lngx";
     };
   };
 

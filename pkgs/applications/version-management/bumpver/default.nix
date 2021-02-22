@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
-  version = "2020.1107";
+  version = "2020.1108";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "75704333a8d1699e2cadcf1fcd3027a2cab6837ae343af10a61c6eef4e0313d7";
+    sha256 = "1bhbrq8fk8rsr78vq9xjz8v9lgv571va0nmg86dwmv6qnj6dymzm";
   };
 
   prePatch = ''

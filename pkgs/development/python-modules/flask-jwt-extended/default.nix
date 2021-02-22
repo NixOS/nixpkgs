@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, dateutil, flask, pyjwt, werkzeug, pytest }:
+{ lib, buildPythonPackage, fetchPypi, dateutil, flask, pyjwt, werkzeug, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-JWT-Extended";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     pytest tests/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JWT extension for Flask";
     homepage = "https://flask-jwt-extended.readthedocs.io/";
     license = licenses.mit;

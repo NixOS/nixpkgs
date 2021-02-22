@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, mpfr, boost }:
+{ lib, stdenv, fetchurl, gmp, mpfr, boost }:
 
 stdenv.mkDerivation {
   name = "gappa-1.3.5";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://gappa.gforge.inria.fr/";
     description = "Verifying and formally proving properties on numerical programs dealing with floating-point or fixed-point arithmetic";
-    license = with stdenv.lib.licenses; [ cecill20 gpl2 ];
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    platforms = stdenv.lib.platforms.all;
+    license = with lib.licenses; [ cecill20 gpl2 ];
+    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = lib.platforms.all;
   };
 }

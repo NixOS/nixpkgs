@@ -1,6 +1,6 @@
 { buildPythonPackage, fetchPypi
 , pyasn1, pyasn1-modules, pytest
-, openldap, cyrus_sasl, stdenv }:
+, openldap, cyrus_sasl, lib, stdenv }:
 
 buildPythonPackage rec {
   pname = "python-ldap";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python modules for implementing LDAP clients";
     homepage = "https://www.python-ldap.org/";
     license = licenses.psfl;

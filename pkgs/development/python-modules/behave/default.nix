@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , buildPythonApplication, python
 , pytestCheckHook, mock, pathpy, pyhamcrest, pytest-html
 , glibcLocales
@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
   # timing-based test flaky on Darwin
   # https://github.com/NixOS/nixpkgs/pull/97737#issuecomment-691489824
-  disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_step_decorator_async_run_until_complete" ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_step_decorator_async_run_until_complete" ];
 
   postCheck = ''
     export LANG="en_US.UTF-8"
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     ${python.interpreter} bin/behave -f progress3 --stop --tags='~@xfail' issue.features/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/behave/behave";
     description = "behaviour-driven development, Python style";
     license = licenses.bsd2;

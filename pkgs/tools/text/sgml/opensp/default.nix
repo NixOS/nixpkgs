@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
+{ lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
 , libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool}:
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
       sha256 = "04q14s8qsad0bkjmj067dn831i0r6v7742rafdlnbfm5y249m2q6";
     })
   ];
-  
+
   setupHook = ./setup-hook.sh;
 
   postFixup = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   preConfigure = if stdenv.isCygwin then "autoreconf -fi" else null;
 
   # need autoconf, automake, gettext, and libtool for reconfigure
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
+  nativeBuildInputs = lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
 
   buildInputs = [ xmlto docbook_xml_dtd_412 libxslt docbook_xsl gettext libiconv ];
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A suite of SGML/XML processing tools";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     homepage = "http://openjade.sourceforge.net/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

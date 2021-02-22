@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , lib
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.18.1";
+  version = "1.18.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0hf66sh8d4x2ksfnvaq2rqrrfq0vi0pv6wbh9i5jixrhvvbm99hv";
+    sha256 = "1b05kg46azrxxvq42c71071lfsnc34pw4vynnkczdqi6g0gzn16x";
   };
 
   patches = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     gettext
     orc

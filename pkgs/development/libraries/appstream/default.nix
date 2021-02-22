@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gettext
+{ lib, stdenv, substituteAll, fetchFromGitHub, meson, ninja, pkg-config, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
 , pcre, itstool, gperf, vala, lmdb, libsoup
@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "appstream";
-  version = "0.13.1";
+  version = "0.14.0";
 
   outputs = [ "out" "dev" ];
 
@@ -14,24 +14,24 @@ stdenv.mkDerivation rec {
     owner  = "ximion";
     repo   = "appstream";
     rev    = "v${version}";
-    sha256 = "16nxaw4fx78maldi3kvr8fiwzhmy5276wd4x2fxny16zzf01098j";
+    sha256 = "sha256-iYqmQ1/58t3ZdJTxYLDc5jkTG1lMBtQWMFFsYsszH9Q=";
   };
 
+  patches = [
+    # Fix hardcoded paths
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libstemmer_includedir = "${lib.getDev libstemmer}/include";
+    })
+  ];
+
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext
+    meson ninja pkg-config gettext
     libxslt xmlto docbook_xsl docbook_xml_dtd_45
     gobject-introspection itstool vala
   ];
 
   buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf lmdb libsoup ];
-
-  prePatch = ''
-    substituteInPlace meson.build \
-      --replace /usr/include ${libstemmer}/include
-
-    substituteInPlace data/meson.build \
-      --replace /etc $out/etc
-  '';
 
   mesonFlags = [
     "-Dapidocs=false"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "-Dvapi=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software metadata handling library";
     homepage    = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     longDescription = ''

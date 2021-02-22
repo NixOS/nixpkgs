@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     cp -r Resource "$out/share/ghostscript/${version}"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
     done
@@ -132,9 +132,9 @@ stdenv.mkDerivation rec {
       of output drivers for various file formats and printers.
     '';
 
-    license = stdenv.lib.licenses.agpl3;
+    license = lib.licenses.agpl3;
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.viric ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.viric ];
   };
 }

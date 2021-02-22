@@ -3,7 +3,7 @@
 , fetchurl
 , substituteAll
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , intltool
 , babl
 , gegl
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
-    pkgconfig
+    pkg-config
     intltool
     gettext
     makeWrapper

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libowfat, zlib }:
+{ lib, stdenv, fetchgit, libowfat, zlib }:
 
 stdenv.mkDerivation {
   name = "opentracker-2018-05-26";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://erdgeist.org/arts/software/opentracker/";
     license = licenses.beerware;
     platforms = platforms.linux;

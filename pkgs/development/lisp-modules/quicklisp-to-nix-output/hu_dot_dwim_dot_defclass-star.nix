@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''hu_dot_dwim_dot_defclass-star'';
-  version = ''20150709-darcs'';
+  baseName = "hu_dot_dwim_dot_defclass-star";
+  version = "20150709-darcs";
 
-  description = ''Simplify class like definitions with defclass* and friends.'';
+  description = "Simplify class like definitions with defclass* and friends.";
 
   deps = [ args."hu_dot_dwim_dot_asdf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2015-07-09/hu.dwim.defclass-star-20150709-darcs.tgz'';
-    sha256 = ''032982lyp0hm0ssxlyh572whi2hr4j1nqkyqlllaj373v0dbs3vs'';
+    url = "http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2015-07-09/hu.dwim.defclass-star-20150709-darcs.tgz";
+    sha256 = "032982lyp0hm0ssxlyh572whi2hr4j1nqkyqlllaj373v0dbs3vs";
   };
 
   packageName = "hu.dwim.defclass-star";

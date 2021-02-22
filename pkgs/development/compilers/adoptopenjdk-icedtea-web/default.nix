@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, xulrunner, zip, pkgconfig, npapi_sdk, bash, bc }:
+{ lib, stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, xulrunner, zip, pkg-config, npapi_sdk, bash, bc }:
 
 stdenv.mkDerivation rec {
   pname = "adoptopenjdk-icedtea-web";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pxijw9v5k4j840jczglx9qyfd57df390g5jdaz3qafblfg0k10n";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig bc ];
+  nativeBuildInputs = [ autoreconfHook pkg-config bc ];
   buildInputs = [ cargo rustc glib xulrunner zip npapi_sdk ];
 
   preConfigure = ''
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
       based on the NetX project.
     '';
     homepage = "https://github.com/adoptopenjdk/icedtea-web";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

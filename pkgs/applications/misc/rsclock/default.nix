@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rsClock";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "01dhkis6zswq1y40n7sdq9xv1sp61f2v7nfqbkicyjngmdrmcgrl";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple terminal clock written in Rust";
     homepage = "https://github.com/valebes/rsClock";
     license = licenses.mit;

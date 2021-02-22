@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , requests
 , testfixtures, mock, requests_toolbelt
 , betamax, betamax-serializers, betamax-matchers, pytest
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Low-level communication layer for PRAW";
     homepage = "https://praw.readthedocs.org/";
     license = licenses.gpl3;

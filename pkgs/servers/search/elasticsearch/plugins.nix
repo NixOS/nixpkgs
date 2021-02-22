@@ -40,7 +40,7 @@ in {
         else if version == "6.8.3" then "0vbaqyj0lfy3ijl1c9h92b0nh605h5mjs57bk2zhycdvbw5sx2lv"
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-icu";
       description = "The ICU Analysis plugin integrates the Lucene ICU module into elasticsearch";
       license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ clangStdenv, stdenv, fetchFromGitHub, catch2, rang, fmt, libyamlcpp, cmake
+{ clangStdenv, fetchFromGitHub, catch2, rang, fmt, libyamlcpp, cmake
 , eigen, lua, luaPackages, liblapack, blas, lib, boost, gsl }:
 
 clangStdenv.mkDerivation rec {
@@ -12,11 +12,10 @@ clangStdenv.mkDerivation rec {
     sha256 = "03zhhl9vhi3rhc3qz1g3zb89jksgpdlrk15fcr8xcz8pkj6r5b1i";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake lua luaPackages.luafilesystem ];
   buildInputs = [ fmt rang libyamlcpp eigen catch2 boost gsl liblapack blas ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "d-SEAMS: Deferred Structural Elucidation Analysis for Molecular Simulations";
     longDescription = ''

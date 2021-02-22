@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 with python3Packages;
 
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     ./test.bash
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Finds problems in C++ source that slow development of large code bases";
     homepage    = "https://github.com/myint/cppclean";
     license     = licenses.asl20;

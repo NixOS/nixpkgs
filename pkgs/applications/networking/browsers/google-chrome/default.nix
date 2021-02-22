@@ -1,9 +1,9 @@
-{ stdenv, patchelf, makeWrapper
+{ lib, stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
-, alsaLib, libXdamage, libXtst, libXrandr, expat, cups
+, alsaLib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos, libdrm, mesa
 , libxkbcommon, wayland # ozone/wayland
@@ -22,7 +22,7 @@
 
 # Additional dependencies according to other distros.
 ## Ubuntu
-, liberation_ttf, curl, util-linux, xdg_utils, wget
+, liberation_ttf, curl, util-linux, xdg-utils, wget
 ## Arch Linux.
 , flac, harfbuzz, icu, libpng, libopus, snappy, speechd
 ## Gentoo
@@ -41,7 +41,7 @@
 , gnome3
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   opusWithCustomModes = libopus.override {
@@ -53,11 +53,11 @@ let
   deps = [
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
-    alsaLib libXdamage libXtst libXrandr expat cups
+    alsaLib libXdamage libXtst libXrandr libxshmfence expat cups
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
     libexif
-    liberation_ttf curl util-linux xdg_utils wget
+    liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     kerberos libdrm mesa coreutils

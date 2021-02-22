@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An experimental modular compiler frontend for the Rust language";
     homepage = "https://github.com/rust-analyzer/rust-analyzer";
     license = with licenses; [ mit asl20 ];

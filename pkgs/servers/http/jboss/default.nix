@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk }:
+{ lib, stdenv, fetchurl, unzip, jdk }:
 
 stdenv.mkDerivation {
   name = "jboss-as-7.1.1.Final";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     find $out/bin -name \*.sh -print0 | xargs -0 sed -i -e '/#!\/bin\/sh/aJAVA_HOME=${jdk}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.jboss.org/";
     description = "Open Source J2EE application server";
     license = licenses.lgpl21;

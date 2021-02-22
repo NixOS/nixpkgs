@@ -1,6 +1,6 @@
-{ stdenv, itstool, fetchurl, gdk-pixbuf, adwaita-icon-theme
+{ lib, stdenv, itstool, fetchurl, gdk-pixbuf, adwaita-icon-theme
 , telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
-, pkgconfig, gtk3, glib, libsecret, libsoup, webkitgtk, gobject-introspection, appstream-glib
+, pkg-config, gtk3, glib, libsecret, libsoup, webkitgtk, gobject-introspection, appstream-glib
 , gnome3, wrapGAppsHook, telepathy-logger, gspell, gsettings-desktop-schemas }:
 
 let
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1l82nmb5qk4h69rsdhzlcmjjdhwh9jzfs4cnw8hy39sg5v9ady1s";
   };
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
+    meson ninja pkg-config itstool gettext wrapGAppsHook libxml2
     desktop-file-utils gobject-introspection appstream-glib
   ];
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Polari";
     description = "IRC chat client designed to integrate with the GNOME desktop";
     maintainers = teams.gnome.members;

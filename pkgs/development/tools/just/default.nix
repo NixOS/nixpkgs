@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
+{ lib, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "4B72VYQ+HBvhGQNl577DuZpvWNIvv/6fejRQtVKtFKY=";
+    sha256 = "sha256-K8jeX1/Wn6mbf48GIR2wRAwiwg1rxtbtCPjjH+4dPYw=";
   };
 
-  cargoSha256 = "uOOpDRWPSoH49NTu82rDxxDR/2icoe4ECxVQb/J/45w=";
+  cargoSha256 = "sha256-a9SBeX3oesdoC5G+4dK2tbt+W7VA4jPqCM9tOAex4DI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage man/just.1
 
-    installShellCompletion --bash --name just.bash completions/just.bash
-    installShellCompletion --fish --name just.fish completions/just.fish
-    installShellCompletion --zsh  --name _just     completions/just.zsh
+    installShellCompletion --cmd just \
+      --bash completions/just.bash \
+      --fish completions/just.fish \
+      --zsh  completions/just.zsh
   '';
 
   checkInputs = [ coreutils bash ];
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   # Skip "choose" when running "cargo test", since this test case needs "fzf".
   checkFlags = [ "--skip=choose" "--skip=edit" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A handy way to save and run project-specific commands";
     homepage = "https://github.com/casey/just";
     license = licenses.cc0;

@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''ironclad'';
-  version = ''v0.51'';
+  baseName = "ironclad";
+  version = "v0.51";
 
   parasites = [ "ironclad/tests" ];
 
-  description = ''A cryptographic toolkit written in pure Common Lisp'';
+  description = "A cryptographic toolkit written in pure Common Lisp";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/ironclad/2020-09-25/ironclad-v0.51.tgz'';
-    sha256 = ''0zfazyvg91fxr9gm195qwwf1y5qdci7i1cwzpv0fggxhylpkswrn'';
+    url = "http://beta.quicklisp.org/archive/ironclad/2020-09-25/ironclad-v0.51.tgz";
+    sha256 = "0zfazyvg91fxr9gm195qwwf1y5qdci7i1cwzpv0fggxhylpkswrn";
   };
 
   packageName = "ironclad";

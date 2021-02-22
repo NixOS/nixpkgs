@@ -1,9 +1,9 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , urllib3
+, geojson
 , isPy3k
-, mock
 , sqlalchemy
 , pytestCheckHook
 }:
@@ -20,15 +20,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     urllib3
+    sqlalchemy
+    geojson
   ];
 
   checkInputs = [
     pytestCheckHook
-    sqlalchemy
-    mock
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
     description = "A Python client library for CrateDB";
     license = licenses.asl20;

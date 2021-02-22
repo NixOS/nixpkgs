@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
+{ lib, stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
 , gitMinimal, ffmpeg }:
 
 let
@@ -42,11 +42,11 @@ in stdenv.mkDerivation rec {
     sh scripts/run-tests.sh -2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/spaam/svtplay-dl";
     description = "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ maintainers.rycee ];
   };
 }

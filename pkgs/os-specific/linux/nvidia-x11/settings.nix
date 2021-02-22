@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchFromGitHub, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
+{ stdenv, lib, fetchFromGitHub, pkg-config, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
@@ -45,7 +45,13 @@ stdenv.mkDerivation {
   version = nvidia_x11.settingsVersion;
   inherit src;
 
-  nativeBuildInputs = [ pkgconfig m4 ];
+  patches = [
+    # Fix a race condition in parallel builds.
+    # https://github.com/NVIDIA/nvidia-settings/issues/59#issuecomment-770302032
+    ./nvidia-setttings-parallel-build.patch
+  ];
+
+  nativeBuildInputs = [ pkg-config m4 ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
@@ -97,7 +103,7 @@ stdenv.mkDerivation {
     inherit libXNVCtrl;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;

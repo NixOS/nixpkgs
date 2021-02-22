@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ghq";
@@ -28,7 +28,7 @@ buildGoModule rec {
   meta = {
     description = "Remote repository management made easy";
     homepage = "https://github.com/x-motemen/ghq";
-    maintainers = with stdenv.lib.maintainers; [ sigma ];
-    license = stdenv.lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigma ];
+    license = lib.licenses.mit;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, zlib }:
+{ lib, stdenv, fetchurl, gfortran, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "QCDNUM";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A very fast QCD evolution program written in FORTRAN77";
-    license     = stdenv.lib.licenses.gpl3;
+    license     = lib.licenses.gpl3;
     homepage    = "https://www.nikhef.nl/~h24/qcdnum/index.html";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

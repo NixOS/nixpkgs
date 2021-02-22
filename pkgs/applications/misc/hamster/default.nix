@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, intltool, glib, itstool
+{ lib, fetchFromGitHub, python3Packages, intltool, glib, itstool
 , wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
 
 python3Packages.buildPythonApplication rec {
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn $out/libexec "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Time tracking application";
     homepage = "http://projecthamster.org/";
     license = licenses.gpl3Plus;

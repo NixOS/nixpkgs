@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , wheel
 , rustPlatform
 , pipInstallHook
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     wheel
   ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   propagatedBuildInputs = [
     python
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     pipInstallPhase
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.etebase.com/";
     description = "A Python client library for Etebase";
     license = licenses.bsd3;

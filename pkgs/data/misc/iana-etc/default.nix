@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "20200729";
@@ -12,7 +12,7 @@ in fetchzip {
     install -D -m0644 -t $out/etc services protocols
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Mic92/iana-etc";
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
     platforms = platforms.unix;

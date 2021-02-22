@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, psycopg2, click, sqlparse }:
+{ lib, buildPythonPackage, fetchPypi, pytest, psycopg2, click, sqlparse }:
 
 buildPythonPackage rec {
   pname = "pgspecial";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Meta-commands handler for Postgres Database";
     homepage = "https://pypi.python.org/pypi/pgspecial";
     license = licenses.bsd3;

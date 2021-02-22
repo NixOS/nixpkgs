@@ -2,26 +2,24 @@
 
 buildGoModule rec {
   pname = "duf";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "duf";
     rev = "v${version}";
-    sha256 = "0n0nvrqrlr75dmf2j6ja615ighzs35cfixn7z9cwdz3vhj1xhc5f";
+    sha256 = "sha256-Wm3gfir6blQFLLi+2bT5Y/5tf7qUxEddJQ7tCYfBGgM=";
   };
 
-  dontStrip = true;
+  vendorSha256 = "0icxy6wbqjqawr6i5skwp1z37fq303p8f95crd8lwn6pjjiqzk4i";
 
-  vendorSha256 = "1jqilfsirj7bkhzywimzf98w2b4s777phb06nsw6lr3bi6nnwzr1";
-
-  buildFlagsArray = [ "-ldflags=" "-X=main.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X=main.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/muesli/duf/";
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ petabyteboy penguwin ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ petabyteboy penguwin SuperSandro2000 ];
   };
 }

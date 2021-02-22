@@ -21,7 +21,7 @@
 
 with lib;
 let
-  pVersion = "1.10.0.20200225";
+  pVersion = "1.11.0.20201202";
   pVersionTriple = splitVersion pVersion;
   majorVersion = elemAt pVersionTriple 0;
   minorVersion = elemAt pVersionTriple 1;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "11cg01gjjvlm6lr6z6rwqs1r31xx5pxddnz55ca0s33lrnywf9fx";
+    sha256 = "sha256-HtIKcGfdjb2wovGGSxv16ud7y1cPQFBn77pkhiekAkI=";
   };
 
   desktopItem = makeDesktopItem {
@@ -62,13 +62,13 @@ stdenv.mkDerivation rec {
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
     [ -f $libCairo ] && patchelf --set-rpath ${
-      stdenv.lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]
+      lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]
     } $libCairo
 
     # Create wrapper script.  Pass -configuration to store settings in ~/.eclipse-mat/<version>
     makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk ])} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk ])} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and feature-rich Java heap analyzer";
     longDescription = ''
       The Eclipse Memory Analyzer is a tool that helps you find memory

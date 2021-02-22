@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+{ lib, buildPythonPackage, fetchPypi, isPyPy
 , pytest, pytestcov, pytest-mock, freezegun
 , jinja2, future, binaryornot, click, whichcraft, poyo, jinja2_time, requests
 , python-slugify }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/audreyr/cookiecutter";
     description = "A command-line utility that creates projects from project templates";
     license = licenses.bsd3;

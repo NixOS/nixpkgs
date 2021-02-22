@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "mirror://savannah/numdiff/numdiff-${version}.tar.gz";
     sha256 = "1vzmjh8mhwwysn4x4m2vif7q2k8i19x8azq7pzmkwwj4g48lla47";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A little program that can be used to compare putatively similar files
       line by line and field by field, ignoring small numeric differences

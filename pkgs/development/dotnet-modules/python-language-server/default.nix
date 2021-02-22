@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , makeWrapper
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
   # to find some of the packaged DLLs.
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Microsoft Language Server for Python";
     homepage = "https://github.com/microsoft/python-language-server";
     license = licenses.asl20;

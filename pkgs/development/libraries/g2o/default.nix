@@ -1,15 +1,15 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, eigen, suitesparse, libGLU
-, qtbase, libqglviewer, makeWrapper }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, eigen, suitesparse, blas
+, lapack, libGLU, qtbase, libqglviewer, makeWrapper }:
 
 mkDerivation rec {
   pname = "g2o";
-  version = "20200410";
+  version = "20201223";
 
   src = fetchFromGitHub {
     owner = "RainerKuemmerle";
     repo = pname;
     rev = "${version}_git";
-    sha256 = "11rgj2g9mmwajlr69pjkjvxjyn88afa0r4bchjyvmxswjccizlg2";
+    sha256 = "sha256-Ik6uBz4Z4rc5+mPNdT8vlNZSBom4Tvt8Y6myBC/s0m8=";
   };
 
   # Removes a reference to gcc that is only used in a debug message
@@ -18,10 +18,12 @@ mkDerivation rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ eigen suitesparse libGLU qtbase libqglviewer ];
+  buildInputs = [ eigen suitesparse blas lapack libGLU qtbase libqglviewer ];
 
   # Silence noisy warning
   CXXFLAGS = "-Wno-deprecated-copy";
+
+  dontWrapQtApps = true;
 
   cmakeFlags = [
     # Detection script is broken
@@ -41,5 +43,7 @@ mkDerivation rec {
     license = with licenses; [ bsd3 lgpl3 gpl3 ];
     maintainers = with maintainers; [ lopsided98 ];
     platforms = platforms.all;
+    # fatal error: 'qglviewer.h' file not found
+    broken = stdenv.isDarwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "fsmon";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FileSystem Monitor utility";
     homepage = "https://github.com/nowsecure/fsmon";
     license = licenses.mit;

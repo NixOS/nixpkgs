@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocamlPackages }:
+{ lib, stdenv, fetchzip, ocamlPackages }:
 
 stdenv.mkDerivation rec
 {
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec
   meta = {
     homepage = "https://github.com/besport/ocsigen-i18n";
     description = "I18n made easy for web sites written with eliom";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.gal_bolle ];
   };
 
 }

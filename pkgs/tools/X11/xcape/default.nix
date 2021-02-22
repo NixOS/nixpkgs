@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libX11, libXtst, xorgproto,
+{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, libXtst, xorgproto,
 libXi }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "04grs4w9kpfzz25mqw82zdiy51g0w355gpn5b170p7ha5972ykc8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libX11 libXtst xorgproto libXi ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "install -Dm444 --target-directory $out/share/doc README.md";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility to configure modifier keys to act as other keys";
     longDescription = ''
       xcape allows you to use a modifier key as another key when

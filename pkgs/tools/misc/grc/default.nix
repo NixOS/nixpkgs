@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "grc";
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet another colouriser for beautifying your logfiles or output of commands";
     homepage    = "http://korpus.juls.savba.sk/~garabik/software/grc.html";
     license     = licenses.gpl2;

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, nlohmann_json,
+{ lib, stdenv, fetchFromGitHub, cmake, nlohmann_json,
   libtoxcore, libsodium, libcap, zeromq,
   systemd ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "toxvpn-2019-09-09";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   postInstall = "$out/bin/toxvpn -h";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage    = "https://github.com/cleverca22/toxvpn";
     license     = licenses.gpl3;

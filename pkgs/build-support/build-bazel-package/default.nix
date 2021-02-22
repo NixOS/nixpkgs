@@ -172,7 +172,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do
-      ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
+      if [[ $(readlink "$symlink") == *NIX_BUILD_TOP* ]]; then
+        ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
+      fi
     done
   '' + fBuildAttrs.preConfigure or "";
 

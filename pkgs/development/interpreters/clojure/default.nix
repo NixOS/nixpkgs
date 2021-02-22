@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
+{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.727";
+  version = "1.10.2.774";
 
   src = fetchurl {
+    # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "1mnxvy4n7g72vcwhvrgr0xqri3p9d9w76c8a78kphhmd8lq0m92q";
+    sha256 = "0z3j8m9k7prmx6n3kpyhj04pjdg7y0plyxv4kp7789shanr6y4qp";
   };
 
   nativeBuildInputs = [
@@ -17,9 +18,11 @@ stdenv.mkDerivation rec {
   # See https://github.com/clojure/brew-install/blob/1.10.1/src/main/resources/clojure/install/linux-install.sh
   installPhase =
     let
-      binPath = stdenv.lib.makeBinPath [ rlwrap jdk ];
+      binPath = lib.makeBinPath [ rlwrap jdk ];
     in
     ''
+      runHook preInstall
+
       clojure_lib_dir=$out
       bin_dir=$out/bin
 
@@ -38,6 +41,8 @@ stdenv.mkDerivation rec {
       wrapProgram $bin_dir/clj --prefix PATH : $out/bin:${binPath}
 
       installManPage clj.1 clojure.1
+
+      runHook postInstall
     '';
 
   doInstallCheck = true;
@@ -47,7 +52,7 @@ stdenv.mkDerivation rec {
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
     license = licenses.epl10;
@@ -70,7 +75,7 @@ stdenv.mkDerivation rec {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre thiagokokada ];
     platforms = platforms.unix;
   };
 }

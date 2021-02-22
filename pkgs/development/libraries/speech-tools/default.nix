@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, ncurses }:
+{ lib, stdenv, fetchurl, alsaLib, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "speech_tools-${version}.0";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-to-speech engine";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

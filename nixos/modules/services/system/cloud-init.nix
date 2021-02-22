@@ -98,7 +98,7 @@ in
            - final-message
            - power-state-change
           '';
-        description = ''cloud-init configuration.'';
+        description = "cloud-init configuration.";
       };
 
     };

@@ -1,9 +1,8 @@
-{ stdenv
-, lib
+{ lib
 , buildGoPackage
 , fetchFromGitHub
 , openssl
-, pkgconfig
+, pkg-config
 , libpcap
 }:
 
@@ -35,7 +34,7 @@ in buildGoPackage {
     sha256 = "0mjwvx0cxvb6zam6jyr3753xjnwcygxcjzqhhlsq0b3xnwws9yh7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libpcap ];
 
   # Mongodb incorrectly names all of their binaries main
@@ -44,7 +43,7 @@ in buildGoPackage {
     # move vendored codes so nixpkgs go builder could find it
     runHook preBuild
 
-    ${stdenv.lib.concatMapStrings (t: ''
+    ${lib.concatMapStrings (t: ''
       go build -o "$out/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
     '') tools}
 

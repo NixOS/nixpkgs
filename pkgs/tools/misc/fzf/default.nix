@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.24.4";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "17k32wr70sp7ag69xww2q9mrgnzakgkjw6la04n3jlhfa5z37dzj";
+    sha256 = "085apa4msw8v8f57942xh7wfw3dkavrl9d58yj6i3yr75l3vg05r";
   };
 
   vendorSha256 = "0dd0qm1fxp3jnlrhfaas8fw87cj7rygaac35a9nk3xh2xsk7q35p";
@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/fzf.vim
 
     if ! grep -q $out plugin/fzf.vim; then

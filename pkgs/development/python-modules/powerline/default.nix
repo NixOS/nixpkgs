@@ -8,6 +8,7 @@
 , pygit2
 , pyuv
 , i3ipc
+, stdenv
 }:
 
 # TODO: bzr support is missing because nixpkgs switched to `breezy`
@@ -29,8 +30,7 @@ buildPythonPackage rec {
     hglib
     pygit2
     pyuv
-    i3ipc
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ i3ipc ];
 
   # tests are travis-specific
   doCheck = false;

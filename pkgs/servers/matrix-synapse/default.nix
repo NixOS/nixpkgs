@@ -12,11 +12,11 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.24.0";
+  version = "1.27.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yxcdFd7iVXbDIUx1lW73FKLy+BZfSspz60LKw7BCtl4=";
+    sha256 = "1kpkxgyzz35ga4ld7cbjr0pfbhrcbrfmp9msnwjqllmsmy0g5bas";
   };
 
   patches = [
@@ -73,7 +73,7 @@ buildPythonApplication rec {
   passthru.tools = tools;
   passthru.python = python3;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://matrix.org";
     description = "Matrix reference homeserver";
     license = licenses.asl20;

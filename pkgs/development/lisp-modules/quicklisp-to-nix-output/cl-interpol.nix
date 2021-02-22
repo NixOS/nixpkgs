@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-interpol'';
-  version = ''20200715-git'';
+  baseName = "cl-interpol";
+  version = "20200715-git";
 
   parasites = [ "cl-interpol-test" ];
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-interpol/2020-07-15/cl-interpol-20200715-git.tgz'';
-    sha256 = ''0qbmpgnlg9y6ykwahmw1q8b058krmcq47w3gx75xz920im46wvmw'';
+    url = "http://beta.quicklisp.org/archive/cl-interpol/2020-07-15/cl-interpol-20200715-git.tgz";
+    sha256 = "0qbmpgnlg9y6ykwahmw1q8b058krmcq47w3gx75xz920im46wvmw";
   };
 
   packageName = "cl-interpol";

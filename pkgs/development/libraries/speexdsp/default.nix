@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, fftw }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fftw }:
 
 stdenv.mkDerivation rec {
   name = "speexdsp-1.2.0";
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw ];
 
   configureFlags = [
     "--with-fft=gpl-fftw3"
-  ] ++ stdenv.lib.optional stdenv.isAarch64 "--disable-neon";
+  ] ++ lib.optional stdenv.isAarch64 "--disable-neon";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.speex.org/";
     description = "An Open Source/Free Software patent-free audio compression format designed for speech";
     license = licenses.bsd3;

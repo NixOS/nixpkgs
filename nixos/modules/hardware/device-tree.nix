@@ -68,11 +68,11 @@ let
       patchShebangs scripts/*
       substituteInPlace scripts/Makefile.lib \
         --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.platform.kernelBaseConfig} ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
-      make dtbs ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
+      make ${pkgs.stdenv.hostPlatform.linux-kernel.baseConfig} ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
+      make dtbs ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
     '';
     installPhase = ''
-      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
+      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
     '';
   };
 
@@ -115,7 +115,7 @@ in
   options = {
       hardware.deviceTree = {
         enable = mkOption {
-          default = pkgs.stdenv.hostPlatform.platform.kernelDTB or false;
+          default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
           type = types.bool;
           description = ''
             Build device tree files. These are used to describe the

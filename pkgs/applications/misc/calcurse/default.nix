@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     patchShebangs .
-    buildPythonPath ${python3Packages.httplib2}
+    buildPythonPath "${python3Packages.httplib2} ${python3Packages.oauth2client}"
     patchPythonScript $out/bin/calcurse-caldav
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A calendar and scheduling application for the command line";
     longDescription = ''
       calcurse is a calendar and scheduling application for the command line. It helps

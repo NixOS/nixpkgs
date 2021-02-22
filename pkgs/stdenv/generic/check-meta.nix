@@ -66,7 +66,7 @@ let
   # {pkgs, ...}:
   # {
   #   allowUnfree = false;
-  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayer-" x.name);
+  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
   # }
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 

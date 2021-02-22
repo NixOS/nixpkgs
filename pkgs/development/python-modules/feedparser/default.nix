@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     python -Wd tests/runtests.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kurtmckee/feedparser";
     description = "Universal feed parser";
     license = licenses.bsd2;

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, alsaLib, espeak, glibc, gpsd
+{ lib, stdenv, fetchFromGitHub, cmake, alsaLib, espeak, glibc, gpsd
 , hamlib, perl, python, udev }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "direwolf";

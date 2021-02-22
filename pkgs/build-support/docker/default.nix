@@ -35,7 +35,6 @@
   system,  # Note: This is the cross system we're compiling for
 }:
 
-# WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
 let
 
   mkDbExtraCommand = contents: let
@@ -58,15 +57,12 @@ let
     done;
   '';
 
-  # Map nixpkgs architecture to Docker notation
-  # Reference: https://github.com/docker-library/official-images#architectures-other-than-amd64
-  getArch = nixSystem: {
-    aarch64-linux = "arm64v8";
-    armv7l-linux = "arm32v7";
-    x86_64-linux = "amd64";
-    powerpc64le-linux = "ppc64le";
-    i686-linux = "i386";
-  }.${nixSystem} or "Can't map Nix system ${nixSystem} to Docker architecture notation. Please check that your input and your requested build are correct or update the mapping in Nixpkgs.";
+  # The OCI Image specification recommends that configurations use values listed
+  # in the Go Language document for GOARCH.
+  # Reference: https://github.com/opencontainers/image-spec/blob/master/config.md#properties
+  # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
+  # mapping from the go package.
+  defaultArch = go.GOARCH;
 
 in
 rec {
@@ -84,7 +80,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? getArch system
+    , arch ? defaultArch
 
       # This is used to set name to the pulled image
     , finalImageName ? imageName
@@ -98,7 +94,7 @@ rec {
       inherit imageDigest;
       imageName = finalImageName;
       imageTag = finalImageTag;
-      impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
       outputHashMode = "flat";
       outputHashAlgo = "sha256";
       outputHash = sha256;
@@ -113,7 +109,7 @@ rec {
     '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
-  # And we cannot untar it, because then we cannot preserve permissions ecc.
+  # And we cannot untar it, because then we cannot preserve permissions etc.
   tarsum = runCommand "tarsum" {
     nativeBuildInputs = [ go ];
   } ''
@@ -124,7 +120,7 @@ rec {
     export GOPATH=$(pwd)
     export GOCACHE="$TMPDIR/go-cache"
     mkdir -p src/github.com/docker/docker/pkg
-    ln -sT ${docker.src}/components/engine/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
+    ln -sT ${docker.moby.src}/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
 
     mkdir -p $out/bin
@@ -500,7 +496,7 @@ rec {
       baseJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = getArch system;
+            architecture = defaultArch;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
@@ -754,7 +750,7 @@ rec {
       streamScript = writePython3 "stream" {} ./stream_layered_image.py;
       baseJson = writeText "${name}-base.json" (builtins.toJSON {
          inherit config;
-         architecture = getArch system;
+         architecture = defaultArch;
          os = "linux";
       });
 
@@ -774,6 +770,7 @@ rec {
           mkdir $out
 
           tar \
+            --sort name \
             --owner 0 --group 0 --mtime "@$SOURCE_DATE_EPOCH" \
             --hard-dereference \
             -C old_out \

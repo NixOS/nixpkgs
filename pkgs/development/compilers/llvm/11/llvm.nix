@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , cmake
 , python3
@@ -22,22 +22,22 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
+  shortVersion = with lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
 in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "0s94lwil98w7zb7cjrbnxli0z7gklb312pkw74xs1d6zk346hgwi";
-  polly_src = fetch "polly" "0h442ivcslr3dv3q3g1nw5avh77f8cxsp6zild1hgspj266xpynw";
+  src = fetch pname "0a5mb65xa5bal8q6cb37xgkqis2bip87fsafgq3wbsva9cjprn6c";
+  polly_src = fetch "polly" "1smrqm9s0r2g9h0v0nil6y9wn2ih4l5bddk4dhgn538ngc7cxpq8";
 
   unpackPhase = ''
     unpackFile $src
-    mv llvm-${version}* llvm
+    mv llvm-${release_version}* llvm
     sourceRoot=$PWD/llvm
   '' + optionalString enablePolly ''
     unpackFile $polly_src
@@ -122,7 +122,7 @@ in stdenv.mkDerivation (rec {
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvm_10}/bin/llvm-tblgen"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm_11}/bin/llvm-tblgen"
   ];
 
   postBuild = ''
@@ -152,21 +152,19 @@ in stdenv.mkDerivation (rec {
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isx86_32);
+  doCheck = stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isMusl);
 
   checkTarget = "check-all";
-
-  enableParallelBuilding = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = "https://llvm.org/";
-    license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
+    platforms   = lib.platforms.all;
   };
-} // stdenv.lib.optionalAttrs enableManpages {
+} // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
 
   buildPhase = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "jellyfin-mpv-shim-shader-pack";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp -a . $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/iwalton3/default-shader-pack";
     description = "Preconfigured set of MPV shaders and configurations for MPV Shim media clients";
     license = with licenses; [ mit lgpl3Plus unlicense ];

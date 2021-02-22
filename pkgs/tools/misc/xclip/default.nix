@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libXmu }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libXmu }:
 
 stdenv.mkDerivation rec {
   pname = "xclip";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool to access the X clipboard from a console application";
     homepage = "https://github.com/astrand/xclip";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

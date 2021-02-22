@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, yasm
+{ lib, stdenv, fetchFromGitHub, perl, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -40,7 +40,7 @@
 
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
-  inherit (stdenv.lib) enableFeature optional optionals;
+  inherit (lib) enableFeature optional optionals;
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 #    ./CVE-2019-9232.CVE-2019-9325.CVE-2019-9371.CVE-2019-9433.patch
   ];
 
-  postPatch = ''patchShebangs .'';
+  postPatch = "patchShebangs .";
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
@@ -173,7 +173,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''moveToOutput bin "$bin" '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";
     homepage    = "https://www.webmproject.org/";
     license     = licenses.bsd3;

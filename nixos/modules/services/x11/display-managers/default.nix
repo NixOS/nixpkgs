@@ -444,8 +444,8 @@ in
       in
         # We will generate every possible pair of WM and DM.
         concatLists (
-          crossLists
-            (dm: wm: let
+            builtins.map
+            ({dm, wm}: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
               desktopNames = if dm ? desktopNames
@@ -472,7 +472,7 @@ in
                   providedSessions = [ sessionName ];
                 })
             )
-            [dms wms]
+            (cartesianProductOfSets { dm = dms; wm = wms; })
           );
 
     # Make xsessions and wayland sessions available in XDG_DATA_DIRS

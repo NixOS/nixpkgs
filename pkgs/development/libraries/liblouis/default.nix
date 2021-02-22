@@ -1,7 +1,7 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gettext
 , python3
 , texinfo
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gettext
     python3
     # Docs, man, info
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source braille translator and back-translator";
     homepage = "http://liblouis.org/";
     license = licenses.lgpl21;

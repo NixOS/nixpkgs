@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils }:
+{ lib, fetchFromGitHub, rustPlatform, coreutils }:
 
 rustPlatform.buildRustPackage rec {
   pname = "heatseeker";
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   # which we can also make use of
   TRAVIS = "true";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A general-purpose fuzzy selector";
     homepage = "https://github.com/rschmitt/heatseeker";
     license = licenses.mit;

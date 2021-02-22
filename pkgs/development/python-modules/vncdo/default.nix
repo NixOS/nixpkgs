@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, fetchFromGitHub
 , buildPythonPackage, isPy27
 , pillow
 , twisted
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   doCheck = !isPy27;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sibson/vncdotool";
     description = "A command line VNC client and python library";
     license = licenses.mit;

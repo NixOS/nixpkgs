@@ -1,18 +1,23 @@
-{ stdenv, fetchurl, tzdata, iana-etc, runCommand
-, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
+{ lib, stdenv, fetchurl, tzdata, iana-etc, runCommand
+, perl, which, pkg-config, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages
 , pkgsBuildTarget
 , fetchpatch
+, callPackage
 }:
 
 let
 
-  inherit (stdenv.lib) optionals optionalString;
+  inherit (lib) optionals optionalString;
+
+  version = "1.14.15";
+
+  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
-    cp -rf ${buildPackages.go_bootstrap}/* $out/
+    cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
@@ -36,15 +41,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.14.13";
+  inherit version;
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "0xxins5crcgghgvnzplmp0qyv2gbmh36v1fpl15d03jwdd6287ds";
+    sha256 = "0jci03f5z09xibbdqg4lnv2k3crhal1phzwr6lc4ajp514i3plby";
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch procps ];
+  nativeBuildInputs = [ perl which pkg-config patch procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -143,6 +148,7 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+    ./go_no_vendor_checks-1_14.patch
 
     # fix rare TestDontCacheBrokenHTTP2Conn failure
     (fetchpatch {
@@ -179,7 +185,7 @@ stdenv.mkDerivation rec {
     else
       null;
 
-  GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+  GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   # Hopefully avoids test timeouts on Hydra
@@ -246,12 +252,14 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ goBootstrap ];
 
-  meta = with stdenv.lib; {
-    branch = "1.14";
+  meta = with lib; {
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.linux ++ platforms.darwin;
+    knownVulnerabilities = [
+      "Support for Go 1.14 ended with the release of Go 1.16: https://golang.org/doc/devel/release.html#policy"
+    ];
   };
 }

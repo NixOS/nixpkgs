@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "awslogs";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     boto3 termcolor dateutil docutils setuptools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jorgebastida/awslogs";
     description = "AWS CloudWatch logs for Humans";
     maintainers = with maintainers; [ dbrock ];

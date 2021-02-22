@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, z3, rlwrap }:
+{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
       sha256 = "1bibabhlsvf6qsjjkgxcpq3cvl1z7r8yfcgqbhbvsiv69n3gyfk3";
     };
 
-  buildInputs = [ perl polyml z3 ]
-             ++ stdenv.lib.optionals (!stdenv.isDarwin) [ nettools java ];
+  buildInputs = [ perl polyml z3 makeWrapper ]
+             ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
@@ -64,9 +64,11 @@ stdenv.mkDerivation rec {
     mv $TMP/$dirname $out
     cd $out/$dirname
     bin/isabelle install $out/bin
+
+    wrapProgram $out/$dirname/src/HOL/Tools/ATP/scripts/remote_atp --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.LWP ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A generic proof assistant";
 
     longDescription = ''

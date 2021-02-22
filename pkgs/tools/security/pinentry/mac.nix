@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, xcbuildHook, libiconv, ncurses, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, xcbuildHook, libiconv, ncurses, Cocoa }:
 
 stdenv.mkDerivation {
-  name = "pinentry-mac-0.9.4";
+  pname = "pinentry-mac";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
@@ -24,8 +25,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Pinentry for GPG on Mac";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/GPGTools/pinentry-mac";
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

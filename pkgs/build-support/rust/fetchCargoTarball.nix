@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, python3 }:
+{ lib, stdenv, cacert, git, cargo, python3 }:
 let cargo-vendor-normalise = stdenv.mkDerivation {
   name = "cargo-vendor-normalise";
   src = ./cargo-vendor-normalise.py;
@@ -22,11 +22,17 @@ in
 , srcs ? []
 , patches ? []
 , sourceRoot
-, sha256
+, hash ? ""
+, sha256 ? ""
 , cargoUpdateHook ? ""
 , ...
 } @ args:
-stdenv.mkDerivation ({
+
+let hash_ =
+  if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+  else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+  else throw "fetchCargoTarball requires a hash for ${name}";
+in stdenv.mkDerivation ({
   name = "${name}-vendor.tar.gz";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
 
@@ -40,7 +46,7 @@ stdenv.mkDerivation ({
         echo
         echo "ERROR: The Cargo.lock file doesn't exist"
         echo
-        echo "Cargo.lock is needed to make sure that cargoSha256 doesn't change"
+        echo "Cargo.lock is needed to make sure that cargoHash/cargoSha256 doesn't change"
         echo "when the registry is updated."
         echo
 
@@ -72,10 +78,9 @@ stdenv.mkDerivation ({
         -czf $out $name
   '';
 
-  outputHashAlgo = "sha256";
-  outputHash = sha256;
+  inherit (hash_) outputHashAlgo outputHash;
 
-  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 } // (builtins.removeAttrs args [
   "name" "sha256" "cargoUpdateHook"
 ]))

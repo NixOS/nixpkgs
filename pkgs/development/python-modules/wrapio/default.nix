@@ -1,21 +1,21 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "wrapio";
-  version = "0.3.8";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jGupLh+xzwil+VBtAjIG+ZYT+dy+QaZOTIfipTQeyWo";
+    sha256 = "sha256-JWcPsqZy1wM6/mbU3H0W3EkpLg0wrEUUg3pT/QrL+rE=";
   };
 
   doCheck = false;
   pythonImportsCheck = [ "wrapio" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Exahilosys/wrapio";
     description = "Handling event-based streams";
     license = licenses.mit;

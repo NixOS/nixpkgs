@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnet-sdk }:
+{ lib, stdenv, fetchurl, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnet-sdk }:
 
 let
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
+  LOCALE_ARCHIVE = lib.optionalString stdenv.isLinux
       "${glibcLocales}/lib/locale/locale-archive";
 
   buildPhase = ''
@@ -122,7 +122,7 @@ EOF
     ${mono}/bin/mono Helloworld.exe | grep "Hello, world!"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     homepage = "https://github.com/mono/msbuild";
     license = licenses.mit;

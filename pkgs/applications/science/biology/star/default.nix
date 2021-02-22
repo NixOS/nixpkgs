@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, zlib }:
+{ lib, stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "star";
-  version = "2.7.6a";
+  version = "2.7.7a";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
     rev = version;
-    sha256 = "1zw9f4jbhz0y51namnmid42pa7pviviy94q9db8w0774nksdf8is";
+    sha256 = "sha256-0K49yjcnTzC56ZIB20OeTiMJ5EW8mRx+xEpyWEfFcts=";
   };
 
   sourceRoot = "source/source";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spliced Transcripts Alignment to a Reference";
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;

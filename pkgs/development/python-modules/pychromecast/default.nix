@@ -2,20 +2,24 @@
 
 buildPythonPackage rec {
   pname = "PyChromecast";
-  version = "7.5.1";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf2e9fa795ea1e9d0d180adfbdccefd6b4f532eae56f41f15d1a75b323096f51";
+    sha256 = "0dlxgh57j25cvk2pqr2dj4lv6yn0pix2rcl2kzqsg2405rdjks91";
   };
 
   disabled = !isPy3k;
 
   propagatedBuildInputs = [ requests zeroconf protobuf casttube ];
 
+  # no tests available
+  doCheck = false;
+  pythonImportsCheck = [ "pychromecast" ];
+
   meta = with lib; {
-    description = "Library for Python 3.4+ to communicate with the Google Chromecast";
-    homepage    = "https://github.com/balloob/pychromecast";
+    description = "Library for Python to communicate with the Google Chromecast";
+    homepage    = "https://github.com/home-assistant-libs/pychromecast";
     license     = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
     platforms   = platforms.unix;

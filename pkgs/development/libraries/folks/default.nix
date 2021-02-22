@@ -1,6 +1,6 @@
 { fetchurl
-, stdenv
-, pkgconfig
+, lib, stdenv
+, pkg-config
 , meson
 , ninja
 , glib
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1f9b52vmwnq7s51vj26w2618dn2ph5g12ibbkbyk6fvxcgd7iryn";
   };
 
   mesonFlags = [
     "-Ddocs=true"
-    "-Dtelepathy_backend=${stdenv.lib.boolToString telepathySupport}"
+    "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
   ];
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     nspr
     nss
     readline
-  ] ++ stdenv.lib.optional telepathySupport telepathy-glib;
+  ] ++ lib.optional telepathySupport telepathy-glib;
 
   propagatedBuildInputs = [
     glib
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
     homepage = "https://wiki.gnome.org/Projects/Folks";
     license = licenses.lgpl2Plus;

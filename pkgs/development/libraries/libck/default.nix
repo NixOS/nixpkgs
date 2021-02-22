@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ck";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-performance concurrency research library";
     longDescription = ''
       Concurrency primitives, safe memory reclamation mechanisms and non-blocking data structures for the research, design and implementation of high performance concurrent systems.

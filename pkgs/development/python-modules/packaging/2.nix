@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyparsing
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # Prevent circular dependency
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Core utilities for Python packages";
     homepage = "https://github.com/pypa/packaging";
     license = [ licenses.bsd2 licenses.asl20 ];

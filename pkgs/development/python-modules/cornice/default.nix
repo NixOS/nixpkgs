@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyramid
@@ -20,12 +20,12 @@ buildPythonPackage rec {
 
   # tests not packaged with pypi release
   doCheck = false;
+  pythonImportsCheck = [ "cornice" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mozilla-services/cornice";
     description = "Build Web Services with Pyramid";
     license = licenses.mpl20;
     maintainers = [ maintainers.costrouc ];
   };
-
 }

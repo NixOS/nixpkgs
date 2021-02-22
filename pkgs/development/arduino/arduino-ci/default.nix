@@ -1,23 +1,22 @@
-{ stdenv, fetchFromGitHub,  makeWrapper, arduino-cli, ruby, python3, patchelf }:
+{ lib, stdenv, fetchFromGitHub,  makeWrapper, arduino-cli, ruby, python3 }:
 
 let
 
-  runtimePath = stdenv.lib.makeBinPath [
+  runtimePath = lib.makeBinPath [
     arduino-cli
-    (python3.withPackages (ps: [ ps.pyserial ])) # required by esp32 core
-    patchelf # required by esp32 core
+    python3 # required by the esp8266 core
   ];
 
 in
 stdenv.mkDerivation rec {
   pname = "arduino-ci";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner  = "pololu";
     repo   = "arduino-ci";
     rev    = "v${version}";
-    sha256 = "sha256-uLCLupzJ446WcxXZtzJk1wnae+k1NTSy0cGHLqW7MZU=";
+    sha256 = "sha256-9RbBxgwsSQ7oGGKr1Vsn9Ug9AsacoRgvQgd9jbRQ034=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/arduino-ci --prefix PATH ":" "${runtimePath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CI for Arduino Libraries";
     homepage = src.meta.homepage;
     license = licenses.mit;

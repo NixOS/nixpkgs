@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper,
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper,
   perlPackages,
   libminc, octave, coreutils, minc_tools }:
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for p in $out/bin/*; do
-      wrapProgram $p --prefix PERL5LIB : $PERL5LIB --set PATH "${stdenv.lib.makeBinPath [ coreutils minc_tools ]}";
+      wrapProgram $p --prefix PERL5LIB : $PERL5LIB --set PATH "${lib.makeBinPath [ coreutils minc_tools ]}";
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Collection of Perl and shell scripts for processing MINC files";
     maintainers = with maintainers; [ bcdarwin ];

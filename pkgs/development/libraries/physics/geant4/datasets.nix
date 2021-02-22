@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, geant_version }:
+{ lib, stdenv, fetchurl, geant_version }:
 
 let
   mkDataset = { name, version, sha256, envvar }:
@@ -24,7 +24,7 @@ let
       inherit envvar;
       setupHook = ./datasets-hook.sh;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Data files for the Geant4 toolkit";
         homepage = "https://geant4.web.cern.ch/support/download";
         license = licenses.g4sl;
@@ -70,8 +70,8 @@ in
 
     {
       name = "G4PARTICLEXS";
-      version = "3.1";
-      sha256 = "1kg9y0kqn4lma7b0yjpgj7s9n317yqi54ydvq365qphnmm7ahka0";
+      version = "3.1.1";
+      sha256 = "1nmgy8w1s196php7inrkbsi0f690qa2dsyj9s1sp75mndkfpxhb6";
       envvar = "PARTICLEXS";
     }
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, scheme48 }:
+{ lib, stdenv, fetchgit, autoreconfHook, scheme48 }:
 
 stdenv.mkDerivation {
   name = "scsh-0.7pre";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ scheme48 ];
   configureFlags = [ "--with-scheme48=${scheme48}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Scheme shell";
     homepage = "http://www.scsh.net/";
     license = licenses.bsd3;

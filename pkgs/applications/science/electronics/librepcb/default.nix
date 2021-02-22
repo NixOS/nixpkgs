@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/librepcb
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
     homepage    = "https://librepcb.org/";
     maintainers = with maintainers; [ luz thoughtpolice ];

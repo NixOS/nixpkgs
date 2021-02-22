@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''_3bmd-ext-code-blocks'';
-  version = ''3bmd-20200925-git'';
+  baseName = "_3bmd-ext-code-blocks";
+  version = "3bmd-20200925-git";
 
-  description = ''extension to 3bmd implementing github style ``` delimited code blocks, with support for syntax highlighting using colorize, pygments, or chroma'';
+  description = "extension to 3bmd implementing github style ``` delimited code blocks, with support for syntax highlighting using colorize, pygments, or chroma";
 
   deps = [ args."_3bmd" args."alexandria" args."colorize" args."esrap" args."html-encode" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/3bmd/2020-09-25/3bmd-20200925-git.tgz'';
-    sha256 = ''0sk4b0xma4vv6ssiskbz7h5bw8v8glm34mbv3llqywb50b9ks4fw'';
+    url = "http://beta.quicklisp.org/archive/3bmd/2020-09-25/3bmd-20200925-git.tgz";
+    sha256 = "0sk4b0xma4vv6ssiskbz7h5bw8v8glm34mbv3llqywb50b9ks4fw";
   };
 
   packageName = "3bmd-ext-code-blocks";

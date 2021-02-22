@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkgconfig, Security
+{ stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkg-config, Security
 , sqliteSupport ? true, sqlite
 , postgresqlSupport ? true, postgresql
 , mysqlSupport ? true, mysql, zlib, libiconv
@@ -8,7 +8,7 @@ assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysq
   "support for at least one database must be enabled";
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
   features = ''
     ${optionalString sqliteSupport "sqlite"} \
     ${optionalString postgresqlSupport "postgres"} \
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./cargo-lock.patch ];
   cargoSha256 = "1vbb7r0dpmq8363i040bkhf279pz51c59kcq9v5qr34hs49ish8g";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
     ++ optional stdenv.isDarwin Security
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv

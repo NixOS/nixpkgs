@@ -80,7 +80,7 @@ stdenvNoCC.mkDerivation rec {
     cp -a *.png $art/data/art/
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface.";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;

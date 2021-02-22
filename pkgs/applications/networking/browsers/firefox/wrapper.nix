@@ -1,11 +1,10 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
-, replace, fetchurl, zip, unzip, jq, xdg_utils
+, replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, flashplayer, hal-flash
-, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd
+, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
 , gnome3/*.gnome-shell*/
-, browserpass, chrome-gnome-shell, uget-integrator, plasma5, bukubrow
+, browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
 , udev
@@ -47,27 +46,10 @@ let
     assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
-
-      plugins =
-        let
-          removed = lib.filter (a: builtins.hasAttr a cfg) [
-            "enableVLC"
-            "enableDjvu"
-            "enableMPlayer"
-            "jre"
-            "icedtea"
-            "enableGoogleTalkPlugin"
-            "enableFriBIDPlugin"
-            "enableBluejeans"
-            "enableAdobeReader"
-          ];
-        in if removed != []
-           then throw "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) removed}. All plugin related options, except for the adobe flash player, have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins)."
-           else lib.optional enableAdobeFlash flashplayer;
+      pipewireSupport = browser.pipewireSupport or false;
 
       nativeMessagingHosts =
         ([ ]
@@ -76,17 +58,17 @@ let
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
-          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5.plasma-browser-integration
+          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa ]
+      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver ]
+            ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
-            ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
             ++ lib.optional alsaSupport alsaLib
             ++ pkcs11Modules;
@@ -97,12 +79,17 @@ let
       #   EXTRA PREF CHANGES  #
       #                       #
       #########################
-      policiesJson = builtins.toFile "policies.json"
-        (builtins.toJSON enterprisePolicies);
+      policiesJson = writeText "policies.json" (builtins.toJSON enterprisePolicies);
 
       usesNixExtensions = nixExtensions != null;
 
-      extensions = builtins.map (a:
+      nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
+
+      # Check that every extension has a unqiue .name attribute
+      # and an extid attribute
+      extensions = if nameArray != (lib.unique nameArray) then
+        throw "Firefox addon name needs to be unique"
+      else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
         else
@@ -128,12 +115,19 @@ let
                 };
               }
             ) {} extensions;
-        }
+          } //
+          {
+            Extensions = {
+              Install = lib.foldr (e: ret:
+                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+                ) [] extensions;
+            };
+          }
         // extraPolicies;
       };
 
-      mozillaCfg = builtins.toFile "mozilla.cfg" ''
-// First line must be a comment
+      mozillaCfg =  writeText "mozilla.cfg" ''
+        // First line must be a comment
 
         // Disables addon signature checking
         // to be able to install addons that do not have an extid
@@ -149,7 +143,24 @@ let
       #                           #
       #############################
 
-    in stdenv.mkDerivation {
+      # TODO: remove this after the next release (21.03)
+      configPlugins = lib.filter (a: builtins.hasAttr a cfg) [
+        "enableAdobeFlash"
+        "enableAdobeReader"
+        "enableBluejeans"
+        "enableDjvu"
+        "enableFriBIDPlugin"
+        "enableGoogleTalkPlugin"
+        "enableMPlayer"
+        "enableVLC"
+        "icedtea"
+        "jre"
+      ];
+      pluginsError =
+        "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) configPlugins}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins).";
+
+    in if configPlugins != [] then throw pluginsError else
+      (stdenv.mkDerivation {
       inherit pname version;
 
       desktopItem = makeDesktopItem {
@@ -160,7 +171,7 @@ let
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
         categories = "Network;WebBrowser;";
-        mimeType = stdenv.lib.concatStringsSep ";" [
+        mimeType = lib.concatStringsSep ";" [
           "text/html"
           "text/xml"
           "application/xhtml+xml"
@@ -247,12 +258,9 @@ let
 
         makeWrapper "$oldExe" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
-            --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
-            --prefix PATH ':' "${xdg_utils}/bin" \
-            --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
+            --prefix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
@@ -320,18 +328,13 @@ let
         # preparing for autoconfig
         mkdir -p "$out/lib/${firefoxLibName}/defaults/pref"
 
-        cat > "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js" <<EOF
-          pref("general.config.filename", "mozilla.cfg");
-          pref("general.config.obscure_value", 0);
-        EOF
+        echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
+        echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
 
         cat > "$out/lib/${firefoxLibName}/mozilla.cfg" < ${mozillaCfg}
 
         mkdir -p $out/lib/${firefoxLibName}/distribution/extensions
 
-        for i in ${toString extensions}; do
-          ln -s -t $out/lib/${firefoxLibName}/distribution/extensions $i/*
-        done
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
@@ -341,9 +344,6 @@ let
 
       preferLocalBuild = true;
 
-      # Let each plugin tell us (through its `mozillaPlugin') attribute
-      # where to find the plugin in its tree.
-      plugins = map (x: x + x.mozillaPlugin) plugins;
       libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
       gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
@@ -352,14 +352,9 @@ let
       disallowedRequisites = [ stdenv.cc ];
 
       meta = browser.meta // {
-        description =
-          browser.meta.description
-          + " (with plugins: "
-          + lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins))
-          + ")";
+        description = browser.meta.description;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
-    };
-in
-  lib.makeOverridable wrapper
+    });
+in lib.makeOverridable wrapper

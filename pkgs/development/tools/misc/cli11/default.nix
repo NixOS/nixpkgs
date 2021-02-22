@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchFromGitHub,
   cmake,
   gtest,
@@ -30,9 +30,7 @@ stdenv.mkDerivation rec {
     sed -i '/TrueFalseTest/d' tests/CMakeLists.txt
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
     platforms = platforms.unix;

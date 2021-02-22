@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , gfortran, blas, lapack, eigen }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DINTERFACE64=${stdenv.lib.optionalString blas.isILP64 "1"}"
+    "-DINTERFACE64=${lib.optionalString blas.isILP64 "1"}"
   ];
 
   preCheck = if stdenv.isDarwin then ''
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
       A collection of Fortran77 subroutines to solve large scale eigenvalue
       problems.
     '';
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.unix;
   };
 }

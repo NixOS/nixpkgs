@@ -1,4 +1,4 @@
-{ stdenv, libbsd, fetchFromGitHub }:
+{ lib, stdenv, libbsd, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "1.1.2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbsd ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Store and restore metadata from a filesystem";
     homepage = "https://software.przemoc.net/#metastore";
     license = licenses.gpl2;

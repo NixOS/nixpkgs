@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, substituteAll, requests, dmenu }:
+{ lib, buildPythonApplication, fetchFromGitHub, substituteAll, requests, dmenu }:
 
 buildPythonApplication rec {
   pname = "dmensamenu";
@@ -25,7 +25,7 @@ buildPythonApplication rec {
   # No tests implemented
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dotlambda/dmensamenu";
     description = "Print German canteen menus using dmenu and OpenMensa";
     license = licenses.mit;

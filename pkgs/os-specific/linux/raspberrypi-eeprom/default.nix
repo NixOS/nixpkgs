@@ -1,15 +1,15 @@
 { stdenvNoCC, lib, fetchFromGitHub, makeWrapper
-, python3, binutils-unwrapped, findutils, kmod, pciutils, raspberrypi-tools
+, python3, binutils-unwrapped, findutils, kmod, pciutils, libraspberrypi
 }:
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-eeprom";
-  version = "unstable-2020-10-05";
+  version = "2020-12-11";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "718820bcebd21d4a619fa262d9b9cf3acbf110f8";
-    sha256 = "1277jsiyv34dqpandva8kxy1s0y5ql344pl9gk84avzp1mqjnv4g";
+    rev = "54a9796abbee59067bff9da6b90c1014178f2c21";
+    sha256 = "0yp7bn444n6yisp4hiblrm00rrvrf213amzb4sh96mlb5nhxspqk";
   };
 
   buildInputs = [ python3 ];
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation {
     patchShebangs $out/bin
     wrapProgram $out/bin/rpi-eeprom-update \
       --set FIRMWARE_ROOT $out/share/rpi-eeprom \
-      ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${raspberrypi-tools}/bin/vcmailbox"} \
+      ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
       --prefix PATH : "${lib.makeBinPath ([
         binutils-unwrapped
         findutils
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation {
         pciutils
         (placeholder "out")
       ] ++ lib.optionals stdenvNoCC.isAarch64 [
-        raspberrypi-tools
+        libraspberrypi
       ])}"
   '';
 

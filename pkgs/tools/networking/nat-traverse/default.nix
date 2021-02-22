@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "nat-traverse";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     gzip -c nat-traverse.1 > $out/share/man/man1/nat-traverse.1.gz
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NAT gateway traversal utility";
     longDescription = ''
       nat-traverse establishes direct connections between nodes which are

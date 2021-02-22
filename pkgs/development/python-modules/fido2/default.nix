@@ -20,6 +20,8 @@ buildPythonPackage rec {
 
   checkInputs = [ mock pyfakefs ];
 
+  pythonImportsCheck = [ "fido2" ];
+
   meta = with lib; {
     description = "Provides library functionality for FIDO 2.0, including communication with a device over USB.";
     homepage = "https://github.com/Yubico/python-fido2";

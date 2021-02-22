@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
 
 let generic = { major, version, src }:
 
@@ -30,7 +30,7 @@ let generic = { major, version, src }:
       cp -r ${desktopItem}/share/applications $out/share
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Language & tool for relational models";
       longDescription = ''
         Alloy is a language for describing structures and a tool for exploring

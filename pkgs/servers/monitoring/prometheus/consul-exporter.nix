@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "consul_exporter";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "16ibafcbpiplsh1awcvblzzf2cbr4baf8wiwpdpibgmcwwf9m5ya";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prometheus exporter for Consul metrics";
     homepage = "https://github.com/prometheus/consul_exporter";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoPatchelfHook
 , dpkg
 , fahviewer
@@ -7,7 +7,7 @@
 , python2
 }:
 let
-  majMin = stdenv.lib.versions.majorMinor version;
+  majMin = lib.versions.majorMinor version;
   version = "7.6.21";
 
   python = python2.withPackages
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fahviewer python ];
 
-  doBuild = false;
-
   unpackPhase = ''
     dpkg-deb -x ${src} ./
   '';
@@ -53,8 +51,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Folding@home control";
     homepage = "https://foldingathome.org/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.zimbatm ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.zimbatm ];
     platforms = [ "x86_64-linux" ];
   };
 }

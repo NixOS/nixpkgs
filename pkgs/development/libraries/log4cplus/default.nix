@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   name = "log4cplus-2.0.5";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://log4cplus.sourceforge.net/";
     description = "A port the log4j library from Java to C++";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

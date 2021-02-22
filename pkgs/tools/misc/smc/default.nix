@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "smc-6.6.3";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/smc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate state machine code from text input (state diagram)";
     longDescription = ''
       SMC (State Machine Compiler) takes a text input file describing states,

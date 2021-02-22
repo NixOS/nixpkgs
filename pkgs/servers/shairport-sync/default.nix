@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
-, libdaemon, popt, pkgconfig, libconfig, libpulseaudio, soxr }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
+, libdaemon, popt, pkg-config, libconfig, libpulseaudio, soxr }:
 
 stdenv.mkDerivation rec {
   version = "3.3.7";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "mikebrady";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     openssl
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Airtunes server and emulator with multi-room capabilities";
     license = licenses.mit;

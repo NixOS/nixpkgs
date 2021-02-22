@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkgconfig
+, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkg-config
 , python, pythonPackages
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded pkgconfig
+    gcc-arm-embedded pkg-config
   ];
 
   buildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = "${stdenv.shell} ${./helper.sh}";
-  installPhase = ":"; # buildPhase does this.
+  dontInstall = true;
 
   enableParallelBuilding = true;
 

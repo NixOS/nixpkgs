@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "go-migrate";
@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/migrate" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/golang-migrate/migrate";
     description = "Database migrations. CLI and Golang library";
     maintainers = with maintainers; [ offline ];

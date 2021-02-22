@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
-, pkgconfig
+, pkg-config
 , glib
 , vala
 , dee
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     autoreconfHook
     gobject-introspection
     intltool
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for instrumenting and integrating with all aspects of the Unity shell";
     homepage = "https://launchpad.net/libunity";
     license = licenses.lgpl3;

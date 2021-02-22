@@ -94,16 +94,6 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
-  cachix = overrideSrc (disableLibraryProfiling super.cachix) {
-    src = (pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "1471050f5906ecb7cd0d72115503d07d2e3beb17";
-      sha256 = "1lkrmhv5x9dpy53w33kxnhv4x4qm711ha8hsgccrjmxaqcsdm59g";
-    }) + "/cachix";
-    version = "0.5.1";
-  };
   hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
@@ -217,6 +207,7 @@ self: super: builtins.intersectAttrs super {
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
+  pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
@@ -236,6 +227,7 @@ self: super: builtins.intersectAttrs super {
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
+  telegraph = dontCheck super.telegraph;
   typed-process = dontCheck super.typed-process;
   js-jquery = dontCheck super.js-jquery;
   hPDB-examples = dontCheck super.hPDB-examples;
@@ -510,7 +502,7 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
-  # requires libsecp256k1 in pkgconfig-depends
+  # requires libsecp256k1 in pkg-config-depends
   secp256k1-haskell = addPkgconfigDepend super.secp256k1-haskell pkgs.secp256k1;
 
   # tests require git and zsh
@@ -550,13 +542,18 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
-  splitmix_0_1_0_3 = dontCheck super.splitmix_0_1_0_3;
 
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
 
   # Break infinite recursion cycle between devtools and mprelude.
   devtools = super.devtools.override { mprelude = dontCheck super.mprelude; };
+
+  # Break dependency cycle between tasty-hedgehog and tasty-expected-failure
+  tasty-hedgehog = dontCheck super.tasty-hedgehog;
+
+  # Break dependency cycle between hedgehog, tasty-hedgehog and lifted-async
+  lifted-async = dontCheck super.lifted-async;
 
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
@@ -615,12 +612,12 @@ self: super: builtins.intersectAttrs super {
 
   git-annex = with pkgs;
     if (!stdenv.isLinux) then
-      let path = stdenv.lib.makeBinPath [ coreutils ];
+      let path = lib.makeBinPath [ coreutils ];
       in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
         # This is an instance of https://github.com/NixOS/nix/pull/1085
         # Fails with:
         #   gpg: can't connect to the agent: File name too long
-        postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+        postPatch = lib.optionalString stdenv.isDarwin ''
           substituteInPlace Test.hs \
             --replace ', testCase "crypto" test_crypto' ""
         '';
@@ -662,33 +659,11 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
-      # Spago needs a small patch to work with the latest versions of rio.
-      # https://github.com/purescript/spago/pull/647
-      spagoWithPatches = overrideCabal (appendPatch super.spago (
-        # Spago-0.17 needs a small patch to work with the latest version of dhall.
-        # This can probably be removed with Spago-0.18.
-        # https://github.com/purescript/spago/pull/695
-        pkgs.fetchpatch {
-          url = "https://github.com/purescript/spago/commit/6258ac601480e776c215c989cc5faae46d5ca9f7.patch";
-          sha256 = "02zy4jf24qlqz9fkcs2rqg64ijd8smncmra8s5yp2mln4dmmii1k";
-        }
-      )) (old: {
-        # The above patch contains a completely new spago.cabal file, but our
-        # source tree from Hackage already contains a cabal file.  Delete the
-        # local cabal file and just take the one from the patch.
-        #
-        # WARNING: The empty line above the `rm` needs to be kept.
-        prePatch = old.prePatch or "" + ''
-
-          rm spago.cabal
-        '';
-        # The above patch also adds a dependency on the stringsearch package.
-        libraryHaskellDepends = old.libraryHaskellDepends or [] ++ [ self.stringsearch ];
-      });
-
       # spago requires an older version of megaparsec, but it appears to work
       # fine with newer versions.
-      spagoWithOverrides = doJailbreak spagoWithPatches;
+      spagoWithOverrides = doJailbreak (super.spago.override {
+        dhall = self.dhall_1_37_1;
+      });
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
@@ -746,7 +721,7 @@ self: super: builtins.intersectAttrs super {
 
   # mplayer-spot uses mplayer at runtime.
   mplayer-spot =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.mplayer ];
+    let path = pkgs.lib.makeBinPath [ pkgs.mplayer ];
     in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
       postInstall = ''
         wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
@@ -758,7 +733,7 @@ self: super: builtins.intersectAttrs super {
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
+    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -814,7 +789,7 @@ self: super: builtins.intersectAttrs super {
     testTarget = "unit-tests";
   };
 
-  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
+  haskell-language-server = enableCabalFlag (enableCabalFlag (overrideCabal super.haskell-language-server (drv: {
     postInstall = let
       inherit (pkgs.lib) concatStringsSep take splitString;
       ghc_version = self.ghc.version;
@@ -829,8 +804,12 @@ self: super: builtins.intersectAttrs super {
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
     '';
-  });
+  })) "all-plugins") "all-formatters";
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
+
+  # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
+  # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
+  hadolint = disableCabalFlag super.hadolint "static";
 }

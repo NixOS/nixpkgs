@@ -1,5 +1,14 @@
-version: 1.0
+version: 2.0
 shards:
+  ameba:
+    git: https://github.com/crystal-ameba/ameba.git
+    version: 0.13.3
+
+  future:
+    git: https://github.com/crystal-community/future.cr.git
+    version: 0.1.0
+
   teeplate:
-    github: luckyframework/teeplate
-    version: 0.8.1
+    git: https://github.com/luckyframework/teeplate.git
+    version: 0.8.2
+

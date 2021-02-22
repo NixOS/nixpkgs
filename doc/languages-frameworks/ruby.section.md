@@ -232,7 +232,7 @@ If you want to package a specific version, you can use the standard Gemfile synt
 Now you can also also make a `default.nix` that looks like this:
 
 ```nix
-{ lib, bundlerApp }:
+{ bundlerApp }:
 
 bundlerApp {
   pname = "mdl";

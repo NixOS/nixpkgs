@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python2, pkgconfig, libgnome, GConf, glib, gtk2, gnome_vfs }:
+{ lib, stdenv, fetchurl, python2, pkg-config, libgnome, GConf, glib, gtk2, gnome_vfs }:
 
-with stdenv.lib;
+with lib;
 
 let
   inherit (python2.pkgs) python pygobject2 pygtk dbus-python;
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "759ce9344cbf89cf7f8449d945822a0c9f317a494f56787782a901e4119b96d8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ python glib gtk2 GConf libgnome gnome_vfs ];
   propagatedBuildInputs = [ pygobject2 pygtk dbus-python ];
 
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     echo "gtk-2.0" > $out/${python2.sitePackages}/${name}.pth
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pygtk.org/";
     description = "Python wrapper for GNOME libraries";
     platforms = platforms.linux;

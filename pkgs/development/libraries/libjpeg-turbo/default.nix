@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, nasm, enableStatic ? false, enableShared ? true }:
+{ lib, stdenv, fetchFromGitHub, cmake, nasm
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
 
@@ -12,11 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "0njdxfmyk8smj8bbd6fs3lxjaq3lybivwgg16gpnbiyl984dpi9b";
   };
 
-  patches =
-    stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+  # This is needed by freeimage
+  patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
+    ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+
+  postFixup = ''
+    moveToOutput include/transupp.h $dev_private
+  '';
 
   nativeBuildInputs = [ cmake nasm ];
 
@@ -28,7 +36,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libjpeg-turbo.org/";
     description = "A faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses

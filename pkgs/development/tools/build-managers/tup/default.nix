@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fuse3, pkgconfig, pcre }:
+{ lib, stdenv, fetchFromGitHub, fuse3, pkg-config, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "tup";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qd07h4wi0743l7z2vybfvhwp61g2p2pc5qhl40672ryl24nvd1d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse3 pcre ];
 
   configurePhase = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast, file-based build system";
     longDescription = ''
       Tup is a file-based build system for Linux, OSX, and Windows. It inputs a list

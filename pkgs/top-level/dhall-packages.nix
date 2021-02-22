@@ -19,6 +19,7 @@ let
 
     in
       { inherit
+          callPackage
           buildDhallPackage
           buildDhallGitHubPackage
           buildDhallDirectoryPackage

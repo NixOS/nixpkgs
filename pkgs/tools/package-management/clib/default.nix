@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl  }:
+{ lib, stdenv, fetchFromGitHub, curl  }:
 
 stdenv.mkDerivation rec {
   version = "1.11.4";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C micro-package manager";
     homepage = "https://github.com/clibs/clib";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , glib
 , flex
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "078n0q7b6z682mf4irclrksm73cyixq295mqnqifl9plwmgaai6x";
   };
 
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
-  ] ++ stdenv.lib.optionals x11Support [
+  ] ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
     # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
-      cairoLib = "${stdenv.lib.getLib cairo}/lib";
+      cairoLib = "${lib.getLib cairo}/lib";
     })
   ];
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  checkInputs = stdenv.lib.optionals stdenv.isDarwin [
+  checkInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);

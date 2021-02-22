@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
     " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
   ''
   + (if firmware == [] then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
-  + (if configOpts == null then "" else ''
-    ln -sf ${configOpts} ./config/config.opts'')
+  + (if configOpts == null then "" else "ln -sf ${configOpts} ./config/config.opts")
   ;
 
   makeFlags = [ "LEX=flex" ];
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
       the PCMCIA subsystem to behave (almost) as every other
       hotpluggable bus system.
     ";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

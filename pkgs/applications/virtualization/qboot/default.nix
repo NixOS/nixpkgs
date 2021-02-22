@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, fetchFromGitHub, nixosTests }:
+{ lib, stdenv, meson, ninja, fetchFromGitHub, nixosTests }:
 
 stdenv.mkDerivation {
   name = "qboot-20200423";
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A simple x86 firmware for booting Linux";
     homepage = "https://github.com/bonzini/qboot";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ tstrobel ];
     platforms = ["x86_64-linux" "i686-linux"];
   };
 }

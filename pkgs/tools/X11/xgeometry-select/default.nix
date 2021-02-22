@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11 }:
+{ lib, stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
   name     = "${baseName}-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mv -v ${baseName} $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Select a region with mouse and prints geometry information (x/y/w/h)";
     homepage    = "https://bbs.archlinux.org/viewtopic.php?pid=660837";
     maintainers = with maintainers; [ obadz ];

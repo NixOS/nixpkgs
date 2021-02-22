@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "me_cleaner";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1bdj2clm13ir441vn7sv860xsc5gh71ja5lc2wn0gggnff0adxj4";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Tool for partial deblobbing of Intel ME/TXE firmware images";
     longDescription = ''

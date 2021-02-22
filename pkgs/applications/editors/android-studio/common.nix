@@ -1,4 +1,4 @@
-{ channel, pname, version, build, sha256Hash }:
+{ channel, pname, version, build ? null, sha256Hash }:
 
 { alsaLib
 , bash
@@ -35,12 +35,14 @@
 , libXrender
 , libXtst
 , makeWrapper
+, ncurses5
 , nspr
 , nss
 , pciutils
 , pkgsi686Linux
 , ps
 , setxkbmap
+, lib
 , stdenv
 , systemd
 , unzip
@@ -53,11 +55,13 @@
 
 let
   drvName = "android-studio-${channel}-${version}";
+  filename = "android-studio-" + (if (build != null) then "ide-${build}" else version) + "-linux.tar.gz";
+
   androidStudio = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
 
     src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.tar.gz";
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/${filename}";
       sha256 = sha256Hash;
     };
 
@@ -69,7 +73,10 @@ let
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-        --prefix PATH : "${stdenv.lib.makeBinPath [
+        --set JAVA_HOME "$out/jre" \
+        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        --set FONTCONFIG_FILE ${fontsConf} \
+        --prefix PATH : "${lib.makeBinPath [
 
           # Checked in studio.sh
           coreutils
@@ -92,7 +99,7 @@ let
           git
           ps
         ]}" \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
 
           # Crash at startup without these
           fontconfig
@@ -135,11 +142,18 @@ let
           gnome_vfs
           glib
           GConf
-        ]}" \
-        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
-        --set FONTCONFIG_FILE ${fontsConf}
+        ]}"
+
+      # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
+      wrapProgram $out/bin/lldb/bin/LLDBFrontend --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
+        ncurses5
+        zlib
+      ]}"
     '';
   };
+
+  # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
+  dontPatchShebangs = true;
 
   desktopItem = makeDesktopItem {
     name = drvName;
@@ -158,7 +172,7 @@ let
   fhsEnv = buildFHSUserEnv {
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [
-      pkgs.ncurses5
+      ncurses5
 
       # Flutter can only search for certs Fedora-way.
       (runCommand "fedoracert" {}
@@ -180,7 +194,7 @@ in runCommand
     passthru = {
       unwrapped = androidStudio;
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''
         Android Studio is the official IDE for Android app development, based on

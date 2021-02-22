@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform
-, openssl, cmake, perl, pkgconfig, zlib, curl, libgit2, libssh2
+{ lib, fetchFromGitHub, fetchpatch, rustPlatform
+, openssl, cmake, perl, pkg-config, zlib, curl, libgit2, libssh2
 }:
 
 with rustPlatform;
@@ -36,14 +36,14 @@ buildRustPackage rec {
 
   LIBGIT2_SYS_USE_PKG_CONFIG = true;
   LIBSSH2_SYS_USE_PKG_CONFIG = true;
-  nativeBuildInputs = [ cmake pkgconfig perl ];
+  nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ openssl zlib curl libgit2 libssh2 ];
 
   postBuild = ''
     install -D "$src/git-series.1" "$out/man/man1/git-series.1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to help with formatting git patches for review on mailing lists";
     longDescription = ''
           git series tracks changes to a patch series over time. git

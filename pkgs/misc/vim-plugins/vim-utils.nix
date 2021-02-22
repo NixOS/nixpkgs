@@ -1,4 +1,4 @@
-{ stdenv, vim, vimPlugins, vim_configurable, neovim, buildEnv, writeText, writeScriptBin
+{ lib, stdenv, vim, vimPlugins, vim_configurable, neovim, buildEnv, writeText, writeScriptBin
 , nix-prefetch-hg, nix-prefetch-git
 , fetchFromGitHub, runtimeShell
 }:
@@ -150,7 +150,7 @@ vim_with_plugins can be installed like any other application within Nix.
 
 
 let
-  inherit (stdenv) lib;
+  inherit lib;
 
   # make sure a plugin is a derivation and its dependencies are derivations. If
   # plugin already is a derivation, this is a no-op. If it is a string, it is
@@ -373,7 +373,7 @@ rec {
     gvimExecutableName,
   }:
     let
-      rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
+      rcOption = o: file: lib.optionalString (file != null) "-${o} ${file}";
       vimWrapperScript = writeScriptBin vimExecutableName ''
         #!${runtimeShell}
         exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
@@ -450,7 +450,7 @@ rec {
 
   vim_with_vim2nix = vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; };
 
-  inherit (import ./build-vim-plugin.nix { inherit stdenv rtpPath vim; }) buildVimPlugin buildVimPluginFrom2Nix;
+  inherit (import ./build-vim-plugin.nix { inherit lib stdenv rtpPath vim; }) buildVimPlugin buildVimPluginFrom2Nix;
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , cmake
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
 
   buildInputs = [ libgit2 libssh2 openssl zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+    ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     license = licenses.mit;

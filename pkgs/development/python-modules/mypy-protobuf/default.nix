@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonApplication, protobuf }:
+{ lib, fetchPypi, buildPythonApplication, protobuf }:
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";
@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ protobuf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate mypy stub files from protobuf specs";
     homepage = "https://github.com/dropbox/mypy-protobuf";
     license = licenses.asl20;

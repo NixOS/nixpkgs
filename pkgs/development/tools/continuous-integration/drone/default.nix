@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   name = "drone.io-${version}";
@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-12Jac+mXWdUX8gWvmpdO9ROv7Bi0YzvyqnNDVNJOr34=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ elohmeier vdemeester ];
     license = licenses.asl20;
     description = "Continuous Integration platform built on container technology";

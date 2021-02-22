@@ -31,6 +31,8 @@ in runCommand podman.name {
   name = "${podman.pname}-wrapper-${podman.version}";
   inherit (podman) pname version passthru;
 
+  preferLocalBuild = true;
+
   meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
 
   outputs = [
@@ -46,6 +48,7 @@ in runCommand podman.name {
   ln -s ${podman.man} $man
 
   mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/lib $out/lib
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
     --prefix PATH : ${binPath}

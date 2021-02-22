@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , unittest2
@@ -21,14 +21,14 @@ buildPythonPackage rec {
   checkInputs = [ unittest2 mock ];
   propagatedBuildInputs = [ pyasn1 ];
 
-  preConfigure = stdenv.lib.optionalString (isPy3k && pythonOlder "3.7") ''
+  preConfigure = lib.optionalString (isPy3k && pythonOlder "3.7") ''
     substituteInPlace setup.py --replace "open('README.md')" "open('README.md',encoding='utf-8')"
   '';
 
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://stuvel.eu/rsa";
     license = licenses.asl20;
     description = "A pure-Python RSA implementation";

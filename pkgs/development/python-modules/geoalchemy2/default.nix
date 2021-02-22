@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , sqlalchemy
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # https://github.com/geoalchemy/geoalchemy2/blob/e05a676350b11f0e73609379dae5625c5de2e868/TEST.rst
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage =  "http://geoalchemy.org/";
     license = licenses.mit;
     description = "Toolkit for working with spatial databases";

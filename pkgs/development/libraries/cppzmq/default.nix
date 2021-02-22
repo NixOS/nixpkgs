@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zeromq }:
+{ lib, stdenv, fetchFromGitHub, cmake, zeromq }:
 
 stdenv.mkDerivation rec {
   pname = "cppzmq";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DCPPZMQ_BUILD_TESTS=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/zeromq/cppzmq";
     license = licenses.bsd2;
     description = "C++ binding for 0MQ";

@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "ocp-index";
   version = "1.2.1";
 
+  useDune2 = true;
+
   src = fetchzip {
     url = "https://github.com/OCamlPro/ocp-index/archive/${version}.tar.gz";
     sha256 = "08r7mxdnxmhff37fw4hmrpjgckgi5kaiiiirwp4rmdl594z0h9c8";

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
+{lib, stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
 , enableX11 ? true}:
 
 let inherit (ocamlPackages) ocaml lablgtk; in
@@ -25,7 +25,7 @@ stdenv.mkDerivation (rec {
   makeFlags = [
     "INSTALLDIR=$(out)/bin/"
     "UISTYLE=${if enableX11 then "gtk2" else "text"}"
-  ] ++ stdenv.lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
+  ] ++ lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
 
   preInstall = "mkdir -p $out/bin";
 
@@ -41,9 +41,9 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; unix;
   };
 
 })

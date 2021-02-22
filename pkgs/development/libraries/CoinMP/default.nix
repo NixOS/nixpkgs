@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "CoinMP";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://projects.coin-or.org/CoinMP/";
     description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
     platforms = platforms.unix;

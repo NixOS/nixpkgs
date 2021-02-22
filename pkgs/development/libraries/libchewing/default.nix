@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sqlite }:
+{ lib, stdenv, fetchurl, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "libchewing";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sqlite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intelligent Chinese phonetic input method";
     homepage = "http://chewing.im/";
     license = licenses.lgpl21;

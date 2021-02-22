@@ -1,4 +1,4 @@
-{ callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0 }:
+{ callPackage, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2 }:
 
 let
   generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
@@ -6,35 +6,6 @@ let
   };
 
 in rec {
-  cudnn_cudatoolkit_7 = generic rec {
-    # Old URL is v4 instead of v4.0 for some reason...
-    version = "4";
-    cudatoolkit = cudatoolkit_7;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v4.0-prod.tgz";
-    sha256 = "01a4v5j4v9n2xjqcc4m28c3m67qrvsx87npvy7zhx7w8smiif2fd";
-  };
-
-  cudnn_cudatoolkit_7_5 = generic rec {
-    version = "6.0";
-    cudatoolkit = cudatoolkit_7_5;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v${version}.tgz";
-    sha256 = "0b68hv8pqcvh7z8xlgm4cxr9rfbjs0yvg1xj2n5ap4az1h3lp3an";
-  };
-
-  cudnn6_cudatoolkit_8 = generic rec {
-    version = "6.0";
-    cudatoolkit = cudatoolkit_8;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v${version}.tgz";
-    sha256 = "173zpgrk55ri8if7s5yngsc89ajd6hz4pss4cdxlv6lcyh5122cv";
-  };
-
-  cudnn_cudatoolkit_8 = generic rec {
-    version = "7.0.5";
-    cudatoolkit = cudatoolkit_8;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.tgz";
-    sha256 = "9e0b31735918fe33a79c4b3e612143d33f48f61c095a3b993023cdab46f6d66e";
-  };
-
   cudnn_cudatoolkit_9_0 = generic rec {
     version = "7.3.0";
     cudatoolkit = cudatoolkit_9_0;
@@ -82,11 +53,21 @@ in rec {
   cudnn_cudatoolkit_10 = cudnn_cudatoolkit_10_2;
 
   cudnn_cudatoolkit_11_0 = generic rec {
-    version = "8.0.2";
+    version = "8.1.0";
     cudatoolkit = cudatoolkit_11_0;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v8.0.2.39.tgz";
-    sha256 = "0ib3v3bgcdxarqapkxngw1nwl0c2a7zz392ns7w9ipcficl4cbv7";
+    # 8.1.0 is compatible with CUDA 11.0, 11.1, and 11.2:
+    # https://docs.nvidia.com/deeplearning/cudnn/support-matrix/index.html#cudnn-cuda-hardware-versions
+    srcName = "cudnn-11.2-linux-x64-v8.1.0.77.tgz";
+    sha256 = "sha256-2+gvrwcdkbqbzwBIAUatM/RiSC3+5WyvRHnBuNq+Pss=";
   };
 
-  cudnn_cudatoolkit_11 = cudnn_cudatoolkit_11_0;
+  cudnn_cudatoolkit_11_1 = cudnn_cudatoolkit_11_0.override {
+    cudatoolkit = cudatoolkit_11_1;
+  };
+
+  cudnn_cudatoolkit_11_2 = cudnn_cudatoolkit_11_0.override {
+    cudatoolkit = cudatoolkit_11_2;
+  };
+
+  cudnn_cudatoolkit_11 = cudnn_cudatoolkit_11_2;
 }

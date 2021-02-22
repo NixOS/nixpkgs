@@ -2,7 +2,7 @@
 , pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles, fetchpatch }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
   version = "2.1.27";

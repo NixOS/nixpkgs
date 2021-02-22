@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # We need to tell ccls where to find the standard library headers.
 
-    standard_library_includes="\\\"-isystem\\\", \\\"${stdenv.lib.getDev stdenv.cc.libc}/include\\\""
+    standard_library_includes="\\\"-isystem\\\", \\\"${lib.getDev stdenv.cc.libc}/include\\\""
     standard_library_includes+=", \\\"-isystem\\\", \\\"${llvmPackages.libcxx}/include/c++/v1\\\""
     export standard_library_includes
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     chmod --reference=$out/bin/$wrapped $out/bin/ccls
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A c/c++ language server powered by clang";
     homepage    = "https://github.com/MaskRay/ccls";
     license     = licenses.asl20;

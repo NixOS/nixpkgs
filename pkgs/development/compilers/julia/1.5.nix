@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
 , cmake
@@ -14,7 +14,7 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-with stdenv.lib;
+with lib;
 
 let
   majorVersion = "1";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     arpack fftw fftwSinglePrec libgit2 libunwind mpfr
     pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
+  ] ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which cmake ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     let
       arch = head (splitString "-" stdenv.system);
       march = {
-        x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64";
+        x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
         i686 = "pentium4";
         aarch64 = "armv8-a";
       }.${arch}
@@ -119,8 +119,6 @@ stdenv.mkDerivation rec {
     openspecfun pcre2 lapack
   ];
 
-  enableParallelBuilding = true;
-
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"
@@ -152,8 +150,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ raskin rob garrison ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     broken = stdenv.isi686;
   };

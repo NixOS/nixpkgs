@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic error monitoring for django, flask, etc.";
     homepage = "https://www.bugsnag.com";
     license = licenses.mit;

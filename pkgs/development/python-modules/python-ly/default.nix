@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, stdenv }:
+{ buildPythonPackage, fetchPypi, lib }:
 
 buildPythonPackage rec {
   pname = "python-ly";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # seem to be broken ATM: https://github.com/wbsoft/python-ly/issues/70
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool and library for manipulating LilyPond files";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];

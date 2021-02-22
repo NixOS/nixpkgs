@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 let
   version = "110.95";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
@@ -79,7 +79,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Standard ML of New Jersey, a compiler";
     homepage    = "http://smlnj.org";
     license     = licenses.bsd3;

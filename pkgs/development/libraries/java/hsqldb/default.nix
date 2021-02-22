@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, unzip, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "hsqldb";
   version = "2.5.1";
-  underscoreMajMin = stdenv.lib.strings.replaceChars ["."] ["_"] (stdenv.lib.versions.majorMinor version);
+  underscoreMajMin = lib.strings.replaceChars ["."] ["_"] (lib.versions.majorMinor version);
 
   src = fetchurl {
     url = "mirror://sourceforge/project/hsqldb/hsqldb/hsqldb_${underscoreMajMin}/hsqldb-${version}.zip";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://hsqldb.org";
     description = "A relational, embedable database management system written in Java and a set of related tools";
     platforms = platforms.unix;

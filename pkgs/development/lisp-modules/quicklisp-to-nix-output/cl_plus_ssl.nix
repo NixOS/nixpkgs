@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl_plus_ssl'';
-  version = ''cl+ssl-20200610-git'';
+  baseName = "cl_plus_ssl";
+  version = "cl+ssl-20200610-git";
 
-  description = ''Common Lisp interface to OpenSSL.'';
+  description = "Common Lisp interface to OpenSSL.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."flexi-streams" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl+ssl/2020-06-10/cl+ssl-20200610-git.tgz'';
-    sha256 = ''1kijg8vlwcxraknp4gadf3n5zjchkgg8axr94v3kas9rb717r6ql'';
+    url = "http://beta.quicklisp.org/archive/cl+ssl/2020-06-10/cl+ssl-20200610-git.tgz";
+    sha256 = "1kijg8vlwcxraknp4gadf3n5zjchkgg8axr94v3kas9rb717r6ql";
   };
 
   packageName = "cl+ssl";

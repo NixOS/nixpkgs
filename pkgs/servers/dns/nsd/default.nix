@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, openssl, nixosTests
+{ lib, stdenv, fetchurl, libevent, openssl, nixosTests
 , bind8Stats       ? false
 , checking         ? false
 , ipv6             ? true
@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.3.4";
+  version = "4.3.5";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0l4ba80ihwg3s2ifhnkmk7rjabrcy5zw6sz4hn0vm9sif6lk9s1v";
+    sha256 = "sha256-faK0PjCz1/MHcixgj3Gb+xafDZhcdko0+gZp3DNIRHI=";
   };
 
   prePatch = ''
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) nsd;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
     license = licenses.bsd3;

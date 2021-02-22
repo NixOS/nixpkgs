@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -72,5 +73,7 @@ buildPythonPackage rec {
     description = "A modular, fast, simple, static website and blog generator";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+    # all tests fail
+    broken = stdenv.isDarwin;
   };
 }

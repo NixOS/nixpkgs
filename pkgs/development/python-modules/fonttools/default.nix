@@ -12,6 +12,7 @@
 , sympy
 , matplotlib
 , reportlab
+, sphinx
 , pytest
 , pytest-randomly
 , glibcLocales
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.14.0";
+  version = "4.20.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "0aiaxjg2v2391gxnhp4nvmgfb3ygm6x7n080s5mnkfjq2bq319in";
+    sha256 = "0yj83vsjh23g7gkmq6svbgc898x3qgygkhvpcbpycvmpwxxqxh1v";
   };
 
   # all dependencies are optional, but
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     matplotlib
     # pens
     reportlab
+    sphinx
   ];
 
   preCheck = ''

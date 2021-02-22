@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
 
 let
 
@@ -24,7 +24,7 @@ let
         cp -rv . $out/lib/cura/plugins/OctoPrintPlugin/
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Enables printing directly to OctoPrint and monitoring the process";
         homepage = "https://github.com/fieldOfView/Cura-OctoPrintPlugin";
         license = licenses.agpl3;

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.25.0";
+  version = "2021.01.0";
 
   disabled = pythonOlder "3.5";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "1irp6s577yyjvrvkg00hh1wnl8vrv7pbnbr09mk67z9y7s6xhiw3";
+    sha256 = "V2cEOzV/L1zjyQ76zlGyN9CIkq6W8y8Yab4NQi3/Ju4=";
   };
 
   checkInputs = [
@@ -59,6 +59,7 @@ buildPythonPackage rec {
     "test_count_nonzero_str"
     "rolling_methods"  # floating percision error ~0.1*10^8 small
     "num_workers_config" # flaky
+    "test_2args_with_array[pandas1-darray1-ldexp]"  # flaky
   ];
 
   meta = {

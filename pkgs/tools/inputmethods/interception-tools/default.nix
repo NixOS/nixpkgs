@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, libyamlcpp,
+{ lib, stdenv, fetchurl, pkg-config, cmake, libyamlcpp,
   libevdev, udev }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     sha256 = "0lqz89wsf9r5xdgflincysxg4l8fpgg5z8zczhhrg9s5787srfzi";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libevdev udev libyamlcpp ];
 
   prePatch = ''
@@ -26,8 +26,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "A minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.vyp ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.vyp ];
+    platforms = lib.platforms.linux;
   };
 }

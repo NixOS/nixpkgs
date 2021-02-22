@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pillow
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "6797e974fac66f0efbe927c1539a2756ca4fe8777eaa5882bac132fc76b39421";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PDF generator using HTML and CSS";
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , asciidoc
@@ -11,7 +11,7 @@
 , tracker
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , bzip2
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1kfi5d6pccqx28hbnja6k1mpwjd53k5zs704sg01rlzmbshz1zn6";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;

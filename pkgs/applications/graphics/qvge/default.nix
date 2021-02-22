@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "qvge";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "ArsMasiuk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j4ih03nl6iihhnxrfldkarg9hvxb62lpr58xspn417d3gj6xjll";
+    sha256 = "0qy73dngl1xm6mr2306ddzbbrzk6yszp3y15phs861bfxynzkqjz";
   };
 
   prePatch = "cd src";

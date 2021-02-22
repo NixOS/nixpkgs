@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre_headless, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "graylog";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/graylogctl $makeWrapperArgs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source log management solution";
     homepage    = "https://www.graylog.org/";
     license     = licenses.gpl3;

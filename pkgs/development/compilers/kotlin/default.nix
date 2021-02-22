@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, unzip }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, unzip }:
 
 let
   version = "1.4.21";
@@ -38,9 +38,9 @@ in stdenv.mkDerivation {
       and has external contributors.
     '';
     homepage = "https://kotlinlang.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers;
       [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

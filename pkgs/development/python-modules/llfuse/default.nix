@@ -1,10 +1,6 @@
-{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
+{ lib, stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkg-config, pytest, fuse, attr, which
 , contextlib2, osxfuse
 }:
-
-let
-  inherit (stdenv.lib) optionals optionalString;
-in
 
 buildPythonPackage rec {
   pname = "llfuse";
@@ -23,20 +19,22 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs =
-    optionals stdenv.isLinux [ fuse ]
-    ++ optionals stdenv.isDarwin [ osxfuse ];
+    lib.optionals stdenv.isLinux [ fuse ]
+    ++ lib.optionals stdenv.isDarwin [ osxfuse ];
+
   checkInputs = [ pytest which ] ++
-    optionals stdenv.isLinux [ attr ];
+    lib.optionals stdenv.isLinux [ attr ];
 
   propagatedBuildInputs = [ contextlib2 ];
 
   checkPhase = ''
-    py.test -k "not test_listdir" ${optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
+    py.test -k "not test_listdir" ${lib.optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
     license = licenses.lgpl2Plus;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "commons-logging-1.2";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Wrapper around a variety of logging API implementations";
     homepage = "http://commons.apache.org/proper/commons-logging";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }
 

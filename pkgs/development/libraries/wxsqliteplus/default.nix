@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, wxsqlite3, sqlite }:
+{ lib, stdenv, fetchFromGitHub, wxGTK, wxsqlite3, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "wxsqliteplus";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -D wxsqliteplus $out/bin/wxsqliteplus
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/guanlisheng/wxsqliteplus";
     description = "A simple SQLite database browser built with wxWidgets";
     platforms = platforms.unix;

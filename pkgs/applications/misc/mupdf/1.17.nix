@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, freetype, harfbuzz, openjpeg
 , jbig2dec, libjpeg , darwin
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
@@ -23,8 +23,8 @@ in stdenv.mkDerivation rec {
 
   patches =
     # Use shared libraries to decrease size
-    stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+    lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
+    ++ lib.optional stdenv.isDarwin ./darwin.patch
   ;
 
   postPatch = ''
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
@@ -80,7 +80,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mupdf.com";
     repositories.git = "git://git.ghostscript.com/mupdf.git";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";

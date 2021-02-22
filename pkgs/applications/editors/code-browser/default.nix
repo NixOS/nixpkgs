@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , copper
 , ruby
@@ -28,18 +28,21 @@ stdenv.mkDerivation rec {
                         gtk3
                         pkg-config
                       ]
-  ++ stdenv.lib.optionals withQt [ wrapQtAppsHook ];
-  buildInputs = stdenv.lib.optionals withQt [ qtbase ]
-                ++ stdenv.lib.optionals withGtk [ gtk3 ];
+  ++ lib.optionals withQt [ wrapQtAppsHook ];
+  buildInputs = lib.optionals withQt [ qtbase ]
+                ++ lib.optionals withGtk [ gtk3 ];
   makeFlags = [
     "prefix=$(out)"
     "COPPER=${copper}/bin/copper-elf64"
     "with-local-libs"
     "QINC=${qtbase.dev}/include"
   ]
-  ++ stdenv.lib.optionals withQt [ "UI=qt" ]
-  ++ stdenv.lib.optionals withGtk [ "UI=gtk" ];
-  meta = with stdenv.lib; {
+  ++ lib.optionals withQt [ "UI=qt" ]
+  ++ lib.optionals withGtk [ "UI=gtk" ];
+
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "Folding text editor, designed to hierarchically structure any kind of text file and especially source code";
     homepage = "https://tibleiz.net/code-browser/";
     license = licenses.gpl2;

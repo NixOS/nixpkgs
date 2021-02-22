@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc }:
+{ lib, stdenv, fetchFromGitHub, cmake, libxslt, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "mkrom";
@@ -11,14 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0xgvanya40mdwy35j94j61hsp80dm5b440iphmr5ng3kjgchvpx2";
   };
 
-  nativeBuildInputs = [
-    asciidoc
-    cmake
-  ];
+  strictDeps = true;
+  nativeBuildInputs = [ asciidoc cmake libxslt.bin ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Packages KnightOS distribution files into a ROM";
     license     = licenses.mit;

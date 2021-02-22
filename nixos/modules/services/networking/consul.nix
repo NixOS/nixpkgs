@@ -99,6 +99,7 @@ in
 
       extraConfig = mkOption {
         default = { };
+        type = types.attrsOf types.anything;
         description = ''
           Extra configuration options which are serialized to json and added
           to the config.json file.

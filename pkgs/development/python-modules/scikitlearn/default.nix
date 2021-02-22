@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.23.2";
+  version = "0.24.1";
   # UnboundLocalError: local variable 'message' referenced before assignment
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20766f515e6cd6f954554387dfae705d93c7b544ec0e6c6a5d8e006f6f7ef480";
+    sha256 = "oDNKGALmTWVgIsO/q1anP71r9LEpg0PzaIryFRgQu98=";
   };
 
   buildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     HOME=$TMPDIR OMP_NUM_THREADS=1 pytest -k "not test_feature_importance_regression" --pyargs sklearn
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of python modules for machine learning and data mining";
     changelog = let
       major = versions.major version;

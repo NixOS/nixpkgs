@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "3.11";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = "http://commons.apache.org/proper/commons-lang";
     description = "Provides additional methods to manipulate standard Java library classes";
-    maintainers = with stdenv.lib.maintainers; [ copumpkin ];
-    license     = stdenv.lib.licenses.asl20;
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with lib.maintainers; [ copumpkin ];
+    license     = lib.licenses.asl20;
+    platforms = with lib.platforms; unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , python3
 , glibcLocales
 , installShellFiles
@@ -60,7 +60,7 @@ buildPythonApplication rec {
     rm tests/test_cli.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''

@@ -1,5 +1,5 @@
-{ stdenv, fetchzip, fetchpatch, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
-, glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkgconfig, which, vte }:
+{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
+, glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
   inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ dmd pkgconfig which ];
+  nativeBuildInputs = [ dmd pkg-config which ];
   propagatedBuildInputs = [
     atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview4
     libgda libpeas librsvg pango vte
@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags  = [
     "prefix=${placeholder "out"}"
-    "PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
+    "PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
   ];
 
   # The .pc files does not declare an `includedir=`, so the multiple
@@ -129,7 +129,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D binding and OO wrapper for GTK";
     homepage = "https://gtkd.org";
     license = licenses.lgpl3Plus;

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-gray-streams'';
-  version = ''20200925-git'';
+  baseName = "trivial-gray-streams";
+  version = "20200925-git";
 
-  description = ''Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams).'';
+  description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams).";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-gray-streams/2020-09-25/trivial-gray-streams-20200925-git.tgz'';
-    sha256 = ''1mg31fwjixd04lfqbpzjan3cny1i478xm1a9l3p0i9m4dv4g2k2b'';
+    url = "http://beta.quicklisp.org/archive/trivial-gray-streams/2020-09-25/trivial-gray-streams-20200925-git.tgz";
+    sha256 = "1mg31fwjixd04lfqbpzjan3cny1i478xm1a9l3p0i9m4dv4g2k2b";
   };
 
   packageName = "trivial-gray-streams";

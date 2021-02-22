@@ -1,5 +1,5 @@
 # Build Open Dylan from source using the binary builds to bootstrap.
-{stdenv, fetchgit, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
+{lib, stdenv, fetchgit, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
 
 stdenv.mkDerivation {
   name = "opendylan-2016.1pre";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://opendylan.org";
     description = "A multi-paradigm functional and object-oriented programming language";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

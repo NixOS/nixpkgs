@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
+{ lib, stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
 , readline }:
 
 stdenv.mkDerivation rec {
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
       trade-offs.
     '';
     homepage    = "http://mercurylang.org";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license     = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
 }

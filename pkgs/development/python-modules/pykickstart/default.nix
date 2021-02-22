@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , urlgrabber
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ${python.interpreter} tests/baseclass.py -vv
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fedoraproject.org/wiki/Pykickstart";
     description = "Read and write Fedora kickstart files";
     license = licenses.gpl2Plus;

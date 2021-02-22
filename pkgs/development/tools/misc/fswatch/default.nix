@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
                      # for xargs
@@ -20,10 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "11479ac436g8bwk0lfnmdms0cirv9k11pdvfrrg9jwkki1j1abkk";
   };
 
-  nativeBuildInputs = [ autoreconfHook ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
   buildInputs = [ gettext libtool makeWrapper texinfo ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A cross-platform file change monitor with multiple backends";
     homepage = "https://github.com/emcrisostomo/fswatch";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, runCommand, makeWrapper, python3Packages, docutils, help2man
+{ lib, stdenv, fetchurl, runCommand, makeWrapper, python3Packages, docutils, help2man, installShellFiles
 , abootimg, acl, apktool, binutils-unwrapped, build-tools, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
 , e2fsprogs, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
 , gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, openssl, pdftk, pgpdump, poppler_utils, qemu, R
@@ -16,18 +16,17 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "163";
+  version = "166";
 
   src = fetchurl {
-    url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-pCAOMRZ3sn1jhdT5RuIZoMR1e6GEYJYyd4mZt7+0lWE=";
+    url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
+    sha256 = "sha256-6VhHG3MxmIczolOYqU4D1m00h8w2n0ku4dy/dFEYqk0=";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
     ./ignore_links.patch
-    ./skip-failing-test.patch
   ];
 
   postPatch = ''
@@ -38,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
-  nativeBuildInputs = [ docutils help2man ];
+  nativeBuildInputs = [ docutils help2man installShellFiles ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
@@ -60,15 +59,20 @@ python3Packages.buildPythonApplication rec {
       hdf5 imagemagick llvm jdk mono odt2txt openssh pdftk poppler_utils qemu R tcpdump wabt
     ] ++ (with python3Packages; [ binwalk guestfs h5py ]));
 
-  checkInputs = with python3Packages; [ pytest ] ++ pythonPath;
+  checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
   postInstall = ''
     make -C doc
-    mkdir -p $out/share/man/man1
-    cp doc/diffoscope.1 $out/share/man/man1/diffoscope.1
+    installManPage doc/diffoscope.1
   '';
 
-  meta = with stdenv.lib; {
+  # Disable flaky test and a failing one
+  disabledTests = [
+    "test_android_manifest"
+    "test_sbin_added_to_path"
+  ];
+
+  meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";
     longDescription = ''
       diffoscope will try to get to the bottom of what makes files or directories
@@ -80,9 +84,9 @@ python3Packages.buildPythonApplication rec {
       diffoscope is developed as part of the "reproducible builds" Debian
       project and was formerly known as "debbindiff".
     '';
-    homepage    = "https://diffoscope.org/";
-    license     = licenses.gpl3Plus;
+    homepage = "https://diffoscope.org/";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg ma27 danielfullmer ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

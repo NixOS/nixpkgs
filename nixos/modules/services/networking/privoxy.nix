@@ -8,15 +8,22 @@ let
 
   cfg = config.services.privoxy;
 
-  confFile = pkgs.writeText "privoxy.conf" ''
+  confFile = pkgs.writeText "privoxy.conf" (''
     user-manual ${privoxy}/share/doc/privoxy/user-manual
     confdir ${privoxy}/etc/
     listen-address  ${cfg.listenAddress}
     enable-edit-actions ${if (cfg.enableEditActions == true) then "1" else "0"}
     ${concatMapStrings (f: "actionsfile ${f}\n") cfg.actionsFiles}
     ${concatMapStrings (f: "filterfile ${f}\n") cfg.filterFiles}
+  '' + optionalString cfg.enableTor ''
+    forward-socks5t / 127.0.0.1:9063 .
+    toggle 1
+    enable-remote-toggle 0
+    enable-edit-actions 0
+    enable-remote-http-toggle 0
+  '' + ''
     ${cfg.extraConfig}
-  '';
+  '');
 
 in
 
@@ -72,6 +79,15 @@ in
         '';
       };
 
+      enableTor = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to configure Privoxy to use Tor's faster SOCKS port,
+          suitable for HTTP.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "" ;
@@ -106,6 +122,11 @@ in
       serviceConfig.ProtectHome = true;
       serviceConfig.ProtectSystem = "full";
     };
+
+    services.tor.settings.SOCKSPort = mkIf cfg.enableTor [
+      # Route HTTP traffic over a faster port (without IsolateDestAddr).
+      { addr = "127.0.0.1"; port = 9063; IsolateDestAddr = false; }
+    ];
 
   };
 

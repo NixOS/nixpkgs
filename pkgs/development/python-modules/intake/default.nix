@@ -24,7 +24,6 @@
 buildPythonPackage rec {
   pname = "intake";
   version = "0.6.0";
-
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -64,14 +63,17 @@ buildPythonPackage rec {
     PATH=$out/bin:$PATH
   '';
 
-  # disable tests which touch network
-  disabledTests = ''
+  disabledTests = [
+    # disable tests which touch network
     "test_discover"
     "test_filtered_compressed_cache"
     "test_get_dir"
     "test_remote_cat"
     "http"
-  '';
+
+    # broken test
+    "test_read_pattern"
+  ];
 
   meta = with lib; {
     description = "Data load and catalog system";

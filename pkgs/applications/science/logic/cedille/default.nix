@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     cp -r lib/ $out/lib/cedille/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory";
     homepage = "https://cedille.github.io/";
     license = licenses.mit;

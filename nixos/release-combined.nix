@@ -145,6 +145,7 @@ in rec {
         (onFullSupported "nixos.tests.printing")
         (onFullSupported "nixos.tests.proxy")
         (onFullSupported "nixos.tests.sddm.default")
+        (onFullSupported "nixos.tests.shadow")
         (onFullSupported "nixos.tests.simple")
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")

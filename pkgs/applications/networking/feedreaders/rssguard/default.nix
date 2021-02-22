@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
-  version = "3.8.3";
+  version = "3.8.4";
 
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = pname;
     rev = version;
-    sha256 = "1704nj77h6s88l4by3wxl5l770gaig90mv3ix80r00nh8mhzq44q";
+    sha256 = "sha256-2NC5Y8WxVYrzpuqDzhXXJ16b04Em1HqZaE2VK9tmfYk=";
   };
 
   buildInputs =  [ qtwebengine qttools ];
   nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
   qmakeFlags = [ "CONFIG+=release" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple RSS/Atom feed reader with online synchronization";
     longDescription = ''
       RSS Guard is a simple, light and easy-to-use RSS/ATOM feed aggregator

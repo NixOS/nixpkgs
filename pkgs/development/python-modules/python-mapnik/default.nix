@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPyPy
 , python
@@ -30,7 +30,7 @@ in buildPythonPackage rec {
   disabled = isPyPy;
   doCheck = false; # doesn't find needed test data files
   preBuild = let
-    pythonVersion = with stdenv.lib.versions; "${major python.version}${minor python.version}";
+    pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
   in ''
     export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
     export BOOST_THREAD_LIB="boost_thread"
@@ -57,7 +57,7 @@ in buildPythonPackage rec {
   ]);
   propagatedBuildInputs = [ pillow pycairo ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for Mapnik";
     homepage = "https://mapnik.org";
     license  = licenses.lgpl21;

@@ -1,22 +1,30 @@
-{ lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkgconfig
-, glib, udev, polkit, libmodule
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, dbus, cmake, pkg-config
+, glib, udev, polkit, libusb1, libjpeg, libmodule
 , pcre, libXdmcp, util-linux, libpthreadstubs
 , enableDdc ? true, ddcutil
 , enableDpms ? true, libXext
-, enableGamma ? true, libXrandr
+, enableGamma ? true, libdrm, libXrandr, wayland
 , enableScreen ? true }:
 
 stdenv.mkDerivation rec {
   pname = "clightd";
-  version = "4.2";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    sha256 = "07z1m1x7nnczd51sg7m2lb6rb2c37c8glsnbrlq44hx176sj9cmj";
+    sha256 = "sha256-BEGum0t+FrCTAEQwTsWeYpoIqimTAz+Bv/ZQPQ3fePY=";
   };
+
+  patches = [
+    # Not needed by next version bump
+    (fetchpatch {
+      url = "https://github.com/FedeDP/Clightd/commit/a52a2888e3798c572dad359a017cb0d40e7c5fb7.patch";
+      sha256 = "sha256-nUzNBia1EvBQxinAfjyKbuldBoHLY1hfMaxgG2lKQWg=";
+    })
+  ];
 
   # dbus-1.pc has datadir=/etc
   SYSTEM_BUS_DIR = "${placeholder "out"}/share/dbus-1/system-services";
@@ -41,26 +49,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dbus
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = with lib; [
     glib
     udev
     polkit
+    libusb1
+    libjpeg
     libmodule
 
     pcre
     libXdmcp
     util-linux
     libpthreadstubs
-  ] ++ optional enableDdc ddcutil
-    ++ optional enableDpms libXext
-    ++ optional enableGamma libXrandr;
+  ] ++ optionals enableDdc [ ddcutil ]
+    ++ optionals enableDpms [ libXext ]
+    ++ optionals enableGamma [ libXrandr ]
+    ++ optionals (enableDpms || enableGamma || enableScreen) [ libdrm wayland ];
 
   postInstall = ''
     mkdir -p $out/bin
-    ln -svT $out/lib/clightd/clightd $out/bin/clightd
+    ln -svT $out/libexec/clightd $out/bin/clightd
   '';
 
   meta = with lib; {

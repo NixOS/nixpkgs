@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3
+{ lib, stdenv, fetchurl, python3
 , libfaketime, fonttosfnt
 , bdftopcf, mkfontscale
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "fontdir" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work

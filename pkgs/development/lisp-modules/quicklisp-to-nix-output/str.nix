@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''str'';
-  version = ''cl-20200925-git'';
+  baseName = "str";
+  version = "cl-20200925-git";
 
-  description = ''Modern, consistent and terse Common Lisp string manipulation library.'';
+  description = "Modern, consistent and terse Common Lisp string manipulation library.";
 
   deps = [ args."cl-change-case" args."cl-ppcre" args."cl-ppcre-unicode" args."cl-unicode" args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-str/2020-09-25/cl-str-20200925-git.tgz'';
-    sha256 = ''06k81x80vjw7qd8gca6lnm5k5ws40c6kl99s7m4z72v7jxwa9ykn'';
+    url = "http://beta.quicklisp.org/archive/cl-str/2020-09-25/cl-str-20200925-git.tgz";
+    sha256 = "06k81x80vjw7qd8gca6lnm5k5ws40c6kl99s7m4z72v7jxwa9ykn";
   };
 
   packageName = "str";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestcov, mock
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestcov, mock
 , pytest_xdist, covCore, glibcLocales }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynect dns lib";
     homepage = "https://dyn.readthedocs.org/en/latest/intro.html";
     license = licenses.bsd3;

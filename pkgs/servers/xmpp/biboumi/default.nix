@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
-  libiconv, botan2, systemd, pkgconfig, udns, pandoc, coreutils } :
+{ lib, stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
+  libiconv, botan2, systemd, pkg-config, udns, pandoc, coreutils } :
 
 stdenv.mkDerivation rec {
   pname = "biboumi";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./catch.patch ];
 
-  nativeBuildInputs = [ cmake pkgconfig pandoc ];
+  nativeBuildInputs = [ cmake pkg-config pandoc ];
   buildInputs = [ libuuid expat sqlite libiconv libidn botan2 systemd
     udns ];
 
@@ -27,10 +27,9 @@ stdenv.mkDerivation rec {
     cp $louiz_catch/single_include/catch.hpp tests/
   '';
 
-  enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern XMPP IRC gateway";
     platforms = platforms.unix;
     homepage = "https://lab.louiz.org/louiz/biboumi";

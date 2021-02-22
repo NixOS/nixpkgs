@@ -29,8 +29,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "A bash-tool to store your private data inside a git repository";
     homepage = "https://git-secret.io";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.lo1tuma ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.lo1tuma ];
+    platforms = lib.platforms.all;
   };
 }

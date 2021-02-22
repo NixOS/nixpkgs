@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-vanity-hash";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     cp README.md $out/share/doc/git-vanity-hash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/prasmussen/git-vanity-hash";
     description = "Tool for creating commit hashes with a specific prefix";
     license = [ licenses.mit ];

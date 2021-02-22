@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook }:
+{ lib, stdenv, fetchgit, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libnova";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Celestial Mechanics, Astrometry and Astrodynamics Library";
     homepage = "http://libnova.sf.net";
     license = licenses.gpl2;

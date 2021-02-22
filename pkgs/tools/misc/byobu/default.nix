@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , ncurses, python3, perl, textual-window-manager
 , gettext, vim, bc, screen }:
 
 let
-  inherit (stdenv) lib;
   pythonEnv = python3.withPackages (ps: with ps; [ snack ]);
 in
 stdenv.mkDerivation rec {
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/byobu/";
     description = "Text-based window manager and terminal multiplexer";
 

@@ -3,7 +3,7 @@ To use aditional parts libraries
 set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 */
 
-{ stdenv, fetchFromGitHub, qt4, qmake4Hook, zlib }:
+{ lib, stdenv, fetchFromGitHub, qt4, qmake4Hook, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "leocad";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CAD program for creating virtual LEGO models";
     homepage = "https://www.leocad.org/";
     license = licenses.gpl2;

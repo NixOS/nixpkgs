@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, libffi, python3, readline }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, libffi, python3, readline }:
 
 stdenv.mkDerivation rec {
   pname = "micropython";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig python3 ];
+  nativeBuildInputs = [ pkg-config python3 ];
 
   buildInputs = [ libffi readline ];
 

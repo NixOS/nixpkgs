@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , dateutil
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clize" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
     license = licenses.mit;

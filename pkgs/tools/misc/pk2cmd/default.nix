@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libusb-compat-0_1, makeWrapper}:
+{lib, stdenv, fetchurl, libusb-compat-0_1, makeWrapper}:
 
 stdenv.mkDerivation {
   name = "pk2cmd-1.20";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.microchip.com/pickit2";
-    license = stdenv.lib.licenses.unfree; #MicroChip-PK2
+    license = lib.licenses.unfree; #MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
   };
 }

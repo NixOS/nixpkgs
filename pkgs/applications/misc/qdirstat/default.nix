@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, qmake
-, coreutils, xdg_utils, bash
+{ lib, fetchFromGitHub, qmake
+, coreutils, xdg-utils, bash
 , makeWrapper, perlPackages, mkDerivation }:
 
 let
@@ -28,7 +28,7 @@ mkDerivation {
     for i in src/SysUtil.cpp src/FileSizeStatsWindow.cpp
     do
       substituteInPlace $i \
-        --replace /usr/bin/xdg-open ${xdg_utils}/bin/xdg-open
+        --replace /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open
     done
     for i in src/Cleanup.cpp src/cleanup-config-page.ui
     do
@@ -47,7 +47,7 @@ mkDerivation {
       --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.URI ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical disk usage analyzer";
     homepage = src.meta.homepage;
     license = licenses.gpl2;

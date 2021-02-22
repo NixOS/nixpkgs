@@ -262,6 +262,13 @@ checkConfigOutput true config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput 1 config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
 
+## types.functionTo
+checkConfigOutput "input is input" config.result ./functionTo/trivial.nix
+checkConfigOutput "a b" config.result ./functionTo/merging-list.nix
+checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
+checkConfigOutput "b a" config.result ./functionTo/list-order.nix
+checkConfigOutput "a c" config.result ./functionTo/merging-attrs.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

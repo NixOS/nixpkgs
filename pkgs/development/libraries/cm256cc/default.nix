@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost } :
+{ lib, stdenv, fetchFromGitHub, cmake, boost } :
 
 stdenv.mkDerivation rec {
   pname = "cm256cc";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast GF(256) Cauchy MDS Block Erasure Codec in C++";
     homepage = "https://github.com/f4exb/cm256cc";
     platforms = platforms.linux;

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig
+{ lib, stdenv, fetchFromGitHub, fetchurl, pkg-config
 , libXinerama, libSM, libXxf86vm
 , gtk2, gtk3
 , xorgproto, gst_all_1, setfile
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported
 , libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
@@ -11,7 +11,7 @@
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert withMesa -> libGLU != null && libGL != null;
 assert withWebKit -> webkitgtk != null;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ++ optional withWebKit webkitgtk
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 

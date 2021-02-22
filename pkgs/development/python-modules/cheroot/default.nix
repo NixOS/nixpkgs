@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, jaraco_functools
 , jaraco_text
 , more-itertools
 , portend
@@ -23,12 +28,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1089c28a9c320d19fdf9a4b0ed6ace23a0948db1c171a36ac985f3741bc62865";
+    sha256 = "0r98qqdp9ww5r5ma6wf1n66r9813rrmfvc54z7yij39jkj5c528h";
   };
 
   nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
 
-  propagatedBuildInputs = [ more-itertools six ];
+  propagatedBuildInputs = [
+    # install_requires
+    jaraco_functools
+
+    more-itertools
+    six
+  ];
 
   checkInputs = [
     jaraco_text
@@ -43,10 +54,6 @@ buildPythonPackage rec {
     trustme
   ];
 
-  # avoid attempting to use 3 packages not available on nixpkgs
-  # (jaraco.apt, jaraco.context, yg.lockfile)
-  pytestFlagsArray = [ "--ignore=cheroot/test/test_wsgi.py" ];
-
   # Disable doctest plugin because times out
   # Disable xdist (-n arg) because it's incompatible with testmon
   # Deselect test_bind_addr_unix on darwin because times out
@@ -58,12 +65,18 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  disabledTests= [
+  disabledTests = [
     "tls" # touches network
     "peercreds_unix_sock" # test urls no longer allowed
   ] ++ lib.optionals stdenv.isDarwin [
     "http_over_https_error"
     "bind_addr_unix"
+  ];
+
+  disabledTestFiles = [
+    # avoid attempting to use 3 packages not available on nixpkgs
+    # (jaraco.apt, jaraco.context, yg.lockfile)
+    "cheroot/test/test_wsgi.py"
   ];
 
   # Some of the tests use localhost networking.

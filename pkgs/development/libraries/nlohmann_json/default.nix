@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DBuildTests=${if doCheck then "ON" else "OFF"}"
     "-DJSON_MultipleHeaders=ON"
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/lib64";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Header only C++ library for the JSON file format";
     homepage = "https://github.com/nlohmann/json";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , Carbon ? null
 , libjpeg ? null
@@ -18,19 +18,19 @@ stdenv.mkDerivation rec {
     url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
     sha256 = "04m0bniszyg7ryknj8laj3rl5sspacw5nr45x59j2swcsxmdvn1v";
   };
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     Carbon
-  ] ++ stdenv.lib.optionals withJpegSupport [
+  ] ++ lib.optionals withJpegSupport [
     libjpeg
-  ] ++ stdenv.lib.optionals withPngSupport [
+  ] ++ lib.optionals withPngSupport [
     libpng
   ];
   preBuild = ''
     cd unix
-  '' + stdenv.lib.optionalString withJpegSupport ''
+  '' + lib.optionalString withJpegSupport ''
     export USEJPEG=" -DUSEJPEG"
     export JPEGLIB=" -ljpeg"
-  '' + stdenv.lib.optionalString withPngSupport ''
+  '' + lib.optionalString withPngSupport ''
     export USEPNG=" -DUSEPNG"
     export PNGLIB=" -lpng -lz"
   '';
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ./make-archs.patch
   ] ++
   # Ensure looks for nix-provided Carbon, not system frameworks
-  stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
+  lib.optional stdenv.isDarwin ./darwin.patch;
 
   installPhase = ''
     cd ../compile/${arch}
@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''A Parallel / Multiprocessor Ray Tracing System'';
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = with stdenv.lib.platforms; linux ++ cygwin ++ darwin;
+    description = "A Parallel / Multiprocessor Ray Tracing System";
+    license = lib.licenses.bsd3;
+    maintainers = [lib.maintainers.raskin];
+    platforms = with lib.platforms; linux ++ cygwin ++ darwin;
     homepage = "http://jedi.ks.uiuc.edu/~johns/tachyon/";
   };
 }

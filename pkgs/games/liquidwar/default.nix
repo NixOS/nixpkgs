@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorgproto, libX11, libXrender
+{ lib, stdenv, fetchurl, xorgproto, libX11, libXrender
 , gmp, libjpeg, libpng
 , expat, gettext, perl, guile
 , SDL, SDL_image, SDL_mixer, SDL_ttf
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${SDL.dev}/include/SDL" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quick tactics game";
     homepage = "https://www.gnu.org/software/liquidwar6/";
     maintainers = [ maintainers.raskin ];

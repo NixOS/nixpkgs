@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-somafm";
@@ -16,8 +16,8 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.mopidy.com/;
+  meta = with lib; {
+    homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for playing music from SomaFM";
     license = licenses.mit;
     maintainers = [ maintainers.nickhu ];

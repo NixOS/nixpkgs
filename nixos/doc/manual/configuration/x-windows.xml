@@ -186,7 +186,7 @@
    The driver has many options (see <xref linkend="ch-options"/>). For
    instance, the following disables tap-to-click behavior:
 <programlisting>
-<xref linkend="opt-services.xserver.libinput.tapping"/> = false;
+<xref linkend="opt-services.xserver.libinput.touchpad.tapping"/> = false;
 </programlisting>
    Note: the use of <literal>services.xserver.synaptics</literal> is deprecated
    since NixOS 17.09.

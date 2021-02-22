@@ -93,7 +93,17 @@ in
             (if i.useDHCP != null then i.useDHCP else false));
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
-          networkConfig.IPv6PrivacyExtensions = "kernel";
+          # IPv6PrivacyExtensions=kernel seems to be broken with networkd.
+          # Instead of using IPv6PrivacyExtensions=kernel, configure it according to the value of
+          # `tempAddress`:
+          networkConfig.IPv6PrivacyExtensions = {
+            # generate temporary addresses and use them by default
+            "default" = true;
+            # generate temporary addresses but keep using the standard EUI-64 ones by default
+            "enabled" = "prefer-public";
+            # completely disable temporary addresses
+            "disabled" = false;
+          }.${i.tempAddress};
           linkConfig = optionalAttrs (i.macAddress != null) {
             MACAddress = i.macAddress;
           } // optionalAttrs (i.mtu != null) {

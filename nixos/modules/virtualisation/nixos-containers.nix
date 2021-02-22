@@ -56,9 +56,9 @@ let
             ip -6 route add $HOST_ADDRESS6 dev eth0
             ip -6 route add default via $HOST_ADDRESS6
           fi
-
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
+
+        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
 
         # Start the regular stage 1 script.
         exec "$1"
@@ -170,7 +170,7 @@ let
 
       ${concatStringsSep "\n" (
         mapAttrsToList (name: cfg:
-          ''ip link del dev ${name} 2> /dev/null || true ''
+          "ip link del dev ${name} 2> /dev/null || true "
         ) cfg.extraVeths
       )}
    '';
@@ -185,7 +185,7 @@ let
             fi
           ''
         else
-          ''${ipcmd} add ${cfg.${attribute}} dev $ifaceHost'';
+          "${ipcmd} add ${cfg.${attribute}} dev $ifaceHost";
       renderExtraVeth = name: cfg:
         if cfg.hostBridge != null then
           ''
@@ -223,8 +223,8 @@ let
             ${ipcall cfg "ip route" "$LOCAL_ADDRESS" "localAddress"}
             ${ipcall cfg "ip -6 route" "$LOCAL_ADDRESS6" "localAddress6"}
           fi
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
+        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
       ''
   );
 
@@ -463,21 +463,15 @@ in
         { config, options, name, ... }:
         {
           options = {
-
             config = mkOption {
               description = ''
                 A specification of the desired configuration of this
                 container, as a NixOS module.
               '';
-              type = let
-                confPkgs = if config.pkgs == null then pkgs else config.pkgs;
-              in lib.mkOptionType {
+              type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") {
+                merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   inherit system;
-                  pkgs = confPkgs;
-                  baseModules = import (confPkgs.path + "/nixos/modules/module-list.nix");
-                  inherit (confPkgs) lib;
                   modules =
                     let
                       extraConfig = {
@@ -526,12 +520,18 @@ in
               '';
             };
 
-            pkgs = mkOption {
-              type = types.nullOr types.attrs;
-              default = null;
-              example = literalExample "pkgs";
+            nixpkgs = mkOption {
+              type = types.path;
+              default = pkgs.path;
+              defaultText = "pkgs.path";
               description = ''
-                Customise which nixpkgs to use for this container.
+                A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
+
+                To only change the <literal>pkgs</literal> argument used inside the container modules,
+                set the <literal>nixpkgs.*</literal> options in the container <option>config</option>.
+                Setting <literal>config.nixpkgs.pkgs = pkgs</literal> speeds up the container evaluation
+                by reusing the system pkgs, but the <literal>nixpkgs.config</literal> option in the
+                container config is ignored in this case.
               '';
             };
 
@@ -672,14 +672,31 @@ in
               '';
             };
 
+            # Removed option. See `checkAssertion` below for the accompanying error message.
+            pkgs = mkOption { visible = false; };
           } // networkOptions;
 
-          config = mkMerge
-            [
-              (mkIf options.config.isDefined {
-                path = config.config.system.build.toplevel;
-              })
-            ];
+          config = let
+            # Throw an error when removed option `pkgs` is used.
+            # Because this is a submodule we cannot use `mkRemovedOptionModule` or option `assertions`.
+            optionPath = "containers.${name}.pkgs";
+            files = showFiles options.pkgs.files;
+            checkAssertion = if options.pkgs.isDefined then throw ''
+              The option definition `${optionPath}' in ${files} no longer has any effect; please remove it.
+
+              Alternatively, you can use the following options:
+              - containers.${name}.nixpkgs
+                This sets the nixpkgs (and thereby the modules, pkgs and lib) that
+                are used for evaluating the container.
+
+              - containers.${name}.config.nixpkgs.pkgs
+                This only sets the `pkgs` argument used inside the container modules.
+            ''
+            else null;
+          in {
+            path = builtins.seq checkAssertion
+              mkIf options.config.isDefined config.config.system.build.toplevel;
+          };
         }));
 
       default = {};

@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''mgl-pax'';
-  version = ''20201016-git'';
+  baseName = "mgl-pax";
+  version = "20201016-git";
 
   parasites = [ "mgl-pax/test" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."_3bmd" args."_3bmd-ext-code-blocks" args."alexandria" args."babel" args."bordeaux-threads" args."cl-fad" args."colorize" args."esrap" args."html-encode" args."ironclad" args."named-readtables" args."pythonic-string-reader" args."split-sequence" args."swank" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/mgl-pax/2020-10-16/mgl-pax-20201016-git.tgz'';
-    sha256 = ''0n48fw4a21sqy491bfi9fygrjl9psrryw00iha40dxy2ww86s6li'';
+    url = "http://beta.quicklisp.org/archive/mgl-pax/2020-10-16/mgl-pax-20201016-git.tgz";
+    sha256 = "0n48fw4a21sqy491bfi9fygrjl9psrryw00iha40dxy2ww86s6li";
   };
 
   packageName = "mgl-pax";

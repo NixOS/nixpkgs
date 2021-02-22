@@ -1,5 +1,5 @@
 { mkDerivation, base, containers, fetchgit, hedgehog
-, optparse-applicative, parsec, stdenv, template-haskell, text
+, optparse-applicative, parsec, lib, template-haskell, text
 }:
 mkDerivation {
   pname = "dconf2nix";
@@ -20,5 +20,5 @@ mkDerivation {
     base containers hedgehog parsec template-haskell text
   ];
   description = "Convert dconf files to Nix, as expected by Home Manager";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

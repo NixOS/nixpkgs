@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, coreutils, python2, duplicity, gawk, gnupg, bash
+{ lib, stdenv, fetchurl, coreutils, python2, duplicity, gawk, gnupg, bash
 , gnugrep, txt2man, makeWrapper, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "duply";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.2.x/duply_${version}.tgz";
-    sha256 = "1bd7ivswxmxg64n0fnwgz6bkgckhdhz2qnnlkqqx4ccdxx15krbr";
+    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.3.x/duply_${version}.tgz";
+    sha256 = "sha256-I1KkblFnZVOCvcWEarGsSXnzlod2+yZ4okaTpckLFbE=";
   };
 
   buildInputs = [ txt2man makeWrapper ];
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/man/man1"
     install -vD duply "$out/bin"
     wrapProgram "$out/bin/duply" --set PATH \
-        ${stdenv.lib.makeBinPath [ coreutils python2 duplicity gawk gnupg bash gnugrep txt2man which ]}
+        ${lib.makeBinPath [ coreutils python2 duplicity gawk gnupg bash gnugrep txt2man which ]}
     "$out/bin/duply" txt2man > "$out/share/man/man1/duply.1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shell front end for the duplicity backup tool";
     longDescription = ''
       Duply is a shell front end for the duplicity backup tool
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://duply.net/";
     license = licenses.gpl2;
     maintainers = [ maintainers.bjornfor ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, texinfo, texLive, perl}:
+{lib, stdenv, fetchurl, texinfo, texLive, perl}:
 let
   s = # Generated upstream information
   rec {
@@ -31,11 +31,11 @@ stdenv.mkDerivation {
     cp -r doc/* "$out"/share/doc/asdf/
     ln -s  "$out"/lib/common-lisp/{asdf/uiop,uiop}
   '';
-  meta = {
+  meta = with lib; {
     inherit (s) version;
-    description = ''Standard software-system definition library for Common Lisp'';
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "Standard software-system definition library for Common Lisp";
+    license = licenses.mit ;
+    maintainers = [maintainers.raskin];
+    platforms = platforms.unix;
   };
 }

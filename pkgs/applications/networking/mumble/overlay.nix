@@ -25,6 +25,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

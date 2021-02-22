@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "lyra";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp -R $src/include/* $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bfgroup/Lyra";
     description = "A simple to use, composable, command line parser for C++ 11 and beyond";
     platforms = platforms.linux;

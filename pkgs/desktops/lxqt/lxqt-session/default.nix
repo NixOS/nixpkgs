@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , lxqt-build-tools
 , qtbase
 , qttools
@@ -18,18 +18,18 @@
 
 mkDerivation rec {
   pname = "lxqt-session";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0kbk13dpmr75yd905n30k51cl7srrxz31ma4kacx450qgr5rwawn";
+    sha256 = "1lmj0cx4crdjl2qih3scm2gvsx3qna0nb6mjjrcx0f2k7h744pik";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
@@ -49,9 +49,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "An alternative session manager ported from the original razor-session";
     homepage = "https://github.com/lxqt/lxqt-session";
-    license = licenses.lgpl21;
+    description = "An alternative session manager ported from the original razor-session";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

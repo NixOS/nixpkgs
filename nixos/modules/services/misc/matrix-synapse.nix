@@ -504,8 +504,7 @@ in {
       report_stats = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-        '';
+        description = "";
       };
       servers = mkOption {
         type = types.attrsOf (types.attrsOf types.str);

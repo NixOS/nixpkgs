@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     export BERKELEYDB_DIR=${pkgs.db.dev};
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for Oracle Berkeley DB";
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
     license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x

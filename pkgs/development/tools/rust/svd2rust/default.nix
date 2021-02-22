@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 with rustPlatform;
 
@@ -19,7 +19,7 @@ buildRustPackage rec {
   # doc tests fail due to missing dependency
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
     homepage = "https://github.com/rust-embedded/svd2rust";
     license = with licenses; [ mit asl20 ];

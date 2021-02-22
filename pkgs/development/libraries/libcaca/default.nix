@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, zlib, pkgconfig, imlib2
+{ lib, stdenv, fetchurl, ncurses, zlib, pkg-config, imlib2
 , x11Support ? !stdenv.isDarwin, libX11, libXext
 }:
 
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     (if x11Support then "--enable-x11" else "--disable-x11")
     ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
+  NIX_CFLAGS_COMPILE = lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [ ncurses zlib pkgconfig (imlib2.override { inherit x11Support; }) ]
-    ++ stdenv.lib.optionals x11Support [ libX11 libXext ];
+  propagatedBuildInputs = [ ncurses zlib pkg-config (imlib2.override { inherit x11Support; }) ]
+    ++ lib.optionals x11Support [ libX11 libXext ];
 
   postInstall = ''
     mkdir -p $dev/bin
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://libcaca.zoy.org/";
     description = "A graphics library that outputs text instead of pixels";
-    license = stdenv.lib.licenses.wtfpl;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.unix;
   };
 }

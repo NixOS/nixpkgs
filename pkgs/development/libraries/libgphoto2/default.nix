@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gettext
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext
 , libusb1
 , libtool
 , libexif
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gettext
     libtool
   ];
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
       from digital cameras.
     '';
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

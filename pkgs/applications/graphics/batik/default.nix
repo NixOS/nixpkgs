@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "batik";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "16sq90nbs6psgm3xz30sbs6r5dnpd3qzsvr1xvnp4yipwjcmhmkw";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Java based toolkit for handling SVG";
     homepage = "https://xmlgraphics.apache.org/batik";
     license = licenses.asl20;

@@ -1,11 +1,11 @@
-{ stdenv, ocaml, findlib, dune, dune_2, opaline }:
+{ lib, stdenv, ocaml, findlib, dune, dune_2 }:
 
 { pname, version, buildInputs ? [], enableParallelBuilding ? true, ... }@args:
 
 let Dune = if args.useDune2 or false then dune_2 else dune; in
 
 if args ? minimumOCamlVersion &&
-   ! stdenv.lib.versionAtLeast ocaml.version args.minimumOCamlVersion
+   ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation ({
   '';
   installPhase = ''
     runHook preInstall
-    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
+    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname}
     runHook postInstall
   '';
 

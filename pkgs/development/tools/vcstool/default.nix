@@ -1,4 +1,4 @@
-{ stdenv, python3Packages
+{ lib, python3Packages
 , git, breezy, subversion }:
 
 with python3Packages;
@@ -14,11 +14,11 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyyaml setuptools ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git breezy subversion ])];
+  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [ git breezy subversion ])];
 
   doCheck = false; # requires network
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a command line tool to invoke vcs commands on multiple repositories";
     homepage = "https://github.com/dirk-thomas/vcstool";
     license = licenses.asl20;

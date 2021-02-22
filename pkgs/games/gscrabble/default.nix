@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub
+{ lib, buildPythonApplication, fetchFromGitHub
 , gtk3, wrapGAppsHook, gst_all_1, gobject-introspection
 , python3Packages, gnome3 }:
 
@@ -30,7 +30,7 @@ buildPythonApplication {
       )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Golden Scrabble crossword puzzle game";
     homepage = "https://github.com/RaaH/gscrabble/";
     license = licenses.gpl2Plus;

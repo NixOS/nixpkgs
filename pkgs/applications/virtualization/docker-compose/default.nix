@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, pythonOlder
+{ lib, buildPythonApplication, fetchPypi, pythonOlder
 , installShellFiles
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
@@ -8,12 +8,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "1.27.4";
+  version = "1.28.2";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a5690f24c27d4b43dcbe6b3fae91ba680713208e99ee863352b3bae37bcaa83";
+    sha256 = "2f148b590414915d029dad7551f4cdf0b03a774dc9baa674480217236d260cc1";
   };
 
   # lots of networking and other fails
@@ -25,8 +25,8 @@ buildPythonApplication rec {
     ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property paramiko distro python-dotenv
   ] ++
-    stdenv.lib.optional (pythonOlder "3.4") enum34 ++
-    stdenv.lib.optional (pythonOlder "3.2") functools32;
+    lib.optional (pythonOlder "3.4") enum34 ++
+    lib.optional (pythonOlder "3.2") functools32;
 
   postPatch = ''
     # Remove upper bound on requires, see also
@@ -39,7 +39,7 @@ buildPythonApplication rec {
     installShellCompletion --zsh contrib/completion/zsh/_docker-compose
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.docker.com/compose/";
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoreconfHook
 , boost
 , db48
@@ -6,25 +6,25 @@
 , libevent
 , miniupnpc
 , openssl
-, pkgconfig
+, pkg-config
 , zeromq
 , zlib
 , unixtools
 , python3
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "particl-core";
-  version = "0.19.1.1";
+  version = "0.19.2.3";
 
   src = fetchurl {
     url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
-    sha256 = "11y5q2srkh6r2samppjb5mg6hl79y16j2lj1r23p0968vb9c45kl";
+    sha256 = "sha256-nAsQvYWUejSu/4MMIwZhlV5Gjza/Da4jcp6/01lppvg=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib miniupnpc libevent zeromq unixtools.hexdump python3 ];
 
   configureFlags = [

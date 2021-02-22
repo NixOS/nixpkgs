@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     py.test $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gwik/geventhttpclient";
     description = "HTTP client library for gevent";
     license = licenses.mit;

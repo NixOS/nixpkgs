@@ -1,9 +1,9 @@
-{ config, stdenv, fetchurl, fetchpatch, pkgconfig, libiconv
+{ config, lib, stdenv, fetchurl, fetchpatch, pkg-config, libiconv
 , libintl, expat, zlib, libpng, pixman, fontconfig, freetype
 , x11Support? !stdenv.isDarwin, libXext, libXrender
 , gobjectSupport ? true, glib
 , xcbSupport ? x11Support, libxcb, xcbutil # no longer experimental since 1.12
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , glSupport ? x11Support && config.cairo.gl or (libGLSupported && stdenv.isLinux)
 , libGL ? null # libGLU libGL is no longer a big dependency
 , pdfSupport ? true
@@ -14,13 +14,13 @@ assert glSupport -> x11Support && libGL != null;
 
 let
   version = "1.16.0";
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "cairo";
   inherit version;
 
   src = fetchurl {
-    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
+    url = "https://cairographics.org/${if lib.mod (builtins.fromJSON (lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
     sha256 = "0c930mk5xr2bshbdljv005j3j8zr47gqmkry3q6qgvqky6rjjysy";
   };
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   outputBin = "dev"; # very small
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
-    stdenv.lib.optionalString stdenv.isFreeBSD
+    lib.optionalString stdenv.isFreeBSD
        '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
           do
             cat "$i" | sed -es/-ldl//g > t
@@ -98,9 +98,9 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin glib.flattenInclude;
+  postInstall = lib.optionalString stdenv.isDarwin glib.flattenInclude;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2D graphics library with support for multiple output devices";
 
     longDescription = ''

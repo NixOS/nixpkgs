@@ -34,13 +34,13 @@
 , openldap
 , ortp
 , pango
-, pkgconfig
+, pkg-config
 , python
 , readline
 , soci
 , speex
 , sqlite
-, stdenv
+, lib, stdenv
 , udev
 , xercesc
 , xsd
@@ -49,7 +49,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "4.4.15";
+  version = "4.4.21";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "16a31c0n5lix4r5xk7p447xlxbrhdlmj11kb4y1krb5fx8hf65cl";
+    sha256 = "sha256-vs65lBRTYYhx2F90n32qnf0CvcPJUIXc16hmggTF/JI=";
   };
 
   # Do not build static libraries
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     graphviz
     intltool
     makeWrapper
-    pkgconfig
+    pkg-config
   ];
 
   # Some grammar files needed to be copied too from some dependencies. I suppose
@@ -123,10 +123,10 @@ stdenv.mkDerivation rec {
     ln -s ${belcard}/share/belr/grammars/* $out/share/belr/grammars/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.linphone.org/technical-corner/liblinphone";
     description = "Library for SIP calls and instant messaging";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

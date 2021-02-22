@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 let
   version = "2020-11-14";
 in
@@ -14,7 +14,7 @@ fetchzip {
 
   sha256 = "1jd3gjjfa4vadp6d499n0irz5b22z611kd7q5qgqf6s2fwbxfhiz";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.moe.gov.tw/";
     description = "Set of KAI and SONG fonts from the Ministry of Education of Taiwan";
     version = version;

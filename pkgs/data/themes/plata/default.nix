@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, parallel
 , sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     parallel
     sassc
     inkscape
     libxml2
     glib.dev
   ]
-  ++ stdenv.lib.optionals mateSupport [ gtk3 marco ]
-  ++ stdenv.lib.optional telegramSupport zip;
+  ++ lib.optionals mateSupport [ gtk3 marco ]
+  ++ lib.optional telegramSupport zip;
 
   buildInputs = [
     gdk-pixbuf
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     let
-      inherit (stdenv.lib) enableFeature optional;
+      inherit (lib) enableFeature optional;
       withOptional = value: feat: optional (value != null) "--with-${feat}=${value}";
     in [
       "--enable-parallel"
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK theme based on Material Design Refresh";
     homepage = "https://gitlab.com/tista500/plata-theme";
     license = with licenses; [ gpl2 cc-by-sa-40 ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -23,7 +23,7 @@ buildPythonPackage rec {
         acoustid.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bindings for Chromaprint acoustic fingerprinting";
     homepage = "https://github.com/sampsyo/pyacoustid";
     license = licenses.mit;

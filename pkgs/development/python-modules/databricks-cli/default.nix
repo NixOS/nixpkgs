@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , click
 , requests
 , tabulate
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     configparser
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/databricks/databricks-cli";
     description = "A command line interface for Databricks";
     license = licenses.asl20;

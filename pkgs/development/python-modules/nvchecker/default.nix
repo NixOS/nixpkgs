@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-m 'not needs_net'" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;

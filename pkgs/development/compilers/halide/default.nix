@@ -49,7 +49,7 @@ llvmPackages.stdenv.mkDerivation rec {
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    platforms = platforms.all;
     maintainers = [ maintainers.ck3d ];
   };
 }

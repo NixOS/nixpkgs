@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , dbus
@@ -7,12 +7,12 @@
 , libfilezilla
 , libidn
 , nettle
-, pkgconfig
+, pkg-config
 , pugixml
 , sqlite
 , tinyxml
 , wxGTK30-gtk3
-, xdg_utils
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     dbus
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     tinyxml
     wxGTK30-gtk3
     wxGTK30-gtk3.gtk
-    xdg_utils
+    xdg-utils
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://filezilla-project.org/";
     description = "Graphical FTP, FTPS and SFTP client";
     longDescription = ''

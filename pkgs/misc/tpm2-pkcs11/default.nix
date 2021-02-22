@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, substituteAll
-, pkgconfig, autoreconfHook, autoconf-archive, makeWrapper, patchelf
+, pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
 , tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python37, glibc, libyaml
 , abrmdSupport ? true, tpm2-abrmd ? null
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig autoreconfHook autoconf-archive makeWrapper patchelf
+    pkg-config autoreconfHook autoconf-archive makeWrapper patchelf
   ];
   buildInputs = [
     tpm2-tss tpm2-tools opensc openssl sqlite libyaml

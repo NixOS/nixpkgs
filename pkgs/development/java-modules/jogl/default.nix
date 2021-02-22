@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ant, jdk8, git, xorg, udev, libGL, libGLU }:
+{ lib, stdenv, fetchgit, ant, jdk8, git, xorg, udev, libGL, libGLU }:
 
 {
   jogl_2_3_2 =
@@ -55,7 +55,7 @@
         cp $NIX_BUILD_TOP/jogl/build/jar/jogl-all{,-natives-linux-amd64}.jar  $out/share/java/
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Java libraries for 3D Graphics, Multimedia and Processing";
         homepage = "https://jogamp.org/";
         license = licenses.bsd3;

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, runCommand
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, runCommand
 , coreutils, gnugrep, gnused, lm_sensors, net-snmp, openssh, openssl, perl
 , dnsutils, libdbi, libmysqlclient, zlib, openldap, procps
 , runtimeShell }:
 
-with stdenv.lib;
+with lib;
 
 let
   majorVersion = "2.2";

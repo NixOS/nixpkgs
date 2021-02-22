@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , Security
@@ -17,9 +17,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1ampmw0l2wk2xp4q13aj5shxncqfh4dc3rsmpk2scaivanrsikn5";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Commandline tool to display information about unicode characters";
     homepage = "https://github.com/antifuchs/chars";
     license = licenses.mit;

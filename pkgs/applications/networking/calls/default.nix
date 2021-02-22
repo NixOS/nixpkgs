@@ -1,13 +1,17 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
-, libhandy_0
+, cmake
+, pkg-config
+, libhandy
 , modemmanager
 , gtk3
 , gom
 , gsound
+, feedbackd
+, callaudiod
 , evolution-data-server
 , folks
 , desktop-file-utils
@@ -22,32 +26,35 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
-    repo = "calls";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1wqkczl1fn4d2py00fsb6kh05avmc7c49gi49j3592fqsvi87j18";
+    sha256 = "1qmjdhnr95dawccw1ss8hc3lk0cypj86xg2amjq7avzn86ryd76l";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     desktop-file-utils
     vala
+    cmake
     wrapGAppsHook
   ];
 
   buildInputs = [
     modemmanager
-    libhandy_0
+    libhandy
     evolution-data-server
     folks
     gom
     gsound
+    feedbackd
+    callaudiod
     gtk3
     libpeas
   ];
@@ -74,7 +81,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A phone dialer and call handler";
     homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;

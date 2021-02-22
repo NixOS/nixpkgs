@@ -15,7 +15,7 @@
 , enableDebugInfo ? false
 , ... }@attrs:
 
-with stdenv.lib;
+with lib;
 
 let
   shell = drv: stdenv.mkDerivation {
@@ -46,25 +46,25 @@ let
     configurePhase = ''
       runHook preConfigure
       ${if checkouts != null then
-          ''cp --no-preserve=all -R ${checkouts}/_checkouts .''
+          "cp --no-preserve=all -R ${checkouts}/_checkouts ."
         else
-          ''''}
+          ""}
       runHook postConfigure
     '';
 
     buildPhase = ''
       runHook preBuild
       HOME=. DEBUG=1 rebar3 as ${profile} ${if releaseType == "escript"
-                                            then '' escriptize''
-                                            else '' release''}
+                                            then "escriptize"
+                                            else "release"}
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
       dir=${if releaseType == "escript"
-            then ''bin''
-            else ''rel''}
+            then "bin"
+            else "rel"}
       mkdir -p "$out/$dir"
       cp -R --preserve=mode "_build/${profile}/$dir" "$out"
       runHook postInstall

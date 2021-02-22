@@ -1,6 +1,6 @@
 # Adaptation of the MIT-licensed work on `sbt2nix` done by Charles O'Farrell
 
-{ fetchurl, stdenv }:
+{ lib, fetchurl, stdenv }:
 let
   defaultRepos = [
     "https://repo1.maven.org/maven2"
@@ -36,21 +36,20 @@ assert (url == "") || (urls == []);
 # if repos is empty, then url or urls must be specified.
 assert (repos != []) || (url != "") || (urls != []);
 
-
 let
   name_ =
-    with stdenv.lib; concatStrings [
-      (replaceChars ["."] ["_"] groupId) "_"
-      (replaceChars ["."] ["_"] artifactId) "-"
+    lib.concatStrings [
+      (lib.replaceChars ["."] ["_"] groupId) "_"
+      (lib.replaceChars ["."] ["_"] artifactId) "-"
       version
     ];
   mkJarUrl = repoUrl:
-    with stdenv.lib; concatStringsSep "/" [
-      (removeSuffix "/" repoUrl)
-      (replaceChars ["."] ["/"] groupId)
+    lib.concatStringsSep "/" [
+      (lib.removeSuffix "/" repoUrl)
+      (lib.replaceChars ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}${optionalString (!isNull classifier) "-${classifier}"}.jar"
+      "${artifactId}-${version}${lib.optionalString (!isNull classifier) "-${classifier}"}.jar"
     ];
   urls_ =
     if url != "" then [url]

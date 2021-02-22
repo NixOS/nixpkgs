@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, pkgconfig, libixp_hg, txt2tags, dash, python, which
+{ lib, stdenv, fetchurl, unzip, pkg-config, libixp_hg, txt2tags, dash, python, which
 , libX11 , libXrender, libXext, libXinerama, libXrandr, libXft }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ unzip libixp_hg txt2tags dash python which
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://suckless.org/"; # https://wmii.suckless.org/ does not exist anymore
     description = "A small window manager controlled by a 9P filesystem";
-    maintainers = with stdenv.lib.maintainers; [ kovirobi ];
-    license = stdenv.lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kovirobi ];
+    license = lib.licenses.mit;
     inherit version;
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

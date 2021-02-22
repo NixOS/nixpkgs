@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
   name = "libf2c-20160102";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "F2c converts Fortran 77 source code to C";
     homepage = "http://www.netlib.org/f2c/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

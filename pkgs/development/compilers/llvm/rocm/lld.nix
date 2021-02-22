@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , libxml2
 , llvm
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       --replace "\''${_IMPORT_PREFIX}/bin/lld" "$out/bin/lld"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ROCm fork of the LLVM Linker";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = licenses.ncsa;

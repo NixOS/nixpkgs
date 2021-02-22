@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , rust
@@ -18,21 +18,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.5.3";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dxjcab10kqfkflq1x9np5wxlysq33swdwi2f28bi7q312sw5x2y";
+    sha256 = "1wmkx458fpsfw57ysawxc0ghxag8v051hiyswm7nnb7gckrm6j8z";
     fetchSubmodules = true;
   };
-  cargoSha256 = "0lhdrsvmf5b4fq2yg9vc00q1sgc1fjk0fh5axs2zffcpsp73ay2k";
+  cargoSha256 = "08vzsp53019gmxkn8lpa6l84w3fvbrnr11lzrfgf99nmii6l2hq5";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = ./update/update.ts;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://deno.land/";
     changelog = "${src.meta.homepage}/releases/tag/v${version}";
     description = "A secure runtime for JavaScript and TypeScript";

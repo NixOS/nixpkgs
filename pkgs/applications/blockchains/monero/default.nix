@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
@@ -10,20 +10,20 @@
 ,   python3  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert stdenv.isDarwin -> IOKit != null;
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
 stdenv.mkDerivation rec {
   pname = "monero";
-  version = "0.17.1.6";
+  version = "0.17.1.9";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "0b6zyr3mzqvcxf48i2g45gr649x6nhppik5598jsvg0z7i2hxb9q";
+    sha256 = "0jqss4csvkcrhrmaa3vrnyv6yiwqpbfw7037clx9xcfm4qrrfiwy";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "source" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
     homepage    = "https://getmonero.org/";
     license     = licenses.bsd3;

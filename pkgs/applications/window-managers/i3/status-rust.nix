@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , rustPlatform
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , makeWrapper
 , dbus
 , libpulseaudio
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0qqkcgl9iz4kxl1a2vv2p7vy7wxn970y28jynf3n7hfp16i3liy2";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ dbus libpulseaudio notmuch ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
     license = licenses.gpl3;

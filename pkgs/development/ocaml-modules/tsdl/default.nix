@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkgconfig, ocb-stubblr }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config, ocb-stubblr }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
 else
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "1zwv0ixkigh1gzk5n49rwvz2f2m62jdkkqg40j7dclg4gri7691f";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
   propagatedBuildInputs = [ SDL2 ctypes ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = webpage;
     description = "Thin bindings to the cross-platform SDL library";
     license = licenses.isc;

@@ -1,25 +1,0 @@
-From 2c31a95d9e57a4308c5159c50e69b5c9178dee72 Mon Sep 17 00:00:00 2001
-From: Christian Kampka <christian@kampka.net>
-Date: Fri, 13 Nov 2020 16:52:12 +0100
-Subject: [PATCH] Remove duplicate assignments
-
----
- src/parseopt.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/src/parseopt.c b/src/parseopt.c
-index 268e080..a4c8576 100644
---- a/src/parseopt.c
-+++ b/src/parseopt.c
-@@ -255,8 +255,6 @@ print_option_descr (const char *descr, size_t lmargin, size_t rmargin)
- }
- 
- char *parseopt_program_name;
--char *parseopt_program_doc;
--char *parseopt_program_args;
- const char *program_bug_address = "<" PACKAGE_BUGREPORT ">";
- void (*parseopt_help_hook) (FILE *stream);
- 
--- 
-2.25.4
-

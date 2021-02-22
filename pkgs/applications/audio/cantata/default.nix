@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
 , qtbase, qtsvg, qttools, perl
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -73,9 +73,7 @@ in mkDerivation {
     ++ lib.optional  withUdisks udisks2
     ++ lib.optional  withLibVlc libvlc;
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   cmakeFlags = lib.flatten [
     (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
+{ lib, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
 , toml
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
     homepage = "https://pypi.python.org/pypi/autopep8/";
     license = licenses.mit;

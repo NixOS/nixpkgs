@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, cmake, catch2, asio, udev, IOKit }:
+{ lib, stdenv, fetchFromGitHub, git, cmake, catch2, asio, udev, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "pc-ble-driver";
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
 
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     IOKit
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     udev
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop library for Bluetooth low energy development";
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver";
     license = licenses.unfreeRedistributable;

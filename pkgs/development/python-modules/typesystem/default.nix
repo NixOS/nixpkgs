@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
-, pytest
+, pytestCheckHook
 , pytestcov
 , jinja2
 , pyyaml
@@ -26,14 +26,19 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytestcov
   ];
 
-  # for some reason jinja2 not picking up forms directory (1% of tests)
-  checkPhase = ''
-    pytest --ignore=tests/test_forms.py
-  '';
+  disabledTests = [
+    # https://github.com/encode/typesystem/issues/102. cosmetic issue where python3.8 changed
+    # the default string formatting of regular expression flags which breaks test assertion
+    "test_to_json_schema_complex_regular_expression"
+  ];
+  disabledTestFiles = [
+    # for some reason jinja2 not picking up forms directory (1% of tests)
+    "tests/test_forms.py"
+  ];
 
   meta = with lib; {
     description = "A type system library for Python";

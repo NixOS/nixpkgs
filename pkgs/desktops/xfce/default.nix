@@ -96,9 +96,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### ART
 
-  xfce4-icon-theme = callPackage ./art/xfce4-icon-theme.nix { };
+  xfce4-icon-theme = callPackage ./art/xfce4-icon-theme { };
 
-  xfwm4-themes = callPackage ./art/xfwm4-themes.nix { };
+  xfwm4-themes = callPackage ./art/xfwm4-themes { };
 
   #### PANEL PLUGINS
 
@@ -110,47 +110,49 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-cpufreq-plugin = callPackage ./panel-plugins/xfce4-cpufreq-plugin { };
 
-  xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin.nix { };
+  xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin { };
 
   xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
 
-  xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin.nix { };
+  xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
-  xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin.nix { };
+  xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
 
-  xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin.nix { };
+  xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
-  xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin.nix { };
+  xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
 
-  xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin.nix { };
+  xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
 
-  xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin.nix { };
+  xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin { };
 
-  xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin.nix { };
+  xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
+
+  xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin { };
 
   xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
-  xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin.nix { };
+  xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin { };
 
-  xfce4-mailwatch-plugin = callPackage ./panel-plugins/xfce4-mailwatch-plugin.nix { };
+  xfce4-mailwatch-plugin = callPackage ./panel-plugins/xfce4-mailwatch-plugin { };
 
-  xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin.nix { };
+  xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-  xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin.nix { };
+  xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
 
-  xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin.nix { };
+  xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 
-  xfce4-timer-plugin = callPackage ./panel-plugins/xfce4-timer-plugin.nix { };
+  xfce4-timer-plugin = callPackage ./panel-plugins/xfce4-timer-plugin { };
 
   xfce4-verve-plugin = callPackage ./panel-plugins/xfce4-verve-plugin { };
 
   xfce4-xkb-plugin = callPackage ./panel-plugins/xfce4-xkb-plugin { };
 
-  xfce4-weather-plugin = callPackage ./panel-plugins/xfce4-weather-plugin.nix { };
+  xfce4-weather-plugin = callPackage ./panel-plugins/xfce4-weather-plugin { };
 
   xfce4-whiskermenu-plugin = callPackage ./panel-plugins/xfce4-whiskermenu-plugin { };
 
-  xfce4-windowck-plugin = callPackage ./panel-plugins/xfce4-windowck-plugin.nix { };
+  xfce4-windowck-plugin = callPackage ./panel-plugins/xfce4-windowck-plugin { };
 
   xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin { };
 

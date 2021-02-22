@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, bison, perl, ncurses, readline, coreutils, pkgconfig
+{ stdenv, fetchurl, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
 , lib
 , fetchpatch
 , autoreconfHook
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bison
     perl
-    pkgconfig
+    pkg-config
     autoreconfHook
   ];
 

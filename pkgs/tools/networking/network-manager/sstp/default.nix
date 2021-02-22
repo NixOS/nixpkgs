@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoreconfHook
 , fetchFromGitHub
 , fetchpatch
@@ -10,7 +10,7 @@
 , libnma
 , libsecret
 , networkmanager
-, pkgconfig
+, pkg-config
 , ppp
 , sstp
 , substituteAll
@@ -30,9 +30,9 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [ sstp networkmanager glib ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ file intltool autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ file intltool autoreconfHook pkg-config ];
 
   postPatch = ''
     sed -i 's#/sbin/pppd#${ppp}/bin/pppd#' src/nm-sstp-service.c
@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's sstp plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

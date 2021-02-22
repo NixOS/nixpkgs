@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
   pname = "marathonctl-unstable";
@@ -15,7 +15,7 @@ buildGoPackage {
     sha256 = "1fcc54hwpa8s3kz4gn26mc6nrv6zjrw869331nvm47khi23gpmxw";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/shoenig/marathonctl";
     description = "CLI tool for Marathon";
     license = licenses.mit;

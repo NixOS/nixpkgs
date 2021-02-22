@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.8.1";
+  version = "0.8.2";
 
   disabled = pythonOlder "3.6";
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "11qyya3vyq50wpzrzzl8v46yx5p72rhpqhybwn47qgazxgg82r1b";
+    sha256 = "sha256-ybf8bXqsVk6quYi0vrfo/Mplk7Nr7tQS7cevXxI9khw=";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
@@ -73,13 +73,8 @@ buildPythonPackage rec {
   # It can also be installed at runtime from the pip wheel.
   # We disable appropriate tests below to allow building without pyscf installed
 
-  # NOTE: we remove cplex b/c we can't build pythonPackages.cplex.
-  # cplex is only distributed in manylinux1 wheel (no source), and Nix python is not manylinux1 compatible
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyscf; sys_platform != 'win32'" "" \
-      --replace "cplex; python_version >= '3.6' and python_version < '3.8'" ""
+    substituteInPlace setup.py --replace "docplex==2.15.194" "docplex"
 
     # Add ImportWarning when running qiskit.chemistry (pyscf is a chemistry package) that pyscf is not included
     echo -e "\nimport warnings\ntry: import pyscf;\nexcept ImportError:\n    " \

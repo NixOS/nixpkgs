@@ -1,6 +1,6 @@
 { stdenv, lib, runCommand, patchelf
 , fetchFromGitHub, rustPlatform, makeWrapper
-, pkgconfig, curl, zlib, Security, CoreServices }:
+, pkg-config, curl, zlib, Security, CoreServices }:
 
 let
   libPath = lib.makeLibraryPath [
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1zkrrg5m0j9rk65g51v2zh404529p9z84qqb7bfyjmgiqlnh48ig";
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
     curl zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];

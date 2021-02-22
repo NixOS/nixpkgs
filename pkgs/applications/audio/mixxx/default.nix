@@ -1,8 +1,8 @@
-{ stdenv, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
+{ lib, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , libGLU, libxcb, lilv, lv2, opusfile
-, pkgconfig, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
+, pkg-config, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
 , qtx11extras, rubberband, sconsPackages, sqlite, taglib, upower, vamp-plugin-sdk
 }:
 
@@ -31,7 +31,7 @@ mkDerivation rec {
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout241 libsndfile
-    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
+    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkg-config portaudio portmidi protobuf qtbase qtscript qtsvg
     qtx11extras rubberband sqlite taglib upower vamp-plugin-sdk
   ];
 
@@ -48,7 +48,7 @@ mkDerivation rec {
     "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     license = licenses.gpl2Plus;

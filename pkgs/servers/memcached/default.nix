@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
+{lib, stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "1.6.9";
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error";
+    ++ lib.optional stdenv.isDarwin "-Wno-error";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed memory object caching system";
     repositories.git = "https://github.com/memcached/memcached.git";
     homepage = "http://memcached.org/";

@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchurl
 , isPy37
 , isPy38
+, isPy39
 , python
-, nvidia_x11
 , addOpenGLRunpath
 , future
 , numpy
@@ -19,7 +19,7 @@ let
   platform = if stdenv.isDarwin then "darwin" else "linux";
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.7.0";
+  version = "1.7.1";
 in buildPythonPackage {
   inherit version;
 
@@ -28,7 +28,7 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = !(isPy37 || isPy38);
+  disabled = !(isPy37 || isPy38 || isPy39);
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -45,23 +45,13 @@ in buildPythonPackage {
     typing-extensions
   ];
 
-  # PyTorch are broken: the dataclasses wheel is required, but ships with
-  # Python >= 3.7. Our dataclasses derivation is incompatible with >= 3.7.
-  #
-  # https://github.com/pytorch/pytorch/issues/46930
-  #
-  # Should be removed with the next PyTorch version.
-  pipInstallFlags = [
-    "--no-deps"
-  ];
-
   postInstall = ''
     # ONNX conversion
     rm -rf $out/bin
   '';
 
   postFixup = let
-    rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib nvidia_x11 ];
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
     find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
@@ -72,7 +62,7 @@ in buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage = "https://pytorch.org/";
     license = licenses.unfree; # Includes CUDA and Intel MKL.

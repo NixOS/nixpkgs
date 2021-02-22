@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromBitbucket
 , autoreconfHook
 , m4ri
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://malb.bitbucket.io/m4rie/";
     description = "Library for matrix multiplication, reduction and inversion over GF(2^k) for 2 <= k <= 10";
     longDescription = ''

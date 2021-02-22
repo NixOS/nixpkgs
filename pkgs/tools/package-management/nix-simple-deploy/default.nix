@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-simple-deploy";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0svnz9r0lrmz333qpbpdddjd46vh9i74qchws8aifa2qwnqy0kmn";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deploy software or an entire NixOS system configuration to another NixOS system";
     homepage = "https://github.com/misuzu/nix-simple-deploy";
     license = with licenses; [ asl20 /* OR */ mit ];

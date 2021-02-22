@@ -10,20 +10,20 @@
 , libmicrohttpd
 , ncurses
 , pulseaudio
-, stdenv
+, lib, stdenv
 , taglib
 , systemdSupport ? stdenv.isLinux, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.2";
+  version = "0.96.5";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1vvc8295yadprfqpmk9i43ghymgsqxsg8zfx3p5i86a8xrdhd9vn";
+    sha256 = "sha256-GxMQPP8i/NWvduf10f+xVyuG666pChj9RsiF4jfygyY=";
   };
 
   nativeBuildInputs = [
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
     ncurses
     pulseaudio
     taglib
-  ] ++ stdenv.lib.optional systemdSupport systemd;
+  ] ++ lib.optional systemdSupport systemd;
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
     maintainers = [ maintainers.aanderse ];

@@ -1,42 +1,13 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, fetchpatch
 , python3
 }:
 
-#
-# Tested in the following setup:
-#
-# TTS model:
-#   Tacotron2 DDC
-#   https://drive.google.com/drive/folders/1Y_0PcB7W6apQChXtbt6v3fAiNwVf4ER5
-# Vocoder model:
-#   Multi-Band MelGAN
-#   https://drive.google.com/drive/folders/1XeRT0q4zm5gjERJqwmX5w84pMrD00cKD
-#
-# Arrange /tmp/tts like this:
-#   scale_stats.npy
-#   tts
-#   tts/checkpoint_130000.pth.tar
-#   tts/checkpoint_130000_tf.pkl
-#   tts/checkpoint_130000_tf_2.3rc0.tflite
-#   tts/config.json
-#   tts/scale_stats.npy
-#   vocoder
-#   vocoder/checkpoint_1450000.pth.tar
-#   vocoder/checkpoint_2750000_tf.pkl
-#   vocoder/checkpoint_2750000_tf_v2.3rc.tflite
-#   vocoder/config.json
-#   vocoder/scale_stats.npy
-#
-# Start like this:
-#   cd /tmp/tts
-#   tts-server \
-#     --vocoder_config ./tts/vocoder/config.json \
-#     --vocoder_checkpoint ./tts/vocoder/checkpoint_1450000.pth.tar \
-#     --tts_config ./tts/config.json \
-#     --tts_checkpoint ./tts/checkpoint_130000.pth.tar
+# USAGE:
+# $ tts-server --list_models
+# # pick your favorite vocoder/tts model
+# $ tts-server --model_name tts_models/en/ljspeech/glow-tts --vocoder_name vocoder_models/universal/libri-tts/fullband-melgan
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
@@ -47,35 +18,31 @@ python3Packages.buildPythonApplication rec {
   # until https://github.com/mozilla/TTS/issues/424 is resolved
   # we treat released models as released versions:
   # https://github.com/mozilla/TTS/wiki/Released-Models
-  version = "unstable-2020-06-17";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "TTS";
-    rev = "72a6ac54c8cfaa407fc64b660248c6a788bdd381";
-    sha256 = "1wvs264if9n5xzwi7ryxvwj1j513szp6sfj6n587xk1fphi0921f";
+    rev = "df5899daf4ba4ec89544edf94f9c2e105c544461";
+    sha256 = "sha256-lklG8DqG04LKJY93z2axeYhW8gtpbRG41o9ow2gJjuA=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mozilla/TTS/commit/36fee428b9f3f4ec1914b090a2ec9d785314d9aa.patch";
-      sha256 = "sha256-pP0NxiyrsvQ0A7GEleTdT87XO08o7WxPEpb6Bmj66dc=";
-    })
-  ];
 
   preBuild = ''
     # numba jit tries to write to its cache directory
     export HOME=$TMPDIR
-    sed -i -e 's!tensorflow==.*!tensorflow!' requirements.txt
+    # we only support pytorch models right now
+    sed -i -e '/tensorflow/d' requirements.txt
+
     sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt setup.py
     sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt setup.py
     sed -i -e 's!bokeh==[^"]*!bokeh!' requirements.txt setup.py
     sed -i -e 's!numba==[^"]*!numba!' requirements.txt setup.py
     # Not required for building/installation but for their development/ci workflow
-    sed -i -e '/pylint/d' requirements.txt setup.py
+    sed -i -e '/pylint/d' requirements.txt
     sed -i -e '/cardboardlint/d' requirements.txt setup.py
   '';
 
+  nativeBuildInputs = [ python3Packages.cython ];
 
   propagatedBuildInputs = with python3Packages; [
     matplotlib
@@ -88,17 +55,23 @@ python3Packages.buildPythonApplication rec {
     tqdm
     librosa
     unidecode
+    umap-learn
     phonemizer
     tensorboardx
     fuzzywuzzy
-    tensorflow_2
     inflect
     gdown
     pysbd
+    pyworld
   ];
 
   postInstall = ''
     cp -r TTS/server/templates/ $out/${python3.sitePackages}/TTS/server
+    # cython modules are not installed for some reasons
+    (
+      cd TTS/tts/layers/glow_tts/monotonic_align
+      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+    )
   '';
 
   checkInputs = with python3Packages; [ pytestCheckHook ];
@@ -112,6 +85,18 @@ python3Packages.buildPythonApplication rec {
     "test_phoneme_to_sequence"
     "test_text2phone"
     "test_parametrized_gan_dataset"
+  ];
+
+  preCheck = ''
+    # use the installed TTS in $PYTHONPATH instead of the one from source to also have cython modules.
+    mv TTS{,.old}
+  '';
+
+  pytestFlagsArray = [
+    # requires tensorflow
+    "--ignore=tests/test_tacotron2_tf_model.py"
+    "--ignore=tests/test_vocoder_tf_melgan_generator.py"
+    "--ignore=tests/test_vocoder_tf_pqmf.py"
   ];
 
   meta = with lib; {

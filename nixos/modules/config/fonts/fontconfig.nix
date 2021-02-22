@@ -436,7 +436,7 @@ in
         useEmbeddedBitmaps = mkOption {
           type = types.bool;
           default = false;
-          description = ''Use embedded bitmaps in fonts like Calibri.'';
+          description = "Use embedded bitmaps in fonts like Calibri.";
         };
 
       };

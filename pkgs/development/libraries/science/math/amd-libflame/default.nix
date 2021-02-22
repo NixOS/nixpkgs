@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libflame.so.${version} $out/lib/liblapacke.so.3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LAPACK-compatible linear algebra library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
     license = licenses.bsd3;

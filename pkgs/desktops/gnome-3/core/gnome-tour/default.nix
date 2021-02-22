@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , rustPlatform
 , gettext
 , meson
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-hV/C/Lyz6e9zhe3FRw4Sox5gMqThDP57wVCTgcekjng=";
   };
 
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
     description = "GNOME Greeter & Tour";
     maintainers = teams.gnome.members;

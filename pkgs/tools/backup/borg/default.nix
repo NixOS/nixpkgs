@@ -1,12 +1,12 @@
-{ stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
+{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1fpdj73cgp96xwasdcifxl7q2pr1my2f4vfdjpv771llri3hgfvx";
+    sha256 = "1g62sdzcw3zx4ccky125ciwnzx6z9kwyvskvp7ijmqxqk3nrxjs9";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
   buildInputs = [
     libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
+  ] ++ lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3.pkgs; [
     cython llfuse
   ];
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
   # 64 failures, needs pytest-benchmark
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;

@@ -1,14 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "vmware-tanzu";
     repo = "velero";
-    sha256 = "1hfi1iipbval0c0c0nnf6fz5n76za0vwczm5lq86sddqnznbvsrz";
+    sha256 = "sha256-DZ6phJxc8n9LCSsER09K3j+pUJxkYrBZQaI4h+bcV94=";
   };
 
   buildFlagsArray = ''
@@ -19,7 +19,7 @@ buildGoModule rec {
       -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean
   '';
 
-  vendorSha256 = "1izl7z689jf3i3wax7rfpk0jjly7nsi7vzasy1j9v5cwjy2d5z4v";
+  vendorSha256 = "sha256-m/zShJeclZ1k8Fr9faK2x1Mpwbwun674iMPJhMw/9Mc=";
 
   excludedPackages = [ "issue-template-gen" ];
 
@@ -32,7 +32,7 @@ buildGoModule rec {
     installShellCompletion velero.{bash,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";

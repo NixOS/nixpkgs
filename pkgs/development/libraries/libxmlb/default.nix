@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , docbook_xml_dtd_43
 , docbook_xsl
@@ -7,7 +7,7 @@
 , gtk-doc
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , shared-mime-info
 , nixosTests
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     (python3.withPackages (pkgs: with pkgs; [ setuptools ]))
     shared-mime-info
   ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to help create and query binary XML blobs";
     homepage = "https://github.com/hughsie/libxmlb";
     license = licenses.lgpl21Plus;

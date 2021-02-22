@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pep8, coverage, logilab_common, requests }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     export HOME=$(pwd)/check-phase
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/python-bugzilla/python-bugzilla";
     description = "Bugzilla XMLRPC access module";
     license = licenses.gpl2;

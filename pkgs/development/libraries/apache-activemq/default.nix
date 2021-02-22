@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "apache-activemq";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://activemq.apache.org/";
     description = "Messaging and Integration Patterns server written in Java";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 
 }

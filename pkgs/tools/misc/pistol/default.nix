@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , file
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";
     homepage = "https://github.com/doronbehar/pistol";
     license = licenses.mit;

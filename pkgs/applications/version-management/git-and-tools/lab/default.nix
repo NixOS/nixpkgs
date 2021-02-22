@@ -1,32 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg_utils }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles, git }:
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.17.2";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "0zkwvmzgj7h8lc8jkg2a81392b28c8hkwqzj6dds6q4asbmymx5c";
+    sha256 = "1l6xsikd1113qd4y0mvjsl64gbi4327m9v4d593f27fxink39j8s";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "1lrmafvv5zfn9kc0p8g5vdz351n1zbaqwhwk861fxys0rdpqskyc";
+  vendorSha256 = "07zl5xhzgrgr5skba6cds5nal58pllf10gak0ap62j1k9gk2ych2";
 
   doCheck = false;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   postInstall = ''
-    mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
-    export LAB_CORE_HOST=a LAB_CORE_USER=b LAB_CORE_TOKEN=c
-    $out/bin/lab completion bash > $out/share/bash-completion/completions/lab
-    $out/bin/lab completion zsh > $out/share/zsh/site-functions/_lab
-    wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ xdg_utils ]}";
+    wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}";
+    for shell in bash fish zsh; do
+      $out/bin/lab completion $shell > lab.$shell
+      installShellCompletion lab.$shell
+    done
   '';
 
   meta = with lib; {

@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , gtk3
 , thunar
 , cmake
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     ninja
   ];
@@ -30,15 +30,13 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  enableParallelBuilding = true;
-
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.thunar-dropbox-plugin";
     versionLister = xfce.gitLister src.meta.homepage;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Jeinzi/thunar-dropbox";
     description = "A plugin that adds context-menu items for Dropbox to Thunar";
     license = licenses.gpl3;

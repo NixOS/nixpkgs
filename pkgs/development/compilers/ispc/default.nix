@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, which, m4, python3, bison, flex, llvmPackages
 
   # the default test target is sse4, but that is not supported by all Hydra agents
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     "-DARM_ENABLED=FALSE"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license     = licenses.bsd3;

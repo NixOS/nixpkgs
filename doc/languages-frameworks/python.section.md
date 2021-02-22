@@ -1,4 +1,4 @@
-# Python
+# Python {#python}
 
 ## User Guide
 
@@ -609,6 +609,10 @@ Using the example above, the analagous pytestCheckHook usage would be:
     # touches network
     "download"
     "update"
+  ];
+
+  disabledTestFiles = [
+    "tests/test_failing.py"
   ];
 ```
 

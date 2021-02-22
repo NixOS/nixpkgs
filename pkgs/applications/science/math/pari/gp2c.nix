@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , pari
 , fetchurl
 , perl }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-paricfg=${pari}/lib/pari/pari.cfg"
     "--with-perl=${perl}/bin/perl" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =  "A compiler to translate GP scripts to PARI programs";
     homepage = "http://pari.math.u-bordeaux.fr/";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";

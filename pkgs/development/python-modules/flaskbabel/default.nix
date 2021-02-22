@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , flask
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask jinja2 speaklater Babel pytz ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adds i18n/l10n support to Flask applications";
     homepage = "https://github.com/mitsuhiko/flask-babel";
     license = licenses.bsd0;

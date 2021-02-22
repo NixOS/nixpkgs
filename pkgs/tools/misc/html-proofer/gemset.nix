@@ -26,10 +26,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "12lpwaw82bb0rm9f52v1498bpba8aj2l2q359mkwbxsswhpga5af";
+      sha256 = "15hgiy09i8ywjihyzyvjvk42ivi3kmy6dm21s5sgg9j7y3h3zkkx";
       type = "gem";
     };
-    version = "1.13.1";
+    version = "1.14.2";
   };
   html-proofer = {
     dependencies = ["addressable" "mercenary" "nokogumbo" "parallel" "rainbow" "typhoeus" "yell"];
@@ -37,10 +37,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1icjr9hg8gk1dsy9gnhffkamh4d8yfkmqa4kfzdpbnvr50qvfmwz";
+      sha256 = "0bz0041fizdmggc5k9an4s3qk6diyybn2agcia2wr96vymfb2qjh";
       type = "gem";
     };
-    version = "3.18.0";
+    version = "3.18.5";
   };
   mercenary = {
     groups = ["default"];

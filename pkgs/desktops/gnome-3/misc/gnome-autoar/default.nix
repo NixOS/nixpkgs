@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , glib
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-autoar";
-  version = "0.2.4";
+  version = "0.3.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-autoar/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yk56ch46n3wfy633mq31kif9n7v06rlij4vqbsbn6l4z1vw6d0a";
+    url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0ssqckfkyldwld88zizy446y2359rg40lnrcm3sjpjhc2b015hgj";
   };
 
   passthru = {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     description = "Library to integrate compressed files management with GNOME";
   };
 }

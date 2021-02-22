@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, qt4, alsaLib }:
+{ lib, stdenv, fetchFromGitHub, scons, qt4, alsaLib }:
 
 stdenv.mkDerivation {
   pname = "gambatte";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cp gambatte_qt/bin/gambatte_qt $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Portable, open-source Game Boy Color emulator";
     homepage = "https://github.com/sinamas/gambatte";
     license = licenses.gpl2;

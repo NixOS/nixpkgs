@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
+{ lib, stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
 let
   p = if stdenv.is64bit then {
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://help.yandex.com/disk/cli-clients.xml";
     description = "A free cloud file storage service";
-    maintainers = with stdenv.lib.maintainers; [ smironov jagajaga ];
+    maintainers = with lib.maintainers; [ smironov jagajaga ];
     platforms = ["i686-linux" "x86_64-linux"];
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     longDescription = ''
       Yandex.Disk console client for Linux lets you manage files on Disk without
       using a window interface or programs that support WebDAV. The advantages

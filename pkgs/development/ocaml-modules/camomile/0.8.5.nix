@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, ocaml, findlib, camlp4}:
+{stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, camlp4}:
 
 stdenv.mkDerivation {
   pname = "camomile";
@@ -21,10 +21,10 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/yoriyuki/Camomile/tree/master/Camomile";
     description = "A comprehensive Unicode library for OCaml";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.maggesi
+      lib.maintainers.maggesi
     ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, farbfeld, libX11, libXft, makeWrapper
+{ lib, stdenv, fetchurl, farbfeld, libX11, libXft, makeWrapper
 , patches ? [] }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/sent" --prefix PATH : "${farbfeld}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple plaintext presentation tool";
     homepage = "https://tools.suckless.org/sent/";
     license = licenses.isc;

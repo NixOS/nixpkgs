@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, perl }:
+{ lib, stdenv, fetchFromGitHub, openssl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "tmux-xpanes";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     install -m 644 man/*.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "tmux-based terminal divider";
     homepage = "https://github.com/greymd/tmux-xpanes";
     license = licenses.mit;

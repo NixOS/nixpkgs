@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python package for the generation of PostScript, PDF, and SVG files";
     homepage = "http://pyx.sourceforge.net/";
     license = with licenses; [ gpl2 ];

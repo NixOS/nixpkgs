@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4, perl, lzma}:
+{lib, stdenv, fetchurl, m4, perl, lzma}:
 
 stdenv.mkDerivation rec {
   name = "autoconf-2.13";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       can use, in the form of M4 macro calls.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

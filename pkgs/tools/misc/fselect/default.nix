@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fselect";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/fselect.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Find files with SQL-like queries";
     homepage = "https://github.com/jhspetersson/fselect";
     license = with licenses; [ asl20 mit ];

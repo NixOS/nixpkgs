@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glfw, freetype, openssl, upx ? null }:
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, upx ? null }:
 
 assert stdenv.hostPlatform.isUnix -> upx != null;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   propagatedBuildInputs = [ glfw freetype openssl ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isUnix upx;
+    ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
   buildPhase = ''
     runHook preBuild
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;

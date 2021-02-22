@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     # trial foolscap
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://foolscap.lothar.com/";
     description = "Foolscap, an RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''

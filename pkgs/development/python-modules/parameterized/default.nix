@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k, isPy38 }:
+{ lib, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k, isPy38 }:
 
 buildPythonPackage rec {
   pname = "parameterized";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" nosetests -v
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parameterized testing with any Python test framework";
     homepage = "https://pypi.python.org/pypi/parameterized";
     license = licenses.bsd3;

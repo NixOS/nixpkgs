@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, lzma, openssl, zlib, bzip2, fts, autoconf }:
+{ lib, stdenv, fetchurl, libxml2, lzma, openssl, zlib, bzip2, fts, autoconf }:
 
 stdenv.mkDerivation rec {
   version = "1.6.1";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
          of content's rich meta-data.
       '';
 
-    license     = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ copumpkin ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ copumpkin ];
+    platforms   = lib.platforms.all;
   };
 }

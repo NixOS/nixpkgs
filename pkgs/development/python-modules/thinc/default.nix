@@ -74,10 +74,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thinc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Practical Machine Learning for NLP in Python";
     homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu danieldk sdll ];
+    maintainers = with maintainers; [ aborsu sdll ];
   };
 }

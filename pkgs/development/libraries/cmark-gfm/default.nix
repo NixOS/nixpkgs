@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "cmark-gfm";
   version = "0.29.0.gfm.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # tests load the library dynamically which for unknown reason failed
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GitHub's fork of cmark, a CommonMark parsing and rendering library and program in C";
     homepage = "https://github.com/github/cmark-gfm";
     maintainers = with maintainers; [ cyplo ];

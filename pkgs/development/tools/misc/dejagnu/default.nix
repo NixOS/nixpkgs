@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, expect, makeWrapper }:
+{ fetchurl, lib, stdenv, expect, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "dejagnu-1.6.2";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${expect}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Framework for testing other programs";
 
     longDescription = ''

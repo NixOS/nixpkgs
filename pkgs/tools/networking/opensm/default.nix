@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
 
 stdenv.mkDerivation rec {
   pname = "opensm";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Infiniband subnet manager";
     homepage = "https://www.openfabrics.org/";
     license = licenses.gpl2; # dual licensed as 2-clause BSD

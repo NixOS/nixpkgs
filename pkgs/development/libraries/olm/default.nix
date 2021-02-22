@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "olm";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Implements double cryptographic ratchet and Megolm ratchet";
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://gitlab.matrix.org/matrix-org/olm";
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
+    platforms = with lib.platforms; darwin ++ linux;
   };
 }

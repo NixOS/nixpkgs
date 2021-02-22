@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdsh";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "118ykkqlf0x6gcgywx4pg3qawfhfr5q5f51gvrw9s302c1lmgk3g";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Markdown shell pre-processor";
     homepage = "https://github.com/zimbatm/mdsh";
     license = with licenses; [ mit ];

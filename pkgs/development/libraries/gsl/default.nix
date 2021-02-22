@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "gsl-2.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isx86_64 "-mno-fma";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isx86_64 "-mno-fma";
 
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
   doCheck = stdenv.hostPlatform.system != "i686-linux" && stdenv.hostPlatform.system != "aarch64-linux";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The GNU Scientific Library, a large numerical library";
     homepage = "https://www.gnu.org/software/gsl/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     longDescription = ''
       The GNU Scientific Library (GSL) is a numerical library for C
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
       fitting.  There are over 1000 functions in total with an
       extensive test suite.
     '';
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

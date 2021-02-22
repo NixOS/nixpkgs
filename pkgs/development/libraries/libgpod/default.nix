@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gtkpod.sourceforge.net/";
     description = "Library used by gtkpod to access the contents of an ipod";
     license = "LGPL";
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
     maintainers = [ ];
   };
 }

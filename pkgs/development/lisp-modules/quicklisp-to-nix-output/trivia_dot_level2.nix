@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivia_dot_level2'';
-  version = ''trivia-20200925-git'';
+  baseName = "trivia_dot_level2";
+  version = "trivia-20200925-git";
 
-  description = ''NON-optimized pattern matcher compatible with OPTIMA, with extensible optimizer interface and clean codebase'';
+  description = "NON-optimized pattern matcher compatible with OPTIMA, with extensible optimizer interface and clean codebase";
 
   deps = [ args."alexandria" args."closer-mop" args."lisp-namespace" args."trivia_dot_level0" args."trivia_dot_level1" args."trivial-cltl2" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz'';
-    sha256 = ''192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z'';
+    url = "http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz";
+    sha256 = "192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z";
   };
 
   packageName = "trivia.level2";

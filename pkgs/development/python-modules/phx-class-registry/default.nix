@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "phx-class-registry";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     "test_len"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Registry pattern for Python classes, with setuptools entry points integration";
     homepage = "https://github.com/todofixthis/class-registry";
     license = licenses.mit;

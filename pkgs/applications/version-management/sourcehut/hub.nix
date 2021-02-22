@@ -1,5 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , srht }:
 
 buildPythonPackage rec {
@@ -22,7 +21,9 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hub.sr.ht";
     description = "Project hub service for the sr.ht network";
     license = licenses.agpl3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchurl
 , gettext
 , itstool
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "toARTVq3kzJFSf1Y9OsgLY4oDAYzoLdl7ebfs0FgqBs=";
   };
 
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visual diff and merge tool";
     homepage = "http://meldmerge.org/";
     license = licenses.gpl2Plus;

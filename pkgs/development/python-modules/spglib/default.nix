@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, numpy, nose, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, numpy, nose, pyyaml }:
 
 buildPythonPackage rec {
   pname = "spglib";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose pyyaml ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for C library for finding and handling crystal symmetries";
     homepage = "https://atztogo.github.io/spglib";
     license = licenses.bsd3;

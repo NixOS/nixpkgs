@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, check, subunit }:
+{ lib, stdenv, fetchFromGitHub, cmake, check, subunit }:
 stdenv.mkDerivation rec {
   pname = "orcania";
   version = "2.1.1";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     export DYLD_FALLBACK_LIBRARY_PATH="$(pwd):$DYLD_FALLBACK_LIBRARY_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Potluck with different functions for different purposes that can be shared among C programs";
     homepage = "https://github.com/babelouest/orcania";
     license = licenses.lgpl21;

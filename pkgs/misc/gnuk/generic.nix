@@ -1,4 +1,4 @@
-{ stdenv, gcc-arm-embedded, binutils-arm-embedded, makeWrapper
+{ lib, stdenv, gcc-arm-embedded, binutils-arm-embedded, makeWrapper
 , python, pythonPackages
 
 # Extra options
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/{unlock,flash}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.fsij.org/pages/gnuk";
     description = "An implementation of USB cryptographic token for gpg";
     license = licenses.gpl3;

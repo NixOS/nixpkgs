@@ -1,3 +1,6 @@
+if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
+__nix_wrapQtAppsHook=1  # Don't run this hook more than once.
+
 # Inherit arguments given in mkDerivation
 qtWrapperArgs=( ${qtWrapperArgs-} )
 
@@ -100,3 +103,5 @@ wrapQtAppsHook() {
 }
 
 fixupOutputHooks+=(wrapQtAppsHook)
+
+fi

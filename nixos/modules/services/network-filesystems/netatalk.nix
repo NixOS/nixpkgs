@@ -46,6 +46,7 @@ in
       enable = mkEnableOption "the Netatalk AFP fileserver";
 
       port = mkOption {
+        type = types.port;
         default = 548;
         description = "TCP port to be used for AFP.";
       };
@@ -68,6 +69,7 @@ in
         };
 
         path = mkOption {
+          type = types.str;
           default = "";
           example = "afp-data";
           description = "Share not the whole user home but this subdirectory path.";
@@ -75,6 +77,7 @@ in
 
         basedirRegex = mkOption {
           example = "/home";
+          type = types.str;
           description = "Regex which matches the parent directory of the user homes.";
         };
 

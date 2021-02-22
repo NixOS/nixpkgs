@@ -5,7 +5,7 @@
 , ninja
 , patchelf
 , perl
-, pkgconfig
+, pkg-config
 , python3
 , expat
 , libdrm
@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2020.Q4.5";
+  version = "2021.Q1.3";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "1CcupEm19ZGEma0TIkGxOa0doKhlPbfXFX2S44EBNp0=";
+    sha256 = "x9VzPALIlgE3eIKY4/qbFg5w+zd2W/jbqFXgJfpvLP4=";
   };
 
   buildInputs = [
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ninja
     patchelf
     perl
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
   cmakeDir = "../drivers/xgl";
 
   # LTO is disabled in gcc for i686 as of #66528
-  cmakeFlags = stdenv.lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
+  cmakeFlags = lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
 
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
   # Keep the rpath, otherwise vulkaninfo and vkcube segfault
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AMD Open Source Driver For Vulkan";
     homepage = "https://github.com/GPUOpen-Drivers/AMDVLK";
     changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";

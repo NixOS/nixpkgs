@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, stdenv, py4j }:
+{ buildPythonPackage, fetchPypi, lib, py4j }:
 
 buildPythonPackage rec {
   pname = "pyspark";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # Tests assume running spark...
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
     license = licenses.asl20;

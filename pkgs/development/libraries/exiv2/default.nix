@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , zlib
@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
     patchShebangs ../test/
     mkdir ../test/tmp
 
-    ${stdenv.lib.optionalString (stdenv.isAarch64 || stdenv.isAarch32) ''
+    ${lib.optionalString (stdenv.isAarch64 || stdenv.isAarch32) ''
       # Fix tests on arm
       # https://github.com/Exiv2/exiv2/issues/933
       rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
     ''}
 
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
       # Removing tests depending on charset conversion
       substituteInPlace ../test/Makefile --replace "conversions.sh" ""
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.exiv2.org/";
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;

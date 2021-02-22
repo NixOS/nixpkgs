@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
+, runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
 , zimg, libass, python3, libiconv
 , ApplicationServices
 , ocrSupport ?  false, tesseract ? null
@@ -8,20 +9,24 @@
 assert ocrSupport   -> tesseract != null;
 assert imwriSupport -> imagemagick7 != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R49";
+  version = "R52";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "1d298mlb24nlc2x7pixfbkd0qbpv4c706c32idsgpi96z1spkhvl";
+    sha256 = "1krfdzc2x2vxv4nq9kiv1c09hgj525qn120ah91fw2ikq8ldvmx4";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper ];
+  patches = [
+    ./0001-Call-weak-function-to-allow-adding-preloaded-plugins.patch
+  ];
+
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
@@ -36,12 +41,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru = {
+  passthru = rec {
     # If vapoursynth is added to the build inputs of mpv and then
     # used in the wrapping of it, we want to know once inside the
     # wrapper, what python3 version was used to build vapoursynth so
     # the right python3.sitePackages will be used there.
     inherit python3;
+
+    withPlugins = import ./plugin-interface.nix {
+      inherit lib python3 buildEnv writeText runCommandCC stdenv runCommand
+        vapoursynth makeWrapper withPlugins;
+    };
   };
 
   postInstall = ''
@@ -49,12 +59,12 @@ stdenv.mkDerivation rec {
         --prefix PYTHONPATH : $out/${python3.sitePackages}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj tadeokondrak ];
+    maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
   };
 
 }

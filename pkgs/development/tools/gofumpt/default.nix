@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gofumpt";
-  version = "2020-10-27";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = pname;
-    rev = "85d5401eb0f699d87b0d6c949dd4c0d5fb23f2e0";
-    sha256 = "0n72d7p4y89kfilcdx3qb63qy6xm8dyp6q8s8954wrkm2wlhkwiy";
+    rev = "v${version}";
+    sha256 = "0xln0a5n8na3p6b7l8im3bh4ys5rr3k413ibzk8mnp471f5h1558";
   };
 
-  vendorSha256 = "1s546hp4ngzqvfx7dbd43k7b94z0mvndgdkndh4ypkkl3rpd9kkz";
+  vendorSha256 = "05qdwz1icl8in0j94gx9pgplidm2v29hsn4kgg5gw35bsbn1c7id";
 
   doCheck = false;
 

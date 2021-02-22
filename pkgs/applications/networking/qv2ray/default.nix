@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , mkDerivation
 , fetchFromGitHub
 , qmake
@@ -8,7 +8,7 @@
 , grpc
 , protobuf
 , openssl
-, pkgconfig
+, pkg-config
 , c-ares
 , abseil-cpp
 , libGL
@@ -51,12 +51,12 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     clang
-    pkgconfig
+    pkg-config
     qmake
     qttools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An GUI frontend to v2ray";
     homepage = "https://qv2ray.github.io/en/";
     license = licenses.gpl3;

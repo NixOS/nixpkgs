@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ nose pkgs.pkgconfig pkgs.swig ];
   buildInputs = [ setuptools pkgs.libcdio ]
-    ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
+    ++ lib.optional stdenv.isDarwin pkgs.libiconv;
 
   # Run tests using nosetests but first need to install the binaries
   # to the root source directory where they can be found.
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/libcdio/";
     description = "Wrapper around libcdio (CD Input and Control library)";
     maintainers = with maintainers; [ rycee ];

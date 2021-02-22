@@ -1,15 +1,16 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , gfortran, fftw, blas, lapack
-, mpi ? null
+, useMpi ? false
+, mpi
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.5";
+  version = "6.6";
   pname = "quantum-espresso";
 
   src = fetchurl {
     url = "https://gitlab.com/QEF/q-e/-/archive/qe-${version}/q-e-qe-${version}.tar.gz";
-    sha256 = "00nnsq1vq579xsmkvwrgs6bdqdcbdlsmcp4yfynnvs40ca52m2r5";
+    sha256 = "0b3718bwdqfyssyz25jknijar79qh5cf1bbizv9faliz135mcilj";
   };
 
   passthru = {
@@ -21,13 +22,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ fftw blas lapack gfortran ]
-    ++ (stdenv.lib.optionals (mpi != null) [ mpi ]);
+    ++ (lib.optionals useMpi [ mpi ]);
 
-configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
+configureFlags = if useMpi then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
 
   makeFlags = [ "all" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electronic-structure calculations and materials modeling at the nanoscale";
     longDescription = ''
         Quantum ESPRESSO is an integrated suite of Open-Source computer codes for

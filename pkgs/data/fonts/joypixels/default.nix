@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , config
 , acceptLicense ? config.joypixels.acceptLicense or false
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The finest emoji you can use legally (formerly EmojiOne)";
     longDescription = ''
       New for 2020! JoyPixels 6.0 includes 3,342 originally crafted icon

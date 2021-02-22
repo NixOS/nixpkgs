@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, tnt}:
+{lib, stdenv, fetchurl, unzip, tnt}:
 
 stdenv.mkDerivation rec {
   pname = "jama";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       cp *.h $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://math.nist.gov/tnt/";
     description = "JAMA/C++ Linear Algebra Package: Java-like matrix C++ templates";
     platforms = platforms.unix;

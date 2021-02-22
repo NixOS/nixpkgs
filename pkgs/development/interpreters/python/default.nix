@@ -24,7 +24,7 @@ with pkgs;
       pythonPackages = callPackage
         ({ pkgs, stdenv, python, overrides }: let
           pythonPackagesFun = import ../../../top-level/python-packages.nix {
-            inherit stdenv pkgs;
+            inherit stdenv pkgs lib;
             python = self;
           };
           otherSplices = {
@@ -154,10 +154,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "8";
-      patch = "6";
+      patch = "7";
       suffix = "";
     };
-    sha256 = "qeC3nSeqBW65zOjWOkJ7X5urFGXe4/lC3P2yWoL0q4o=";
+    sha256 = "sha256-3cwd8Wu1uHqkLsXSCluQLy0IjKommyjgFZD5enmOxQo=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -167,10 +167,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "0";
+      patch = "1";
       suffix = "";
     };
-    sha256 = "0m18z05nlmqm1zjw9s0ifgrn1jvjn3jwjg0bpswhjmw5k4yfcwww";
+    sha256 = "1zq3k4ymify5ig739zyvx9s2ainvchxb1zpy139z74krr653y74r";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -181,9 +181,9 @@ in {
       major = "3";
       minor = "10";
       patch = "0";
-      suffix = "a2";
+      suffix = "a4";
     };
-    sha256 = "0zl5h61s8n2w2v1n40af0mwaw7lqh5fl1ys7kyjgcph60vb9wzjr";
+    sha256 = "sha256-McHBl7IZuOH96je/izkxur0Edirn+igVkQU/pbek73M=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -218,9 +218,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "1";
+      patch = "2";
     };
-    sha256 = "08ckkhd0ix6j9873a7gr507c72d4cmnv5lwvprlljdca9i8p2dzs";
+    sha256 = "1l98b7s9sf16a5w8y0fdn7a489l3gpykjasws1j67bahhc6li2c1";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -234,9 +234,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "1";
+      patch = "2";
     };
-    sha256 = "10zsk8jby8j6visk5mzikpb1cidvz27qq4pfpa26jv53klic6b0c";
+    sha256 = "03f1fdw6yk2mypa9pbmgk26r8y1hhmw801l6g36zry9zsvz7aqgx";
     pythonVersion = "3.6";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -251,9 +251,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "1";
+      patch = "2";
     };
-    sha256 = "18xc5kwidj5hjwbr0w8v1nfpg5l4lk01z8cn804zfyyz8xjqhx5y"; # linux64
+    sha256 = "0fx1kp13cgx3rijd0zf8rdjbai6mfhc9is4xfc7kl5cpd88hhkwd"; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
   };
@@ -264,9 +264,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "1";
+      patch = "2";
     };
-    sha256 = "04nv0mkalaliphbjw7y0pmb372bxwjzwmcsqkf9kwsik99kg2z7n"; # linux64
+    sha256 = "10xdx7q04fzy4v4rbj9bbdw8g9y68qgaih7z2n0s5aknj0bizafp"; # linux64
     pythonVersion = "3.6";
     inherit passthruFun;
   };

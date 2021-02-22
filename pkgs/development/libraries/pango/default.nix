@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cairo, harfbuzz
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, cairo, harfbuzz
 , libintl, libthai, gobject-introspection, darwin, fribidi, gnome3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 , meson, ninja, glib
 , x11Support? !stdenv.isDarwin, libXft
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   pname = "pango";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0ry3j9n0lvdfmjwi2w7wa4gkalnip56kghqq6bh8hcf45xjvh3bk";
   };
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja
     glib # for glib-mkenum
-    pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
+    pkg-config gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
     fribidi
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-Dxft=disabled"  # only works with x11
   ];
 
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''

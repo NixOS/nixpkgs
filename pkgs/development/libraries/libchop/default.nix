@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, zlib, bzip2, libgcrypt
+{ fetchurl, lib, stdenv, zlib, bzip2, libgcrypt
 , gdbm, gperf, tdb, gnutls, db, libuuid
-, lzo, pkgconfig, guile, rpcsvc-proto, libtirpc
+, lzo, pkg-config, guile, rpcsvc-proto, libtirpc
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gets-undeclared.patch ./size_t.patch ./0001-Fix-RPC-compilation-when-using-libtirpc-rather-than-.patch ];
 
-  nativeBuildInputs = [ pkgconfig gperf rpcsvc-proto ];
+  nativeBuildInputs = [ pkg-config gperf rpcsvc-proto ];
 
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -re 's%@GUILE@%&/guile%' -i */Makefile.* Makefile.*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools & library for data backup and distributed storage";
 
     longDescription =

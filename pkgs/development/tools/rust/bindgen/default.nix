@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
-  runtimeShell }:
+{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin
+, runtimeShell
+, bash
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
@@ -16,7 +18,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1dv1ywdy701bnc2jv5jq0hnpal1snlizaj9w6k1wxyrp9szjd48w";
 
-  libclang = llvmPackages.libclang.lib; #for substituteAll
+  #for substituteAll
+  libclang = llvmPackages.libclang.lib;
+  inherit bash;
 
   buildInputs = [ libclang ];
 
@@ -50,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically generates Rust FFI bindings to C (and some C++) libraries";
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into

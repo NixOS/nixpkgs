@@ -10,28 +10,24 @@ let
     "2.10" = {
       version = "2.10.7";
       sha256 = "koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
-      tests = [ nixosTests.scala.scala_2_10 ];
       pname = "scala_2_10";
     };
 
     "2.11" = {
       version = "2.11.12";
       sha256 = "sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
-      tests = [ nixosTests.scala.scala_2_11 ];
       pname = "scala_2_11";
     };
 
     "2.12" = {
-      version = "2.12.12";
-      sha256 = "NSDNHzye//YrrudfMuUtHl3BIL4szzQGSeRw5I9Sfis=";
-      tests = [ nixosTests.scala.scala_2_12 ];
+      version = "2.12.13";
+      sha256 = "17548sx7liskkadqiqaajmwp2w7bh9m2d8hp2mwyg8yslmjx4pcc";
       pname = "scala_2_12";
     };
 
     "2.13" = {
       version = "2.13.4";
       sha256 = "1alcnzmxga00nsvgy8yky91zw5b4q0xg2697vrrdgjlglpxiqwdw";
-      tests = [ nixosTests.scala.scala_2_13 ];
       pname = "scala_2_13";
     };
   };
@@ -69,13 +65,19 @@ stdenv.mkDerivation rec {
       done
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/scalac -version 2>&1 | grep '^Scala compiler version ${version}'
+
+    echo 'println("foo"*3)' | $out/bin/scala 2>/dev/null | grep "foofoofoo"
+  '';
+
   passthru = {
-    inherit tests;
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           coreutils
           git

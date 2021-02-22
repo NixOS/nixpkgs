@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
+{ lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
 , libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
-, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib
+, makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
 , libpulseaudio, libopus, libogg, jansson, libsodium }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "0b4a6bxwhpmj274d281vhny7i5rwydrdmab76xk6ji8vf0p705dn";
+    sha256 = "sha256-2u9gO9Mu0dM1yixcaqOnZcDfGcp69dc5CH5tkl6vRas=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig libtool makeWrapper ];
+  nativeBuildInputs = [ pkg-config libtool makeWrapper ];
   buildInputs = [
     adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
     libmicrohttpd libunistring libxml2 ncurses gettext libsodium
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     make -k check
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''

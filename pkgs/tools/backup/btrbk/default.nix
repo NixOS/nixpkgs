@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
+{ lib, stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
 , util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -24,12 +24,6 @@ stdenv.mkDerivation rec {
     # Tainted Mode disables PERL5LIB
     substituteInPlace btrbk --replace "perl -T" "perl"
 
-    # Fix btrbk-mail
-    substituteInPlace contrib/cron/btrbk-mail \
-      --replace "/bin/date" "${coreutils}/bin/date" \
-      --replace "/bin/echo" "${coreutils}/bin/echo" \
-      --replace '$btrbk' 'btrbk'
-
     # Fix SSH filter script
     sed -i '/^export PATH/d' ssh_filter_btrbk.sh
     substituteInPlace ssh_filter_btrbk.sh --replace logger ${util-linux}/bin/logger
@@ -38,10 +32,10 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
+      --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A backup tool for btrfs subvolumes";
     homepage = "https://digint.ch/btrbk";
     license = licenses.gpl3;

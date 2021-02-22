@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytz, requests, pytest, freezegun }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytz, requests, pytest, freezegun }:
 
 buildPythonPackage rec {
   pname = "astral";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     py.test -m "not webtest"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculations for the position of the sun and the moon";
     homepage = "https://github.com/sffjunkie/astral/";
     license = licenses.asl20;

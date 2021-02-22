@@ -29,9 +29,8 @@ stdenv.mkDerivation (rec {
     sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
   };
 
-  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-    # included on coreutils master; TODO: apply unconditionally, I guess
-    ++ optional stdenv.hostPlatform.isAarch64 ./sys-getdents-undeclared.patch
+  patches = [ ./sys-getdents-undeclared.patch ]
+    ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
     # fix gnulib tests on 32-bit ARM. Included on coreutils master.
     # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
     ++ optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
@@ -76,8 +75,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
-    ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
+    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ];  # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
@@ -155,6 +153,6 @@ stdenv.mkDerivation (rec {
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
   NIX_CFLAGS_COMPILE = "-Wno-error";
-} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+} // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
   NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
 })

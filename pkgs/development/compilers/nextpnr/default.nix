@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , boost, python3, eigen
 , icestorm, trellis
 , llvmPackages
 
-, enableGui ? true
-, wrapQtAppsHook
-, qtbase
+, enableGui ? false
+, wrapQtAppsHook ? null
+, qtbase ? null
 , OpenGL ? null
 }:
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
 in
-with stdenv; mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2020.12.01";
+  version = "2021.01.02";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr";
-      rev    = "868902fbdf0b476bdccf4d25cbb80ba602d2cc11";
-      sha256 = "1kb5lhixb7f4q800gjyw9xm9ff1yaq3pgna17f5f0bw6b4ds56zc";
+      rev    = "9b9628047c01a970cfe20f83f2b7129ed109440d";
+      sha256 = "0pcv96d0n40h2ipywi909hpzlys5b6r4pamc320qk1xxhppmgkmm";
       name   = "nextpnr";
     })
     (fetchFromGitHub {
@@ -43,19 +43,18 @@ with stdenv; mkDerivation rec {
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
-  enableParallelBuilding = true;
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
       "-DARCH=generic;ice40;ecp5"
       "-DBUILD_TESTS=ON"
-      "-DICEBOX_ROOT=${icestorm}/share/icebox"
+      "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
       "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
-      "-DSERIALIZE_CHIPDB=OFF"
+      "-DSERIALIZE_CHIPDBS=OFF"
     ]
-    ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
+    ++ (lib.optional enableGui "-DBUILD_GUI=ON")
     ++ (lib.optional (enableGui && stdenv.isDarwin)
         "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 

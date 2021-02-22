@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, pkgconfig, openssl }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "h2aWWjycTm84TS89/vhqnAvwOqeeSDtvvCt+Is6I0eI=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   cargoPatches = [ ./cargo-lock-vendor-fix.patch ];

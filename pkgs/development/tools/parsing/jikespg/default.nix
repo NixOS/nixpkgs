@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "jikespg-1.3";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       cp jikespg $out/bin
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://jikes.sourceforge.net/";
     description = "The Jikes Parser Generator";
     platforms = platforms.linux;

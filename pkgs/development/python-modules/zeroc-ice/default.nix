@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, openssl, bzip2 }:
+{ lib, buildPythonPackage, fetchPypi, openssl, bzip2 }:
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl bzip2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zeroc.com/";
     license = licenses.gpl2;
     description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more.";

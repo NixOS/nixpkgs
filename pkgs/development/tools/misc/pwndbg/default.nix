@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3
 , fetchFromGitHub
 , makeWrapper
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
       --set NIX_PYTHONPATH ${pythonPath}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Exploit Development and Reverse Engineering with GDB Made Easy";
     homepage = "https://github.com/pwndbg/pwndbg";
     license = licenses.mit;

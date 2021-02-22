@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, autoreconfHook,
   which }:
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     mkdir -p $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/binaryanalysisplatform/bap-bindings";
     description = "A C library for interacting with BAP";
     maintainers = [ maintainers.maurer ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "gprolog-1.4.5";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z4cc42n3k6i35b8mr816iwsvrpxshw6d7dgz6s2h1hy0l7g1p5z";
   };
 
-  hardeningDisable = stdenv.lib.optional stdenv.isi686 "pic";
+  hardeningDisable = lib.optional stdenv.isi686 "pic";
 
   patchPhase = ''
     sed -i -e "s|/tmp/make.log|$TMPDIR/make.log|g" src/Pl2Wam/check_boot
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/gprolog/";
     description = "GNU Prolog, a free Prolog compiler with constraint solving over finite domains";
-    license = stdenv.lib.licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
 
     longDescription = ''
       GNU Prolog is a free Prolog compiler with constraint solving
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       declarativity of logic programming.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

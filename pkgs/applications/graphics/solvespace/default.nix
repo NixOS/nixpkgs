@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
+{ lib, stdenv, fetchgit, cmake, pkg-config, zlib, libpng, cairo, freetype
 , json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre
 , wrapGAppsHook
 }:
@@ -13,14 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig cmake wrapGAppsHook
+    pkg-config cmake wrapGAppsHook
   ];
   buildInputs = [
     zlib libpng cairo freetype
     json_c fontconfig gtkmm3 pangomm glew libGLU
     xorg.libpthreadstubs xorg.libXdmcp pcre
   ];
-  enableParallelBuilding = true;
 
   preConfigure = ''
     patch CMakeLists.txt <<EOF
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/ $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A parametric 3d CAD program";
     license = licenses.gpl3;
     maintainers = [ maintainers.edef ];

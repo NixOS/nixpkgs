@@ -1,6 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 let
   cfg = config.virtualisation.podman;
+  toml = pkgs.formats.toml { };
 
   inherit (lib) mkOption types;
 
@@ -53,6 +54,14 @@ in
       '';
     };
 
+    enableNvidia = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable use of NVidia GPUs from within podman containers.
+      '';
+    };
+
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
@@ -78,21 +87,40 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      environment.systemPackages = [ cfg.package ]
+        ++ lib.optional cfg.dockerCompat dockerCompat;
 
-    environment.systemPackages = [ cfg.package ]
-      ++ lib.optional cfg.dockerCompat dockerCompat;
+      environment.etc."cni/net.d/87-podman-bridge.conflist".source = utils.copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
 
-    environment.etc."cni/net.d/87-podman-bridge.conflist".source = utils.copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
+      virtualisation.containers = {
+        enable = true; # Enable common /etc/containers configuration
+        containersConf.extraConfig = lib.optionalString cfg.enableNvidia
+          (builtins.readFile (toml.generate "podman.nvidia.containers.conf" {
+            engine = {
+              conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
+              runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
+            };
+          }));
+      };
 
-    # Enable common /etc/containers configuration
-    virtualisation.containers.enable = true;
+      systemd.packages = [ cfg.package ];
 
-    assertions = [{
-      assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
-      message = "Option dockerCompat conflicts with docker";
-    }];
+      systemd.services.podman.serviceConfig = {
+        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      };
 
-  };
+      systemd.sockets.podman.wantedBy = [ "sockets.target" ];
 
+      systemd.tmpfiles.packages = [ cfg.package ];
+
+      assertions = [
+        {
+          assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
+          message = "Option dockerCompat conflicts with docker";
+        }
+      ];
+    }
+  ]);
 }

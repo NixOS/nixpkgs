@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_scep";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1imddqyi81l90valvndx9r0ywn32ggijrdfrjmbx8j1abaccagrc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RedWax CA service modules for SCEP (Automatic ceritifcate issue/renewal)";
 
     homepage = "https://redwax.eu";

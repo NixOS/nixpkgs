@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-mpris";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for controlling Mopidy through D-Bus using the MPRIS specification";
     license = licenses.asl20;

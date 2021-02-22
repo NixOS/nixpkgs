@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "erfa";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-shared" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Essential Routines for Fundamental Astronomy";
     homepage = "https://github.com/liberfa/erfa";
     maintainers = with maintainers; [ mir06 ];

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "phraseapp-client";
@@ -18,7 +18,7 @@ buildGoPackage rec {
     ln -s $out/bin/phraseapp-client $out/bin/phraseapp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
     license = licenses.mit;

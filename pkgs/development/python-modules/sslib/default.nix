@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
   pname = "sslib";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jqueiroz/python-sslib";
     description = "A Python3 library for sharing secrets";
     license = licenses.mit;

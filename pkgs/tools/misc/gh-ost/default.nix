@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gh-ost";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version} -X main.BuildDescribe=${src.rev}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Triggerless online schema migration solution for MySQL";
     homepage = "https://github.com/github/gh-ost";
     license = licenses.mit;

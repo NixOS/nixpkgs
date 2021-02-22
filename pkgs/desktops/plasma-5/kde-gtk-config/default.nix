@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules, wrapGAppsHook,
   glib, gtk2, gtk3, karchive, kcmutils, kconfigwidgets, ki18n, kiconthemes, kio,
-  knewstuff, gsettings-desktop-schemas, xsettingsd
+  knewstuff, gsettings-desktop-schemas, xsettingsd, kdecoration, sass
 }:
 
 mkDerivation {
@@ -11,7 +11,7 @@ mkDerivation {
   dontWrapGApps = true;  # There is nothing to wrap
   buildInputs = [
     ki18n kio glib gtk2 gtk3 karchive kcmutils kconfigwidgets kiconthemes
-    knewstuff gsettings-desktop-schemas xsettingsd
+    knewstuff gsettings-desktop-schemas xsettingsd kdecoration sass
   ];
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"

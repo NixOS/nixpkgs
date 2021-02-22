@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "kail";
@@ -23,7 +23,7 @@ buildGoPackage rec {
   deleteVendor = true;
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kubernetes log viewer";
     homepage = "https://github.com/boz/kail";
     license = licenses.mit;

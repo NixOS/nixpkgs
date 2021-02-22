@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
+{ lib, stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "pythia";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--with-lhapdf6=${lhapdf}"
-  ] ++ (if stdenv.lib.versions.major hepmc.version == "3" then [
+  ] ++ (if lib.versions.major hepmc.version == "3" then [
     "--with-hepmc3=${hepmc}"
   ] else [
     "--with-hepmc2=${hepmc}"
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program for the generation of high-energy physics events";
-    license     = stdenv.lib.licenses.gpl2;
+    license     = lib.licenses.gpl2;
     homepage    = "http://home.thep.lu.se/~torbjorn/Pythia.html";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

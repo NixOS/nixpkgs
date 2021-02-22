@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''simple-date'';
-  version = ''postmodern-20201016-git'';
+  baseName = "simple-date";
+  version = "postmodern-20201016-git";
 
   parasites = [ "simple-date/tests" ];
 
-  description = ''Simple date library that can be used with postmodern'';
+  description = "Simple date library that can be used with postmodern";
 
   deps = [ args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2020-10-16/postmodern-20201016-git.tgz'';
-    sha256 = ''1svaiksbqcaq8sh7q6sj9kzazdfl360zqr2nzhwbgy4xnaj4vf3n'';
+    url = "http://beta.quicklisp.org/archive/postmodern/2020-10-16/postmodern-20201016-git.tgz";
+    sha256 = "1svaiksbqcaq8sh7q6sj9kzazdfl360zqr2nzhwbgy4xnaj4vf3n";
   };
 
   packageName = "simple-date";

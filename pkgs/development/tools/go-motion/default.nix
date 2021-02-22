@@ -9,7 +9,7 @@ buildGoPackage rec {
   rev = "218875ebe23806e7af82f3b5b14bb3355534f679";
 
   goPackagePath = "github.com/fatih/motion";
-  excludedPackages = ''testdata'';
+  excludedPackages = "testdata";
 
   src = fetchFromGitHub {
     inherit rev;

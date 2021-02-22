@@ -7,7 +7,7 @@ with pkgs.lib;
 {
   test1 = makeTest {
     name = "vector-test1";
-    meta.maintainers = [ pkgs.stdenv.lib.maintainers.happysalada ];
+    meta.maintainers = [ pkgs.lib.maintainers.happysalada ];
 
     machine = { config, pkgs, ... }: {
       services.vector = {

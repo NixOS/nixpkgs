@@ -1,14 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ghorg";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
     rev = version;
-    sha256 = "0diwndkckv6fga45j9zngizycn5m71r67cziv0zrx6c66ssbj49w";
+    sha256 = "sha256-OoNHKDxYKTmfm1rrQxG7PnH7DINa2M/NKc/5iKaUybg=";
   };
 
   doCheck = false;
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quickly clone an entire org/users repositories into one directory";
     longDescription = ''
       ghorg allows you to quickly clone all of an orgs, or users repos into a

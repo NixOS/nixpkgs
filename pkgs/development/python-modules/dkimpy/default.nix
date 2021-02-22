@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, openssl, buildPythonPackage
+{ lib, fetchPypi, openssl, buildPythonPackage
 , pytest, dnspython, pynacl, authres, python }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     ${python.interpreter} ./test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DKIM + ARC email signing/verification tools + Python module";
     longDescription = ''
       Python module that implements DKIM (DomainKeys Identified Mail) email

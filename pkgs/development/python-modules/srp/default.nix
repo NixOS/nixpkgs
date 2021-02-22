@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, lib }:
+{ buildPythonPackage, fetchPypi, six, lib }:
 
 buildPythonPackage rec {
   pname = "srp";

@@ -18,7 +18,7 @@ in
 {
   basic = makeTest {
     name = "systemd-boot";
-    meta.maintainers = with pkgs.stdenv.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
 
     machine = common;
 
@@ -42,7 +42,7 @@ in
   # Boot without having created an EFI entry--instead using default "/EFI/BOOT/BOOTX64.EFI"
   fallback = makeTest {
     name = "systemd-boot-fallback";
-    meta.maintainers = with pkgs.stdenv.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
 
     machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -68,7 +68,7 @@ in
 
   update = makeTest {
     name = "systemd-boot-update";
-    meta.maintainers = with pkgs.stdenv.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
 
     machine = common;
 

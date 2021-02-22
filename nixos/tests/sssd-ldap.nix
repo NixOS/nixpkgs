@@ -10,7 +10,7 @@
   in import ./make-test-python.nix {
     name = "sssd-ldap";
 
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ bbigras ];
     };
 

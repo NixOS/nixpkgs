@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "serf";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1arakjvhyasrk52vhxas2ghlrby3i3wj59r7sjrkbpln2cdbqnlx";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for service orchestration and management";
     homepage = "https://www.serf.io/";
     platforms = platforms.linux ++ platforms.darwin;

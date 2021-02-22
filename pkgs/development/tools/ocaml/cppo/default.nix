@@ -1,56 +1,65 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, ocamlbuild
+, buildDunePackage
+}:
+
 let
   pname = "cppo";
-  webpage = "https://github.com/ocaml-community/${pname}";
-in
-assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then
-   (if stdenv.lib.versionAtLeast ocaml.version "4.03" then {
-    version = "1.6.6";
-    sha256 = "1smcc0l6fh2n0y6bp96c69j5nw755jja99w0b206wx3yb2m4w2hs";
-   } else {
-    version = "1.6.5";
-    sha256 = "03c0amszy28shinvz61hm340jz446zz5763a1pdqlza36kwcj0p0";
-   }) // {
-    buildInputs = [ dune ];
-    extra = {
-      inherit (dune) installPhase;
-    };
-  } else {
-    version = "1.5.0";
-    sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
-    extra = {
-      createFindlibDestdir = true;
-      makeFlags = [ "PREFIX=$(out)" ];
-      preBuild = ''
-        mkdir $out/bin
-      '';
-    };
-  }
-; in
-
-stdenv.mkDerivation ({
-
-  name = "${pname}-${param.version}";
-
-  src = fetchFromGitHub {
-    owner = "mjambon";
-    repo = pname;
-    rev = "v${param.version}";
-    inherit (param) sha256;
-  };
-
-  buildInputs = [ ocaml findlib ocamlbuild ] ++ (param.buildInputs or []);
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The C preprocessor for OCaml";
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.
     '';
-    homepage = webpage;
+    homepage = "https://github.com/ocaml-community/${pname}";
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };
-} // param.extra)
+
+in
+
+if lib.versionAtLeast ocaml.version "4.02" then
+
+buildDunePackage rec {
+  inherit pname;
+  version = "1.6.7";
+
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/ocaml-community/cppo/releases/download/v${version}/cppo-v${version}.tbz";
+    sha256 = "17ajdzrnmnyfig3s6hinb56mcmhywbssxhsq32dz0v90dhz3wmfv";
+  };
+
+  doCheck = true;
+
+  inherit meta;
+}
+
+else
+
+let version = "1.5.0"; in
+
+stdenv.mkDerivation {
+
+  name = "${pname}-${version}";
+
+  src = fetchFromGitHub {
+    owner = "mjambon";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
+  };
+
+  buildInputs = [ ocaml findlib ocamlbuild ];
+
+  inherit meta;
+
+  createFindlibDestdir = true;
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  preBuild = ''
+    mkdir $out/bin
+  '';
+
+}

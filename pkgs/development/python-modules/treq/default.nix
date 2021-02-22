@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, service-identity, requests, six
+{ lib, fetchPypi, buildPythonPackage, service-identity, requests, six
 , mock, twisted, incremental, pep8, httpbin
 }:
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   # Failing tests https://github.com/twisted/treq/issues/208
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/twisted/treq";
     description = "A requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;

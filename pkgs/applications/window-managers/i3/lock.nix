@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutilimage,
+{ fetchurl, lib, stdenv, which, pkg-config, libxcb, xcbutilkeysyms, xcbutilimage,
   xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "02szjsaz7rqrdkd0r2nwgwa85c4hwfrcskxw7ryk695kmjcfhzv3";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
     pam libX11 libev cairo libxkbcommon libxkbfile ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp *.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple screen locker like slock";
     longDescription = ''
       Simple screen locker. After locking, a colored background (default: white) or

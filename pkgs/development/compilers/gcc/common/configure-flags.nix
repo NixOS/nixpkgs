@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , targetPackages
 
 , crossStageStatic, libcCross
@@ -24,8 +24,8 @@
 , langJit
 }:
 
-assert cloog != null -> stdenv.lib.versionOlder version "5";
-assert langJava -> stdenv.lib.versionOlder version "7";
+assert cloog != null -> lib.versionOlder version "5";
+assert langJava -> lib.versionOlder version "7";
 
 # Note [Windows Exception Handling]
 # sjlj (short jump long jump) exception handling makes no sense on x86_64,
@@ -39,8 +39,7 @@ assert langJava -> stdenv.lib.versionOlder version "7";
 
 let
   inherit (stdenv)
-    buildPlatform hostPlatform targetPlatform
-    lib;
+    buildPlatform hostPlatform targetPlatform;
 
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
@@ -73,7 +72,7 @@ let
       "--enable-libssp"
       "--disable-nls"
       # To keep ABI compatibility with upstream mingw-w64
-      "--enable-fully-dynamic-string"      
+      "--enable-fully-dynamic-string"
     ] ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
       # See Note [Windows Exception Handling]
       "--enable-sjlj-exceptions"
@@ -171,7 +170,7 @@ let
     ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
-    ++ (import ../common/platform-flags.nix { inherit (stdenv) lib targetPlatform; })
+    ++ (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 
@@ -187,13 +186,16 @@ let
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
-    ] 
+    ]
     ++ lib.optionals langJit [
       "--enable-host-shared"
-    ] 
+    ]
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
+    # Make -fcommon default on gcc10
+    # TODO: fix all packages (probably 100+) and remove that
+    ++ lib.optional (version >= "10.1.0") "--with-specs=%{!fno-common:%{!fcommon:-fcommon}}"
   ;
 
 in configureFlags

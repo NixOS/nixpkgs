@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "konqueror";
+  pname = "konqueror";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kdelibs4support kcmutils khtml kdesu

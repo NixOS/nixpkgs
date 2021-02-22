@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cffi-grovel'';
-  version = ''cffi_0.23.0'';
+  baseName = "cffi-grovel";
+  version = "cffi_0.23.0";
 
-  description = ''The CFFI Groveller'';
+  description = "The CFFI Groveller";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-toolchain" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cffi/2020-07-15/cffi_0.23.0.tgz'';
-    sha256 = ''1szpbg5m5fjq7bpkblflpnwmgz3ncsvp1y43g3jzwlk7yfxrwxck'';
+    url = "http://beta.quicklisp.org/archive/cffi/2020-07-15/cffi_0.23.0.tgz";
+    sha256 = "1szpbg5m5fjq7bpkblflpnwmgz3ncsvp1y43g3jzwlk7yfxrwxck";
   };
 
   packageName = "cffi-grovel";

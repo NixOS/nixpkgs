@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, jdk, selenium-server-standalone }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk, selenium-server-standalone }:
 
-with stdenv.lib;
+with lib;
 let
     name = "selendroid-standalone-${version}";
     pluginName = "selendroid-grid-plugin-${version}";

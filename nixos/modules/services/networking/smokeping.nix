@@ -124,7 +124,8 @@ in
       };
       hostName = mkOption {
         type = types.str;
-        default = config.networking.hostName;
+        default = config.networking.fqdn;
+        defaultText = "\${config.networking.fqdn}";
         example = "somewhere.example.com";
         description = "DNS name for the urls generated in the cgi.";
       };
@@ -156,6 +157,7 @@ in
       ownerEmail = mkOption {
         type = types.str;
         default = "no-reply@${cfg.hostName}";
+        defaultText = "no-reply@\${hostName}";
         example = "no-reply@yourdomain.com";
         description = "Email contact for owner";
       };
@@ -239,18 +241,18 @@ in
       targetConfig = mkOption {
         type = types.lines;
         default = ''
-					probe = FPing
-					menu = Top
-					title = Network Latency Grapher
-					remark = Welcome to the SmokePing website of xxx Company. \
-									 Here you will learn all about the latency of our network.
-					+ Local
-					menu = Local
-					title = Local Network
-					++ LocalMachine
-					menu = Local Machine
-					title = This host
-					host = localhost
+          probe = FPing
+          menu = Top
+          title = Network Latency Grapher
+          remark = Welcome to the SmokePing website of xxx Company. \
+                   Here you will learn all about the latency of our network.
+          + Local
+          menu = Local
+          title = Local Network
+          ++ LocalMachine
+          menu = Local Machine
+          title = This host
+          host = localhost
         '';
         description = "Target configuration";
       };
@@ -303,7 +305,7 @@ in
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
-      script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
+      script = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
     };
     systemd.services.thttpd = mkIf cfg.webService {
       wantedBy = [ "multi-user.target"];

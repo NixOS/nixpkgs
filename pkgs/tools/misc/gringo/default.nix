@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,
+{ lib, stdenv, fetchurl,
   bison, re2c, sconsPackages,
   libcxx
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     ./gringo-4.5.4-to_string.patch
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace ./SConstruct \
       --replace \
         "env['CXX']            = 'g++'" \
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     cp build/release/gringo $out/bin/gringo
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts input programs with first-order variables to equivalent ground programs";
     homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;

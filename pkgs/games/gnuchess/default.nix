@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex, makeWrapper}:
+{lib, stdenv, fetchurl, flex, makeWrapper}:
 let
   s = # Generated upstream information
   rec {
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "GNU Chess engine";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
   };
 }
