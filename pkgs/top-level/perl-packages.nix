@@ -13712,6 +13712,23 @@ let
     };
   };
 
+  MojoIOLoopDelay = buildPerlModule {
+    pname = "Mojo-IOLoop-Delay";
+    version = "8.76";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-Delay-8.76.tar.gz";
+      sha256 = "1vd9s1r82wfxh8y1g2ninsyvzkawx7n6ncll8lhdj89p91hw1jwf";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
+      description = "(DISCOURAGED) Promises/A+ and flow-control helpers";
+      license = lib.licenses.artistic2;
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   MojoIOLoopForkCall = buildPerlModule {
     pname = "Mojo-IOLoop-ForkCall";
     version = "0.20";
