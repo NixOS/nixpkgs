@@ -9,6 +9,7 @@
 , protobuf
 , protobuf3-to-dict
 , smdebug-rulesconfig
+, pandas
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,10 @@ buildPythonPackage rec {
     sha256 = "sha256-xQ1nt8FcjuoilzM5PbU8KHgirPyj9us+ykyjfgEqZhg=";
   };
 
-  doCheck = false;
-
-  pythonImportsCheck = [ "sagemaker" ];
+  pythonImportsCheck = [
+    "sagemaker"
+    "sagemaker.lineage.visualizer"
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -33,7 +35,14 @@ buildPythonPackage rec {
     protobuf
     protobuf3-to-dict
     smdebug-rulesconfig
+    pandas
   ];
+
+  doCheck = false;
+
+  postFixup = ''
+    [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
+  '';
 
   meta = with lib; {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
