@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkg-config, qt5
+{ lib, stdenv, fetchFromGitHub, pkg-config, qt5
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python3
 , rnnoise
