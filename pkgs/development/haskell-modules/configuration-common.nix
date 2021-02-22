@@ -684,11 +684,19 @@ self: super: {
     '';
   });
 
-  # The standard libraries are compiled separately.
-  # Megaparsec override is needed because https://github.com/idris-lang/Idris-dev/issues/4826
-  # declares idris1 has no plans to migrate to megaparsec-9
+  # * The standard libraries are compiled separately.
+  # * Megaparsec override is needed because https://github.com/idris-lang/Idris-dev/issues/4826
+  #   declares idris1 has no plans to migrate to megaparsec-9
+  # * We need a patch from master to fix compilation with haskeline 0.8.0
+  #   which can be removed as soon as idris 1.3.4 hits presumably.
   idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
-    (super.idris.override { megaparsec = self.megaparsec_8_0_0; })
+    (appendPatch (super.idris.override {
+      megaparsec = self.megaparsec_8_0_0;
+    }) (pkgs.fetchpatch {
+      # compatibility with haskeline >= 0.8
+      url = "https://github.com/idris-lang/Idris-dev/commit/89a87cf666eb8b27190c779e72d0d76eadc1bc14.patch";
+      sha256 = "0fv493zlpgjsf57w0sncd4vqfkabfczp3xazjjmqw54m9rsfix35";
+    }))
   ));
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
