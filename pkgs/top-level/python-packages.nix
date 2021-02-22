@@ -2481,6 +2481,8 @@ in {
 
   futures = callPackage ../development/python-modules/futures { };
 
+  fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
+
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
   fx2 = callPackage ../development/python-modules/fx2 { };
