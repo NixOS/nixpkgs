@@ -20782,6 +20782,8 @@ in
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
+  orchis = callPackage ../data/themes/orchis { };
+
   orion = callPackage ../data/themes/orion {};
 
   overpass = callPackage ../data/fonts/overpass { };
