@@ -1,5 +1,6 @@
 { fetchurl
 , stdenv
+, fetchpatch
 , substituteAll
 , accountsservice
 , adwaita-icon-theme
@@ -57,6 +58,7 @@
 , shared-mime-info
 , sound-theme-freedesktop
 , tracker
+, tracker-miners
 , tzdata
 , udisks2
 , upower
@@ -95,6 +97,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     colord
     colord-gtk
+    epoxy
     fontconfig
     gdk-pixbuf
     glib
@@ -116,6 +119,7 @@ stdenv.mkDerivation rec {
     libgudev
     libhandy
     libkrb5
+    libnma
     libpulseaudio
     libpwquality
     librsvg
@@ -126,13 +130,12 @@ stdenv.mkDerivation rec {
     modemmanager
     mutter # schemas for the keybindings
     networkmanager
-    libnma
     polkit
     samba
     tracker
+    tracker-miners # for search locations dialog
     udisks2
     upower
-    epoxy
   ];
 
   patches = [
@@ -142,6 +145,12 @@ stdenv.mkDerivation rec {
       gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
+    })
+
+    # https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1173
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/-/commit/27e1140c9d4ad852b4dc6a132a14cd5532d52997.patch";
+      sha256 = "nU3szjKfXpRek8hhsxiCJNgMeDeIRK3QVo82D9R+kL4=";
     })
   ];
 
