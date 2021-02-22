@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, substituteAll, pythonOlder
-, geos, pytest, cython
+, geos, pytestCheckHook, cython
 , numpy
 }:
 
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     cython
   ];
 
-  checkInputs = [ pytest ];
-
   propagatedBuildInputs = [ numpy ];
+
+  checkInputs = [ pytestCheckHook ];
 
   # environment variable used in shapely/_buildcfg.py
   GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -38,11 +38,13 @@ buildPythonPackage rec {
    })
  ];
 
-  # Disable the tests that improperly try to use the built extensions
-  checkPhase = ''
+  preCheck = ''
     rm -r shapely # prevent import of local shapely
-    py.test tests
   '';
+
+  disabledTests = [
+    "test_collection"
+  ];
 
   meta = with lib; {
     description = "Geometric objects, predicates, and operations";
