@@ -118,6 +118,12 @@ in
       copy_bin_and_libs ${pkgs.plymouth}/bin/plymouthd
       copy_bin_and_libs ${pkgs.plymouth}/bin/plymouth
 
+      # Check if the actual requested theme is here
+      if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
+          echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
+          exit 1
+      fi
+
       moduleName="$(sed -n 's,ModuleName *= *,,p' ${themesEnv}/share/plymouth/themes/${cfg.theme}/${cfg.theme}.plymouth)"
 
       mkdir -p $out/lib/plymouth/renderers
