@@ -2,10 +2,11 @@
 
 let
 
-generic = args:
-if ((!lib.versionOlder args.version "391")
-    && stdenv.hostPlatform.system != "x86_64-linux") then null
-  else callPackage (import ./generic.nix args) { };
+  generic = args:
+    if ((!lib.versionOlder args.version "391")
+        && stdenv.hostPlatform.system != "x86_64-linux") then null
+    else callPackage (import ./generic.nix args) { };
+
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
 
@@ -26,6 +27,8 @@ rec {
       sha256_64bit = "0x6w2kcjm5q9z9l6rkxqabway4qq4h3ynngn36i8ky2dpxc1wzfq";
       settingsSha256 = "1hk4yvbb7xhfwm8jiwq6fj5m7vg3w7yvgglhfyhq7bbrlklfb4hm";
       persistencedSha256 = "00mmazv8sy93jvp60v7p954n250f4q3kxc13l4f8fmi28lgv0844";
+
+      patches = [ ./kvmalloc.patch ];
     }
     else legacy_390;
 

@@ -1,0 +1,45 @@
+diff --git a/kernel/nvidia-modeset/nvidia-modeset-linux.c b/kernel/nvidia-modeset/nvidia-modeset-linux.c
+index ffbbeb9..2302541 100644
+--- a/kernel/nvidia-modeset/nvidia-modeset-linux.c
++++ b/kernel/nvidia-modeset/nvidia-modeset-linux.c
+@@ -21,6 +21,8 @@
+ #include <linux/file.h>
+ #include <linux/list.h>
+ #include <linux/rwsem.h>
++#include <linux/mm.h>
++#include <linux/version.h>
+
+ #include "nvstatus.h"
+
+@@ -169,8 +171,9 @@ static inline void nvkms_write_unlock_pm_lock(void)
+  * are called while nvkms_lock is held.
+  *************************************************************************/
+
+-/* Don't use kmalloc for allocations larger than 128k */
+-#define KMALLOC_LIMIT (128 * 1024)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 12, 0)
++/* Don't use kmalloc for allocations larger than PAGE_SIZE */
++#define KMALLOC_LIMIT (PAGE_SIZE)
+
+ void* NVKMS_API_CALL nvkms_alloc(size_t size, NvBool zero)
+ {
+@@ -197,6 +200,19 @@ void NVKMS_API_CALL nvkms_free(void *ptr, size_t size)
+         vfree(ptr);
+     }
+ }
++#else
++void* NVKMS_API_CALL nvkms_alloc(size_t size, NvBool zero)
++{
++    if (zero)
++        return kvzalloc(size, GFP_KERNEL);
++    return kvmalloc(size, GFP_KERNEL);
++}
++
++void NVKMS_API_CALL nvkms_free(void *ptr, size_t size)
++{
++    kvfree(ptr);
++}
++#endif
+
+ void* NVKMS_API_CALL nvkms_memset(void *ptr, NvU8 c, size_t size)
+ {
