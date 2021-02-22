@@ -150,6 +150,17 @@ let
               useDHCP = false;
               useNetworkd = true;
             };
+            # FIXME get rid of this hack!
+            # On a test-system I experienced that this service was hanging for no reason.
+            # After a config-activation in ExecReload which affected larger parts of the OS in the
+            # container, `nixops` waited until the timeout was reached. However, the networkd
+            # was routable and the `host0` interface reached the state `configured`. Hence I'd guess
+            # that this is a networkd bug that requires investigation. Until then, I'll leave
+            # this as-is.
+            systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = lib.mkForce [
+              ""
+              "/run/current-system/sw/bin/true"
+            ];
             systemd.network.networks."20-host0" = {
               matchConfig = {
                 Virtualization = "container";
@@ -279,6 +290,25 @@ in {
             '';
           };
 
+          activation = {
+            strategy = mkOption {
+              type = types.enum [ "none" "reload" "restart" ];
+              default = "none";
+              description = ''
+                Decide whether to <emphasis>restart</emphasis> or <emphasis>reload</emphasis>
+                the container during activation.
+              '';
+            };
+
+            reloadScript = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                Script to run when a container is supposed to be reloaded.
+              '';
+            };
+          };
+
           network = mkOption {
             type = types.nullOr (types.submodule {
               options = recUpdate3
@@ -402,6 +432,13 @@ in {
           container `${n}' already uses zone `${inst.zone}'!
         '';
       }
+      { assertion = !inst.sharedNix -> inst.activation.strategy != "reload";
+        message = ''
+          Cannot reload a container with `sharedNix' disabled! As soon as the
+          `BindReadOnly='-options change, a config activation can't be done without a reboot
+          (affected: ${n})!
+        '';
+      }
     ]));
 
     services.radvd = {
@@ -439,11 +476,31 @@ in {
       nspawn = mapAttrs (const mkContainer) images;
       targets.machines.wants = map (x: "systemd-nspawn@${x}.service") (attrNames cfg);
       services = listToAttrs (flip map (attrNames cfg) (container:
-        nameValuePair "systemd-nspawn@${container}" {
+        let
+          inherit (cfg.${container}) activation;
+          reloadProp =
+            if activation.strategy == "none"
+              then null
+            else if activation.strategy == "reload"
+              then "reloadIfChanged"
+            else "restartIfChanged";
+        in nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
             mkdir -p /var/lib/machines/${container}/{etc,var}
             touch /var/lib/machines/${container}/etc/{os-release,machine-id} || true
           '';
+
+          ${reloadProp} = true;
+
+          serviceConfig = mkIf (activation.strategy == "reload") {
+            ExecReload = if activation.reloadScript != null
+              then "${activation.reloadScript}"
+              else "${pkgs.writeShellScriptBin "activate" ''
+                pid=$(machinectl show ${container} --value --property Leader)
+                ${pkgs.utillinux}/bin/nsenter -t "$pid" -m -u -i -n -p \
+                  -- ${images.${container}.container.config.system.build.toplevel}/bin/switch-to-configuration test
+              ''}/bin/activate";
+          };
         }
       ));
     };
