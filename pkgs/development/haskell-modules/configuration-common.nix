@@ -695,7 +695,7 @@ self: super: {
         # compatibility with haskeline >= 0.8
         url = "https://github.com/idris-lang/Idris-dev/commit/89a87cf666eb8b27190c779e72d0d76eadc1bc14.patch";
         sha256 = "0fv493zlpgjsf57w0sncd4vqfkabfczp3xazjjmqw54m9rsfix35";
-      })
+      }),
       (pkgs.fetchpatch {
         # compatibility with megaparsec >= 9
         url = "https://github.com/idris-lang/Idris-dev/commit/6ea9bc913877d765048d7cdb7fc5aec60b196fac.patch";
