@@ -36,11 +36,9 @@ with py.pkgs; buildPythonApplication rec {
   };
 
   # https://github.com/aws/aws-cli/issues/4837
-  # https://github.com/aws/aws-cli/pull/5887
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "docutils>=0.10,<0.16" "docutils>=0.10" \
-      --replace "PyYAML>=3.10,<5.4" "PyYAML>=3.10"
+      --replace "docutils>=0.10,<0.16" "docutils>=0.10"
   '';
 
   # No tests included
