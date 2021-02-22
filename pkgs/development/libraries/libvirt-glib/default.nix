@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1zpbv4ninc57c9rw4zmmkvvqn7154iv1qfr20kyxn8xplalqrzvz";
   };
 
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1304981
+  patches = [ ./rm-version-script-linker-flag.patch ];
+
   nativeBuildInputs = [ pkg-config intltool vala gobject-introspection ];
-  buildInputs = [ libcap_ng libvirt libxml2 gobject-introspection ];
+  buildInputs = [ libvirt libxml2 gobject-introspection ]
+    ++ lib.optional (!stdenv.isDarwin) [ libcap_ng  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -30,6 +34,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://libvirt.org/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
