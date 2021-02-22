@@ -74,8 +74,8 @@ let
                       ''}
 
           # list of already loaded artifacts
-          echo ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (x: x.spec) deps)} > amm-dependencies.txt
-          zip ammonite_${scala.version}-${version}.jar amm-dependencies.txt
+          echo ${lib.escapeShellArg (lib.concatStringsSep "\n" (lib.naturalSort (map (x: x.spec) deps)))} > amm-dependencies.txt
+          zip ammonite_${scala.version}-${version}.jar                                                      amm-dependencies.txt
       '';
 
       installPhase = ''
