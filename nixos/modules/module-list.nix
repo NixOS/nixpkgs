@@ -163,6 +163,7 @@
   ./programs/neovim.nix
   ./programs/nm-applet.nix
   ./programs/npm.nix
+  ./programs/noisetorch.nix
   ./programs/oblogout.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
