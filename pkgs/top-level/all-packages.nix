@@ -14693,7 +14693,7 @@ in
   libbacktrace = callPackage ../development/libraries/libbacktrace { };
 
   libbap = callPackage ../development/libraries/libbap {
-    inherit (ocaml-ng.ocamlPackages_4_07) bap ocaml findlib ctypes;
+    inherit (ocaml-ng.ocamlPackages) bap ocaml findlib ctypes;
   };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
