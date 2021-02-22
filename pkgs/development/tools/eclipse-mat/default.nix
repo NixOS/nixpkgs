@@ -1,5 +1,4 @@
-{ buildEnv
-, fetchurl
+{ fetchurl
 , fontconfig
 , freetype
 , glib
