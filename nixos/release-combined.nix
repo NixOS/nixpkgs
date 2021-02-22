@@ -56,7 +56,9 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
-        (onSystems ["x86_64-linux"] "nixos.tests.boot.biosUsb")
+        # Flaky test, blocking the release channel far too often.
+        # https://github.com/NixOS/nixpkgs/issues/15690
+        # (onSystems ["x86_64-linux"] "nixos.tests.boot.biosUsb")
         (onFullSupported "nixos.tests.boot-stage1")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiCdrom")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiUsb")
