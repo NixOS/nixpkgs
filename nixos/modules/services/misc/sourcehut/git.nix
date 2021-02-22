@@ -186,7 +186,7 @@ in
       "git.sr.ht::dispatch".${builtins.unsafeDiscardStringContext "${pkgs.sourcehut.buildsrht}/bin/buildsrht-keys"} = mkDefault "buildsrht:buildsrht";
     };
 
-    services.nginx.virtualHosts."git.${cfg.hostName}" = {
+    services.nginx.virtualHosts."git.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

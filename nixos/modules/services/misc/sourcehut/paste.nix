@@ -107,7 +107,7 @@ in
 
     services.sourcehut.settings = {
       # URL paste.sr.ht is being served at (protocol://domain)
-      "paste.sr.ht".origin = mkDefault "http://paste.sr.ht.local";
+      "paste.sr.ht".origin = mkDefault "http://paste.${cfg.originBase}";
       # Address and port to bind the debug server to
       "paste.sr.ht".debug-host = mkDefault "0.0.0.0";
       "paste.sr.ht".debug-port = mkDefault port;
@@ -122,7 +122,7 @@ in
       "paste.sr.ht".webhooks = mkDefault "redis://${rcfg.bind}:${toString rcfg.port}/5";
     };
 
-    services.nginx.virtualHosts."paste.${cfg.hostName}" = {
+    services.nginx.virtualHosts."paste.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

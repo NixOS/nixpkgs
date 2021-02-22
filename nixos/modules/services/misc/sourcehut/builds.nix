@@ -75,8 +75,6 @@ in
       '';
     };
 
-
-
   };
 
   config = with scfg; let
@@ -173,10 +171,9 @@ in
       };
     };
 
-
     services.sourcehut.settings = {
       # URL builds.sr.ht is being served at (protocol://domain)
-      "builds.sr.ht".origin = mkDefault "http://builds.sr.ht.local";
+      "builds.sr.ht".origin = mkDefault "http://builds.${cfg.originBase}";
       # Address and port to bind the debug server to
       "builds.sr.ht".debug-host = mkDefault "0.0.0.0";
       "builds.sr.ht".debug-port = mkDefault port;
@@ -195,14 +192,22 @@ in
 
       # Location for build logs, images, and control command
     } // lib.attrsets.optionalAttrs scfg.enableWorker {
-      "builds.sr.ht::worker".name = mkDefault "runner.sr.ht.local";
+      # Default worker stores logs that are accessible via this address:port
+      "builds.sr.ht::worker".name = mkDefault "127.0.0.1:5020";
       "builds.sr.ht::worker".buildlogs = mkDefault "${scfg.statePath}/logs";
       "builds.sr.ht::worker".images = mkDefault "${image_dir}/images";
       "builds.sr.ht::worker".controlcmd = mkDefault "${image_dir}/images/control";
       "builds.sr.ht::worker".timeout = mkDefault "3m";
     };
 
-    services.nginx.virtualHosts."builds.${cfg.hostName}" = {
+    services.nginx.virtualHosts."logs.sr.ht" =
+      if scfg.enableWorker then {
+        listen = with builtins; let address = split ":" cfg.settings."builds.sr.ht::worker".name;
+        in [{ addr = elemAt address 0; port = lib.toInt (elemAt address 2); }];
+        locations."/logs".root = "${scfg.statePath}";
+      } else { };
+
+    services.nginx.virtualHosts."builds.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

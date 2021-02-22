@@ -90,7 +90,7 @@ in
 
     services.sourcehut.settings = {
       # URL dispatch.sr.ht is being served at (protocol://domain)
-      "dispatch.sr.ht".origin = mkDefault "http://dispatch.sr.ht.local";
+      "dispatch.sr.ht".origin = mkDefault "http://dispatch.${cfg.originBase}";
       # Address and port to bind the debug server to
       "dispatch.sr.ht".debug-host = mkDefault "0.0.0.0";
       "dispatch.sr.ht".debug-port = mkDefault port;
@@ -114,7 +114,7 @@ in
       # "dispatch.sr.ht::gitlab"."gitlab.com" = mkDefault "GitLab:application id:secret";
     };
 
-    services.nginx.virtualHosts."dispatch.${cfg.hostName}" = {
+    services.nginx.virtualHosts."dispatch.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

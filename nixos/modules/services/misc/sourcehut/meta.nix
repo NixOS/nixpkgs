@@ -160,7 +160,7 @@ in
 
     services.sourcehut.settings = {
       # URL meta.sr.ht is being served at (protocol://domain)
-      "meta.sr.ht".origin = mkDefault "http://meta.sr.ht.local";
+      "meta.sr.ht".origin = mkDefault "https://meta.${cfg.originBase}";
       # Address and port to bind the debug server to
       "meta.sr.ht".debug-host = mkDefault "0.0.0.0";
       "meta.sr.ht".debug-port = mkDefault port;
@@ -179,7 +179,7 @@ in
       # If "no", public registration will not be permitted.
       "meta.sr.ht::settings".registration = mkDefault "no";
       # Where to redirect new users upon registration
-      "meta.sr.ht::settings".onboarding-redirect = mkDefault "http://example.org";
+      "meta.sr.ht::settings".onboarding-redirect = mkDefault "https://meta.${cfg.originBase}";
       # How many invites each user is issued upon registration (only applicable if
       # open registration is disabled)
       "meta.sr.ht::settings".user-invites = mkDefault 5;
@@ -200,7 +200,7 @@ in
       "meta.sr.ht::billing".stripe-secret-key = mkDefault null;
     };
 
-    services.nginx.virtualHosts."meta.${cfg.hostName}" = {
+    services.nginx.virtualHosts."meta.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

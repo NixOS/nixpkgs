@@ -89,7 +89,7 @@ in
 
     services.sourcehut.settings = {
       # URL hub.sr.ht is being served at (protocol://domain)
-      "hub.sr.ht".origin = mkDefault "http://hub.sr.ht.local";
+      "hub.sr.ht".origin = mkDefault "http://hub.${cfg.originBase}";
       # Address and port to bind the debug server to
       "hub.sr.ht".debug-host = mkDefault "0.0.0.0";
       "hub.sr.ht".debug-port = mkDefault port;
@@ -103,7 +103,7 @@ in
       "hub.sr.ht".oauth-client-secret = mkDefault null;
     };
 
-    services.nginx.virtualHosts."hub.${cfg.hostName}" = {
+    services.nginx.virtualHosts."hub.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

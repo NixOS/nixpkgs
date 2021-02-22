@@ -67,10 +67,11 @@ in
       '';
     };
 
-    hostName = mkOption {
+    originBase = mkOption {
       type = types.str;
+      default = with config.networking; hostName + lib.optionalString (domain != null) ".${domain}";
       description = ''
-        Host name used by reverse-proxy.
+        Host name used by reverse-proxy and for default settings. Will host services at git."''${originBase}". For example: git.sr.ht
       '';
     };
 
@@ -101,7 +102,9 @@ in
     };
 
     settings = mkOption {
-      type = settingsFormat.type;
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
+      };
       default = { };
       description = ''
         The configuration for the sourcehut network.

@@ -129,7 +129,7 @@ in
 
     services.sourcehut.settings = {
       # URL hg.sr.ht is being served at (protocol://domain)
-      "hg.sr.ht".origin = mkDefault "http://hg.sr.ht.local";
+      "hg.sr.ht".origin = mkDefault "http://hg.${cfg.originBase}";
       # Address and port to bind the debug server to
       "hg.sr.ht".debug-host = mkDefault "0.0.0.0";
       "hg.sr.ht".debug-port = mkDefault port;
@@ -163,7 +163,7 @@ in
     };
 
     # TODO: requires testing and addition of hg-specific requirements
-    services.nginx.virtualHosts."hg.${cfg.hostName}" = {
+    services.nginx.virtualHosts."hg.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

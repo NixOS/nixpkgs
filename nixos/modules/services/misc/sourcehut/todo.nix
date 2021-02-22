@@ -106,7 +106,7 @@ in
 
     services.sourcehut.settings = {
       # URL todo.sr.ht is being served at (protocol://domain)
-      "todo.sr.ht".origin = mkDefault "http://todo.sr.ht.local";
+      "todo.sr.ht".origin = mkDefault "http://todo.${cfg.originBase}";
       # Address and port to bind the debug server to
       "todo.sr.ht".debug-host = mkDefault "0.0.0.0";
       "todo.sr.ht".debug-port = mkDefault port;
@@ -132,10 +132,10 @@ in
       # group.
       "todo.sr.ht::mail".sock-group = mkDefault "postfix";
 
-      "todo.sr.ht::mail".posting-domain = mkDefault "example.org";
+      "todo.sr.ht::mail".posting-domain = mkDefault "todo.${cfg.originBase}";
     };
 
-    services.nginx.virtualHosts."todo.${cfg.hostName}" = {
+    services.nginx.virtualHosts."todo.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";

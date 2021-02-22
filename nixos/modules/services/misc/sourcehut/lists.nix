@@ -139,7 +139,7 @@ in
 
     services.sourcehut.settings = {
       # URL lists.sr.ht is being served at (protocol://domain)
-      "lists.sr.ht".origin = mkDefault "http://lists.sr.ht.local";
+      "lists.sr.ht".origin = mkDefault "http://lists.${cfg.originBase}";
       # Address and port to bind the debug server to
       "lists.sr.ht".debug-host = mkDefault "0.0.0.0";
       "lists.sr.ht".debug-port = mkDefault port;
@@ -162,7 +162,7 @@ in
       # Allow creation
       "lists.sr.ht".allow-new-lists = mkDefault "no";
       # Posting Domain
-      "lists.sr.ht".posting-domain = mkDefault "lists.sr.ht.local";
+      "lists.sr.ht".posting-domain = mkDefault "lists.${cfg.originBase}";
 
       # Path for the lmtp daemon's unix socket. Direct incoming mail to this socket.
       # Alternatively, specify IP:PORT and an SMTP server will be run instead.
@@ -175,7 +175,7 @@ in
 
     };
 
-    services.nginx.virtualHosts."lists.${cfg.hostName}" = {
+    services.nginx.virtualHosts."lists.${cfg.originBase}" = {
       forceSSL = true;
       locations."/".proxyPass = "http://${cfg.address}:${toString port}";
       locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
