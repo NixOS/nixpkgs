@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kak-lsp";
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
-    owner = "ul";
+    owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nka51szivwhlfkimjiyzj67nxh75m784c28ass6ihlfax631w9m";
+    sha256 = "1wfv2fy5ga6kc51zka3pak0hq97csm2l11bz74w3n1hrf5q9nnf8";
   };
 
-  cargoSha256 = "174qy50m9487vv151vm8q6sby79dq3gbqjbz6h4326jwsc9wwi8c";
+  cargoSha256 = "0g67s6n45rxvv1q5s7x5ajh5n16p68bhlsrsjp46qamrraz63d68";
 
   buildInputs = lib.optional stdenv.isDarwin [ Security ];
 

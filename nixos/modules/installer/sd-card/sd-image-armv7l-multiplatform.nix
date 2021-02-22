@@ -1,5 +1,5 @@
 # To build, use:
-# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix -A config.system.build.sdImage
+# nix-build nixos -I nixos-config=nixos/modules/installer/sd-card/sd-image-armv7l-multiplatform.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
 {
@@ -49,8 +49,4 @@
       ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
     '';
   };
-
-  # the installation media is also the installation target,
-  # so we don't want to provide the installation configuration.nix.
-  installer.cloneConfig = false;
 }

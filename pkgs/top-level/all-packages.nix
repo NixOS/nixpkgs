@@ -27443,6 +27443,8 @@ in
     libpng = libpng12;
   };
 
+  wargus = callPackage ../games/wargus { };
+
   warmux = callPackage ../games/warmux { };
 
   warsow-engine = callPackage ../games/warsow/engine.nix { };
