@@ -25,7 +25,7 @@ in {
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages = [ steam ];
+    environment.systemPackages = [ steam steam.run ];
   };
 
   meta.maintainers = with maintainers; [ mkg20001 ];
