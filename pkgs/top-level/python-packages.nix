@@ -210,6 +210,8 @@ in {
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
+  aiocache = callPackage ../development/python-modules/aiocache { };
+
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
   aioconsole = callPackage ../development/python-modules/aioconsole { };
@@ -5465,6 +5467,8 @@ in {
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
   pyflume = callPackage ../development/python-modules/pyflume { };
+
+  pyflunearyou = callPackage ../development/python-modules/pyflunearyou { };
 
   pyfma = callPackage ../development/python-modules/pyfma { };
 

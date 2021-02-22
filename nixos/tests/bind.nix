@@ -6,6 +6,7 @@ import ./make-test-python.nix {
     services.bind.extraOptions = "empty-zones-enable no;";
     services.bind.zones = lib.singleton {
       name = ".";
+      master = true;
       file = pkgs.writeText "root.zone" ''
         $TTL 3600
         . IN SOA ns.example.org. admin.example.org. ( 1 3h 1h 1w 1d )
