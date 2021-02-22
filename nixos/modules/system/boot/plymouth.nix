@@ -4,8 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) plymouth;
-  inherit (pkgs) nixos-icons;
+  inherit (pkgs) plymouth nixos-icons;
 
   cfg = config.boot.plymouth;
 
@@ -16,9 +15,31 @@ let
     osVersion = config.system.nixos.release;
   };
 
+  plymouthLogos = pkgs.runCommand "plymouth-logos" { inherit (cfg) logo; } ''
+    mkdir -p $out
+
+    # For themes that are compiled with PLYMOUTH_LOGO_FILE
+    mkdir -p $out/etc/plymouth
+    ln -s $logo $out/etc/plymouth/logo.png
+
+    # Logo for bgrt theme
+    # Note this is technically an abuse of watermark for the bgrt theme
+    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/95#note_813768
+    mkdir -p $out/share/plymouth/themes/spinner
+    ln -s $logo $out/share/plymouth/themes/spinner/watermark.png
+
+    # Logo for spinfinity theme
+    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
+    mkdir -p $out/share/plymouth/themes/spinfinity
+    ln -s $logo $out/share/plymouth/themes/spinfinity/header-image.png
+  '';
+
   themesEnv = pkgs.buildEnv {
     name = "plymouth-themes";
-    paths = [ plymouth ] ++ cfg.themePackages;
+    paths = [
+      plymouth
+      plymouthLogos
+    ] ++ cfg.themePackages;
   };
 
   configFile = pkgs.writeText "plymouthd.conf" ''
@@ -48,7 +69,7 @@ in
       };
 
       themePackages = mkOption {
-        default = [ nixosBreezePlymouth ];
+        default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
         type = types.listOf types.package;
         description = ''
           Extra theme packages for plymouth.
@@ -56,7 +77,7 @@ in
       };
 
       theme = mkOption {
-        default = "breeze";
+        default = "bgrt";
         type = types.str;
         description = ''
           Splash screen theme.
@@ -111,12 +132,12 @@ in
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
     systemd.services.plymouth-read-write.wantedBy = [ "sysinit.target" ];
-    systemd.services.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
-    systemd.paths.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
+    systemd.services.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
+    systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.plymouth}/bin/plymouthd
-      copy_bin_and_libs ${pkgs.plymouth}/bin/plymouth
+      copy_bin_and_libs ${plymouth}/bin/plymouth
+      copy_bin_and_libs ${plymouth}/bin/plymouthd
 
       # Check if the actual requested theme is here
       if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
@@ -134,21 +155,29 @@ in
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
 
-      # copy themes into working directory for patching
+      # Copy themes into working directory for patching
       mkdir themes
-      # use -L to copy the directories proper, not the symlinks to them
-      cp -r -L ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} themes
 
-      # patch out any attempted references to the theme or plymouth's themes directory
+      # Use -L to copy the directories proper, not the symlinks to them.
+      # Copy all themes because they're not large assets, and bgrt depends on the ImageDir of
+      # the spinner theme.
+      cp -r -L ${themesEnv}/share/plymouth/themes/* themes
+
+      # Patch out any attempted references to the theme or plymouth's themes directory
       chmod -R +w themes
       find themes -type f | while read file
       do
         sed -i "s,/nix/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
       done
 
+      # Install themes
       cp -r themes/* $out/share/plymouth/themes
-      cp ${cfg.logo} $out/share/plymouth/logo.png
 
+      # Install logo
+      mkdir -p $out/etc/plymouth
+      cp -r -L ${themesEnv}/etc/plymouth $out
+
+      # Setup font
       mkdir -p $out/share/fonts
       cp ${cfg.font} $out/share/fonts
       mkdir -p $out/etc/fonts
