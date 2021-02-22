@@ -189,6 +189,22 @@ let
         };
       };
 
+      dracula-theme.theme-dracula = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "theme-dracula";
+          publisher = "dracula-theme";
+          version = "2.22.3";
+          sha256 = "0wni9sriin54ci8rly2s68lkfx8rj1cys6mgcizvps9sam6377w6";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
+          description = "Official Dracula Theme. A dark theme for many editors, shells, and more.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula";
+          homepage = "https://draculatheme.com/";
+          license = licenses.mit;
+        };
+      };
+
       eamodio.gitlens = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitlens";
