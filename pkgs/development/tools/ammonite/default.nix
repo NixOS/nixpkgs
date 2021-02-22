@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, zip, fetchFromGitHub, writeText, writeScript, fetchurl, ncurses, coreutils, bash, jre, gnused, disableRemoteLogging ? true }:
+{ lib, stdenv, buildPackages, zip, fetchFromGitHub, makeWrapper, writeText, writeScript, fetchurl, ncurses, coreutils, bash, jre, gnused, disableRemoteLogging ? true }:
 
 let
   # fetchurl enriched with artifact info in passthru parsed out of the url
@@ -52,7 +52,7 @@ let
         sha256 = "06afx4gp5gwm8j9a6whj6h67rf00krn5vwp3xs0dzcpdhybjq2qh";
       };
 
-      nativeBuildInputs = [ zip gnused scala ];
+      nativeBuildInputs = [ zip gnused scala makeWrapper ];
       postPatch = ''
         substituteInPlace terminal/src/main/scala/ammonite/terminal/Utils.scala \
           --replace '"/usr/bin/tput"'                                 '"${ncurses}/bin/tput"'   \
@@ -86,10 +86,8 @@ let
           CLASSPATH=''${CLASSPATH-}''${CLASSPATH:+:}$out/share/java/$jarname
         done
 
-        mkdir $out/bin
-        echo "#!${bash}/bin/bash"                                                                                                    > $out/bin/amm
-        echo "${jre}/bin/java -cp $CLASSPATH ammonite.Main ${lib.optionalString (disableRemoteLogging) " --no-remote-logging"} \"\$@\"" >> $out/bin/amm
-        chmod +x $out/bin/amm
+        makeWrapper "${jre}/bin/java" $out/bin/amm \
+          --add-flags "-cp $CLASSPATH ammonite.Main ${lib.optionalString (disableRemoteLogging) " --no-remote-logging"}"
       '';
 
       meta = {
