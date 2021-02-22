@@ -13736,10 +13736,17 @@ let
       url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-ForkCall-0.20.tar.gz";
       sha256 = "2b9962244c25a71e4757356fb3e1237cf869e26d1c27215115ba7b057a81f1a6";
     };
-    propagatedBuildInputs = [ IOPipely Mojolicious ];
+    propagatedBuildInputs = [ IOPipely Mojolicious MojoIOLoopDelay ];
+    preBuild = ''
+      # This module needs the deprecated Mojo::IOLoop::Delay
+      substituteInPlace lib/Mojo/IOLoop/ForkCall.pm \
+        --replace "use Mojo::IOLoop;" "use Mojo::IOLoop; use Mojo::IOLoop::Delay;"
+    '';
     meta = {
-      description = "Run blocking functions asynchronously by forking";
+      homepage = "https://github.com/jberger/Mojo-IOLoop-ForkCall";
+      description = "Run blocking functions asynchronously by forking (deprecated)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
