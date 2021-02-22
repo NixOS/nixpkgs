@@ -45833,6 +45833,15 @@ let
         sha1 = "15931d3cd967ade52206f523aa7331aef7d43af7";
       };
     };
+    "pyright-1.1.113" = {
+      name = "pyright";
+      packageName = "pyright";
+      version = "1.1.113";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/pyright/-/pyright-1.1.113.tgz";
+        sha512 = "VcitW5t5lG1KY0w8xY/ubMhFZZ2lfXJvhBW4TfTwy067R4WtXKSa23br4to1pdRA1rwpxOREgxVTnOWmf3YkYg==";
+      };
+    };
     "q-0.9.7" = {
       name = "q";
       packageName = "q";
@@ -68861,6 +68870,27 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "prettier extension for coc.nvim";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  coc-pyright = nodeEnv.buildNodePackage {
+    name = "coc-pyright";
+    packageName = "coc-pyright";
+    version = "1.1.113";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-pyright/-/coc-pyright-1.1.113.tgz";
+      sha512 = "a9mC0b7oVLT3KEHbBw1e7D7k2UD0lRaTk/HrZJJ/lkIDlpF/6TrwqTcL/BUWptUjwUA4sOOdAoQQeOR88Ugsww==";
+    };
+    dependencies = [
+      sources."pyright-1.1.113"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Pyright extension for coc.nvim";
+      homepage = "https://github.com/fannheyward/coc-pyright#readme";
       license = "MIT";
     };
     production = true;

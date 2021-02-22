@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "powerline-go";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "justjanne";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Pge57OXNE0MY2rlspVsqxdoe1r/XWjrq/q9ygdns2c8=";
+    sha256 = "sha256-IO3I5lvPdN73EF+S5Xo+TMEYaBtd1pOGMs+aQtRnHjE=";
   };
 
   vendorSha256 = "sha256-HYF6aKz+P241EKmupEoretadlrh9FBRx6nIER66jofg=";

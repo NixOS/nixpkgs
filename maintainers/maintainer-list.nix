@@ -3297,6 +3297,12 @@
     githubId = 10528737;
     name = "Severin Fürbringer";
   };
+  fufexan = {
+    email = "fufexan@protonmail.com";
+    github = "fufexan";
+    githubId = 36706276;
+    name = "Fufezan Mihai";
+  };
   funfunctor = {
     email = "eocallaghan@alterapraxis.com";
     name = "Edward O'Callaghan";
