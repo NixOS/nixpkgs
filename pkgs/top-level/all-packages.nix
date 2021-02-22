@@ -15951,7 +15951,7 @@ in
     # Override this attribute to register additional libraries.
     packages = [];
   };
-    
+
 
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (p: {})) pkgs;

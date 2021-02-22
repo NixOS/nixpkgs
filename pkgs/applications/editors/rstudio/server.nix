@@ -76,11 +76,11 @@ mkDerivation rec {
     sha256 = "037z0y32k1gdda192y5qn5hi7wp8wyap44mkjlklrgcqkmlcylb9";
   };
 
-  preConfigure =
+  preConfigure = with lib.versions;
     ''
-      export RSTUDIO_VERSION_MAJOR=${verMajor}
-      export RSTUDIO_VERSION_MINOR=${verMinor}
-      export RSTUDIO_VERSION_PATCH=${verPatch}
+      export RSTUDIO_VERSION_MAJOR=${major version}
+      export RSTUDIO_VERSION_MINOR=${minor version}
+      export RSTUDIO_VERSION_PATCH=${patch version}
 
       GWT_LIB_DIR=src/gwt/lib
 
@@ -109,7 +109,6 @@ mkDerivation rec {
       popd
     '';
 
-  enableParallelBuilding = true;
 
   cmakeFlags = [ "-DRSTUDIO_TARGET=Server" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 
@@ -133,7 +132,7 @@ mkDerivation rec {
          if [ ! -d "$ex" ]; then
            wrapProgram "$ex"
          fi
-      done        
+      done
   '';
 
   meta = with lib;

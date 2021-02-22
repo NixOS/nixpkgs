@@ -1,13 +1,13 @@
 { lib, runCommand, R, fontconfig, rstudio-server, wrapQtAppsHook, recommendedPackages, packages, qtbase }:
 
 let
-  qtVersion = with lib.versions; "${major qtbase.version}.${minor qtbase.version}";
+  qtVersion = with lib.versions; "${majorMinor qtbase.version}";
 in
 runCommand (rstudio-server.name + "-wrapper") {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  nativeBuildInputs = [wrapQtAppsHook];
+  nativeBuildInputs = [ wrapQtAppsHook ];
   dontWrapQtApps = true;
 
   buildInputs = [R rstudio-server fontconfig] ++ recommendedPackages ++ packages;
