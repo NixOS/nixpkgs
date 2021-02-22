@@ -101,6 +101,12 @@
      of the NixOS manual for an example using networkd links.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <option>security.hideProcessInformation</option> module has been removed.
+     It was broken since the switch to cgroups-v2.
+    </para>
+   </listitem>
     <listitem>
       <para>
         The <literal>systemConfig</literal> kernel parameter is no longer added to boot loader entries. It has been unused since September 2010, but if do have a system generation from that era, you will now be unable to boot into them.
