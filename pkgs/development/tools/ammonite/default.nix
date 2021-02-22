@@ -1,18 +1,7 @@
-{ lib, stdenv, perl, buildPackages, zip, fetchFromGitHub, makeWrapper, writeText, fetchurl, ncurses, coreutils, bash, jdk, gnused, disableRemoteLogging ? true }:
+{ lib, stdenv, perl, callPackage, buildPackages, zip, fetchFromGitHub, makeWrapper, writeText, fetchurl, ncurses, coreutils, bash, jdk, gnused, disableRemoteLogging ? true }:
 
 let
-  # fetchurl enriched with artifact info in passthru parsed out of the url
-  artifact = {sha1, url}: fetchurl {
-               inherit sha1 url;
-               passthru = let
-                            m = builtins.match ''mirror://maven/(.+)/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/[a-zA-Z0-9._-]+\.jar'' url;
-                          in rec {
-                            groupId = lib.replaceStrings ["/"] ["."] (lib.elemAt m 0);
-                            artifactId = lib.elemAt m 1;
-                            version = lib.elemAt m 2;
-                            spec = "${groupId}:${artifactId}:${version}";
-                          };
-             };
+  artifact = callPackage ./fetchArtifact.nix {};
 
   common = { scala, deps }:
     stdenv.mkDerivation rec {
