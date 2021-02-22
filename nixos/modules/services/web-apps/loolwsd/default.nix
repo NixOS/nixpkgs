@@ -118,7 +118,10 @@ in
       # Libreoffice lib directory (lotemplate) is kept separately because loolwsd expects that.
       preStart = ''
         rm -rf ${dataDir}/child-roots/*
-        if [ ! -L ${dataDir}/core  ] || [ "$(readlink ${dataDir}/core)" != "${corePkg}" ]; then
+        if [ ! -L ${dataDir}/core ] \
+           || [ ! -d ${dataDir}/systemplate ] \
+           || [ ! -d ${dataDir}/lotemplate ] \
+           || [ "$(readlink ${dataDir}/core)" != "${corePkg}" ]; then
           echo "Matching LibreOffice version not found, reinitializing systemplate, this may take a while ..."
           rm -rf ${dataDir}/{core,systemplate,lotemplate}
 
