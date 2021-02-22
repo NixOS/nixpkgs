@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, gtk3, fribidi
 , libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
-, boost, libxslt, goffice, wrapGAppsHook, gnome3
+, boost, libxslt, goffice, wrapGAppsHook, gnome3, file
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace configure --replace 'enchant >=' 'enchant-2 >='
+    substituteInPlace configure \
+      --replace 'enchant >=' 'enchant-2 >=' \
+      --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
