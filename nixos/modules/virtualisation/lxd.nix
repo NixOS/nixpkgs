@@ -100,7 +100,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
 
-      path = lib.optional config.boot.zfs.enabled config.boot.zfs.package;
+      path = lib.optional cfg.zfsSupport config.boot.zfs.package;
 
       preStart = ''
         mkdir -m 0755 -p /var/lib/lxc/rootfs
