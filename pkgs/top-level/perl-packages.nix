@@ -13680,10 +13680,10 @@ let
 
   MojoSQLite = buildPerlModule {
     pname = "Mojo-SQLite";
-    version = "3.004";
+    version = "3.005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.004.tar.gz";
-      sha256 = "d9ca9c1f3e8183611638e318b88ad3c0f8ab7e65f6ac72e48bffe51aea03b983";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.005.tar.gz";
+      sha256 = "0appzyhr5adzdfxns31lj568hz18bkmxmcv7fpafrx67b98cpza1";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URIdb ];
