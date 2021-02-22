@@ -1,4 +1,4 @@
-{ version ? "release", stdenv, lib, substituteAll, fetchFromGitHub, go-ethereum }:
+{ version ? "release", stdenv, lib, fetchFromGitHub, go-ethereum }:
 
 stdenv.mkDerivation rec {
   pname = "bee-clef";
