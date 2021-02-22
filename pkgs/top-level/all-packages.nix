@@ -750,6 +750,8 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  inherit (callPackages ../tools/networking/ublock-origin { }) ublock-origin-chromium ublock-origin-firefox;
+
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
