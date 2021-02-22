@@ -685,7 +685,11 @@ self: super: {
   });
 
   # The standard libraries are compiled separately.
-  idris = generateOptparseApplicativeCompletion "idris" (dontCheck super.idris);
+  # Megaparsec override is needed because https://github.com/idris-lang/Idris-dev/issues/4826
+  # declares idris1 has no plans to migrate to megaparsec-9
+  idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
+    (super.idris.override { megaparsec = self.megaparsec_8_0_0; })
+  ));
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
