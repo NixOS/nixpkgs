@@ -15,10 +15,10 @@ buildGoModule rec {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lSvYiTh67gK9kJls7VsayV8T3H6RzFEEKe49BOWnUBw=";
+    sha256 = "sha256-QhAN30ge0dbC9dGT1yP4o0VgrcS9+g+r6YJ07ZjPJtg=";
   };
 
-  vendorSha256 = "sha256-qywiaNoO3pI7sfyPbwWR8BLd86RvJ2xSWwCJUsm3RkM=";
+  vendorSha256 = "sha256-bX1GfKbAbdEAnW3kPNsbF/cJWufxvuhm//G88qJ3u08=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -30,6 +30,9 @@ buildGoModule rec {
     "-X github.com/AkihiroSuda/nerdctl/pkg/version.Revision=<unknown>"
   ];
 
+  # Many checks require a containerd socket and running nerdctl after it's built
+  doCheck = false;
+
   postInstall = ''
     wrapProgram $out/bin/nerdctl \
       --prefix PATH : "${lib.makeBinPath ([ buildkit ] ++ extraPackages)}" \
@@ -39,6 +42,9 @@ buildGoModule rec {
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
+    # nerdctl expects XDG_RUNTIME_DIR to be set
+    export XDG_RUNTIME_DIR=$TMPDIR
+
     $out/bin/nerdctl --help
     # --version will error without containerd.sock access
     $out/bin/nerdctl --help | grep "${version}"
