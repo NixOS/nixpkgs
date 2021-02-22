@@ -19,7 +19,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=19700101-00:00:00" ];
+  preBuild = ''
+    buildFlagsArray+=("-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=19700101-00:00:00")
+  '';
 
   postInstall = ''
     for shell in bash zsh; do
@@ -31,7 +33,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Fast linters Runner for Go";
     homepage = "https://golangci-lint.run/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ anpryl manveru ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ anpryl manveru mic92 ];
   };
 }
