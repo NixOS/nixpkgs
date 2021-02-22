@@ -695,13 +695,13 @@ self: super: {
         # compatibility with haskeline >= 0.8
         url = "https://github.com/idris-lang/Idris-dev/commit/89a87cf666eb8b27190c779e72d0d76eadc1bc14.patch";
         sha256 = "0fv493zlpgjsf57w0sncd4vqfkabfczp3xazjjmqw54m9rsfix35";
-      }),
+      })
       (pkgs.fetchpatch {
         # compatibility with megaparsec >= 9
         url = "https://github.com/idris-lang/Idris-dev/commit/6ea9bc913877d765048d7cdb7fc5aec60b196fac.patch";
         sha256 = "0yms74d1xdxd1c08dnp45nb1ddzq54n6hqgzxx0r494wy614ir8q";
       })
-    )
+    ])
   ));
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
