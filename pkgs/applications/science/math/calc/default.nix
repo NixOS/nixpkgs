@@ -3,17 +3,17 @@
 
 stdenv.mkDerivation rec {
   pname = "calc";
-  version = "2.12.8.1";
+  version = "2.12.8.2";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/${version}/${pname}-${version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-TwVcuGaWIgzEc34DFEGFcmckXrwZ4ruRqselJClz15o=";
+    sha256 = "sha256-yKe4PASm7qWH/nYv8BtYbi9m3xPpA0SZ02Hahj8DJC8=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace '-install_name ''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' \
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C-style arbitrary precision calculator";
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
   };

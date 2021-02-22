@@ -12512,6 +12512,8 @@ in
 
   kustomize = callPackage ../development/tools/kustomize { };
 
+  kustomize-sops = callPackage ../development/tools/kustomize/kustomize-sops.nix { };
+
   ktlint = callPackage ../development/tools/ktlint { };
 
   kythe = callPackage ../development/tools/kythe { };
@@ -20789,6 +20791,8 @@ in
   openzone-cursors = callPackage ../data/themes/openzone { };
 
   orbitron = callPackage ../data/fonts/orbitron { };
+
+  orchis = callPackage ../data/themes/orchis { };
 
   orion = callPackage ../data/themes/orion {};
 

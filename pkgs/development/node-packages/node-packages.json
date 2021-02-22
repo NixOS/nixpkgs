@@ -41,6 +41,7 @@
 , "coc-metals"
 , "coc-pairs"
 , "coc-prettier"
+, "coc-pyright"
 , "coc-python"
 , "coc-r-lsp"
 , "coc-rls"
