@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, zip, fetchFromGitHub, writeText, writeScript, fetchurl, ncurses, coreutils, bash, scala_2_12, scala_2_13, jre, gnused, disableRemoteLogging ? true }:
+{ lib, stdenv, buildPackages, zip, fetchFromGitHub, writeText, writeScript, fetchurl, ncurses, coreutils, bash, jre, gnused, disableRemoteLogging ? true }:
 
 let
   # fetchurl enriched with artifact info in passthru parsed out of the url
@@ -108,7 +108,7 @@ let
     };
 in {
   ammonite_2_12 = common {
-    scala = scala_2_12.override{ inherit jre; };
+    scala = buildPackages.scala_2_12.override{ inherit jre; };
 /*
 produced with
 
@@ -187,7 +187,7 @@ sha1sum $(coursier fetch --scala-version $SCALAVERSION $DEPS) | \
   };
 
   ammonite_2_13 = common {
-    scala = scala_2_13.override{ inherit jre; };
+    scala = buildPackages.scala_2_13.override{ inherit jre; };
 /*
 produced with
 
