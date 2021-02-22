@@ -8222,6 +8222,11 @@ in
   swec = callPackage ../tools/networking/swec { };
 
   swtpm = callPackage ../tools/security/swtpm { };
+  swtpm-tpm2 = swtpm.override {
+    libtpms = libtpms.override {
+      tpm2Support = true;
+    };
+  };
 
   svn2git = callPackage ../applications/version-management/git-and-tools/svn2git {
     git = gitSVN;
