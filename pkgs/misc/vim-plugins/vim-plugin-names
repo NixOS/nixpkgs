@@ -101,6 +101,7 @@ easymotion/vim-easymotion
 editorconfig/editorconfig-vim
 edwinb/idris2-vim
 ehamberg/vim-cute-python
+eigenfoo/stan-vim
 eikenb/acp
 elixir-editors/vim-elixir
 elmcast/elm-vim

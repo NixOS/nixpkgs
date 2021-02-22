@@ -3948,6 +3948,18 @@ let
     meta.homepage = "https://github.com/srcery-colors/srcery-vim/";
   };
 
+  stan-vim = buildVimPluginFrom2Nix {
+    pname = "stan-vim";
+    version = "2020-08-05";
+    src = fetchFromGitHub {
+      owner = "eigenfoo";
+      repo = "stan-vim";
+      rev = "9d3b6ec149f9559bd9bd021dfa827c29c5d1dc38";
+      sha256 = "0qv748m1vrp1qcl41y7fj2jm8cac9b01ljq6ydq3z4syxdf7yzcc";
+    };
+    meta.homepage = "https://github.com/eigenfoo/stan-vim/";
+  };
+
   starsearch-vim = buildVimPluginFrom2Nix {
     pname = "starsearch-vim";
     version = "2014-09-21";
