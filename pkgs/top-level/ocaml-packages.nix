@@ -917,6 +917,8 @@ let
       inherit (pkgs) postgresql;
     };
 
+    ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
+
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
