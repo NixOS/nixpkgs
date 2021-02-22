@@ -12509,6 +12509,8 @@ in
 
   kustomize = callPackage ../development/tools/kustomize { };
 
+  kustomize-sops = callPackage ../development/tools/kustomize/kustomize-sops.nix { };
+
   ktlint = callPackage ../development/tools/ktlint { };
 
   kythe = callPackage ../development/tools/kythe { };
