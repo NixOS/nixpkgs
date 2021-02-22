@@ -9,6 +9,8 @@ buildPythonPackage rec {
     sha256 = "de7129142a5c86d75a52b96f394d94d96d497881d2aaf8eafe320cdbe8ac4bcc";
   };
 
+  pythonImportsCheck = [ "identify" ];
+
   # Tests not included in PyPI tarball
   doCheck = false;
 
