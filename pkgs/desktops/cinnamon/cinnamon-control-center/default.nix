@@ -8,18 +8,11 @@
 , intltool
 , gtk3
 , libnotify
-, gnome-menus
 , libxml2
-, systemd
-, upower
 , gnome-online-accounts
 , cinnamon-settings-daemon
 , colord
 , polkit
-, ibus
-, libpulseaudio
-, isocodes
-, kerberos
 , libxkbfile
 , cinnamon-menus
 , dbus-glib
@@ -27,7 +20,6 @@
 , libxklavier
 , networkmanager
 , libwacom
-, gnome3
 , libtool
 , wrapGAppsHook
 , tzdata
