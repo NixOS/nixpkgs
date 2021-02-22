@@ -3399,6 +3399,8 @@ in {
 
   jsonref = callPackage ../development/python-modules/jsonref { };
 
+  json-rpc = callPackage ../development/python-modules/json-rpc { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
