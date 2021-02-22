@@ -9214,8 +9214,6 @@ in
     w3m = w3m-batch;
   };
 
-  xmpppy = pythonPackages.xmpppy;
-
   xiccd = callPackage ../tools/misc/xiccd { };
 
   xidlehook = callPackage ../tools/X11/xidlehook {
@@ -18452,10 +18450,6 @@ in
   public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
 
   pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
-
-  pyIRCt = callPackage ../servers/xmpp/pyIRCt {};
-
-  pyMAILt = callPackage ../servers/xmpp/pyMAILt {};
 
   pypolicyd-spf = python3.pkgs.callPackage ../servers/mail/pypolicyd-spf { };
 
