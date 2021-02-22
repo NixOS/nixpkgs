@@ -1,20 +1,7 @@
-{ lib, stdenv, buildPackages, zip, perl, fetchFromGitHub, makeWrapper, writeText, fetchurl, ncurses, coreutils, bash, jdk, gnused, disableRemoteLogging ? true }:
+{ lib, stdenv, callPackage, buildPackages, zip, perl, fetchFromGitHub, makeWrapper, writeText, fetchurl, ncurses, coreutils, bash, jdk, gnused, disableRemoteLogging ? true }:
 
 let
-  # fetchurl enriched with artifact info in passthru parsed out of the url
-  artifact = {sha1, url}: fetchurl {
-               inherit sha1 url;
-               passthru = let
-                            m = builtins.match ''(mirror://maven|https://scala-ci.typesafe.com/artifactory/scala-integration)/(.+)/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/[a-zA-Z0-9._-]+\.jar'' url;
-                          in
-                            if m == null then throw "error parsing artifact url ${url}" else
-                            rec {
-                              groupId = lib.replaceStrings ["/"] ["."] (lib.elemAt m 1);
-                              artifactId = lib.elemAt m 2;
-                              version = lib.elemAt m 3;
-                              spec = "${groupId}:${artifactId}:${version}";
-                            };
-             };
+  artifact = callPackage ./fetchArtifact.nix {};
 
   # Beware that this requires both versions to have the same tasty format version.
   # For example, 2.13.4 and 3.0.0-M1 do, while 2.13.4 and 3.0.0-M{2,3} don't.
