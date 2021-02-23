@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     changelog = "https://github.com/redis/redis/raw/${version}/00-RELEASENOTES";
-    maintainers = with maintainers; [ berdario globin ];
+    maintainers = with maintainers; [ berdario globin marsam ];
   };
 }
