@@ -10,10 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "165k0z7dsv04q432sanmw0jxmxwf56cnhsdfw5ffjqxd3lzkjnv6";
   };
   buildPhase = ''
+    runHook preBuild
     make -C core
+    runHook postBuild
   '';
   installPhase = ''
+    runHook preInstall
     install -D -t $out/bin core/clips
+    runHook postInstall
   '';
   meta = with lib; {
     description = "A Tool for Building Expert Systems";
