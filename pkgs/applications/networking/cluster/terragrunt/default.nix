@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DzC/HNwFNNEJhic/8KpHchrBmsSbrn7xf1DjY0JTH08=";
+    sha256 = "sha256-pM3R85gdP2eVoXx//2tKePNAi14eM8Ut+eXR+vB0Ukk=";
   };
 
   vendorSha256 = "sha256-lRJerUYafpkXAGf8MEM8SeG3aB86mlMo7iLpeHFAnd4=";
