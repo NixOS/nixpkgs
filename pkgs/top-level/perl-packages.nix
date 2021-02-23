@@ -9142,6 +9142,10 @@ let
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
+    # Tests are broken with PerlMagick and imagemagick version 7 as of 2021-02-22.
+    # See https://github.com/carygravel/gtk3-imageview/issues/19 and
+    # https://github.com/NixOS/nixpkgs/pull/114007#issuecomment-783595659.
+    doCheck = false;
     checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
