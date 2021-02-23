@@ -19,9 +19,7 @@
 , dbus
 , vala
 , wrapGAppsHook
-, xorg
 , xvfb_run
-, libxml2
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
+{ stdenv, fetchurl, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
