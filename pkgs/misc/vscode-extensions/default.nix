@@ -607,6 +607,18 @@ let
         };
       };
 
+      rubbersheep.gi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gi";
+          publisher = "rubbersheep";
+          version = "0.2.11";
+          sha256 = "0j9k6wm959sziky7fh55awspzidxrrxsdbpz1d79s5lr5r19rs6j";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       ryu1kn.partial-diff = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "partial-diff";
