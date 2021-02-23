@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1fkdi7adfffxg1k4h6r9i69i3wi93s44c1j4cvr69blxsfh0mcnc";
   };
 
-  nativeBuildInputs = with pkgs; [ 
-    boost.all 
-    libseccomp 
-    flex 
+  nativeBuildInputs = with pkgs; [
+    boost.all
+    libseccomp
+    flex
     python3Packages.pefile
-    python3Packages.pyelftools 
+    python3Packages.pyelftools
     python3Packages.capstone
     swig4
-    bison 
+    bison
     cmake
   ];
 
