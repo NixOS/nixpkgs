@@ -20,7 +20,7 @@
 , openGLSupport ? sdlSupport, mesa, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? true, libiscsi
-, smbdSupport ? false, samba
+, smbdSupport ? true, samba
 , tpmSupport ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
