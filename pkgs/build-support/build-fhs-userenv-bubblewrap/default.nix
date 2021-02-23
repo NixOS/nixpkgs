@@ -80,9 +80,9 @@ let
     if [[ -d ${env}/etc ]]; then
       for i in ${env}/etc/*; do
         path="/''${i##*/}"
-        # NOTE: we're binding /etc/fonts from the host so we don't want to
-        # override it with a path from the FHS environment.
-        if [[ $path == '/fonts' ]]; then
+        # NOTE: we're binding /etc/fonts and /etc/ssl/certs from the host so we
+        # don't want to override it with a path from the FHS environment.
+        if [[ $path == '/fonts' || $path == '/ssl' ]]; then
           continue
         fi
         ro_mounts+=(--ro-bind "$i" "/etc$path")
