@@ -276,6 +276,18 @@ let
         };
       };
 
+      formulahendry.code-runner = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-runner";
+          publisher = "formulahendry";
+          version = "0.11.2";
+          sha256 = "0qwcxr6m1xwhqmdl4pccjgpikpq1hgi2hgrva5abn8ixa2510hcy";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       freebroccolo.reasonml = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/freebroccolo.reasonml/changelog";
