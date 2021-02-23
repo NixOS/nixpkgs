@@ -15933,10 +15933,10 @@ let
 
   OpenAPIClient = buildPerlPackage rec {
     pname = "OpenAPI-Client";
-    version = "0.25";
+    version = "1.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/OpenAPI-Client-0.25.tar.gz";
-      sha256 = "bc6be443c9c44348899fd595e080abe53760ae7561d63615a2f9b9f0a943336c";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/OpenAPI-Client-1.00.tar.gz";
+      sha256 = "41bcf211c1123fbfb844413aa53f97061410b592591367b61273a206865991f7";
     };
     propagatedBuildInputs = [ MojoliciousPluginOpenAPI ];
     meta = {
