@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "io-2015.11.11";
+  name = "io-2017.09.06";
   src = fetchFromGitHub {
     owner = "stevedekorte";
     repo = "io";
-    rev = "1fc725e0a8635e2679cbb20521f4334c25273caa";
-    sha256 = "0ll2kd72zy8vf29sy0nnx3awk7nywpwpv21rvninjjaqkygrc0qw";
+    rev = "b8a18fc199758ed09cd2f199a9bc821f6821072a";
+    sha256 = "07rg1zrz6i6ghp11cm14w7bbaaa1s8sb0y5i7gr2sds0ijlpq223";
   };
 
   patches = [
