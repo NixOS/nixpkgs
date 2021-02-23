@@ -198,7 +198,7 @@ let
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
-          description = "Official Dracula Theme. A dark theme for many editors, shells, and more.";
+          description = "Dark theme for many editors, shells, and more";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula";
           homepage = "https://draculatheme.com/";
           license = licenses.mit;
