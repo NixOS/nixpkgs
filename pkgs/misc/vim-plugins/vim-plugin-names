@@ -553,6 +553,7 @@ svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
+tami5/compe-conjure
 tami5/lispdocs.nvim
 tami5/sql.nvim
 tbodt/deoplete-tabnine
