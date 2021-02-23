@@ -13141,6 +13141,7 @@ in
 
   uefi-firmware-parser = callPackage ../development/tools/analysis/uefi-firmware-parser { };
 
+  uhd3_5 = callPackage ../applications/radio/uhd/3.5.nix { };
   uhd = callPackage ../applications/radio/uhd { };
 
   uisp = callPackage ../development/tools/misc/uisp { };
@@ -22358,6 +22359,8 @@ in
   gnuradio3_7-unwrapped = callPackage ../applications/radio/gnuradio/3.7.nix {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     python = python2;
+    # Incompatible with uhd4+
+    uhd = uhd3_5;
   };
   # A build without gui components and other utilites not needed if gnuradio is
   # used as a c++ library.
