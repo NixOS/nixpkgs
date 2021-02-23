@@ -135,6 +135,7 @@ GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
+glepnir/dashboard-nvim
 glepnir/galaxyline.nvim@main
 glepnir/lspsaga.nvim@main
 glepnir/oceanic-material
