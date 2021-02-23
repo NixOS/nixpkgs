@@ -17,7 +17,7 @@ public:
                   const QString& targetDeviceRootInternal,
                   bool installFromExternalToInternal,
                   bool isFdeEnabled,
-                  const QString& password );
+                  const QString& password);
 
     QString prettyName() const override;
     Calamares::JobResult exec() override;
