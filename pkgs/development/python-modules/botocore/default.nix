@@ -28,10 +28,6 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
-  '';
-
   checkInputs = [ mock nose ];
 
   checkPhase = ''
