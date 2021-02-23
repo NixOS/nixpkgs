@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tools/grap/CMakeLists.txt --replace "/usr/local/bin" "$out/bin"
   '';
   meta = with lib; {
-    description = "grap: define and match graph patterns within binaries";
+    description = "Define and match graph patterns within binaries";
     longDescription = ''
       grap takes patterns and binary files, uses a Casptone-based disassembler to obtain the control flow graphs from the binaries, then matches the patterns against them.
 
