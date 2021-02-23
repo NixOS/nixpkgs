@@ -8015,6 +8015,8 @@ in {
 
   tweepy = callPackage ../development/python-modules/tweepy { };
 
+  twentemilieu = callPackage ../development/python-modules/twentemilieu { };
+
   twiggy = callPackage ../development/python-modules/twiggy { };
 
   twilio = callPackage ../development/python-modules/twilio { };

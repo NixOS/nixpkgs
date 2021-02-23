@@ -866,7 +866,7 @@
     "trend" = ps: with ps; [ numpy ];
     "tts" = ps: with ps; [ aiohttp-cors mutagen ];
     "tuya" = ps: with ps; [ tuyaha ];
-    "twentemilieu" = ps: with ps; [ ]; # missing inputs: twentemilieu
+    "twentemilieu" = ps: with ps; [ twentemilieu ];
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
