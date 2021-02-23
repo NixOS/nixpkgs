@@ -25463,6 +25463,8 @@ in
 
   tdrop = callPackage ../applications/misc/tdrop { };
 
+  trafficserver = callPackage ../servers/trafficserver {};
+
   tre-command = callPackage ../tools/system/tre-command {};
 
   tree = callPackage ../tools/system/tree {};
