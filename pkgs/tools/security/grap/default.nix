@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
     cmake -DCMAKE_INSTALL_PREFIX=$prefix -DPYTHON_SITE_DIR=$out/${python3.sitePackages} ../src
   '';
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace src/tools/grap-match/CMakeLists.txt --replace "/usr/local/bin" "$out/bin"
     substituteInPlace src/tools/grap/CMakeLists.txt --replace "/usr/local/bin" "$out/bin"
   '';
+
   meta = with lib; {
     description = "Define and match graph patterns within binaries";
     longDescription = ''
