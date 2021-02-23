@@ -509,6 +509,8 @@ in
 
   madonctl = callPackage ../applications/misc/madonctl { };
 
+  maelstrom = callPackage ../games/maelstrom { };
+
   copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
