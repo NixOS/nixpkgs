@@ -82,7 +82,6 @@ in stdenv.mkDerivation {
     makeFlagsArray+=(PYTHON="python -m py_compile")
   '';
 
-
   buildInputs = [
     xorg.libX11
     libGL
