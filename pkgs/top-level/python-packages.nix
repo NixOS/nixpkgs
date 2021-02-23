@@ -8220,6 +8220,8 @@ in {
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
+  venstarcolortouch = callPackage ../development/python-modules/venstarcolortouch { };
+
   venusian = callPackage ../development/python-modules/venusian { };
 
   verboselogs = callPackage ../development/python-modules/verboselogs { };
