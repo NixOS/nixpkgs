@@ -36389,7 +36389,7 @@ with pkgs;
   };
 
   grap = callPackage ../tools/security/grap { };
- 
+
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly {
