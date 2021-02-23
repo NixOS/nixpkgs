@@ -6927,6 +6927,8 @@ in {
 
   rig = callPackage ../development/python-modules/rig { };
 
+  ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
+
   ripser = callPackage ../development/python-modules/ripser { };
 
   rising = callPackage ../development/python-modules/rising { };
