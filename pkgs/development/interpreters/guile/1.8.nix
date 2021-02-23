@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  patches = [ ./cpp-4.5.patch ];
+  patches = [
+    ./cpp-4.5.patch
+    ./CVE-2016-8605.patch
+  ];
 
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
