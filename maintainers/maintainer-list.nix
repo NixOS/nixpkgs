@@ -4435,6 +4435,12 @@
     githubId = 1102396;
     name = "Jussi Maki";
   };
+  joaquinito2051 = {
+    email = "joaquinito2051@gmail.com";
+    github = "heroku-miraheze";
+    githubId = 61781343;
+    name = "Joaquín Rufo Gutierrez";
+  };
   jobojeha = {
     email = "jobojeha@jeppener.de";
     github = "jobojeha";
