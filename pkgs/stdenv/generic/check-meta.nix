@@ -16,8 +16,8 @@ let
   allowUnfree = config.allowUnfree or false
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
-  allowlist = config.allowlistedLicenses or [];
-  blocklist = config.blocklistedLicenses or [];
+  allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
+  blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
 
   onlyLicenses = list:
     lib.lists.all (license:
