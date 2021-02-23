@@ -30019,6 +30019,8 @@ in
   doing = callPackage ../applications/misc/doing  { };
 
   undervolt = callPackage ../os-specific/linux/undervolt { };
+ 
+  trafficserver = callPackage ../server/trafficserver { };
 
   alibuild = callPackage ../development/tools/build-managers/alibuild {
     python = python3;
