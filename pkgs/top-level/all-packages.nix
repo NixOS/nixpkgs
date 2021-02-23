@@ -8225,6 +8225,13 @@ in
 
   swec = callPackage ../tools/networking/swec { };
 
+  swtpm = callPackage ../tools/security/swtpm { };
+  swtpm-tpm2 = swtpm.override {
+    libtpms = libtpms.override {
+      tpm2Support = true;
+    };
+  };
+
   svn2git = callPackage ../applications/version-management/git-and-tools/svn2git {
     git = gitSVN;
   };
@@ -15591,6 +15598,8 @@ in
   inherit (callPackages ../development/libraries/libtoxcore {})
     libtoxcore_0_1 libtoxcore_0_2;
   libtoxcore = libtoxcore_0_2;
+
+  libtpms = callPackage ../tools/security/libtpms { };
 
   libtap = callPackage ../development/libraries/libtap { };
 
