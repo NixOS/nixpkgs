@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, nixosTests
 , python3
 , python3Packages
 }:
@@ -58,6 +59,8 @@ python3.pkgs.buildPythonApplication rec {
     unidecode
     Wand
   ];
+
+  passthru.tests.calibre-web = nixosTests.calibre-web;
 
   meta = with lib; {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
