@@ -616,6 +616,18 @@ let
     meta.homepage = "https://github.com/rhysd/committia.vim/";
   };
 
+  compe-conjure = buildVimPluginFrom2Nix {
+    pname = "compe-conjure";
+    version = "2021-02-23";
+    src = fetchFromGitHub {
+      owner = "tami5";
+      repo = "compe-conjure";
+      rev = "809853ff8098dffcf8ba5ac89bcf07806eb8f981";
+      sha256 = "0p7p4bgkh05zy0gzmq0g9nn9npykh1l17cvfzjyhcb3n1sczpjzf";
+    };
+    meta.homepage = "https://github.com/tami5/compe-conjure";
+  };
+
   compe-tabnine = buildVimPluginFrom2Nix {
     pname = "compe-tabnine";
     version = "2021-02-21";
