@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # memtest86 is distributed as a bootable USB image.  It contains the actual
     # memtest86 EFI app.
     #
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     ')
     mkdir $out
     mcopy -vsi $IMG@@$ESP_OFFSET ::'/EFI/BOOT/*' $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
