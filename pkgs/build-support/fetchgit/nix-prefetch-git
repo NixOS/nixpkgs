@@ -48,6 +48,7 @@ Options:
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
+      --fetch-lfs     Fetch files from LFS.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --quiet         Only print the final json summary.
 "
@@ -73,8 +74,8 @@ for arg; do
             --quiet) QUIET=true;;
             --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
-            --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --fetch-lfs) fetchLFS=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
             *)
@@ -215,6 +216,14 @@ init_submodules(){
     done
 }
 
+# Fetch extra files from LFS
+init_lfs(){
+    # use --local because the nix-builders are $HOME-less
+    clean_git lfs install --local
+    clean_git lfs fetch
+    clean_git lfs checkout
+}
+
 clone(){
     local top=$PWD
     local dir="$1"
@@ -237,6 +246,9 @@ clone(){
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
         init_submodules
+    fi
+    if test -n "$fetchLFS"; then
+        init_lfs
     fi
 
     if [ -z "$builder" ] && [ -f .topdeps ]; then
@@ -296,11 +308,6 @@ clone_user_rev() {
     local dir="$1"
     local url="$2"
     local rev="${3:-HEAD}"
-
-    if [ -n "$fetchLFS" ]; then
-        HOME=$TMPDIR
-        git lfs install
-    fi
 
     # Perform the checkout.
     case "$rev" in
