@@ -6011,6 +6011,8 @@ in {
 
   pysma = callPackage ../development/python-modules/pysma { };
 
+  pysmappee = callPackage ../development/python-modules/pysmappee { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { inherit (pkgs) pkg-config; };
