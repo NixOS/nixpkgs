@@ -6606,6 +6606,8 @@ in {
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
+  pyvizio = callPackage ../development/python-modules/pyvizio { };
+
   pyvips = callPackage ../development/python-modules/pyvips {
     inherit (pkgs) pkg-config vips glib;
   };
