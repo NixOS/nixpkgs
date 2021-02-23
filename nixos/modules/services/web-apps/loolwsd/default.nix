@@ -9,7 +9,7 @@ let
   pkg = cfg.package;
   corePkg = pkg.passthru.libreoffice;
   subdir = corePkg.pname;
-  cmdLineOpts = {
+  cmdLineOpts = with attrsets; {
     sys_template_path = "${dataDir}/systemplate";
     child_root_path = "${dataDir}/child-roots";
     file_server_root_path = "${pkg}/share/loolwsd";
@@ -21,7 +21,8 @@ let
     # LO treats allowed_languages as a list of prefixes, by taking the first two letters we
     # should be able to avoid mismatches of package name with the corresponding locale name
     "allowed_languages" = concatMapStringsSep " " (builtins.substring 0 2) cfg.dictionaries;
-  } // cfg.settings;
+  } // (optionalAttrs cfg.proxy.enable { server_name = cfg.proxy.hostname; })
+  // cfg.settings;
   cmdLineVal = v: if v == true then "true" else if v == false then "false" else escapeShellArg v;
 
   sysTemplateSetup = ./loolwsd-systemplate-setup-nixos;
