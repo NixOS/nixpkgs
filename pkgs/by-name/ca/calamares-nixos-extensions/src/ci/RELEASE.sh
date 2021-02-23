@@ -10,6 +10,7 @@
 # NOTE: this is largely a copy of the release script for Calamares,
 #       with not-applicable parts (such as translation-freeze) either
 #       commented-out, or skipped with if(false).
+# NOTE: this script contains Linuxisms (in particular, expects GNU mktemp(1))
 #
 # This attempts to perform the different steps of the RELEASE.md
 # document automatically. It's not tested on other machines or
