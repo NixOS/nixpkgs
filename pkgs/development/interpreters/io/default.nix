@@ -5,7 +5,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "io-2017.09.06";
+  pname = "io";
+  version = "2017.09.06";
   src = fetchFromGitHub {
     owner = "stevedekorte";
     repo = "io";
