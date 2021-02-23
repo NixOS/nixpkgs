@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "StevenBlack";
     repo = "hosts";
     rev = version;
-    sha256 ="zQMzXci1/21PCvi8AGqyDataQl/kQJJ+jszxXd2XMQc=";
+    sha256 ="01 rijzfmvwfcirz94h74bx15maqdn9m01g7q197nvzxmr1fk60yd";
   };
 
   inherit allowList;
