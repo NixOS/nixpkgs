@@ -36,5 +36,6 @@ buildGoPackage rec {
     platforms = platforms.unix;
     license = licenses.mpl20;
     maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes ];
+    knownVulnerabilities = optional (versionOlder version "0.12.10") "CVE-2021-3283";
   };
 }
