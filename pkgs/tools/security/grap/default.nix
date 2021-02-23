@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkgs, python3 }:
+{ lib, stdenv, fetchFromGitHub, boost, libseccomp, flex, python3Packages, swig4, bison,
+  cmake, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "grap";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fkdi7adfffxg1k4h6r9i69i3wi93s44c1j4cvr69blxsfh0mcnc";
   };
 
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = [
     boost.all
     libseccomp
     flex
@@ -23,12 +24,10 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  configurePhase = ''
-    ls $src
-    mkdir build;
-    cd build;
-    cmake -DCMAKE_INSTALL_PREFIX=$prefix -DPYTHON_SITE_DIR=$out/${python3.sitePackages} ../src
-  '';
+  cmakeFlags = [
+    "-DPYTHON_SITE_DIR=$out/${python3.sitePackages}"
+    "../src"
+  ];
 
   postPatch = ''
     substituteInPlace src/tools/grap-match/CMakeLists.txt --replace "/usr/local/bin" "$out/bin"
