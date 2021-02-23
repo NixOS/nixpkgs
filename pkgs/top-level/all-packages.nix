@@ -23530,8 +23530,6 @@ in
 
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
 
-  lscolors = callPackage ../applications/misc/lscolors { };
-
   lumail = callPackage ../applications/networking/mailreaders/lumail {
     lua = lua5_1;
   };
