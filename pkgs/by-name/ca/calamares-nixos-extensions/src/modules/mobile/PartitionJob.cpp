@@ -21,7 +21,7 @@ PartitionJob::PartitionJob( const QString& cmdInternalStoragePrepare,
                             const QString& targetDeviceRootInternal,
                             bool installFromExternalToInternal,
                             bool isFdeEnabled,
-                            const QString& password)
+                            const QString& password )
     : Calamares::Job()
     , m_cmdInternalStoragePrepare( cmdInternalStoragePrepare )
     , m_cmdLuksFormat( cmdLuksFormat )

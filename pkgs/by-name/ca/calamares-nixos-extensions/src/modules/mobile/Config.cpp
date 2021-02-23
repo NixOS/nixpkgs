@@ -90,7 +90,7 @@ Config::runPartitionJobThenLeave( bool b )
     }
     else
     {
-        v->onInstallationFailed( "Unknown filesystem: '" + m_fsType + "'", "");
+        v->onInstallationFailed( "Unknown filesystem: '" + m_fsType + "'", "" );
     }
     /* HACK: run partition job
      * The "mobile" module has two jobs, the partition job and the users job.
@@ -172,14 +172,16 @@ Config::setInstallFromExternalToInternal( const bool val )
 void
 Config::setFsType( int idx )
 {
-    if ( idx >= 0 && idx < m_fsList.length() ) {
+    if ( idx >= 0 && idx < m_fsList.length() )
+    {
         setFsType( m_fsList[ idx ] );
     }
 }
 void
 Config::setFsType( const QString& fsType )
 {
-    if ( fsType != m_fsType ) {
+    if ( fsType != m_fsType )
+    {
         m_fsType = fsType;
         emit fsTypeChanged( m_fsType );
     }
