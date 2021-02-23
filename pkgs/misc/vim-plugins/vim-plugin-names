@@ -679,6 +679,7 @@ vim-utils/vim-husk
 Vimjas/vim-python-pep8-indent
 vimlab/split-term.vim
 vimoutliner/vimoutliner
+vimpostor/vim-tpipeline
 vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
