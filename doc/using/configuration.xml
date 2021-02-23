@@ -151,26 +151,26 @@
    </listitem>
    <listitem>
     <para>
-     It is also possible to whitelist and blacklist licenses that are specifically acceptable or not acceptable, using <literal>whitelistedLicenses</literal> and <literal>blacklistedLicenses</literal>, respectively.
+     It is also possible to allow and block licenses that are specifically acceptable or not acceptable, using <literal>allowlistedLicenses</literal> and <literal>blocklistedLicenses</literal>, respectively.
     </para>
     <para>
-     The following example configuration whitelists the licenses <literal>amd</literal> and <literal>wtfpl</literal>:
+     The following example configuration allowlists the licenses <literal>amd</literal> and <literal>wtfpl</literal>:
 <programlisting>
 {
-  whitelistedLicenses = with lib.licenses; [ amd wtfpl ];
+  allowlistedLicenses = with lib.licenses; [ amd wtfpl ];
 }
 </programlisting>
     </para>
     <para>
-     The following example configuration blacklists the <literal>gpl3Only</literal> and <literal>agpl3Only</literal> licenses:
+     The following example configuration blocklists the <literal>gpl3Only</literal> and <literal>agpl3Only</literal> licenses:
 <programlisting>
 {
-  blacklistedLicenses = with lib.licenses; [ agpl3Only gpl3Only ];
+  blocklistedLicenses = with lib.licenses; [ agpl3Only gpl3Only ];
 }
 </programlisting>
     </para>
     <para>
-      Note that <literal>whitelistedLicenses</literal> only applies to unfree licenses unless <literal>allowUnfree</literal> is enabled. It is not a generic whitelist for all types of licenses. <literal>blacklistedLicenses</literal> applies to all licenses.
+      Note that <literal>allowlistedLicenses</literal> only applies to unfree licenses unless <literal>allowUnfree</literal> is enabled. It is not a generic allowlist for all types of licenses. <literal>blocklistedLicenses</literal> applies to all licenses.
     </para>
    </listitem>
   </itemizedlist>
