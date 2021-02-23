@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
     homepage = "https://redis.io";
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = platforms.all;
+    changelog = "https://github.com/redis/redis/raw/${version}/00-RELEASENOTES";
     maintainers = with maintainers; [ berdario globin ];
   };
 }
