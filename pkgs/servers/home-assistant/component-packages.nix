@@ -906,7 +906,7 @@
     "vicare" = ps: with ps; [ ]; # missing inputs: PyViCare
     "vilfo" = ps: with ps; [ ]; # missing inputs: vilfo-api-client
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
-    "vizio" = ps: with ps; [ ]; # missing inputs: pyvizio
+    "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [ ]; # missing inputs: python-telnet-vlc
     "voicerss" = ps: with ps; [ ];
