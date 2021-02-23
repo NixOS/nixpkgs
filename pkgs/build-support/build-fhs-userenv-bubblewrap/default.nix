@@ -138,6 +138,13 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       --die-with-parent
       --ro-bind /nix /nix
+      # Our glibc will look for the cache in its own path in `/nix/store`.
+      # As such, we need a cache to exist there, because pressure-vessel
+      # depends on the existence of an ld cache. However, adding one
+      # globally proved to be a bad idea (see #100655), the solution we
+      # settled on being mounting one via bwrap.
+      # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
+      # of both architectures to work.
       --tmpfs ${glibc}/etc \
       --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
