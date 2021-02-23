@@ -9,11 +9,7 @@ stdenv.mkDerivation rec {
       "mirror://sourceforge/clipsrules/CLIPS/${version}/clips_core_source_${v}.tar.gz";
     sha256 = "165k0z7dsv04q432sanmw0jxmxwf56cnhsdfw5ffjqxd3lzkjnv6";
   };
-  buildPhase = ''
-    runHook preBuild
-    make -C core
-    runHook postBuild
-  '';
+  makeFlags = [ "-C" "core" ];
   installPhase = ''
     runHook preInstall
     install -D -t $out/bin core/clips
