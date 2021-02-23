@@ -11,6 +11,8 @@ buildPythonPackage rec {
     sha256 = "0vids7sxk8w5vr73xdnf8xdci71a7syl6cd35aiisppbqyyfmykx";
   };
 
+  dontUseCmakeConfigure = true;
+
   nativeBuildInputs = with pkgs; [
     swig qmake cmake
   ];
