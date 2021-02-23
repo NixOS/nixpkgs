@@ -7368,6 +7368,8 @@ in {
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };
 
+  signify = callPackage ../development/python-modules/signify { };
+
   sip = callPackage ../development/python-modules/sip { };
 
   sip_5 = callPackage ../development/python-modules/sip/5.x.nix { };
