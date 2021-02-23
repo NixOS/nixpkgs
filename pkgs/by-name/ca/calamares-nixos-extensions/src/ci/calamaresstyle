@@ -1,0 +1,77 @@
+#!/bin/sh
+#
+#   SPDX-FileCopyrightText: 2014 Aurélien Gâteau <agateau@kde.org>
+#   SPDX-FileCopyrightText: 2019 Adriaan de Groot <groot@kde.org>
+#   SPDX-License-Identifier: BSD-2-Clause
+#
+# Calls astyle with settings matching Calamares coding style
+# Requires astyle >= 2.04 and clang-format-7 -8 or -9
+#
+# Clang-format-10 is **not** supported, since it changes a default
+# that re-introduces a space into empty function bodies; this
+# can be turned off with a style setting, but that breaks
+# older format versions which don't recognize the setting.
+#
+# You can pass in directory names, in which case the files
+# in that directory (NOT below it) are processed.
+#
+LANG=C
+LC_ALL=C
+LC_NUMERIC=C
+export LANG LC_ALL LC_NUMERIC
+
+AS=$( which astyle )
+
+CF_VERSIONS="clang-format-7 clang-format-8 clang-format70 clang-format80 clang-format90 clang-format-9.0.1 clang-format"
+for _cf in $CF_VERSIONS
+do
+	# Not an error if this particular clang-format isn't found
+	CF=$( which $_cf 2> /dev/null || true )
+	test -n "$CF" && break
+done
+
+test -n "$AS" || { echo "! No astyle found in PATH"; exit 1 ; }
+test -n "$CF" || { echo "! No clang-format ($CF_VERSIONS) found in PATH"; exit 1 ; }
+test -x "$AS" || { echo "! $AS is not executable."; exit 1 ; }
+test -x "$CF" || { echo "! $CF is not executable."; exit 1 ; }
+
+unmangle_clang_format=""
+if expr `"$CF" --version | tr -dc '[^.0-9]' | cut  -d . -f 1` '<' 10 > /dev/null ; then
+	:
+else
+	unmangle_clang_format=$( dirname $0 )/../.clang-format
+	echo "SpaceInEmptyBlock: false" >> "$unmangle_clang_format"
+fi
+
+set -e
+
+any_dirs=no
+for d in "$@"
+do
+	test -d "$d" && any_dirs=yes
+done
+
+style_some()
+{
+	if test -n "$*" ; then
+		$AS --options=$(dirname $0)/astylerc --quiet "$@"
+		$CF -i -style=file "$@"
+	fi
+}
+
+if test "x$any_dirs" = "xyes" ; then
+	for d in "$@"
+	do
+		if test -d "$d"  ; then
+			style_some $( find "$d" -maxdepth 1 -type f -name '*.cpp' -o -name '*.h' )
+		else
+			style_some "$d"
+		fi
+	done
+else
+	style_some "$@"
+fi
+
+if test -n "$unmangle_clang_format" ; then
+	sed -i.bak '/^SpaceInEmptyBlock/d' "$unmangle_clang_format"
+fi

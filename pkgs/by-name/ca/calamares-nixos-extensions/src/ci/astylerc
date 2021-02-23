@@ -1,0 +1,17 @@
+#   SPDX-FileCopyrightText: 2014 Aurélien Gâteau <agateau@kde.org>
+#   SPDX-FileCopyrightText: 2019 Adriaan de Groot <groot@kde.org>
+#   SPDX-License-Identifier: BSD-2-Clause
+
+# Do not create a backup file
+suffix=none
+
+indent=spaces=4
+
+# Brackets
+style=break
+add-brackets
+
+# Spaces
+pad-paren-in
+pad-header
+align-pointer=type
