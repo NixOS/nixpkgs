@@ -18018,6 +18018,8 @@ in
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
   mbtileserver = callPackage ../servers/mbtileserver { };
+  
+  trafficserver = callPackage ../servers/trafficserver { };
 
   mediatomb = callPackage ../servers/mediatomb { };
 
