@@ -739,6 +739,18 @@ let
         };
       };
 
+      usernamehw.errorlens = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "errorlens";
+          publisher = "usernamehw";
+          version = "3.2.4";
+          sha256 = "0caxmf6v0s5kgp6cp3j1kk7slhspjv5kzhn4sq3miyl5jkrn95kx";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
 
       vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
