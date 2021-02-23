@@ -40,6 +40,17 @@ stdenv.mkDerivation {
     sed -ie \
           "s/add_subdirectory(addons)/#add_subdirectory(addons)/g" \
           CMakeLists.txt
+    # Bind Libs STATIC to avoid a segfault when relinking
+    sed -i 's/basekit SHARED/basekit STATIC/' libs/basekit/CMakeLists.txt
+    sed -i 's/garbagecollector SHARED/garbagecollector STATIC/' libs/garbagecollector/CMakeLists.txt
+    sed -i 's/coroutine SHARED/coroutine STATIC/' libs/coroutine/CMakeLists.txt
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/io
+    $out/bin/io_static
   '';
 
   # for gcc5; c11 inline semantics breaks the build
