@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, writeText, writeScriptBin, pkgs, pkgsi686Linux }:
+{ stdenv, lib, buildEnv, writeText, writeShellScriptBin, pkgs, pkgsi686Linux }:
 
 { name, profile ? ""
 , targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
@@ -49,9 +49,7 @@ let
     [ (toString gcc.cc.lib)
     ];
 
-  ldconfig = writeScriptBin "ldconfig" ''
-    #!${pkgs.stdenv.shell}
-
+  ldconfig = writeShellScriptBin "ldconfig" ''
     exec ${pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
   '';
   etcProfile = writeText "profile" ''
