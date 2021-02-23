@@ -45,5 +45,6 @@ stdenvNoCC.mkDerivation rec {
     # https://github.com/StevenBlack/hosts#sources-of-hosts-data-unified-in-this-variant
     license = licenses.unfreeRedistributable;
     platforms = platforms.all;
+    mantainers = [ mantainers.pasqui23 ];
   };
 }
