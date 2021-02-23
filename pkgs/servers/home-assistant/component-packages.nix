@@ -896,7 +896,7 @@
     "vasttrafik" = ps: with ps; [ ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [ python-velbus ];
     "velux" = ps: with ps; [ pyvlx ];
-    "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
+    "venstar" = ps: with ps; [ venstarcolortouch ];
     "vera" = ps: with ps; [ pyvera ];
     "verisure" = ps: with ps; [ jsonpath vsure ];
     "versasense" = ps: with ps; [ ]; # missing inputs: pyversasense
