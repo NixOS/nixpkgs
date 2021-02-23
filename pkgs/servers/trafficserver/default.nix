@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       plugins to build large scale web applications.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ "joaquinito2051" ];
+    maintainers = with maintainers; [ joaquinito2051 ];
     platforms = platforms.all;
   };
 }
