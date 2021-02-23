@@ -123,7 +123,9 @@ let
                 postBuild = ''
                   cp ${extraInit} $out/lib/php.ini
 
-                  wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+                  if test -e $out/bin/php; then
+                    wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+                  fi
 
                   if test -e $out/bin/php-fpm; then
                     wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
