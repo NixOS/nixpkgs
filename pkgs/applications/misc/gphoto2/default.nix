@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gphoto2";
-  version = "2.5.26";
+  version = "2.5.27";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "gphoto2";
     rev = "v${version}";
-    sha256 = "1w01j3qvjl2nlfs38rnsmjvn3r0r2xf7prxz1i6yarbpj3fzwqqc";
+    sha256 = "sha256-zzlyA2IedyBZ4/TdSmrqbe2le8rFMQ6tY6jF5skJ7l4=";
   };
 
   nativeBuildInputs = [
