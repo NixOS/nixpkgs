@@ -6,7 +6,7 @@
 
 with lib;
 
-let self = rec {
+self: super: with self; {
 
   pluginDir = "/share/kodi/addons";
   rel = "Matrix";
@@ -556,4 +556,58 @@ let self = rec {
 
     extraBuildInputs = [ libarchive lzma bzip2 zlib lz4 lzo openssl ];
   };
-}; in self
+
+  # addons which are included in kodi
+  audioencoder-kodi-builtin-aac = null;
+  audioencoder-kodi-builtin-wma = null;
+  # game-controller-default = null;
+  # game-controller-snes = null;
+  kodi-binary-global-audioengine = null;
+  kodi-binary-global-filesystem = null;
+  kodi-binary-global-general = null;
+  kodi-binary-global-gui = null;
+  kodi-binary-global-main = null;
+  kodi-binary-global-network = null;
+  kodi-binary-instance-audiodecoder = null;
+  kodi-binary-instance-audioencoder = null;
+  kodi-binary-instance-game = null;
+  kodi-binary-instance-imagedecoder = null;
+  kodi-binary-instance-inputstream = null;
+  kodi-binary-instance-peripheral = null;
+  kodi-binary-instance-pvr = null;
+  kodi-binary-instance-screensaver = null;
+  kodi-binary-instance-vfs = null;
+  kodi-binary-instance-videocodec = null;
+  kodi-binary-instance-visualization = null;
+  kodi-resource = null;
+  # metadata-album-universal = null;
+  # metadata-artists-universal = null;
+  # metadata-common-allmusic-com = null;
+  # metadata-common-fanart-tv = null;
+  # metadata-common-imdb-com = null;
+  # metadata-common-musicbrainz-org = null;
+  # metadata-common-theaudiodb-com = null;
+  # metadata-common-themoviedb-org = null;
+  metadata-local = null;
+  # metadata-themoviedb-org = null;
+  # metadata-tvshows-themoviedb-org = null;
+  repository-xbmc-org = null;
+  resource-images-weathericons-default = null;
+  resource-language-en_gb = null;
+  resource-uisounds-kodi = null;
+  screensaver-xbmc-builtin-black = null;
+  screensaver-xbmc-builtin-dim = null;
+  script-module-pil = python3Packages.pillow;
+  script-module-pycryptodome = python3Packages.pycryptodome;
+  # service-xbmc-versioncheck = null;
+  skin-estouchy = null;
+  skin-estuary = null;
+  webinterface-default = null;
+  xbmc-addon = null;
+  xbmc-core = null;
+  xbmc-gui = null;
+  xbmc-json = null;
+  xbmc-metadata = null;
+  xbmc-python = null;
+  xbmc-webinterface = null;
+}
