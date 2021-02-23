@@ -409,6 +409,7 @@ nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
 norcalli/nvim-terminal.lua
+norcalli/snippets.nvim
 npxbr/glow.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
