@@ -7,14 +7,19 @@ changes and contributors are listed. Note that Calamares-Extensions does not
 have a historical changelog -- this log starts with version 1.0.0.
 
 
-# 1.x.x (unreleased) #
+# 1.1.1 (2021-02-23) #
 
 This release contains contributions from (alphabetically by first name):
+ - Oliver Smith
  - Undef
 
 Changes and new modules in this release:
+ - Branding has a new example, *image-slideshow*, for a QML-based
+   slideshow with only images.
+ - CI now builds the extensions against a recent Calamares build.
  - *mobile* add ability to select target filesystem.
- - *mobile* rename cmdMkfsRoot to cmdMkfsRootExt4
+ - *mobile* rename `cmdMkfsRoot` to `cmdMkfsRootExt4`.
+ - *mobile* wait screen has been re-worded.
 
 
 # 1.1.0 (2021-01-04) #
