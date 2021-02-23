@@ -22,6 +22,7 @@ let
     # should be able to avoid mismatches of package name with the corresponding locale name
     "allowed_languages" = concatMapStringsSep " " (builtins.substring 0 2) cfg.dictionaries;
   } // (optionalAttrs cfg.proxy.enable { server_name = cfg.proxy.hostname; })
+  // (optionalAttrs (cfg.trustedHost != "") { "storage.wopi.host[0]" = cfg.trustedHost; })
   // cfg.settings;
   cmdLineVal = v: if v == true then "true" else if v == false then "false" else escapeShellArg v;
 
@@ -69,6 +70,16 @@ in
         List of Hunspell dictionaries to include for spellchecking functionality.
 
         The values must be names of attributes in <varname>pkgs.hunspellDicts</varname>.
+      '';
+    };
+
+    trustedHost = mkOption {
+      type = str;
+      default = config.services.nextcloud.hostName or "";
+      defaultText = "\${config.services.nextcloud.hostName}";
+      example = "cloud.example.com";
+      description = ''
+        Regex expression matching hostnames that are trusted to use loolwsd
       '';
     };
 
