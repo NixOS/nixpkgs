@@ -123,6 +123,8 @@ stdenv.mkDerivation rec {
     "-DG_DISABLE_CAST_CHECKS"
   ];
 
+  hardeningDisable = [ "pie" ];
+
   postPatch = ''
     chmod +x gio/tests/gengiotypefuncs.py
     patchShebangs gio/tests/gengiotypefuncs.py
