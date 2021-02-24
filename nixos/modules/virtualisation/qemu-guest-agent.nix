@@ -35,6 +35,11 @@ in {
           RestartSec = 0;
         };
       };
+      systemd.sockets.qemu-guest-agent = {
+        description = "QEMU Guest Agent socket";
+        wantedBy = [ "sockets.target" ];
+        listenStreams = [ "/run/qga.sock" ];
+      };
     }
   ]
   );
