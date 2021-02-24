@@ -32,49 +32,42 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ pkgs, lib ? pkgs.lib, emacs }:
+{ pkgs', makeScope, makeOverridable, emacs }:
 
 let
 
-  trivialBuild = pkgs.callPackage ../build-support/emacs/trivial.nix {
-    inherit emacs;
-  };
-
-  melpaBuild = pkgs.callPackage ../build-support/emacs/melpa.nix {
-    inherit emacs;
-  };
-
-  mkElpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
+  mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs-modes/elpa-packages.nix {
     inherit (pkgs) stdenv texinfo writeText;
     inherit lib;
   };
 
   # Contains both melpa stable & unstable
-  melpaGeneric = import ../applications/editors/emacs-modes/melpa-packages.nix {
-    inherit lib pkgs;
-  };
-  mkMelpaStablePackages = melpaGeneric "stable";
-  mkMelpaPackages = melpaGeneric "unstable";
-
-  mkOrgPackages = import ../applications/editors/emacs-modes/org-packages.nix {
-    inherit lib;
-  };
-
-  emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit (pkgs) lndir makeWrapper runCommand;
-    inherit lib;
-  };
-
-  mkManualPackages = import ../applications/editors/emacs-modes/manual-packages.nix {
+  melpaGeneric = { pkgs, lib }: import ../applications/editors/emacs-modes/melpa-packages.nix {
     inherit lib pkgs;
   };
 
-in lib.makeScope pkgs.newScope (self: lib.makeOverridable ({
-  elpaPackages ? mkElpaPackages self
-  , melpaStablePackages ? mkMelpaStablePackages self
-  , melpaPackages ? mkMelpaPackages self
-  , orgPackages ? mkOrgPackages self
-  , manualPackages ? mkManualPackages self
+  mkOrgPackages = { lib }: import ../applications/editors/emacs-modes/org-packages.nix {
+    inherit lib;
+  };
+
+  mkManualPackages = { pkgs, lib }: import ../applications/editors/emacs-modes/manual-packages.nix {
+    inherit lib pkgs;
+  };
+
+  emacsWithPackages = { pkgs, lib }: import ../build-support/emacs/wrapper.nix {
+    inherit (pkgs) makeWrapper runCommand;
+    inherit (pkgs.xorg) lndir;
+    inherit lib;
+  };
+
+in makeScope pkgs'.newScope (self: makeOverridable ({
+  pkgs ? pkgs'
+  , lib ? pkgs.lib
+  , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
+  , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
+  , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
+  , orgPackages ? mkOrgPackages { inherit lib; } self
+  , manualPackages ? mkManualPackages { inherit pkgs lib; } self
 }: ({}
   // elpaPackages // { inherit elpaPackages; }
   // melpaStablePackages // { inherit melpaStablePackages; }
@@ -82,8 +75,18 @@ in lib.makeScope pkgs.newScope (self: lib.makeOverridable ({
   // orgPackages // { inherit orgPackages; }
   // manualPackages // { inherit manualPackages; }
   // {
-    inherit emacs melpaBuild trivialBuild;
-    emacsWithPackages = emacsWithPackages self;
-    withPackages = emacsWithPackages self;
+
+    inherit emacs;
+
+    trivialBuild = pkgs.callPackage ../build-support/emacs/trivial.nix {
+      inherit (self) emacs;
+    };
+
+    melpaBuild = pkgs.callPackage ../build-support/emacs/melpa.nix {
+      inherit (self) emacs;
+    };
+
+    emacsWithPackages = emacsWithPackages { inherit pkgs lib; } self;
+    withPackages = emacsWithPackages { inherit pkgs lib; } self;
   })
 ) {})

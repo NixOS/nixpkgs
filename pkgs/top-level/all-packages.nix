@@ -21947,7 +21947,11 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
-  emacsPackagesFor = emacs: import ./emacs-packages.nix { inherit pkgs lib emacs; };
+  emacsPackagesFor = emacs: import ./emacs-packages.nix {
+    inherit (lib) makeScope makeOverridable;
+    inherit emacs;
+    pkgs' = pkgs;  # default pkgs used for bootstrapping the emacs package set
+  };
 
   inherit (gnome3) empathy;
 
