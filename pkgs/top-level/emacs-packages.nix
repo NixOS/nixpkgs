@@ -38,7 +38,6 @@
 , trivialBuild
 , melpaBuild
 
-, external
 , pkgs
 }:
 
@@ -50,7 +49,7 @@ let
 
   # Contains both melpa stable & unstable
   melpaGeneric = import ../applications/editors/emacs-modes/melpa-packages.nix {
-    inherit external lib pkgs;
+    inherit lib pkgs;
   };
   mkMelpaStablePackages = melpaGeneric "stable";
   mkMelpaPackages = melpaGeneric "unstable";
@@ -64,7 +63,7 @@ let
   };
 
   mkManualPackages = import ../applications/editors/emacs-modes/manual-packages.nix {
-    inherit external lib pkgs;
+    inherit lib pkgs;
   };
 
 in lib.makeScope newScope (self: lib.makeOverridable ({

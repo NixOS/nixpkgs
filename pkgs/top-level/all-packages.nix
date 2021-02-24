@@ -21960,15 +21960,6 @@ in
     melpaBuild = callPackage ../build-support/emacs/melpa.nix {
       inherit emacs;
     };
-
-    external = {
-      inherit (haskellPackages)
-        ghc-mod structured-haskell-mode Agda hindent;
-      inherit
-        autoconf automake editorconfig-core-c git libffi libpng pkg-config
-        poppler rtags w3m zlib substituteAll rustPlatform cmake llvmPackages
-        libtool zeromq openssl ott;
-    };
   };
 
   inherit (gnome3) empathy;
