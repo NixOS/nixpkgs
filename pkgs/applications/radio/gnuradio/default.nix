@@ -24,6 +24,8 @@
 , gsl
 , cppzmq
 , zeromq
+# Needed only if qt-gui is disabled, from some reason
+, icu
 # GUI related
 , gtk3
 , pango
@@ -60,7 +62,10 @@ let
         boost
         log4cpp
         mpir
-      ];
+      ]
+        # when gr-qtgui is disabled, icu needs to be included, otherwise
+        # building with boost 1.7x fails
+        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
       pythonNative = with python.pkgs; [
         Mako
         six
@@ -160,7 +165,9 @@ let
       cmakeEnableFlag = "GR_TRELLIS";
     };
     gr-uhd = {
-      runtime = [ uhd ];
+      runtime = [
+        uhd
+      ];
       cmakeEnableFlag = "GR_UHD";
     };
     gr-utils = {
@@ -264,6 +271,13 @@ let
     (fetchpatch {
       url = "https://github.com/gnuradio/gnuradio/commit/dbc8ad7e7361fddc7b1dbc267c07a776a3f9664b.diff";
       sha256 = "tQcCpcUbJv3yqAX8rSHN/pAuBq4ueEvoVo7sNzZGvf4=";
+    })
+    # Needed to use boost 1.7x, see:
+    # https://github.com/gnuradio/gnuradio/issues/3720
+    # https://github.com/gnuradio/gnuradio/pull/3967
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/cbcb968358fad56f3646619b258f18b0e6693a07.diff";
+      sha256 = "1ajf4797f869lqv436xw61s29qdbn7f01i0970kfxv3yahd34p9v";
     })
   ];
 in
