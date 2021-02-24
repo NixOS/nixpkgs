@@ -35,6 +35,7 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+, cargoTestFlags ? []
 , buildType ? "release"
 , meta ? {}
 , target ? rust.toRustTargetSpec stdenv.hostPlatform
@@ -239,7 +240,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
   '';
 
   checkPhase = args.checkPhase or (let
-    argstr = "${lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
+    argstr = "${lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen ${builtins.concatStringsSep " " cargoTestFlags}";
     threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
   in ''
     ${lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}

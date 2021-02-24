@@ -166,6 +166,9 @@ rustPlatform.buildRustPackage {
 Please note that the code will be compiled twice here: once in `release` mode
 for the `buildPhase`, and again in `debug` mode for the `checkPhase`.
 
+Test flags, e.g., `--features xxx/yyy`, can be passed to `cargo test` via the
+`cargoTestFlags` attribute.
+
 #### Tests relying on the structure of the `target/` directory
 
 Some tests may rely on the structure of the `target/` directory. Those tests
