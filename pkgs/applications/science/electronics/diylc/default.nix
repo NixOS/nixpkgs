@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/share/diylc
     ${unzip}/bin/unzip -UU ${files.app} -d $out/share/diylc
     rm $out/share/diylc/diylc.exe
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     ${jre8}/bin/java -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
     EOF
     chmod +x $out/bin/diylc
+
+    runHook postInstall
   '';
 
   meta = with lib; {
