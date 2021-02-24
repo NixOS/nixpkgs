@@ -2914,6 +2914,8 @@ in
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
+  mslink = callPackage ../tools/misc/mslink { };
+
   mcelog = callPackage ../os-specific/linux/mcelog {
     util-linux = util-linuxMinimal;
   };
