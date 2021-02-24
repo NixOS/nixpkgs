@@ -745,7 +745,7 @@
     "sleepiq" = ps: with ps; [ ]; # missing inputs: sleepyq
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
-    "smappee" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pysmappee
+    "smappee" = ps: with ps; [ aiohttp-cors pysmappee ];
     "smart_meter_texas" = ps: with ps; [ ]; # missing inputs: smart-meter-texas
     "smarthab" = ps: with ps; [ ]; # missing inputs: smarthab
     "smartthings" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: pysmartapp pysmartthings
