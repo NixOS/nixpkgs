@@ -4,6 +4,7 @@ let
   # A list of binaries to put into separate outputs
   bins = [
     "geth"
+    "clef"
   ];
 
 in buildGoModule rec {
