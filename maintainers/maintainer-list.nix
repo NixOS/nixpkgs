@@ -8149,6 +8149,12 @@
     githubId = 6047658;
     name = "Ryan Horiguchi";
   };
+  ribose-jeffreylau = {
+    name = "Jeffrey Lau";
+    email = "jeffrey.lau@ribose.com";
+    github = "ribose-jeffreylau";
+    githubId = 2649467;
+  };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";
     github = "richardipsum";
