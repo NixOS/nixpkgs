@@ -8,16 +8,19 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.16.6";
-
+  version = "1.17.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc1e6a62ccb7c9830f1e7e9288e2d20eaf373cc8875b5c55b7d5d9b7717be91";
+    sha256 = "sha256-FBmMWv6yiRBuQO5uXkwFKcU2mTn2yliKAos3GnX+IN0=";
   };
 
   propagatedBuildInputs = [ passlib scramp ];
+
+  # Tests require a running PostgreSQL instance
+  doCheck = false;
+  pythonImportsCheck = [ "pg8000" ];
 
   meta = with lib; {
     homepage = "https://github.com/tlocke/pg8000";
@@ -25,5 +28,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
-
 }
