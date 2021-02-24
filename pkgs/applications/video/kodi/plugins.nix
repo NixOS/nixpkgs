@@ -346,21 +346,19 @@ let self = rec {
   pdfreader = mkKodiPlugin rec {
     plugin = "pdfreader";
     namespace = "plugin.image.pdf";
-    version = "1.0.2";
+    version = "2.0.2";
 
-    src = fetchFromGitHub rec {
-      name = plugin + "-" + version + ".tar.gz";
-      owner = "teeedubb";
-      repo = owner + "-xbmc-repo";
-      rev = "0a405b95208ced8a1365ad3193eade8d1c2117ce";
-      sha256 = "1iv7d030z3xvlflvp4p5v3riqnwg9g0yvzxszy63v1a6x5kpjkqa";
+    src = fetchFromGitHub {
+      owner = "i96751414";
+      repo = "plugin.image.pdfreader";
+      rev = "v${version}";
+      sha256 = "0nkqhlm1gyagq6xpdgqvd5qxyr2ngpml9smdmzfabc8b972mwjml";
     };
 
     meta = {
       homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
       description = "A comic book reader";
       maintainers = with maintainers; [ edwtjo ];
-      broken = true; # requires port to python3
     };
   };
 
