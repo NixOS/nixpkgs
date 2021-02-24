@@ -8047,6 +8047,8 @@ in {
 
   twitter-common-options = callPackage ../development/python-modules/twitter-common-options { };
 
+  twitterapi = callPackage ../development/python-modules/twitterapi { };
+
   twofish = callPackage ../development/python-modules/twofish { };
 
   txaio = callPackage ../development/python-modules/txaio { };

@@ -872,7 +872,7 @@
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
     "twinkly" = ps: with ps; [ ]; # missing inputs: twinkly-client
     "twitch" = ps: with ps; [ python-twitch-client ];
-    "twitter" = ps: with ps; [ ]; # missing inputs: TwitterAPI
+    "twitter" = ps: with ps; [ twitterapi ];
     "ubus" = ps: with ps; [ ];
     "ue_smart_radio" = ps: with ps; [ ];
     "uk_transport" = ps: with ps; [ ];
