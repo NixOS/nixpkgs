@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/bancika/diy-layout-creator/releases";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ eduardosm ];
   };
 }
