@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A multi-purpose particle physics event generator";
     homepage = "https://herwig.hepforge.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
     broken = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
