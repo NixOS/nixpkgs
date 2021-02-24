@@ -23,8 +23,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pg8000" ];
 
   meta = with lib; {
+    description = "Python driver for PostgreSQL";
     homepage = "https://github.com/tlocke/pg8000";
-    description = "PostgreSQL interface library, for asyncio";
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
