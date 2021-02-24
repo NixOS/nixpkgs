@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "herwig";
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "11m6xvardnk0i8x8b3dpwg4c4ncq0xmlfg2n5r5qmh6544pz7zyl";
+    sha256 = "10y3fb33zsinr0z3hzap9rsbcqhy1yjqnv4b4vz21g7mdlw6pq2k";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
