@@ -225,7 +225,7 @@ let
           version = "2.1.64";
           sha256 = "sha256-qsL1vWiEAYeWkMDNSrr1yzg0QxroEQQeznoDL3Ujy/o=";
         };
-        meta = {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
