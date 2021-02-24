@@ -1,4 +1,5 @@
 declare -a checkFlags
+declare -a cargoTestFlags
 
 cargoCheckHook() {
     echo "Executing cargoCheckHook"
@@ -15,7 +16,7 @@ cargoCheckHook() {
         threads=1
     fi
 
-    argstr="--${cargoCheckType} --target @rustTargetPlatformSpec@ --frozen";
+    argstr="--${cargoCheckType} --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}";
 
     (
         set -x
