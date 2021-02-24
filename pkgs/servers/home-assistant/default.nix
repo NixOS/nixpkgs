@@ -23,6 +23,11 @@ let
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
+    # Pinned due to bug in ring-doorbell 0.7.0
+    # https://github.com/tchellomello/python-ring-doorbell/issues/240
+    (mkOverride "ring-doorbell" "0.6.2"
+      "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
+
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
