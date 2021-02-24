@@ -21,17 +21,6 @@
   (package-initialize)
 */
 
-## FOR CONTRIBUTORS
-#
-# When adding a new package here please note that
-# * please use `elpaBuild` for pre-built package.el packages and
-#   `melpaBuild` or `trivialBuild` if the package must actually
-#   be built from the source.
-# * lib.licenses are `with`ed on top of the file here
-# * both trivialBuild and melpaBuild will automatically derive a
-#   `meta` with `platforms` and `homepage` set to something you are
-#   unlikely to want to override for most packages
-
 { pkgs', makeScope, makeOverridable, emacs }:
 
 let
