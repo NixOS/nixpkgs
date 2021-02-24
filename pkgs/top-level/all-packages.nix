@@ -3291,6 +3291,8 @@ in
 
   netevent = callPackage ../tools/inputmethods/netevent { };
 
+  netplan = callPackage ../tools/admin/netplan { };
+
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
