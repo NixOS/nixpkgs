@@ -1,4 +1,4 @@
-{ fetchsvn, stdenv, gnum4, tet }:
+{ lib, fetchsvn, stdenv, gnum4, tet }:
 
 stdenv.mkDerivation (rec {
   version = "3258";
