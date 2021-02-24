@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "0s4qd1z40c1bczkvc840jwjmzbv7nyj06xqs1si9v54qmkh4gaq4";
+    sha256 = "sha256-6Z/H15bKe0PKpNe9PCgc5mLOii3CILCAVon7EgzIkx8=";
   };
 
   patches = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
         paths = with python3Packages; [ websocket_client six ];
       }}/${python3Packages.python.sitePackages}";
     })
-    ./hardcode-json-file-path.patch
+    ./0001-hardcode-json-file-path.patch
   ];
 
   postPatch = ''
