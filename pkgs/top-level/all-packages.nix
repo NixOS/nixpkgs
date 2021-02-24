@@ -21947,12 +21947,7 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
-  emacsPackagesFor = emacs: import ./emacs-packages.nix {
-    inherit lib newScope stdenv pkgs;
-    inherit fetchFromGitHub fetchurl;
-    inherit emacs texinfo makeWrapper runCommand writeText;
-    inherit (xorg) lndir;
-  };
+  emacsPackagesFor = emacs: import ./emacs-packages.nix { inherit pkgs lib emacs; };
 
   inherit (gnome3) empathy;
 

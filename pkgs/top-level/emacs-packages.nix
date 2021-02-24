@@ -32,12 +32,7 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ lib, newScope, stdenv, fetchurl, fetchFromGitHub, runCommand, writeText
-
-, emacs, texinfo, lndir, makeWrapper
-
-, pkgs
-}:
+{ pkgs, lib ? pkgs.lib, emacs }:
 
 let
 
@@ -50,7 +45,8 @@ let
   };
 
   mkElpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
-    inherit lib stdenv texinfo writeText;
+    inherit (pkgs) stdenv texinfo writeText;
+    inherit lib;
   };
 
   # Contains both melpa stable & unstable
@@ -65,14 +61,15 @@ let
   };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib lndir makeWrapper runCommand;
+    inherit (pkgs) lndir makeWrapper runCommand;
+    inherit lib;
   };
 
   mkManualPackages = import ../applications/editors/emacs-modes/manual-packages.nix {
     inherit lib pkgs;
   };
 
-in lib.makeScope newScope (self: lib.makeOverridable ({
+in lib.makeScope pkgs.newScope (self: lib.makeOverridable ({
   elpaPackages ? mkElpaPackages self
   , melpaStablePackages ? mkMelpaStablePackages self
   , melpaPackages ? mkMelpaPackages self
