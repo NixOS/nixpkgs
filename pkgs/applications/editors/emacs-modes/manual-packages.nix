@@ -128,6 +128,55 @@
     };
   };
 
+  matrix-client = melpaBuild {
+    pname = "matrix-client";
+    version = "0.3.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "alphapapa";
+      repo = "matrix-client.el";
+      rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+      sha256 = "1scfv1502yg7x4bsl253cpr6plml1j4d437vci2ggs764sh3rcqq";
+    };
+
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/alphapapa/matrix-client.el/commit/5f49e615c7cf2872f48882d3ee5c4a2bff117d07.patch";
+        sha256 = "07bvid7s1nv1377p5n61q46yww3m1w6bw4vnd4iyayw3fby1lxbm";
+      })
+    ];
+
+    packageRequires = [
+      anaphora
+      cl-lib
+      self.map
+      dash-functional
+      esxml
+      f
+      ov
+      tracking
+      rainbow-identifiers
+      dash
+      s
+      request
+      frame-purpose
+      a
+      ht
+    ];
+
+    recipe = pkgs.writeText "recipe" ''
+      (matrix-client
+      :repo "alphapapa/matrix-client.el"
+      :fetcher github)
+    '';
+
+    meta = {
+      description = "A chat client and API wrapper for Matrix.org";
+      license = gpl3Plus;
+    };
+
+  };
+
   org-mac-link =
     callPackage ./org-mac-link { };
 
