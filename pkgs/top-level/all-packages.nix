@@ -16225,7 +16225,6 @@ in
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_0
     libressl_3_1;
 
   # Please keep this pointed to the latest version. See also
