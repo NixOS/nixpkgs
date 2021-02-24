@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-D8/amC6SwXkm8Ao8G2Vn9FNpbqyFJFBUVcngkW5g8k0=";
+    sha256 = "0b333594af6e54677f9620480226dbc88ec6dd7c004352de9268d01aa49467f4";
   };
 
   propagatedBuildInputs = [
