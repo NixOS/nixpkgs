@@ -101,6 +101,9 @@ stdenv.mkDerivation rec {
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
     })
   ];
+  postPatch = ''
+    sed -i 's=#define QGA_STATE_RELATIVE_DIR  ".*"=#define QGA_STATE_RELATIVE_DIR  ""=g' qga/main.c
+  '';
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -159,6 +162,9 @@ stdenv.mkDerivation rec {
     done
   '';
   preBuild = "cd build";
+  postConfigure = ''
+    sed -i 's=#define CONFIG_QEMU_LOCALSTATEDIR ".*"=#define CONFIG_QEMU_LOCALSTATEDIR "/run"=g' build/config-host.h
+  '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
