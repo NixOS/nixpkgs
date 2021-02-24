@@ -7241,6 +7241,8 @@ in {
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
 
+  sharkiqpy = callPackage ../development/python-modules/sharkiqpy { };
+
   sh = callPackage ../development/python-modules/sh { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
