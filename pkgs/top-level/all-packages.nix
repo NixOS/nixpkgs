@@ -19840,6 +19840,8 @@ in
 
   gopls = callPackage ../development/tools/gopls { };
 
+  gops = callPackage ../development/tools/gops { };
+
   gore = callPackage ../development/tools/gore { };
 
   gotests = callPackage ../development/tools/gotests { };
