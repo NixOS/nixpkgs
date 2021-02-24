@@ -35,13 +35,19 @@
 { lib, newScope, stdenv, fetchurl, fetchFromGitHub, runCommand, writeText
 
 , emacs, texinfo, lndir, makeWrapper
-, trivialBuild
-, melpaBuild
 
 , pkgs
 }:
 
 let
+
+  trivialBuild = pkgs.callPackage ../build-support/emacs/trivial.nix {
+    inherit emacs;
+  };
+
+  melpaBuild = pkgs.callPackage ../build-support/emacs/melpa.nix {
+    inherit emacs;
+  };
 
   mkElpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
     inherit lib stdenv texinfo writeText;
