@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     fi
     ln -s ${mastodon-assets}/public/assets public/assets
     ln -s ${mastodon-assets}/public/packs public/packs
+    ln -s /var/lib/mastodon/public-system public/system
 
     patchShebangs bin/
     for b in $(ls ${mastodon-gems}/bin/)
