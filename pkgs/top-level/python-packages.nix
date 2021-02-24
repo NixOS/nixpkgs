@@ -3393,6 +3393,8 @@ in {
 
   jsonpath_rw = callPackage ../development/python-modules/jsonpath_rw { };
 
+  jsonpath-ng = callPackage ../development/python-modules/jsonpath-ng { };
+
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
 
   jsonpointer = callPackage ../development/python-modules/jsonpointer { };
