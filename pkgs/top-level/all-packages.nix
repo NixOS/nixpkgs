@@ -23031,6 +23031,8 @@ in
     stdenv = gccStdenv;
   };
 
+  iim = callPackage ../applications/networking/irc/iim { };
+
   ike = callPackage ../applications/networking/ike { };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
