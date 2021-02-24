@@ -9,15 +9,17 @@
 , future
 , pygments
 , six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "readme_renderer";
-  version = "28.0";
+  version = "29.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b7e5aa59210a40de72eb79931491eaf46fefca2952b9181268bd7c7c65c260a";
+    sha256 = "sha256-kv1awr+Gd/MQ8zA6pLzludX58glKuYwp8TeR17gFo9s=";
   };
 
   checkInputs = [ pytest mock ];
