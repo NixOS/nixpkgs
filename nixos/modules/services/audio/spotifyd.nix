@@ -23,17 +23,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.services.spotifyd = {
+    systemd.user.services.spotifyd = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
+        ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --config-path ${spotifydConf}";
         Restart = "always";
         RestartSec = 12;
-        DynamicUser = true;
-        CacheDirectory = "spotifyd";
-        SupplementaryGroups = ["audio"];
       };
     };
   };
