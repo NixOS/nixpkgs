@@ -605,6 +605,14 @@ in {
               access_log off;
             '';
           };
+          "= /" = {
+            priority = 100;
+            extraConfig = ''
+              if ( $http_user_agent ~ ^DavClnt ) {
+                return 302 /remote.php/webdav/$is_args$args;
+              }
+            '';
+          };
           "/" = {
             priority = 900;
             extraConfig = "rewrite ^ /index.php;";
@@ -622,6 +630,9 @@ in {
               }
               location = /.well-known/caldav {
                 return 301 /remote.php/dav;
+              }
+              location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
+                return 301 /index.php$request_uri;
               }
               try_files $uri $uri/ =404;
             '';
