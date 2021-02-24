@@ -2,11 +2,11 @@
 
 let
   pname = "diylc";
-  version = "4.15.1";
+  version = "4.17.0";
   files = {
     app = fetchurl {
       url = "https://github.com/bancika/diy-layout-creator/releases/download/v${version}/diylc-${version}.zip";
-      sha256 = "09vzbxas654n8npxljqljf930y5gcjfvv3r4dv97dwk5sy66xvaf";
+      sha256 = "0cysqkrddhbs7rprm8xm21c286mz4apw66fxakhzlg50kjn0nwjv";
     };
     icon16 = fetchurl {
       url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_small.png";
