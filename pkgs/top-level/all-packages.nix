@@ -21948,27 +21948,9 @@ in
   };
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
-    inherit lib newScope stdenv pkgs;
-    inherit fetchFromGitHub fetchurl;
-    inherit emacs texinfo makeWrapper runCommand writeText;
-    inherit (xorg) lndir;
-
-    trivialBuild = callPackage ../build-support/emacs/trivial.nix {
-      inherit emacs;
-    };
-
-    melpaBuild = callPackage ../build-support/emacs/melpa.nix {
-      inherit emacs;
-    };
-
-    external = {
-      inherit (haskellPackages)
-        ghc-mod structured-haskell-mode Agda hindent;
-      inherit
-        autoconf automake editorconfig-core-c git libffi libpng pkg-config
-        poppler rtags w3m zlib substituteAll rustPlatform cmake llvmPackages
-        libtool zeromq openssl ott;
-    };
+    inherit (lib) makeScope makeOverridable;
+    inherit emacs;
+    pkgs' = pkgs;  # default pkgs used for bootstrapping the emacs package set
   };
 
   inherit (gnome3) empathy;
