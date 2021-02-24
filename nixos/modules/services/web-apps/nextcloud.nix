@@ -280,6 +280,24 @@ in {
           may be served via HTTPS.
         '';
       };
+
+      defaultPhoneRegion = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        example = "DE";
+        description = ''
+          <warning>
+           <para>This option exists since Nextcloud 21! If older versions are used,
+            this will throw an eval-error!</para>
+          </warning>
+
+          <link xlink:href="https://www.iso.org/iso-3166-country-codes.html">ISO 3611-1</link>
+          country codes for automatic phone-number detection without a country code.
+
+          With e.g. <literal>DE</literal> set, the <literal>+49</literal> can be omitted for
+          phone-numbers.
+        '';
+      };
     };
 
     caching = {
@@ -344,6 +362,9 @@ in {
         { assertion = ((acfg.adminpass != null || acfg.adminpassFile != null)
             && !(acfg.adminpass != null && acfg.adminpassFile != null));
           message = "Please specify exactly one of adminpass or adminpassFile";
+        }
+        { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
+          message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
         }
       ];
 
@@ -442,6 +463,7 @@ in {
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+              ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
             ];
           '';
           occInstallCmd = let
