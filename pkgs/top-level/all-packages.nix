@@ -8663,6 +8663,8 @@ in
 
   tea = callPackage ../tools/misc/tea { };
 
+  inherit (nodePackages) teck-programmer;
+
   ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = libsForQt514.callPackage ../applications/networking/remote/teamviewer { };
