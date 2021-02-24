@@ -150,6 +150,11 @@ in
 
   alda = callPackage ../development/interpreters/alda { };
 
+  ags = callPackage ../games/ags {
+    inherit (xorg) libXext libXxf86vm ;
+    inherit (pkgs.xorg) libX11 ;
+  };
+
   among-sus = callPackage ../games/among-sus { };
 
   ankisyncd = callPackage ../servers/ankisyncd { };

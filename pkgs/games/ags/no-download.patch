@@ -1,0 +1,53 @@
+diff --git a/CMake/FetchAllegro.cmake b/CMake/FetchAllegro.cmake
+index c29d247..6c9a083 100644
+--- a/CMake/FetchAllegro.cmake
++++ b/CMake/FetchAllegro.cmake
+@@ -1,8 +1,6 @@
+ FetchContent_Declare(
+   allegro_content
+-  GIT_REPOSITORY https://github.com/adventuregamestudio/lib-allegro.git
+-  GIT_TAG        allegro-4.4.3.1-agspatch
+-  GIT_SHALLOW    yes
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(allegro_content)
+diff --git a/CMake/FetchOgg.cmake b/CMake/FetchOgg.cmake
+index c4cd544..4c306fe 100644
+--- a/CMake/FetchOgg.cmake
++++ b/CMake/FetchOgg.cmake
+@@ -1,7 +1,6 @@
+ FetchContent_Declare(
+   ogg_content
+-  GIT_REPOSITORY https://github.com/xiph/ogg.git
+-  GIT_TAG        f7dadaaf75634289f7ead64ed1802b627d761ee3
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(ogg_content)
+diff --git a/CMake/FetchTheora.cmake b/CMake/FetchTheora.cmake
+index 0698bab..50caf27 100644
+--- a/CMake/FetchTheora.cmake
++++ b/CMake/FetchTheora.cmake
+@@ -1,7 +1,6 @@
+ FetchContent_Declare(
+   theora_content
+-  GIT_REPOSITORY https://github.com/xiph/theora.git
+-  GIT_TAG        e5d205bfe849f1b41f45b91a0b71a3bdc6cd458f
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(theora_content)
+diff --git a/CMake/FetchVorbis.cmake b/CMake/FetchVorbis.cmake
+index 893f744..cab0d81 100644
+--- a/CMake/FetchVorbis.cmake
++++ b/CMake/FetchVorbis.cmake
+@@ -1,7 +1,6 @@
+ FetchContent_Declare(
+   vorbis_content
+-  GIT_REPOSITORY https://github.com/xiph/vorbis.git
+-  GIT_TAG        9eadeccdc4247127d91ac70555074239f5ce3529
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(vorbis_content)
