@@ -30066,6 +30066,8 @@ in
 
   nix-store-gcs-proxy = callPackage ../tools/nix/nix-store-gcs-proxy {};
 
+  webwormhole = callPackage ../tools/networking/webwormhole { };
+
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen {};
