@@ -30,6 +30,7 @@ buildPythonPackage rec {
     "disk_io_counters"
     "sensors_battery"
     "cpu_times"
+    "cpu_freq"
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.IOKit ];
