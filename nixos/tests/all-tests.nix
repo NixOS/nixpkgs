@@ -326,6 +326,7 @@ in
   proxy = handleTest ./proxy.nix {};
   pt2-clone = handleTest ./pt2-clone.nix {};
   qboot = handleTestOn ["x86_64-linux" "i686-linux"] ./qboot.nix {};
+  qemu-guest-agent = handleTest ./qemu-guest-agent.nix {};
   quagga = handleTest ./quagga.nix {};
   quorum = handleTest ./quorum.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
