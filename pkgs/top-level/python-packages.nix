@@ -7790,6 +7790,8 @@ in {
 
   terminaltables = callPackage ../development/python-modules/terminaltables { };
 
+  termplotlib = callPackage ../development/python-modules/termplotlib { };
+
   termstyle = callPackage ../development/python-modules/termstyle { };
 
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
