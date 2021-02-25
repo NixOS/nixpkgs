@@ -1,17 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests, geojson }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, requests
+, geojson
+, pysocks
+}:
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "3.1.1";
-
-  disabled = pythonOlder "3.3";
+  version = "3.2.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7b18297a9189dbe5f6b454b12d61a407e35c7eb9ca75bcabfe5e1c83245290d";
+    sha256 = "sha256-o9QL2KtZdRa/uFq+tq8LDm5jRovNuma96qOSDK/hqN4=";
   };
 
-  propagatedBuildInputs = [ requests geojson ];
+  propagatedBuildInputs = [
+    geojson
+    pysocks
+    requests
+  ];
 
   # This may actually break the package.
   postPatch = ''
@@ -21,9 +31,10 @@ buildPythonPackage rec {
 
   # No tests in archive
   doCheck = false;
+  pythonImportsCheck = [ "" ];
 
   meta = with lib; {
-    description = "A Python wrapper around the OpenWeatherMap web API";
+    description = "Python wrapper around the OpenWeatherMap web API";
     homepage = "https://pyowm.readthedocs.io/";
     license = licenses.mit;
   };
