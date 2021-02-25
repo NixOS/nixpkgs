@@ -12616,6 +12616,8 @@ in
     libiberty_static = libiberty.override { staticBuild = true; };
   };
 
+  pactorio = callPackage ../development/tools/pactorio { };
+
   pahole = callPackage ../development/tools/misc/pahole {};
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
