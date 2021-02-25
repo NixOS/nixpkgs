@@ -45,7 +45,7 @@ self: super: {
   # The proper 3.2.0.0 release does not compile with ghc-8.10.1, so we take the
   # hitherto unreleased next version from the '3.2' branch of the upstream git
   # repository for the time being.
-  cabal-install = assert super.cabal-install.version == "3.2.0.0";
+  cabal-install = assert super.cabal-install.version == "3.4.0.0";
                   overrideCabal super.cabal-install (drv: {
     postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
     version = "3.2.0.0-git";
