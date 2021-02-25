@@ -86,7 +86,8 @@ in
 
       logo = mkOption {
         type = types.path;
-        default = "${nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png";
+        # Dimensions are 48x48 to match GDM logo
+        default = "${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
         defaultText = ''pkgs.fetchurl {
           url = "https://nixos.org/logo/nixos-hires.png";
           sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
