@@ -3,8 +3,10 @@
 stdenv.mkDerivation rec {
   version = "6.31";
   pname = "clips";
-  in fetchurl {
-    url = "mirror://sourceforge/clipsrules/CLIPS/${version}/clips_core_source_${builtins.replaceStrings [ "." ] [ "" ] version}.tar.gz";
+  src = fetchurl {
+    url = "mirror://sourceforge/clipsrules/CLIPS/${version}/clips_core_source_${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }.tar.gz";
     sha256 = "165k0z7dsv04q432sanmw0jxmxwf56cnhsdfw5ffjqxd3lzkjnv6";
   };
   makeFlags = [ "-C" "core" ];
