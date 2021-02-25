@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1c2mwhrj0xapc661z1nb6am4qq3rd1pvbvjaxikjyx95n0gs8gjk";
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=v${version}" ];
+
   meta = with lib; {
     description = "Kubernetes YAML to Terraform HCL converter";
     homepage = "https://github.com/sl1pm4t/k2tf";
