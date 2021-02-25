@@ -14,11 +14,12 @@ let
   buildInputs = [
     qtbase qtsvg poppler djvulibre libspectre cups file ghostscript
   ];
+  patches = [ ./qpdfview-qt515-compat.patch ];
 in
 mkDerivation {
   pname = s.baseName;
   inherit (s) version;
-  inherit nativeBuildInputs buildInputs;
+  inherit nativeBuildInputs buildInputs patches;
   src = fetchurl {
     inherit (s) url sha256;
   };
