@@ -2950,6 +2950,18 @@ let
     meta.homepage = "https://github.com/roxma/nvim-cm-racer/";
   };
 
+  nvim-bqf = buildVimPluginFrom2Nix {
+    pname = "nvim-bqf";
+    version = "2021-02-25";
+    src = fetchFromGitHub {
+      owner = "kevinhwang91";
+      repo = "nvim-bqf";
+      rev = "4a424267e110e9637b84096a7080aa280c56be31";
+      sha256 = "034x827nka73znvnbm5slnypw1az9s7xlrpkv5ia6hi7pcapjyfn";
+    };
+    meta.homepage = "https://github.com/kevinhwang91/nvim-bqf";
+  };
+
   nvim-compe = buildVimPluginFrom2Nix {
     pname = "nvim-compe";
     version = "2021-02-23";
