@@ -77,8 +77,6 @@ stdenv.mkDerivation rec {
 
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons-lib.sh
 
-    cp ${./mk-docker-opts.sh} $out/bin/mk-docker-opts.sh
-
     for tool in kubeadm kubectl; do
       installShellCompletion --cmd $tool \
         --bash <($out/bin/$tool completion bash) \

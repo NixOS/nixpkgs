@@ -260,7 +260,6 @@ in
         account token issuer. The issuer will sign issued ID tokens with this
         private key.
       '';
-      default = top.serviceAccountSigningKeyFile;
       type = path;
     };
 
@@ -272,7 +271,6 @@ in
         different files. If unspecified, --tls-private-key-file is used.
         Must be specified when --service-account-signing-key is provided
       '';
-      default = top.serviceAccountKeyFile;
       type = path;
     };
 

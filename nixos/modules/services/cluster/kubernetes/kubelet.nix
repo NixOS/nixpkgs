@@ -23,7 +23,7 @@ let
     name = "pause";
     tag = "latest";
     contents = top.package.pause;
-    config.Cmd = "/bin/pause";
+    config.Cmd = ["/bin/pause"];
   };
 
   kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
@@ -134,7 +134,7 @@ in
     containerRuntimeEndpoint = mkOption {
       description = "Endpoint at which to find the container runtime api interface/socket";
       type = str;
-      default = "unix:///var/run/docker/containerd/containerd.sock";
+      default = "unix:///var/run/containerd/containerd.sock";
     };
 
     enable = mkEnableOption "Kubernetes kubelet.";
@@ -247,16 +247,24 @@ in
   ###### implementation
   config = mkMerge [
     (mkIf cfg.enable {
+
+      environment.etc."cni/net.d".source = cniConfig;
+
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
+
+      boot.kernel.sysctl = {
+        "net.bridge.bridge-nf-call-iptables"  = 1;
+        "net.ipv4.ip_forward"                 = 1;
+        "net.bridge.bridge-nf-call-ip6tables" = 1;
+      };
 
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "kube-apiserver.service" "sockets.target" ];
+        after = [ "containerd.service" "network.target" "kube-apiserver.service" ];
         path = with pkgs; [
           gitMinimal
           openssh
-          docker
           util-linux
           iproute
           ethtool
@@ -266,8 +274,12 @@ in
         ] ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package ++ top.path;
         preStart = ''
           ${concatMapStrings (img: ''
-            echo "Seeding docker image: ${img}"
-            docker load <${img}
+            echo "Seeding container image: ${img}"
+            ${if (lib.hasSuffix "gz" img) then
+              ''${pkgs.gzip}/bin/zcat "${img}" | ${pkgs.containerd}/bin/ctr -n k8s.io image import -''
+            else
+              ''${pkgs.coreutils}/bin/cat "${img}" | ${pkgs.containerd}/bin/ctr -n k8s.io image import -''
+            }
           '') cfg.seedDockerImages}
 
           rm /opt/cni/bin/* || true
@@ -320,6 +332,7 @@ in
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
             --container-runtime=${cfg.containerRuntime} \
             --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
+            --cgroup-driver=systemd \
             ${cfg.extraOpts}
           '';
           WorkingDirectory = top.dataDir;
@@ -329,7 +342,7 @@ in
       # Allways include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
 
-      boot.kernelModules = ["br_netfilter"];
+      boot.kernelModules = ["br_netfilter" "overlay"];
 
       services.kubernetes.kubelet.hostname = with config.networking;
         mkDefault (hostName + optionalString (domain != null) ".${domain}");
