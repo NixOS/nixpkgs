@@ -112,21 +112,40 @@ services.gitlab = {
  <section xml:id="module-services-gitlab-maintenance">
   <title>Maintenance</title>
 
-  <para>
-   You can run GitLab's rake tasks with <literal>gitlab-rake</literal> which
-   will be available on the system when gitlab is enabled. You will have to run
-   the command as the user that you configured to run gitlab with.
-  </para>
+  <section xml:id="module-services-gitlab-maintenance-backups">
+   <title>Backups</title>
+   <para>
+     Backups can be configured with the options in <link
+     linkend="opt-services.gitlab.backup.keepTime">services.gitlab.backup</link>. Use
+     the <link
+     linkend="opt-services.gitlab.backup.startAt">services.gitlab.backup.startAt</link>
+     option to configure regular backups.
+   </para>
 
-  <para>
-   For example, to backup a GitLab instance:
+   <para>
+     To run a manual backup, start the <literal>gitlab-backup</literal> service:
 <screen>
-<prompt>$ </prompt>sudo -u git -H gitlab-rake gitlab:backup:create
+<prompt>$ </prompt>systemctl start gitlab-backup.service
 </screen>
-   A list of all availabe rake tasks can be obtained by running:
+   </para>
+  </section>
+
+  <section xml:id="module-services-gitlab-maintenance-rake">
+   <title>Rake tasks</title>
+
+   <para>
+    You can run GitLab's rake tasks with <literal>gitlab-rake</literal>
+    which will be available on the system when GitLab is enabled. You
+    will have to run the command as the user that you configured to run
+    GitLab with.
+   </para>
+
+   <para>
+    A list of all availabe rake tasks can be obtained by running:
 <screen>
 <prompt>$ </prompt>sudo -u git -H gitlab-rake -T
 </screen>
-  </para>
+   </para>
+  </section>
  </section>
 </chapter>
