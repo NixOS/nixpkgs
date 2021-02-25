@@ -69,6 +69,12 @@ stdenv.mkDerivation {
     "prefix=${placeholder "out"}"
   ];
 
+  # Replace hard links with symlinks for reproducibility
+  postFixup = ''
+    rm $out/bin/zipinfo
+    ln -s ./unzip $out/bin/zipinfo
+  '';
+
   setupHook = ./setup-hook.sh;
 
   meta = {
