@@ -9,16 +9,16 @@ let
       rev = "824636a2c2629c329ab10275cef6a0b7395343ad";
       goVersionString = "g" + builtins.substring 0 7 rev;     # this seems to be some kind of standard of git describe...
       sha256 = "0ly1yqjq29arbak8lchdradf39l5bmxpbfir6ljjc7nyqdxz0sxg";
-      vendorSha256 = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
+      vendorSha256 = "sha256-19k0eRBoF6+IUS2aeOSwL7/D+TI2K+DhMtj6oDfi1L8=";
     };
     release = rec {
       pname = "bee";
-      version = "0.5.0";
+      version = "0.5.1";
       rev = "refs/tags/v${version}";
-      sha256 = "sha256-3Oy9RhgMPRFjUs3Dj8XUhAqoxx5BTi32OiK4Y8YEG2Q=";
-      vendorSha256 = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
+      sha256 = "sha256-4p4N8OiMeLNjB7qZfpxsdOIVjJxA1iosJpK7/MdHWJk=";
+      vendorSha256 = "sha256-19k0eRBoF6+IUS2aeOSwL7/D+TI2K+DhMtj6oDfi1L8=";
     };
-    "0.5.0" = release;
+    "0.5.1" = release;
     "0.4.1" = rec {
       pname = "bee";
       version = "0.4.1";
