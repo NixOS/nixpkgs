@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Communicate with your Coldcard using Python";
     homepage = "https://github.com/Coldcard/ckcc-protocol";
-    license = licenses.gpl3;
+    license = licenses.mit;
     maintainers = [ maintainers.hkjn ];
   };
 }
