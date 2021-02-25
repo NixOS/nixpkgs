@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A parametric 3d CAD program";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.edef ];
     platforms = platforms.linux;
     homepage = "http://solvespace.com";
