@@ -1,30 +1,115 @@
-{ stdenv, lib, perl, fetchurl, python2
-, pkg-config, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
-, libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools
-, withEditor ? true, wxGTK ? null
+{stdenv
+,cargo
+,lib
+,perl
+,fetchurl
+,fmt
+,pkg-config
+,boost
+,icu67
+,libxml2
+,libpng
+,libsodium
+,libjpeg
+,zlib
+,curl
+,libogg
+,libvorbis
+,enet
+,miniupnpc
+,openal
+,libGLU
+,libGL
+,xorgproto
+,libX11
+,libXcursor
+,nspr
+,SDL2
+,gloox
+,nvidia-texture-tools
+,libidn
+,rustc
+,rust-cbindgen
+,python3
+,yasm
+,readline
+,autoconf213
+,llvmPackages
+,which
+,zip
+,xorg
+,buildPackages
+,cargo-c
+,withEditor ? true, wxGTK ? null
 }:
-
 assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.0.23b";
+  version = "0.0.24b";
 
   src = fetchurl {
-    url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "0draa53xg69i5qhqym85658m45xhwkbiimaldj4sr3703rjgggq1";
+   url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
+   sha256 = "1a1py45hkh2cswi09vbf9chikgxdv9xplsmg6sv6xhdznv4j6p1j";
   };
 
-  nativeBuildInputs = [ python2 perl pkg-config ];
+  #this is required so SpiderMonkey builds with (cargo-link is searching impure paths)
+  NIX_ENFORCE_PURITY=0;
+
+  nativeBuildInputs = [
+   autoconf213
+   cargo
+   llvmPackages.llvm
+   llvmPackages.libcxx
+   llvmPackages.libcxxStdenv
+   llvmPackages.libclang
+   python3
+   perl
+   pkg-config
+   rust-cbindgen
+   which
+   yasm
+   zip
+  ];
+
+  patches = [
+    ./rootdir_env.patch
+  ];
+
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   buildInputs = [
-    spidermonkey_38 boost icu libxml2 libpng libjpeg
-    zlib curl libogg libvorbis enet miniupnpc openal
-    libGLU libGL xorgproto libX11 libXcursor nspr SDL2 gloox
-    nvidia-texture-tools libsodium
-  ] ++ lib.optional withEditor wxGTK;
+   readline
+   cargo-c
+   boost
+   icu67
+   libxml2
+   libpng
+   libjpeg
+   zlib
+   curl
+   libogg
+   libvorbis
+   enet
+   miniupnpc
+   openal
+   libGLU
+   libGL
+   xorgproto
+   libX11
+   libXcursor
+   nspr
+   SDL2
+   gloox
+   nvidia-texture-tools
+   libsodium
+   fmt
+   libidn
+   cargo
+   rustc
+   python3
+   yasm
+   nspr] ++ lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include/X11"
@@ -33,37 +118,24 @@ stdenv.mkDerivation rec {
     "-I${SDL2}/include/SDL2"
   ];
 
-  patches = [
-    ./rootdir_env.patch
-    # Fixes build with spidermonkey-38.8.0, includes the minor version check:
-    # https://src.fedoraproject.org/rpms/0ad/c/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b
-    (fetchurl {
-      url = "https://src.fedoraproject.org/rpms/0ad/raw/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b/f/0ad-mozjs-incompatible.patch";
-      sha256 = "1rzpaalcrzihsgvlk3nqd87n2kxjldlwvb3qp5fcd5ffzr6k90wa";
-    })
-  ];
-
   configurePhase = ''
     # Delete shipped libraries which we don't need.
-    rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
-
+    rm -rf libraries/source/{enet,miniupnpc,nvtt}
     # Workaround invalid pkg-config name for mozjs
     mkdir pkg-config
-    ln -s ${spidermonkey_38}/lib/pkgconfig/* pkg-config/mozjs-38.pc
     PKG_CONFIG_PATH="$PWD/pkg-config:$PKG_CONFIG_PATH"
-
+    # bash doesn't know die anymore
+    find -name build.sh -exec sed -i -e "s/die \(.*\)/(echo \1;exit 1)/g" {} \;
     # Update Makefiles
     pushd build/workspaces
     ./update-workspaces.sh \
       --with-system-nvtt \
-      --with-system-mozjs38 \
       ${lib.optionalString withEditor "--enable-atlas"} \
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \
       --without-tests \
       -j $NIX_BUILD_CORES
     popd
-
     # Move to the build directory.
     pushd build/workspaces/gcc
   '';
@@ -72,7 +144,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     popd
-
     # Copy executables.
     install -Dm755 binaries/system/pyrogenesis "$out"/bin/0ad
     ${lib.optionalString withEditor ''
