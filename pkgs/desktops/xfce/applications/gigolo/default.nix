@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, gtk3, gvfs, glib }:
+{ mkXfceDerivation, gtk3, gvfs, glib }:
 
 mkXfceDerivation {
   category = "apps";
@@ -8,8 +8,12 @@ mkXfceDerivation {
 
   sha256 = "8UDb4H3zxRKx2y+MRsozQoR3es0fs5ooR/5wBIE11bY=";
 
-  nativeBuildInputs = [ exo ];
   buildInputs = [ gtk3 glib gvfs ];
+
+  postPatch = ''
+    # exo-csource has been dropped from exo
+    substituteInPlace src/Makefile.am --replace exo-csource xdt-csource
+  '';
 
   meta = {
     description = "A frontend to easily manage connections to remote filesystems";
