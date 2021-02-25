@@ -7954,6 +7954,8 @@ in {
 
   tox = callPackage ../development/python-modules/tox { };
 
+  tpm2-pytss = callPackage ../development/python-modules/tpm2-pytss { };
+
   tqdm = callPackage ../development/python-modules/tqdm { };
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
