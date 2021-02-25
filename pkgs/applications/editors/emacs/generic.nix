@@ -63,6 +63,12 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       rm -fr .git
     '')
 
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    ''
+      substituteInPlace src/Makefile.in \
+        --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+    ''
+
     ''
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
