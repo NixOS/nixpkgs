@@ -14,6 +14,7 @@ let
   buildInputs = [
     qtbase qtsvg poppler djvulibre libspectre cups file ghostscript
   ];
+  # apply upstream fix for qt5.15 https://bazaar.launchpad.net/~adamreichold/qpdfview/trunk/revision/2104
   patches = [ ./qpdfview-qt515-compat.patch ];
 in
 mkDerivation {
@@ -41,7 +42,7 @@ mkDerivation {
   meta = {
     inherit (s) version;
     description = "A tabbed document viewer";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://launchpad.net/qpdfview";
