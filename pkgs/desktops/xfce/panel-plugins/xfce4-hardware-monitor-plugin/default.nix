@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     description = "Hardware monitor plugin for the XFCE4 panel";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    broken = true; # unmaintained plugin; no longer compatible with xfce 4.16
     maintainers = [ maintainers.romildo ];
   };
 }
