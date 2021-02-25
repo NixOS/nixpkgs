@@ -150,6 +150,13 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     ./go_no_vendor_checks-1_14.patch
 
+    # support TZ environment variable starting with colon
+    (fetchpatch {
+      name = "tz-support-colon.patch";
+      url = "https://github.com/golang/go/commit/58fe2cd4022c77946ce4b598cf3e30ccc8367143.patch";
+      sha256 = "0vphwiqrm0qykfj3rfayr65qzk22fksg7qkamvaz0lmf6fqvbd2f";
+    })
+
     # fix rare TestDontCacheBrokenHTTP2Conn failure
     (fetchpatch {
       url = "https://github.com/golang/go/commit/ea1437a8cdf6bb3c2d2447833a5d06dbd75f7ae4.patch";
