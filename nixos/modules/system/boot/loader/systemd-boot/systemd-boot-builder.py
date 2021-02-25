@@ -74,9 +74,16 @@ def describe_generation(generation_dir):
     except IOError:
         nixos_version = "Unknown"
 
-    kernel_dir = os.path.dirname(os.path.realpath("%s/kernel" % generation_dir))
-    module_dir = glob.glob("%s/lib/modules/*" % kernel_dir)[0]
-    kernel_version = os.path.basename(module_dir)
+    try:
+        with open("%s/kernel-version" % generation_dir) as f:
+            kernel_version = f.read()
+    except IOError:
+        kernel_dir = os.path.dirname(os.path.realpath("%s/kernel" % generation_dir))
+        try:
+            module_dir = glob.glob("%s/lib/modules/*" % kernel_dir)[0]
+            kernel_version = os.path.basename(module_dir)
+        except IndexError:
+            kernel_version = "Unknown"
 
     build_time = int(os.path.getctime(generation_dir))
     build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
