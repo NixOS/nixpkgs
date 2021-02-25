@@ -5,11 +5,12 @@
 
 { stdenvNoCC, kernel, firmware, nukeReferences, rootModules
 , kmod, allowMissing ? false }:
-
-stdenvNoCC.mkDerivation {
+let
+  version = kernel.passthru.modDirVersion;
+in stdenvNoCC.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
   nativeBuildInputs = [ nukeReferences kmod ];
-  inherit kernel firmware rootModules allowMissing;
+  inherit kernel firmware rootModules allowMissing version;
   allowedReferences = ["out"];
 }
