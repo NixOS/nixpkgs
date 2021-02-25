@@ -6,7 +6,6 @@
 , atspiSupport ? true
 , bash
 , glib
-, glibcLocales
 , dconf
 , gobject-introspection
 , gsettings-desktop-schemas
@@ -130,8 +129,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "/etc" "$out/etc"
 
     substituteInPlace  ./Onboard/LanguageSupport.py \
-      --replace "/usr/share/xml/iso-codes" "${isocodes}/share/xml/iso-codes" \
-      --replace "/usr/bin/yelp" "${yelp}/bin/yelp"
+      --replace "/usr/share/xml/iso-codes" "${isocodes}/share/xml/iso-codes"
 
     substituteInPlace  ./Onboard/Indicator.py \
       --replace   "/usr/bin/yelp" "${yelp}/bin/yelp"

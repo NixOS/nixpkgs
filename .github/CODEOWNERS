@@ -100,7 +100,7 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
-/pkgs/build-support/rust @andir @zowoq
+/pkgs/build-support/rust @andir @danieldk @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers

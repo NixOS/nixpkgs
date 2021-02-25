@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , gettext

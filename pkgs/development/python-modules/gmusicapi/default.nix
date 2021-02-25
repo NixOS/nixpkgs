@@ -29,6 +29,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ validictory decorator mutagen protobuf setuptools requests dateutil proboscis mock appdirs oauth2client pyopenssl gpsoauth MechanicalSoup future ];
 
+  doCheck = false;
+  pythonImportsCheck = [ "gmusicapi" ];
+
   meta = with lib; {
     description = "An unofficial API for Google Play Music";
     homepage = "https://pypi.python.org/pypi/gmusicapi/";

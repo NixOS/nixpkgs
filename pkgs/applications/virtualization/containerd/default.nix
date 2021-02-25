@@ -40,13 +40,8 @@ buildGoPackage rec {
   installPhase = ''
     install -Dm555 bin/* -t $out/bin
     installManPage man/*.[1-9]
-  '';
-
-  # completion installed separately so it can be overridden in docker
-  # can be moved to installPhase when docker uses containerd >= 1.4
-  postInstall = ''
-    installShellFiles --bash contrib/autocomplete/ctr
-    installShellFiles --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
   '';
 
   passthru.tests = { inherit (nixosTests) docker; };

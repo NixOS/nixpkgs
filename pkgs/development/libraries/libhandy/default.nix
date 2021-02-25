@@ -9,7 +9,6 @@
 , docbook_xsl
 , docbook_xml_dtd_43
 , gtk3
-, gnome3
 , glade
 , dbus
 , xvfb_run

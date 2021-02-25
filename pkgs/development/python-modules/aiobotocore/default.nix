@@ -1,10 +1,7 @@
 { lib
-
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, pytestrunner
-, typing-extensions
 , wrapt
 , aioitertools
 , aiohttp

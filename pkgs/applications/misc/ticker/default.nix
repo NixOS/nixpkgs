@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ticker";
-  version = "3.0.0";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = "ticker";
     rev = "v${version}";
-    sha256 = "sha256-k4ahoaEI2HBoEcRQscpitp2tWsiWmSYaErnth99xOqw=";
+    sha256 = "sha256-U2TYUB4RHUBPoXe/te+QpXglbVcrT6SItiDrA7ODX6w=";
   };
 
-  vendorSha256 = "sha256-8Ew+K/uTFoBAhPQwebtjl6bJPiSEE3PaZCYZsQLOMkw=";
+  vendorSha256 = "sha256-aUBj7ZGWBeWc71y1CWm/KCw+El5TwH29S+KxyZGH1Zo=";
 
   # Tests require internet
   doCheck = false;

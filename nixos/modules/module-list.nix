@@ -207,7 +207,6 @@
   ./security/dhparams.nix
   ./security/duosec.nix
   ./security/google_oslogin.nix
-  ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
   ./security/oath.nix
@@ -257,6 +256,8 @@
   ./services/backup/tsm.nix
   ./services/backup/zfs-replication.nix
   ./services/backup/znapzend.nix
+  ./services/blockchain/ethereum/geth.nix
+  ./services/backup/zrepl.nix
   ./services/cluster/hadoop/default.nix
   ./services/cluster/k3s/default.nix
   ./services/cluster/kubernetes/addons/dns.nix
@@ -461,6 +462,7 @@
   ./services/misc/errbot.nix
   ./services/misc/etcd.nix
   ./services/misc/etebase-server.nix
+  ./services/misc/etesync-dav.nix
   ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix

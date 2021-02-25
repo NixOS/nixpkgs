@@ -35,7 +35,6 @@
 , wrapGAppsHook
 , dbus
 , xvfb_run
-, glib
 }:
 
 stdenv.mkDerivation rec {

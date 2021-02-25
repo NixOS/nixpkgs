@@ -101,7 +101,7 @@ def write_entry(profile, generation, machine_id):
         entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
     generation_dir = os.readlink(system_dir(profile, generation))
     tmp_path = "%s.tmp" % (entry_file)
-    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+    kernel_params = "init=%s/init " % generation_dir
 
     with open("%s/kernel-params" % (generation_dir)) as params_file:
         kernel_params = kernel_params + params_file.read()

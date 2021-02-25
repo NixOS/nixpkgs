@@ -1,5 +1,5 @@
 { lib, buildDunePackage
-, astring, base64, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
+, astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
 , repr, ppx_irmin, bheap
 }:
 
@@ -13,7 +13,6 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     astring
-    base64
     digestif
     fmt
     jsonm

@@ -8,11 +8,12 @@
 , numpy
 , pydicom
 , scipy
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.2.8";
+  version = "2.2.12";
   disabled = isPy27;
 
   # no tests in PyPI dist
@@ -20,10 +21,10 @@ buildPythonPackage rec {
     owner = "icometrix";
     repo = pname;
     rev = version;
-    sha256 = "1qi2map6f4pa1l8wsif7ff7rhja6ynrjlm7w306dzvi9l25mia34";
+    sha256 = "0ddzaw0yasyi2wsh7a6r73cdcmdfbb0nh0k0n4yxp9vnkw1ag5z4";
   };
 
-  propagatedBuildInputs = [ gdcm nibabel numpy pydicom scipy ];
+  propagatedBuildInputs = [ nibabel numpy pydicom scipy setuptools ];
 
   checkInputs = [ nose gdcm ];
   checkPhase = "nosetests tests";

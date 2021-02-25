@@ -1553,9 +1553,6 @@ in
         wantedBy = [ "multi-user.target" ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
         restartTriggers = map (x: x.source) (attrValues unitFiles);
-        # prevent race condition with interface renaming (#39069)
-        requires = [ "systemd-udev-settle.service" ];
-        after = [ "systemd-udev-settle.service" ];
       };
 
       systemd.services.systemd-networkd-wait-online = {

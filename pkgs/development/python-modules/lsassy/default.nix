@@ -4,7 +4,6 @@
 , impacket
 , netaddr
 , pypykatz
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

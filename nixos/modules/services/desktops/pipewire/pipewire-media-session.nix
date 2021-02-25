@@ -37,7 +37,8 @@ in {
     services.pipewire.media-session = {
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = config.services.pipewire.enable;
+        defaultText = "config.services.pipewire.enable";
         description = "Example pipewire session manager";
       };
 

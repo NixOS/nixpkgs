@@ -63,6 +63,12 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       rm -fr .git
     '')
 
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    ''
+      substituteInPlace src/Makefile.in \
+        --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+    ''
+
     ''
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
@@ -159,10 +165,14 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   '' + lib.optionalString (nativeComp && withNS) ''
     ln -snf $out/lib/emacs/*/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
   '' + lib.optionalString nativeComp ''
-    $out/bin/emacs --batch \
-      -l comp --eval "(mapatoms (lambda (s) \
-                        (when (subr-primitive-p (symbol-function s)) \
-                          (comp-trampoline-compile s))))"
+    echo "Generating native-compiled trampolines..."
+    # precompile trampolines in parallel, but avoid spawning one process per trampoline.
+    # 1000 is a rough lower bound on the number of trampolines compiled.
+    $out/bin/emacs --batch --eval "(mapatoms (lambda (s) \
+      (when (subr-primitive-p (symbol-function s)) (print s))))" \
+      | xargs -n $((1000/NIX_BUILD_CORES + 1)) -P $NIX_BUILD_CORES \
+        $out/bin/emacs --batch -l comp --eval "(while argv \
+          (comp-trampoline-compile (intern (pop argv))))"
     mkdir -p $out/share/emacs/native-lisp
     $out/bin/emacs --batch \
       --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp\")" \

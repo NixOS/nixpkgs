@@ -65,6 +65,10 @@ stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
+  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
+    # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
+    ./aarch64-darwin.patch
   ];
 
   postPatch = ''

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # Of all the files in the source and data archives, there doesn't seem to be
   # a decent icon :-)
   iconsrc = fetchurl {
-    url = "http://wiki.flightgear.org/images/6/62/FlightGear_logo.png";
+    url = "https://wiki.flightgear.org/w/images/6/62/FlightGear_logo.png";
     sha256 = "1ikz413jia55vfnmx8iwrlxvx8p16ggm81mbrj66wam3q7s2dm5p";
   };
 

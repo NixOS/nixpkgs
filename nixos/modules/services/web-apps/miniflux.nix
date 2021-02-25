@@ -44,7 +44,7 @@ in
         '';
         description = ''
           Configuration for Miniflux, refer to
-          <link xlink:href="http://docs.miniflux.app/en/latest/configuration.html"/>
+          <link xlink:href="https://miniflux.app/docs/configuration.html"/>
           for documentation on the supported values.
         '';
       };

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "aqualogic";
-  version = "2.3";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "swilson";
     repo = pname;
     rev = version;
-    sha256 = "0101lni458y88yrw1wri3pz2cn5jlxln03pa3q2pxaybcyklb9qk";
+    sha256 = "sha256-yxd+A5dsB9gBwVlPNjz+IgDHKTktNky84bWZMhA/xa4=";
   };
 
   propagatedBuildInputs = [ pyserial ];

@@ -11,9 +11,9 @@ let
 
   inherit (lib) optionals optionalString;
 
-  go_bootstrap = callPackage ./bootstrap.nix {
-    inherit Security;
-  };
+  version = "1.16";
+
+  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
@@ -41,7 +41,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.16";
+  inherit version;
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";

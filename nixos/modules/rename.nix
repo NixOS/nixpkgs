@@ -73,6 +73,11 @@ with lib;
     (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
 
+    (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
+        The hidepid module was removed, since the underlying machinery
+        is broken when using cgroups-v2.
+    '')
+
     # Do NOT add any option renames here, see top of the file
   ];
 }

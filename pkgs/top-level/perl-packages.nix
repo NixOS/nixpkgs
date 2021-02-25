@@ -8741,7 +8741,6 @@ let
       sha256 = "005m3inz12xcsd5sr056cm1kbhmxsx2ly88ifbdv6p6cwz0s05kk";
     };
     buildInputs = [ pkgs.glib ];
-    doCheck = false; # tests failing with glib 2.60 https://rt.cpan.org/Public/Bug/Display.html?id=128165
     meta = {
       homepage = "http://gtk2-perl.sourceforge.net/";
       description = "Perl wrappers for the GLib utility and Object libraries";
@@ -8757,13 +8756,20 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
       sha256 = "0mxg6pz8qfyipw0ypr54alij0c4adzg94f62702b2a6hkp5jhij6";
     };
-    checkInputs = [ pkgs.cairo ];
+    checkInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
+    preCheck = ''
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running tests, the library is not yet installed,
+      # though, so we need to replace the absolute path with a local one during build.
+      # We are using a symlink that we will delete after the execution of the tests.
+      mkdir -p $out/lib
+      ln -s $PWD/build/*.so $out/lib/
+    '';
+    postCheck = ''
+      rm -r $out/lib
+    '';
     meta = {
-      broken = true; # TODO: tests failing because "failed to load libregress.so"
-      # see https://github.com/NixOS/nixpkgs/pull/68115
-      # and https://github.com/NixOS/nixpkgs/issues/68116
-      # adding pkgs.gnome3.gjs does not fix it
       description = "Dynamically create Perl language bindings";
       license = lib.licenses.lgpl2Plus;
     };
@@ -8914,6 +8920,20 @@ let
     };
   };
 
+  gotofile = buildPerlPackage {
+    pname = "goto-file";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/goto-file-0.005.tar.gz";
+      sha256 = "c6cdd5ee4a6cdcbdbf314d92a4f9985dbcdf9e4258048cae76125c052aa31f77";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Stop parsing the current file and move on to a different one";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Graph = buildPerlPackage {
     pname = "Graph";
     version = "0.9712";
@@ -8922,6 +8942,22 @@ let
       sha256 = "1as4ngbqxrjv9f31hm3wg8pyiyrz5fbbvlpfsrm68k1yskwkgkcg";
     };
     propagatedBuildInputs = [ HeapFibonacci ];
+  };
+
+  GraphicsTIFF = buildPerlPackage {
+    pname = "Graphics-TIFF";
+    version = "9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
+      sha256 = "1n1r9r7f6hp2s6l361pyvb1i1pm9xqy0w9n3z5ygm7j64160kz9a";
+    };
+    buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
+    propagatedBuildInputs = [ Readonly ];
+    checkInputs = [ TestRequires TestDeep pkgs.hexdump ];
+    meta = {
+      description = "Perl extension for the libtiff library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   GraphViz = buildPerlPackage {
@@ -9094,6 +9130,26 @@ let
     meta = {
       description = "Perl interface to the 3.x series of the GTK toolkit";
       license = lib.licenses.lgpl21Plus;
+    };
+  };
+
+  Gtk3ImageView = buildPerlPackage {
+    pname = "Gtk3-ImageView";
+    version = "6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk3-ImageView-6.tar.gz";
+      sha256 = "0krkif9i3hrgjdskw05pcks40fmb43d21lxf4h8aclv0g8z647f0";
+    };
+    buildInputs = [ pkgs.gtk3 ];
+    propagatedBuildInputs = [ Readonly Gtk3 ];
+    checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    checkPhase = ''
+      ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
+        make test
+    '';
+    meta = {
+      description = "Image viewer widget for Gtk3";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -10018,6 +10074,20 @@ let
     };
     propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
     meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ImagePNGLibpng = buildPerlPackage {
+    pname = "Image-PNG-Libpng";
+    version = "0.56";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
+      sha256 = "1nf7qcql7b2w98i859f76q1vb4b2zd0k0ypjbsw7ngs2zzmvzyzs";
+    };
+    buildInputs = [ pkgs.libpng ];
+    meta = {
+      description = "Perl interface to the C library \"libpng\"";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11794,6 +11864,20 @@ let
     propagatedBuildInputs = [ IOLockedFile ];
     meta = {
       description = "Helps us create simple logs for our application";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LongJump = buildPerlPackage {
+    pname = "Long-Jump";
+    version = "0.000001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Long-Jump-0.000001.tar.gz";
+      sha256 = "d5d6456d86992b559d8f66fc90960f919292cd3803c13403faac575762c77af4";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Mechanism for returning to a specific point from a deeply nested stack";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -16406,6 +16490,21 @@ let
     };
   };
 
+  PDFBuilder = buildPerlPackage {
+    pname = "PDF-Builder";
+    version = "3.021";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.021.tar.gz";
+      sha256 = "1hc22s5gdspr5nyfmix3cwdzcw7z66pcqxy422ksmbninbzv4z93";
+    };
+    checkInputs = [ TestException TestMemoryCycle ];
+    propagatedBuildInputs = [ FontTTF ];
+    meta = {
+      description = "Facilitates the creation and modification of PDF files";
+      license = lib.licenses.lgpl21Plus;
+    };
+  };
+
   PDL = buildPerlPackage rec {
     pname = "PDL";
     version = "2.025";
@@ -19790,6 +19889,55 @@ let
     propagatedBuildInputs = [ Curses ];
     meta = {
       description = "ASCII sprite animation framework";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Test2Harness = buildPerlPackage {
+    pname = "Test2-Harness";
+    version = "1.000042";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000042.tar.gz";
+      sha256 = "aaf231a68af1a6ffd6a11188875fcf572e373e43c8285945227b9d687b43db2d";
+    };
+
+    checkPhase = ''
+      patchShebangs ./t ./scripts/yath
+      ./scripts/yath test -j $NIX_BUILD_CORES
+    '';
+
+    propagatedBuildInputs = [ DataUUID Importer LongJump ScopeGuard TermTable Test2PluginMemUsage Test2PluginUUID Test2Suite gotofile ];
+    meta = {
+      description = "A new and improved test harness with better Test2 integration";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Test2PluginMemUsage = buildPerlPackage {
+    pname = "Test2-Plugin-MemUsage";
+    version = "0.002003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-MemUsage-0.002003.tar.gz";
+      sha256 = "5e0662d5a823ae081641f5ce82843111eec1831cd31f883a6c6de54afdf87c25";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Collect and display memory usage information";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+   Test2PluginUUID = buildPerlPackage {
+    pname = "Test2-Plugin-UUID";
+    version = "0.002001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-UUID-0.002001.tar.gz";
+      sha256 = "4c6c8d484d7153d8779dc155a992b203095b5c5aa1cfb1ee8bcedcd0601878c9";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ DataUUID ];
+    meta = {
+      description = "Use REAL UUIDs in Test2";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

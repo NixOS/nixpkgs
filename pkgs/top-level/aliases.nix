@@ -769,6 +769,9 @@ mapAliases ({
   xbmcPlain = kodiPlain; # added 2018-04-25
   xbmcPlugins = kodiPlugins; # added 2018-04-25
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
+  xmpppy = throw "xmpppy has been removed from nixpkgs as it is unmaintained and python2-only";
+  pyIRCt = throw "pyIRCt has been removed from nixpkgs as it is unmaintained and python2-only";
+  pyMAILt = throw "pyMAILt has been removed from nixpkgs as it is unmaintained and python2-only";
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xf86_input_mtrack = throw ("xf86_input_mtrack has been removed from nixpkgs as it hasn't been maintained"
     + "and is broken. Working alternatives are libinput and synaptics.");

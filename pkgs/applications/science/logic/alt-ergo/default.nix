@@ -9,20 +9,22 @@ let
     sha256 = "124k2a4ikk4wdpmvgjpgl97x9skvr9qznk8m68dzsynzpv6yksaj";
   };
 
+  useDune2 = true;
+
   nativeBuildInputs = [ which ];
 
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src nativeBuildInputs;
+  inherit version src useDune2 nativeBuildInputs;
   configureFlags = pname;
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src nativeBuildInputs;
+  inherit version src useDune2 nativeBuildInputs;
   configureFlags = pname;
   buildInputs = with ocamlPackages; [ menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
@@ -30,7 +32,7 @@ let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src nativeBuildInputs;
+  inherit pname version src useDune2 nativeBuildInputs;
 
   configureFlags = pname;
 

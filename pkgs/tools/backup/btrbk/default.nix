@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
+{ lib, stdenv, fetchurl, bash, btrfs-progs, openssh, perl, perlPackages
 , util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {

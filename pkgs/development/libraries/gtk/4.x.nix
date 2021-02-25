@@ -55,7 +55,7 @@ assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.0.2";
+  version = "4.0.3";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "115w3mzwm1xsi1q85qvwfm2yxpsjs2rcajgddzbnwhjicyn0frv2";
+    sha256 = "18mJNyV5C1C9mjuyeIVtnVQ7RLa5uVHXtg573swTGJA=";
   };
 
   nativeBuildInputs = [
@@ -226,7 +226,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin vcunat lethalman worldofpeace ];
+    maintainers = with maintainers; [ raskin lethalman worldofpeace ];
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };

@@ -40,8 +40,6 @@ in {
 
     environment.systemPackages = [ config.boot.kernelPackages.hyperv-daemons.bin ];
 
-    security.rngd.enable = false;
-
     # enable hotadding cpu/memory
     services.udev.packages = lib.singleton (pkgs.writeTextFile {
       name = "hyperv-cpu-and-memory-hotadd-udev-rules";

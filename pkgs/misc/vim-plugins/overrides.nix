@@ -788,6 +788,8 @@ self: super: {
 } // (
   let
     nodePackageNames = [
+      "coc-clangd"
+      "coc-cmake"
       "coc-css"
       "coc-diagnostic"
       "coc-emmet"
@@ -805,6 +807,7 @@ self: super: {
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
+      "coc-pyright"
       "coc-python"
       "coc-r-lsp"
       "coc-rls"
@@ -814,6 +817,7 @@ self: super: {
       "coc-solargraph"
       "coc-stylelint"
       "coc-tabnine"
+      "coc-texlab"
       "coc-tslint"
       "coc-tslint-plugin"
       "coc-tsserver"
