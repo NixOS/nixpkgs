@@ -217,26 +217,10 @@ self: super: {
   # building of the executable has been disabled for ghc < 8.10 in hnix.
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
-  hnix = dontCheck (super.hnix.override {
-
-    #  2021-01-07: NOTE: hnix-store-core pinned at ==0.2 in Stackage Nightly.
-    # https://github.com/haskell-nix/hnix-store/issues/104
-    # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
-    # the 0_4_0_0 is used
-    hnix-store-core = self.hnix-store-core_0_4_1_0; # at least 1.7
-
-  });
-
-  #  2021-01-07: NOTE: hnix-store-core pinned at ==0.2 in Stackage Nightly.
-  # https://github.com/haskell-nix/hnix-store/issues/104
-  # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
-  # the 0_4_0_0 is used
-  hnix-store-remote = (super.hnix-store-remote.override {
-    hnix-store-core = self.hnix-store-core_0_4_1_0; # at least 1.7
-  });
+  hnix = dontCheck super.hnix;
 
   # https://github.com/haskell-nix/hnix-store/issues/127
-  hnix-store-core_0_4_1_0 = addTestToolDepend super.hnix-store-core_0_4_1_0 self.tasty-discover;
+  hnix-store-core = addTestToolDepend super.hnix-store-core self.tasty-discover;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
