@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "webwormhole";
-  version = "git-2021-01-16";
+  version = "unstable-2021-01-16";
 
   src = fetchFromGitHub {
     owner = "saljam";
