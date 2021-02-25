@@ -11,23 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1aa51j0xnhi49izc8djya68l70jkjv25559pgybfb9sa4fa4gz97";
   };
 
-  # almost same as Debian but for now using --enable-all instead of --enable-distro to ensure options.h gets installed
-  configureFlags = [ "--enable-all" "--enable-pkcs11" "--enable-tls13" "--enable-base64encode" ];
+  # almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
+  configureFlags = [ "--enable-all" "--enable-reproducible-build" "--enable-pkcs11" "--enable-tls13" "--enable-base64encode" ];
 
   outputs = [ "out" "dev" "doc" "lib" ];
 
   nativeBuildInputs = [ autoreconfHook ];
-
-  postPatch = ''
-     # fix recursive cycle:
-     # build flags (including location of header files) are exposed in the
-     # public API of wolfssl, causing lib to depend on dev
-     substituteInPlace configure.ac \
-       --replace '#define LIBWOLFSSL_CONFIGURE_ARGS \"$ac_configure_args\"' ' '
-     substituteInPlace configure.ac \
-       --replace '#define LIBWOLFSSL_GLOBAL_CFLAGS \"$CPPFLAGS $AM_CPPFLAGS $CFLAGS $AM_CFLAGS\"' ' '
-  '';
-
 
   postInstall = ''
      # fix recursive cycle:
