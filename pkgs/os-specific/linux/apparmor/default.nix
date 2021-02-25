@@ -3,8 +3,8 @@
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) perl.meta.platforms, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) python.meta.platforms, python
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python, python
 , swig
 , ncurses
 , pam

@@ -22,7 +22,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
-  enableNativeBignum ? !(lib.any (lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms)
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
