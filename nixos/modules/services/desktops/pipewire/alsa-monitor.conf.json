@@ -1,0 +1,48 @@
+{
+  "properties": {},
+  "rules": [
+    {
+      "actions": {
+        "update-props": {
+          "api": {
+            "acp": {
+              "auto-port": false,
+              "auto-profile": false
+            },
+            "alsa": {
+              "use-acp": true
+            }
+          }
+        }
+      },
+      "matches": [
+        {
+          "device": {
+            "name": "~alsa_card.*"
+          }
+        }
+      ]
+    },
+    {
+      "actions": {
+        "update-props": {
+          "node": {
+            "pause-on-idle": false
+          }
+        }
+      },
+      "matches": [
+        {
+          "node": {
+            "name": "~alsa_input.*"
+          }
+        },
+        {
+          "node": {
+            "name": "~alsa_output.*"
+          }
+        }
+      ]
+    }
+  ]
+}

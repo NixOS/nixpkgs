@@ -1,0 +1,38 @@
+{
+  "properties": {},
+  "rules": [
+    {
+      "actions": {
+        "update-props": {}
+      },
+      "matches": [
+        {
+          "device": {
+            "name": "~v4l2_device.*"
+          }
+        }
+      ]
+    },
+    {
+      "actions": {
+        "update-props": {
+          "node": {
+            "pause-on-idle": false
+          }
+        }
+      },
+      "matches": [
+        {
+          "node": {
+            "name": "~v4l2_input.*"
+          }
+        },
+        {
+          "node": {
+            "name": "~v4l2_output.*"
+          }
+        }
+      ]
+    }
+  ]
+}

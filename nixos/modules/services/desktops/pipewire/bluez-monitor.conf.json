@@ -1,0 +1,38 @@
+{
+  "properties": {},
+  "rules": [
+    {
+      "actions": {
+        "update-props": {}
+      },
+      "matches": [
+        {
+          "device": {
+            "name": "~bluez_card.*"
+          }
+        }
+      ]
+    },
+    {
+      "actions": {
+        "update-props": {
+          "node": {
+            "pause-on-idle": false
+          }
+        }
+      },
+      "matches": [
+        {
+          "node": {
+            "name": "~bluez_input.*"
+          }
+        },
+        {
+          "node": {
+            "name": "~bluez_output.*"
+          }
+        }
+      ]
+    }
+  ]
+}
