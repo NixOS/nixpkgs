@@ -24,7 +24,8 @@ let
 
   systemBuilder =
     let
-      kernelPath = "${config.boot.kernelPackages.kernel}/" +
+      kernel = config.boot.kernelPackages.kernel;
+      kernelPath = "${kernel}/" +
         "${config.system.boot.loader.kernelFile}";
       initrdPath = "${config.system.build.initialRamdisk}/" +
         "${config.system.boot.loader.initrdFile}";
@@ -42,6 +43,7 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
+        echo -n ${kernel.version} > $out/kernel-version
         ${optionalString (config.hardware.deviceTree.package != null) ''
           ln -s ${config.hardware.deviceTree.package} $out/dtbs
         ''}
