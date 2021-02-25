@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
 
+  # Replace hard links with symlinks for reproducibility
+  postFixup = ''
+    rm $out/bin/fsck.jfs
+    ln -s ./jfs_fsck $out/bin/fsck.jfs
+    rm $out/bin/mkfs.jfs
+    ln -s ./jfs_mkfs $out/bin/mkfs.jfs
+  '';
+
   meta = with lib; {
     description = "IBM JFS utilities";
     homepage = "http://jfs.sourceforge.net";
