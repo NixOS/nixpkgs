@@ -2950,6 +2950,18 @@ let
     meta.homepage = "https://github.com/nathunsmitty/nvim-ale-diagnostic/";
   };
 
+  nvim-autopairs= buildVimPluginFrom2Nix {
+    pname = "nvim-autopairs";
+    version = "2021-02-25";
+    src = fetchFromGitHub {
+      owner = "windwp";
+      repo = "nvim-autopairs";
+      rev = "1596756a90114cbe25d0f383825a1ae2145b459b";
+      sha256 = "1c0h0082lkngn0ly4qpla98xgg71ax5r26v4q4h3gc77jf6mlqrd";
+    };
+    meta.homepage = "https://github.com/windwp/nvim-autopairs";
+  };
+
   nvim-cm-racer = buildVimPluginFrom2Nix {
     pname = "nvim-cm-racer";
     version = "2017-07-27";

@@ -707,6 +707,7 @@ whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+windwp/nvim-autopairs
 wlangstroth/vim-racket
 wsdjeg/vim-fetch
 xavierd/clang_complete
