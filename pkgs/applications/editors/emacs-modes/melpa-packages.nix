@@ -299,6 +299,16 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
           nativeBuildInputs = [ pkgs.pkg-config ];
 
+          postPatch = ''
+            substituteInPlace telega-customize.el \
+              --replace 'defcustom telega-server-command "telega-server"' \
+                        "defcustom telega-server-command \"$out/bin/telega-server\""
+
+            substituteInPlace telega-sticker.el --replace '"dwebp"' '"${pkgs.libwebp}/bin/dwebp"'
+
+            substituteInPlace telega-vvnote.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
+          '';
+
           postBuild = ''
             cd source/server
             make
