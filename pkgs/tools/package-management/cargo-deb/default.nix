@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "1.24.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "mmstick";
     repo = pname;
-    rev = "b49351f6770aa7aeb053dd1d4a02d6b086caad2a";
-    sha256 = "1hs96yv0awgi7ggpxp7k3n21jpv642sm0529b21hs9ib6kp4vs8s";
+    rev = "86d02f9cacaf4a4f9b576e2dbd9dad65baa61a0d";
+    sha256 = "sha256-oWivGy2azF9zpeZ0UAi7Bxm4iXFWAjcBG0pN7qtkSU8=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "1vqnnqn6rzkdi239bh3lk7gaxr7w6v3c4ws4ya1ah04g6v9hkzlw";
+  cargoSha256 = "sha256-HgGl1JWNkPEBODzWa6mfXuAtF8jOgT0Obx4mX9nOLkk=";
 
   preCheck = ''
     substituteInPlace tests/command.rs \
