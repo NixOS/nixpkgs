@@ -1994,6 +1994,8 @@ in
 
   wev = callPackage ../tools/wayland/wev { };
 
+  wdomirror = callPackage ../tools/wayland/wdomirror { };
+
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
   wlogout = callPackage ../tools/wayland/wlogout { };
