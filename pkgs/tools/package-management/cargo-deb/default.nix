@@ -13,17 +13,21 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mmstick";
     repo = pname;
-    rev = "86d02f9cacaf4a4f9b576e2dbd9dad65baa61a0d";
+    rev = "v${version}";
     sha256 = "sha256-oWivGy2azF9zpeZ0UAi7Bxm4iXFWAjcBG0pN7qtkSU8=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "sha256-HgGl1JWNkPEBODzWa6mfXuAtF8jOgT0Obx4mX9nOLkk=";
+  cargoSha256 = "0j9frvcmy9hydw73v0ffr0bjvq2ykylnpmiw700z344djpaaa08y";
 
   preCheck = ''
     substituteInPlace tests/command.rs \
       --replace 'target/debug' "target/${rust.toRustTarget stdenv.buildPlatform}/release"
+
+    # This is an FHS specific assert depending on glibc location
+    substituteInPlace src/dependencies.rs \
+      --replace 'assert!(deps.iter().any(|d| d.starts_with("libc")));' '// no libc assert here'
   '';
 
   meta = with lib; {
