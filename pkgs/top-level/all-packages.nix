@@ -12485,6 +12485,8 @@ in
 
   augustus = callPackage ../games/augustus { };
 
+  k2tf = callPackage ../development/tools/misc/k2tf { };
+
   kafkacat = callPackage ../development/tools/kafkacat { };
 
   kati = callPackage ../development/tools/build-managers/kati { };
