@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectx";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c7y5hj4w72bm6y3riw0acayn4w9x7bbf1vykqcprbyw3a3dvcsw";
+    sha256 = "11c31nzz39nwzsaphv2j9gv9cjls6z11fc5nchwfm83sf54khv3b";
   };
 
-  vendorSha256 = "168hfdc2rfwpz2ls607bz5vsm1aw4brhwm8hmbiq1n1l2dn2dj0y";
+  vendorSha256 = "1j662bbhjc8wz7awc0d2mamlq0rihhnizp3xb3gw0fh15nl1mi72";
 
   doCheck = false;
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     description = "Fast way to switch between clusters and namespaces in kubectl!";
     license = licenses.asl20;
     homepage = "https://github.com/ahmetb/kubectx";
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre Chili-Man ];
     platforms = with platforms; unix;
   };
 }
