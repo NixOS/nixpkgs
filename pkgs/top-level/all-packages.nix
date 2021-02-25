@@ -2495,6 +2495,8 @@ in
 
   ifm = callPackage ../tools/graphics/ifm {};
 
+  infracost = callPackage ../development/tools/infracost { };
+
   ink = callPackage ../tools/misc/ink { };
 
   interlock = callPackage ../servers/interlock {};
@@ -8635,6 +8637,12 @@ in
   urdfdom = callPackage ../development/libraries/urdfdom {};
 
   urdfdom-headers = callPackage ../development/libraries/urdfdom-headers {};
+
+  urfave-cli-completion_2 = callPackage ../development/libraries/urfave-cli-completion/v2.nix {};
+  urfave-cli-completion_1 = callPackage ../development/libraries/urfave-cli-completion/v1.nix {};
+
+  # urfave-cli-completion = urfave-cli-completion_2;
+  urfave-cli-completion = callPackage ../development/libraries/urfave-cli-completion {};
 
   uriparser = callPackage ../development/libraries/uriparser {};
 
