@@ -132,9 +132,24 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
-          nativeBuildInputs = [ pkgs.pkg-config ];
-          buildInputs = with pkgs; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
-          preBuild = "make server/epdfinfo";
+          nativeBuildInputs = [
+            pkgs.autoconf
+            pkgs.automake
+            pkgs.pkg-config
+            pkgs.removeReferencesTo
+          ];
+          buildInputs = old.buildInputs ++ [ pkgs.libpng pkgs.zlib pkgs.poppler ];
+          preBuild = ''
+            make server/epdfinfo
+            remove-references-to \
+              -t ${pkgs.stdenv.cc.libc.dev} \
+              -t ${pkgs.glib.dev} \
+              -t ${pkgs.libpng.dev} \
+              -t ${pkgs.poppler.dev} \
+              -t ${pkgs.zlib.dev} \
+              -t ${pkgs.cairo.dev} \
+              server/epdfinfo
+          '';
           recipe = pkgs.writeText "recipe" ''
             (pdf-tools
             :repo "politza/pdf-tools" :fetcher github
