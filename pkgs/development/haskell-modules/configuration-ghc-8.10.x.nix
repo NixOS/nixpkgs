@@ -42,20 +42,13 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # The proper 3.2.0.0 release does not compile with ghc-8.10.1, so we take the
-  # hitherto unreleased next version from the '3.2' branch of the upstream git
-  # repository for the time being.
-  cabal-install = assert super.cabal-install.version == "3.2.0.0";
-                  overrideCabal super.cabal-install (drv: {
-    postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
-    version = "3.2.0.0-git";
-    editedCabalFile = null;
-    src = pkgs.fetchgit {
-      url = "git://github.com/haskell/cabal.git";
-      rev = "9bd4cc0591616aeae78e17167338371a2542a475";
-      sha256 = "005q1shh7vqgykkp72hhmswmrfpz761x0q0jqfnl3wqim4xd9dg0";
-    };
-  });
+  cabal-install = super.cabal-install.override {
+    Cabal = super.Cabal_3_4_0_0;
+    hackage-security = super.hackage-security.override { Cabal = super.Cabal_3_4_0_0; };
+    # Usung dontCheck to break test dependency cycles
+    edit-distance = dontCheck (super.edit-distance.override { random = super.random_1_2_0; });
+    random = super.random_1_2_0;
+  };
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
