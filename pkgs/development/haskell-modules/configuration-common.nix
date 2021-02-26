@@ -969,8 +969,9 @@ self: super: {
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
-  # dontCheck: printf double rounding behavior
-  prettyprinter = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.prettyprinter else super.prettyprinter;
+
+  # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
+  prettyprinter = dontCheck super.prettyprinter;
 
   # Fix with Cabal 2.2, https://github.com/guillaume-nargeot/hpc-coveralls/pull/73
   hpc-coveralls = appendPatch super.hpc-coveralls (pkgs.fetchpatch {
