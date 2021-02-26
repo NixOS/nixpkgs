@@ -155,6 +155,9 @@ stdenv.mkDerivation rec {
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
+    # ensure backward compatibility with the latest version of icu:
+    # http://linuxfromscratch.org/blfs/view/svn/x/webkitgtk.html
+    "-DCMAKE_CXX_FLAGS=-DU_DEFINE_FALSE_AND_TRUE=1"
   ] ++ optionals stdenv.isDarwin [
     "-DENABLE_GRAPHICS_CONTEXT_3D=OFF"
     "-DENABLE_GTKDOC=OFF"
