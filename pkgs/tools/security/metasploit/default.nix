@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-wt7VeS8NnmJHMhry/68W1S1f9jUnsSHnhUSrCQN1qNM=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontPatchELF = true; # stay away from exploit executables
 

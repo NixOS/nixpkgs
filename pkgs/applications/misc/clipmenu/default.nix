@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
-  buildInputs = [ makeWrapper ];
-  nativeBuildInputs = [ xsel clipnotify ];
+  nativeBuildInputs = [ makeWrapper xsel clipnotify ];
 
   postFixup = ''
     sed -i "$out/bin/clipctl" -e 's,clipmenud\$,\.clipmenud-wrapped\$,'

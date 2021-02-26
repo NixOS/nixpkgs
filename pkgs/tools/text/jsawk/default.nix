@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0z3vdr3c8nvdrrxkjv9b4xg47mdb2hsknxpimw6shgwbigihapyr";
   };
   dontBuild = true;
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
     cp $src/jsawk $out/bin/

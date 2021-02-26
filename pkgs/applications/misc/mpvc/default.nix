@@ -17,7 +17,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/mpvc --prefix PATH : "${socat}/bin/"
   '';
 
-  buildInputs = [ socat makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ socat ];
 
   meta = with lib; {
     description = "A mpc-like control interface for mpv";

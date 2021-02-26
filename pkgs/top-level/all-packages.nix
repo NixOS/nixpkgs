@@ -517,7 +517,7 @@ in
 
   makeInitrd = callPackage ../build-support/kernel/make-initrd.nix; # Args intentionally left out
 
-  makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = pkgs.runtimeShell; }; }
+  makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = targetPackages.runtimeShell; }; }
                               ../build-support/setup-hooks/make-wrapper.sh;
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
@@ -5139,13 +5139,7 @@ in
 
   hdf5-blosc = callPackage ../development/libraries/hdf5-blosc { };
 
-  hdfview = callPackage ../tools/misc/hdfview {
-    javac = jdk8; # TODO: https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
-  hdf_java = callPackage ../tools/misc/hdfjava {
-    javac = jdk8; # TODO: https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  hdfview = callPackage ../tools/misc/hdfview { };
 
   hecate = callPackage ../applications/editors/hecate { };
 
@@ -9935,6 +9929,9 @@ in
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
+    # gcc 10 is too strict to cross compile gcc <= 8
+    stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+
     isl = if stdenv.isDarwin
             then null
           else if stdenv.targetPlatform.isRedox
@@ -9951,6 +9948,9 @@ in
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
+    # gcc 10 is too strict to cross compile gcc <= 8
+    stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
 
@@ -9962,6 +9962,9 @@ in
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+
+    # gcc 10 is too strict to cross compile gcc <= 8
+    stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
@@ -14438,8 +14441,13 @@ in
   } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu68 = callPackage ../development/libraries/icu/68.nix ({
+    nativeBuildRoot = buildPackages.icu68.override { buildRootOnly = true; };
+  } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
-  icu = icu67;
+  icu = icu68;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -16592,6 +16600,8 @@ in
   readline80 = callPackage ../development/libraries/readline/8.0.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
+
+  rinutils = callPackage ../development/libraries/rinutils { };
 
   kissfft = callPackage ../development/libraries/kissfft { };
 
@@ -26634,6 +26644,10 @@ in
 
   bitsnbots = callPackage ../games/bitsnbots {
     lua = lua5;
+  };
+
+  black-hole-solver = callPackage ../games/black-hole-solver {
+    inherit (perlPackages) PathTiny;
   };
 
   blackshades = callPackage ../games/blackshades { };

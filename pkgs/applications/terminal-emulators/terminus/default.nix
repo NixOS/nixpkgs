@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     url = "https://github.com/Eugeny/terminus/releases/download/v${version}/terminus_${version}_amd64.deb";
     sha256 = "1r5n75n71zwahg4rxlnf9qzrb0651gxv0987m6bykqmfpnw91nmb";
   };
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ dpkg ];
   unpackPhase = ''
     mkdir pkg
     dpkg-deb -x $src pkg

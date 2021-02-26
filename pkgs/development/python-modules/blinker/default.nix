@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, nose, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "blinker";
@@ -8,6 +8,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1dpq0vb01p36jjwbhhd08ylvrnyvcc82yxx3mwjx6awrycjyw6j7";
   };
+
+  checkInputs = [ nose pytestCheckHook ];
+  pythonImportsCheck = [ "blinker" ];
 
   meta = with lib; {
     homepage = "https://pythonhosted.org/blinker/";

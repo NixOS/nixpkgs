@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lvfdlpmmsyq2i9gs4mf6a8fxkfimdr4rhyihqnfhjij3fzxz4lk";
   };
 
-  buildInputs = [ makeWrapper which xdg-utils ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ which xdg-utils ];
 
   unpackPhase = ''
     mkdir -p phony-home $out/share/applications

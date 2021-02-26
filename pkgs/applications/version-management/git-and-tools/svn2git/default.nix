@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0ly2vrv6q31n0xhciwb7a1ilr5c6ndyi3bg81yfp4axiypps7l41";
   };
 
-  buildInputs = [ ruby makeWrapper ];
+  nativeBuildInputs = [ ruby makeWrapper ];
 
   dontBuild = true;
 

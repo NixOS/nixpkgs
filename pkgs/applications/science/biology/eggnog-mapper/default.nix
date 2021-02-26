@@ -16,7 +16,7 @@ python27Packages.buildPythonApplication rec {
     sha256 = "0abnmn0bh11jihf5d3cggiild1ykawzv5f5fhb4cyyi8fvy4hcxf";
   });
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ python27Packages.biopython wget diamond hmmer ];
 
   # make emapper find diamond & hmmer

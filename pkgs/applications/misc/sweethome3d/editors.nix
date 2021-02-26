@@ -35,7 +35,8 @@ let
       categories = "Graphics;2DGraphics;3DGraphics;";
     };
 
-    buildInputs = [ ant jdk8 makeWrapper gtk3 gsettings-desktop-schemas ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ ant jre jdk8 gtk3 gsettings-desktop-schemas ];
 
     postPatch = ''
       sed -i -e 's,../SweetHome3D,${application.src},g' build.xml

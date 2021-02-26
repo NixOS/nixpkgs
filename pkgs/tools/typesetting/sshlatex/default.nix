@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kaah8is74zba9373xccmsxmnnn6kh0isr4qpg21x3qhdzhlxl7q";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = let
     binPath = lib.makeBinPath [ openssh perl gnutar bash inotify-tools ];

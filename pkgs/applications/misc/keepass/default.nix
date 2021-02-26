@@ -12,7 +12,8 @@ with builtins; buildDotnetPackage rec {
 
   sourceRoot = ".";
 
-  buildInputs = [ unzip makeWrapper icoutils ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ unzip icoutils ];
 
   patches = [
     (substituteAll {

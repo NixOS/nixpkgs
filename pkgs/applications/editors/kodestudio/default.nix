@@ -29,7 +29,8 @@ in
         inherit sha256;
     };
 
-    buildInputs = [ makeWrapper libXScrnSaver ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ libXScrnSaver ];
 
     desktopItem = makeDesktopItem {
       name = "kodestudio";

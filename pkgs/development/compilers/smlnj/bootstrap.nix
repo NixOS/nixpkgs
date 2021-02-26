@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "12jn50h5jz0ac1vzld2mb94p1dyc8h0mk0hip2wj5xqk1dbzwxl4";
   };
 
-  buildInputs = [ cpio rsync makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ cpio rsync ];
 
   unpackPhase = ''
     ${xar}/bin/xar -xf $src

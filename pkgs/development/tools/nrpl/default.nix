@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1cly9lhrawnc42r31b7r0p0i6hcx8r00aa17gv7w9pcpj8ngb4v2";
   };
 
-  buildInputs = [ makeWrapper nim pcre ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ nim pcre ];
 
   patches = [
     (fetchpatch {

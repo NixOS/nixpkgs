@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "0nd63i924ifh39cba1hd4sbi6vh1cb73v97nrn4bf8rrjh3k8pdi";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     make install PREFIX="$out"

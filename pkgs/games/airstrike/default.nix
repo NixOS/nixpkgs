@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h6rv2zcp84ycmd0kv1pbpqjgwx57dw42x7878d2c2vnpi5jn8qi";
   };
 
-  buildInputs = [ makeWrapper SDL SDL_image ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ SDL SDL_image ];
 
   NIX_LDFLAGS = "-lm";
 

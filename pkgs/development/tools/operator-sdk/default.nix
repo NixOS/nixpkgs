@@ -17,7 +17,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/operator-sdk" ];
 
-  buildInputs = [ go makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ go ];
 
   # operator-sdk uses the go compiler at runtime
   allowGoReference = true;

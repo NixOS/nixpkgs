@@ -18,8 +18,8 @@ in stdenv.mkDerivation rec {
   };
 
   pythonPaths = [ pycrypto pyyaml requests ];
-  buildInputs = [ python perl nose mock makeWrapper python-dateutil setuptools ] ++ pythonPaths;
-  nativeBuildInputs = [ gitMinimal zip ];
+  buildInputs = [ python perl nose mock python-dateutil setuptools ] ++ pythonPaths;
+  nativeBuildInputs = [ gitMinimal zip makeWrapper ];
 
   postPatch = ''
     substituteInPlace scripts/run-tests.sh \

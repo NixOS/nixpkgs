@@ -24,7 +24,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   buildTools = [];
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [
     CGI
     DataStructureUtil
     FileCopyRecursive

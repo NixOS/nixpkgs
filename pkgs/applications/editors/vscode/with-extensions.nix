@@ -57,7 +57,8 @@ in
 # When no extensions are requested, we simply redirect to the original
 # non-wrapped vscode executable.
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
-  buildInputs = [ vscode makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ vscode ];
   dontPatchELF = true;
   dontStrip = true;
   meta = vscode.meta;

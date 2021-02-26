@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ jre ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # perl provides shasum
   postInstall = ''

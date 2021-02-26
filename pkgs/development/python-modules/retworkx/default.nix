@@ -1,16 +1,14 @@
 { lib
+, buildPythonPackage
 , rustPlatform
-, python
 , fetchFromGitHub
-, pipInstallHook
-, maturin
-, pip
+
   # Check inputs
 , pytestCheckHook
 , numpy
 }:
 
-rustPlatform.buildRustPackage rec {
+buildPythonPackage rec {
   pname = "retworkx";
   version = "0.6.0";
 
@@ -21,28 +19,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20";
   };
 
-  cargoSha256 = "1vg4yf0k6yypqf9z46zz818mz7fdrgxj7zl6zjf7pnm2r8mq3qw5";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-heOBK8qi2nuc/Ib+I/vLzZ1fUUD/G/KTw9d7M4Hz5O0=";
+  };
 
-  propagatedBuildInputs = [ python ];
+  format = "pyproject";
 
-  nativeBuildInputs = [ pipInstallHook maturin pip ];
+  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
   # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
   doCheck = false;
   doInstallCheck = true;
 
   installCheckInputs = [ pytestCheckHook numpy ];
-
-  buildPhase = ''
-    runHook preBuild
-    maturin build --release --manylinux off --strip
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    install -Dm644 -t dist target/wheels/*.whl
-    pipInstallPhase
-  '';
 
   preCheck = ''
     export TESTDIR=$(mktemp -d)
