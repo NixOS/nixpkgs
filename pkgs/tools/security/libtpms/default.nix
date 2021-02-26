@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pkg-config, autoreconfHook
 , openssl, perl
-, tpm2Support ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -30,8 +29,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-openssl"
-  ] ++ lib.optionals tpm2Support [
-    "--with-tpm2" # TPM2 support is flagged experimental by upstream
+    "--with-tpm2"
   ];
 
   meta = with lib; {
