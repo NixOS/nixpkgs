@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : let
+import ./make-test-python.nix ({ pkgs, lib, ... }: let
 
   customPkgs = pkgs.appendOverlays [ (self: super: {
     hello = super.hello.overrideAttrs (old: {
@@ -8,8 +8,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : let
 
 in {
   name = "containers-custom-pkgs";
-  meta = with lib.maintainers; {
-    maintainers = [ adisbladis earvstedt ];
+  meta = {
+    maintainers = with lib.maintainers; [ adisbladis earvstedt ];
   };
 
   machine = { config, ... }: {
