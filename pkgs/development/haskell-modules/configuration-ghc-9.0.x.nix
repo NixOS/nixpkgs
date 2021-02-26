@@ -43,19 +43,12 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Take the 3.4.x release candidate.
-  cabal-install = assert super.cabal-install.version == "3.2.0.0";
-                  overrideCabal (doJailbreak super.cabal-install) (drv: {
-    postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
-    version = "cabal-install-3.4.0.0-rc4";
-    editedCabalFile = null;
-    src = pkgs.fetchgit {
-      url = "git://github.com/haskell/cabal.git";
-      rev = "cabal-install-3.4.0.0-rc4";
-      sha256 = "049hllk1d8jid9yg70hmcsdgb0n7hm24p39vavllaahfb0qfimrk";
-    };
-    executableHaskellDepends = drv.executableHaskellDepends ++ [ self.regex-base self.regex-posix ];
-  });
+  # Build cabal-install with the compiler's native Cabal.
+  cabal-install = (doJailbreak super.cabal-install).override {
+    # Use dontCheck to break test dependency cycles
+    edit-distance = dontCheck (super.edit-distance.override { random = super.random_1_2_0; });
+    random = super.random_1_2_0;
+  };
 
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
