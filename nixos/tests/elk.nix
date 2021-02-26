@@ -216,7 +216,7 @@ let
           )
     '';
   }) { inherit pkgs system; };
-in pkgs.lib.mapAttrs mkElkTest {
+in pkgs.lib.mapAttrs mkElkTest ({
   ELK-6 =
     if enableUnfree
     then {
@@ -233,20 +233,13 @@ in pkgs.lib.mapAttrs mkElkTest {
       journalbeat   = pkgs.journalbeat6;
       metricbeat    = pkgs.metricbeat6;
     };
-  ELK-7 =
-    if enableUnfree
-    then {
-      elasticsearch = pkgs.elasticsearch7;
-      logstash      = pkgs.logstash7;
-      kibana        = pkgs.kibana7;
-      journalbeat   = pkgs.journalbeat7;
-      metricbeat    = pkgs.metricbeat7;
-    }
-    else {
-      elasticsearch = pkgs.elasticsearch7-oss;
-      logstash      = pkgs.logstash7-oss;
-      kibana        = pkgs.kibana7-oss;
-      journalbeat   = pkgs.journalbeat7;
-      metricbeat    = pkgs.metricbeat7;
-    };
-}
+} // pkgs.lib.optionalAttrs enableUnfree {
+    ELK-7 =
+      {
+        elasticsearch = pkgs.elasticsearch7;
+        logstash      = pkgs.logstash7;
+        kibana        = pkgs.kibana7;
+        journalbeat   = pkgs.journalbeat7;
+        metricbeat    = pkgs.metricbeat7;
+      };
+})
