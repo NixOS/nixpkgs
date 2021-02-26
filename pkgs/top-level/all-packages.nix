@@ -1416,6 +1416,8 @@ in
 
   gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
 
+  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
+
   gospider = callPackage ../tools/security/gospider { };
 
   browserpass = callPackage ../tools/security/browserpass { };
