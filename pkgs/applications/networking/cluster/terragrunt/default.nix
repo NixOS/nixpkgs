@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.28.6";
+  version = "0.28.7";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DzC/HNwFNNEJhic/8KpHchrBmsSbrn7xf1DjY0JTH08=";
+    sha256 = "sha256-pM3R85gdP2eVoXx//2tKePNAi14eM8Ut+eXR+vB0Ukk=";
   };
 
   vendorSha256 = "sha256-lRJerUYafpkXAGf8MEM8SeG3aB86mlMo7iLpeHFAnd4=";
@@ -21,6 +21,14 @@ buildGoModule rec {
     "-w"
     "-X main.VERSION=v${version}"
   ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/terragrunt --help
+    $out/bin/terragrunt --version | grep "v${version}"
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://terragrunt.gruntwork.io";

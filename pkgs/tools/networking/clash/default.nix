@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "clash";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Dreamacro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yTj3kXG7xB1+PhaiGgQR4bUcKkdk5eiF4bGXmxuMMsg=";
+    sha256 = "sha256-T6oBdhBX850GXb19MTOFVo9LRfOgCyMW3GIljMMeGmg=";
   };
 
   vendorSha256 = "sha256-HqlHUVWwvO15nitpwIh/u0GfF8wqJqkviyxOp7QHYz8=";
@@ -23,7 +23,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A rule-based tunnel in Go";
     homepage = "https://github.com/Dreamacro/clash";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ contrun Br1ght0ne ];
   };
 }

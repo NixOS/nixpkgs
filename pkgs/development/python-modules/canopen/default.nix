@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "canopen";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15d49f1f71e9989dde6e3b75fb8445c76bd223064dfc0ac629fe9ecb0e21fba9";
+    sha256 = "18d01d56ff0023795cb336cafd4810a76cf402b98b42139b201fa8c5d4ba8c06";
   };
 
   nativeBuildInputs = [

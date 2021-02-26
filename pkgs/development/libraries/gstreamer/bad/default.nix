@@ -1,10 +1,8 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
-, config
 , pkg-config
 , python3
 , gst-plugins-base

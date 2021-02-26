@@ -1,16 +1,16 @@
 {lib, stdenv, fetchurl, protobuf}:
 
 stdenv.mkDerivation {
-  name = "libosmpbf-1.3.3";
+  name = "libosmpbf-1.5.0";
 
   src = fetchurl {
-    url = "https://github.com/scrosby/OSM-binary/archive/v1.3.3.tar.gz";
-    sha256 = "a109f338ce6a8438a8faae4627cd08599d0403b8977c185499de5c17b92d0798";
+    url = "https://github.com/scrosby/OSM-binary/archive/v1.5.0.tar.gz";
+    sha256 = "sha256-Kr8xJnKXk3MsM4B2OZnMNl5Rv/2jaaAIITh5o82QR2w=";
   };
 
   buildInputs = [ protobuf ];
 
-  sourceRoot = "OSM-binary-1.3.3/src";
+  sourceRoot = "OSM-binary-1.5.0/src";
 
   installFlags = [ "PREFIX=$(out)" ];
 

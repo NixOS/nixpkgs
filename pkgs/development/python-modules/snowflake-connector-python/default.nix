@@ -57,11 +57,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'boto3>=1.4.4,<1.16'," "'boto3~=1.16'," \
-      --replace "'cryptography>=2.5.0,<3.0.0'," "'cryptography'," \
-      --replace "'pyOpenSSL>=16.2.0,<20.0.0'," "'pyOpenSSL'," \
-      --replace "'idna<2.10'," "'idna'," \
-      --replace "'requests<2.24.0'," "'requests',"
+      --replace "'pyOpenSSL>=16.2.0,<20.0.0'," "'pyOpenSSL',"
   '';
 
   # tests require encrypted secrets, see

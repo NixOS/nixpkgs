@@ -1,5 +1,5 @@
-{ lib, stdenv
-, fetchFromGitLab
+{ lib
+, stdenv
 , cmake
 , libGLU
 , libGL
@@ -18,9 +18,7 @@
 , pcre
 , libpthreadstubs
 , libXdmcp
-, fetchpatch
 , lndir
-, callPackage
 
 , stable
 , baseName

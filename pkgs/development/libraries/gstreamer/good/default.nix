@@ -30,6 +30,7 @@
 , mpg123
 , twolame
 , gtkSupport ? false, gtk3 ? null
+, qt5Support ? false, qt5 ? null
 , raspiCameraSupport ? false, libraspberrypi ? null
 , enableJack ? true, libjack2
 , libXdamage
@@ -102,7 +103,12 @@ stdenv.mkDerivation rec {
   ] ++ optionals gtkSupport [
     # for gtksink
     gtk3
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals qt5Support (with qt5; [
+    qtbase
+    qtdeclarative
+    qtwayland
+    qtx11extras
+  ]) ++ optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ] ++ optionals stdenv.isLinux [
     libv4l
@@ -118,7 +124,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-    "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
+  ] ++ optionals (!qt5Support) [
+    "-Dqt5=disabled"
   ] ++ optionals (!gtkSupport) [
     "-Dgtk3=disabled"
   ] ++ optionals (!enableJack) [
@@ -131,7 +138,6 @@ stdenv.mkDerivation rec {
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
     "-Dximagesrc=disabled" # Linux-only
-    "-Dpulse=disabled" # TODO check if we can keep this enabled
   ] ++ optionals (!raspiCameraSupport) [
     "-Drpicamsrc=disabled"
   ];
@@ -149,6 +155,9 @@ stdenv.mkDerivation rec {
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
+
+  # must be explicitely set since 5590e365
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "GStreamer Good Plugins";

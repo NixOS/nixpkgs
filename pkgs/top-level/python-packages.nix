@@ -878,7 +878,7 @@ in {
 
   bandit = callPackage ../development/python-modules/bandit { };
 
-  bap = callPackage ../development/python-modules/bap { bap = pkgs.ocaml-ng.ocamlPackages_4_07.bap; };
+  bap = callPackage ../development/python-modules/bap { inherit (pkgs.ocaml-ng.ocamlPackages) bap; };
 
   baron = callPackage ../development/python-modules/baron { };
 
@@ -2483,6 +2483,8 @@ in {
 
   futures = callPackage ../development/python-modules/futures { };
 
+  fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
+
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
   fx2 = callPackage ../development/python-modules/fx2 { };
@@ -3393,11 +3395,15 @@ in {
 
   jsonpath_rw = callPackage ../development/python-modules/jsonpath_rw { };
 
+  jsonpath-ng = callPackage ../development/python-modules/jsonpath-ng { };
+
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
 
   jsonpointer = callPackage ../development/python-modules/jsonpointer { };
 
   jsonref = callPackage ../development/python-modules/jsonref { };
+
+  json-rpc = callPackage ../development/python-modules/json-rpc { };
 
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
@@ -6009,6 +6015,8 @@ in {
 
   pysma = callPackage ../development/python-modules/pysma { };
 
+  pysmappee = callPackage ../development/python-modules/pysmappee { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { inherit (pkgs) pkg-config; };
@@ -6603,6 +6611,8 @@ in {
   pyvex = callPackage ../development/python-modules/pyvex { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
+
+  pyvizio = callPackage ../development/python-modules/pyvizio { };
 
   pyvips = callPackage ../development/python-modules/pyvips {
     inherit (pkgs) pkg-config vips glib;
@@ -7231,6 +7241,8 @@ in {
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
 
+  sharkiqpy = callPackage ../development/python-modules/sharkiqpy { };
+
   sh = callPackage ../development/python-modules/sh { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
@@ -7782,6 +7794,8 @@ in {
 
   terminaltables = callPackage ../development/python-modules/terminaltables { };
 
+  termplotlib = callPackage ../development/python-modules/termplotlib { };
+
   termstyle = callPackage ../development/python-modules/termstyle { };
 
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
@@ -7878,8 +7892,6 @@ in {
 
   tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
 
-  tiros = callPackage ../development/python-modules/tiros { };
-
   tissue = callPackage ../development/python-modules/tissue { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
@@ -7941,6 +7953,8 @@ in {
   towncrier = callPackage ../development/python-modules/towncrier { inherit (pkgs) git; };
 
   tox = callPackage ../development/python-modules/tox { };
+
+  tpm2-pytss = callPackage ../development/python-modules/tpm2-pytss { };
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
@@ -8013,6 +8027,8 @@ in {
 
   tweepy = callPackage ../development/python-modules/tweepy { };
 
+  twentemilieu = callPackage ../development/python-modules/twentemilieu { };
+
   twiggy = callPackage ../development/python-modules/twiggy { };
 
   twilio = callPackage ../development/python-modules/twilio { };
@@ -8038,6 +8054,8 @@ in {
   twitter-common-log = callPackage ../development/python-modules/twitter-common-log { };
 
   twitter-common-options = callPackage ../development/python-modules/twitter-common-options { };
+
+  twitterapi = callPackage ../development/python-modules/twitterapi { };
 
   twofish = callPackage ../development/python-modules/twofish { };
 
@@ -8217,6 +8235,8 @@ in {
   vega = callPackage ../development/python-modules/vega { };
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
+
+  venstarcolortouch = callPackage ../development/python-modules/venstarcolortouch { };
 
   venusian = callPackage ../development/python-modules/venusian { };
 
@@ -8511,8 +8531,6 @@ in {
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xmodem = callPackage ../development/python-modules/xmodem { };
-
-  xmpppy = callPackage ../development/python-modules/xmpppy { };
 
   xnd = callPackage ../development/python-modules/xnd { };
 

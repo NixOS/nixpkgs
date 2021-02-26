@@ -93,5 +93,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
+    # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
+    broken = if stdenv.isDarwin && (majorVersion == 7 || majorVersion == 8) then true else false;
   };
 }

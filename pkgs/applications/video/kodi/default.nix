@@ -1,11 +1,12 @@
-{ stdenv, lib, fetchpatch, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
-, pkg-config, cmake, gnumake, yasm, python2Packages
+{ stdenv, lib, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
+, pkg-config, cmake, gnumake, yasm, python3Packages
 , libgcrypt, libgpgerror, libunistring
-, boost, avahi, lame, autoreconfHook
+, boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
+, gtest, ncurses, spdlog
 , libxml2, systemd
-, alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
+, alsaLib, libGLU, libGL, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
@@ -42,17 +43,18 @@ assert udevSupport  -> udev != null;
 assert usbSupport   -> libusb-compat-0_1 != null && ! udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
 assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
+assert useGbm || useWayland || x11Support;
 
 let
-  kodiReleaseDate = "20200728";
-  kodiVersion = "18.9";
-  rel = "Leia";
+  kodiReleaseDate = "20210219";
+  kodiVersion = "19.0";
+  rel = "Matrix";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "0nnf7823pixj6n2fkjc8rbdjwayvhlbglij2by4rnjzzfgmqmw20";
+    sha256 = "097dg6a7v4ia85jx1pmlpwzdpqcqxlrmniqd005q73zvgj67zc2p";
   };
 
   cmakeProto = fetchurl {
@@ -87,9 +89,9 @@ let
 
   ffmpeg = kodiDependency rec {
     name    = "FFmpeg";
-    version = "4.0.3";
-    rev     = "${version}-${rel}-18.2";
-    sha256  = "1krsjlr949iy5l6ljxancza1yi6w1annxc5s6k283i9mb15qy8cy";
+    version = "4.3.1";
+    rev     = "${version}-${rel}-Beta1";
+    sha256  = "1c5rwlxn6xj501iw7masdv2p6wb9rkmd299lmlkx97sw1kvxvg2w";
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
       sed -i 's/ --cpu=''${CPU}//' CMakeLists.txt
@@ -151,6 +153,12 @@ let
     postPatch         = cmakeProtoPatch;
   };
 
+  kodi_platforms =
+    lib.optional useGbm "gbm" ++
+    lib.optional useWayland "wayland" ++
+    lib.optional x11Support "x11"
+  ;
+
 in stdenv.mkDerivation {
     name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
 
@@ -158,10 +166,11 @@ in stdenv.mkDerivation {
 
     buildInputs = [
       gnutls libidn libtasn1 nasm p11-kit
-      libxml2 python2Packages.python
+      libxml2 python3Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh
+      gtest ncurses spdlog
       alsaLib libGL libGLU fontconfig freetype ftgl
       libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
@@ -210,7 +219,7 @@ in stdenv.mkDerivation {
       which
       pkg-config gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-      jre_headless yasm gettext python2Packages.python flatbuffers
+      jre_headless yasm gettext python3Packages.python flatbuffers
 
       # for TexturePacker
       giflib zlib libpng libjpeg lzo
@@ -221,6 +230,8 @@ in stdenv.mkDerivation {
     ];
 
     cmakeFlags = [
+      "-DAPP_RENDER_SYSTEM=${if useGbm then "gles" else "gl"}"
+      "-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}"
       "-Dlibdvdcss_URL=${libdvdcss.src}"
       "-Dlibdvdnav_URL=${libdvdnav.src}"
       "-Dlibdvdread_URL=${libdvdread.src}"
@@ -231,14 +242,9 @@ in stdenv.mkDerivation {
       "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
-      "-DPYTHON_EXECUTABLE=${buildPackages.python2Packages.python}/bin/python"
+      "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
     ] ++ lib.optional useWayland [
-      "-DCORE_PLATFORM_NAME=wayland"
-      "-DWAYLAND_RENDER_SYSTEM=gl"
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
-    ] ++ lib.optional useGbm [
-      "-DCORE_PLATFORM_NAME=gbm"
-      "-DGBM_RENDER_SYSTEM=gles"
     ];
 
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -
@@ -256,14 +262,14 @@ in stdenv.mkDerivation {
     '';
 
     postPatch = ''
-      substituteInPlace xbmc/platform/linux/LinuxTimezone.cpp \
+      substituteInPlace xbmc/platform/posix/PosixTimezone.cpp \
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
     '';
 
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH            ":" "${lib.makeBinPath ([ python2Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo)}" \
+          --prefix PATH            ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
                  ++ lib.optional nfsSupport libnfs
@@ -279,7 +285,7 @@ in stdenv.mkDerivation {
     installCheckPhase = "$out/bin/kodi --version";
 
     passthru = {
-      pythonPackages = python2Packages;
+      pythonPackages = python3Packages;
     };
 
     meta = with lib; {

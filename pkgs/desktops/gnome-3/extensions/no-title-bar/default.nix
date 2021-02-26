@@ -2,18 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-no-title-bar";
-  version = "9";
+  version = "11";
 
   src = fetchFromGitHub {
-    owner = "franglais125";
+    owner = "poehlerj";
     repo = "no-title-bar";
-    rev = "v${version}";
-    sha256 = "02zm61fg40r005fn2rvgrbsz2hbcsmp2hkhyilqbmpilw35y0nbq";
+    rev = "V_${version}";
+    sha256 = "07ddw47binlsbyvgy4xkdjvd40zyp7nwd17r6k7w54d50vmnwhvb";
   };
 
-  nativeBuildInputs = [
-    glib gettext
-  ];
+  nativeBuildInputs = [ glib gettext ];
 
   patches = [
     (substituteAll {
@@ -25,14 +23,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
-  uuid = "no-title-bar@franglais125.gmail.com";
+  uuid = "no-title-bar@jonaspoehler.de";
 
   meta = with lib; {
     description = "Integrates maximized windows with the top panel";
-    homepage = "https://github.com/franglais125/no-title-bar";
+    homepage = "https://github.com/poehlerj/no-title-bar";
     license = licenses.gpl2;
-    broken = true; # https://github.com/franglais125/no-title-bar/issues/114
-    maintainers = with maintainers; [ jonafato svsdep ];
+    maintainers = with maintainers; [ jonafato svsdep maxeaubrey ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k, isPy35
+{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k, isPy35, fetchpatch
 , mock
 , pysqlite
 , pytestCheckHook
@@ -13,6 +13,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "12wi4vxjsx4ra76phks9drhc2yc9xz25458kgijnyrkq4mkk7jkg";
   };
+
+  patches = [
+    # fix test_pyodbc_extra_connect_azure test failure
+    (fetchpatch {
+      url = "https://github.com/sqlalchemy/sqlalchemy/commit/7293b3dc0e9eb3dae84ffd831494b85355df8e73.patch";
+      sha256 = "1z61lzxamz74771ddlqmbxba1dcr77f016vqfcmb44dxb228w2db";
+    })
+  ];
 
   checkInputs = [
     pytestCheckHook

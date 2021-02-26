@@ -1,4 +1,4 @@
-{ lib, external, pkgs }: self: with self; with lib.licenses; {
+{ lib, pkgs }: self: with self; with lib.licenses; {
 
   elisp-ffi = melpaBuild rec {
     pname = "elisp-ffi";
@@ -9,7 +9,7 @@
       rev = version;
       sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
     };
-    buildInputs = [ external.libffi ];
+    buildInputs = [ pkgs.libffi ];
     preBuild = "make";
     recipe = pkgs.writeText "recipe" ''
       (elisp-ffi
@@ -29,15 +29,15 @@
     };
   };
 
-  agda2-mode = with external; trivialBuild {
+  agda2-mode = trivialBuild {
     pname = "agda-mode";
-    version = Agda.version;
+    version = pkgs.haskellPackages.Agda.version;
 
     phases = [ "buildPhase" "installPhase" ];
 
     # already byte-compiled by Agda builder
     buildPhase = ''
-      agda=`${Agda}/bin/agda-mode locate`
+      agda=`${pkgs.haskellPackages.Agda}/bin/agda-mode locate`
       cp `dirname $agda`/*.el* .
     '';
 
@@ -47,21 +47,21 @@
         Wrapper packages that liberates init.el from `agda-mode locate` magic.
         Simply add this to user profile or systemPackages and do `(require 'agda2)` in init.el.
       '';
-      homepage = Agda.meta.homepage;
-      license = Agda.meta.license;
+      homepage = pkgs.haskellPackages.Agda.meta.homepage;
+      license = pkgs.haskellPackages.Agda.meta.license;
     };
   };
 
   agda-input = self.trivialBuild {
     pname = "agda-input";
 
-    inherit (external.Agda) src version;
+    inherit (pkgs.haskellPackages.Agda) src version;
 
     postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
 
     meta = {
       description = "Standalone package providing the agda-input method without building Agda.";
-      inherit (external.Agda.meta) homepage license;
+      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
     };
   };
 
@@ -74,10 +74,10 @@
 
   ghc-mod = melpaBuild {
     pname = "ghc";
-    version = external.ghc-mod.version;
-    src = external.ghc-mod.src;
+    version = pkgs.haskellPackages.ghc-mod.version;
+    src = pkgs.haskellPackages.ghc-mod.src;
     packageRequires = [ haskell-mode ];
-    propagatedUserEnvPkgs = [ external.ghc-mod ];
+    propagatedUserEnvPkgs = [ pkgs.haskellPackages.ghc-mod ];
     recipe = pkgs.writeText "recipe" ''
       (ghc-mod :repo "DanielG/ghc-mod" :fetcher github :files ("elisp/*.el"))
     '';
@@ -115,7 +115,7 @@
 
   llvm-mode = trivialBuild {
     pname = "llvm-mode";
-    inherit (external.llvmPackages.llvm) src version;
+    inherit (pkgs.llvmPackages.llvm) src version;
 
     dontConfigure = true;
     buildPhase = ''
@@ -123,9 +123,58 @@
     '';
 
     meta = {
-      inherit (external.llvmPackages.llvm.meta) homepage license;
+      inherit (pkgs.llvmPackages.llvm.meta) homepage license;
       description = "Major mode for the LLVM assembler language.";
     };
+  };
+
+  matrix-client = melpaBuild {
+    pname = "matrix-client";
+    version = "0.3.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "alphapapa";
+      repo = "matrix-client.el";
+      rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+      sha256 = "1scfv1502yg7x4bsl253cpr6plml1j4d437vci2ggs764sh3rcqq";
+    };
+
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/alphapapa/matrix-client.el/commit/5f49e615c7cf2872f48882d3ee5c4a2bff117d07.patch";
+        sha256 = "07bvid7s1nv1377p5n61q46yww3m1w6bw4vnd4iyayw3fby1lxbm";
+      })
+    ];
+
+    packageRequires = [
+      anaphora
+      cl-lib
+      self.map
+      dash-functional
+      esxml
+      f
+      ov
+      tracking
+      rainbow-identifiers
+      dash
+      s
+      request
+      frame-purpose
+      a
+      ht
+    ];
+
+    recipe = pkgs.writeText "recipe" ''
+      (matrix-client
+      :repo "alphapapa/matrix-client.el"
+      :fetcher github)
+    '';
+
+    meta = {
+      description = "A chat client and API wrapper for Matrix.org";
+      license = gpl3Plus;
+    };
+
   };
 
   org-mac-link =
@@ -134,13 +183,13 @@
   ott-mode = self.trivialBuild {
     pname = "ott-mod";
 
-    inherit (external.ott) src version;
+    inherit (pkgs.ott) src version;
 
     postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
 
     meta = {
       description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
-      inherit (external.Agda.meta) homepage license;
+      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
     };
   };
 

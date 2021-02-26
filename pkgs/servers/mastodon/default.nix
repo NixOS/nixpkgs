@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
       fi
       chmod -R u+w node_modules
       rake webpacker:compile
+      rails assets:precompile
     '';
 
     installPhase = ''

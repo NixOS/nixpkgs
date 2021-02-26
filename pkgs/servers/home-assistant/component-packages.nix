@@ -723,7 +723,7 @@
     "sesame" = ps: with ps; [ ]; # missing inputs: pysesame2
     "seven_segments" = ps: with ps; [ pillow ];
     "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
-    "sharkiq" = ps: with ps; [ ]; # missing inputs: sharkiqpy
+    "sharkiq" = ps: with ps; [ sharkiqpy ];
     "shell_command" = ps: with ps; [ ];
     "shelly" = ps: with ps; [ aioshelly ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
@@ -745,7 +745,7 @@
     "sleepiq" = ps: with ps; [ ]; # missing inputs: sleepyq
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
-    "smappee" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pysmappee
+    "smappee" = ps: with ps; [ aiohttp-cors pysmappee ];
     "smart_meter_texas" = ps: with ps; [ ]; # missing inputs: smart-meter-texas
     "smarthab" = ps: with ps; [ ]; # missing inputs: smarthab
     "smartthings" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: pysmartapp pysmartthings
@@ -866,13 +866,13 @@
     "trend" = ps: with ps; [ numpy ];
     "tts" = ps: with ps; [ aiohttp-cors mutagen ];
     "tuya" = ps: with ps; [ tuyaha ];
-    "twentemilieu" = ps: with ps; [ ]; # missing inputs: twentemilieu
+    "twentemilieu" = ps: with ps; [ twentemilieu ];
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
     "twinkly" = ps: with ps; [ ]; # missing inputs: twinkly-client
     "twitch" = ps: with ps; [ python-twitch-client ];
-    "twitter" = ps: with ps; [ ]; # missing inputs: TwitterAPI
+    "twitter" = ps: with ps; [ twitterapi ];
     "ubus" = ps: with ps; [ ];
     "ue_smart_radio" = ps: with ps; [ ];
     "uk_transport" = ps: with ps; [ ];
@@ -896,7 +896,7 @@
     "vasttrafik" = ps: with ps; [ ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [ python-velbus ];
     "velux" = ps: with ps; [ pyvlx ];
-    "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
+    "venstar" = ps: with ps; [ venstarcolortouch ];
     "vera" = ps: with ps; [ pyvera ];
     "verisure" = ps: with ps; [ jsonpath vsure ];
     "versasense" = ps: with ps; [ ]; # missing inputs: pyversasense
@@ -906,7 +906,7 @@
     "vicare" = ps: with ps; [ ]; # missing inputs: PyViCare
     "vilfo" = ps: with ps; [ ]; # missing inputs: vilfo-api-client
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
-    "vizio" = ps: with ps; [ ]; # missing inputs: pyvizio
+    "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [ ]; # missing inputs: python-telnet-vlc
     "voicerss" = ps: with ps; [ ];

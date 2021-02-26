@@ -2,18 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.6.8";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "1k8ghz8xwy7v4y4r4xc690ig7qmn0mkvynplwn66j44fgdpg0v1s";
+    sha256 = "1xzbsnij0xsgd5j11frkf35w8rkr55hq2yl7myaxrgzh686a8law";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  patches = [ ./fix-luajit-darwin.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./fix-luajit-darwin.patch ];
+
+  # _FORTIFY_SOURCE requires compiling with optimization (-O)
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

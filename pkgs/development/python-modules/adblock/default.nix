@@ -46,11 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adblock" ];
 
-  passthru.meta = with lib; {
+  meta = with lib; {
     description = "Python wrapper for Brave's adblocking library, which is written in Rust";
     homepage = "https://github.com/ArniDagur/python-adblock/";
     maintainers = with maintainers; [ petabyteboy ];
     license = with licenses; [ asl20 mit ];
-    platforms = with platforms; [ all ];
   };
 }

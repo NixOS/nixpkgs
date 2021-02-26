@@ -189,6 +189,22 @@ let
         };
       };
 
+      dracula-theme.theme-dracula = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "theme-dracula";
+          publisher = "dracula-theme";
+          version = "2.22.3";
+          sha256 = "0wni9sriin54ci8rly2s68lkfx8rj1cys6mgcizvps9sam6377w6";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
+          description = "Dark theme for many editors, shells, and more";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula";
+          homepage = "https://draculatheme.com/";
+          license = licenses.mit;
+        };
+      };
+
       eamodio.gitlens = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitlens";
@@ -270,6 +286,18 @@ let
           publisher = "formulahendry";
           version = "0.1.6";
           sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      formulahendry.code-runner = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-runner";
+          publisher = "formulahendry";
+          version = "0.11.2";
+          sha256 = "0qwcxr6m1xwhqmdl4pccjgpikpq1hgi2hgrva5abn8ixa2510hcy";
         };
         meta = {
           license = lib.licenses.mit;
@@ -595,6 +623,18 @@ let
         };
       };
 
+      rubbersheep.gi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gi";
+          publisher = "rubbersheep";
+          version = "0.2.11";
+          sha256 = "0j9k6wm959sziky7fh55awspzidxrrxsdbpz1d79s5lr5r19rs6j";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       ryu1kn.partial-diff = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "partial-diff";
@@ -709,6 +749,18 @@ let
           publisher = "Tyriar";
           version = "1.9.0";
           sha256 = "0l4wibsjnlbzbrl1wcj18vnm1q4ygvxmh347jvzziv8f1l790qjl";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      usernamehw.errorlens = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "errorlens";
+          publisher = "usernamehw";
+          version = "3.2.4";
+          sha256 = "0caxmf6v0s5kgp6cp3j1kk7slhspjv5kzhn4sq3miyl5jkrn95kx";
         };
         meta = {
           license = lib.licenses.mit;

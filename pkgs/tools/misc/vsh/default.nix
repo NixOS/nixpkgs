@@ -2,21 +2,17 @@
 
 buildGoModule rec {
   pname = "vsh";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "fishi0x01";
     repo = "vsh";
     rev = "v${version}";
-    sha256 = "1f6szcdakfx3zap1zpkrcs134plv7vnyilzcxs5jbhrrbr6q1807";
+    sha256 = "16q0pkmdzhq0bqy4lnnlxrc29gszca6vwajj2bg6sylcvi94x80d";
   };
 
-  vendorSha256 = "0a2kjql4ibglxkq5dgzr2sxxxm38nf83s4rsk2gd1cf7v0flr02j";
-
-  # vendor dir in vsh repo is incomplete
-  deleteVendor = true;
-
-  runVend = true;
+  # vendor directory is part of repository
+  vendorSha256 = null;
 
   # make sure version gets set at compile time
   buildFlagsArray = [ "-ldflags=-s -w -X main.vshVersion=v${version}" ];

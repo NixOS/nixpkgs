@@ -7203,6 +7203,12 @@
     githubId = 157610;
     name = "Piotr Bogdan";
   };
+  pborzenkov = {
+    email = "pavel@borzenkov.net";
+    github = "pborzenkov";
+    githubId = 434254;
+    name = "Pavel Borzenkov";
+  };
   pblkt = {
     email = "pebblekite@gmail.com";
     github = "pblkt";

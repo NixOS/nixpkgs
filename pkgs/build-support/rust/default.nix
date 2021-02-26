@@ -25,6 +25,9 @@
   # Legacy hash
 , cargoSha256 ? ""
 
+  # Name for the vendored dependencies tarball
+, cargoDepsName ? name
+
 , src ? null
 , srcs ? null
 , unpackPhase ? null
@@ -59,7 +62,8 @@ let
 
   cargoDeps = if cargoVendorDir == null
     then fetchCargoTarball ({
-        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
+        inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+        name = cargoDepsName;
         hash = cargoHash;
         patches = cargoPatches;
         sha256 = cargoSha256;
