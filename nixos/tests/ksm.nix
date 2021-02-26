@@ -1,8 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ lib, ...} :
 
 {
   name = "ksm";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ rnhmjoj ];
   };
 
