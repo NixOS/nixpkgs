@@ -23423,6 +23423,8 @@ in
 
   libowfat = callPackage ../development/libraries/libowfat { };
 
+  libowlevelzs = callPackage ../development/libraries/libowlevelzs { };
+
   librecad = libsForQt514.callPackage ../applications/misc/librecad { };
 
   libreoffice = hiPrio libreoffice-still;
