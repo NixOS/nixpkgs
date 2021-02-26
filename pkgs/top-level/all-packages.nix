@@ -1603,6 +1603,10 @@ in
 
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
 
+  beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
+    inherit (plasma5Packages) breeze-icons;
+  };
+
   bc = callPackage ../tools/misc/bc { };
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
