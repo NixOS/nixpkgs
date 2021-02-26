@@ -302,7 +302,7 @@ in
     };
 
     services.zfs.autoScrub = {
-      enable = mkEnableOption "Enables periodic scrubbing of ZFS pools.";
+      enable = mkEnableOption "periodic scrubbing of ZFS pools";
 
       interval = mkOption {
         default = "Sun, 02:00";
