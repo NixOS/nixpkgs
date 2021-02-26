@@ -39,6 +39,11 @@
      (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#7547</link>).
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Plasma desktop environment now has support for the wayland session, finally 😺!
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
