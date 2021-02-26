@@ -972,6 +972,7 @@ self: super: {
 
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
+  brittany = doJailbreak (dontCheck super.brittany);  # Outdated upperbound on ghc-exactprint: https://github.com/lspitzner/brittany/issues/342
 
   # Fix with Cabal 2.2, https://github.com/guillaume-nargeot/hpc-coveralls/pull/73
   hpc-coveralls = appendPatch super.hpc-coveralls (pkgs.fetchpatch {
@@ -1411,10 +1412,6 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
-
-  # 2020-02-26: Outdated upperbound on ghc-exactprint
-  # https://github.com/lspitzner/brittany/issues/342
-  brittany = doJailbreak super.brittany;
 
   # 2021-02-11: Jailbreaking because of syntax error on bound revision
   hls-explicit-imports-plugin = doJailbreak super.hls-explicit-imports-plugin;
