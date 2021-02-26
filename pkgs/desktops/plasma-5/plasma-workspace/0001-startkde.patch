@@ -1,4 +1,4 @@
-From d653bc84c8aed33072237ed858194a8a73b6a2e7 Mon Sep 17 00:00:00 2001
+From 65ed69a38a9ffee21f0eb36de1f7a3f152111cad Mon Sep 17 00:00:00 2001
 From: Tom Hall <tahall256@protonmail.ch>
 Date: Mon, 7 Sep 2020 18:09:52 +0100
 Subject: [PATCH] startkde
@@ -7,27 +7,27 @@ Subject: [PATCH] startkde
  startkde/plasma-session/startup.cpp     |  2 +-
  startkde/startplasma-waylandsession.cpp |  2 +-
  startkde/startplasma-x11.cpp            |  2 +-
- startkde/startplasma.cpp                | 22 +++++++++-------------
- 4 files changed, 12 insertions(+), 16 deletions(-)
+ startkde/startplasma.cpp                | 16 ++++++++--------
+ 4 files changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/startkde/plasma-session/startup.cpp b/startkde/plasma-session/startup.cpp
-index 89cc144ba..8ca9e81d2 100644
+index c3e77d4..88cb0e9 100644
 --- a/startkde/plasma-session/startup.cpp
 +++ b/startkde/plasma-session/startup.cpp
-@@ -211,7 +211,7 @@ Startup::Startup(QObject *parent):
+@@ -223,7 +223,7 @@ Startup::Startup(QObject *parent)
      upAndRunning(QStringLiteral("ksmserver"));
      const AutoStart autostart;
  
 -    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
 +    QProcess::execute(QStringLiteral(NIXPKGS_START_KDEINIT_WRAPPER), QStringList());
  
-     KJob* phase1;
+     KJob *phase1;
      QProcessEnvironment kdedProcessEnv;
 diff --git a/startkde/startplasma-waylandsession.cpp b/startkde/startplasma-waylandsession.cpp
-index f59654d18..5e3a93db0 100644
+index 4fbfe18..6ba916c 100644
 --- a/startkde/startplasma-waylandsession.cpp
 +++ b/startkde/startplasma-waylandsession.cpp
-@@ -61,7 +61,7 @@ int main(int argc, char** argv)
+@@ -65,7 +65,7 @@ int main(int argc, char **argv)
      waitForKonqi();
      out << "startplasma-waylandsession: Shutting down...\n";
  
@@ -37,10 +37,10 @@ index f59654d18..5e3a93db0 100644
      cleanupX11();
      out << "startplasma-waylandsession: Done.\n";
 diff --git a/startkde/startplasma-x11.cpp b/startkde/startplasma-x11.cpp
-index ae1c4d101..0df24b5be 100644
+index 4ddf9f8..e0e59cd 100644
 --- a/startkde/startplasma-x11.cpp
 +++ b/startkde/startplasma-x11.cpp
-@@ -110,7 +110,7 @@ int main(int argc, char** argv)
+@@ -110,7 +110,7 @@ int main(int argc, char **argv)
  
      out << "startkde: Shutting down...\n";
  
@@ -50,10 +50,10 @@ index ae1c4d101..0df24b5be 100644
      cleanupPlasmaEnvironment();
      cleanupX11();
 diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
-index a055d5635..62afb1513 100644
+index 9809197..1250e3e 100644
 --- a/startkde/startplasma.cpp
 +++ b/startkde/startplasma.cpp
-@@ -41,7 +41,7 @@ QTextStream out(stderr);
+@@ -46,7 +46,7 @@ QTextStream out(stderr);
  void messageBox(const QString &text)
  {
      out << text;
@@ -61,46 +61,56 @@ index a055d5635..62afb1513 100644
 +    runSync(QStringLiteral(NIXPKGS_XMESSAGE), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
  }
  
- QStringList allServices(const QLatin1String& prefix)
-@@ -262,15 +262,15 @@ void setupX11()
- //     If the user has overwritten fonts, the cursor font may be different now
- //     so don't move this up.
+ QStringList allServices(const QLatin1String &prefix)
+@@ -267,8 +267,8 @@ void setupX11()
+     //     If the user has overwritten fonts, the cursor font may be different now
+     //     so don't move this up.
  
 -    runSync(QStringLiteral("xsetroot"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
--    runSync(QStringLiteral("xprop"), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("8t"), QStringLiteral("-set"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("true")});
--    runSync(QStringLiteral("xprop"), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("32c"), QStringLiteral("-set"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("5")});
+-    runSync(QStringLiteral("xprop"),
 +    runSync(QStringLiteral(NIXPKGS_XSETROOT), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
-+    runSync(QStringLiteral(NIXPKGS_XPROP), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("8t"), QStringLiteral("-set"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("true")});
-+    runSync(QStringLiteral(NIXPKGS_XPROP), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("32c"), QStringLiteral("-set"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("5")});
- }
++    runSync(QStringLiteral(NIXPKGS_XPROP),
+             {QStringLiteral("-root"),
+              QStringLiteral("-f"),
+              QStringLiteral("KDE_FULL_SESSION"),
+@@ -276,7 +276,7 @@ void setupX11()
+              QStringLiteral("-set"),
+              QStringLiteral("KDE_FULL_SESSION"),
+              QStringLiteral("true")});
+-    runSync(QStringLiteral("xprop"),
++    runSync(QStringLiteral(NIXPKGS_XPROP),
+             {QStringLiteral("-root"),
+              QStringLiteral("-f"),
+              QStringLiteral("KDE_SESSION_VERSION"),
+@@ -288,8 +288,8 @@ void setupX11()
  
  void cleanupX11()
  {
--    runSync(QStringLiteral("xprop"), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_FULL_SESSION") });
--    runSync(QStringLiteral("xprop"), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_SESSION_VERSION") });
-+    runSync(QStringLiteral(NIXPKGS_XPROP), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_FULL_SESSION") });
-+    runSync(QStringLiteral(NIXPKGS_XPROP), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_SESSION_VERSION") });
+-    runSync(QStringLiteral("xprop"), {QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_FULL_SESSION")});
+-    runSync(QStringLiteral("xprop"), {QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_SESSION_VERSION")});
++    runSync(QStringLiteral(NIXPKGS_XPROP), {QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_FULL_SESSION")});
++    runSync(QStringLiteral(NIXPKGS_XPROP), {QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_SESSION_VERSION")});
  }
  
  // TODO: Check if Necessary
-@@ -306,7 +302,7 @@ void setupFontDpi()
-     //TODO port to c++?
+@@ -321,7 +321,7 @@ void setupFontDpi()
+     // TODO port to c++?
      const QByteArray input = "Xft.dpi: " + QByteArray::number(fontsCfg.readEntry("forceFontDPI", 0));
      QProcess p;
--    p.start(QStringLiteral("xrdb"), { QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp") });
-+    p.start(QStringLiteral(NIXPKGS_XRDB), { QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp") });
+-    p.start(QStringLiteral("xrdb"), {QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp")});
++    p.start(QStringLiteral(NIXPKGS_XRDB), {QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp")});
      p.setProcessChannelMode(QProcess::ForwardedChannels);
      p.write(input);
      p.closeWriteChannel();
-@@ -328,7 +324,7 @@ QProcess* setupKSplash()
+@@ -343,7 +343,7 @@ QProcess *setupKSplash()
          KConfigGroup ksplashCfg = cfg.group("KSplash");
          if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
              p = new QProcess;
--            p->start(QStringLiteral("ksplashqml"), { ksplashCfg.readEntry("Theme", QStringLiteral("Breeze")) });
-+            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), { ksplashCfg.readEntry("Theme", QStringLiteral("Breeze")) });
+-            p->start(QStringLiteral("ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
++            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
          }
      }
      return p;
 -- 
-2.28.0
+2.30.0
 
