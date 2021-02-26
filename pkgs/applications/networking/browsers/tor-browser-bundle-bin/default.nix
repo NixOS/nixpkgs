@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeDesktopItem
 
-# Common run-time dependencies
+  # Common run-time dependencies
 , zlib
 
-# libxul run-time dependencies
+  # libxul run-time dependencies
 , atk
 , cairo
 , dbus
@@ -27,16 +28,16 @@
 , libpulseaudio
 , apulse
 
-# Media support (implies audio support)
+  # Media support (implies audio support)
 , mediaSupport ? true
 , ffmpeg_3
 
 , gmp
 
-# Pluggable transport dependencies
+  # Pluggable transport dependencies
 , python27
 
-# Wrapper runtime
+  # Wrapper runtime
 , coreutils
 , glibcLocales
 , gnome3
@@ -44,21 +45,20 @@
 , shared-mime-info
 , gsettings-desktop-schemas
 
-# Hardening
+  # Hardening
 , graphene-hardened-malloc
-# crashes with intel driver
+  # crashes with intel driver
 , useHardenedMalloc ? false
 
-# Whether to disable multiprocess support to work around crashing tabs
-# TODO: fix the underlying problem instead of this terrible work-around
+  # Whether to disable multiprocess support to work around crashing tabs
+  # TODO: fix the underlying problem instead of this terrible work-around
 , disableContentSandbox ? true
 
-# Extra preferences
+  # Extra preferences
 , extraPrefs ? ""
 }:
 
 with lib;
-
 let
   libPath = makeLibraryPath libPkgs;
 
@@ -91,7 +91,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.9";
+  version = "10.0.12";
 
   lang = "en-US";
 
@@ -405,7 +405,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 cap KarlJoad ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
