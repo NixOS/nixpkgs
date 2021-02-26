@@ -20615,6 +20615,8 @@ in
 
   julia-mono = callPackage ../data/fonts/julia-mono { };
 
+  juno-theme = callPackage ../data/themes/juno { };
+
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
