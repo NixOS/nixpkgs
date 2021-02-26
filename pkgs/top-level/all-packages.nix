@@ -14107,10 +14107,7 @@ in
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
-  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = newScope { libav = pkgs.ffmpeg; };
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  });
+  gst_all_1 = recurseIntoAttrs(import ../development/libraries/gstreamer { inherit pkgs lib; });
 
   gusb = callPackage ../development/libraries/gusb { };
 
