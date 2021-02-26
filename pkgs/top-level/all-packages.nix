@@ -9352,6 +9352,8 @@ in
 
   zinit = callPackage ../shells/zsh/zinit {} ;
 
+  zs-apc-spdu-ctl = callPackage ../tools/networking/zs-apc-spdu-ctl { };
+
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-autopair = callPackage ../shells/zsh/zsh-autopair { };
