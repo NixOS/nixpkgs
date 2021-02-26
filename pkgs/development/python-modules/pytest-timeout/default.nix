@@ -22,6 +22,8 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_suppresses_timeout_when_pdb_is_entered"
+    # Remove until https://github.com/pytest-dev/pytest/pull/7207 or similar
+    "test_suppresses_timeout_when_debugger_is_entered"
   ];
   pytestFlagsArray = [
     "-ra"
