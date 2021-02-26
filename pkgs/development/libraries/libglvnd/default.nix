@@ -1,11 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python3, pkg-config, libX11, libXext, xorgproto, addOpenGLRunpath }:
+{ stdenv, lib, fetchFromGitLab
+, autoreconfHook, pkg-config, python3, addOpenGLRunpath
+, libX11, libXext, xorgproto
+}:
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
   version = "1.3.2";
 
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
     sha256 = "10x7fgb114r4gikdg6flszl3kwzcb9y5qa7sj9936mk0zxhjaylz";
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
       dispatch each API call to at runtime.
       Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
     '';
-    homepage = "https://github.com/NVIDIA/libglvnd";
+    inherit (src.meta) homepage;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ primeos ];
