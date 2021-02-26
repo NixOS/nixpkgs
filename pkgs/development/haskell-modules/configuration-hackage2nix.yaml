@@ -6923,6 +6923,7 @@ broken-packages:
   - huzzy
   - hVOIDP
   - hw-all
+  - hw-aws-sqs-conduit
   - hw-ci-assist
   - hw-dsv
   - hw-json
@@ -9908,9 +9909,11 @@ broken-packages:
   - servant-zeppelin-server
   - servant-zeppelin-swagger
   - server-generic
+  - serversession
   - serversession-backend-acid-state
   - serversession-backend-persistent
   - serversession-backend-redis
+  - serversession-frontend-snap
   - serversession-frontend-yesod
   - services
   - ses-html-snaplet
