@@ -145,6 +145,17 @@ in
         to the current service already provided.
       '';
     };
+
+    services.minidlna.startupDelay = mkOption {
+      type = types.int;
+      default = 0;
+      description =
+        ''
+          Time to wait before starting miniDLNA service (in seconds).
+          A delay is required when mediaDirs include a network path and
+          that path requires more time to get mounted.
+       '';
+    };
   };
 
   ###### implementation
@@ -176,7 +187,8 @@ in
       { description = "MiniDLNA Server";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        after = [ "network.target" "local-fs.target" "remote-fs.target" ];
+        preStart = "sleep ${toString cfg.startupDelay}s";
 
         serviceConfig =
           { User = "minidlna";
