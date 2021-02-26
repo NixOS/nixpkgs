@@ -21,7 +21,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   preBuild = ''
     buildFlagsArray+=(
