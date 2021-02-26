@@ -215,7 +215,7 @@ let
               '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep ^'
           )
     '';
-  }) {};
+  }) { inherit pkgs system; };
 in pkgs.lib.mapAttrs mkElkTest {
   ELK-6 =
     if enableUnfree
