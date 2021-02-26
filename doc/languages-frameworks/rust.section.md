@@ -320,9 +320,10 @@ attributes can also be used:
   variable `buildAndTestSubdir` can be used to build a crate in a
   Cargo workspace. Additional maturin flags can be passed through
   `maturinBuildFlags`.
-* `cargoCheckHook`: run tests using Cargo. Additional flags can be
-  passed to Cargo using `checkFlags` and `checkFlagsArray`. By
-  default, tests are run in parallel. This can be disabled by setting
+* `cargoCheckHook`: run tests using Cargo. The build type for checks
+  can be set using `cargoCheckType`. Additional flags can be passed to
+  the tests using `checkFlags` and `checkFlagsArray`. By default,
+  tests are run in parallel. This can be disabled by setting
   `dontUseCargoParallelTests`.
 * `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
