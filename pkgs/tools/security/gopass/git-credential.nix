@@ -2,7 +2,6 @@
 , makeWrapper
 , buildGoModule
 , fetchFromGitHub
-, installShellFiles
 , gopass
 }:
 
