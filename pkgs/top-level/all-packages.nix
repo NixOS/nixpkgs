@@ -25140,10 +25140,13 @@ in
 
   libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
-  sourcetrail = libsForQt5.callPackage ../development/tools/sourcetrail {
-    jdk = jdk8;
+  sourcetrail = let
     llvmPackages = llvmPackages_10;
+  in libsForQt5.callPackage ../development/tools/sourcetrail {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    jdk = jdk8;
     pythonPackages = python3Packages;
+    inherit llvmPackages;
   };
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
