@@ -85,7 +85,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [
       badmutex
-      colemickens
       forkk
       lnl7
       pjones

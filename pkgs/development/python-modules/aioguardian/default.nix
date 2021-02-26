@@ -4,7 +4,6 @@
 , asyncio-dgram
 , asynctest
 , buildPythonPackage
-, cryptography
 , fetchFromGitHub
 , poetry
 , pytest-aiohttp

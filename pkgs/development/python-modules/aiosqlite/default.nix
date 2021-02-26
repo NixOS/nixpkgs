@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.16.0";
+  version = "0.17.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a0fjmlvadyzsml10g5p1qif7192k0swy5zwjp8v48y5zc3yy56h";
+    sha256 = "sha256-8OaswkvEhkFJJnrIL7Rt+zvkRV+Z/iHfgmCcxua67lE=";
   };
 
   checkInputs = [
@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   # tests are not pick-up automatically by the hook
   pytestFlagsArray = [ "aiosqlite/tests/*.py" ];
+
+  pythonImportsCheck = [ "aiosqlite" ];
 
   meta = with lib; {
     description = "Asyncio bridge to the standard sqlite3 module";

@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.2.1";
+  version = "5.3.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "aa37b744c400f437acba7a54aebcbdbe722ece743d342cbc39f2dd8087f05826";
+    sha256 = "fb6cb2c03f4fffbdd8a0098127383d03b14cf7d6abf3a0cd229fb13ff68ee33e";
   };
 
   outputs = [ "out" "dev" ];
@@ -43,7 +43,8 @@ unwrapped = stdenv.mkDerivation rec {
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
     echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
-    sed '/^[[:blank:]]*test_dstaddr,$/d' -i tests/config/doh2.test.lua
+    sed '/^[[:blank:]]*test_dstaddr,$/d' -i \
+      tests/config/doh2.test.lua modules/http/http_doh.test.lua
   '';
 
   preConfigure = ''

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lime";
-  version = "4.4.0";
+  version = "4.4.21";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "14jg1zisjbzflw3scfqdbwy48wq3cp93l867vigb8l40lkc6n26z";
+    sha256 = "sha256-3whr2KSAULRe3McgOtJlA3NEPF8NO6YHp+4vqeMPT5I=";
   };
 
   buildInputs = [ bctoolbox soci belle-sip sqlite ];

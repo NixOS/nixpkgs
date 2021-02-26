@@ -22,10 +22,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [texinfo];
 
-  patchPhase = ''
+  postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
-
-    pwd
 
     # SBCL checks whether files are up-to-date in many places..
     # Unfortunately, same timestamp is not good enough
@@ -43,12 +41,6 @@ stdenv.mkDerivation rec {
     # Fix the tests
     sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
-
-    # Use whatever `cc` the stdenv provides
-    substituteInPlace src/runtime/Config.x86-64-darwin --replace gcc cc
-
-    substituteInPlace src/runtime/Config.x86-64-darwin \
-      --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
   ''
   + (if purgeNixReferences
     then
@@ -81,16 +73,24 @@ stdenv.mkDerivation rec {
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
   buildPhase = ''
+    runHook preBuild
+
     sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}" ${
                   lib.concatStringsSep " "
                     (builtins.map (x: "--with-${x}") enableFeatures ++
                      builtins.map (x: "--without-${x}") disableFeatures)
                 }
     (cd doc/manual ; make info)
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     INSTALL_ROOT=$out sh install.sh
+
+    runHook postInstall
   ''
   + lib.optionalString (!purgeNixReferences) ''
     cp -r src $out/lib/sbcl

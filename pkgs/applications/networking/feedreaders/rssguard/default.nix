@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
-  version = "3.8.4";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2NC5Y8WxVYrzpuqDzhXXJ16b04Em1HqZaE2VK9tmfYk=";
+    sha256 = "sha256-pprWJIYAFYSTPhWVCW4dz3GWeAS53Vo8UXiyQ56Mwjo=";
   };
 
   buildInputs =  [ qtwebengine qttools ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       for ownCloud/Nextcloud.
     '';
     homepage = "https://github.com/martinrotter/rssguard";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

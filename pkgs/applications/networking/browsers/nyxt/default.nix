@@ -1,4 +1,4 @@
-{ stdenv, lib, lispPackages, sbcl
+{ stdenv, lib, lispPackages
 , makeWrapper, wrapGAppsHook, gst_all_1
 , glib, gdk-pixbuf, cairo
 , mime-types, pango, gtk3

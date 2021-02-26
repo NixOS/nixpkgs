@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectx";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c7y5hj4w72bm6y3riw0acayn4w9x7bbf1vykqcprbyw3a3dvcsw";
+    sha256 = "sha256-a2w4SXF6oOo4ZLYwF8I3mkqW9ktSbHiV/tym8b8Ng4U=";
   };
 
-  vendorSha256 = "168hfdc2rfwpz2ls607bz5vsm1aw4brhwm8hmbiq1n1l2dn2dj0y";
+  vendorSha256 = "sha256-4sQaqC0BOsDfWH3cHy2EMQNMq6qiAcbV+RwxCdcSxsg=";
 
   doCheck = false;
 

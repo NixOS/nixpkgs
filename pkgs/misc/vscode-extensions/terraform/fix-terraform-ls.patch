@@ -1,8 +1,8 @@
 diff --git a/out/extension.js b/out/extension.js
-index 1de8aab..e2b3a3e 100644
+index 375048c..fa5eff0 100644
 --- a/out/extension.js
 +++ b/out/extension.js
-@@ -204,19 +204,7 @@ function pathToBinary() {
+@@ -209,20 +209,7 @@ function pathToBinary() {
          if (!_pathToBinaryPromise) {
              let command = vscodeUtils_1.config('terraform').get('languageServer.pathToBinary');
              if (!command) { // Skip install/upgrade if user has set custom binary path
@@ -13,6 +13,7 @@ index 1de8aab..e2b3a3e 100644
 -                }
 -                catch (err) {
 -                    vscode.window.showErrorMessage(err);
+-                    reporter.sendTelemetryException(err);
 -                    throw err;
 -                }
 -                finally {

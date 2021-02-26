@@ -5,7 +5,7 @@
 , substituteAll
 , pythonOlder
 , geos
-, pytest
+, pytestCheckHook
 , cython
 , numpy
 , fetchpatch
@@ -26,9 +26,13 @@ buildPythonPackage rec {
     cython
   ];
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    numpy
+  ];
 
-  propagatedBuildInputs = [ numpy ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # environment variable used in shapely/_buildcfg.py
   GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -51,13 +55,20 @@ buildPythonPackage rec {
       libgeos_c = GEOS_LIBRARY_PATH;
       libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
-  ];
+   # included in next release.
+   (fetchpatch {
+     url = "https://github.com/Toblerity/Shapely/commit/ea5b05a0c87235d3d8f09930ad47c396a76c8b0c.patch";
+     sha256 = "sha256-egdydlV+tpXosSQwQFHaXaeBhXEHAs+mn7vLUDpvybA=";
+   })
+ ];
 
-  # Disable the tests that improperly try to use the built extensions
-  checkPhase = ''
+  preCheck = ''
     rm -r shapely # prevent import of local shapely
-    py.test tests
   '';
+
+  disabledTests = [
+    "test_collection"
+  ];
 
   meta = with lib; {
     description = "Geometric objects, predicates, and operations";

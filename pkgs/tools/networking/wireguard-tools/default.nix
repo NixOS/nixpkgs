@@ -13,11 +13,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "1.0.20200827";
+  version = "1.0.20210223";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
-    sha256 = "1d8rs1g6zy3kz327cc3hzkk5a44278x9p32gxasz6i94bq0b2bs3";
+    sha256 = "sha256-YlqviVEYrGYZAJtUg2zAU8AzsQotxguljltC3N2ruUc=";
   };
 
   outputs = [ "out" "man" ];

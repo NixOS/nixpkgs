@@ -13,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.12.0";
+  version = "1.12.1";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -21,10 +21,10 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y3dcikw6gl436mhza5j0b3lm49jzl590a9ry53rkmzrv2lqx9w6";
+    sha256 = "0ickzq2swhabxqcg32n1i99bam6ip7c0mhhncgvmw332w6pzgvlb";
   };
 
-  vendorSha256 = "09lbkm7c361c2s87qi1wpfsqgpp3r862wcn98dzdg5j6pvpgwbag";
+  vendorSha256 = "0i0dhipp1gdn0xdl4bpi13ksxf7dc9biz9riapm988bldcr5s1kr";
 
   subPackages = [ "." ];
 
@@ -41,6 +41,7 @@ buildGoModule rec {
   );
 
   postInstall = ''
+    HOME=$TMPDIR
     for shell in bash fish zsh; do
       $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell

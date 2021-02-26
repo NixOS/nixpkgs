@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchgit, cmake, pkg-config, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre
-, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, libpng, cairo, freetype
+, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre, wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
-  name = "solvespace-2.3-20190501";
-  rev = "e7b75f19c34c923780db776592b47152650d8f22";
-  src = fetchgit {
-    url = "https://github.com/solvespace/solvespace";
-    inherit rev;
-    sha256 = "07k4mbzxf0dmzwdhjx5nc09y7rn1schkaypsw9kz0l7ppylprpp2";
+  pname = "solvespace";
+  version = "v3.0.rc2";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1z0873gwcr0hybrpqy4hwislir6k2zb4s62lbsivq5nbkizy7gjm";
     fetchSubmodules = true;
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     +# include(GetGitCommitHash)
      # and instead uncomment the following, adding the complete git hash of the checkout you are using:
     -# set(GIT_COMMIT_HASH 0000000000000000000000000000000000000000)
-    +set(GIT_COMMIT_HASH $rev)
+    +set(GIT_COMMIT_HASH $version)
     EOF
   '';
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A parametric 3d CAD program";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.edef ];
     platforms = platforms.linux;
     homepage = "http://solvespace.com";

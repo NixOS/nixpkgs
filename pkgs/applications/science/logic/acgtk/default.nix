@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchurl, dune, ocamlPackages }:
+{ lib, stdenv, fetchurl, dune_2, ocamlPackages }:
 
 stdenv.mkDerivation {
 
   pname = "acgtk";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
-    url = "https://acg.loria.fr/software/acg-1.5.1-20191113.tar.gz";
-    sha256 = "17595qfwhzz5q091ak6i6bg5wlppbn8zfn58x3hmmmjvx2yfajn1";
+    url = "https://acg.loria.fr/software/acg-1.5.2-20201204.tar.gz";
+    sha256 = "09yax7dyw8kgwzlb69r9d20y7rrymzwi3bbq2dh0qdq01vjz2xwq";
   };
 
-  buildInputs = [ dune ] ++ (with ocamlPackages; [
+  buildInputs = [ dune_2 ] ++ (with ocamlPackages; [
     ocaml findlib ansiterminal cairo2 cmdliner fmt logs menhir mtime yojson
   ]);
 
-  buildPhase = "dune build";
+  buildPhase = "dune build --profile=release";
 
   installPhase = ''
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR

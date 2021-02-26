@@ -22,7 +22,7 @@ instantenous and formats commits for you.
 
 */
 
-{ lib, external, pkgs }: variant: self:
+{ lib, pkgs }: variant: self:
 let
   dontConfigure = pkg:
     if pkg != null then pkg.override (args: {
@@ -53,7 +53,7 @@ let
   });
 
   fix-rtags = pkg:
-    if pkg != null then dontConfigure (externalSrc pkg external.rtags)
+    if pkg != null then dontConfigure (externalSrc pkg pkgs.rtags)
     else null;
 
   generateMelpa = lib.makeOverridable ({ archiveJson ? ./recipes-archive-melpa.json
@@ -79,9 +79,9 @@ let
         };
 
         auto-complete-clang-async = super.auto-complete-clang-async.overrideAttrs (old: {
-          buildInputs = old.buildInputs ++ [ external.llvmPackages.llvm ];
-          CFLAGS = "-I${external.llvmPackages.clang}/include";
-          LDFLAGS = "-L${external.llvmPackages.clang}/lib";
+          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
+          CFLAGS = "-I${pkgs.llvmPackages.clang}/include";
+          LDFLAGS = "-L${pkgs.llvmPackages.clang}/lib";
         });
 
         # part of a larger package
@@ -132,8 +132,8 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
-          nativeBuildInputs = [ external.pkg-config ];
-          buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
+          nativeBuildInputs = [ pkgs.pkg-config ];
+          buildInputs = with pkgs; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
           preBuild = "make server/epdfinfo";
           recipe = pkgs.writeText "recipe" ''
             (pdf-tools
@@ -143,7 +143,7 @@ let
         });
 
         # Build same version as Haskell package
-        hindent = (externalSrc super.hindent external.hindent).overrideAttrs (attrs: {
+        hindent = (externalSrc super.hindent pkgs.haskellPackages.hindent).overrideAttrs (attrs: {
           packageRequires = [ self.haskell-mode ];
         });
 
@@ -169,7 +169,7 @@ let
           dontUseCmakeBuildDir = true;
           doCheck = true;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ external.cmake external.llvmPackages.llvm external.llvmPackages.clang ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.clang ];
         });
 
         # tries to write a log file to $HOME
@@ -286,18 +286,28 @@ let
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
-        rtags = dontConfigure (externalSrc super.rtags external.rtags);
+        rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
         rtags-xref = dontConfigure super.rtags;
 
         shm = super.shm.overrideAttrs (attrs: {
-          propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
+          propagatedUserEnvPkgs = [ pkgs.haskellPackages.structured-haskell-mode ];
         });
 
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
-          nativeBuildInputs = [ external.pkg-config ];
+          nativeBuildInputs = [ pkgs.pkg-config ];
+
+          postPatch = ''
+            substituteInPlace telega-customize.el \
+              --replace 'defcustom telega-server-command "telega-server"' \
+                        "defcustom telega-server-command \"$out/bin/telega-server\""
+
+            substituteInPlace telega-sticker.el --replace '"dwebp"' '"${pkgs.libwebp}/bin/dwebp"'
+
+            substituteInPlace telega-vvnote.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
+          '';
 
           postBuild = ''
             cd source/server
@@ -314,12 +324,12 @@ let
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
         });
 
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
         });
 
         zmq = super.zmq.overrideAttrs (old: {
@@ -328,11 +338,11 @@ let
             make
           '';
           nativeBuildInputs = [
-            external.autoconf
-            external.automake
-            external.pkg-config
-            external.libtool
-            (external.zeromq.override { enableDrafts = true; })
+            pkgs.autoconf
+            pkgs.automake
+            pkgs.pkg-config
+            pkgs.libtool
+            (pkgs.zeromq.override { enableDrafts = true; })
           ];
           postInstall = ''
             mv $out/share/emacs/site-lisp/elpa/zmq-*/src/.libs/emacs-zmq.so $out/share/emacs/site-lisp/elpa/zmq-*
@@ -415,7 +425,7 @@ let
         window-numbering = markBroken super.window-numbering;
 
         editorconfig = super.editorconfig.overrideAttrs (attrs: {
-          propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
+          propagatedUserEnvPkgs = [ pkgs.editorconfig-core-c ];
         });
 
         # missing dependencies
@@ -433,7 +443,7 @@ let
         racer = super.racer.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace racer.el \
-              --replace /usr/local/src/rust/src ${external.rustPlatform.rustcSrc}
+              --replace /usr/local/src/rust/src ${pkgs.rustPlatform.rustcSrc}
           '';
         });
 
@@ -462,7 +472,7 @@ let
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
             prePatch =
-              let w3m = "${lib.getBin external.w3m}/bin/w3m"; in
+              let w3m = "${lib.getBin pkgs.w3m}/bin/w3m"; in
               ''
                 substituteInPlace w3m.el \
                 --replace 'defcustom w3m-command nil' \

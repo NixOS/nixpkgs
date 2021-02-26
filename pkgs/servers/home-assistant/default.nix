@@ -85,6 +85,7 @@ in with py.pkgs; buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "attrs==19.3.0" "attrs>=19.3.0" \
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
+      --replace "awesomeversion==21.2.2" "awesomeversion>=21.2.2" \
       --replace "cryptography==3.2" "cryptography" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "pytz>=2020.5" "pytz>=2020.4" \

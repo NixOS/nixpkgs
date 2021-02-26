@@ -21,11 +21,6 @@ buildPythonPackage rec {
     sha256 = "26af5c1a3f2b76aab8c3200310f0fc783790ec5a231ffeec102e620acdd6262e";
   };
 
-  # nixpkgs version of moto is >=1.2.0, remove version pin to fix build
-  postPatch = ''
-    substituteInPlace ./setup.py --replace "moto==0.4.31" "moto"
-  '';
-
   # moto>=1.0.0 is backwards-incompatible and some tests fail with it,
   # so disable tests for now
   doCheck = false;

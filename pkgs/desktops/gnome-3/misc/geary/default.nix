@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , gtk3
 , vala

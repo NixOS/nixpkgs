@@ -1,9 +1,11 @@
-{ lib, buildDunePackage, fetchurl, ocaml, cmdliner, opaline, ptime }:
+{ lib, buildDunePackage, fetchurl, ocaml, cmdliner, ptime }:
 
 buildDunePackage rec {
 
   pname = "crunch";
   version = "3.1.0";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-crunch/releases/download/v${version}/crunch-v${version}.tbz";
@@ -15,7 +17,7 @@ buildDunePackage rec {
   outputs = [ "lib" "bin" "out" ];
 
   installPhase = ''
-    ${opaline}/bin/opaline -prefix $bin -libdir $lib/lib/ocaml/${ocaml.version}/site-lib/
+    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib/
   '';
 
   meta = {

@@ -15,19 +15,15 @@
 , stable ? true
 , oceSupport ? false
 , withOCE ? false
-, opencascade
 , withOCCT ? false
 , withOCC ? true
-, opencascade-occt
 , ngspiceSupport ? false
 , withNgspice ? true
 , libngspice
 , scriptingSupport ? false
 , withScripting ? true
-, swig
 , python3
 , debug ? false
-, valgrind
 , with3d ? true
 , withI18n ? true
 , srcs ? { }

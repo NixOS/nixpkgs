@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchurl {
     url = "https://github.com/wolfcw/libfaketime/archive/v${version}.tar.gz";
-    sha256 = "18s2hjm4sbrlg6sby944z87yslnq9s85p7j892hyr42qrlvq4a06";
+    sha256 = "sha256-V9AYEVA2HAqbXI7vBbETkvYTStosLZmOkuY9rtY5ZHw=";
   };
 
   patches = [
