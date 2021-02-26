@@ -3547,7 +3547,6 @@ broken-packages:
   - binary-indexed-tree
   - binary-protocol
   - binary-protocol-zmq
-  - binary-search
   - binary-streams
   - binary-tagged
   - binary-typed
