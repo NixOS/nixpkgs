@@ -292,7 +292,7 @@ mapAliases ({
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
   jasper = throw "jasper has been removed: abandoned upstream with many vulnerabilities";
-  jbuilder = dune; # added 2018-09-09
+  jbuilder = dune_1; # added 2018-09-09
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
