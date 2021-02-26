@@ -47,8 +47,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The GL Vendor-Neutral Dispatch library";
+    longDescription = ''
+      libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
+      calls between multiple vendors. It allows multiple drivers from different
+      vendors to coexist on the same filesystem, and determines which vendor to
+      dispatch each API call to at runtime.
+      Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
+    '';
     homepage = "https://github.com/NVIDIA/libglvnd";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ primeos ];
   };
 }
