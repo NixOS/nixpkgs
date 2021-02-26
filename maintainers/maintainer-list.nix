@@ -7455,6 +7455,16 @@
     githubId = 11365056;
     name = "Kevin Liu";
   };
+  pnotequalnp = {
+    email = "kevin@pnotequalnp.com";
+    github = "pnotequalnp";
+    githubId = 46154511;
+    name = "Kevin Mullins";
+    keys = [{
+      longkeyid = "rsa4096/361820A45DB41E9A";
+      fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A";
+    }];
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";
