@@ -1610,4 +1610,5 @@ self: super: {
       })
     ];
   });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
