@@ -1406,16 +1406,12 @@ self: super: {
   # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
-  haskell-language-server = overrideCabal (dontCheck super.haskell-language-server) {
-    # 2020-02-19: Override is necessary because of wrong bound on upstream, remove after next hackage update
-    preConfigure = ''
-      substituteInPlace haskell-language-server.cabal --replace "hls-explicit-imports-plugin ==0.1.0.1" "hls-explicit-imports-plugin ==0.1.0.0"
-    '';
-  };
+  haskell-language-server = dontCheck super.haskell-language-server;
 
-  # 2021-02-08: Jailbreaking because of
-  # https://github.com/haskell/haskell-language-server/issues/1329
-  hls-tactics-plugin = doJailbreak super.hls-tactics-plugin;
+  # 2020-02-26: Outdated upperbound on ghc-exactprint
+  # https://github.com/lspitzner/brittany/issues/342
+  brittany = doJailbreak super.brittany;
+
   # 2021-02-11: Jailbreaking because of syntax error on bound revision
   hls-explicit-imports-plugin = doJailbreak super.hls-explicit-imports-plugin;
 

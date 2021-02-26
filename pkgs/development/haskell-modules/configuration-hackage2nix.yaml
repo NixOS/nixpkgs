@@ -2800,14 +2800,12 @@ package-maintainers:
     - nix-diff
   maralorn:
     - reflex-dom
-    - ghcide
     - cabal-fmt
     - shh
-    - brittany
-    - hlint
     - neuron
     - releaser
     - taskwarrior
+    - haskell-language-server
   sorki:
     - cayene-lpp
     - data-stm32
