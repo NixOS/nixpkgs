@@ -1,11 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python3, pkg-config, libX11, libXext, xorgproto, addOpenGLRunpath }:
+{ stdenv, lib, fetchFromGitLab
+, autoreconfHook, pkg-config, python3, addOpenGLRunpath
+, libX11, libXext, xorgproto
+}:
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
   version = "1.3.2";
 
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
     sha256 = "10x7fgb114r4gikdg6flszl3kwzcb9y5qa7sj9936mk0zxhjaylz";
@@ -47,8 +51,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The GL Vendor-Neutral Dispatch library";
-    homepage = "https://github.com/NVIDIA/libglvnd";
+    longDescription = ''
+      libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
+      calls between multiple vendors. It allows multiple drivers from different
+      vendors to coexist on the same filesystem, and determines which vendor to
+      dispatch each API call to at runtime.
+      Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
+    '';
+    inherit (src.meta) homepage;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ primeos ];
   };
 }
