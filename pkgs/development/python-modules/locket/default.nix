@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "locket";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d4z2zngrpqkrfhnd4yhysh66kjn4mblys2l06sh5dix2p0n7vhz";
+    sha256 = "3e1faba403619fe201552f083f1ecbf23f550941bc51985ac6ed4d02d25056dd";
   };
 
   buildInputs = [ pytest ];

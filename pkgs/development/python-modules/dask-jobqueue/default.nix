@@ -8,12 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.7.1";
+  version = "0.7.2";
   pname = "dask-jobqueue";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d32ddf3e3c7db29ace102037fa5f61c8db2d945176454dc316a6ffdb8bbfe88b";
+    sha256 = "1767f4146b2663d9d2eaef62b882a86e1df0bccdb8ae68ae3e5e546aa6796d35";
   };
 
   checkInputs = [ pytest ];

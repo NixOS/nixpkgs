@@ -1,9 +1,22 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, black, isort
-, pytestCheckHook, pyyaml, typing-extensions, typing-inspect, dataclasses }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, hypothesis
+, doCheck ? true
+, dataclasses
+, hypothesmith
+, pytestCheckHook
+, pyyaml
+, typing-extensions
+, typing-inspect
+, black
+, isort
+}:
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.13";
+  version = "0.3.17";
 
   # Some files for tests missing from PyPi
   # https://github.com/Instagram/LibCST/issues/331
@@ -11,25 +24,21 @@ buildPythonPackage rec {
     owner = "instagram";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0pbddjrsqj641mr6zijk2phfn15dampbx268zcws4bhhhnrxlj65";
+    sha256 = "sha256-mlSeB9OjCiUVYwcPYNrQdlfcj9DV/+wqVWt91uFsQsU=";
   };
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ pyyaml typing-inspect ]
+  propagatedBuildInputs = [ hypothesis typing-inspect pyyaml ]
     ++ lib.optional (pythonOlder "3.7") dataclasses;
 
-  checkInputs = [ black isort pytestCheckHook ];
+  checkInputs = [ black hypothesmith isort pytestCheckHook ];
 
-  # https://github.com/Instagram/LibCST/issues/346
-  # https://github.com/Instagram/LibCST/issues/347
+  inherit doCheck;
+
   preCheck = ''
     python -m libcst.codegen.generate visitors
     python -m libcst.codegen.generate return_types
-    rm libcst/tests/test_fuzz.py
-    rm libcst/tests/test_pyre_integration.py
-    rm libcst/metadata/tests/test_full_repo_manager.py
-    rm libcst/metadata/tests/test_type_inference_provider.py
   '';
 
   pythonImportsCheck = [ "libcst" ];
@@ -39,6 +48,6 @@ buildPythonPackage rec {
       "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
     homepage = "https://github.com/Instagram/libcst";
     license = with licenses; [ mit asl20 psfl ];
-    maintainers = with maintainers; [ maintainers.ruuda ];
+    maintainers = with maintainers; [ ruuda SuperSandro2000 ];
   };
 }
