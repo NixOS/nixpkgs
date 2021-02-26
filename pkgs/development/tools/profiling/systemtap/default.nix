@@ -37,7 +37,7 @@ let
 
 in runCommand "systemtap-${kernel.version}-${version}" {
   inherit stapBuild kernelBuildDir;
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   meta = {
     homepage = "https://sourceware.org/systemtap/";
     repositories.git = url;

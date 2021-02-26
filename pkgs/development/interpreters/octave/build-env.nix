@@ -1,4 +1,4 @@
-{ stdenv, octave, buildEnv
+{ lib, stdenv, octave, buildEnv
 , makeWrapper, texinfo
 , octavePackages
 , wrapOctave
@@ -48,7 +48,7 @@ in buildEnv {
 
       createOctavePackagesPath $out ${octave}
 
-      for path in ${stdenv.lib.concatStringsSep " " packages}; do
+      for path in ${lib.concatStringsSep " " packages}; do
           if [ -e $path/*.tar.gz ]; then
              $out/bin/octave-cli --eval "pkg local_list $out/.octave_packages; \
                                          pkg prefix $out/${octave.octPkgsPath} $out/${octave.octPkgsPath}; \
@@ -61,7 +61,7 @@ in buildEnv {
       # To point to the new local_list in $out
       addPkgLocalList $out ${octave}
 
-      wrapOctavePrograms "${stdenv.lib.concatStringsSep " " packages}"
+      wrapOctavePrograms "${lib.concatStringsSep " " packages}"
      '' + postBuild;
 
   inherit (octave) meta;

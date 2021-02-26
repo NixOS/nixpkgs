@@ -611,7 +611,7 @@ Using the example above, the analagous pytestCheckHook usage would be:
     "update"
   ];
 
-  disabledTestFiles = [
+  disabledTestPaths = [
     "tests/test_failing.py"
   ];
 ```

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xn403fxz6ay5lv8whyfdq611kvxj5q309bj317yw5cxbb08w1yb";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/vassal $out/doc

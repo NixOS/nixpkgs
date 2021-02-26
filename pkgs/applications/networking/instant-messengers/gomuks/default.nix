@@ -26,7 +26,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildInputs = [ makeWrapper olm ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ olm ];
 
   # Upstream issue: https://github.com/tulir/gomuks/issues/260
   patches = lib.optional stdenv.isLinux (substituteAll {

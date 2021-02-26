@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256="0px6x5ivcdbbp2pz5n1r1cwg1syadklhjw8piqhl63n91i4r7iyb";
   };
 
-  buildInputs = [ bison flex makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bison flex ];
   propagatedBuildInputs = [ llvm gmp mpfr readline ];
   NIX_LDFLAGS = "-lLLVMJIT";
 

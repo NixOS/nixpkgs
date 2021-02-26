@@ -20,7 +20,8 @@ stdenv.mkDerivation {
   patchFlags = [ "-p0" ];
   patches = [ ./warn.patch ];
 
-  buildInputs = [ ocaml makeWrapper ncurses ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ocaml ncurses ];
 
   phases = "unpackPhase patchPhase buildPhase";
   buildPhase = ''

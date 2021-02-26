@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m3971z4z1wr0paggprfz0n8ng8vsnkc9m6s3bdplgyz7qjk6jwx";
   };
 
-  buildInputs = [ makeWrapper perlPackages.perl perlPackages.LWP perlPackages.URI perlPackages.HTMLParser ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perlPackages.perl perlPackages.LWP perlPackages.URI perlPackages.HTMLParser ];
   checkInputs = [ perlPackages.HTTPServerSimple perlPackages.Parent ];
 
   configurePhase = ''

@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hOemDLfkjjPXQErKKCIMl8c5EPZe40B1HlNfvg7IZKU=";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   unpackPhase = ''
     tar xfz ${src}

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gv7g61ja9q9zg1m30k4snqwwy1kq7b4df6sb7d2qra7kbdq8af1";
   };
 
-  buildInputs = [ makeWrapper perl openssh rsync ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl openssh rsync ];
 
   doCheck = true;
 

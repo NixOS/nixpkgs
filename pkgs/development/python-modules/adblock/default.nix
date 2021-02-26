@@ -1,10 +1,9 @@
 { stdenv
 , lib
-, rustPlatform
 , fetchFromGitHub
-, pipInstallHook
+, buildPythonPackage
+, rustPlatform
 , pythonImportsCheckHook
-, maturin
 , pkg-config
 , openssl
 , publicsuffix-list
@@ -13,7 +12,7 @@
 , Security
 }:
 
-rustPlatform.buildRustPackage rec {
+buildPythonPackage rec {
   pname = "adblock";
   version = "0.4.0";
   disabled = isPy27;
@@ -25,39 +24,32 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "10d6ks2fyzbizq3kb69q478idj0h86k6ygjb6wl3zq3mf65ma4zg";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-gEFmj3/KvhvvsOK2nX2L1RUD4Wfp3nYzEzVnQZIsIDY=";
+  };
+
   format = "pyproject";
 
-  cargoSha256 = "0di05j942rrm2crpdpp9czhh65fmidyrvdp2n3pipgnagy7nchc0";
-
-  nativeBuildInputs = [ pipInstallHook maturin pkg-config pythonImportsCheckHook ];
+  nativeBuildInputs = [ pkg-config pythonImportsCheckHook ]
+    ++ (with rustPlatform; [ cargoSetupHook maturinBuildHook ]);
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
-  buildPhase = ''
-    runHook preBuild
-    maturin build --release --manylinux off --strip
-    runHook postBuild
-  '';
-
   # There are no rust tests
   doCheck = false;
+
   pythonImportsCheck = [ "adblock" ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm644 -t dist target/wheels/*.whl
-    pipInstallPhase
-    runHook postInstall
-  '';
-
-  passthru.meta = with lib; {
+  meta = with lib; {
     description = "Python wrapper for Brave's adblocking library, which is written in Rust";
     homepage = "https://github.com/ArniDagur/python-adblock/";
     maintainers = with maintainers; [ petabyteboy ];
     license = with licenses; [ asl20 mit ];
-    platforms = with platforms; [ all ];
   };
 }

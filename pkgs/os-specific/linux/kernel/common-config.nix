@@ -252,11 +252,17 @@ let
       DRM_AMDGPU_SI = whenAtLeast "4.9" yes;
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
-      # amdgpu support for RX6000 series
-      DRM_AMD_DC_DCN3_0 = whenBetween "5.9.12" "5.11" yes;
-      DRM_AMD_DC_DCN = whenAtLeast "5.11" yes;
       # Allow device firmware updates
       DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
+      # amdgpu display core (DC) support
+      DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
+      DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
+      DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
+      DRM_AMD_DC_DCN2_1 = whenBetween "5.4" "5.6" yes;
+      DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
+      DRM_AMD_DC_DCN = whenAtLeast "5.11" yes;
+      DRM_AMD_DC_HDCP = whenAtLeast "5.5" yes;
+      DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
@@ -640,7 +646,12 @@ let
       XZ_DEC_TEST              = option no;
     };
 
-    criu = optionalAttrs (features.criu or false) ({
+    criu = if (versionAtLeast version "4.19") then {
+      # Unconditionally enabled, because it is required for CRIU and
+      # it provides the kcmp() system call that Mesa depends on.
+      CHECKPOINT_RESTORE  = yes;
+    } else optionalAttrs (features.criu or false) ({
+      # For older kernels, CHECKPOINT_RESTORE is hidden behind EXPERT.
       EXPERT              = yes;
       CHECKPOINT_RESTORE  = yes;
     } // optionalAttrs (features.criu_revert_expert or true) {

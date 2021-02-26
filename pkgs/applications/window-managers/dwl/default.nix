@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , pkg-config
+, libinput
 , libxcb
 , libxkbcommon
 , wayland
@@ -15,27 +16,32 @@
 
 stdenv.mkDerivation rec {
   pname = "dwl";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "QoKaeF5DbSX0xciwc/0VKpubn/001cJjoZ+UzVDX4qE=";
+    sha256 = "gUaFTkpIQDswEubllMgvxPfCaEYFO7mODzjPyW7XsGQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    libinput
     libxcb
     libxkbcommon
     wayland
     wayland-protocols
     wlroots
-  ] ++ lib.optionals enable-xwayland [ xwayland libX11 ];
+  ] ++ lib.optionals enable-xwayland [
+    libX11
+    xwayland
+  ];
 
   # Allow users to set their own list of patches
   inherit patches;
 
+  # Last line of config.mk enables XWayland
   prePatch = lib.optionalString enable-xwayland ''
     sed -i -e '$ s|^#||' config.mk
   '';

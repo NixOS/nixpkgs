@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1yx9s1j47cq0v40cwq2gn7bdizpw46l95ba4zl9z4gg31mfvm807";
   };
 
-  buildInputs = [ snack tcl tk makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ snack tcl tk ];
 
   installPhase = ''
     mkdir -p $out/{bin,nix-support,share/wavesurfer/}

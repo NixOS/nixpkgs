@@ -19,7 +19,7 @@
         sha256 = "0fw952kdh1gn00y6sx2ag0rnb2paxq9ikg4bzgmbj7rrd1c6l2k9";
       };
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       buildCommand = ''
         mkdir -p "$out/lib/SideQuest" "$out/bin"

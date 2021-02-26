@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mm6r9bq79zks50yk0agcpdkw9yy994m38ibmgpb3bi3wkpq9891";
   };
 
-  buildInputs = [ makeWrapper adoptopenjdk-bin ant ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ adoptopenjdk-bin ant ];
 
   buildPhase = "ant -f tlatools/org.lamport.tlatools/customBuild.xml compile dist";
   installPhase = ''

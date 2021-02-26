@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
 
   installPhase = ''

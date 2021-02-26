@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
 
   installPhase =
     if stdenv.isDarwin then ''

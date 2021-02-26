@@ -50,7 +50,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  disabledTestFiles = [ "tests/test_graphql.py" ];
+  disabledTestPaths = [ "tests/test_graphql.py" ];
   # https://github.com/encode/starlette/issues/1131
   disabledTests = [ "test_debug_html" ];
   pythonImportsCheck = [ "starlette" ];

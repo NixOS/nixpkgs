@@ -18,7 +18,8 @@ stdenv.mkDerivation {
     cd $out; unzip $src
   '';
 
-  buildInputs = [unzip makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ unzip ];
 
   installPhase = ''
     dir=$(echo $out/OpenJUMP-*)

@@ -21,7 +21,7 @@ in
 , src ? null
 , srcs ? []
 , patches ? []
-, sourceRoot
+, sourceRoot ? ""
 , hash ? ""
 , sha256 ? ""
 , cargoUpdateHook ? ""

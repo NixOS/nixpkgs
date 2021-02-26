@@ -71,6 +71,9 @@ stdenv.mkDerivation rec {
 
     # fix intermittent errors in sagespawn.pyx: https://trac.sagemath.org/ticket/31052
     ./patches/sagespawn-implicit-casting.patch
+
+    # disable pexpect interrupt test (see https://trac.sagemath.org/ticket/30945)
+    ./patches/disable-pexpect-intermittent-failure.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -106,6 +109,9 @@ stdenv.mkDerivation rec {
 
     # fix test output with sympy 1.7 (https://trac.sagemath.org/ticket/30985)
     ./patches/sympy-1.7-update.patch
+
+    # workaround until we use sage's fork of threejs, which contains a "version" file
+    ./patches/dont-grep-threejs-version-from-minified-js.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

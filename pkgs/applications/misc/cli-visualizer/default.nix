@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sed '1i#include <cmath>' -i src/Transformer/SpectrumCircleTransformer.cpp
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
-  buildInputs = [ fftw ncurses5 libpulseaudio makeWrapper ];
+  buildInputs = [ fftw ncurses5 libpulseaudio ];
 
   buildFlags = [ "ENABLE_PULSE=1" ];
 

@@ -1,7 +1,25 @@
-{ stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
-, zulu, glib, libxml2, ffmpeg_3, libxslt, libGL, alsaLib
-, fontconfig, freetype, pango, gtk2, cairo, gdk-pixbuf, atk, xorg, zlib
-, swingSupport ? true }:
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, unzip
+, makeWrapper
+, setJavaClassPath
+, zulu
+# minimum dependencies
+, alsaLib
+, fontconfig
+, freetype
+, zlib
+, xorg
+# runtime dependencies
+, cups
+# runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? stdenv.isLinux
+, cairo
+, glib
+, gtk3
+}:
 
 let
   version = "11.41.23";
@@ -14,14 +32,12 @@ let
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
   extension = if stdenv.isDarwin then "zip" else "tar.gz";
 
-  libraries = [
-    stdenv.cc.libc glib libxml2 ffmpeg_3 libxslt libGL
-    xorg.libXxf86vm alsaLib fontconfig freetype pango
-    gtk2 cairo gdk-pixbuf atk zlib
-  ] ++ (lib.optionals swingSupport (with xorg; [
-    xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp
-    xorg.libXt xorg.libXrender stdenv.cc.cc
-  ]));
+  runtimeDependencies = [
+    cups
+  ] ++ lib.optionals gtkSupport [
+    cairo glib gtk3
+  ];
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
 in stdenv.mkDerivation {
   inherit version openjdk platform hash extension;
@@ -33,22 +49,28 @@ in stdenv.mkDerivation {
     sha256 = hash;
   };
 
-  buildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin unzip;
+  buildInputs = lib.optionals stdenv.isLinux [
+    alsaLib # libasound.so wanted by lib/libjsound.so
+    fontconfig
+    freetype
+    stdenv.cc.cc # libstdc++.so.6
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXtst
+    zlib
+  ];
+
+  nativeBuildInputs = [
+    autoPatchelfHook makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    unzip
+  ];
 
   installPhase = ''
     mkdir -p $out
     cp -r ./* "$out/"
-
-    rpath=$rpath''${rpath:+:}$out/lib/jli
-    rpath=$rpath''${rpath:+:}$out/lib/server
-    rpath=$rpath''${rpath:+:}$out/lib
-
-    # set all the dynamic linkers
-    find $out -type f -perm -0100 \
-        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$rpath" {} \;
-
-    find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
 
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
@@ -57,9 +79,17 @@ in stdenv.mkDerivation {
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
+  '' + lib.optionalString stdenv.isLinux ''
+    # We cannot use -exec since wrapProgram is a function but not a command.
+    for bin in $( find "$out" -executable -type f ); do
+      wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
+    done
   '';
 
-  rpath = lib.strings.makeLibraryPath libraries;
+  preFixup = ''
+    find "$out" -name libfontmanager.so -exec \
+      patchelf --add-needed libfontconfig.so {} \;
+  '';
 
   passthru = {
     home = zulu;

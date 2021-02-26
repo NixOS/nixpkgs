@@ -9,7 +9,8 @@ perlPackages.buildPerlPackage rec {
     sha256 = "0ga5mi2nv2v91kakk9xakkg71rnxnddlzv76ca13vfyd4jgcfasf";
   };
 
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [
     HTMLParser NetCIDRLite NetDNS NetAddrIP DBFile HTTPDate MailDKIM LWP
     IOSocketSSL DBI EncodeDetect IPCountry NetIdent Razor2ClientAgent MailSPF
     NetDNSResolverProgrammable Socket6

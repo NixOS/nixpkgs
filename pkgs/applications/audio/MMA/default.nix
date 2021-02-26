@@ -9,7 +9,8 @@
     sha256 = "18k0hwlqky5x4y461fxmw77gvz7z8jyrvxicrqphsgvwwinzy732";
   };
 
-  buildInputs = [ makeWrapper python3 alsaUtils timidity ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 alsaUtils timidity ];
 
   patchPhase = ''
     sed -i 's@/usr/bin/aplaymidi@/${alsaUtils}/bin/aplaymidi@g' mma-splitrec

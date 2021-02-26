@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/security/2020-2/0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch";
       sha256 = "19f4hx0p547mdx8y8arb3vclwyy4w9c8a6a40ryj7q33730mrmn4";
     })
+    # P2P: Fix a corner case in peer addition based on PD Request (https://w1.fi/security/2021-1/)
+    (fetchurl {
+      url = "https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch";
+      sha256 = "04cnds7hmbqc44jasabjvrdnh66i5hwvk2h2m5z94pmgbzncyh3z";
+    })
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -118,7 +123,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://hostap.epitest.fi/wpa_supplicant/";
+    homepage = "https://w1.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marcweber ];

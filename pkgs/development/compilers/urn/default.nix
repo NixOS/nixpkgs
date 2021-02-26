@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     sha256 = "0nclr3d8ap0y5cg36i7g4ggdqci6m5q27y9f26b57km8p266kcpy";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   # Any packages that depend on the compiler have a transitive
   # dependency on the Urn runtime support.
   propagatedBuildInputs = [ urn-rt ];

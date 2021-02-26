@@ -270,8 +270,8 @@ dvipng = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  nativeBuildInputs = [ perl pkg-config ];
-  buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
+  nativeBuildInputs = [ perl pkg-config makeWrapper ];
+  buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript ];
 
   preConfigure = ''
     cd texk/dvipng
