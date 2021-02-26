@@ -4,10 +4,10 @@
 , pcre, readline, boehmgc, sqlite, nim-unwrapped, nimble-unwrapped }:
 
 let
-  version = "1.4.2";
+  version = "1.4.4";
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-    sha256 = "0q8i56343b69f1bh48a8vxkqman9i2kscyj0lf017n3xfy1pb903";
+    sha256 = "03k642nnjca0s6jlbn1v4jld51mbkix97jli4ky74gqlxyfp4wvd";
   };
 
   meta = with lib; {
@@ -156,13 +156,13 @@ let
 
     nimble-unwrapped = stdenv.mkDerivation rec {
       pname = "nimble-unwrapped";
-      version = "0.12.0";
+      version = "0.13.1";
 
       src = fetchFromGitHub {
         owner = "nim-lang";
         repo = "nimble";
         rev = "v" + version;
-        sha256 = "0vx0mdk31n00dr2rhiip6f4x7aa3z3mnblnmwk7f65ixd5hayq6y";
+        sha256 = "1idb4r0kjbqv16r6bgmxlr13w2vgq5332hmnc8pjbxiyfwm075x8";
       };
 
       nativeBuildInputs = [ nim-unwrapped ];
