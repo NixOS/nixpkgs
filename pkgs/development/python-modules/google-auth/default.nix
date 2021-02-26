@@ -12,6 +12,7 @@
 , pytest-localserver
 , responses
 , rsa
+, six
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "0bmdqkyv8k8n6s8dss4zpbcq1cdxwicpb42kwybd02ia85mh43hb";
   };
 
-  propagatedBuildInputs = [ pyasn1-modules cachetools rsa ];
+  propagatedBuildInputs = [ pyasn1-modules cachetools rsa six ];
 
   checkInputs = [
     flask
