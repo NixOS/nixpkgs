@@ -7,7 +7,7 @@ rec {
 
   gst-plugins-base = callPackage ./base { inherit gstreamer; };
 
-  gst-plugins-good = callPackage ./good { inherit gst-plugins-base; };
+  gst-plugins-good = callPackage ./good { inherit gstreamer gst-plugins-base; };
 
   gst-plugins-bad = callPackage ./bad { inherit gst-plugins-base; };
 

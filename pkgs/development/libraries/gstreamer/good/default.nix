@@ -42,6 +42,8 @@
 , xorg
 , libgudev
 , wavpack
+, gstreamer
+, removeReferencesTo
 }:
 
 assert gtkSupport -> gtk3 != null;
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     nasm
+    removeReferencesTo
   ] ++ optionals stdenv.isLinux [
     wayland-protocols
   ];
@@ -145,6 +148,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
+  '';
+
+  # Remove references to gstreamer.dev
+  postInstall = ''
+    remove-references-to -t ${gstreamer.dev} $out/lib/gstreamer-1.0/libgstrtpmanager.so
   '';
 
   NIX_LDFLAGS = [
