@@ -59,7 +59,8 @@ stdenv.mkDerivation rec {
       Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
     '';
     inherit (src.meta) homepage;
-    license = licenses.bsd2;
+    # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
+    license = with licenses; [ mit bsd1 bsd3 gpl3Only asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ primeos ];
   };
