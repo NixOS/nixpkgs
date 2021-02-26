@@ -9914,6 +9914,7 @@ broken-packages:
   - serversession-backend-persistent
   - serversession-backend-redis
   - serversession-frontend-snap
+  - serversession-frontend-wai
   - serversession-frontend-yesod
   - services
   - ses-html-snaplet
