@@ -10768,4 +10768,10 @@
     github = "felixscheinost";
     githubId = 31761492;
   };
+  benneti = {
+    name = "Benedikt Tissot";
+    email = "benedikt.tissot@googlemail.com";
+    github = "benneti";
+    githubId = 11725645;
+  };
 }
