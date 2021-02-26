@@ -195,6 +195,7 @@ in
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
   krb5 = discoverTests (import ./krb5 {});
+  ksm = handleTest ./ksm.nix {};
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
   # kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};
