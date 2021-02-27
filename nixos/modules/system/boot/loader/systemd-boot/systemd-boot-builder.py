@@ -105,7 +105,7 @@ def write_entry(profile, generation, machine_id):
 
     with open("%s/kernel-params" % (generation_dir)) as params_file:
         kernel_params = kernel_params + params_file.read()
-    with open(tmp_path, 'w') as f:
+    with open(tmp_path, 'wb') as f:
         f.write(BOOT_ENTRY.format(profile=" [" + profile + "]" if profile else "",
                     generation=generation,
                     kernel=kernel,
