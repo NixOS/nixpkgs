@@ -63,7 +63,7 @@
     "automation" = ps: with ps; [ aiohttp-cors ];
     "avea" = ps: with ps; [ avea ];
     "avion" = ps: with ps; [ avion ];
-    "awair" = ps: with ps; [ ]; # missing inputs: python_awair
+    "awair" = ps: with ps; [ python-awair ];
     "aws" = ps: with ps; [ aiobotocore ];
     "axis" = ps: with ps; [ aiohttp-cors axis paho-mqtt ];
     "azure_devops" = ps: with ps; [ ]; # missing inputs: aioazuredevops
