@@ -63,7 +63,7 @@
     "automation" = ps: with ps; [ aiohttp-cors ];
     "avea" = ps: with ps; [ avea ];
     "avion" = ps: with ps; [ avion ];
-    "awair" = ps: with ps; [ ]; # missing inputs: python_awair
+    "awair" = ps: with ps; [ python-awair ];
     "aws" = ps: with ps; [ aiobotocore ];
     "axis" = ps: with ps; [ aiohttp-cors axis paho-mqtt ];
     "azure_devops" = ps: with ps; [ ]; # missing inputs: aioazuredevops
@@ -338,7 +338,7 @@
     "hassio" = ps: with ps; [ aiohttp-cors pillow ];
     "haveibeenpwned" = ps: with ps; [ ];
     "hddtemp" = ps: with ps; [ ];
-    "hdmi_cec" = ps: with ps; [ ]; # missing inputs: pyCEC
+    "hdmi_cec" = ps: with ps; [ pycec ];
     "heatmiser" = ps: with ps; [ ]; # missing inputs: heatmiserV3
     "heos" = ps: with ps; [ ]; # missing inputs: pyheos
     "here_travel_time" = ps: with ps; [ ]; # missing inputs: herepy
@@ -731,7 +731,7 @@
     "shopping_list" = ps: with ps; [ aiohttp-cors ];
     "sht31" = ps: with ps; [ ]; # missing inputs: Adafruit-GPIO Adafruit-SHT31
     "sigfox" = ps: with ps; [ ];
-    "sighthound" = ps: with ps; [ pillow ]; # missing inputs: simplehound
+    "sighthound" = ps: with ps; [ pillow simplehound ];
     "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
     "simplisafe" = ps: with ps; [ ]; # missing inputs: simplisafe-python
@@ -801,7 +801,7 @@
     "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
-    "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot
+    "switchbot" = ps: with ps; [ pyswitchbot ];
     "switcher_kis" = ps: with ps; [ aioswitcher ];
     "switchmate" = ps: with ps; [ ]; # missing inputs: pySwitchmate
     "syncthru" = ps: with ps; [ url-normalize ]; # missing inputs: pysyncthru
@@ -870,7 +870,7 @@
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
-    "twinkly" = ps: with ps; [ ]; # missing inputs: twinkly-client
+    "twinkly" = ps: with ps; [ twinkly-client ];
     "twitch" = ps: with ps; [ python-twitch-client ];
     "twitter" = ps: with ps; [ twitterapi ];
     "ubus" = ps: with ps; [ ];

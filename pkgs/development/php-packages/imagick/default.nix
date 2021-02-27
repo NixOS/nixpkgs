@@ -1,4 +1,4 @@
-{ buildPecl, fetchpatch, lib, imagemagick7, pkg-config, pcre' }:
+{ buildPecl, fetchpatch, lib, imagemagick, pkg-config, pcre' }:
 
 buildPecl {
   pname = "imagick";
@@ -19,7 +19,7 @@ buildPecl {
     })
   ];
 
-  configureFlags = [ "--with-imagick=${imagemagick7.dev}" ];
+  configureFlags = [ "--with-imagick=${imagemagick.dev}" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre' ];
 

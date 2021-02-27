@@ -23072,7 +23072,7 @@ in
 
   imagej = callPackage ../applications/graphics/imagej { };
 
-  imagemagick_light = imagemagick.override {
+  imagemagick6_light = imagemagick6.override {
     bzip2 = null;
     zlib = null;
     libX11 = null;
@@ -23095,14 +23095,14 @@ in
     libde265 = null;
   };
 
-  imagemagick = callPackage ../applications/graphics/ImageMagick {
+  imagemagick6 = callPackage ../applications/graphics/ImageMagick/6.x.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     ghostscript = null;
   };
 
-  imagemagickBig = imagemagick.override { inherit ghostscript; };
+  imagemagick6Big = imagemagick6.override { inherit ghostscript; };
 
-  imagemagick7_light = lowPrio (imagemagick7.override {
+  imagemagick_light = lowPrio (imagemagick.override {
     bzip2 = null;
     zlib = null;
     libX11 = null;
@@ -23124,11 +23124,11 @@ in
     libheif = null;
   });
 
-  imagemagick7 = lowPrio (imagemagick7Big.override {
+  imagemagick = lowPrio (imagemagickBig.override {
     ghostscript = null;
   });
 
-  imagemagick7Big = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
+  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   });
 

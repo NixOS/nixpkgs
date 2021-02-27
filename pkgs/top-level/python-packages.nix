@@ -2808,6 +2808,8 @@ in {
 
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { inherit (pkgs) pkg-config; };
 
+  graphtage = callPackage ../development/python-modules/graphtage { };
+
   graphviz = callPackage ../development/python-modules/graphviz { inherit (pkgs) graphviz; };
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
@@ -3376,6 +3378,8 @@ in {
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
 
   jsmin = callPackage ../development/python-modules/jsmin { };
+
+  json5 = callPackage ../development/python-modules/json5 { };
 
   jsondate = callPackage ../development/python-modules/jsondate { };
 
@@ -5325,6 +5329,8 @@ in {
 
   pycdio = callPackage ../development/python-modules/pycdio { };
 
+  pycec = callPackage ../development/python-modules/pycec { };
+
   pycfdns = callPackage ../development/python-modules/pycfdns { };
 
   pychannels = callPackage ../development/python-modules/pychannels { };
@@ -6095,6 +6101,8 @@ in {
     inherit (pkgs) bash subversion apr aprutil expat neon openssl;
   };
 
+  pyswitchbot = callPackage ../development/python-modules/pyswitchbot { };
+
   pysychonaut = callPackage ../development/python-modules/pysychonaut { };
 
   pysyncobj = callPackage ../development/python-modules/pysyncobj { };
@@ -6312,6 +6320,8 @@ in {
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
+
+  python-awair = callPackage ../development/python-modules/python-awair { };
 
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
@@ -7288,6 +7298,8 @@ in {
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
+  simplehound = callPackage ../development/python-modules/simplehound { };
+
   simplejson = callPackage ../development/python-modules/simplejson { };
 
   simplekml = callPackage ../development/python-modules/simplekml { };
@@ -8040,6 +8052,8 @@ in {
   twill = callPackage ../development/python-modules/twill { };
 
   twine = callPackage ../development/python-modules/twine { };
+
+  twinkly-client = callPackage ../development/python-modules/twinkly-client { };
 
   twisted = callPackage ../development/python-modules/twisted { };
 

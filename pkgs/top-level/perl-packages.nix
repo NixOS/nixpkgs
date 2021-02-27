@@ -9142,6 +9142,10 @@ let
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
+    # Tests are broken with PerlMagick and imagemagick version 7 as of 2021-02-22.
+    # See https://github.com/carygravel/gtk3-imageview/issues/19 and
+    # https://github.com/NixOS/nixpkgs/pull/114007#issuecomment-783595659.
+    doCheck = false;
     checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
@@ -16739,19 +16743,18 @@ let
     };
   };
 
-  PerlMagick = buildPerlPackage {
+  PerlMagick = buildPerlPackage rec {
     pname = "PerlMagick";
-    version = "6.89-1";
+    version = "7.0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.89-1.tar.gz";
-      sha256 = "0n9afy1z5bhf9phrbahnkwhgcmijn8jggpbzwrivw1zhliliiy68";
+      url = "mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-${version}.tar.gz";
+      sha256 = "1x05hdb3b6qs36x958b4w46qanvkqm6rpc44rlq4rd2w3gbp4lhx";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
       '';
-    doCheck = false;
   };
 
   PerlTidy = buildPerlPackage rec {
