@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "v${version}";
-    sha256 = "0vvd13g48i4alnqil98zc09zi5kv6l2s3kdfyg5syjxvq4lfd476";
+    rev = version;
+    sha256 = "06jwk0ps80fjzbsy24qn5bsggfpgn4ccjzjz65cdh0ap1mfvh5jf";
   };
 
   propagatedBuildInputs = [
