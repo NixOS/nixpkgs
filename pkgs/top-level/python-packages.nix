@@ -8043,6 +8043,8 @@ in {
 
   twine = callPackage ../development/python-modules/twine { };
 
+  twinkly-client = callPackage ../development/python-modules/twinkly-client { };
+
   twisted = callPackage ../development/python-modules/twisted { };
 
   twitch-python = callPackage ../development/python-modules/twitch-python { };
