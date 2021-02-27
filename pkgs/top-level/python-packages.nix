@@ -6371,6 +6371,8 @@ in {
 
   python-frontmatter = callPackage ../development/python-modules/python-frontmatter { };
 
+  python-gammu = callPackage ../development/python-modules/python-gammu { };
+
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
