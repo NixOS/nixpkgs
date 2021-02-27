@@ -3373,6 +3373,8 @@ in {
 
   jsmin = callPackage ../development/python-modules/jsmin { };
 
+  json5 = callPackage ../development/python-modules/json5 { };
+
   jsondate = callPackage ../development/python-modules/jsondate { };
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
