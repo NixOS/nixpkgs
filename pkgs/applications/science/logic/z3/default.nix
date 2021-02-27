@@ -57,9 +57,14 @@ stdenv.mkDerivation rec {
     mkdir -p $python/lib
     mv $lib/lib/python* $python/lib/
     ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
+  '' + optionalString javaBindings ''
+    mkdir -p $java/share/java
+    mv com.microsoft.z3.jar $java/share/java
+    moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
   '';
 
   outputs = [ "out" "lib" "dev" "python" ]
+    ++ optional javaBindings "java"
     ++ optional ocamlBindings "ocaml";
 
   meta = with lib; {

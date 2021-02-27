@@ -92,7 +92,6 @@ stdenv.mkDerivation {
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      (lib.getDev alsaLib)
       atk
       cairo
       curl
@@ -128,7 +127,6 @@ stdenv.mkDerivation {
       pango
       libheimdal
       libpulseaudio
-      (lib.getDev libpulseaudio)
       systemd
       ffmpeg
     ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [

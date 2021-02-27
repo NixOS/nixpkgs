@@ -191,6 +191,7 @@ in {
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (python38.override {
     self = python3Minimal;
+    pythonAttr = "python3Minimal";
     # strip down that python version as much as possible
     openssl = null;
     readline = null;
