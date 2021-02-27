@@ -56,7 +56,8 @@ function genSrcs() {
     done
 }
 
-cat <<EOF                     > data.nix
+{
+  cat <<EOF
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
@@ -64,14 +65,14 @@ cat <<EOF                     > data.nix
   pulumiPkgs = {
     x86_64-linux = [
 EOF
-genMainSrc "linux"           >> data.nix
-genSrcs "linux"              >> data.nix
-echo "    ];"                >> data.nix
+  genMainSrc "linux"
+  genSrcs "linux"
+  echo "    ];"
+  echo "    x86_64-darwin = ["
 
-echo "    x86_64-darwin = [" >> data.nix
-genMainSrc "darwin"          >> data.nix
-genSrcs "darwin"             >> data.nix
-echo "    ];"                >> data.nix
-echo "  };"                  >> data.nix
-echo "}"                     >> data.nix
-
+  genMainSrc "darwin"
+  genSrcs "darwin"
+  echo "    ];"
+  echo "  };"
+  echo "}"
+} > data.nix
