@@ -5,7 +5,6 @@
 , openssl
 , libuuid
 , coreutils
-, go
 , which
 , makeWrapper
 , cryptsetup
