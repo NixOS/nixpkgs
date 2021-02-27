@@ -136,7 +136,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets"
-    ++ lib.optional nativeComp "--with-nativecomp"
+    ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
     ;
 
