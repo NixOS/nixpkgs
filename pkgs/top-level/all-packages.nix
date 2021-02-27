@@ -5897,6 +5897,8 @@ in
 
   ox = callPackage ../applications/editors/ox { };
 
+  poke = callPackage ../applications/editors/poke { };
+
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
   kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd {};
