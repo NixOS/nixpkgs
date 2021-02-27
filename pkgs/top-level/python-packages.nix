@@ -6101,6 +6101,8 @@ in {
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
 
+  pytankerkoenig = callPackage ../development/python-modules/pytankerkoenig { };
+
   pyte = callPackage ../development/python-modules/pyte { };
 
   pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
