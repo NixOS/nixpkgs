@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "POSIX Shell script to quickly manage 2-monitors display";
     homepage = "https://github.com/Ventto/mons.git";
     license = licenses.mit;
-    maintainers = [ maintainers.mschneider ];
+    maintainers = with maintainers; [ mschneider thiagokokada ];
   };
 }
