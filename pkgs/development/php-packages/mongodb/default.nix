@@ -15,7 +15,7 @@ buildPecl {
     snappy
     zlib
     pcre'
-  ] ++ lib.optionals (stdenv.isDarwin) darwin.apple_sdk.frameworks.Security;
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta.maintainers = lib.teams.php.members;
 }
