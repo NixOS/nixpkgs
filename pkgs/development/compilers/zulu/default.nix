@@ -81,7 +81,10 @@ in stdenv.mkDerivation {
     EOF
   '' + lib.optionalString stdenv.isLinux ''
     # We cannot use -exec since wrapProgram is a function but not a command.
-    for bin in $( find "$out" -executable -type f ); do
+    #
+    # jspawnhelper is executed from JVM, so it doesn't need to wrap it, and it
+    # breaks building OpenJDK (#114495).
+    for bin in $( find "$out" -executable -type f -not -name jspawnhelper ); do
       wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
     done
   '';

@@ -189,7 +189,10 @@ let
         preFixup = ''
           # We cannot use -exec since wrapProgram is a function but not a
           # command.
-          for bin in $( find "$out" -executable -type f -not -path '*/languages/ruby/lib/gems/*' ); do
+          #
+          # jspawnhelper is executed from JVM, so it doesn't need to wrap it,
+          # and it breaks building OpenJDK (#114495).
+          for bin in $( find "$out" -executable -type f -not -path '*/languages/ruby/lib/gems/*' -not -name jspawnhelper ); do
             if patchelf --print-interpreter "$bin" &> /dev/null || head -n 1 "$bin" | grep '^#!' -q; then
               wrapProgram "$bin" \
                 --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
