@@ -751,7 +751,7 @@
     "smartthings" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: pysmartapp pysmartthings
     "smarty" = ps: with ps; [ ]; # missing inputs: pysmarty
     "smhi" = ps: with ps; [ ]; # missing inputs: smhi-pkg
-    "sms" = ps: with ps; [ ]; # missing inputs: python-gammu
+    "sms" = ps: with ps; [ python-gammu ];
     "smtp" = ps: with ps; [ ];
     "snapcast" = ps: with ps; [ snapcast ];
     "snips" = ps: with ps; [ aiohttp-cors paho-mqtt ];
