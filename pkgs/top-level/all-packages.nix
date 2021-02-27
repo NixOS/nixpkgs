@@ -15036,7 +15036,9 @@ in
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
-  libe-book = callPackage ../development/libraries/libe-book {};
+  libe-book = callPackage ../development/libraries/libe-book {
+    icu = icu67;
+  };
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
