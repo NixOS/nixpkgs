@@ -1,4 +1,4 @@
-{ mkDerivation, fetchurl, pkgs, lib, php }:
+{ mkDerivation, fetchurl, makeWrapper, unzip, lib, php }:
 let
   pname = "composer";
   version = "1.10.15";
@@ -13,17 +13,17 @@ mkDerivation {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     install -D $src $out/libexec/composer/composer.phar
     makeWrapper ${php}/bin/php $out/bin/composer \
       --add-flags "$out/libexec/composer/composer.phar" \
-      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
+      --prefix PATH : ${lib.makeBinPath [ unzip ]}
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "Dependency Manager for PHP";
     license = licenses.mit;
     homepage = "https://getcomposer.org/";
