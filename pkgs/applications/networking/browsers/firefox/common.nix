@@ -10,7 +10,7 @@
 , libvpx_1_8
 , icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, rust-cbindgen_0_15, nodejs, nasm, fetchpatch
+, rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , debugBuild ? false
 
@@ -19,7 +19,7 @@
 ## backported libraries
 
 , nss_latest
-
+, rust-cbindgen_latest
 
 ## optional libraries
 
@@ -93,8 +93,8 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  nss_pkg = if lib.versionAtLeast ffversion "82" then nss_latest else nss_3_53;
-  rust-cbindgen_pkg = if lib.versionAtLeast ffversion "83" then rust-cbindgen_0_15 else rust-cbindgen;
+  nss_pkg = if lib.versionAtLeast ffversion "86" then nss_latest else nss_3_53;
+  rust-cbindgen_pkg = if lib.versionAtLeast ffversion "86" then rust-cbindgen_latest else rust-cbindgen;
 in
 
 stdenv.mkDerivation ({
@@ -104,8 +104,9 @@ stdenv.mkDerivation ({
   inherit src unpackPhase meta;
 
   patches = [
-    ./env_var_for_system_dir.patch
   ] ++
+  lib.optional (lib.versionOlder ffversion "86") ./env_var_for_system_dir-ff85.patch ++
+  lib.optional (lib.versionAtLeast ffversion "86") ./env_var_for_system_dir-ff86.patch ++
   lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
   lib.optional (lib.versionAtLeast ffversion "84") ./no-buildconfig-ffx84.patch ++
 
