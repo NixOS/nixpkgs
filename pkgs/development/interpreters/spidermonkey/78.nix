@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , autoconf213
 , pkg-config
 , perl
@@ -26,6 +27,15 @@ stdenv.mkDerivation rec {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
     sha256 = "0451hhjrj9hb6limxim7sbhvw4gs6dd2gmnfxjjx07z3wbgdzwhw";
   };
+
+  patches = [
+    # Fix build failure on armv7l using Debian patch
+    # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
+    (fetchpatch {
+      url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
+      sha256 = "02b7zwm6vxmk61aj79a6m32s1k5sr0hwm3q1j4v6np9jfyd10g1j";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
