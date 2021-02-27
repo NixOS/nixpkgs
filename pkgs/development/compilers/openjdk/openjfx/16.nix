@@ -3,10 +3,10 @@
 , ffmpeg, python3, ruby }:
 
 let
-  major = "15";
-  update = ".0.1";
-  build = "+1";
-  repover = "${major}${update}${build}";
+  major = "16";
+  update = "";
+  build = "8";
+  repover = "${major}${update}+${build}";
   gradle_ = (gradleGen.override {
     java = openjdk11_headless;
   }).gradle_5_6;
@@ -18,7 +18,7 @@ let
       owner = "openjdk";
       repo = "jfx";
       rev = repover;
-      sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
+      sha256 = "15v3xwm8sw9g1cjja0zv49s3fyy6mg0d1gr92b648l4a0qxgmfzb";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
@@ -69,47 +69,73 @@ let
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
-in makePackage {
-  pname = "openjfx-modular-sdk";
+  common = args: makePackage ({
+    patches = [
+      # libglass.so tries to load GTK to see it is available, so we must add GTK
+      # to the RUNPATH of the libglass.so.
+      ./add_gtk_to_libglass.patch
+      # libstreamer-lite.so loads FFmpeg at runtime, so we must add FFmpeg to the
+      # RUNPATH of the libstreamer-lite.so.
+      ./add_ffmpeg_to_libgstreamer-lite.patch
+    ];
 
-  gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = true
-  '';
+    gradleProperties = ''
+      COMPILE_MEDIA = true
+      COMPILE_WEBKIT = true
+    '';
 
-  preBuild = ''
-    swtJar="$(find ${deps} -name org.eclipse.swt\*.jar)"
-    substituteInPlace build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }' \
-      --replace 'name: SWT_FILE_NAME' "files('$swtJar')"
-  '';
+    preBuild = ''
+      swtJar="$(find ${deps} -name org.eclipse.swt\*.jar)"
+      substituteInPlace build.gradle \
+        --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }' \
+        --replace 'name: SWT_FILE_NAME' "files('$swtJar')"
+    '';
 
-  installPhase = ''
-    cp -r build/modular-sdk $out
-  '';
+    stripDebugList = [ "." ];
 
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+    postFixup = ''
+      # Remove references to bootstrap.
+      find "$out" -name \*.so | while read lib; do
+        new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${lib.escape ["+"] openjdk11_headless.outPath}[^:]*,,')"
+        patchelf --set-rpath "$new_refs" "$lib"
+      done
+    '';
 
-  stripDebugList = [ "." ];
+    disallowedReferences = [ openjdk11_headless ];
+  } // args);
 
-  postFixup = ''
-    # Remove references to bootstrap.
-    find "$out" -name \*.so | while read lib; do
-      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${lib.escape ["+"] openjdk11_headless.outPath}[^:]*,,')"
-      patchelf --set-rpath "$new_refs" "$lib"
-    done
-  '';
+in {
+  modular-sdk = common {
+    pname = "openjfx-modular-sdk";
 
-  disallowedReferences = [ openjdk11_headless ];
+    installPhase = ''
+      cp -r build/modular-sdk $out
+    '';
 
-  passthru.deps = deps;
+    passthru.deps = deps;
 
-  meta = with lib; {
-    homepage = "http://openjdk.java.net/projects/openjfx/";
-    license = licenses.gpl2;
-    description = "The next-generation Java client toolkit";
-    maintainers = with maintainers; [ abbradar ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    meta = with lib; {
+      homepage = "http://openjdk.java.net/projects/openjfx/";
+      license = licenses.gpl2;
+      description = "The next-generation Java client toolkit; unpacked SDK";
+      maintainers = with maintainers; [ abbradar ];
+      platforms = [ "i686-linux" "x86_64-linux" ];
+    };
+  };
+
+  sdk = common {
+    pname = "openjfx-sdk";
+
+    installPhase = ''
+      cp -r build/sdk $out
+    '';
+
+    meta = with lib; {
+      homepage = "http://openjdk.java.net/projects/openjfx/";
+      license = licenses.gpl2;
+      description = "The next-generation Java client toolkit; packed SDK";
+      maintainers = with maintainers; [ abbradar ];
+      platforms = [ "i686-linux" "x86_64-linux" ];
+    };
   };
 }

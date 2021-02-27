@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeText, gradleGen, pkg-config, perl, cmake
+{ stdenv, lib, fetchFromGitHub, writeText, gradleGen, pkg-config, perl, cmake
 , gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib, ffmpeg_3, python, ruby
 , openjdk11-bootstrap }:
 
@@ -14,9 +14,11 @@ let
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
 
-    src = fetchurl {
-      url = "https://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
-      sha256 = "1h7qsylr7rnwnbimqjyn3whszp9kv4h3gpicsrb3mradxc9yv194";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jfx${major}u";
+      rev = repover;
+      sha256 = "1dr19k0f47gw6fy4xyv61p9ksaqxlir4jfw0gkjlqx36bmvs45p1";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg_3 ];
@@ -67,47 +69,73 @@ let
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
-in makePackage {
-  pname = "openjfx-modular-sdk";
+  common = args: makePackage ({
+    patches = [
+      # libglass.so tries to load GTK to see it is available, so we must add GTK
+      # to the RUNPATH of the libglass.so.
+      ./add_gtk_to_libglass_11.patch
+      # libstreamer-lite.so loads FFmpeg at runtime, so we must add FFmpeg to the
+      # RUNPATH of the libstreamer-lite.so.
+      ./add_ffmpeg_to_libgstreamer-lite.patch
+    ];
 
-  gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = true
-  '';
+    gradleProperties = ''
+      COMPILE_MEDIA = true
+      COMPILE_WEBKIT = true
+    '';
 
-  preBuild = ''
-    swtJar="$(find ${deps} -name org.eclipse.swt\*.jar)"
-    substituteInPlace build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }' \
-      --replace 'name: SWT_FILE_NAME' "files('$swtJar')"
-  '';
+    preBuild = ''
+      swtJar="$(find ${deps} -name org.eclipse.swt\*.jar)"
+      substituteInPlace build.gradle \
+        --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }' \
+        --replace 'name: SWT_FILE_NAME' "files('$swtJar')"
+    '';
 
-  installPhase = ''
-    cp -r build/modular-sdk $out
-  '';
+    stripDebugList = [ "." ];
 
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+    postFixup = ''
+      # Remove references to bootstrap.
+      find "$out" -name \*.so | while read lib; do
+        new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${openjdk11-bootstrap}[^:]*,,')"
+        patchelf --set-rpath "$new_refs" "$lib"
+      done
+    '';
 
-  stripDebugList = [ "." ];
+    disallowedReferences = [ openjdk11-bootstrap ];
+  } // args);
 
-  postFixup = ''
-    # Remove references to bootstrap.
-    find "$out" -name \*.so | while read lib; do
-      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${openjdk11-bootstrap}[^:]*,,')"
-      patchelf --set-rpath "$new_refs" "$lib"
-    done
-  '';
+in {
+  modular-sdk = common {
+    pname = "openjfx-modular-sdk";
 
-  disallowedReferences = [ openjdk11-bootstrap ];
+    installPhase = ''
+      cp -r build/modular-sdk $out
+    '';
 
-  passthru.deps = deps;
+    passthru.deps = deps;
 
-  meta = with lib; {
-    homepage = "http://openjdk.java.net/projects/openjfx/";
-    license = licenses.gpl2;
-    description = "The next-generation Java client toolkit";
-    maintainers = with maintainers; [ abbradar ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    meta = with lib; {
+      homepage = "http://openjdk.java.net/projects/openjfx/";
+      license = licenses.gpl2;
+      description = "The next-generation Java client toolkit; unpacked SDK";
+      maintainers = with maintainers; [ abbradar ];
+      platforms = [ "i686-linux" "x86_64-linux" ];
+    };
+  };
+
+  sdk = common {
+    pname = "openjfx-sdk";
+
+    installPhase = ''
+      cp -r build/sdk $out
+    '';
+
+    meta = with lib; {
+      homepage = "http://openjdk.java.net/projects/openjfx/";
+      license = licenses.gpl2;
+      description = "The next-generation Java client toolkit; packed SDK";
+      maintainers = with maintainers; [ abbradar ];
+      platforms = [ "i686-linux" "x86_64-linux" ];
+    };
   };
 }

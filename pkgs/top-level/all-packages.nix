@@ -10765,9 +10765,16 @@ in
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
+  openjfx11-packages = callPackages ../development/compilers/openjdk/openjfx/11.nix {};
+  openjfx11-modular-sdk = openjfx11-packages.modular-sdk;
+  openjfx11-sdk = openjfx11-packages.sdk;
 
-  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
+  openjfx16-packages = callPackages ../development/compilers/openjdk/openjfx/16.nix {};
+  openjfx16-modular-sdk = openjfx16-packages.modular-sdk;
+  openjfx16-sdk = openjfx16-packages.sdk;
+
+  openjfx-modular-sdk = openjfx11-modular-sdk;
+  openjfx-sdk = openjfx11-sdk;
 
   openjdk8-bootstrap =
     if adoptopenjdk-hotspot-bin-8.meta.available then
@@ -10807,7 +10814,7 @@ in
       callPackage ../development/compilers/openjdk/darwin/11.nix { }
     else
       callPackage ../development/compilers/openjdk/11.nix {
-        openjfx = openjfx11;
+        openjfx-modular-sdk = openjfx11-modular-sdk;
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -10823,23 +10830,23 @@ in
     else
       /* adoptopenjdk not available for i686, so fall back to our old builds of 12, 13, & 14 for bootstrapping */
       callPackage ../development/compilers/openjdk/15.nix {
-        openjfx = openjfx11; /* need this despite next line :-( */
+        openjfx-modular-sdk = openjfx11-modular-sdk; /* need this despite next line :-( */
         enableJavaFX = false;
         headless = true;
         inherit (gnome2) GConf gnome_vfs;
         openjdk15-bootstrap = callPackage ../development/compilers/openjdk/14.nix {
-          openjfx = openjfx11; /* need this despite next line :-( */
+          openjfx-modular-sdk = openjfx11-modular-sdk; /* need this despite next line :-( */
           enableJavaFX = false;
           headless = true;
           inherit (gnome2) GConf gnome_vfs;
           openjdk14-bootstrap = callPackage ../development/compilers/openjdk/13.nix {
-            openjfx = openjfx11; /* need this despite next line :-( */
+            openjfx-modular-sdk = openjfx11-modular-sdk; /* need this despite next line :-( */
             enableJavaFX = false;
             headless = true;
             inherit (gnome2) GConf gnome_vfs;
             openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
               stdenv = gcc8Stdenv; /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
-              openjfx = openjfx11; /* need this despite next line :-( */
+              openjfx-modular-sdk = openjfx11-modular-sdk; /* need this despite next line :-( */
               enableJavaFX = false;
               headless = true;
               inherit (gnome2) GConf gnome_vfs;
@@ -10857,7 +10864,7 @@ in
       callPackage ../development/compilers/openjdk/darwin { }
     else
       callPackage ../development/compilers/openjdk/16.nix {
-        openjfx = openjfx15;
+        openjfx-modular-sdk = openjfx16-modular-sdk;
         inherit (gnome2) GConf gnome_vfs;
       };
 
