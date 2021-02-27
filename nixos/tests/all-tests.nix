@@ -55,6 +55,7 @@ in
   cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
   ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
   ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
+  ceph-single-node-bluestore = handleTestOn ["x86_64-linux"] ./ceph-single-node-bluestore.nix {};
   certmgr = handleTest ./certmgr.nix {};
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
@@ -72,6 +73,7 @@ in
   containers-imperative = handleTest ./containers-imperative.nix {};
   containers-ip = handleTest ./containers-ip.nix {};
   containers-macvlans = handleTest ./containers-macvlans.nix {};
+  containers-names = handleTest ./containers-names.nix {};
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-portforward = handleTest ./containers-portforward.nix {};
   containers-reloadable = handleTest ./containers-reloadable.nix {};
@@ -195,6 +197,7 @@ in
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
   krb5 = discoverTests (import ./krb5 {});
+  ksm = handleTest ./ksm.nix {};
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
   # kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};

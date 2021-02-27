@@ -382,6 +382,7 @@
   ./services/hardware/sane.nix
   ./services/hardware/sane_extra_backends/brscan4.nix
   ./services/hardware/sane_extra_backends/dsseries.nix
+  ./services/hardware/spacenavd.nix
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix

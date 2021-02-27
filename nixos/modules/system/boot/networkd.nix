@@ -436,7 +436,8 @@ let
           "IPv4ProxyARP"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
-          "IPv6PrefixDelegation"
+          "IPv6SendRA"
+          "DHCPv6PrefixDelegation"
           "IPv6MTUBytes"
           "Bridge"
           "Bond"
@@ -477,7 +478,8 @@ let
         (assertMinimum "IPv6HopLimit" 0)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
-        (assertValueOneOf "IPv6PrefixDelegation" ["static" "dhcpv6" "yes" "false"])
+        (assertValueOneOf "IPv6SendRA" boolValues)
+        (assertValueOneOf "DHCPv6PrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
@@ -643,18 +645,63 @@ let
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
         (assertOnlyFields [
+          "UseAddress"
           "UseDNS"
           "UseNTP"
+          "RouteMetric"
           "RapidCommit"
+          "MUDURL"
+          "RequestOptions"
+          "SendVendorOption"
           "ForceDHCPv6PDOtherInformation"
           "PrefixDelegationHint"
-          "RouteMetric"
+          "WithoutRA"
+          "SendOption"
+          "UserClass"
+          "VendorClass"
         ])
+        (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
-        (assertInt "RouteMetric")
+        (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
+        (assertRange "SendOption" 1 65536)
+      ];
+
+      sectionDHCPv6PrefixDelegation = checkUnitConfig "DHCPv6PrefixDelegation" [
+        (assertOnlyFields [
+          "SubnetId"
+          "Announce"
+          "Assign"
+          "Token"
+        ])
+        (assertValueOneOf "Announce" boolValues)
+        (assertValueOneOf "Assign" boolValues)
+      ];
+
+      sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
+        (assertOnlyFields [
+          "UseDNS"
+          "UseDomains"
+          "RouteTable"
+          "UseAutonomousPrefix"
+          "UseOnLinkPrefix"
+          "RouterDenyList"
+          "RouterAllowList"
+          "PrefixDenyList"
+          "PrefixAllowList"
+          "RouteDenyList"
+          "RouteAllowList"
+          "DHCPv6Client"
+        ])
+        (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertRange "RouteTable" 0 4294967295)
+        (assertValueOneOf "UseAutonomousPrefix" boolValues)
+        (assertValueOneOf "UseOnLinkPrefix" boolValues)
+        (assertValueOneOf "DHCPv6Client" (boolValues ++ ["always"]))
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -685,7 +732,7 @@ let
         (assertValueOneOf "EmitTimezone" boolValues)
       ];
 
-      sectionIPv6PrefixDelegation = checkUnitConfig "IPv6PrefixDelegation" [
+      sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
         (assertOnlyFields [
           "Managed"
           "OtherInformation"
@@ -1090,6 +1137,30 @@ let
       '';
     };
 
+    dhcpV6PrefixDelegationConfig = mkOption {
+      default = {};
+      example = { SubnetId = "auto"; Announce = true; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6PrefixDelegation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv6PrefixDelegation]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6AcceptRAConfig = mkOption {
+      default = {};
+      example = { UseDNS = true; DHCPv6Client = "always"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6AcceptRA;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPv6AcceptRA]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     dhcpServerConfig = mkOption {
       default = {};
       example = { PoolOffset = 50; EmitDNS = false; };
@@ -1102,13 +1173,20 @@ let
       '';
     };
 
+    # systemd.network.networks.*.ipv6PrefixDelegationConfig has been deprecated
+    # in 247 in favor of systemd.network.networks.*.ipv6SendRAConfig.
     ipv6PrefixDelegationConfig = mkOption {
+      visible = false;
+      apply = _: throw "The option `systemd.network.networks.*.ipv6PrefixDelegationConfig` has been replaced by `systemd.network.networks.*.ipv6SendRAConfig`.";
+    };
+
+    ipv6SendRAConfig = mkOption {
       default = {};
       example = { EmitDNS = true; Managed = true; OtherInformation = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6PrefixDelegation;
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6SendRA;
       description = ''
         Each attribute in this set specifies an option in the
-        <literal>[IPv6PrefixDelegation]</literal> section of the unit.  See
+        <literal>[IPv6SendRA]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1457,13 +1535,21 @@ let
           [DHCPv6]
           ${attrsToSection def.dhcpV6Config}
         ''
+        + optionalString (def.dhcpV6PrefixDelegationConfig != { }) ''
+          [DHCPv6PrefixDelegation]
+          ${attrsToSection def.dhcpV6PrefixDelegationConfig}
+        ''
+        + optionalString (def.ipv6AcceptRAConfig != { }) ''
+          [IPv6AcceptRA]
+          ${attrsToSection def.ipv6AcceptRAConfig}
+        ''
         + optionalString (def.dhcpServerConfig != { }) ''
           [DHCPServer]
           ${attrsToSection def.dhcpServerConfig}
         ''
-        + optionalString (def.ipv6PrefixDelegationConfig != { }) ''
-          [IPv6PrefixDelegation]
-          ${attrsToSection def.ipv6PrefixDelegationConfig}
+        + optionalString (def.ipv6SendRAConfig != { }) ''
+          [IPv6SendRA]
+          ${attrsToSection def.ipv6SendRAConfig}
         ''
         + flip concatMapStrings def.ipv6Prefixes (x: ''
           [IPv6Prefix]
@@ -1479,7 +1565,6 @@ let
 in
 
 {
-
   options = {
 
     systemd.network.enable = mkOption {

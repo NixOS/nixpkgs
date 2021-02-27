@@ -1,9 +1,8 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
 xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
 opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
-gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkg-config, mpi ? null }:
-
-assert mpi != null;
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkg-config, mpi,
+spaceNavSupport ? true, libspnav, qtx11extras }:
 
 let
   pythonPackages = python3Packages;
@@ -34,7 +33,7 @@ in mkDerivation rec {
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
     GitPython # for addon manager
     scipy pyyaml # (at least for) PyrateWorkbench
-  ]);
+  ]) ++ lib.optionals spaceNavSupport [ libspnav qtx11extras ];
 
   cmakeFlags = [
     "-DBUILD_QT5=ON"

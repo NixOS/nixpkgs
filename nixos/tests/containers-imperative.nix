@@ -1,9 +1,7 @@
-# Test for NixOS' container support.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-imperative";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco kampfschlaefer ];
+  meta = {
+    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
   };
 
   machine =
