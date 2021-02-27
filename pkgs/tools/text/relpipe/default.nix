@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchhg, cmake, pkgconfig, installShellFiles, symlinkJoin,
+{ lib, stdenv, fetchhg, cmake, pkg-config, installShellFiles, symlinkJoin,
   xercesc, libxmlxx, guile_2_2, unixODBC, python36, libjack2 }:
 # Build instructions: https://relational-pipes.globalcode.info/v_0/release-v0.16.xhtml
-# Things not yet done: bash completion
 let
   mkRelPipe = { pname, hash, deps }:
     stdenv.mkDerivation rec {
@@ -15,7 +14,7 @@ let
       };
 
       buildInputs = deps;
-      nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
+      nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
       cmakeFlags = [ "-DPROJECT_VERSION=${version}" ];
 
@@ -25,10 +24,10 @@ let
         fi
       '';
 
-      meta = {
-        maintainers = [ stdenv.lib.maintainers.MostAwesomeDude ];
+      meta = with lib; {
+        maintainers = [ maintainers.MostAwesomeDude ];
         homepage = https://relational-pipes.globalcode.info/;
-        license = stdenv.lib.licenses.gpl3;
+        license = licenses.gpl3;
         description = "An open data format designed for streaming structured data between two processes";
       };
     };
