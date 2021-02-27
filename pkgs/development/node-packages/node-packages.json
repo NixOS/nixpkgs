@@ -143,6 +143,7 @@
 , "livedown"
 , {"lumo-build-deps": "../interpreters/clojurescript/lumo" }
 , "madoko"
+, "markdownlint-cli"
 , "markdown-link-check"
 , "mastodon-bot"
 , "mathjax"
