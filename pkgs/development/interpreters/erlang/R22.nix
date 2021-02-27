@@ -3,8 +3,8 @@
 # How to obtain `sha256`:
 # nix-prefetch-url --unpack https://github.com/erlang/otp/archive/OTP-${version}.tar.gz
 mkDerivation {
-  version = "22.3";
-  sha256 = "0srbyncgnr1kp0rrviq14ia3h795b3gk0iws5ishv6rphcq1rs27";
+  version = "22.3.4.16";
+  sha256 = "sha256-V0RwEPfjnHtEzShNh6Q49yGC5fbt2mNR4xy6f6iWvck=";
 
   prePatch = ''
     substituteInPlace make/configure.in --replace '`sw_vers -productVersion`' "''${MACOSX_DEPLOYMENT_TARGET:-10.12}"
