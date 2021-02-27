@@ -801,7 +801,7 @@
     "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
-    "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot
+    "switchbot" = ps: with ps; [ pyswitchbot ];
     "switcher_kis" = ps: with ps; [ aioswitcher ];
     "switchmate" = ps: with ps; [ ]; # missing inputs: pySwitchmate
     "syncthru" = ps: with ps; [ url-normalize ]; # missing inputs: pysyncthru
