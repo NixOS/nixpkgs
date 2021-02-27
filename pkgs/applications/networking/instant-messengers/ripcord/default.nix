@@ -1,7 +1,7 @@
-{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools,
-  qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats,
-  autoPatchelfHook, desktop-file-utils, imagemagick, makeWrapper,
-  twemoji-color-font, xorg, libsodium, libopus, libGL, zlib, alsaLib }:
+{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools
+, qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats
+, autoPatchelfHook, desktop-file-utils, imagemagick
+, twemoji-color-font, xorg, libsodium, libopus, libGL, alsaLib }:
 
 mkDerivation rec {
   pname = "ripcord";
@@ -19,9 +19,9 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoPatchelfHook desktop-file-utils imagemagick ];
-  buildInputs = [ libsodium libopus libGL alsaLib ] ++
-                [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ] ++
-                (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
+  buildInputs = [ libsodium libopus libGL alsaLib ]
+    ++ [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ]
+    ++ (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
 
   fontsConf = makeFontsConf {
     fontDirectories = [ twemoji-color-font ];
@@ -60,10 +60,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
-
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
-
     maintainers = with maintainers; [ infinisil ];
     platforms = [ "x86_64-linux" ];
   };
