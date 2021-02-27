@@ -15,7 +15,9 @@
 , dejagnu
 }:
 
-stdenv.mkDerivation rec {
+let
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+in stdenv.mkDerivation rec {
   pname = "poke";
   version = "1.0";
 
@@ -37,11 +39,12 @@ stdenv.mkDerivation rec {
     texinfo
   ] ++ lib.optional guiSupport makeWrapper;
 
-  buildInputs = [ boehmgc dejagnu readline ]
+  buildInputs = [ boehmgc readline ]
   ++ lib.optional guiSupport tk
   ++ lib.optional miSupport json_c
   ++ lib.optional nbdSupport libnbd
-  ++ lib.optional textStylingSupport gettext;
+  ++ lib.optional textStylingSupport gettext
+  ++ lib.optional (!isCross) dejagnu;
 
   configureFlags = lib.optionals guiSupport [
     "--with-tcl=${tcl}/lib"
@@ -51,8 +54,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
-  checkInputs = [ dejagnu ];
+  doCheck = !isCross;
+  checkInputs = lib.optionals (!isCross) [ dejagnu ];
 
   postFixup = lib.optionalString guiSupport ''
     wrapProgram "$out/bin/poke-gui" \
