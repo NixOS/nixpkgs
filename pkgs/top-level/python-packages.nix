@@ -5321,6 +5321,8 @@ in {
 
   pycdio = callPackage ../development/python-modules/pycdio { };
 
+  pycec = callPackage ../development/python-modules/pycec { };
+
   pycfdns = callPackage ../development/python-modules/pycfdns { };
 
   pychannels = callPackage ../development/python-modules/pychannels { };

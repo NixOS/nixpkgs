@@ -338,7 +338,7 @@
     "hassio" = ps: with ps; [ aiohttp-cors pillow ];
     "haveibeenpwned" = ps: with ps; [ ];
     "hddtemp" = ps: with ps; [ ];
-    "hdmi_cec" = ps: with ps; [ ]; # missing inputs: pyCEC
+    "hdmi_cec" = ps: with ps; [ pycec ];
     "heatmiser" = ps: with ps; [ ]; # missing inputs: heatmiserV3
     "heos" = ps: with ps; [ ]; # missing inputs: pyheos
     "here_travel_time" = ps: with ps; [ ]; # missing inputs: herepy
