@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     })
     # P2P: Fix a corner case in peer addition based on PD Request (https://w1.fi/security/2021-1/)
     (fetchurl {
+      name = "CVE-2021-27803.patch";
       url = "https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch";
       sha256 = "04cnds7hmbqc44jasabjvrdnh66i5hwvk2h2m5z94pmgbzncyh3z";
     })
