@@ -12,6 +12,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Substitute xrandr path with @xrandr@ so we can replace it with
+    # real path in substituteInPlace
+    ./xrandr.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace mons.sh --replace '@xrandr@' '${xrandr}/bin/xrandr'
+  '';
+
   nativeBuildInputs = [ help2man ];
   makeFlags = [
     "DESTDIR=$(out)"
