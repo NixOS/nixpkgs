@@ -290,7 +290,7 @@ let
     , name ? ""
     }: rootPaths: runCommand
       ( "apparmor-closure-rules"
-      + lib.optionalString (name != "") "-${name}") {} ''
+      + lib.optionalString (name != "") "-${name}" ) {} ''
     touch $out
     while read -r path
     do printf >>$out "%s,\n" ${lib.concatMapStringsSep " " (x: "\"${x}\"") (baseRules ++ additionalRules)}
