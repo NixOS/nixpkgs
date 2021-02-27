@@ -817,7 +817,7 @@
     "tag" = ps: with ps; [ ];
     "tahoma" = ps: with ps; [ tahoma-api ];
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility
-    "tankerkoenig" = ps: with ps; [ ]; # missing inputs: pytankerkoenig
+    "tankerkoenig" = ps: with ps; [ pytankerkoenig ];
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [ aiohttp-cors hatasmota paho-mqtt ];
     "tautulli" = ps: with ps; [ ]; # missing inputs: pytautulli
