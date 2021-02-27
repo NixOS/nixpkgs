@@ -43,19 +43,12 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Take the 3.4.x release candidate.
-  cabal-install = assert super.cabal-install.version == "3.2.0.0";
-                  overrideCabal (doJailbreak super.cabal-install) (drv: {
-    postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
-    version = "cabal-install-3.4.0.0-rc4";
-    editedCabalFile = null;
-    src = pkgs.fetchgit {
-      url = "git://github.com/haskell/cabal.git";
-      rev = "cabal-install-3.4.0.0-rc4";
-      sha256 = "049hllk1d8jid9yg70hmcsdgb0n7hm24p39vavllaahfb0qfimrk";
-    };
-    executableHaskellDepends = drv.executableHaskellDepends ++ [ self.regex-base self.regex-posix ];
-  });
+  # Build cabal-install with the compiler's native Cabal.
+  cabal-install = (doJailbreak super.cabal-install).override {
+    # Use dontCheck to break test dependency cycles
+    edit-distance = dontCheck (super.edit-distance.override { random = super.random_1_2_0; });
+    random = super.random_1_2_0;
+  };
 
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
@@ -98,10 +91,6 @@ self: super: {
   language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  });
-  regex-base = appendPatch (doJailbreak super.regex-base) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/regex-base-0.94.0.0.patch";
-    sha256 = "0k5fglbl7nnhn8400c4cpnflxcbj9p3xi5prl9jfmszr31jwdy5d";
   });
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.

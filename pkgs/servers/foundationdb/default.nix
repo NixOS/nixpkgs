@@ -69,6 +69,7 @@ in with builtins; {
 
     patches = [
       ./patches/ldflags-6.0.patch
+      ./patches/include-fixes-6.0.patch
     ];
   };
 

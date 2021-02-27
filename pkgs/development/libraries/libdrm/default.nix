@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
     "-Dtegra=true"
     "-Detnaviv=true"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false";
+  ];
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
