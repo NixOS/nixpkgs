@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, imagemagick7Big
+, imagemagickBig
 }:
 
 buildPythonPackage rec {
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace wand/api.py --replace \
       "magick_home = os.environ.get('MAGICK_HOME')" \
-      "magick_home = '${imagemagick7Big}'"
+      "magick_home = '${imagemagickBig}'"
   '';
 
   # tests not included with pypi release
   doCheck = false;
 
-  passthru.imagemagick = imagemagick7Big;
+  passthru.imagemagick = imagemagickBig;
 
   meta = with lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";

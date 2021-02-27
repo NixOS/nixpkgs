@@ -524,6 +524,14 @@ self: super:
       data from the device and mix it into the kernel's RNG.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The default version of ImageMagick has been updated from 6 to 7.
+     You can use <package>imagemagick6</package>,
+     <package>imagemagick6_light</package>, and
+     <package>imagemagick6Big</package> if you need the older version.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
