@@ -66,7 +66,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          enables various settings to avoid common pitfalls when
+          Enables various settings to avoid common pitfalls when
           running containers requiring many file operations.
           Fixes errors like "Too many open files" or
           "neighbour: ndisc_cache: neighbor table overflow!".
@@ -81,39 +81,57 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    security.apparmor = {
-      enable = true;
-      profiles = [
-        "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
-        "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
-      ];
-      packages = [ cfg.lxcPackage ];
-    };
+    # Note: the following options are also declared in virtualisation.lxc, but
+    # the latter can't be simply enabled to reuse the formers, because it
+    # does a bunch of unrelated things.
+    systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
+
+    security.apparmor.packages = [ pkgs.lxcPackage ];
+    security.apparmor.profiles = [
+      "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
+      "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
+    ];
 
     # TODO: remove once LXD gets proper support for cgroupsv2
     # (currently most of the e.g. CPU accounting stuff doesn't work)
     systemd.enableUnifiedCgroupHierarchy = false;
 
+    systemd.sockets.lxd = {
+      description = "LXD UNIX socket";
+      wantedBy = [ "sockets.target" ];
+
+      socketConfig = {
+        ListenStream = "/var/lib/lxd/unix.socket";
+        SocketMode = "0660";
+        SocketGroup = "lxd";
+        Service = "lxd.service";
+      };
+    };
+
     systemd.services.lxd = {
       description = "LXD Container Management Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
+      after = [ "network-online.target" "lxcfs.service" ];
+      requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
+      documentation = [ "man:lxd(1)" ];
 
-      path = lib.optional config.boot.zfs.enabled config.boot.zfs.package;
-
-      preStart = ''
-        mkdir -m 0755 -p /var/lib/lxc/rootfs
-      '';
+      path = optional cfg.zfsSupport config.boot.zfs.package;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
-        Type = "simple";
+        ExecStartPost = "${cfg.package}/bin/lxd waitready --timeout=600";
+        ExecStop = "${cfg.package}/bin/lxd shutdown";
+
         KillMode = "process"; # when stopping, leave the containers alone
         LimitMEMLOCK = "infinity";
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
+
+        Restart = "on-failure";
+        TimeoutStartSec = "600s";
+        TimeoutStopSec = "30s";
 
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
