@@ -15778,6 +15778,8 @@ in
 
   libx86 = callPackage ../development/libraries/libx86 {};
 
+  libxcrypt = callPackage ../development/libraries/libxcrypt { };
+
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
   libxkbcommon = libxkbcommon_8;
