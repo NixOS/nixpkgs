@@ -13507,6 +13507,8 @@ in
 
   cog = callPackage ../development/web/cog { };
 
+  cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
+
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
