@@ -8372,6 +8372,8 @@ in {
 
   web = callPackage ../development/python-modules/web { };
 
+  web_cache = callPackage ../development/python-modules/web_cache { };
+
   webcolors = callPackage ../development/python-modules/webcolors { };
 
   webdavclient3 = callPackage ../development/python-modules/webdavclient3 { };
