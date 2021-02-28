@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "1.5.14";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de7129142a5c86d75a52b96f394d94d96d497881d2aaf8eafe320cdbe8ac4bcc";
+    sha256 = "7b435803dc79a0f0ce887887a62ad360f3a9e8162ac0db9ee649d5d24085bf30";
   };
 
   pythonImportsCheck = [ "identify" ];
