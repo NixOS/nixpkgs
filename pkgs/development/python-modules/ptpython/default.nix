@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, pythonOlder, fetchPypi
 , appdirs
 , black
-, docopt
 , importlib-metadata
 , isPy3k
 , jedi
@@ -22,7 +21,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     appdirs
     black # yes, this is in install_requires
-    docopt
     jedi
     prompt_toolkit
     pygments
