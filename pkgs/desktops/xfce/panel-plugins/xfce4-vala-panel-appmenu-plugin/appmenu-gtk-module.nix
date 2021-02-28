@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Port of the Unity GTK Module";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

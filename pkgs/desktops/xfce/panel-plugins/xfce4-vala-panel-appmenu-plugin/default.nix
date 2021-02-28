@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Global Menu applet for XFCE4";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with lib.maintainers; [ ];
     broken = true;
   };
 }
