@@ -15,7 +15,7 @@ cargoCheckHook() {
         threads=1
     fi
 
-    argstr="--${cargoBuildType} --target @rustTargetPlatformSpec@ --frozen";
+    argstr="--${cargoCheckType} --target @rustTargetPlatformSpec@ --frozen";
 
     (
         set -x
