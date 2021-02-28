@@ -40,7 +40,7 @@ common =
       outputs = [ "out" "dev" "man" "doc" ];
 
       nativeBuildInputs =
-        [ pkg-config utillinux ]
+        [ pkg-config util-linux ]
         ++ lib.optionals is24
           [ autoreconfHook
             autoconf-archive
