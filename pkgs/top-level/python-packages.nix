@@ -2061,6 +2061,8 @@ in {
 
   eliot = callPackage ../development/python-modules/eliot { };
 
+  elmax = callPackage ../development/python-modules/elmax { };
+
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
