@@ -10,7 +10,7 @@ let
 
 common =
   { lib, stdenv, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , bash, coreutils, utillinux, gzip, gnutar
+  , bash, coreutils, util-linux, gzip, gnutar
   , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive
