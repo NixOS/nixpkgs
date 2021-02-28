@@ -1,10 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, isPy27, fetchPypi, pythonOlder
 , importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "exdown";
   version = "0.7.1";
   format = "pyproject";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
