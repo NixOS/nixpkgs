@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , pytestCheckHook
 }:
@@ -14,6 +15,14 @@ buildPythonPackage rec {
      rev = "v${version}";
      sha256 = "10qfaibyb2syiwiyv74l7d97vnmlk079qirgnw3ncklqjs0s3gbi";
   };
+
+  patches = [
+    # Make it detect Apple Silicon, remove after https://github.com/workhorsy/py-cpuinfo/pull/161 is merged.
+    (fetchpatch {
+      url = "https://github.com/workhorsy/py-cpuinfo/commit/54c32da6678f9d75ec5acf4534056cdc85c2a04d.patch";
+      sha256 = "sha256-3R46KrpACAQ1V0CQtz48V5mQXxvplUQrXnACtiE8WqY=";
+    })
+  ];
 
   checkInputs = [
     pytestCheckHook
