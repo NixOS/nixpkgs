@@ -158,7 +158,8 @@ rec {
 
   base = janePackage {
     pname = "base";
-    hash = "1d5ynzzq58g9qammhba5dasrg734p9vndq28a7kg80bdxb8gh3kp";
+    version = "0.14.1";
+    hash = "1hizjxmiqlj2zzkwplzjamw9rbnl0kh44sxgjpzdij99qnfkzylf";
     minimumOCamlVersion = "4.07";
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
