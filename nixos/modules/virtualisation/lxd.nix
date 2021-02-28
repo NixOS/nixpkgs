@@ -74,6 +74,17 @@ in {
           for details.
         '';
       };
+
+      startTimeout = mkOption {
+        type = types.int;
+        default = 600;
+        apply = toString;
+        description = ''
+          Time to wait (in seconds) for LXD to become ready to process requests.
+          If LXD does not reply within the configured time, lxd.service will be
+          considered failed and systemd will attempt to restart it.
+        '';
+      };
     };
   };
 
@@ -120,7 +131,7 @@ in {
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
-        ExecStartPost = "${cfg.package}/bin/lxd waitready --timeout=600";
+        ExecStartPost = "${cfg.package}/bin/lxd waitready --timeout=${cfg.startTimeout}";
         ExecStop = "${cfg.package}/bin/lxd shutdown";
 
         KillMode = "process"; # when stopping, leave the containers alone
@@ -130,7 +141,7 @@ in {
         TasksMax = "infinity";
 
         Restart = "on-failure";
-        TimeoutStartSec = "600s";
+        TimeoutStartSec = "${cfg.startTimeout}s";
         TimeoutStopSec = "30s";
 
         # By default, `lxd` loads configuration files from hard-coded
