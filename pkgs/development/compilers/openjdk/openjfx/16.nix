@@ -116,7 +116,7 @@ in {
 
     meta = with lib; {
       homepage = "http://openjdk.java.net/projects/openjfx/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Classpath;
       description = "The next-generation Java client toolkit; unpacked SDK";
       maintainers = with maintainers; [ abbradar ];
       platforms = [ "i686-linux" "x86_64-linux" ];
@@ -132,7 +132,7 @@ in {
 
     meta = with lib; {
       homepage = "http://openjdk.java.net/projects/openjfx/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Classpath;
       description = "The next-generation Java client toolkit; packed SDK";
       maintainers = with maintainers; [ abbradar ];
       platforms = [ "i686-linux" "x86_64-linux" ];
