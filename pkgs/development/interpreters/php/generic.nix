@@ -112,7 +112,8 @@ let
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
-                  tests = nixosTests.php;
+                  # Select the right php tests for the php version
+                  tests = nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                   inherit (php-packages) extensions buildPecl;
                   packages = php-packages.tools;
                   meta = php.meta // {
