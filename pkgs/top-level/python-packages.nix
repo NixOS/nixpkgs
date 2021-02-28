@@ -6113,6 +6113,8 @@ in {
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
 
+  pytankerkoenig = callPackage ../development/python-modules/pytankerkoenig { };
+
   pyte = callPackage ../development/python-modules/pyte { };
 
   pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
@@ -6374,6 +6376,8 @@ in {
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
 
   python-frontmatter = callPackage ../development/python-modules/python-frontmatter { };
+
+  python-gammu = callPackage ../development/python-modules/python-gammu { };
 
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
