@@ -8372,7 +8372,7 @@ in {
 
   web = callPackage ../development/python-modules/web { };
 
-  web_cache = callPackage ../development/python-modules/web_cache { };
+  web-cache = callPackage ../development/python-modules/web-cache { };
 
   webcolors = callPackage ../development/python-modules/webcolors { };
 

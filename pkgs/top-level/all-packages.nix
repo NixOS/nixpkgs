@@ -7732,6 +7732,8 @@ in
 
   s6-portable-utils = skawarePackages.s6-portable-utils;
 
+  sacad = callPackage ../tools/misc/sacad { };
+
   safecopy = callPackage ../tools/system/safecopy { };
 
   sacd = callPackage ../tools/cd-dvd/sacd { };
