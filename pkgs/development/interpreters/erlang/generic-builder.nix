@@ -57,7 +57,7 @@ in stdenv.mkDerivation ({
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
     ++ optional withSystemd systemd
-    ++ optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ AGL Carbon Cocoa ]);
+    ++ optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ AGL Carbon Cocoa WebKit ]);
 
   debugInfo = enableDebugInfo;
 
