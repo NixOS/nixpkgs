@@ -32,4 +32,6 @@ cargoBuildHook() {
     echo "Finished cargoBuildHook"
 }
 
-buildPhase=cargoBuildHook
+if [ -z "${buildPhase-}" ]; then
+  buildPhase=cargoBuildHook
+fi
