@@ -9,6 +9,7 @@
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
+, jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
 , vncSupport ? !nixosTestRunner, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner, libcacard
@@ -34,7 +35,8 @@ with lib;
 let
   audio = optionalString alsaSupport "alsa,"
     + optionalString pulseSupport "pa,"
-    + optionalString sdlSupport "sdl,";
+    + optionalString sdlSupport "sdl,"
+    + optionalString jackSupport "jack,";
 
 in
 
@@ -64,6 +66,7 @@ stdenv.mkDerivation rec {
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL2 SDL2_image ]
+    ++ optionals jackSupport [ libjack2 ]
     ++ optionals gtkSupport [ gtk3 gettext vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals smartcardSupport [ libcacard ]
