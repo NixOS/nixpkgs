@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "elmax";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-elmax";
     rev = version;
-    sha256 = "0np3ixw8khrzb7hd8ly8xv349vnas0myfv9s0ahic58r1l9lcwa4";
+    sha256 = "sha256-vDISJ/CVOjpM+GPF2TCm3/AMFTWTM0b/+ZPCpAEvNvY=";
   };
 
   nativeBuildInputs = [ poetry-core ];
