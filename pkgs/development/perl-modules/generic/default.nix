@@ -10,8 +10,6 @@ assert attrs?pname -> !(attrs?name);
  else
   (x: x))
 toPerlModule(stdenv.mkDerivation (
-  (
-  lib.recursiveUpdate
   {
     outputs = [ "out" "devdoc" ];
 
@@ -31,11 +29,13 @@ toPerlModule(stdenv.mkDerivation (
     # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
     PERL_USE_UNSAFE_INC = "1";
 
-    meta.homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
-    meta.platforms = perl.meta.platforms;
+    meta = {
+      homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
+      platforms = perl.meta.platforms;
+    } // (attrs.meta or {});
   }
-  attrs
-  )
+  //
+  (builtins.removeAttrs attrs [ "meta" ])
   //
   {
     pname = "perl${perl.version}-${lib.getName attrs}"; # TODO: phase-out `attrs.name`
