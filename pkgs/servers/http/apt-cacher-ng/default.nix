@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apt-cacher-ng";
-  version = "3.6";
+  version = "3.6.1";
 
   src = fetchurl {
     url = "http://ftp.debian.org/debian/pool/main/a/apt-cacher-ng/apt-cacher-ng_${version}.orig.tar.xz";
-    sha256 = "sha256-/4jA5acNpHpdQ9kb/1A9thtoUCqsYFxSCr4JLmFYdt4=";
+    sha256 = "sha256-avyjp4KH7l6OZxnMVDv1U/MIWcadqyPPtnLYzEYkqlA=";
   };
 
   nativeBuildInputs = [ cmake doxygen pkg-config ];
