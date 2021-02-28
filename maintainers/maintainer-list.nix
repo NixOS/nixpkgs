@@ -2417,6 +2417,16 @@
     githubId = 6806011;
     name = "Robert Schütz";
   };
+  dottedmag = {
+    email = "dottedmag@dottedmag.net";
+    github = "dottedmag";
+    githubId = 16120;
+    name = "Misha Gusarov";
+    keys = [{
+      longkeyid = "rsa4096/0x9D20F6503E338888";
+      fingerprint = "A8DF 1326 9E5D 9A38 E57C  FAC2 9D20 F650 3E33 8888";
+    }];
+  };
   doublec = {
     email = "chris.double@double.co.nz";
     github = "doublec";
