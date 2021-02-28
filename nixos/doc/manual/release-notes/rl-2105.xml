@@ -869,10 +869,9 @@ environment.systemPackages = [
      to provide a way to disable a profile
      and to select whether to confine in enforce mode (default)
      or in complain mode (see <literal>journalctl -b --grep apparmor</literal>).
-     Before enabling this module, either directly
-     or by importing <literal>&lt;nixpkgs/nixos/modules/profiles/hardened.nix&gt;</literal>,
-     please be sure to read the documentation of <link linkend="opt-security.apparmor.enable">security.apparmor.enable</link>,
-     and especially the part about <xref linkend="opt-security.apparmor.killUnconfinedConfinables"/>.
+     Security-minded users may also want to enable <xref linkend="opt-security.apparmor.killUnconfinedConfinables"/>,
+     at the cost of having some of their processes killed
+     when updating to a NixOS version introducing new AppArmor profiles.
     </para>
    </listitem>
    <listitem>
