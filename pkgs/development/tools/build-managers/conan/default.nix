@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, git, pkg-config }:
+{ lib, stdenv, python3, fetchFromGitHub, git, pkg-config, fetchpatch }:
 
 # Note:
 # Conan has specific dependency demands; check
@@ -20,6 +20,13 @@ let newPython = python3.override {
         inherit version;
         sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
       };
+      patches = oldAttrs.patches or [] ++ [
+        # Don't raise import error on non-linux os. Remove after upgrading to distro≥1.2.0
+        (fetchpatch {
+          url = "https://github.com/nir0s/distro/commit/25aa3f8c5934346dc838387fc081ce81baddeb95.patch";
+          sha256 = "0m09ldf75gacazh2kr04cifgsqfxg670vk4ypl62zv7fp3nyd5dc";
+        })
+      ];
     });
     node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
       version = "0.6.1";
@@ -69,7 +76,7 @@ in newPython.pkgs.buildPythonApplication rec {
     six
     tqdm
     urllib3
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ idna cryptography pyopenssl ];
 
   checkInputs = [
     pkg-config
@@ -90,6 +97,9 @@ in newPython.pkgs.buildPythonApplication rec {
     substituteInPlace conans/requirements.txt \
       --replace "PyYAML>=3.11, <3.14.0" "PyYAML" \
       --replace "deprecation>=2.0, <2.1" "deprecation" \
+      --replace "idna==2.6" "idna" \
+      --replace "cryptography>=1.3.4, <2.4.0" "cryptography" \
+      --replace "pyOpenSSL>=16.0.0, <19.0.0" "pyOpenSSL" \
       --replace "six>=1.10.0,<=1.14.0" "six"
   '';
 
@@ -98,6 +108,5 @@ in newPython.pkgs.buildPythonApplication rec {
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
-    platforms = platforms.linux;
   };
 }
