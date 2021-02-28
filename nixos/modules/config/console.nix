@@ -171,7 +171,7 @@ in
           ${if substring 0 1 cfg.font == "/" then ''
             font="${cfg.font}"
           '' else ''
-            font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}.*)"
+            font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}*)"
           ''}
           if [[ $font == *.gz ]]; then
             gzip -cd $font > $out/share/consolefonts/font.psf
