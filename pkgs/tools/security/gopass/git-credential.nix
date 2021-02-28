@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/gopasspw/git-credential-gopass";
     license = licenses.mit;
     maintainers = with maintainers; [ benneti ];
-    platforms = platforms.unix;
   };
 }
