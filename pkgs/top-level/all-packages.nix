@@ -24041,6 +24041,8 @@ in
      stdenv = stdenv_32bit;
   };
 
+  pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
+
   polybar = callPackage ../applications/misc/polybar { };
 
   polybarFull = callPackage ../applications/misc/polybar {
