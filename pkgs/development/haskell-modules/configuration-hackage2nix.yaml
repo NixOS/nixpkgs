@@ -11489,7 +11489,6 @@ broken-packages:
   - xleb
   - xls
   - xlsior
-  - xlsx
   - xlsx-tabular
   - xlsx-templater
   - xml-catalog
