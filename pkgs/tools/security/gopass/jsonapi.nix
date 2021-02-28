@@ -38,6 +38,5 @@ buildGoModule rec {
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ maxhbr ];
-    platforms = platforms.unix;
   };
 }

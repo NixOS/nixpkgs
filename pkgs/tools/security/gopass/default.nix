@@ -60,7 +60,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];
     changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
-    platforms = platforms.unix;
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of
