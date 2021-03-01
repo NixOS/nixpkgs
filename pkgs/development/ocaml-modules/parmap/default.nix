@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "parmap";
-  version = "1.1.1";
+  version = "1.2";
 
   src = fetchurl {
     url = "https://github.com/rdicosmo/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1pci7b1jqxkgmrbhr0p5j98i4van5nfmmb3sak8cyvxhwgna93j4";
+    sha256 = "sha256-XUXptzD0eytaypaBQ+EBp4iVFRE6/Y0inS93t/YZrM8=";
   };
 
   doCheck = true;
