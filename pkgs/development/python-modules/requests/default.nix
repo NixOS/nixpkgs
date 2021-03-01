@@ -8,6 +8,7 @@
 , pytest-xdist
 , pytestCheckHook
 , urllib3
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -55,5 +56,7 @@ buildPythonPackage rec {
     homepage = "http://docs.python-requests.org/en/latest/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    # AttributeError: 'KeywordMapping' object has no attribute 'get'
+    broken = isPy27;
   };
 }
