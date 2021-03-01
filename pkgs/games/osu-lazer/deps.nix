@@ -395,14 +395,9 @@
     sha256 = "1jfbqfngwwjx3x1cyqaamf26s7j6wag86ig1n7bh99ny85gd78wb";
   })
   (fetchNuGet {
-    name = "Microsoft.CodeAnalysis.FxCopAnalyzers";
-    version = "3.3.2";
-    sha256 = "02apz67f1gbp4p0wy7r593m10mhjm0rwp9q1n96p9avhdc3dwmv5";
-  })
-  (fetchNuGet {
-    name = "Microsoft.CodeAnalysis.VersionCheckAnalyzer";
-    version = "3.3.2";
-    sha256 = "1wxfkn16bqay7z64yxx50y9qkyznbfrv269h19fd60dy0vflwlfv";
+    name = "Microsoft.CodeAnalysis.NetAnalyzers";
+    version = "5.0.3";
+    sha256 = "1l0zg9wl8yapjq9g2d979zhsmdkr8kfybmxnl7kvgkgldf114fbg";
   })
   (fetchNuGet {
     name = "Microsoft.CodeAnalysis.Workspaces.Common";
@@ -413,11 +408,6 @@
     name = "Microsoft.CodeAnalysis.Workspaces.MSBuild";
     version = "3.8.0";
     sha256 = "1ag78ls51s88znv4v004sbklrx3qnbphpdngjq196188a3vljww7";
-  })
-  (fetchNuGet {
-    name = "Microsoft.CodeQuality.Analyzers";
-    version = "3.3.2";
-    sha256 = "0hfsjqg4kz5ylx461ssvbx64wgaiy8gcalb760jc53lvbd8qrq5r";
   })
   (fetchNuGet {
     name = "Microsoft.CSharp";
@@ -580,11 +570,6 @@
     sha256 = "0swqcknyh87ns82w539z1mvy804pfwhgzs97cr3nwqk6g5s42gd6";
   })
   (fetchNuGet {
-    name = "Microsoft.NetCore.Analyzers";
-    version = "3.3.2";
-    sha256 = "1h1bjiiw64qncs61p2idwxswv4kzq06bbl2rlghiagv6sbjk4pnq";
-  })
-  (fetchNuGet {
     name = "Microsoft.NETCore.App.Runtime.linux-x64";
     version = "5.0.0";
     sha256 = "1k9yxklzdnjfkqysg54dz0mr75yg29fhlls9alh5qlfpsfpk32yq";
@@ -618,11 +603,6 @@
     name = "Microsoft.NETCore.Targets";
     version = "5.0.0";
     sha256 = "0z3qyv7qal5irvabc8lmkh58zsl42mrzd1i0sssvzhv4q4kl3cg6";
-  })
-  (fetchNuGet {
-    name = "Microsoft.NetFramework.Analyzers";
-    version = "3.3.2";
-    sha256 = "0samfc6c3mm7c4g6b0m01c8c37ip5ywy1i2my02xsbf9vygkal89";
   })
   (fetchNuGet {
     name = "Microsoft.Win32.Primitives";
@@ -726,8 +706,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2021.220.0";
-    sha256 = "0lsv1xl4wav9wv50d1aba56sf6dgqa5qsx4lfn81azy3lzpcbzpp";
+    version = "2021.226.0";
+    sha256 = "0875lcd28vmx4f40k8m957lcpg0ilkzm3da12j94xaqk88mx4j7c";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
