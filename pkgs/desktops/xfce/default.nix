@@ -102,8 +102,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### PANEL PLUGINS
 
-  xfce4-vala-panel-appmenu-plugin = callPackage ./panel-plugins/xfce4-vala-panel-appmenu-plugin { };
-
   xfce4-battery-plugin = callPackage ./panel-plugins/xfce4-battery-plugin { };
 
   xfce4-clipman-plugin = callPackage ./panel-plugins/xfce4-clipman-plugin { };
