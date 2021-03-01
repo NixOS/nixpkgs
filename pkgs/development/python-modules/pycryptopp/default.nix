@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tahoe-lafs.org/trac/pycryptopp";
     description = "Python wrappers for the Crypto++ library";
     license = licenses.gpl2Plus;

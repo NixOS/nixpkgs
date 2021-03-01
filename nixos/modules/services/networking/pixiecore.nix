@@ -115,7 +115,7 @@ in
               if cfg.mode == "boot"
               then [ "boot" cfg.kernel ]
                    ++ optional (cfg.initrd != "") cfg.initrd
-                   ++ optional (cfg.cmdLine != "") "--cmdline=${lib.escapeShellArg cfg.cmdLine}"
+                   ++ optionals (cfg.cmdLine != "") [ "--cmdline" cfg.cmdLine ]
               else [ "api" cfg.apiServer ];
           in
             ''

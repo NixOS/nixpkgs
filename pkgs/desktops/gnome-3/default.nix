@@ -79,6 +79,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-session = callPackage ./core/gnome-session { };
 
+  gnome-session-ctl = callPackage ./core/gnome-session/ctl.nix { };
+
   gnome-shell = callPackage ./core/gnome-shell { };
 
   gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };
@@ -156,15 +158,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   cheese = callPackage ./apps/cheese { };
 
-  evolution = callPackage ./apps/evolution { };
-
   file-roller = callPackage ./apps/file-roller { };
 
   gedit = callPackage ./apps/gedit { };
 
   ghex = callPackage ./apps/ghex { };
-
-  glade = callPackage ./apps/glade { };
 
   gnome-books = callPackage ./apps/gnome-books { };
 
@@ -264,7 +262,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
-  gnome-panel = callPackage ./misc/gnome-panel { };
+  gnome-panel = callPackage ./misc/gnome-panel {
+    autoreconfHook = pkgs.autoreconfHook269;
+  };
 
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
@@ -351,6 +351,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) dconf; # added 2019-11-30
 
   inherit (pkgs) networkmanagerapplet; # added 2019-12-12
+
+  inherit (pkgs) glade; # added 2020-05-15
 
   vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
 

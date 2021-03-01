@@ -1,29 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, tinycss2, pytest, pytestrunner }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, tinycss2
+, pytest
+, pytestrunner
+, pytestcov
+, pytest-flake8
+, pytest-isort
+}:
 
 buildPythonPackage rec {
   pname = "cssselect2";
-  version = "0.2.2";
+  version = "0.4.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0skymzb4ncrm2zdsy80f53vi0arf776lvbp51hzh4ayp1il5lj3h";
+    sha256 = "93fbb9af860e95dd40bf18c3b2b6ed99189a07c0f29ba76f9c5be71344664ec8";
   };
-
-  # We're not interested in code quality tests
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-cov" "" \
-      --replace "pytest-flake8" "" \
-      --replace "pytest-isort" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov=cssselect2" "" \
-      --replace "--flake8" "" \
-      --replace "--isort" ""
-  '';
 
   propagatedBuildInputs = [ tinycss2 ];
 
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
 
   meta = with lib; {
     description = "CSS selectors for Python ElementTree";

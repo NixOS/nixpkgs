@@ -1,4 +1,4 @@
-{ stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
+{ lib, fetchdarcs, pythonPackages, libvncserver, zlib
 , gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
 
 mkDerivationWith pythonPackages.buildPythonApplication rec {
@@ -39,7 +39,7 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     desktopName = "Blink";
     icon = "blink";
     genericName = "Instant Messaging";
-    categories = "Application;Internet;";
+    categories = "Internet;";
   };
 
   dontWrapQtApps = true;
@@ -58,7 +58,7 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://icanblink.com/";
     description = "A state of the art, easy to use SIP client for Voice, Video and IM";
     platforms = platforms.linux;

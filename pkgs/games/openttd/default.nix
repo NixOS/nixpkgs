@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgconfig, SDL2, libpng, zlib, xz, freetype, fontconfig
+{ lib, stdenv, fetchurl, fetchzip, pkg-config, which, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
 , writeScriptBin, makeWrapper, runtimeShell
@@ -29,16 +29,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    sha256 = "0d22a3c50f7a321f4f211594f4987ac16c381e8e3e40f116848e63e91e7fbb9b";
+    sha256 = "0fxmfz1mm95a2x0rnzfff9wb8q57w0cvsdd0z7agdcbyakph25n1";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
-    ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+  nativeBuildInputs = [ pkg-config which makeWrapper ];
+  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig libxdg_basedir ]
+    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 
@@ -51,30 +51,30 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/games/ $out/bin
 
-    ${stdenv.lib.optionalString withOpenGFX ''
+    ${lib.optionalString withOpenGFX ''
       cp ${opengfx}/* $out/share/games/openttd/baseset
     ''}
 
     mkdir -p $out/share/games/openttd/data
 
-    ${stdenv.lib.optionalString withOpenSFX ''
+    ${lib.optionalString withOpenSFX ''
       cp ${opensfx}/*.{obs,cat} $out/share/games/openttd/data
     ''}
 
     mkdir $out/share/games/openttd/baseset/openmsx
 
-    ${stdenv.lib.optionalString withOpenMSX ''
+    ${lib.optionalString withOpenMSX ''
       cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
     ''}
 
-    ${stdenv.lib.optionalString withFluidSynth ''
+    ${lib.optionalString withFluidSynth ''
       wrapProgram $out/bin/openttd \
         --add-flags -m \
         --add-flags extmidi:cmd=${playmidi}/bin/playmidi
     ''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
     longDescription = ''
       OpenTTD is a transportation economics simulator. In single player mode,
@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.openttd.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming the-kenny fpletz ];
+    maintainers = with maintainers; [ jcumming fpletz ];
   };
 }

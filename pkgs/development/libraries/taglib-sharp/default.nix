@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, mono }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, pkg-config, mono }:
 
 stdenv.mkDerivation rec {
   pname = "taglib-sharp";
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "12pk4z6ag8w7kj6vzplrlasq5lwddxrww1w1ya5ivxrfki15h5cp";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook which ];
+  nativeBuildInputs = [ pkg-config autoreconfHook which ];
   buildInputs = [ mono ];
 
   dontStrip = true;
 
   configureFlags = [ "--disable-docs" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing metadata in media files";
     homepage = "https://github.com/mono/taglib-sharp";
     platforms = platforms.linux;

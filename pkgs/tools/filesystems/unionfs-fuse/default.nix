@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, fuse }:
+{ lib, stdenv, fetchFromGitHub, cmake, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
     rev = "v${version}";
-    sha256 = "0lb8zgdxnjy2fjr2284hvdfn7inc1in44ynzgcr66x54bxzvynj6";
+    sha256 = "0bwx70x834qgqh53vqp18bhbxbsny80hz922rbgj8k9wj7cbfilm";
   };
 
   patches =
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
       ./prevent-kill-on-shutdown.patch
     ];
 
-  buildInputs = [ cmake fuse ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ fuse ];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
   # possible to do:
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = licenses.bsd3;

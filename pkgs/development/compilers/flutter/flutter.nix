@@ -1,24 +1,47 @@
-{ channel, pname, version, sha256Hash, patches
-, filename ? "flutter_linux_v${version}-${channel}.tar.xz" }:
+{ pname
+, version
+, patches
+, dart
+, src
+}:
 
-{ bash, buildFHSUserEnv, cacert, coreutils, git, makeWrapper, runCommand, stdenv
-, fetchurl, alsaLib, dbus, expat, libpulseaudio, libuuid, libX11, libxcb
-, libXcomposite, libXcursor, libXdamage, libXfixes, libGL, nspr, nss, systemd }:
-
+{ bash
+, buildFHSUserEnv
+, cacert
+, coreutils
+, git
+, runCommand
+, stdenv
+, lib
+, fetchurl
+, alsaLib
+, dbus
+, expat
+, libpulseaudio
+, libuuid
+, libX11
+, libxcb
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXfixes
+, libXrender
+, libXtst
+, libXi
+, libXext
+, libGL
+, nspr
+, nss
+, systemd
+}:
 let
-  drvName = "flutter-${channel}-${version}";
+  drvName = "flutter-${version}";
   flutter = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
 
-    src = fetchurl {
-      url =
-        "https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/${filename}";
-      sha256 = sha256Hash;
-    };
+    buildInputs = [ git ];
 
-    buildInputs = [ makeWrapper git ];
-
-    inherit patches;
+    inherit src patches;
 
     postPatch = ''
       patchShebangs --build ./bin/
@@ -26,33 +49,36 @@ let
     '';
 
     buildPhase = ''
-      FLUTTER_ROOT=$(pwd)
-      FLUTTER_TOOLS_DIR="$FLUTTER_ROOT/packages/flutter_tools"
-      SNAPSHOT_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot"
-      STAMP_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.stamp"
-      SCRIPT_PATH="$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart"
-      DART_SDK_PATH="$FLUTTER_ROOT/bin/cache/dart-sdk"
+      export FLUTTER_ROOT="$(pwd)"
+      export FLUTTER_TOOLS_DIR="$FLUTTER_ROOT/packages/flutter_tools"
+      export SCRIPT_PATH="$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart"
 
-      DART="$DART_SDK_PATH/bin/dart"
-      PUB="$DART_SDK_PATH/bin/pub"
+      export SNAPSHOT_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot"
+      export STAMP_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.stamp"
+
+      export DART_SDK_PATH="${dart}"
 
       HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
                  # path is relative otherwise it's replaced by /build/flutter
 
-      (cd "$FLUTTER_TOOLS_DIR" && "$PUB" upgrade --offline)
+      pushd "$FLUTTER_TOOLS_DIR"
+      ${dart}/bin/pub get --offline
+      popd
 
       local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
-      "$DART" --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
+      ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
       echo "$revision" > "$STAMP_PATH"
       echo -n "${version}" > version
 
-      rm -rf bin/cache/{artifacts,downloads}
-      rm -f  bin/cache/*.stamp
+      rm -r bin/cache/{artifacts,dart-sdk,downloads}
+      rm bin/cache/*.stamp
     '';
 
     installPhase = ''
       mkdir -p $out
       cp -r . $out
+      mkdir -p $out/bin/cache/
+      ln -sf ${dart} $out/bin/cache/dart-sdk
     '';
   };
 
@@ -72,6 +98,7 @@ let
       with pkgs; [
         bash
         curl
+        dart
         git
         unzip
         which
@@ -91,7 +118,11 @@ let
         libXcomposite
         libXcursor
         libXdamage
+        libXext
         libXfixes
+        libXi
+        libXrender
+        libXtst
         libGL
         nspr
         nss
@@ -99,7 +130,9 @@ let
       ];
   };
 
-in runCommand drvName {
+in
+runCommand drvName
+{
   startScript = ''
     #!${bash}/bin/bash
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
@@ -109,9 +142,8 @@ in runCommand drvName {
   preferLocalBuild = true;
   allowSubstitutes = false;
   passthru = { unwrapped = flutter; };
-  meta = with stdenv.lib; {
-    description =
-      "Flutter is Google's SDK for building mobile, web and desktop with Dart.";
+  meta = with lib; {
+    description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
     longDescription = ''
       Flutter is Google’s UI toolkit for building beautiful,
       natively compiled applications for mobile, web, and desktop from a single codebase.
@@ -119,7 +151,7 @@ in runCommand drvName {
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ babariviere ];
+    maintainers = with maintainers; [ babariviere ericdallo thiagokokada ];
   };
 } ''
   mkdir -p $out/bin

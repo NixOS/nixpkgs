@@ -1,43 +1,45 @@
-{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, mkDerivation
-, gtk2, qtbase, qtsvg, qtx11extras # Toolkit dependencies
+{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config, mkDerivation
+, gtk2Support ? true, gtk2
+, qtbase, qtsvg, qtx11extras # Toolkit dependencies
 , karchive, kconfig, kconfigwidgets, kio, frameworkintegration
 , kguiaddons, ki18n, kwindowsystem, kdelibs4support, kiconthemes
 , libpthreadstubs, pcre, libXdmcp, libX11, libXau # X11 dependencies
 , fetchpatch
 }:
 
-let
-  version = "1.9.1";
-in mkDerivation {
+mkDerivation rec {
   pname = "qtcurve";
-  inherit version;
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "qtcurve";
     rev = version;
-    sha256 = "0sm1fza68mwl9cvid4h2lsyxq5svia86l5v9wqk268lmx16mbzsw";
+    sha256 = "XP9VTeiVIiMm5mkXapCKWxfcvaYCkhY3S5RXZNR3oWo=";
   };
 
   patches = [
+    # Remove unnecessary constexpr, this is not allowed in C++14
     (fetchpatch {
       url = "https://github.com/KDE/qtcurve/commit/ee2228ea2f18ac5da9b434ee6089381df815aa94.patch";
       sha256 = "1vz5frsrsps93awn84gk8d7injrqfcyhc1rji6s0gsgsp5z9sl34";
     })
+    # Fix build with Qt5.15
+    (fetchpatch {
+      url = "https://github.com/KDE/qtcurve/commit/44e2a35ebb164dcab0bad1a9158b1219a3ff6504.patch";
+      sha256 = "5I2fTxKRJX0cJcyUvYHWZx369FKk6ti9Se7AfYmB9ek=";
+    })
   ];
 
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
-    gtk2
     qtbase qtsvg qtx11extras
     karchive kconfig kconfigwidgets kio kiconthemes kguiaddons ki18n
     kwindowsystem kdelibs4support frameworkintegration
     libpthreadstubs
     pcre
     libXdmcp libX11 libXau
-  ];
+  ] ++ lib.optional gtk2Support gtk2;
 
   preConfigure = ''
     for i in qt5/CMakeLists.txt qt5/config/CMakeLists.txt
@@ -52,7 +54,12 @@ in mkDerivation {
     patchShebangs tools/gen-version.sh
   '';
 
-  meta = with stdenv.lib; {
+  configureFlags = [
+    "-DENABLE_GTK2=${if gtk2Support then "ON" else "OFF"}"
+    "-DENABLE_QT4=OFF"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/QtCurve/qtcurve";
     description = "Widget styles for Qt5/Plasma 5 and gtk2";
     platforms = platforms.linux;

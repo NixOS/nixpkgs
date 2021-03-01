@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, flex, bison, python, autoconf, automake, gnulib, libtool
-, gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
+{ lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
+, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
-, zfsSupport ? true
+, zfsSupport ? false
 , xenSupport ? false
 }:
 
-with stdenv.lib;
+with lib;
 let
   pcSystems = {
     i686-linux.target = "i386";
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
     ./fix-bash-completion.patch
   ];
 
-  nativeBuildInputs = [ bison flex python pkgconfig autoconf automake ];
-  buildInputs = [ ncurses libusb freetype gettext lvm2 fuse libtool ]
+  nativeBuildInputs = [ bison flex python3 pkg-config autoconf automake ];
+  buildInputs = [ ncurses libusb-compat-0_1 freetype gettext lvm2 fuse libtool ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
 
     longDescription =

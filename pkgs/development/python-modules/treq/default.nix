@@ -1,14 +1,14 @@
-{ stdenv, fetchPypi, buildPythonPackage, service-identity, requests, six
+{ lib, fetchPypi, buildPythonPackage, service-identity, requests, six
 , mock, twisted, incremental, pep8, httpbin
 }:
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "18.6.0";
+  version = "20.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "91e09ff6b524cc90aa5e934b909c8d0d1a9d36ebd618b6c38e37b17013e69f48";
+    sha256 = "83cd2ca75aef4f1fbdbe144c186426d930c3e8b20385df8cec9e12d442986da2";
   };
 
   propagatedBuildInputs = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   # Failing tests https://github.com/twisted/treq/issues/208
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/twisted/treq";
     description = "A requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;

@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "3proxy";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ misuzu ];
   };
 
@@ -134,6 +134,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
+    start_all()
+
+    peer0.wait_for_unit("network-online.target")
+
     peer1.wait_for_unit("3proxy.service")
     peer1.wait_for_open_port("9999")
 

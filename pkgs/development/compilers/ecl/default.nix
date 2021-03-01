@@ -1,5 +1,6 @@
-{stdenv, fetchurl
+{lib, stdenv, fetchurl, fetchpatch
 , libtool, autoconf, automake
+, texinfo
 , gmp, mpfr, libffi, makeWrapper
 , noUnicode ? false
 , gcc
@@ -10,19 +11,18 @@ let
   s = # Generated upstream information
   rec {
     baseName="ecl";
-    version="16.1.3";
+    version="21.2.1";
     name="${baseName}-${version}";
-    hash="0m0j24w5d5a9dwwqyrg0d35c0nys16ijb4r0nyk87yp82v38b9bn";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.3.tgz";
-    sha256="0m0j24w5d5a9dwwqyrg0d35c0nys16ijb4r0nyk87yp82v38b9bn";
+    url="https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
+    sha256="000906nnq25177bgsfndiw3iqqgrjc9spk10hzk653sbz3f7anmi";
   };
   buildInputs = [
-    libtool autoconf automake makeWrapper
+    libtool autoconf automake texinfo makeWrapper
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
     # replaces ecl's own gc which other packages can depend on, thus propagated
-  ] ++ stdenv.lib.optionals useBoehmgc [
+  ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
@@ -36,7 +36,11 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    ./libffi-3.3-abi.patch
+    # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
+    (fetchpatch {
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
+      sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
+    })
   ];
 
   configureFlags = [
@@ -45,7 +49,7 @@ stdenv.mkDerivation {
     "--with-libffi-prefix=${libffi.dev}"
     ]
     ++
-    (stdenv.lib.optional (! noUnicode)
+    (lib.optional (! noUnicode)
       "--enable-unicode")
     ;
 
@@ -63,8 +67,8 @@ stdenv.mkDerivation {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

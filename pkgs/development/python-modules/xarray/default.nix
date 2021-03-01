@@ -5,20 +5,21 @@
 , numpy
 , pandas
 , python
+, setuptools
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c72d160c970725201f769e80fb91cbad68d6ebf21d68fcc371385a6c950459c3";
+    sha256 = "5e1af056ff834bf62ca57da917159328fab21b1f8c25284f92083016bb2d92a5";
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [numpy pandas];
+  propagatedBuildInputs = [ numpy pandas setuptools ];
 
   checkPhase = ''
     pytest $out/${python.sitePackages}

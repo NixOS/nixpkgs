@@ -16,7 +16,7 @@
 }:
 
 mkDerivation {
-  name = "kalarm";
+  pname = "kalarm";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.rittelle ];

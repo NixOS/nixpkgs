@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python }:
+{ lib, stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation {
   pname = "biblatex-check";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     install -Dm755 biblatex_check.py $out/bin/biblatex-check
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python2/3 script for checking BibLatex .bib files";
     homepage = "https://github.com/Pezmc/BibLatex-Check";
     license = licenses.mit;

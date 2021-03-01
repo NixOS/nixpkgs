@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "mysqltuner";
-  version = "1.7.17";
+  version = "1.7.21";
 
   src = fetchFromGitHub {
     owner  = "major";
     repo   = "MySQLTuner-perl";
     rev    = version;
-    sha256 = "0wjdqraa6r6kd6rsgrn177dq6xsnnr1sgnbs9whknjbs4fn3wwl5";
+    sha256 = "sha256-Yv1XjD8sZcmGr2SVD6TEElUH7vspJ61WwQwfXLOrao0=";
   };
 
   buildInputs = [ perl ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -m0755 mysqltuner.pl $out/bin/mysqltuner
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
     homepage = "http://mysqltuner.com";
     license = licenses.gpl3;

@@ -1,23 +1,29 @@
-{ stdenv, callPackage, fetchurl }:
+{ lib, stdenv, callPackage, fetchurl, nixosTests }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
   plat = {
     x86_64-linux = "linux-x64";
-    x86_64-darwin = "darwin";
+    x86_64-darwin = "darwin-x64";
+    aarch64-linux = "linux-arm64";
+    armv7l-linux = "linux-armhf";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1prv4rzr5z905s6jnmkmd97zr5kz8nn4m9bil483bnx4wqr2k10g";
-    x86_64-darwin = "1p0a94i80s7fq6ars01bvr41qxiq35s0r6crfv857ma01g9ia7k3";
+    x86_64-linux = "1b9pzfi034idhi6f3n0sz3fckf95ckf2qx3sgfn9fx2g52r9m9z1";
+    x86_64-darwin = "1983d8hn04xl5vw7p6842cv5x08q7vilqg7nhvy5yg3lj9q2rpp0";
+    aarch64-linux = "09l32abkq110ib4hjd0yv9avr8a2vg5vs7w4jpk0p499gzrysh2l";
+    armv7l-linux = "1s0gbq1fapq2i905c0xxfyh0656qnb7dmg00khlwbplxzd6i6m18";
   }.${system};
 
   sourceRoot = {
     x86_64-linux = ".";
     x86_64-darwin = "";
+    aarch64-linux = ".";
+    armv7l-linux = ".";
   }.${system};
 in
   callPackage ./generic.nix rec {
@@ -27,19 +33,21 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.44.0";
+    version = "1.53.2";
     pname = "vscodium";
 
     executableName = "codium";
     longName = "VSCodium";
-    shortName = "Codium";
+    shortName = "vscodium";
 
     src = fetchurl {
       url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
       inherit sha256;
     };
 
-    meta = with stdenv.lib; {
+    tests = nixosTests.vscodium;
+
+    meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS (VS Code without MS branding/telemetry/licensing)
@@ -54,7 +62,7 @@ in
       homepage = "https://github.com/VSCodium/vscodium";
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
-      maintainers = with maintainers; [ synthetica ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" ];
+      maintainers = with maintainers; [ synthetica turion ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

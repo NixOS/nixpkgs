@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen,
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
+  AGL, Carbon, Cocoa, Foundation,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? false, jasper,  # disable jasper by default (many CVE)
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
@@ -11,7 +11,7 @@
   curlSupport ? true, curl,
   colladaSupport ? false, opencollada,
   opencascadeSupport ? false, opencascade,
-  ffmpegSupport ? false, ffmpeg,
+  ffmpegSupport ? false, ffmpeg_3,
   nvttSupport ? false, nvidia-texture-tools,
   freetypeSupport ? true, freetype,
   svgSupport ? false, librsvg,
@@ -36,13 +36,12 @@ stdenv.mkDerivation rec {
     sha256 = "0x8hdbzw0b71j91fzp9cwmy9a7ava8v8wwyj8nxijq942vdx1785";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake doxygen ];
+  nativeBuildInputs = [ pkg-config cmake doxygen ];
 
   buildInputs = [
     libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional jasperSupport jasper
     ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional curlSupport curl
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional opencascadeSupport opencascade
-    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optional ffmpegSupport ffmpeg_3
     ++ lib.optional nvttSupport nvidia-texture-tools
     ++ lib.optional freetypeSupport freetype
     ++ lib.optional svgSupport librsvg
@@ -62,15 +61,16 @@ stdenv.mkDerivation rec {
     ++ lib.optional sdlSupport SDL2
     ++ lib.optionals restSupport [ asio boost ]
     ++ lib.optionals withExamples [ fltk wxGTK ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
   ;
 
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
     maintainers = with maintainers; [ aanderse raskin ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
 }

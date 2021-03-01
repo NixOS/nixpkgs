@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildGoPackage}:
+{lib, fetchurl, buildGoPackage}:
 
 buildGoPackage rec {
 
@@ -14,9 +14,9 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  postInstall = "mv $bin/bin/harmonist.git $bin/bin/harmonist";
+  postInstall = "mv $out/bin/harmonist.git $out/bin/harmonist";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A stealth coffee-break roguelike game";
     longDescription = ''
       Harmonist is a stealth coffee-break roguelike game. The game has a heavy

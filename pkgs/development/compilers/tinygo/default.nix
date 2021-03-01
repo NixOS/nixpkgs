@@ -1,19 +1,44 @@
 { lib, buildGoModule, fetchFromGitHub, llvm, clang-unwrapped, lld, avrgcc
-, avrdude, openocd, gcc-arm-embedded, makeWrapper }:
+, avrdude, openocd, gcc-arm-embedded, makeWrapper, fetchurl }:
 
+let main = ./main.go;
+    gomod = ./go.mod;
+in
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.12.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "0dw3kxf55p617pb0bj3knsqcfvap5scxlvhh3a9g9ia92kann4v1";
+    sha256 = "063aszbsnr0myq56kms1slmrfs7m4nmg0zgh2p66lxdsifrfly7j";
+    fetchSubmodules = true;
   };
 
-  modSha256 = "1bjq4vaf38hi204lr9w3r3wcy1rzj06ygi5gzfa7dl3kx10hw6p0";
-  enableParallelBuilding = true;
+  overrideModAttrs = (_: {
+      patches = [];
+      preBuild = ''
+      rm -rf *
+      cp ${main} main.go
+      cp ${gomod} go.mod
+      chmod +w go.mod
+      '';
+  });
+
+  preBuild = "cp ${gomod} go.mod";
+
+  postBuild = "make gen-device";
+
+  vendorSha256 = "12k2gin0v7aqz5543m12yhifc0xsz26qyqra5l4c68xizvzcvkxb";
+
+  doCheck = false;
+
+  prePatch = ''
+    sed -i s/', "-nostdlibinc"'// builder/builtins.go
+    sed -i s/'"-nostdlibinc", '// compileopts/config.go builder/picolibc.go
+  '';
+
   subPackages = [ "." ];
   buildInputs = [ llvm clang-unwrapped makeWrapper ];
   propagatedBuildInputs = [ lld avrgcc avrdude openocd gcc-arm-embedded ];
@@ -21,7 +46,11 @@ buildGoModule rec {
   postInstall = ''
     mkdir -p $out/share/tinygo
     cp -a lib src targets $out/share/tinygo
-    wrapProgram $out/bin/tinygo --prefix "TINYGOROOT" : "$out/share/tinygo"
+    wrapProgram $out/bin/tinygo --prefix "TINYGOROOT" : "$out/share/tinygo" \
+      --prefix "PATH" : "$out/libexec/tinygo"
+    mkdir -p $out/libexec/tinygo
+    ln -s ${clang-unwrapped}/bin/clang $out/libexec/tinygo/clang-10
+    ln -s ${lld}/bin/lld $out/libexec/tinygo/ld.lld-10
     ln -sf $out/bin $out/share/tinygo
   '';
 
@@ -30,6 +59,5 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

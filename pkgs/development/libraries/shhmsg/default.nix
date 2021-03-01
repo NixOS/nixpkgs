@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "shhmsg-1.4.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTBASEDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for displaying messages";
     homepage = "https://shh.thathost.com/pub-unix/";
     license = licenses.artistic1;

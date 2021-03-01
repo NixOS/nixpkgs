@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "ninja";
-  version = "1.10.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "1fbzl7mrcrwp527sgkc1npfl3k6bbpydpiq98xcf1a1hkrx0z5x4";
+    sha256 = "0mspq4mvx41qri2v2zlg2y3znx5gfw6d8s3czbcfpr2218qbpz55";
   };
 
   nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];

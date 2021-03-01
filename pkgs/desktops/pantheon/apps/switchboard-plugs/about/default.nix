@@ -1,10 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
+, nix-update-script
 , pantheon
 , substituteAll
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -16,17 +18,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1cjhip0abc0y5w6cqnjcgi48bfrackp45gz7955l66hxhnm5wyw6";
+    sha256 = "sha256-wis6wNEOOjPLUCT9vRRhMxbKHR2Y2nZArKogSF/FQv8=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -46,6 +48,20 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # Get OS Info from GLib.Environment
+    # https://github.com/elementary/switchboard-plug-about/pull/128
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-about/commit/5ed29988e3a895b2df66e5529df0f12a94d5517c.patch";
+      sha256 = "1ipDxnpDZjpSEzZdtOeNe5U+QOXiB5M+hC3yDAsl/rQ=";
+    })
+
+    # Use Pretty Name
+    # https://github.com/elementary/switchboard-plug-about/pull/134
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-about/commit/653d131dc8fac10ae7523f2bf6b179ffffa9c0fd.patch";
+      sha256 = "AsM49Dc9/yn2tG6fqjfedeOlDXUu+iEoyNUmNYLH+zE=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit pciutils;
@@ -53,7 +69,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard About Plug";
     homepage = "https://github.com/elementary/switchboard-plug-about";
     license = licenses.gpl3Plus;

@@ -1,16 +1,18 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
-  version = "0.11.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "thanos-io";
     repo = "thanos";
-    sha256 = "152ic9pga0wjg4r7b66hdnbsj9wrzfzbbps7wjas3rcbcv1f2i90";
+    sha256 = "sha256-GJKTQGMmFJeUQn02GWP4KKpKdM8eT+VxDBDzST+5NXk=";
   };
 
-  modSha256 = "1pdypyyy352l6wy5lr94fv8j890lh863h8zg2hxchiymrs5pgq1c";
+  vendorSha256 = "sha256-s11iJFcJ1Ez6TkhCU3VD2ThU5/9otHz5rDF8z9ux79E=";
+
+  doCheck = false;
 
   subPackages = "cmd/thanos";
 
@@ -23,7 +25,7 @@ buildGoModule rec {
        -X ${t}.BuildDate=unknown
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;

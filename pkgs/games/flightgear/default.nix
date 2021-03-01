@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wrapQtAppsHook
+{ lib, stdenv, fetchurl, wrapQtAppsHook
 , freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
@@ -6,15 +6,15 @@
 }:
 
 let
-  version = "2019.1.1";
+  version = "2020.3.4";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
-    pname = "flightgear-base";
+    pname = "flightgear-data";
     inherit version;
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "14zm0hzshbca4ych72631hpc4pw2w24zib62ri3lwm8nz6j63qhf";
+      sha256 = "1cqikbqvidfaynml9bhqfr9yw5ga35gpqrbz62z94a1skdijkpkg";
     };
 
     phases = [ "installPhase" ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "189wal08p9lrz757pmazxnf85sfymsqrm3nfvdad95pfp6bg7pyi";
+    sha256 = "02d9h10p8hyn0a25csragj6pbwmrir1z8zb92023s9vi21j7bwy8";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -69,11 +69,9 @@ stdenv.mkDerivation rec {
     "--set FG_ROOT ${data}/share/FlightGear"
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flight simulator";
-    maintainers = with maintainers; [ raskin the-kenny ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     hydraPlatforms = []; # disabled from hydra because it's so big
     license = licenses.gpl2;

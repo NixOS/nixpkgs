@@ -40,9 +40,9 @@ let
       in scrubbedEval.options;
   };
 
-  helpScript = pkgs.writeScriptBin "nixos-help"
-    ''
-      #! ${pkgs.runtimeShell} -e
+
+  nixos-help = let
+    helpScript = pkgs.writeShellScriptBin "nixos-help" ''
       # Finds first executable browser in a colon-separated list.
       # (see how xdg-open defines BROWSER)
       browser="$(
@@ -59,14 +59,22 @@ let
       exec "$browser" ${manual.manualHTMLIndex}
     '';
 
-  desktopItem = pkgs.makeDesktopItem {
-    name = "nixos-manual";
-    desktopName = "NixOS Manual";
-    genericName = "View NixOS documentation in a web browser";
-    icon = "nix-snowflake";
-    exec = "${helpScript}/bin/nixos-help";
-    categories = "System";
-  };
+    desktopItem = pkgs.makeDesktopItem {
+      name = "nixos-manual";
+      desktopName = "NixOS Manual";
+      genericName = "View NixOS documentation in a web browser";
+      icon = "nix-snowflake";
+      exec = "nixos-help";
+      categories = "System";
+    };
+
+    in pkgs.symlinkJoin {
+      name = "nixos-help";
+      paths = [
+        helpScript
+        desktopItem
+      ];
+    };
 
 in
 
@@ -99,6 +107,16 @@ in
         description = ''
           Whether to install manual pages and the <command>man</command> command.
           This also includes "man" outputs.
+        '';
+      };
+
+      man.generateCaches = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to generate the manual page index caches using
+          <literal>mandb(8)</literal>. This allows searching for a page or
+          keyword using utilities like <literal>apropos(1)</literal>.
         '';
       };
 
@@ -187,7 +205,33 @@ in
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
-      environment.etc."man.conf".source = "${pkgs.man-db}/etc/man_db.conf";
+      environment.etc."man_db.conf".text =
+        let
+          manualPages = pkgs.buildEnv {
+            name = "man-paths";
+            paths = config.environment.systemPackages;
+            pathsToLink = [ "/share/man" ];
+            extraOutputsToInstall = ["man"];
+            ignoreCollisions = true;
+          };
+          manualCache = pkgs.runCommandLocal "man-cache" { }
+          ''
+            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
+            ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
+          '';
+        in
+        ''
+          # Manual pages paths for NixOS
+          MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
+          MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
+
+          ${optionalString cfg.man.generateCaches ''
+          # Generated manual pages cache for NixOS (immutable)
+          MANDB_MAP /run/current-system/sw/share/man ${manualCache}
+          ''}
+          # Manual pages caches for NixOS
+          MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
+        '';
     })
 
     (mkIf cfg.info.enable {
@@ -214,10 +258,10 @@ in
 
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.manpages
-        ++ optionals cfg.doc.enable ([ manual.manualHTML helpScript ]
-           ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
+        ++ optionals cfg.doc.enable ([ manual.manualHTML nixos-help ]
+           ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
 
-      services.mingetty.helpLine = mkIf cfg.doc.enable (
+      services.getty.helpLine = mkIf cfg.doc.enable (
           "\nRun 'nixos-help' for the NixOS manual."
       );
     })

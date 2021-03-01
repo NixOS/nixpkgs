@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   # check phase is empty for now (as of version 0.7)
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculates rank-width and rank-decompositions";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

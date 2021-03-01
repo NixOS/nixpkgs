@@ -283,7 +283,7 @@ let
         default = false;
         type = types.bool;
         description = ''
-          Turn on proxy_arp for this device (and proxy_ndp for ipv6).
+          Turn on proxy_arp for this device.
           This is mainly useful for creating pseudo-bridges between a real
           interface and a virtual network such as VPN or a virtual machine for
           interfaces that don't support real bridging (most wlan interfaces).
@@ -376,10 +376,43 @@ in
 
     networking.hostName = mkOption {
       default = "nixos";
-      type = types.str;
+      # Only allow hostnames without the domain name part (i.e. no FQDNs, see
+      # e.g. "man 5 hostname") and require valid DNS labels (recommended
+      # syntax). Note: We also allow underscores for compatibility/legacy
+      # reasons (as undocumented feature):
+      type = types.strMatching
+        "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
       description = ''
-        The name of the machine.  Leave it empty if you want to obtain
-        it from a DHCP server (if using DHCP).
+        The name of the machine. Leave it empty if you want to obtain it from a
+        DHCP server (if using DHCP). The hostname must be a valid DNS label (see
+        RFC 1035 section 2.3.1: "Preferred name syntax", RFC 1123 section 2.1:
+        "Host Names and Numbers") and as such must not contain the domain part.
+        This means that the hostname must start with a letter or digit,
+        end with a letter or digit, and have as interior characters only
+        letters, digits, and hyphen. The maximum length is 63 characters.
+        Additionally it is recommended to only use lower-case characters.
+        If (e.g. for legacy reasons) a FQDN is required as the Linux kernel
+        network node hostname (uname --nodename) the option
+        boot.kernel.sysctl."kernel.hostname" can be used as a workaround (but
+        the 64 character limit still applies).
+      '';
+    };
+
+    networking.fqdn = mkOption {
+      readOnly = true;
+      type = types.str;
+      default = if (cfg.hostName != "" && cfg.domain != null)
+        then "${cfg.hostName}.${cfg.domain}"
+        else throw ''
+          The FQDN is required but cannot be determined. Please make sure that
+          both networking.hostName and networking.domain are set properly.
+        '';
+      defaultText = literalExample ''''${networking.hostName}.''${networking.domain}'';
+      description = ''
+        The fully qualified domain name (FQDN) of this host. It is the result
+        of combining networking.hostName and networking.domain. Using this
+        option will result in an evaluation error if the hostname is empty or
+        no domain is specified.
       '';
     };
 
@@ -398,6 +431,9 @@ in
         (this derives it from the machine-id that systemd generates) or
 
         <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
+
+        The primary use case is to ensure when using ZFS that a pool isn't imported
+        accidentally on a wrong machine.
       '';
     };
 
@@ -456,7 +492,7 @@ in
 
     networking.search = mkOption {
       default = [];
-      example = [ "example.com" "local.domain" ];
+      example = [ "example.com" "home.arpa" ];
       type = types.listOf types.str;
       description = ''
         The list of search paths used when resolving domain names.
@@ -465,7 +501,7 @@ in
 
     networking.domain = mkOption {
       default = null;
-      example = "home";
+      example = "home.arpa";
       type = types.nullOr types.str;
       description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.
@@ -506,7 +542,7 @@ in
         <option>networking.useDHCP</option> is true, then every
         interface not listed here will be configured using DHCP.
       '';
-      type = with types; loaOf (submodule interfaceOpts);
+      type = with types; attrsOf (submodule interfaceOpts);
     };
 
     networking.vswitches = mkOption {
@@ -531,7 +567,7 @@ in
           interfaces = mkOption {
             example = [ "eth0" "eth1" ];
             description = "The physical network interfaces connected by the vSwitch.";
-            type = with types; loaOf (submodule vswitchInterfaceOpts);
+            type = with types; attrsOf (submodule vswitchInterfaceOpts);
           };
 
           controllers = mkOption {
@@ -1044,7 +1080,6 @@ in
       ];
 
     boot.kernelModules = [ ]
-      ++ optional cfg.enableIPv6 "ipv6"
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
       ++ optional hasBonds "bonding";
@@ -1055,11 +1090,11 @@ in
       optionalString hasBonds "options bonding max_bonds=0";
 
     boot.kernel.sysctl = {
+      "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
-      "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
-        (i: forEach [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)))
+        (i: [(nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)]))
       // listToAttrs (forEach interfaces
         (i: let
           opt = i.tempAddress;
@@ -1116,7 +1151,6 @@ in
       ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?
         pkgs.iw
-        pkgs.rfkill
       ]
       ++ bridgeStp;
 
@@ -1230,7 +1264,7 @@ in
             '';
 
             # Udev attributes for systemd to name the device and to create a .device target.
-            systemdAttrs = n: ''NAME:="${n}", ENV{INTERFACE}:="${n}", ENV{SYSTEMD_ALIAS}:="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+            systemdAttrs = n: ''NAME:="${n}", ENV{INTERFACE}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
           in
           flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
             let

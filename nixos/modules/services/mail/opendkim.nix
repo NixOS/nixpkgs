@@ -129,6 +129,36 @@ in {
         User = cfg.user;
         Group = cfg.group;
         RuntimeDirectory = optional (cfg.socket == defaultSock) "opendkim";
+        StateDirectory = "opendkim";
+        StateDirectoryMode = "0700";
+        ReadWritePaths = [ cfg.keyPath ];
+
+        AmbientCapabilities = [];
+        CapabilityBoundingSet = [];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6 AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        UMask = "0077";
       };
     };
 

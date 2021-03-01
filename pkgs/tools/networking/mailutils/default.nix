@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkg-config
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
 , python3, gss, libmysqlclient, system-sendmail }:
 
 stdenv.mkDerivation rec {
-  name = "${project}-${version}";
-  project = "mailutils";
-  version = "3.9";
+  pname = "mailutils";
+  version = "3.12";
 
   src = fetchurl {
-    url = "mirror://gnu/${project}/${name}.tar.xz";
-    sha256 = "1g1xf2lal04nsnf1iym9n9n0wxjpqbcr9nysxpm98v4pniinqwsz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0n51ng1f8yf5zfsnh8s0pj9bnw6icb2r0y78gl2kzijaghhzlhvd";
   };
 
   postPatch = ''
@@ -18,13 +17,10 @@ stdenv.mkDerivation rec {
       */Makefile{.in,.am}
     sed -i 's:/usr/lib/mysql:${libmysqlclient}/lib/mysql:' configure.ac
     sed -i 's/0\.18/0.19/' configure.ac
-    sed -i -e 's:mysql/mysql.h:mysql.h:' \
-           -e 's:mysql/errmsg.h:errmsg.h:' \
-      sql/mysql.c
   '';
 
   nativeBuildInputs = [
-    autoreconfHook gettext pkgconfig
+    autoreconfHook gettext pkg-config
   ];
 
   buildInputs = [
@@ -35,6 +31,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-build-mb-len-max.patch
     ./path-to-cat.patch
+    # Fix cross-compilation
+    # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html
+    (fetchpatch {
+      url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
+      sha256 = "0ghzqb8qx2q8cffbvqzw19mivv7r5f16whplzhm7hdj0j2i6xf6s";
+    })
   ];
 
   enableParallelBuilding = false;
@@ -55,8 +57,6 @@ stdenv.mkDerivation rec {
     (fetchurl { url = "${p}/twomsg.at"; sha256 = "15m29rg2xxa17xhx6jp4s2vwa9d4khw8092vpygqbwlhw68alk9g"; })
     (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
   ];
-
-  env.NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
 
   checkInputs = [ dejagnu ];
   doCheck = false; # fails 1 out of a bunch of tests, looks like a bug
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     unset LD_LIBRARY_PATH
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''
@@ -115,6 +115,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/mailutils/";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = platforms.gnu ++ platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , python
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # no binaries, so out = library, dev = headers
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SQL / SQLI tokenizer parser analyzer";
     homepage    = "https://github.com/client9/libinjection";
     license     = licenses.bsd3;

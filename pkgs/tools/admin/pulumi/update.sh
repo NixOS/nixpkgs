@@ -1,13 +1,33 @@
 #!/usr/bin/env bash
+# Bash 3 compatible for Darwin
 
-VERSION="1.12.0"
+# Version of Pulumi from
+# https://www.pulumi.com/docs/get-started/install/versions/
+VERSION="2.19.0"
 
-declare -A plugins
+# Grab latest release ${VERSION} from
+# https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
-    ["aws"]="1.24.0"
-    ["gcp"]="2.8.0"
-    ["random"]="1.5.0"
-    ["kubernetes"]="1.5.6"
+    "auth0=1.5.2"
+    "aws=3.25.1"
+    "cloudflare=2.11.1"
+    "consul=2.7.0"
+    "datadog=2.15.0"
+    "digitalocean=3.3.0"
+    "docker=2.7.0"
+    "gcp=4.9.0"
+    "github=2.5.1"
+    "gitlab=3.5.0"
+    "hcloud=0.5.1"
+    "kubernetes=2.7.8"
+    "mailgun=2.3.2"
+    "mysql=2.3.3"
+    "openstack=2.11.0"
+    "packet=3.2.2"
+    "postgresql=2.5.3"
+    "random=3.0.1"
+    "vault=3.3.0"
+    "vsphere=2.11.4"
 )
 
 function genMainSrc() {
@@ -21,8 +41,9 @@ function genMainSrc() {
 }
 
 function genSrcs() {
-    for plug in "${!plugins[@]}"; do
-        local version=${plugins[$plug]}
+    for plugVers in "${plugins[@]}"; do
+        local plug=${plugVers%=*}
+        local version=${plugVers#*=}
         # url as defined here
         # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
         local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-$1-amd64.tar.gz"
@@ -35,7 +56,7 @@ function genSrcs() {
     done
 }
 
-cat <<EOF
+cat <<EOF                     > data.nix
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
@@ -43,13 +64,14 @@ cat <<EOF
   pulumiPkgs = {
     x86_64-linux = [
 EOF
-genMainSrc "linux"
-genSrcs "linux"
-echo "    ];"
+genMainSrc "linux"           >> data.nix
+genSrcs "linux"              >> data.nix
+echo "    ];"                >> data.nix
 
-echo "    x86_64-darwin = ["
-genMainSrc "darwin"
-genSrcs "darwin"
-echo "    ];"
-echo "  };"
-echo "}"
+echo "    x86_64-darwin = [" >> data.nix
+genMainSrc "darwin"          >> data.nix
+genSrcs "darwin"             >> data.nix
+echo "    ];"                >> data.nix
+echo "  };"                  >> data.nix
+echo "}"                     >> data.nix
+

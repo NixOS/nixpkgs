@@ -98,6 +98,12 @@ services.gitlab = {
   </para>
 
   <para>
+    When <literal>icoming_mail.enabled</literal> is set to <literal>true</literal>
+    in <link linkend="opt-services.gitlab.extraConfig">extraConfig</link> an additional
+    service called <literal>gitlab-mailroom</literal> is enabled for fetching incoming mail.
+  </para>
+
+  <para>
    Refer to <xref linkend="ch-options" /> for all available configuration
    options for the
    <link linkend="opt-services.gitlab.enable">services.gitlab</link> module.

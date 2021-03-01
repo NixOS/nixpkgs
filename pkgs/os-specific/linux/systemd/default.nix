@@ -1,68 +1,303 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
-, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, libmicrohttpd, pcre2
-, linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi, bashInteractive
-, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, ninja, meson, python3Packages, glibcLocales
-, patchelf
-, getent
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
 , buildPackages
-, perl
-, withSelinux ? false, libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
+, ninja
+, meson
+, m4
+, pkg-config
+, coreutils
+, gperf
+, getent
+, patchelf
+, glibcLocales
+, glib
+, substituteAll
+, gettext
+, python3Packages
+
+  # Mandatory dependencies
+, libcap
+, util-linux
+, kbd
+, kmod
+
+  # Optional dependencies
+, pam
+, cryptsetup
+, lvm2
+, audit
+, acl
+, lz4
+, libgcrypt
+, libgpgerror
+, libidn2
+, curl
+, gnutar
+, gnupg
+, zlib
+, xz
+, libuuid
+, libapparmor
+, intltool
+, bzip2
+, pcre2
+, e2fsprogs
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnu-efi
+, iptables
+, withSelinux ? false
+, libselinux
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
+, kexectools
+, bashInteractive
+, libmicrohttpd
+
+, withAnalyze ? true
+, withApparmor ? true
+, withCompression ? true  # adds bzip2, lz4 and xz
+, withCoredump ? true
+, withCryptsetup ? true
+, withDocumentation ? true
+, withEfi ? stdenv.hostPlatform.isEfi
+, withHomed ? false
+, withHostnamed ? true
+, withHwdb ? true
+, withImportd ? true
+, withLocaled ? true
+, withLogind ? true
+, withMachined ? true
+, withNetworkd ? true
+, withNss ? true
+, withOomd ? false
+, withPCRE2 ? true
+, withPolkit ? true
+, withPortabled ? false
+, withRemote ? true
+, withResolved ? true
+, withShellCompletions ? true
+, withTimedated ? true
+, withTimesyncd ? true
+, withUserDb ? true
+, libfido2
+, p11-kit
+
+  # name argument
+, pname ? "systemd"
+
+
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
 }:
 
-let gnupg-minimal = gnupg.override {
-  enableMinimal = true;
-  guiSupport = false;
-  pcsclite = null;
-  sqlite = null;
-  pinentry = null;
-  adns = null;
-  gnutls = null;
-  libusb = null;
-  openldap = null;
-  readline = null;
-  zlib = null;
-  bzip2 = null;
-};
-in stdenv.mkDerivation {
-  version = "243.7";
-  pname = "systemd";
+assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withImportd ->
+(curl.dev != null && zlib != null && xz != null && libgcrypt != null
+  && gnutar != null && gnupg != null && withCompression);
 
-  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
-  # Also fresh patches should be cherry-picked from that tree to our current one.
+assert withEfi -> (gnu-efi != null);
+assert withRemote -> lib.getDev curl != null;
+assert withCoredump -> withCompression;
+
+assert withHomed -> withCryptsetup;
+
+assert withCryptsetup ->
+(cryptsetup != null);
+let
+  wantCurl = withRemote || withImportd;
+
+  version = "247.2";
+in
+stdenv.mkDerivation {
+  inherit version pname;
+
+  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
+  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
-    owner = "nixos";
-    repo = "systemd";
-    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
-    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
+    owner = "systemd";
+    repo = "systemd-stable";
+    rev = "v${version}";
+    sha256 = "091pwrvxz3gcf80shlp28d6l4gvjzc6pb61v4mwxmk9d71qaq7ry";
   };
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  # If these need to be regenerated, `git am path/to/00*.patch` them into a
+  # systemd worktree, rebase to the more recent systemd version, and export the
+  # patches again via `git format-patch v${version}`.
+  # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
+  patches = [
+    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
+    ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0003-Fix-NixOS-containers.patch
+    ./0004-Look-for-fsck-in-the-right-place.patch
+    ./0005-Add-some-NixOS-specific-unit-directories.patch
+    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0008-Fix-hwdb-paths.patch
+    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0012-inherit-systemd-environment-when-calling-generators.patch
+    ./0013-add-rootprefix-to-lookup-dir-paths.patch
+    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0019-Revert-pkg-config-prefix-is-not-really-configurable-.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/boot/efi/meson.build \
+      --replace \
+      "find_program('ld'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
+      --replace \
+      "find_program('objcopy'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '' + (let
+
+    # The folllowing dlopen patches ensure that all the features that are
+    # implemented via dlopen(3) are available (or explicitly deactivated) by
+    # pointing dlopen to the absolute store path instead of relying on the
+    # linkers runtime lookup code.
+    #
+    # All of the dlopen calls have to be handled. When new ones are introduced
+    # by upstream (or one of our patches) they must be explicitly declared,
+    # otherwise the build will fail.
+    #
+    # As of systemd version 247 we've seen a few errors like `libpcre2.… not
+    # found` when using e.g. --grep with journalctl. Those errors should
+    # become less unexpected now.
+    #
+    # There are generally two classes of dlopen(3) calls. Those that we want to
+    # support and those that should be deactivated / unsupported. This change
+    # enforces that we handle all dlopen calls explicitly. Meaning: There is
+    # not a single dlopen call in the source code tree that we did not
+    # explicitly handle.
+    #
+    # In order to do this we introduced a list of attributes that maps from
+    # shared object name to the package that contains them. The package can be
+    # null meaning the reference should be nuked and the shared object will
+    # never be loadable during runtime (because it points at an invalid store
+    # path location).
+    #
+    # To get a list of dynamically loaded libraries issue something like
+    # `grep -ri 'dlopen("lib' $src` and update the below list.
+    dlopenLibs = [
+      # We did never provide support for libxkbcommon & qrencode
+      { name = "libxkbcommon.so.0"; pkg = null; }
+      { name = "libqrencode.so.4"; pkg = null; }
+
+      # We did not provide libpwquality before so it is safe to disable it for
+      # now.
+      { name = "libpwquality.so.1"; pkg = null; }
+
+      # Only include cryptsetup if it is enabled. We might not be able to
+      # provide it during "bootstrap" in e.g. the minimal systemd build as
+      # cryptsetup has udev (aka systemd) in it's dependencies.
+      { name = "libcryptsetup.so.12"; pkg = if withCryptsetup then cryptsetup else null; }
+
+      # We are using libidn2 so we only provide that and ignore the others.
+      # Systemd does this decision during configure time and uses ifdef's to
+      # enable specific branches. We can safely ignore (nuke) the libidn "v1"
+      # libraries.
+      { name = "libidn2.so.0"; pkg = libidn2; }
+      { name = "libidn.so.12"; pkg = null; }
+      { name = "libidn.so.11"; pkg = null; }
+
+      # journalctl --grep requires libpcre so lets provide it
+      { name = "libpcre2-8.so.0"; pkg = pcre2; }
+    ];
+
+    patchDlOpen = dl: let
+      library = "${lib.makeLibraryPath [dl.pkg]}/${dl.name}";
+    in if dl.pkg == null then ''
+      # remove the dependency on the library by replacing it with an invalid path
+      for file in $(grep -lr 'dlopen("${dl.name}"' src); do
+        echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
+        substituteInPlace "$file" --replace 'dlopen("${dl.name}"' 'dlopen("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
+      done
+    '' else ''
+      # ensure that the library we provide actually exists
+      if ! [ -e ${library} ]; then
+        echo 'The shared library `${library}` does not exist but was given as subtitute for `${dl.name}`'
+        exit 1
+      fi
+      # make the path to the dependency explicit
+      for file in $(grep -lr 'dlopen("${dl.name}"' src); do
+        echo "patching dlopen(\"${dl.name}\", …) in $file to ${library}…"
+        substituteInPlace "$file" --replace 'dlopen("${dl.name}"' 'dlopen("${library}"'
+      done
+    '';
+  in # patch all the dlopen calls to contain absolute paths to the libraries
+  lib.concatMapStringsSep "\n" patchDlOpen dlopenLibs)
+  # finally ensure that there are no left-over dlopen calls that we didn't handle
+  + ''
+    if grep -qr 'dlopen("[^/]' src; then
+      echo "Found unhandled dlopen calls: "
+      grep -r 'dlopen("[^/]' src
+      exit 1
+    fi
+  '';
+
+  outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
-    [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-      ninja meson
+    [
+      pkg-config
+      gperf
+      ninja
+      meson
       coreutils # meson calls date, stat etc.
       glibcLocales
-      patchelf getent m4
-      perl # to patch the libsystemd.so and remove dependencies on aarch64
+      patchelf
+      getent
+      m4
 
-      (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
+      intltool
+      gettext
+
+      libxslt
+      docbook_xsl
+      docbook_xml_dtd_42
+      docbook_xml_dtd_45
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
     ];
+
   buildInputs =
-    [ linuxHeaders libcap curl.dev kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
-    [ libffi audit lz4 bzip2 libapparmor
-      iptables gnu-efi
-    ] ++ stdenv.lib.optional withSelinux libselinux;
+    [
+      acl
+      audit
+      glib
+      kmod
+      libcap
+      libgcrypt
+      libidn2
+      libuuid
+      linuxHeaders
+      pam
+    ]
+
+    ++ lib.optional withApparmor libapparmor
+    ++ lib.optional wantCurl (lib.getDev curl)
+    ++ lib.optionals withCompression [ bzip2 lz4 xz ]
+    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+    ++ lib.optional withEfi gnu-efi
+    ++ lib.optional withKexectools kexectools
+    ++ lib.optional withLibseccomp libseccomp
+    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPCRE2 pcre2
+    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withSelinux libselinux
+    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optionals withHomed [ p11-kit libfido2 ]
+  ;
 
   #dontAddPrefix = true;
 
@@ -72,33 +307,47 @@ in stdenv.mkDerivation {
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
     "-Drootprefix=${placeholder "out"}"
-    "-Drootlibdir=${placeholder "lib"}/lib"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
     "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
+    "-Dglib=${lib.boolToString (glib != null)}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
-    "-Dimportd=true"
-    "-Dlz4=true"
-    "-Dhostnamed=true"
-    "-Dnetworkd=true"
+    "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
+    "-Dimportd=${lib.boolToString withImportd}"
+    "-Dlz4=${lib.boolToString withCompression}"
+    "-Dhomed=${lib.boolToString withHomed}"
+    "-Dlogind=${lib.boolToString withLogind}"
+    "-Dlocaled=${lib.boolToString withLocaled}"
+    "-Dhostnamed=${lib.boolToString withHostnamed}"
+    "-Dmachined=${lib.boolToString withMachined}"
+    "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Doomd=${lib.boolToString withOomd}"
+    "-Dpolkit=${lib.boolToString withPolkit}"
+    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
+    "-Dportabled=${lib.boolToString withPortabled}"
+    "-Dhwdb=${lib.boolToString withHwdb}"
+    "-Dremote=${lib.boolToString withRemote}"
     "-Dsysusers=false"
-    "-Dtimedated=true"
-    "-Dtimesyncd=true"
+    "-Dtimedated=${lib.boolToString withTimedated}"
+    "-Dtimesyncd=${lib.boolToString withTimesyncd}"
+    "-Duserdb=${lib.boolToString withUserDb}"
+    "-Dcoredump=${lib.boolToString withCoredump}"
     "-Dfirstboot=false"
-    "-Dlocaled=true"
-    "-Dresolve=true"
+    "-Dresolve=${lib.boolToString withResolved}"
     "-Dsplit-usr=false"
-    "-Dlibcurl=true"
+    "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=true"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
     "-Db_pie=true"
+    "-Dinstall-sysconfdir=false"
     /*
     As of now, systemd doesn't allow runtime configuration of these values. So
     the settings in /etc/login.defs have no effect on it. Many people think this
@@ -113,56 +362,77 @@ in stdenv.mkDerivation {
     "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
 
-    (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
-
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
     "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
-    "-Dsulogin-path=${utillinux}/bin/sulogin"
-    "-Dmount-path=${utillinux}/bin/mount"
-    "-Dumount-path=${utillinux}/bin/umount"
+    "-Dsulogin-path=${util-linux}/bin/sulogin"
+    "-Dmount-path=${util-linux}/bin/mount"
+    "-Dumount-path=${util-linux}/bin/umount"
     "-Dcreate-log-dirs=false"
-    # Upstream uses cgroupsv2 by default. To support docker and other
-    # container managers we still need v1.
-    "-Ddefault-hierarchy=hybrid"
+
+    # Use cgroupsv2. This is already the upstream default, but better be explicit.
+    "-Ddefault-hierarchy=unified"
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
     "-Dman=true"
 
-    "-Dntp-servers=\"0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org\""
+    "-Defi=${lib.boolToString withEfi}"
+    "-Dgnu-efi=${lib.boolToString withEfi}"
+  ] ++ lib.optionals withEfi [
+    "-Defi-libdir=${toString gnu-efi}/lib"
+    "-Defi-includedir=${toString gnu-efi}/include/efi"
+    "-Defi-ldsdir=${toString gnu-efi}/lib"
+  ] ++ lib.optionals (withShellCompletions == false) [
+    "-Dbashcompletiondir=no"
+    "-Dzshcompletiondir=no"
+  ] ++ lib.optionals (!withNss) [
+    "-Dnss-myhostname=false"
+    "-Dnss-mymachines=false"
+    "-Dnss-resolve=false"
+    "-Dnss-systemd=false"
   ];
 
   preConfigure = ''
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c units/systemd-logind.service.in units/systemd-nspawn@.service.in; do
+    for i in \
+      src/core/mount.c \
+      src/core/swap.c \
+      src/cryptsetup/cryptsetup-generator.c \
+      src/journal/cat.c \
+      src/nspawn/nspawn.c \
+      src/remount-fs/remount-fs.c \
+      src/shared/generator.c \
+      src/shutdown/shutdown.c \
+      units/emergency.service.in \
+      units/rescue.service.in \
+      units/systemd-logind.service.in \
+      units/systemd-nspawn@.service.in; \
+    do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
-        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
-        --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
+        --replace /sbin/mkswap ${lib.getBin util-linux}/sbin/mkswap \
+        --replace /sbin/swapon ${lib.getBin util-linux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin util-linux}/sbin/swapoff \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin util-linux}/sbin/sulogin \
         --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for dir in tools src/resolve test src/test; do
+    for dir in tools src/resolve test src/test src/shared; do
       patchShebangs $dir
     done
 
     # absolute paths to gpg & tar
     substituteInPlace src/import/pull-common.c \
-      --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
+      --replace '"gpg"' '"${gnupg}/bin/gpg"'
     for file in src/import/{{export,import,pull}-tar,import-common}.c; do
       substituteInPlace $file \
         --replace '"tar"' '"${gnutar}/bin/tar"'
@@ -184,17 +454,25 @@ in stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = toString [
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
-    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+    "-UPOLKIT_AGENT_BINARY_PATH"
+    "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
     # Set the release_agent on /sys/fs/cgroup/systemd to the
     # currently running systemd (/run/current-system/systemd) so
     # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    "-USYSTEMD_CGROUP_AGENT_PATH"
+    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
   ];
 
   doCheck = false; # fails a bunch of tests
+
+  # trigger the test -n "$DESTDIR" || mutate in upstreams build system
+  preInstall = ''
+    export DESTDIR=/
+  '';
 
   postInstall = ''
     # sysinit.target: Don't depend on
@@ -218,37 +496,11 @@ in stdenv.mkDerivation {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
-
-    # Keep only libudev and libsystemd in the lib output.
-    mkdir -p $out/lib
-    mv $lib/lib/security $lib/lib/libnss* $out/lib/
-  ''; # */
+  '' + lib.optionalString (!withDocumentation) ''
+    rm -rf $out/share/doc
+  '';
 
   enableParallelBuilding = true;
-
-  # On aarch64 we "leak" a reference to $out/lib/systemd/catalog in the lib
-  # output. The result of that is a dependency cycle between $out and $lib.
-  # Thus nix (rightfully) marks the build as failed. That reference originates
-  # from an array of strings (catalog_file_dirs) in systemd
-  # (src/src/journal/catalog.{c,h}).  The only consumer (as of v242) of the
-  # symbol is the main function of journalctl.  Still libsystemd.so contains
-  # the VALUE but not the symbol.  Systemd seems to be properly using function
-  # & data sections together with the linker flags to garbage collect unused
-  # sections (-Wl,--gc-sections).  For unknown reasons those flags do not
-  # eliminate the unused string constants, in this case on aarch64-linux. The
-  # hacky way is to just remove the reference after we finished compiling.
-  # Since it can not be used (there is no symbol to actually refer to it) there
-  # should not be any harm.  It is a bit odd and I really do not like starting
-  # these kind of hacks but there doesn't seem to be a straight forward way at
-  # this point in time.
-  # The reference will be replaced by the same reference the usual nukeRefs
-  # tooling uses.  The standard tooling can not / should not be uesd since it
-  # is a bit too excessive and could potentially do us some (more) harm.
-  postFixup = ''
-    nukedRef=$(echo $out | sed -e "s,$NIX_STORE/[^-]*-\(.*\),$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-\1,")
-    cat $lib/lib/libsystemd.so | perl -pe "s|$out/lib/systemd/catalog|$nukedRef/lib/systemd/catalog|" > $lib/lib/libsystemd.so.tmp
-    mv $lib/lib/libsystemd.so.tmp $(readlink -f $lib/lib/libsystemd.so)
-  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
@@ -258,12 +510,12 @@ in stdenv.mkDerivation {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ andir eelco flokli mic92 ];
+    maintainers = with maintainers; [ andir eelco flokli kloenk ];
   };
 }

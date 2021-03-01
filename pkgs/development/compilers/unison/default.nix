@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, autoPatchelfHook
+{ lib, stdenv, fetchurl, autoPatchelfHook
 , ncurses5, zlib, gmp
+, makeWrapper
+, less
 }:
 
 stdenv.mkDerivation rec {
   pname = "unison-code-manager";
-  milestone_id = "M1h";
+  milestone_id = "M1m";
   version = "1.0.${milestone_id}-alpha";
 
   src = if (stdenv.isDarwin) then
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-osx.tar.gz";
-      sha256 = "0iivm5gmbk0fq0zr3lvck6p1c2i7i54l3rf70z677529w9irzchp";
+      sha256 = "06pxvp753j8pr0pn02l7cswmmas5pk1vlkw83yd04h3f2rx1s61v";
     }
   else
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-linux64.tar.gz";
-      sha256 = "0fb84c1yn8pidflh7kq696j3v4blkvbk1fsqp36h30p7vv676yci";
+      sha256 = "1qspvfq805d34kz031pf9sqw8kzz7h637kc8lnbjlgvwixxkxc7c";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -23,15 +25,16 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
+  nativeBuildInputs = [ makeWrapper ] ++ (lib.optional (!stdenv.isDarwin) autoPatchelfHook);
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv ucm $out/bin
+    wrapProgram $out/bin/ucm --prefix PATH ":" "${lib.makeBinPath [ less ]}";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];

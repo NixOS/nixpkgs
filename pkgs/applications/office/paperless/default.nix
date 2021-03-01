@@ -106,25 +106,19 @@ let
   };
 
   python = python3.override {
-    packageOverrides = self: super: {
-      # Paperless only supports Django 2.0
-      django = django_2_0 super;
+    packageOverrides = self: super: let
+      customPkgs = import ./python-modules super fetchFromGitHub; in
+    {
       pyocr = pyocrWithUserTesseract super;
+
+      # Paperless is incompatible with factory_boy >= 3
+      factory_boy = customPkgs.factory_boy_2_12_0;
+
       # These are pre-release versions, hence they are private to this pkg
       django-filter = self.callPackage ./python-modules/django-filter.nix {};
       django-crispy-forms = self.callPackage ./python-modules/django-crispy-forms.nix {};
     };
   };
-
-  django_2_0 = pyPkgs: pyPkgs.django_2_2.overrideDerivation (_: rec {
-    pname = "Django";
-    version = "2.0.12";
-    name = "${pname}-${version}";
-    src = pyPkgs.fetchPypi {
-      inherit pname version;
-      sha256 = "15s8z54k0gf9brnz06521bikm60ddw5pn6v3nbvnl47j1jjsvwz2";
-    };
-  });
 
   runtimePackages = with python.pkgs; [
     dateparser

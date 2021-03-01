@@ -1,4 +1,4 @@
-{stdenv, fetchgit, gettext, python, elfutils}:
+{lib, stdenv, fetchgit, gettext, python, elfutils}:
 
 stdenv.mkDerivation {
   pname = "libsystemtap";
@@ -20,11 +20,11 @@ stdenv.mkDerivation {
     cp -r includes/* $out/include/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Statically defined probes development files";
     homepage = "https://sourceware.org/systemtap/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.farlion ];
+    maintainers = [ lib.maintainers.farlion ];
   };
 }

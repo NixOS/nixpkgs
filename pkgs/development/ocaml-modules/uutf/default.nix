@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner , topkg, uchar }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner , topkg, uchar }:
 let
   pname = "uutf";
   webpage = "https://erratique.ch/software/${pname}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-blocking streaming Unicode codec for OCaml";
     homepage = webpage;
     platforms = ocaml.meta.platforms or [];

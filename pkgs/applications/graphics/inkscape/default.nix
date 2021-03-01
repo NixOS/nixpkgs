@@ -1,16 +1,20 @@
-{ stdenv
+{ lib, stdenv
 , boehmgc
 , boost
 , cairo
 , cmake
-, fetchpatch
+, double-conversion
 , fetchurl
 , gettext
+, gdl
 , glib
+, glib-networking
 , glibmm
 , gsl
-, gtkmm2
-, gtkspell2
+, gtk-mac-integration
+, gtkmm3
+, gtkspell3
+, gdk-pixbuf
 , imagemagick
 , lcms
 , libcdr
@@ -19,18 +23,20 @@
 , librevenge
 , librsvg
 , libsigcxx
+, libsoup
 , libvisio
 , libwpg
 , libXft
 , libxml2
 , libxslt
-, makeWrapper
+, ninja
 , perlPackages
 , pkg-config
 , poppler
 , popt
 , potrace
 , python3
+, substituteAll
 , wrapGAppsHook
 , zlib
 }:
@@ -44,11 +50,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "0.92.5";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.bz2";
-    sha256 = "ge5/aeK9ZKlzQ9g5Wkp6eQWyG4YVZu1eXZF5F41Rmgs=";
+    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
+    sha256 = "sha256-2j4jBRGgjL8h6GcQ0WFFhZT+qHhn6RV7Z+0BoE6ieYo=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -57,21 +63,28 @@ stdenv.mkDerivation rec {
   # will leave us under ARGMAX.
   strictDeps = true;
 
+  patches = [
+    (substituteAll {
+      src = ./fix-python-paths.patch;
+      # Python is used at run-time to execute scripts,
+      # e.g., those from the "Effects" menu.
+      python3 = "${python3Env}/bin/python";
+    })
+  ];
+
   postPatch = ''
     patchShebangs share/extensions
-    patchShebangs fix-roff-punct
-
-    # Python is used at run-time to execute scripts, e.g., those from
-    # the "Effects" menu.
-    substituteInPlace src/extension/implementation/script.cpp \
-      --replace '"python-interpreter", "python"' '"python-interpreter", "${python3Env}/bin/python"'
+    patchShebangs share/templates
+    patchShebangs man/fix-roff-punct
   '';
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    makeWrapper
+    ninja
     python3Env
+    glib # for setup hook
+    gdk-pixbuf # for setup hook
     wrapGAppsHook
   ] ++ (with perlPackages; [
     perl
@@ -81,11 +94,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boehmgc
     boost
+    double-conversion
+    gdl
     gettext
     glib
+    glib-networking
     glibmm
     gsl
-    gtkmm2
+    gtkmm3
     imagemagick
     lcms
     libcdr
@@ -94,6 +110,7 @@ stdenv.mkDerivation rec {
     librevenge
     librsvg # for loading icons
     libsigcxx
+    libsoup
     libvisio
     libwpg
     libXft
@@ -105,19 +122,20 @@ stdenv.mkDerivation rec {
     potrace
     python3Env
     zlib
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
-    gtkspell2
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gtkspell3
+  ] ++ lib.optionals stdenv.isDarwin [
     cairo
+    gtk-mac-integration
   ];
 
   # Make sure PyXML modules can be found at run-time.
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vector graphics editor";
     homepage = "https://www.inkscape.org";
     license = licenses.gpl3Plus;

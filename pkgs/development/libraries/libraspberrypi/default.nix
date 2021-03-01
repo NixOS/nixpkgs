@@ -1,25 +1,40 @@
-{ stdenv, cmake, fetchFromGitHub }:
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
-  name = "libraspberrypi";
-  version = "2019-10-22";
+  pname = "libraspberrypi";
+  version = "unstable-2020-11-30";
+
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "userland";
-    rev = "5070cb7fc150fc98f1ed64a7739c3356970d9f76";
-    sha256 = "08yfzwn9s7lhrblcsxyag9p5lj5vk3n66b1pv3f7r3hah7qcggyq";
+    rev = "093b30bbc2fd083d68cc3ee07e6e555c6e592d11";
+    sha256 = "0n2psqyxlsic9cc5s8h65g0blblw3xws4czhpbbgjm58px3822d7";
   };
 
-  cmakeFlags = if (stdenv.targetPlatform.system == "aarch64-linux")
-    then "-DARM64=ON"
-    else "-DARM64=OFF";
-  preConfigure = ''cmakeFlags="$cmakeFlags -DVMCS_INSTALL_PREFIX=$out"'';
-  nativeBuildInputs = [ cmake ];
-  meta = with stdenv.lib; {
-    description = "Userland libraries for interfacing with Raspberry Pi hardware";
+  patches = [
+    (fetchpatch {
+      # https://github.com/raspberrypi/userland/pull/670
+      url = "https://github.com/raspberrypi/userland/pull/670/commits/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
+      sha256 = "1fbrbkpc4cc010ji8z4ll63g17n6jl67kdy62m74bhlxn72gg9rw";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake pkg-config ];
+  cmakeFlags = [
+    (if (stdenv.hostPlatform.isAarch64) then "-DARM64=ON" else "-DARM64=OFF")
+    "-DVMCS_INSTALL_PREFIX=${placeholder "out"}"
+  ];
+
+  meta = with lib; {
+    description = "Userland tools & libraries for interfacing with Raspberry Pi hardware";
     homepage = "https://github.com/raspberrypi/userland";
     license = licenses.bsd3;
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ tkerber ];
+    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ dezgeg tavyc tkerber ];
   };
 }

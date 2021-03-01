@@ -1,4 +1,17 @@
-{ stdenv, fetchgit, fetchpatch, libuuid, python3, iasl, bc }:
+{
+  stdenv,
+  clangStdenv,
+  fetchgit,
+  fetchpatch,
+  libuuid,
+  python3,
+  iasl,
+  bc,
+  clang_9,
+  llvmPackages_9,
+  overrideCC,
+  lib,
+}:
 
 let
   pythonEnv = python3.withPackages (ps: [ps.tkinter]);
@@ -12,21 +25,33 @@ else if stdenv.isAarch64 then
 else
   throw "Unsupported architecture";
 
-edk2 = stdenv.mkDerivation {
+buildStdenv = if stdenv.isDarwin then
+  overrideCC clangStdenv [ clang_9 llvmPackages_9.llvm llvmPackages_9.lld ]
+else
+  stdenv;
+
+buildType = if stdenv.isDarwin then
+    "CLANGPDB"
+  else
+    "GCC5";
+
+edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "201911";
+  version = "202011";
 
   # submodules
   src = fetchgit {
     url = "https://github.com/tianocore/edk2";
     rev = "edk2-stable${edk2.version}";
-    sha256 = "1rmvb4w043v25cppsqxqrpzqqcay3yrzsrhhzm2q9bncrj56vm8q";
+    sha256 = "1fvlz1z075jr6smq9qa0asy6fxga1gljcfd0764ypzy1mw963c9s";
   };
 
   buildInputs = [ libuuid pythonEnv ];
 
-  makeFlags = [ "-C BaseTools" ];
-  env.NIX_CFLAGS_COMPILE = "-Wno-return-type -Wno-error=stringop-truncation";
+  makeFlags = [ "-C BaseTools" ]
+    ++ lib.optionals (stdenv.cc.isClang) [ "BUILD_CC=clang" "BUILD_CXX=clang++" "BUILD_AS=clang" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
   hardeningDisable = [ "format" "fortify" ];
 
@@ -38,15 +63,15 @@ edk2 = stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intel EFI development kit";
     homepage = "https://sourceforge.net/projects/edk2/";
     license = licenses.bsd2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrs: stdenv.mkDerivation ({
+    mkDerivation = projectDscPath: attrs: buildStdenv.mkDerivation ({
       inherit (edk2) src;
 
       buildInputs = [ bc pythonEnv ] ++ attrs.buildInputs or [];
@@ -65,7 +90,7 @@ edk2 = stdenv.mkDerivation {
 
       buildPhase = ''
         runHook preBuild
-        build -a ${targetArch} -b RELEASE -t GCC5 -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
+        build -a ${targetArch} -b RELEASE -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
         runHook postBuild
       '';
 

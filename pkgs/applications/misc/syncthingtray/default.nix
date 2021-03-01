@@ -1,5 +1,4 @@
 { mkDerivation
-, stdenv
 , lib
 , fetchFromGitHub
 , qtbase
@@ -20,14 +19,14 @@
 }:
 
 mkDerivation rec {
-  version = "0.10.8";
+  version = "1.1.2";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "1g27v109m0ar090b340x6lsrzfp85hskcr3kapc2rgdhaa0mygpd";
+    sha256 = "sha256-I5QhnYp4ga3ERJ3w4qjh5gFFU+S1Htw26vHK/2M8j5s=";
   };
 
   buildInputs = [ qtbase cpp-utilities qtutilities ]
@@ -38,6 +37,12 @@ mkDerivation rec {
   ;
 
   nativeBuildInputs = [ cmake qttools ];
+
+  # No tests are available by upstream, but we test --help anyway
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/syncthingtray --help | grep ${version}
+  '';
 
   cmakeFlags = [
     # See https://github.com/Martchus/syncthingtray/issues/42

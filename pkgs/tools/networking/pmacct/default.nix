@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , libtool
 , libpcap
@@ -19,26 +19,29 @@ assert withSQLite -> sqlite != null;
 assert withPgSQL -> postgresql != null;
 assert withMysql -> libmysqlclient != null;
 
-let inherit (stdenv.lib) optional optionals; in
+let inherit (lib) getDev optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.5";
   pname = "pmacct";
 
   src = fetchFromGitHub {
     owner = "pmacct";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j5qmkya67q7jvaddcj00blmaac37bkir1zb3m1xmm95gm5lf2p5";
+    sha256 = "17p5isrq5w58hvmzhc6akbd37ins3c95g0rvhhdm0v33khzxmran";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
   buildInputs = [ libpcap ]
     ++ optional withJansson jansson
     ++ optional withNflog libnetfilter_log
     ++ optional withSQLite sqlite
     ++ optional withPgSQL postgresql
     ++ optionals withMysql [ libmysqlclient zlib ];
+
+  MYSQL_CONFIG =
+    optionalString withMysql "${getDev libmysqlclient}/bin/mysql_config";
 
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
@@ -48,15 +51,15 @@ stdenv.mkDerivation rec {
     ++ optional withPgSQL "--enable-pgsql"
     ++ optional withMysql "--enable-mysql";
 
-  meta = with stdenv.lib; {
-    description = "pmacct is a small set of multi-purpose passive network monitoring tools";
+  meta = with lib; {
+    description = "A small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]
     '';
     homepage = "http://www.pmacct.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.unix;
   };
 }

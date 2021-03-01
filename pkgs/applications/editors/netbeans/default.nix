@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
 , jdk, perl, python
 }:
 
 let
-  version = "11.3";
+  version = "12.2";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
     comment = "Integrated Development Environment";
     desktopName = "Apache NetBeans IDE";
     genericName = "Integrated Development Environment";
-    categories = "Application;Development;";
+    categories = "Development;";
     icon = "netbeans";
   };
 in
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    sha512 = "ae828836138b5a4156d58df24dd4053be58018cb6b5beb179cb0f4cd8b5db72d2a7356a434d01157aacb78d228732950cf4e3a0b6c725da8e053b6ccd91075d6";
+    sha512 = "b25cda9830e8fe1d05687b08cc5fa9bcac7e8e6d12776998a4da7e483b3be0d04493345e56be7e6198fa8f86428d57d4459bfa7372c2e3f918f4a1101d0a31a7";
   };
 
   buildCommand = ''
@@ -27,12 +27,14 @@ stdenv.mkDerivation {
     unzip $src
     patchShebangs .
 
+    rm netbeans/bin/*.exe
+
     # Copy to installation directory and create a wrapper capable of starting
     # it.
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jdk which ]} \
+      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
       --prefix JAVA_HOME : ${jdk.home} \
       --add-flags "--jdkhome ${jdk.home}"
 
@@ -59,8 +61,8 @@ stdenv.mkDerivation {
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sander rszibele asbachb ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sander rszibele asbachb ];
+    platforms = lib.platforms.unix;
   };
 }

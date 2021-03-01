@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libedit, automake, autoconf, libtool
+{lib, stdenv, fetchurl, libedit, automake, autoconf, libtool
 ,
   # icu = null: use icu which comes with firebird
 
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
       "--with-fbconf=/etc/firebird"
       "--with-fbsecure-db=/var/db/firebird/system"
     ]
-    ++ (stdenv.lib.optional  (icu != null) "--with-system-icu")
-    ++ (stdenv.lib.optional superServer "--enable-superserver");
+    ++ (lib.optional  (icu != null) "--with-system-icu")
+    ++ (lib.optional superServer "--enable-superserver");
 
   src = fetchurl {
     url = "mirror://sourceforge/firebird/Firebird-${version}.tar.bz2";
@@ -77,14 +77,14 @@ stdenv.mkDerivation rec {
   # dosen't work. Copying the files manually which can be found
   # in ubuntu -dev -classic, -example packages:
   # maybe some of those files can be removed again
-  installPhase = ''cp -r gen/firebird $out'';
+  installPhase = "cp -r gen/firebird $out";
 
   meta = {
     description = "SQL relational database management system";
     homepage = "https://www.firebirdnews.org";
     license = ["IDPL" "Interbase-1.0"];
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
     broken = true;
   };
 

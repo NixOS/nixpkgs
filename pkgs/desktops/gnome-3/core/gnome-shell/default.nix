@@ -1,59 +1,78 @@
-{ fetchurl, fetchpatch, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, json-glib, gettext, libsecret
-, python3, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
-, libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
-, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
-, libpulseaudio, libical, gobject-introspection, wrapGAppsHook, libxslt, gcr
-, accountsservice, gdk-pixbuf, gdm, upower, ibus, libnma, libgnomekbd, gnome-desktop
-, gsettings-desktop-schemas, gnome-keyring, glib, gjs, mutter, evolution-data-server, gtk3
-, sassc, systemd, gst_all_1, adwaita-icon-theme, gnome-bluetooth, gnome-clocks, gnome-settings-daemon
-, gnome-autoar, asciidoc-full
+{ fetchurl
+, fetchpatch
+, substituteAll
+, lib, stdenv
+, meson
+, ninja
+, pkg-config
+, gnome3
+, json-glib
+, gettext
+, libsecret
+, python3
+, polkit
+, networkmanager
+, gtk-doc
+, docbook-xsl-nons
+, at-spi2-core
+, libstartup_notification
+, unzip
+, shared-mime-info
+, libgweather
+, librsvg
+, geoclue2
+, perl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_43
+, desktop-file-utils
+, libpulseaudio
+, libical
+, gobject-introspection
+, wrapGAppsHook
+, libxslt
+, gcr
+, accountsservice
+, gdk-pixbuf
+, gdm
+, upower
+, ibus
+, libnma
+, libgnomekbd
+, gnome-desktop
+, gsettings-desktop-schemas
+, gnome-keyring
+, glib
+, gjs
+, mutter
+, evolution-data-server
+, gtk3
+, sassc
+, systemd
+, pipewire
+, gst_all_1
+, adwaita-icon-theme
+, gnome-bluetooth
+, gnome-clocks
+, gnome-settings-daemon
+, gnome-autoar
+, asciidoc-full
 , bash-completion
 }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
-
 let
-  pythonEnv = python3.withPackages ( ps: with ps; [ pygobject3 ] );
-
-in stdenv.mkDerivation rec {
+  pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
+in
+stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.36.1";
+  version = "3.38.2";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0696qw6bmbga30qlvh1k6bkiajl7877j8yis4bwmi1wxkcmkh854";
+    url = "mirror://gnome/sources/gnome-shell/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "05fm7kxyvws2lbb156wfa2wf4xmkxr49rrjxg0yaxf68v000yq2k";
   };
-
-  LANG = "en_US.UTF-8";
-
-  nativeBuildInputs = [
-    meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
-    sassc desktop-file-utils libxslt.bin python3 asciidoc-full
-  ];
-  buildInputs = [
-    systemd
-    gsettings-desktop-schemas gnome-keyring glib gcr json-glib accountsservice
-    libsecret libsoup polkit gdk-pixbuf librsvg
-    networkmanager libstartup_notification telepathy-glib
-    libXtst gjs mutter libpulseaudio evolution-data-server
-    libical gtk3 gdm libcanberra-gtk3 geoclue2
-    adwaita-icon-theme gnome-bluetooth
-    gnome-clocks # schemas needed
-    at-spi2-core upower ibus gnome-desktop telepathy-logger gnome-settings-daemon
-    gobject-introspection
-    gnome-autoar
-
-    # recording
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-
-    # not declared at build time, but typelib is needed at runtime
-    libgweather libnma
-
-    # for gnome-extension tool
-    bash-completion
-  ];
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
@@ -61,13 +80,6 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit libgnomekbd unzip;
       gsettings = "${glib.bin}/bin/gsettings";
-    })
-
-    # Install bash-completions to correct prefix.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1194
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f1ad5d86ddbabaa840eb2860279d53f4e635453.patch";
-      sha256 = "f8MDFbfg9D7ORF84Ld9GIvf0xRCYuSszo3QLMji2VaE=";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
@@ -82,8 +94,78 @@ in stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
       revert = true;
-      sha256 = "9DdzjEnDiBL+JmdfgKwjYPn1O2wJ/6n1sMDT1ylUB5I=";
+      sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    docbook-xsl-nons
+    # Switch to 4.5 in the 40.
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    gtk-doc
+    perl
+    wrapGAppsHook
+    sassc
+    desktop-file-utils
+    libxslt.bin
+    python3
+    asciidoc-full
+  ];
+
+  buildInputs = [
+    systemd
+    gsettings-desktop-schemas
+    gnome-keyring
+    glib
+    gcr
+    accountsservice
+    libsecret
+    polkit
+    gdk-pixbuf
+    librsvg
+    networkmanager
+    libstartup_notification
+    gjs
+    mutter
+    libpulseaudio
+    evolution-data-server
+    libical
+    gtk3
+    gdm
+    geoclue2
+    adwaita-icon-theme
+    gnome-bluetooth
+    gnome-clocks # schemas needed
+    at-spi2-core
+    upower
+    ibus
+    gnome-desktop
+    gnome-settings-daemon
+    gobject-introspection
+
+    # recording
+    pipewire
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+
+    # not declared at build time, but typelib is needed at runtime
+    libgweather
+    libnma
+
+    # for gnome-extension tool
+    bash-completion
+    gnome-autoar
+    json-glib
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
   ];
 
   postPatch = ''
@@ -105,7 +187,7 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     # The services need typelibs.
-    for svc in org.gnome.Shell.Extensions org.gnome.Shell.Notifications; do
+    for svc in org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
@@ -118,7 +200,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Core user interface for the GNOME 3 desktop";
     homepage = "https://wiki.gnome.org/Projects/GnomeShell";
     license = licenses.gpl2Plus;

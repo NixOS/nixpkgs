@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , substituteAll
 , plymouth
 , pam
-, pkgconfig
+, pkg-config
 , autoconf
 , automake
 , libtool
@@ -30,7 +31,7 @@
 , yelp-tools
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     libtool
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -127,11 +128,18 @@ stdenv.mkDerivation rec {
     rm -rf $out/etc/apparmor.d $out/etc/init $out/etc/pam.d
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
   meta = {
     homepage = "https://github.com/CanonicalLtd/lightdm";
     description = "A cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ocharles worldofpeace ];
+    maintainers = with maintainers; [ worldofpeace ];
   };
 }

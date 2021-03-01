@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, bash, perl, diffstat, diffutils, patch, findutils }:
+{ lib, stdenv, fetchurl, makeWrapper, bash, perl, diffstat, diffutils, patch, findutils }:
 
 stdenv.mkDerivation rec {
 
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       and more.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 
 }

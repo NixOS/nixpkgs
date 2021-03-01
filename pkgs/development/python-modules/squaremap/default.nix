@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six wxPython ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hierarchic visualization control for wxPython";
     homepage = "https://launchpad.net/squaremap";
     license = licenses.bsd3;

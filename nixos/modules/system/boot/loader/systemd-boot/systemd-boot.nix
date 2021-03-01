@@ -64,10 +64,10 @@ in {
       example = 120;
       type = types.nullOr types.int;
       description = ''
-        Maximum number of latest generations in the boot menu. 
+        Maximum number of latest generations in the boot menu.
         Useful to prevent boot partition running out of disk space.
 
-        <literal>null</literal> means no limit i.e. all generations 
+        <literal>null</literal> means no limit i.e. all generations
         that were not garbage collected yet.
       '';
     };

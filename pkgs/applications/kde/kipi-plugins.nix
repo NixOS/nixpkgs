@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name    = "kipi-plugins";
+  pname    = "kipi-plugins";
 
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

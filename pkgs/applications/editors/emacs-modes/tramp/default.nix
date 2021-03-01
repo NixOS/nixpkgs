@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs, texinfo }:
+{ lib, stdenv, fetchurl, emacs, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "tramp-2.4.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Transparently access remote files from Emacs. Newer versions than built-in.";
     homepage = "https://www.gnu.org/software/tramp";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
   };
 }

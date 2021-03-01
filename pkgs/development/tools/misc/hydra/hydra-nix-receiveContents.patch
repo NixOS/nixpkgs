@@ -1,0 +1,18 @@
+Update for https://github.com/NixOS/nix/commit/faa31f40
+
+--- a/src/hydra-queue-runner/nar-extractor.cc
++++ b/src/hydra-queue-runner/nar-extractor.cc
+@@ -48,9 +48,9 @@
+-    void receiveContents(unsigned char * data, size_t len) override
++    void receiveContents(std::string_view data) override
+     {
+         assert(expectedSize);
+         assert(curMember);
+         assert(hashSink);
+-        *curMember->fileSize += len;
+-        (*hashSink)(data, len);
++        *curMember->fileSize += data.size();
++        (*hashSink)(data);
+         if (curMember->contents) {
+-            curMember->contents->append((char *) data, len);
++            curMember->contents->append(data);

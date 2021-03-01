@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, pytest, glibcLocales, isPy37 }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, python, pytest, glibcLocales }:
 
 buildPythonPackage rec {
-  version = "3.7.1";
+  version = "4.3.2";
   pname = "pyfakefs";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1eb68bb250cc14310a6e33c197cbe2c8d93832b543f534e29b58286712f7e2b2";
+    sha256 = "dfeed4715e2056e3e56b9c5f51a679ce2934897eef926f3d14e5364e43f19070";
   };
 
   postPatch = ''
@@ -18,14 +19,12 @@ buildPythonPackage rec {
       --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
     substituteInPlace pyfakefs/tests/fake_filesystem_unittest_test.py \
       --replace "test_copy_real_file" "notest_copy_real_file"
-  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (lib.optionalString stdenv.isDarwin ''
     # this test fails on darwin due to case-insensitive file system
     substituteInPlace pyfakefs/tests/fake_os_test.py \
       --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
   '');
 
-  # https://github.com/jmcgeheeiv/pyfakefs/issues/508
-  doCheck = !isPy37;
   checkInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
@@ -35,10 +34,11 @@ buildPythonPackage rec {
     ${python.interpreter} -m pytest pyfakefs/pytest_tests/pytest_plugin_test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
     license     = licenses.asl20;
     homepage    = "http://pyfakefs.org/";
+    changelog   = "https://github.com/jmcgeheeiv/pyfakefs/blob/master/CHANGES.md";
     maintainers = with maintainers; [ gebner ];
   };
 }

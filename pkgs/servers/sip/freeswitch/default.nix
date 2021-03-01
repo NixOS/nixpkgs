@@ -1,20 +1,19 @@
-{ fetchFromGitHub, stdenv, lib, pkgconfig, autoreconfHook
+{ fetchFromGitHub, fetchpatch, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre
+, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
 , ldns, libedit, yasm, which, libsndfile, libtiff
 
-, curl, lua, libmysqlclient, postgresql, libopus, libctb, gsmlib
+, callPackage
 
 , SystemConfiguration
 
 , modules ? null
+, nixosTests
 }:
 
 let
 
-availableModules = import ./modules.nix {
-  inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
-};
+availableModules = callPackage ./modules.nix { };
 
 # the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
@@ -89,24 +88,41 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.2";
+  version = "1.10.5";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fmrm51zgrasjbmhs0pzb1lyca3ddx0wd35shvxnkjnifi8qd1h7";
+    sha256 = "18dhyb19k28dcm1i8mhqvvgm2phsrmrwyjmfn79glk8pdlalvcha";
   };
+
+  patches = [
+    # https://github.com/signalwire/freeswitch/pull/812 fix mod_spandsp, mod_gsmopen build, drop when updating from 1.10.5
+    (fetchpatch {
+      url = "https://github.com/signalwire/freeswitch/commit/51fba83ed3ed2d9753d8e6b13e13001aca50b493.patch";
+      sha256 = "0h2bmifsyyasxjka3pczbmqym1chvz91fmb589njrdbwpkjyvqh3";
+    })
+  ];
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
       --replace AS=\''${AS} AS=yasm
+
+    # Disable advertisement banners
+    for f in src/include/cc.h libs/esl/src/include/cc.h; do
+      {
+        echo 'const char *cc = "";'
+        echo 'const char *cc_s = "";'
+      } > $f
+    done
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     openssl ncurses gnutls readline perl libjpeg
     sqlite pcre speex ldns libedit yasm which
     libsndfile libtiff
+    libuuid
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
@@ -129,11 +145,13 @@ stdenv.mkDerivation rec {
     cp -r conf $out/share/freeswitch/
   '';
 
+  passthru.tests.freeswitch = nixosTests.freeswitch;
+
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
-    license = stdenv.lib.licenses.mpl11;
-    maintainers = with stdenv.lib.maintainers; [ misuzu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.mpl11;
+    maintainers = with lib.maintainers; [ misuzu ];
+    platforms = with lib.platforms; unix;
   };
 }

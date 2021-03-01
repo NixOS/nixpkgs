@@ -1,15 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k }:
 
 buildPythonPackage rec {
   pname = "precis-i18n";
-  version = "1.0.0";
+  version = "1.0.2";
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    pname = "precis_i18n";
-    inherit version;
-    sha256 = "0gjhvwd8aifx94rl1ag08vlmndyx2q3fkyqb0c4i46x3p2bc2yi2";
+  src = fetchFromGitHub {
+    owner = "byllyfish";
+    repo = "precis_i18n";
+    rev = "v${version}";
+    hash = "sha256:1r9pah1kgik6valf15ac7ybw0szr92cq84kwjvm6mq3z46j1pmkr";
   };
 
   meta = {

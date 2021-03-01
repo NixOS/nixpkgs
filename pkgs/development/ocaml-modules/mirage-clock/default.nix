@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "mirage-clock";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-clock/releases/download/v${version}/mirage-clock-v${version}.tbz";
-    sha256 = "12m2dph69r843clrbcgfjj2gcxmq2kdb7g5d91kfj16g13b0vsa3";
+    sha256 = "0cqa07aqkamw0dvis1fl46brvk81zvb92iy5076ik62gv9n5a0mn";
   };
 
   meta = {

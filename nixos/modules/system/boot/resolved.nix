@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 let
@@ -136,7 +136,11 @@ in
       }
     ];
 
-    users.users.resolved.group = "systemd-resolve";
+    users.users.systemd-resolve.group = "systemd-resolve";
+
+    # add resolve to nss hosts database if enabled and nscd enabled
+    # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
+    system.nssDatabases.hosts = optional config.services.nscd.enable "resolve [!UNAVAIL=return]";
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-resolved.service"
@@ -144,7 +148,11 @@ in
 
     systemd.services.systemd-resolved = {
       wantedBy = [ "multi-user.target" ];
+      aliases = [ "dbus-org.freedesktop.resolve1.service" ];
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+      # Upstream bug: https://github.com/systemd/systemd/issues/18078
+      # systemd-resolved without libidn2 is broken
+      environment.LD_LIBRARY_PATH = "${lib.getLib pkgs.libidn2}/lib";
     };
 
     environment.etc = {

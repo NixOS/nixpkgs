@@ -1,12 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , glib
 , gettext
 , cinnamon-desktop
 , intltool
-, libxslt
 , gtk3
 , libnotify
 , gnome-menus
@@ -37,21 +36,18 @@
 , modemmanager
 , xorg
 , gdk-pixbuf
-, cups
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "4.4.0";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1rxm5n2prh182rxvjs7psxgjddikrjr8492j22060gmyvq55n7kc";
+    sha256 = "0fbgi2r2xikpa04k431qq9akngi9akyflq1kcks8f095qs5gsana";
   };
-
-  configureFlags = [ "--enable-systemd" ];
 
   buildInputs = [
     gtk3
@@ -61,7 +57,6 @@ stdenv.mkDerivation rec {
     cinnamon-menus
     libxml2
     dbus-glib
-    systemd
     polkit
     libgnomekbd
     libxklavier
@@ -76,7 +71,6 @@ stdenv.mkDerivation rec {
     xorg.libXxf86misc
     xorg.libxkbfile
     gdk-pixbuf
-    cups
   ];
 
   /* ./panels/datetime/test-timezone.c:4:#define TZ_DIR "/usr/share/zoneinfo/"
@@ -105,21 +99,22 @@ stdenv.mkDerivation rec {
     rm -rfv $out
   '';
 
+  doCheck = true;
+
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     wrapGAppsHook
     gettext
     intltool
-    libxslt
     libtool
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "A collection of configuration plugins used in cinnamon-settings";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

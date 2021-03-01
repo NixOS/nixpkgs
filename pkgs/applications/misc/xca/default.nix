@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, perl, pkg-config
 , libtool, openssl, qtbase, qttools }:
 
 mkDerivation rec {
@@ -19,7 +19,7 @@ mkDerivation rec {
 
   buildInputs = [ libtool openssl qtbase ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig qttools ];
+  nativeBuildInputs = [ autoreconfHook pkg-config qttools ];
 
   enableParallelBuilding = true;
 

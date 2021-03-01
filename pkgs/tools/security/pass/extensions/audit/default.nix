@@ -1,27 +1,28 @@
-{ stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
+{ lib, stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
 
 let
   pythonEnv = pythonPackages.python.withPackages (p: [ p.requests p.setuptools p.zxcvbn ]);
 
 in stdenv.mkDerivation rec {
   pname = "pass-audit";
-  version = "1.0.1";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-audit";
     rev = "v${version}";
-    sha256 = "1mdckw0dwcnv8smp1za96y0zmdnykbkw2606v7mzfnzbz4zjdlwl";
+    sha256 = "1vapymgpab91kh798mirgs1nb7j9qln0gm2d3321cmsghhb7xs45";
   };
 
   patches = [
-    ./0001-Make-it-possible-to-run-the-tests-offline.patch
     ./0002-Fix-audit.bash-setup.patch
   ];
 
   postPatch = ''
     substituteInPlace audit.bash \
-      --replace '/usr/bin/env python3' "${pythonEnv}/bin/python3"
+      --replace 'python3' "${pythonEnv}/bin/python3"
+    substituteInPlace Makefile \
+      --replace "install --root" "install --prefix ''' --root"
   '';
 
   outputs = [ "out" "man" ];
@@ -29,7 +30,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pythonEnv ];
   nativeBuildInputs = [ makeWrapper ];
 
-  doCheck = true;
+  # Tests freeze on darwin with: pass-audit-1.1 (checkPhase): EOFError
+  doCheck = !stdenv.isDarwin;
   checkInputs = [ pythonPackages.green pass gnupg ];
   checkPhase = ''
     ${pythonEnv}/bin/python3 setup.py green -q
@@ -41,7 +43,7 @@ in stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$out/lib/${pythonEnv.libPrefix}/site-packages"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pass extension for auditing your password repository.";
     homepage = "https://github.com/roddhjav/pass-audit";
     license = licenses.gpl3Plus;

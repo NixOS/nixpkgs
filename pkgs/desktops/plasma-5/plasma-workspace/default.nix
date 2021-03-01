@@ -4,17 +4,18 @@
   extra-cmake-modules, kdoctools,
 
   coreutils, dbus, gnugrep, gnused, isocodes, libdbusmenu, libSM, libXcursor,
-  libXtst, pam, wayland, xmessage, xprop, xrdb, xsetroot,
+  libXtst, libXft, pam, wayland, xmessage, xprop, xrdb, xsetroot,
 
   baloo, breeze-qt5, kactivities, kactivities-stats, kcmutils, kconfig, kcrash,
   kdbusaddons, kdeclarative, kdelibs4support, kdesu, kglobalaccel, kidletime,
   kinit, kjsembed, knewstuff, knotifyconfig, kpackage, kpeople, krunner,
   kscreenlocker, ktexteditor, ktextwidgets, kwallet, kwayland, kwin,
   kxmlrpcclient, libkscreen, libksysguard, libqalculate, networkmanager-qt,
-  phonon, plasma-framework, prison, solid, kholidays,
+  phonon, plasma-framework, prison, solid, kholidays, kquickcharts,
+  appstream-qt, plasma-wayland-protocols,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
-  qtwayland, qtx11extras,
+  qtwayland, qtx11extras, qqc2-desktop-style,
 }:
 
 let inherit (lib) getBin getLib; in
@@ -24,16 +25,17 @@ mkDerivation {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    isocodes libdbusmenu libSM libXcursor libXtst pam wayland
+    isocodes libdbusmenu libSM libXcursor libXtst libXft pam wayland
 
     baloo kactivities kactivities-stats kcmutils kconfig kcrash kdbusaddons
     kdeclarative kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
     knotifyconfig kpackage kpeople krunner kscreenlocker ktexteditor
     ktextwidgets kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
     libqalculate networkmanager-qt phonon plasma-framework prison solid
-    kholidays
+    kholidays kquickcharts appstream-qt plasma-wayland-protocols
 
-    qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
+    qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland
+    qtx11extras qqc2-desktop-style
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
@@ -47,6 +49,10 @@ mkDerivation {
     ./0002-absolute-wallpaper-install-dir.patch
   ];
 
+  postPatch = ''
+    substituteInPlace wallpapers/image/wallpaper.knsrc.cmake \
+      --replace '@QtBinariesDir@/qdbus' ${getBin qttools}/bin/qdbus
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''

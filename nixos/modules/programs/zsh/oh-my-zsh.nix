@@ -39,6 +39,7 @@ in
     options = {
       programs.zsh.ohMyZsh = {
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             Enable oh-my-zsh.

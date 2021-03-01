@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, unzip, graylog }:
+{ pkgs,  lib, stdenv, fetchurl, unzip, graylog }:
 
 with pkgs.lib;
 
@@ -32,16 +32,16 @@ in {
     };
     meta = {
       homepage = "https://github.com/cvtienhoven/graylog-plugin-aggregates";
-      description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
+      description = "A plugin that enables users to execute term searches and get notified when the given criteria are met";
     };
   };
   auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
-    version = "3.1.0";
+    version = "3.3.0";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0hwgpq1j3qk0j1zgap5f1avh2nvkcscgds81x8xr0gamphgps8y2";
+      sha256 = "1g47hlld8vzicd47b5i9n2816rbrhv18vjq8gp765c7mdg4a2jn8";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-auth-sso";
@@ -61,6 +61,25 @@ in {
       description = "Message filter plugin can be used to do DNS lookups for the source field in Graylog messages";
     };
   };
+  enterprise-integrations = glPlugin rec {
+    name = "graylog-enterprise-integrations-${version}";
+    pluginName = "graylog-plugin-enterprise-integrations";
+    version = "3.3.9";
+    src = fetchurl {
+      url = "https://downloads.graylog.org/releases/graylog-enterprise-integrations/graylog-enterprise-integrations-plugins-${version}.tgz";
+      sha256 = "0yr2lmf50w8qw5amimmym6y4jxga4d7s7cbiqs5sqzvipgsknbwj";
+    };
+    installPhase = ''
+      mkdir -p $out/bin
+      tar --strip-components=2 -xf $src
+      cp ${pluginName}-${version}.jar $out/bin/${pluginName}-${version}.jar
+    '';
+    meta = {
+      homepage = "https://docs.graylog.org/en/3.3/pages/integrations.html#enterprise";
+      description = "Integrations are tools that help Graylog work with external systems (unfree enterprise integrations)";
+      license = lib.licenses.unfree;
+    };
+  };
   filter-messagesize = glPlugin rec {
     name = "graylog-filter-messagesize-${version}";
     pluginName = "graylog-plugin-filter-messagesize";
@@ -72,6 +91,24 @@ in {
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-filter-messagesize";
       description = "Prints out all messages that have an estimated size crossing a configured threshold during processing";
+    };
+  };
+  integrations = glPlugin rec {
+    name = "graylog-integrations-${version}";
+    pluginName = "graylog-plugin-integrations";
+    version = "3.3.9";
+    src = fetchurl {
+      url = "https://downloads.graylog.org/releases/graylog-integrations/graylog-integrations-plugins-${version}.tgz";
+      sha256 = "0q858ffmkinngyqqsaszcrx93zc4fg43ny0xb7vm0p4wd48hjyqc";
+    };
+    installPhase = ''
+      mkdir -p $out/bin
+      tar --strip-components=2 -xf $src
+      cp ${pluginName}-${version}.jar $out/bin/${pluginName}-${version}.jar
+    '';
+    meta = {
+      homepage = https://github.com/Graylog2/graylog-plugin-integrations;
+      description = "A collection of open source Graylog integrations that will be released together";
     };
   };
   internal-logs = glPlugin rec {
@@ -142,10 +179,10 @@ in {
   pagerduty = glPlugin rec {
     name = "graylog-pagerduty-${version}";
     pluginName = "graylog-plugin-pagerduty";
-    version = "1.3.0";
+    version = "2.0.0";
     src = fetchurl {
       url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1g63c6rm5pkz7f0d73wb2lmk4zm430jqnhihbyq112cm4i7ymglh";
+      sha256 = "0xhcwfwn7c77giwjilv7k7aijnj9azrjbjgd0r3p6wdrw970f27r";
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-pagerduty";
@@ -176,6 +213,19 @@ in {
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-slack";
       description = "Can notify Slack or Mattermost channels about triggered alerts in Graylog (Alarm Callback)";
+    };
+  };
+  snmp = glPlugin rec {
+    name = "graylog-snmp-${version}";
+    pluginName = "graylog-plugin-snmp";
+    version = "0.3.0";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1hkaklwzcsvqq45b98chwqxqdgnnbj4dg68agsll13yq4zx37qpp";
+    };
+    meta = {
+      homepage = https://github.com/graylog-labs/graylog-plugin-snmp;
+      description = "Graylog plugin to receive SNMP traps";
     };
   };
   spaceweather = glPlugin rec {

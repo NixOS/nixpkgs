@@ -1,45 +1,38 @@
-{ stdenv, fetchurl, fetchpatch, gettext }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "libexif-0.6.21";
+  pname = "libexif";
+  version = "0.6.22";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libexif/${name}.tar.bz2";
-    sha256 = "06nlsibr3ylfwp28w8f5466l6drgrnydgxrm4jmxzrmk5svaxk8n";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${pname}-${builtins.replaceStrings ["."] ["_"] version}-release";
+    sha256 = "0mzndakdi816zcs13z7yzp7hj031p2dcyfq2p391r63d9z21jmy1";
   };
 
   patches = [
     (fetchpatch {
-      name = "CVE-2017-7544.patch";
-      url = "https://github.com/libexif/libexif/commit/c39acd1692023b26290778a02a9232c873f9d71a.patch";
-      sha256 = "0xgx6ly2i4q05shb61mfx6njwf1yp347jkznm0ka4m85i41xm6sd";
+      name = "CVE-2020-0198.patch";
+      url = "https://github.com/libexif/libexif/commit/ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c.patch";
+      sha256 = "1040278g5dbq3vvlyk8cmzb7flpi9bfsp99268hw69i6ilwbdf2k";
     })
     (fetchpatch {
-      name = "CVE-2018-20030-1.patch";
-      url = "https://github.com/libexif/libexif/commit/5d28011c40ec86cf52cffad541093d37c263898a.patch";
-      sha256 = "1wv8s962wmbn2m2xypgirf12g6msrbplpsmd5bh86irfwhkcppj3";
-    })
-    (fetchpatch {
-      name = "CVE-2018-20030-2.patch";
-      url = "https://github.com/libexif/libexif/commit/6aa11df549114ebda520dde4cdaea2f9357b2c89.patch";
-      sha256 = "01aqvz63glwq6wg0wr7ykqqghb4abgq77ghvhizbzadg1k4h7drx";
+      name = "CVE-2020-0452.patch";
+      url = "https://github.com/libexif/libexif/commit/9266d14b5ca4e29b970fa03272318e5f99386e06.patch";
       excludes = [ "NEWS" ];
-    })
-    (fetchpatch {
-      name = "CVE-2019-9278.patch";
-      url = "https://github.com/libexif/libexif/commit/75aa73267fdb1e0ebfbc00369e7312bac43d0566.patch";
-      sha256 = "10ikg33mips5zq9as7l9xqnyzbg1wwr4sw17517nzf4hafjpasrj";
+      sha256 = "0k4z1gbbkli6wwyy9qm2qvn0h00qda6wqym61nmmbys7yc2zryj6";
     })
   ];
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ autoreconfHook gettext ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://libexif.github.io/";
     description = "A library to read and manipulate EXIF data in digital photographs";
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.erictapen ];
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ erictapen ];
   };
 
 }

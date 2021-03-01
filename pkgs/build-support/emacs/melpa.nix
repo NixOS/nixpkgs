@@ -23,7 +23,7 @@ with lib;
 let
 
   defaultMeta = {
-    homepage = args.src.meta.homepage or "http://melpa.org/#/${pname}";
+    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
   };
 
 in

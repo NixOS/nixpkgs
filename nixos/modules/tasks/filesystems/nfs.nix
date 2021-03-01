@@ -10,20 +10,9 @@ let
 
   rpcMountpoint = "${nfsStateDir}/rpc_pipefs";
 
-  idmapdConfFile = pkgs.writeText "idmapd.conf" ''
-    [General]
-    Pipefs-Directory = ${rpcMountpoint}
-    ${optionalString (config.networking.domain != null)
-      "Domain = ${config.networking.domain}"}
+  format = pkgs.formats.ini {};
 
-    [Mapping]
-    Nobody-User = nobody
-    Nobody-Group = nogroup
-
-    [Translation]
-    Method = nsswitch
-  '';
-
+  idmapdConfFile = format.generate "idmapd.conf" cfg.idmapd.settings;
   nfsConfFile = pkgs.writeText "nfs.conf" cfg.extraConfig;
   requestKeyConfFile = pkgs.writeText "request-key.conf" ''
     create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
@@ -38,6 +27,25 @@ in
 
   options = {
     services.nfs = {
+      idmapd.settings = mkOption {
+        type = format.type;
+        default = {};
+        description = ''
+          libnfsidmap configuration. Refer to
+          <link xlink:href="https://linux.die.net/man/5/idmapd.conf"/>
+          for details.
+        '';
+        example = literalExample ''
+          {
+            Translation = {
+              GSS-Methods = "static,nsswitch";
+            };
+            Static = {
+              "root/hostname.domain.com@REALM.COM" = "root";
+            };
+          }
+        '';
+      };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -53,6 +61,20 @@ in
   config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
 
     services.rpcbind.enable = true;
+
+    services.nfs.idmapd.settings = {
+      General = mkMerge [
+        { Pipefs-Directory = rpcMountpoint; }
+        (mkIf (config.networking.domain != null) { Domain = config.networking.domain; })
+      ];
+      Mapping = {
+        Nobody-User = "nobody";
+        Nobody-Group = "nogroup";
+      };
+      Translation = {
+        Method = "nsswitch";
+      };
+    };
 
     system.fsPackages = [ pkgs.nfs-utils ];
 

@@ -16,7 +16,7 @@ in
         type = types.lines;
         description = ''
           Configuration for Spotifyd. For syntax and directives, see
-          https://github.com/Spotifyd/spotifyd#Configuration.
+          <link xlink:href="https://github.com/Spotifyd/spotifyd#Configuration"/>.
         '';
       };
     };

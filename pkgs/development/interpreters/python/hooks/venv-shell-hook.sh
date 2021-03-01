@@ -4,12 +4,14 @@ venvShellHook() {
 
     if [ -d "${venvDir}" ]; then
       echo "Skipping venv creation, '${venvDir}' already exists"
+      source "${venvDir}/bin/activate"
     else
       echo "Creating new venv environment in path: '${venvDir}'"
       @pythonInterpreter@ -m venv "${venvDir}"
-    fi
 
-    source "${venvDir}/bin/activate"
+      source "${venvDir}/bin/activate"
+      runHook postVenvCreation
+    fi
 
     runHook postShellHook
     echo "Finished executing venvShellHook"

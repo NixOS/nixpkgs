@@ -1,19 +1,20 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
+{ lib, stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
 , libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl, libpng
 , sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat, libiconv, libxml2
 , autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl, pkg-config }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.0.4";
+  # broken with poppler 20.08, however, can't fetch patches cleanly
+  version = "3.1.2.post2020-08-26";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "v${version}";
-    sha256 = "00a7q9wv8s1bmdhqxvixkq2afr8aibg3pkc76gg50r8lavf6j84c";
+    rev = "9a8df672204a8b3b33c36e09a32f747e21166fe9";
+    sha256 = "1n25jma4x1l7slwxk702q77r84vxr90fyn4c3zpkr07q1b8wqql9";
   };
 
   sourceRoot = "source/gdal";
@@ -38,8 +39,8 @@ stdenv.mkDerivation rec {
     libxml2
     postgresql
   ] ++ (with pythonPackages; [ python numpy wrapPython ])
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv
-    ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
+    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   configureFlags = [
     "--with-expat=${expat.dev}"
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}" # optional
     "--with-pg=yes" # since gdal 3.0 doesn't use ${postgresql}/bin/pg_config
-    "--with-mysql=${libmysqlclient}/bin/mysql_config"
+    "--with-mysql=${getDev libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"
@@ -57,8 +58,8 @@ stdenv.mkDerivation rec {
     "--with-proj=${proj.dev}" # optional
     "--with-geos=${geos}/bin/geos-config" # optional
     "--with-hdf4=${hdf4.dev}" # optional
-    "--with-xml2=${libxml2.dev}/bin/xml2-config" # optional
-  ] ++ stdenv.lib.optional netcdfSupport "--with-netcdf=${netcdf}";
+    "--with-xml2=yes" # optional
+  ] ++ lib.optional netcdfSupport "--with-netcdf=${netcdf}";
 
   hardeningDisable = [ "format" ];
 
@@ -85,8 +86,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

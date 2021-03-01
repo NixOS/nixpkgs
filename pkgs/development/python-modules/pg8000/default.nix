@@ -1,24 +1,25 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, scramp
 , isPy3k
 , passlib
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.13.2";
+  version = "1.16.6";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eebcb4176a7e407987e525a07454882f611985e0becb2b73f76efb93bbdc0aab";
+    sha256 = "8fc1e6a62ccb7c9830f1e7e9288e2d20eaf373cc8875b5c55b7d5d9b7717be91";
   };
 
-  propagatedBuildInputs = [ passlib ];
+  propagatedBuildInputs = [ passlib scramp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tlocke/pg8000";
     description = "PostgreSQL interface library, for asyncio";
     maintainers = with maintainers; [ domenkozar ];

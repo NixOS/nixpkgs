@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , attrs
 , audio-metadata
 , importlib-metadata
@@ -9,16 +12,17 @@
 
 buildPythonPackage rec {
   pname = "google-music-proto";
-  version = "2.8.0";
-  disabled = pythonOlder "3.6";
+  version = "2.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10qraipdr18pwnr1dz6ai5vxs9lmww5wbavbh1xyg4lsggmlsrqb";
+    sha256 = "91b78c0de4f59b1e5503fd6d49cb3fec029d9199cca0794c87667e643342e987";
   };
 
   postPatch = ''
     sed -i -e "/audio-metadata/c\'audio-metadata'," -e "/marshmallow/c\'marshmallow'," setup.py
+    substituteInPlace setup.py \
+      --replace "'attrs>=18.2,<19.4'" "'attrs'"
   '';
 
   propagatedBuildInputs = [

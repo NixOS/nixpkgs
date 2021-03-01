@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, writeText, sbclBootstrap
+{ lib, stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
+, disableImmobileSpace ? false
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
@@ -10,28 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "sbcl";
-  version = "2.0.2";
+  version = "2.0.8";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
-    sha256 = "07pyzdjnhcpqwvr3rrk4i18maqdywbq1qj93fnpx1h4b7dp08r28";
+    sha256 = "sha256:1xwrwvps7drrpyw3wg5h3g2qajmkwqs9gz0fdw1ns9adp7vld390";
   };
 
   buildInputs = [texinfo];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
-    echo "
-    (lambda (features)
-      (flet ((enable (x)
-               (pushnew x features))
-             (disable (x)
-               (setf features (remove x features))))
-    ''
-    + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
-    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
-    + ''
-      )) " > customize-target-features.lisp
 
     pwd
 
@@ -80,15 +70,27 @@ stdenv.mkDerivation rec {
     export HOME=$PWD/test-home
   '';
 
+  enableFeatures = with lib;
+    optional threadSupport "sb-thread" ++
+    optional stdenv.isAarch32 "arm";
+
+  disableFeatures = with lib;
+    optional (!threadSupport) "sb-thread" ++
+    optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
+
   buildPhase = ''
-    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
+    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}" ${
+                  lib.concatStringsSep " "
+                    (builtins.map (x: "--with-${x}") enableFeatures ++
+                     builtins.map (x: "--without-${x}") disableFeatures)
+                }
     (cd doc/manual ; make info)
   '';
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
   ''
-  + stdenv.lib.optionalString (!purgeNixReferences) ''
+  + lib.optionalString (!purgeNixReferences) ''
     cp -r src $out/lib/sbcl
     cp -r contrib $out/lib/sbcl
     cat >$out/lib/sbcl/sbclrc <<EOF
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  setupHook = stdenv.lib.optional purgeNixReferences (writeText "setupHook.sh" ''
+  setupHook = lib.optional purgeNixReferences (writeText "setupHook.sh" ''
     addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'

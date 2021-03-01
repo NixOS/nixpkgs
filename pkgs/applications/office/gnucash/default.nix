@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
+{ fetchurl, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
@@ -25,14 +25,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "3.9";
+  version = "4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "1zxrgrjbs13vgr002rvl734w9f7zzxfq4xxmyhj777dwgkfds0ld";
+    sha256 = "sha256-2R4NEmtGHXHeG8GyDZzxQnBDU97AfT5lmdE4QidZ5no=";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
+  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest ];
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
 
   # glib-2.62 deprecations
   env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
-
-  patches = [ ./cmake_check_symbol_exists.patch ];
 
   postPatch = ''
     patchShebangs .
@@ -65,11 +63,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}" \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
+      --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
   # TODO: The following tests FAILED:
-  #   61 - test-gnc-timezone (Failed)
   #   70 - test-load-c (Failed)
   #   71 - test-modsysver (Failed)
   #   72 - test-incompatdep (Failed)
@@ -83,8 +81,6 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
   '';
   doCheck = false;
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Personal and small-business financial-accounting application";
@@ -100,11 +96,11 @@ stdenv.mkDerivation rec {
       accounting principles to ensure balanced books and accurate reports.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "http://www.gnucash.org/";
 
-    maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti lib.maintainers.domenkozar ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

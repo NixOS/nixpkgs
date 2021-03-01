@@ -48,7 +48,7 @@ import ../make-test-python.nix ({...}: {
     datanode.wait_for_open_port(9866)
     datanode.wait_for_open_port(9867)
 
-    namenode.succeed("curl http://namenode:9870")
-    datanode.succeed("curl http://datanode:9864")
+    namenode.succeed("curl -f http://namenode:9870")
+    datanode.succeed("curl -f http://datanode:9864")
   '';
 })

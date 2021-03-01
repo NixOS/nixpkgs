@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
+{ stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk13-bootstrap
+, libXcursor, libXrandr, fontconfig, openjdk15-bootstrap
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -9,8 +9,8 @@
 }:
 
 let
-  major = "13";
-  update = ".0.2";
+  major = "15";
+  update = ".0.1";
   build = "-ga";
 
   openjdk = stdenv.mkDerivation rec {
@@ -18,15 +18,15 @@ let
     version = "${major}${update}${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1871ziss7ny19rw8f7bay5vznmhpqbfi4ihn3yygs06wyxhm0zmv";
+      url = "https://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      sha256 = "1h8n5figc9q0k9p8b0qggyhvqagvxanfih1lj5j492c74cd1mx1l";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf ];
     buildInputs = [
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk13-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk15-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -54,7 +54,8 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk13-bootstrap.home}"
+      "--with-boot-jdk=${openjdk15-bootstrap.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -91,6 +92,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
@@ -137,10 +139,10 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk13-bootstrap ];
+    disallowedReferences = [ openjdk15-bootstrap ];
 
-    meta = with stdenv.lib; {
-      homepage = "http://openjdk.java.net/";
+    meta = with lib; {
+      homepage = "https://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
       maintainers = with maintainers; [ edwtjo ];
@@ -150,6 +152,7 @@ let
     passthru = {
       architecture = "";
       home = "${openjdk}/lib/openjdk";
+      inherit gtk3;
     };
   };
 in openjdk

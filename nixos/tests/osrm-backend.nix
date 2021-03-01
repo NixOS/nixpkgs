@@ -48,10 +48,10 @@ in {
     machine.wait_for_unit("osrm.service")
     machine.wait_for_open_port(${toString port})
     assert "Boulevard Rainier III" in machine.succeed(
-        "curl --silent '${query}' | jq .waypoints[0].name"
+        "curl --fail --silent '${query}' | jq .waypoints[0].name"
     )
     assert "Avenue de la Costa" in machine.succeed(
-        "curl --silent '${query}' | jq .waypoints[1].name"
+        "curl --fail --silent '${query}' | jq .waypoints[1].name"
     )
   '';
 })

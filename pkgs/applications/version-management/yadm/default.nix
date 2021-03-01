@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, git, gnupg }:
+{ lib, stdenv, fetchFromGitHub, git, gnupg }:
 
-let version = "2.4.0"; in
+let version = "2.5.0"; in
 stdenv.mkDerivation {
   pname = "yadm";
   inherit version;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
     rev    = version;
-    sha256 = "0kpahznrkxkyj92vrhwjvldg2affi1askgwvpgbs4mg40f92szlp";
+    sha256 = "128qlx8mp7h5ifapqqgsj3fwghn3q6x6ya0y33h5r7gnassd3njr";
   };
 
   dontConfigure = true;
@@ -19,10 +19,10 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/bin $src/yadm
-    install -Dt $out/share/man/man1 $src/yadm.1
-    install -D $src/completion/yadm.zsh_completion $out/share/zsh/site-functions/_yadm
-    install -D $src/completion/yadm.bash_completion $out/share/bash-completion/completions/yadm.bash
+    install -Dt $out/bin yadm
+    install -Dt $out/share/man/man1 yadm.1
+    install -D completion/yadm.zsh_completion $out/share/zsh/site-functions/_yadm
+    install -D completion/yadm.bash_completion $out/share/bash-completion/completions/yadm.bash
     runHook postInstall
   '';
 
@@ -35,7 +35,8 @@ stdenv.mkDerivation {
       * Provides a way to use alternate files on a specific OS or host.
       * Supplies a method of encrypting confidential data so it can safely be stored in your repository.
     '';
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ abathur ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -6,23 +6,20 @@
 , six
 , html5lib
 , setuptools
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fdf7f77adcf649c9911387df51254b813185e32b2c6619f690b593a617e19fa";
+    sha256 = "52b5919b81842b1854196eaae5ca29679a2f2e378905c346d3ca8227c2c66080";
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six html5lib setuptools ];
-
-  postPatch = ''
-    substituteInPlace setup.py --replace ",<3dev" ""
-  '';
+  propagatedBuildInputs = [ packaging six html5lib setuptools ];
 
   # Disable network tests
   checkPhase = ''

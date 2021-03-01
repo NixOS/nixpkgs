@@ -1,20 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, scdoc }:
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.1.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    sha256 = "1k0bq4b4rv6wrh24jvcnpg1mfqrzqhl90zg4zibxzv3zkhjdskzh";
+    sha256 = "sha256-ZeyHidw8iHboo/LHTR9E3Sqj8euaRvDaYbPQMdecsrk=";
   };
 
-  modSha256 = "080k8d5rp8kyg0x7vjxm758b9ya9z336yd4rcqws7yhqawxiv55z";
-  subPackages = ["cmd/shfmt"];
+  vendorSha256 = "1ma7nvyn6ylbi8bd7x900i94pzs877kfy9xh0nf1bbify1vcpd29";
+
+  subPackages = [ "cmd/shfmt" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles scdoc ];
+
+  postBuild = ''
+    scdoc < cmd/shfmt/shfmt.1.scd > shfmt.1
+    installManPage shfmt.1
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";
@@ -24,5 +32,6 @@ buildGoModule rec {
       You can feed it standard input, any number of files or any number of directories to recurse into.
     '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ zowoq ];
   };
 }

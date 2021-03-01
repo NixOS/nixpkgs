@@ -1,4 +1,4 @@
-{ lib, stdenv, mkRustcDepArgs, rust }:
+{ lib, stdenv, mkRustcDepArgs, mkRustcFeatureArgs, rust }:
 { crateName,
   dependencies,
   crateFeatures, crateRenames, libName, release, libPath,
@@ -13,9 +13,9 @@
       ++ ["-C codegen-units=$NIX_BUILD_CORES"]
       ++ ["--remap-path-prefix=$NIX_BUILD_TOP=/" ]
       ++ [(mkRustcDepArgs dependencies crateRenames)]
-      ++ [crateFeatures]
+      ++ [(mkRustcFeatureArgs crateFeatures)]
       ++ extraRustcOpts
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--target ${rust.toRustTarget stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc"
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--target ${rust.toRustTargetSpec stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc"
       # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
       # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
       ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
@@ -38,7 +38,7 @@
     build_bin = if buildTests then "build_bin_test" else "build_bin";
   in ''
     runHook preBuild
- 
+
     # configure & source common build functions
     LIB_RUSTC_OPTS="${libRustcOpts}"
     BIN_RUSTC_OPTS="${binRustcOpts}"

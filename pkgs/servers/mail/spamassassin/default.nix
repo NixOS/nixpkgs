@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, gnupg }:
+{ lib, fetchurl, perlPackages, makeWrapper, gnupg }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchurl {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
-    sha256 = "1380cmrgjsyidnznr844c5yr9snz36dw7xchdfryi2s61vjzvf55";
+    sha256 = "0ga5mi2nv2v91kakk9xakkg71rnxnddlzv76ca13vfyd4jgcfasf";
   };
 
   buildInputs = [ makeWrapper ] ++ (with perlPackages; [
@@ -35,8 +35,8 @@ perlPackages.buildPerlPackage rec {
   meta = {
     homepage = "http://spamassassin.apache.org/";
     description = "Open-Source Spam Filter";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ peti qknight ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ peti qknight qyliss ];
   };
 }

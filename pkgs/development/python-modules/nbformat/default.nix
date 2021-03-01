@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.0.4";
+  version = "5.0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "562de41fc7f4f481b79ab5d683279bf3a168858268d4387b489b7b02be0b324a";
+    sha256 = "f545b22138865bfbcc6b1ffe89ed5a2b8e2dc5d4fe876f2ca60d8e6f702a30f8";
   };
 
   LC_ALL="en_US.utf8";

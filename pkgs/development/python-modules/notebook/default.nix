@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, argon2_cffi
 , nose
 , nose_warnings_filters
 , glibcLocales
@@ -11,6 +12,7 @@
 , tornado
 , ipython_genutils
 , traitlets
+, jupyter
 , jupyter_core
 , jupyter_client
 , nbformat
@@ -21,27 +23,28 @@
 , send2trash
 , pexpect
 , prometheus_client
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.0.3";
+  version = "6.1.5";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "47a9092975c9e7965ada00b9a20f0cf637d001db60d241d479f53c0be117ad48";
+    sha256 = "3db37ae834c5f3b6378381229d0e5dfcbfb558d08c8ce646b1ad355147f5e91d";
   };
 
   LC_ALL = "en_US.utf8";
 
-  checkInputs = [ nose glibcLocales ]
+  checkInputs = [ nose pytestCheckHook glibcLocales ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus_client
+    prometheus_client argon2_cffi
   ];
 
   # disable warning_filters
@@ -52,18 +55,24 @@ buildPythonPackage rec {
   postPatch = ''
     # Remove selenium tests
     rm -rf notebook/tests/selenium
-
+    export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    mkdir tmp
-    HOME=tmp nosetests -v ${if (stdenv.isDarwin) then ''
-      --exclude test_delete \
-      --exclude test_checkpoints_follow_file
-    ''
-    else ""}
-  '';
+  disabledTests = [
+    # a "system_config" is generated, and fails many tests
+    "config"
+    "load_ordered"
+    # requires jupyter, but will cause circular imports
+    "test_run"
+    "TestInstallServerExtension"
+    "launch_socket"
+    "sock_server"
+    "test_list_formats" # tries to find python MIME type
+    "KernelCullingTest" # has a race condition failing on slower hardware
+  ] ++ lib.optional stdenv.isDarwin [
+    "test_delete"
+    "test_checkpoints_follow_file"
+  ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

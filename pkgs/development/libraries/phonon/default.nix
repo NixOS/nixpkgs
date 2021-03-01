@@ -4,7 +4,7 @@
 , cmake
 , libGLU
 , libGL
-, pkgconfig
+, pkg-config
 , libpulseaudio
 , extra-cmake-modules
 , qtbase
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   version = "4.11.1";
 
   meta = {
-    homepage = "https://phonon.kde.org/";
+    homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 
   src = fetchurl {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     extra-cmake-modules
   ];
 

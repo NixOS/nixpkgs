@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ionrock/cachecontrol";
     description = "Httplib2 caching for requests";
     license = licenses.asl20;

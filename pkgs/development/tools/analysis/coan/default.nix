@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   version = "6.0.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mv -v $out/share/man/man1/coan.1.{1,gz}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The C preprocessor chainsaw";
     longDescription = ''
       A software engineering tool for analysing preprocessor-based

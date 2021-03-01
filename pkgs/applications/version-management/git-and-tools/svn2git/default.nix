@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, makeWrapper, git }:
+{ lib, stdenv, fetchurl, ruby, makeWrapper, git }:
 
 let
   version = "2.4.0";
@@ -33,9 +33,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/nirvdrum/svn2git";
     description = "Tool for importing Subversion repositories into git";
-    license = stdenv.lib.licenses.mit;
-
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

@@ -3,7 +3,7 @@
 bundlerApp {
   pname = "redis-dump";
   gemdir = ./.;
-  exes = [ "redis-dump" ];
+  exes = [ "redis-dump" "redis-load" ];
 
   passthru.updateScript = bundlerUpdateScript "redis-dump";
 

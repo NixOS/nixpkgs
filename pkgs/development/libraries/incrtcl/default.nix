@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, tcl }:
+{ lib, stdenv, fetchurl, writeText, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "incrtcl";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rmdir $out/bin
     mv $out/lib/itcl${version}/* $out/lib
+    ln -s libitcl${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
+      $out/lib/libitcl${lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
     rmdir $out/lib/itcl${version}
   '';
 
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://incrtcl.sourceforge.net/";
     description = "Object Oriented Enhancements for Tcl/Tk";
     license     = licenses.tcltk;

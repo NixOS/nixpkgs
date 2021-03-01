@@ -1,16 +1,17 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , gtk3
-, intltool
+, gettext
 , json_c
 , lcms2
 , libpng
 , librsvg
 , gobject-introspection
 , libmypaint
+, hicolor-icon-theme
 , mypaint-brushes
 , gdk-pixbuf
-, pkgconfig
+, pkg-config
 , python3
 , swig
 , wrapGAppsHook
@@ -20,23 +21,25 @@ let
   inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
 in buildPythonApplication rec {
   pname = "mypaint";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
     rev = "v${version}";
-    sha256 = "180kyilhf81ndhwl1hlvy82gh6hxpcvka2d1nkghbpgy431rls6r";
+    sha256 = "rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    intltool
-    pkgconfig
+    gettext
+    pkg-config
     swig
     wrapGAppsHook
     gobject-introspection # for setup hook
+    hicolor-icon-theme # fór setup hook
   ];
+
   buildInputs = [
     gtk3
     gdk-pixbuf
@@ -48,6 +51,9 @@ in buildPythonApplication rec {
     librsvg
     pycairo
     pygobject3
+
+    # Mypaint checks for a presence of this theme scaffold and crashes when not present.
+    hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [
@@ -84,7 +90,7 @@ in buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphics application for digital painters";
     homepage = "http://mypaint.org/";
     license = licenses.gpl2Plus;

@@ -1,18 +1,28 @@
-{ stdenv, fetchurl, zlib, bzip2, openssl, attr, lzo, libgcrypt, e2fsprogs, gpgme, xz }:
+{ lib, stdenv, fetchurl
+, attr, e2fsprogs
+, curl, librsync, libthreadar
+, gpgme, libgcrypt, openssl
+, bzip2, lzo, xz, zlib
+}:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.6.9";
+  version = "2.6.13";
   pname = "dar";
 
   src = fetchurl {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "1jzqq54w1dix2qdlj4hr9dpq9fnp23h102bk8d2gq6k7n2zgaj6v";
+    sha256 = "15yhpzyzw7h7d74xxh104cnbh19639yxx0502xz85fazwpwrzsiz";
   };
 
-  buildInputs = [ zlib bzip2 openssl lzo libgcrypt gpgme xz ]
-    ++ optionals stdenv.isLinux [ attr e2fsprogs ];
+  outputs = [ "out" "dev" ];
+
+  buildInputs = [
+    curl librsync libthreadar
+    gpgme libgcrypt openssl
+    bzip2 lzo xz zlib
+  ] ++ optionals stdenv.isLinux [ attr e2fsprogs ];
 
   configureFlags = [
     "--disable-birthtime"
@@ -23,7 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    rm -r "$out"/share/dar # Disable html help
+    # Disable html help
+    rm -r "$out"/share/dar
   '';
 
   enableParallelBuilding = true;
@@ -33,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
+    maintainers = with maintainers; [ izorkin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

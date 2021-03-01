@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libowfat, zlib }:
+{ lib, stdenv, fetchgit, libowfat, zlib }:
 
 stdenv.mkDerivation {
   name = "opentracker-2018-05-26";
@@ -11,6 +11,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ libowfat zlib ];
 
+  makeFlags = [
+    "LIBOWFAT_HEADERS=${libowfat}/include/libowfat"
+    "LIBOWFAT_LIBRARY=${libowfat}/lib"
+  ];
+
   installPhase = ''
     runHook preInstall
     install -D opentracker $out/bin/opentracker
@@ -18,11 +23,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://erdgeist.org/arts/software/opentracker/";
     license = licenses.beerware;
     platforms = platforms.linux;
-    description = "Bittorrent tracker project which aims for minimal resource usage and is intended to run at your wlan router.";
+    description = "Bittorrent tracker project which aims for minimal resource usage and is intended to run at your wlan router";
     maintainers = with maintainers; [ makefu ];
   };
 }

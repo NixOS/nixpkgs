@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptoolsDarcs
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptoolsDarcs pyutil ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "zbase32, a base32 encoder/decoder";
     homepage = "https://pypi.python.org/pypi/zbase32";
     license = licenses.bsd0;

@@ -3,11 +3,12 @@
 , fetchFromGitHub
 , git
 , go
+, lib
 , stdenv
 }:
 
 buildBazelPackage rec {
-  name = "bazel-remote-${version}";
+  pname = "bazel-remote";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -64,7 +65,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "141kw2zpr612xdcrg6x9kslg4d5b3fbpzx0vgp3lqwdihfj3sc1l";
+    sha256 = "1vijh3nl30n8k6xlx6in92pzs70x15akbqiqalk8apgvphvdz8vy";
   };
 
   buildAttrs = {
@@ -80,11 +81,12 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/buchgr/bazel-remote";
-    description = "A remote HTTP/1.1 cache for Bazel.";
+    description = "A remote HTTP/1.1 cache for Bazel";
     license = licenses.asl20;
     maintainers = [ maintainers.uri-canva ];
     platforms = platforms.darwin ++ platforms.linux;
+    broken = stdenv.isDarwin;
   };
 }

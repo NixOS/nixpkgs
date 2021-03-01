@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, mkfontscale }:
+{ lib, stdenv, fetchzip, mkfontscale }:
 
 stdenv.mkDerivation {
   pname = "profont";
@@ -28,16 +28,11 @@ stdenv.mkDerivation {
       gzip -n -9 -c "$f" > "$out/share/fonts/misc/$f.gz"
     done
     install -D -m 644 LICENSE -t "$out/share/doc/$pname"
+    install -D -m 644 "$srcOtb/profontn.otb" -t $out/share/fonts/misc
     mkfontdir "$out/share/fonts/misc"
-
-    cd $srcOtb
-    install -D -m 644 profontn.otb -t $otb/share/fonts/misc
-    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tobiasjung.name/profont/";
     description = "A monospaced font created to be a most readable font for programming";
     maintainers = with maintainers; [ myrl ];

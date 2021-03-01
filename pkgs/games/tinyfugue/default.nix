@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, ncurses, zlib
+{ lib, stdenv, fetchurl, ncurses, zlib
 , openssl ? null
 , sslSupport ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 assert sslSupport -> openssl != null;
 

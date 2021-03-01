@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, protobufc, libconfig }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, protobufc, libconfig }:
 
 stdenv.mkDerivation rec {
   pname = "umurmur";
-  version = "0.2.17";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "umurmur";
     repo = "umurmur";
     rev = version;
-    sha256 = "074px4ygmv4ydy2pqwxwnz17f0hfswqkz5kc9qfz0iby3h5i3fyl";
+    sha256 = "sha256-86wveYlM493RIuU8aKac6XTOMPv0JxlZL4qH2N2AqRU=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--enable-shmapi"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimalistic Murmur (Mumble server)";
     license = licenses.bsd3;
     homepage = "https://github.com/umurmur/umurmur";

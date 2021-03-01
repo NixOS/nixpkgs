@@ -1,29 +1,30 @@
-{ stdenv
-, fetchurl
+{ lib, stdenv
 , makeWrapper
 , fetchFromGitHub
+, nixosTests
 , gradle_5
 , perl
 , jre
-, xorg
-, openal
+, libpulseaudio
 }:
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.7.5f";
+  version = "0.9.1d";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
-    repo = "shattered-pixel-dungeon-gdx";
+    repo = "shattered-pixel-dungeon";
     rev = "v${version}";
-    sha256 = "05awbbc7np9li50shdbpv9dgdgry6lra8d5gibwn578m2g9srbxx";
+    sha256 = "0f9vi1iffh477zi03hi07rmfbkb8i4chwvv43vs70mgjh4qx7247";
   };
 
   postPatch = ''
     # disable gradle plugins with native code and their targets
     perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
     perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar)/ ... /^}/" build.gradle
+    # Remove unbuildable android stuff
+    rm android/build.gradle
   '';
 
   # fake build to pre-download deps into fixed-output derivation
@@ -33,7 +34,9 @@ let
     nativeBuildInputs = [ gradle_5 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon desktop:dist
+      # https://github.com/gradle/gradle/issues/4426
+      ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
+      gradle --no-daemon desktop:release
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
@@ -43,7 +46,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1k0v5scadw9ziq4dw2rckmh8x2xlmxslfsxmpw79zg78n3hvwhf1";
+    outputHash = "0ih10c6c85vhrqgilqmkzqjx3dc8cscvs9wkh90zgdj10qv0iba3";
   };
 
 in stdenv.mkDerivation rec {
@@ -53,26 +56,34 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
+    # https://github.com/gradle/gradle/issues/4426
+    ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
     # point to offline repo
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
-    gradle --offline --no-daemon desktop:dist
+    sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
+    gradle --offline --no-daemon desktop:release
   '';
 
   installPhase = ''
     install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
     mkdir $out/bin
     makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
-      --prefix LD_LIBRARY_PATH : ${xorg.libXxf86vm}/lib:${openal}/lib \
+      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;
+  };
+
+  meta = with lib; {
     homepage = "https://shatteredpixel.com/";
-    downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon-gdx/releases";
+    downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    # https://github.com/NixOS/nixpkgs/pull/99885#issuecomment-740065005
+    broken = stdenv.isDarwin;
   };
 }
 

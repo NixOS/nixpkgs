@@ -4,6 +4,7 @@
 , alsaLib
 , opencv
 , libsndfile
+, which
 }:
 
 faust.wrapWithBuildEnv {
@@ -12,7 +13,6 @@ faust.wrapWithBuildEnv {
 
   scripts = [
     "faust2jack"
-    "faust2jackinternal"
     "faust2jackconsole"
   ];
 
@@ -22,6 +22,7 @@ faust.wrapWithBuildEnv {
     alsaLib
     opencv
     libsndfile
+    which
   ];
 
 }

@@ -19,6 +19,7 @@ in
         '';
       };
       autorun = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to automatically start the tunnel.
@@ -27,6 +28,7 @@ in
 
       username = mkOption {
         default = "";
+        type = types.str;
         description = ''
           Your Gateway6 login name, if any.
         '';
@@ -41,6 +43,7 @@ in
       };
 
       server = mkOption {
+        type = types.str;
         default = "anonymous.freenet6.net";
         example = "broker.freenet6.net";
         description = "The Gateway6 server to be used.";

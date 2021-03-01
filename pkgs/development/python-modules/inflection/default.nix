@@ -1,17 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage, pytest } :
+{ lib, fetchPypi, buildPythonPackage, isPy27, pytest } :
 
 buildPythonPackage rec {
   pname = "inflection";
-  version = "0.3.1";
+  version = "0.5.1";
+  disabled = isPy27;
 
   src = fetchPypi {
    inherit pname version;
-   sha256 = "1jhnxgnw8y3mbzjssixh6qkc7a3afc4fygajhqrqalnilyvpzshq";
+   sha256 = "1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417";
   };
 
   checkInputs = [ pytest ];
   # Suppress overly verbose output if tests run successfully
-  checkPhase = ''pytest >/dev/null || pytest'';
+  checkPhase = "pytest >/dev/null || pytest";
 
   meta = {
    homepage = "https://github.com/jpvanhal/inflection";

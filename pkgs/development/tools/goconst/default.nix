@@ -5,16 +5,17 @@
 
 buildGoPackage rec {
   pname = "goconst";
-  version = "1.1.0";
+  version = "1.4.0";
 
   goPackagePath = "github.com/jgautheron/goconst";
-  excludedPackages = ''testdata'';
+
+  excludedPackages = [ "tests" ];
 
   src = fetchFromGitHub {
     owner = "jgautheron";
     repo = "goconst";
     rev = version;
-    sha256 = "0zhscvv9w54q1h2vs8xx3qkz98cf36qhxjvdq0xyz3qvn4vhnyw6";
+    sha256 = "0jp9vg5l4wcvnf653h3d8ay2n7y717l9z34rls1vrsaf0qdf1r6v";
   };
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
+{ lib, stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
 
 stdenv.mkDerivation rec {
   pname = "policycoreutils";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "MAN5DIR=$(out)/share/man/man5"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SELinux policy core utilities";
     license = licenses.gpl2;
     inherit (libsepol.meta) homepage platforms maintainers;

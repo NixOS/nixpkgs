@@ -1,9 +1,8 @@
-{ stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
+{ lib, stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
 , RSupport? true, R
-, mesosSupport ? true, mesos
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 
@@ -12,12 +11,11 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-    sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g"; 
+    sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g";
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
-    ++ optional RSupport R
-    ++ optional mesosSupport mesos;
+    ++ optional RSupport R;
 
   untarDir = "${pname}-${version}-bin-without-hadoop";
   installPhase = ''
@@ -37,8 +35,6 @@ stdenv.mkDerivation rec {
     ${optionalString RSupport
       ''export SPARKR_R_SHELL="${R}/bin/R"
         export PATH=$PATH:"${R}/bin/R"''}
-    ${optionalString mesosSupport
-      ''export MESOS_NATIVE_LIBRARY="$MESOS_NATIVE_LIBRARY"''}
     EOF
 
     for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
@@ -51,8 +47,8 @@ stdenv.mkDerivation rec {
   meta = {
     description      = "Apache Spark is a fast and general engine for large-scale data processing";
     homepage         = "http://spark.apache.org";
-    license          = stdenv.lib.licenses.asl20;
-    platforms        = stdenv.lib.platforms.all;
+    license          = lib.licenses.asl20;
+    platforms        = lib.platforms.all;
     maintainers      = with maintainers; [ thoughtpolice offline kamilchm ];
     repositories.git = "git://git.apache.org/spark.git";
   };

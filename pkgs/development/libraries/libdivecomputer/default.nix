@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libdivecomputer";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.libdivecomputer.org";
     description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
     maintainers = [ maintainers.mguentner ];

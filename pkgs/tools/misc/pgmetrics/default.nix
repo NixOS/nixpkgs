@@ -1,21 +1,23 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pgmetrics";
-  version = "1.8.1";
+  version = "1.10.5";
 
   src = fetchFromGitHub {
     owner  = "rapidloop";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "06w2kqjq2yq9yypg6biywrybnmi4jlnnigd7az72hp7lzf2nhl62";
+    sha256 = "sha256-rqaK94Rw0K1+r7+7jHI2bzBupCGTkokeC4heJ3Yu6pQ=";
   };
 
-  modSha256 = "0h375zk0ik06g0b5vmi00b1wn5q2c0r137f7qf6l8k8p886x41h6";
+  vendorSha256 = "sha256-5f2hkOgAE4TrHNz7xx1RU9fozxjFZAl4HilhAqsbo5s=";
+
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pgmetrics.io/";
     description = "Collect and display information and stats from a running PostgreSQL server";
     license = licenses.asl20;

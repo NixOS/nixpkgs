@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkgconfig, python3, wireless-regdb }:
+{ lib, stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkg-config, python3Packages, wireless-regdb }:
 
 stdenv.mkDerivation rec {
   pname = "crda";
@@ -24,14 +24,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgcrypt libnl ];
   nativeBuildInputs = [
-    pkgconfig
-    python3
-    python3.pkgs.pycrypto
+    pkg-config
+    python3Packages.pycrypto
   ];
 
   postPatch = ''
     patchShebangs utils/
-    substituteInPlace Makefile --replace ldconfig true
+    substituteInPlace Makefile \
+      --replace ldconfig true \
+      --replace pkg-config $PKG_CONFIG
     sed -i crda.c \
       -e "/\/usr\/.*\/regulatory.bin/d" \
       -e "s|/lib/crda|${wireless-regdb}/lib/crda|g"
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     rm $out/include/reglib/keys-gcrypt.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux wireless Central Regulatory Domain Agent";
     longDescription = ''
       CRDA acts as the udev helper for communication between the kernel and

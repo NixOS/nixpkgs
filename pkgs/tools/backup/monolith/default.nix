@@ -1,32 +1,34 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.2.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08xbpn6kdfiyvz5pwx9hkzbgb40z6dicmiry7frclw0aibal9avi";
+    sha256 = "sha256-kCyfVeGTXBzdwmTTDJM1eaR6ANoIXAydj1ePmrZehqE=";
   };
 
-  cargoSha256 = "10zwyg54f05m6ldpnchqzxjkb6rlpcl80crdnk8s6wkf18qny4i3";
+  cargoSha256 = "sha256-juxaL/zjfqzFMqZe9tpevdjjVU7fPK8zalksAARWHC8=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  checkPhase = "cargo test -- --skip tests::cli";
+  checkFlagsArray = [ "--skip=tests::cli" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bundle any web page into a single HTML file";
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

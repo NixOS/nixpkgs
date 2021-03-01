@@ -1,18 +1,19 @@
-{ stdenv, buildGoPackage, fetchurl, makeWrapper
+{ lib, buildGoPackage, fetchurl, makeWrapper
 , git, bash, gzip, openssh, pam
 , sqliteSupport ? true
 , pamSupport ? true
+, nixosTests
 }:
 
-with stdenv.lib;
+with lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.11.4";
+  version = "1.13.2";
 
   src = fetchurl {
     url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "18k6kcdq0ijpzgay2aq1w95qkgfvrn1dgh4cxyj9c4i0pwb3ar7f";
+    sha256 = "sha256-uezg8GdNqgKVHgJj9rTqHFLWuLdyDp63fzr7DMslOII=";
   };
 
   unpackPhase = ''
@@ -22,7 +23,9 @@ buildGoPackage rec {
 
   sourceRoot = "source";
 
-  patches = [ ./static-root-path.patch ];
+  patches = [
+    ./static-root-path.patch
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -35,7 +38,7 @@ buildGoPackage rec {
 
   preBuild = let
     tags = optional pamSupport "pam"
-        ++ optional sqliteSupport "sqlite";
+        ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
     tagsString = concatStringsSep " " tags;
   in ''
     export buildFlagsArray=(
@@ -44,7 +47,7 @@ buildGoPackage rec {
     )
   '';
 
-  outputs = [ "bin" "out" "data" ];
+  outputs = [ "out" "data" ];
 
   postInstall = ''
     mkdir $data
@@ -52,11 +55,13 @@ buildGoPackage rec {
     mkdir -p $out
     cp -R ./go/src/${goPackagePath}/options/locale $out/locale
 
-    wrapProgram $bin/bin/gitea \
+    wrapProgram $out/bin/gitea \
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
   goPackagePath = "code.gitea.io/gitea";
+
+  passthru.tests.gitea = nixosTests.gitea;
 
   meta = {
     description = "Git with a cup of tea";

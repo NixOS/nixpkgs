@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, cairocffi, nose, fontconfig
+{ lib, buildPythonPackage, fetchFromGitHub, cairocffi, nose, fontconfig
 , cssselect2, defusedxml, pillow, tinycss2 }:
 
 # CairoSVG 2.x dropped support for Python 2 so offer CairoSVG 1.x as an
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   #   FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf nosetests .
   # '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cairosvg.org";
     license = licenses.lgpl3;
     description = "SVG converter based on Cairo";

@@ -9,7 +9,7 @@
 , opencv3
 , protobuf
 , doxygen
-, openblas
+, blas
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake doxygen ];
 
   cmakeFlags =
@@ -63,7 +61,7 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 openblas ]
+  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 blas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb
@@ -127,7 +125,7 @@ stdenv.mkDerivation rec {
       -weights "${test_model_weights}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deep learning framework";
     longDescription = ''
       Caffe is a deep learning framework made with expression, speed, and

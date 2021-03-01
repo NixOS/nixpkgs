@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
-, gitMinimal }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
+, gitMinimal, ffmpeg }:
 
 let
 
@@ -8,13 +8,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "svtplay-dl";
-  version = "2.4";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "146ss7pzh61yw84crk6hzfxkfdnf6bq07m11b6lgsw4hsn71g59w";
+    sha256 = "1977xyxi9jfj7qra1sz7c9lk885cadpci66jvbzvnwm6d60m05lb";
   };
 
   pythonPaths = [ pycrypto pyyaml requests ];
@@ -24,12 +24,16 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace scripts/run-tests.sh \
       --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
+
+    sed -i '/def test_sublang2\?(/ i\    @unittest.skip("accesses network")' \
+      lib/svtplay_dl/tests/test_postprocess.py
   '';
 
   makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
 
   postInstall = ''
     wrapProgram "$out/bin/svtplay-dl" \
+      --prefix PATH : "${ffmpeg}" \
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
@@ -38,11 +42,11 @@ in stdenv.mkDerivation rec {
     sh scripts/run-tests.sh -2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/spaam/svtplay-dl";
     description = "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ maintainers.rycee ];
   };
 }

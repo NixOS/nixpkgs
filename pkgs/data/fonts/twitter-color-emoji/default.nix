@@ -1,11 +1,10 @@
-# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/tree/454acad50ba584d9602ccd4238fc5e585abc15c9
+# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts
 # The main difference is that we use “Twitter Color Emoji” name (which is recognized by upstream fontconfig)
 
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cairo
-, graphicsmagick
+, imagemagick
 , pkg-config
 , pngquant
 , python3
@@ -15,15 +14,18 @@
 }:
 
 let
-  version = "12.1.2";
+  version = "13.0.1";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "twitter";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "0vzmlp83vnk4njcfkn03jcc1vkg2rf12zf5kj3p3a373xr4ds1zn";
+    sha256 = "0acinlv2l3s1jga2i9wh16mvgkxw4ipzgvjx8c80zd104lpdpgd9";
   };
+
+  pythonEnv =
+    python3.withPackages (p: [ p.fonttools p.nototools ]);
 
 in
 stdenv.mkDerivation rec {
@@ -44,37 +46,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cairo
-    graphicsmagick
+    imagemagick
     pkg-config
     pngquant
-    python3
-    python3.pkgs.nototools
+    pythonEnv
     which
     zopfli
   ];
 
-  patches = [
-    # ImageMagick -> GrahphicsMagick
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-use-gm.patch";
-      sha256 = "0yfmfzaaiq5163c06172g4r734aysiqyv1s28siv642vqzsqh4i2";
-    })
-  ];
-
   postPatch = let
-    templateSubstitutions = stdenv.lib.concatStringsSep "; " [
-      ''s#Noto Color Emoji#Twitter Color Emoji#''
-      ''s#NotoColorEmoji#TwitterColorEmoji#''
+    templateSubstitutions = lib.concatStringsSep "; " [
+      "s#Noto Color Emoji#Twitter Color Emoji#"
+      "s#NotoColorEmoji#TwitterColorEmoji#"
       ''s#Copyright .* Google Inc\.#Twitter, Inc and other contributors.#''
-      ''s# Version .*# ${version}#''
-      ''s#.*is a trademark.*##''
+      "s# Version .*# ${version}#"
+      "s#.*is a trademark.*##"
       ''s#Google, Inc\.#Twitter, Inc and other contributors#''
-      ''s#http://www.google.com/get/noto/#https://twemoji.twitter.com/#''
-      ''s#.*is licensed under.*#      Creative Commons Attribution 4.0 International#''
-      ''s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#''
+      "s#http://www.google.com/get/noto/#https://twemoji.twitter.com/#"
+      "s#.*is licensed under.*#      Creative Commons Attribution 4.0 International#"
+      "s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#"
     ];
   in ''
-    patchShebangs ./flag_glyph_name.py
+    ${noto-fonts-emoji.postPatch}
 
     sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
     pushd ${twemojiSrc.name}/assets/72x72/
@@ -88,6 +81,8 @@ stdenv.mkDerivation rec {
     "EMOJI=TwitterColorEmoji"
     "EMOJI_SRC_DIR=${twemojiSrc.name}/assets/72x72"
     "BODY_DIMENSIONS=76x72"
+    # twemoji contains some codepoints noto doesn't like
+    "BYPASS_SEQUENCE_CHECK=True"
   ];
 
   enableParallelBuilding = true;
@@ -96,7 +91,7 @@ stdenv.mkDerivation rec {
     install -Dm644 TwitterColorEmoji.ttf $out/share/fonts/truetype/TwitterColorEmoji.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color emoji font with a flat visual style, designed and used by Twitter";
     longDescription = ''
       A bitmap color emoji font built from the Twitter Emoji for
@@ -114,7 +109,9 @@ stdenv.mkDerivation rec {
     # In twemoji source
     ## Artwork is Creative Commons Attribution 4.0 International
     ## Non-artwork is MIT
+    # In Fedora twitter-twemoji-fonts source
+    ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ jtojnar emily ];
   };
 }

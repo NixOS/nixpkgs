@@ -1,74 +1,88 @@
-{ lib, fetchurl, fetchFromGitHub, callPackage
+{ lib, fetchurl, fetchFromGitHub, fetchpatch, callPackage
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
-, stdenv, llvmPackages_6
+, Security
 }:
 
 let
 
 common =
-  { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
+  { lib, stdenv, perl, curl, bzip2, sqlite, openssl ? null, xz
   , bash, coreutils, gzip, gnutar
-  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
-  , jq, libarchive, rustc, cargo
+  , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
+  , autoreconfHook, autoconf-archive, bison, flex
+  , jq, libarchive
+  , lowdown, mdbook
+  # Used by tests
+  , gmock
   , busybox-sandbox-shell
   , storeDir
   , stateDir
   , confDir
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-  , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
-
-  , name, suffix ? "", src, crates ? null
-
+  , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+  , enableStatic ? stdenv.hostPlatform.isStatic
+  , name, suffix ? "", src
+  , patches ? [ ]
   }:
   let
      sh = busybox-sandbox-shell;
      nix = stdenv.mkDerivation rec {
-      inherit name src;
+      inherit name src patches;
       version = lib.getVersion name;
 
       is24 = lib.versionAtLeast version "2.4pre";
-      isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
 
       outputs = [ "out" "dev" "man" "doc" ];
 
       nativeBuildInputs =
-        [ pkgconfig ]
-        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
+        [ pkg-config ]
+        ++ lib.optionals is24
+          [ autoreconfHook
+            autoconf-archive
+            bison flex
+            (lib.getBin lowdown) mdbook
+            jq
+           ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
+        ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive rustc cargo ]
+        ++ lib.optionals is24 [ libarchive gmock lowdown ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
               apis = ["s3" "transfer"];
               customMemoryManagement = false;
             }).overrideDerivation (args: {
-              patches = args.patches or [] ++ [(fetchpatch {
-                url = "https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch";
-                sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
-              })];
+              patches = args.patches or [] ++ [
+                ./aws-sdk-cpp-TransferManager-ContentEncoding.patch
+              ];
             }));
 
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      env = {
-        NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
-        VERSION_SUFFIX = suffix;
-      };
+      env.NIX_LDFLAGS =
+        # need to list libraries individually until
+        # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
+        # is in a release
+          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
+
+        # need to detect it here until
+        # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
+        # is in a release
+        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        ''
+        lib.optionalString (!enableStatic) ''
           mkdir -p $out/lib
           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
           rm -f $out/lib/*.a
@@ -77,14 +91,15 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # Unpack the Rust crates.
-        lib.optionalString is24 ''
-          tar xvf ${crates} -C nix-rust/
-          mv nix-rust/nix-vendored-crates* nix-rust/vendor
-        '' +
-        # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
-        # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly23) ''
+        # On all versions before c9f51e87057652db0013289a95deffba495b35e7,
+        # released with 2.3.8, we need to patch around an issue where the Nix
+        # configure step pulls in the build system's bash and other utilities
+        # when cross-compiling.
+        lib.optionalString (
+          stdenv.buildPlatform != stdenv.hostPlatform &&
+          (lib.versionOlder "2.3.8" version && !is24)
+          # The additional is24 condition is required as versionOlder doesn't understand nixUnstable version strings
+        ) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
@@ -109,11 +124,12 @@ common =
         ]
         ++ lib.optional (
             stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
-        ) ''--with-system=${stdenv.hostPlatform.nix.system}''
+        ) "--with-system=${stdenv.hostPlatform.nix.system}"
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
-      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
+      makeFlags = [ "profiledir=$(out)/etc/profile.d" ]
+        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0";
 
       installFlags = [ "sysconfdir=$(out)/etc" ];
 
@@ -138,9 +154,9 @@ common =
           environments.
         '';
         homepage = "https://nixos.org/";
-        license = stdenv.lib.licenses.lgpl2Plus;
-        maintainers = [ stdenv.lib.maintainers.eelco ];
-        platforms = stdenv.lib.platforms.unix;
+        license = lib.licenses.lgpl2Plus;
+        maintainers = [ lib.maintainers.eelco ];
+        platforms = lib.platforms.unix;
         outputsToInstall = [ "out" "man" ];
       };
 
@@ -156,7 +172,7 @@ common =
           # This is not cross-compile safe, don't have time to fix right now
           # but noting for future travellers.
           nativeBuildInputs =
-            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive ];
+            [ perl pkg-config curl nix libsodium boost autoreconfHook autoconf-archive nlohmann_json ];
 
           configureFlags =
             [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -176,53 +192,49 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.4";
+    name = "nix-2.3.10";
     src = fetchurl {
-      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
+      url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "a8a85e55de43d017abbf13036edfb58674ca136691582f17080c1cd12787b7ab";
     };
 
+    patches = [(
+      fetchpatch {
+        url = "https://github.com/NixOS/nix/pull/4316.patch";
+        sha256 = "0bqlm4n9sac9prgr9xlfng92arisp1hiqvc9pfh4fibsppkgdfc5";
+      }
+    )];
+
     inherit storeDir stateDir confDir boehmgc;
-  } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
-    stdenv = llvmPackages_6.stdenv;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre7346_5e7ccdc9";
+    suffix = "pre20201205_a5d85d0";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "5e7ccdc9e3ddd61dc85e20c898001345bfb497a5";
-      sha256 = "10jg0rq92xbigbbri7harn4b75blqaf6rjgq4hhvlnggf2w9iprg";
+      rev = "a5d85d07faa94cf3518e98273be4bee3d495f06a";
+      sha256 = "0g9jjhh0vs4hjrff5yx88x6sh7rk87ngvni3gnyxajqia957dipg";
     };
 
-    crates = fetchurl {
-      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
-      sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
-    };
+    patches = [
+      (fetchpatch { # Fix build on gcc10
+        url = "https://github.com/NixOS/nix/commit/d4870462f8f539adeaa6dca476aff6f1f31e1981.patch";
+        sha256 = "mTvLvuxb2QVybRDgntKMq+b6da/s3YgM/ll2rWBeY/Y=";
+      })
+      # Fix the ETag bug. PR merged. Remove when updating to >= 20210125
+      # https://github.com/NixOS/nixpkgs/pull/109309#issuecomment-768331750
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/c5b42c5a42138329c6d02da0d8a53cb59c6077f4.patch";
+        sha256 = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
+      })
+    ];
 
     inherit storeDir stateDir confDir boehmgc;
   });
 
-  nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20200403_3473b19";
-
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "3473b1950a90d596a3baa080fdfdb080f55a5cc0";
-      sha256 = "1bb7a8a5lzmb3pzq80zxd3s9y3qv757q7032s5wvp75la9wgvmvr";
-    };
-
-    crates = fetchurl {
-      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
-      sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
-    };
-
-    inherit storeDir stateDir confDir boehmgc;
-  });
+  nixFlakes = nixUnstable;
 
 }

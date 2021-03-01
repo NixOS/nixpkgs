@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
+{ lib, fetchFromGitHub, cmake, pkg-config, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, libglvnd, xorg, python3, python3Packages
 , bison, pcre, automake, autoconf, addOpenGLRunpath
@@ -13,14 +13,14 @@ let
   pythonPackages = python3Packages;
 in
 mkDerivation rec {
-  version = "1.7";
+  version = "1.11";
   pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0r0y0lx48hkyf39pgippsc9q8hdcf57bdva6gx7f35vlhicx5hlz";
+    sha256 = "01r4fq03fpyhwvn47wx3dw29vcadcd0qml00h36q38cq3pi9x42j";
   };
 
   buildInputs = [
@@ -28,7 +28,7 @@ mkDerivation rec {
   ]; # ++ (with pythonPackages; [pyside2 pyside2-tools shiboken2]);
   # TODO: figure out how to make cmake recognise pyside2
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -61,9 +61,7 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A single-frame graphics debugger";
     homepage = "https://renderdoc.org/";
     license = licenses.mit;

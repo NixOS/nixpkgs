@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 
 , bison
 , flex
@@ -19,18 +19,18 @@ let
   };
   inherit (llvmPkgs) llvm;
   inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang clang-unwrapped spirv-llvm-translator;
-  inherit (stdenv.lib) getVersion optional optionals versionOlder versions;
+  inherit (lib) getVersion optional optionals versionOlder versions;
 in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.3627";
+  version = "1.0.4241";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "1x9fjvf7rbhil09am2v9j2jhwysdvwgshf9zidbirjgfrqn573h8";
+    sha256 = "1jp3c67ppl1x4pazr5nzy52615cpx0kyckaridhc0fsmrkgilyxq";
   };
 
   nativeBuildInputs = [ clang cmake bison flex llvm python ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     license     = licenses.mit;

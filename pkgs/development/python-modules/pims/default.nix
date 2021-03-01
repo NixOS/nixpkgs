@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , slicerator
@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.1";
+  version = "0.5";
   pname = "PIMS";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6a53a155e900b44e71127a1e1fccbfbaed7eec3c2b52497c40c23a05f334c9dd";
+    sha256 = "a02cdcbb153e2792042fb0bae7df4f30878bbba1f2d176114a87ee0dc18715a0";
   };
 
   checkInputs = [ nose ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # not everything packaged with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/soft-matter/pims";
     description = "Python Image Sequence: Load video and sequential images in many formats with a simple, consistent interface";
     license = licenses.bsdOriginal;

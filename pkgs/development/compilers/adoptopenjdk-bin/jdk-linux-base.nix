@@ -29,7 +29,7 @@ let result = stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib freetype fontconfig zlib xorg.libX11 xorg.libXext xorg.libXtst
-    xorg.libXi xorg.libXrender
+    xorg.libXi xorg.libXrender stdenv.cc.cc.lib
   ] ++ lib.optional stdenv.isAarch32 libffi;
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -69,7 +69,7 @@ let result = stdenv.mkDerivation rec {
 
   passthru.home = result;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms

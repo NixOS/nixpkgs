@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpng, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchurl, libpng, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "icoutils-0.32.3";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.nongnu.org/icoutils/";
     description = "Set of programs to deal with Microsoft Windows(R) icon and cursor files";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

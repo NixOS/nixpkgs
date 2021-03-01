@@ -1,26 +1,28 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase,
+ qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
 
 mkDerivation rec {
   pname = "cura";
-  version = "4.5.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "0fm04s912sgmr66wyb55ly4jh39ijsj6lx4fx9wn7hchlqmw5jxi";
+    sha256 = "060fqzspipm93ks0inrj7yrj5wmvkdfv8xaxrv22590yb9f95s9m";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
     rev = version;
-    sha256 = "0fgkwz1anw49macq1jxjhjr79slhmx7g3zwij7g9fqyzzhrrmwqn";
+    sha256 = "0hi9w1fsnazlr0vvxdr3alsdb8m1vjjfp5zhmlz4kyyxhsy3bc33";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf
+    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
+    sentry-sdk trimesh
   ] ++ plugins;
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 

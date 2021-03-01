@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , cmake
 , libxml2
@@ -73,7 +73,7 @@ mkDerivation rec {
     /* "-DWITH_DIAMONDCARD=On" seems ancient and broken */
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     changelog = "https://github.com/LubosD/twinkle/blob/${version}/NEWS";
     description = "A SIP-based VoIP client";
     homepage = "http://twinkle.dolezel.info/";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, xz, dpkg
+{lib, stdenv, fetchurl, unzip, xz, dpkg
 , libxslt, docbook_xsl, makeWrapper
 , python3Packages
 , perlPackages, curl, gnupg, diffutils
@@ -57,8 +57,8 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    description = ''Debian package maintenance scripts'';
+  meta = with lib; {
+    description = "Debian package maintenance scripts";
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with maintainers; [raskin];
     platforms = with platforms; linux;

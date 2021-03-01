@@ -1,19 +1,33 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, lxqt-build-tools }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, lxqt-build-tools
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
   pname = "libsysstat";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "10h9n7km7yx8bnmzxi4nn1yqq03hizjkrx4745j0mczy7niiffsz";
+    sha256 = "1pbshhg8pjkzkka5f2rxfxal7rb4fjccpgj07kxvgcnqlah27ydk";
   };
 
-  nativeBuildInputs = [ cmake lxqt-build-tools ];
+  nativeBuildInputs = [
+    cmake
+    lxqt-build-tools
+  ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [
+    qtbase
+  ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Library used to query system info and statistics";

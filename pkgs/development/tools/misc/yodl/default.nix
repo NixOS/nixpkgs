@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, perl, icmake, utillinux }:
+{ lib, stdenv, fetchFromGitLab, perl, icmake, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "yodl";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/
     substituteInPlace INSTALL.im --replace /usr $out
     substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
-    substituteInPlace scripts/yodl2whatever.in --replace getopt ${utillinux}/bin/getopt
+    substituteInPlace scripts/yodl2whatever.in --replace getopt ${util-linux}/bin/getopt
   '';
 
   # Set TERM because icmbuild calls tput.
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ./build install man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package that implements a pre-document language and tools to process it";
     homepage = "https://fbb-git.gitlab.io/yodl/";
     license = licenses.gpl3;

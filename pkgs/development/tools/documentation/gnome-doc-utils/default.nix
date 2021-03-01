@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2Python, libxslt, intltool, gnome3
+{ lib, fetchurl, pkg-config, libxml2Python, libxslt, intltool, gnome3
 , python2Packages }:
 
 python2Packages.buildPythonApplication rec {
@@ -8,11 +8,11 @@ python2Packages.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "19n4x25ndzngaciiyd8dd6s2mf9gv6nv3wv27ggns2smm7zkj1nb";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig libxslt.dev ];
+  nativeBuildInputs = [ intltool pkg-config libxslt.dev ];
   buildInputs = [ libxslt ];
 
   configureFlags = [ "--disable-scrollkeeper" ];
@@ -34,7 +34,7 @@ python2Packages.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of documentation utilities for the GNOME project";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-doc-utils";
     license = with licenses; [ gpl2Plus lgpl2Plus ];

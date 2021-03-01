@@ -1,4 +1,4 @@
-{ stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
+{ lib, stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
 let
   py = python27Packages;
   version = "15.04";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "";
   buildPhase = "";
-  
+
   patches = [ ./numpy-cast.patch ];
 
   installPhase = ''
@@ -64,11 +64,10 @@ stdenv.mkDerivation rec {
     ln -s "$resources/images/c.png" "$out"/share/icons/cura.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D printing host software";
     homepage = "https://github.com/daid/Cura";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

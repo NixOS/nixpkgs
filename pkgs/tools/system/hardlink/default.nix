@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre2 }:
+{ lib, stdenv, fetchurl, pcre2 }:
 
 
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp -f hardlink.1 $out/share/man/man1/hardlink.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Consolidate duplicate files via hardlinks";
     homepage = "https://pagure.io/hardlink";
     repositories.git = "https://src.fedoraproject.org/cgit/rpms/hardlink.git";

@@ -4,6 +4,7 @@
 , fetchurl
 , makeDesktopItem
 , makeWrapper
+, lib
 , stdenv
 , udev
 , wrapGAppsHook
@@ -16,13 +17,13 @@ let
 
   pname = "simplenote";
 
-  version = "1.15.1";
+  version = "2.2.0";
 
   sha256 = {
-    x86_64-linux = "1q1y5favj2ny0l2iq53vq39ns68zfr2z1plskxdg2d93jarvcr8x";
+    x86_64-linux = "123b0fh14068s2z3k6s5mmh46xwlz02qfnpmj838zlm5hckjmifv";
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The simplest way to keep notes";
     homepage = "https://github.com/Automattic/simplenote-electron";
     license = licenses.gpl2;
@@ -82,12 +83,12 @@ let
     '';
 
     runtimeDependencies = [
-      udev.lib
+      (lib.getLib udev)
     ];
 
     postFixup = ''
       makeWrapper $out/opt/Simplenote/simplenote $out/bin/simplenote \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }" \
         "''${gappsWrapperArgs[@]}"
     '';
   };

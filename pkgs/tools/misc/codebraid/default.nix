@@ -1,14 +1,14 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "codebraid";
-  version = "0.5.0-unstable-2019-12-11";
+  version = "0.5.0-unstable-2020-08-14";
 
   src = fetchFromGitHub {
     owner = "gpoore";
     repo = pname;
-    rev = "fac1b29";
-    sha256 = "0ldfrkkip7i1fdyz1iydyik3mhm0xv0jvxnl37r7g707dl38vf3h";
+    rev = "526a223c4fc32c37d6c5c9133524dfa0e1811ca4";
+    sha256 = "0qkqaj49k584qzgx9jlsf5vlv4lq7x403s1kig8v87i0kgh55p56";
   };
 
   propagatedBuildInputs = with python3Packages; [ bespon ];
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     $out/bin/codebraid --help > /dev/null
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gpoore/codebraid";
     description = ''
       Live code in Pandoc Markdown.

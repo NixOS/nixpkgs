@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, ant, jdk }:
+{ fetchgit, lib, stdenv, ant, jdk }:
 
 stdenv.mkDerivation {
   pname = "hydra-ant-logger";
@@ -20,6 +20,6 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

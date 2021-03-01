@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-icon-hider";
@@ -14,11 +14,13 @@ stdenv.mkDerivation rec {
   uuid = "icon-hider@kalnitsky.org";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icon Hider is a GNOME Shell extension for managing status area items";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonafato ];

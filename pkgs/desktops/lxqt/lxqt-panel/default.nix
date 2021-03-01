@@ -1,58 +1,81 @@
-{
-  lib, mkDerivation, fetchFromGitHub,
-  cmake, pkgconfig, lxqt-build-tools,
-  qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
-  kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,
-  xorg, libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
-  lxmenu-data, pcre, libXdamage
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsaLib
+, kguiaddons
+, kwindowsystem
+, libXdamage
+, libdbusmenu
+, liblxqt
+, libpulseaudio
+, libqtxdg
+, libstatgrab
+, libsysstat
+, lm_sensors
+, lxmenu-data
+, lxqt-build-tools
+, lxqt-globalkeys
+, lxqtUpdateScript
+, menu-cache
+, pcre
+, qtbase
+, qtsvg
+, qttools
+, qtx11extras
+, solid
+, xorg
 }:
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "0.14.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1py3i7qgm6h2iwjwqfjml1rp06s7ls1d7z5i9iizsmfshdzkaq86";
+    sha256 = "1mm23fys5npm5fi47y3h2mzvlhlcaz7k1p4wwmc012f0hqcrvqik";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
   buildInputs = [
+    alsaLib
+    kguiaddons
+    kwindowsystem
+    libXdamage
+    libdbusmenu
+    liblxqt
+    libpulseaudio
+    libqtxdg
+    libstatgrab
+    libsysstat
+    lm_sensors
+    lxmenu-data
+    lxqt-globalkeys
+    menu-cache
+    pcre
     qtbase
+    qtsvg
     qttools
     qtx11extras
-    qtsvg
-    libdbusmenu
-    kwindowsystem
     solid
-    kguiaddons
-    liblxqt
-    libqtxdg
-    lxqt-globalkeys
-    libsysstat
-    xorg.libpthreadstubs
     xorg.libXdmcp
-    libstatgrab
-    lm_sensors
-    libpulseaudio
-    alsaLib
-    menu-cache
-    lxmenu-data
-    pcre
-    libXdamage
+    xorg.libpthreadstubs
   ];
 
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+
   meta = with lib; {
-    description = "The LXQt desktop panel";
     homepage = "https://github.com/lxqt/lxqt-panel";
-    license = licenses.lgpl21;
+    description = "The LXQt desktop panel";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

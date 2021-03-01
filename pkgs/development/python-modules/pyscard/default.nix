@@ -1,20 +1,17 @@
-{ stdenv, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
 
 let
   # Package does not support configuring the pcsc library.
   withApplePCSC = stdenv.isDarwin;
-
-  inherit (stdenv.lib) getLib getDev optionalString optionals;
-  inherit (stdenv.hostPlatform.extensions) sharedLibrary;
 in
 
 buildPythonPackage rec {
-  version = "1.9.9";
+  version = "2.0.0";
   pname = "pyscard";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "082cjkbxadaz2jb4rbhr0mkrirzlqyqhcf3r823qb0q1k50ybgg6";
+    sha256 = "0yap0p8mp6dx58n3nina6ryhc2cysaj75sq98wf3qybf33cxjr5k";
   };
 
   postPatch = if withApplePCSC then ''
@@ -24,19 +21,19 @@ buildPythonPackage rec {
   '' else ''
     substituteInPlace smartcard/scard/winscarddll.c \
       --replace "libpcsclite.so.1" \
-                "${getLib pcsclite}/lib/libpcsclite${sharedLibrary}"
+                "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
-  env.NIX_CFLAGS_COMPILE = optionalString (! withApplePCSC)
-    "-I ${getDev pcsclite}/include/PCSC";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
+    "-I ${lib.getDev pcsclite}/include/PCSC";
 
   propagatedBuildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
   nativeBuildInputs = [ swig ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pyscard.sourceforge.io/";
     description = "Smartcard library for python";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ layus ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ layus ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, pkgconfig, gtk2 }:
+{ lib, stdenv, fetchurl, perl, pkg-config, gtk2 }:
 
 stdenv.mkDerivation {
   name = "eboard-1.1.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./eboard.patch ];
 
   buildInputs = [ gtk2 ];
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
 
   hardeningDisable = [ "format" ];
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.bergo.eng.br/eboard/";
     description = "Chess interface for Unix-like systems";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

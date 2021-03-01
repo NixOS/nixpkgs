@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
+{ lib, stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
 , procps, coreutils, gnused, systemd, glibcLocales
 , AppKit, Carbon, Cocoa
@@ -8,17 +8,17 @@
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
 
-  version = "3.8.3";
+  version = "3.8.9";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1fhs3g2pgrq2xi4hnlc437hkv3261l4i134m6mxid00sf1c89p5f";
+    sha256 = "0b252l9r45h8r5gibdqcn6hhbm8g6rfzhm1k9d39pwhs5x77cjqv";
   };
 
   buildInputs =
     [ erlang elixir python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip rsync glibcLocales ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     export LANG=C.UTF-8 # fix elixir locale warning
   '';
 
-  runtimePath = stdenv.lib.makeBinPath [
+  runtimePath = lib.makeBinPath ([
     erlang
     getconf # for getting memory limits
-    socat systemd procps # for systemd unit activation check
+    socat procps
     gnused coreutils # used by helper scripts
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
     sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.rabbitmq.com/";
     description = "An implementation of the AMQP messaging protocol";
-    license = stdenv.lib.licenses.mpl11;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 
   passthru.tests = {

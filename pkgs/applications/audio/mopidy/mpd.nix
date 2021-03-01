@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-MPD";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "mopidy_mpd" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-mpd";
     description = "Mopidy extension for controlling playback from MPD clients";
     license = licenses.asl20;

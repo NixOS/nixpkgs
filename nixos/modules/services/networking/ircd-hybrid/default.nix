@@ -36,15 +36,11 @@ in
 
     services.ircdHybrid = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable IRCD.
-        ";
-      };
+      enable = mkEnableOption "IRCD";
 
       serverName = mkOption {
         default = "hades.arpa";
+        type = types.str;
         description = "
           IRCD server name.
         ";
@@ -52,6 +48,7 @@ in
 
       sid = mkOption {
         default = "0NL";
+        type = types.str;
         description = "
           IRCD server unique ID in a net of servers.
         ";
@@ -59,6 +56,7 @@ in
 
       description = mkOption {
         default = "Hybrid-7 IRC server.";
+        type = types.str;
         description = "
           IRCD server description.
         ";
@@ -67,6 +65,7 @@ in
       rsaKey = mkOption {
         default = null;
         example = literalExample "/root/certificates/irc.key";
+        type = types.nullOr types.path;
         description = "
           IRCD server RSA key.
         ";
@@ -75,6 +74,7 @@ in
       certificate = mkOption {
         default = null;
         example = literalExample "/root/certificates/irc.pem";
+        type = types.nullOr types.path;
         description = "
           IRCD server SSL certificate. There are some limitations - read manual.
         ";
@@ -82,6 +82,7 @@ in
 
       adminEmail = mkOption {
         default = "<bit-bucket@example.com>";
+        type = types.str;
         example = "<name@domain.tld>";
         description = "
           IRCD server administrator e-mail.
@@ -91,6 +92,7 @@ in
       extraIPs = mkOption {
         default = [];
         example = ["127.0.0.1"];
+        type = types.listOf types.str;
         description = "
           Extra IP's to bind.
         ";
@@ -98,6 +100,7 @@ in
 
       extraPort = mkOption {
         default = "7117";
+        type = types.str;
         description = "
           Extra port to avoid filtering.
         ";

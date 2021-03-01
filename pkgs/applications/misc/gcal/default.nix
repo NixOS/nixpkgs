@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, fetchpatch }:
+{ lib, stdenv, fetchurl, ncurses, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gcal";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
       also displays holiday lists for many countries around the globe.
     '';
     homepage = "https://www.gnu.org/software/gcal/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

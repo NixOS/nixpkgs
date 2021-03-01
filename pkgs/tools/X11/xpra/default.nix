@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig, writeText
+{ lib, fetchurl, callPackage, substituteAll, python3, pkg-config, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
-, wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
-, ffmpeg_4, x264, libvpx, libwebp, x265
+, wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
+, ffmpeg, x264, libvpx, libwebp, x265
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobject-introspection
 , pam }:
@@ -30,25 +30,27 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "3.0.8";
+  version = "4.0.6";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "0d78bn7s03nwnyc4ryznxaivbg55kvsb26q75p8747j3562s9p2b";
+    sha256 = "nGcvbZFGYd2nQ75LL4YN+xcWb7UsViA3OAqpcrTwieg=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit (xorg) xkeyboardconfig;
+      inherit libfakeXinerama;
     })
+    ./fix-41106.patch
   ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
   '';
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = with xorg; [
     libX11 xorgproto libXrender libXi
     libXtst libXfixes libXcomposite libXdamage
@@ -58,7 +60,7 @@ in buildPythonApplication rec {
 
     pango cairo gdk-pixbuf atk.out gtk3 glib
 
-    ffmpeg_4 libvpx x264 libwebp x265
+    ffmpeg libvpx x264 libwebp x265
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -83,17 +85,19 @@ in buildPythonApplication rec {
     "--with-Xdummy"
     "--without-strict"
     "--with-gtk3"
-    "--without-gtk2"
     # Override these, setup.py checks for headers in /usr/* paths
     "--with-pam"
     "--with-vsock"
   ];
 
+  dontWrapGApps = true;
   preFixup = ''
-    gappsWrapperArgs+=(
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
+      --set XPRA_COMMAND "$out/bin/xpra"
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
+      --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
     )
   '';
 
@@ -106,7 +110,10 @@ in buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
-  passthru = { inherit xf86videodummy; };
+  passthru = {
+    inherit xf86videodummy;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     homepage = "http://xpra.org/";

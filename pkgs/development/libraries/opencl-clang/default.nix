@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -15,10 +16,10 @@ let
     inherit spirv-llvm-translator;
   };
 
-  inherit (stdenv.lib) getVersion;
+  inherit (lib) getVersion;
 
   addPatches = component: pkg:
-    with builtins; with stdenv.lib;
+    with builtins; with lib;
     let path = "${passthru.patchesOut}/${component}";
     in pkg.overrideAttrs (super: {
       postPatch = (if super ? postPatch then super.postPatch + "\n" else "") + ''
@@ -39,7 +40,7 @@ let
 
     patchesOut = stdenv.mkDerivation rec {
       pname = "opencl-clang-patches";
-      inherit (lib) version src patches;
+      inherit (library) version src patches;
       installPhase = ''
         [ -d patches ] && cp -r patches/ $out || mkdir $out
         mkdir -p $out/clang $out/spirv
@@ -50,7 +51,7 @@ let
 
   };
 
-  lib = let
+  library = let
     inherit (llvmPkgs) llvm;
     inherit (if buildWithPatches then passthru else llvmPkgs) clang-unwrapped spirv-llvm-translator;
   in
@@ -85,7 +86,7 @@ let
         "-DSPIRV_TRANSLATOR_DIR=${spirv-llvm-translator}"
       ];
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage    = "https://github.com/intel/opencl-clang/";
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
         license     = licenses.ncsa;
@@ -94,4 +95,4 @@ let
       };
     };
 in
-  lib
+  library

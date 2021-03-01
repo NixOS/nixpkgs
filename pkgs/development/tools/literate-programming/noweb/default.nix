@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gawk, groff, icon-lang ? null }:
+{ lib, stdenv, fetchFromGitHub, gawk, groff, icon-lang ? null }:
 
 let noweb = stdenv.mkDerivation rec {
   pname = "noweb";
@@ -13,17 +13,17 @@ let noweb = stdenv.mkDerivation rec {
 
   patches = [ ./no-FAQ.patch ];
 
-  nativeBuildInputs = [ groff ] ++ stdenv.lib.optionals (!isNull icon-lang) [ icon-lang ];
+  nativeBuildInputs = [ groff ] ++ lib.optionals (!isNull icon-lang) [ icon-lang ];
 
   preBuild = ''
     mkdir -p "$out/lib/noweb"
     cd src
   '';
 
-  makeFlags = stdenv.lib.optionals (!isNull icon-lang) [
+  makeFlags = lib.optionals (!isNull icon-lang) [
     "LIBSRC=icon"
     "ICONC=icont"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "CC=clang"
   ];
 
@@ -70,7 +70,7 @@ let noweb = stdenv.mkDerivation rec {
   tlType = "run";
   passthru.pkgs = [ noweb.tex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, extensible literate-programming tool";
     homepage = "https://www.cs.tufts.edu/~nr/noweb";
     license = licenses.bsd2;

@@ -1,18 +1,18 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
-  version = "20190731";
+  version = "20200729";
 in fetchzip {
   name = "iana-etc-${version}";
   url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-  sha256 = "0vqr4zm53zn7z75ynmf59xfrlhpyk8f41xd6i4v8j0f7k6hfdvpi";
+  sha256 = "05cymmisfvpyd7fwzc6axvm5fsi1v6hzs0pjr4xp1i95wvpz7qpm";
 
   postFetch = ''
     tar -xzvf $downloadedFile --strip-components=1
     install -D -m0644 -t $out/etc services protocols
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Mic92/iana-etc";
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
     platforms = platforms.unix;

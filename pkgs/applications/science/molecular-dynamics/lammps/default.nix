@@ -1,6 +1,7 @@
-{ stdenv, fetchFromGitHub
-, libpng, gzip, fftw, openblas
-, mpi ? null
+{ lib, stdenv, fetchFromGitHub
+, libpng, gzip, fftw, blas, lapack
+, withMPI ? false
+, mpi
 }:
 let packages = [
      "asphere" "body" "class2" "colloid" "compress" "coreshell"
@@ -8,7 +9,6 @@ let packages = [
      "opt" "peri" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-reaxc"
     ];
     lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
-    withMPI = (mpi != null);
 in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     inherit packages;
   };
 
-  buildInputs = [ fftw libpng openblas gzip ]
-    ++ (stdenv.lib.optionals withMPI [ mpi ]);
+  buildInputs = [ fftw libpng blas lapack gzip ]
+    ++ (lib.optionals withMPI [ mpi ]);
 
   configurePhase = ''
     cd src
-    for pack in ${stdenv.lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
+    for pack in ${lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
   '';
 
   # Must do manual build due to LAMMPS requiring a seperate build for
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cp -v liblammps* $out/lib/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Classical Molecular Dynamics simulation code";
     longDescription = ''
       LAMMPS is a classical molecular dynamics simulation code designed to

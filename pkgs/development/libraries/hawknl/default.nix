@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
   name = "hawknl-1.68";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://hawksoft.com/hawknl/";
     description = "Free, open source, game oriented network API";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

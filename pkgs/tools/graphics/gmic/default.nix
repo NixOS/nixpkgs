@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , ninja
-, pkgconfig
-, opencv3
+, pkg-config
+, opencv
 , openexr
 , graphicsmagick
 , fftw
@@ -15,19 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gmic";
-  version = "2.7.5";
+  version = "2.9.5";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "008lpjm3w5hzfccam6qf0rizdg3a9cqrizhr7vrpskmbr1j451d6";
+    sha256 = "sha256-KV/Ti6mPW+FASjug6q8Qfgra8L/TIyl/Y6JwANzQreE=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -36,19 +36,20 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    opencv3
+    opencv
     openexr
     graphicsmagick
   ];
 
   cmakeFlags = [
     "-DBUILD_LIB_STATIC=OFF"
+    "-DENABLE_CURL=OFF"
     "-DENABLE_DYNAMIC_LINKING=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open and full-featured framework for image processing";
-    homepage = "http://gmic.eu/";
+    homepage = "https://gmic.eu/";
     license = licenses.cecill20;
     platforms = platforms.unix;
   };

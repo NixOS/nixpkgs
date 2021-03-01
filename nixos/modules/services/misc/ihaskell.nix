@@ -15,11 +15,13 @@ in
   options = {
     services.ihaskell = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Autostart an IHaskell notebook service.";
       };
 
       extraPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = self: [];
         example = literalExample ''
           haskellPackages: [

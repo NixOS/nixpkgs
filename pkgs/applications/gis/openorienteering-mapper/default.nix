@@ -1,33 +1,58 @@
-{ stdenv, fetchFromGitHub, gdal, cmake, ninja, proj, clipper, zlib, qtbase, qttools
-, qtlocation, qtsensors, doxygen, cups, wrapQtAppsHook, qtimageformats
+{ lib, stdenv
+, mkDerivation
+, fetchFromGitHub
+, substituteAll
+, gdal
+, cmake
+, ninja
+, proj
+, clipper
+, zlib
+, qttools
+, qtlocation
+, qtsensors
+, qttranslations
+, doxygen
+, cups
+, qtimageformats
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
-  version = "0.9.2";
+  version = "0.9.4";
 
-  buildInputs = [ gdal qtbase qttools qtlocation qtimageformats
-                  qtsensors clipper zlib proj doxygen cups];
+  buildInputs = [
+    gdal
+    qtlocation
+    qtimageformats
+    qtsensors
+    clipper
+    zlib
+    proj
+    cups
+  ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ninja ];
+  nativeBuildInputs = [ cmake doxygen ninja qttools ];
 
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "1787f2agjzcyizk2m60icb44yv9dlwv6irw3k53fqfmwkhkd2h5p";
+    sha256 = "13k9dirqm74lknhr8w121zr1hjd9gm1y73cj4rrj98rx44dzmk7b";
   };
 
-  cmakeFlags =
-    [
+  patches = (substituteAll {
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    src = ./fix-qttranslations-path.diff;
+    inherit qttranslations;
+  });
+
+  cmakeFlags = [
     # Building the manual and bundling licenses fails
+    # See https://github.com/NixOS/nixpkgs/issues/85306
     "-DLICENSING_PROVIDER:BOOL=OFF"
     "-DMapper_MANUAL_QTHELP:BOOL=OFF"
-    ] ++
-    (stdenv.lib.optionals stdenv.isDarwin
-    [
-    # Usually enabled on Darwin
-    "-DCMAKE_FIND_FRAMEWORK=never"
+  ] ++ lib.optionals stdenv.isDarwin [
     # FindGDAL is broken and always finds /Library/Framework unless this is
     # specified
     "-DGDAL_INCLUDE_DIR=${gdal}/include"
@@ -38,18 +63,19 @@ stdenv.mkDerivation rec {
     "-DMapper_PACKAGE_QT=0"
     "-DMapper_PACKAGE_ASSISTANT=0"
     "-DMapper_PACKAGE_GDAL=0"
-    ]);
+  ];
 
-  postInstall =
-    stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = with stdenv; lib.optionalString isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/Mapper.app $out/Applications
     # Fixes "This application failed to start because it could not find or load the Qt
     # platform plugin "cocoa"."
-    wrapQtApp $out/Mapper.app/Contents/MacOS/Mapper
+    wrapQtApp $out/Applications/Mapper.app/Contents/MacOS/Mapper
     mkdir -p $out/bin
-    ln -s $out/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
-    '';
+    ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       OpenOrienteering Mapper is an orienteering mapmaking program
       and provides a free alternative to the existing proprietary solution.

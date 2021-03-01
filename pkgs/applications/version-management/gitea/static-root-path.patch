@@ -1,13 +1,13 @@
 diff --git a/modules/setting/setting.go b/modules/setting/setting.go
-index 714015c47..a2f85337e 100644
+index 45e55a2..9d18ee4 100644
 --- a/modules/setting/setting.go
 +++ b/modules/setting/setting.go
-@@ -641,7 +641,7 @@ func NewContext() {
- 	PortToRedirect = sec.Key("PORT_TO_REDIRECT").MustString("80")
+@@ -667,7 +667,7 @@ func NewContext() {
  	OfflineMode = sec.Key("OFFLINE_MODE").MustBool()
  	DisableRouterLog = sec.Key("DISABLE_ROUTER_LOG").MustBool()
--	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString(AppWorkPath)
-+	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString("@data@")
+ 	if len(StaticRootPath) == 0 {
+-		StaticRootPath = AppWorkPath
++		StaticRootPath = "@data@"
+ 	}
+ 	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString(StaticRootPath)
  	StaticCacheTime = sec.Key("STATIC_CACHE_TIME").MustDuration(6 * time.Hour)
- 	AppDataPath = sec.Key("APP_DATA_PATH").MustString(path.Join(AppWorkPath, "data"))
- 	EnableGzip = sec.Key("ENABLE_GZIP").MustBool()

@@ -1,53 +1,51 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, pyopenssl
 , libuv
-, psutil
-, isPy27
 , CoreServices
 , ApplicationServices
 # Check Inputs
+, aiohttp
+, psutil
+, pyopenssl
 , pytestCheckHook
-# , pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.14.0";
-  disabled = isPy27;
+  version = "0.15.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07j678z9gf41j98w72ysrnb5sa41pl5yxd7ib17lcwfxqz0cjfhj";
+    sha256 = "0rfhr84km8k5gj0036b2pznwmc8macx56vkxc3aksvns95dksl0s";
   };
-
-  patches = lib.optional stdenv.isDarwin ./darwin_sandbox.patch;
 
   buildInputs = [
     libuv
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
-
-  pythonImportsCheck = [
-    "uvloop"
-    "uvloop.loop"
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+    ApplicationServices
   ];
 
   dontUseSetuptoolsCheck = true;
-  checkInputs = [ pytestCheckHook pyopenssl psutil ];
+  checkInputs = [
+    aiohttp
+    pytestCheckHook
+    pyopenssl
+    psutil
+  ];
 
   pytestFlagsArray = [
     # from pytest.ini, these are NECESSARY to prevent failures
     "--capture=no"
     "--assert=plain"
+    "--strict"
     "--tb=native"
     # ignore code linting tests
     "--ignore=tests/test_sourcecode.py"
-  ];
-
-  disabledTests = [
-    "test_sock_cancel_add_reader_race"  # asyncio version of test is supposed to be skipped but skip doesn't happen. uvloop version runs fine
   ];
 
   # force using installed/compiled uvloop vs source by moving tests to temp dir
@@ -56,9 +54,15 @@ buildPythonPackage rec {
     cp -r tests $TEST_DIR
     pushd $TEST_DIR
   '';
+
   postCheck = ''
     popd
   '';
+
+  pythonImportsCheck = [
+    "uvloop"
+    "uvloop.loop"
+  ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

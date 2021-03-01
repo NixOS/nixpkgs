@@ -1,19 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "pycparser";
-  version = "2.19";
+  version = "2.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3";
+    sha256 = "2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0";
   };
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C parser in Python";
     homepage = "https://github.com/eliben/pycparser";
     license = licenses.bsd3;

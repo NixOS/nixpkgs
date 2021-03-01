@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, flake8, six, orderedmultidict, pytest }:
+{ lib, buildPythonPackage, fetchPypi, flake8, six, orderedmultidict, pytest }:
 
 buildPythonPackage rec {
   pname = "furl";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     pytest -k 'not join'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "furl is a small Python library that makes parsing and manipulating URLs easy";
     homepage = "https://github.com/gruns/furl";
     license = licenses.unlicense;

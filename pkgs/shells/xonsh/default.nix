@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3Packages
 , glibcLocales
@@ -8,17 +8,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.17";
+  version = "0.9.24";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "xonsh";
     repo   = "xonsh";
     rev    = version;
-    sha256 = "0ynfnphbp69am390m5zfzk5rzj1749vs7rzyq310f6mk7xdq6j4v";
+    sha256 = "1nk7kbiv7jzmr6narsnr0nyzkhlc7xw3b2bksyq2j6nda67b9b3y";
   };
 
   LC_ALL = "en_US.UTF-8";
+
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
     sed -ie "s|SHELL=xonsh|SHELL=$out/bin/xonsh|" tests/test_integrations.py
@@ -42,7 +43,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";
     homepage = "https://xon.sh/";
     changelog = "https://github.com/xonsh/xonsh/releases/tag/${version}";

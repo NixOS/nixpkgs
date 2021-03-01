@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , zlib
 , fetchpatch
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "py3" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     makeWrapper
   ];
@@ -71,21 +71,32 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libproxy/libproxy/pull/95.patch";
       sha256 = "18vyr6wlis9zfwml86606jpgb9mss01l9aj31iiciml8p857aixi";
     })
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "CVE-2020-25219.patch";
+      url = "https://github.com/libproxy/libproxy/commit/a83dae404feac517695c23ff43ce1e116e2bfbe0.patch";
+      sha256 = "0wdh9qjq99aw0jnf2840237i3hagqzy42s09hz9chfgrw8pyr72k";
+    })
+    (fetchpatch {
+      name = "CVE-2020-26154.patch";
+      url = "https://github.com/libproxy/libproxy/commit/4411b523545b22022b4be7d0cac25aa170ae1d3e.patch";
+      sha256 = "0pdy9sw49lxpaiwq073cisk0npir5bkch70nimdmpszxwp3fv1d8";
+    })
+
+  ] ++ lib.optionals stdenv.isDarwin [
     (fetchpatch {
       url = "https://github.com/libproxy/libproxy/commit/44158f03f8522116758d335688ed840dfcb50ac8.patch";
       sha256 = "0axfvb6j7gcys6fkwi9dkn006imhvm3kqr83gpwban8419n0q5v1";
     })
   ];
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # config_gnome3 uses the helper to find GNOME proxy settings
     wrapProgram $out/libexec/pxgsettings --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
   '';
 
   doCheck = false; # fails 1 out of 10 tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.lgpl21;
     homepage = "http://libproxy.github.io/libproxy/";

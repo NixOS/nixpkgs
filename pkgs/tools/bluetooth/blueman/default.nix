@@ -1,23 +1,23 @@
-{ config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
-, obex_data_server, xdg_utils, dnsmasq, dhcp, libappindicator, iproute
+{ config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
+, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute
 , gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
   pythonPackages = python3Packages;
-  binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp iproute ];
+  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute ];
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0k49hgyglsrlszckjzrvlsdm9ysns3qgvczgcmwaz02vvwnb4zai";
+    sha256 = "1nk46s1s8yrlqv37sc7la05nnn7sdgqhkrcdm98qin34llwkv70x";
   };
 
   nativeBuildInputs = [
-    gobject-introspection intltool pkgconfig pythonPackages.cython
+    gobject-introspection intltool pkg-config pythonPackages.cython
     pythonPackages.wrapPython wrapGAppsHook
     autoreconfHook # drop when below patch is removed
   ];

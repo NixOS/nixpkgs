@@ -1,19 +1,19 @@
-{ lib, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
+{ lib, pkg-config, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "0.8.0";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "kha";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0n2ncssjcmp3x5kbnci7xbq5fgcihlr3vaglyhhwzrxkjy2vpmpd";
+    sha256 = "sha256-YkGfuqtvVfPcxJ8UqD5QidcNEy5brTWGEK4fR64Yz70=";
   };
 
-  cargoSha256 = "1pkg0n7kxckr0zhr8dr12b9fxg5q185kj3r9k2rmnkj2dpa2mxh3";
+  cargoSha256 = "sha256-2fYicpoEERwD4OjdpseKQOkDvZlb7NnOZcb6Tu+rQdA=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ curl zlib openssl ];
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker leanc; do
+    for link in lean leanpkg leanchecker leanc leanmake; do
       ln -s elan $link
     done
     popd

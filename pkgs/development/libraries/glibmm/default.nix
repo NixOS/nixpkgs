@@ -1,18 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, glib, libsigcxx, gnome3, darwin }:
+{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome3, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.62.0";
+  version = "2.64.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ziwx6r7k7wbvg4qq1rgrv8zninapgrmhn1hs6926a3krh9ryr9n";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1v6lp23fr2qh4zshcnm28sn29j3nzgsvcqj2nhmrnvamipjq4lm7";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gnum4 ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  nativeBuildInputs = [
+    pkg-config
+    gnum4
+    glib # for glib-compile-schemas
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
   ]);
   propagatedBuildInputs = [ glib libsigcxx ];
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ interface to the GLib library";
 
     homepage = "https://gtkmm.org/";

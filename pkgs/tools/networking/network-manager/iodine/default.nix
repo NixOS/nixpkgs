@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
-, withGnome ? true, gnome3, fetchpatch, libnma }:
+{ lib, stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkg-config, networkmanager, libsecret, gtk3
+, withGnome ? true, gnome3, fetchpatch, libnma, glib }:
 
 let
   pname = "NetworkManager-iodine";
@@ -27,10 +27,10 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ iodine networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+  buildInputs = [ iodine networkmanager glib ]
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ intltool autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ intltool autoreconfHook pkg-config ];
 
   # glib-2.62 deprecations
   env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's iodine plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

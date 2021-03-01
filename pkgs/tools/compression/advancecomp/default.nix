@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
@@ -28,8 +28,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
-    description = ''A set of tools to optimize deflate-compressed files'';
+  # autover.sh relies on 'git describe', which obviously doesn't work as we're not cloning
+  # the full git repo. so we have to put the version number in `.version`, otherwise
+  # the binaries get built reporting "none" as their version number.
+  postPatch = ''
+    echo "${version}" >.version
+  '';
+
+  meta = with lib; {
+    description = "A set of tools to optimize deflate-compressed files";
     license = licenses.gpl3 ;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux ++ platforms.darwin;

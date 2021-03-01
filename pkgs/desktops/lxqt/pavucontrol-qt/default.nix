@@ -1,20 +1,30 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt, libpulseaudio,
-  pcre, qtbase, qttools, qtx11extras }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, lxqt
+, libpulseaudio
+, pcre
+, qtbase
+, qttools
+, qtx11extras
+}:
 
 mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "0.14.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "124dk41v8l5pv7afi1h7fgbhm8zj605yfd8b769sn7id2bqj7bis";
+    sha256 = "1d3kp2y3crrmbqak4mn9d6cfbhi5l5xhchhjh44ng8gpww22k5h0";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt.lxqt-build-tools
   ];
 
@@ -26,10 +36,12 @@ mkDerivation rec {
     pcre
   ];
 
+  passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
+
   meta = with lib; {
-    description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
     homepage = "https://github.com/lxqt/pavucontrol-qt";
-    license = licenses.gpl2;
+    description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ romildo ];
   };

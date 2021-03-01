@@ -11,22 +11,26 @@
 , tornado
 , aiohttp
 , uritemplate
+, pyjwt
 }:
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "3.2.0";
+  version = "4.2.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f4b69063a256994d38243cc0eba4e1453017b5b8b04a173216d02d47ffc3989";
+    sha256 = "5526cc2a06bfad707d10ec118393e0d33c2aa524605255d96958c22c93e8e7aa";
   };
 
   nativeBuildInputs = [ setuptools pytestrunner ];
   checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
-  propagatedBuildInputs = [ uritemplate ];
+  propagatedBuildInputs = [
+    uritemplate
+    pyjwt
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

@@ -1,14 +1,14 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.3";
+  version = "4.5";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1cq508ymak3g5fhi1n4bdiiqkc86s2l3k4dvzw842vv2x0441cac";
+    sha256 = "1lcq5fk8d5j2kfhn9m5l2hk46v7nj4vfa22m1psz35c9zpw4px8q";
   };
 
   checkInputs = [
@@ -38,6 +38,7 @@ with python3.pkgs; buildPythonApplication rec {
     click
     html5lib
     vcrpy
+    toml
   ];
 
   postPatch = ''
@@ -69,11 +70,11 @@ with python3.pkgs; buildPythonApplication rec {
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private cmdline bookmark manager";
     homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }

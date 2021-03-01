@@ -1,13 +1,15 @@
-{ mkDerivation, lib, copyPathsToStore, cmake, pkgconfig }:
+{ mkDerivation, lib, cmake, pkg-config }:
 
 mkDerivation {
   name = "extra-cmake-modules";
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./nix-lib-path.patch
+  ];
 
   outputs = [ "out" ];  # this package has no runtime components
 
-  propagatedBuildInputs = [ cmake pkgconfig ];
+  propagatedBuildInputs = [ cmake pkg-config ];
 
   setupHook = ./setup-hook.sh;
 

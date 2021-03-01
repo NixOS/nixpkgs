@@ -1,19 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, future-fstrings, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
 , sqlalchemy, ruamel_yaml, CommonMark, lxml, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.4.2";
+  version = "0.8.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f8pzi7ip82p7hn6d9xrgp5wsl4s3w6gmjsgb8gjy2606f7czqyg";
+    sha256 = "471684d40cbc2f7db345f2f809553b221a34d1c81e04bcdcb08a2832f140db1e";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    future-fstrings
 
     # defined in optional-requirements.txt
     sqlalchemy
@@ -22,10 +21,12 @@ buildPythonPackage rec {
     lxml
   ];
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   # no tests available
   doCheck = false;
+
+  pythonImportsCheck = [ "mautrix" ];
 
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-python";

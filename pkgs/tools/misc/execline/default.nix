@@ -1,14 +1,11 @@
-{ lib, skawarePackages
-# for execlineb-with-builtins
-, coreutils, gnugrep, writeScriptBin, runCommand, runCommandCC
-}:
+{ skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "execline";
-  version = "2.6.0.0";
-  sha256 = "1m6pvawxqaqjr49456vyjyl8dnqwvr19v77sjj7dnglfijwza5al";
+  version = "2.7.0.0";
+  sha256 = "0kl74yix60msgw8k3shhp9ymm80n91yxxqckixj5qbbhmylpnpqd";
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 

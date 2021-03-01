@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "15dkzczx10fhl0zs9bmcgkxfbwq2znc7bpscljm4rchbzx7y6lsg";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/ts";
     description = "Task spooler - batch queue";
     license = licenses.gpl2;

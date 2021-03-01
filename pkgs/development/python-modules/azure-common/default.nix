@@ -9,14 +9,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.1.25";
+  version = "1.1.26";
   pname = "azure-common";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "ce0f1013e6d0e9faebaf3188cc069f4892fc60a6ec552e3f817c1a2f92835054";
+    sha256 = "b2866238aea5d7492cfb0282fc8b8d5f6d06fb433872345864d45753c10b6e4f";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure common code";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai mwilsoninsight ];
+    maintainers = with maintainers; [ olcai maxwilson ];
   };
 }

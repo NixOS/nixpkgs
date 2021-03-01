@@ -1,44 +1,50 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, less
-, Security, libiconv, installShellFiles, makeWrapper
+{ lib, stdenv
+, nixosTests
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, less
+, Security
+, libiconv
+, installShellFiles
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname   = "bat";
-  version = "0.13.0";
+  pname = "bat";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "1kaa6ps6v1wk9qs63h116k4pbz7y9mfbfxfbq7g89yjhzkjmh6xc";
-    fetchSubmodules = true;
+    owner = "sharkdp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1kbziqm00skj65gpjq6m83hmfk9g3xyx88gai1r80pzsx8g239w1";
   };
 
-  cargoSha256 = "01l1y124gjh6gf9z1jkbpfzh0w92hrgwvsmqkqdw3a9pa4w5f6yg";
+  cargoSha256 = "1pdja5jhk036hpgv77xc3fcvra1sw0z5jc1ry53i0r7362lnwapz";
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
-    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.fish
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{fish,zsh}
   '';
 
   # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
   # expected with certain flag combinations.
   postFixup = ''
     wrapProgram "$out/bin/bat" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
+      --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) bat; };
+
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
-    homepage    = "https://github.com/sharkdp/bat";
-    license     = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir lilyball ];
-    platforms   = platforms.all;
+    homepage = "https://github.com/sharkdp/bat";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir lilyball zowoq ];
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
+{ lib, stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
 , libarchive, db, pcre, libedit, libossp_uuid, libXpm
-, libSM, libXt, freetype, pkgconfig, fontconfig
+, libSM, libXt, freetype, pkg-config, fontconfig
 , cmake, libyaml, Security
 , libjpeg, libX11, libXext, libXft, libXinerama
 , extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "8.1.15";
+  version = "8.3.9";
   packInstall = swiplPath: pack:
     ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
     '';
@@ -22,18 +22,18 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl-devel";
     rev = "V${version}";
-    sha256 = "0czbrscx2s4079nmwvipp9cnwfny16m3fpnp823llm7wyljchgvq";
+    sha256 = "0ixb8pc5s7q8q0njs8is1clpvik6jhhdcwnys7m9rpwdzgi10sjz";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ gmp readline openssl
     libarchive libyaml db pcre libedit libossp_uuid
     zlib ]
-  ++ stdenv.lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
+  ++ lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
   ++ extraLibraries
-  ++ stdenv.lib.optional stdenv.isDarwin Security;
+  ++ lib.optional stdenv.isDarwin Security;
 
   hardeningDisable = [ "format" ];
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.swi-prolog.org";
     description = "A Prolog compiler and interpreter";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.optionals (!withGui) stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.meditans ];
+    platforms = lib.platforms.linux ++ lib.optionals (!withGui) lib.platforms.darwin;
+    maintainers = [ lib.maintainers.meditans ];
   };
 }

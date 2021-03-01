@@ -1,14 +1,26 @@
-{ callPackage, fetchurl, ... } @ args:
+{ callPackage
+, fetchurl
+
+  # This is a bit unusual, but makes version and hash easily
+  # overridable. This is useful when the upstream archive was replaced
+  # and nixpkgs is not in sync yet.
+, officeVersion ? {
+  version = "980";
+  edition = "2018";
+  sha256 = "19pgil86aagiz6z4kx22gd4cxbbmrx42ix42arkfb6p6hav1plby";
+}
+
+, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
+  inherit (officeVersion) version edition;
+
   pname = "freeoffice";
-  version = "976";
-  edition = "2018";
   suiteName = "FreeOffice";
 
   src = fetchurl {
+    inherit (officeVersion) sha256;
     url = "https://www.softmaker.net/down/softmaker-freeoffice-${version}-amd64.tgz";
-    sha256 = "13yh4lyqakbdqf4r8vw8imy5gwpfva697iqfd85qmp3wimqvzskl";
   };
 
   archive = "freeoffice${edition}.tar.lzma";

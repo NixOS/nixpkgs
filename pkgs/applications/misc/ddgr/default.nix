@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python3, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  version = "1.8";
+  version = "1.9";
   pname = "ddgr";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "ddgr";
     rev = "v${version}";
-    sha256 = "1cyaindcg2vc3ij0p6b35inr01c6ys04izxsn1h70ixhsz46qg8z";
+    sha256 = "0qbdq7k0mmvkjp6qzz88n7vf29liqn6y5w4y39ldqdc8hzw5sld7";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -17,18 +17,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  # Version 1.8 was released as 1.7
-  postPatch = ''
-    substituteInPlace ddgr --replace "_VERSION_ = '1.7'" "_VERSION_ = '${version}'"
-  '';
-
   postInstall = ''
     installShellCompletion --bash --name ddgr.bash auto-completion/bash/ddgr-completion.bash
     installShellCompletion --fish auto-completion/fish/ddgr.fish
     installShellCompletion --zsh auto-completion/zsh/_ddgr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jarun/ddgr";
     description = "Search DuckDuckGo from the terminal";
     license = licenses.gpl3;

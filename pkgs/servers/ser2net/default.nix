@@ -1,17 +1,33 @@
-{ stdenv, lib, fetchFromGitHub, gensio, libyaml, autoreconfHook }:
+{ autoreconfHook
+, fetchFromGitHub
+, gensio
+, lib
+, libyaml
+, nix-update-script
+, pkg-config
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "ser2net";
-  version = "4.1.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "cminyard";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1zl68mmd7pp10cjv1jk8rs2dlbwvzskyb58qvc7ph7vc6957lfhc";
+    sha256 = "sha256-fA4rtFZ2lhGAwY3KUl/Jk8gjueI761J1QRdivMtbqX4=";
   };
 
-  buildInputs = [ autoreconfHook gensio libyaml ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+
+  buildInputs = [ gensio libyaml ];
 
   meta = with lib; {
     description = "Serial to network connection server";

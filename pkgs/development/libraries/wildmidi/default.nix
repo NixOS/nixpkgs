@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, alsaLib, freepats }:
+{ lib, stdenv, fetchurl, cmake, alsaLib, freepats }:
 
 stdenv.mkDerivation rec {
   name = "wildmidi-0.4.3";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     echo "source ${freepats}/freepats.cfg" >> "$out"/etc/wildmidi.cfg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software MIDI player and library";
     longDescription = ''
       WildMIDI is a simple software midi player which has a core softsynth

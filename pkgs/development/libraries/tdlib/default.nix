@@ -1,20 +1,22 @@
-{ fetchFromGitHub, gperf, openssl, readline, zlib, cmake, stdenv }:
+{ fetchFromGitHub, gperf, openssl, readline, zlib, cmake, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.0";
+  version = "1.7.0";
   pname = "tdlib";
 
   src = fetchFromGitHub {
     owner = "tdlib";
     repo = "td";
+
     rev = "v${version}";
-    sha256 = "0zlzpl6fgszg18kwycyyyrnkm255dvc6fkq0b0y32m5wvwwl36cv";
+
+    sha256 = "sha256-sZzp9k7KDnqftcSGSgXkIy0siCksGPBmRckySU/J0TU=";
   };
 
   buildInputs = [ gperf openssl readline zlib ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
     license = [ licenses.boost ];

@@ -7,18 +7,19 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
       virtualisation.vlans = [ 1 ];
       environment.systemPackages = with pkgs; [ wireguard-tools ];
       boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
-      systemd.tmpfiles.rules = [
-        "f /run/wg_priv 0640 root systemd-network - ${privk}"
-      ];
       systemd.network = {
         enable = true;
         netdevs = {
           "90-wg0" = {
             netdevConfig = { Kind = "wireguard"; Name = "wg0"; };
             wireguardConfig = {
-              PrivateKeyFile = "/run/wg_priv";
+              # NOTE: we're storing the wireguard private key in the
+              #       store for this test. Do not do this in the real
+              #       world. Keep in mind the nix store is
+              #       world-readable.
+              PrivateKeyFile = pkgs.writeText "wg0-priv" privk;
               ListenPort = 51820;
-              FwMark = 42;
+              FirewallMark = 42;
             };
             wireguardPeers = [ {wireguardPeerConfig={
               Endpoint = "192.168.1.${peerId}:51820";
@@ -60,7 +61,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
     };
 in import ./make-test-python.nix ({pkgs, ... }: {
   name = "networkd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ninjatrappeur ];
   };
   nodes = {

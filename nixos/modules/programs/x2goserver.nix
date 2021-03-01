@@ -110,7 +110,7 @@ in {
       "L+ /usr/local/bin/chmod - - - - ${coreutils}/bin/chmod"
       "L+ /usr/local/bin/cp - - - - ${coreutils}/bin/cp"
       "L+ /usr/local/bin/sed - - - - ${gnused}/bin/sed"
-      "L+ /usr/local/bin/setsid - - - - ${utillinux}/bin/setsid"
+      "L+ /usr/local/bin/setsid - - - - ${util-linux}/bin/setsid"
       "L+ /usr/local/bin/xrandr - - - - ${xorg.xrandr}/bin/xrandr"
       "L+ /usr/local/bin/xmodmap - - - - ${xorg.xmodmap}/bin/xmodmap"
     ];

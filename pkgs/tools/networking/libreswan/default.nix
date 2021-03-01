@@ -1,14 +1,11 @@
-{ stdenv, fetchurl, makeWrapper,
-  pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
+{ lib, stdenv, fetchurl, makeWrapper,
+  pkg-config, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
   bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
   docs ? false, xmlto, libselinux, ldns
   }:
 
 let
-  optional = stdenv.lib.optional;
-  version = "3.31";
-  name = "libreswan-${version}";
-  binPath = stdenv.lib.makeBinPath [
+  binPath = lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
   ];
 in
@@ -16,13 +13,13 @@ in
 assert docs -> xmlto != null;
 assert stdenv.isLinux -> libselinux != null;
 
-stdenv.mkDerivation {
-  inherit name;
-  inherit version;
+stdenv.mkDerivation rec {
+  pname = "libreswan";
+  version = "3.32";
 
   src = fetchurl {
-    url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "1wxqsv11nqgfj5and5xzfgh6ayqvl47midcghd5ryynh60mp7naa";
+    url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
+    sha256 = "0bj3g6qwd3ir3gk6hdl9npy3k44shf56vcgjahn30qpmx3z5fsr3";
   };
 
   # These flags were added to compile v3.18. Try to lift them when updating.
@@ -32,13 +29,17 @@ stdenv.mkDerivation {
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"
     "-Wno-error=stringop-truncation"
+    # The following flag allows libreswan v3.32 to work with NSS 3.22, see
+    # https://github.com/libreswan/libreswan/issues/334.
+    # This flag should not be needed for libreswan v3.33 (which is not yet released).
+    "-DNSS_PKCS11_2_0_COMPAT=1"
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
                   libcap_ng curl nspr nss python ldns ]
-                ++ optional docs xmlto
-                ++ optional stdenv.isLinux libselinux;
+                ++ lib.optional docs xmlto
+                ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path
@@ -82,10 +83,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+    platforms = platforms.linux ++ platforms.freebsd;
     license = licenses.gpl2;
     maintainers = [ maintainers.afranchuk ];
   };

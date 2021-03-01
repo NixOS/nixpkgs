@@ -1,28 +1,19 @@
-{ lib, fetchpatch, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools_scm, six }:
 
 let
-  _arrow-cpp = arrow-cpp.override { inherit python; };
+  _arrow-cpp = arrow-cpp.override { python3 = python; };
 in
 
 buildPythonPackage rec {
   pname = "pyarrow";
+  disabled = !isPy3k;
 
   inherit (_arrow-cpp) version src;
 
-  patches = [
-    # Remove when updating pkgs.arrow-cpp to 0.17
-    (fetchpatch {
-      name = "ARROW-8106-fix-conversion-test";
-      url = "https://github.com/apache/arrow/commit/af20bbff30adc560d7e57dd921345d00cc8b870c.patch";
-      sha256 = "0ihpw589vh35va31ajzy5zpx3bqd9gdn3342rghi03r245kch9zd";
-      stripLen = 1;
-    })
-  ];
-
   sourceRoot = "apache-arrow-${version}/python";
 
-  nativeBuildInputs = [ cmake cython pkgconfig setuptools_scm ];
-  propagatedBuildInputs = [ numpy six ] ++ lib.optionals (!isPy3k) [ futures ];
+  nativeBuildInputs = [ cmake cython pkg-config setuptools_scm ];
+  propagatedBuildInputs = [ numpy six ];
   checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
 
   PYARROW_BUILD_TYPE = "release";
@@ -42,6 +33,13 @@ buildPythonPackage rec {
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
   '';
+
+  # Deselect a single test because pyarrow prints a 2-line error message where
+  # only a single line is expected. The additional line of output comes from
+  # the glog library which is an optional dependency of arrow-cpp that is
+  # enabled in nixpkgs.
+  # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
+  pytestFlagsArray = [ "--deselect=pyarrow/tests/test_memory.py::test_env_var" ];
 
   dontUseSetuptoolsCheck = true;
   preCheck = ''

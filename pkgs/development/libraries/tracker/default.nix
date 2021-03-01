@@ -1,52 +1,129 @@
-{ stdenv, fetchurl, gettext, meson, ninja, pkgconfig, gobject-introspection, python3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
-, libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
-, gnome3, icu, libuuid, networkmanager, libsoup, json-glib, systemd, dbus
-, substituteAll }:
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, gettext
+, meson
+, ninja
+, pkg-config
+, asciidoc
+, gobject-introspection
+, python3
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, libxml2
+, glib
+, wrapGAppsNoGuiHook
+, vala
+, sqlite
+, libxslt
+, libstemmer
+, gnome3
+, icu
+, libuuid
+, libsoup
+, json-glib
+, systemd
+, dbus
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.4";
+  version = "3.0.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "V3lSJEq5d8eLC4ji9jxBl+q6FuTWa/9pK39YmT4GUW0=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1rhcs75axga7p7hl37h6jzb2az89jddlcwc7ykrnb2khyhka78rr";
   };
-
-  nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext libxslt wrapGAppsHook gobject-introspection
-    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
-    python3 # for data-generators
-    systemd # used for checks to install systemd user service
-    dbus # used for checks and pkgconfig to install dbus service/s
-  ];
-
-  buildInputs = [
-    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib libstemmer
-  ];
-
-  mesonFlags = [
-    # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
-    "-Dfunctional_tests=false"
-    "-Ddocs=true"
-  ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gdbus = "${glib.bin}/bin/gdbus";
+      inherit asciidoc;
+    })
+
+    # Fix consistency error with sqlite 3.34
+    # https://gitlab.gnome.org/GNOME/tracker/merge_requests/353
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker/commit/040e22d005985a19a0dc435a7631f91700804ce4.patch";
+      sha256 = "5OZj17XY8ZnXfMMim25HvGfFKUlsVlVHOUjZKfBKHcs=";
     })
   ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    pkg-config
+    asciidoc
+    gettext
+    libxslt
+    wrapGAppsNoGuiHook
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    python3 # for data-generators
+    systemd # used for checks to install systemd user service
+    dbus # used for checks and pkg-config to install dbus service/s
+  ];
+
+  buildInputs = [
+    glib
+    libxml2
+    sqlite
+    icu
+    libsoup
+    libuuid
+    json-glib
+    libstemmer
+  ];
+
+  checkInputs = [
+    python3.pkgs.pygobject3
+  ];
+
+  mesonFlags = [
+    "-Ddocs=true"
+  ];
+
+  doCheck = true;
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
     patchShebangs utils/data-generators/cc/generate
+    patchShebangs tests/functional-tests/test-runner.sh.in
+    patchShebangs tests/functional-tests/*.py
   '';
 
-  postInstall = ''
-    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  preCheck = ''
+    # (tracker-store:6194): Tracker-CRITICAL **: 09:34:07.722: Cannot initialize database: Could not open sqlite3 database:'/homeless-shelter/.cache/tracker/meta.db': unable to open database file
+    export HOME=$(mktemp -d)
+
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running functional tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p $out/lib
+    ln -s $PWD/src/libtracker-sparql/libtracker-sparql-3.0.so $out/lib/libtracker-sparql-3.0.so.0
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    # Clean up out symlinks
+    rm -r $out/lib
   '';
 
   passthru = {
@@ -56,11 +133,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

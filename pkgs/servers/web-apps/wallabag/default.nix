@@ -1,19 +1,21 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "wallabag";
-  version = "2.3.8";
+  version = "2.4.1";
 
   # remember to rm -r var/cache/* after a rebuild or unexpected errors will occur
 
   src = fetchurl {
     url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    sha256 = "1sr62hfk2f2rl5by48dg8yd1gchngjnc850as17wr3w287p1kwsq";
+    sha256 = "1dqf5ia66kjsnfad2xkm8w6jgs976mf9x0dcd73jybqfgs4j09kj";
   };
 
   outputs = [ "out" ];
 
-  patches = [ ./wallabag-data.patch ]; # exposes $WALLABAG_DATA
+  patches = [
+    ./wallabag-data.patch # exposes $WALLABAG_DATA
+  ];
 
   dontBuild = true;
 
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -R * $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web page archiver";
     longDescription = ''
       wallabag is a self hostable application for saving web pages.

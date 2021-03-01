@@ -1,23 +1,26 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 , gnome3
+, gnome-icon-theme
 , hicolor-icon-theme
 , gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "unstable-2020-03-21";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    rev = "f169a617bc344cb0b480b2b72f54cdd06af05255";
-    sha256 = "1c2a79ylk363i982czwwqcwc7cw6dyzlqphcypqm6nll7xlafq8s";
+    # commit is named 1.4.3, tags=404
+    rev = "c997af402d425889f2e4277966eebe473f7451f7";
+    sha256 = "0yfas949xm85a28vgjqm9ym3bhhynrq256w9vfs8aiqq9nbm18mf";
   };
 
-  propagatedUserEnvPkgs = [
+  propagatedBuildInputs = [
     gnome3.adwaita-icon-theme
+    gnome-icon-theme
     hicolor-icon-theme
   ];
 
@@ -25,22 +28,26 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  postFixup =  ''
-    gtk-update-icon-cache $out/share/icons/*
-  '';
-
   dontDropIconThemeCache = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv usr/share $out
+
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache $theme
+    done
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-y-icons";
     description = "The Mint-Y icon theme";
     license = licenses.gpl3; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

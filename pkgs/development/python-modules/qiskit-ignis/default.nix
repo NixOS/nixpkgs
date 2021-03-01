@@ -3,59 +3,75 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, python
 , numpy
 , qiskit-terra
+, scikitlearn
 , scipy
+  # Optional package inputs
+, withVisualization ? false
+, matplotlib
+, withCvx ? false
+, cvxpy
+, withJit ? false
+, numba
   # Check Inputs
 , pytestCheckHook
+, ddt
+, pyfakefs
 , qiskit-aer
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
-  version = "0.2.0";
+  version = "0.5.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   # Pypi's tarball doesn't contain tests
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
+    repo = "qiskit-ignis";
     rev = version;
-    sha256 = "08a60xk5dq5wmqc23r4hr2v2nsf9hs0ybz832vbnd6d80dl6izyc";
+    sha256 = "17kplmi17axcbbgw35dzfr3d5bzfymxfni9sf6v14223c5674p4y";
   };
 
-  patches = [
-    # Update tests for compatibility with qiskit-aer 0.4 (#342). Remove in version > 0.2.0
-    (fetchpatch {
-      url = "https://github.com/Qiskit/qiskit-ignis/commit/d78c494579f370058e68e360f10149db81b52477.patch";
-      sha256 = "0ygkllf95c0jfvjg7gn399a5fd0wshsjpcn279kj7855m8j306h6";
-    })
-    # Fix statevector test over-eager validation (PR #333)
-    (fetchpatch {
-      url = "https://github.com/Qiskit/qiskit-ignis/commit/7cc8eb2e852b383ea429233fa43d3728931f1707.patch";
-      sha256 = "0mdygykilg4qivdaa731z3y56l3ax4jp1sil9npqv0gn4p03c9g5";
-    })
-  ];
+  # hacky, fix https://github.com/Qiskit/qiskit-ignis/issues/532.
+  # TODO: remove on qiskit-ignis v0.5.1
+  postPatch = ''
+    substituteInPlace qiskit/ignis/mitigation/expval/base_meas_mitigator.py --replace "plt.axes" "'plt.axes'"
+  '';
 
   propagatedBuildInputs = [
     numpy
     qiskit-terra
+    scikitlearn
     scipy
-  ];
+  ] ++ lib.optionals (withCvx) [ cvxpy ]
+  ++ lib.optionals (withVisualization) [ matplotlib ]
+  ++ lib.optionals (withJit) [ numba ];
+  postInstall = "rm -rf $out/${python.sitePackages}/docs"; # this dir can create conflicts
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
   dontUseSetuptoolsCheck = true;
-  preCheck = ''export HOME=$TMPDIR'';
+  preCheck = "export HOME=$TMPDIR";
   checkInputs = [
     pytestCheckHook
+    ddt
+    pyfakefs
     qiskit-aer
+  ];
+  disabledTests = [
+    "test_tensored_meas_cal_on_circuit" # Flaky test, occasionally returns result outside bounds
+    "test_qv_fitter" # execution hangs, ran for several minutes
   ];
 
   meta = with lib; {
     description = "Qiskit tools for quantum hardware verification, noise characterization, and error correction";
-    homepage = "https://github.com/QISKit/qiskit-ignis";
+    homepage = "https://qiskit.org/ignis";
+    downloadPage = "https://github.com/QISKit/qiskit-ignis/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

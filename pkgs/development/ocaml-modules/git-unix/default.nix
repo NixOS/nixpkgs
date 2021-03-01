@@ -1,14 +1,20 @@
-{ buildDunePackage, git-http, cohttp-lwt-unix, tls, cmdliner, mtime }:
+{ stdenv, buildDunePackage, git-http, cohttp, cohttp-lwt-unix
+, mmap, cmdliner, mtime, alcotest, mirage-crypto-rng, tls
+, io-page, git-binary
+}:
 
 buildDunePackage {
-	pname = "git-unix";
-	inherit (git-http) version src;
+  pname = "git-unix";
+  inherit (git-http) version src minimumOCamlVersion;
 
-	buildInputs = [ cmdliner mtime ];
-	propagatedBuildInputs = [ cohttp-lwt-unix git-http tls ];
+  useDune2 = true;
 
-	meta = {
-		description = "Unix backend for the Git protocol(s)";
-		inherit (git-http.meta) homepage license maintainers;
-	};
+  propagatedBuildInputs = [ mmap cmdliner git-http cohttp cohttp-lwt-unix mtime ];
+  checkInputs = [ alcotest mirage-crypto-rng tls io-page git-binary ];
+  doCheck = !stdenv.isAarch64;
+
+  meta = {
+    description = "Unix backend for the Git protocol(s)";
+    inherit (git-http.meta) homepage license maintainers;
+  };
 }

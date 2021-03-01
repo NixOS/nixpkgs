@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, apr, expat, gnused
+{ lib, stdenv, fetchurl, makeWrapper, apr, expat, gnused
 , sslSupport ? true, openssl
 , bdbSupport ? true, db
 , ldapSupport ? !stdenv.isCygwin, openldap
@@ -10,7 +10,7 @@ assert sslSupport -> openssl != null;
 assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "apr-util-1.6.1";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     inherit sslSupport bdbSupport ldapSupport;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://apr.apache.org/";
     description = "A companion library to APR, the Apache Portable Runtime";
     maintainers = [ maintainers.eelco ];

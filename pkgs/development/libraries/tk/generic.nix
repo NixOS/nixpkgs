@@ -1,4 +1,4 @@
-{ stdenv, lib, src, pkgconfig, tcl, libXft, patches ? []
+{ stdenv, lib, src, pkg-config, tcl, libXft, patches ? []
 , enableAqua ? stdenv.isDarwin, darwin
 , ... }:
 
@@ -19,19 +19,19 @@ stdenv.mkDerivation {
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
     cp ../{unix,generic}/*.h $out/include
-    ln -s $out/lib/libtk${tcl.release}.so $out/lib/libtk.so
+    ln -s $out/lib/libtk${tcl.release}${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libtk${stdenv.hostPlatform.extensions.sharedLibrary}
   ''
-  + stdenv.lib.optionalString (stdenv.isDarwin) ''
+  + lib.optionalString (stdenv.isDarwin) ''
     cp ../macosx/*.h $out/include
   '';
 
   configureFlags = [
     "--enable-threads"
     "--with-tcl=${tcl}/lib"
-  ] ++ stdenv.lib.optional stdenv.is64bit "--enable-64bit"
-    ++ stdenv.lib.optional enableAqua "--enable-aqua";
+  ] ++ lib.optional stdenv.is64bit "--enable-64bit"
+    ++ lib.optional enableAqua "--enable-aqua";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
   propagatedBuildInputs = [ tcl libXft ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     libdir = "lib/${libPrefix}";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = "https://www.tcl.tk/";
     license = licenses.tcltk;

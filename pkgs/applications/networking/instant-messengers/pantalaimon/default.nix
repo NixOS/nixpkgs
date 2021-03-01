@@ -1,6 +1,7 @@
 { lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
   attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
   prompt_toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
+  setuptools,
 
   pytest, faker, pytest-aiohttp, aioresponses,
 
@@ -9,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.5.1";
+  version = "0.8.0";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +19,7 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "18jihvqlfk8lx97hxcr36zdkp2sffg2l8mkg5lflylwcgwy1dx0y";
+    sha256 = "0n86cdpw85qzlcr1ynvar0f0zbphmdz1jia9r75lmj07iw4r5hk9";
   };
 
   propagatedBuildInputs = [
@@ -32,11 +33,12 @@ buildPythonApplication rec {
     matrix-nio
     peewee
     prompt_toolkit
+    setuptools
   ] ++ lib.optionals enableDbusUi [
-    dbus-python
-    notify2
-    pygobject3
-    pydbus
+      dbus-python
+      notify2
+      pygobject3
+      pydbus
   ];
 
   checkInputs = [
@@ -54,7 +56,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An end-to-end encryption aware Matrix reverse proxy daemon.";
+    description = "An end-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = licenses.asl20;
     maintainers = with maintainers; [ valodim ];

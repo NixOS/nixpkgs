@@ -26,6 +26,7 @@ in
         };
         reservedMemory = mkOption {
           default = "128M";
+          type = types.str;
           description = ''
             The amount of memory reserved for the crashdump kernel.
             If you choose a too high value, dmesg will mention

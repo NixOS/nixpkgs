@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
-, pkgconfig
+, pkg-config
 , gtk-doc
 , gobject-introspection
 , gjs
@@ -19,15 +19,17 @@
 , automake
 , libtool
 , fuse
-, utillinuxMinimal
+, util-linuxMinimal
 , libselinux
+, libsodium
 , libarchive
 , libcap
 , bzip2
 , yacc
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_42
+, openssl
 , python3
 }:
 
@@ -37,13 +39,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2020.3";
+  version = "2020.8";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "01cch4as23xspq6pck59al7x5jj60wl21g8p3iqbdxcjl1p3jxsq";
+    sha256 = "16v73v63h16ika73kgh2cvgm0v27r2d48m932mbj3xm6s295kapx";
   };
 
   patches = [
@@ -59,6 +61,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-test-paths.patch;
       python3 = testPython.interpreter;
+      openssl = "${openssl}/bin/openssl";
     })
   ];
 
@@ -66,14 +69,14 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     gtk-doc
     gobject-introspection
     which
     makeWrapper
     yacc
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_42
   ];
 
@@ -85,20 +88,17 @@ in stdenv.mkDerivation rec {
     gpgme
     fuse
     libselinux
+    libsodium
     libcap
     libarchive
     bzip2
     xz
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
 
     # for installed tests
     testPython
     gjs
   ];
-
-  preConfigure = ''
-    env NOCONFIGURE=1 ./autogen.sh
-  '';
 
   enableParallelBuilding = true;
 
@@ -106,6 +106,7 @@ in stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
+    "--with-ed25519-libsodium"
   ];
 
   makeFlags = [
@@ -113,8 +114,12 @@ in stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
+  preConfigure = ''
+    env NOCONFIGURE=1 ./autogen.sh
+  '';
+
   postFixup = let
-    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+    typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
       (placeholder "out")
       gobject-introspection
     ];
@@ -130,7 +135,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git for operating system binaries";
     homepage = "https://ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;

@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, pruneLibtoolFiles, flex, bison
+{ lib, stdenv, fetchurl, pkg-config, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
 , nftablesCompat ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "1.8.4";
+  version = "1.8.6";
   pname = "iptables";
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
-    sha256 = "0z0mgs1ghvn3slc868mgbf2g26njgrzcy5ggyb5w4i55j1a3lflr";
+    sha256 = "0rvp0k8a72h2snrdx48cfn75bfa0ycrd2xl3kjysbymq7q6gxx50";
   };
 
-  nativeBuildInputs = [ pkgconfig pruneLibtoolFiles flex bison ];
+  nativeBuildInputs = [ pkg-config pruneLibtoolFiles flex bison ];
 
   buildInputs = [ libmnl libnetfilter_conntrack libnfnetlink libnftnl libpcap ];
 

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, dask
 , numpy
 , scipy
 , numba
@@ -10,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.8.0";
+  version = "0.11.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3dc14ee5314caa2e64331b0b50c8f92e8999d7d275179a804a114e6cb1f8b81";
+    sha256 = "bc5c35dbc81242237feb7a8e1f7d9c5e9dd9bb0910f6ec55f50dcc379082864f";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest dask ];
   propagatedBuildInputs = [
     numpy
     scipy

@@ -1,22 +1,27 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, which
 , gettext, libffi, libiconv, libtasn1
 }:
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.23.20";
+  version = "0.23.22";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    sha256 = "00xxhzgd7cpin9nzwrrzykvhjwqg5l45p0cq2gv68y3sxq2p9q6y";
+    sha256 = "sha256-erWqElJr0iESNUk9EZiJRmSMYhns8GxuFLNw7mIIIWs=";
   };
 
   outputs = [ "out" "dev"];
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+  # for cross platform builds of p11-kit, libtasn1 in nativeBuildInputs
+  # provides the asn1Parser binary on the hostPlatform needed for building.
+  # at the same time, libtasn1 in buildInputs provides the libasn1 library
+  # to link against for the target platform.
+  # hence, libtasn1 is required in both native and build inputs.
+  nativeBuildInputs = [ autoreconfHook pkg-config which libtasn1 ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
 
   autoreconfPhase = ''
@@ -26,16 +31,25 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--without-trust-paths"
-  ]; # TODO: store trust anchors in a directory common to Nix and NixOS
+    "--with-trust-paths=/etc/ssl/certs/ca-certificates.crt"
+  ];
 
   enableParallelBuilding = true;
 
+  # Tests run in fakeroot for non-root users
+  preCheck = ''
+    if [ "$(id -u)" != "0" ]; then
+      export FAKED_MODE=1
+    fi
+  '';
+
   doCheck = !stdenv.isDarwin;
 
-  installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
+  installFlags = [
+    "exampledir=${placeholder "out"}/etc/pkcs11"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for loading and sharing PKCS#11 modules";
     longDescription = ''
       Provides a way to load and enumerate PKCS#11 modules.

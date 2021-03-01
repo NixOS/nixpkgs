@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, git, glibc }:
+{ lib, stdenv, fetchFromGitHub, cmake, git, glibc }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
-  pname = "lepton";
+  version = "2019-08-20";
+  pname = "lepton-unstable";
 
   src = fetchFromGitHub {
     repo = "lepton";
     owner = "dropbox";
-    rev = version;
-    sha256 = "1f2vyp0crj4yw27bs53vykf2fqk4w57gv3lh9dp89dh3y7wwh1ba";
+    rev = "3d1bc19da9f13a6e817938afd0f61a81110be4da";
+    sha256 = "0aqs6nvcbq8cbfv8699fa634bsz7csmk0169n069yvv17d1c07fd";
   };
 
   nativeBuildInputs = [ cmake git ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ glibc.static ];
+  buildInputs = lib.optionals stdenv.isLinux [ glibc.static ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dropbox/lepton";
     description = "A tool to losslessly compress JPEGs";
     license = licenses.asl20;

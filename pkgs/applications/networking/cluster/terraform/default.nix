@@ -1,15 +1,13 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper
-, runCommand, writeText, terraform-providers }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, coreutils
+, runCommand, runtimeShell, writeText, terraform-providers, fetchpatch }:
 
 let
-  goPackagePath = "github.com/hashicorp/terraform";
-
-  generic = { version, sha256, ... }@attrs:
-    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" ];
-    in buildGoPackage ({
+  generic = { version, sha256, vendorSha256 ? null, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "vendorSha256" ];
+    in buildGoModule ({
       name = "terraform-${version}";
 
-      inherit goPackagePath;
+      inherit vendorSha256;
 
       src = fetchFromGitHub {
         owner = "hashicorp";
@@ -18,9 +16,15 @@ let
         inherit sha256;
       };
 
+      postConfigure = ''
+        # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
+        substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
+          --replace "/bin/stty" "${coreutils}/bin/stty"
+      '';
+
       postInstall = ''
         # remove all plugins, they are part of the main binary now
-        for i in $bin/bin/*; do
+        for i in $out/bin/*; do
           if [[ $(basename $i) != terraform ]]; then
             rm "$i"
           fi
@@ -28,20 +32,26 @@ let
       '';
 
       preCheck = ''
-        export HOME=$TMP
+        export HOME=$TMPDIR
+        export TF_SKIP_REMOTE_TESTS=1
       '';
 
-      meta = with stdenv.lib; {
+      subPackages = [ "." ];
+
+      meta = with lib; {
         description =
           "Tool for building, changing, and versioning infrastructure";
         homepage = "https://www.terraform.io/";
+        changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
         license = licenses.mpl20;
         maintainers = with maintainers; [
-          zimbatm
-          peterhoeg
+          Chili-Man
+          babariviere
           kalbasit
           marsam
-          babariviere
+          peterhoeg
+          timstott
+          zimbatm
         ];
       };
     } // attrs');
@@ -51,6 +61,35 @@ let
       withPlugins = plugins:
         let
           actualPlugins = plugins terraform.plugins;
+
+          # Make providers available in Terraform 0.13 and 0.12 search paths.
+          pluginDir = lib.concatMapStrings (pl: let
+            inherit (pl) version GOOS GOARCH;
+
+            pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
+
+            # This is just the name, without the terraform-provider- prefix
+            plugin_name = lib.removePrefix "terraform-provider-" pname;
+
+            slug = pl.passthru.provider-source-address or "registry.terraform.io/nixpkgs/${plugin_name}";
+
+            shim = writeText "shim" ''
+              #!${runtimeShell}
+              exec ${pl}/bin/${pname}_v${version} "$@"
+            '';
+            in ''
+              TF_0_13_PROVIDER_PATH=$out/plugins/${slug}/${version}/${GOOS}_${GOARCH}/${pname}_v${version}
+              mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
+
+              cp ${shim} "$TF_0_13_PROVIDER_PATH"
+              chmod +x "$TF_0_13_PROVIDER_PATH"
+
+              TF_0_12_PROVIDER_PATH=$out/plugins/${pname}_v${version}
+
+              cp ${shim} "$TF_0_12_PROVIDER_PATH"
+              chmod +x "$TF_0_12_PROVIDER_PATH"
+          ''
+          ) actualPlugins;
 
           # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
           wrapperInputs = lib.unique (lib.flatten
@@ -77,18 +116,13 @@ let
           (orig: { passthru = orig.passthru // passthru; })
         else
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
-            inherit (terraform) name;
+            inherit (terraform) name meta;
             buildInputs = [ makeWrapper ];
 
-            buildCommand = ''
+            buildCommand = pluginDir + ''
               mkdir -p $out/bin/
-              makeWrapper "${terraform.bin}/bin/terraform" "$out/bin/terraform" \
-                --set NIX_TERRAFORM_PLUGIN_DIR "${
-                  buildEnv {
-                    name = "tf-plugin-env";
-                    paths = actualPlugins;
-                  }
-                }/bin" \
+              makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
+                --set NIX_TERRAFORM_PLUGIN_DIR $out/plugins \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
 
@@ -102,18 +136,30 @@ let
     "recurseForDerivations"
   ];
 in rec {
-  terraform_0_11 = pluggable (generic {
-    version = "0.11.14";
-    sha256 = "1bzz5wy13gh8j47mxxp6ij6yh20xmxd9n5lidaln3mf1bil19dmc";
+  terraform_0_12 = pluggable (generic {
+    version = "0.12.30";
+    sha256 = "0mv2nsy2ygb1kgkw98xckihcdqxpzhdmks5p2gi2l7wb7lx51yz2";
+    patches = [
+        ./provider-path.patch
+        (fetchpatch {
+            name = "fix-mac-mojave-crashes.patch";
+            url = "https://github.com/hashicorp/terraform/commit/cd65b28da051174a13ac76e54b7bb95d3051255c.patch";
+            sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+        }) ];
+    passthru = { inherit plugins; };
+  });
+
+  terraform_0_13 = pluggable (generic {
+    version = "0.13.6";
+    sha256 = "04vas8i894ssfhncdvljdvmvj2qzfrcs20zcv71l1wmnnv9ibs6l";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
 
-  terraform_0_11-full = terraform_0_11.full;
-
-  terraform_0_12 = pluggable (generic {
-    version = "0.12.24";
-    sha256 = "1rjihp6qcaizp2nnv4z20kpmjnqcw95pq5rnhq381a3pdzr0cd0z";
+  terraform_0_14 = pluggable (generic {
+    version = "0.14.6";
+    sha256 = "0ba3vd6lswy4pd0qywdbx8cf71j5z3p8p8kdjs9m4qbyrzsbq0fk";
+    vendorSha256 = "0pk5mgj19a8by7wbn5xd6kgr1kxrazhvg851fvs8mq3j0ayb32nb";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
@@ -126,7 +172,7 @@ in rec {
     mainTf = writeText "main.tf" ''
       resource "random_id" "test" {}
     '';
-    terraform = terraform_0_11.withPlugins (p: [ p.random ]);
+    terraform = terraform_0_12.withPlugins (p: [ p.random ]);
     test =
       runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e

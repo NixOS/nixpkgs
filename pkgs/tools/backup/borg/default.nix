@@ -1,12 +1,12 @@
-{ stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
+{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.11";
+  version = "1.1.15";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "190gjzx83b6p64nqj840x382dgz9gfv0gm7wj585lnkrpa90j29n";
+    sha256 = "1g62sdzcw3zx4ccky125ciwnzx6z9kwyvskvp7ijmqxqk3nrxjs9";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
   buildInputs = [
     libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
+  ] ++ lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3.pkgs; [
     cython llfuse
   ];
@@ -53,8 +53,8 @@ python3.pkgs.buildPythonApplication rec {
   # tries to fuse mount and create directories in /var/tmp
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    description = "A deduplicating backup program (attic fork)";
+  meta = with lib; {
+    description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage

@@ -1,25 +1,52 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, pytest-httpbin }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, toml
+, structlog
+, appdirs
+, pytest-asyncio
+, flaky
+, tornado
+, pycurl
+, aiohttp
+, pytest-httpbin
+, docutils
+, installShellFiles
+}:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.5";
+  version = "2.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0973f7c3ea5ad65fb19837e8915882a9f2c2f21f5c2589005478697391fea2fd";
+  # Tests not included in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "lilydjwg";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0b17pikqyxcsid69lwnjl44n8z46ydjmxxdnbzasfdl7r83l7ijr";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio flaky pytest-httpbin ];
+  nativeBuildInputs = [ installShellFiles docutils ];
+  propagatedBuildInputs = [ setuptools toml structlog appdirs tornado pycurl aiohttp ];
+  checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
-  # disable `test_ubuntupkg` because it requires network
-  checkPhase = ''
-    py.test -m "not needs_net" --ignore=tests/test_ubuntupkg.py
+  disabled = pythonOlder "3.7";
+
+  postBuild = ''
+    patchShebangs docs/myrst2man.py
+    make -C docs man
   '';
 
-  disabled = pythonOlder "3.5";
+  postInstall = ''
+    installManPage docs/_build/man/nvchecker.1
+  '';
 
-  meta = with stdenv.lib; {
+  pytestFlagsArray = [ "-m 'not needs_net'" ];
+
+  meta = with lib; {
     homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;

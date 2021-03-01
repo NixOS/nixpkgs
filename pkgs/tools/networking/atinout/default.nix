@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ronn, mount }:
+{ lib, stdenv, fetchgit, ronn, mount }:
 
 stdenv.mkDerivation rec {
   name = "atinout-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     make PREFIX=$out install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://atinout.sourceforge.net";
     description = "Tool for talking to modems";
     platforms = platforms.unix;

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
+{ lib, stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.15.0";
+  name = "valgrind-3.16.1";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "1ccawxrni8brcvwhygy12iprkvz409hbr9xkk1bd03gnm2fplz21";
+    sha256 = "1jik19rcd34ip8a5c9nv5wfj8k8maqb8cyclr4xhznq2gcpkl7y9";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
-  buildInputs = [ gdb perl ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [ perl ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
+  preConfigure = lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
@@ -38,10 +38,6 @@ stdenv.mkDerivation rec {
       sed -i coregrind/link_tool_exe_darwin.in \
           -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
 
-      echo "substitute hardcoded /usr/include/mach with ${xnu}/include/mach"
-      substituteInPlace coregrind/Makefile.in \
-         --replace /usr/include/mach ${xnu}/include/mach
-
       substituteInPlace coregrind/m_debuginfo/readmacho.c \
          --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
@@ -54,7 +50,8 @@ stdenv.mkDerivation rec {
   postPatch = "";
 
   configureFlags =
-    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit";
+    lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
   doCheck = false; # fails
 
@@ -79,15 +76,16 @@ stdenv.mkDerivation rec {
       Valgrind to build new tools.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.unix;
     badPlatforms = [
       "armv5tel-linux" "armv6l-linux" "armv6m-linux"
       "sparc-linux" "sparc64-linux"
       "riscv32-linux" "riscv64-linux"
       "alpha-linux"
     ];
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

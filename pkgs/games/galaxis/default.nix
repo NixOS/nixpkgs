@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, ncurses, xmlto }:
+{ lib, stdenv, fetchurl, ncurses, xmlto }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec{
+with lib;
+stdenv.mkDerivation rec {
 
   pname = "galaxis";
   version = "1.10";

@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, autoreconfHook
-, IOKit ? null , ApplicationServices ? null }:
+{ lib, stdenv, fetchurl, autoreconfHook
+, mailutils, enableMail ? true
+, inetutils
+, IOKit, ApplicationServices }:
 
 let
-  version = "7.1";
+  version = "7.2";
 
-  dbrev = "5033";
-  drivedbBranch = "RELEASE_7_0_DRIVEDB";
+  dbrev = "5164";
+  drivedbBranch = "RELEASE_7_2_DRIVEDB";
   driverdb = fetchurl {
     url    = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "029j118lwiazn56vg6d3i7ayv73wrpv1fypw3ff4nd4hgs2mlcrg";
+    sha256 = "1vj0sv3bgcd0lwk5x450brfyxksa5fn1mjgvmj994ab8spmicc43";
     name   = "smartmontools-drivedb.h";
   };
 
@@ -18,17 +20,21 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${pname}-${version}.tar.gz";
-    sha256 = "0imqb7ka4ia5573w8rnpck571pjjc9698pdjcapy9cfyk4n4swrz";
+    sha256 = "1mlc25sd5rgj5xmzcllci47inmfdw7cp185fday6hc9rwqkqmnaw";
   };
 
   patches = [ ./smartmontools.patch ];
   postPatch = "cp -v ${driverdb} drivedb.h";
 
+  configureFlags = [
+    "--with-scriptpath=${lib.makeBinPath ([ inetutils ] ++ lib.optional enableMail mailutils)}"
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
+  buildInputs = [] ++ lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for monitoring the health of hard drives";
     homepage    = "https://www.smartmontools.org/";
     license     = licenses.gpl2Plus;

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, buildEnv, makeWrapper
+{ stdenv, lib, fetchurl, buildEnv, makeWrapper
 
 , xorg, alsaLib, dbus, glib, gtk3, atk, pango, freetype, fontconfig
 , gdk-pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify
-, ffmpeg, libxcb, cups
+, ffmpeg_3, libxcb, cups
 , sqlite, udev
 , libuuid
 , sdk ? false
@@ -22,7 +22,7 @@ let
       xorg.libXScrnSaver cups
       libcap libnotify
       # libnw-specific (not chromium dependencies)
-      ffmpeg libxcb
+      ffmpeg_3 libxcb
       # chromium runtime deps (dlopen’d)
       sqlite udev
       libuuid
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   installPhase =
-    let ccPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
+    let ccPath = lib.makeLibraryPath [ stdenv.cc.cc ];
     in ''
       mkdir -p $out/share/nwjs
       cp -R * $out/share/nwjs
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
 
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
 
-      ln -s ${systemd.lib}/lib/libudev.so $out/share/nwjs/libudev.so.0
+      ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
       libpath="$out/share/nwjs/lib/"
       for f in "$libpath"/*.so; do
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An app runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];

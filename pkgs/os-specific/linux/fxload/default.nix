@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "fxload-2002_04_11";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     mkdir -p $out/share/usb
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://linux-hotplug.sourceforge.net/?selected=usb";
     description = "Tool to upload firmware to Cypress EZ-USB microcontrollers";
     license = licenses.gpl2;

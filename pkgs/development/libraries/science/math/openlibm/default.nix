@@ -1,20 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
-  version = "0.7.0";
+  version = "0.7.4";
   src = fetchurl {
     url = "https://github.com/JuliaLang/openlibm/archive/v${version}.tar.gz";
-    sha256 = "18q6mrq4agvlpvhix2k13qcyvqqzh30vj7b329dva64035rzg68n";
+    sha256 = "sha256-61hSBNbJlWkeVUXqT/y4h8FZvwXMXuG7+Spvzd4vzK4=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
 
   meta = {
     description = "High quality system independent, portable, open source libm implementation";
-    homepage = "https://www.openlibm.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://openlibm.org/";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.all;
   };
 }

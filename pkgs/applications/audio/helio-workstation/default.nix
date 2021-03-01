@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , alsaLib, freetype, xorg, curl, libGL, libjack2, gnome3
-, pkgconfig, makeWrapper
+, pkg-config, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "2.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "16iwj4mjs1nm8dlk70q97svp3vkcgs7hdj9hfda9h67acn4a8vvk";
+    sha256 = "sha256-meeNqV1jKUwWc7P3p/LicPsbpzpKKFmQ1wP9DuXc9NY=";
   };
 
   buildInputs = [
@@ -20,9 +20,12 @@ stdenv.mkDerivation rec {
     xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome3.zenity
   ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  preBuild = "cd Projects/LinuxMakefile";
+  preBuild = ''
+    cd Projects/LinuxMakefile
+    substituteInPlace Makefile --replace alsa "alsa jack"
+  '';
   buildFlags = [ "CONFIG=Release64" ];
 
   installPhase = ''
@@ -36,10 +39,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/helio" "$out/bin/Helio"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "One music sequencer for all major platforms, both desktop and mobile";
     homepage = "https://helio.fm/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.suhr ];
     platforms = [ "x86_64-linux" ];
   };

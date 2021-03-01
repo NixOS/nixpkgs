@@ -44,7 +44,7 @@ self: super: {
   text = self.text_1_2_4_0;
 
   # Needs Cabal 3.0.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_0_0; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_1_0; };
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
@@ -90,5 +90,8 @@ self: super: {
   # Older GHC versions need these additional dependencies.
   ListLike = addBuildDepend super.ListLike self.semigroups;
   base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
+
+  # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
 
 }

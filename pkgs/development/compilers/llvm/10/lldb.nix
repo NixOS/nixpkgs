@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , cmake
 , zlib
@@ -20,12 +20,12 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "0ddikvc0kbqlqvsypsm9nhfwmyw4prp4rv49f0bgacyh5ssgq7yx";
+  src = fetch pname "051p5b04y6z3g730rmc2n2v71lipbw7k69riww3a6sl74myfiaq7";
 
   patches = [ ./lldb-procfs.patch ];
 
   nativeBuildInputs = [ cmake python3 which swig lit ]
-    ++ stdenv.lib.optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
+    ++ lib.optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [
     ncurses
@@ -34,7 +34,7 @@ stdenv.mkDerivation (rec {
     libxml2
     llvm
   ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
     darwin.apple_sdk.frameworks.Foundation
@@ -43,23 +43,21 @@ stdenv.mkDerivation (rec {
     darwin.apple_sdk.frameworks.Cocoa
   ];
 
-  env.CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+    "-DLLVM_ENABLE_RTTI=OFF"
     "-DClang_DIR=${clang-unwrapped}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
-  ] ++ stdenv.lib.optionals enableManpages [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+  ] ++ lib.optionals enableManpages [
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
-  ]
-;
-
-  enableParallelBuilding = true;
+  ];
 
   postInstall = ''
     # Editor support
@@ -69,13 +67,13 @@ stdenv.mkDerivation (rec {
     ln -s $out/bin/lldb-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A next-generation high-performance debugger";
     homepage = "https://lldb.llvm.org";
     license = licenses.ncsa;
     platforms = platforms.all;
   };
-} // stdenv.lib.optionalAttrs enableManpages {
+} // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";
 
   buildPhase = ''

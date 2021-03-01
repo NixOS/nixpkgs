@@ -1,26 +1,32 @@
-{ stdenvNoCC, fetchFromGitHub, python2 }:
+{ lib, fetchFromGitHub, python3Packages }:
 
-stdenvNoCC.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "q-text-as-data";
-  version = "1.7.4";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = "harelba";
     repo = "q";
     rev = version;
-    sha256 = "0p8rbfwwcqjyrix51v52zp9b03z4xg1fv2raf2ygqp9a4l27dca8";
+    sha256 = "18cwyfjgxxavclyd08bmb943c8bvzp1gnqp4klkq5xlgqwivr4sv";
   };
 
-  buildInputs = [ python2 ];
-  dontBuild = true;
+  propagatedBuildInputs = with python3Packages; [
+    setuptools
+    six
+  ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin/q $out/bin
-    chmod +x $out/bin/q
+  doCheck = false;
+
+  patchPhase = ''
+    # remove broken symlink
+    rm bin/qtextasdata.py
+
+    # not considered good practice pinning in install_requires
+    substituteInPlace setup.py --replace 'six==' 'six>='
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "Run SQL directly on CSV or TSV files";
     longDescription = ''
       q is a command line tool that allows direct execution of SQL-like queries on CSVs/TSVs (and any other tabular text files).

@@ -1,14 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "0.16.0";
-
-  disabled = pythonAtLeast "3.8";  # 0.17 should support Python 3.8
+  version = "0.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zlxdrs6ww2hm41izz67h67z9dkm0rlgw8m04vygaip0q91030yj";
+    sha256 = "786b5c38c530d4846aa68a42604f61b4e69a493390e3ca11b88df0fbfdc3ed04";
   };
 
   checkInputs = [ nose ];
@@ -17,7 +15,7 @@ buildPythonPackage rec {
     NOSE_IGNORE_FILES=type_hinting_test.py nosetests ropetest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
     maintainers = with maintainers; [ goibhniu ];

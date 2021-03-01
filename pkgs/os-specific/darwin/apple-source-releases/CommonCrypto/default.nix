@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation }:
+{ lib, appleDerivation }:
 
 appleDerivation {
   installPhase = ''
@@ -6,7 +6,7 @@ appleDerivation {
     cp include/* $out/include/CommonCrypto
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;

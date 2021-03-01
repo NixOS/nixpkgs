@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, ocamlPackages, gnome2, pkgconfig, makeWrapper, glib
+{ lib, stdenv, fetchurl, ocamlPackages, gnome2, pkg-config, makeWrapper, glib
 , libtool, libpng, yacc, expat, fontconfig, gd, pango, libjpeg, libwebp, xlibsWrapper, libXaw
 }:
 # We need an old version of Graphviz for format compatibility reasons.
 # This version is vulnerable, but monotone-viz will never feed it bad input.
 let graphviz_2_0 = import ./graphviz-2.0.nix {
-      inherit stdenv fetchurl pkgconfig xlibsWrapper libpng libjpeg expat libXaw
+      inherit lib stdenv fetchurl pkg-config xlibsWrapper libpng libjpeg expat libXaw
         yacc libtool fontconfig pango gd libwebp;
     }; in
 let inherit (gnome2) libgnomecanvas; in
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.0.2";
   pname = "monotone-viz";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ocaml lablgtk libgnomecanvas glib graphviz_2_0 makeWrapper camlp4];
   src = fetchurl {
     url = "http://oandrieu.nerim.net/monotone-viz/${pname}-${version}-nolablgtk.tar.gz";
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    description = ''Monotone ancestry visualiser'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Monotone ancestry visualiser";
+    license = lib.licenses.gpl2Plus ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

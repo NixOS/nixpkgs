@@ -153,6 +153,16 @@ in
         '';
       };
 
+      allowFrom = mkOption {
+        type = types.listOf types.str;
+        default = [ "localhost" ];
+        example = [ "all" ];
+        apply = concatMapStringsSep "\n" (x: "Allow ${x}");
+        description = ''
+          From which hosts to allow unconditional access.
+        '';
+      };
+
       bindirCmds = mkOption {
         type = types.lines;
         internal = true;
@@ -403,19 +413,19 @@ in
 
         <Location />
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin>
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin/conf>
           AuthType Basic
           Require user @SYSTEM
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Policy default>

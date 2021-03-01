@@ -1,29 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, tree }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "3.3.1";
-  # rev is the 3.3.1 commit, mainly for kustomize version command output
-  rev = "f2ac5a2d0df13c047fb20cbc12ef1a3b41ce2dad";
+  version = "3.10.0";
+  # rev is the 3.9.3 commit, mainly for kustomize version command output
+  rev = "602ad8aa98e2e17f6c9119e027a09757e63c8bec";
 
-  buildFlagsArray = let t = "sigs.k8s.io/kustomize/v3/provenance"; in ''
-    -ldflags=
-      -s -X ${t}.version=${version}
-         -X ${t}.gitCommit=${rev}
-         -X ${t}.buildDate=unknown
-  '';
+  buildFlagsArray = let t = "sigs.k8s.io/kustomize/api/provenance"; in
+    ''
+      -ldflags=
+        -s -X ${t}.version=${version}
+           -X ${t}.gitCommit=${rev}
+    '';
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0yxxz0b56r18w178y32s619zy8ci6l93c6vlzx11hhxhbw43f6v6";
+    rev = "kustomize/v${version}";
+    sha256 = "1qr0mi83df8d9qd2svyr1h26pg97qi67nnygrkydnp8an28k48hi";
   };
 
   # avoid finding test and development commands
   sourceRoot = "source/kustomize";
 
-  modSha256 = "1bas6al14ck0d2ccb4235426a5hldqsm0nf8vi76chz4nahzb71g";
+  vendorSha256 = "0p2j8mm7jpladpm6v3451g38n5bax0g368dk5h5r5gmkr6srxdy4";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
@@ -34,6 +34,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime ];
+    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man saschagrunert ];
   };
 }

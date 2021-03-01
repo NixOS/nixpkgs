@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "void";
@@ -16,11 +16,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0fnkcjxcsiw9j0ibh4z7zy0m6r5d84q5hvr2darwpckbn9ryrh3k";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal-based personal organizer";
     homepage = "https://github.com/spacejam/void";
     license = licenses.gpl3;
     maintainers = with maintainers; [ spacekookie ];
-    platforms = platforms.all;
   };
 }

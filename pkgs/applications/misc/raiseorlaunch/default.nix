@@ -10,8 +10,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ python3Packages.setuptools_scm ];
-  checkInputs = [ python3Packages.pytest ];
   pythonPath = with python3Packages; [ i3ipc ];
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "raiseorlaunch" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ winpat ];

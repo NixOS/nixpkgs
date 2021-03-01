@@ -4,12 +4,12 @@
 , python
 , fetchFromGitHub
 , fetchpatch
-, qt5
+, qtbase
 , boost
 , assimp
 , gym
 , bullet-roboschool
-, pkgconfig
+, pkg-config
 , which
 }:
 
@@ -32,15 +32,15 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
-    qt5.qtbase # needs the `moc` tool
+    pkg-config
+    qtbase # needs the `moc` tool
     which
   ];
 
   buildInputs = [
     bullet-roboschool
     assimp
-    qt5.qtbase
+    qtbase
     boost
   ];
 

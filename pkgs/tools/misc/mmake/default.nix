@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "mmake";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tj/mmake";
     description = "A small program  which wraps make to provide additional functionality";
     longDescription = ''
@@ -25,7 +25,6 @@ buildGoPackage rec {
       pass-through to standard make.
       '';
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = [ maintainers.gabesoft ];
   };
 }

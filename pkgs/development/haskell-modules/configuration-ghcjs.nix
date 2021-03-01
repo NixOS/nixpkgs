@@ -92,7 +92,7 @@ self: super:
          base template-haskell ghcjs-base split containers text ghc-prim
        ];
        description = "FFI QuasiQuoter for GHCJS";
-       license = pkgs.stdenv.lib.licenses.mit;
+       license = pkgs.lib.licenses.mit;
      }) {};
   # experimental
   ghcjs-vdom = self.callPackage
@@ -112,7 +112,7 @@ self: super:
         base ghc-prim ghcjs-ffiqq ghcjs-base ghcjs-prim containers split
         template-haskell
       ];
-      license = pkgs.stdenv.lib.licenses.mit;
+      license = pkgs.lib.licenses.mit;
       description = "bindings for https://github.com/Matt-Esch/virtual-dom";
     }) {};
 

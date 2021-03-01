@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, meson, ninja, glib, pkgconfig, udev, libgudev, doxygen }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, glib, pkg-config, udev, libgudev, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "1.3";
+  version = "1.7";
 
   outputs = [ "out" "dev" ];
 
@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "12g8jb67wj6sgg9ar2w8kkw1m1431rn9nd0j64qkrd3vy9g4l0hk";
+    sha256 = "sha256-kF4Q3ACiVlUbEjS2YqwHA42QknKMLqX9US31PmXtS/I=";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja doxygen ];
+  nativeBuildInputs = [ pkg-config meson ninja doxygen ];
 
   mesonFlags = [ "-Dtests=disabled" ];
 
   buildInputs = [ glib udev libgudev ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     homepage = "https://linuxwacom.github.io/";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";

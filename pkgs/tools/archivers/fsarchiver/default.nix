@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , zlib, bzip2, lzma, lzo, lz4, zstd, xz
-, libgcrypt, e2fsprogs, utillinux, libgpgerror }:
+, libgcrypt, e2fsprogs, util-linux, libgpgerror }:
 
 let
   version = "0.8.5";
@@ -17,15 +17,15 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook pkg-config
   ];
 
   buildInputs = [
     zlib bzip2 lzma lzo lz4 zstd xz
-    libgcrypt e2fsprogs utillinux libgpgerror
+    libgcrypt e2fsprogs util-linux libgpgerror
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File system archiver for linux";
     longDescription = ''
       FSArchiver is a system tool that allows you to save the contents of a
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
       checksummed in the archive in order to protect the data. If the archive is
       corrupt, you just loose the current file, not the whole archive.
     '';
-    homepage = "http://www.fsarchiver.org/";
+    homepage = "https://www.fsarchiver.org/";
     license = licenses.lgpl2;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
 
 stdenv.mkDerivation rec {
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1x186kp6fr8nwg0jlv5phagxndvw4rjqfga9mkibmn6dx252p61d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RedWax module for Certificate Revocation Lists";
 
     homepage = "https://redwax.eu";

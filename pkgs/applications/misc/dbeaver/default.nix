@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper
 , fontconfig, freetype, glib, gtk3
 , jdk, libX11, libXrender, libXtst, zlib }:
 
@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dbeaver-ce";
-  version = "7.0.2";
+  version = "7.3.2";
 
   desktopItem = makeDesktopItem {
     name = "dbeaver";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     desktopName = "dbeaver";
     comment = "SQL Integrated Development Environment";
     genericName = "SQL Integrated Development Environment";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
 
   buildInputs = [
@@ -30,10 +30,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dbeaver.io/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "0p75kvs9ng5i5x5cpdqxlf18y3k83pqsvrkab0i1azk3x4lfkzmd";
+    sha256 = "sha256-4BVXcR8/E4uIrPQJe9KU9577j4XLTxJWTO8g0vCHWts=";
   };
 
   installPhase = ''
+    # remove bundled jre
+    rm -rf jre
+
     mkdir -p $out/
     cp -r . $out/dbeaver
 
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
     # Create desktop item.
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
     ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dbeaver.io/";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''

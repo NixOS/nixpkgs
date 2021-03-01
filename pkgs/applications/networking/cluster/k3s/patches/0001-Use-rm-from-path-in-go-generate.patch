@@ -1,0 +1,25 @@
+From e79ddef65d08599ae3fe8ff39d202ea2416650b8 Mon Sep 17 00:00:00 2001
+From: Euan Kemp <euank@euank.com>
+Date: Sun, 31 May 2020 17:27:05 -0700
+Subject: [PATCH 1/2] Use 'rm' from path in go generate
+
+/bin/rm is less portable. On some distros, like nixos, it doesn't exist
+at all.
+---
+ main.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/main.go b/main.go
+index 62908bb7bb..0527222887 100644
+--- a/main.go
++++ b/main.go
+@@ -1,5 +1,5 @@
+ //go:generate go run pkg/codegen/cleanup/main.go
+-//go:generate /bin/rm -rf pkg/generated
++//go:generate rm -rf pkg/generated
+ //go:generate go run pkg/codegen/main.go
+ //go:generate go fmt pkg/deploy/zz_generated_bindata.go
+ //go:generate go fmt pkg/static/zz_generated_bindata.go
+-- 
+2.25.4
+

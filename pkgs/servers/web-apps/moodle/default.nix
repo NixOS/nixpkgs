@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, writeText }:
+{ lib, stdenv, fetchurl, writeText, plugins ? [ ] }:
 
 let
-  version = "3.8.2";
-  stableVersion = builtins.substring 0 2 (builtins.replaceStrings ["."] [""] version);
-in
+  version = "3.10.1";
+  stableVersion = lib.concatStrings (lib.take 2 (lib.splitVersion version));
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "moodle";
   inherit version;
 
   src = fetchurl {
-    url = "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
-    sha256 = "134vxsbslk7sfalmgcp744aygaxz2k080d14j8nkivk9zhplds53";
+    url =
+      "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
+    sha256 = "sha256-VHlz8twsp7mSwZPatJkciHaDOP0r0EudeG5i3gjPUT8=";
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('MOODLE_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('MOODLE_CONFIG'));
+    ?>
   '';
 
   installPhase = ''
@@ -27,14 +27,37 @@ stdenv.mkDerivation rec {
     cp -r . $out/share/moodle
     cp ${phpConfig} $out/share/moodle/config.php
 
+    ${lib.concatStringsSep "\n" (map (p:
+      let
+        dir = if p.pluginType == "mod" then
+          "mod"
+        else if p.pluginType == "theme" then
+          "theme"
+        else if p.pluginType == "block" then
+          "blocks"
+        else if p.pluginType == "question" then
+          "question/type"
+        else if p.pluginType == "course" then
+          "course/format"
+        else if p.pluginType == "report" then
+          "admin/report"
+        else
+          throw "unknown moodle plugin type";
+        # we have to copy it, because the plugins have refrences to .. inside
+      in ''
+        mkdir -p $out/share/moodle/${dir}/${p.name}
+        cp -r ${p}/* $out/share/moodle/${dir}/${p.name}/
+      '') plugins)}
+
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    description = "Free and open-source learning management system (LMS) written in PHP";
+  meta = with lib; {
+    description =
+      "Free and open-source learning management system (LMS) written in PHP";
     license = licenses.gpl3Plus;
     homepage = "https://moodle.org/";
-    maintainers = with maintainers; [ aanderse ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
   };
 }

@@ -1,24 +1,60 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, python3, wrapGAppsHook
-, cairo, gdk-pixbuf, colord, glib, gtk3, gusb, packagekit, libwebp
-, libxml2, sane-backends, vala, gnome3, gobject-introspection }:
+{ lib, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, itstool
+, python3
+, wrapGAppsHook
+, cairo
+, gdk-pixbuf
+, colord
+, glib
+, gtk3
+, gusb
+, packagekit
+, libwebp
+, libxml2
+, sane-backends
+, vala
+, gnome3
+, gobject-introspection
+}:
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "3.36.1";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bprm9gfnlrs0k8jvy9pqm1rjq47z5pgahqjjj1i7q2k4a8g09vl";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0grscz96bwj79ka4qvxh8h75avdx6824k8k38ylmaj6xbl6gi0hy";
   };
 
-  buildInputs = [
-    cairo gdk-pixbuf colord glib gnome3.adwaita-icon-theme gusb
-    gtk3 libwebp packagekit sane-backends vala
-  ];
   nativeBuildInputs = [
-    meson ninja gettext itstool pkgconfig python3 wrapGAppsHook libxml2
-    # For setup hook
-    gobject-introspection
+    meson
+    ninja
+    gettext
+    itstool
+    pkg-config
+    python3
+    wrapGAppsHook
+    libxml2
+    gobject-introspection # For setup hook
+  ];
+
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    colord
+    glib
+    gnome3.adwaita-icon-theme
+    gusb
+    gtk3
+    libwebp
+    packagekit
+    sane-backends
+    vala
   ];
 
   postPatch = ''
@@ -33,7 +69,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple scanning utility";
     longDescription = ''
       A really easy way to scan both documents and photos. You can crop out the

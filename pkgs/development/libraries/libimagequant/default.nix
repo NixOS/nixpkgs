@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libimagequant";
-  version = "2.12.6";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = pname;
     rev = version;
-    sha256 = "00w7fny3xf14cfyhbdnmqyh9ddqdh1irvgzxd35a2z65kp7vnvj0";
+    sha256 = "1543h1i59k2hbj2g8shcl8fvhz2silipacynwjgw412r38hkr33j";
   };
 
   preConfigure = ''
     patchShebangs ./configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pngquant.org/lib/";
     description = "Image quantization library";
     longDescription = "Small, portable C library for high-quality conversion of RGBA images to 8-bit indexed-color (palette) images.";

@@ -1,87 +1,124 @@
 { stdenv, lib, pkgs, fetchFromGitHub, nodejs, nodePackages, remarshal
-, ttfautohint-nox, otfcc
+, ttfautohint-nox
+  # Custom font set options.
+  # See https://typeof.net/Iosevka/customizer
+  # Can be a raw TOML string, or a Nix attrset.
 
-# Custom font set options.
-# See https://github.com/be5invis/Iosevka#build-your-own-style
-# Ex:
-# privateBuildPlan = {
-#   family = "Iosevka Expanded";
-#
-#   design = [
-#     "sans"
-#     "expanded"
-#   ];
-# };
+  # Ex:
+  # privateBuildPlan = ''
+  #   [buildPlans.iosevka-custom]
+  #   family = "Iosevka Custom"
+  #   spacing = "normal"
+  #   serifs = "sans"
+  #
+  #   [buildPlans.iosevka-custom.variants.design]
+  #   capital-j = "serifless"
+  #
+  #   [buildPlans.iosevka-custom.variants.italic]
+  #   i = "tailed"
+  # '';
+
+  # Or:
+  # privateBuildPlan = {
+  #   family = "Iosevka Custom";
+  #   spacing = "normal";
+  #   serifs = "sans";
+  #
+  #   variants = {
+  #     design.capital-j = "serifless";
+  #     italic.i = "tailed";
+  #   };
+  # }
 , privateBuildPlan ? null
   # Extra parameters. Can be used for ligature mapping.
-  # It must be a raw toml string.
-  #
+  # It must be a raw TOML string.
+
   # Ex:
-  # [[iosevka.compLig]]
-  # unicode = 57808 # 0xe1d0
-  # featureTag = 'XHS0'
-  # sequence = "+>"
+  # extraParameters = ''
+  #   [[iosevka.compLig]]
+  #   unicode = 57808 # 0xe1d0
+  #   featureTag = 'XHS0'
+  #   sequence = "+>"
+  # '';
 , extraParameters ? null
   # Custom font set name. Required if any custom settings above.
 , set ? null }:
 
 assert (privateBuildPlan != null) -> set != null;
+assert (extraParameters != null) -> set != null;
 
+let
+  # We don't know the attribute name for the Iosevka package as it
+  # changes not when our update script is run (which in turn updates
+  # node-packages.json, but when node-packages/generate.sh is run
+  # (which updates node-packages.nix).
+  #
+  # Doing it this way ensures that the package can always be built,
+  # although possibly an older version than ioseva-bin.
+  nodeIosevka = (
+    lib.findSingle
+      (drv: drv ? packageName && drv.packageName == "iosevka")
+      (throw "no 'iosevka' package found in nodePackages")
+      (throw "multiple 'iosevka' packages found in nodePackages")
+      (lib.attrValues nodePackages)
+  ).override (drv: { dontNpmInstall = true; });
+in
 stdenv.mkDerivation rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
-
-  version = "2.3.3";
-
-  src = fetchFromGitHub {
-    owner = "be5invis";
-    repo = "Iosevka";
-    rev = "v${version}";
-    sha256 = "0k7xij473g5g0lwhb6qpn70v3n2d025dww3nlb7jwbpnp03zliz0";
-  };
+  inherit (nodeIosevka) version src;
 
   nativeBuildInputs = [
     nodejs
-    nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
+    nodeIosevka
     remarshal
-    otfcc
     ttfautohint-nox
   ];
 
-  privateBuildPlanJSON =
-    builtins.toJSON { buildPlans.${pname} = privateBuildPlan; };
+  buildPlan =
+    if builtins.isAttrs privateBuildPlan
+      then builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
+    else privateBuildPlan;
+
   inherit extraParameters;
-  passAsFile = [ "privateBuildPlanJSON" "extraParameters" ];
+  passAsFile = [ "buildPlan" "extraParameters" ];
 
   configurePhase = ''
     runHook preConfigure
-    ${lib.optionalString (privateBuildPlan != null) ''
-      remarshal -i "$privateBuildPlanJSONPath" -o private-build-plans.toml -if json -of toml
+    ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
+      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
+    ''}
+    ${lib.optionalString (builtins.isString privateBuildPlan) ''
+      cp "$buildPlanPath" private-build-plans.toml
     ''}
     ${lib.optionalString (extraParameters != null) ''
-      echo -e "\n" >> parameters.toml
-      cat "$extraParametersPath" >> parameters.toml
+      echo -e "\n" >> params/parameters.toml
+      cat "$extraParametersPath" >> params/parameters.toml
     ''}
-    ln -s ${
-      nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
-    }/lib/node_modules/iosevka-build-deps/node_modules .
+    ln -s ${nodeIosevka}/lib/node_modules/iosevka/node_modules .
     runHook postConfigure
   '';
 
   buildPhase = ''
     runHook preBuild
-    npm run build --no-update-notifier -- ttf::$pname >/dev/null
+    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES ttf::$pname >/dev/null
     runHook postBuild
   '';
 
   installPhase = ''
-    fontdir="$out/share/fonts/$pname"
+    runHook preInstall
+    fontdir="$out/share/fonts/truetype"
     install -d "$fontdir"
     install "dist/$pname/ttf"/* "$fontdir"
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = ./update-default.sh;
+  };
+
+  meta = with lib; {
     homepage = "https://be5invis.github.io/Iosevka";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = ''
@@ -96,6 +133,7 @@ stdenv.mkDerivation rec {
       ttuegel
       babariviere
       rileyinman
+      AluisioASG
     ];
   };
 }

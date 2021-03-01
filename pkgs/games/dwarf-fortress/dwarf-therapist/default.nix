@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase
+{ lib, stdenv, fetchFromGitHub, qtbase
 , qtdeclarative, cmake, texlive, ninja }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     cp -r DwarfTherapist.app $out/Applications
   '' else null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to manage dwarves in a running game of Dwarf Fortress";
-    maintainers = with maintainers; [ the-kenny abbradar bendlas numinit jonringer ];
+    maintainers = with maintainers; [ abbradar bendlas numinit jonringer ];
     license = licenses.mit;
     platforms = platforms.unix;
     homepage = "https://github.com/Dwarf-Therapist/Dwarf-Therapist";

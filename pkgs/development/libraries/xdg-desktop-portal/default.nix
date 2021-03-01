@@ -1,12 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nixosTests
 , substituteAll
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , libxml2
 , glib
-, pipewire_0_2
+, pipewire
 , fontconfig
 , flatpak
 , gsettings-desktop-schemas
@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.6.0";
+  version = "1.8.0";
 
   outputs = [ "out" "installedTests" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "0fbsfpilwbv7j6cimsmmz6g0r96bw0ziwyk9z4zg2rd1mfkmmp9a";
+    sha256 = "1f1f79hy259lm017zaq4rpvys8zkmjspqily4a3lbnm77zk3y079";
   };
 
   patches = [
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     libxml2
     wrapGAppsHook
   ];
 
   buildInputs = [
     glib
-    pipewire_0_2
+    pipewire
     fontconfig
     flatpak
     acl
@@ -60,10 +60,6 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     json-glib
   ];
-
-  # Seems to get stuck after "PASS: test-portals 39 /portal/inhibit/monitor"
-  # TODO: investigate!
-  doCheck = false;
 
   configureFlags = [
     "--enable-installed-tests"
@@ -80,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];

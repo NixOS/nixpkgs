@@ -1,71 +1,27 @@
-import ../make-test-python.nix ({ pkgs, lib, ...} :
-  let
-    wg-snakeoil-keys = import ./snakeoil-keys.nix;
-    peer = (import ./make-peer.nix) { inherit lib; };
-  in
-  {
-    name = "wireguard";
-    meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ ma27 ];
-    };
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+, kernelVersionsToTest ? [ "5.4" "latest" ]
+}:
 
-    nodes = {
-      peer0 = peer {
-        ip4 = "192.168.0.1";
-        ip6 = "fd00::1";
-        extraConfig = {
-          networking.firewall.allowedUDPPorts = [ 23542 ];
-          networking.wireguard.interfaces.wg0 = {
-            ips = [ "10.23.42.1/32" "fc00::1/128" ];
-            listenPort = 23542;
+with pkgs.lib;
 
-            inherit (wg-snakeoil-keys.peer0) privateKey;
+let
+  tests = let callTest = p: flip (import p) { inherit system pkgs; }; in {
+    basic = callTest ./basic.nix;
+    namespaces = callTest ./namespaces.nix;
+    wg-quick = callTest ./wg-quick.nix;
+    generated = callTest ./generated.nix;
+  };
+in
 
-            peers = lib.singleton {
-              allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
-
-              inherit (wg-snakeoil-keys.peer1) publicKey;
-            };
-          };
-        };
-      };
-
-      peer1 = peer {
-        ip4 = "192.168.0.2";
-        ip6 = "fd00::2";
-        extraConfig = {
-          networking.wireguard.interfaces.wg0 = {
-            ips = [ "10.23.42.2/32" "fc00::2/128" ];
-            listenPort = 23542;
-            allowedIPsAsRoutes = false;
-
-            inherit (wg-snakeoil-keys.peer1) privateKey;
-
-            peers = lib.singleton {
-              allowedIPs = [ "0.0.0.0/0" "::/0" ];
-              endpoint = "192.168.0.1:23542";
-              persistentKeepalive = 25;
-
-              inherit (wg-snakeoil-keys.peer0) publicKey;
-            };
-
-            postSetup = let inherit (pkgs) iproute; in ''
-              ${iproute}/bin/ip route replace 10.23.42.1/32 dev wg0
-              ${iproute}/bin/ip route replace fc00::1/128 dev wg0
-            '';
-          };
-        };
-      };
-    };
-
-    testScript = ''
-      start_all()
-
-      peer0.wait_for_unit("wireguard-wg0.service")
-      peer1.wait_for_unit("wireguard-wg0.service")
-
-      peer1.succeed("ping -c5 fc00::1")
-      peer1.succeed("ping -c5 10.23.42.1")
-    '';
-  }
+listToAttrs (
+  flip concatMap kernelVersionsToTest (version:
+    let
+      v' = replaceStrings [ "." ] [ "_" ] version;
+    in
+    flip mapAttrsToList tests (name: test:
+      nameValuePair "wireguard-${name}-linux-${v'}" (test { kernelPackages = pkgs."linuxPackages_${v'}"; })
+    )
+  )
 )

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , getopt
 }:
 
 stdenv.mkDerivation rec {
   pname = "bmake";
-  version = "20200318";
+  version = "20200902";
 
   src = fetchurl {
     url    = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
-    sha256 = "10rcgv0hd5axm2b41a5xaig6iqbpyqfp2q7llr7zc3mnbacwaz35";
+    sha256 = "1v1v81llsiy8qbpy38nml1x08dhrihwh040pqgwbwb9zy1108b08";
   };
 
   nativeBuildInputs = [ getopt ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./fix-unexport-env-test.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Portable version of NetBSD 'make'";
     homepage    = "http://www.crufty.net/help/sjg/bmake.html";
     license     = licenses.bsd3;

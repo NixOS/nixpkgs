@@ -1,27 +1,23 @@
-{ stdenv, rustPlatform , fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
 rustPlatform.buildRustPackage rec {
   pname = "whitebox_tools";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "jblindsay";
     repo = "whitebox-tools";
-    rev = "v${version}";
-    sha256 = "0zi32d0wrbl2763dcllv2g0liwacsfiza5lkx52620prjjbhby8i";
+    rev = version;
+    sha256 = "0s5byn8qyi1bm59j9vhwqaygw5cxipc7wbd3flh7n24nx0s8pr8c";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "13k21akyfqgamywj39bw73sldby1s02vyvxfglxbaqq1x96xcy4i";
+  cargoSha256 = "09rz8f1xyc64qjbj6pgw8jxr2a7chghmdc6sfkbv7hdvx6vg4wvk";
 
-  # failures: structures::polyline::test::test_polyline_split
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced geospatial data analysis platform";
-    homepage = "http://www.uoguelph.ca/~hydrogeo/WhiteboxTools/index.html";
+    homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
     license = licenses.mit;
     maintainers = [ maintainers.mpickering ];
-    platforms = platforms.all;
   };
 }

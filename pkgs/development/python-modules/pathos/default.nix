@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , dill
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # Require network
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://github.com/uqfoundation/pathos/";
     license = licenses.bsd3;

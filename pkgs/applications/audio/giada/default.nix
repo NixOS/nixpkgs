@@ -1,23 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook,
-  fltk, jansson, rtmidi, libsamplerate, libsndfile,
-  jack2, alsaLib, libpulseaudio,
-  libXpm, libXinerama, libXcursor }:
+{ lib, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, fltk
+, jansson
+, rtmidi
+, libsamplerate
+, libsndfile
+, jack2
+, alsaLib
+, libpulseaudio
+, libXpm
+, libXinerama
+, libXcursor
+, catch2
+, nlohmann_json
+}:
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.16.1";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b3lhjs6myml5r5saky15523sbc3qr43r9rh047vhsiafmqdvfq1";
+    sha256 = "0qyx0bvivlvly0vj5nnnbiks22xh13sqlw4mfgplq2lbbpgisigp";
   };
 
-  configureFlags = [ "--target=linux" ];
+  configureFlags = [
+    "--target=linux"
+    "--enable-system-catch"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
   ];
+
   buildInputs = [
     fltk
     libsndfile
@@ -30,7 +48,14 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libXinerama
     libXcursor
+    catch2
+    nlohmann_json
   ];
+
+  postPatch = ''
+    sed -i 's:"deps/json/single_include/nlohmann/json\.hpp":<nlohmann/json.hpp>:' \
+        src/core/{conf,init,midiMapConf,patch}.cpp
+  '';
 
   meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";

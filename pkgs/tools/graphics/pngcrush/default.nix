@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpng }:
+{ lib, stdenv, fetchurl, libpng }:
 
 stdenv.mkDerivation rec {
   name = "pngcrush-1.8.13";
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://pmt.sourceforge.net/pngcrush";
     description = "A PNG optimizer";
-    license = stdenv.lib.licenses.free;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    license = lib.licenses.free;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

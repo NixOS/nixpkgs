@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "mstpd";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--libexecdir=$(out)/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiple Spanning Tree Protocol daemon";
     homepage = "https://github.com/mstpd/mstpd";
     license = licenses.gpl2;

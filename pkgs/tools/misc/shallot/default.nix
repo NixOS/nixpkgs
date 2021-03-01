@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , openssl
 }:
 
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Shallot allows you to create customized .onion addresses for your hidden service";
+    description = "Allows you to create customized .onion addresses for your hidden service";
 
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/katmagic/Shallot";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

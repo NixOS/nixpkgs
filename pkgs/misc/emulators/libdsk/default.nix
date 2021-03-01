@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libdsk";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0s2k9vkrf95pf4ydc6vazb29ysrnhdpcfjnf17lpk4nmlv1j3vyv";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for accessing discs and disc image files";
     homepage = "http://www.seasip.info/Unix/LibDsk/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

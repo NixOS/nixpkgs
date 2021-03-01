@@ -1,56 +1,58 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, uvicorn
-, starlette
 , pydantic
-, isPy3k
-, pytest
-, pytestcov
-, pyjwt
-, passlib
+, starlette
+, pytestCheckHook
+, pytest-asyncio
 , aiosqlite
-, peewee
+, databases
 , flask
+, httpx
+, passlib
+, peewee
+, python-jose
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.54.0";
+  version = "0.63.0";
   format = "flit";
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "17bicrpr801z71wrn9iimvh7qk6iwyxvr89ialf0s2rxxa2s0yb5";
+    sha256 = "0l3imrcs42pqf9d6k8c1q15k5sqcnapl5zk71xl52mrxhz49lgpi";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette ==0.13.6" "starlette"
+  '';
+
   propagatedBuildInputs = [
-    uvicorn
     starlette
     pydantic
   ];
 
   checkInputs = [
-    pytest
-    pytestcov
-    pyjwt
-    passlib
     aiosqlite
-    peewee
+    databases
     flask
+    httpx
+    passlib
+    peewee
+    python-jose
+    pytestCheckHook
+    pytest-asyncio
+    sqlalchemy
   ];
 
-  # test_default_response_class.py: requires orjson, which requires rust toolchain
-  # test_custom_response/test_tutorial001b.py: requires orjson
-  # tests/test_tutorial/test_sql_databases/test_testing_databases.py: just broken, don't know why
-  checkPhase = ''
-    pytest --ignore=tests/test_default_response_class.py \
-           --ignore=tests/test_tutorial/test_custom_response/test_tutorial001b.py \
-           --ignore=tests/test_tutorial/test_sql_databases/test_testing_databases.py
-  '';
+  # disabled tests require orjson which requires rust nightly
+  pytestFlagsArray = [ "--ignore=tests/test_default_response_class.py" ];
+  disabledTests = [ "test_get_custom_response" ];
 
   meta = with lib; {
     homepage = "https://github.com/tiangolo/fastapi";

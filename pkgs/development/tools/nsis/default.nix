@@ -1,18 +1,23 @@
-{ stdenv, fetchurl, fetchzip, scons, zlib }:
+{ lib, stdenv
+, fetchurl
+, fetchzip
+, sconsPackages
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "nsis";
-  version = "3.05";
+  version = "3.06.1";
 
   src =
     fetchurl {
       url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}-src.tar.bz2";
-      sha256 = "1sbwx5vzpddharkb7nj4q5z3i5fbg4lan63ng738cw4hmc4v7qdn";
+      sha256 = "1w1z2m982l6j8lw8hy91c3979wbnqglcf4148f9v79vl32znhpcv";
     };
   srcWinDistributable =
     fetchzip {
       url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
-      sha256 = "0i3pzdilyy5g0r2c92pd2jl92ji9f75vv98mndzq8vw03a34yh3q";
+      sha256 = "04qm9jqbcybpwcrjlksggffdyafzwxxcaz9xhjw8w5rb95x7lw5q";
     };
 
   postUnpack = ''
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $out/share/nsis
   '';
 
-  nativeBuildInputs = [ scons.py2 ];
+  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
   buildInputs = [ zlib ];
 
   sconsFlags = [
@@ -42,8 +47,8 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
 
-  meta = with stdenv.lib; {
-    description = "NSIS is a free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
+  meta = with lib; {
+    description = "A free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
     license = licenses.zlib;
     platforms = platforms.linux;

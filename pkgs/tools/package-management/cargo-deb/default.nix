@@ -2,28 +2,36 @@
 , lib
 , fetchFromGitHub
 , rustPlatform
-, Security }:
+, rust
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "1.23.2";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "mmstick";
     repo = pname;
-    rev = "367910e0020de93f45c175c92a37a53ee401978f";
-    sha256 = "1s0xv818rlafdzpb70c1ldv5iq3hh2jxj7g3l6p7v20q1wx0nnvv";
+    rev = "b49351f6770aa7aeb053dd1d4a02d6b086caad2a";
+    sha256 = "1hs96yv0awgi7ggpxp7k3n21jpv642sm0529b21hs9ib6kp4vs8s";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "0ffzq2gm0f56vyfkmdzxfs5z1xsdj2kcsyc1fdrk4k1cylqn2f47";
+  cargoSha256 = "1vqnnqn6rzkdi239bh3lk7gaxr7w6v3c4ws4ya1ah04g6v9hkzlw";
+
+  checkType = "debug";
+
+  preCheck = ''
+    substituteInPlace tests/command.rs \
+      --replace 'target/debug' "target/${rust.toRustTarget stdenv.buildPlatform}/debug"
+  '';
 
   meta = with lib; {
     description = "Generate Debian packages from information in Cargo.toml";
     homepage = "https://github.com/mmstick/cargo-deb";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

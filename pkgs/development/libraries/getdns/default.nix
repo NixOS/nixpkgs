@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unbound, libidn2, openssl, doxygen, cmake }:
+{ lib, stdenv, fetchurl, unbound, libidn2, openssl, doxygen, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "getdns";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unbound libidn2 openssl doxygen ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern asynchronous DNS API";
     longDescription = ''
       getdns is an implementation of a modern asynchronous DNS API; the

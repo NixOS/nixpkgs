@@ -1,20 +1,20 @@
 { lib, fetchzip }:
 
 let
-  version = "1.047";
+  version = "1.071";
 in
 fetchzip {
   name = "recursive-${version}";
 
-  url = "https://github.com/arrowtype/recursive/releases/download/${version}/Recursive-Beta_${version}.zip";
+  url = "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.ttf   -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.woff2 -d $out/share/fonts/woff2
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
 
-  sha256 = "0v50m6hiv19f7i4idi987j1six6493y6hj3r9djifg075v9adxx9";
+  sha256 = "0db410vcvgawb89f11l2v7w3b7l70wzlwwv8df3vnangl3mdv13z";
 
   meta = with lib; {
     homepage = "https://recursive.design/";

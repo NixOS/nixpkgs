@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
+{ lib, stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "vuze";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp $out/share/java/Vuze_${version}-00.jar:${swt}/jars/swt.jar org.gudy.azureus2.ui.swt.Main"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Torrent client";
     homepage = "http://www.vuze.com";
     license = licenses.unfree;

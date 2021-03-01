@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, wrapGAppsHook,
+{ lib, fetchurl, perlPackages, wrapGAppsHook,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
@@ -6,15 +6,15 @@
   # test dependencies
   xvfb_run, liberation_ttf, file, tesseract }:
 
-with stdenv.lib;
+with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.6.5";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0x8931i5zs4zl3iqjhlp7h8y6ssklxiqsddz5kh84nl3p0izbg0y";
+    sha256 = "1ls6n1a8vjgwkb40drpc3rapjligaf9fp218539fnwvhv26div69";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -29,6 +29,7 @@ perlPackages.buildPerlPackage rec {
       Glib
       GlibObjectIntrospection
       GooCanvas2
+      LocaleCodes
       LocaleGettext
       PDFAPI2
       ImageSane
@@ -64,6 +65,7 @@ perlPackages.buildPerlPackage rec {
 
     # Add runtime dependencies
     wrapProgram "$out/bin/gscan2pdf" \
+      --prefix PATH : "${sane-backends}/bin" \
       --prefix PATH : "${imagemagick}/bin" \
       --prefix PATH : "${libtiff}/bin" \
       --prefix PATH : "${djvulibre}/bin" \

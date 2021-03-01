@@ -16,4 +16,4 @@ callPackage ./dvtm.nix rec {
     })
   ];
 }
-    
+

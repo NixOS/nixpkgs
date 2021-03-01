@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitiles, fetchFromGitHub, fetchurl, trousers, leveldb, unzip
-, scons, pkgconfig, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
+{ lib, stdenv, fetchFromGitiles, fetchFromGitHub, fetchurl, trousers, leveldb, unzip
+, scons, pkg-config, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
 }:
 
 let
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile --replace @@NIXOS_LEVELDB@@ ${leveldb}
     '';
 
-  nativeBuildInputs = [ unzip scons pkgconfig ];
+  nativeBuildInputs = [ unzip scons pkg-config ];
 
   buildInputs = [ trousers glib dbus_cplusplus dbus protobuf openssl snappy leveldb pam ];
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     cp ${name}/man/* $out/usr/share/man/man8/.
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PKCS #11 implementation based on trusted platform module (TPM)";
     homepage = "https://www.chromium.org/developers/design-documents/chaps-technical-design";
     maintainers = [ maintainers.tstrobel ];

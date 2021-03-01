@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgs }:
+{ lib, stdenv, fetchurl, fetchzip, pkgs }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need
@@ -152,7 +152,7 @@ let
     name = "${name}-${version}";
     enableParallelBuilding = true;
     meta = {
-      platforms = stdenv.lib.platforms.darwin;
+      platforms = lib.platforms.darwin;
     };
   } // (if attrs ? srcs then {} else {
     src  = fetchApple version sha256 name;
@@ -160,7 +160,7 @@ let
 
   applePackage = namePath: version: sha256:
     let
-      name = builtins.elemAt (stdenv.lib.splitString "/" namePath) 0;
+      name = builtins.elemAt (lib.splitString "/" namePath) 0;
       appleDerivation = appleDerivation_ name version sha256;
       callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation name version; });
     in callPackage (./. + "/${namePath}");
@@ -187,7 +187,7 @@ let
     # There should be an IOVideo here, but they haven't released it :(
   };
 
-  IOKitSrcs = stdenv.lib.mapAttrs (name: value: if stdenv.lib.isFunction value then value name else value) IOKitSpecs;
+  IOKitSrcs = lib.mapAttrs (name: value: if lib.isFunction value then value name else value) IOKitSpecs;
 
   # Only used for bootstrapping. It’s convenient because it was the last version to come with a real makefile.
   adv_cmds-boot = applePackage "adv_cmds/boot.nix" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};

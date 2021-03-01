@@ -11,7 +11,7 @@ let
       file = {
         group = "nginx";
         owner = "nginx";
-        path = "/tmp/${host}-ca.pem";
+        path = "/var/ssl/${host}-ca.pem";
       };
       label = "www_ca";
       profile = "three-month";
@@ -20,13 +20,13 @@ let
     certificate = {
       group = "nginx";
       owner = "nginx";
-      path = "/tmp/${host}-cert.pem";
+      path = "/var/ssl/${host}-cert.pem";
     };
     private_key = {
       group = "nginx";
       mode = "0600";
       owner = "nginx";
-      path = "/tmp/${host}-key.pem";
+      path = "/var/ssl/${host}-key.pem";
     };
     request = {
       CN = host;
@@ -56,6 +56,8 @@ let
 
         services.cfssl.enable = true;
         systemd.services.cfssl.after = [ "cfssl-init.service" "networking.target" ];
+
+        systemd.tmpfiles.rules = [ "d /var/ssl 777 root root" ];
 
         systemd.services.cfssl-init = {
           description = "Initialize the cfssl CA";
@@ -87,8 +89,8 @@ let
           enable = true;
           virtualHosts = lib.mkMerge (map (host: {
             ${host} = {
-              sslCertificate = "/tmp/${host}-cert.pem";
-              sslCertificateKey = "/tmp/${host}-key.pem";
+              sslCertificate = "/var/ssl/${host}-cert.pem";
+              sslCertificateKey = "/var/ssl/${host}-key.pem";
               extraConfig = ''
                 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
               '';
@@ -124,16 +126,18 @@ in
     };
     testScript = ''
       machine.wait_for_unit("cfssl.service")
-      machine.wait_until_succeeds("ls /tmp/decl.example.org-ca.pem")
-      machine.wait_until_succeeds("ls /tmp/decl.example.org-key.pem")
-      machine.wait_until_succeeds("ls /tmp/decl.example.org-cert.pem")
-      machine.wait_until_succeeds("ls /tmp/imp.example.org-ca.pem")
-      machine.wait_until_succeeds("ls /tmp/imp.example.org-key.pem")
-      machine.wait_until_succeeds("ls /tmp/imp.example.org-cert.pem")
+      machine.wait_until_succeeds("ls /var/ssl/decl.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /var/ssl/decl.example.org-key.pem")
+      machine.wait_until_succeeds("ls /var/ssl/decl.example.org-cert.pem")
+      machine.wait_until_succeeds("ls /var/ssl/imp.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /var/ssl/imp.example.org-key.pem")
+      machine.wait_until_succeeds("ls /var/ssl/imp.example.org-cert.pem")
       machine.wait_for_unit("nginx.service")
       assert 1 < int(machine.succeed('journalctl -u nginx | grep "Starting Nginx" | wc -l'))
-      machine.succeed("curl --cacert /tmp/imp.example.org-ca.pem https://imp.example.org")
-      machine.succeed("curl --cacert /tmp/decl.example.org-ca.pem https://decl.example.org")
+      machine.succeed("curl --cacert /var/ssl/imp.example.org-ca.pem https://imp.example.org")
+      machine.succeed(
+          "curl --cacert /var/ssl/decl.example.org-ca.pem https://decl.example.org"
+      )
     '';
   };
 

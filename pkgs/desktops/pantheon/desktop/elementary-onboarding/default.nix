@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "1.2.0";
+  version = "1.2.1";
 
   repoName = "onboarding";
 
@@ -28,11 +29,22 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0yxafz7jlzj8gsbp6m72q4zbcvm1ch2y4fibj9cymjvz2i0izhba";
+    sha256 = "sha256-tLTwXA2miHqYqCUbIiBjb2nQB+uN/WzuE4F9m3fVCbM=";
   };
 
+  patches = [
+    # Port to Libhandy-1
+    (fetchpatch {
+      url = "https://github.com/elementary/onboarding/commit/8af6b7d9216f8cbf725f708b36ef4d4f6c400c78.patch";
+      sha256 = "cnSCSSFEQlNd9Ncw5VCJ32stZ8D4vhl3f+derAk/Cas=";
+      excludes = [
+        ".github/workflows/main.yml"
+      ];
+    })
+  ];
+
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -41,7 +53,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -62,7 +74,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Onboarding app for new users designed for elementary OS";
     homepage = "https://github.com/elementary/onboarding";
     license = licenses.gpl3Plus;

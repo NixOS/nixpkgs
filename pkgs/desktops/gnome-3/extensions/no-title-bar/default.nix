@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, glib, gettext, xorg }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gettext, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-no-title-bar";
@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
-  meta = with stdenv.lib; {
+  uuid = "no-title-bar@franglais125.gmail.com";
+
+  meta = with lib; {
     description = "Integrates maximized windows with the top panel";
     homepage = "https://github.com/franglais125/no-title-bar";
     license = licenses.gpl2;

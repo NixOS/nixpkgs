@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, kerberos }:
+{ lib, stdenv, fetchurl, pam, kerberos }:
 
 stdenv.mkDerivation rec {
   name = "pam-krb5-4.9";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam kerberos ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.eyrie.org/~eagle/software/pam-krb5/";
     description = "PAM module allowing PAM-aware applications to authenticate users by performing an AS exchange with a Kerberos KDC";
     longDescription = ''

@@ -1,0 +1,13 @@
+diff --git a/src/nautilus-tag-manager.c b/src/nautilus-tag-manager.c
+index 28b96c996..0b1fad9ab 100644
+--- a/src/nautilus-tag-manager.c
++++ b/src/nautilus-tag-manager.c
+@@ -962,7 +962,7 @@ child_watch_cb (GPid     pid,
+ static void
+ export_tracker2_data (NautilusTagManager *self)
+ {
+-    gchar *argv[] = {"tracker3", "export", "--2to3", "files-starred", "--keyfile", NULL};
++    gchar *argv[] = {"@tracker@/bin/tracker3", "export", "--2to3", "files-starred", "--keyfile", NULL};
+     gint stdout_fd;
+     GPid child_pid;
+     g_autoptr (GError) error = NULL;

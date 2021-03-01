@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "stunnel";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Universal tls/ssl wrapper";
     homepage    = "https://www.stunnel.org/";
-    license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

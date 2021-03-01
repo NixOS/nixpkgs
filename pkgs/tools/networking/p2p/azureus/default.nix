@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jdk, swt}:
+{lib, stdenv, fetchurl, jdk, swt}:
 
 stdenv.mkDerivation {
   name = "azureus-2.3.0.6";
@@ -31,6 +31,6 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

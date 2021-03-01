@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkg-config, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
-  version = "0.85.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "20.12.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0jyr036scdly13hx5dxmsqp2p3jifc29h2by51msw0ih6bmpbj1b";
+    sha256 = "0dbv1y9i5ahg6namz6gw2d0njnmrigr4a80dbxvnqad4q232banh";
   };
 
   outputs = [ "out" "dev" ];
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     ++ optional utils nss
     ++ optional introspectionSupport gobject-introspection;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   # Workaround #54606
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
 }

@@ -1,13 +1,14 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ buildPythonPackage, fetchPypi, lib, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "1.16.0";
+  version = "2.0.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
+    sha256 = "044af09374469c3a39eeea1a146e8cac27daec951f1f1f157b1962fc7cb9d1b7";
   };
 
   # needs networking for some tests
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   meta = {
     description = "A DNS toolkit for Python 3.x";
     homepage = "http://www.dnspython.org";
-    # BSD-like, check http://www.dnspython.org/LICENSE for details
+    # BSD-like, check https://www.dnspython.org/LICENSE for details
     license = lib.licenses.free;
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, gstreamer, gst-plugins-base, GConf, setfile
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
+, setfile
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
@@ -9,7 +9,7 @@
 
 assert withMesa -> libGLU != null && libGL != null;
 
-with stdenv.lib;
+with lib;
 
 let
   version = "2.9.4";
@@ -32,17 +32,16 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer
-      gst-plugins-base GConf ]
+    [ gtk2 libXinerama libSM libXxf86vm xorgproto ]
     ++ optional withMesa libGLU
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
   configureFlags =
-    [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"
+    [ "--enable-gtk2" "--disable-precomp-headers"
       (if compat24 then "--enable-compat24" else "--disable-compat24")
       (if compat26 then "--enable-compat26" else "--disable-compat26") ]
     ++ optional unicode "--enable-unicode"

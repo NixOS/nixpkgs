@@ -1,5 +1,5 @@
 { lib, buildGoPackage, fetchFromGitHub, fetchpatch
-, pkgconfig, zlib, geoip }:
+, pkg-config, zlib, geoip }:
 
 buildGoPackage rec {
   pname = "mirrorbits";
@@ -30,9 +30,10 @@ buildGoPackage rec {
   '';
 
   goPackagePath = "github.com/etix/mirrorbits";
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib geoip ];
 
   meta = {

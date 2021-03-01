@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation {
   name = "kak-auto-pairs";
-  version = "2019-07-27";
+  version = "2020-07-14";
   src = fetchFromGitHub {
     owner = "alexherbo2";
     repo = "auto-pairs.kak";
-    rev = "886449b1a04d43e5deb2f0ef4b1aead6084c7a5f";
-    sha256 = "0knfhdvslzw1f1r1k16733yhkczrg3yijjz6n2qwira84iv3239j";
+    rev = "5b4b3b723c34c8b7f40cee60868204974349bf9f";
+    sha256 = "1wgrv03f1lkzflbbaz8n23glij5rvfxf8pcqysd668mbx1hcrk9i";
   };
 
   installPhase = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     cp -r rc $out/share/kak/autoload/plugins/auto-pairs
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Kakoune extension to enable automatic closing of pairs";
     homepage = "https://github.com/alexherbo2/auto-pairs.kak";
     license = licenses.unlicense;

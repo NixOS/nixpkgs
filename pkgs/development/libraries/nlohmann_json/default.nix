@@ -1,20 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "nlohmann_json";
-  version = "3.7.3";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "04rry1xzis71z5gj1ylcj8b4li5q18zxhcwaviwvi3hx0frzxl9w";
+    sha256 = "sha256-THordDPdH2qwk6lFTgeFmkl7iDuA/7YH71PTUe6vJCs=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DBuildTests=${if doCheck then "ON" else "OFF"}"
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/lib64";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Header only C++ library for the JSON file format";
     homepage = "https://github.com/nlohmann/json";
     license = licenses.mit;

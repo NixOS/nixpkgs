@@ -40,6 +40,7 @@ in
     services.ntp = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
@@ -78,6 +79,7 @@ in
 
       servers = mkOption {
         default = config.networking.timeServers;
+        type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.
         '';

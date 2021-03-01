@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
-, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
 , nvidia_cg_toolkit, zlib, openssl, portaudio
 }:
 let
-  fullPath = stdenv.lib.makeLibraryPath [
+  fullPath = lib.makeLibraryPath [
     stdenv.cc.cc
     gtk3
     gdk-pixbuf
     cairo
     libjpeg_original
     glib
-    gnome2.pango
+    pango
     libGLU
     nvidia_cg_toolkit
     zlib
@@ -47,7 +47,7 @@ let
       # This adds it to lightworks' search path while keeping the default
       # using the FONTCONFIG_FILE env variable
       echo "<?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
           <dir>/usr/share/fonts/truetype</dir>
           <include>/etc/fonts/fonts.conf</include>
@@ -80,8 +80,8 @@ in buildFHSUserEnv {
   meta = {
     description = "Professional Non-Linear Video Editor";
     homepage = "https://www.lwks.com/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.antonxy ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.antonxy ];
     platforms = [ "x86_64-linux" ];
   };
 }

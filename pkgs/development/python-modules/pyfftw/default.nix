@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
   #'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW/";
     license = with licenses; [ bsd2 bsd3 ];

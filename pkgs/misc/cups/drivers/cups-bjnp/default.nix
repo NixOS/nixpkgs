@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cups}:
+{lib, stdenv, fetchurl, cups}:
 
 stdenv.mkDerivation rec {
   name = "cups-bjnp-1.2.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"'';
 
   buildInputs = [cups];
-  env.NIX_CFLAGS_COMPILE = "-include stdio.h -Wno-error=stringop-truncation";
+  env.NIX_CFLAGS_COMPILE = "-include stdio.h -Wno-error=stringop-truncation -Wno-error=deprecated-declarations";
 
   meta = {
     description = "CUPS back-end for Canon printers";
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
       Canon printer. The design is based on reverse engineering of the protocol.
     '';
     homepage = "http://cups-bjnp.sourceforge.net";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage, makeWrapper }:
 
 let
   inherit (import ./src.nix) version sha256;
@@ -16,7 +16,7 @@ let
     goPackagePath = "github.com/${owner}/${repo}";
     inherit src;
     postInstall = ''
-      mkdir $out
+      mkdir -p $out
       cp go/src/github.com/sensu/uchiwa/public/index.html $out/
     '';
   };
@@ -37,13 +37,13 @@ in stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -p $out/bin $out/public
-    makeWrapper ${backend.bin}/bin/uchiwa $out/bin/uchiwa \
+    makeWrapper ${backend}/bin/uchiwa $out/bin/uchiwa \
       --add-flags "-p $out/public"
     ln -s ${backend.out}/index.html $out/public/index.html
     ln -s ${frontend.out}/bower_components $out/public/bower_components
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Dashboard for the sensu monitoring framework";
     homepage    = "http://sensuapp.org/";
     license     = licenses.mit;

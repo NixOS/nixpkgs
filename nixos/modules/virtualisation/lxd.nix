@@ -5,17 +5,15 @@
 with lib;
 
 let
-
   cfg = config.virtualisation.lxd;
-  zfsCfg = config.boot.zfs;
+in {
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+  ];
 
-in
-
-{
   ###### interface
 
   options = {
-
     virtualisation.lxd = {
       enable = mkOption {
         type = types.bool;
@@ -25,12 +23,18 @@ in
           containers. Users in the "lxd" group can interact with
           the daemon (e.g. to start or stop containers) using the
           <command>lxc</command> command line tool, among others.
+
+          Most of the time, you'll also want to start lxcfs, so
+          that containers can "see" the limits:
+          <code>
+            virtualisation.lxc.lxcfs.enable = true;
+          </code>
         '';
       };
 
       package = mkOption {
         type = types.package;
-        default = pkgs.lxd;
+        default = pkgs.lxd.override { nftablesSupport = config.networking.nftables.enable; };
         defaultText = "pkgs.lxd";
         description = ''
           The LXD package to use.
@@ -46,18 +50,10 @@ in
         '';
       };
 
-      zfsPackage = mkOption {
-        type = types.package;
-        default = with pkgs; if zfsCfg.enableUnstable then zfsUnstable else zfs;
-        defaultText = "pkgs.zfs";
-        description = ''
-          The ZFS package to use with LXD.
-        '';
-      };
-
       zfsSupport = mkOption {
         type = types.bool;
-        default = false;
+        default = config.boot.zfs.enabled;
+        defaultText = "config.boot.zfs.enabled";
         description = ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -65,6 +61,7 @@ in
           with nixos.
         '';
       };
+
       recommendedSysctlSettings = mkOption {
         type = types.bool;
         default = false;
@@ -81,9 +78,7 @@ in
   };
 
   ###### implementation
-
   config = mkIf cfg.enable {
-
     environment.systemPackages = [ cfg.package ];
 
     security.apparmor = {
@@ -95,26 +90,36 @@ in
       packages = [ cfg.lxcPackage ];
     };
 
+    # TODO: remove once LXD gets proper support for cgroupsv2
+    # (currently most of the e.g. CPU accounting stuff doesn't work)
+    systemd.enableUnifiedCgroupHierarchy = false;
+
     systemd.services.lxd = {
       description = "LXD Container Management Daemon";
 
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
 
-      path = lib.optional cfg.zfsSupport cfg.zfsPackage;
+      path = lib.optional config.boot.zfs.enabled config.boot.zfs.package;
 
       preStart = ''
         mkdir -m 0755 -p /var/lib/lxc/rootfs
       '';
 
       serviceConfig = {
-        ExecStart = "@${cfg.package.bin}/bin/lxd lxd --group lxd";
+        ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
         Type = "simple";
         KillMode = "process"; # when stopping, leave the containers alone
         LimitMEMLOCK = "infinity";
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
+
+        # By default, `lxd` loads configuration files from hard-coded
+        # `/usr/share/lxc/config` - since this is a no-go for us, we have to
+        # explicitly tell it where the actual configuration files are
+        Environment = mkIf (config.virtualisation.lxc.lxcfs.enable)
+          "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
     };
 

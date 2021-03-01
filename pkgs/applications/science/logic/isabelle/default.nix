@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, z3, rlwrap }:
+{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
   pname = "isabelle";
-  version = "2018";
+  version = "2020";
 
   dirname = "Isabelle${version}";
 
   src = if stdenv.isDarwin
     then fetchurl {
-      url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}.dmg";
-      sha256 = "0jwnvsf5whklq14ihaxs7b9nbic94mm56nvxljrdbvl6y628j9r5";
+      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
+      sha256 = "1sfr5filsaqj93g5y4p9n8g5652dhr4whj25x4lifdxr2pp560xx";
     }
     else fetchurl {
       url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-      sha256 = "1928lwrw1v1p9s23kix30ncpqm8djmrnjixj82f3ni2a8sc3hrsp";
+      sha256 = "1bibabhlsvf6qsjjkgxcpq3cvl1z7r8yfcgqbhbvsiv69n3gyfk3";
     };
 
-  buildInputs = [ perl polyml z3 ]
-             ++ stdenv.lib.optionals (!stdenv.isDarwin) [ nettools java ];
+  buildInputs = [ perl polyml z3 makeWrapper ]
+             ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
       ML_SOURCES="\$POLYML_HOME/src"
     EOF
 
-    cat >contrib/jdk/etc/settings <<EOF
+    cat >contrib/jdk*/etc/settings <<EOF
       ISABELLE_JAVA_PLATFORM=${stdenv.system}
       ISABELLE_JDK_HOME=${java}
     EOF
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk contrib/polyml-* contrib/z3-*; do
+    for comp in contrib/jdk* contrib/polyml-* contrib/z3-*; do
       rm -rf $comp/x86*
     done
     '' + (if ! stdenv.isLinux then "" else ''
@@ -64,9 +64,11 @@ stdenv.mkDerivation rec {
     mv $TMP/$dirname $out
     cd $out/$dirname
     bin/isabelle install $out/bin
+
+    wrapProgram $out/$dirname/src/HOL/Tools/ATP/scripts/remote_atp --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.LWP ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A generic proof assistant";
 
     longDescription = ''
@@ -74,9 +76,9 @@ stdenv.mkDerivation rec {
       to be expressed in a formal language and provides tools for proving those
       formulas in a logical calculus.
     '';
-    homepage = "http://isabelle.in.tum.de/";
-    license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.jwiegley ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://isabelle.in.tum.de/";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.jwiegley ];
+    platforms = platforms.linux;
   };
 }

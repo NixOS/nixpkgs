@@ -3,8 +3,10 @@
   minimal ? false
 , # Ignored
   config ? null
-  # Nixpkgs, for qemu, lib and more
-, pkgs
+, # Nixpkgs, for qemu, lib and more
+  pkgs
+, # !!! See comment about args in lib/modules.nix
+  specialArgs ? {}
 , # NixOS configuration to add to the VMs
   extraConfigurations ? []
 }:
@@ -15,9 +17,6 @@ with import ../lib/qemu-flags.nix { inherit pkgs; };
 rec {
 
   inherit pkgs;
-
-  qemu = pkgs.qemu_test;
-
 
   # Build a virtual network from an attribute set `{ machine1 =
   # config1; ... machineN = configN; }', where `machineX' is the
@@ -31,13 +30,12 @@ rec {
     nodes: configurations:
 
     import ./eval-config.nix {
-      inherit system;
+      inherit system specialArgs;
       modules = configurations ++ extraConfigurations;
       baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
-          { key = "qemu"; system.build.qemu = qemu; }
           { key = "nodes"; _module.args.nodes = nodes; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
     };

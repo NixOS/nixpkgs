@@ -41,8 +41,8 @@ self: super: {
   xhtml = null;
 
   # Needs Cabal 3.2.x.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_0_0; };
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_1_0; };
 
   # Restricts aeson to <1.4
   # https://github.com/purescript/purescript/pull/3537
@@ -85,5 +85,9 @@ self: super: {
 
   # The old Haddock cannot process the newer documentation syntax.
   fast-logger = dontHaddock super.fast-logger;
+
+  # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
 
 }

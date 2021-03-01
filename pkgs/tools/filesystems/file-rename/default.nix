@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchurl, perlPackages, makeWrapper }:
 
 perlPackages.buildPerlPackage {
   pname = "File-Rename";
@@ -11,6 +11,12 @@ perlPackages.buildPerlPackage {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # Fix an incorrect platform test that misidentifies Darwin as Windows
+  postPatch = ''
+    substituteInPlace Makefile.PL \
+      --replace '/win/i' '/MSWin32/'
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/rename \
       --prefix PERL5LIB : $out/${perlPackages.perl.libPrefix}
@@ -18,7 +24,7 @@ perlPackages.buildPerlPackage {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Perl extension for renaming multiple files";
     license = licenses.artistic1;
     maintainers = with maintainers; [ peterhoeg ];

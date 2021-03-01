@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , atk
 , cairo
 , desktop-file-utils
 , evolution-data-server
+, evolution
 , gcr
 , gettext
 , glib
@@ -16,18 +17,19 @@
 , libxml2
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, python3
 , sqlite
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "almanah";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09rxx4s4c34d1axza6ayss33v78p44r9bpx058shllh1sf5avpcb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "IWYOnOu0C9uQ9k1dgWkJ6Kv+o/jY+6Llfsi4PusHE24=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +38,8 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
+    python3
     wrapGAppsHook
   ];
 
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gcr
     glib
-    gnome3.evolution
+    evolution
     gpgme
     gtk3
     gtksourceview3
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
     homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
     license = licenses.gpl3Plus;

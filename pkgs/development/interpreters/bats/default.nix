@@ -1,25 +1,37 @@
-{ stdenv, fetchzip, gnugrep }:
+{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, doCheck ? true }:
 
 stdenv.mkDerivation rec {
   pname = "bats";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchzip {
     url = "https://github.com/bats-core/bats-core/archive/v${version}.tar.gz";
-    sha256 = "1kkh0j2alql3xiyhw9wsvcc3xclv52g0ivgyk8h85q9fn3qdqakz";
+    hash = "sha256-grB/rJaDU0fuw4Hm3/9nI2px8KZnSWqRjTJPd7Mmb7s=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   patchPhase = ''
-    patchShebangs ./install.sh
-    substituteInPlace ./libexec/bats-core/bats-format-tap-stream --replace grep ${gnugrep}/bin/grep
+    patchShebangs .
   '';
 
-  installPhase = "./install.sh $out";
+  installPhase = ''
+    ./install.sh $out
+    wrapProgram $out/bin/bats --suffix PATH : "${lib.makeBinPath [ bash coreutils gnugrep ]}"
+  '';
 
-  meta = with stdenv.lib; {
+  inherit doCheck;
+  checkPhase = ''
+    # test generates file with absolute shebang dynamically
+    substituteInPlace test/install.bats --replace \
+      "/usr/bin/env bash" "${bash}/bin/bash"
+    bin/bats test
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/bats-core/bats-core";
     description = "Bash Automated Testing System";
-    maintainers = [ maintainers.lnl7 ];
+    maintainers = with maintainers; [ abathur ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

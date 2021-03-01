@@ -1,22 +1,24 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-qthelp";
-  version = "1.0.2";
+  version = "1.0.3";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "79465ce11ae5694ff165becda529a600c754f4bc459778778c7017374d4d406f";
+    sha256 = "4c33767ee058b70dba89a6fc5c1892c0d57a54be67ddd3e7875a18d14cba5a72";
   };
 
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp document.";
     homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;

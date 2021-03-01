@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
+{ fetchurl, lib, stdenv, substituteAll, pkg-config, gnome3, python3, gobject-introspection
 , intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr
 , p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
 , vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib
@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.36.1";
+  version = "3.38.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15k7k225jfv5a45hmjk94xq90np2r9f5v8yj0xi3166vvlp2n4hk";
+    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "rFPxay1R8+f/gCX5yhn0otTOOEHXKun+K7iX3ICZ1wU=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobject-introspection vala
+    cmake ninja pkg-config intltool python3 gperf wrapGAppsHook gobject-introspection vala
   ];
   buildInputs = [
     glib libsoup libxml2 gtk3 gnome-online-accounts
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
     homepage = "https://wiki.gnome.org/Apps/Evolution";
     license = licenses.lgpl2;

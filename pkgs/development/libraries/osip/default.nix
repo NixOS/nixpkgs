@@ -1,18 +1,18 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 stdenv.mkDerivation rec {
-  version = "5.1.1";
+  version = "5.2.0";
   src = fetchurl {
     url = "mirror://gnu/osip/libosip2-${version}.tar.gz";
-    sha256 = "0kgnxgzf968kbl6rx3hjsfb3jsg4ydgrsf35gzj319i1f8qjifv1";
+    sha256 = "0xdk3cszkzb8nb757gl47slrr13mf6xz43ab4k343fv8llp8pd2g";
   };
   pname = "libosip2";
 
   meta = {
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     homepage = "https://www.gnu.org/software/osip/";
     description = "The GNU oSIP library, an implementation of the Session Initiation Protocol (SIP)";
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     inherit version;
   };
 }

@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, jdk, maven, makeWrapper, jre_headless, pcsclite }:
+{ lib, stdenv, fetchFromGitHub, jdk8, maven, makeWrapper, jre8_headless, pcsclite }:
 
+let jdk = jdk8; jre_headless = jre8_headless; in
 # TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {
   pname = "global-platform-pro";
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${pcsclite.out}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line utility for managing applets and keys on Java Cards";
     longDescription = ''
       This command-line utility can be used to manage applets and keys

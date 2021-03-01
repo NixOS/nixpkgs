@@ -1,15 +1,10 @@
-{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib }:
-
-let version = "10.12"; in
-
-# Ensure appleSdkVersion is up to date.
-assert stdenv.isDarwin -> stdenv.appleSdkVersion == version;
+{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib, darwin-stubs, print-reexports }:
 
 let
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     pname = "MacOS_SDK";
-    inherit version;
+    version = "10.12";
 
     # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.12.merged-1.sucatalog, which we found by:
     #  1. Google: site:swscan.apple.com and look for a name that seems appropriate for your version
@@ -42,16 +37,27 @@ let
       rmdir System
 
       pushd lib
-      ln -s -L /usr/lib/libcups*.dylib .
+      cp ${darwin-stubs}/usr/lib/libcups*.tbd .
+      ln -s libcups.2.tbd      libcups.tbd
+      ln -s libcupscgi.1.tbd   libcupscgi.tbd
+      ln -s libcupsimage.2.tbd libcupsimage.tbd
+      ln -s libcupsmime.1.tbd  libcupsmime.tbd
+      ln -s libcupsppdc.1.tbd  libcupsppdc.tbd
       popd
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Apple SDK ${version}";
       maintainers = with maintainers; [ copumpkin ];
       platforms   = platforms.darwin;
     };
   };
+
+  mkFrameworkSubs = name: deps:
+  let
+    deps' = deps // { "${name}" = placeholder "out"; };
+    substArgs = lib.concatMap (x: [ "--subst-var-by" x deps'."${x}" ]) (lib.attrNames deps');
+  in lib.escapeShellArgs substArgs;
 
   framework = name: deps: stdenv.mkDerivation {
     name = "apple-framework-${name}";
@@ -63,11 +69,14 @@ let
 
     disallowedRequisites = [ sdk ];
 
+    nativeBuildInputs = [ print-reexports ];
+
+    extraTBDFiles = [];
+
     installPhase = ''
       linkFramework() {
         local path="$1"
         local nested_path="$1"
-        local dest="$out/Library/Frameworks/$path"
         if [ "$path" == "JavaNativeFoundation.framework" ]; then
           local nested_path="JavaVM.framework/Versions/A/Frameworks/JavaNativeFoundation.framework"
         fi
@@ -80,21 +89,29 @@ let
           current=A
         fi
 
-        mkdir -p "$dest"
-        pushd "$dest" >/dev/null
+        local dest="$out/Library/Frameworks/$path"
 
-        # Keep track of if this is a child or a child rescue as with
-        # ApplicationServices in the 10.9 SDK
-        local isChild=0
+        mkdir -p "$dest/Versions/$current"
+        pushd "$dest/Versions/$current" >/dev/null
 
         if [ -d "${sdk.out}/Library/Frameworks/$nested_path/Versions/$current/Headers" ]; then
-          isChild=1
           cp -R "${sdk.out}/Library/Frameworks/$nested_path/Versions/$current/Headers" .
         elif [ -d "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current/Headers" ]; then
           current="$(readlink "/System/Library/Frameworks/$name.framework/Versions/Current")"
           cp -R "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current/Headers" .
         fi
-        ln -s -L "/System/Library/Frameworks/$nested_path/Versions/$current/$name"
+
+        local tbd_source=${darwin-stubs}/System/Library/Frameworks/$nested_path/Versions/$current
+        if [ "${name}" != "Kernel" ]; then
+          # The Kernel.framework has headers but no actual library component.
+          cp -v $tbd_source/*.tbd .
+        fi
+
+        if [ -d "$tbd_source/Libraries" ]; then
+          mkdir Libraries
+          cp -v $tbd_source/Libraries/*.tbd Libraries/
+        fi
+
         ln -s -L "/System/Library/Frameworks/$nested_path/Versions/$current/Resources"
 
         if [ -f "/System/Library/Frameworks/$nested_path/module.map" ]; then
@@ -110,34 +127,73 @@ let
           linkFramework "$childpath"
         done
 
-        if [ -d "$dest/Versions/$current" ]; then
-          mv $dest/Versions/$current/* .
-        fi
+        pushd ../.. >/dev/null
+        ln -s "$current" Versions/Current
+        ln -s Versions/Current/* .
+        popd >/dev/null
 
         popd >/dev/null
       }
 
       linkFramework "${name}.framework"
+
+      # linkFramework is recursive, the rest of the processing is not.
+
+      local tbd_source=${darwin-stubs}/System/Library/Frameworks/${name}.framework
+      for tbd in $extraTBDFiles; do
+        local tbd_dest_dir=$out/Library/Frameworks/${name}.framework/$(dirname "$tbd")
+        mkdir -p "$tbd_dest_dir"
+        cp -v "$tbd_source/$tbd" "$tbd_dest_dir"
+      done
+
+      # Fix and check tbd re-export references
+      find $out -name '*.tbd' | while read tbd; do
+        echo "Fixing re-exports in $tbd"
+        substituteInPlace "$tbd" ${mkFrameworkSubs name deps}
+
+        echo "Checking re-exports in $tbd"
+        print-reexports "$tbd" | while read target; do
+          local expected="''${target%.dylib}.tbd"
+          if ! [ -e "$expected" ]; then
+            echo -e "Re-export missing:\n\t$target\n\t(expected $expected)"
+            echo -e "While processing\n\t$tbd"
+            exit 1
+          else
+            echo "Re-exported target $target ok"
+          fi
+        done
+      done
     '';
 
-    propagatedBuildInputs = deps;
+    propagatedBuildInputs = builtins.attrValues deps;
 
     # don't use pure CF for dylibs that depend on frameworks
     setupHook = ./framework-setup-hook.sh;
 
     # Not going to be more specific than this for now
-    __propagatedImpureHostDeps = stdenv.lib.optionals (name != "Kernel") [
+    __propagatedImpureHostDeps = lib.optionals (name != "Kernel") [
       # The setup-hook ensures that everyone uses the impure CoreFoundation who uses these SDK frameworks, so let's expose it
       "/System/Library/Frameworks/CoreFoundation.framework"
       "/System/Library/Frameworks/${name}.framework"
       "/System/Library/Frameworks/${name}.framework/${name}"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Apple SDK framework ${name}";
       maintainers = with maintainers; [ copumpkin ];
       platforms   = platforms.darwin;
     };
+  };
+
+  tbdOnlyFramework = name: { private ? true }: stdenv.mkDerivation {
+    name = "apple-framework-${name}";
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p $out/Library/Frameworks/
+      cp -r ${darwin-stubs}/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework \
+        $out/Library/Frameworks
+      # NOTE there's no re-export checking here, this is probably wrong
+    '';
   };
 in rec {
   libs = {
@@ -168,7 +224,8 @@ in rec {
       installPhase = ''
         mkdir -p $out/include $out/lib
         ln -s "${lib.getDev sdk}/include/Xplugin.h" $out/include/Xplugin.h
-        ln -s "/usr/lib/libXplugin.1.dylib" $out/lib/libXplugin.dylib
+        cp ${darwin-stubs}/usr/lib/libXplugin.1.tbd $out/lib
+        ln -s libXplugin.1.tbd $out/lib/libXplugin.tbd
       '';
     };
 
@@ -187,34 +244,42 @@ in rec {
   };
 
   overrides = super: {
-    AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
+    AppKit = lib.overrideDerivation super.AppKit (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
       ];
     });
 
-    CoreFoundation = stdenv.lib.overrideDerivation super.CoreFoundation (drv: {
+    Carbon = lib.overrideDerivation super.Carbon (drv: {
+      extraTBDFiles = [ "Versions/A/Frameworks/HTMLRendering.framework/Versions/A/HTMLRendering.tbd" ];
+    });
+
+    CoreFoundation = lib.overrideDerivation super.CoreFoundation (drv: {
       setupHook = ./cf-setup-hook.sh;
     });
 
-    CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
+    CoreMedia = lib.overrideDerivation super.CoreMedia (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/Frameworks/CoreImage.framework"
       ];
     });
 
-    CoreMIDI = stdenv.lib.overrideDerivation super.CoreMIDI (drv: {
+    CoreMIDI = lib.overrideDerivation super.CoreMIDI (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
       ];
       setupHook = ./private-frameworks-setup-hook.sh;
     });
 
-    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+    IMServicePlugIn = lib.overrideDerivation super.IMServicePlugIn (drv: {
+      extraTBDFiles = [ "Versions/A/Frameworks/IMServicePlugInSupport.framework/Versions/A/IMServicePlugInSupport.tbd" ];
+    });
+
+    Security = lib.overrideDerivation super.Security (drv: {
       setupHook = ./security-setup-hook.sh;
     });
 
-    QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
+    QuartzCore = lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
@@ -222,15 +287,22 @@ in rec {
       '';
     });
 
-    MetalKit = stdenv.lib.overrideDerivation super.MetalKit (drv: {
+    MetalKit = lib.overrideDerivation super.MetalKit (drv: {
       installPhase = drv.installPhase + ''
         mkdir -p $out/include/simd
         cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
       '';
     });
-  };
 
-  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
+    WebKit = lib.overrideDerivation super.WebKit (drv: {
+      extraTBDFiles = [
+        "Versions/A/Frameworks/WebCore.framework/Versions/A/WebCore.tbd"
+        "Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy.tbd"
+      ];
+    });
+  } // lib.genAttrs [ "ContactsPersistence" "UIFoundation" "GameCenter" ] (x: tbdOnlyFramework x {});
+
+  bareFrameworks = lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
     inherit (pkgs.darwin) libobjc;
   });

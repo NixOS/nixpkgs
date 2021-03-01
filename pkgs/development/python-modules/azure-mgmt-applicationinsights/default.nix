@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-applicationinsights";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1hm6s7vym1y072jqypjgbhps8lza1d5kb8qcpyxnw4zsmsvshdp5";
+    sha256 = "3c788a54db4fbca1a8850151462ec1471ff59c86b3a10d6082952bbdaa7e6651";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Application Insights Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer maxwilson ];
   };
 }

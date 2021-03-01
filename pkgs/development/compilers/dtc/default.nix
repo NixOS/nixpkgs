@@ -1,19 +1,18 @@
-{ stdenv, lib, fetchgit, flex, bison, pkgconfig, which
+{ stdenv, lib, fetchgit, flex, bison, pkg-config, which
 , pythonSupport ? false, python, swig
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtc";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1jhhfrg22h53lvm2lqhd66pyk20pil08ry03wcwyx1c3ln27k73z";
+    sha256 = "0li992wwd7kgy71bikanqky49y4hq3p3vx35p2hvyxy1k0wfy7i8";
   };
 
-  nativeBuildInputs = [ flex bison pkgconfig which ] ++ lib.optionals pythonSupport [ python swig ];
-  buildInputs = lib.optionals pythonSupport [ python ];
+  nativeBuildInputs = [ flex bison pkg-config which ] ++ lib.optionals pythonSupport [ python swig ];
 
   postPatch = ''
     patchShebangs pylibfdt/

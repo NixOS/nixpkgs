@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, trivialBuild }:
+{ fetchurl, lib, trivialBuild }:
 
 trivialBuild {
   pname = "sv-kalender";
@@ -12,11 +12,11 @@ trivialBuild {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Swedish calendar for Emacs";
     homepage = "http://bigwalter.net/daniel/elisp/sv-kalender.el";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainer.rycee ];
+    maintainers = [ maintainers.rycee ];
   };
 }

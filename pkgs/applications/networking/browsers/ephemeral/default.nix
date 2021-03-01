@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , desktop-file-utils
 , vala
 , gettext
@@ -10,7 +11,7 @@
 , meson
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , python3
 , webkitgtk
 , wrapGAppsHook
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "6.3.1";
+  version = "7.0.5";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "13rl26lv5xgagiv21yp5pz69bkwh4nnz1lx9wryhsplki45xm1sq";
+    sha256 = "sha256-dets4YoTUgFCDOrvzNuAwJb3/MsnjOSBx9PBZuT0ruk=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -55,15 +56,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The always-incognito web browser";
     homepage = "https://github.com/cassidyjames/ephemeral";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

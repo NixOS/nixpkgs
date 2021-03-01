@@ -1,35 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, libpng, libjpeg
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libpng, libjpeg
 , guiSupport ? false, libX11
 
   # see http://dlib.net/compile.html
-, avxSupport ? true
+, avxSupport ? stdenv.hostPlatform.avxSupport
 , cudaSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "dlib";
-  version = "19.19";
+  version = "19.21";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "0574p46zf85nx33cam4yqcg20g94kkmrvi5689r1xshprr0szghp";
+    sha256 = "00jwklnl21l3hlvb0bjc6rl3hgi88vxb41dsn4m0kh436c9v0rl3";
   };
 
   postPatch = ''
     rm -rf dlib/external
   '';
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
     "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libpng libjpeg ] ++ lib.optional guiSupport libX11;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A general purpose cross-platform C++ machine learning library";
     homepage = "http://www.dlib.net";
     license = licenses.boost;

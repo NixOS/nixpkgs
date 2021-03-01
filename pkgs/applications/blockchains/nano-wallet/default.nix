@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook, boost, libGL
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, boost, libGL
 , qtbase}:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     optionToFlag = name: value: "-D${name}=${value}";
   in lib.mapAttrsToList optionToFlag options;
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ boost libGL qtbase ];
 
   buildPhase = ''

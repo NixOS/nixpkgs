@@ -1,7 +1,7 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
 , withPrometheusExporter ? true
-, stdenv, lib, fetchurl
+, stdenv, lib, fetchurl, nixosTests
 , openssl, zlib
 , lua5_3 ? null, pcre ? null, systemd ? null
 }:
@@ -11,11 +11,11 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.1.4";
+  version = "2.3.5";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "1kcizs5r538chhpwqykdngxyqfi98i03akfjnii721npjvv0y0si";
+    url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
+    sha256 = "sha256-eSRTlTC79VWCnH9Yhr4Lf8+NnI/+CGe3AQvrZwq/vks=";
   };
 
   buildInputs = [ openssl zlib ]
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin "CC=cc";
 
   enableParallelBuilding = true;
+
+  passthru.tests.haproxy = nixosTests.haproxy;
 
   meta = with lib; {
     description = "Reliable, high performance TCP/HTTP load balancer";

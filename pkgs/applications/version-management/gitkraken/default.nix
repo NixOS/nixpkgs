@@ -1,23 +1,23 @@
-{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
 , libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5
+, e2fsprogs, krb5, libdrm, mesa
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "6.5.4";
+  version = "7.5.0";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "0hrxkhxp6kp82jg1pkcl6vxa5mjpgncx0k353bcnm4986ysizhj4";
+    sha256 = "1v89aza7iwph7k5phyld5m5856c5wbh8ncgg6lh7558v4xna0x57";
   };
 
   dontBuild = true;
@@ -61,15 +61,17 @@ stdenv.mkDerivation rec {
     libuuid
     e2fsprogs
     krb5
+    libdrm
+    mesa
   ];
 
   desktopItem = makeDesktopItem {
-    name = "gitkraken";
+    name = pname;
     exec = "gitkraken";
     icon = "gitkraken";
     desktopName = "GitKraken";
     genericName = "Git Client";
-    categories = "Application;Development;";
+    categories = "Development;";
     comment = "Graphical Git client from Axosoft";
   };
 
@@ -86,10 +88,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
 
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
-
-    substituteInPlace $out/share/applications/gitkraken.desktop \
-      --replace $out/usr/share/gitkraken $out/bin
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     mkdir -p $out/share/pixmaps
     cp gitkraken.png $out/share/pixmaps/gitkraken.png

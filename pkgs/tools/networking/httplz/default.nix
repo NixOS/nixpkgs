@@ -1,35 +1,35 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, rustPlatform
-, openssl, pkgconfig, darwin, libiconv }:
+, openssl, pkg-config, darwin, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.8.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "thecoshman";
     repo = "http";
     rev = "v${version}";
-    sha256 = "0i41hqig8v6w1qb6498239iix1rss0lznm5lcl9m3i439c2zv7pw";
+    sha256 = "154alxxclz78r29m656c8yahnzq0vd64s4sp19h0ca92dfw4s46y";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security
   ];
 
   cargoBuildFlags = [ "--bin httplz" ];
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "13hk9m09jff3bxbixsjvksiir4j4mak4ckvlq45bx5d5lh8sapxl";
+  cargoSha256 = "1rpwzrr9bvw375vn97y5fqhraqz35d3ani9kfflvn2758x3g8gwf";
 
   postInstall = ''
     wrapProgram $out/bin/httplz \
       --prefix PATH : "${openssl}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A basic http server for hosting a folder fast and simply";
     homepage = "https://github.com/thecoshman/http";
     license = licenses.mit;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ ];
   };
 }

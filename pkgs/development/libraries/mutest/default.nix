@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ebassi.github.io/mutest/mutest.md.html";
     description = "A BDD testing framework for C, inspired by Mocha";
     license = licenses.mit;

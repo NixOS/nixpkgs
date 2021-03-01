@@ -1,4 +1,4 @@
-{ stdenv, apacheHttpd, autoconf, automake, autoreconfHook, curl, fetchFromGitHub, glib, lasso, libtool, libxml2, libxslt, openssl, pkgconfig, xmlsec }:
+{ lib, stdenv, apacheHttpd, autoconf, automake, autoreconfHook, curl, fetchFromGitHub, glib, lasso, libtool, libxml2, libxslt, openssl, pkg-config, xmlsec }:
 
 stdenv.mkDerivation rec {
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./fixdeps.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ apacheHttpd autoconf automake curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
 
   configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp ./.libs/mod_auth_mellon.so $out/modules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/UNINETT/mod_auth_mellon";
     description = "An Apache module with a simple SAML 2.0 service provider";
     license = licenses.gpl2Plus;

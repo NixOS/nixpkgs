@@ -1,30 +1,30 @@
-{ stdenv, mkDerivation, fetchFromGitHub
-, pkgconfig, autoreconfHook
+{ lib, stdenv, mkDerivation, fetchFromGitHub
+, pkg-config, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
-, glib, protobuf, utillinux, qrencode
+, glib, protobuf, util-linux, qrencode
 , AppKit
 , withGui ? true, libevent
 , qtbase, qttools
 , zeromq
 }:
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
 
   name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.17.1";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "08a0ghs4aa9m3qv3ppydyshfibykdwxk07i1vcqvg0ycqisdpb7y";
+    sha256 = "11753zhyx1kmrlljc6kbjwrcb06dfcrsqvmw3iaki9a132qk6l5c";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib zeromq
-                  miniupnpc glib protobuf utillinux libevent ]
+                  miniupnpc glib protobuf util-linux libevent ]
                   ++ optionals stdenv.isDarwin [ AppKit ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
@@ -50,6 +50,6 @@ mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ offline AndersonTorres ];
+    maintainers = with maintainers; [ offline ];
   };
 }

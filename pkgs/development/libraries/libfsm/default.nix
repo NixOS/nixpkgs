@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , bmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfsm";
-  version = "0.1pre1905_${builtins.substring 0 8 src.rev}";
+  version = "0.1pre2442_${builtins.substring 0 8 src.rev}";
 
   src = fetchFromGitHub {
     owner  = "katef";
     repo   = pname;
-    rev    = "bd5937fad42b26a86bac1fe3ec49eff73581bd1d";
-    sha256 = "1q3grbmvjnnvc2sshswbd40cc2j2hnwibmljcqx9jqgda0wd6pgv";
+    rev    = "9c5095f7364fa464efff6c81fad9b60b19dfcc99";
+    sha256 = "1bs51agvrrwqid0slq2svj2yj7kkjdsnv3xsrk8zmf1jbgza6jrm";
     fetchSubmodules = true;
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # fix up multi-output install. we also have to fix the pkgconfig libdir
+  # fix up multi-output install. we also have to fix the pkg-config libdir
   # file; it uses prefix=$out; libdir=${prefix}/lib, which is wrong in
   # our case; libdir should really be set to the $lib output.
   postInstall = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DFA regular expression library & friends";
     homepage    = "https://github.com/katef/libfsm";
     license     = licenses.bsd2;

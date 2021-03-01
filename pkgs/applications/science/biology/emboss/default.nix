@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline, perl, libharu, libX11, libpng, libXt, zlib}:
+{lib, stdenv, fetchurl, readline, perl, libharu, libX11, libpng, libXt, zlib}:
 
 stdenv.mkDerivation {
   name = "emboss-6.6.0";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
     specially developed for the needs of the molecular biology (e.g. EMBnet)
     user community, including libraries. The software automatically copes with
     data in a variety of formats and even allows transparent retrieval of
-    sequence data from the web.''; 
-    license     = "GPL2";
+    sequence data from the web.'';
+    license     = lib.licenses.gpl2;
     homepage    = "http://emboss.sourceforge.net/";
   };
 }

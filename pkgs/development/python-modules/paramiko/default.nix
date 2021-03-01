@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f";
+    sha256 = "7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035";
   };
 
   checkInputs = [ invoke pytest mock pytest-relaxed ];
@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   # 2 sftp tests fail (skip for now)
   # test_config relies on artifacts to be to downloaded
+  # RSA tests don't have valid keys
   checkPhase = ''
     pytest tests \
       --ignore=tests/test_sftp.py \
@@ -38,7 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/paramiko/paramiko/";
     description = "Native Python SSHv2 protocol library";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ aszlig ];
 
     longDescription = ''
       This is a library for making SSH2 connections (client or server).

@@ -1,4 +1,4 @@
-{ stdenv, castxml, fetchFromGitHub, buildPythonPackage,
+{ lib, castxml, fetchFromGitHub, buildPythonPackage,
 llvmPackages }:
 buildPythonPackage rec {
   pname = "pygccxml";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # but the format doesn't accept -isystem directives
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gccxml/pygccxml";
     description = "Python package for easy C++ declarations navigation";
     license = licenses.boost;

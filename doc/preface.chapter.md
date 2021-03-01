@@ -1,10 +1,4 @@
----
-title: Preface
-author: Frederik Rietdijk
-date: 2015-11-25
----
-
-# Preface
+# Preface {#preface}
 
 The Nix Packages collection (Nixpkgs) is a set of thousands of packages for the
 [Nix package manager](https://nixos.org/nix/), released under a
@@ -42,7 +36,7 @@ distributed as soon as all tests for that channel pass, e.g.
 [this table](https://hydra.nixos.org/job/nixpkgs/trunk/unstable#tabs-constituents)
 shows the status of tests for the `nixpkgs` channel.
 
-The tests are conducted by a cluster called [Hydra](http://nixos.org/hydra/),
+The tests are conducted by a cluster called [Hydra](https://nixos.org/hydra/),
 which also builds binary packages from the Nix expressions in Nixpkgs for
 `x86_64-linux`, `i686-linux` and `x86_64-darwin`.
 The binaries are made available via a [binary cache](https://cache.nixos.org).

@@ -1,22 +1,30 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, pytest }:
+{ lib, isPy3k, pythonOlder, fetchPypi, buildPythonPackage
+, pytest
+, pytestcov
+, sybil
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "1.0";
+  version = "2.1.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i3sbxkdlbb4560rrlmwwd5y4ps7k73lp4d8wnmd7ag9k426gjkx";
+    sha256 = "fa1d48bcb85bbed90f6ffee6936578f65ff0e93aa607397bd88eaeb408bd96d8";
   };
 
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
   checkInputs = [
-    pytest
+    pytest pytestcov sybil
   ];
 
   checkPhase = ''
-    pytest --pyargs public
+    pytest
   '';
 
   meta = with lib; {

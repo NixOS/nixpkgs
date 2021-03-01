@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kdf";
+  pname = "kdf";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.peterhoeg ];

@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, addOpenGLRunpath, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
@@ -44,7 +44,7 @@
 
 let
   inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
-  inherit (stdenv.lib) optional optionals optionalString enableFeature filter;
+  inherit (lib) optional optionals optionalString enableFeature filter;
 
   cmpVer = builtins.compareVersions;
   reqMin = requiredVersion: (cmpVer requiredVersion branch != 1);
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  postPatch = ''patchShebangs .'';
+  postPatch = "patchShebangs .";
   inherit patches;
 
   outputs = [ "bin" "dev" "out" "man" ]
@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     # Docs
       (ifMinVer "0.6" "--disable-doc")
     # External Libraries
+      "--enable-libass"
       "--enable-bzlib"
       "--enable-gnutls"
       (ifMinVer "1.0" "--enable-fontconfig")
@@ -163,18 +164,17 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
-      "--pkg-config=pkg-config" # Override ffmpeg's ./configure assumption that pkg-config is prefixed by the architecture. (e.g. aarch64-unknown-linux-gnu-pkg-config)
   ] ++ optional stdenv.cc.isClang "--cc=clang");
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
     libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
-    ++ optional vpxSupport libaom
+    ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
@@ -199,9 +199,10 @@ stdenv.mkDerivation rec {
         --replace "includedir=$out" "includedir=''${!outputInclude}"
     done
   '' + optionalString stdenv.isLinux ''
-    # Set RUNPATH so that libnvcuvid in /run/opengl-driver(-32)/lib can be found.
+    # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
     # See the explanation in addOpenGLRunpath.
-    addOpenGLRunpath $out/lib/libavcodec.so*
+    addOpenGLRunpath $out/lib/libavcodec.so
+    addOpenGLRunpath $out/lib/libavutil.so
   '';
 
   installFlags = [ "install-man" ];
@@ -210,7 +211,7 @@ stdenv.mkDerivation rec {
     inherit vaapiSupport vdpauSupport;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "http://www.ffmpeg.org/";
     longDescription = ''

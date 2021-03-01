@@ -1,4 +1,4 @@
-{stdenv, makeWrapper, python, toposort, rpm}:
+{lib, stdenv, makeWrapper, python, toposort, rpm}:
 
 stdenv.mkDerivation {
   pname = "nix-template-rpm";
@@ -15,10 +15,10 @@ stdenv.mkDerivation {
       --set PYTHONPATH "${rpm}/lib/${python.libPrefix}/site-packages":"${toposort}/lib/${python.libPrefix}/site-packages"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create templates of nix expressions from RPM .spec files";
     maintainers = with maintainers; [ tstrobel ];
-    platforms = with stdenv.lib.platforms; unix;
+    platforms = platforms.unix;
     hydraPlatforms = [];
   };
 }

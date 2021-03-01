@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, zlib }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "20.03";
+  version = "20.09";
   pname = "mediainfo";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "1f1shnycf0f1fwka9k9s250l228xjkg0k4k73h8bpld8msighgnw";
+    sha256 = "0rqg9z7s5bk7vlvjrs4gackzg7ib05a0dffi2ihsjf5a7kw7wcir";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libzen libmediainfo zlib ];
 
   sourceRoot = "./MediaInfo/Project/GNU/CLI/";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Supplies technical and tag information about a video or audio file";
     longDescription = ''
       MediaInfo is a convenient unified display of the most relevant technical

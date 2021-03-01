@@ -1,29 +1,28 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
-  fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps,
+  fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gtk3, gtkmm3, iproute, dbus, systemd, which,
+  pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "11.0.5";
+  version = "11.2.0";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "0idh8dqwb1df2di689090k9x1iap35jk3wg8yb1g70byichmscqb";
+    sha256 = "125y3zdhj353dmmjmssdaib2zp1jg5aiqmvpgkrzhnh5nx2icfv6";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
-  buildInputs = [ fuse glib icu libdnet libmspack openssl pam procps xercesc ]
-      ++ lib.optionals withX [ gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
+  buildInputs = [ fuse glib icu libdnet libmspack libtirpc openssl pam procps rpcsvc-proto xercesc ]
+      ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
-  patches = [ ./recognize_nixos.patch ];
   postPatch = ''
      # Build bugfix for 10.1.0, stolen from Arch PKGBUILD
      mkdir -p common-agent/etc/config
@@ -31,6 +30,7 @@ stdenv.mkDerivation rec {
 
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
      sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
+     sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
      sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
      sed -i 's,$(UDEVRULESDIR),''${prefix}/$(UDEVRULESDIR),' udev/Makefile.am
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/vmware/open-vm-tools";
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''

@@ -1,15 +1,15 @@
-{ stdenv, python3Packages, fetchFromGitHub, libxslt,
+{ lib, python3Packages, fetchFromGitHub, libxslt,
   gobject-introspection, gtk3, wrapGAppsHook, gnome3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "6.0.13";
+  version = "6.1.3";
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
-    sha256 = "1fphv6k2hqfi3fzazjqmvip7sz9fhy5ccsgpqv68vfylrf8g1f92";
+    sha256 = "1jv28ygsd6ifjb096w3pm50za6wi62y45ycbizwhv7x56lr6zx1v";
   };
 
   buildInputs = [
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
   # No test exist
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Template based wallpaper/colorscheme generator and manager";
     longDescription = ''
      In short, wpgtk is a colorscheme/wallpaper manager with a template system attached which lets you create templates from any textfile and will replace keywords on it on the fly, allowing for great styling and theming possibilities.

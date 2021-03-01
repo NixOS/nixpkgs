@@ -1,31 +1,29 @@
-{ stdenv, lib, pkgconfig, openssl, fetchFromGitHub, rustPlatform, darwin }:
+{ stdenv, lib, pkg-config, openssl, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hydra-cli";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nlewo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jdlmc45hwblcxs6hvy3gi2dr7qyzs1sg5zr26jrpxrbvqqzrdhc";
+    sha256 = "1fd3swdjx249971ak1bgndm5kh6rlzbfywmydn122lhfi6ry6a03";
   };
-
-  cargoSha256 = "1sj80a99iakxxa698gggiszsrxwlwhr2sx4wmsni0cshx6z2x6za";
+  cargoSha256 = "1fjzcgayyha270bdxl5p6c337nq8zj4h81rk4ih9czyz3yaxga3f";
 
   buildInputs = [ openssl ]
                 ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for the Hydra CI";
     homepage = "https://github.com/nlewo/hydra-cli";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gilligan lewo ];
-    platforms = platforms.all;
   };
 
 }

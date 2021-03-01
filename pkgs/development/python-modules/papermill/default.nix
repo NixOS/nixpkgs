@@ -7,6 +7,7 @@
 , pyyaml
 , nbformat
 , nbconvert
+, nbclient
 , six
 , tqdm
 , jupyter_client
@@ -14,6 +15,7 @@
 , entrypoints
 , tenacity
 , futures
+, black
 , backports_tempfile
 , isPy27
 , pytest
@@ -23,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "1.2.1";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04dadaabdeb129c7414079f77b9f9a4a08f1322549aa99e20e4a12700ee23509";
+    sha256 = "1c452b1c5a9ab52b94c99d8b7705ae7173f6aa88a3d28a5d30cffba48a46f5b6";
   };
 
   propagatedBuildInputs = [
@@ -37,12 +39,14 @@ buildPythonPackage rec {
     pyyaml
     nbformat
     nbconvert
+    nbclient
     six
     tqdm
     jupyter_client
     requests
     entrypoints
     tenacity
+    black
   ] ++ lib.optionals isPy27 [
     futures
     backports_tempfile

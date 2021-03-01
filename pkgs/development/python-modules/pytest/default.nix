@@ -1,34 +1,69 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+, atomicwrites
+, attrs
+, funcsigs
+, hypothesis
+, iniconfig
+, mock
+, more-itertools
+, packaging
+, pathlib2
+, pluggy
+, py
+, pygments
+, python
+, setuptools
+, setuptools_scm
+, six
+, toml
+, wcwidth
+, writeText
 }:
+
 buildPythonPackage rec {
-  version = "5.3.5";
+  version = "6.1.2";
   pname = "pytest";
 
   disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e";
+  };
+
+  checkInputs = [ hypothesis pygments ];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [
+    atomicwrites
+    attrs
+    iniconfig
+    more-itertools
+    packaging
+    pluggy
+    py
+    setuptools
+    six
+    toml
+    wcwidth
+  ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+
+  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 
   preCheck = ''
     # don't test bash builtins
     rm testing/test_argcomplete.py
   '';
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d";
-  };
-
-  checkInputs = [ hypothesis mock ];
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
-    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
-
-  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
-
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   checkPhase = ''
     runHook preCheck
     $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
+
+    # tests leave behind unreproducible pytest binaries in the output directory, remove:
+    find $out/lib -name "*-pytest-${version}.pyc" -delete
+    # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
+    find $out/lib -name "*opt-2.pyc" -delete
+
     runHook postCheck
   '';
 
@@ -44,7 +79,7 @@ buildPythonPackage rec {
     "pytest"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , aiohttp, zigpy
 , pytest, isPy27 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1zgajlkhclyrqhkmivna4ha2lyvfpk5929s042gy59p7mzpkvjx7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python library to communicate with the flux_led smart bulbs";
     homepage = "https://github.com/Danielhiversen/flux_led";
     license = licenses.lgpl3;

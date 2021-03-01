@@ -4,9 +4,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-notifyd";
-  version = "0.4.4";
+  version = "0.6.1";
 
-  sha256 = "1lmm9h3ych8dz9jpjkxg91f9ln14xs527nxjxsryks00kmqk4kai";
+  sha256 = "18d2q5b54df8j2281lash8gm0826c6apn39q4igfz2zfcyqjh1if";
 
   buildInputs = [ exo gtk3 glib libnotify libxfce4ui libxfce4util xfce4-panel xfconf ];
 

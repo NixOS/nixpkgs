@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, libpng, static ? false
+{ lib, stdenv, fetchurl, libpng
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 # This package comes with its own copy of zlib, libpng and pngxtern
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "optipng-0.7.7";
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     mv "$out"/bin/optipng{,.exe}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://optipng.sourceforge.net/";
     description = "A PNG optimizer";
     license = licenses.zlib;

@@ -32,8 +32,8 @@ buildPythonPackage rec {
     export LD=$CC
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
-  buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
+  buildInputs = with pkgs; [ alsaLib ffmpeg_3 libv4l sqlite libvpx ];
   propagatedBuildInputs = [ cython pkgs.openssl dnspython dateutil xcaplib msrplib lxml python-otr ];
 
   meta = with lib; {

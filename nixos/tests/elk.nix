@@ -12,7 +12,7 @@ let
   mkElkTest = name : elk :
     import ./make-test-python.nix ({
     inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco offline basvandijk ];
     };
     nodes = {
@@ -101,6 +101,7 @@ let
                       prefixed indices. Ignore the error if the filter does not result in an
                       actionable list of indices (ignore_empty_list) and exit cleanly.
                     options:
+                      allow_ilm_indices: true
                       ignore_empty_list: True
                       disable_action: False
                     filters:

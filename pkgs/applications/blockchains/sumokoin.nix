@@ -23,10 +23,8 @@ stdenv.mkDerivation rec {
     "-DLMDB_INCLUDE=${lmdb}/include"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
-    description = "Sumokoin is a fork of Monero and a truely fungible cryptocurrency";
+    description = "A fork of Monero and a truely fungible cryptocurrency";
     homepage = "https://www.sumokoin.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];

@@ -1,7 +1,8 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, pytestCheckHook
 , pytestcov
 , pytest_xdist
 , pytest-django
@@ -11,28 +12,25 @@
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "4.1.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
     rev = "v${version}";
-    sha256 = "0xy2vpk4hixb4gg871d9sx9wxdz8pi0pmnfdwg4bf8jqfjg022w8";
+    sha256 = "0xwqw60dbn1x2294galcs08vm6ydcr677lr8slqz8a3ry6sgkhn9";
   };
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytestcov
     pytest_xdist
     pytest-django
     mock
   ];
 
-  disabled = lib.versionAtLeast django.version "2.0";
-
-  checkPhase = ''
-    pytest
-  '';
+  # Darwin sandbox causes most tests to fail.
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";

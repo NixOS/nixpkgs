@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , numpy
 , pkgs
@@ -27,7 +27,7 @@ buildPythonPackage {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cournape/samplerate";
     description = "High quality sampling rate convertion from audio data in numpy arrays";
     license = licenses.gpl2;

@@ -1,11 +1,12 @@
 # This file is based on https://github.com/turboMaCk/bs-platform.nix/blob/master/build-bs-platform.nix
 # to make potential future updates simpler
 
-{ stdenv, fetchFromGitHub, ninja, runCommand, nodejs, python3,
+{ lib, stdenv, fetchFromGitHub, ninja, runCommand, nodejs, python3,
   ocaml-version, version, src,
+  patches ? [],
   ocaml ? (import ./ocaml.nix {
     version = ocaml-version;
-    inherit stdenv;
+    inherit lib stdenv;
     src = "${src}/ocaml";
   }),
   custom-ninja ? (ninja.overrideAttrs (attrs: {
@@ -22,7 +23,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  inherit src version;
+  inherit src version patches;
   pname = "bs-platform";
 
   BS_RELEASE_BUILD = "true";
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nodejs python3 custom-ninja ];
 
-  patchPhase = ''
+  prePatch = ''
     sed -i 's:./configure.py --bootstrap:python3 ./configure.py --bootstrap:' ./scripts/install.js
     mkdir -p ./native/${ocaml-version}/bin
     ln -sf ${ocaml}/bin/*  ./native/${ocaml-version}/bin
@@ -46,13 +47,13 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     # This is an unfortunate name, but it's actually how to build a release
     # binary for BuckleScript
-    node scripts/install.js
+    npm run postinstall
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp -rf jscomp lib ${bin_folder} vendor odoc_gen native bsb bsc bsrefmt $out
-    mkdir $out/lib/ocaml
+    mkdir -p $out/lib/ocaml
     cp jscomp/runtime/js.* jscomp/runtime/*.cm* $out/lib/ocaml
     cp jscomp/others/*.ml jscomp/others/*.mli jscomp/others/*.cm* $out/lib/ocaml
     cp jscomp/stdlib-406/*.ml jscomp/stdlib-406/*.mli jscomp/stdlib-406/*.cm* $out/lib/ocaml

@@ -1,14 +1,14 @@
 {
-  stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
+  lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
   , asciidoc, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl
   , libarchive, lzma
 }:
 stdenv.mkDerivation rec {
   baseName = "pixz";
-  version = "1.0.6";
+  version = "1.0.7";
   name = "${baseName}-${version}";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf automake libtool asciidoc libxslt libxml2
     docbook_xml_dtd_45 docbook_xsl
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "vasi";
     repo = baseName;
     rev = "v${version}";
-    sha256 = "0q61wqg2yxrgd4nc7256mf7izp92is29ll3rax1cxr6fj9jrd8b7";
+    sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
   };
   preConfigure = ''
     ./autogen.sh
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    description = ''A parallel compressor/decompressor for xz format'';
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "A parallel compressor/decompressor for xz format";
+    license = lib.licenses.bsd2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

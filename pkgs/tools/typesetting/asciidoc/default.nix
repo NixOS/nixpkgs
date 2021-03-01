@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, python2
-
+{ fetchurl, lib, stdenv, python3
+, fetchFromGitHub, autoreconfHook
 , enableStandardFeatures ? false
 , sourceHighlight ? null
 , highlight ? null
@@ -144,17 +144,20 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "asciidoc-8.6.9";
+  pname = "asciidoc";
+  version = "9.0.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/asciidoc/${name}.tar.gz";
-    sha256 = "1w71nk527lq504njmaf0vzr93pgahkgzzxzglrq6bay8cw2rvnvq";
+  src = fetchFromGitHub {
+    owner = "asciidoc";
+    repo = "asciidoc-py3";
+    rev = version;
+    sha256 = "1gspxw5i0axymxdjzj5rmhf10gyl2gqr666gz141nv042l9dm5vi";
   };
 
-  buildInputs = [ python2 unzip ];
+  nativeBuildInputs = [ python3 unzip autoreconfHook ];
 
   # install filters early, so their shebangs are patched too
-  patchPhase = with stdenv.lib; ''
+  patchPhase = with lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
   '' + optionalString _enableDitaaFilter ''
@@ -212,7 +215,7 @@ stdenv.mkDerivation rec {
     # the odp backend already has that fix. Copy it here until fixed upstream.
     sed -i "s|'/etc/asciidoc/backends/odt/asciidoc.ott'|os.path.dirname(__file__),'asciidoc.ott'|" \
         "$out/etc/asciidoc/backends/odt/a2x-backend.py"
-  '' + optionalString enableStandardFeatures ''
+  '' + (if enableStandardFeatures then ''
     sed -e "s|dot|${graphviz}/bin/dot|g" \
         -e "s|neato|${graphviz}/bin/neato|g" \
         -e "s|twopi|${graphviz}/bin/twopi|g" \
@@ -222,7 +225,8 @@ stdenv.mkDerivation rec {
 
     sed -e "s|run('latex|run('${texlive}/bin/latex|g" \
         -e "s|cmd = 'dvipng'|cmd = '${texlive}/bin/dvipng'|g" \
-        -i "filters/latex/latex2png.py"
+        -e "s|cmd = 'dvisvgm'|cmd = '${texlive}/bin/dvisvgm'|g" \
+        -i "filters/latex/latex2img.py"
 
     sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
         -e "s|run('lilypond|run('${lilypond}/bin/lilypond|g" \
@@ -239,7 +243,7 @@ stdenv.mkDerivation rec {
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
     # TODO: Is this still necessary when using texlive?
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ texlive coreutils gnused ]}')|" \
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${lib.makeBinPath [ texlive coreutils gnused ]}')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
@@ -249,19 +253,21 @@ stdenv.mkDerivation rec {
         -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
         -e "s|^EPUBCHECK =.*|EPUBCHECK = 'nixpkgs_is_missing_epubcheck'|" \
         -i a2x.py
-  '' + ''
-    for n in $(find "$out" . -name \*.py); do
-      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python2}/bin/python,g" "$n"
-      chmod +x "$n"
-    done
+  '' else ''
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml')|" \
+        -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
+        -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
+        -i a2x.py
+  '') + ''
+    patchShebangs .
 
     sed -i -e "s,/etc/vim,,g" Makefile.in
   '';
 
   preInstall = "mkdir -p $out/etc/vim";
-  makeFlags = stdenv.lib.optional stdenv.isCygwin "DESTDIR=/.";
+  makeFlags = lib.optional stdenv.isCygwin "DESTDIR=/.";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-based document generation system";
     longDescription = ''
       AsciiDoc is a text document format for writing notes, documentation,

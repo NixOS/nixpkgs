@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb }:
+{ lib, stdenv, fetchurl, pkg-config, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "usbredir";
@@ -11,15 +11,14 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb ];
-  propagatedBuildInputs = [ libusb ];
+  nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [ libusb1 ];
 
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "USB traffic redirection protocol";
-    homepage = "http://spice-space.org/page/UsbRedir";
+    homepage = "https://www.spice-space.org/usbredir.html";
     license = licenses.lgpl21;
 
     maintainers = [ maintainers.offline ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkgconfig, ncurses
+{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkg-config, ncurses
 , dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU, libGL, freetype, pngcrush, advancecomp
 , tileMode ? false, enableSound ? tileMode
 
@@ -8,19 +8,19 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.24.1";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "1fiizkigmbrw0nb1l1m3syl2mw4a4r36l1y0n4z8z7slp79bsbv4";
+    sha256 = "sha256-lh0lCMZRH+c6jSHjLFDU3wjy6Oyp59ZcPaqg5PWVrkk=";
   };
 
   # Patch hard-coded paths and remove force library builds
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
+  nativeBuildInputs = [ pkg-config which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   fontsPath = lib.optionalString tileMode dejavu_fonts;
 
   makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
+                "FORCE_PKGCONFIG=y"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
                 "DATADIR=${placeholder "out"}"
               ] ++ lib.optional tileMode "TILES=y"
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source, single-player, role-playing roguelike game";
     homepage = "http://crawl.develz.org/";
     longDescription = ''

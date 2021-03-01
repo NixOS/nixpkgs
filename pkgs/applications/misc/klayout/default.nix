@@ -1,17 +1,17 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch
 , python, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl, makeWrapper, fixDarwinDylibNames
+, which, perl, makeWrapper
 }:
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.26.2";
+  version = "0.26.8";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    sha256 = "0svyqayvr45snqw0dhx6jpnjhg4qb097pz28s8k1crx5i31nnd94";
+    sha256 = "0pkhvxcfk70dnmgczyyq585mxrfwqai44ikshs4c1imh92z25llq";
   };
 
   postPatch = ''

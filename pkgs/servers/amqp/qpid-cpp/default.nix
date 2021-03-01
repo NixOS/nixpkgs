@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
+{ lib, stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
 
 let
   pname = "qpid-cpp";
@@ -10,7 +10,7 @@ let
     sha256 = "088dx1l6myrksbhpr15bs09j6qm8vdliqwjp2ja5amym47md103r";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://qpid.apache.org";
     repositories.git = "git://git.apache.org/qpid.git";
     repositories.svn = "http://svn.apache.org/repos/asf/qpid";
@@ -41,7 +41,7 @@ let
       "-Wno-error=unused-function"
       "-Wno-error=ignored-qualifiers"
       "-Wno-error=catch-value"
-    ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
+    ] ++ lib.optionals stdenv.cc.isGNU [
       "-Wno-error=deprecated-copy"
     ]);
   };

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, pkgconfig, polkit, automoc4, glib, qt4 }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, polkit, automoc4, glib, qt4 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "polkit-qt-1-qt4-0.112.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkgconfig automoc4 ];
+  nativeBuildInputs = [ cmake pkg-config automoc4 ];
 
   propagatedBuildInputs = [ polkit glib qt4 ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       done
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt wrapper around PolKit";
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, libdispatch, xnu }:
+{ lib, appleDerivation, libdispatch, xnu }:
 
 appleDerivation {
   propagatedBuildInputs = [ libdispatch xnu ];
@@ -16,6 +16,6 @@ appleDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

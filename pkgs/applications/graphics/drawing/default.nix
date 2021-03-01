@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , appstream-glib
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.4.13";
 
   format = "other";
-  
+
   src = fetchFromGitHub {
     owner = "maoschanz";
     repo = pname;
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     glib
     gettext

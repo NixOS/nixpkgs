@@ -149,6 +149,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
+      boot.kernelModules = [ "bridge" "veth" ];
       environment.systemPackages = [ cfg.package ]
         ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;
@@ -156,8 +157,10 @@ in
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
+        requires = [ "docker.socket" ];
         environment = proxy_env;
         serviceConfig = {
+          Type = "notify";
           ExecStart = [
             ""
             ''
@@ -211,13 +214,10 @@ in
           message = "Option enableNvidia requires 32bit support libraries";
         }];
     }
-    (mkIf cfg.enableNvidia {
-      environment.etc."nvidia-container-runtime/config.toml".source = "${pkgs.nvidia-docker}/etc/config.toml";
-    })
   ]);
 
   imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed in favor of starting docker at boot")
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
   ];
 
 }

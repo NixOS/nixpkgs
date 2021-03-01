@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, freeglut, libGLU, libGL, libcdio, libjack2
-, libsamplerate, libsndfile, libX11, SDL2, SDL2_net, zlib }:
+{ lib, stdenv, fetchurl, pkg-config, freeglut, libGLU, libGL, libcdio, libjack2
+, libsamplerate, libsndfile, libX11, SDL2, SDL2_net, zlib, alsaLib }:
 
 stdenv.mkDerivation rec {
   pname = "mednafen";
-  version = "1.24.1";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://mednafen.github.io/releases/files/${pname}-${version}.tar.xz";
-    sha256 = "1rszcy5lgfrw0f9b62sd69kgz1xziki3d55vpqh6k9jdmwzxyym4";
+    sha256 = "1x7xhxjhwsdbak8l0iyb497f043xkhibk73w96xck4j2bk10fac4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     freeglut
     libGLU libGL
     libcdio
     libjack2
+    alsaLib
     libsamplerate
     libsndfile
     libX11
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     mv Documentation $out/share/doc/mednafen
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     longDescription = ''
       Mednafen is a portable, utilizing OpenGL and SDL,

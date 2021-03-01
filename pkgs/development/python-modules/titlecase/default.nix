@@ -1,13 +1,15 @@
-{buildPythonPackage, lib, nose, fetchPypi}:
+{ buildPythonPackage, lib, nose, fetchPypi, regex }:
 
 buildPythonPackage rec {
   pname = "titlecase";
-  version = "0.12.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0486i99wf8ssa7sgn81fn6fv6i4rhhq6n751bc740b3hzfbpmpl4";
+    sha256 = "16e279edf085293bc9c44a68ce959c7d6cd5c653e6b5669a3a3640015cb63eb6";
   };
+
+  propagatedBuildInputs = [ regex ];
 
   checkInputs = [ nose ];
 
@@ -17,4 +19,3 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 }
-

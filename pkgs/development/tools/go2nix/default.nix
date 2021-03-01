@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
+{ lib, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
   fetchFromGitHub }:
 
 buildGoPackage rec {
@@ -17,14 +17,14 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-bindata gotools makeWrapper ];
 
-  preBuild = ''go generate ./...'';
+  preBuild = "go generate ./...";
 
   postInstall = ''
-    wrapProgram $bin/bin/go2nix \
+    wrapProgram $out/bin/go2nix \
       --prefix PATH : ${nix-prefetch-git}/bin \
       --prefix PATH : ${git}/bin
 
@@ -36,7 +36,7 @@ buildGoPackage rec {
 
   doCheck = false; # tries to access the net
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Go apps packaging for Nix";
     homepage = "https://github.com/kamilchm/go2nix";
     license = licenses.mit;

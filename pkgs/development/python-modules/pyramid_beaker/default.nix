@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
+{ lib, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
 
 buildPythonPackage rec {
   pname = "pyramid_beaker";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ beaker pyramid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
   };
 }

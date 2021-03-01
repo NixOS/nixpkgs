@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , vala
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -20,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "fondo";
-  version = "1.3.8";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "calo001";
     repo = pname;
     rev = version;
-    sha256 = "126diirhmm2igxdpgfv1l20wnz5q8hadgq53d0j83ka72mfd3qg6";
+    sha256 = "sha256-eGHgZm9Q6JnY6OQNAyrFvRsuyuFnruMJNckOCCiO4Ug=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -57,13 +58,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Find the most beautiful wallpapers for your desktop";
     homepage = "https://github.com/calo001/fondo";
     license = licenses.agpl3Plus;

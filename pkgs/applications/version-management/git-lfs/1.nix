@@ -1,10 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "git-lfs";
   version = "1.5.6";
   rev = "0d02fb7d9a1c599bbf8c55e146e2845a908e04e0";
-  
+
   goPackagePath = "github.com/git-lfs/git-lfs";
 
   src = fetchFromGitHub {
@@ -14,8 +14,7 @@ buildGoPackage rec {
     sha256 = "0wddry1lqjccf4522fvhx6grx8h57xsz17lkaf5aybnrgw677w3d";
   };
 
-  # Tests fail with 'lfstest-gitserver.go:46: main redeclared in this block'
-  excludedPackages = [ "test" ];
+  subPackages = [ "." ];
 
   preBuild = ''
     pushd go/src/github.com/git-lfs/git-lfs
@@ -23,10 +22,7 @@ buildGoPackage rec {
     popd
   '';
 
-  postInstall = ''
-    rm -v $bin/bin/{man,script}
-  '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git extension for versioning large files";
     homepage    = "https://git-lfs.github.com/";
     license     = [ licenses.mit ];

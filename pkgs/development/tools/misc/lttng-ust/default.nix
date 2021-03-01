@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liburcu, python }:
+{ lib, stdenv, fetchurl, liburcu, python3 }:
 
 # NOTE:
 #   ./configure ...
@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   preConfigure = ''
     patchShebangs .
   '';
-  
+
   propagatedBuildInputs = [ liburcu ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LTTng Userspace Tracer libraries";
     homepage = "https://lttng.org/";
     license = licenses.lgpl21Plus;

@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, wxGTK
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, wxGTK30-gtk3
 , desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
-  version = "19.09";
+  version = "20.09";
   pname = "mediainfo-gui";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "1a2ssklg12sjsw09y8my9kf35mizi3zj7w002nspcmw28apb1x82";
+    sha256 = "0rqg9z7s5bk7vlvjrs4gackzg7ib05a0dffi2ihsjf5a7kw7wcir";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libzen libmediainfo wxGTK desktop-file-utils libSM
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libzen libmediainfo wxGTK30-gtk3 desktop-file-utils libSM
                   imagemagick ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Supplies technical and tag information about a video or audio file (GUI version)";
     longDescription = ''
       MediaInfo is a convenient unified display of the most relevant technical

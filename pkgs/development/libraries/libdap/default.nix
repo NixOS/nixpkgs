@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, bison, libuuid, curl, libxml2, flex }:
+{ lib, stdenv, fetchurl, bison, libuuid, curl, libxml2, flex }:
 
 stdenv.mkDerivation rec {
-  version = "3.20.5";
+  version = "3.20.6";
   pname = "libdap";
 
   nativeBuildInputs = [ bison flex ];
@@ -9,14 +9,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.opendap.org/pub/source/${pname}-${version}.tar.gz";
-    sha256 = "15jysnsmdjs7q4iafb4qzq4b76cfyvmbxgcxnqg4sr0x4bplwfnb";
+    sha256 = "0jn5bi8k2lq6mmrsw7r1r5aviyf8gb39b2iy20v4kpkj5napzk1m";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++ SDK which contains an implementation of DAP";
     homepage = "https://www.opendap.org/software/libdap";
     license = licenses.lgpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

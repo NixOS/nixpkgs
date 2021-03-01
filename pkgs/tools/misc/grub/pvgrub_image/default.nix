@@ -1,6 +1,6 @@
-{ stdenv, grub2_xen }:
+{ lib, stdenv, grub2_xen }:
 
-with stdenv.lib;
+with lib;
 let
   efiSystemsBuild = {
     i686-linux.target = "i386";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp "grub-${efiSystemsBuild.${stdenv.hostPlatform.system}.target}-xen.bin" $out/lib/grub-xen/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PvGrub image for use for booting PV Xen guests";
 
     longDescription =

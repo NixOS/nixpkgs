@@ -1,41 +1,45 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pandas
-, astropy
-, parfive
+, fetchPypi
 , pythonOlder
-, sqlalchemy
-, scikitimage
-, glymur
+, asdf
+, astropy
+, astropy-helpers
+, astropy-extension-helpers
 , beautifulsoup4
 , drms
-, python-dateutil
-, zeep
-, tqdm
-, asdf
-, astropy-helpers
+, glymur
 , hypothesis
+, matplotlib
+, numpy
+, pandas
+, parfive
 , pytest-astropy
-, pytestcov
 , pytest-mock
+, pytestcov
+, python-dateutil
+, scikitimage
+, scipy
+, sqlalchemy
+, towncrier
+, tqdm
+, zeep
 }:
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "1.0.6";
+  version = "2.0.6";
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "sunpy";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0j2yfhfxgi95rig8cfp9lvszb7694gq90jvs0xrb472hwnzgh2sk";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "109flghca42yhsm2w5xicqhyx1mc8c3vlwvadbn65fz3lhysqj67";
   };
+
+  nativeBuildInputs = [
+    astropy-extension-helpers
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -47,6 +51,7 @@ buildPythonPackage rec {
     parfive
     sqlalchemy
     scikitimage
+    towncrier
     glymur
     beautifulsoup4
     drms
@@ -63,16 +68,11 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-    export HOME=$(mktemp -d)
-  '';
-
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
   # ignore documentation tests
   checkPhase = ''
-    pytest sunpy -k 'not rst'
+    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst'
   '';
 
   meta = with lib; {

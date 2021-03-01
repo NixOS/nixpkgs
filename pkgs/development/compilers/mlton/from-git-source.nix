@@ -6,6 +6,7 @@
 , sha256
 , stdenv
 , version
+, which
 }:
 
 stdenv.mkDerivation {
@@ -16,10 +17,13 @@ stdenv.mkDerivation {
     inherit url rev sha256;
   };
 
+  nativeBuildInputs = [ which ];
+
   buildInputs = [mltonBootstrap gmp];
 
   preBuild = ''
     find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
+    sed -i "s|/tmp|$TMPDIR|" bin/regression
 
     makeFlagsArray=(
       MLTON_VERSION="${version} ${rev}"

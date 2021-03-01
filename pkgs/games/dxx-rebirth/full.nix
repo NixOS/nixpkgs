@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper
+{ lib, stdenv, makeWrapper
 , dxx-rebirth, descent1-assets, descent2-assets }:
 
 let
@@ -14,7 +14,7 @@ let
         --add-flags "-hogdir ${assets}/share/games/descent${toString ver}"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Descent ${toString ver} using the DXX-Rebirth project engine and game assets from GOG";
       homepage    = "https://www.dxx-rebirth.com/";
       license     = with licenses; [ free unfree ];

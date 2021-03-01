@@ -7,15 +7,15 @@
 , crcmod
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "fx2";
-  version = "unstable-2020-01-25";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "libfx2";
-    rev = "d3e37f640d706aac5e69ae4476f6cd1bd0cd6a4e";
-    sha256 = "1dsyknjpgf4wjkfr64lln1lcy7qpxdx5x3qglidrcswzv9b3i4fg";
+    rev = version;
+    sha256 = "sha256-Uk+K7ym92JX4fC3PyTNxd0UvBzoNZmtbscBYjSWChuk=";
   };
 
   nativeBuildInputs = [ sdcc ];

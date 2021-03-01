@@ -32,11 +32,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "2.3.1";
+  version = "3.3.1";
   src = fetchPypi {
     pname = "Sphinx";
     inherit version;
-    sha256 = "19a28nsb0w4bs6k8rdfyk6vzrcwdpvhs2wq77rgpmww59yvndrz6";
+    sha256 = "1e8d592225447104d1172be415bc2972bd1357e3e12fdc76edf2261105db4300";
   };
   LC_ALL = "en_US.UTF-8";
 
@@ -69,12 +69,6 @@ buildPythonPackage rec {
 
   # Lots of tests. Needs network as well at some point.
   doCheck = false;
-
-  # https://github.com/NixOS/nixpkgs/issues/22501
-  # Do not run `python sphinx-build arguments` but `sphinx-build arguments`.
-  postPatch = ''
-    substituteInPlace sphinx/make_mode.py --replace "sys.executable, " ""
-  '';
 
   meta = {
     description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";

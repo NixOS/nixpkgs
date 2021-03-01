@@ -1,33 +1,38 @@
 { stdenv
 , lib
 , fetchurl
-, pkgconfig
+, pkg-config
 , expat
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , systemd
+, audit
+, libapparmor
 , libX11 ? null
 , libICE ? null
 , libSM ? null
 , x11Support ? (stdenv.isLinux || stdenv.isDarwin)
 , dbus
+, docbook_xml_dtd_44
+, docbook-xsl-nons
+, xmlto
 }:
-
-assert
-  x11Support ->
-    libX11 != null && libICE != null && libSM != null;
-
-assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.12.16";
+  version = "1.12.20";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "107ckxaff1cv4q6kmfdi2fb1nlsv03312a7kf6lb4biglhpjv8jl";
+    sha256 = "1zp5gpx61v1cpqf2zwb1cidhp9xylvw49d3zydkxqk6b1qa20xpp";
   };
 
-  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
+  patches = [
+    # 'generate.consistent.ids=1' ensures reproducible docs, for further details see
+    # http://docbook.sourceforge.net/release/xsl/current/doc/html/generate.consistent.ids.html
+    # Also applied upstream in https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/189,
+    # expected in version 1.14
+    ./docs-reproducible-ids.patch
+  ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
 
   postPatch = ''
     substituteInPlace tools/Makefile.in \
@@ -43,10 +48,13 @@ stdenv.mkDerivation rec {
       --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
   '';
 
-  outputs = [ "out" "dev" "lib" "doc" ];
+  outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
+    docbook_xml_dtd_44
+    docbook-xsl-nons
+    xmlto
   ];
 
   propagatedBuildInputs = [
@@ -58,12 +66,14 @@ stdenv.mkDerivation rec {
       libX11
       libICE
       libSM
-    ] ++ lib.optional enableSystemd systemd;
+    ] ++ lib.optional enableSystemd systemd
+    ++ lib.optionals (!stdenv.isDarwin) [ audit libapparmor ];
   # ToDo: optional selinux?
 
   configureFlags = [
     "--enable-user-session"
-    "--libexecdir=${placeholder ''out''}/libexec"
+    "--enable-xml-docs"
+    "--libexecdir=${placeholder "out"}/libexec"
     "--datadir=/etc"
     "--localstatedir=/var"
     "--runstatedir=/run"
@@ -71,9 +81,10 @@ stdenv.mkDerivation rec {
     "--with-session-socket-dir=/tmp"
     "--with-system-pid-file=/run/dbus/pid"
     "--with-system-socket=/run/dbus/system_bus_socket"
-    "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
-    "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
-  ] ++ lib.optional (!x11Support) "--without-x";
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+  ] ++ lib.optional (!x11Support) "--without-x"
+  ++ lib.optionals (!stdenv.isDarwin) [ "--enable-apparmor" "--enable-libaudit" ];
 
   # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
   # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
@@ -88,8 +99,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installFlags = [
-    "sysconfdir=${placeholder ''out''}/etc"
-    "datadir=${placeholder ''out''}/share"
+    "sysconfdir=${placeholder "out"}/etc"
+    "datadir=${placeholder "out"}/share"
   ];
 
   # it's executed from $lib by absolute path
@@ -103,7 +114,7 @@ stdenv.mkDerivation rec {
     daemon = dbus.out;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1

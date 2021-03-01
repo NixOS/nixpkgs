@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , pkgs
 , isPyPy
@@ -7,7 +7,6 @@
 , singledispatch
 , futures
 , isPy27
-, isPy33
 }:
 
 buildPythonPackage rec {
@@ -23,14 +22,13 @@ buildPythonPackage rec {
   buildInputs = [ pkgs.makeWrapper ];
 
   propagatedBuildInputs = [ pkgs.rtmpdump pycrypto requests ]
-    ++ stdenv.lib.optionals isPy27 [ singledispatch futures ]
-    ++ stdenv.lib.optionals isPy33 [ singledispatch ];
+    ++ lib.optionals isPy27 [ singledispatch futures ];
 
   postInstall = ''
     wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://livestreamer.tanuki.se";
     description = ''
       Livestreamer is CLI program that extracts streams from various

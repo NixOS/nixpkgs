@@ -1,13 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
+{ lib, stdenv, fetchFromGitHub, cmake
+, zlib, boost, openssl, python, ncurses, SystemConfiguration
 }:
 
 let
-  version = "1.2.5";
-  formattedVersion = lib.replaceChars ["."] ["_"] version;
+  version = "2.0.1";
 
   # Make sure we override python, so the correct version is chosen
-  # for the bindings, if overridden
   boostPython = boost.override { enablePython = true; inherit python; };
 
 in stdenv.mkDerivation {
@@ -17,15 +15,15 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "libtorrent-${formattedVersion}";
-    sha256 = "0nwdsv6d2gkdsh7l5a46g6cqx27xwh3msify5paf02l1qzjy4s5l";
+    rev = "v${version}";
+    sha256 = "04ppw901babkfkis89pyb8kiyn39kb21k1s838xjq5ghbral1b1c";
+    fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ boostPython openssl zlib python libiconv geoip ncurses ];
+  nativeBuildInputs = [ cmake ];
 
-  preConfigure = "./autotool.sh";
+  buildInputs = [ boostPython openssl zlib python ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   postInstall = ''
     moveToOutput "include" "$dev"
@@ -34,20 +32,16 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "python" ];
 
-  configureFlags = [
-    "--enable-python-binding"
-    "--with-libgeoip=system"
-    "--with-libiconv=yes"
-    "--with-boost=${boostPython.dev}"
-    "--with-boost-libdir=${boostPython.out}/lib"
-    "--with-libiconv=yes"
+  cmakeFlags = [
+    "-Dpython-bindings=on"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

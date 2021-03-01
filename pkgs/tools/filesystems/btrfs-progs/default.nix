@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
+{ lib, stdenv, fetchurl, pkg-config, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.6";
+  version = "5.10";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0srg276yccfmqz0skmmga3vbqx4wiqsk1l6h86n6ryhxa9viqcm1";
+    sha256 = "sha256-5xoNbdUE86XZV/zpowKB62Hs+ZHIrzFf4AYaG5eh0CE=";
   };
 
   nativeBuildInputs = [
-    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
     python3 python3.pkgs.setuptools
   ];
 
@@ -20,22 +20,18 @@ stdenv.mkDerivation rec {
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
-  # The i686 case is a quick hack; I don't know what's wrong.
-  postConfigure = stdenv.lib.optionalString (!stdenv.isi686) ''
-    export LDSHARED="$LD -shared"
-  '';
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
   postPatch = "sed -i s/-O1/-O2/ configure";
 
   postInstall = ''
-    install -v -m 444 -D btrfs-completion $out/etc/bash_completion.d/btrfs
+    install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";
     license = licenses.gpl2;

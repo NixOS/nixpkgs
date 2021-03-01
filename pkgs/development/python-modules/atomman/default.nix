@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , cython
 , datamodeldict
 , matplotlib
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     py.test tests -k 'not test_atomic'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/usnistgov/atomman/";
     description = "Atomistic Manipulation Toolkit";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, systemd, utillinux, coreutils, wall, hostname, man
+{ lib, stdenv, fetchurl, pkg-config, systemd, util-linux, coreutils, wall, hostname, man
 , enableCgiScripts ? true, gd
 }:
 
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rwqiyzlg9p0szf3x6q1ppvrw6f6dbpn2rc5z623fk3bkdalhxyv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ utillinux man ] ++ stdenv.lib.optional enableCgiScripts gd;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ util-linux man ] ++ lib.optional enableCgiScripts gd;
 
   configureFlags = [
     "--bindir=${placeholder "out"}/bin"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--with-lock-dir=/run/lock"
     "--with-pid-dir=/run"
     "--enable-usb"
-  ] ++ stdenv.lib.optionals enableCgiScripts [
+  ] ++ lib.optionals enableCgiScripts [
     "--enable-cgi"
     "--with-cgi-bin=${placeholder "out"}/libexec/cgi-bin"
   ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon for controlling APC UPSes";
     homepage = "http://www.apcupsd.com/";
     license = licenses.gpl2;

@@ -7,8 +7,19 @@ addToEmacsLoadPath() {
   fi
 }
 
+addToEmacsNativeLoadPath() {
+  local nativeDir="$1"
+  if [[ -d $nativeDir && ${EMACSNATIVELOADPATH-} != *"$nativeDir":* ]]; then
+    export EMACSNATIVELOADPATH="$nativeDir:${EMACSNATIVELOADPATH-}"
+  fi
+}
+
 addEmacsVars () {
   addToEmacsLoadPath "$1/share/emacs/site-lisp"
+
+  if [ -n "${addEmacsNativeLoadPath:-}" ]; then
+    addToEmacsNativeLoadPath "$1/share/emacs/native-lisp"
+  fi
 
   # Add sub paths to the Emacs load path if it is a directory
   # containing .el files. This is necessary to build some packages,

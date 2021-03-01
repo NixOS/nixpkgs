@@ -5,11 +5,6 @@ mesonConfigurePhase() {
         mesonFlags=("--prefix=$prefix" ${mesonFlags[@]+"${mesonFlags[@]}"})
     fi
 
-    # Build release by default.
-    if [ -n "@isCross@" ]; then
-      crossMesonFlags="--cross-file=@crossFile@/cross-file.conf"
-    fi
-
     # See multiple-outputs.sh and meson’s coredata.py
     mesonFlags=(
       "--libdir=${!outputLib}/lib" "--libexecdir=${!outputLib}/libexec"
@@ -26,7 +21,7 @@ mesonConfigurePhase() {
 
     echo "meson flags: ${mesonFlags[@]}"
 
-    CC=@cc@/bin/cc CXX=@cc@/bin/c++ meson build "${mesonFlags[@]}"
+    meson build "${mesonFlags[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then

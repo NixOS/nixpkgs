@@ -1,6 +1,6 @@
-{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, cacert, utillinux
+, unbound, dns-root-data, gettext, cacert, util-linux
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -8,10 +8,10 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.6.13";
+  version = "3.6.15";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
-  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4"
       && stdenv.buildPlatform == stdenv.hostPlatform;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "0f1gnm0756qms5cpx6yn6xb8d3imc2gkqmygf12n9x6r8zs1s11j";
+    sha256 = "0n0m93ymzd0q9hbknxc2ycanz49sqlkyyf73g9fk7n787llc7a0f";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -34,10 +34,13 @@ stdenv.mkDerivation {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
+    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch
+    # fix gnulib tests on 32-bit ARM. Included on gnutls master.
+    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
+    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   # Skip some tests:
-  #  - pkgconfig: building against the result won't work before installing (3.5.11)
+  #  - pkg-config: building against the result won't work before installing (3.5.11)
   #  - fastopen: no idea; it broke between 3.6.2 and 3.6.3 (3437fdde6 in particular)
   #  - trust-store: default trust store path (/etc/ssl/...) is missing in sandbox (3.5.11)
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
@@ -48,6 +51,8 @@ stdenv.mkDerivation {
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
+  '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
+    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool
   '';
 
   preConfigure = "patchShebangs .";
@@ -57,8 +62,12 @@ stdenv.mkDerivation {
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
-  ] ++ lib.optional guileBindings
-    [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
+  ] ++ lib.optional guileBindings [
+    "--enable-guile"
+    "--with-guile-site-dir=\${out}/share/guile/site"
+    "--with-guile-site-ccache-dir=\${out}/share/guile/site"
+    "--with-guile-extension-dir=\${out}/share/guile/site"
+  ];
 
   enableParallelBuilding = true;
 
@@ -67,9 +76,9 @@ stdenv.mkDerivation {
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ]
+  nativeBuildInputs = [ perl pkg-config ]
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
-    ++ lib.optionals doCheck [ which nettools utillinux ];
+    ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ];
 
@@ -78,7 +87,7 @@ stdenv.mkDerivation {
   #   Error setting the x509 trust file: Error while reading file.
   checkInputs = [ cacert ];
 
-  # Fixup broken libtool and pkgconfig files
+  # Fixup broken libtool and pkg-config files
   preFixup = lib.optionalString (!isDarwin) ''
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \

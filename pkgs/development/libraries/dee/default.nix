@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , fetchpatch
-, pkgconfig
+, pkg-config
 , glib
 , icu
 , gobject-introspection
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     vala
     autoreconfHook
     gobject-introspection
@@ -55,7 +55,9 @@ stdenv.mkDerivation rec {
     "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
     homepage = "https://launchpad.net/dee";
     license = licenses.lgpl3;

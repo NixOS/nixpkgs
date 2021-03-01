@@ -1,6 +1,6 @@
-{stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [] }:
+{lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [] }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "tabbed-20180310";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   inherit patches;
 
-  postPatch = stdenv.lib.optionalString (customConfig != null) ''
+  postPatch = lib.optionalString (customConfig != null) ''
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 

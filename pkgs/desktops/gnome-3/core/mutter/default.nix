@@ -1,19 +1,18 @@
 { fetchurl
 , fetchpatch
 , substituteAll
-, stdenv
-, pkgconfig
+, runCommand
+, lib, stdenv
+, pkg-config
 , gnome3
 , gettext
 , gobject-introspection
-, upower
 , cairo
 , pango
-, cogl
 , json-glib
 , libstartup_notification
 , zenity
-, libcanberra-gtk3
+, libcanberra
 , ninja
 , xkeyboard_config
 , libxkbfile
@@ -24,7 +23,6 @@
 , glib
 , gtk3
 , gnome-desktop
-, geocode-glib
 , pipewire
 , libgudev
 , libwacom
@@ -42,16 +40,27 @@
 , wayland-protocols
 }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.36.1";
+  version = "3.38.2";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09fqs9805d07c60a2ibskqffsb5wn72l8grwzb9fic5sl574b0im";
+    url = "mirror://gnome/sources/mutter/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "03a612m0c7v6y72bs3ghmpyk49177fzq6gdy1jrz4608vnalx5yr";
   };
+
+  patches = [
+    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
+    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
+    ./drop-inheritable.patch
+
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
@@ -65,7 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    # required for pkgconfig to detect mutter-clutter
+    # required for pkg-config to detect mutter-clutter
     json-glib
     libXtst
     libcap_ng
@@ -77,7 +86,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     xorgserver # for cvt command
@@ -85,16 +94,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    cogl
     egl-wayland
-    geocode-glib
     glib
     gnome-desktop
     gnome-settings-daemon
     gobject-introspection
     gsettings-desktop-schemas
     gtk3
-    libcanberra-gtk3
+    libcanberra
     libgudev
     libinput
     libstartup_notification
@@ -104,23 +111,9 @@ stdenv.mkDerivation rec {
     pango
     pipewire
     sysprof
-    upower
     xkeyboard_config
     xwayland
-    zenity
-    zenity
     wayland-protocols
-  ];
-
-  patches = [
-    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
-    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    ./drop-inheritable.patch
-
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit zenity;
-    })
   ];
 
   postPatch = ''
@@ -131,18 +124,34 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+  # Install udev files into our own tree.
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+
   passthru = {
+    libdir = "${self}/lib/mutter-7";
+
+    tests = {
+      libdirExists = runCommand "mutter-libdir-exists" {} ''
+        if [[ ! -d ${self.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+          exit 1
+        fi
+        touch $out
+      '';
+    };
+
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "gnome3.${pname}";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A window manager for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+};
+in self

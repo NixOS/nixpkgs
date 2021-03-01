@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "kdiff3";
-  version = "1.8.2";
+  version = "1.8.5";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0s5vsm1avzv88b6mf2pp20c2sz0srrj52iiqpnwi3p4ihivm8wgv";
+    sha256 = "sha256-vJL30E6xI/nFbb4wR69nv3FSQPqZSHrB0czypF4IVME=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -18,7 +18,7 @@ mkDerivation rec {
   propagatedBuildInputs = [ kconfig kcrash kinit kparts kiconthemes ];
 
   meta = with lib; {
-    homepage = "http://kdiff3.sourceforge.net/";
+    homepage = "https://invent.kde.org/sdk/kdiff3";
     license = licenses.gpl2Plus;
     description = "Compares and merges 2 or 3 files or directories";
     maintainers = with maintainers; [ peterhoeg ];

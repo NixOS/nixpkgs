@@ -5,7 +5,7 @@
 , fetchpatch
 , patchelf
 , freetype
-, libusb
+, libusb-compat-0_1
 }:
 let
   license = lib.licenses.gpl2;
@@ -25,7 +25,7 @@ let
       sha256 = "1mkrf622n0cmz57lj8w9q82a9dcr1lmyyxbnrghrxzb6gvifnbqk";
     };
 
-    buildInputs = [ libusb ];
+    buildInputs = [ libusb-compat-0_1 ];
 
     enableParallelBuilding = true;
 

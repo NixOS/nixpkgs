@@ -9,6 +9,7 @@ with lib;
   options = {
 
     networking.wicd.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to start <command>wicd</command>. Wired and

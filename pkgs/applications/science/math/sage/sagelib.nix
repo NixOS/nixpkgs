@@ -3,7 +3,8 @@
 , perl
 , buildPythonPackage
 , arb
-, openblasCompat
+, blas
+, lapack
 , brial
 , cliquer
 , cypari2
@@ -14,6 +15,7 @@
 , ecm
 , flint
 , gd
+, giac
 , givaro
 , glpk
 , gsl
@@ -50,7 +52,10 @@
 , libbraiding
 , gmpy2
 , pplpy
+, sqlite
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This is the core sage python package. Everything else is just wrappers gluing
 # stuff together. It is not very useful on its own though, since it will not
@@ -91,6 +96,7 @@ buildPythonPackage rec {
     ecm
     fflas-ffpack
     flint
+    giac
     givaro
     glpk
     gsl
@@ -103,7 +109,8 @@ buildPythonPackage rec {
     m4rie
     mpfi
     ntl
-    openblasCompat
+    blas
+    lapack
     pari
     planarity
     ppl
@@ -120,6 +127,7 @@ buildPythonPackage rec {
     libbraiding
     gmpy2
     pplpy
+    sqlite
   ];
 
   buildPhase = ''

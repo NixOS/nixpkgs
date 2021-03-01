@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf, ncurses, openjpeg
+{ lib, stdenv, fetchFromGitHub
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf_1_17, ncurses, openjpeg
 , openssl
 
 , imageSupport ? true, imlib2 ? null }:
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    freetype harfbuzz jbig2dec libjpeg libX11 mupdf ncurses openjpeg
+    freetype harfbuzz jbig2dec libjpeg libX11 mupdf_1_17 ncurses openjpeg
     openssl
-  ] ++ stdenv.lib.optionals imageSupport [
+  ] ++ lib.optionals imageSupport [
     imlib2
   ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     install ${toString binaries} $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF and image viewer for the Linux framebuffer";
     longDescription = ''
       A very fast PDF and image viewer for the Linux framebuffer with some

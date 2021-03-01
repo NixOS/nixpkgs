@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
+{ lib, stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
 let
   p = if stdenv.is64bit then {
@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
     cd unpacked
     ${rpmextract}/bin/rpmextract $src
 
+    mkdir -p $out/share/bash-completion/completions
     cp -r -t $out/bin usr/bin/*
     cp -r -t $out/share usr/share/*
-    cp -r -t $out/etc etc/*
+    cp -r -t $out/share/bash-completion/completions etc/bash_completion.d/*
 
     sed -i 's@have@${which}/bin/which >/dev/null 2>\&1@' \
-      $out/etc/bash_completion.d/yandex-disk-completion.bash
+      $out/share/bash-completion/completions/yandex-disk-completion.bash
 
     ${patchelf}/bin/patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -48,9 +49,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://help.yandex.com/disk/cli-clients.xml";
     description = "A free cloud file storage service";
-    maintainers = with stdenv.lib.maintainers; [ smironov jagajaga ];
+    maintainers = with lib.maintainers; [ smironov jagajaga ];
     platforms = ["i686-linux" "x86_64-linux"];
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     longDescription = ''
       Yandex.Disk console client for Linux lets you manage files on Disk without
       using a window interface or programs that support WebDAV. The advantages

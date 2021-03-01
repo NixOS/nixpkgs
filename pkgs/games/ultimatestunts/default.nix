@@ -1,5 +1,5 @@
-{stdenv, fetchurl, SDL, libGLU, libGL, SDL_image, freealut, openal, libvorbis,
-pkgconfig}:
+{lib, stdenv, fetchurl, SDL, libGLU, libGL, SDL_image, freealut, openal, libvorbis,
+pkg-config}:
 
 stdenv.mkDerivation {
   name = "ultimate-stunts-0.7.6.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0rd565ml6l927gyq158klhni7myw8mgllhv0xl1fg9m8hlzssgrv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL libGLU libGL SDL_image freealut openal libvorbis ];
 
   postPatch = ''
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.ultimatestunts.nl/";
     description = "Remake of the popular racing DOS-game Stunts";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

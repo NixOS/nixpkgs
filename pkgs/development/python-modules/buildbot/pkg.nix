@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
-  version = "2.7.0";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03zb09r8w8dvd9qas7h6gdwlqc7q482ikph6h3708lpnkn72xdkb";
+    sha256 = "0ymqkjz1zk4gs0hkxjh07napc4k24xxb8f3pganw27fca60xcii0";
   };
 
   postPatch = ''
@@ -14,6 +14,11 @@ buildPythonPackage rec {
     # Do we have to care about that with Nix...?
     substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
   '';
+
+  # No tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "buildbot_pkg" ];
 
   disabled = !isPy3k;
 

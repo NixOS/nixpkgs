@@ -1,25 +1,31 @@
-{ stdenv, fetchurl, config, makeWrapper
-, gconf
+{ stdenv, lib, fetchurl, config, makeWrapper
 , alsaLib
 , at-spi2-atk
 , atk
 , cairo
+, coreutils
 , cups
 , curl
-, dbus-glib
 , dbus
+, dbus-glib
 , fontconfig
 , freetype
 , gdk-pixbuf
 , glib
 , glibc
-, gst-plugins-base
-, gstreamer
+, gnome3
+, gnugrep
+, gnupg
+, gnused
+, gpgme
 , gtk2
 , gtk3
 , kerberos
+, libcanberra
+, libGL
+, libGLU
 , libX11
-, libXScrnSaver
+, libxcb
 , libXcomposite
 , libXcursor
 , libXdamage
@@ -28,23 +34,14 @@
 , libXi
 , libXinerama
 , libXrender
+, libXScrnSaver
 , libXt
-, libxcb
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
-, gnome3
-, libGLU, libGL
 , nspr
 , nss
 , pango
+, runtimeShell
 , writeScript
 , xidel
-, coreutils
-, gnused
-, gnugrep
-, gnupg
-, runtimeShell
 }:
 
 # imports `version` and `sources`
@@ -63,9 +60,9 @@ let
 
   systemLocale = config.i18n.defaultLocale or "en-US";
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
   name = "thunderbird-bin-${version}";
 in
@@ -75,14 +72,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
-    inherit (source) sha512;
+    inherit (source) sha256;
   };
 
   phases = "unpackPhase installPhase";
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      gconf
       alsaLib
       at-spi2-atk
       atk
@@ -96,8 +92,6 @@ stdenv.mkDerivation {
       gdk-pixbuf
       glib
       glibc
-      gst-plugins-base
-      gstreamer
       gtk2
       gtk3
       kerberos
@@ -113,20 +107,21 @@ stdenv.mkDerivation {
       libXrender
       libXt
       libxcb
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
+      libcanberra
       libGLU libGL
       nspr
       nss
       pango
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
   buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
+
+  # See "Note on GPG support" in `../thunderbird/default.nix` for explanations
+  # on adding `gnupg` and `gpgme` into PATH/LD_LIBRARY_PATH.
 
   installPhase =
     ''
@@ -168,7 +163,9 @@ stdenv.mkDerivation {
         --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
         --set SNAP_NAME "thunderbird" \
         --set MOZ_LEGACY_PROFILES 1 \
-        --set MOZ_ALLOW_DOWNGRADE 1
+        --set MOZ_ALLOW_DOWNGRADE 1 \
+        --prefix PATH : "${lib.getBin gnupg}/bin" \
+        --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
@@ -178,14 +175,14 @@ stdenv.mkDerivation {
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
     license = {
       free = false;
       url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
     platforms = platforms.linux;
   };
 }

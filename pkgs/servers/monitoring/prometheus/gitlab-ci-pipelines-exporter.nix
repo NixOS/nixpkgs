@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gitlab-ci-pipelines-exporter";
@@ -17,11 +17,10 @@ buildGoPackage rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prometheus / OpenMetrics exporter for GitLab CI pipelines insights";
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
     license = licenses.asl20;
     maintainers = [ maintainers.mmahut ];
-    platforms = platforms.all;
   };
 }

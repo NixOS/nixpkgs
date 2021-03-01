@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, python2Packages,
+{ lib, fetchFromGitHub, python2Packages,
   asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
 python2Packages.buildPythonApplication rec {
-  version = "7.3.2";
+  version = "7.3.3";
   pname = "offlineimap";
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "0rmj1ws6hljqnfap3p3js5s46kx85yc02hjkiki5zg44wn3hswjg";
+    sha256 = "1gg8ry67i20qapj4z20am9bm67m2q28kixcj7ja75m897vhzarnq";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ python2Packages.buildPythonApplication rec {
   meta = {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ endocrimes ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ endocrimes ];
   };
 }

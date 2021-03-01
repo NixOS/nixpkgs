@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, utillinux
+{ lib, stdenv, fetchurl, util-linux
 , cdparanoia, cdrdao, dvdplusrwtools, flac, lame, mpg123, normalize
 , vorbis-tools, xorriso }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.tar.gz";
   };
 
-  nativeBuildInputs = [ utillinux ];
+  nativeBuildInputs = [ util-linux ];
 
   postPatch = ''
     for path in \
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       BB_OGGENC=${vorbis-tools}/bin/oggenc \
       BB_OGGDEC=${vorbis-tools}/bin/oggdec \
       BB_FLACCMD=${flac.bin}/bin/flac \
-      BB_EJECT=${utillinux}/bin/eject \
+      BB_EJECT=${util-linux}/bin/eject \
       BB_NORMCMD=${normalize}/bin/normalize \
     ; do
       echo $path
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sh Install.sh --prefix $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bash script CD Burner Writer";
     longDescription = ''
       It might not be the best looking application out there, but it works.

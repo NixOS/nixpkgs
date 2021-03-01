@@ -10,16 +10,16 @@
 , at-spi2-atk
 , coreutils
 , gawk
-, xdg_utils
+, xdg-utils
 , systemd }:
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.3.00.5153";
+  version = "1.3.00.30857";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "13c7fmij0gcg6mrjjj2mhs21q7fzdssscwhihzyrmbmj64cd0a69";
+    sha256 = "06r48h1fr2si2g5ng8hsnbcmr70iapnafj21v5bzrzzrigzb2n2h";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
     pulseaudio
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg_utils}/bin")
+    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg-utils}/bin")
   '';
 
   installPhase = ''
@@ -47,12 +47,38 @@ stdenv.mkDerivation rec {
     mv share $out/share
 
     substituteInPlace $out/share/applications/teams.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
 
     ln -s $out/opt/teams/teams $out/bin/
+
+    # Work-around screen sharing bug
+    # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
+    rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
   '';
 
-  meta = with stdenv.lib; {
+  dontAutoPatchelf = true;
+
+  # Includes runtimeDependencies in the RPATH of the included Node modules
+  # so that dynamic loading works. We cannot use directly runtimeDependencies
+  # here, since the libraries from runtimeDependencies are not propagated
+  # to the dynamically loadable node modules because of a condition in
+  # autoPatchElfHook since *.node modules have Type: DYN (Shared object file)
+  # instead of EXEC or INTERP it expects.
+  # Fixes: https://github.com/NixOS/nixpkgs/issues/85449
+  postFixup = ''
+    autoPatchelf "$out"
+
+    runtime_rpath="${lib.makeLibraryPath runtimeDependencies}"
+
+    for mod in $(find "$out/opt/teams" -name '*.node'); do
+      mod_rpath="$(patchelf --print-rpath "$mod")"
+
+      echo "Adding runtime dependencies to RPATH of Node module $mod"
+      patchelf --set-rpath "$runtime_rpath:$mod_rpath" "$mod"
+    done;
+  '';
+
+  meta = with lib; {
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";
     downloadPage = "https://teams.microsoft.com/downloads";

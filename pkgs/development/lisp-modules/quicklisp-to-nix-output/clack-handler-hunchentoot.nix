@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clack-handler-hunchentoot'';
-  version = ''clack-20191007-git'';
+  baseName = "clack-handler-hunchentoot";
+  version = "clack-20191007-git";
 
-  description = ''Clack handler for Hunchentoot.'';
+  description = "Clack handler for Hunchentoot.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."clack-socket" args."flexi-streams" args."hunchentoot" args."md5" args."rfc2388" args."split-sequence" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2019-10-07/clack-20191007-git.tgz'';
-    sha256 = ''004drm82mhxmcsa00lbmq2l89g4fzwn6j2drfwdazrpi27z0ry5w'';
+    url = "http://beta.quicklisp.org/archive/clack/2019-10-07/clack-20191007-git.tgz";
+    sha256 = "004drm82mhxmcsa00lbmq2l89g4fzwn6j2drfwdazrpi27z0ry5w";
   };
 
   packageName = "clack-handler-hunchentoot";

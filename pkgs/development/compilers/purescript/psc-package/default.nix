@@ -44,12 +44,10 @@ stdenv.mkDerivation rec {
   '' + ''
     chmod u-w $PSC_PACKAGE
 
-    $PSC_PACKAGE --bash-completion-script $PSC_PACKAGE > psc-package.bash
-    $PSC_PACKAGE --fish-completion-script $PSC_PACKAGE > psc-package.fish
-    $PSC_PACKAGE --zsh-completion-script $PSC_PACKAGE > _psc-package
-    installShellCompletion \
-      psc-package.{bash,fish} \
-      --zsh _psc-package
+    installShellCompletion --cmd psc-package \
+      --bash <($PSC_PACKAGE --bash-completion-script $PSC_PACKAGE) \
+      --fish <($PSC_PACKAGE --fish-completion-script $PSC_PACKAGE) \
+      --zsh <($PSC_PACKAGE --zsh-completion-script $PSC_PACKAGE)
   '';
 
   meta = with lib; {

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, glib, git,
-  rlwrap, curl, pkgconfig, perl, makeWrapper, tzdata, ncurses,
+{ lib, stdenv, fetchurl, glib, git,
+  rlwrap, curl, pkg-config, perl, makeWrapper, tzdata, ncurses,
   pango, cairo, gtk2, gdk-pixbuf, gtkglext,
   mesa, xorg, openssl, unzip }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ./fuel-dir.patch
   ];
 
-  buildInputs = with xorg; [ git rlwrap curl pkgconfig perl makeWrapper
+  buildInputs = with xorg; [ git rlwrap curl pkg-config perl makeWrapper
     libX11 pango cairo gtk2 gdk-pixbuf gtkglext
     mesa libXmu libXt libICE libSM openssl unzip ];
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     # out of known libraries. The side effect is that find-lib
     # will work only on the known libraries. There does not seem
     # to be a generic solution here.
-    find $(echo ${stdenv.lib.makeLibraryPath (with xorg; [
+    find $(echo ${lib.makeLibraryPath (with xorg; [
         glib libX11 pango cairo gtk2 gdk-pixbuf gtkglext
         mesa libXmu libXt libICE libSM ])} | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
     cp ./factor $out/bin
     wrapProgram $out/bin/factor --prefix LD_LIBRARY_PATH : \
-      "${stdenv.lib.makeLibraryPath (with xorg; [ glib
+      "${lib.makeLibraryPath (with xorg; [ glib
         libX11 pango cairo gtk2 gdk-pixbuf gtkglext
         mesa libXmu libXt libICE libSM openssl])}"
 
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     cp misc/fuel/*.el $out/share/emacs/site-lisp/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://factorcode.org";
     license = licenses.bsd2;
     description = "A concatenative, stack-based programming language";

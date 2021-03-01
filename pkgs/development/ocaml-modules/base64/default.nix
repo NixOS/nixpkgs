@@ -1,21 +1,20 @@
-{ lib, fetchzip, buildDunePackage, alcotest, bos }:
+{ lib, fetchurl, buildDunePackage, alcotest, bos, dune-configurator }:
 
-let version = "3.2.0"; in
-
-buildDunePackage {
+buildDunePackage rec {
   pname = "base64";
-  inherit version;
+  version = "3.4.0";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-base64/archive/v${version}.tar.gz";
-    sha256 = "1ilw3zj0w6cq7i4pvr8m2kv5l5f2y9aldmv72drlwwns013b1gwy";
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-v${version}.tbz";
+    sha256 = "0d0n5gd4nkdsz14jnxq13f1f7rzxmndg5xql039a8wfppmazd70w";
   };
 
-  minimumOCamlVersion = "4.03";
-
-  buildInputs = [ alcotest bos ];
+  buildInputs = [ bos dune-configurator ];
 
   doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-base64";

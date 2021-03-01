@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pixiecore";
@@ -12,14 +12,17 @@ buildGoModule rec {
     sha256 = "14dslmx3gk08h9gqfjw5y27x7d2c6r8ir7mjd7l9ybysagpzr02a";
   };
 
-  modSha256 = "1waqaglm6f9zy5296z309ppkck2vmydhk9gjnxrgzmhqld5lcq4f";
+  vendorSha256 = "08n3m6fkwh8jmmzky3ygij4gxlcqidqk5ywi8ki8bkyzzs2lqaw7";
+
+  doCheck = false;
+
   subPackages = [ "cmd/pixiecore" ];
 
   meta = {
     description = "A tool to manage network booting of machines";
     homepage = "https://github.com/danderson/netboot/tree/master/pixiecore";
-    license =  stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ bbigras danderson ];
-    platforms = stdenv.lib.platforms.linux;
+    license =  lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras danderson ];
+    platforms = lib.platforms.linux;
   };
 }

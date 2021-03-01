@@ -1,8 +1,7 @@
 { stdenv
+, lib
 , fetchurl
 , rpmextract
-, patchelf
-, patchelfUnstable
 , libnotify
 , libuuid
 , cairo
@@ -40,17 +39,18 @@
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.1.0";
+  version = "2.19.0";
+  buildNumber = "61";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans.rpm";
-    sha256 = "1zhh0pla5gk75p8x84va9flvnk456pbcm1n6x8l82c9682fwr7dd";
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
+    sha256 = "163p67dqry256d454qzk4k4b692kz8s9fcvaxd6gi7zvnsd48ikr";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
+    lib.makeLibraryPath
       [
         libnotify
         libuuid
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
         expat
         gdk-pixbuf
         dbus
-        udev.lib
+        (lib.getLib udev)
         freetype
         nspr
         glib
@@ -96,11 +96,11 @@ stdenv.mkDerivation rec {
     mv usr/share share
     rmdir usr
 
-    ${patchelf}/bin/patchelf \
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
-    ${patchelfUnstable}/bin/patchelf \
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
 
@@ -110,14 +110,17 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
       --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
 
+    substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
+      --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"
+
     patchShebangs "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

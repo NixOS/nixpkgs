@@ -1,12 +1,12 @@
-{stdenv, rustPlatform, fetchFromGitHub, fetchzip, androidenv, substituteAll}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchzip, androidenv, makeWrapper }:
 let
-version = "2.4";
+version = "2.5";
 apk = stdenv.mkDerivation {
   pname = "gnirehtet.apk";
   inherit version;
   src = fetchzip {
     url = "https://github.com/Genymobile/gnirehtet/releases/download/v${version}/gnirehtet-rust-linux64-v${version}.zip";
-    sha256 = "13gsh5982v961j86j5y71pgas94g2d1v1fgnbslbqw4h69fbf48g";
+    sha256 = "1db0gkg5z8lighhkyqfsr9jiacrck89zmfnmp74vj865hhxgjzgq";
   };
   installPhase = ''
     mkdir $out
@@ -22,21 +22,20 @@ rustPlatform.buildRustPackage {
       owner = "Genymobile";
       repo = "gnirehtet";
       rev = "v${version}";
-      sha256 = "1c99d6zpjxa8xlrg0n1825am20d2pjiicfcjwv8iay9ylfdnvygl";
+      sha256 = "0wk6n082gnj9xk46n542h1012h8gyhldca23bs7vl73g0534g878";
   };
   sourceRoot = "source/relay-rust";
-  cargoSha256 = "0rb5xcqg5ikgrxpmzrql5n298j50aqgkkp45znbfv2x2n40dywad";
+  cargoSha256 = "0i7f52r697gjw30m8k60hd3y6wsn5lpz419r083a1rhpbinzd26q";
 
-  patchFlags = [ "-p2" ];
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      adb = "${androidenv.androidPkgs_9_0.platform-tools}/bin/adb";
-      inherit apk;
-    })
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    wrapProgram $out/bin/gnirehtet \
+    --set GNIREHTET_APK ${apk}/gnirehtet.apk \
+    --set ADB ${androidenv.androidPkgs_9_0.platform-tools}/bin/adb
+  '';
+
+  meta = with lib; {
     description = "Reverse tethering over adb for Android";
     longDescription = ''
       This project provides reverse tethering over adb for Android: it allows devices to use the internet connection of the computer they are plugged on. It does not require any root access (neither on the device nor on the computer).

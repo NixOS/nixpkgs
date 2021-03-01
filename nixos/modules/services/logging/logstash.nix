@@ -4,12 +4,8 @@ with lib;
 
 let
   cfg = config.services.logstash;
-  pluginPath = lib.concatStringsSep ":" cfg.plugins;
-  havePluginPath = lib.length cfg.plugins > 0;
   ops = lib.optionalString;
   verbosityFlag = "--log.level " + cfg.logLevel;
-
-  pluginsPath = "--path.plugins ${pluginPath}";
 
   logstashConf = pkgs.writeText "logstash.conf" ''
     input {
@@ -104,7 +100,7 @@ in
 
       inputConfig = mkOption {
         type = types.lines;
-        default = ''generator { }'';
+        default = "generator { }";
         description = "Logstash input configuration.";
         example = ''
           # Read from journal
@@ -135,7 +131,7 @@ in
 
       outputConfig = mkOption {
         type = types.lines;
-        default = ''stdout { codec => rubydebug }'';
+        default = "stdout { codec => rubydebug }";
         description = "Logstash output configuration.";
         example = ''
           redis { host => ["localhost"] data_type => "list" key => "logstash" codec => json }
@@ -173,7 +169,7 @@ in
         ExecStart = concatStringsSep " " (filter (s: stringLength s != 0) [
           "${cfg.package}/bin/logstash"
           "-w ${toString cfg.filterWorkers}"
-          (ops havePluginPath pluginsPath)
+          (concatMapStringsSep " " (x: "--path.plugins ${x}") cfg.plugins)
           "${verbosityFlag}"
           "-f ${logstashConf}"
           "--path.settings ${logstashSettingsDir}"

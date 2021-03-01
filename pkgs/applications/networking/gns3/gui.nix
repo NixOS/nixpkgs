@@ -1,12 +1,9 @@
 { stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, wrapQtAppsHook }:
 
 let
-  # TODO: This package requires qt5Full to launch
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "jsonschema" "2.6.0"
-      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
   ];
 
   python = python3.override {
@@ -23,15 +20,20 @@ in python.pkgs.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
+  nativeBuildInputs = [ wrapQtAppsHook ];
   propagatedBuildInputs = with python.pkgs; [
-    raven psutil jsonschema # tox for check
+    sentry-sdk psutil jsonschema # tox for check
     # Runtime dependencies
     sip (pyqt5.override { withWebSockets = true; }) distro setuptools
   ];
 
   doCheck = false; # Failing
+  dontWrapQtApps = true;
+  postFixup = ''
+      wrapQtApp "$out/bin/gns3"
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical Network Simulator 3 GUI (${branch} release)";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This

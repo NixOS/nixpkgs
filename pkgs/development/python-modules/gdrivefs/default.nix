@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , isPy3k
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       --replace "==" ">="
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mount Google Drive as a local file system";
     longDescription = ''
       GDriveFS is a FUSE wrapper for Google Drive developed. Design goals:

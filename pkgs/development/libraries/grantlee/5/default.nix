@@ -1,4 +1,4 @@
-{ mkDerivation, lib, copyPathsToStore, fetchurl, qtbase, qtscript, cmake }:
+{ mkDerivation, lib, fetchurl, qtbase, qtscript, cmake }:
 
 mkDerivation rec {
   pname = "grantlee";
@@ -14,7 +14,10 @@ mkDerivation rec {
   buildInputs = [ qtbase qtscript ];
   nativeBuildInputs = [ cmake ];
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./grantlee-nix-profiles.patch
+    ./grantlee-no-canonicalize-filepath.patch
+  ];
 
   outputs = [ "out" "dev" ];
   postFixup =

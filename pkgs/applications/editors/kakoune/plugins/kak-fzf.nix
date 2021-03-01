@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, fzf }:
+{ lib, stdenv, fetchFromGitHub, fzf }:
 
-assert stdenv.lib.asserts.assertOneOf "fzf" fzf.pname [ "fzf" "skim" ];
+assert lib.asserts.assertOneOf "fzf" fzf.pname [ "fzf" "skim" ];
 
 stdenv.mkDerivation {
   name = "kak-fzf";
-  version = "2019-07-16";
+  version = "2020-07-26";
+
   src = fetchFromGitHub {
     owner = "andreyorst";
     repo = "fzf.kak";
-    rev = "ede90d3e02bceb714f997adfcbab8260b42e0a19";
-    sha256 = "18w90j3fpk2ddn68497s33n66aap8phw5636y1r7pqsa641zdxcv";
+    rev = "f23daa698ad95493fbd675ae153e3cac13ef34e9";
+    hash = "sha256-BfXHTJ371ThOizMI/4BAbdJoaltGSP586hz4HqX1KWA=";
   };
 
   configurePhase = ''
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
     cp -r rc $out/share/kak/autoload/plugins/fzf
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Kakoune plugin that brings integration with fzf";
     homepage = "https://github.com/andreyorst/fzf.kak";
     license = licenses.mit;

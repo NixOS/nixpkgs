@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "bcachefs";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ chiiruno ];
+  meta.maintainers = with pkgs.lib.maintainers; [ chiiruno ];
 
   machine = { pkgs, ... }: {
     virtualisation.emptyDiskImages = [ 4096 ];
@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("modprobe bcachefs")
     machine.succeed("bcachefs version")
     machine.succeed("ls /dev")
-    
+
     machine.succeed(
         "mkdir /tmp/mnt",
         "udevadm settle",

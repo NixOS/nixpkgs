@@ -1,28 +1,28 @@
-{ stdenv, fetchFromGitLab }:
+{ lib, stdenv, fetchFromGitLab, glib, gnome3, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-night-theme-switcher";
-  version = "19";
+  version = "40";
 
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "nightthemeswitcher-gnome-shell-extension";
     rev = "v${version}";
-    sha256 = "1ll0yf1skf51wa10mlrajd1dy459w33kx0i3vhfcx2pdk7mw5a3c";
+    sha256 = "0z11y18bgdc0y41hrrzzgi4lagm2cg06x12jgdnary1ycng7xja0";
   };
 
-  # makefile tries to do install in home directory using
-  # `gnome-extensions install`
-  dontBuild = true;
+  buildInputs = [ glib gnome3.gnome-shell unzip ];
 
   uuid = "nightthemeswitcher@romainvigier.fr";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/
-    cp -r src/ $out/share/gnome-shell/extensions/${uuid}
+    unzip build/${uuid}.shell-extension.zip -d $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically change the GTK theme to dark variant when Night Light activates";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonafato ];

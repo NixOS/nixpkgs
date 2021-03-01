@@ -7,18 +7,18 @@ with lib;
       type = types.bool;
       default = true;
       description = ''
-        Whether to install files to support the 
+        Whether to install files to support the
         <link xlink:href="https://www.freedesktop.org/software/appstream/docs/index.html">AppStream metadata specification</link>.
       '';
     };
   };
 
   config = mkIf config.appstream.enable {
-    environment.pathsToLink = [ 
+    environment.pathsToLink = [
       # per component metadata
-      "/share/metainfo" 
+      "/share/metainfo"
       # legacy path for above
-      "/share/appdata" 
+      "/share/appdata"
     ];
   };
 

@@ -1,22 +1,23 @@
-{fetchurl, stdenv, dpkg, makeWrapper,
- alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1, harfbuzz, libcap,
- libpulseaudio, libxml2, libxslt, libGLU, libGL, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+{fetchurl, lib, stdenv, dpkg, makeWrapper,
+ alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
+ harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
+ nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "7.0.0.1035";
+  version = "13.3.1.22";
 
   src = fetchurl {
     url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "06mp2wvqx4y6rd5gs2mh442qcykjrrvwnkhlpx0lara331i2p0lj";
+    sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
   };
 
   buildInputs = [ dpkg makeWrapper ];
 
   dontUnpack = true;
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
       alsaLib
       cups
       curl
@@ -29,10 +30,11 @@ stdenv.mkDerivation {
       gst_all_1.gstreamer
       harfbuzz
       libcap
+      libGLU libGL
       libpulseaudio
+      libxkbcommon
       libxml2
       libxslt
-      libGLU libGL
       nspr
       nss
       openssl
@@ -96,9 +98,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.viber.com";
     description = "An instant messaging and Voice over IP (VoIP) app";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ jagajaga ];
+    maintainers = with lib.maintainers; [ jagajaga ];
   };
 
 }

@@ -5,8 +5,8 @@ let
   cfg = config.programs.singularity;
   singularity = pkgs.singularity.overrideAttrs (attrs : {
     installPhase = attrs.installPhase + ''
-      mv $bin/libexec/singularity/bin/starter-suid $bin/libexec/singularity/bin/starter-suid.orig
-      ln -s /run/wrappers/bin/singularity-suid $bin/libexec/singularity/bin/starter-suid
+      mv $out/libexec/singularity/bin/starter-suid $out/libexec/singularity/bin/starter-suid.orig
+      ln -s /run/wrappers/bin/singularity-suid $out/libexec/singularity/bin/starter-suid
     '';
   });
 in {

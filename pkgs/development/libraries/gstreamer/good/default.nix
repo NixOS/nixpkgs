@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
+, nasm
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , orc
@@ -29,40 +30,45 @@
 , mpg123
 , twolame
 , gtkSupport ? false, gtk3 ? null
+, raspiCameraSupport ? false, libraspberrypi ? null
 , enableJack ? true, libjack2
 , libXdamage
 , libXext
 , libXfixes
 , ncurses
+, wayland
+, wayland-protocols
 , xorg
 , libgudev
 , wavpack
 }:
 
 assert gtkSupport -> gtk3 != null;
+assert raspiCameraSupport -> ((libraspberrypi != null) && stdenv.isLinux && stdenv.isAarch64);
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.16.2";
+  version = "1.18.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "068k3cbv1yf3gbllfdzqsg263kzwh21y8dpwr0wvgh15vapkpfs0";
+    sha256 = "1929nhjsvbl4bw37nfagnfsnxz737cm2x3ayz9ayrn9lwkfm45zp";
   };
 
-  patches = [ ./fix_pkgconfig_includedir.patch ];
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
     meson
     ninja
     gettext
+    nasm
+  ] ++ optionals stdenv.isLinux [
+    wayland-protocols
   ];
 
   buildInputs = [
@@ -91,6 +97,8 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXdamage
     wavpack
+  ] ++ optionals raspiCameraSupport [
+    libraspberrypi
   ] ++ optionals gtkSupport [
     # for gtksink
     gtk3
@@ -102,12 +110,14 @@ stdenv.mkDerivation rec {
     libavc1394
     libiec61883
     libgudev
+    wayland
   ] ++ optionals enableJack [
     libjack2
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
   ] ++ optionals (!gtkSupport) [
     "-Dgtk3=disabled"
@@ -122,8 +132,14 @@ stdenv.mkDerivation rec {
     "-Dv4l2=disabled" # Linux-only
     "-Dximagesrc=disabled" # Linux-only
     "-Dpulse=disabled" # TODO check if we can keep this enabled
+  ] ++ optionals (!raspiCameraSupport) [
+    "-Drpicamsrc=disabled"
   ];
 
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   # linking error on Darwin
   # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
@@ -132,7 +148,7 @@ stdenv.mkDerivation rec {
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GStreamer Good Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

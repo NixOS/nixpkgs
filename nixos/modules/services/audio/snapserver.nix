@@ -31,27 +31,42 @@ let
     let
       os = val:
         optionalString (val != null) "${val}";
-      os' = prefixx: val:
-        optionalString (val != null) (prefixx + "${val}");
+      os' = prefix: val:
+        optionalString (val != null) (prefix + "${val}");
       flatten = key: value:
         "&${key}=${value}";
     in
-      "-s ${opt.type}://" + os opt.location + "?" + os' "name=" name
-        + concatStrings (mapAttrsToList flatten opt.query);
+      "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
+        + concatStrings (mapAttrsToList flatten opt.query) + "\"";
 
   optionalNull = val: ret:
     optional (val != null) ret;
 
   optionString = concatStringsSep " " (mapAttrsToList streamToOption cfg.streams
-             ++ ["-p ${toString cfg.port}"]
-             ++ ["--controlPort ${toString cfg.controlPort}"]
-             ++ optionalNull cfg.sampleFormat "--sampleFormat ${cfg.sampleFormat}"
-             ++ optionalNull cfg.codec "-c ${cfg.codec}"
-             ++ optionalNull cfg.streamBuffer "--streamBuffer ${cfg.streamBuffer}"
-             ++ optionalNull cfg.buffer "-b ${cfg.buffer}"
-             ++ optional cfg.sendToMuted "--sendToMuted");
+    # global options
+    ++ [ "--stream.bind_to_address ${cfg.listenAddress}" ]
+    ++ [ "--stream.port ${toString cfg.port}" ]
+    ++ optionalNull cfg.sampleFormat "--stream.sampleformat ${cfg.sampleFormat}"
+    ++ optionalNull cfg.codec "--stream.codec ${cfg.codec}"
+    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${toString cfg.streamBuffer}"
+    ++ optionalNull cfg.buffer "--stream.buffer ${toString cfg.buffer}"
+    ++ optional cfg.sendToMuted "--stream.send_to_muted"
+    # tcp json rpc
+    ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
+    ++ optionals cfg.tcp.enable [
+      "--tcp.address ${cfg.tcp.listenAddress}"
+      "--tcp.port ${toString cfg.tcp.port}" ]
+     # http json rpc
+    ++ [ "--http.enabled ${toString cfg.http.enable}" ]
+    ++ optionals cfg.http.enable [
+      "--http.address ${cfg.http.listenAddress}"
+      "--http.port ${toString cfg.http.port}"
+    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
 
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "snapserver" "controlPort"] [ "services" "snapserver" "tcp" "port" ])
+  ];
 
   ###### interface
 
@@ -67,19 +82,20 @@ in {
         '';
       };
 
+      listenAddress = mkOption {
+        type = types.str;
+        default = "::";
+        example = "0.0.0.0";
+        description = ''
+          The address where snapclients can connect.
+        '';
+      };
+
       port = mkOption {
         type = types.port;
         default = 1704;
         description = ''
           The port that snapclients can connect to.
-        '';
-      };
-
-      controlPort = mkOption {
-        type = types.port;
-        default = 1705;
-        description = ''
-          The port for control connections (JSON-RPC).
         '';
       };
 
@@ -93,60 +109,6 @@ in {
 
       inherit sampleFormat;
       inherit codec;
-
-      streams = mkOption {
-        type = with types; attrsOf (submodule {
-          options = {
-            location = mkOption {
-              type = types.path;
-              description = ''
-                The location of the pipe.
-              '';
-            };
-            type = mkOption {
-              type = types.enum [ "pipe" "file" "process" "spotify" "airplay" ];
-              default = "pipe";
-              description = ''
-                The type of input stream.
-              '';
-            };
-            query = mkOption {
-              type = attrsOf str;
-              default = {};
-              description = ''
-                Key-value pairs that convey additional parameters about a stream.
-              '';
-              example = literalExample ''
-                # for type == "pipe":
-                {
-                  mode = "listen";
-                };
-                # for type == "process":
-                {
-                  params = "--param1 --param2";
-                  logStderr = "true";
-                };
-              '';
-            };
-            inherit sampleFormat;
-            inherit codec;
-          };
-        });
-        default = { default = {}; };
-        description = ''
-          The definition for an input source.
-        '';
-        example = literalExample ''
-          {
-            mpd = {
-              type = "pipe";
-              location = "/run/snapserver/mpd";
-              sampleFormat = "48000:16:2";
-              codec = "pcm";
-            };
-          };
-        '';
-      };
 
       streamBuffer = mkOption {
         type = with types; nullOr int;
@@ -173,14 +135,139 @@ in {
           Send audio to muted clients.
         '';
       };
-    };
 
+      tcp.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable the JSON-RPC via TCP.
+        '';
+      };
+
+      tcp.listenAddress = mkOption {
+        type = types.str;
+        default = "::";
+        example = "0.0.0.0";
+        description = ''
+          The address where the TCP JSON-RPC listens on.
+        '';
+      };
+
+      tcp.port = mkOption {
+        type = types.port;
+        default = 1705;
+        description = ''
+          The port where the TCP JSON-RPC listens on.
+        '';
+      };
+
+      http.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable the JSON-RPC via HTTP.
+        '';
+      };
+
+      http.listenAddress = mkOption {
+        type = types.str;
+        default = "::";
+        example = "0.0.0.0";
+        description = ''
+          The address where the HTTP JSON-RPC listens on.
+        '';
+      };
+
+      http.port = mkOption {
+        type = types.port;
+        default = 1780;
+        description = ''
+          The port where the HTTP JSON-RPC listens on.
+        '';
+      };
+
+      http.docRoot = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          Path to serve from the HTTP servers root.
+        '';
+      };
+
+      streams = mkOption {
+        type = with types; attrsOf (submodule {
+          options = {
+            location = mkOption {
+              type = types.oneOf [ types.path types.str ];
+              description = ''
+                The location of the pipe, file, Librespot/Airplay/process binary, or a TCP address.
+                Use an empty string for alsa.
+              '';
+            };
+            type = mkOption {
+              type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" ];
+              default = "pipe";
+              description = ''
+                The type of input stream.
+              '';
+            };
+            query = mkOption {
+              type = attrsOf str;
+              default = {};
+              description = ''
+                Key-value pairs that convey additional parameters about a stream.
+              '';
+              example = literalExample ''
+                # for type == "pipe":
+                {
+                  mode = "create";
+                };
+                # for type == "process":
+                {
+                  params = "--param1 --param2";
+                  logStderr = "true";
+                };
+                # for type == "tcp":
+                {
+                  mode = "client";
+                }
+                # for type == "alsa":
+                {
+                  device = "hw:0,0";
+                }
+              '';
+            };
+            inherit sampleFormat;
+            inherit codec;
+          };
+        });
+        default = { default = {}; };
+        description = ''
+          The definition for an input source.
+        '';
+        example = literalExample ''
+          {
+            mpd = {
+              type = "pipe";
+              location = "/run/snapserver/mpd";
+              sampleFormat = "48000:16:2";
+              codec = "pcm";
+            };
+          };
+        '';
+      };
+    };
   };
 
 
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
+    warnings = filter (w: w != "") (mapAttrsToList (k: v: if v.type == "spotify" then ''
+      services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
+    '' else "") cfg.streams);
 
     systemd.services.snapserver = {
       after = [ "network.target" ];
@@ -199,14 +286,17 @@ in {
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
         ProtectKernelModules = true;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
         RestrictNamespaces = true;
         RuntimeDirectory = name;
         StateDirectory = name;
       };
     };
 
-    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall [ cfg.port cfg.controlPort ];
+    networking.firewall.allowedTCPPorts =
+      optionals cfg.openFirewall [ cfg.port ]
+      ++ optional cfg.tcp.enable cfg.tcp.port
+      ++ optional cfg.http.enable cfg.http.port;
   };
 
   meta = {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, libpcap, automake}:
+{ lib, stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
 
 stdenv.mkDerivation {
   name = "iftop-1.0pre4";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-  env.LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  env.LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preConfigure = ''
     cp ${automake}/share/automake*/config.{sub,guess} config
@@ -18,7 +18,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ncurses libpcap];
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) iftop; };
+
+  meta = with lib; {
     description = "Display bandwidth usage on a network interface";
     longDescription = ''
       iftop does for network usage what top(1) does for CPU usage. It listens

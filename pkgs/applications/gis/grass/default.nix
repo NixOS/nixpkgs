@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
+{ lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
+, cairo, readline, ffmpeg_3, makeWrapper, wxGTK30, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
 }:
 
@@ -7,16 +7,16 @@ stdenv.mkDerivation rec {
   name = "grass";
   version = "7.6.1";
 
-  src = with stdenv.lib; fetchFromGitHub {
+  src = with lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = "${name}_${replaceStrings ["."] ["_"] version}";
     sha256 = "1amjk9rz7vw5ha7nyl5j2bfwj5if9w62nlwx5qbp1x7spldimlll";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
+  readline ffmpeg_3 makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
   libLAS proj-datumgrid ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
     "--with-postgres-libs=${postgresql.lib}/lib/"
     # it complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
-    "--with-mysql-includes=${libmysqlclient}/include/mysql"
+    "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
     "--with-mysql-libs=${libmysqlclient}/lib/mysql"
     "--with-blas"
     "--with-liblas=${libLAS}/bin/liblas-config"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
-  makeFlags = stdenv.lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+  makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
@@ -101,8 +101,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://grass.osgeo.org/";
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [mpickering];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [mpickering];
   };
 }

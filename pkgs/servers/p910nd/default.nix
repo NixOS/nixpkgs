@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "p910nd";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mv $out/etc $out/share/doc/examples
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small printer daemon passing jobs directly to the printer";
     longDescription = ''
       p910nd is a small printer daemon intended for diskless platforms that

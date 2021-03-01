@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "trompeloeil";
-  version = "37";
+  version = "39";
 
   src = fetchFromGitHub {
     owner = "rollbear";
     repo = "trompeloeil";
     rev = "v${version}";
-    sha256 = "04f9vpzh4fc15w4ynirzs9ipm9r31dbggb2zilmk0fj4qr79am42";
+    sha256 = "1053iw4isi7qsy94fqmh570wki999sg9n70jhqy8kfy1bniczh0l";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Header only C++14 mocking framework";
     homepage = "https://github.com/rollbear/trompeloeil";
     license = licenses.boost;

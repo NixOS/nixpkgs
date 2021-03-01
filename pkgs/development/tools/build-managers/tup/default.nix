@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, fuse, pkgconfig, pcre }:
+{ lib, stdenv, fetchFromGitHub, fuse3, pkg-config, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "tup";
-  version = "0.7.8";
+  version = "0.7.10";
+  outputs = [ "bin" "man" "out" ];
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "07dmz712zbs5kayf98kywp7blssgh0y2gc1623jbsynmqwi77mcb";
+    sha256 = "1qd07h4wi0743l7z2vybfvhwp61g2p2pc5qhl40672ryl24nvd1d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse pcre ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ fuse3 pcre ];
 
   configurePhase = ''
     sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
@@ -30,14 +31,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp tup $out/bin/
-
-    mkdir -p $out/share/man/man1
-    cp tup.1 $out/share/man/man1/
+    install -D tup -t $bin/bin/
+    install -D tup.1 -t $man/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  setupHook = ./setup-hook.sh;
+
+  meta = with lib; {
     description = "A fast, file-based build system";
     longDescription = ''
       Tup is a file-based build system for Linux, OSX, and Windows. It inputs a list
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://gittup.org/tup/";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

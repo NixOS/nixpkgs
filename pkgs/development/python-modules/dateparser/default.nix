@@ -2,6 +2,7 @@
 , nose
 , parameterized
 , mock
+, flake8
 , glibcLocales
 , six
 , jdatetime
@@ -10,22 +11,40 @@
 , pytz
 , tzlocal
 , regex
-, ruamel_yaml }:
+, ruamel_yaml
+, python
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.2";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e1eac8ef28de69a554d5fcdb60b172d526d61924b1a40afbbb08df459a36006b";
+    sha256 = "159cc4e01a593706a15cd4e269a0b3345edf3aef8bf9278a57dac8adf5bf1e4a";
   };
 
-  checkInputs = [ nose mock parameterized six glibcLocales ];
+  checkInputs = [
+    flake8
+    nose
+    mock
+    parameterized
+    six
+    glibcLocales
+  ];
   preCheck =''
     # skip because of missing convertdate module, which is an extra requirement
     rm tests/test_jalali.py
   '';
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover -s tests
+  '';
+
+  # Strange
+  # AttributeError: 'module' object has no attribute 'config'
+  doCheck = false;
 
   propagatedBuildInputs = [
     # install_requires

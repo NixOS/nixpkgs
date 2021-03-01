@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, gnutls, freetype
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gnutls, freetype
 , SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
 , libSM, libsndfile, libogg, libtool
 }:
@@ -8,16 +8,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freewheeling";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "free-wheeling";
     repo = "freewheeling";
     rev = "v${version}";
-    sha256 = "1gjii2kndffj9iqici4vb9zrkrdqj1hs9q43x7jv48wv9872z78r";
+    sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];
+  nativeBuildInputs = [ pkg-config autoreconfHook libtool ];
   buildInputs = [
     freetype SDL SDL_gfx SDL_ttf
     liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     '' ;
 
     homepage = "http://freewheeling.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.sepi ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.sepi ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,7 +4,8 @@ let
 
   runCommand' = runLocal: stdenv: name: env: buildScript:
     stdenv.mkDerivation ({
-      inherit name buildScript;
+      name = lib.strings.sanitizeDerivationName name;
+      inherit buildScript;
       buildCommand = ''
         source <(${jq}/bin/jq -r <.attrs.json '.buildScript')
       '';
@@ -234,6 +235,8 @@ rec {
    *
    * This creates a single derivation that replicates the directory structure
    * of all the input paths.
+   *
+   * BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
    *
    * Examples:
    * # adds symlinks of hello to current build.

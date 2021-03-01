@@ -1,19 +1,23 @@
 { lib, fetchPypi, buildPythonPackage
-, lxml, pycryptodome, construct
+, lxml, pycryptodomex, construct
 , argon2_cffi, dateutil, future
 }:
 
 buildPythonPackage rec {
   pname   = "pykeepass";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ysjn92bixq8wkwhlbhrjj9z0h80qnlnj7ks5478ndkzdw5gxvm1";
+    sha256 = "b3e07eb2dd3aeb1dfa1a2d2d17be77066ee560c1e770f1c72d7ea5608117d284";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "==" ">="
+  '';
+
   propagatedBuildInputs = [
-    lxml pycryptodome construct
+    lxml pycryptodomex construct
     argon2_cffi dateutil future
   ];
 

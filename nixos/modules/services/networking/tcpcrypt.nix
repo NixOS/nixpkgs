@@ -15,6 +15,7 @@ in
   options = {
 
     networking.tcpcrypt.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to enable opportunistic TCP encryption. If the other end

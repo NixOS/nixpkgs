@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2 }:
+{lib, stdenv, fetchurl, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   version = "0.1";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0s2sj19n8ys92q9832hkn36ld91bb4qavicc6nygkry6qdpkkmjw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ stdenv gtk2 ];
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A font selection program for X11 using the GTK 2 toolkit";
     longDescription = ''
       Font selection tool similar to xfontsel implemented using GTK 2.

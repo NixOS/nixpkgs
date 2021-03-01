@@ -12,9 +12,9 @@
 , makeWrapper
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
-, stdenv
+, lib, stdenv
 , systemd
 , wrapGAppsHook
 , xapps
@@ -27,17 +27,17 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "4.4.0";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0hplck17rksfgqm2z58ajvz4p2m4zg6ksdpbc27ki20iv4fv620s";
+    sha256 = "133vpgs0dqr16pvx5wyxhfcargn9wl14z0q99m2pn93hf6zycmsv";
   };
 
   patches = [
-    ./0001-Add-dbus_glib-dependency.patch
+    ./0001-Use-dbus_glib-instead-of-elogind.patch
   ];
 
   buildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_412
     python3
-    pkgconfig
+    pkg-config
     libxslt
     xmlto
   ];
@@ -95,11 +95,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "The Cinnamon session manager";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

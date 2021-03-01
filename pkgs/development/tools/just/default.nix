@@ -1,29 +1,30 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, dash }:
+{ lib, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.5.10";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s8np28glzn3kmh59dwk86yc9fb2lm9fq2325kzmy7rkb5jsdcl1";
+    sha256 = "sha256-K8jeX1/Wn6mbf48GIR2wRAwiwg1rxtbtCPjjH+4dPYw=";
   };
 
-  cargoSha256 = "05mrzav3aydvwac9jjckdmlxvxnlcncmkfsdb9z7zvxia4k89w1l";
+  cargoSha256 = "sha256-a9SBeX3oesdoC5G+4dK2tbt+W7VA4jPqCM9tOAex4DI=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    # generate completion scripts for just
+    installManPage man/just.1
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-
-    $out/bin/just --completions bash > "$out/share/bash-completion/completions/just"
-    $out/bin/just --completions fish > "$out/share/fish/vendor_completions.d/just.fish"
-    $out/bin/just --completions zsh  > "$out/share/zsh/site-functions/_just"
+    installShellCompletion --cmd just \
+      --bash completions/just.bash \
+      --fish completions/just.fish \
+      --zsh  completions/just.zsh
   '';
 
-  checkInputs = [ coreutils bash dash ];
+  checkInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty
@@ -38,24 +39,14 @@ rustPlatform.buildRustPackage rec {
         -e "s@#!/usr/bin/env bash@#!${bash}/bin/sh@g"
   '';
 
-  # Skip "edit" when running "cargo test",
-  # since this test case needs "cat".
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo test --
-        --skip edit
-        ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- \
-        --skip edit \
-        ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
-    runHook postCheck
-  '';
+  # Skip "edit" when running "cargo test", since this test case needs "cat".
+  # Skip "choose" when running "cargo test", since this test case needs "fzf".
+  checkFlags = [ "--skip=choose" "--skip=edit" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A handy way to save and run project-specific commands";
     homepage = "https://github.com/casey/just";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.all;
   };
 }

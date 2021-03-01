@@ -1,4 +1,4 @@
-{ stdenv, cmake, ninja, fetchFromGitHub }:
+{ lib, stdenv, cmake, ninja, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
@@ -15,13 +15,18 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-cmake-config-includedir.patch
+    (fetchpatch {
+      name = "fix-pkgconfig-paths.patch";
+      url = "https://github.com/google/googletest/commit/5126ff48d9ac54828d1947d1423a5ef2a8efee3b.patch";
+      sha256 = "sha256-TBvECU/9nuvwjsCjWJP2b6DNy+FYnHIFZeuVW7g++JE=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ninja ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
     license = licenses.bsd3;

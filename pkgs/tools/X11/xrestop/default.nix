@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, pkgconfig, ncurses }:
+{ lib, stdenv, fetchurl, xorg, pkg-config, ncurses }:
 stdenv.mkDerivation {
 
   pname = "xrestop";
@@ -9,11 +9,11 @@ stdenv.mkDerivation {
     sha256 = "0mz27jpij8am1s32i63mdm58znfijcpfhdqq1npbmvgclyagrhk7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ xorg.libX11 xorg.libXres xorg.libXext ncurses ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
   };
 }

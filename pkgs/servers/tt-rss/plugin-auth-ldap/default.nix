@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "tt-rss-plugin-auth-ldap";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -D plugins/auth_ldap/init.php $out/auth_ldap/init.php
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin for TT-RSS to authenticate users via ldap";
     license = licenses.asl20;
     homepage = "https://github.com/hydrian/TTRSS-Auth-LDAP";

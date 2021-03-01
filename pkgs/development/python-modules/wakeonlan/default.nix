@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, setuptools_scm, pytest, mock }:
+{ lib, fetchPypi, buildPythonPackage, setuptools_scm, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "wakeonlan";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small python module for wake on lan";
     homepage = "https://github.com/remcohaszing/pywakeonlan";
     license = licenses.wtfpl;

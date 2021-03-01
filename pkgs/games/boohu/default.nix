@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildGoPackage}:
+{lib, fetchurl, buildGoPackage}:
 
 buildGoPackage rec {
 
@@ -14,9 +14,9 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  postInstall = "mv $bin/bin/boohu.git $bin/bin/boohu";
+  postInstall = "mv $out/bin/boohu.git $out/bin/boohu";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A new coffee-break roguelike game";
     longDescription = ''
       Break Out Of Hareka's Underground (Boohu) is a roguelike game mainly

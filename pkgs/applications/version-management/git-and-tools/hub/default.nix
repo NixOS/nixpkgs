@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, groff, utillinux }:
+{ lib, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux, nixosTests }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -16,28 +16,32 @@ buildGoPackage rec {
     sha256 = "1qjab3dpia1jdlszz3xxix76lqrm4zbmqzd9ymld7h06awzsg2vh";
   };
 
-  nativeBuildInputs = [ groff utillinux ];
+  nativeBuildInputs = [ groff installShellFiles util-linux ];
 
   postPatch = ''
     patchShebangs .
+    substituteInPlace git/git.go --replace "cmd.New(\"git\")" "cmd.New(\"${git}/bin/git\")"
+    substituteInPlace commands/args.go --replace "Executable:  \"git\"" "Executable:  \"${git}/bin/git\""
   '';
 
   postInstall = ''
     cd go/src/${goPackagePath}
-    install -D etc/hub.zsh_completion "$bin/share/zsh/site-functions/_hub"
-    install -D etc/hub.bash_completion.sh "$bin/share/bash-completion/completions/hub"
-    install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
+    installShellCompletion --zsh --name _hub etc/hub.zsh_completion
+    installShellCompletion --bash --name hub etc/hub.bash_completion.sh
+    installShellCompletion --fish --name hub.fish etc/hub.fish_completion
 
     LC_ALL=C.UTF8 \
     make man-pages
-    cp -vr --parents share/man/man[1-9]/*.[1-9] $bin/
+    installManPage share/man/man[1-9]/*.[1-9]
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) hub; };
+
+  meta = with lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
     license = licenses.mit;
     homepage = "https://hub.github.com/";
-    maintainers = with maintainers; [ the-kenny globin ];
+    maintainers = with maintainers; [ globin ];
     platforms = with platforms; unix;
   };
 }

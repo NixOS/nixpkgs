@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7d220a032..786b60e6e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -183,7 +183,6 @@ ENDFUNCTION(CODESIGN_ON_MAC target)
+ # Define a function to link dependencies.
+ FUNCTION(FISH_LINK_DEPS_AND_SIGN target)
+   TARGET_LINK_LIBRARIES(${target} fishlib)
+-  CODESIGN_ON_MAC(${target})
+ ENDFUNCTION(FISH_LINK_DEPS_AND_SIGN)
+ 
+ # Define libfish.a.

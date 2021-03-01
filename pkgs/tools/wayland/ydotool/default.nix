@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, boost, libevdevplus, libuinputplus }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, boost, libevdevplus, libuinputplus }:
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
       ""
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     boost libevdevplus libuinputplus
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Generic Linux command-line automation tool";
     license = licenses.mit;

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, intltool, gtk3, gnome3, librsvg, pkgconfig, pango, atk, gtk2
-, gdk-pixbuf }:
+{ lib, stdenv, fetchurl, intltool, gtk3, gnome3, librsvg, pkg-config, pango, atk, gtk2
+, gdk-pixbuf, hicolor-icon-theme }:
 
 let
   pname = "gnome-themes-extra";
@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "06aqg9asq2vqi9wr29bs4v8z2bf4manhbhfghf4nvw01y2zs0jvw";
   };
 
@@ -18,14 +18,17 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [ gtk3 librsvg pango atk gtk2 gdk-pixbuf gnome3.adwaita-icon-theme ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ gtk3 librsvg pango atk gtk2 gdk-pixbuf ];
+  propagatedBuildInputs = [ gnome3.adwaita-icon-theme hicolor-icon-theme ];
 
-  postFixup = ''
+  dontDropIconThemeCache = true;
+
+  postInstall = ''
     gtk-update-icon-cache "$out"/share/icons/HighContrast
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

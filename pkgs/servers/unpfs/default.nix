@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "unpfs";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     install -D -m 0444 ../../LICEN* -t "$out/share/doc/${pname}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "9P2000.L server implementation in Rust";
     homepage = "https://github.com/pfpacket/rust-9p";
     license = licenses.bsd3;

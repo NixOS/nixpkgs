@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ostree
 , rpm
@@ -6,7 +6,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , cargo
 , rustc
 , gobject-introspection
@@ -32,25 +32,25 @@
 , python
 , json_c
 , zchunk
-, libmodulemd_1
-, utillinux
+, libmodulemd
+, util-linux
 , sqlite
 , cppunit
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2020.1";
+  version = "2021.1";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1xgfppq4fqqvg3cs327bckjpiz6rrn3bbbhg3q5p4j2bzsq89xiz";
+    sha256 = "sha256-1GpM7IW27MgbXG6iVo5qnWaotwN1GgcXf7dFGRF8s0w=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     which
     autoconf
     automake
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
     # required by vendored libdnf
     json_c
     zchunk
-    libmodulemd_1
-    utillinux # for smartcols.pc
+    libmodulemd
+    util-linux # for smartcols.pc
     sqlite
     cppunit
   ];
@@ -114,9 +114,9 @@ stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
-    homepage = "https://rpm-ostree.readthedocs.io/en/latest/";
+    homepage = "https://coreos.github.io/rpm-ostree/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;

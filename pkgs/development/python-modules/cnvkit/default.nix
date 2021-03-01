@@ -1,11 +1,13 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , rPackages
 , rWrapper
 , buildPythonPackage
 , biopython
 , numpy
 , scipy
+, scikitlearn
 , pandas
 , matplotlib
 , reportlab
@@ -14,21 +16,34 @@
 , pillow
 , pomegranate
 , pyfaidx
+, python
+, R
 }:
 
 buildPythonPackage rec {
   pname = "CNVkit";
-  version = "0.9.6";
+  version = "0.9.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hj8c98s538i0hg5mrz4bw4v07qmcl51rhxq611rj2nglnc9r25y";
+  src = fetchFromGitHub {
+    owner = "etal";
+    repo = "cnvkit";
+    rev = "v${version}";
+    sha256 = "022zplgqil5l76vri647cyjx427vnbg5r2gw6lw712d2janvdjm7";
   };
+
+  patches = [
+    # Fix: AttributeError: module 'pandas.io.common' has no attribute 'EmptyDataError'
+    (fetchpatch {
+      url = "https://github.com/etal/cnvkit/commit/392adfffedfa0415e635b72c5027835b0a8d7ab5.patch";
+      sha256 = "0s0gwyy0hybmhc3jij2v9l44b6lkcmclii8bkwsazzj2kc24m2rh";
+    })
+  ];
 
   propagatedBuildInputs = [
     biopython
     numpy
     scipy
+    scikitlearn
     pandas
     matplotlib
     reportlab
@@ -37,11 +52,23 @@ buildPythonPackage rec {
     future
     pillow
     pomegranate
+    rPackages.DNAcopy
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
+  '';
+
+  checkInputs = [ R ];
+
+  checkPhase = ''
+    pushd test/
+    ${python.interpreter} test_io.py
+    ${python.interpreter} test_genome.py
+    ${python.interpreter} test_cnvlib.py
+    ${python.interpreter} test_commands.py
+    ${python.interpreter} test_r.py
   '';
 
   meta = with lib; {

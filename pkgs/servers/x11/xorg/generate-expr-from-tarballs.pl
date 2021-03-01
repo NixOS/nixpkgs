@@ -11,8 +11,7 @@ use warnings;
 
 use File::Basename;
 use File::Spec::Functions;
-
-my $tmpDir = "/tmp/xorg-unpack";
+use File::Temp;
 
 
 my %pkgURLs;
@@ -26,7 +25,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -93,8 +92,7 @@ while (<>) {
     $pkgHashes{$pkg} = $hash;
 
     print "\nunpacking $path\n";
-    system "rm -rf '$tmpDir'";
-    mkdir $tmpDir, 0700;
+    my $tmpDir = File::Temp->newdir();
     system "cd '$tmpDir' && tar xf '$path'";
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
@@ -163,7 +161,7 @@ while (<>) {
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
-        push @nativeRequires, "python";
+        push @nativeRequires, "python3";
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
@@ -294,7 +292,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
-    unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
+    unshift @arguments, "stdenv", "pkg-config", "fetchurl";
     my $argumentsStr = join ", ", @arguments;
 
     my $extraAttrsStr = "";
@@ -307,13 +305,13 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
-      url = $pkgURLs{$pkg};
+      url = "$pkgURLs{$pkg}";
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
+    nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
-    meta.platforms = stdenv.lib.platforms.unix;
+    meta.platforms = lib.platforms.unix;
   }) {};
 
 EOF

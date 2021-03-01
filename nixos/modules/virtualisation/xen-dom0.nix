@@ -57,7 +57,8 @@ in
 
     virtualisation.xen.bootParams =
       mkOption {
-        default = "";
+        default = [];
+        type = types.listOf types.str;
         description =
           ''
             Parameters passed to the Xen hypervisor at boot time.
@@ -68,6 +69,7 @@ in
       mkOption {
         default = 0;
         example = 512;
+        type = types.addCheck types.int (n: n >= 0);
         description =
           ''
             Amount of memory (in MiB) allocated to Domain 0 on boot.
@@ -78,6 +80,7 @@ in
     virtualisation.xen.bridge = {
         name = mkOption {
           default = "xenbr0";
+          type = types.str;
           description = ''
               Name of bridge the Xen domUs connect to.
             '';
@@ -103,6 +106,7 @@ in
         };
 
         forwardDns = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             If set to <literal>true</literal>, the DNS queries from the
@@ -135,14 +139,8 @@ in
           };
       };
 
-    virtualisation.xen.trace =
-      mkOption {
-        default = false;
-        description =
-          ''
-            Enable Xen tracing.
-          '';
-      };
+    virtualisation.xen.trace = mkEnableOption "Xen tracing";
+
   };
 
 
@@ -206,8 +204,8 @@ in
       ''
         if [ -d /proc/xen ]; then
             ${pkgs.kmod}/bin/modprobe xenfs 2> /dev/null
-            ${pkgs.utillinux}/bin/mountpoint -q /proc/xen || \
-                ${pkgs.utillinux}/bin/mount -t xenfs none /proc/xen
+            ${pkgs.util-linux}/bin/mountpoint -q /proc/xen || \
+                ${pkgs.util-linux}/bin/mount -t xenfs none /proc/xen
         fi
       '';
 

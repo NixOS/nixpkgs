@@ -1,35 +1,44 @@
 { stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , ifaddr
 , typing
 , isPy27
 , pythonOlder
-, python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.24.5";
+  version = "0.28.8";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jpgd0rk91si93857mjrizan5gc42kj1q4fi4160qgk68la88fl9";
+    sha256 = "0narq8haa3b375vfblbyil77n8bw0wxqnanl91pl0wwwm884mqjb";
   };
 
   propagatedBuildInputs = [ ifaddr ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "zeroconf/test.py" ];
+  disabledTests = [
+    # disable tests that expect some sort of networking in the build container
+    "test_launch_and_close"
+    "test_launch_and_close_v4_v6"
+    "test_launch_and_close_v6_only"
+    "test_integration_with_listener_ipv6"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_lots_of_names"
+  ];
+  __darwinAllowLocalNetworking = true;
 
-  checkPhase = ''
-    ${python.interpreter} test_zeroconf.py
-  '';
+  pythonImportsCheck = [ "zeroconf" ];
 
-  meta = with stdenv.lib; {
-    description = "A pure python implementation of multicast DNS service discovery";
+  meta = with lib; {
+    description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

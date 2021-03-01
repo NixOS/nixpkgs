@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, makeDesktopItem, ffmpeg
+{ lib, fetchurl, makeDesktopItem, ffmpeg_3
 , qmake, qttools, mkDerivation
 , qtbase, qtdeclarative, qtlocation, qtquickcontrols2, qtwebchannel, qtwebengine
 }:
 
 mkDerivation rec {
   pname = "clipgrab";
-  version = "3.8.11";
+  version = "3.9.5";
 
   src = fetchurl {
-    sha256 = "0jpfdmyzjasq4x1xvk7b1cmhhq6fz6ydvvbwz2wclph367x496xk";
+    sha256 = "1p8pqa5s70basdm2zpmahc54shsxrr0fr7chvv425n5a9sqba4dh";
     # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
     url = "https://download.clipgrab.org/${pname}-${version}.tar.gz";
   };
 
-  buildInputs = [ ffmpeg qtbase qtdeclarative qtlocation qtquickcontrols2 qtwebchannel qtwebengine ];
+  buildInputs = [ ffmpeg_3 qtbase qtdeclarative qtlocation qtquickcontrols2 qtwebchannel qtwebengine ];
   nativeBuildInputs = [ qmake qttools ];
 
-  postPatch = stdenv.lib.optionalString (ffmpeg != null) ''
+  postPatch = lib.optionalString (ffmpeg_3 != null) ''
   substituteInPlace converter_ffmpeg.cpp \
-    --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
-    --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
+    --replace '"ffmpeg"' '"${ffmpeg_3.bin}/bin/ffmpeg"' \
+    --replace '"ffmpeg ' '"${ffmpeg_3.bin}/bin/ffmpeg '
   '';
 
   qmakeFlags = [ "clipgrab.pro" ];
@@ -42,7 +42,7 @@ mkDerivation rec {
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video downloader for YouTube and other sites";
     longDescription = ''
       ClipGrab is a free downloader and converter for YouTube, Vimeo, Metacafe,

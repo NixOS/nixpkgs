@@ -1,15 +1,21 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
-, enableShared ? true
+, # N.B. the defult is intentionally not from an `isStatic`. See
+  # https://gcc.gnu.org/install/configure.html - this is about target
+  # platform libraries not host platform ones unlike normal. But since
+  # we can't rebuild those without also rebuilding the compiler itself,
+  # we opt to always build everything unlike our usual policy.
+  enableShared ? true
 , enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
-, gmp, mpfr, libmpc, gettext, which
+, gmp, mpfr, libmpc, gettext, which, patchelf
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
@@ -20,8 +26,8 @@
 , threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
-  stripped ? stdenv.hostPlatform == stdenv.buildPlatform
-          && stdenv.targetPlatform == stdenv.hostPlatform
+  stripped ? stdenv.hostPlatform.system == stdenv.buildPlatform.system
+          && stdenv.targetPlatform.system == stdenv.hostPlatform.system
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
@@ -39,7 +45,7 @@ assert langGo -> langCC;
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
-with stdenv.lib;
+with lib;
 with builtins;
 
 let majorVersion = "7";
@@ -52,6 +58,8 @@ let majorVersion = "7";
         ./riscv-pthread-reentrant.patch
         # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
         ./riscv-no-relax.patch
+
+        ./0001-Fix-build-for-glibc-2.31.patch
       ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optionals targetPlatform.isNetBSD [
@@ -65,10 +73,9 @@ let majorVersion = "7";
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
-        url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
-        sha256 = "1nyjnshpq5gbcbbpfv27hy4ajvycmgkpiabkjlxnnrnq1d99k1ay";
-      });
+
+      # Obtain latest patch with ../update-mcfgthread-patches.sh
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -90,7 +97,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = [ "out" "man" "info" ] ++ lib.optional (!langJit) "lib";
   setOutputFlags = false;
 
   libc_dev = stdenv.cc.libc_dev;
@@ -99,15 +106,15 @@ stdenv.mkDerivation ({
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
-  prePatch = stdenv.lib.optionalString hostPlatform.isDarwin ''
+  prePatch = lib.optionalString hostPlatform.isDarwin ''
     substituteInPlace gcc/config/darwin-c.c \
       --replace 'if (stdinc)' 'if (0)'
 
     substituteInPlace libgcc/config/t-slibgcc-darwin \
-      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
     substituteInPlace libgfortran/configure \
-      --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+      --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
   '';
 
   postPatch = ''
@@ -133,13 +140,13 @@ stdenv.mkDerivation ({
                  -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
            done
         ''
-        + stdenv.lib.optionalString (targetPlatform.libc == "musl")
+        + lib.optionalString (targetPlatform.libc == "musl")
         ''
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
     else "")
-      + stdenv.lib.optionalString targetPlatform.isAvr ''
+      + lib.optionalString targetPlatform.isAvr ''
         makeFlagsArray+=(
            'LIMITS_H_TEST=false'
         )
@@ -154,11 +161,14 @@ stdenv.mkDerivation ({
 
   # For building runtime libs
   depsBuildTarget =
-    if hostPlatform == buildPlatform then [
-      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
-    ] else assert targetPlatform == hostPlatform; [ # build != host == target
-      stdenv.cc
-    ];
+    (
+      if hostPlatform == buildPlatform then [
+        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+      ] else assert targetPlatform == hostPlatform; [ # build != host == target
+        stdenv.cc
+      ]
+    )
+    ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
     gmp mpfr libmpc libelf
@@ -173,17 +183,18 @@ stdenv.mkDerivation ({
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
 
   preConfigure = import ../common/pre-configure.nix {
-    inherit (stdenv) lib;
+    inherit lib;
     inherit version hostPlatform langGo;
   };
 
   dontDisableStatic = true;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = import ../common/configure-flags.nix {
     inherit
+      lib
       stdenv
       targetPackages
       crossStageStatic libcCross
@@ -202,6 +213,7 @@ stdenv.mkDerivation ({
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   } ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
     ++ optional targetPlatform.isNetBSD "--disable-libcilkrts"
@@ -243,13 +255,13 @@ stdenv.mkDerivation ({
 
     inherit
       (import ../common/extra-target-flags.nix {
-        inherit stdenv crossStageStatic libcCross threadsCross;
+        inherit lib stdenv crossStageStatic libcCross threadsCross;
       })
-      EXTRA_TARGET_FLAGS
-      EXTRA_TARGET_LDFLAGS
+      EXTRA_FLAGS_FOR_TARGET
+      EXTRA_LDFLAGS_FOR_TARGET
       ;
-    NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
-    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+    NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+    NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
   } // optionalAttrs (hostPlatform.system == "x86_64-solaris") {
     # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
     CC = "gcc -m64";
@@ -267,7 +279,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "https://gcc.gnu.org/";
-    license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
+    license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");
 
@@ -280,13 +292,13 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
 
     platforms =
-      stdenv.lib.platforms.linux ++
-      stdenv.lib.platforms.freebsd ++
-      stdenv.lib.platforms.illumos ++
-      stdenv.lib.platforms.darwin;
+      lib.platforms.linux ++
+      lib.platforms.freebsd ++
+      lib.platforms.illumos ++
+      lib.platforms.darwin;
   };
 }
 

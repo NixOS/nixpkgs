@@ -1,33 +1,36 @@
-{ lib, libpcap, buildGoPackage, fetchFromGitHub }:
-
-with lib;
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "etcd";
-  version = "3.3.13"; # After updating check that nixos tests pass
-  rev = "v${version}";
+  version = "3.3.25";
 
   goPackagePath = "github.com/coreos/etcd";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "coreos";
+    owner = "etcd-io";
     repo = "etcd";
-    sha256 = "1kac4qfr83f2hdz35403f1ald05wc85vvhw79vxb431n61jvyaqy";
+    rev = "v${version}";
+    sha256 = "10cyy6jr2xzmla5yyn850cv323ixrk70fjpk8lxjjjvy0ffmb6hj";
   };
 
-  subPackages = [
-    "cmd/etcd"
-    "cmd/etcdctl"
-  ];
+  buildPhase = ''
+    cd go/src/${goPackagePath}
+    patchShebangs .
+    ./build
+    ./functional/build
+  '';
 
-  buildInputs = [ libpcap ];
+  installPhase = ''
+    install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
+  '';
 
-  meta = {
+  passthru.tests = { inherit (nixosTests) etcd etcd-cluster; };
+
+  meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
-    homepage = "https://coreos.com/etcd/";
-    maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    homepage = "https://etcd.io/";
+    maintainers = with maintainers; [ offline zowoq ];
+    platforms = platforms.unix;
   };
 }

@@ -3,7 +3,7 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-20.03">
- <title>Release 20.03 (“Markhor”, 2020.03/??)</title>
+ <title>Release 20.03 (“Markhor”, 2020.04/20)</title>
 
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -41,6 +41,15 @@
    <listitem>
     <para>
      Linux kernel is updated to branch 5.4 by default (from 4.19).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Grub is updated to 2.04, adding support for booting from F2FS filesystems and
+     Btrfs volumes using zstd compression. Note that some users have been unable
+to boot after upgrading to 2.04 - for more information, please see <link
+xlink:href="https://github.com/NixOS/nixpkgs/issues/61718#issuecomment-617618503">this
+     discussion</link>.
     </para>
    </listitem>
    <listitem>
@@ -650,7 +659,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
       <listitem>
        <para>
          <literal>boot.extraTTYs</literal> renamed to
-         <link linkend="opt-console.extraTTYs">console.extraTTYs</link>
+         <literal>console.extraTTYs</literal>.
        </para>
       </listitem>
     </itemizedlist>
@@ -792,11 +801,11 @@ users.users.me =
      The <option>services.xserver.displayManager.auto</option> module has been removed.
      It was only intended for use in internal NixOS tests, and gave the false impression
      of it being a special display manager when it's actually LightDM.
-     Please use the <xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin"/> options instead,
+     Please use the <option>services.xserver.displayManager.lightdm.autoLogin</option> options instead,
      or any other display manager in NixOS as they all support auto-login. If you used this module specifically
      because it permitted root auto-login you can override the lightdm-autologin pam module like:
 <programlisting>
-<link xlink:href="#opt-security.pam.services._name__.text">security.pam.services.lightdm-autologin.text</link> = lib.mkForce ''
+<link xlink:href="#opt-security.pam.services._name_.text">security.pam.services.lightdm-autologin.text</link> = lib.mkForce ''
     auth     requisite pam_nologin.so
     auth     required  pam_succeed_if.so quiet
     auth     required  pam_permit.so
@@ -935,8 +944,8 @@ services.dnsmasq.servers = [ "127.0.0.1#43" ];
    </listitem>
    <listitem>
     <para>
-      Haskell <varname>env</varname> and <varname>shellFor</varname> dev shell environments now organized dependencies the same way as regular builds.
-      In particular, rather than receiving all the different lists of dependencies master together as one big lists, and then partitioning into Haskell and non-Hakell dependencies, they work from the original many different dependency parameters and don't need to algorithmically partition anything.
+      Haskell <varname>env</varname> and <varname>shellFor</varname> dev shell environments now organize dependencies the same way as regular builds.
+      In particular, rather than receiving all the different lists of dependencies mashed together as one big list, and then partitioning into Haskell and non-Hakell dependencies, they work from the original many different dependency parameters and don't need to algorithmically partition anything.
     </para>
     <para>
       This means that if you incorrectly categorize a dependency, e.g. non-Haskell library dependency as a <varname>buildDepends</varname> or run-time Haskell dependency as a <varname>setupDepends</varname>, whereas things would have worked before they may not work now.
@@ -1145,9 +1154,11 @@ systemd.services.nginx.serviceConfig.User = lib.mkForce "root";
      As well as this, the options <literal>security.acme.acceptTerms</literal> and either
      <literal>security.acme.email</literal> or <literal>security.acme.certs.&lt;name&gt;.email</literal>
      must be set in order to use the ACME module.
-     Certificates will be regenerated anew on the next renewal date. The credentials for simp-le are
-     preserved and thus it is possible to roll back to previous versions without breaking certificate
-     generation.
+     Certificates will be regenerated on activation, no account or certificate will be migrated from simp-le.
+     In particular private keys will not be preserved. However, the credentials for simp-le are preserved and
+     thus it is possible to roll back to previous versions without breaking certificate generation.
+     Note also that in contrary to simp-le a new private key is recreated at each renewal by default, which can
+     have consequences if you embed your public key in apps.
     </para>
    </listitem>
    <listitem>

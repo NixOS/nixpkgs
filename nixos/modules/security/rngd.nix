@@ -10,11 +10,10 @@ in
     security.rngd = {
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
-          Whether to enable the rng daemon, which adds entropy from
-          hardware sources of randomness to the kernel entropy pool when
-          available.
+          Whether to enable the rng daemon.  Devices that the kernel recognises
+          as entropy sources are handled automatically by krngd.
         '';
       };
       debug = mkOption {
@@ -26,12 +25,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.udev.extraRules = ''
-      KERNEL=="random", TAG+="systemd"
-      SUBSYSTEM=="cpu", ENV{MODALIAS}=="cpu:type:x86,*feature:*009E*", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
-      KERNEL=="hw_random", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
-    '';
-
     systemd.services.rngd = {
       bindsTo = [ "dev-random.device" ];
 

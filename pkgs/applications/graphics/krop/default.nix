@@ -1,28 +1,34 @@
-{ stdenv, fetchFromGitHub, python3Packages, libsForQt5, ghostscript, qt5}:
+{ lib, fetchFromGitHub, python3Packages, libsForQt5, ghostscript, qt5}:
 
 python3Packages.buildPythonApplication rec {
   pname = "krop";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "arminstraub";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b1zqpks4vzq7sfhf7r9qrshr77f1ncj18x7d0fa3g29rxa42dcr";
+    sha256 = "1ygzc7vlwszqmsd3v1dsqp1dpsn6inx7g8gck63alvf88dbn8m3s";
   };
 
   propagatedBuildInputs = with python3Packages; [
     pyqt5
     pypdf2
     poppler-qt5
-    libsForQt5.poppler
     ghostscript
+  ];
+  buildInputs = [
+    libsForQt5.poppler
   ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   makeWrapperArgs = [
    "\${qtWrapperArgs[@]}"
   ];
+
+  postInstall = ''
+    install -m666 -Dt $out/share/applications krop.desktop
+  '';
 
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;
@@ -38,8 +44,8 @@ python3Packages.buildPythonApplication rec {
     your eReader does not support convenient scrolling. Krop also has a command line
     interface.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ leenaars ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.linux;
   };
 }

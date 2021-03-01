@@ -1,4 +1,5 @@
-{ stdenv
+{ mkDerivation
+, lib
 , autoreconfHook
 , curl
 , fetchFromGitHub
@@ -7,9 +8,9 @@
 , libtool
 , qrencode
 , udev
-, libusb
+, libusb1
 , makeWrapper
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , qtwebsockets
@@ -46,23 +47,23 @@
 let
   copyUdevRuleToOutput = name: rule:
     "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   pname = "digitalbitbox";
-  version = "2.2.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "dbb-app";
     rev = "v${version}";
-    sha256 = "1r77fvqrlaryzij5dfbnigzhvg1d12g96qb2gp8dy3xph1j0k3s1";
+    sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 
-  nativeBuildInputs = with stdenv.lib; [
+  nativeBuildInputs = with lib; [
     autoreconfHook
     curl
     git
     makeWrapper
-    pkgconfig
+    pkg-config
     qttools
   ];
 
@@ -70,7 +71,7 @@ in stdenv.mkDerivation rec {
     libevent
     libtool
     udev
-    libusb
+    libusb1
     qrencode
 
     qtbase
@@ -93,6 +94,8 @@ in stdenv.mkDerivation rec {
     "format"
   ];
 
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : $out/lib" ];
+
   postInstall = ''
     mkdir -p "$out/lib"
     cp src/libbtc/.libs/*.so* $out/lib
@@ -103,9 +106,6 @@ in stdenv.mkDerivation rec {
     # [RPATH][patchelf] Avoid forbidden reference error
     rm -rf $PWD
 
-    wrapProgram "$out/bin/dbb-cli" --prefix LD_LIBRARY_PATH : "$out/lib"
-    wrapProgram "$out/bin/dbb-app" --prefix LD_LIBRARY_PATH : "$out/lib"
-
     # Provide udev rules as documented in https://digitalbitbox.com/start_linux
     mkdir -p "$out/etc/udev/rules.d"
     ${copyUdevRuleToOutput "51-hid-digitalbox.rules" udevRule51}
@@ -114,7 +114,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A QT based application for the Digital Bitbox hardware wallet";
     longDescription = ''
       Digital Bitbox provides dbb-app, a GUI tool, and dbb-cli, a CLI tool, to manage Digital Bitbox devices.
@@ -138,6 +138,5 @@ in stdenv.mkDerivation rec {
       vidbina
     ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

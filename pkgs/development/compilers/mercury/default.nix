@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
+{ lib, stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
 , readline }:
 
 stdenv.mkDerivation rec {
   pname = "mercury";
-  version = "20.01.1";
+  version = "20.06.1";
 
   src = fetchurl {
     url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
-    sha256 = "0vxp9f0jmr228n13p6znhbxncav6ay0bnl4ypy6r3lw5lh7z172p";
+    sha256 = "ef093ae81424c4f3fe696eff9aefb5fb66899e11bb17ae0326adfb70d09c1c1f";
   };
 
   buildInputs = [ gcc flex bison texinfo jdk erlang makeWrapper
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
       trade-offs.
     '';
     homepage    = "http://mercurylang.org";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license     = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, bison, flex }:
+{ lib, stdenv, fetchFromGitHub, cmake, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "libcue";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails all the tests (ctest)
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CUE Sheet Parser Library";
     longDescription = ''
       libcue is intended to parse a so called cue sheet from a char string or

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libjack2, ncurses, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, libjack2, ncurses, pkg-config }:
 
 stdenv.mkDerivation {
   name = "timidity-2.15.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./timidity-iA-Oj.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib libjack2 ncurses ];
 
   configureFlags = [ "--enable-audio=oss,alsa,jack" "--enable-alsaseq" "--with-default-output=alsa" "--enable-ncurses" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/timidity/";
     license = licenses.gpl2;
     description = "A software MIDI renderer";

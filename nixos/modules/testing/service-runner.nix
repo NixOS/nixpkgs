@@ -52,7 +52,7 @@ let
 
       # Run the ExecStartPre program.  FIXME: this could be a list.
       my $preStart = <<END_CMD;
-      ${service.serviceConfig.ExecStartPre or ""}
+      ${concatStringsSep "\n" (service.serviceConfig.ExecStartPre or [])}
       END_CMD
       if (defined $preStart && $preStart ne "\n") {
           print STDERR "running ExecStartPre: $preStart\n";
@@ -79,7 +79,7 @@ let
 
       # Run the ExecStartPost program.
       my $postStart = <<END_CMD;
-      ${service.serviceConfig.ExecStartPost or ""}
+      ${concatStringsSep "\n" (service.serviceConfig.ExecStartPost or [])}
       END_CMD
       if (defined $postStart && $postStart ne "\n") {
           print STDERR "running ExecStartPost: $postStart\n";

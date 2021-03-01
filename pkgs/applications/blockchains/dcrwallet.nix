@@ -1,43 +1,26 @@
-{ stdenv, lib, go, buildGoPackage, dep, fetchgit, git, cacert }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dcrwallet";
-  version = "1.1.2";
-  rev = "refs/tags/v${version}";
-  goPackagePath = "github.com/decred/dcrwallet";
+  version = "1.6.0";
 
-  buildInputs = [ go git dep cacert ];
-
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  env.NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  src = fetchgit {
-    inherit rev;
-    url = "https://${goPackagePath}";
-    sha256 = "058im4vmcmxcl5ir14h17wik5lagp2ay0p8qc3r99qmpfwvvz39x";
+  src = fetchFromGitHub {
+    owner = "decred";
+    repo = "dcrwallet";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WUfmv+laOwR/fc4osAFzPKqHQR+wOtSdLEsysICnuvg=";
   };
 
-  preBuild = ''
-    export CWD=$(pwd)
-    cd go/src/github.com/decred/dcrwallet
-    dep ensure
-  '';
+  vendorSha256 = "sha256-9IRNlULvARIZu6dWaKrvx6fiDJ80SBLINhK/9tW9k/0=";
 
-  buildPhase = ''
-    runHook preBuild
-    go build
-  '';
+  doCheck = false;
 
-  installPhase = ''
-    mkdir -pv $bin/bin
-    cp -v dcrwallet $bin/bin
-  '';
-
+  subPackages = [ "." ];
 
   meta = {
     homepage = "https://decred.org";
-    description = "Decred daemon in Go (golang)";
+    description = "A secure Decred wallet daemon written in Go (golang)";
     license = with lib.licenses; [ isc ];
-    broken = stdenv.isLinux; # 2018-04-10
+    maintainers = with lib.maintainers; [ juaningan ];
   };
 }

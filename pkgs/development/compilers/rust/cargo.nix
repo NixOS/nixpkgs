@@ -1,4 +1,4 @@
-{ stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
+{ lib, stdenv, file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
 , CoreFoundation, Security
 }:
@@ -9,17 +9,16 @@ rustPlatform.buildRustPackage {
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
-  preBuild = "pushd src/tools/cargo";
-  postBuild = "popd";
+  buildAndTestSubdir = "src/tools/cargo";
 
   passthru.rustc = rustc;
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkgconfig cmake installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkg-config cmake installShellFiles makeWrapper ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
   env = {
     # cargo uses git-rs which is made for a version of libgit2 from recent master that
@@ -41,6 +40,11 @@ rustPlatform.buildRustPackage {
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
 
     installManPage src/tools/cargo/src/etc/man/*
+
+    installShellCompletion --bash --name cargo \
+      src/tools/cargo/src/etc/cargo.bashcomp.sh
+
+    installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
   '';
 
   checkPhase = ''
@@ -52,7 +56,7 @@ rustPlatform.buildRustPackage {
   # Disable check phase as there are failures (4 tests fail)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
     maintainers = with maintainers; [ retrry ];

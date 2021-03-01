@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "cutee";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp cutee $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ Unit Testing Easy Environment";
     homepage    = "http://www.codesink.org/cutee_unit_testing.html";
     license     = licenses.gpl2Plus;

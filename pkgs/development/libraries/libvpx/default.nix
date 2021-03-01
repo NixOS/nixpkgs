@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, yasm
+{ lib, stdenv, fetchFromGitHub, perl, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -40,7 +40,7 @@
 
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
-  inherit (stdenv.lib) enableFeature optional optionals;
+  inherit (lib) enableFeature optional optionals;
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -56,20 +56,16 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
-    repo = "libvpx";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0vvh89hvp8qg9an9vcmwb7d9k3nixhxaz6zi65qdjnd0i56kkcz6";
+    sha256 = "16xv6ambc82g14h1y0q1vyy57wp6j9fbp0nk0wd5csnrw407rhry";
   };
 
-  patches = [
-    ./CVE-2019-9232.CVE-2019-9325.CVE-2019-9371.CVE-2019-9433.patch
-  ];
-
-  postPatch = ''patchShebangs .'';
+  postPatch = "patchShebangs .";
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
@@ -135,6 +131,12 @@ stdenv.mkDerivation rec {
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    #"--extra-cflags="
+    #"--extra-cxxflags="
+    #"--prefix="
+    #"--libc="
+    #"--libdir="
+    "--enable-external-build"
     # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
     # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
     # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
@@ -159,11 +161,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ ]
     ++ optionals unitTestsSupport [ coreutils curl ];
 
+  env.NIX_LDFLAGS = "-lpthread"; # fixes linker errors
+
   enableParallelBuilding = true;
 
   postInstall = ''moveToOutput bin "$bin" '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";
     homepage    = "https://www.webmproject.org/";
     license     = licenses.bsd3;

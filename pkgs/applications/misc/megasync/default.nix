@@ -1,27 +1,50 @@
-{ stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
-, fetchpatch, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen
-, lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
-, wget }:
+{ lib, stdenv
+, autoconf
+, automake
+, c-ares
+, cryptopp
+, curl
+, doxygen
+, fetchFromGitHub
+, fetchpatch
+, ffmpeg_3
+, libmediainfo
+, libraw
+, libsodium
+, libtool
+, libuv
+, libzen
+, lsb-release
+, mkDerivation
+, pkg-config
+, qtbase
+, qttools
+, qtx11extras
+, sqlite
+, swig
+, unzip
+, wget
+}:
 
 mkDerivation rec {
   pname = "megasync";
-  version = "4.3.0.8";
+  version = "4.3.5.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1rhxkc6j3039rcsi8cxy3n00g6w7acir82ymnksbpsnp4yxqv5r3";
+    sha256 = "0rr1jjy0n5bj1lh6xi3nbbcikvq69j3r9qnajp4mhywr5izpccvs";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkgconfig qttools swig ];
+    [ autoconf automake doxygen lsb-release pkg-config qttools swig ];
   buildInputs = [
     c-ares
     cryptopp
     curl
-    ffmpeg
+    ffmpeg_3
     libmediainfo
     libraw
     libsodium
@@ -29,6 +52,7 @@ mkDerivation rec {
     libuv
     libzen
     qtbase
+    qtx11extras
     sqlite
     unzip
     wget
@@ -85,7 +109,7 @@ mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage = "https://mega.nz/";

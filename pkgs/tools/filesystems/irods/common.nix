@@ -1,13 +1,10 @@
-{ stdenv, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp, boost, jansson, zeromq, openssl, pam, libiodbc, kerberos, gcc, libcxx, which }:
+{ lib, stdenv, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp, boost, jansson, zeromq, openssl, pam, libiodbc, kerberos, gcc, libcxx, which, catch2 }:
 
 # Common attributes of irods packages
 
-with stdenv;
-
 {
-  enableParallelBuilding = true;
-
-  buildInputs = [ bzip2 zlib autoconf automake cmake gnumake help2man texinfo libtool cppzmq libarchive avro-cpp jansson zeromq openssl pam libiodbc kerberos gcc boost libcxx which ];
+  nativeBuildInputs = [ autoconf automake cmake gnumake help2man texinfo which gcc ];
+  buildInputs = [ bzip2 zlib libtool cppzmq libarchive avro-cpp jansson zeromq openssl pam libiodbc kerberos boost libcxx catch2 ];
 
   cmakeFlags = [
     "-DIRODS_EXTERNALS_FULLPATH_CLANG=${stdenv.cc}"
@@ -18,6 +15,7 @@ with stdenv;
     "-DIRODS_EXTERNALS_FULLPATH_JANSSON=${jansson}"
     "-DIRODS_EXTERNALS_FULLPATH_ZMQ=${zeromq}"
     "-DIRODS_EXTERNALS_FULLPATH_CPPZMQ=${cppzmq}"
+    "-DIRODS_EXTERNALS_FULLPATH_CATCH2=${catch2}"
     "-DIRODS_LINUX_DISTRIBUTION_NAME=nix"
     "-DIRODS_LINUX_DISTRIBUTION_VERSION_MAJOR=${builtins.nixVersion}"
     "-DCPACK_GENERATOR=TGZ"
@@ -35,7 +33,7 @@ with stdenv;
     "
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Integrated Rule-Oriented Data System (iRODS)";
     longDescription = ''
       The Integrated Rule-Oriented Data System (iRODS) is open source data management
@@ -48,8 +46,8 @@ with stdenv;
       testing on supported platforms; plug-in support for microservices, storage resources,
       drivers, and databases; and extensive documentation, training and support services.'';
     homepage = "https://irods.org";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, autoreconfHook, bison, flex, ghostscript, groff, netpbm
+{ lib, stdenv, fetchurl, autoreconfHook, bison, flex, ghostscript, groff, netpbm
 , fltk, libXinerama, libXpm, libjpeg
 }:
 
 stdenv.mkDerivation rec {
   pname = "mup";
-  version = "6.7";
+  version = "6.8";
 
   src = fetchurl {
     url = "http://www.arkkra.com/ftp/pub/unix/mup${builtins.replaceStrings ["."] [""] version}src.tar.gz";
-    sha256 = "1y1qknhib1isdjsbv833w3nxzyfljkfgp1gmjwly60l55q60frpk";
+    sha256 = "06bv5nyl8rcibyb83zzrfdq6x6f93g3rgnv47i5gsjcaw5w6l31y";
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex ghostscript groff netpbm ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.arkkra.com/";
     description = "Music typesetting program (ASCII to PostScript and MIDI)";
     license = licenses.bsd3;

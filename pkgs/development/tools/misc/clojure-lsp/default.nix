@@ -1,30 +1,31 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "20200412T033138";
+  version = "2021.02.13-18.04.19";
 
   src = fetchurl {
-    url = "https://github.com/snoe/clojure-lsp/releases/download/release-${version}/${pname}";
-    sha256 = "19i6sikg5x5qzcbakzbiqbcy5q2srqk6ihpmb3l90n1p4jn4605c";
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/${pname}.jar";
+    sha256 = "sha256-v7+HH77xFxQc0LjVhcrXsdcmmZmrPiMSArxfoOaHkoI=";
   };
 
   dontUnpack = true;
 
+  buildInputs = [ makeWrapper ];
+
   installPhase = ''
-    install -Dm755 $src $out/bin/clojure-lsp
-    sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/clojure-lsp
+    install -Dm644 $src $out/share/java/${pname}.jar
+    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+      --add-flags "-Xmx2g" \
+      --add-flags "-server" \
+      --add-flags "-jar $out/share/java/${pname}.jar"
   '';
 
-  # verify shebang patch
-  installCheckPhase = "PATH= clojure-lsp --version";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/snoe/clojure-lsp";
     license = licenses.mit;
     maintainers = [ maintainers.ericdallo ];
     platforms = jre.meta.platforms;
   };
-
 }

@@ -1,23 +1,47 @@
-{ stdenv, fetchurl, libunwind }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, libunwind
+}:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.7";
+  pname = "gperftools";
+  version = "2.8.1";
 
-  src = fetchurl {
-    url = "https://github.com/gperftools/gperftools/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1jb30zxmw7h9qxa8yi76rfxj4ssk60rv8n9y41m6pzqfk9lwis0y";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "19bj2vlsbfwq7m826v2ccqg47kd7cb5vcz1yw2x0v5qzhaxbakk1";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
+  patches = [
+    # Add the --disable-general-dynamic-tls configure option:
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/gperftools/raw/f62d87a34f56f64fb8eb86727e34fbc2d3f5294a/f/gperftools-2.7.90-disable-generic-dynamic-tls.patch";
+      sha256 = "02falhpaqkl27hl1dib4yvmhwsddmgbw0krb46w31fyf3awb2ydv";
+    })
+  ];
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # tcmalloc uses libunwind in a way that works correctly only on non-ARM linux
+  buildInputs = lib.optional (stdenv.isLinux && !(stdenv.isAarch64 || stdenv.isAarch32)) libunwind;
+
+  # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
+  configureFlags = lib.optional (stdenv.isAarch32 || stdenv.isAarch64)
+    "--disable-general-dynamic-tls";
+
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++
-    substituteInPlace Makefile.in --replace stdc++ c++
-    substituteInPlace libtool --replace stdc++ c++
   '';
 
-  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
-    "-D_XOPEN_SOURCE -Wno-aligned-allocation-unavailable";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+    "-D_XOPEN_SOURCE";
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
@@ -25,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gperftools/gperftools";
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
     platforms = with platforms; linux ++ darwin;

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch, buildShared ? true }:
+{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch
+, buildShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
 
@@ -40,8 +42,6 @@ let
       substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "bin" "dev" "out" "man" "nc" ];
 
     postFixup = ''
@@ -63,20 +63,13 @@ let
   };
 
 in {
-
-  libressl_2_9 = generic {
-    version = "2.9.2";
-    sha256 = "1m6mz515dcbrbnyz8hrpdfjzdmj1c15vbgnqxdxb89g3z9kq3iy4";
-    patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
-      (fetchpatch {
-        url = "https://github.com/libressl-portable/portable/pull/529/commits/a747aacc23607c993cc481378782b2c7dd5bc53b.patch";
-        sha256 = "0wbrcscdkjpk4mhh7f3saghi4smia4lhf7fl6la3ahhgx1krn5zm";
-      })
-    ];
-  };
-
   libressl_3_0 = generic {
     version = "3.0.2";
     sha256 = "13ir2lpxz8y1m151k7lrx306498nzfhwlvgkgv97v5cvywmifyyz";
+  };
+
+  libressl_3_1 = generic {
+    version = "3.1.4";
+    sha256 = "1dnbbnr43jashxivnafmh9gnn57c7ayva788ba03z633k6f18k21";
   };
 }

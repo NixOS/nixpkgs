@@ -1,14 +1,14 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, pkg-config }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "mrjimenez";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "17jhbzx8khz5vbl0lhcipjzgg897p1k2lp5wcc3hiddcfyh05pdj";
+    sha256 = "1wp9sz2ld4g6ak9v59i3s5mbsraxsphi9k91vw9xgrbzfmg8w0a6";
   };
   outputs = [ "dev" "out" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   meta = {
-    description = "libupnp, an open source UPnP development kit for Linux";
+    description = "An open source UPnP development kit for Linux";
 
     longDescription = ''
       The Linux SDK for UPnP Devices (libupnp) provides developers
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = "BSD-style";
 
     homepage = "http://pupnp.sourceforge.net/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

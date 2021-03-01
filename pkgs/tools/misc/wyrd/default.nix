@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocamlPackages, ncurses, remind }:
+{ lib, stdenv, fetchurl, ocamlPackages, ncurses, remind }:
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A text-based front-end to Remind";
     longDescription = ''
       Wyrd is a text-based front-end to Remind, a sophisticated

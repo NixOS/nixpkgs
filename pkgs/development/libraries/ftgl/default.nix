@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, freetype, libGL, libGLU, OpenGL }:
+{ lib, stdenv, fetchurl, freetype, libGL, libGLU, OpenGL }:
 
 let
   name = "ftgl-2.1.3-rc5";
@@ -18,14 +18,14 @@ stdenv.mkDerivation {
       [ libGL libGLU ])
     ;
 
-  configureFlags = [ "--with-ft-prefix=${stdenv.lib.getDev freetype}" ];
+  configureFlags = [ "--with-ft-prefix=${lib.getDev freetype}" ];
 
   enableParallelBuilding = true;
 
   meta = {
     homepage = "https://sourceforge.net/apps/mediawiki/ftgl/";
     description = "Font rendering library for OpenGL applications";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     longDescription = ''
       FTGL is a free cross-platform Open Source C++ library that uses
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       and extruded polygon rendering modes.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [];
   };
 }

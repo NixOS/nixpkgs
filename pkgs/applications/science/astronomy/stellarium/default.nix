@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub
+{ stdenv, lib, mkDerivation, fetchFromGitHub
 , cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
 , qtscript, qtserialport, qttools
 , qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "stellarium";
-  version = "0.20.0";
+  version = "0.20.4";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "1732dxkgyqd4xf0ry7v930vcbv60l8iry596869z1d47j2piibs4";
+    sha256 = "sha256-EhlcaMxlDyX2RneBrpbmLScc9vd77Tf7RPblbQqAqZ0=";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
@@ -22,12 +22,21 @@ mkDerivation rec {
     qtmultimedia qtlocation qtbase
   ];
 
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
+                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out"/Stellarium.app/Contents/MacOS/stellarium
+  '';
+
   meta = with lib; {
     description = "Free open-source planetarium";
     homepage = "http://stellarium.org/";
     license = licenses.gpl2;
-
-    platforms = platforms.linux; # should be mesaPlatforms, but we don't have qt on darwin
+    platforms = platforms.unix;
     maintainers = with maintainers; [ peti ma27 ];
   };
 }

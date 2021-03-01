@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clack'';
-  version = ''20191007-git'';
+  baseName = "clack";
+  version = "20191007-git";
 
-  description = ''Web application environment for Common Lisp'';
+  description = "Web application environment for Common Lisp";
 
-  deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."nibbles" args."uiop" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2019-10-07/clack-20191007-git.tgz'';
-    sha256 = ''004drm82mhxmcsa00lbmq2l89g4fzwn6j2drfwdazrpi27z0ry5w'';
+    url = "http://beta.quicklisp.org/archive/clack/2019-10-07/clack-20191007-git.tgz";
+    sha256 = "004drm82mhxmcsa00lbmq2l89g4fzwn6j2drfwdazrpi27z0ry5w";
   };
 
   packageName = "clack";
@@ -26,11 +26,10 @@ rec {
      (NAME ironclad FILENAME ironclad) (NAME lack FILENAME lack)
      (NAME lack-component FILENAME lack-component)
      (NAME lack-middleware-backtrace FILENAME lack-middleware-backtrace)
-     (NAME lack-util FILENAME lack-util) (NAME nibbles FILENAME nibbles)
-     (NAME uiop FILENAME uiop))
+     (NAME lack-util FILENAME lack-util) (NAME uiop FILENAME uiop))
     DEPENDENCIES
     (alexandria bordeaux-threads ironclad lack lack-component
-     lack-middleware-backtrace lack-util nibbles uiop)
+     lack-middleware-backtrace lack-util uiop)
     VERSION 20191007-git SIBLINGS
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot
      clack-handler-wookie clack-socket clack-test clack-v1-compat

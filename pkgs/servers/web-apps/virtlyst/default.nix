@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, autoPatchelfHook
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, autoPatchelfHook
 , qtbase, libvirt, cutelyst, grantlee }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vgjai34hqppkpl0ryxkyhpm9dsx1chs3bii3wc3h40hl80n6dgy";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig autoPatchelfHook ];
+  nativeBuildInputs = [ cmake pkg-config autoPatchelfHook ];
   buildInputs = [ qtbase libvirt cutelyst grantlee ];
 
   installPhase = ''

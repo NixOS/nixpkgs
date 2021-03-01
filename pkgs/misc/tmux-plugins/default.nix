@@ -66,14 +66,32 @@ in rec {
 
   continuum = mkDerivation {
     pluginName = "continuum";
-    version = "unstable-2018-02-23";
+    version = "unstable-2020-10-16";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
-      rev = "1531b3770a7cf7373d15fedd239c5331b99342d1";
-      sha256 = "1w3f7gzvv1k25yfr6d1snr2z88p8f87cahrbaslmyphdxpy0fa4m";
+      rev = "26eb5ffce0b559d682b9f98c8d4b6c370ecb639b";
+      sha256 = "1glwa89bv2r92qz579a49prk3jf612cpd5hw46j4wfb35xhnj3ab";
     };
     dependencies = [ resurrect ];
+    meta = {
+      homepage = "https://github.com/tmux-plugins/tmux-continuum";
+      description = "continous saving of tmux environment";
+      longDescription =
+      ''
+        Features:
+        * continuous saving of tmux environment
+        * automatic tmux start when computer/server is turned on
+        * automatic restore when tmux is started
+
+        Together, these features enable uninterrupted tmux usage. No matter the
+        computer or server restarts, if the machine is on, tmux will be there how
+        you left it off the last time it was used.
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
+    };
   };
 
   copycat = mkDerivation {
@@ -89,12 +107,12 @@ in rec {
 
   cpu = mkDerivation {
     pluginName = "cpu";
-    version = "unstable-2020-04-05";
+    version = "unstable-2020-07-25";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-cpu";
-      rev = "8858050756e1fc3c081d37894b441f05ea893a67";
-      sha256 = "1bydzrnd9y5y46hjr844p4ylx2dpijn6pv3w94yyvwbyswmirhff";
+      rev = "20120a38ade17057441482b43eb5390e6ea2c1c1";
+      sha256 = "1gdz2awyd9icvyiw2p40gwymh6ngjhb9mkiv63ix53snp9ii794i";
     };
   };
 
@@ -107,6 +125,38 @@ in rec {
       rev = "v${version}";
       sha256 = "1kv5pqfjczd6z7i9jf6j5xmcai50l9bn5p2p1w1l5fi6cj8cz1k1";
     };
+  };
+
+  dracula = mkDerivation rec {
+    pluginName = "dracula";
+    version = "unstable-2021-02-09";
+    src = fetchFromGitHub {
+      owner = "dracula";
+      repo = "tmux";
+      rev = "d1678a5834679d98ffac1dd7a0eaecff7868ab8e";
+      sha256 = "rdy5NFkh5Yl2YOTnuMKZQGRqVb2Pk8Bpq3nbJp2rCtE=";
+    };
+    meta = with lib; {
+      homepage = "https://draculatheme.com/tmux";
+      description = "A feature packed Dracula theme for tmux!";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ethancedwards8 ];
+    };
+  };
+
+  fingers = mkDerivation rec {
+    pluginName = "fingers";
+    rtpFilePath = "tmux-fingers.tmux";
+    version = "1.0.1";
+    src = fetchFromGitHub {
+      owner = "Morantron";
+      repo = "tmux-fingers";
+      rev = version;
+      sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
+      fetchSubmodules = true;
+    };
+    dependencies = [ pkgs.gawk ];
   };
 
   fpp = mkDerivation {
@@ -148,6 +198,30 @@ in rec {
     };
   };
 
+  jump = mkDerivation {
+    pluginName = "jump";
+    version = "2020-06-26";
+    rtpFilePath = "tmux-jump.tmux";
+    src = fetchFromGitHub {
+      owner = "schasse";
+      repo = "tmux-jump";
+      rev = "416f613d3eaadbe1f6f9eda77c49430527ebaffb";
+      sha256 = "1xbzdyhsgaq2in0f8f491gwjmx6cxpkf2c35d2dk0kg4jfs505sz";
+    };
+    postInstall = ''
+      sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
+    '';
+    dependencies = [ pkgs.ruby ];
+
+    meta = with lib; {
+      homepage = "https://github.com/schasse/tmux-jump";
+      description = "Vimium/Easymotion like navigation for tmux";
+      license = licenses.gpl3;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ arnarg ];
+    };
+  };
+
   logging = mkDerivation {
     pluginName = "logging";
     version = "unstable-2019-04-19";
@@ -167,6 +241,17 @@ in rec {
       repo = "tmux-net-speed";
       rev = "58abb615971cb617821e2e7e41c660334f55a92d";
       sha256 = "1aj06gdhzcxsydjzf21n9kyxigwf38kh2rg8hh7gnjk260ydqlrc";
+    };
+  };
+
+  nord = mkDerivation rec {
+    pluginName = "nord";
+    version = "0.3.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "arcticicestudio";
+      repo = "nord-tmux";
+      rev = "v${version}";
+      sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
     };
   };
 
@@ -203,6 +288,18 @@ in rec {
     };
   };
 
+  onedark-theme = mkDerivation {
+    pluginName = "onedark-theme";
+    rtpFilePath = "tmux-onedark-theme.tmux";
+    version = "unstable-2020-06-07";
+    src = fetchFromGitHub {
+      owner = "odedlaz";
+      repo = "tmux-onedark-theme";
+      rev = "3607ef889a47dd3b4b31f66cda7f36da6f81b85c";
+      sha256 = "19jljshwp2p83b634cd1mw69091x42jj0dg40ipw61qy6642h2m5";
+    };
+  };
+
   pain-control = mkDerivation {
     pluginName = "pain-control";
     version = "unstable-2020-02-18";
@@ -228,6 +325,18 @@ in rec {
     '';
   };
 
+  power-theme = mkDerivation {
+    pluginName = "power";
+    rtpFilePath = "tmux-power.tmux";
+    version = "unstable-2020-11-18";
+    src = pkgs.fetchFromGitHub {
+      owner = "wfxr";
+      repo = "tmux-power";
+      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
+      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+    };
+  };
+
   prefix-highlight = mkDerivation {
     pluginName = "prefix-highlight";
     version = "unstable-2020-03-26";
@@ -241,12 +350,38 @@ in rec {
 
   resurrect = mkDerivation {
     pluginName = "resurrect";
-    version = "unstable-2020-03-21";
+    version = "unstable-2020-09-18";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "327c0481ad20c429b4e692e092659f8b3346b08f";
-      sha256 = "0nxfqazww36wwv49dzd39kq4jfls20834hf1458sf5pvmv5cmbyw";
+      rev = "e4825055c92e54b0c6ec572afc9b6c4723aba6c8";
+      sha256 = "0a96drkx1kpadkbxabcnvb542p75xdh2dbizvlq2lac5ldpb4hmx";
+    };
+    meta = {
+      homepage = "https://github.com/tmux-plugins/tmux-resurrect";
+      description = "Restore tmux environment after system restart";
+      longDescription =
+        ''
+          This plugin goes to great lengths to save and restore all the details
+          from your tmux environment. Here's what's been taken care of:
+
+          * all sessions, windows, panes and their order
+          * current working directory for each pane
+          * exact pane layouts within windows (even when zoomed)
+          * active and alternative session
+          * active and alternative window for each session
+          * windows with focus
+          * active pane for each window
+          * "grouped sessions" (useful feature when using tmux with multiple monitors)
+          * programs running within a pane! More details in the restoring programs doc.
+
+          Optional:
+          * restoring vim and neovim sessions
+          * restoring pane contents
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
@@ -297,6 +432,25 @@ in rec {
     };
   };
 
+  tilish = mkDerivation {
+    pluginName = "tilish";
+    version = "2020-08-12";
+    src = fetchFromGitHub {
+      owner = "jabirali";
+      repo = "tmux-tilish";
+      rev = "73d2404cdc0ef6bd7fbc8982edae0b0e2a4dd860";
+      sha256 = "1x58h3bg9d69j40fh8rcjpxvg0i6j04pj8p3jk57l3cghxis5j05";
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/jabirali/tmux-tilish";
+      description = "Plugin which makes tmux work and feel like i3wm";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ arnarg ];
+    };
+  };
+
   tmux-colors-solarized = mkDerivation {
     pluginName = "tmuxcolors";
     version = "unstable-2019-07-14";
@@ -305,6 +459,42 @@ in rec {
       repo = "tmux-colors-solarized";
       rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
       sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+    };
+  };
+
+  tmux-fzf = mkDerivation {
+    pluginName = "tmux-fzf";
+    rtpFilePath = "main.tmux";
+    version = "unstable-2020-12-07";
+    src = fetchFromGitHub {
+      owner = "sainnhe";
+      repo = "tmux-fzf";
+      rev = "5efeb91086040a3becf5372fb38258acd0579954";
+      sha256 = "1z0zmsf8asxs9wbwvkiyd81h93wb2ikl8nxxc26sdpi6l333q5s9";
+    };
+    postInstall = ''
+      find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|sed |${pkgs.gnused}/bin/sed |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|tput |${pkgs.ncurses}/bin/tput |g'
+    '';
+     meta = {
+      homepage = "https://github.com/sainnhe/tmux-fzf";
+      description = "Use fzf to manage your tmux work environment! ";
+      longDescription =
+        ''
+        Features:
+        * Manage sessions (attach, detach*, rename, kill*).
+        * Manage windows (switch, link, move, swap, rename, kill*).
+        * Manage panes (switch, break, join*, swap, layout, kill*, resize).
+        * Multiple selection (support for actions marked by *).
+        * Search commands and append to command prompt.
+        * Search key bindings and execute.
+        * User menu.
+        * Popup window support.
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ kyleondy ];
     };
   };
 
@@ -321,6 +511,25 @@ in rec {
       sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
     '';
     dependencies = [ pkgs.urlview ];
+  };
+
+  vim-tmux-focus-events = mkDerivation {
+    pluginName = "vim-tmux-focus-events";
+    version = "unstable-2020-10-05";
+    src = fetchFromGitHub {
+      owner = "tmux-plugins";
+      repo = "vim-tmux-focus-events";
+      rev = "a568192ca0de4ca0bd7b3cd0249aad491625c941";
+      sha256 = "130l73v18md95djkc4s9d0fr018f8f183sjcgy7dgldwdaxlqdi1";
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/tmux-plugins/vim-tmux-focus-events";
+      description = "Makes FocusGained and FocusLost autocommand events work in vim when using tmux";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ronanmacf ];
+    };
   };
 
   vim-tmux-navigator = mkDerivation {

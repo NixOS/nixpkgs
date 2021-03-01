@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, bison, flex }:
+{ lib, stdenv, fetchgit, bison, flex }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "pcalc";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     homepage = "http://pcalc.sourceforge.net/";
     description = "Programmer's calculator";
     license = licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    platforms = lib.platforms.linux;
     inherit version;
   };
 }

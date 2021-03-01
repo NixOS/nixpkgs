@@ -1,21 +1,23 @@
-{ config, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, fuse
+, util-linux, makeWrapper
 , enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-4.0.1";
+  pname = "lxcfs";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    rev = name;
-    sha256 = "09y26ln2wxpi809kd3r352my64aal0yz2a5kin0i25gnvivl32cs";
+    rev = "lxcfs-${version}";
+    sha256 = "sha256-gC1Q+kG/oKfYvuHVKstpRWfL/thsemULrimPrV/eeaI=";
   };
 
-  nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
-  buildInputs = [ fuse ];
+  nativeBuildInputs = [ pkg-config help2man autoreconfHook ];
+  buildInputs = [ fuse makeWrapper ];
 
-  preConfigure = stdenv.lib.optionalString enableDebugBuild ''
+  preConfigure = lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
   '';
 
@@ -27,14 +29,21 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "SYSTEMD_UNIT_DIR=\${out}/lib/systemd" ];
 
+  postInstall = ''
+    # `mount` hook requires access to the `mount` command from `util-linux`:
+    wrapProgram "$out/share/lxcfs/lxc.mount.hook" \
+      --prefix PATH : "${util-linux}/bin"
+  '';
+
   postFixup = ''
     # liblxcfs.so is reloaded with dlopen()
     patchelf --set-rpath "$(patchelf --print-rpath "$out/bin/lxcfs"):$out/lib" "$out/bin/lxcfs"
   '';
 
   meta = {
-    homepage = "https://linuxcontainers.org/lxcfs";
     description = "FUSE filesystem for LXC";
+    homepage = "https://linuxcontainers.org/lxcfs";
+    changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mic92 fpletz ];

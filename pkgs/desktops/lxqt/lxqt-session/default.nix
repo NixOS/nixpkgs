@@ -1,19 +1,35 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg, xorg, xdg-user-dirs }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtsvg
+, qtx11extras
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, xorg
+, xdg-user-dirs
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
   pname = "lxqt-session";
-  version = "0.14.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0s6b0lblb795zz1p7sy677c1iznhmdzc4vw3jkc2agmsrhm7if7s";
+    sha256 = "1lmj0cx4crdjl2qih3scm2gvsx3qna0nb6mjjrcx0f2k7h744pik";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
@@ -30,10 +46,12 @@ mkDerivation rec {
     xdg-user-dirs
   ];
 
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+
   meta = with lib; {
-    description = "An alternative session manager ported from the original razor-session";
     homepage = "https://github.com/lxqt/lxqt-session";
-    license = licenses.lgpl21;
+    description = "An alternative session manager ported from the original razor-session";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

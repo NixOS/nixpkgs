@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, zlib }:
+{ lib, stdenv, fetchurl, cmake, zlib }:
 
 stdenv.mkDerivation {
   name = "diamond-0.8.36";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Accelerated BLAST compatible local sequence aligner";
     longDescription = ''
       A sequence aligner for protein and translated DNA

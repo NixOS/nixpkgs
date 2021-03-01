@@ -1,14 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake
-, gfortran, openblas, eigen }:
+{ lib, stdenv, fetchFromGitHub, cmake
+, gfortran, blas, lapack, eigen }:
 
-with stdenv.lib;
-
-let
-  version = "3.7.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "arpack";
-  inherit version;
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "opencollab";
@@ -18,19 +13,22 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gfortran openblas eigen ];
+  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
+    gfortran
+    blas
+    lapack
+    eigen
+  ];
 
   doCheck = true;
 
-  BLAS_LIBS = "-L${openblas}/lib -lopenblas";
-
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DINTERFACE64=${optionalString openblas.blas64 "1"}"
+    "-DINTERFACE64=${lib.optionalString blas.isILP64 "1"}"
   ];
 
   preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib:${blas}/lib:${lapack}/lib
   '' else ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '' + ''
@@ -50,8 +48,8 @@ stdenv.mkDerivation {
       A collection of Fortran77 subroutines to solve large scale eigenvalue
       problems.
     '';
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.unix;
   };
 }

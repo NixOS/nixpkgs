@@ -1,15 +1,27 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bc, bison, dtc, flex
-, openssl, swig, meson-tools, armTrustedFirmwareAllwinner
-, armTrustedFirmwareRK3328, armTrustedFirmwareRK3399
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, bc
+, bison
+, dtc
+, flex
+, openssl
+, swig
+, meson-tools
+, armTrustedFirmwareAllwinner
+, armTrustedFirmwareRK3328
+, armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
 , buildPackages
 }:
 
 let
-  defaultVersion = "2020.01";
+  defaultVersion = "2021.01";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1w9ml4jl15q6ixpdqzspxjnl7d3rgxd7f99ms1xv5c8869h3qida";
+    sha256 = "0m04glv9kn3bhs62sn675w60wkrl4m3a4hnbnnw67s3l198y21xl";
   };
   buildUBoot = {
     version ? null
@@ -28,7 +40,9 @@ let
 
     src = if src == null then defaultSrc else src;
 
-    patches = extraPatches;
+    patches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ] ++ extraPatches;
 
     postPatch = ''
       patchShebangs tools
@@ -41,7 +55,10 @@ let
       dtc
       flex
       openssl
-      (buildPackages.python3.withPackages (p: [ p.libfdt ]))
+      (buildPackages.python3.withPackages (p: [
+        p.libfdt
+        p.setuptools # for pkg_resources
+      ]))
       swig
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -162,7 +179,7 @@ in {
   ubootNovena = buildUBoot {
     defconfig = "novena_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot.bin" "SPL"];
+    filesToInstall = ["u-boot-dtb.img" "SPL"];
   };
 
   # Flashing instructions:
@@ -257,6 +274,13 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootPinebookPro = buildUBoot {
+    defconfig = "pinebook-pro-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
+  };
+
   ubootQemuAarch64 = buildUBoot {
     defconfig = "qemu_arm64_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
@@ -289,6 +313,18 @@ in {
 
   ubootRaspberryPi3_64bit = buildUBoot {
     defconfig = "rpi_3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi4_32bit = buildUBoot {
+    defconfig = "rpi_4_32b_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi4_64bit = buildUBoot {
+    defconfig = "rpi_4_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
@@ -336,6 +372,13 @@ in {
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 
+  ubootROCPCRK3399 = buildUBoot {
+    defconfig = "roc-pc-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "spl/u-boot-spl.bin" "u-boot.itb" "idbloader.img"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+  };
+
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
@@ -365,5 +408,12 @@ in {
     defconfig = "wandboard_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.img" "SPL"];
+  };
+
+  ubootRockPi4 = buildUBoot {
+    defconfig = "rock-pi-4-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 }

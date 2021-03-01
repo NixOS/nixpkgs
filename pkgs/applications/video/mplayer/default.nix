@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg
+{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg_3
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
@@ -21,6 +21,7 @@
 , jackaudioSupport ? false, libjack2 ? null
 , pulseSupport ? config.pulseaudio or false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
+, v4lSupport ? false, libv4l ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
 , libjpegSupport ? true, libjpeg ? null
@@ -53,6 +54,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 assert libjpegSupport -> libjpeg != null;
+assert v4lSupport -> libv4l != null;
 
 let
 
@@ -82,7 +84,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = lib.licenses.unfree;
   } else null;
 
   crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -105,9 +107,9 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig yasm ];
-  buildInputs = with stdenv.lib;
-    [ freetype ffmpeg ]
+  nativeBuildInputs = [ pkg-config yasm ];
+  buildInputs = with lib;
+    [ freetype ffmpeg_3 ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
@@ -132,11 +134,12 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
+    ++ optional v4lSupport libv4l
     ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
     ;
 
   configurePlatforms = [ ];
-  configureFlags = with stdenv.lib; [
+  configureFlags = with lib; [
     "--enable-freetype"
     (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
     (if xineramaSupport then "--enable-xinerama" else "--disable-xinerama")
@@ -162,6 +165,7 @@ stdenv.mkDerivation rec {
     # Note, the `target` vs `host` confusion is intensional.
     "--target=${stdenv.hostPlatform.config}"
   ] ++ (if x11Support then [ "--enable-x11" "--enable-gl" ] else [ "--disable-x11" "--disable-gl" ])
+    ++ (if v4lSupport then [ "--enable-v4l2" "--enable-tv-v4l2" ] else [ "--disable-v4l2" "--disable-tv-v4l2" ])
     ++ (if lameSupport then [ "--enable-mp3lame" "--disable-mp3lame-lavc" ] else [ "--disable-mp3lame" "--enable-mp3lame-lavc" ])
     ++ (if x264Support then [ "--enable-x264" "--disable-x264-lavc" ] else [ "--disable-x264" "--enable-x264-lavc" ])
     ++ optional
@@ -182,7 +186,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray+=(
       "--cc=$CC"
-      "--host-cc=$BUILD_CC"
+      "--host-cc=$CC_FOR_BUILD"
       "--as=$AS"
       "--nm=$NM"
       "--ar=$AR"
@@ -195,18 +199,19 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  env.NIX_LDFLAGS = with stdenv.lib; toString (
+  env.NIX_LDFLAGS = with lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ [ "-lfreetype" ]
   );
 
-  installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
+  installTargets = [ "install" ] ++ lib.optional x11Support "install-gui";
 
   enableParallelBuilding = true;
 
   # Provide a reasonable standard font when not using fontconfig. Maybe we should symlink here.
-  postInstall = stdenv.lib.optionalString (!fontconfigSupport)
+  postInstall = lib.optionalString (!fontconfigSupport)
     ''
       mkdir -p $out/share/mplayer
       cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
@@ -219,7 +224,7 @@ stdenv.mkDerivation rec {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = [ lib.maintainers.eelco ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

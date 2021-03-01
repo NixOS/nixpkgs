@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, fetchzip, ocaml, findlib, tcl, tk }:
+{ stdenv, lib, fetchurl, fetchzip, ocaml, findlib, tcl, tk }:
 
-let OCamlVersionAtLeast = stdenv.lib.versionAtLeast ocaml.version; in
+let OCamlVersionAtLeast = lib.versionAtLeast ocaml.version; in
 
 if !OCamlVersionAtLeast "4.04"
 then throw "labltk is not available for OCaml ${ocaml.version}"
 else
 
 let param =
-if OCamlVersionAtLeast "4.08" then rec {
-  version = "8.06.7";
-  src = fetchzip {
-    url = "https://github.com/garrigue/labltk/archive/${version}.tar.gz";
-    sha256 = "1cqnxjv2dvw9csiz4iqqyx6rck04jgylpglk8f69kgybf7k7xk2h";
-  };
-} else
+  let mkNewParam = { version, sha256 }: {
+    inherit version;
+    src = fetchzip {
+      url = "https://github.com/garrigue/labltk/archive/${version}.tar.gz";
+      inherit sha256;
+    };
+  }; in
   let mkOldParam = { version, key, sha256 }: {
     src = fetchurl {
       url = "https://forge.ocamlcore.org/frs/download.php/${key}/labltk-${version}.tar.gz";
@@ -21,7 +21,7 @@ if OCamlVersionAtLeast "4.08" then rec {
     };
     inherit version;
   }; in
- {
+ rec {
   "4.04" = mkOldParam {
     version = "8.06.2";
     key = "1628";
@@ -41,6 +41,20 @@ if OCamlVersionAtLeast "4.08" then rec {
     version = "8.06.5";
     key = "1764";
     sha256 = "0wgx65y1wkgf22ihpqmspqfp95fqbj3pldhp1p3b1mi8rmc37zwj";
+  };
+  _8_06_7 = mkNewParam {
+    version = "8.06.7";
+    sha256 = "1cqnxjv2dvw9csiz4iqqyx6rck04jgylpglk8f69kgybf7k7xk2h";
+  };
+  "4.08" = _8_06_7;
+  "4.09" = _8_06_7;
+  "4.10" = mkNewParam {
+    version = "8.06.8";
+    sha256 = "0lfjc7lscq81ibqb3fcybdzs2r1i2xl7rsgi7linq46a0pcpkinw";
+  };
+  "4.11" = mkNewParam {
+    version = "8.06.9";
+    sha256 = "1k42k3bjkf22gk39lwwzqzfhgjyhxnclslldrzpg5qy1829pbnc0";
   };
 }.${builtins.substring 0 4 ocaml.version};
 in
@@ -66,8 +80,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "OCaml interface to Tcl/Tk, including OCaml library explorer OCamlBrowser";
     homepage = "http://labltk.forge.ocamlcore.org/";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , boost
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_TESTING=ON"
+  # Darwin tests require rpath for libs in build dir
+  ] ++ lib.optional stdenv.isDarwin [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   buildInputs = [
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reference implementation of OGC KML 2.2";
     homepage = "https://github.com/libkml/libkml";
     license = licenses.bsd3;

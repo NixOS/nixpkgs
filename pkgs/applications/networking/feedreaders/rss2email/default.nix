@@ -1,17 +1,31 @@
-{ pythonPackages, fetchurl, lib, nixosTests }:
+{ pythonPackages, fetchurl, fetchpatch, lib, nixosTests }:
 
 with pythonPackages;
 
 buildPythonApplication rec {
   pname = "rss2email";
-  version = "3.11";
+  version = "3.12.2";
 
-  propagatedBuildInputs = [ feedparser beautifulsoup4 html2text ];
+  propagatedBuildInputs = [ feedparser html2text ];
+  checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
     url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "1vk5slp2mhmc1qj30igqkyq3z5h2bl1ayhafqrjapa6cg6rbvhrn";
+    sha256 = "12w6x80wsw6xm17fxyymnl45aavsagg932zw621wcjz154vjghjr";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "rss2email-feedparser6.patch";
+      url = "https://github.com/rss2email/rss2email/pull/149/commits/338343c92f956c31ff5249ef4bcf7aeea81f687e.patch";
+      sha256 = "0h8b3g9332vdrkqbh6lp00k97asrhmlxi13zghrgc78ia13czy3z";
+    })
+    (fetchpatch {
+      name = "rss2email-feedparser6-test.patch";
+      url = "https://github.com/rss2email/rss2email/pull/149/commits/8c99651eced3f29f05ba2c0ca02abb8bb9a18967.patch";
+      sha256 = "1scljak6xyqxlilg3j39v4qm9a9jks1bnvnrh62hyf3g53yw2xlg";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ];
 
@@ -36,10 +50,10 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A tool that converts RSS/Atom newsfeeds to email.";
+    description = "A tool that converts RSS/Atom newsfeeds to email";
     homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jb55 Profpatsch ];
+    maintainers = with maintainers; [ jb55 Profpatsch ekleog ];
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;

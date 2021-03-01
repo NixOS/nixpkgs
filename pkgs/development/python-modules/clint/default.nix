@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   buildInputs = [ mock nose nose_progressive pkgs.glibcLocales ];
   propagatedBuildInputs = [ pillow blessings args ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kennethreitz/clint";
     description = "Python Command Line Interface Tools";
     license = licenses.isc;

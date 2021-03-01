@@ -1,27 +1,28 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , boost
 , fftwFloat
 , gnuradio
 , liquid-dsp
 , qtbase
+, wrapQtAppsHook
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "inspectrum";
-  version = "unstable-2017-05-31";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "miek";
     repo = "inspectrum";
-    rev = "a89d1337efb31673ccb6a6681bb89c21894c76f7";
-    sha256 = "1fvnr8gca25i6s9mg9b2hyqs0zzr4jicw13mimc9dhrgxklrr1yv";
+    rev = "v${version}";
+    sha256 = "1x6nyn429pk0f7lqzskrgsbq09mq5787xd4piic95add6n1cc355";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
     fftwFloat
     boost

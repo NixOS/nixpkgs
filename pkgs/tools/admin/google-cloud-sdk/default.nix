@@ -21,20 +21,18 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0v83faz0jwnx603acmkc3bsl7vg2xxsm1jfw88fmnj6zcsa5b9ql";
+      sha256 = "09pv1xvycgfai151z6kbsggyldcd3cx6x1p04dcim2xrawqvng6s";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1z9liqzgwfavh3m3q1s871gxnwnsxdbny2vqzh9sjlwdk26f76gi";
+      sha256 = "1iybbvxjny33mw3h2f81fdvsvp65xa62c2qrzjv8hkrqkw69ckrp";
     };
   }.${system};
 
-  strip = if stdenv.isDarwin then "strip -x" else "strip";
-
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "286.0.0";
+  version = "325.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -76,8 +74,8 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
+    mkdir -p $out/share/bash-completion/completions
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud.inc
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -93,18 +91,15 @@ in stdenv.mkDerivation rec {
       jq -c . $path > $path.min
       mv $path.min $path
     done
-
-    # strip the Cython gRPC library
-    ${strip} $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [ pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

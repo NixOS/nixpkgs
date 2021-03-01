@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchurl, autoreconfHook, pkg-config
 , libxslt, xz, elf-header
-, withStatic ? false }:
+, withStatic ? stdenv.hostPlatform.isStatic
+}:
 
 let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
@@ -8,14 +9,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "kmod";
-  version = "26";
+  version = "27";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "17dvrls70nr3b3x1wm8pwbqy4r8a5c20m0dhys8mjhsnpg425fsp";
+    sha256 = "035wzfzjx4nwidk747p8n085mgkvy531ppn16krrajx2dkqzply1";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libxslt ];
   buildInputs = [ xz ] ++ lib.optional stdenv.isDarwin elf-header;
 
   configureFlags = [
@@ -24,7 +25,7 @@ in stdenv.mkDerivation rec {
     "--with-modulesdirs=${modulesDirs}"
   ] ++ lib.optional withStatic "--enable-static";
 
-  patches = [ ./module-dir.patch ]
+  patches = [ ./module-dir.patch ./no-name-field.patch ]
     ++ lib.optional stdenv.isDarwin ./darwin.patch
     ++ lib.optional withStatic ./enable-static.patch;
 
@@ -37,9 +38,17 @@ in stdenv.mkDerivation rec {
     ln -s bin $out/sbin
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
+  meta = with lib; {
     description = "Tools for loading and managing Linux kernel modules";
+    longDescription = ''
+      kmod is a set of tools to handle common tasks with Linux kernel modules
+      like insert, remove, list, check properties, resolve dependencies and
+      aliases. These tools are designed on top of libkmod, a library that is
+      shipped with kmod.
+    '';
+    homepage = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/";
+    downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
+    changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
     license = licenses.lgpl21;
     platforms = platforms.unix;
   };

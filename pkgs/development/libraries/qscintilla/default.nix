@@ -5,24 +5,18 @@
 }:
 
 let
-  # Fix Xcode 8 compilation problem
-  xcodePatch = fetchurl {
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a651d71/qscintilla2/xcode-8.patch";
-    sha256 = "1a88309fdfd421f4458550b710a562c622d72d6e6fdd697107e4a43161d69bc9";
-  };
-
   pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
-  version = "2.11.2";
+  version = "2.11.5";
 
 in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_gpl-${version}.tar.gz";
-    sha256 = "18glb2v07mwfz6p8qmwhzcaaczyc36x3gn9wx8ndm7q6d93xr6q2";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
+    sha256 = "k2Hib9f7e1gZp+uSxcGIChjem9PtndLrAI5XOIaWcWs=";
   };
 
-  sourceRoot = "QScintilla_gpl-${version}/Qt4Qt5";
+  sourceRoot = "QScintilla-${version}/Qt4Qt5";
 
   buildInputs = [ (if withQt5 then qtbase else qt4) ];
 
@@ -32,8 +26,7 @@ in stdenv.mkDerivation rec {
     ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  patches = (lib.optional (stdenv.isDarwin && withQt5) xcodePatch) ++
-            (lib.optional (!withQt5) ./fix-qt4-build.patch );
+  patches = lib.optional (!withQt5) ./fix-qt4-build.patch;
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -53,7 +46,7 @@ in stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
@@ -70,7 +63,7 @@ in stdenv.mkDerivation rec {
       background colours and multiple fonts.
     '';
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
-    license = with licenses; [ gpl2 gpl3 ]; # and commercial
+    license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };

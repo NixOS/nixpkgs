@@ -1,26 +1,30 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, Security }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "kubie";
-  version = "0.7.3";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "sbstp";
     repo = "kubie";
-    sha256 = "186h5fng16gwqhsy2nxswbrrxsx0ysqrb4pqznyygbiz5cd9bgxp";
+    sha256 = "0q21qd9fhchggby18gzyvds517n9vq7b1rr0gmzik4036ykg1lm2";
   };
 
-  cargoSha256 = "1yllpi8dp1fy39z4zmhyf1hdjpl62vwh8b8qlj0g778qsdrm9p98";
+  cargoSha256 = "0dp4prv8c2a6mxl7wskpc65qlfjphdxshb4q2bswqa5i21h8r534";
 
-  meta = with stdenv.lib; {
-    description =
-      "Shell independent context and namespace switcher for kubectl";
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  postInstall = ''
+    installShellCompletion completion/kubie.bash
+  '';
+
+  meta = with lib; {
+    description = "Shell independent context and namespace switcher for kubectl";
     homepage = "https://github.com/sbstp/kubie";
     license = with licenses; [ zlib ];
     maintainers = with maintainers; [ illiusdope ];
-    platforms = platforms.all;
   };
 }

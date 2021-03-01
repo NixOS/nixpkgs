@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, xorgproto, libX11, bison, ksh, perl, gnum4
+{ lib, stdenv, fetchurl, xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
 , ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
-, autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot }:
+, autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot
+, rpcsvc-proto }:
 
 let
   x11ProjectRoot = symlinkJoin {
@@ -25,6 +26,7 @@ in stdenv.mkDerivation rec {
   # remove with next release
   patches = [
     ./2.3.2.patch
+    ./0001-all-remove-deprecated-sys_errlist-and-replace-with-A.patch
   ];
 
   buildInputs = [
@@ -33,6 +35,7 @@ in stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     bison ncompress gawk autoPatchelfHook makeWrapper fakeroot
+    rpcsvc-proto
   ];
 
   makeFlags = [
@@ -68,7 +71,7 @@ EOF
     mv $out/opt/dt/bin/dtmail $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common Desktop Environment";
     homepage = "https://sourceforge.net/projects/cdesktopenv/";
     license = licenses.lgpl2;

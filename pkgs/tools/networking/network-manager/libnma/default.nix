@@ -19,17 +19,18 @@
 , gcr
 , glib
 , substituteAll
+, lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.28";
+  version = "1.8.30";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09mp6k0hfam1vyyv9kcd8j4gb2r58i05ipx2nswb58ris599bxja";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1d5gzn7ss5vi0bhc8s4i5gsrck1ajslajam5jxfqazg094mffcys";
   };
 
   patches = [
@@ -55,13 +56,13 @@ stdenv.mkDerivation rec {
     networkmanager
     isocodes
     mobile-broadband-provider-info
-  ] ++ stdenv.lib.optionals withGnome [
+  ] ++ lib.optionals withGnome [
     # advanced certificate chooser
     gcr
   ];
 
   mesonFlags = [
-    "-Dgcr=${if withGnome then "true" else "false"}"
+    "-Dgcr=${lib.boolToString withGnome}"
   ];
 
   postPatch = ''
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/libnma";
     description = "NetworkManager UI utilities (libnm version)";
     license = licenses.gpl2Plus; # Mix of GPL and LPGL 2+

@@ -1,19 +1,21 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
-      version = "1.4.2";
+      version = "1.13.1";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "0pfzpbdir2agwsyfjh1rxlyyd225xmyrr4k2g4vlg5r12kpcjwya";
+        sha256 = "1jvmcpyj4k43s4hv753pr9a1qg930nac90d5c8haqv30v1rw5pws";
       };
 
-      modSha256 = "0qjhb55nd8mlnswbk8bgl2sb9angmv8fnympmmyqj1dqa7lcs87z";
+      vendorSha256 = "140b0wqp5ayyyan7ml12jqd72s00cawhmdf8g699j5sav8j6hppi";
+
+      doCheck = false;
 
       patches = [
         ./add-stcli-target.patch
@@ -35,9 +37,15 @@ let
 
       inherit postInstall;
 
+      passthru.tests = with nixosTests; {
+        init = syncthing-init;
+        relay = syncthing-relay;
+      };
+
       meta = with lib; {
-        homepage = "https://www.syncthing.net/";
+        homepage = "https://syncthing.net/";
         description = "Open Source Continuous File Synchronization";
+        changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
         maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
         platforms = platforms.unix;

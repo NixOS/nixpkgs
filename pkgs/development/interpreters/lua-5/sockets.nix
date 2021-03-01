@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://w3.impa.br/~diego/software/luasocket/";
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

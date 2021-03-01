@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, pkgconfig, perl
+{ lib, stdenv, fetchurl, libxml2, pkg-config, perl
 , compressionSupport ? true, zlib ? null
 , sslSupport ? true, openssl ? null
 , static ? false
@@ -10,7 +10,7 @@ assert sslSupport -> openssl != null;
 assert static || shared;
 
 let
-   inherit (stdenv.lib) optionals;
+   inherit (lib) optionals;
 in
 
 stdenv.mkDerivation rec {
@@ -24,15 +24,15 @@ stdenv.mkDerivation rec {
 
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [libxml2 openssl]
-    ++ stdenv.lib.optional compressionSupport zlib;
+    ++ lib.optional compressionSupport zlib;
 
   configureFlags = [
-    (stdenv.lib.enableFeature shared "shared")
-    (stdenv.lib.enableFeature static "static")
-    (stdenv.lib.withFeature compressionSupport "zlib")
-    (stdenv.lib.withFeature sslSupport "ssl")
+    (lib.enableFeature shared "shared")
+    (lib.enableFeature static "static")
+    (lib.withFeature compressionSupport "zlib")
+    (lib.withFeature sslSupport "ssl")
   ];
 
   passthru = {inherit compressionSupport sslSupport;};
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ perl ];
   doCheck = false; # fails, needs the net
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An HTTP and WebDAV client library";
     homepage = "http://www.webdav.org/neon/";
     platforms = platforms.unix;

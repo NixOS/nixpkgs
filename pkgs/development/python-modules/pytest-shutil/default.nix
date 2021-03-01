@@ -1,4 +1,4 @@
-{ stdenv, lib, isPyPy, buildPythonPackage, fetchPypi
+{ lib, isPyPy, buildPythonPackage, fetchPypi
 , pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A goodie-bag of unix shell and environment tools for py.test";
     homepage = "https://github.com/manahl/pytest-plugins";
     maintainers = with maintainers; [ ryansydnor ];

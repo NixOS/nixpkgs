@@ -17,10 +17,11 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp * $out/bin/
+  '' + optionalString stdenv.isLinux ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '';
 
-  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
 
   meta = {
     homepage = "https://pulumi.io/";
@@ -28,8 +29,10 @@ in stdenv.mkDerivation {
     license = with licenses; [ asl20 ];
     platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with maintainers; [
+      ghuntley
       peterromfeldhk
       jlesquembre
+      cpcloud
     ];
   };
 }

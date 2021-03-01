@@ -1,11 +1,11 @@
 # TODO: Resolve the issues with the Mono bindings.
 
-{ stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, autoreconfHook
+{ stdenv, fetchgit, lib
+, pkg-config, autoreconfHook
 , glib, dbus-glib, gtkVersion ? "3"
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, vala, gobject-introspection
+, gtk-doc, vala, gobject-introspection
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
@@ -15,18 +15,17 @@ with lib;
 stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}-${version}";
-  version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "0";
+  version = "12.10.1+20.10.20200706.1";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/libappindicator-${version}.tar.gz";
-    sha256 = "17xlqd60v0zllrxp8bgq3k5a1jkj0svkqn8rzllcyjh8k0gpr46m";
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/libappindicator";
+    rev = "fe25e53bc7e39cd59ad6b3270cd7a6a9c78c4f44";
+    sha256 = "0xjvbl4gn7ra2fs6gn2g9s787kzb5cg9hv79iqsz949rxh4iw32d";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook vala gobject-introspection ];
+  nativeBuildInputs = [ pkg-config autoreconfHook vala gobject-introspection gtk-doc ];
 
   propagatedBuildInputs =
     if gtkVersion == "2"
@@ -39,14 +38,9 @@ stdenv.mkDerivation rec {
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);
 
-  patches = [
-    # Remove python2 from libappindicator.
-    (fetchpatch {
-      name = "no-python.patch";
-      url = "https://src.fedoraproject.org/rpms/libappindicator/raw/8508f7a52437679fd95a79b4630373f08315f189/f/nopython.patch";
-      sha256 = "18b1xzvwsbhhfpbzf5zragij4g79pa04y1dk6v5ci1wsjvii725s";
-    })
-  ];
+  preAutoreconf = ''
+    gtkdocize
+  '';
 
   configureFlags = [
     "CFLAGS=-Wno-error"

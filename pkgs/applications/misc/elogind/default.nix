@@ -8,7 +8,7 @@
 , getent
 , libcap
 , gettext
-, pkgconfig
+, pkg-config
 , udev
 , eudev
 , libxslt
@@ -25,7 +25,7 @@
 , enableSystemd ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "elogind";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     m4
-    pkgconfig
+    pkg-config
     gperf
     getent
     libcap

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, gnused_422, perl, python2, zip, libffi, readline, icu, zlib, buildPackages
+{ lib, stdenv, fetchurl, pkg-config, gnused_422, perl, python2, zip, libffi, readline, icu, zlib, buildPackages
 , libobjc }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "38.8.0";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libffi readline icu zlib ]
-               ++ stdenv.lib.optional stdenv.isDarwin libobjc;
-  nativeBuildInputs = [ pkgconfig perl python2 zip gnused_422 ];
+               ++ lib.optional stdenv.isDarwin libobjc;
+  nativeBuildInputs = [ pkg-config perl python2 zip gnused_422 ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 
@@ -60,12 +60,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     # TODO: MPL/GPL/LGPL tri-license.
 
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.unix;
+    knownVulnerabilities = [ "SpiderMonkey 38 is outdated and contains known security vulnerabilities." ]; # as per https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Releases/38
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
-, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, utillinux
+, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
     homepage = "http://stgt.sourceforge.net/";
     license = licenses.gpl2;

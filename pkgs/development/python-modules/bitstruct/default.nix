@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "8.8.1";
+  version = "8.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84893f90eb78f8179af24a87622ef964ede5c7e785562022917033987d6ce198";
+    sha256 = "4e7b8769c0f09fee403d0a5f637f8b575b191a79a92e140811aa109ce7461f0c";
   };
 
   meta = with lib; {

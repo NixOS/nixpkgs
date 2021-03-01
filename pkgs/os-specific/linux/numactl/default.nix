@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "numactl";
-  version = "2.0.13";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "08xj0n27qh0ly8hjallnx774gicz15nfq0yyxz8zhgy6pq8l33vv";
+    sha256 = "0hahpdp5xqy9cbg251bdxqkml341djn2h856g435h4ngz63sr9fs";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # building ~5% slower until reboot. Ugh!
   doCheck = false; # never ever!
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = "https://github.com/numactl/numactl";
     license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21

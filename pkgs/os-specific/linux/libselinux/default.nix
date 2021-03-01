@@ -1,26 +1,26 @@
-{ stdenv, fetchurl, pcre, pkgconfig, libsepol
-, enablePython ? true, swig ? null, python ? null
+{ lib, stdenv, fetchurl, pcre, pkg-config, libsepol
+, enablePython ? true, swig ? null, python3 ? null
 , fts
 }:
 
-assert enablePython -> swig != null && python != null;
+assert enablePython -> swig != null && python3 != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "libselinux";
-  version = "2.9";
+  version = "3.0";
   inherit (libsepol) se_release se_url;
 
   outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libselinux-${version}.tar.gz";
-    sha256 = "14r69mgmz7najf9wbizvp68q56mqx4yjbkxjlbcqg5a47s3wik0v";
+    sha256 = "0cr4p0qkr4qd5z1x677vwhz6mlz55kxyijwi2dmrvbhxcw7v78if";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ optionals enablePython [ swig python ];
-  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python ];
+  nativeBuildInputs = [ pkg-config ] ++ optionals enablePython [ swig python3 ];
+  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
@@ -35,13 +35,17 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN5DIR=$(man)/share/man/man5"
     "MAN8DIR=$(man)/share/man/man8"
-    "PYTHON=${python.pythonForBuild}/bin/python"
-    "PYTHONLIBDIR=$(py)/${python.sitePackages}"
+    "PYTHON=${python3.pythonForBuild}/bin/python"
+    "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
     "SBINDIR=$(bin)/sbin"
     "SHLIBDIR=$(out)/lib"
 
-    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
+
+  preInstall = ''
+    mkdir -p $py/${python3.sitePackages}/selinux
+  '';
 
   installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
 

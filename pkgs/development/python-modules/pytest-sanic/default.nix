@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-sanic";
-  version = "1.1.2";
+  version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "61a60e1b0456b2ceaeeb7173783f3450332c3609017fb6b18176b307f7186d3a";
+    sha256 = "6428ed8cc2e6cfa05b92689a8589149aacdc1f0640fcf9673211aa733e6a5209";
   };
 
   propagatedBuildInputs = [

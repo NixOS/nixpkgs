@@ -4,6 +4,8 @@
 , mock
 , msrest
 , pytest
+, pytest-asyncio
+, pytest-trio
 , pytestCheckHook
 , requests
 , six
@@ -12,14 +14,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.0";
+  version = "1.10.0";
   pname = "azure-core";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0vfcfpb01qsrqh9xg4xyfm153bczwjglkv59zpdvrn7x0rrdc1cc";
+    sha256 = "b9cddf3eb239e32b14cf44750b21d7bc8d78b82aa53d57628523598dcd006803";
   };
 
   propagatedBuildInputs = [
@@ -33,13 +35,16 @@ buildPythonPackage rec {
     mock
     msrest
     pytest
+    pytest-trio
+    pytest-asyncio
     pytestCheckHook
     trio
     typing-extensions
   ];
 
   pytestFlagsArray = [ "tests/" ];
-  disabledTests = [ "response" "request" "timeout" ];
+  # disable tests which touch network
+  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
 
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";

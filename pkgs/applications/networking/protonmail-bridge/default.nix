@@ -1,73 +1,42 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtsvg, qtdeclarative, qttools, qtgraphicaleffects, qtquickcontrols2, full
-, libsecret, libGL, libpulseaudio, glib, wrapQtAppsHook, mkDerivation }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, libsecret }:
 
-let
-  version = "1.2.3-1";
-
-  description = ''
-    An application that runs on your computer in the background and seamlessly encrypts
-    and decrypts your mail as it enters and leaves your computer.
-
-    To work, gnome-keyring service must be enabled.
-  '';
-in mkDerivation {
+buildGoModule rec {
   pname = "protonmail-bridge";
-  inherit version;
+  version = "1.5.0";
 
-  src = fetchurl {
-    url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";
-    sha256 = "032ggk9fvd19fbsqkzwzwh0hpyg8gpkrin71di7zsx6ias5innw1";
+  src = fetchFromGitHub {
+    owner = "ProtonMail";
+    repo = "proton-bridge";
+    rev = "br-${version}";
+    sha256 = "lHqwKlFwz9iO7LJMGFTGCauw12z/BKnQte2sVoVkOaY=";
   };
 
-  sourceRoot = ".";
+  vendorSha256 = "eP+7fqBctX9XLCoHVJDI/qaa5tocgg3F5nfUM6dzNRg=";
 
-  unpackCmd = ''
-    ar p "$src" data.tar.xz | tar xJ
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libsecret ];
+
+  buildPhase = ''
+    make BUILD_TIME= build-nogui
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,lib,share}
-
-    cp -r usr/lib/protonmail/bridge/protonmail-bridge $out/lib
-    cp -r usr/share $out
-
-    ln -s $out/lib/protonmail-bridge $out/bin/protonmail-bridge
+    install -Dm555 Desktop-Bridge $out/bin/protonmail-bridge
   '';
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      qtbase
-      qtquickcontrols2
-      qtgraphicaleffects
-      qtmultimedia
-      qtsvg
-      qtdeclarative
-      qttools
-      libGL
-      libsecret
-      libpulseaudio
-      glib
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${rpath}" \
-      $out/lib/protonmail-bridge
-
-    substituteInPlace $out/share/applications/ProtonMail_Bridge.desktop \
-      --replace "/usr/" "$out/" \
-      --replace "Exec=protonmail-bridge" "Exec=$out/bin/protonmail-bridge"
-  '';
-
-  buildInputs = [ qtbase qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative ];
-
-  meta = with stdenv.lib; {
-    homepage = "https://www.protonmail.com/bridge";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+  meta = with lib; {
+    homepage = "https://github.com/ProtonMail/proton-bridge";
+    changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
+    downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ lightdiscord ];
+    description = "Use your ProtonMail account with your local e-mail client";
+    longDescription = ''
+      An application that runs on your computer in the background and seamlessly encrypts
+      and decrypts your mail as it enters and leaves your computer.
 
-    inherit description;
+      To work, gnome-keyring service must be enabled.
+    '';
   };
 }

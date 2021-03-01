@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
 , openssl
 , linkOpenssl? true
 , openldap
@@ -40,14 +40,14 @@ assert withRest -> curl != null && withJson;
 ## TODO: include oracle optionally
 ## TODO: include ykclient optionally
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.0.20";
+  version = "3.0.21";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    sha256 = "0zrnlpril8lcnyd6zz0wy45wj5i2k2krcf42dwa0rldjsjh6nazp";
+    sha256 = "1bij07angf6ll6bq8lccd4fx1a1clf7k13kh5vbryh6lf7a19y9b";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ] ++ optional (!linkOpenssl) "--with-openssl=no";
 
-  patches = stdenv.lib.optional withRest (fetchpatch {
+  patches = lib.optional withRest (fetchpatch {
     # Fix HTTP/2 in rest
     url = "https://github.com/FreeRADIUS/freeradius-server/commit/6286520698a3cc4053b4d49eb0a61d9ba77632aa.patch";
     sha256 = "1ycvr3ql1mfkvzydnn4aiygnidicv2hgllppv37nb1p2pk02159g";
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://freeradius.org/";
     description = "A modular, high performance free RADIUS suite";
     license = licenses.gpl2;

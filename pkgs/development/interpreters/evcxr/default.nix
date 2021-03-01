@@ -1,30 +1,38 @@
-{ cargo, fetchFromGitHub, makeWrapper, pkgconfig, rustPlatform, stdenv, gcc, Security, cmake }:
+{ cargo, fetchFromGitHub, makeWrapper, pkg-config, rustPlatform, lib, stdenv, gcc, Security, cmake }:
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
-    rev = "239e431c58d04c641da22af791e4d3e1b894365e";
-    sha256 = "0vkcis06gwsqfwvrl8xcf74mfcs6j77b9fhcz5rrh77mwl7ixsdc";
+    rev = "v${version}";
+    sha256 = "sha256-33XeepqwYmTMcObroPTuxykYuM9qYI1+LV5lZIFSomg=";
   };
 
-  cargoSha256 = "0pamwqhw3sj4anqc1112l5cayhqzibdhqjc28apfrkf2m63cclzi";
+  cargoSha256 = "sha256-tjCID3YeGkxcq/LqJDMHGNpv1MCXKtcLlDnNkFwx1zU=";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper cmake ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
-  postInstall = ''
-    wrapProgram $out/bin/evcxr --prefix PATH : ${stdenv.lib.makeBinPath [ cargo gcc ]}
+  RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
+
+  nativeBuildInputs = [ pkg-config makeWrapper cmake ];
+  buildInputs = lib.optional stdenv.isDarwin Security;
+  postInstall = let
+    wrap = exe: ''
+      wrapProgram $out/bin/${exe} \
+        --prefix PATH : ${lib.makeBinPath [ cargo gcc ]} \
+        --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
+    '';
+  in ''
+    ${wrap "evcxr"}
+    ${wrap "evcxr_jupyter"}
     rm $out/bin/testing_runtime
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An evaluation context for Rust";
     homepage = "https://github.com/google/evcxr";
     license = licenses.asl20;
     maintainers = with maintainers; [ protoben ma27 ];
-    platforms = platforms.all;
   };
 }

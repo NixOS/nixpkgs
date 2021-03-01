@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
+{ lib, stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
 , libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
 , leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   boolToCMake = b: if b then "ON" else "OFF";
@@ -60,7 +60,7 @@ let
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://minetest.net/";
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
@@ -76,9 +76,9 @@ let
   };
 
   v5 = {
-    version = "5.1.1";
-    sha256 = "0cjj63333b7j4ydfq0h9yc6d2jvmyjd7n7zbd08yrf0rcibrj2k0";
-    dataSha256 = "1r9fxz2j24q74a9injvbxbf2xk67fzabv616i676zw2cvgv9hn39";
+    version = "5.3.0";
+    sha256 = "03ga3j3cg38w4lg4d4qxasmnjdl8n3lbizidrinanvyfdyvznyh6";
+    dataSha256 = "1liciwlh013z5h08ib0psjbwn5wkvlr937ir7kslfk4vly984cjx";
   };
 
 in {

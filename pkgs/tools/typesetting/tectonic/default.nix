@@ -1,32 +1,36 @@
-{ stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform
+, darwin, fontconfig, harfbuzz, openssl, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.1.12";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
-    rev = "v${version}";
-    sha256 = "0dycv135bkpf71iwlwh8rwwvn287d605nl7v8mjxlrsayiivdmn9";
+    rev = "tectonic@${version}";
+    sha256 = "1p93428ln3sfsflc7spjpfcgy81c4z5y0xhwv5mkgzf55g8nrin1";
   };
 
-  cargoSha256 = "1axrf7d01gmhvrap13rydfvwcsg0lk1zw7z1i7zzm898bc7c02qn";
+  cargoSha256 = "0jzngl1iwrq20cx3l0mwdrrddvyw977rwb75nz1k4hkxjnicc1ga";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
-  # tests fail due to read-only nix store
-  doCheck = false;
+  postInstall = lib.optionalString stdenv.isLinux ''
+    install -D dist/appimage/tectonic.desktop -t $out/share/applications/
+    install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+  '';
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  meta = with lib; {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
     homepage = "https://tectonic-typesetting.github.io/";
+    changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.lluchs ];
-    platforms = platforms.all;
+    maintainers = [ maintainers.lluchs maintainers.doronbehar ];
   };
 }

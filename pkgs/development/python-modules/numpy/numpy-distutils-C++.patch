@@ -1,8 +1,7 @@
 diff --git a/numpy/distutils/unixccompiler.py b/numpy/distutils/unixccompiler.py
-index 6ed5eec..82a88b5 100644
 --- a/numpy/distutils/unixccompiler.py
 +++ b/numpy/distutils/unixccompiler.py
-@@ -44,8 +44,6 @@ def UnixCCompiler__compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts
+@@ -37,8 +37,6 @@ def UnixCCompiler__compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts
          if opt not in llink_s:
              self.linker_so = llink_s.split() + opt.split()
  
@@ -11,7 +10,7 @@ index 6ed5eec..82a88b5 100644
      # gcc style automatic dependencies, outputs a makefile (-MF) that lists
      # all headers needed by a c file as a side effect of compilation (-MMD)
      if getattr(self, '_auto_depends', False):
-@@ -54,8 +52,15 @@ def UnixCCompiler__compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts
+@@ -47,8 +45,15 @@ def UnixCCompiler__compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts
          deps = []
  
      try:
@@ -26,6 +25,6 @@ index 6ed5eec..82a88b5 100644
 +            self.spawn(self.compiler_so + cc_args + [src, '-o', obj] + deps +
 +                       extra_postargs, display = display)
 +
-     except DistutilsExecError:
-         msg = str(get_exception())
+     except DistutilsExecError as e:
+         msg = str(e)
          raise CompileError(msg)

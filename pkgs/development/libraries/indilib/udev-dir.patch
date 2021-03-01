@@ -1,12 +1,11 @@
-diff -Naur libindi-1.0.0-upstream/CMakeLists.txt libindi-1.0.0/CMakeLists.txt
---- libindi-1.0.0-upstream/CMakeLists.txt	2015-03-28 21:06:49.576863460 -0430
-+++ libindi-1.0.0/CMakeLists.txt	2015-03-28 21:07:48.420677548 -0430
-@@ -28,7 +28,7 @@
+--- indi-1.8.6/CMakeLists.txt	2020-08-21 05:56:59.000000000 -0500
++++ CMakeLists.txt	2020-11-01 12:50:57.621293870 -0600
+@@ -77,7 +77,7 @@
  ## the following are directories where stuff will be installed to
  set(INCLUDE_INSTALL_DIR      "${CMAKE_INSTALL_PREFIX}/include/")
- set(PKGCONFIG_INSTALL_PREFIX "${LIB_DESTINATION}/pkgconfig/")
+ set(PKGCONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_LIBDIR}/pkgconfig/")
 -set(UDEVRULES_INSTALL_DIR "/lib/udev/rules.d" CACHE STRING "Base directory for udev rules")
 +set(UDEVRULES_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib/udev/rules.d" CACHE STRING "Base directory for udev rules")
  
- ##################  Includes  ################################
- Include (CheckCXXSourceCompiles)
+ set(PKG_CONFIG_LIBDIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+ 

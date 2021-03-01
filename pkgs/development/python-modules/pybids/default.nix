@@ -2,6 +2,7 @@
 , lib
 , fetchPypi
 , isPy27
+, click
 , num2words
 , numpy
 , scipy
@@ -15,15 +16,16 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
+  version = "0.12.4";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b37ba89eb7407bbfdf8e26e1230b6ef452da3d986df5eed21aab96be61b6e844";
+    sha256 = "830f3f518ab0d2e058e9ba6d6ff9a942792909c874433b3ad58a3339a23f46bf";
   };
 
   propagatedBuildInputs = [
+    click
     num2words
     numpy
     scipy

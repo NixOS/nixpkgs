@@ -1,26 +1,34 @@
-{ stdenv, fetchurl, pkgconfig, cmake
-, alsaLib, boost, glib, lash, libjack2, libarchive, libsndfile, lrdf, qt4
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
+, alsaLib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
+, qtbase, qttools, qtxmlpatterns
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.7";
   pname = "hydrogen";
+  version = "1.0.1";
 
-  src = fetchurl {
-    url = "https://github.com/hydrogen-music/hydrogen/archive/${version}.tar.gz";
-    sha256 = "1dy2jfkdw0nchars4xi4isrz66fqn53a9qk13bqza7lhmsg3s3qy";
+  src = fetchFromGitHub {
+    owner = "hydrogen-music";
+    repo = pname;
+    rev = version;
+    sha256 = "0snljpvbcgikhz610c325dgvayi0k512p3bglck9vvi90wsqx7l1";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    alsaLib boost glib lash libjack2 libarchive libsndfile lrdf qt4
+    alsaLib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
+    qtbase qttools qtxmlpatterns
   ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DWANT_DEBUG=OFF"
+  ];
+
+  meta = with lib; {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu orivej ];
   };
 }

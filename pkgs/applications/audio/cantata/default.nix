@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtsvg, qttools
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
+, qtbase, qtsvg, qttools, perl
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
 # default for now until I (or someone else) figure it out.
@@ -10,13 +10,13 @@
 
 , withTaglib ? true, taglib, taglib_extras
 , withHttpStream ? true, qtmultimedia
-, withReplaygain ? true, ffmpeg, speex, mpg123
+, withReplaygain ? true, ffmpeg_3, speex, mpg123
 , withMtp ? true, libmtp
 , withOnlineServices ? true
 , withDevices ? true, udisks2
 , withDynamic ? true
 , withHttpServer ? true
-, withLibVlc ? false, vlc
+, withLibVlc ? false, libvlc
 , withStreams ? true
 }:
 
@@ -31,12 +31,14 @@ assert withReplaygain -> withTaglib;
 assert withLibVlc -> withHttpStream;
 
 let
-  version = "2.4.1";
+  version = "2.4.2";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
 
   withUdisks = (withTaglib && withDevices);
+
+  perl' = perl.withPackages (ppkgs: [ ppkgs.URI ]);
 
 in mkDerivation {
   name = "${pname}-${version}";
@@ -45,12 +47,23 @@ in mkDerivation {
     owner  = "CDrummond";
     repo   = "cantata";
     rev    = "v${version}";
-    sha256 = "0ix7xp352bziwz31mw79y7wxxmdn6060p8ry2px243ni1lz1qx1c";
+    sha256 = "15qfx9bpfdplxxs08inwf2j8kvf7g5cln5sv1wj1l2l41vbf1mjr";
   };
 
-  buildInputs = [ qtbase qtsvg ]
+  patches = [
+    # Cantata wants to check if perl is in the PATH at runtime, but we
+    # patchShebangs the playlists scripts, making that unnecessary (perl will
+    # always be available because it's a dependency)
+    ./dont-check-for-perl-in-PATH.diff
+  ];
+
+  postPatch = ''
+    patchShebangs playlists
+  '';
+
+  buildInputs = [ qtbase qtsvg perl' ]
     ++ lib.optionals withTaglib [ taglib taglib_extras ]
-    ++ lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
+    ++ lib.optionals withReplaygain [ ffmpeg_3 speex mpg123 ]
     ++ lib.optional  withHttpStream qtmultimedia
     ++ lib.optional  withCdda cdparanoia
     ++ lib.optional  withCddb libcddb
@@ -58,11 +71,9 @@ in mkDerivation {
     ++ lib.optional  withMtp libmtp
     ++ lib.optional  withMusicbrainz libmusicbrainz5
     ++ lib.optional  withUdisks udisks2
-    ++ lib.optional  withLibVlc vlc;
+    ++ lib.optional  withLibVlc libvlc;
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   cmakeFlags = lib.flatten [
     (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])

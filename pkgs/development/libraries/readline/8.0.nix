@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses
+{ fetchurl, lib, stdenv, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -32,11 +32,7 @@ stdenv.mkDerivation rec {
     ]
     ++ upstreamPatches;
 
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-  bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for interactive line editing";
 
     longDescription = ''

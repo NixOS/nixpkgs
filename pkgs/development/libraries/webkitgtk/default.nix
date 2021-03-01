@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , perl
 , python3
@@ -7,7 +7,7 @@
 , gperf
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , gobject-introspection
 , libnotify
@@ -41,33 +41,33 @@
 , enableGeoLocation ? true
 , geoclue2
 , sqlite
-, enableGtk2Plugins ? false
-, gtk2 ? null
+, enableGLES ? true
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
 , bubblewrap
 , libseccomp
+, systemd
 , xdg-dbus-proxy
 , substituteAll
 , glib
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
-assert enableGtk2Plugins -> gtk2 != null;
-assert stdenv.isDarwin -> !enableGtk2Plugins;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.28.0";
+  version = "2.30.3";
 
   outputs = [ "out" "dev" ];
 
+  separateDebugInfo = stdenv.isLinux;
+
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "12qfs9w93c5kiyi14ynm4rf4ad3c213dvzmdrc9c3ab2iwbks7rn";
+    sha256 = "0zsy3say94d9bhaan0l6mfr59z03a5x4kngyy8b2i20n77q19skd";
   };
 
   patches = optionals stdenv.isLinux [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     ./libglvnd-headers.patch
   ];
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ignore gettext in cmake_prefix_path so that find_program doesn't
     # pick up the wrong gettext. TODO: Find a better solution for
     # this, maybe make cmake not look up executables in
@@ -94,10 +94,11 @@ stdenv.mkDerivation rec {
     gperf
     ninja
     perl
-    pkgconfig
+    pkg-config
     python3
     ruby
     glib # for gdbus-codegen
+  ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
 
@@ -139,10 +140,10 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     bubblewrap
     libseccomp
+    systemd
     wayland
     xdg-dbus-proxy
-  ] ++ optional enableGeoLocation geoclue2
-    ++ optional enableGtk2Plugins gtk2;
+  ] ++ optional enableGeoLocation geoclue2;
 
   propagatedBuildInputs = [
     gtk3
@@ -166,8 +167,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_ACCELERATE=0"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
-    ++ optional stdenv.isLinux "-DENABLE_GLES2=ON";
+  ] ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .
@@ -177,8 +177,7 @@ stdenv.mkDerivation rec {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
-    platforms = platforms.linux;
-    hydraPlatforms = [];
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
   };
 }

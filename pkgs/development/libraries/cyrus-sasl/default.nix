@@ -2,14 +2,15 @@
 , pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles, fetchpatch }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
   version = "2.1.27";
 
   src = fetchurl {
     urls =
-      [ "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
+      [ "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
+        "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
         "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
       ];
     sha256 = "1m85zcpgfdhm43cavpdkhb1s2zq1b31472hq1w1gs3xh94anp1i6";
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames pruneLibtoolFiles ];
+  nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [ openssl db gettext kerberos ]
     ++ lib.optional enableLdap openldap

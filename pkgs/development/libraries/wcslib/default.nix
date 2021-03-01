@@ -1,14 +1,14 @@
-{ fetchurl,  stdenv, flex }:
+{ fetchurl,  lib, stdenv, flex }:
 
 stdenv.mkDerivation rec {
-  version = "7.2";
+  version = "7.3.1";
   pname = "wcslib";
 
   buildInputs = [ flex ];
 
   src = fetchurl {
     url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${pname}-${version}.tar.bz2";
-    sha256 ="0fbf6ypq7ag9dmjn65ja5vbfxswb6511bja8rbna25wmhns9x5b3";
+    sha256 ="0p0bp3jll9v2094a8908vk82m7j7qkjqzkngm1r9qj1v6l6j5z6c";
   };
 
   prePatch = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     systems. This is the standard library for this purpose in
     astronomy.'';
 
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

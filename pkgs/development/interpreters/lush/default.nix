@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, xorgproto, indent, readline, gsl, freeglut, libGLU, libGL, SDL
+{lib, stdenv, fetchurl, libX11, xorgproto, indent, readline, gsl, freeglut, libGLU, libGL, SDL
 , blas, libbfd, intltool, gettext, zlib, libSM}:
 
 stdenv.mkDerivation rec {
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lisp Universal SHell";
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus ;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
 }

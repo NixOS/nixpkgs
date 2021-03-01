@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, nose, nose-of-yeti
+{ lib, buildPythonPackage, fetchFromGitHub, six, nose, nose-of-yeti
 , nose-pattern-exclude, which }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ./test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Decorator and plugin to make nose focus on specific tests";
     homepage = "https://nose-focus.readthedocs.io/en/latest/";
     license = licenses.wtfpl;

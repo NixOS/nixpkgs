@@ -37,12 +37,7 @@ in
 
     services.mysqlBackup = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable MySQL backups.
-        '';
-      };
+      enable = mkEnableOption "MySQL backups";
 
       calendar = mkOption {
         type = types.str;
@@ -53,6 +48,7 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = defaultUser;
         description = ''
           User to be used to perform backup.
@@ -61,12 +57,14 @@ in
 
       databases = mkOption {
         default = [];
+        type = types.listOf types.str;
         description = ''
           List of database names to dump.
         '';
       };
 
       location = mkOption {
+        type = types.path;
         default = "/var/backup/mysql";
         description = ''
           Location to put the gzipped MySQL database dumps.
@@ -75,6 +73,7 @@ in
 
       singleTransaction = mkOption {
         default = false;
+        type = types.bool;
         description = ''
           Whether to create database dump in a single transaction
         '';

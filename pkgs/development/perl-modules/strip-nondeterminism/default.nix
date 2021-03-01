@@ -1,4 +1,4 @@
-{ lib, file, fetchFromGitLab, buildPerlPackage, ArchiveZip, ArchiveCpio }:
+{ lib, stdenv, file, fetchFromGitLab, buildPerlPackage, ArchiveZip, ArchiveCpio, shortenPerlShebang }:
 
 buildPerlPackage rec {
   pname = "strip-nondeterminism";
@@ -17,12 +17,17 @@ buildPerlPackage rec {
   # stray test failure
   doCheck = false;
 
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
   buildInputs = [ ArchiveZip ArchiveCpio file ];
 
   perlPostHook = ''
     # we don’t need the debhelper script
     rm $out/bin/dh_strip_nondeterminism
     rm $out/share/man/man1/dh_strip_nondeterminism.1.gz
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/strip-nondeterminism
   '';
 
   meta = with lib; {

@@ -7,15 +7,18 @@
 , markdown
 , pyct
 , testpath
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.7.0";
+  version = "0.9.7";
+  # Version 10 attempts to download models from the web during build-time
+  # https://github.com/holoviz/panel/issues/1819
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "71d446f469b424cb190bc896e78d0415b2bbebf17c6e5b024ed1a73b4448f8f4";
+    sha256 = "2e86d82bdd5e7664bf49558eedad62b664d5403ec9e422e5ddfcf69e3bd77318";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +28,7 @@ buildPythonPackage rec {
     markdown
     pyct
     testpath
+    tqdm
   ];
 
   # infinite recursion in test dependencies (hvplot)

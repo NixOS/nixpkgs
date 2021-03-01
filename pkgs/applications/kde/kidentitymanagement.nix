@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kidentitymanagement";
+  pname = "kidentitymanagement";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;

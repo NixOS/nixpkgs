@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
-, cmocka, libmicrohttpd, stabber, expat, libmesode
-, autoconf-archive
+, cmocka, libmicrohttpd, expat, sqlite, libmesode, autoconf-archive
 
 , autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
 , notifySupport ? true,         libnotify ? null, gdk-pixbuf ? null
@@ -18,30 +17,32 @@ assert pgpSupport          -> gpgme != null;
 assert pythonPluginSupport -> python != null;
 assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    sha256 = "0fg5xcdlvhsi7a40w4jcxyj7m7wl42jy1cvsa8fi2gb6g9y568k8";
+    sha256 = "0a9rzhnivxcr8v02xxzrbck7pvvv4c66ap2zy0gzxhri5p8ac03r";
   };
 
-  patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
+  patches = [
+    ./patches/packages-osx.patch
+  ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    autoreconfHook autoconf-archive glibcLocales pkgconfig
+    autoreconfHook autoconf-archive glibcLocales pkg-config
   ];
 
   buildInputs = [
     expect readline libuuid glib openssl expat ncurses libotr
-    curl libmesode cmocka libmicrohttpd stabber
+    curl libmesode cmocka libmicrohttpd sqlite
   ] ++ optionals autoAwaySupport     [ libXScrnSaver libX11 ]
     ++ optionals notifySupport       [ libnotify gdk-pixbuf ]
     ++ optionals traySupport         [ gnome2.gtk ]
@@ -74,6 +75,8 @@ stdenv.mkDerivation rec {
     homepage = "http://www.profanity.im/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    changelog = "https://github.com/profanity-im/profanity/releases/tag/${version}";
+    downloadPage = "https://github.com/profanity-im/profanity/releases/";
     maintainers = [ maintainers.devhell ];
     updateWalker = true;
   };

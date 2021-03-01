@@ -1,41 +1,57 @@
 { buildPythonPackage
-, stdenv
+, lib
 , fetchFromGitHub
-, sacremoses
-, requests
-, sentencepiece
-, boto3
-, tqdm
+, pythonOlder
+, cookiecutter
+, filelock
+, importlib-metadata
 , regex
+, requests
 , numpy
-, pytest
+, protobuf
+, sacremoses
+, tokenizers
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "2.2.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p8p3lhhiyk1xl9gpgq4vbchyz57v3w7hhvsj1r90zs3cckindl8";
+    hash = "sha256-vv4wKf1PcuVR63ZQJd3oixdNvS7VcTmAaKkmL8I4COg=";
   };
 
-  propagatedBuildInputs = [ numpy sacremoses requests sentencepiece boto3 tqdm regex ];
+  propagatedBuildInputs = [
+    cookiecutter
+    filelock
+    numpy
+    protobuf
+    regex
+    requests
+    sacremoses
+    tokenizers
+    tqdm
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [ pytest ];
-  # pretrained tries to download from s3
-  checkPhase = ''
-    cd transformers # avoid importing local files
-    HOME=$TMPDIR pytest -k 'not pretrained_tokenizers'
+  # Many tests require internet access.
+  doCheck = false;
+
+  postPatch = ''
+    sed -ri 's/tokenizers[=>]=[^"]+/tokenizers/g' setup.py src/transformers/dependency_versions_table.py
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "transformers" ];
+
+  meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
     description = "State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch";
+    changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ pashashocky ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ danieldk pashashocky ];
   };
 }

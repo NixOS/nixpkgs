@@ -1,21 +1,42 @@
-{ stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
+{ lib
+, pythonPackages
+, fetchFromGitHub
+, rtmpdump
+, ffmpeg_3
+}:
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.3.1";
   pname = "streamlink";
+  version = "2.0.0";
+  disabled = pythonPackages.pythonOlder "3.5.0";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = version;
-    sha256 = "0scc0mzvy56b1l6iyvrzb28l8vzrxpfkn4lcwr8nnyjb7ams2xms";
+    sha256 = "+W9Nu5Ze08r7IlUZOkkVOz582E1Bbj0a3qIQHwxSmj8=";
   };
 
-  checkInputs = with pythonPackages; [ pytest mock requests-mock freezegun ];
+  checkInputs = with pythonPackages; [
+    pytest
+    mock
+    requests-mock
+    freezegun
+  ];
 
-  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client isodate ]) ++ [ rtmpdump ffmpeg ];
+  propagatedBuildInputs = (with pythonPackages; [
+    pycryptodome
+    requests
+    iso-639
+    iso3166
+    websocket_client
+    isodate
+  ]) ++ [
+    rtmpdump
+    ffmpeg_3
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/streamlink/streamlink";
     description = "CLI for extracting streams from various websites to video player of your choosing";
     longDescription = ''
@@ -27,6 +48,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dezgeg zraexy enzime ];
+    maintainers = with maintainers; [ dezgeg zraexy ];
   };
 }

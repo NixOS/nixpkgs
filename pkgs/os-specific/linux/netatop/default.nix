@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, kernel, zlib }:
+{ lib, stdenv, fetchurl, kernel, zlib }:
 
 let
-  version = "2.0";
+  version = "3.1";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.atoptool.nl/download/netatop-${version}.tar.gz";
-    sha256 = "03n248p1l3ps7gj2hdlcbrb1fsw1zcmgzypj4j4l4rynjjh7qvf6";
+    sha256 = "0qjw8glfdmngfvbn1w63q128vxdz2jlabw13y140ga9i5ibl6vvk";
   };
 
   buildInputs = [ zlib ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation {
         -e s,/usr,$out, \
         -e /init.d/d \
         -e /depmod/d \
+        -e /netatop.service/d \
         Makefile
   '';
 
@@ -35,8 +36,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Network monitoring module for atop";
     homepage = "https://www.atoptool.nl/downloadnetatop.php";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [viric];
   };
 }

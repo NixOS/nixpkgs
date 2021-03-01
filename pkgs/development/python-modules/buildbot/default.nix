@@ -1,7 +1,7 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
-  txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
+  txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
   parameterized, git, openssh, glibcLocales, nixosTests }:
 
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.7.0";
+    version = "2.10.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0jj8fh611n7xc3vsfbgpqsllp38cfj3spkr2kz3ara2x7jvh3406";
+      sha256 = "0jmgpvgn36kfc1sa27a1l1g26dawhl99a1wl8gn4ajbcbcvc2pkh";
     };
 
     propagatedBuildInputs = [
@@ -51,7 +51,7 @@ let
     checkInputs = [
       treq
       txrequests
-      pyjade
+      pypugjs
       boto3
       moto
       mock
@@ -96,7 +96,7 @@ let
 
     meta = with lib; {
       homepage = "https://buildbot.net/";
-      description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
+      description = "An open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };

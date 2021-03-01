@@ -1,44 +1,43 @@
 { base58
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, fetchFromGitHub
 , lib
 , morphys
-, pytest
-, pytestcov
-, pytestrunner
+, pytest-runner
+, pytestCheckHook
+, pythonOlder
 , six
-, variants
 , varint
 }:
 
 buildPythonPackage rec {
   pname = "py-multihash";
-  version = "0.2.3";
+  version = "2.0.1";
+  disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
-    inherit pname version ;
-    sha256 = "f0ade4de820afdc4b4aaa40464ec86c9da5cae3a4578cda2daab4b0eb7e5b18d";
+  src = fetchFromGitHub {
+    owner = "multiformats";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
   };
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [
     base58
     morphys
     six
-    variants
     varint
   ];
 
   checkInputs = [
-    pytest
-    pytestcov
+    pytestCheckHook
   ];
 
-  disabled = isPy27;
+  pythonImportsCheck = [ "multihash" ];
 
   meta = with lib; {
     description = "Self describing hashes - for future proofing";

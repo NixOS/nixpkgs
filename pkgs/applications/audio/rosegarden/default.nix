@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools, wrapQtAppsHook
+{ lib, stdenv, fetchurl, cmake, makedepend, perl, pkg-config, qttools, wrapQtAppsHook
 , dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsaLib
 , liblo, libsamplerate, libsndfile, lirc ? null, lrdf, qtbase }:
 
 stdenv.mkDerivation (rec {
-  version = "19.12";
+  version = "20.06";
   pname = "rosegarden";
 
   src = fetchurl {
     url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
-    sha256 = "1qcaxc6hdzva7kwxxhgl95437fagjbxzv4mihsgpr7y9qk08ppw1";
+    sha256 = "1i9x9rkqwwdrk77xl5ra8i48cjirbc7fbisnj0nnclccwaq0wk6r";
   };
 
   patchPhase = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation (rec {
   '';
 
   nativeBuildInputs =
-    [ cmake makedepend perl pkgconfig qttools wrapQtAppsHook ];
+    [ cmake makedepend perl pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
     dssi
@@ -33,9 +33,7 @@ stdenv.mkDerivation (rec {
     alsaLib
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";
     longDescription = ''

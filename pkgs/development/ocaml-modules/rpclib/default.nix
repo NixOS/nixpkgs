@@ -1,20 +1,22 @@
-{ lib, fetchFromGitHub, buildDunePackage, alcotest, cmdliner, rresult, result, xmlm, yojson }:
+{ lib, fetchurl, buildDunePackage
+, alcotest
+, base64, cmdliner, rresult, xmlm, yojson
+}:
 
 buildDunePackage rec {
   pname = "rpclib";
-  version = "6.0.0";
+  version = "8.0.0";
 
-  minimumOCamlVersion = "4.04";
+  useDune2 = true;
 
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = "ocaml-rpc";
-    rev = "v${version}";
-    sha256 = "0bmr20sj7kybjjlwd42irj0f5zlnxcw7mxa1mdgxkki9bmhsqr51";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-rpc/releases/download/v${version}/rpclib-v${version}.tbz";
+    sha256 = "1kqbixk4d9y15ns566fiyzid5jszkamm1kv7iks71invv33v7krz";
   };
 
-  buildInputs = [ alcotest cmdliner yojson ];
-  propagatedBuildInputs = [ rresult result xmlm ];
+  buildInputs = [ cmdliner yojson ];
+  propagatedBuildInputs = [ base64 rresult xmlm ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

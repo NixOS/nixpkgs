@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   pname = "memtest86+";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.memtest.org/";
     description = "A tool to detect memory errors";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

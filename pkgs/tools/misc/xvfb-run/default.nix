@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, xorgserver, getopt
-, xauth, utillinux, which, fontsConf, gawk, coreutils }:
+{ lib, stdenv, fetchurl, makeWrapper, xorgserver, getopt
+, xauth, util-linux, which, fontsConf, gawk, coreutils }:
 let
   xvfb_run = fetchurl {
     name = "xvfb-run";
@@ -19,11 +19,11 @@ stdenv.mkDerivation {
     patchShebangs $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
       --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux gawk coreutils ]}
+      --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux gawk coreutils ]}
   '';
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
+  meta = with lib; {
+    platforms = platforms.unix;
     license = licenses.gpl2;
   };
 }

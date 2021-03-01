@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   version = "2.9.3.1";
@@ -37,7 +37,7 @@ python2Packages.buildPythonApplication rec {
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electrum DASH";
     homepage = "https://github.com/dashpay/electrum-dash";
     license = licenses.gpl3;

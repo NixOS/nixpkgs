@@ -42,4 +42,16 @@
               type = (builtins.readDir parent).${base} or null;
           in file == /. || type == "directory";
     in go (if isDir then file else parent);
+
+
+  # listFilesRecursive: Path -> [ Path ]
+  #
+  # Given a directory, return a flattened list of all files within it recursively.
+  listFilesRecursive = dir: lib.flatten (lib.mapAttrsToList (name: type:
+    if type == "directory" then
+      lib.filesystem.listFilesRecursive (dir + "/${name}")
+    else
+      dir + "/${name}"
+  ) (builtins.readDir dir));
+
 }

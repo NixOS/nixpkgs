@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, bison, perl, ncurses, readline, coreutils, pkgconfig
+{ stdenv, fetchurl, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
 , lib
 , fetchpatch
 , autoreconfHook
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bison
     perl
-    pkgconfig
+    pkg-config
     autoreconfHook
   ];
 
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A CAS for polynomial computations";
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     # 32 bit x86 fails with some link error: `undefined reference to `__divmoddi4@GCC_7.0.0'`
     platforms = subtractLists platforms.i686 platforms.unix;
     license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus-glib, glib, python2, pkgconfig, libxslt
+{ lib, stdenv, fetchurl, dbus-glib, glib, python2, pkg-config, libxslt
 , gobject-introspection, vala, glibcLocales }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
   propagatedBuildInputs = [ dbus-glib glib ];
 
-  nativeBuildInputs = [ pkgconfig libxslt gobject-introspection vala ];
+  nativeBuildInputs = [ pkg-config libxslt gobject-introspection vala ];
   buildInputs = [ glibcLocales python2 ];
 
   enableParallelBuilding = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   passthru.python = python2;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://telepathy.freedesktop.org";
     platforms = platforms.unix;
     license = with licenses; [ bsd2 bsd3 lgpl21Plus ];

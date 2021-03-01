@@ -8,8 +8,7 @@ with lib;
 let
 
   requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-    [ config.nix.package
-      pkgs.acl
+    [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
@@ -33,17 +32,21 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.nix-info
       config.programs.ssh.package
-      pkgs.perl
+      pkgs.mkpasswd
       pkgs.procps
-      pkgs.rsync
-      pkgs.strace
       pkgs.su
       pkgs.time
-      pkgs.utillinux
-      pkgs.which # 88K size
+      pkgs.util-linux
+      pkgs.which
+      pkgs.zstd
     ];
+
+    defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      [ pkgs.perl
+        pkgs.rsync
+        pkgs.strace
+      ];
 
 in
 
@@ -64,6 +67,21 @@ in
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           <filename>/nix/var/nix/profiles/default</filename>.
+        '';
+      };
+
+      defaultPackages = mkOption {
+        type = types.listOf types.package;
+        default = defaultPackages;
+        example = literalExample "[]";
+        description = ''
+          Set of packages users expect from a minimal linux istall.
+          Like systemPackages, they appear in
+          /run/current-system/sw.  These packages are
+          automatically available to all users, and are
+          automatically updated every time you rebuild the system
+          configuration.
+          If you want a more minimal system, set it to an empty list.
         '';
       };
 
@@ -106,7 +124,7 @@ in
 
   config = {
 
-    environment.systemPackages = requiredPackages;
+    environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
 
     environment.pathsToLink =
       [ "/bin"
@@ -125,6 +143,8 @@ in
         "/share/kservices5"
         "/share/kservicetypes5"
         "/share/kxmlgui5"
+        "/share/systemd"
+        "/share/thumbnailers"
       ];
 
     system.path = pkgs.buildEnv {

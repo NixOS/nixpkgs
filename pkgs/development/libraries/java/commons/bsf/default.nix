@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "commons-bsf-1.2";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Interface to scripting languages, including JSR-223";
     homepage = "http://commons.apache.org/proper/commons-bsf/";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }
 

@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, asciidoc
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, asciidoc
 , jansson, jose, cryptsetup, curl, libpwquality, luksmeta
 }:
 
 stdenv.mkDerivation rec {
   pname = "clevis";
-  version = "12";
+  version = "15";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dbyl3c21h841w9lrrq6gd5y6dhamr0z5ixd87jz86cn02lznp5m";
+    sha256 = "0wfgd2v1r47ckh5qp60b903191fx0fa27zyadxlsb8riqszhmwvz";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig asciidoc ];
+  nativeBuildInputs = [ meson ninja pkg-config asciidoc ];
   buildInputs = [ jansson jose cryptsetup curl libpwquality luksmeta ];
 
   outputs = [ "out" "man" ];

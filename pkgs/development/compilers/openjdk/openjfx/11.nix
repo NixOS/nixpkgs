@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, writeText, gradleGen, pkgconfig, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib, ffmpeg, python, ruby
+{ stdenv, lib, fetchurl, writeText, gradleGen, pkg-config, perl, cmake
+, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib, ffmpeg_3, python, ruby
 , openjdk11-bootstrap }:
 
 let
@@ -19,8 +19,8 @@ let
       sha256 = "1h7qsylr7rnwnbimqjyn3whszp9kv4h3gpicsrb3mradxc9yv194";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
-    nativeBuildInputs = [ gradle_ perl pkgconfig cmake gperf python ruby ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg_3 ];
+    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python ruby ];
 
     dontUseCmakeConfigure = true;
 
@@ -103,10 +103,10 @@ in makePackage {
 
   passthru.deps = deps;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
-    description = "The next-generation Java client toolkit.";
+    description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

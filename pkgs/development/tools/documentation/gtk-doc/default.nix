@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitLab
 , meson
 , ninja
@@ -14,7 +14,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gtk-doc";
-  version = "1.32";
+  version = "1.33.1";
 
   format = "other";
 
@@ -22,8 +22,8 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
-    sha256 = "14fihxj662gg4ln1ngff6s52zzkpbcc58qa0nxysxypnhp0h4ypk";
+    rev = version;
+    sha256 = "L9CjhZ60F42xbo50x7cdKfJrav/9mf38pff8S4xkEVo=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     docbook_xml_dtd_43
     docbook_xsl
     libxslt
-  ] ++ stdenv.lib.optionals withDblatex [
+  ] ++ lib.optionals withDblatex [
     dblatex
   ];
 
@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
     homepage = "https://www.gtk.org/gtk-doc";
     license = licenses.gpl2;

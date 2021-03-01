@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , automake
 , autoreconfHook
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     qttools
   ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced MIDI arpeggiator";
     longDescription = ''
       An advanced MIDI arpeggiator, programmable step sequencer and LFO for Linux.

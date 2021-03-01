@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
 
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     unzip -d $out/client/apps ${togetherjs}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web-based kanban board";
     license = licenses.osl3;
-    homepage = "http://restya.com";
+    homepage = "https://restya.com";
     maintainers = with maintainers; [ tstrobel ];
     platforms = platforms.linux;
   };

@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
   pname = "pmd";
-  version = "6.17.0";
-
-  nativeBuildInputs = [ unzip ];
+  version = "6.29.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "0000w28dg5z8gs7cxhx7d0fv10ry0yxamk5my28ncqqsg7a4qy8w";
+    sha256 = "08iibpf9jhkk7ihsmlm85wpjwy1bvznbvggvqyw6109f9gzlrvvq";
   };
+
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out
     cp -R {bin,lib} $out
+    wrapProgram $out/bin/run.sh --prefix PATH : ${openjdk.jre}/bin
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extensible cross-language static code analyzer";
     homepage = "https://pmd.github.io/";
     changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";

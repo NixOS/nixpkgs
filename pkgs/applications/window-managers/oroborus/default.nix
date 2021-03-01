@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , freetype, fribidi
 , libSM, libICE, libXt, libXaw, libXmu
 , libXext, libXft, libXpm, libXrandr
 , libXrender, xorgproto, libXinerama }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "oroborus";
   version = "2.0.20";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype fribidi libSM libICE libXt libXaw libXmu libXext
                   libXft libXpm libXrandr libXrender xorgproto libXinerama ];
 

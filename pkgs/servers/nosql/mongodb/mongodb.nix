@@ -1,14 +1,27 @@
-{ stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, python27, curl, Security, CoreFoundation, cctools }:
+{ lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
+, sasl, openssl, libpcap, python27, python38, curl, Security, CoreFoundation, cctools }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
 
-with stdenv.lib;
+with lib;
 
-{ version, sha256, patches ? [] }@args:
+{ version, sha256, patches ? []
+, license ? lib.licenses.sspl
+}@args:
 
 let
+  variants = if versionAtLeast version "4.2"
+    then { python = python38.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
+            scons = sconsPackages.scons_latest;
+            mozjsVersion = "60";
+            mozjsReplace = "defined(HAVE___SINCOS)";
+          }
+    else { python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+            scons = sconsPackages.scons_3_1_2;
+            mozjsVersion = "45";
+            mozjsReplace = "defined(HAVE_SINCOS)";
+          };
   python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
   system-libraries = [
     "boost"
@@ -21,18 +34,18 @@ let
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
   ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
-  inherit (stdenv.lib) systems subtractLists;
+  inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "mongodb-${version}";
+  pname = "mongodb";
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
     inherit sha256;
   };
 
-  nativeBuildInputs = [ scons.py2 ];
+  nativeBuildInputs = [ variants.scons ];
   buildInputs = [
     boost
     curl
@@ -41,11 +54,11 @@ in stdenv.mkDerivation rec {
     libyamlcpp
     openssl
     pcre-cpp
-    python
+    variants.python
     sasl
     snappy
     zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -56,22 +69,22 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
 
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlng.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlngrect.cc --replace drem remainder
-  '' + stdenv.lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.isi686 ''
 
     # don't fail by default on i686
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument";
 
   sconsFlags = [
@@ -99,6 +112,13 @@ in stdenv.mkDerivation rec {
     rm -f "$out/bin/install_compass" || true
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    "$out/bin/mongo" --version
+    runHook postInstallCheck
+  '';
+
   prefixKey = "--prefix=";
 
   enableParallelBuilding = true;
@@ -108,7 +128,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
-    license = licenses.sspl;
+    inherit license;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;

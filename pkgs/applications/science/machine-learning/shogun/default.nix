@@ -2,7 +2,7 @@
 # data, compression
 , bzip2, curl, hdf5, json_c, lzma, lzo, protobuf, snappy
 # maths
-, openblasCompat, eigen, nlopt, lp_solve, colpack, liblapack, glpk
+, blas, lapack, eigen, nlopt, lp_solve, colpack, glpk
 # libraries
 , libarchive, libxml2
 # extra support
@@ -12,6 +12,8 @@
 
 assert pythonSupport -> pythonPackages != null;
 assert opencvSupport -> opencv != null;
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   pname = "shogun";
@@ -23,7 +25,7 @@ let
       owner = pname + "-toolbox";
       repo = pname;
       rev = pname + "_" + version;
-      sha256 = "38aULxK50wQ2+/ERosSpRyBmssmYSGv5aaWfWSlrSRc=";
+      sha256 = "05s9dclmk7x5d7wnnj4qr6r6c827m72a44gizcv09lxr28pr9inz";
       fetchSubmodules = true;
     };
     # we need the packed archive
@@ -63,9 +65,10 @@ stdenv.mkDerivation rec {
   env.CCACHE_DISABLE="1";
   env.CCACHE_DIR=".ccache";
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = with lib; [
-      openblasCompat bzip2 cmake colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
-      protobuf nlopt snappy swig (libarchive.dev) libxml2 liblapack glpk
+      blas lapack bzip2 colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
+      protobuf nlopt snappy swig (libarchive.dev) libxml2 lapack glpk
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
     ++ optional  (opencvSupport) opencv;
@@ -85,9 +88,7 @@ stdenv.mkDerivation rec {
     (flag "OpenCV" opencvSupport)
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
     license = licenses.gpl3;

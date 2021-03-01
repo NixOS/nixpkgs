@@ -1,4 +1,4 @@
-{ busybox, stdenv}:
+{ busybox}:
 
 # Minimal shell for use as basic /bin/sh in sandbox builds
 busybox.override {

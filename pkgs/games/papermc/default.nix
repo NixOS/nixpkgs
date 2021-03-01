@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, bash, jre }:
 let
-  mcVersion = "1.15.2";
-  buildNum = "161";
+  mcVersion = "1.16.5";
+  buildNum = "457";
   jar = fetchurl {
     url = "https://papermc.io/api/v1/paper/${mcVersion}/${buildNum}/download";
-    sha256 = "1jngj5djs1fjdj25wg9iszw0dsp56f386j8ydms7x4ky8s8kxyms";
+    sha256 = "1xkjaj5wgm9rmzk8mz20n9vd674fynvdgqsy96c9bfifa03lsnmc";
   };
 in stdenv.mkDerivation {
   pname = "papermc";
@@ -13,23 +13,24 @@ in stdenv.mkDerivation {
   preferLocalBuild = true;
 
   dontUnpack = true;
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ${jar} $out/papermc.jar
-    cat > $out/bin/minecraft-server << EOF
-    #!/bin/sh
-    exec ${jre}/bin/java \$@ -jar $out/papermc.jar nogui
-    EOF
-    chmod +x $out/bin/minecraft-server
+  dontConfigure = true;
+
+  buildPhase = ''
+    cat > minecraft-server << EOF
+    #!${bash}/bin/sh
+    exec ${jre}/bin/java \$@ -jar $out/share/papermc/papermc.jar nogui
   '';
 
-  phases = "installPhase";
+  installPhase = ''
+    install -Dm444 ${jar} $out/share/papermc/papermc.jar
+    install -Dm555 -t $out/bin minecraft-server
+  '';
 
   meta = {
     description = "High-performance Minecraft Server";
     homepage    = "https://papermc.io/";
-    license     = stdenv.lib.licenses.gpl3;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ aaronjanse ];
+    license     = lib.licenses.gpl3Only;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aaronjanse neonfuz ];
   };
 }

@@ -1,38 +1,49 @@
-{ stdenv, fetchurl, fetchpatch, zlib, openssl, libedit, pkgconfig, pam, autoreconfHook
+{ lib, stdenv
+, pkgs
+, fetchurl
+, fetchpatch
+, zlib
+, openssl
+, libedit
+, pkg-config
+, pam
+, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? true
 , withGssapiPatches ? false
 , kerberos
 , libfido2
-, withFIDO ? stdenv.hostPlatform.isUnix
-, linkOpenssl? true
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+, linkOpenssl ? true
 }:
 
 let
 
+  version = "8.4p1";
+
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%258.2p1-1/debian/patches/gssapi.patch";
-    sha256 = "081gryqkfr5zr4f5m4v0piq1sxz06sb38z5lqxccgpivql7pa8d8";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
+    sha256 = "1z1ckzimlkm1dmr9f5fqjnjg28gsqcwx6xka0klak857548d2lp2";
   };
 
 in
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "openssh";
-  version = if hpnSupport then "8.1p1" else "8.2p1";
+  inherit version;
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-8_1_P1.tar.gz";
-        sha256 = "1xiv28df9c15h44fv1i93fq8rvkyapjj9vj985ndnw3xk1nvqjyd";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-${replaceStrings [ "." "p" ] [ "_" "_P" ] version}.tar.gz";
+        sha256 = "1x2afjy1isslbg7qlvhhs4zhj2c8q2h1ljz0fc5b4h9pqcm9j540";
       }
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
-        sha256 = "0wg6ckzvvklbzznijxkk28fb8dnwyjd0w30ra0afwv6gwr8m34j3";
+        sha256 = "091b3pxdlj47scxx6kkf4agkx8c8sdacdxx8m1dw1cby80pd40as";
       };
 
   patches =
@@ -43,6 +54,9 @@ stdenv.mkDerivation rec {
       ./dont_create_privsep_path.patch
 
       ./ssh-keysign.patch
+
+      # See https://github.com/openssh/openssh-portable/pull/206
+      ./ssh-copy-id-fix-eof.patch
     ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
@@ -53,7 +67,9 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  nativeBuildInputs = [ pkgconfig ] ++ optional (hpnSupport || withGssapiPatches) autoreconfHook;
+  nativeBuildInputs = [ pkg-config ]
+    ++ optional (hpnSupport || withGssapiPatches) autoreconfHook
+    ++ optional withKerberos pkgs.kerberos.dev;
   buildInputs = [ zlib openssl libedit pam ]
     ++ optional withFIDO libfido2
     ++ optional withKerberos kerberos;
@@ -62,6 +78,22 @@ stdenv.mkDerivation rec {
     # Setting LD causes `configure' and `make' to disagree about which linker
     # to use: `configure' wants `gcc', but `make' wants `ld'.
     unset LD
+  ''
+  # Upstream build system does not support static build, so we fall back
+  # on fragile patching of configure script.
+  #
+  # libedit is found by pkg-config, but without --static flag, required
+  # to get also transitive dependencies for static linkage, hence sed
+  # expression.
+  #
+  # Kerberos can be found either by krb5-config or by fall-back shell
+  # code in openssh's configure.ac. Neither of them support static
+  # build, but patching code for krb5-config is simpler, so to get it
+  # into PATH, kerberos.dev is added into buildInputs.
+  + optionalString stdenv.hostPlatform.isStatic ''
+    sed -i "s,PKGCONFIG --libs,PKGCONFIG --libs --static,g" configure
+    sed -i 's#KRB5CONF --libs`#KRB5CONF --libs` -lkrb5support -lkeyutils#g' configure
+    sed -i 's#KRB5CONF --libs gssapi`#KRB5CONF --libs gssapi` -lkrb5support -lkeyutils#g' configure
   '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
@@ -99,9 +131,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://www.openssh.com/";
     description = "An implementation of the SSH protocol";
-    license = stdenv.lib.licenses.bsd2;
+    homepage = "https://www.openssh.com/";
+    changelog = "https://www.openssh.com/releasenotes.html";
+    license = lib.licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ eelco aneeshusa ];
   };

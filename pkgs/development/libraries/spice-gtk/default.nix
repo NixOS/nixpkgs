@@ -1,35 +1,36 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, acl
+, cyrus_sasl
+, docbook_xsl
+, epoxy
+, gettext
+, gobject-introspection
+, gst_all_1
+, gtk-doc
+, gtk3
+, json-glib
+, libcacard
+, libdrm
+, libjpeg_turbo
+, libopus
+, libsoup
+, libusb1
+, lz4
 , meson
 , ninja
+, openssl
+, perl
+, phodav
+, pixman
+, pkg-config
+, polkit
 , python3
 , spice-protocol
-, gettext
-, openssl
-, pixman
-, gobject-introspection
-, libjpeg_turbo
-, zlib
-, cyrus_sasl
 , usbredir
-, libsoup
-, polkit
-, acl
 , usbutils
 , vala
-, gtk3
-, epoxy
-, libdrm
-, gst_all_1
-, phodav
-, libopus
-, gtk-doc
-, json-glib
-, lz4
-, libcacard
-, perl
-, docbook_xsl
+, zlib
 , withPolkit ? true
 }:
 
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     perl
-    pkgconfig
+    pkg-config
     python3
     python3.pkgs.pyparsing
     python3.pkgs.six
@@ -99,15 +100,16 @@ stdenv.mkDerivation rec {
     libcacard
     libdrm
     libjpeg_turbo
+    libopus
+    libusb1
     lz4
     openssl
-    libopus
     phodav
     pixman
     spice-protocol
     usbredir
     zlib
-  ] ++ stdenv.lib.optionals withPolkit [ polkit acl usbutils ] ;
+  ] ++ lib.optionals withPolkit [ polkit acl usbutils ] ;
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
@@ -116,7 +118,7 @@ stdenv.mkDerivation rec {
     "-Dpulse=disabled" # is deprecated upstream
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK 3 SPICE widget";
     longDescription = ''
       spice-gtk is a GTK 3 SPICE widget. It features glib-based

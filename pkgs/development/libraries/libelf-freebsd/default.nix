@@ -6,7 +6,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/elftoolchain/code/trunk";
-    rev = (stdenv.lib.strings.toInt version);
+    rev = (lib.strings.toInt version);
     name = "elftoolchain-${version}";
   };
 
@@ -29,9 +29,9 @@ stdenv.mkDerivation (rec {
 
     homepage = "https://sourceforge.net/p/elftoolchain/wiki/Home/";
 
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
 
-    platforms = stdenv.lib.platforms.freebsd;
+    platforms = lib.platforms.freebsd;
     maintainers = [ ];
   };
 })

@@ -1,27 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, fetchpatch }:
+{ lib, stdenv, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.8.1";
+  version = "0.9.3";
 
-  src = fetchFromGitHub {
-    owner = "lotabout";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0xjb8slrlkrzdqvzmf63lq6rgggrjw3hf9an6h8xf6vizz1vfni0";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "026mgqcp9sg6wwikghrc3rgh5p6wdbnvav5pb3xvs79lj85d5ga7";
   };
 
   outputs = [ "out" "vim" ];
 
-  cargoSha256 = "14p4ppbl2mak21jvxpbd1b28jaw2629bc8kv7875cdzy3ksxyji3";
-
-  patches = [
-    # Fix bash completion. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/lotabout/skim/commit/60ca3484090c2e73a1de396500c73a6ad6e0bde9.patch";
-      sha256 = "07nibr13vmxscbwavrckhcbsvxwkpan4a6ml0qfr1ny36xbc6y3p";
-    })
-  ];
+  cargoSha256 = "07bs23x2vxzlrca5swwq8khmd9fbdhlhm0avwp9y231df6xdi2ys";
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
@@ -42,11 +32,10 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/bin/sk-share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

@@ -5,9 +5,9 @@
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.7";
+  version = "2.2.14";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1z31y1nqiyj6rml9lz8gcbr29myhs5wcap8jsvgm3pb7p9p9y8m9";
+  sha256 = "sha256-vsb7RFjT9l4N6BzwIvVLcRtA4n/c8jk20B6RUMkyhJs=";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -34,7 +34,7 @@ let
       for gem in "$out"/lib/ruby/gems/*/gems/*; do
         cp -a "$gem/" "$gem.new"
         rm "$gem"
-        # needed on macOS, otherwise the mv yields permission denied 
+        # needed on macOS, otherwise the mv yields permission denied
         chmod +w "$gem.new"
         mv "$gem.new" "$gem"
       done
@@ -54,13 +54,6 @@ in buildRubyGem rec {
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
-
-    # fix deprecation warning on ruby 2.6.5.
-    # See also https://github.com/hashicorp/vagrant/pull/11307
-    (fetchpatch {
-      url = "https://github.com/hashicorp/vagrant/commit/d18ed567aaa5da23c9e91ab87f360e7bf6760f13.patch";
-      sha256 = "0f61qj41rc3fdggmnha4jrqg4pzmfiriwpsz4fcgf7c0bx6qha7q";
-    })
   ];
 
   postPatch = ''

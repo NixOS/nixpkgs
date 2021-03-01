@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, python3Packages, docutils, }:
+{ lib, fetchFromGitHub, python3Packages, docutils }:
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "2.0.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
-    owner = "jakubroztocil";
+    owner = "httpie";
     repo = "httpie";
     rev = version;
-    sha256 = "0d0rsn5i973l9y0ws3xmnzaw4jwxdlryyjbasnlddph5mvkf7dq0";
+    sha256 = "00lafjqg9nfnak0nhcr2l2hzzkwn2y6qv0wdkm6r6f69snizy3hf";
   };
+
+  patches = [
+    ./strip-venv.patch
+  ];
 
   outputs = [ "out" "doc" "man" ];
 
-  propagatedBuildInputs = with python3Packages; [ pygments requests setuptools ];
-  dontUseSetuptoolsCheck = true;
-  patches = [ ./strip-venv.patch ];
+  propagatedBuildInputs = with python3Packages; [ pygments requests requests-toolbelt setuptools ];
 
   checkInputs = with python3Packages; [
     mock
@@ -61,15 +63,6 @@ python3Packages.buildPythonApplication rec {
     toHtml CHANGELOG.rst $docdir/html/CHANGELOG.html
     toHtml CONTRIBUTING.rst $docdir/html/CONTRIBUTING.html
 
-    # change a few links to the local files
-    substituteInPlace $docdir/html/index.html \
-      --replace \
-        'https://github.com/jakubroztocil/httpie/blob/master/CHANGELOG.rst' \
-        "CHANGELOG.html" \
-      --replace \
-        'https://github.com/jakubroztocil/httpie/blob/master/CONTRIBUTING.rst' \
-        "CONTRIBUTING.html"
-
     ${docutils}/bin/rst2man \
       --strip-elements-with-class=no-web \
       --title=http \
@@ -85,10 +78,14 @@ python3Packages.buildPythonApplication rec {
     export PATH=${docutils}/bin:$PATH
   '';
 
-  meta = {
+  checkPhase = ''
+    py.test ./httpie ./tests --doctest-modules --verbose ./httpie ./tests -k 'not test_chunked and not test_verbose_chunked and not test_multipart_chunked and not test_request_body_from_file_by_path_chunked'
+  '';
+
+  meta = with lib; {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ antono relrod schneefux ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ antono relrod schneefux SuperSandro2000 ];
   };
 }

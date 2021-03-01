@@ -61,9 +61,9 @@ in stdenv.mkDerivation {
 
       homepage = "http://impressive.sourceforge.net/";
 
-      license = stdenv.lib.licenses.gpl2;
+      license = lib.licenses.gpl2;
 
       maintainers = with lib.maintainers; [ lheckemann ];
-      platforms = stdenv.lib.platforms.mesaPlatforms;
+      platforms = lib.platforms.mesaPlatforms;
     };
   }

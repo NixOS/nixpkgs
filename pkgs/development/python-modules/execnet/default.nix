@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , isPyPy
 , fetchPypi
@@ -36,7 +35,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rapid multi-Python deployment";
     license = licenses.gpl2;
     homepage = "https://execnet.readthedocs.io/";

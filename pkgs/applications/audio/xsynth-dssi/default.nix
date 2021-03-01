@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk2, libjack2,
-ladspaH, ladspaPlugins, liblo, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk2, libjack2,
+ladspaH, ladspaPlugins, liblo, pkg-config }:
 
 stdenv.mkDerivation  rec {
   pname = "xsynth-dssi";
@@ -11,7 +11,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [ alsaLib autoconf automake dssi gtk2 libjack2 ladspaH
-    ladspaPlugins liblo pkgconfig ];
+    ladspaPlugins liblo pkg-config ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,7 +20,7 @@ stdenv.mkDerivation  rec {
     cp src/.libs/* $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Classic-analog (VCOs-VCF-VCA) style software synthesizer";
     longDescription = ''
       Xsynth-DSSI is a classic-analog (VCOs-VCF-VCA) style software

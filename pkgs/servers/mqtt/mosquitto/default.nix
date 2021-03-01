@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "1.6.8";
+  version = "1.6.12";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "1py13vg3vwwwg6jdnmq46z6rlzb84r4ggqsmsrn4yar5hrw9pa90";
+    sha256 = "0y9jna2p7wg57vv2g6ls1dj6w89vaw828y9z1wb3vwz1yhvs35s8";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "-DWITH_WEBSOCKETS=ON"
   ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source MQTT v3.1/3.1.1 broker";
     homepage = "https://mosquitto.org/";
     license = licenses.epl10;

@@ -1,6 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, isPy27
 , mock
 , pytest
 , pytestrunner
@@ -15,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "coveralls";
-  name = "${pname}-python-${version}";
-  version = "1.9.2";
+  version = "2.2.0";
+  disabled = isPy27;
 
   # wanted by tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e3315e8620bb6b3c6f3179a75f498e7179c93b3ddc440352404f941b1f70524";
+    sha256 = "b990ba1f7bc4288e63340be0433698c1efe8217f78c689d254c2540af3d38617";
   };
 
   checkInputs = [
@@ -34,6 +35,10 @@ buildPythonPackage rec {
   buildInputs = [
     pytestrunner
   ];
+
+  postPatch = ''
+    sed -i "s/'coverage>=\([^,]\+\),.*',$/'coverage>=\1',/" setup.py
+  '';
 
   # FIXME: tests requires .git directory to be present
   doCheck = false;

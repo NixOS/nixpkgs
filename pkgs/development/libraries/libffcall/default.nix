@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libffcall";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Foreign function call library";
     homepage = "https://www.gnu.org/software/libffcall/";
     license = licenses.gpl2Plus;

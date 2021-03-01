@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, cmake, elfutils, zlib }:
+{ lib, stdenv, fetchgit, cmake, elfutils, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "pahole";
-  version = "1.16";
+  version = "1.17";
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git";
     rev = "v${version}";
-    sha256 = "1gfc9v4dgs811v1zjk0d9hsgmizllw2hibc83ykmakzysimaxsy3";
+    sha256 = "13dxsmhpf9n2wqggf4gd6f12rm0vhv0q96jd50gkvaxzzvgpzzbc";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.kernel.org/cgit/devel/pahole/pahole.git/";
     description = "Pahole and other DWARF utils";
     license = licenses.gpl2;

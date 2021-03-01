@@ -3,9 +3,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-taskmanager";
-  version = "1.2.2";
+  version = "1.2.3";
 
-  sha256 = "03js0pmhrybxa7hrp3gx4rm7j061ansv0bp2dwhnbrdpmzjysysc";
+  sha256 = "0818chns7vkvjqakgz8z790adkygcq4jlw59dv6kyzk17hxq6cxv";
 
   nativeBuildInputs = [ exo ];
   buildInputs = [ gtk3 libwnck3 libXmu ];

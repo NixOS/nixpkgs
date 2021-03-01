@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub
+{ lib, buildPythonApplication, fetchFromGitHub
 , gtk3, gobject-introspection
 , wrapGAppsHook, python3Packages }:
 
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     pycairo
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphical implementation of the Shogi board game, also known as Japanese Chess";
     homepage = "http://johncheetham.com/projects/gshogi/";
     license = licenses.gpl3;

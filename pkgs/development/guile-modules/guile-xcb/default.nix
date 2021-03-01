@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, guile, texinfo }:
+{ lib, stdenv, fetchurl, pkg-config, guile, texinfo }:
 
 let
   name = "guile-xcb-${version}";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     sha256 = "04dvbqdrrs67490gn4gkq9zk8mqy3mkls2818ha4p0ckhh0pm149";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ guile texinfo ];
 
   preConfigure = ''
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
     ";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XCB bindings for Guile";
     homepage = "http://www.markwitmer.com/guile-xcb/guile-xcb.html";
     license = licenses.gpl3Plus;

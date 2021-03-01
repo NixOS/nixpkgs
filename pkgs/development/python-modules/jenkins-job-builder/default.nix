@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "3.3.0";
+  version = "3.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0znnw1vnvnm8a6gfrk479s2b9hzlxi4qy57c9a47qphvx3mklm8x";
+    sha256 = "sha256-uRyeRP1y3GS7tXb0kHLBi7+trJRme/Ke3xgOY+LqZ6k=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pbr python-jenkins pyyaml six stevedore fasteners jinja2 ];
 
   # Need to fix test deps, relies on stestr and a few other packages that aren't available on nixpkgs
-  checkPhase = ''$out/bin/jenkins-jobs --help'';
+  checkPhase = "$out/bin/jenkins-jobs --help";
 
   meta = with lib; {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";

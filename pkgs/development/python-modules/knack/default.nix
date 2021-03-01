@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , argcomplete
@@ -17,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "knack";
-  version = "0.6.3";
+  version = "0.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08g15kwfppdr7vhbsg6qclpqbf11d9k3hwgrmvhh5fa1jrk95b5i";
+    sha256 = "dfc6aef6760ea9a9620577e01540617678d78cab3111a0f03e8b9f987d0f08ca";
   };
 
   propagatedBuildInputs = [

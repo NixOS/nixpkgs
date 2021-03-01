@@ -170,7 +170,6 @@ in {
           Restart = "always";
           RestartSec = 30;
           BusName = "com.intel.tss2.Tabrmd";
-          StandardOutput = "syslog";
           ExecStart = "${cfg.abrmd.package}/bin/tpm2-abrmd";
           User = "tss";
           Group = "nogroup";

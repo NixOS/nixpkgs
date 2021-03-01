@@ -1,8 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig
-, gtk2, gtk3, libXinerama, libSM, libXxf86vm
-, xorgproto, gstreamer, gst-plugins-base, GConf, setfile
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, fetchFromGitHub, fetchurl, pkg-config
+, libXinerama, libSM, libXxf86vm
+, gtk2, gtk3
+, xorgproto, gst_all_1, setfile
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? libGLSupported
 , libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
@@ -10,7 +11,7 @@
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert withMesa -> libGLU != null && libGL != null;
 assert withWebKit -> webkitgtk != null;
@@ -28,14 +29,15 @@ stdenv.mkDerivation rec {
     sha256 = "19mqglghjjqjgz4rbybn3qdgn2cz9xc511nq1pvvli9wx2k8syl1";
   };
 
-  buildInputs =
-    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xorgproto gstreamer
-      gst-plugins-base GConf ]
+  buildInputs = [
+    libXinerama libSM libXxf86vm xorgproto gst_all_1.gstreamer gst_all_1.gst-plugins-base
+  ] ++ optionals withGtk2 [ gtk2 ]
+    ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
     ++ optional withWebKit webkitgtk
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 

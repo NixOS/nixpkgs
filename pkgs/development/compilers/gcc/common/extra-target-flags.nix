@@ -1,21 +1,24 @@
-{ stdenv, crossStageStatic, libcCross, threadsCross }:
+{ lib, stdenv, crossStageStatic, langD ? false, libcCross, threadsCross }:
 
 let
-  inherit (stdenv) lib hostPlatform targetPlatform;
+  inherit (stdenv) hostPlatform targetPlatform;
 in
 
 {
-  EXTRA_TARGET_FLAGS = let
-      mkFlags = dep: lib.optionals (targetPlatform != hostPlatform && dep != null) ([
-        "-idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
-      ] ++ stdenv.lib.optionals (! crossStageStatic) [
+  # For non-cross builds these flags are currently assigned in builder.sh.
+  # It would be good to consolidate the generation of makeFlags
+  # ({C,CXX,LD}FLAGS_FOR_{BUILD,TARGET}, etc...) at some point.
+  EXTRA_FLAGS_FOR_TARGET = let
+      mkFlags = dep: langD: lib.optionals (targetPlatform != hostPlatform && dep != null && !langD) ([
+        "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
+      ] ++ lib.optionals (! crossStageStatic) [
         "-B${lib.getLib dep}${dep.libdir or "/lib"}"
       ]);
-    in builtins.toString (mkFlags libcCross
-    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross))
+    in builtins.toString (mkFlags libcCross langD
+    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross langD))
     ;
 
-  EXTRA_TARGET_LDFLAGS = let
+  EXTRA_LDFLAGS_FOR_TARGET = let
       mkFlags = dep: lib.optionals (targetPlatform != hostPlatform && dep != null) ([
         "-Wl,-L${lib.getLib dep}${dep.libdir or "/lib"}"
       ] ++ (if crossStageStatic then [

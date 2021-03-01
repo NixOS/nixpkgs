@@ -8,15 +8,16 @@
 , sphinx
 , traitlets
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.5.1";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kh0d83xavpffdp4xp4hq8xy43l6lyv3d1a25rnc15jcbdf1nghw";
+    sha256 = "19lf036h0d9ryqasrh91myhn3dq5zcw4rik9jy6sayq7l6irmm94";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,15 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m nbsphinx
-  '';
+  # The package has not tests
+  doCheck = false;
+
+  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+  pythonImportsCheck = [
+    "nbsphinx"
+  ];
+
+  disabled = !isPy3k;
 
   meta = with lib; {
     description = "Jupyter Notebook Tools for Sphinx";

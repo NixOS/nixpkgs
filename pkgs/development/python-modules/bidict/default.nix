@@ -3,7 +3,7 @@
 , sphinx
 , hypothesis
 , py
-, pytest
+, pytestCheckHook
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.18.3";
+  version = "0.21.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1742a25a9ef1b1ac4000683406879a3e1a6577faa02f31e482e6c84e2e3bf628";
+    sha256 = "4fa46f7ff96dc244abfc437383d987404ae861df797e2fd5b190e233c302be09";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -26,14 +26,11 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     py
-    pytest
+    pytestCheckHook
     pytest-benchmark
     sortedcollections
     sortedcontainers
   ];
-  checkPhase = ''
-    pytest tests
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/jab/bidict";

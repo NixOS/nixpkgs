@@ -1,36 +1,33 @@
 { lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkgconfig, bash-completion
+, dbus, cmake, pkg-config, bash-completion
 , gsl, popt, clightd, systemd, libconfig, libmodule
 , withGeoclue ? true, geoclue2
 , withUpower ? true, upower }:
 
 stdenv.mkDerivation rec {
   pname = "clight";
-  version = "4.0";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
-    sha256 = "101fp9kwmfmfffpdvv41wf96kdjw0b16xk49g43w32a5wlr74zrq";
+    sha256 = "sha256-NmfnE6ZWgG9erBmrFFIhutnB1t2Ix/6jo+EeXYVtehg=";
   };
 
-  # bash-completion.pc completionsdir=${bash-completion.out}
-  COMPLETIONS_DIR = "${placeholder "out"}/share/bash-completions/completions";
   # dbus-1.pc has datadir=/etc
   SESSION_BUS_DIR = "${placeholder "out"}/share/dbus-1/services";
 
   postPatch = ''
     sed -i "s@/usr@$out@" CMakeLists.txt
     sed -i "s@/etc@$out\0@" CMakeLists.txt
-    sed -i "s@pkg_get_variable(COMPLETIONS_DIR.*@set(COMPLETIONS_DIR $COMPLETIONS_DIR)@" CMakeLists.txt
     sed -i "s@pkg_get_variable(SESSION_BUS_DIR.*@set(SESSION_BUS_DIR $SESSION_BUS_DIR)@" CMakeLists.txt
   '';
 
   nativeBuildInputs = [
     dbus
     cmake
-    pkgconfig
+    pkg-config
     bash-completion
   ];
 
@@ -45,6 +42,12 @@ stdenv.mkDerivation rec {
     libmodule
   ] ++ optional withGeoclue geoclue2
     ++ optional withUpower upower;
+
+  cmakeFlags = [
+    # bash-completion.pc completionsdir=${bash-completion.out}
+    "-DBASH_COMPLETIONS_DIR=${placeholder "out"}/share/bash-completions/completions"
+    "-DZSH_COMPLETIONS_DIR=${placeholder "out"}/share/zsh/site-functions"
+  ];
 
   meta = with lib; {
     description = "A C daemon that turns your webcam into a light sensor";

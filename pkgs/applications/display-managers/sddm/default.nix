@@ -1,10 +1,10 @@
 { mkDerivation, lib, fetchFromGitHub
-, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
+, cmake, extra-cmake-modules, pkg-config, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
 }:
 
 let
-  version = "0.18.1";
+  version = "0.19.0";
 
 in mkDerivation {
   pname = "sddm";
@@ -14,7 +14,7 @@ in mkDerivation {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "0an1zafz0yhxd9jgd3gzdwmaw5f9vs4c924q56lp2yxxddbmzjcq";
+    sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
   };
 
   patches = [
@@ -27,7 +27,7 @@ in mkDerivation {
       sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config qttools ];
 
   buildInputs = [
     libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative qtquickcontrols2 systemd

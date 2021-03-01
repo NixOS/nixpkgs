@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
 , appdirs
 , audio-metadata
 , google-music-proto
@@ -10,17 +12,12 @@
 
 buildPythonPackage rec {
   pname = "google-music";
-  version = "3.5.0";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1agqsbnn72gx88sk736k1pzdn2j8fi7flwqhj5g2qhz3wvkx90yq";
+    sha256 = "0fsp491ifsw0i1r98l8xr41m8d00nw9n5bin8k3laqzq1p65d6dp";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "audio-metadata>=0.8,<0.9" "audio-metadata"
-  '';
 
   propagatedBuildInputs = [
     appdirs
@@ -34,8 +31,6 @@ buildPythonPackage rec {
 
   # No tests
   doCheck = false;
-
-  disabled = pythonOlder "3.6";
 
   meta = with lib; {
     homepage = "https://github.com/thebigmunch/google-music";

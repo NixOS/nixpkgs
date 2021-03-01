@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/tree-sitter/tree-sitter-css",
+  "rev": "23f2cb97d47860c517f67f03e1f4b621d5bd2085",
+  "date": "2020-05-14T14:44:30-07:00",
+  "path": "/nix/store/r5pkz9kly0mhgrmqzdzdsr6d1dpqavld-tree-sitter-css",
+  "sha256": "17svpf36p0p7spppzhm3fi833zpdl2l1scg34r6d4vcbv7dknrjy",
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

@@ -224,7 +224,7 @@ in
         serviceConfig = {
           User = "nobody";
           Group = "nogroup";
-          ExecStart = "${pkgs.matterircd.bin}/bin/matterircd ${concatStringsSep " " cfg.matterircd.parameters}";
+          ExecStart = "${pkgs.matterircd}/bin/matterircd ${concatStringsSep " " cfg.matterircd.parameters}";
           WorkingDirectory = "/tmp";
           PrivateTmp = true;
           Restart = "always";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkg-config, cmake
 , wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
 , libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
@@ -21,17 +21,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-11824";
+  version = "5.0-13178";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "1b97f081b8eff9012132a4124537968bdb0e03e0";
-    sha256 = "1v96hcn34040vjsw83k8p0r0nb8rrdcz80h4ngirxzm36b3l7w6m";
+    rev = "a34823df61df65168aa40ef5e82e44defd4a0138";
+    sha256 = "0j6hnj60iai366kl0kdbn1jkwc183l02g65mp2vq4qb2yd4399l1";
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake pkgconfig ]
+  nativeBuildInputs = [ cmake pkg-config ]
   ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
@@ -71,6 +70,8 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
     ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, systemd, utillinux, coreutils }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, systemd, util-linux, coreutils }:
 
 let
   v = "2.02.106";
@@ -12,15 +12,27 @@ stdenv.mkDerivation {
     sha256 = "0nr833bl0q4zq52drjxmmpf7bs6kqxwa5kahwwxm9411khkxz0vc";
   };
 
+  patches = [
+    # Fix build with glibc >= 2.28
+    # https://github.com/NixOS/nixpkgs/issues/86403
+    (fetchpatch {
+      url = "https://github.com/lvmteam/lvm2/commit/92d5a8441007f578e000b492cecf67d6b8a87405.patch";
+      sha256 = "1yqd6jng0b370k53vks1shg57yhfyribhpmv19km5zsjqf0qqx2d";
+      excludes = [
+        "libdm/libdm-stats.c"
+      ];
+    })
+  ];
+
   configureFlags = [
     "--disable-readline"
     "--enable-udev_rules"
     "--enable-udev_sync"
-    "--enable-pkgconfig"
+    "--enable-pkg-config"
     "--enable-applib"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];
 
   preConfigure =
@@ -48,7 +60,7 @@ stdenv.mkDerivation {
   postInstall =
     ''
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
-        --replace $out/sbin/blkid ${utillinux.bin}/sbin/blkid
+        --replace $out/sbin/blkid ${util-linux.bin}/sbin/blkid
 
       # Systemd stuff
       mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
@@ -56,9 +68,9 @@ stdenv.mkDerivation {
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

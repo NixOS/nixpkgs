@@ -73,8 +73,6 @@ in {
         TTYVTDisallocate = "yes";
         # Fail to start if not controlling the virtual terminal.
         StandardInput = "tty-fail";
-        StandardOutput = "syslog";
-        StandardError = "syslog";
         # Set up a full (custom) user session for the user, required by Cage.
         PAMName = "cage";
       };
@@ -84,6 +82,7 @@ in {
       auth    required pam_unix.so nullok
       account required pam_unix.so
       session required pam_unix.so
+      session required pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
       session required ${pkgs.systemd}/lib/security/pam_systemd.so
     '';
 

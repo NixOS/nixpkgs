@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-remove-dropdown-arrows";
@@ -18,12 +18,14 @@ stdenv.mkDerivation rec {
 
   uuid = "remove-dropdown-arrows@mpdeimos.com";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp extension.js $out/share/gnome-shell/extensions/${uuid}
     cp metadata.json $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Remove dropdown arrows from GNOME Shell Menus";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonafato ];

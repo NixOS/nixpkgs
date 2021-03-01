@@ -2,14 +2,16 @@
 , stdenvNoCC
 , lib
 , fetchFromGitHub
+, fetchurl
 , fetchzip
 , optipng
 , cairo
-, python3Packages
-, pkgconfig
+, python3
+, pkg-config
 , pngquant
 , which
 , imagemagick
+, zopfli
 }:
 
 let
@@ -109,25 +111,40 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "unstable-2019-10-22";
+    version = "2020-09-16-unicode13_1";
+    emojiPythonEnv =
+      python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
     pname = "noto-fonts-emoji";
-    inherit version;
+    version = builtins.replaceStrings [ "_" ] [ "." ] version;
 
     src = fetchFromGitHub {
-      owner = "googlei18n";
+      owner = "googlefonts";
       repo = "noto-emoji";
-      rev = "018aa149d622a4fea11f01c61a7207079da301bc";
-      sha256 = "0qmnnjpp5lza6g5m3ki6hj46p891h9vl42k3acd0qw8i0jj5yn2c";
+      rev = "v${version}";
+      sha256 = "0659336dp0l2nkac153jpcb9yvp0p3dx1crcyxjd14i8cqkfi2hh";
     };
 
-    buildInputs = [ cairo ];
-    nativeBuildInputs = [ pngquant optipng which cairo pkgconfig imagemagick ]
-                     ++ (with python3Packages; [ python fonttools nototools ]);
+    nativeBuildInputs = [
+      cairo
+      imagemagick
+      zopfli
+      pngquant
+      which
+      pkg-config
+      emojiPythonEnv
+    ];
 
     postPatch = ''
-      sed -i 's,^PNGQUANT :=.*,PNGQUANT := ${pngquant}/bin/pngquant,' Makefile
-      patchShebangs flag_glyph_name.py
+      patchShebangs *.py
+      patchShebangs third_party/color_emoji/*.py
+      # remove check for virtualenv, since we handle
+      # python requirements using python.withPackages
+      sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
+
+      # Make the build verbose so it won't get culled by Hydra thinking that
+      # it somehow got stuck doing nothing.
+      sed -i 's;\t@;\t;' Makefile
     '';
 
     enableParallelBuilding = true;
@@ -140,10 +157,34 @@ in
     meta = with lib; {
       inherit version;
       description = "Color and Black-and-White emoji fonts";
-      homepage = "https://github.com/googlei18n/noto-emoji";
+      homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 ];
+    };
+  };
+
+  noto-fonts-emoji-blob-bin = stdenv.mkDerivation rec {
+    pname = "noto-fonts-emoji-blob-bin";
+    version = "2019-06-14-Emoji-12";
+
+    src = fetchurl {
+      url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
+      sha256 = "0snvymglmvpnfgsriw2cnnqm0f4llav0jvzir6mpd17mqqhhabbh";
+    };
+
+    dontUnpack = true;
+
+    installPhase = ''
+      install -D $src $out/share/fonts/blobmoji/Blobmoji.ttf
+    '';
+
+    meta = with lib; {
+      description = "Noto Emoji with extended Blob support";
+      homepage = "https://github.com/C1710/blobmoji";
+      license = with licenses; [ ofl asl20 ];
+      platforms = platforms.all;
+      maintainers = with maintainers; [ rileyinman ];
     };
   };
 }

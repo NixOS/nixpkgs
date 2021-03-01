@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, substituteAll, callPackage, pkgconfig, cmake, vala, libxml2,
+{ lib, stdenv, fetchFromGitHub, substituteAll, callPackage, pkg-config, cmake, vala, libxml2,
   glib, pcre, gtk2, gtk3, xorg, libxkbcommon, epoxy, at-spi2-core, dbus-glib, bamf,
   xfce, libwnck3, libdbusmenu, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-vala-panel-appmenu-plugin";
-  version = "0.6.94";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "rilian-la-te";
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     rev = version;
     fetchSubmodules = true;
 
-    sha256 = "0xxn3zs60a9nfix8wrdp056wviq281cm1031hznzf1l38lp3wr5p";
+    sha256 = "06rykdr2c9rnzxwinwdynd73v9wf0gjkx6qfva7sx2n94ajsdnaw";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake vala libxml2.bin ];
+  nativeBuildInputs = [ pkg-config cmake vala libxml2.bin ];
   buildInputs = [ (callPackage ./appmenu-gtk-module.nix {})
                   glib pcre gtk2 gtk3 xorg.libpthreadstubs xorg.libXdmcp libxkbcommon epoxy
                   at-spi2-core dbus-glib bamf xfce.xfce4panel_gtk3 xfce.libxfce4util xfce.xfconf
@@ -41,7 +41,13 @@ stdenv.mkDerivation rec {
     mv cmake/FallbackVersion.cmake.in cmake/FallbackVersion.cmake
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.gitLister src.meta.homepage;
+  };
+
+  meta = with lib; {
     description = "Global Menu applet for XFCE4";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jD91mZM2 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
 stdenv.mkDerivation {
   pname = "ocamlmod";
@@ -22,10 +22,10 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = {
-    homepage = "http://forge.ocamlcore.org/projects/ocamlmod/ocamlmod";
+    homepage = "https://forge.ocamlcore.org/projects/ocamlmod/ocamlmod";
     description = "Generate OCaml modules from source files";
     platforms = ocaml.meta.platforms or [];
-    maintainers = with stdenv.lib.maintainers; [
+    maintainers = with lib.maintainers; [
       maggesi
     ];
   };

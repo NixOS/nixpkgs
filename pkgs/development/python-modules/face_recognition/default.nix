@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchFromGitHub, pillow, click, dlib, numpy
-, face_recognition_models, stdenv, flake8, pytest, glibcLocales
+, face_recognition_models, lib, flake8, pytest, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/ageitgey/face_recognition";
     maintainers = with maintainers; [ ma27 ];

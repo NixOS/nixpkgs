@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "0.4.38";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shared library for libmediainfo and mediainfo";
     homepage = "https://mediaarea.net/";
     license = licenses.bsd2;

@@ -1,26 +1,37 @@
-{ stdenv, buildPythonPackage, fetchPypi, twine, pbr, click, click-completion, validate-email,
-pendulum, ptable, requests, inquirer, pythonOlder, pytest, pytestcov, pytest-mock, faker, factory_boy,
-setuptools }:
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+, click
+, click-completion
+, factory_boy
+, faker
+, inquirer
+, notify-py
+, pbr
+, pendulum
+, ptable
+, pytest
+, pytestcov
+, pytest-mock
+, requests
+, twine
+, validate-email
+}:
 
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.1.0";
-
+  version = "2.4.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "0iirvvb8772569v28d36bnryksm1qkkw48d48fw26j7ka01qq6mm";
+    sha256 = "19lry8adcznzmzbvghyid3yl4j05db6931bw38af5vrkkyzyf62i";
   };
 
   postPatch = ''
    substituteInPlace requirements.txt \
-     --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
-     --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
-     --replace "pbr==5.1.2" "pbr>=5.1.2" \
-     --replace "inquirer==2.5.1" "inquirer>=2.5.1"
+     --replace "inquirer==2.6.3" "inquirer>=2.6.3" \
+     --replace "notify-py==0.2.2" "notify-py>=0.2.2"
   '';
 
   nativeBuildInputs = [ pbr twine ];
@@ -39,22 +50,21 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    setuptools
     click
     click-completion
-    validate-email
+    inquirer
+    notify-py
     pendulum
     ptable
     requests
-    inquirer
     pbr
+    validate-email
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://toggl.uhlir.dev/";
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     license = licenses.mit;
     maintainers = [ maintainers.mmahut ];
   };
 }
-

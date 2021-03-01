@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bdftopcf
+{ lib, stdenv, fetchurl, bdftopcf
 , libfaketime, fonttosfnt, mkfontscale
 }:
 
@@ -42,18 +42,16 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -m 644 -D *.pcf.gz -t "$out/share/fonts/misc"
-    install -m 644 -D *.bdf    -t "$bdf/share/fonts/misc"
-    install -m 644 -D *.otb    -t "$otb/share/fonts/misc"
+    install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts/misc"
+    install -m 644 -D *.bdf -t "$bdf/share/fonts/misc"
 
     mkfontdir "$out/share/fonts/misc"
     mkfontdir "$bdf/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" "otb" ];
+  outputs = [ "out" "bdf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";
     description = "Unicode bitmap fonts";
     license = licenses.publicDomain;

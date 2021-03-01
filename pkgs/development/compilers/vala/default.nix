@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, flex, bison, libxslt, autoconf, autoreconfHook
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
 , graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
 }:
 
@@ -70,7 +70,7 @@ let
     outputs = [ "out" "devdoc" ];
 
     nativeBuildInputs = [
-      pkgconfig flex bison libxslt
+      pkg-config flex bison libxslt
     ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ extraNativeBuildInputs;
@@ -92,7 +92,7 @@ let
     #  };
     # };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Compiler for GObject type system";
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
@@ -123,8 +123,8 @@ in rec {
   };
 
   vala_0_48 = generic {
-    version = "0.48.1";
-    sha256 = "61c5TAqQj/Y2I9F54J+h6dazjTHH61l9MCFInyl+cdQ=";
+    version = "0.48.9";
+    sha256 = "1agyrvslv2yh9ikiw7k5nw6j6il1l2zrzfan0pzdpb9xpg9idslw";
   };
 
   vala = vala_0_48;

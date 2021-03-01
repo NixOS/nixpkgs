@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation }:
+{ lib, appleDerivation }:
 
 appleDerivation {
   dontBuild = true;
@@ -13,7 +13,7 @@ appleDerivation {
 
   DSTROOT = "$(out)";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;

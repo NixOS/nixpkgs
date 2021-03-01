@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
+{ lib, stdenv, fetchurl, pkg-config, libxml2, gnome3, dconf, nautilus
 , gtk3, gsettings-desktop-schemas, vte, gettext, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook, glib, pcre2 }:
+, desktop-file-utils, itstool, wrapGAppsHook, glib, pcre2
+, libxslt, docbook-xsl-nons }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.36.1.1";
+  version = "3.38.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xm3g3kanfhs1q3xh3x58r55v8906806wvqjbg4c2xvdwyhhimzk";
+    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "EaWw1jXxX9znUINRpRD79OkqpTMVKlD/DHhF4xAuR2Q=";
   };
 
   buildInputs = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig gettext itstool which libxml2
+    pkg-config gettext itstool which libxml2 libxslt docbook-xsl-nons
     vala desktop-file-utils wrapGAppsHook pcre2
   ];
 
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNOME Terminal Emulator";
     homepage = "https://wiki.gnome.org/Apps/Terminal";
     platforms = platforms.linux;

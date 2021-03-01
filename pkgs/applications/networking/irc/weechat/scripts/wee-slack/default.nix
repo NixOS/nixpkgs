@@ -1,14 +1,14 @@
-{ stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "0sxgi5fg8qvzqmxy7sdma6v0wj93xwh21av10n8nxvdskacw5dxz";
+    sha256 = "0s4qd1z40c1bczkvc840jwjmzbv7nyj06xqs1si9v54qmkh4gaq4";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     install -D -m 0444 weemoji.json $out/share/wee-slack/weemoji.json
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/wee-slack/wee-slack";
     license = licenses.mit;
     maintainers = with maintainers; [ willibutz ];

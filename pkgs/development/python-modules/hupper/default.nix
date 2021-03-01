@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , pytest, pytestcov, watchdog, mock
 }:
 
 buildPythonPackage rec {
   pname = "hupper";
-  version = "1.9.1";
+  version = "1.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3b1c2222ec7b8159e7ad059e4493c6cc634c86184af0bf2ce5aba6edd241cf5f";
+    sha256 = "3818f53dabc24da66f65cf4878c1c7a9b5df0c46b813e014abdd7c569eb9a02a";
   };
 
   checkPhase = ''
@@ -17,5 +17,5 @@ buildPythonPackage rec {
 
   # FIXME: watchdog dependency is disabled on Darwin because of #31865, which causes very silent
   # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
-  checkInputs = [ pytest pytestcov mock ] ++ stdenv.lib.optional (!stdenv.isDarwin) watchdog;
+  checkInputs = [ pytest pytestcov mock ] ++ lib.optional (!stdenv.isDarwin) watchdog;
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mv * "$out/share/combinatorial_designs"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Data for Combinatorial Designs";
     longDescription = ''
       Current content:
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

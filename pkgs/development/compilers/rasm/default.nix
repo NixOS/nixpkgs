@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "rasm";
@@ -15,19 +15,19 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
       # according to official documentation
-      cc rasm_v*.c -O2 -lm -lrt -march=native -o rasm
+      cc rasm_v*.c -O2 -lm -lrt -o rasm
   '';
 
   installPhase = ''
     install -Dt $out/bin rasm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.roudoudou.com/rasm/";
     description = "Z80 assembler";
     # use -n option to display all licenses
     license = licenses.mit; # expat version
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

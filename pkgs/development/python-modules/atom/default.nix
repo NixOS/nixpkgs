@@ -1,14 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, future }:
+{ lib, buildPythonPackage, fetchPypi, future, cppy }:
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.4.3";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce96fb50326a3bfa084463dbde1cf2e02c92735e5bc324d836355c25af87e0ae";
+    sha256 = "df65a654744ccdc4843ce09c38612fd8f702c84be501b1d955c3ac0b9ad28dc5";
   };
 
+  buildInputs = [ cppy ];
   propagatedBuildInputs = [ future ];
 
   # Tests not released to pypi

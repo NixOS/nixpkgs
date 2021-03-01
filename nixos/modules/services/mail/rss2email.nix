@@ -91,6 +91,8 @@ in {
       };
     };
 
+    environment.systemPackages = with pkgs; [ rss2email ];
+
     services.rss2email.config.to = cfg.to;
 
     systemd.tmpfiles.rules = [

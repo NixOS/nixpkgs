@@ -1,14 +1,14 @@
-{ stdenv, skawarePackages }:
+{ lib, skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "s6-linux-utils";
-  version = "2.5.1.2";
-  sha256 = "0w4jms9qyb5kx9zcyd3gzri60rrii2rbmh08s59ckg4awy27py86";
+  version = "2.5.1.4";
+  sha256 = "02gxzc9igid2kf2rvm3v6kc9806mpjmdq7cpanv4cml0ip68vbfq";
 
   description = "A set of minimalistic Linux-specific system utilities";
-  platforms = stdenv.lib.platforms.linux;
+  platforms = lib.platforms.linux;
 
   outputs = [ "bin" "dev" "doc" "out" ];
 

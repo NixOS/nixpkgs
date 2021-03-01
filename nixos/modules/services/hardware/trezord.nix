@@ -10,7 +10,7 @@ in {
   meta = {
     doc = ./trezord.xml;
   };
-  
+
   ### interface
 
   options = {
@@ -40,14 +40,14 @@ in {
       };
     };
   };
-  
+
   ### implementation
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.trezor-udev-rules ];
 
     systemd.services.trezord = {
-      description = "TREZOR Bridge";
+      description = "Trezor Bridge";
       after = [ "systemd-udev-settle.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [];

@@ -1,5 +1,5 @@
-{ fetchurl, stdenv
-, pkgconfig, gnupg
+{ fetchurl, fetchgit, lib, stdenv
+, pkg-config, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
 , pythonPackages
@@ -9,24 +9,25 @@
 , withEmacs ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.29.3";
+  version = "0.31.3";
   pname = "notmuch";
 
   passthru = {
-    pythonSourceRoot = "${pname}-${version}/bindings/python";
+    pythonSourceRoot = "${src.name}/bindings/python";
     inherit version;
   };
 
-  src = fetchurl {
-    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0dfwa38vgnxk9cvvpza66szjgp8lir6iz6yy0cry9593lywh9xym";
+  src = fetchgit {
+    url = "https://git.notmuchmail.org/git/notmuch";
+    sha256 = "1wm1myzacz1dcg7vdfd3akia3xan7ssfspf1fflrwm18hdalss5v";
+    rev = version;
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
-    "--infodir=${placeholder "info"}"
+    "--infodir=${placeholder "info"}/share/info"
   ] ++ optional (!withEmacs) "--without-emacs"
     ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
     ++ optional (isNull ruby) "--without-ruby";
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "V=1" ];
 
 
-  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional withEmacs "emacs";
+  outputs = [ "out" "man" "info" ] ++ lib.optional withEmacs "emacs";
 
   preCheck = let
     test-database = fetchurl {
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
       sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
     };
   in ''
+    mkdir -p test/test-databases
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
   doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
@@ -84,9 +86,15 @@ stdenv.mkDerivation rec {
     gdb man emacs
   ];
 
+  # Expects there to always be a thread with ID
+  # thread:0000000000000009, but notmuch new is non-deterministic so
+  # this isn't always the case.  Upstream bug report:
+  # https://nmbug.notmuchmail.org/nmweb/show/871reno6g7.fsf%40alyssa.is
+  NOTMUCH_SKIP_TESTS = "lib-thread";
+
   installTargets = [ "install" "install-man" "install-info" ];
 
-  postInstall = stdenv.lib.optionalString withEmacs ''
+  postInstall = lib.optionalString withEmacs ''
     moveToOutput bin/notmuch-emacs-mua $emacs
   '';
 
@@ -96,7 +104,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ flokli puckipedia the-kenny ];
+    maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
   };
 }

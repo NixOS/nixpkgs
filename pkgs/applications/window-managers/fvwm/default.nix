@@ -1,5 +1,5 @@
 { gestures ? false
-, stdenv, fetchurl, pkgconfig
+, lib, stdenv, fetchurl, pkg-config
 , cairo, fontconfig, freetype, libXft, libXcursor, libXinerama
 , libXpm, libXt, librsvg, libpng, fribidi, perl
 , libstroke ? null
@@ -16,18 +16,18 @@ stdenv.mkDerivation rec {
     sha256 = "1bliqcnap7vb3m2rn8wvxyfhbf35h9x34s41fl4301yhrkrlrihv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo fontconfig freetype
     libXft libXcursor libXinerama libXpm libXt
     librsvg libpng fribidi perl
-  ] ++ stdenv.lib.optional gestures libstroke;
+  ] ++ lib.optional gestures libstroke;
 
   meta = {
     homepage = "http://fvwm.org";
     description = "A multiple large virtual desktop window manager";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ edanaher ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ edanaher ];
   };
 }

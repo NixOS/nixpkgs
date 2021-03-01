@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pyjks";
-  version = "19.0.0";
+  version = "20.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06h1cybsdj2wi0jf7igbr722xfm87crqn4g7m3bgrpxwi41b9rcw";
+    sha256 = "0378cec15fb11b2ed27ba54dad9fd987d48e6f62f49fcff138f5f7a8b312b044";
   };
 
   propagatedBuildInputs = [

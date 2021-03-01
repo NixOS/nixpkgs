@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 with rustPlatform;
 
@@ -15,11 +15,11 @@ buildRustPackage rec {
 
   cargoSha256 = "1fgv1kxiif48q9mm60ygn88r5nkxfyiacmvbgwp0jxiacv8r7779";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cgag/loc";
     description = "Count lines of code quickly";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     platforms = platforms.unix;
   };
 }

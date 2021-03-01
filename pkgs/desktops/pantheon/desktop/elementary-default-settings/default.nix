@@ -1,11 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
 , nixos-artwork
 , glib
-, pkgconfig
+, pkg-config
 , dbus
 , polkit
 , accountsservice
@@ -23,11 +24,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "00z31alwn2skhksrhp2jk75f6jlaipzk91hclx7na4gbcyrw7ahw";
+    sha256 = "sha256-HKrDs2frEWVPpwyGNP+NikrjyplSXJj1hFMLy6kK4wM=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -55,14 +56,14 @@ stdenv.mkDerivation rec {
     glib # polkit requires
     meson
     ninja
-    pkgconfig
+    pkg-config
     polkit
     python3
   ];
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
-    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png"
+    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
     "-Dplank-dockitems=false"
   ];
 
@@ -83,8 +84,10 @@ stdenv.mkDerivation rec {
     cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
 
     # Whitelist wingpanel indicators to be used in the greeter
-    # TODO: is this needed or installed upstream?
-    install -D ${./io.elementary.greeter.whitelist} $out/etc/wingpanel.d/io.elementary.greeter.whitelist
+    # hhttps://github.com/elementary/greeter/blob/fc19752f147c62767cd2097c0c0c0fcce41e5873/debian/io.elementary.greeter.whitelist
+    # wingpanel 2.3.2 renamed this to .allowed to .forbidden
+    # https://github.com/elementary/wingpanel/pull/326
+    install -D ${./io.elementary.greeter.allowed} $out/etc/wingpanel.d/io.elementary.greeter.allowed
   '';
 
   postFixup = ''
@@ -95,7 +98,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Default settings and configuration files for elementary";
     homepage = "https://github.com/elementary/default-settings";
     license = licenses.gpl2Plus;

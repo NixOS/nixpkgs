@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
   pname = "autospotting";
@@ -12,14 +12,12 @@ buildGoPackage {
     sha256 = "0p48lgig9kblxvgq1kggczkn4qdbx6ciq9c8x0179i80vl4jf7v6";
   };
 
-  goDeps = ./deps.nix;
-
   # patching path where repository used to exist
   postPatch = ''
     sed -i "s+github.com/cristim/autospotting/core+github.com/AutoSpotting/AutoSpotting/core+" autospotting.go
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/AutoSpotting/AutoSpotting";
     description = "Automatically convert your existing AutoScaling groups to up to 90% cheaper spot instances with minimal configuration changes";
     license = licenses.free;

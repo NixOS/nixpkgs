@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 # native deps.
-, runCommand, pkgconfig, meson, ninja, makeWrapper
+, runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
-, knot-dns, luajitPackages, libuv, gnutls, lmdb, systemd, dns-root-data
+, knot-dns, luajitPackages, libuv, gnutls, lmdb
+, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -11,25 +12,17 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals;
+inherit (lib) optional optionals optionalString;
 lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.0.1";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "4a93264ad0cda7ea2252d1ba057e474722f77848165f2893e0c76e21ae406415";
+    sha256 = "aa37b744c400f437acba7a54aebcbdbe722ece743d342cbc39f2dd8087f05826";
   };
-
-  patches = [
-    (fetchpatch { # merged to upstream master, remove on update
-      name = "zfs-cpu-usage.diff";
-      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/merge_requests/946.diff";
-      sha256 = "0mcvx4pfnl19h6zrv2fcgxdjarqzczn2dz85sylcczsfvdmn6i5m";
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 
@@ -37,8 +30,8 @@ unwrapped = stdenv.mkDerivation rec {
   postPatch = ''
     patch meson.build <<EOF
     @@ -50,2 +50,2 @@
-    -systemd_work_dir = join_paths(prefix, get_option('localstatedir'), 'lib', 'knot-resolver')
-    -systemd_cache_dir = join_paths(prefix, get_option('localstatedir'), 'cache', 'knot-resolver')
+    -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
+    -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
     +systemd_work_dir  = '/var/lib/knot-resolver'
     +systemd_cache_dir = '/var/cache/knot-resolver'
     EOF
@@ -46,18 +39,24 @@ unwrapped = stdenv.mkDerivation rec {
     # ExecStart can't be overwritten in overrides.
     # We need that to use wrapped executable and correct config file.
     sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+  ''
+    # some tests have issues with network sandboxing, apparently
+  + optionalString doInstallCheck ''
+    echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
+    sed '/^[[:blank:]]*test_dstaddr,$/d' -i tests/config/doh2.test.lua
   '';
 
   preConfigure = ''
     patchShebangs scripts/
   '';
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optional stdenv.isLinux systemd # passing sockets, sd_notify
-    ## optional dependencies; TODO: libedit, dnstap
+    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
+    ++ [ nghttp2 ]
+    ## optional dependencies; TODO: dnstap
     ;
 
   mesonFlags = [
@@ -75,15 +74,17 @@ unwrapped = stdenv.mkDerivation rec {
   postInstall = ''
     rm "$out"/lib/libkres.a
     rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
+  '' + optionalString stdenv.targetPlatform.isLinux ''
+    rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
   doInstallCheck = with stdenv; hostPlatform == buildPlatform;
-  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx ];
+  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = "https://knot-resolver.cz";
     license = licenses.gpl3Plus;

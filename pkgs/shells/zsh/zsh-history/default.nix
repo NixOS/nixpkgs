@@ -13,8 +13,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  modSha256 = "0f10b86gyn7m7lw43c8y1m30mdg0i092a319v3cb2qj05jb9vn42";
-  goPackagePath = "github.com/b4b4r07/history";
+  vendorSha256 = "13rc1afds5xg30faqz35haha4kxg73b5nvjirbrkc6kna0vhb54z";
+
+  doCheck = false;
 
   postInstall = ''
     install -d $out/share
@@ -27,7 +28,7 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/b4b4r07/history";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ kampka ];
+    maintainers = with maintainers; [ ];
   };
 
   passthru.tests = {

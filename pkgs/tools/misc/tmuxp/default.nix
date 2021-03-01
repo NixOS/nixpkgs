@@ -1,14 +1,14 @@
-{ stdenv, python }:
+{ lib, python }:
 
 with python.pkgs;
 
 buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.5.4";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13qnacqlcih731wfrsalbff1g81inkh6sypvabg5gi7gd7mha49p";
+    sha256 = "e5135d07a8944170e39ea8b96b09123c54648cca94537b4953d8f15e5a537da2";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     click colorama kaptan libtmux
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manage tmux workspaces from JSON and YAML";
     homepage = "https://tmuxp.git-pull.com/";
     license = licenses.bsd3;

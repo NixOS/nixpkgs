@@ -1,23 +1,28 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, six
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "rethinkdb";
-  version = "2.4.4.post1";
+  version = "2.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e1c1f8ad93bc1c6f2aaa73afc333c57d505d8cc08c437d78a5c1eb8dc4b7e8c2";
+    sha256 = "945b5efdc10f468fc056bd53a4e4224ec4c2fe1a7e83ae47443bbb6e7c7a1f7d";
   };
 
-  doCheck = false;
+  propagatedBuildInputs = [ six setuptools ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+  pythonImportsCheck = [ "rethinkdb" ];
+
+  meta = with lib; {
     description = "Python driver library for the RethinkDB database server";
     homepage = "https://pypi.python.org/pypi/rethinkdb";
-    license = licenses.agpl3;
+    license = licenses.asl20;
   };
 
 }

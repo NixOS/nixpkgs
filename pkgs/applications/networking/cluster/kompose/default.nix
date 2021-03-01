@@ -15,9 +15,10 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    $bin/bin/kompose completion bash > kompose.bash
-    $bin/bin/kompose completion zsh > kompose.zsh
-    installShellCompletion kompose.{bash,zsh}
+    for shell in bash zsh; do
+      $out/bin/kompose completion $shell > kompose.$shell
+      installShellCompletion kompose.$shell
+    done
   '';
 
   meta = with lib; {

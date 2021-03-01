@@ -7,11 +7,11 @@
   kmail-account-wizard, kmailtransport, knotifications, knotifyconfig,
   kontactinterface, kparts, kpty, kservice, ktextwidgets, ktnef, kwallet,
   kwidgetsaddons, kwindowsystem, kxmlgui, libgravatar, libksieve, mailcommon,
-  messagelib, pim-sieve-editor, qtscript, qtwebengine, akonadi
+  messagelib, pim-sieve-editor, qtscript, qtwebengine, akonadi, kdepim-addons
 }:
 
 mkDerivation {
-  name = "kmail";
+  pname = "kmail";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
@@ -24,7 +24,7 @@ mkDerivation {
     knotifications knotifyconfig kontactinterface kparts kpty kservice
     ktextwidgets ktnef kwidgetsaddons kwindowsystem kxmlgui libgravatar
     libksieve mailcommon messagelib pim-sieve-editor qtscript qtwebengine
+    kdepim-addons
   ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
-  patches = [ ./kmail.patch ];
 }

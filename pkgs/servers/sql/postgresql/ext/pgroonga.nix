@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, msgpack, groonga }:
+{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack, groonga }:
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
-  version = "2.2.5";
+  version = "2.2.8";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0lwj99kdx9kfp4vfd7lfapj183mz235kj1vjfscfnkg5ypj656gz";
+    sha256 = "sha256-YDDO3t6ARbQv72QotjA7DNxOlRo2O5CYzrH+/eEzj3w=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ postgresql msgpack groonga ];
 
   makeFlags = [ "HAVE_MSGPACK=1" ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -D ./{pgroonga-*.sql,pgroonga.control} -t $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.

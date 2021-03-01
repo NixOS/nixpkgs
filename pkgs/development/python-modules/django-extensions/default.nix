@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.2.8";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1gd3nykwzh3azq1p9cvgkc3l5dwrv7y86sfjxd9llbyj8ky71iaj";
+    sha256 = "hZ6GS2VkXH8KfKZuL1rR6JS/nDkx8SfKuUx5XrvTbec=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -49,10 +49,11 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  # tests not compatible with pip>=20
+  # remove tests that need network access
   checkPhase = ''
     rm tests/management/commands/test_pipchecker.py
-    ${python.interpreter} setup.py test
+    DJANGO_SETTINGS_MODULE=tests.testapp.settings \
+      pytest django_extensions tests
   '';
 
   meta = with lib; {

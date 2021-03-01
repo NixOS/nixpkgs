@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nixosTests
 , substituteAll, gd, geoip, perl
 , withDebug ? false
 , withStream ? true
 , withMail ? false
+, withPerl ? true
 , modules ? []
 , ...
 }:
@@ -21,7 +22,7 @@
 , meta ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
 
@@ -68,6 +69,14 @@ stdenv.mkDerivation {
     "--with-http_stub_status_module"
     "--with-threads"
     "--with-pcre-jit"
+    "--http-log-path=/var/log/nginx/access.log"
+    "--error-log-path=/var/log/nginx/error.log"
+    "--pid-path=/var/log/nginx/nginx.pid"
+    "--http-client-body-temp-path=/var/cache/nginx/client_body"
+    "--http-proxy-temp-path=/var/cache/nginx/proxy"
+    "--http-fastcgi-temp-path=/var/cache/nginx/fastcgi"
+    "--http-uwsgi-temp-path=/var/cache/nginx/uwsgi"
+    "--http-scgi-temp-path=/var/cache/nginx/scgi"
   ] ++ optionals withDebug [
     "--with-debug"
   ] ++ optionals withStream [
@@ -79,7 +88,7 @@ stdenv.mkDerivation {
   ] ++ optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
-  ] ++ optionals (perl != null) [
+  ] ++ optionals withPerl [
     "--with-http_perl_module"
     "--with-perl=${perl}/bin/perl"
     "--with-perl_modules_path=lib/perl5"
@@ -99,26 +108,28 @@ stdenv.mkDerivation {
   preConfigure = preConfigure
     + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
-  patches = map fixPatch
-    (singleton (substituteAll {
+  patches = map fixPatch ([
+    (substituteAll {
       src = ./nix-etag-1.15.4.patch;
       preInstall = ''
         export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
       '';
-    }) ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
-        sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
-      })
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/101-feature_test_fix.patch";
-        sha256 = "0v6890a85aqmw60pgj3mm7g8nkaphgq65dj4v9c6h58wdsrc6f0y";
-      })
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/103-sys_nerr.patch";
-        sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
-      })
-    ] ++ mapModules "patches");
+    })
+    ./nix-skip-check-logs-path.patch
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
+      sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/101-feature_test_fix.patch";
+      sha256 = "0v6890a85aqmw60pgj3mm7g8nkaphgq65dj4v9c6h58wdsrc6f0y";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/103-sys_nerr.patch";
+      sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
+    })
+  ] ++ mapModules "patches");
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
@@ -138,6 +149,6 @@ stdenv.mkDerivation {
     homepage    = "http://nginx.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ];
+    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
   };
 }

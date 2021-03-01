@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkgconfig, bison
+{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkg-config, bison
 , flex, twisted
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost zlib libevent openssl python bison flex twisted
   ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-tests=no" ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for scalable cross-language services";
     homepage = "http://thrift.apache.org/";
     license = licenses.asl20;

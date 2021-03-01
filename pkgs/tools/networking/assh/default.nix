@@ -1,29 +1,36 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, openssh, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, openssh, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "assh";
-  version = "2.7.0";
-
-  goPackagePath = "github.com/moul/advanced-ssh-config";
-  subPackages = [ "cmd/assh" ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  postInstall = ''
-    wrapProgram "$bin/bin/assh" \
-      --prefix PATH : ${openssh}/bin
-  '';
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
     rev = "v${version}";
-    sha256 = "0jfpcr8990lb7kacadbishdkz5l8spw24ksdlb79x34sdbbp3fm6";
+    sha256 = "sha256-/StB5yee9sbkebuJt6JDI+bp52NG0bBhprzmdepL+ek=";
   };
 
-  meta = with stdenv.lib; {
+  vendorSha256 = "sha256-6OAsO7zWAgPfQWD9k+nYH7hnDDUlKIjTB61ivvoubn0=";
+
+  doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/assh" \
+      --prefix PATH : ${openssh}/bin
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/assh --help > /dev/null
+  '';
+
+  meta = with lib; {
     description = "Advanced SSH config - Regex, aliases, gateways, includes and dynamic hosts";
-    homepage = "https://github.com/moul/advanced-ssh-config";
+    homepage = "https://github.com/moul/assh";
+    changelog = "https://github.com/moul/assh/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ zzamboni ];
     platforms = with platforms; linux ++ darwin;

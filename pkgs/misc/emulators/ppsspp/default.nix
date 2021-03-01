@@ -1,12 +1,12 @@
 { SDL2
 , cmake
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_3
 , glew
 , lib
 , libzip
 , mkDerivation
-, pkgconfig
+, pkg-config
 , python3
 , qtbase
 , qtmultimedia
@@ -16,28 +16,26 @@
 
 mkDerivation rec {
   pname = "ppsspp";
-  version = "1.9.3";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
-    repo = "ppsspp";
+    repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "17sym0vk72lzbh9a1501mhw98c78x1gq7k1fpy69nvvb119j37wa";
+    sha256 = "19948jzqpclf8zfzp3k7s580xfjgqcyfwlcp7x7xj8h8lyypzymx";
   };
 
   postPatch = ''
-    substituteInPlace git-version.cmake \
-      --replace unknown ${src.rev}
-    substituteInPlace UI/NativeApp.cpp \
-      --replace /usr/share $out/share
+    substituteInPlace git-version.cmake --replace unknown ${src.rev}
+    substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig python3 ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
   buildInputs = [
     SDL2
-    ffmpeg
+    ffmpeg_3
     glew
     libzip
     qtbase
@@ -52,6 +50,7 @@ mkDerivation rec {
     "-DUSE_SYSTEM_LIBZIP=ON"
     "-DUSE_SYSTEM_SNAPPY=ON"
     "-DUSING_QT_UI=ON"
+    "-DHEADLESS=OFF"
   ];
 
   installPhase = ''
@@ -61,9 +60,11 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A PSP emulator for Android, Windows, Mac and Linux, written in C++";
+    description = "A HLE Playstation Portable emulator, written in C++";
     homepage = "https://www.ppsspp.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
+# TODO: add SDL headless port

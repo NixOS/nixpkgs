@@ -32,8 +32,6 @@ in stdenv.mkDerivation (libs // rec {
 
   cmakeFlags = [ "-DQFUSION_GAME=Warsow" ];
 
-  enableParallelBuilding = true;
-
   installPhase = ''
     mkdir -p $out/lib
     cp -r libs $out/lib/warsow
@@ -42,7 +40,7 @@ in stdenv.mkDerivation (libs // rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiplayer FPS game designed for competitive gaming (engine only)";
     homepage = "http://www.warsow.net";
     license = licenses.gpl2;

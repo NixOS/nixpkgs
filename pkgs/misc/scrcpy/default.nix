@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , fetchpatch
 
 , platform-tools
@@ -10,10 +10,10 @@
 }:
 
 let
-  version = "1.12.1";
+  version = "1.17";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "1sk6hbbnf4g6q58fspwlh8bn16j73j3i8hlcshqxzhfhl746krb3";
+    sha256 = "sha256-EbWtLRvJuXMPtyVKeO/XGo/0axk4/0aOR6IbZTobZyU=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16zi0d2jjm2nlrwkwvsxzfpgy45ami45wfh67wq7na2h2ywfmgcp";
+    sha256 = "sha256-xCzrbWhMve0bJerFNHiUdSzp5O1pSaKRkcJSs/0nHpk=";
   };
 
   # postPatch:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkgconfig ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
 
   buildInputs = [ ffmpeg SDL2 ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
     license = licenses.asl20;

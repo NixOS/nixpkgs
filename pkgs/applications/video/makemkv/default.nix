@@ -1,23 +1,33 @@
-{ stdenv, mkDerivation, fetchurl, autoPatchelfHook
-, ffmpeg, openssl, qtbase, zlib, pkgconfig
+{ lib
+, mkDerivation
+, fetchurl
+, autoPatchelfHook
+, pkg-config
+, ffmpeg_3
+, openssl
+, qtbase
+, zlib
+
+, withJava ? true
+, jre_headless
 }:
 
 let
-  version = "1.15.0";
+  version = "1.15.4";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "1zr63fqx4qcrnrbg1f97w9mp3yzzxf0dk8pw60y2d4436vanfba4";
+    hash = "sha256-Reun5hp7Rnsf6N5yL6iQ1Vbhnz/AKnt/jYRqyOK625o=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "01pdydll37inkq74874rqd5kk0maafnm1lqcv41jzgzjrfkky8d9";
+    hash = "sha256-gtBi1IRNF5ASk/ZdzkDmOuEIT9gazNaRNCftqbLEP+M=";
   };
 in mkDerivation {
   pname = "makemkv";
@@ -27,9 +37,16 @@ in mkDerivation {
 
   sourceRoot = "makemkv-oss-${version}";
 
-  nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
+  nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
-  buildInputs = [ ffmpeg openssl qtbase zlib ];
+  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+
+  qtWrapperArgs =
+    let
+      binPath = lib.makeBinPath [ jre_headless ];
+    in lib.optionals withJava [
+      "--prefix PATH : ${binPath}"
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -41,7 +58,7 @@ in mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert blu-ray and dvd to mkv";
     longDescription = ''
       makemkv is a one-click QT application that transcodes an encrypted
@@ -55,6 +72,6 @@ in mkDerivation {
     license = licenses.unfree;
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.titanous ];
+    maintainers = with maintainers; [ danieldk titanous ];
   };
 }

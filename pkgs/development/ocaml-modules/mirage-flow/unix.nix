@@ -4,7 +4,7 @@
 buildDunePackage {
   pname = "mirage-flow-unix";
 
-  inherit (mirage-flow) version src;
+  inherit (mirage-flow) version useDune2 src;
 
   propagatedBuildInputs = [ fmt logs mirage-flow ocaml_lwt cstruct ];
 

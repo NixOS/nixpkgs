@@ -1,31 +1,46 @@
-{stdenv, fetchurl, cmake, flex, bison, openssl, libpcap, zlib, file, curl
-, libmaxminddb, gperftools, python, swig, fetchpatch }:
+{ lib, stdenv
+, fetchurl
+, cmake
+, flex
+, bison
+, openssl
+, libpcap
+, zlib
+, file
+, curl
+, libmaxminddb
+, gperftools
+, python
+, swig
+, gettext
+, fetchpatch
+, coreutils
+}:
 let
-  preConfigure = (import ./script.nix);
+  preConfigure = (import ./script.nix {inherit coreutils;});
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.1.1";
+  version = "3.2.3";
 
   src = fetchurl {
-    url = "https://old.zeek.org/downloads/zeek-${version}.tar.gz";
-    sha256 = "0siybzdp8w62jqk5vdi5fxwvj6cn4r6c2d4z2axd4rj5vhv5zvx2";
+    url = "https://download.zeek.org/zeek-${version}.tar.gz";
+    sha256 = "1in25clpbb2vdhms3iypj6r5sp8d1dxjcfn85c272sh7shnmqagr";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];
-  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig ];
+  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig ]
+    ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
   inherit preConfigure;
 
-  enableParallelBuilding = true;
-
-  patches = stdenv.lib.optionals stdenv.cc.isClang [
+  patches = lib.optionals stdenv.cc.isClang [
     # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
     (fetchpatch {
       url = "https://github.com/pybind/pybind11/commit/759221f5c56939f59d8f342a41f8e2d2cacbc8cf.patch";
-      sha256 = "0l8z7d7chq1awd8dnfarj4c40wx36hkhcan0702p5l89x73wqk54";
-      extraPrefix = "aux/broker/bindings/python/3rdparty/pybind11/";
+      sha256 = "17qznp8yavnv84fjsbghv3d59z6k6rx74j49w0izakmgw5a95w84";
+      extraPrefix = "auxil/broker/bindings/python/3rdparty/pybind11/";
       stripLen = 1;
     })
   ];
@@ -36,9 +51,10 @@ stdenv.mkDerivation rec {
     "-DINSTALL_AUX_TOOLS=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
+    changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub marsam tobim ];
     platforms = platforms.unix;

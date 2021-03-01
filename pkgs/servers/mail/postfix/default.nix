@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre, m4
-, buildPackages
+, buildPackages, nixosTests
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, libmysqlclient
@@ -12,7 +12,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient.dev}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.4.10";
+  version = "3.5.9";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0m36wn5grm4cf8nnvlgsgwsm6v09xz01n7jnx13h0yjk73y6d2lh";
+    sha256 = "0avn00drmk9c9mjynfvcmir72ss9s3mckdhjm3mmnhas2sixbkji";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -48,10 +48,9 @@ in stdenv.mkDerivation rec {
     ./postfix-3.0-no-warnings.patch
     ./post-install-script.patch
     ./relative-symlinks.patch
-    ./0001-Fix-build-with-glibc-2.30.patch
   ];
 
-  postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -e 's!bin/postconf!${buildPackages.postfix}/bin/postconf!' -i postfix-install
   '' + ''
     sed -e '/^PATH=/d' -i postfix-install
@@ -97,12 +96,14 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
+  passthru.tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+
   meta = with lib; {
     homepage = "http://www.postfix.org/";
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rickynils globin ];
+    maintainers = with maintainers; [ globin ];
   };
 
 }

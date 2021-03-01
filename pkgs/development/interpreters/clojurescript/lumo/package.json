@@ -27,7 +27,7 @@
     "glob": "^7.1.3",
     "gunzip-maybe": "^1.4.1",
     "insert-module-globals": "^7.2.0",
-    "jszip": "github:anmonteiro/jszip#patch-1",
+    "jszip": "2.x",
     "mkdirp": "^1.0.3",
     "ncp": "^2.0.0",
     "node-fetch": "^2.2.1",

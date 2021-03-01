@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isort, coverage, mock
+{ lib, buildPythonPackage, fetchPypi, isPy3k, isort, coverage, mock
 , robot-detection, django_extensions, rjsmin, cssmin, django-mailman3
 , django-haystack, flufl_lock, networkx, dateutil, defusedxml
 , django-paintstore, djangorestframework, django, django-q
@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "HyperKitty";
-  version = "1.3.2";
+  version = "1.3.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "092fkv0xyf5vgj33xwq0mh9h5c5d56ifwimaqbfpx5cwc6yivb88";
+    sha256 = "0p85r9q6mn5as5b39xp9hkkipnk0156acx540n2ygk3qb3jd4a5n";
   };
 
   nativeBuildInputs = [ isort ];
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Archiver for GNU Mailman v3";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ peti globin ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ peti globin ];
   };
 }

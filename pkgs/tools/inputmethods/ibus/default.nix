@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , gettext
 , makeWrapper
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , dbus
@@ -16,6 +16,7 @@
 , gtk2
 , gtk3
 , gtk-doc
+, runCommand
 , isocodes
 , cldr-emoji-annotation
 , unicode-character-database
@@ -35,7 +36,7 @@
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
-with stdenv.lib;
+with lib;
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
@@ -47,17 +48,25 @@ let
       makeWrapper ${glib.dev}/bin/glib-mkenums $out/bin/glib-mkenums --unset PYTHONPATH
     '';
   };
+  # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
+  # it will fail to read /etc/dbus-1/session.conf unless we add this flag
+  dbus-launch = runCommand "sandbox-dbus-launch" {
+    nativeBuildInputs = [ makeWrapper ];
+  } ''
+      makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+        --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
+  '';
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.22";
+  version = "1.5.23";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "09ynn7gq84q18hhbg6wq2yrliwil42qbzxbwbpggry1s955jg5xb";
+    sha256 = "0qnblqhz8wyhchnm36zrxhbvi9g4fcwcgmw7p60yjybdlhq4asc7";
   };
 
   patches = [
@@ -71,7 +80,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "installedTests" ];
 
   postPatch = ''
-    echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh
+    patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
   '';
 
@@ -92,8 +101,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "test_execsdir=${placeholder ''installedTests''}/libexec/installed-tests/ibus"
-    "test_sourcesdir=${placeholder ''installedTests''}/share/installed-tests/ibus"
+    "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
+    "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
   ];
 
   nativeBuildInputs = [
@@ -101,10 +110,11 @@ stdenv.mkDerivation rec {
     gtk-doc
     gettext
     makeWrapper
-    pkgconfig
+    pkg-config
     python3BuildEnv
     vala
     wrapGAppsHook
+    dbus-launch
   ];
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , alsaLib
@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmid";
-  version = "0.6.8";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "llloret";
     repo = "osmid";
     rev = "v${version}";
-    sha256 = "1yl25abf343yvd49nfsgxsz7jf956zrsi5n4xyqb5ldlp2hifk15";
+    sha256 = "1s1wsrp6g6wb0y61xzxvaj59mwycrgy52r4h456086zkz10ls6hw";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/llloret/osmid";
     description = "A lightweight, portable, easy to use tool to convert MIDI to OSC and OSC to MIDI";
     license = licenses.mit;

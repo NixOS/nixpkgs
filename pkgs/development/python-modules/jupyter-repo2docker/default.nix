@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast
 , docker
 , escapism
 , jinja2
@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
+  version = "2021.1.0";
   pname = "jupyter-repo2docker";
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7965262913be6be60e64c8016f5f3d4bf93701f2787209215859d73b2adbc05a";
+    sha256 = "3e3e671407ef2a7f7695338dc6ce2ca9cc75683ffc7a543829cf119564aca802";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "repo2docker.contentproviders.base"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://repo2docker.readthedocs.io/en/latest/";
     description = "Repo2docker: Turn code repositories into Jupyter enabled Docker Images";
     license = licenses.bsdOriginal;

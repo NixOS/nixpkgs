@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
 , curl, db, libgeotiff
 , libXpm, libXt, motif, pcre
 , perl, proj, rastermagick, shapelib
@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xastir";
-  version = "2.1.4";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Release-${version}";
-    sha256 = "14f908jy5jzvgm1h1sr47hjqjq3q2nq91byhimk84kj044fn21w9";
+    sha256 = "0yrvwy6hlc73gzwrsrczflyymyz0k33hj991ajrd1vijq14m3n91";
   };
 
   buildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical APRS client";
     homepage = "https://xastir.org";
     license = licenses.gpl2;

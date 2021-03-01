@@ -1,7 +1,7 @@
 {
   pkgs
 , stdenv
-, libusb
+, libusb-compat-0_1
 , fetchFromGitHub
 , lib
 }:
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
      sha256 = "14msy9amlbflw5mqrbs57b7bby3nsgx43srr7215zyhfdgsla0in";
    };
 
-   buildInputs = [ libusb ];
-   makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
+   buildInputs = [ libusb-compat-0_1 ];
+   makeFlags = lib.optionals stdenv.isDarwin [ "CC=cc" ];
 
    installPhase = ''
      mkdir -p $out/bin

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
 stdenv.mkDerivation rec {
   name = "rtl8821au-${kernel.version}-${version}";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "rtl8821AU, rtl8812AU and rtl8811AU chipset driver with firmware";
     homepage = "https://github.com/zebulon2/rtl8812au";
     license = licenses.gpl2;

@@ -1,20 +1,42 @@
-{ alsaLib, cmake, fetchFromGitHub, glib, gettext, gtk2, harfbuzz, lib, libaio
-, libpng, libpcap, libxml2, makeWrapper, perl, pkgconfig, portaudio
-, SDL2, soundtouch, stdenv, udev, wxGTK, zlib
+{ alsaLib
+, cmake
+, fetchFromGitHub
+, fmt
+, gcc-unwrapped
+, gettext
+, glib
+, gtk3
+, harfbuzz
+, libaio
+, libpcap
+, libpng
+, libpulseaudio
+, libsamplerate
+, libxml2
+, makeWrapper
+, perl
+, pkg-config
+, portaudio
+, SDL2
+, soundtouch
+, lib, stdenv
+, udev
+, wrapGAppsHook
+, wxGTK
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pcsx2";
-  version = "unstable-2020-01-05";
+  version = "unstable-2020-11-13";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
-    rev = "9c12937351c51b921e1f28d44b019bc52e747c51";
-    sha256 = "0y1f5v99a6njmf6hyvl4z5xnrm7351rkyw2fn4f09hqn92r7zmi5";
+    fetchSubmodules = true;
+    rev = "319287dbe552c8405720b25dfdf5fa518deeee0b";
+    sha256 = "1kswc8vw9hbv2nigp8cxrgf2s0ik7p4i203cbqci8zjmnkaqpsai";
   };
-
-  postPatch = "sed '1i#include \"x86intrin.h\"' -i common/src/x86emitter/cpudetect.cpp";
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
@@ -23,35 +45,43 @@ stdenv.mkDerivation rec {
     "-DDOC_DIR=${placeholder "out"}/share/doc/pcsx2"
     "-DGAMEINDEX_DIR=${placeholder "out"}/share/pcsx2"
     "-DGLSL_SHADER_DIR=${placeholder "out"}/share/pcsx2"
-    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
-    "-DwxWidgets_INCLUDE_DIRS=${wxGTK}/include"
-    "-DwxWidgets_CONFIG_EXECUTABLE=${wxGTK}/bin/wx-config"
+    "-DGTK3_API=TRUE"
     "-DPACKAGE_MODE=TRUE"
     "-DPLUGIN_DIR=${placeholder "out"}/lib/pcsx2"
     "-DREBUILD_SHADER=TRUE"
+    "-DUSE_LTO=TRUE"
+    "-DwxWidgets_CONFIG_EXECUTABLE=${wxGTK}/bin/wx-config"
+    "-DwxWidgets_INCLUDE_DIRS=${wxGTK}/include"
+    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
     "-DXDG_STD=TRUE"
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
-    "-DGTK3_API=FALSE"
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/BuildParameters.cmake \
+      --replace /usr/bin/gcc-ar ${gcc-unwrapped}/bin/gcc-ar \
+      --replace /usr/bin/gcc-nm ${gcc-unwrapped}/bin/gcc-nm \
+      --replace /usr/bin/gcc-ranlib ${gcc-unwrapped}/bin/gcc-ranlib
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/PCSX2 \
       --set __GL_THREADED_OPTIMIZATIONS 1
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper perl pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper perl pkg-config wrapGAppsHook ];
 
   buildInputs = [
     alsaLib
-    glib
+    fmt
     gettext
-    gtk2
+    glib
+    gtk3
     harfbuzz
     libaio
     libpcap
     libpng
+    libpulseaudio
+    libsamplerate
     libxml2
     portaudio
     SDL2
@@ -61,7 +91,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Playstation 2 emulator";
     longDescription= ''
       PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose
@@ -71,13 +101,13 @@ stdenv.mkDerivation rec {
       PC, with many additional features and benefits.
     '';
     homepage = "https://pcsx2.net";
-    maintainers = with maintainers; [ hrdinka ];
+    maintainers = with maintainers; [ hrdinka samuelgrf govanify ];
 
     # PCSX2's source code is released under LGPLv3+. It However ships
     # additional data files and code that are licensed differently.
     # This might be solved in future, for now we should stick with
     # license.free
     license = licenses.free;
-    platforms = platforms.i686;
+    platforms = platforms.x86;
   };
 }

@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , coreutils, jdk, rlwrap, gnupg }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.9.1";
+  version = "2.9.5";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "1h0gpzpr7xk6hvmrrq41bcp2k9aai348baf8ad9bxvci01n4zb12";
+    sha256 = "12kv3286a2vkm3qpm2msiks87mkspxddgl7bwiacdias9dfda09n";
   };
 
   jarsrc = fetchurl {
     # NOTE: This is actually a .jar, Github has issues
     url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.zip";
-    sha256 = "1y2mva5s2w2szzn1b9rhz0dvkffls4ravii677ybcf2w9wd86z7a";
+    sha256 = "1shyvg1471sc3bv4h3ax51626xw8a8w05f43bny6gmp8pyc0qjfz";
   };
 
   JARNAME = "${pname}-${version}-standalone.jar";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/lein \
       --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
     wrapProgram $out/bin/lein \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \
+      --prefix PATH ":" "${lib.makeBinPath [ rlwrap coreutils ]}" \
       --set LEIN_GPG ${gnupg}/bin/gpg \
       --set JAVA_CMD ${jdk}/bin/java
   '';
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://leiningen.org/";
     description = "Project automation for Clojure";
-    license = stdenv.lib.licenses.epl10;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ thiagokokada ];
   };
 }

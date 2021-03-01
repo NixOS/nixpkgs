@@ -1,12 +1,13 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , coreutils
 , glibc
+, gccForLibs
 , which
 , perl
 , libedit
 , ninja
-, pkgconfig
+, pkg-config
 , sqlite
 , swig
 , bash
@@ -120,8 +121,8 @@ let
 
   cmakeFlags = [
     "-DGLIBC_INCLUDE_PATH=${stdenv.cc.libc.dev}/include"
-    "-DC_INCLUDE_DIRS=${stdenv.lib.makeSearchPathOutput "dev" "include" devInputs}:${libxml2.dev}/include/libxml2"
-    "-DGCC_INSTALL_PREFIX=${clang.cc.gcc}"
+    "-DC_INCLUDE_DIRS=${lib.makeSearchPathOutput "dev" "include" devInputs}:${libxml2.dev}/include/libxml2"
+    "-DGCC_INSTALL_PREFIX=${gccForLibs}"
   ];
 
 in
@@ -140,7 +141,7 @@ stdenv.mkDerivation {
     makeWrapper
     ninja
     perl
-    pkgconfig
+    pkg-config
     python
     rsync
     which
@@ -154,7 +155,7 @@ stdenv.mkDerivation {
     libgit2
     python
   ];
-  propagatedUserEnvPkgs = [ git pkgconfig ];
+  propagatedUserEnvPkgs = [ git pkg-config ];
 
   hardeningDisable = [ "format" ]; # for LLDB
 
@@ -182,6 +183,9 @@ stdenv.mkDerivation {
   '';
 
   patchPhase = ''
+    # Glibc 2.31 fix
+    patch -p1 -i ${./patches/swift-llvm.patch}
+
     # Just patch all the things for now, we can focus this later
     patchShebangs $SWIFT_SOURCE_ROOT
 
@@ -196,7 +200,7 @@ stdenv.mkDerivation {
     substituteInPlace swift/stdlib/public/Platform/CMakeLists.txt \
       --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
     substituteInPlace swift/utils/build-script-impl \
-      --replace '/usr/include/c++' "${clang.cc.gcc}/include/c++"
+      --replace '/usr/include/c++' "${gccForLibs}/include/c++"
     patch -p1 -d swift -i ${./patches/glibc-arch-headers.patch}
     patch -p1 -d swift -i ${./patches/0001-build-presets-linux-don-t-require-using-Ninja.patch}
     patch -p1 -d swift -i ${./patches/0002-build-presets-linux-allow-custom-install-prefix.patch}
@@ -241,6 +245,10 @@ stdenv.mkDerivation {
       --replace usr "$PREFIX"
     substituteInPlace swift-corelibs-xctest/build_script.py \
       --replace usr "$PREFIX"
+    substituteInPlace swift-corelibs-foundation/CoreFoundation/PlugIn.subproj/CFBundle_InfoPlist.c \
+      --replace "if !TARGET_OS_ANDROID" "if TARGET_OS_MAC || TARGET_OS_BSD"
+    substituteInPlace swift-corelibs-foundation/CoreFoundation/PlugIn.subproj/CFBundle_Resources.c \
+      --replace "if !TARGET_OS_ANDROID" "if TARGET_OS_MAC || TARGET_OS_BSD"
   '';
 
   configurePhase = ''
@@ -257,11 +265,11 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    # gcc-6.4.0/include/c++/6.4.0/cstdlib:75:15: fatal error: 'stdlib.h' file not found
-    export NIX_CFLAGS_COMPILE="$( echo ${clang.default_cxx_stdlib_compile} ) $NIX_CFLAGS_COMPILE"
+    # explicitly include C++ headers to prevent errors where stdlib.h is not found from cstdlib
+    export NIX_CFLAGS_COMPILE="$(< ${clang}/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
     # During the Swift build, a full local LLVM build is performed and the resulting clang is invoked.
     # This compiler is not using the Nix wrappers, so it needs some help to find things.
-    export NIX_LDFLAGS_BEFORE="-rpath ${clang.cc.gcc.lib}/lib -L${clang.cc.gcc.lib}/lib $NIX_LDFLAGS_BEFORE"
+    export NIX_LDFLAGS_BEFORE="-rpath ${gccForLibs.lib}/lib -L${gccForLibs.lib}/lib $NIX_LDFLAGS_BEFORE"
     # However, we want to use the wrapped compiler whenever possible.
     export CC="${clang}/bin/clang"
 
@@ -274,7 +282,7 @@ stdenv.mkDerivation {
       installable_package=$INSTALLABLE_PACKAGE \
       install_prefix=$out \
       install_destdir=$SWIFT_INSTALL_DIR \
-      extra_cmake_options="${stdenv.lib.concatStringsSep "," cmakeFlags}"
+      extra_cmake_options="${lib.concatStringsSep "," cmakeFlags}"
   '';
 
   doCheck = true;
@@ -314,9 +322,9 @@ stdenv.mkDerivation {
   '';
 
   # Hack to avoid build and install directories in RPATHs.
-  preFixup = ''rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR'';
+  preFixup = "rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Swift Programming Language";
     homepage = "https://github.com/apple/swift";
     maintainers = with maintainers; [ dtzWill ];
@@ -324,6 +332,9 @@ stdenv.mkDerivation {
     # Swift doesn't support 32bit Linux, unknown on other platforms.
     platforms = platforms.linux;
     badPlatforms = platforms.i686;
-    broken = stdenv.isAarch64; # 2018-09-04, never built on Hydra
+    broken = true; # 2021-01-29
+    knownVulnerabilities = [
+      "CVE-2020-9861"
+    ];
   };
 }

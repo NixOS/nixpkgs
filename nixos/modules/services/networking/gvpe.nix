@@ -3,7 +3,7 @@
 {config, pkgs, lib, ...}:
 
 let
-  inherit (lib) mkOption mkIf;
+  inherit (lib) mkOption mkIf types;
 
   cfg = config.services.gvpe;
 
@@ -42,20 +42,18 @@ in
 {
   options = {
     services.gvpe = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run gvpe
-        '';
-      };
+      enable = lib.mkEnableOption "gvpe";
+
       nodename = mkOption {
         default = null;
+        type = types.nullOr types.str;
         description =''
           GVPE node name
         '';
       };
       configText = mkOption {
         default = null;
+        type = types.nullOr types.lines;
         example = ''
           tcp-port = 655
           udp-port = 655
@@ -76,6 +74,7 @@ in
       };
       configFile = mkOption {
         default = null;
+        type = types.nullOr types.path;
         example = "/root/my-gvpe-conf";
         description = ''
           GVPE config file, if already present
@@ -83,12 +82,14 @@ in
       };
       ipAddress = mkOption {
         default = null;
+        type = types.nullOr types.str;
         description = ''
           IP address to assign to GVPE interface
         '';
       };
       subnet = mkOption {
         default = null;
+        type = types.nullOr types.str;
         example = "10.0.0.0/8";
         description = ''
           IP subnet assigned to GVPE network
@@ -96,6 +97,7 @@ in
       };
       customIFSetup = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Additional commands to apply in ifup script
         '';

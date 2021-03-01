@@ -1,37 +1,26 @@
 { lib, buildPythonPackage, fetchPypi, fetchpatch
-, tornado
-, toolz
-, zict
-, six
-, pytest
-, networkx
-, distributed
 , confluent-kafka
+, distributed
+, flaky
 , graphviz
+, networkx
+, pytest
 , requests
+, six
+, toolz
+, tornado
+, zict
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "127rpdjgkcyjifmkqbhmqfbzlgi32n54rybrdxja610qr906y40c";
+    sha256 = "215703456479d24f524cdcd0365006250d4502d242f57e2f5db18e8638bc8694";
   };
-
-  patches = [
-    # fix networkx rename issue of GiGraph.node -> DiGraph.nodes, remove on next bump
-    ( fetchpatch {
-      url = "https://github.com/python-streamz/streamz/commit/f8b7bdb6bcb9dd107677e82e755ff4695bf0c4be.patch";
-      sha256 = "1b2frp0j369gf55plxk2pigblhsc44m0rm9az01y83cjlcm26x2s";
-    })
-    # also, fix networkx rename issue of GiGraph.node -> DiGraph.nodes, remove on next bump
-    ( fetchpatch {
-      url = "https://github.com/python-streamz/streamz/commit/f7603f4cbea54f1548885881206a3ca9d6e52250.patch";
-      sha256 = "1125kqiaz6b3cifz0yk1zrkxj5804lfzl4kc58jhqajv8rsrbs45";
-    })
-  ];
 
   propagatedBuildInputs = [
     networkx
@@ -44,10 +33,13 @@ buildPythonPackage rec {
   checkInputs = [
     confluent-kafka
     distributed
+    flaky
     graphviz
     pytest
     requests
   ];
+
+  disabled = pythonOlder "3.6";
 
   # Disable test_tcp_async because fails on sandbox build
   # disable kafka tests

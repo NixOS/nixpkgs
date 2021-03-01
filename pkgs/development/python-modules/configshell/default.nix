@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pyparsing, six, urwid }:
+{ lib, fetchFromGitHub, buildPythonPackage, pyparsing, six, urwid }:
 
 buildPythonPackage rec {
   pname = "configshell";
-  version = "1.1.27";
+  version = "1.1.28";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
-    repo ="${pname}-fb";
+    repo = "${pname}-fb";
     rev = "v${version}";
-    sha256 = "1nldzq3097xqgzd8qxv36ydvx6vj2crwanihz53k46is0myrwcnn";
+    sha256 = "1ym2hkvmmacgy21wnjwzyrcxyl3sx4bcx4hc51vf4lzcnj589l68";
   };
 
   propagatedBuildInputs = [ pyparsing six urwid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python library for building configuration shells";
     homepage = "https://github.com/open-iscsi/configshell-fb";
     license = licenses.asl20;

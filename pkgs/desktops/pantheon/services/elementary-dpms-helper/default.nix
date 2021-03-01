@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0svfp0qyb6nx4mjl3jx4aqmb4x24m25jpi75mdis3yfr3c1xz9nh";
+    sha256 = "sha256-0KbfAxvZ+aFjq+XEK4uoRHSyKlaky0FlJd2a5TG4bms=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ glib.dev coreutils ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ glib.dev coreutils ]}")
   '';
 
   postFixup = ''
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sets DPMS settings found in org.pantheon.dpms";
     homepage = "https://github.com/elementary/dpms-helper";
     license = licenses.gpl2;

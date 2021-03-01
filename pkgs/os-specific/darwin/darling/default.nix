@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
     cp src/libaks/include/* $out/include
   '';
 
-  # buildInputs = [ cmake bison flex ];
-
   meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];
     license = licenses.gpl3;

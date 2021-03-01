@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 stdenv.mkDerivation rec {
   pname = "fairymax";
   version = "4.8";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''A small chess engine supporting fairy pieces'';
+    description = "A small chess engine supporting fairy pieces";
     longDescription = ''
        A version of micro-Max that reads the piece description
        from a file fmax.ini, so that arbitrary fairy pieces can be
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
        and board sizes up to 12x8. A Linux port exists in the
        format of a debian package.
     '';
-    license = stdenv.lib.licenses.free ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.free ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "http://home.hccnet.nl/h.g.muller/dwnldpage.html";
   };
 }

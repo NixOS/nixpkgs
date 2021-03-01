@@ -1,16 +1,16 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
+, replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, flashplayer, hal-flash
-, MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
-, jrePlugin, adoptopenjdk-icedtea-web
-, bluejeans, djview4, adobe-reader
-, google_talk_plugin, fribid, gnome3/*.gnome-shell*/
-, browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
+, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
+, gnome3/*.gnome-shell*/
+, browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
 , udev
 , kerberos
+, libva
+, mesa # firefox wants gbm for drm+dmabuf
 }:
 
 ## configurability of the wrapper itself
@@ -26,44 +26,52 @@ let
       (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
     , nameSuffix ? ""
     , icon ? browserName
-    , extraPlugins ? []
     , extraNativeMessagingHosts ? []
-    , gdkWayland ? false
+    , pkcs11Modules ? []
+    , forceWayland ? false
+    , useGlvnd ? true
     , cfg ? config.${browserName} or {}
+
+    ## Following options are needed for extra prefs & policies
+    # For more information about anti tracking (german website)
+    # visit https://wiki.kairaven.de/open/app/firefox
+    , extraPrefs ? ""
+    # For more information about policies visit
+    # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+    , extraPolicies ? {}
+    , firefoxLibName ? "firefox" # Important for tor package or the like
+    , nixExtensions ? null
     }:
 
-    assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
+    assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
-      jre = cfg.jre or false;
-      icedtea = cfg.icedtea or false;
-      supportsJDK =
-        stdenv.hostPlatform.system == "i686-linux" ||
-        stdenv.hostPlatform.system == "x86_64-linux" ||
-        stdenv.hostPlatform.system == "armv7l-linux" ||
-        stdenv.hostPlatform.system == "aarch64-linux";
+      alsaSupport = browser.alsaSupport or false;
+      pipewireSupport = browser.pipewireSupport or false;
 
+      # FIXME: This should probably be an assertion now?
       plugins =
-        assert !(jre && icedtea);
-        if builtins.hasAttr "enableVLC" cfg
-        then throw "The option \"${browserName}.enableVLC\" has been removed since Firefox no longer supports npapi plugins"
+        let
+          removed = lib.filter (a: builtins.hasAttr a cfg) [
+            "enableAdobeFlash"
+            "enableAdobeReader"
+            "enableBluejeans"
+            "enableDjvu"
+            "enableFriBIDPlugin"
+            "enableGoogleTalkPlugin"
+            "enableMPlayer"
+            "enableVLC"
+            "icedtea"
+            "jre"
+          ];
+        in if removed != [] then
+          throw "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) removed}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins)."
         else
-        ([ ]
-          ++ lib.optional enableAdobeFlash flashplayer
-          ++ lib.optional (cfg.enableDjvu or false) (djview4)
-          ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
-          ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional icedtea adoptopenjdk-icedtea-web
-          ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
-          ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
-          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
-          ++ lib.optional (cfg.enableBluejeans or false) bluejeans
-          ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
-          ++ extraPlugins
-        );
+          []
+        ;
+
       nativeMessagingHosts =
         ([ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
@@ -71,19 +79,90 @@ let
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
-          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
+          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optional stdenv.isLinux udev
+      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver ]
+            ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
-            ++ lib.optional gdkWayland libglvnd
+            ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
-            ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
-            ++ lib.optional (config.pulseaudio or true) libpulseaudio;
+            ++ lib.optional (config.pulseaudio or true) libpulseaudio
+            ++ lib.optional alsaSupport alsaLib
+            ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk2 ];
+
+      #########################
+      #                       #
+      #   EXTRA PREF CHANGES  #
+      #                       #
+      #########################
+      policiesJson = writeText "policies.json" (builtins.toJSON enterprisePolicies);
+
+      usesNixExtensions = nixExtensions != null;
+
+      nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
+
+      # Check that every extension has a unqiue .name attribute
+      # and an extid attribute
+      extensions = if nameArray != (lib.unique nameArray) then
+        throw "Firefox addon name needs to be unique"
+      else builtins.map (a:
+        if ! (builtins.hasAttr "extid" a) then
+        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
+        else
+        a
+      ) (if usesNixExtensions then nixExtensions else []);
+
+      enterprisePolicies =
+      {
+        policies = lib.optionalAttrs usesNixExtensions  {
+          DisableAppUpdate = true;
+        } //
+        lib.optionalAttrs usesNixExtensions {
+          ExtensionSettings = {
+            "*" = {
+                blocked_install_message = "You can't have manual extension mixed with nix extensions";
+                installation_mode = "blocked";
+              };
+
+          } // lib.foldr (e: ret:
+              ret // {
+                "${e.extid}" = {
+                  installation_mode = "allowed";
+                };
+              }
+            ) {} extensions;
+          } //
+          {
+            Extensions = {
+              Install = lib.foldr (e: ret:
+                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+                ) [] extensions;
+            };
+          }
+        // extraPolicies;
+      };
+
+      mozillaCfg =  writeText "mozilla.cfg" ''
+        // First line must be a comment
+
+        // Disables addon signature checking
+        // to be able to install addons that do not have an extid
+        // Security is maintained because only user whitelisted addons
+        // with a checksum can be installed
+        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
+        ${extraPrefs}
+      '';
+
+      #############################
+      #                           #
+      #   END EXTRA PREF CHANGES  #
+      #                           #
+      #############################
 
     in stdenv.mkDerivation {
       inherit pname version;
@@ -93,10 +172,10 @@ let
         exec = "${browserName}${nameSuffix} %U";
         inherit icon;
         comment = "";
-        desktopName = "${desktopName}${nameSuffix}${lib.optionalString gdkWayland " (Wayland)"}";
+        desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
-        categories = "Application;Network;WebBrowser;";
-        mimeType = stdenv.lib.concatStringsSep ";" [
+        categories = "Network;WebBrowser;";
+        mimeType = lib.concatStringsSep ";" [
           "text/html"
           "text/xml"
           "application/xhtml+xml"
@@ -110,6 +189,7 @@ let
       nativeBuildInputs = [ makeWrapper lndir ];
       buildInputs = lib.optional (browser ? gtk3) browser.gtk3;
 
+
       buildCommand = lib.optionalString stdenv.isDarwin ''
         mkdir -p $out/Applications
         cp -R --no-preserve=mode,ownership ${browser}/Applications/${browserName}.app $out/Applications
@@ -121,12 +201,72 @@ let
             exit 1
         fi
 
-        makeWrapper "$(readlink -v --canonicalize-existing "${browser}${browser.execdir or "/bin"}/${browserName}")" \
+        #########################
+        #                       #
+        #   EXTRA PREF CHANGES  #
+        #                       #
+        #########################
+        # Link the runtime. The executable itself has to be copied,
+        # because it will resolve paths relative to its true location.
+        # Any symbolic links have to be replicated as well.
+        cd "${browser}"
+        find . -type d -exec mkdir -p "$out"/{} \;
+
+        find . -type f \( -not -name "${browserName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
+
+        find . -type f -name "${browserName}" -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+          chmod a+rwx "$out/$f"
+        done
+
+        # fix links and absolute references
+        cd "${browser}"
+
+        find . -type l -print0 | while read -d $'\0' l; do
+          target="$(readlink "$l" | ${replace}/bin/replace-literal -es -- "${browser}" "$out")"
+          ln -sfT "$target" "$out/$l"
+        done
+
+        # This will not patch binaries, only "text" files.
+        # Its there for the wrapper mostly.
+        cd "$out"
+        ${replace}/bin/replace-literal -esfR -- "${browser}" "$out"
+
+        # create the wrapper
+
+        executablePrefix="$out${browser.execdir or "/bin"}"
+        executablePath="$executablePrefix/${browserName}"
+
+        if [ ! -x "$executablePath" ]
+        then
+            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
+            exit 1
+        fi
+
+        if [ ! -L "$executablePath" ]
+        then
+          # Careful here, the file at executablePath may already be
+          # a wrapper. That is why we postfix it with -old instead
+          # of -wrapped.
+          oldExe="$executablePrefix"/".${browserName}"-old
+          mv "$executablePath" "$oldExe"
+        else
+          oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
+        fi
+
+        if [ ! -x "${browser}${browser.execdir or "/bin"}/${browserName}" ]
+        then
+            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
+            exit 1
+        fi
+
+        makeWrapper "$oldExe" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
             --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
+            --prefix PATH ':' "${xdg-utils}/bin" \
             --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
@@ -134,13 +274,18 @@ let
             --set SNAP_NAME "firefox" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
-            ${lib.optionalString gdkWayland ''
-              --set GDK_BACKEND "wayland" \
+            ${lib.optionalString forceWayland ''
+              --set MOZ_ENABLE_WAYLAND "1" \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
                 ''
             }
+        #############################
+        #                           #
+        #   END EXTRA PREF CHANGES  #
+        #                           #
+        #############################
 
         if [ -e "${browser}/share/icons" ]; then
             mkdir -p "$out/share"
@@ -162,9 +307,46 @@ let
             ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
 
+        mkdir -p $out/lib/mozilla/pkcs11-modules
+        for ext in ${toString pkcs11Modules}; do
+            ln -sLt $out/lib/mozilla/pkcs11-modules $ext/lib/mozilla/pkcs11-modules/*
+        done
+
         # For manpages, in case the program supplies them
         mkdir -p $out/nix-support
         echo ${browser} > $out/nix-support/propagated-user-env-packages
+
+
+        #########################
+        #                       #
+        #   EXTRA PREF CHANGES  #
+        #                       #
+        #########################
+        # user customization
+        mkdir -p $out/lib/${firefoxLibName}
+
+        # creating policies.json
+        mkdir -p "$out/lib/${firefoxLibName}/distribution"
+
+        POL_PATH="$out/lib/${firefoxLibName}/distribution/policies.json"
+        rm -f "$POL_PATH"
+        cat ${policiesJson} >> "$POL_PATH"
+
+        # preparing for autoconfig
+        mkdir -p "$out/lib/${firefoxLibName}/defaults/pref"
+
+        echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
+        echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
+
+        cat > "$out/lib/${firefoxLibName}/mozilla.cfg" < ${mozillaCfg}
+
+        mkdir -p $out/lib/${firefoxLibName}/distribution/extensions
+
+        #############################
+        #                           #
+        #   END EXTRA PREF CHANGES  #
+        #                           #
+        #############################
       '';
 
       preferLocalBuild = true;

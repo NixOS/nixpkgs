@@ -29,7 +29,7 @@ let
 
     with open('${cfg.workerPassFile}', 'r', encoding='utf-8') as passwd_file:
         passwd = passwd_file.read().strip('\r\n')
-    keepalive = 600
+    keepalive = ${toString cfg.keepalive}
     umask = None
     maxdelay = 300
     numcpus = None
@@ -114,6 +114,15 @@ in {
         default = "localhost:9989";
         type = types.str;
         description = "Specifies the Buildbot Worker connection string.";
+      };
+
+      keepalive = mkOption {
+        default = 600;
+        type = types.int;
+        description = "
+          This is a number that indicates how frequently keepalive messages should be sent
+          from the worker to the buildmaster, expressed in seconds.
+        ";
       };
 
       package = mkOption {

@@ -1,20 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, libsamplerate, libsndfile, fftw
+{ lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
 , vamp-plugin-sdk, ladspaH }:
 
-stdenv.mkDerivation {
-  name = "rubberband-1.8.1";
+stdenv.mkDerivation rec {
+  pname = "rubberband";
+  version = "1.9.0";
 
   src = fetchurl {
-    url = "http://code.breakfastquay.com/attachments/download/23/rubberband-1.8.1.tar.bz2";
-    sha256 = "0x9bm2nqd6w2f35w2sqcp7h5z34i4w7mdg53m0vzjhffnnq6637z";
+    url = "https://breakfastquay.com/files/releases/${pname}-${version}.tar.bz2";
+    sha256 = "4f5b9509364ea876b4052fc390c079a3ad4ab63a2683aad09662fb905c2dc026";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";
-    homepage = "https://www.breakfastquay.com/rubberband/index.html";
+    homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];

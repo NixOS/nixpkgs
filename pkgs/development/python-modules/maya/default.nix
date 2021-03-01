@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch, buildPythonPackage
+{ lib, fetchPypi, fetchpatch, buildPythonPackage
 , dateparser, humanize, pendulum, ruamel_yaml, tzlocal }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Datetimes for Humans";
     homepage = "https://github.com/kennethreitz/maya";
     license = licenses.mit;

@@ -1,16 +1,17 @@
-{ fetchFromGitHub, stdenv, cmake, pkgconfig, python3, alsaLib
+{ fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "teeworlds";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
     rev = version;
-    sha256 = "1llrzcc9p8pswk58rj4qh4g67nlji8q2kw3hxh3qpli85jvkdmyx";
+    sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
     fetchSubmodules = true;
   };
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig icoutils ];
+  nativeBuildInputs = [ cmake pkg-config icoutils ];
 
   buildInputs = [
     python3 alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
     install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
   '';
 
+  passthru.tests.teeworlds = nixosTests.teeworlds;
+
   meta = {
     description = "Retro multiplayer shooter game";
 
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://teeworlds.com/";
     license = "BSD-style, see `license.txt'";
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.linux;
   };
 }

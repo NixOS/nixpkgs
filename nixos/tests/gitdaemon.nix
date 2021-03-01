@@ -7,7 +7,7 @@ let
 in {
   name = "gitdaemon";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ tilpner ];
   };
 
@@ -54,6 +54,9 @@ in {
 
     with subtest("git daemon starts"):
         server.wait_for_unit("git-daemon.service")
+
+    server.wait_for_unit("network-online.target")
+    client.wait_for_unit("network-online.target")
 
     with subtest("client can clone project.git"):
         client.succeed(

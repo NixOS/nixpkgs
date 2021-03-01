@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, yojson, ulex, pprint, fix, functory }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, yojson, ulex, pprint, fix, functory }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "mezzo is not available for OCaml ${ocaml.version}"
 else
 
 let
-  check-ocaml-version = with stdenv.lib; versionAtLeast (getVersion ocaml);
+  check-ocaml-version = with lib; versionAtLeast (getVersion ocaml);
 in
 
 assert check-ocaml-version "4";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild yojson menhir ulex pprint fix functory ];
 
   # Sets warning 3 as non-fatal
-  prePatch = stdenv.lib.optionalString (check-ocaml-version "4.02") ''
+  prePatch = lib.optionalString (check-ocaml-version "4.02") ''
     substituteInPlace myocamlbuild.pre.ml \
     --replace '@1..3' '@1..2+3'
   '';
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     cp mezzo $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://protz.github.io/mezzo/";
     description = "A programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
     license = licenses.gpl2;

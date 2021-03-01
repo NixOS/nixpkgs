@@ -25,9 +25,12 @@ stdenv.mkDerivation {
   installPhase = ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "$p:${lib.makeLibraryPath [ stdenv.cc.cc ]}" $1
+      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc ]}:\$ORIGIN/" $1
     }
-    fixRunPath lib64/libcudnn.so
+
+    for lib in lib64/lib*.so; do
+      fixRunPath $lib
+    done
 
     mkdir -p $out
     cp -a include $out/include
@@ -37,7 +40,9 @@ stdenv.mkDerivation {
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
   postFixup = ''
-    addOpenGLRunpath $out/lib/lib*.so
+    for lib in $out/lib/lib*.so; do
+      addOpenGLRunpath $lib
+    done
   '';
 
   propagatedBuildInputs = [
@@ -49,7 +54,7 @@ stdenv.mkDerivation {
     majorVersion = lib.versions.major version;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
     license = licenses.unfree;

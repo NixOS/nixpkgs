@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, windows }:
+{ lib, stdenv, fetchurl, openssl, zlib, windows }:
 
 stdenv.mkDerivation rec {
   pname = "libssh2";
@@ -12,18 +12,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   buildInputs = [ openssl zlib ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
   patches = [
-    # not able to use fetchpatch here: infinite recursion
-    (fetchurl {
-      name = "CVE-2019-17498.patch";
-      url = "https://github.com/libssh2/libssh2/pull/402.patch";
-      sha256 = "1n9s2mcz5dkw0xpm3c5x4hzj8bar4i6z0pr1rmqjplhfg888vdvc";
-    })
+    # Not able to use fetchpatch here: infinite recursion
+    ./CVE-2019-17498.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client-side C library implementing the SSH2 protocol";
     homepage = "https://www.libssh2.org";
     platforms = platforms.all;

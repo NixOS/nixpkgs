@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, cmake
+{ lib, buildPythonPackage, fetchFromGitHub, python, cmake
 , pyqt5, numpy, scipy, shapely, libarcus, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
-  version = "4.5.0";
+  version = "4.7.1";
   pname = "uranium";
   format = "other";
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "1l8fwj521irla42bdbw298d3c5rjpn1nm9xhjnx7hidbqixr5d27";
+    sha256 = "1h5d3scy3cnbyhh0pbavflpqklhn2lbp7hl193rc5gx8yzr3mqbh";
   };
 
   disabled = pythonOlder "3.5.0";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
      UM/Application.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python framework for building Desktop applications";
     homepage = "https://github.com/Ultimaker/Uranium";
     license = licenses.lgpl3Plus;

@@ -1,24 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, gettext
-, guile, guile-reader, guile-lib
-, ploticus, imagemagick
-, ghostscript, transfig
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, guile
+, guile-reader
+, guile-lib
+, ploticus
+, imagemagick
+, ghostscript
+, transfig
 , enableEmacs ? false, emacs ? null
 , enableLout ? true, lout ? null
 , enableTex ? true, tex ? null
-, makeWrapper }:
+, makeWrapper
+}:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
-
+let
   pname = "skribilo";
-  version = "0.9.4";
+  version = "0.9.5";
+  inherit (lib) optional;
+in stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchurl {
     url = "http://download.savannah.nongnu.org/releases/skribilo/${pname}-${version}.tar.gz";
-    sha256 = "06ywnfjfa9sxrzdszb5sryzg266380g519cm64kq62sskzl7zmnf";
+    sha256 = "sha256-AIJqIcRjT7C0EO6J60gGjERdgAglh0ZU49U9XKPwvwk=";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ gettext guile ploticus imagemagick ghostscript transfig ]
   ++ optional enableEmacs emacs
@@ -33,7 +42,7 @@ stdenv.mkDerivation rec {
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/share/guile/site:${guile-lib}/share/guile/site:${guile-reader}/share/guile/site"
   '';
 
-  meta = {
+  meta = with lib;{
     description = "The Ultimate Document Programming Framework";
     longDescription = ''
       Skribilo is a free document production tool that takes a

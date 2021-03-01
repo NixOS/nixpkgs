@@ -1,8 +1,13 @@
-{ stdenv, fetchFromGitHub, cmake, libusb1, ninja, pkgconfig }:
+{ stdenv, config, lib, fetchFromGitHub, cmake, libusb1, ninja, pkg-config, gcc
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, enablePython ? false, pythonPackages ? null }:
+
+assert cudaSupport -> cudatoolkit != null;
+assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.33.1";
+  version = "2.41.0";
 
   outputs = [ "out" "dev" ];
 
@@ -10,22 +15,43 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04macplj3k2sdpf1wdjm6gsghak5dzfhi2pmr47qldh2sy2zz0a3";
+    sha256 = "0ngv9fgja72vg7hq1aiwpa7x4dhniawhpd8mqm85pqkjxiph8s1k";
   };
 
   buildInputs = [
     libusb1
+    gcc.cc.lib
+  ] ++ lib.optional cudaSupport cudatoolkit
+    ++ lib.optional enablePython pythonPackages.python;
+
+  patches = lib.optionals enablePython [
+    ./py_sitepackage_dir.patch
   ];
 
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
   ];
 
-  cmakeFlags = [ "-DBUILD_EXAMPLES=false" ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=ON"
+    "-DBUILD_GRAPHICAL_EXAMPLES=OFF"
+    "-DBUILD_GLSL_EXTENSIONS=OFF"
+  ] ++ lib.optionals enablePython [
+    "-DBUILD_PYTHON_BINDINGS:bool=true"
+    "-DXXNIX_PYTHON_SITEPACKAGES=${placeholder "out"}/${pythonPackages.python.sitePackages}"
+  ] ++ lib.optional cudaSupport "-DBUILD_WITH_CUDA:bool=true";
 
-  meta = with stdenv.lib; {
+  # ensure python package contains its __init__.py. for some reason the install
+  # script does not do this, and it's questionable if intel knows it should be
+  # done
+  # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
+  postInstall = lib.optionalString enablePython  ''
+    cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
+  '';
+
+  meta = with lib; {
     description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;

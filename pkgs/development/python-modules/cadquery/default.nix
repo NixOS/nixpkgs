@@ -1,24 +1,28 @@
 { lib
-  , buildPythonPackage
-  , isPy3k
-  , pythonOlder
-  , fetchFromGitHub
-  , pyparsing
-  , opencascade
-  , stdenv
-  , python
-  , cmake
-  , swig
-  , ninja
-  , smesh
-  , freetype
-  , libGL
-  , libGLU
-  , libX11
-  , six
+, buildPythonPackage
+, isPy3k
+, pythonOlder
+, pythonAtLeast
+, fetchFromGitHub
+, pyparsing
+, opencascade
+, stdenv
+, python
+, cmake
+, swig
+, smesh
+, freetype
+, libGL
+, libGLU
+, libX11
+, six
+, pytest
+, makeFontsConf
+, freefont_ttf
+, Cocoa
 }:
 
-let 
+let
   pythonocc-core-cadquery = stdenv.mkDerivation {
     pname = "pythonocc-core-cadquery";
     version = "0.18.2";
@@ -31,10 +35,9 @@ let
       sha256 = "07zmiiw74dyj4v0ar5vqkvk30wzcpjjzbi04nsdk5mnlzslmyi6c";
     };
 
-    nativeBuildInputs = [ 
+    nativeBuildInputs = [
       cmake
       swig
-      ninja
     ];
 
     buildInputs = [
@@ -45,7 +48,7 @@ let
       libGL
       libGLU
       libX11
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
     propagatedBuildInputs = [
       six
@@ -63,27 +66,34 @@ let
 in
   buildPythonPackage rec {
     pname = "cadquery";
-    version = "2.0RC0";
-  
+    version = "2.0";
+
     src = fetchFromGitHub {
       owner = "CadQuery";
       repo = pname;
       rev = version;
-      sha256 = "1xgd00rih0gjcnlrf9s6r5a7ypjkzgf2xij2b6436i76h89wmir3";
+      sha256 = "1n63b6cjjrdwdfmwq0zx1xabjnhndk9mgfkm4w7z9ardcfpvg84l";
     };
-  
+
     buildInputs = [
       opencascade
     ];
-  
+
     propagatedBuildInputs = [
       pyparsing
       pythonocc-core-cadquery
     ];
-  
-    # Build errors on 2.7 and >=3.8 (officially only supports 3.6 and 3.7).
-    disabled = !(isPy3k && (pythonOlder "3.8"));
-  
+
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [ freefont_ttf ];
+    };
+
+    checkInputs = [
+      pytest
+    ];
+
+    disabled = pythonOlder "3.6" || pythonAtLeast "3.8";
+
     meta = with lib; {
       description = "Parametric scripting language for creating and traversing CAD models";
       homepage = "https://github.com/CadQuery/cadquery";

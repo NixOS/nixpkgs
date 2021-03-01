@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ant, jdk, makeWrapper, jre, coreutils, which }:
+{ lib, stdenv, fetchgit, ant, jdk, makeWrapper, jre, coreutils, which }:
 
 stdenv.mkDerivation rec {
   pname = "projectlibre";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     cp -R $resourcesPath/samples/* $out/share/projectlibre/samples
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.projectlibre.com/";
+  meta = with lib; {
+    homepage = "https://www.projectlibre.com/";
     description = "Project-Management Software similar to MS-Project";
     maintainers = [ maintainers.Mogria ];
     license = licenses.cpal10;

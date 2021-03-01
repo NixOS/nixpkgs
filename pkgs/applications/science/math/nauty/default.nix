@@ -4,21 +4,19 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "26r12";
+  version = "27r1";
   src = fetchurl {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";
-    sha256 = "1p4mxf8q5wm47nxyskxbqwa5p1vvkycv1zgswvnk9nsn6vff0al6";
+    sha256 = "0xsfqfcknbd6g6wzpa5l7crmmk3bf3zjh37rhylq6b20dqcmvjkn";
   };
   outputs = [ "out" "dev" ];
-  configureFlags = {
+  configureFlags = [
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
-    default        = [ "--disable-clz" "--disable-popcnt" ];
-    westmere       = [ "--disable-clz" ];
-    sandybridge    = [ "--disable-clz" ];
-    ivybridge      = [ "--disable-clz" ];
-  }.${stdenv.hostPlatform.platform.gcc.arch or "default"} or [];
+    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-popcnt"
+    "--${if stdenv.hostPlatform.sse4_aSupport then "enable" else "disable"}-clz"
+  ];
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}
 
@@ -33,10 +31,14 @@ stdenv.mkDerivation rec {
   checkTarget = "checks";
   meta = with lib; {
     inherit version;
-    description = ''Programs for computing automorphism groups of graphs and digraphs'';
+    description = "Programs for computing automorphism groups of graphs and digraphs";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
+    # I'm not sure if the filename will remain the same for future changelog or
+    # if it will track changes to minor releases. Lets see. Better than nothing
+    # in any case.
+    changelog = "http://pallini.di.uniroma1.it/changes24-27.txt";
     homepage = "http://pallini.di.uniroma1.it/";
   };
 }

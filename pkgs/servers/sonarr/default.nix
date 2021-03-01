@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, ... }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
   pname = "sonarr";
@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \
       --add-flags "$out/bin/NzbDrone.exe" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
 
   meta = {
     description = "Smart PVR for newsgroup and bittorrent users";
     homepage = "https://sonarr.tv/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.fadenb ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ fadenb purcell ];
+    platforms = lib.platforms.all;
   };
 }

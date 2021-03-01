@@ -1,15 +1,15 @@
 {
   mkDerivation, lib,
   extra-cmake-modules,
-  ffmpeg, kio
+  ffmpeg_3, kio
 }:
 
 mkDerivation {
-  name = "ffmpegthumbs";
+  pname = "ffmpegthumbs";
   meta = {
     license = with lib.licenses; [ gpl2 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ ffmpeg kio ];
+  buildInputs = [ ffmpeg_3 kio ];
 }

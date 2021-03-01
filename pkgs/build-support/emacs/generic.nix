@@ -1,6 +1,6 @@
 # generic builder for Emacs packages
 
-{ lib, stdenv, emacs, texinfo }:
+{ lib, stdenv, emacs, texinfo, ... }:
 
 with lib;
 
@@ -54,6 +54,19 @@ stdenv.mkDerivation ({
   doCheck = false;
 
   meta = defaultMeta // meta;
+}
+
+// lib.optionalAttrs (emacs.nativeComp or false) {
+
+  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+
+  addEmacsNativeLoadPath = true;
+
+  postInstall = ''
+    find $out/share/emacs -type f -name '*.el' -print0 \
+      | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c \
+          "emacs --batch --eval=\"(add-to-list 'comp-eln-load-path \\\"$out/share/emacs/native-lisp/\\\")\" -f batch-native-compile {} || true"
+  '';
 }
 
 // removeAttrs args [ "buildInputs" "packageRequires"

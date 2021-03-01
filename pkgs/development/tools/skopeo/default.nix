@@ -1,65 +1,54 @@
-{ stdenv
-, lib
-, buildGoPackage
+{ lib
+, stdenv
+, buildGoModule
 , fetchFromGitHub
-, runCommand
 , gpgme
-, libgpgerror
 , lvm2
 , btrfs-progs
 , pkg-config
-, libselinux
 , go-md2man
+, installShellFiles
+, makeWrapper
+, fuse-overlayfs
 }:
 
-with stdenv.lib;
-
-let
-  version = "0.2.0";
+buildGoModule rec {
+  pname = "skopeo";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "09zqzrw6f1s6kaknnj3hra3xz4nq6y86vmw5vk8p4f6g7cwakg1x";
+    sha256 = "1y9pmijazbgxzriymrm7zrifmkd1x1wad9b3zjcj7zwr6c999dhg";
   };
 
-  defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
+  outputs = [ "out" "man" ];
 
-  goPackagePath = "github.com/containers/skopeo";
+  vendorSha256 = null;
 
-in
-buildGoPackage {
-  pname = "skopeo";
-  inherit version;
-  inherit src goPackagePath;
+  doCheck = false;
 
-  outputs = [ "bin" "man" "out" ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
-  excludedPackages = "integration";
+  buildInputs = [ gpgme ]
+  ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
-  nativeBuildInputs = [ pkg-config (lib.getBin go-md2man) ];
-  buildInputs = [ gpgme ] ++ lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
-
-  buildFlagsArray = ''
-    -ldflags=
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/v5/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/v5/internal/tmpdir.unixTempDirForBigFiles=/tmp
+  buildPhase = ''
+    patchShebangs .
+    make bin/skopeo docs
   '';
 
-  preBuild = ''
-    export CGO_CFLAGS="$CFLAGS"
-    export CGO_LDFLAGS="$LDFLAGS"
+  installPhase = ''
+    install -Dm755 bin/skopeo -t $out/bin
+    installManPage docs/*.[1-9]
+    installShellCompletion --bash completions/bash/skopeo
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/skopeo \
+      --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
   '';
 
-  postBuild = ''
-    # depends on buildGoPackage not changing …
-    pushd ./go/src/${goPackagePath}
-    make install-docs MANINSTALLDIR="$man/share/man"
-    popd
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/containers/skopeo";
     maintainers = with maintainers; [ lewo ] ++ teams.podman.members;

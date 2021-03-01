@@ -1,32 +1,36 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db53, boost
-, zlib, miniupnpc, qtbase ? null , qttools ? null, utillinux, protobuf, qrencode, libevent
-, withGui }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, cmake, openssl, db53, boost
+, zlib, miniupnpc, qtbase ? null , qttools ? null, util-linux, protobuf, qrencode, libevent
+, withGui, python3, jemalloc, zeromq4 }:
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-abc-" + version;
-  version = "0.21.3";
+  version = "0.21.13";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "1pzdgghbsss2qjfgl42lvkbs5yc5q6jnzqnp24lljmrh341g2zn4";
+    sha256 = "1x8xcdi1vcskggk9bqkwr3ah4vi9b7sj2h8hf7spac6dvz8lmzav";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db53 boost zlib
-                  miniupnpc utillinux protobuf libevent ]
+  nativeBuildInputs = [ pkg-config cmake ];
+  buildInputs = [ openssl db53 boost zlib python3 jemalloc zeromq4
+                  miniupnpc util-linux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt5" ];
+  cmakeFlags = optionals (!withGui) [
+    "-DBUILD_BITCOIN_QT=OFF"
+  ];
 
-  enableParallelBuilding = true;
+  # many of the generated scripts lack execute permissions
+  postConfigure = ''
+    find ./. -type f -iname "*.sh" -exec chmod +x {} \;
+  '';
 
   meta = {
     description = "Peer-to-peer electronic cash system (Cash client)";

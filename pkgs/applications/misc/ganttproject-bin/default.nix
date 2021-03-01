@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeDesktopItem, makeWrapper
+{ lib, stdenv, fetchzip, makeDesktopItem, makeWrapper
 , jre
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       desktopName = "GanttProject";
       genericName = "Shedule and manage projects";
       comment = meta.description;
-      categories = "Office;Application;";
+      categories = "Office;";
     };
 
     javaOptions = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     cp -rv "${desktopItem}/share/applications" "$out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Project scheduling and management";
     homepage = "https://www.ganttproject.biz/";
     downloadPage = "https://www.ganttproject.biz/download";

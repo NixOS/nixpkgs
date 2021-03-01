@@ -19,7 +19,7 @@
       buildInputs = [ pkgs.makeWrapper ];
       installPhase = "install -m755 -D ${./create-trivial-project.sh} $out/bin/create-trivial-project.sh";
       postFixup = ''
-        wrapProgram "$out/bin/create-trivial-project.sh" --prefix PATH ":" ${pkgs.stdenv.lib.makeBinPath [ pkgs.curl ]} --set EXPR_PATH ${trivialJob}
+        wrapProgram "$out/bin/create-trivial-project.sh" --prefix PATH ":" ${pkgs.lib.makeBinPath [ pkgs.curl ]} --set EXPR_PATH ${trivialJob}
       '';
     };
   in {
@@ -37,6 +37,7 @@
     };
     services.postfix.enable = true;
     nix = {
+      distributedBuilds = true;
       buildMachines = [{
         hostName = "localhost";
         systems = [ system ];

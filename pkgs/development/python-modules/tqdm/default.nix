@@ -5,30 +5,30 @@
 , coverage
 , glibcLocales
 , flake8
+, setuptools_scm
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.42.1";
+  version = "4.54.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "251ee8440dbda126b8dfa8a7c028eb3f13704898caaef7caa699b35e119301e2";
+    sha256 = "1x9chlh3msikddmq8p8p5s5kgqqs48bclxgzz3vb9ygcwjimidiq";
   };
 
-  checkInputs = [ nose coverage glibcLocales flake8 ];
+  nativeBuildInputs = [
+    setuptools_scm
+  ];
 
-  postPatch = ''
-    # Remove performance testing.
-    # Too sensitive for on Hydra.
-    rm tqdm/tests/tests_perf.py
-  '';
+  checkInputs = [ nose coverage glibcLocales flake8 pytestCheckHook ];
+
+  # Remove performance testing.
+  # Too sensitive for on Hydra.
+  PYTEST_ADDOPTS = "-k \"not perf\"";
 
   LC_ALL="en_US.UTF-8";
-
-#   doCheck = !stdenv.isDarwin;
-  # Test suite is too big and slow.
-  doCheck = false;
 
   meta = {
     description = "A Fast, Extensible Progress Meter";

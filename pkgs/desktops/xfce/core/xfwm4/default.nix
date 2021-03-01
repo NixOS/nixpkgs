@@ -5,9 +5,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfwm4";
-  version = "4.14.0"; # TODO: remove xfce4-14 alias when this gets bumped
+  version = "4.14.6";
 
-  sha256 = "1z5aqij2d8n9wnha88b0qzkvss54jvqs8w1w5m3mzjl4c9mn9n8m";
+  sha256 = "1ml5b4nn8laqhjihfqqsbjn66525abhin5d32bplh1k9yfxw4xi4";
 
   nativeBuildInputs = [ exo librsvg ];
 

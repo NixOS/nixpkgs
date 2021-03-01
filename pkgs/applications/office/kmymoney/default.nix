@@ -15,17 +15,15 @@
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
-  version = "5.0.8";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "1h6l01a08f1xgk4dfpndl7rmgbp9npm58qi760jwl2gggprwwsxc";
+    sha256 = "sha256-33ufeOhZb5nSgpXKc4cI8GVe4Fd4nf2SHHsbq5ZXgpg=";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
   env.NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools python2

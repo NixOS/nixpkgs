@@ -1,40 +1,58 @@
-{ stdenv, buildFHSUserEnv, writeScript, pkgs
-, bash, radare2, jq, squashfsTools, ripgrep
-, coreutils, libarchive, file, runtimeShell, pv
-, lib, runCommand }:
+{ lib
+
+, bash
+, binutils-unwrapped
+, coreutils
+, gawk
+, libarchive
+, pv
+, squashfsTools
+, buildFHSUserEnv
+, pkgs
+}:
 
 rec {
   appimage-exec = pkgs.substituteAll {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = with pkgs; lib.makeBinPath [ pv ripgrep file radare2 libarchive jq squashfsTools coreutils bash ];
+    path = lib.makeBinPath [
+      bash
+      binutils-unwrapped
+      coreutils
+      gawk
+      libarchive
+      pv
+      squashfsTools
+    ];
   };
 
-  extract = { name, src }: runCommand "${name}-extracted" {
-    buildInputs = [ appimage-exec ];
-  } ''
-    appimage-exec.sh -x $out ${src}
-  '';
+  extract = { name, src }: pkgs.runCommand "${name}-extracted" {
+      buildInputs = [ appimage-exec ];
+    } ''
+      appimage-exec.sh -x $out ${src}
+    '';
 
   # for compatibility, deprecated
   extractType1 = extract;
   extractType2 = extract;
   wrapType1 = wrapType2;
 
-  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
-    inherit name;
+  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv
+    (defaultFhsEnvArgs // {
+      inherit name;
 
-    targetPkgs = pkgs: [ appimage-exec ]
-      ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
+      targetPkgs = pkgs: [ appimage-exec ]
+        ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-    runScript = "appimage-exec.sh -w ${src}";
-  } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
+      runScript = "appimage-exec.sh -w ${src}";
+    } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
-    src = extract { inherit name src; };
-  });
+  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
+    (args // {
+      inherit name extraPkgs;
+      src = extract { inherit name src; };
+    });
 
   defaultFhsEnvArgs = {
     name = "appimage-env";
@@ -48,7 +66,7 @@ rec {
       xorg.xrandr
       which
       perl
-      xdg_utils
+      xdg-utils
       iana-etc
       krb5
     ];
@@ -67,6 +85,7 @@ rec {
 
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-base
       libdrm
       xorg.xkeyboardconfig
       xorg.libpciaccess
@@ -102,7 +121,6 @@ rec {
       libusb1
       udev
       dbus-glib
-      libav
       atk
       at-spi2-atk
       libudev0-shim
@@ -145,8 +163,6 @@ rec {
       SDL_mixer
       SDL2_ttf
       SDL2_mixer
-      gstreamer
-      gst-plugins-base
       libappindicator-gtk2
       libcaca
       libcanberra

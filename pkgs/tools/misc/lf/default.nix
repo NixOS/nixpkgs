@@ -2,30 +2,20 @@
 
 buildGoModule rec {
   pname = "lf";
-  version = "14";
+  version = "20";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "0kl9yrgph1i0jbxhlg3k0411436w80xw1s8dzd7v7h2raygkb4is";
+    sha256 = "056g2g503ppbqqbq5nk90sl8ki1q4fixdc25a6wv15gm1inxrb4b";
   };
 
-  modSha256 = "1c6c6qg8yrhdhqsnqj3jw3x2hi8vrhfm47cp9xlkfnjfrz3nk6jp";
+  vendorSha256 = "12njqs39ympi2mqal1cdn0smp80yzcs8xmca1iih8pbmxv51r2gg";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # TODO: Setting buildFlags probably isn't working properly. I've tried a few
-  # variants, e.g.:
-  # - buildFlags = [ "-ldflags" "\"-s" "-w"" ""-X 'main.gVersion=${version}'\"" ];
-  # - buildFlags = [ "-ldflags" "\\\"-X" "${goPackagePath}/main.gVersion=${version}\\\"" ];
-  # Override the build phase (to set buildFlags):
-  buildPhase = ''
-    runHook preBuild
-    runHook renameImports
-    go install -ldflags="-s -w -X main.gVersion=r${version}"
-    runHook postBuild
-  '';
+  buildFlagsArray = [ "-ldflags=-s -w -X main.gVersion=r${version}" ];
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop

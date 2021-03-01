@@ -1,5 +1,5 @@
 { stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
-, perl, XMLLibXML, XMLLibXSLT, zlib
+, perl, XMLLibXML, XMLLibXSLT, zlib, ruby
 , enableStoneSense ? false,  allegro5, libGLU, libGL
 , enableTWBT ? true, twbt
 , SDL
@@ -53,10 +53,10 @@ let
       prerelease = true;
     };
     "0.47.04" = {
-      dfHackRelease = "0.47.04-alpha0";
-      sha256 = "07056k6717mqim9skwjprqplj8jmmli6g4p2c72c8000jwnn2hjy";
-      xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd50aa";
-      prerelease = true;
+      dfHackRelease = "0.47.04-r2";
+      sha256 = "18ppn1dqaxi6ahjzsvb9kw70rvca106a1hibhzc4rxmraypnqb89";
+      xmlRev = "036b662a1bbc96b4911f3cbe74dfa1243b6459bc";
+      prerelease = false;
     };
   };
 
@@ -109,6 +109,19 @@ let
     };
 
     patches = [ ./fix-stonesense.patch ];
+
+    # As of
+    # https://github.com/DFHack/dfhack/commit/56e43a0dde023c5a4595a22b29d800153b31e3c4,
+    # dfhack gets its goodies from the directory above the Dwarf_Fortress
+    # executable, which leads to stock Dwarf Fortress and not the built
+    # environment where all the dfhack resources are symlinked to (typically
+    # ~/.local/share/df_linux). This causes errors like `tweak is not a
+    # recognized command` to be reported and dfhack to lose some of its
+    # functionality.
+    postPatch = ''
+      sed -i 's@cached_path = path_string.*@cached_path = getenv("DF_DIR");@' library/Process-linux.cpp
+    '';
+
     nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
     # We don't use system libraries because dfhack needs old C++ ABI.
     buildInputs = [ zlib SDL ]
@@ -127,7 +140,12 @@ let
     cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
               ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
 
-    enableParallelBuilding = true;
+    # dfhack expects an unversioned libruby.so to be present in the hack
+    # subdirectory for ruby plugins to function.
+    postInstall = ''
+      ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
+    '';
+
   };
 in
 
@@ -138,7 +156,7 @@ buildEnv {
 
   paths = [ dfhack ] ++ lib.optionals enableTWBT [ twbt.lib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
     homepage = "https://github.com/DFHack/dfhack/";
     license = licenses.zlib;

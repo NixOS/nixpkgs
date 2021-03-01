@@ -1,14 +1,14 @@
-{ stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
+{ lib, stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "moreutils";
-  version = "0.63";
+  version = "0.65";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
     rev = "refs/tags/${version}";
-    sha256 = "17sszmcdck4w01hgcq7vd25p2iw3yzvjwx1yf20jg85gzs1dplrd";
+    sha256 = "17r80xs756c5vv4ghh901c8abraqqfp7ncagv9ys4il3jngfqbrb";
   };
 
   preBuild = ''

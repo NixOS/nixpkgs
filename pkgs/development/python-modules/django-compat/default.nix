@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python,
+{ lib, buildPythonPackage, fetchFromGitHub, python,
   django, six
 }:
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, 1.9, 1.10 and 1.11";
     homepage = "https://github.com/arteria/django-compat";
     license = licenses.mit;

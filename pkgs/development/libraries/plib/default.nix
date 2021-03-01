@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, libGLU, libGL, freeglut, SDL
+{ fetchurl, fetchpatch, lib, stdenv, libGLU, libGL, freeglut, SDL
 , libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
       GLUT, or FLTK instead of PLIB's 'PW' windowing library, you can.
     '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     homepage = "http://plib.sourceforge.net/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

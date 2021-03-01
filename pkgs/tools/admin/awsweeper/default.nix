@@ -2,20 +2,24 @@
 
 buildGoModule rec {
   pname = "awsweeper";
-  version = "0.6.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
-    owner = "cloudetc";
+    owner = "jckuester";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sbd1jgzz3rxxwgbni885zvvcznfc51imaxwv7f064290iqlbrv4";
+    sha256 = "sha256-fpWoLFSwSVxaiWyVMSmQTd3o/zOySUXNM2YhxMQ7nsA=";
   };
 
-  modSha256 = "14yvf0svh7xqpc2y7xr94pc6r7d3iv2nsr8qs3f5q29hdc5hv3fs";
+  vendorSha256 = "sha256-1u1mzANLlWduAQF1GUX7BJSyYlSZwNQISqKwbyRlGog=";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/jckuester/awsweeper/internal.version=${version} -X github.com/jckuester/awsweeper/internal.commit=${src.rev} -X github.com/jckuester/awsweeper/internal.date=unknown" ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "A tool to clean out your AWS account";
-    homepage = "https://github.com/cloudetc/awsweeper/";
+    homepage = "https://github.com/jckuester/awsweeper";
     license = licenses.mpl20;
     maintainers = [ maintainers.marsam ];
   };

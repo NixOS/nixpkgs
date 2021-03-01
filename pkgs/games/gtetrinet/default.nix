@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, intltool, pkgconfig, libgnome, libgnomeui, GConf }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, intltool, pkg-config, libgnome, libgnomeui, GConf }:
 
 stdenv.mkDerivation {
   name = "gtetrinet-0.7.11";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1y05x8lfyxvkjg6c87cfd0xxmb22c88scx8fq3gah7hjy5i42v93";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
 
   buildInputs = [ libgnome libgnomeui ];
 
@@ -31,14 +31,14 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Client for Tetrinet, a multiplayer online Tetris game.";
+    description = "Client for Tetrinet, a multiplayer online Tetris game";
     longDescription = ''
       GTetrinet is a client program for Tetrinet, a multiplayer tetris game
       that is played over the internet.
     '';
     homepage = "http://gtetrinet.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.chris-martin ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.chris-martin ];
   };
 }

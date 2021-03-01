@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
+{ stdenv, lib, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
@@ -10,19 +10,22 @@
 
 let
   major = "11";
-  update = ".0.6";
-  build = "ga";
+  minor = "0";
+  update = "9";
+  build = "11";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}-${build}";
+    version = "${major}.${minor}.${update}+${build}";
 
-    src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1w6n0cnz9izpjb3sc870q7a0jz85a6c7fiszymxin10cnsajkzir";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jdk${major}u";
+      rev = "jdk-${version}";
+      sha256 = "11j2rqz9nag5y562g99py4p72f2kv4wwwyrnaspmrzax00wynyx7";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf ];
     buildInputs = [
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
@@ -47,6 +50,7 @@ let
 
     configureFlags = [
       "--with-boot-jdk=${openjdk11-bootstrap.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -83,6 +87,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
@@ -131,17 +136,18 @@ let
 
     disallowedReferences = [ openjdk11-bootstrap ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo ];
+      maintainers = with maintainers; [ edwtjo asbachb ];
       platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
     };
 
     passthru = {
       architecture = "";
       home = "${openjdk}/lib/openjdk";
+      inherit gtk3;
     };
   };
 in openjdk

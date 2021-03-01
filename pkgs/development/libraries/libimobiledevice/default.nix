@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig, gnutls
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config, gnutls
 , libgcrypt, libtasn1, glib, libplist, libusbmuxd }:
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
-  version = "2020-01-20";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "61babf5f54e7734ebf3044af4c6294524d4b29b5";
-    sha256 = "02dnq6xza72li52kk4p2ak0gq2js3ssfp2fpjlgsv0bbn5mkg2hi";
+    rev = version;
+    sha256 = "1jkq3hpg4n5a6s1k618ib0s80pwf00nlfcby7xckysq8mnd2pp39";
   };
 
   outputs = [ "out" "dev" ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
   ];
   propagatedBuildInputs = [
     glib
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "--without-cython"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
     description = "A software library that talks the protocols to support iPhone®, iPod Touch® and iPad® devices on Linux";
     longDescription = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       devices to the Linux Desktop.
     '';
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ infinisil ];
   };
 }

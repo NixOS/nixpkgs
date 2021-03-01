@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     ${python}/bin/${python.executable} selftest.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A unittest-based testing framework for python that makes writing and running tests easier";
     homepage = "http://readthedocs.org/docs/nose/";
     license = licenses.lgpl3;

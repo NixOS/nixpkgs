@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "5.3.4";
+  version = "6.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "60e6faec1031d63df57f1cc671ed673dced0ed420f4377ea33db37b1c188b910";
+    sha256 = "49e390b36fe4b4226724704ea28d9fb903f1a3601b6882ce3105221cd09377a1";
   };
 
   propagatedBuildInputs = [

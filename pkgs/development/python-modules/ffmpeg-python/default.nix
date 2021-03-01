@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , substituteAll
-, ffmpeg
+, ffmpeg_3
 , future
 , pytest
 , pytestrunner
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     (
       substituteAll {
         src = ./ffmpeg-location.patch;
-        inherit ffmpeg;
+        ffmpeg = ffmpeg_3;
       }
     )
   ];

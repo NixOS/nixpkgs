@@ -1,26 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs, nixosTests }:
 
 buildGoModule rec {
   pname = "documize-community";
-  version = "3.7.0";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
     rev = "v${version}";
-    sha256 = "1pcldf9lqvpb2h2a3kr3mahj2v1jasjwrszj6czjmkyml7x2sz7c";
+    sha256 = "sha256-6DOvInfD32/mEILGXdXUeflmHoyn0eiYyQN/aI23FJ0=";
   };
 
-  modSha256 = "1z0v7n8klaxcqv7mvzf3jzgrp78zb4yiibx899ppk6i5qnj4xiv0";
+  vendorSha256 = null;
+
+  doCheck = false;
 
   nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
 
-  subPackages = [ "edition/community.go" ];
+  # This is really weird, but they've managed to screw up
+  # their folder structure enough, you can only build by
+  # literally cding into this folder.
+  preBuild = "cd edition";
+
+  subPackages = [ "." ];
+
+  passthru.tests = { inherit (nixosTests) documize; };
 
   postInstall = ''
-    # `buildGoModule` calls `go install` (without `go build` first), so
-    # `-o bin/documize` doesn't work.
-    mv $out/bin/community $out/bin/documize
+    mv $out/bin/edition $out/bin/documize
   '';
 
   meta = with lib; {

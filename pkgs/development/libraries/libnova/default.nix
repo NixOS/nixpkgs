@@ -1,17 +1,25 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchgit, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libnova-0.12.3";
+  pname = "libnova";
+  version = "0.16";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libnova/${name}.tar.gz";
-    sha256 = "18mkx79gyhccp5zqhf6k66sbhv97s7839sg15534ijajirkhw9dc";
+  # pull from git repo because upstream stopped tarball releases after v0.15
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/libnova/${pname}";
+    rev = "v${version}";
+    sha256 = "0icwylwkixihzni0kgl0j8dx3qhqvym6zv2hkw2dy6v9zvysrb1b";
   };
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  meta = with lib; {
     description = "Celestial Mechanics, Astrometry and Astrodynamics Library";
     homepage = "http://libnova.sf.net";
-    platforms = platforms.unix;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ hjones2199 ];
+    platforms = platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, mpi, openssh }:
+{ lib, fetchPypi, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
@@ -43,10 +43,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ mpi openssh ];
 
-  meta = {
-    description =
-      "Python bindings for the Message Passing Interface standard";
+  meta = with lib; {
+    description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://bitbucket.org/mpi4py/mpi4py/";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

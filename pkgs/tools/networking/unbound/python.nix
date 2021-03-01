@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, expat, libevent, swig, pythonPackages }:
+{ lib, stdenv, fetchurl, openssl, expat, libevent, swig, pythonPackages }:
 
 let
   inherit (pythonPackages) python;
@@ -54,12 +54,12 @@ in stdenv.mkDerivation rec {
     patchelf --replace-needed libunbound.so.2 $out/${python.sitePackages}/libunbound.so.2 $out/${python.sitePackages}/_unbound.so
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "http://www.unbound.net";
     maintainers = with maintainers; [ leenaars ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     broken = true;
   };
 }

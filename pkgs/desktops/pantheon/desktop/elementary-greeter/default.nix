@@ -1,10 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -28,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0.3";
+  version = "5.0.4";
 
   repoName = "greeter";
 
@@ -36,11 +37,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1zbfcdgjn57r8pz01xrz6kk8rmviq133snz9f1vqhjdsznk82w5i";
+    sha256 = "sha256-Enn+ekALWbk7FVJJuea/rNiwEZDIyb3kyMcZNNraOv8=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
     # Needed until https://github.com/elementary/greeter/issues/360 is fixed
     (substituteAll {
       src = ./hardcode-fallback-background.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png";
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
   ];
 
@@ -103,6 +104,9 @@ stdenv.mkDerivation rec {
 
       # for the compositor
       --prefix PATH : "$out/bin"
+
+      # the theme is hardcoded
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
     )
   '';
 
@@ -110,13 +114,13 @@ stdenv.mkDerivation rec {
     # Use NixOS default wallpaper
     substituteInPlace $out/etc/lightdm/io.elementary.greeter.conf \
       --replace "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
-      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png"
+      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
 
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;

@@ -1,22 +1,24 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
-  version = "1.0.2";
+  version = "1.0.3";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4670f99f8951bd78cd4ad2ab962f798f5618b17675c35c5ac3b2132a14ea8422";
+    sha256 = "e8f5bb7e31b2dbb25b9cc435c8ab7a79787ebf7f906155729338f3156d93659b";
   };
 
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "sphinxcontrib-htmlhelp is a sphinx extension which ...";
     homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;

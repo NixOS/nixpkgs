@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, lib }:
+{ stdenvNoCC, fetchgit, lib }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "firmware-linux-nonfree";
-  version = "2020-01-22";
+  version = "2021-02-08";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
     rev = lib.replaceStrings ["-"] [""] version;
-    sha256 = "0256p99bqwf1d1s6gqnzpjcdmg6skcp1jzz64sd1p29xxrf0pzfa";
+    sha256 = "0c85cd659312isfz1r87qswsgfhy0rljagcwspnvjljqrh9bsgzq";
   };
 
   installFlags = [ "DESTDIR=$(out)" ];
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "1d2jvy395jpfq0gli7q5p571lcb9p5y0y8qr8p8rlcmczh4gry64";
+  outputHash = "0l4xsgxdvjffad7a98n42nyqy3ihs6m6hy3qsfkqin9z10413x5n";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Binary firmware collection packaged by kernel.org";
-    homepage = "http://packages.debian.org/sid/firmware-linux-nonfree";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];

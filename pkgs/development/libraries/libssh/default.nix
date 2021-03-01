@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, cmake, zlib, openssl, libsodium }:
+{ lib, stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
   pname = "libssh";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/0.8/${pname}-${version}.tar.xz";
-    sha256 = "1qk5bm9r6199jbfk54f8w24vkl52051g8s3kmq4z2kdc6vbpy4jb";
+    sha256 = "09b8w9m5qiap8wbvz4613nglsynpk8hn0q9b929ny2y4l2fy2nc5";
   };
 
   postPatch = ''
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib openssl libsodium ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSH client library";
     homepage = "https://libssh.org";
     license = licenses.lgpl2Plus;

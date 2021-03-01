@@ -58,6 +58,35 @@ in {
           Run <literal>VBoxManage modifyvm --help</literal> to see more options.
         '';
      };
+      extraDisk = mkOption {
+        description = ''
+          Optional extra disk/hdd configuration.
+          The disk will be an 'ext4' partition on a separate VMDK file.
+        '';
+        default = null;
+        example = {
+          label = "storage";
+          mountPoint = "/home/demo/storage";
+          size = 100 * 1024;
+        };
+        type = types.nullOr (types.submodule {
+          options = {
+            size = mkOption {
+              type = types.int;
+              description = "Size in MiB";
+            };
+            label = mkOption {
+              type = types.str;
+              default = "vm-extra-storage";
+              description = "Label for the disk partition";
+            };
+            mountPoint = mkOption {
+              type = types.str;
+              description = "Path where to mount this disk.";
+            };
+          };
+        });
+      };
     };
   };
 
@@ -72,6 +101,7 @@ in {
         audiocontroller = "ac97";
         audio = "alsa";
         audioout = "on";
+        graphicscontroller = "vmsvga";
         rtcuseutc = "on";
         usb = "on";
         usbehci = "on";
@@ -95,6 +125,20 @@ in {
           echo "creating VirtualBox pass-through disk wrapper (no copying involved)..."
           VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage
 
+          ${optionalString (cfg.extraDisk != null) ''
+            echo "creating extra disk: data-disk.raw"
+            dataDiskImage=data-disk.raw
+            truncate -s ${toString cfg.extraDisk.size}M $dataDiskImage
+
+            parted --script $dataDiskImage -- \
+              mklabel msdos \
+              mkpart primary ext4 1MiB -1
+            eval $(partx $dataDiskImage -o START,SECTORS --nr 1 --pairs)
+            mkfs.ext4 -F -L ${cfg.extraDisk.label} $dataDiskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+            echo "creating extra disk: data-disk.vmdk"
+            VBoxManage internalcommands createrawvmdk -filename data-disk.vmdk -rawdisk $dataDiskImage
+          ''}
+
           echo "creating VirtualBox VM..."
           vmName="${cfg.vmName}";
           VBoxManage createvm --name "$vmName" --register \
@@ -105,6 +149,10 @@ in {
           VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
           VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
             --medium disk.vmdk
+          ${optionalString (cfg.extraDisk != null) ''
+            VBoxManage storageattach "$vmName" --storagectl SATA --port 1 --device 0 --type hdd \
+            --medium data-disk.vmdk
+          ''}
 
           echo "exporting VirtualBox VM..."
           mkdir -p $out
@@ -118,11 +166,19 @@ in {
         '';
     };
 
-    fileSystems."/" = {
-      device = "/dev/disk/by-label/nixos";
-      autoResize = true;
-      fsType = "ext4";
-    };
+    fileSystems = {
+      "/" = {
+        device = "/dev/disk/by-label/nixos";
+        autoResize = true;
+        fsType = "ext4";
+      };
+    } // (lib.optionalAttrs (cfg.extraDisk != null) {
+      ${cfg.extraDisk.mountPoint} = {
+        device = "/dev/disk/by-label/" + cfg.extraDisk.label;
+        autoResize = true;
+        fsType = "ext4";
+      };
+    });
 
     boot.growPartition = true;
     boot.loader.grub.device = "/dev/sda";

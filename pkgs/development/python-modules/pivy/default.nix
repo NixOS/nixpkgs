@@ -1,31 +1,31 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pkgs }:
+{ lib, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.5a2";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
-    owner = "FreeCAD";
+    owner = "coin3d";
     repo = "pivy";
     rev = version;
-    sha256 = "1w03jaha36bjyfaz8hchnv8yrkm5715w15crhd3qrlagz8fs38hm";
+    sha256 = "0vids7sxk8w5vr73xdnf8xdci71a7syl6cd35aiisppbqyyfmykx";
   };
 
   nativeBuildInputs = with pkgs; [
-    swig qt5.qmake cmake
+    swig qmake cmake
   ];
 
   buildInputs = with pkgs; with xorg; [
-    coin3d soqt qt5.qtbase
+    coin3d soqt qtbase
     libGLU libGL
     libXi libXext libSM libICE libX11
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${pkgs.qt5.qtbase.dev}/include/QtCore"
-    "-I${pkgs.qt5.qtbase.dev}/include/QtGui"
-    "-I${pkgs.qt5.qtbase.dev}/include/QtOpenGL"
-    "-I${pkgs.qt5.qtbase.dev}/include/QtWidgets"
+    "-I${qtbase.dev}/include/QtCore"
+    "-I${qtbase.dev}/include/QtGui"
+    "-I${qtbase.dev}/include/QtOpenGL"
+    "-I${qtbase.dev}/include/QtWidgets"
   ];
 
   dontUseQmakeConfigure = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
       \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/coin3d/pivy/";
     description = "A Python binding for Coin";
     license = licenses.bsd0;

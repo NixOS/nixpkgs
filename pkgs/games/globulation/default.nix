@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU, libGL, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
+{ lib, stdenv, fetchurl, libGLU, libGL, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
 , fetchpatch
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_LDFLAGS = "-lboost_system";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RTS without micromanagement";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

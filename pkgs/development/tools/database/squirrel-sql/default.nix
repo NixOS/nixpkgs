@@ -1,18 +1,18 @@
 # To enable specific database drivers, override this derivation and pass the
 # driver packages in the drivers argument (e.g. mysql_jdbc, postgresql_jdbc).
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip
 , jre
 , drivers ? []
 }:
 let
-  version = "4.0.0";
+  version = "4.1.0";
 in stdenv.mkDerivation rec {
   pname = "squirrel-sql";
   inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
-    sha256 = "06njdp2248zxm7zlcpyawx1s7j6hffp5a9mwam3cb53gsmzcz126";
+    sha256 = "0ni7cva0acrin5bkcfkiiv28sf58dzz7xsbl3y4536hmph0g68k6";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    
+
     mkdir -p $out/share/squirrel-sql
     cp -r . $out/share/squirrel-sql
 
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/squirrel-sql/icons/acorn.png \
       $out/share/icons/hicolor/32x32/apps/squirrel-sql.png
     ln -s ${desktopItem}/share/applications $out/share
-    
+
     runHook postInstall
   '';
 
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
     icon = "squirrel-sql";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Universal SQL Client";
     homepage = "http://squirrel-sql.sourceforge.net/";
     license = licenses.lgpl21;

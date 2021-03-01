@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libusb1 }:
+{ lib, stdenv, fetchgit, fetchpatch, cmake, pkg-config, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "rtl-sdr";
@@ -10,7 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "0lmvsnb4xw4hmz6zs0z5ilsah5hjz29g1s0050n59fllskqr3b8k";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  patches = [ (fetchpatch {
+    name = "hardened-udev-rules.patch";
+    url = "https://osmocom.org/projects/rtl-sdr/repository/revisions/b2814731563be4d5a0a68554ece6454a2c63af12/diff?format=diff";
+    sha256 = "0ns740s2rys4glq4la4bh0sxfv1mn61yfjns2yllhx70rsb2fqrn";
+  }) ];
+
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ libusb1 ];
 
   # TODO: get these fixes upstream:
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
   #   /etc/udev/rules.d/, and there is no option to install elsewhere. So install
   #   rules manually.
   # * Propagate libusb-1.0 dependency in pkg-config file.
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d/"
     cp ../rtl-sdr.rules "$out/etc/udev/rules.d/99-rtl-sdr.rules"
 
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     echo "Requires: libusb-1.0" >> "$pcfile"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
     homepage = "http://sdr.osmocom.org/trac/wiki/rtl-sdr";
     license = licenses.gpl2Plus;

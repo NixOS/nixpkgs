@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, openssl, pkgconfig, libnl
+{ lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
 , dbus, readline ? null, pcsclite ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   version = "2.9";
 
@@ -19,6 +19,18 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
       sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
     })
+    (fetchpatch {
+      # Expose OWE key management capability over DBus, remove >= 2.10
+      name = "dbus-Export-OWE-capability-and-OWE-BSS-key_mgmt.patch";
+      url = "https://w1.fi/cgit/hostap/patch/?id=7800725afb27397f7d6033d4969e2aeb61af4737";
+      sha256 = "0c1la7inf4m5y9gzdjjdnhpkx32pm8vi6m5knih8p77q4mbrdgg8";
+    })
+    # P2P: Fix copying of secondary device types for P2P group client (https://w1.fi/security/2020-2/)
+    (fetchurl {
+      name = "CVE-2021-0326.patch";
+      url = "https://w1.fi/security/2020-2/0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch";
+      sha256 = "19f4hx0p547mdx8y8arb3vclwyy4w9c8a6a40ryj7q33730mrmn4";
+    })
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -32,6 +44,7 @@ stdenv.mkDerivation rec {
     CONFIG_EAP_SAKE=y
     CONFIG_EAP_GPSK=y
     CONFIG_EAP_GPSK_SHA256=y
+    CONFIG_OWE=y
     CONFIG_WPS=y
     CONFIG_WPS_ER=y
     CONFIG_WPS_NFS=y
@@ -81,13 +94,13 @@ stdenv.mkDerivation rec {
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
-      -I$(echo "${stdenv.lib.getDev libnl}"/include/libnl*/) \
-      -I${stdenv.lib.getDev pcsclite}/include/PCSC/"
+      -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
+      -I${lib.getDev pcsclite}/include/PCSC/"
   '';
 
   buildInputs = [ openssl libnl dbus readline pcsclite ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
@@ -104,7 +117,7 @@ stdenv.mkDerivation rec {
     install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hostap.epitest.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;

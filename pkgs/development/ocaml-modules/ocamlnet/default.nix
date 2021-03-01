@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, ocaml, findlib, ocaml_pcre, camlzip
+{ stdenv, lib, fetchurl, pkg-config, ncurses, ocaml, findlib, ocaml_pcre, camlzip
 , gnutls, nettle
 }:
 
-if stdenv.lib.versionOlder ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "ocamlnet is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ocamlnet-${version}";
-  version = "4.1.7";
+  version = "4.1.8";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/ocamlnet-${version}.tar.gz";
-    sha256 = "0r9gl0lsgxk2achixxqzm8bm5l9jwc4vwihf0rvxxa9v9q9vfdhi";
+    sha256 = "1x703mjqsv9nvffnkj5i36ij2s5zfvxxll2z1qj6a7p428b2yfnm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ocaml findlib ocaml_pcre camlzip gnutls nettle ];
 
   createFindlibDestdir = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     license = "Most Ocamlnet modules are released under the zlib/png license. The HTTP server module Nethttpd is, however, under the GPL.";
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.maggesi
+      lib.maintainers.maggesi
     ];
   };
 }

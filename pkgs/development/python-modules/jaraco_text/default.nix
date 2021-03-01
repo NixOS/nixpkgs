@@ -13,6 +13,8 @@ buildPythonPackage rec {
     sha256 = "1v0hz3h74m31jlbc5bxwkvrx1h2n7887bajrg1n1c3yc4q8qn1z5";
   };
 
+  pythonNamespaces = [ "jaraco" ];
+
   nativeBuildInputs =[ setuptools_scm ];
   propagatedBuildInputs = [
     jaraco_functools

@@ -1,4 +1,4 @@
-{ stdenv, binutils-unwrapped, cctools, llvm }:
+{ lib, stdenv, binutils-unwrapped, cctools, llvm }:
 
 # Make sure both underlying packages claim to have prepended their binaries
 # with the same targetPrefix.
@@ -16,7 +16,7 @@ in
 stdenv.mkDerivation {
   pname = "${targetPrefix}cctools-binutils-darwin";
   inherit (cctools) version;
-  outputs = [ "out" "info" "man" ];
+  outputs = [ "out" "man" ];
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     # - strip: the binutils one seems to break mach-o files
     # - lipo: gcc build assumes it exists
     # - nm: the gnu one doesn't understand many new load commands
-    for i in ${stdenv.lib.concatStringsSep " " (builtins.map (e: targetPrefix + e) cmds)}; do
+    for i in ${lib.concatStringsSep " " (builtins.map (e: targetPrefix + e) cmds)}; do
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
@@ -42,12 +42,13 @@ stdenv.mkDerivation {
 
     ln -s ${cctools}/libexec $out/libexec
 
-    mkdir -p "$info/nix-support" "$man/nix-support"
-    printWords ${binutils-unwrapped.info} \
-      >> $info/nix-support/propagated-build-inputs
-    # FIXME: cctools missing man pages
-    printWords ${binutils-unwrapped.man} \
-      >> $man/nix-support/propagated-build-inputs
+    mkdir -p "$man"/share/man/man{1,5}
+    for i in ${builtins.concatStringsSep " " cmds}; do
+      for path in "${cctools.man}"/share/man/man?/$i.*; do
+        dest_path="$man''${path#${cctools.man}}"
+        ln -sv "$path" "$dest_path"
+      done
+    done
   '';
 
   passthru = {
@@ -55,7 +56,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [ matthewbauer ];
     priority = 10;
   };
 }

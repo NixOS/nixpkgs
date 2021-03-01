@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
+{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
 
 let
-  version = "3.3.0";
-  libPath = stdenv.lib.makeLibraryPath [ oracle-instantclient.lib ];
+  version = "4.1.0";
+  libPath = lib.makeLibraryPath [ oracle-instantclient.lib ];
 
 in stdenv.mkDerivation {
   inherit version;
@@ -13,27 +13,27 @@ in stdenv.mkDerivation {
     owner = "oracle";
     repo = "odpi";
     rev = "v${version}";
-    sha256 = "0qyfpincifz2vgicjd4q3rk563sg7927xja53rz3l7zv54wp9k62";
+    sha256 = "1zk08z74q7njbj329xfy8aszphj27rqlkhsyglai60wfzl6mcf4x";
   };
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ oracle-instantclient ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libaio ];
+    ++ lib.optionals stdenv.isLinux [ libaio ];
 
   dontPatchELF = true;
   makeFlags = [ "PREFIX=$(out)" "CC=cc" "LD=cc"];
 
   postFixup = ''
-    ${stdenv.lib.optionalString (stdenv.isLinux) ''
+    ${lib.optionalString (stdenv.isLinux) ''
       patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary})" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
-    ${stdenv.lib.optionalString (stdenv.isDarwin) ''
+    ${lib.optionalString (stdenv.isDarwin) ''
       install_name_tool -add_rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Oracle ODPI-C library";
     homepage = "https://oracle.github.io/odpi/";
     maintainers = with maintainers; [ mkazulak flokli ];

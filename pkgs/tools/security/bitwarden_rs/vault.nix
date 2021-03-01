@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "bitwarden_rs-vault";
-  version = "2.13.2";
+  version = "2.18.1b";
 
   src = fetchurl {
     url = "https://github.com/dani-garcia/bw_web_builds/releases/download/v${version}/bw_web_v${version}.tar.gz";
-    sha256 = "1000iqjr670imm1dlw9r003d8psp5sq0m0p62sjnll7wnycd805r";
+    sha256 = "sha256-MwHTx4ITr2GuBS6qXD4m3aCinpJHQa0Wp0Bbmgg7ATQ=";
   };
 
   buildCommand = ''
@@ -16,11 +16,13 @@ stdenv.mkDerivation rec {
     mv web-vault vault
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = nixosTests.bitwarden;
+
+  meta = with lib; {
     description = "Integrates the web vault into bitwarden_rs";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
     platforms = platforms.all;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ msteen ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ msteen mic92 ];
   };
 }

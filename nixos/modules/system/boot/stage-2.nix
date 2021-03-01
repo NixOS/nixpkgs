@@ -10,13 +10,14 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     shell = "${pkgs.bash}/bin/bash";
+    inherit (config.boot) systemdExecutable;
     isExecutable = true;
     inherit (config.nix) readOnlyStore;
     inherit useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
     path = lib.makeBinPath ([
       pkgs.coreutils
-      pkgs.utillinux
+      pkgs.util-linux
     ] ++ lib.optional useHostResolvConf pkgs.openresolv);
     fsPackagesPath = lib.makeBinPath config.system.fsPackages;
     postBootCommands = pkgs.writeText "local-cmds"
@@ -72,6 +73,15 @@ in
         '';
       };
 
+      systemdExecutable = mkOption {
+        default = "systemd";
+        type = types.str;
+        description = ''
+          The program to execute to start systemd. Typically
+          <literal>systemd</literal>, which will find systemd in the
+          PATH.
+        '';
+      };
     };
 
   };

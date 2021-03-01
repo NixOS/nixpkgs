@@ -1,14 +1,14 @@
 { buildPythonPackage, fetchPypi
 , pyasn1, pyasn1-modules, pytest
-, openldap, cyrus_sasl, stdenv }:
+, openldap, cyrus_sasl, lib, stdenv }:
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13nvrhp85yr0jyxixcjj012iw8l9wynxxlykm9j3alss6waln73x";
+    sha256 = "198as30xy6p760niqps2zdvq2xcmr765h06pmda8fa9y077wl4a7";
   };
 
   propagatedBuildInputs = [ pyasn1 pyasn1-modules ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python modules for implementing LDAP clients";
     homepage = "https://www.python-ldap.org/";
     license = licenses.psfl;

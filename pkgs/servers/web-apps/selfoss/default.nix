@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "selfoss";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -ra * $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     homepage = "https://selfoss.aditu.de";
     license = licenses.gpl3;

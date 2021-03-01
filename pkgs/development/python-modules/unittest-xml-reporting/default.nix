@@ -1,8 +1,9 @@
-{lib, fetchPypi, buildPythonPackage, six}:
+{lib, fetchPypi, buildPythonPackage, isPy27, six}:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
-  version = "2.5.2";
+  version = "3.0.4";
+  disabled = isPy27;
 
   propagatedBuildInputs = [six];
 
@@ -11,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d28ddf6524cf0ff9293f61bd12e792de298f8561a5c945acea63fb437789e0e";
+    sha256 = "984cebba69e889401bfe3adb9088ca376b3a1f923f0590d005126c1bffd1a695";
   };
   meta = with lib; {
     homepage = "https://github.com/xmlrunner/unittest-xml-reporting/tree/master/";

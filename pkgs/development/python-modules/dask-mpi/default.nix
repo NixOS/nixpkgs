@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , dask
@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "2.21.0";
   pname = "dask-mpi";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "774cd2d69e5f7154e1fa133c22498062edd31507ffa2ea19f4ab4d8975c27bc3";
+    sha256 = "76e153fc8c58047d898970b33ede0ab1990bd4e69cc130c6627a96f11b12a1a7";
   };
 
   checkInputs = [ pytest requests ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # hardcoded mpirun path in tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dask/dask-mpi";
     description = "Deploy Dask using mpi4py";
     license = licenses.bsd3;

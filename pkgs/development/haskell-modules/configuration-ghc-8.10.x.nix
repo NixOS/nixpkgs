@@ -42,23 +42,61 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # The proper 3.2.0.0 release does not compile with ghc-8.10.1, so we take the
+  # hitherto unreleased next version from the '3.2' branch of the upstream git
+  # repository for the time being.
+  cabal-install = assert super.cabal-install.version == "3.2.0.0";
+                  overrideCabal super.cabal-install (drv: {
+    postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
+    version = "3.2.0.0-git";
+    editedCabalFile = null;
+    src = pkgs.fetchgit {
+      url = "git://github.com/haskell/cabal.git";
+      rev = "9bd4cc0591616aeae78e17167338371a2542a475";
+      sha256 = "005q1shh7vqgykkp72hhmswmrfpz761x0q0jqfnl3wqim4xd9dg0";
+    };
+  });
+
   # Jailbreak to fix the build.
-  async = doJailbreak super.async;
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  hashable = doJailbreak super.hashable;
-  parallel = doJailbreak super.parallel;
-  regex-base = doJailbreak super.regex-base;
-  regex-compat = doJailbreak super.regex-compat;
-  regex-pcre-builtin = doJailbreak super.regex-pcre-builtin;
-  regex-posix = doJailbreak super.regex-posix;
-  regex-tdfa = doJailbreak super.regex-tdfa;
-  split = doJailbreak super.split;
-  tar = doJailbreak super.tar;
-  tasty-expected-failure = doJailbreak super.tasty-expected-failure;
+  base-noprelude = doJailbreak super.base-noprelude;
+  system-fileio = doJailbreak super.system-fileio;
   unliftio-core = doJailbreak super.unliftio-core;
-  vector = doJailbreak super.vector;
-  zlib = doJailbreak super.zlib;
 
-  # Use the latest version to fix the build.
+  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  monoidal-containers = doJailbreak super.monoidal-containers;
 
+  # Jailbreak to fix the build.
+  brick = doJailbreak super.brick;
+  exact-pi = doJailbreak super.exact-pi;
+  serialise = doJailbreak super.serialise;
+  setlocale = doJailbreak super.setlocale;
+  shellmet = doJailbreak super.shellmet;
+  shower = doJailbreak super.shower;
+
+  # The shipped Setup.hs file is broken.
+  csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
+
+  # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
+  language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
+    name = "language-haskell-extract-0.2.4.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
+    sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
+  });
+
+  # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
+  hnix = generateOptparseApplicativeCompletion "hnix"
+    (overrideCabal super.hnix (drv: {
+      # executable is allowed for ghc >= 8.10 and needs repline
+      executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
+    }));
+
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
+
+  # Agda 2.6.1.2 only declares a transformers dependency for ghc < 8.10.3.
+  # https://github.com/agda/agda/issues/5109
+  Agda = appendPatch super.Agda (pkgs.fetchpatch {
+    url = "https://github.com/agda/agda/commit/76278c23d447b49f59fac581ca4ac605792aabbc.patch";
+    sha256 = "1g34g8a09j73h89pk4cdmri0nb0qg664hkff45amcr9kyz14a9f3";
+  });
 }

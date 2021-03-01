@@ -12,6 +12,7 @@
 , enableTruetype ? true
 , enableFPS ? false
 , enableTextMode ? false
+, enableSound ? true
 }:
 
 let
@@ -59,7 +60,7 @@ let
   '' + lib.optionalString enableTWBT ''
     substituteInPlace $out/data/init/init.txt \
       --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
-  '' + 
+  '' +
  lib.optionalString enableTextMode ''
     substituteInPlace $out/data/init/init.txt \
       --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TEXT]'
@@ -67,7 +68,8 @@ let
     substituteInPlace $out/data/init/init.txt \
       --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
       --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
-      --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
+      --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]' \
+      --replace '[SOUND:YES]' '[SOUND:${unBool enableSound}]'
   ''));
 
   env = buildEnv {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, payload ? null }: let
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, payload ? null }: let
   rev = "e5846a2bc707eaa58dc8ab6a8d20a090c6ee8570";
   sha256 = "1clynpp70fnbgsjgxx7xi0vrdrj1v0h8zpv0x26i324kp2gwylf4";
   revCount = "438";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   configureScript = "../configure";
 
-  configureFlags = stdenv.lib.optional (payload != null)
+  configureFlags = lib.optional (payload != null)
     "--with-payload=${payload}";
 
   hardeningDisable = [ "all" ];
@@ -33,10 +33,10 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "RISC-V Proxy Kernel and Bootloader.";
+    description = "RISC-V Proxy Kernel and Bootloader";
     homepage = "https://github.com/riscv/riscv-pk";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.riscv;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.riscv;
+    maintainers = [ lib.maintainers.shlevy ];
   };
 }

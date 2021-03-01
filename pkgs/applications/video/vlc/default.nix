@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook
+{ lib, stdenv, fetchurl, autoreconfHook
 , libarchive, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
-, pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
+, pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
@@ -9,8 +9,9 @@
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
+, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 , jackSupport ? false
+, skins2Support ? !onlyLibVLC, freetype
 , removeReferencesTo
 , chromecastSupport ? true, protobuf, libmicrodns
 }:
@@ -19,17 +20,15 @@
 # If your firewall is enabled, make sure to have something like:
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
-with stdenv.lib;
-
-assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
+with lib;
 
 stdenv.mkDerivation rec {
-  pname = "vlc";
-  version = "3.0.8";
+  pname = "${optionalString onlyLibVLC "lib"}vlc";
+  version = "3.0.12";
 
   src = fetchurl {
-    url = "http://get.videolan.org/vlc/${version}/${pname}-${version}.tar.xz";
-    sha256 = "e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6";
+    url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
+    sha256 = "0ygqihw2c5vvzv8950dlf7rdwz1cpz1668jgyja604ljibrmix7g";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -46,10 +45,11 @@ stdenv.mkDerivation rec {
     fluidsynth wayland wayland-protocols
   ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
+    ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
     ++ optional jackSupport libjack2
     ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ]
+  nativeBuildInputs = [ autoreconfHook perl pkg-config removeReferencesTo ]
     ++ optionals withQt5 [ wrapQtAppsHook ];
 
   enableParallelBuilding = true;
@@ -61,9 +61,6 @@ stdenv.mkDerivation rec {
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   postPatch = ''
-    substituteInPlace configure \
-      --replace /bin/echo echo
-
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
   '';
@@ -83,6 +80,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
   ] ++ optional onlyLibVLC "--disable-vlc"
+    ++ optional skins2Support "--enable-skins2"
     ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
@@ -94,7 +92,7 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform media player and streaming server";
     homepage = "http://www.videolan.org/vlc/";
     license = licenses.lgpl21Plus;

@@ -1,11 +1,22 @@
 { stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 let
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "jsonschema" "2.6.0"
-      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
+    (mkOverride "aiofiles" "0.5.0"
+      "98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af")
+    (self: super: {
+      py-cpuinfo = super.py-cpuinfo.overridePythonAttrs (oldAttrs: rec {
+        version = "7.0.0";
+        src = fetchFromGitHub {
+           owner = "workhorsy";
+           repo = "py-cpuinfo";
+           rev = "v${version}";
+           sha256 = "10qfaibyb2syiwiyv74l7d97vnmlk079qirgnw3ncklqjs0s3gbi";
+        };
+      });
+    })
   ];
 
   python = python3.override {
@@ -23,13 +34,13 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # yarl 1.4+ only requires Python 3.6+
-    sed -iE "s/yarl==1.3.0//" requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2"
   '';
 
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
+    jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
     prompt_toolkit py-cpuinfo
   ];
 
@@ -40,7 +51,7 @@ in python.pkgs.buildPythonPackage {
     rm $out/bin/gns3loopback # For Windows only
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or

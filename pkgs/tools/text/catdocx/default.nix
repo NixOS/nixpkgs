@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     ln -s $out/libexec/catdocx.sh $out/bin/catdocx
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extracts plain text from docx files";
     homepage = "https://github.com/jncraton/catdocx";
     license = with licenses; [ bsd3 ];

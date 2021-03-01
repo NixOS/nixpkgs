@@ -1,8 +1,8 @@
-{ buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "confd";
-  version = "0.9.0";
+  version = "0.16.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/kelseyhightower/confd";
@@ -12,8 +12,13 @@ buildGoPackage rec {
     inherit rev;
     owner = "kelseyhightower";
     repo = "confd";
-    sha256 = "0rz533575hdcln8ciqaz79wbnga3czj243g7fz8869db6sa7jwlr";
+    sha256 = "0q7r6dkgirnmqi3rhqdaai88jqzw52l6jdrrwsf2qq0hva09961p";
   };
 
-  goDeps = ./deps.nix;
+  meta = {
+    description = "Manage local application configuration files using templates and data from etcd or consul";
+    homepage = "https://github.com/kelseyhightower/confd";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zimbatm ];
+  };
 }

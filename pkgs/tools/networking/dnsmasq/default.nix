@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, dbus, nettle, fetchpatch
+{ lib, stdenv, fetchurl, pkg-config, dbus, nettle, fetchpatch
 , libidn, libnetfilter_conntrack }:
 
-with stdenv.lib;
+with lib;
 let
   copts = concatStringsSep " " ([
     "-DHAVE_IDN"
@@ -12,22 +12,15 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.80";
+  pname = "dnsmasq";
+  version = "2.83";
 
   src = fetchurl {
-    url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "1fv3g8vikj3sn37x1j6qsywn09w1jipvlv34j3q5qrljbrwa5ayd";
+    url = "http://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
+    sha256 = "1sjamz1v588qf35m8z6wcqkjk5w12bqhj7d7p48dj8jyn3lgghgz";
   };
 
-  patches = [
-    # Fix build with nettle 3.5
-    (fetchpatch {
-      name = "nettle-3.5.patch";
-      url = "thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=ab73a746a0d6fcac2e682c5548eeb87fb9c9c82e";
-      sha256 = "1hnixij3jp1p6zc3bx2dr92yyf9jp1ahhl9hiiq7bkbhbrw6mbic";
-    })
-  ];
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '1i#include <linux/sockios.h>' -i src/dhcp.c
   '';
 
@@ -73,7 +66,7 @@ stdenv.mkDerivation rec {
     END
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nettle libidn ]
     ++ optionals stdenv.isLinux [ dbus libnetfilter_conntrack ];
 

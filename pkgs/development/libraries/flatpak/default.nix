@@ -1,21 +1,19 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , docbook_xml_dtd_412
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
-, docbook_xsl
+, docbook_xml_dtd_45
+, docbook-xsl-nons
 , which
 , libxml2
 , gobject-introspection
 , gtk-doc
 , intltool
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
 , appstream-glib
 , substituteAll
-, glibcLocales
 , yacc
 , xdg-dbus-proxy
 , p11-kit
@@ -39,6 +37,7 @@
 , nixosTests
 , libsoup
 , lzma
+, zstd
 , ostree
 , polkit
 , python3
@@ -46,7 +45,7 @@
 , xorg
 , valgrind
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , dconf
 , gsettings-desktop-schemas
 , librsvg
@@ -54,14 +53,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.6.3";
+  version = "1.10.1";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "dev" "man" "doc" "installedTests" ];
+  outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "17s8nqdxd4xdy7ag9bw06adxccha78jmlsa3zpqnl3qh92pg0hji";
+    sha256 = "1dywvfpmszvp2wy5hvpzy8z6gz2gzmi9p302njp52p9vpx14ydf1";
   };
 
   patches = [
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
     # https://github.com/flatpak/flatpak/issues/1460
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit coreutils gettext glibcLocales socat gtk3;
+      inherit coreutils gettext socat gtk3;
       smi = shared-mime-info;
       dfu = desktop-file-utils;
       hicolorIconTheme = hicolor-icon-theme;
@@ -106,20 +105,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     libxml2
+    # Remove 4.1.2 again once the following is merged
+    # https://github.com/flatpak/flatpak/pull/4102
     docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    docbook_xsl
+    docbook_xml_dtd_45
+    docbook-xsl-nons
     which
     gobject-introspection
     gtk-doc
     intltool
     libxslt
-    pkgconfig
+    pkg-config
     xmlto
     appstream-glib
     yacc
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
     libseccomp
     libsoup
     lzma
+    zstd
     polkit
     python3
     systemd
@@ -166,6 +167,7 @@ stdenv.mkDerivation rec {
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--localstatedir=/var"
+    "--enable-gtk-doc"
     "--enable-installed-tests"
   ];
 
@@ -174,9 +176,14 @@ stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/flatpak"
   ];
 
-  postPatch = ''
+  postPatch = let
+    vsc-py = python3.withPackages (pp: [
+      pp.pyparsing
+    ]);
+  in ''
     patchShebangs buildutil
     patchShebangs tests
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
   '';
 
   passthru = {
@@ -185,10 +192,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

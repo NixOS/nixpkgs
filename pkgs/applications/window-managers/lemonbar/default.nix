@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, perl, libxcb }:
+{ lib, stdenv, fetchurl, perl, libxcb }:
 
 stdenv.mkDerivation {
-  name = "lemonbar-1.3";
-  
+  name = "lemonbar-1.4";
+
   src = fetchurl {
-    url    = "https://github.com/LemonBoy/bar/archive/v1.3.tar.gz";
-    sha256 = "0zd3v8ys4jzi60pm3wq7p3pbbd5y0acimgiq46qx1ckmwg2q9rza";
+    url    = "https://github.com/LemonBoy/bar/archive/v1.4.tar.gz";
+    sha256 = "0fa91vb968zh6fyg97kdaix7irvqjqhpsb6ks0ggcl59lkbkdzbv";
   };
-  
+
   buildInputs = [ libxcb perl ];
-  
+
   prePatch = ''sed -i "s@/usr@$out@" Makefile'';
-  
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "A lightweight xcb based bar";
     homepage = "https://github.com/LemonBoy/bar";
     maintainers = [ maintainers.meisternu ];
-    license = "Custom";   
+    license = "Custom";
     platforms = platforms.linux;
   };
 }

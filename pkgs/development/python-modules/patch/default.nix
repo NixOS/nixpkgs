@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchzip
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to parse and apply unified diffs";
     homepage = "https://github.com/techtonik/python-patch/";
     license = licenses.mit;

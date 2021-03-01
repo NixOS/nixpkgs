@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg, gawk }:
 
 let
-  version = "0.3.2";
+  version = "0.3.3";
   repo = "git-secret";
 
 in stdenv.mkDerivation {
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     inherit repo;
     owner = "sobolevn";
     rev = "v${version}";
-    sha256 = "0n268xlsd9p5f083sqwzpvsqg99fdk876mf8gihkydakrismc45b";
+    sha256 = "0hc7yavcp8jmn6b7wngjqhy8kl7f4191sfpik8ycvqghkvvimxj4";
   };
 
   buildInputs = [ makeWrapper ];
@@ -29,8 +29,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "A bash-tool to store your private data inside a git repository";
     homepage = "https://git-secret.io";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.lo1tuma ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.lo1tuma ];
+    platforms = lib.platforms.all;
   };
 }

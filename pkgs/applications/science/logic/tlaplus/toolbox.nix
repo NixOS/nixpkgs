@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.6.0";
+  version = "1.7.0";
   arch = "x86_64";
 
   desktopItem = makeDesktopItem rec {
@@ -13,7 +13,7 @@ let
     comment = "IDE for TLA+";
     desktopName = name;
     genericName = comment;
-    categories = "Application;Development";
+    categories = "Development";
     extraEntries = ''
       StartupWMClass=TLA+ Toolbox
     '';
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   inherit version;
   src = fetchzip {
     url = "https://tla.msr-inria.inria.fr/tlatoolbox/products/TLAToolbox-${version}-linux.gtk.${arch}.zip";
-    sha256 = "1mgx4p5qykf9q0p4cp6kcpc7fx8g5f2w1g40kdgas24hqwrgs3cm";
+    sha256 = "0v15wscawair5bghr5ixb4i062kmh9by1m0hnz2r1sawlqyafz02";
   };
 
   buildInputs = [ makeWrapper  ];
@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
     '';
     # http://lamport.azurewebsites.net/tla/license.html
     license = with lib.licenses; [ mit ];
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.badi ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

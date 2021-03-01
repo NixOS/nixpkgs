@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner,
-thrift, pytest, python-snappy, lz4 }:
+thrift, pytest, python-snappy, lz4, zstd }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.3.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "1vnxr4r0bia2zi9csjw342l507nic6an4hr5xb3a36ggqlbaa0g5";
+    sha256 = "17i091kky34m2xivk29fqsyxxxa7v4352n79w01n7ni93za6wana";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ numba numpy pandas thrift ];
-  checkInputs = [ pytest python-snappy lz4 ];
+  checkInputs = [ pytest python-snappy lz4 zstd ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";

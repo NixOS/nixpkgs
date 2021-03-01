@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, git, which }:
-  
+{ lib, fetchFromGitHub, buildGoPackage, git, which, removeReferencesTo, go }:
+
 buildGoPackage rec {
   pname = "quorum";
   version = "2.5.0";
@@ -21,11 +21,17 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -pv $bin/bin
-    cp -v build/bin/geth build/bin/bootnode build/bin/swarm $bin/bin
+    mkdir -pv $out/bin
+    cp -v build/bin/geth build/bin/bootnode build/bin/swarm $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  # fails with `GOFLAGS=-trimpath`
+  allowGoReference = true;
+  preFixup = ''
+    find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
+  '';
+
+  meta = with lib; {
     description = "A permissioned implementation of Ethereum supporting data privacy";
     homepage = "https://www.goquorum.com/";
     license = licenses.lgpl3;

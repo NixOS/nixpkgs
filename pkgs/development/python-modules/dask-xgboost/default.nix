@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , xgboost
@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.1.9";
+  version = "0.1.11";
   pname = "dask-xgboost";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6faeeed044112151e28770b69fb1ad06b026597726ce8dc185fd3ae45363d0c0";
+    sha256 = "3fbe1bf4344dc74edfbe9f928c7e3e6acc26dc57cefd8da8ae56a15469c6941c";
   };
 
   checkInputs = [ pytest scikitlearn ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dask/dask-xgboost";
     description = "Interactions between Dask and XGBoost";
     license = licenses.bsd3;

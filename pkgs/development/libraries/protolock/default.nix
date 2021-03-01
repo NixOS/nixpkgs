@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "protolock";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "nilslice";
     repo = "protolock";
     rev = "v${version}";
-    sha256 = "0qg26vcqdhgy91p6wiv16dq73ay0fymran3d8ylca9264zwi2vxw";
+    sha256 = "sha256-rnsHVJHFE/8JIOfMWqGBfIbIuOFyHtT54Vu/DaRY9js=";
   };
 
-  modSha256 = "1q755ipqsfpr41s5fxzmx50lwcdqc5a7akwx6mzn789w2z07x8lg";
+  vendorSha256 = "sha256-3kRGLZgYcbUQb6S+NrleMNNX0dXrE9Yer3vvqxiP4So=";
+
+  doCheck = false;
 
   postInstall = ''
     rm $out/bin/plugin*

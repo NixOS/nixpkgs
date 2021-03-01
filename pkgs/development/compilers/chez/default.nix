@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , coreutils, cctools
 , ncurses, libiconv, libX11, libuuid
 }:
 
 stdenv.mkDerivation rec {
   pname = "chez-scheme";
-  version = "9.5.2";
+  version = "9.5.4";
 
   src = fetchFromGitHub {
     owner  = "cisco";
     repo   = "ChezScheme";
     rev    = "refs/tags/v${version}";
-    sha256 = "1gsjmsvsj31q5l9bjvm869y7bakrvl41yq94vyqdx8zwcr1bmpjf";
+    sha256 = "065dir19cqpn0d1bk9w49wnwzn6qfrgvcqw8da2fdhkafhfcb1bj";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ coreutils ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ coreutils ] ++ lib.optional stdenv.isDarwin cctools;
   buildInputs = [ ncurses libiconv libX11 libuuid ];
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   /*
   ** We patch out a very annoying 'feature' in ./configure, which
@@ -65,12 +65,14 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib/csv${version}/examples
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description  = "A powerful and incredibly fast R6RS Scheme compiler";
     homepage     = "https://cisco.github.io/ChezScheme/";
-    license      = stdenv.lib.licenses.asl20;
-    maintainers  = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms    = stdenv.lib.platforms.unix;
+    license      = lib.licenses.asl20;
+    maintainers  = with lib.maintainers; [ thoughtpolice ];
+    platforms    = lib.platforms.unix;
     badPlatforms = [ "aarch64-linux" ];
   };
 }

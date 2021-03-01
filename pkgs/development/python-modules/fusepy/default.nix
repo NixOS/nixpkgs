@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -23,7 +23,7 @@ buildPythonPackage rec {
       "find_library('fuse')" "'${pkgs.fuse}/lib/libfuse.so'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple ctypes bindings for FUSE";
     longDescription = ''
       Python module that provides a simple interface to FUSE and MacFUSE.

@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchurl, utillinux, makeWrapper
+{ stdenv, lib, fetchurl, util-linux, makeWrapper
 , enableReadline ? true, readline, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "calc";
-  version = "2.12.7.2";
+  version = "2.12.7.6";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/${version}/${pname}-${version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "147wmbajcxv6wp92j6pizq4plrr1sb7jirifr1477bx33hc49bsp";
+    sha256 = "sha256-Pg8nvW+RDy1Vb+Xg+5tnDxZEVkD80VcQGyZVayq8zsk=";
   };
 
   patchPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
   '';
 
-  buildInputs = [ utillinux makeWrapper ]
+  buildInputs = [ util-linux makeWrapper ]
              ++ lib.optionals enableReadline [ readline ncurses ];
 
   makeFlags = [

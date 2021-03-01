@@ -1,27 +1,23 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ buildGoModule, lib, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "impl-unstable";
-  version = "2018-02-27";
-  rev = "3d0f908298c49598b6aa84f101c69670e15d1d03";
-
-  goPackagePath = "github.com/josharian/impl";
+buildGoModule rec {
+  pname = "impl";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    inherit rev;
-
     owner = "josharian";
     repo = "impl";
-    sha256 = "0xpip20x5vclrl0by1760lg73v6lj6nmkbiazlskyvpkw44h8a7c";
+    rev = "v${version}";
+    sha256 = "0l21fkcgiaaf6ka91dmz8hx0l3nbp0kqi8p25kij1s5zb796z0dy";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "0xkalwy02w62px01jdwwr3vwwsh50f22dsxf8lrrwmw6k0rq57zv";
+
+  # go: cannot find GOROOT directory: go
+  doCheck = false;
 
   meta = with lib; {
-    description = "impl generates method stubs for implementing an interface.";
+    description = "Generate method stubs for implementing an interface";
     homepage = "https://github.com/josharian/impl";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];

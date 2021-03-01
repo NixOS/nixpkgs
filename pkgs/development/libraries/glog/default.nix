@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ perl ];
   doCheck = false; # fails with "Mangled symbols (28 out of 380) found in demangle.dm"
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/glog";
     license = licenses.bsd3;
     description = "Library for application-level logging";

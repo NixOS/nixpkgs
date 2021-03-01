@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, dtc }:
+{ lib, stdenv, fetchgit, dtc, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "spike";
@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    can-run-hello-world = nixosTests.spike;
+  };
+
+  meta = with lib; {
     description = "A RISC-V ISA Simulator";
     homepage = "https://github.com/riscv/riscv-isa-sim";
     license = licenses.bsd3;

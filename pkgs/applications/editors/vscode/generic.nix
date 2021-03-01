@@ -1,7 +1,10 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig
+, systemd, fontconfig, libdbusmenu
+
+# Populate passthru.tests
+, tests
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
@@ -16,7 +19,7 @@ in
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName;
+      inherit executableName tests;
     };
 
     desktopItem = makeDesktopItem {
@@ -24,7 +27,7 @@ in
       desktopName = longName;
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
-      exec = executableName;
+      exec = "${executableName} %F";
       icon = "code";
       startupNotify = "true";
       categories = "Utility;TextEditor;Development;IDE;";
@@ -62,7 +65,7 @@ in
       else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
         ++ [ libsecret libXScrnSaver ];
 
-    runtimeDependencies = lib.optional (stdenv.isLinux) [ systemd.lib fontconfig.lib ];
+    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 
@@ -77,8 +80,6 @@ in
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
-
-        substituteInPlace $out/lib/vscode/bin/${executableName} --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
 
         ln -s $out/lib/vscode/bin/${executableName} $out/bin
 

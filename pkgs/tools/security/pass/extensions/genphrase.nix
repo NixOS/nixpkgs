@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "pass-genphrase";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "congma";
     repo = "pass-genphrase";
     rev = version;
-    sha256 = "1sdkmz5s6wdx4vdlgqf5kmyrm17zwzy3n52s13qpx32bnnajap1h";
+    sha256 = "01dff2jlp111y7vlmp1wbgijzphhlzc19m02fs8nzmn5vxyffanx";
   };
 
   dontBuild = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace '$EXTENSIONS' "$out/lib/password-store/extensions/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pass extension that generates memorable passwords";
     homepage = "https://github.com/congma/pass-genphrase";
     license = licenses.gpl3;

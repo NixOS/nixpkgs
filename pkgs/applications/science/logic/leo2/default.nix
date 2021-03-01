@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
+{ lib, stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "leo2";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       --add-flags "--atprc $out/etc/leoatprc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-performance typed higher order prover";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ config, lib, stdenv, fetchFromGitHub, pkg-config, cmake
 
 # dependencies
 , glib, libXinerama
@@ -64,17 +64,17 @@ assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport  -> curlSupport && libxml2 != null;
 assert journalSupport      -> systemd != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
-  version = "1.11.5";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "1a75ss48mn9pknrxy33dh5rdgm67a5kpddsyqfhlcn1761kfzzyp";
+    sha256 = "0y2g66fjqp2hdk0y1h4ijxhnv34j16gizvxpmbigwh4n6zijcm6v";
   };
 
   postPatch = ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_LDFLAGS = "-lgcc_s";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib libXinerama ]
     ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
   # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://conky.sourceforge.net/";
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];

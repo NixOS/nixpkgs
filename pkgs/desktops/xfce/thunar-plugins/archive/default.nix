@@ -1,6 +1,5 @@
-{ stdenv
+{ lib
 , mkXfceDerivation
-, fetchFromGitHub
 , gtk3
 , thunar
 , exo
@@ -9,7 +8,7 @@
 , gettext
 }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "thunar-plugins";
   pname  = "thunar-archive-plugin";
   version = "0.4.0";
@@ -32,7 +31,7 @@ mkXfceDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thunar plugin providing file context menus for archives";
   };
 }

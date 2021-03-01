@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test library providing test harnesses and mock classes complementing the classes provided by GLib";
     homepage = "https://gitlab.gnome.org/pwithnall/libglib-testing";
     license = licenses.lgpl21Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , fetchFromGitHub
 , cmake
@@ -18,29 +18,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "galario";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "mtazzari";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1akz7md7ly16a89zr880c265habakqdg9sj8iil90klqa0i21w6g";
+    sha256 = "0dw88ga50x3jwyfgcarn4azlhiarggvdg262hilm7rbrvlpyvha0";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ fftw fftwFloat ]
-    ++ stdenv.lib.optional enablePython pythonPackages.python
-    ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ lib.optional enablePython pythonPackages.python
+  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = stdenv.lib.optionals enablePython [
+  propagatedBuildInputs = lib.optional enablePython [
     pythonPackages.numpy
     pythonPackages.cython
     pythonPackages.pytest
   ];
 
-  checkInputs = stdenv.lib.optional enablePython pythonPackages.scipy;
+  checkInputs = lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytestcov ];
 
   preConfigure = ''
     mkdir -p build/external/src
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enablePython) ''
+  postInstall = lib.optionalString (stdenv.isDarwin && enablePython) ''
     install_name_tool -change libgalario.dylib $out/lib/libgalario.dylib $out/lib/python*/site-packages/galario/double/libcommon.so
     install_name_tool -change libgalario_single.dylib $out/lib/libgalario_single.dylib $out/lib/python*/site-packages/galario/single/libcommon.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPU Accelerated Library for Analysing Radio Interferometer Observations";
     longDescription = ''
       Galario is a library that exploits the computing power of modern

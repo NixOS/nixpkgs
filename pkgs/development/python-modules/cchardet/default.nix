@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "cchardet";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cs6y59qhbal8fgbyjk2lpjykh8kfjhq16clfssylsddb4hgnsmp";
+    sha256 = "c428b6336545053c2589f6caf24ea32276c6664cb86db817e03a94c60afa0eaf";
   };
 
   checkInputs = [ nose ];

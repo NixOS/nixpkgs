@@ -1,55 +1,83 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper
-, openal, fluidsynth_1, soundfont-fluid, libGL, SDL2
-, bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth_1
+, soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
+, game-music-emu, pkg-config }:
 
-stdenv.mkDerivation rec {
-  pname = "gzdoom";
-  version = "4.3.3";
-
-  src = fetchFromGitHub {
+let
+  zmusic-src = fetchFromGitHub {
     owner = "coelckers";
-    repo = "gzdoom";
-    rev = "g${version}";
-    sha256 = "1c4vhnvvwy1rs8xm01kqd486h5xsiccwkf95fjx7912zr49yalks";
+    repo = "zmusic";
+    rev = "bff02053bea30bd789e45f60b90db3ffc69c8cc8";
+    sha256 = "0vpr79gpdbhslg5qxyd1qxlv5akgli26skm1vb94yd8v69ymdcy2";
+  };
+  zmusic = stdenv.mkDerivation {
+    pname = "zmusic";
+    version = "1.1.3";
+
+    src = zmusic-src;
+
+    nativeBuildInputs = [ cmake pkg-config ];
+
+    preConfigure = ''
+      sed -i \
+        -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
+        -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
+        source/mididevices/music_fluidsynth_mididevice.cpp
+    '';
+
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [
-    SDL2 libGL openal fluidsynth_1 bzip2 zlib libjpeg libsndfile mpg123
-    game-music-emu
-  ];
+  gzdoom = stdenv.mkDerivation rec {
+    pname = "gzdoom";
+    version = "4.5.0";
 
-  enableParallelBuilding = true;
+    src = fetchFromGitHub {
+      owner = "coelckers";
+      repo = "gzdoom";
+      rev = "g${version}";
+      sha256 = "0kmqnyhdi5psi7zwrx9j3pz0cplypsvhg4cr8w2jbawh6jb71sk9";
+      fetchSubmodules = true;
+    };
 
-  env.NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
+    nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+    buildInputs = [
+      SDL2
+      libGL
+      openal
+      fluidsynth_1
+      bzip2
+      zlib
+      libjpeg
+      libsndfile
+      mpg123
+      game-music-emu
+      zmusic
+    ];
 
-  preConfigure = ''
-    sed -i \
-      -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
-      -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
-      libraries/zmusic/mididevices/music_fluidsynth_mididevice.cpp
-  '';
+    env.NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
-  installPhase = ''
-    install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
-    for i in *.pk3; do
-      install -Dm644 "$i" "$out/lib/gzdoom/$i"
-    done
-    for i in fm_banks/*; do
-      install -Dm644 "$i" "$out/lib/gzdoom/$i"
-    done
-    for i in soundfonts/*; do
-      install -Dm644 "$i" "$out/lib/gzdoom/$i"
-    done
-    mkdir $out/bin
-    makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
-  '';
+    installPhase = ''
+      install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
+      for i in *.pk3; do
+        install -Dm644 "$i" "$out/lib/gzdoom/$i"
+      done
+      for i in fm_banks/*; do
+        install -Dm644 "$i" "$out/lib/gzdoom/$i"
+      done
+      for i in soundfonts/*; do
+        install -Dm644 "$i" "$out/lib/gzdoom/$i"
+      done
+      mkdir $out/bin
+      makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
+    '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/coelckers/gzdoom";
-    description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
-    license = licenses.gpl3;
-    platforms = ["x86_64-linux"];
-    maintainers = with maintainers; [ lassulus ];
+    meta = with lib; {
+      homepage = "https://github.com/coelckers/gzdoom";
+      description =
+        "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
+      license = licenses.gpl3;
+      platforms = [ "x86_64-linux" ];
+      maintainers = with maintainers; [ lassulus ];
+    };
   };
-}
+
+in gzdoom

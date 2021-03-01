@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "1.13.0";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e24a911ec96773022ebcc7030059b57cd3480b56d4f5d19b7c370ec635e6aed5";
+    sha256 = "a4d6d37329e4a893e77d9ffa89e838dd2b45d5dc099984cf03c703ac8411bb82";
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) mock;
@@ -27,8 +27,9 @@ buildPythonPackage rec {
     pytest
   ];
 
+  # ignore test which only works with pytest5 output structure
   checkPhase = ''
-    pytest
+    pytest -k 'not detailed_introspection_async'
   '';
 
   meta = with lib; {

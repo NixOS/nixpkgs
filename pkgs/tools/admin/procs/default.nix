@@ -1,25 +1,34 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.9.20";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00qqn8nwv791bs88n302hy67dpas5hcacnkakn7law567klnzxfz";
+    sha256 = "sha256-OaHsNxrOrPlAwtFDY3Tnx+nOabax98xcGQeNds32iOA=";
   };
 
-  cargoSha256 = "09ib1nlqhzq3mc5wc16mgqbyr652asrwdpbwaax54fm1gd334prl";
+  cargoSha256 = "sha256-miOfm1Sw6tIICkT9T2V82cdGG2STo9vuLPWsAN/8wuM=";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ installShellFiles ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/procs --completion $shell > procs.$shell
+      installShellCompletion procs.$shell
+    done
+  '';
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
+
+  meta = with lib; {
     description = "A modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     license = licenses.mit;
-    maintainers = with maintainers;  [ dalance filalex77 ];
+    maintainers = with maintainers; [ dalance Br1ght0ne ];
     platforms = with platforms; linux ++ darwin;
   };
 }

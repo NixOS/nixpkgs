@@ -5,7 +5,7 @@
 , doxygen
 , fetchFromGitLab
 , fetchpatch
-, ffmpeg
+, ffmpeg_3
 , glew
 , gsm
 , intltool
@@ -23,27 +23,25 @@
 , libv4l
 , libvpx
 , ortp
-, pkgconfig
+, pkg-config
 , python
 , SDL
 , speex
 , srtp
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  # Using master branch for linphone-desktop caused a chain reaction that many
-  # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-20";
+  version = "4.4.13";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "c5eecb72cb44376d142949051dd0cb7c982608fb";
-    sha256 = "1vp260jxvjlmrmjdl4p23prg4cjln20a7z6zq8dqvfh4iq3ya033";
+    rev = version;
+    sha256 = "0w84v1ajhyysr41qaj7x4njwdak84cc10lq33hl8lq68a52fc2vw";
   };
 
   patches = [
@@ -59,7 +57,7 @@ stdenv.mkDerivation rec {
     cmake
     doxygen
     intltool
-    pkgconfig
+    pkg-config
     python
   ];
 
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
     alsaLib
     bctoolbox
     bzrtp
-    ffmpeg
+    ffmpeg_3
     glew
     gsm
     libGL
@@ -101,7 +99,7 @@ stdenv.mkDerivation rec {
   ];
   env.NIX_LDFLAGS = "-lXext";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, zlib, fetchpatch }:
+{ lib, stdenv, buildPackages, fetchurl, zlib, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "kexec-tools";
@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" "pic" "relro" "pie" ];
 
+  # Prevent kexec-tools from using uname to detect target, which is wrong in
+  # cases like compiling for aarch32 on aarch64
+  configurePlatforms = [ "build" "host" ];
   configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://horms.net/projects/kexec/kexec-tools";
     description = "Tools related to the kexec Linux feature";
     platforms = platforms.linux;

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -23,17 +23,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.7.1";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1s97sv24bybggjx6hgqba2qdqz3ivfpd4cmkh4zm5y59sim109mv";
+    sha256 = "sha256-tPNBgVTvP0PZQggnKUkWrqGCcCGvwG4WRPxWlRgwo1k=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     vala
@@ -68,12 +68,13 @@ stdenv.mkDerivation rec {
     "-Denable-gtk-doc=true"
   ];
 
-  # FIXME: fails two new tests added in 1.7.1:
-  # libosinfo:symbols / check-symfile
-  # 3/24 libosinfo:symbols / check-symsorting
-  doCheck = false;
+  preCheck = ''
+    patchShebangs ../osinfo/check-symfile.pl ../osinfo/check-symsorting.pl
+  '';
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  meta = with lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
     license = licenses.lgpl2Plus;

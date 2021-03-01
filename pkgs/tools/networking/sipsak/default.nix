@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, c-ares, openssl ? null }:
+{ lib, stdenv, fetchurl, autoreconfHook, c-ares, openssl ? null }:
 
 stdenv.mkDerivation rec {
   pname = "sipsak";
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "769fe59966b1962b67aa35aad7beb9a2110ebdface36558072a05c6405fb5374";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sipwise/sipsak";
     description = "SIP Swiss army knife";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with maintainers; [ sheenobu ];
     platforms = with platforms; unix;
   };

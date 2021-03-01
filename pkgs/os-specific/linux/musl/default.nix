@@ -19,21 +19,27 @@ let
   # iconv tool, implemented by musl author.
   # Original: http://git.etalabs.net/cgit/noxcuse/plain/src/iconv.c?id=02d288d89683e99fd18fe9f54d4e731a6c474a4f
   # We use copy from Alpine which fixes error messages, see:
-  # https://git.alpinelinux.org/cgit/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
+  # https://git.alpinelinux.org/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
   iconv_c = fetchurl {
     name = "iconv.c";
-    url = "https://git.alpinelinux.org/cgit/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
+    url = "https://git.alpinelinux.org/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
     sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
   };
+
+  arch = if stdenv.hostPlatform.isx86_64
+    then "x86_64"
+    else if stdenv.hostPlatform.isx86_32
+      then "i386"
+      else null;
 
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.1.24";
+  version = "1.2.1";
 
   src = fetchurl {
     url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "18r2a00k82hz0mqdvgm7crzc7305l36109c0j9yjmkxj2alcjw0k";
+    sha256 = "0jz8fzwgvfyjgxjbpw35ixdglp2apqjvp8m386f6yr4zacc6xbv8";
   };
 
   enableParallelBuilding = true;
@@ -55,6 +61,12 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
+    })
+    # wcsnrtombs destination buffer overflow, remove >= 1.2.2
+    (fetchurl {
+      name = "CVE-2020-28928.patch";
+      url = "https://www.openwall.com/lists/oss-security/2020/11/20/4/1";
+      sha256 = "077n2p165504nz9di6n8y5421591r3lsbcxgih8z26l6mvkhcs2h";
     })
   ];
 
@@ -104,6 +116,9 @@ stdenv.mkDerivation rec {
       -lc \
       -B $out/lib \
       -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
+  '' + lib.optionalString (arch != null) ''
+    # Create 'libc.musl-$arch' symlink
+    ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h

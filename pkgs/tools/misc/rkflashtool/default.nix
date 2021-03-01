@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb1 }:
+{ lib, stdenv, fetchurl, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "rkflashtool-5.1";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp rkunpack rkcrc rkflashtool rkparameters rkparametersblock rkunsign rkmisc $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/rkflashtool/";
     description = "Tools for flashing Rockchip devices";
     platforms = platforms.linux;

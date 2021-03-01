@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libminc }:
+{ lib, stdenv, fetchFromGitHub, cmake, libminc }:
 
 stdenv.mkDerivation rec {
   pname = "EBTKS";
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libminc ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Library for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];

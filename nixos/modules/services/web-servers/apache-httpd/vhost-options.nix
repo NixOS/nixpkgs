@@ -112,7 +112,7 @@ in
 
     acmeRoot = mkOption {
       type = types.str;
-      default = "/var/lib/acme/acme-challenges";
+      default = "/var/lib/acme/acme-challenge";
       description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
     };
 
@@ -137,7 +137,7 @@ in
 
     http2 = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Whether to enable HTTP 2. HTTP/2 is supported in all multi-processing modules that come with httpd. <emphasis>However, if you use the prefork mpm, there will
         be severe restrictions.</emphasis> Refer to <link xlink:href="https://httpd.apache.org/docs/2.4/howto/http2.html#mpm-config"/> for details.

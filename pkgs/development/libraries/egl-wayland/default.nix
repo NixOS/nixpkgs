@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , libX11
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

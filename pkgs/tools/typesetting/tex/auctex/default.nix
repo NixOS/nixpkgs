@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, emacs, texlive, ghostscript }:
- 
+{ lib, stdenv, fetchurl, emacs, texlive, ghostscript }:
+
 let auctex = stdenv.mkDerivation ( rec {
-  version = "12.2";
+  version = "12.3";
 
   # Make this a valid tex(live-new) package;
   # the pkgs attribute is provided with a hack below.
@@ -13,7 +13,7 @@ let auctex = stdenv.mkDerivation ( rec {
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "14vqs08mkfzc91jg7kabs9sdn74vywj8a29gyrfa3ivnm9c7jrsr";
+    sha256 = "1pd99hbhci3l1n0lmzn803svqwl47kld6172gwkwjmwlnqqgxm1g";
   };
 
   buildInputs = [ emacs texlive.combined.scheme-basic ghostscript ];
@@ -30,8 +30,8 @@ let auctex = stdenv.mkDerivation ( rec {
   meta = {
     description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
     homepage = "https://www.gnu.org/software/auctex";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
 });
 

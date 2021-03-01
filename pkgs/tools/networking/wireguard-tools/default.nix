@@ -1,23 +1,23 @@
-{
-  stdenv, fetchzip,
-
-  iptables ? null,
-  iproute ? null,
-  makeWrapper ? null,
-  openresolv ? null,
-  procps ? null,
-  wireguard-go ? null,
+{ lib, stdenv
+, fetchzip
+, nixosTests
+, iptables ? null
+, iproute ? null
+, makeWrapper ? null
+, openresolv ? null
+, procps ? null
+, wireguard-go ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "1.0.20200319";
+  version = "1.0.20200827";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
-    sha256 = "0g9vlngg9dnh7qqfhaycw35fq8ij5hfz6p1cykh4ncjgr93i7rbx";
+    sha256 = "1d8rs1g6zy3kz327cc3hzkk5a44278x9p32gxasz6i94bq0b2bs3";
   };
 
   outputs = [ "out" "man" ];
@@ -47,7 +47,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = nixosTests.wireguard;
+  };
 
   meta = {
     description = "Tools for the WireGuard secure network tunnel";

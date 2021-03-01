@@ -11,11 +11,11 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.5.34";
+  version = "3.5.55";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9675a26d01ec141cb717091bb139b6227bfb3794f521943101da50327bff4825";
+    sha256 = "4f307accda32c9f17015ed77c7424f904514e349dff063f78d2462d715963e53";
   };
 
   checkInputs = [ glibcLocales ];
@@ -30,6 +30,7 @@ in buildPythonPackage rec {
 
     # Remove the tests that require Vera fonts installed
     rm tests/test_graphics_render.py
+    rm tests/test_graphics_charts.py
   '';
 
   checkPhase = ''

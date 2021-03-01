@@ -1,37 +1,64 @@
-{ stdenv, fetchFromGitHub, fetchpatch, mkDerivation, SDL2, frei0r, gettext, mlt
-, jack1, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
-, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, mkDerivation
+, SDL2
+, frei0r
+, ladspaPlugins
+, gettext
+, mlt
+, jack1
+, pkg-config
+, qtbase
+, qtmultimedia
+, qtx11extras
+, qtwebsockets
+, qtquickcontrols2
+, qtgraphicaleffects
+, qmake
+, qttools
+, genericUpdater
+, common-updater-scripts
 }:
 
-assert stdenv.lib.versionAtLeast libmlt.version "6.18.0";
-assert stdenv.lib.versionAtLeast mlt.version "6.18.0";
+assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.04.01";
+  version = "21.01.29";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "10svbhsd5q8z1k055kcfibil97qifwzn3xmnf5b9sxa7ky4bkmqr";
+    sha256 = "0Q+63IRY4UbiYS+IMnn7hlr6w3IYtWynjBfTBvtWBMo=";
   };
 
-  patches = [ ./0001-encodedock.cpp-connect-to-VAAPI-via-DRM-not-X11.patch ];
-
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
-    SDL2 frei0r gettext mlt libmlt
-    qtbase qtmultimedia qtwebkit qtx11extras qtwebsockets qtquickcontrols
+    SDL2
+    frei0r
+    ladspaPlugins
+    gettext
+    mlt
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qtwebsockets
+    qtquickcontrols2
     qtgraphicaleffects
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
-  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" "SHOTCUT_VERSION=${version}" ];
+  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
+  qmakeFlags = [
+    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
+    "SHOTCUT_VERSION=${version}"
+    "DEFINES+=SHOTCUT_NOUPGRADE"
+  ];
 
   prePatch = ''
-    sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
+    sed 's_shotcutPath, "melt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
     sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
     sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
     NICE=$(type -P nice)
@@ -40,7 +67,8 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix" "FREI0R_PATH" ":" "${frei0r}/lib/frei0r-1"
-    "--prefix" "LD_LIBRARY_PATH" ":" (stdenv.lib.makeLibraryPath [jack1 SDL2])
+    "--prefix" "LADSPA_PATH" ":" "${ladspaPlugins}/lib/ladspa"
+    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ jack1 SDL2 ])
     "--prefix" "PATH" ":" "${mlt}/bin"
   ];
 
@@ -49,7 +77,13 @@ mkDerivation rec {
     cp -r src/qml $out/share/shotcut/
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    rev-prefix = "v";
+  };
+
+  meta = with lib; {
     description = "A free, open source, cross-platform video editor";
     longDescription = ''
       An official binary for Shotcut, which includes all the

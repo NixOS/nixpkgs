@@ -1,24 +1,41 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, google_api_python_client, simplejson, oauth2client, setuptools
+{ lib, buildPythonPackage, fetchPypi, isPy3k
+, docutils, installShellFiles
+, google_api_python_client, simplejson, oauth2client, setuptools, xdg
 }:
 
 buildPythonPackage rec {
   pname = "goobook";
-  version = "3.4";
+  version = "3.5.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "089a95s6g9izsy1fzpz48p6pz0wpngcbbrvsillm1n53492gfhjg";
+    sha256 = "6e69aeaf69112d116302f0c42ca1904f3b6efd17f15cefc12c866206160293be";
   };
 
+  nativeBuildInputs = [ docutils installShellFiles ];
   propagatedBuildInputs = [
-    google_api_python_client simplejson oauth2client setuptools
+    google_api_python_client simplejson oauth2client setuptools xdg
   ];
 
-  meta = with stdenv.lib; {
-    description = "Search your google contacts from the command-line or mutt";
+  postInstall = ''
+    rst2man goobook.1.rst goobook.1
+    installManPage goobook.1
+  '';
+
+  doCheck = false;
+
+  pythonImportsCheck = [ "goobook" ];
+
+  meta = with lib; {
+    description = "Access your Google contacts from the command line";
+    longDescription = ''
+      The purpose of GooBook is to make it possible to use your Google Contacts
+      from the command-line and from MUAs such as Mutt.
+      It can be used from Mutt the same way as abook.
+    '';
     homepage    = "https://pypi.python.org/pypi/goobook";
+    changelog   = "https://gitlab.com/goobook/goobook/-/blob/${version}/CHANGES.rst";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ primeos ];
     platforms   = platforms.unix;

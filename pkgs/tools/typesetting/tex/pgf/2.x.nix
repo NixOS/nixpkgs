@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "pgf-2.00";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     cp -prd * $out/share/texmf-nix
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     branch = "2";
     platforms = platforms.unix;
     license = licenses.gpl2;

@@ -1,7 +1,7 @@
 { mkDerivation, fetchurl, lib
 , extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
 , kconfig, kcrash, kinit, kpmcore
-, eject, libatasmart , utillinux, qtbase
+, eject, libatasmart , util-linux, qtbase
 }:
 
 let
@@ -15,12 +15,10 @@ in mkDerivation rec {
     sha256 = "0jhggb4xksb0k0mj752n6pz0xmccnbzlp984xydqbz3hkigra1si";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook ];
 
   # refer to kpmcore for the use of eject
-  buildInputs = [ eject libatasmart utillinux ];
+  buildInputs = [ eject libatasmart util-linux ];
   propagatedBuildInputs = [ kconfig kcrash kinit kpmcore ];
 
   meta = with lib; {

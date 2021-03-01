@@ -2,13 +2,13 @@
 
 let
   pname = "deltachat-electron";
-  version = "1.2.0";
+  version = "1.3.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url =
       "https://download.delta.chat/desktop/v${version}/DeltaChat-${version}.AppImage";
-    sha256 = "Cyb34bfQEdwOA6XYZO+1Ri/2e/PRat15aUMn7IElmUI=";
+    sha256 = "1xyp8cg11px8rras12sncjmq85alyvz7ycw1v1py8w8rlz60wkij";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };

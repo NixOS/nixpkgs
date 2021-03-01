@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptoolsDarcs
@@ -24,11 +24,11 @@ buildPythonPackage rec {
   # package, apparently some kind of plugin.
   doCheck = false;
 
-  prePatch = stdenv.lib.optionalString isPyPy ''
+  prePatch = lib.optionalString isPyPy ''
     grep -rl 'utf-8-with-signature-unix' ./ | xargs sed -i -e "s|utf-8-with-signature-unix|utf-8|g"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pyutil, a collection of mature utilities for Python programmers";
 
     longDescription = ''

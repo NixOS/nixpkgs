@@ -15,6 +15,7 @@ let
     networkmanager-openconnect
     networkmanager-openvpn
     networkmanager-vpnc
+    networkmanager-sstp
    ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
 
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
@@ -386,6 +387,9 @@ in {
 
       "NetworkManager/VPN/nm-iodine-service.name".source =
         "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
+
+      "NetworkManager/VPN/nm-sstp-service.name".source =
+        "${networkmanager-sstp}/lib/NetworkManager/VPN/nm-sstp-service.name";
       }
       // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
          {
@@ -449,12 +453,19 @@ in {
 
     systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
 
+    # override unit as recommended by upstream - see https://github.com/NixOS/nixpkgs/issues/88089
+    # TODO: keep an eye on modem-manager releases as this will eventually be added to the upstream unit
+    systemd.services.ModemManager.serviceConfig.ExecStart = [
+      ""
+      "${pkgs.modemmanager}/sbin/ModemManager --filter-policy=STRICT"
+    ];
+
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ configFile overrideNameserversScript ];
 
       # useful binaries for user-specified hooks
-      path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
+      path = [ pkgs.iproute pkgs.util-linux pkgs.coreutils ];
       aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 

@@ -1,18 +1,22 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy, pythonAtLeast
 , lazy-object-proxy, six, wrapt, typing, typed-ast
 , pytestrunner, pytest
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.3.3";
+  version = "2.4.2";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.4" || pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "71ea07f44df9568a75d0f354c49143a4575d90645e9fead6dfb52c26a85ed13a";
+    sha256 = "2f4078c2a41bf377eea06d71c9d2ba4eb8f6b1af2135bec27bbbb7d8f12bb703";
   };
+
+  postPatch = ''
+    substituteInPlace astroid/__pkginfo__.py --replace "lazy_object_proxy==1.4.*" "lazy_object_proxy"
+  '';
 
   # From astroid/__pkginfo__.py
   propagatedBuildInputs = [ lazy-object-proxy six wrapt ]

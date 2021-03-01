@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpmextract, autoPatchelfHook
+{ stdenv, lib, fetchurl, rpmextract, autoPatchelfHook
 , xorg, gtk3, gnome2, nss, alsaLib, udev, libnotify
 , wrapGAppsHook }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   ]) ++ [
     gtk3 nss alsaLib
   ];
-  runtimeDependencies = [ udev.lib libnotify ];
+  runtimeDependencies = [ (lib.getLib udev) libnotify ];
 
   unpackPhase = ''
     rpmextract $src
@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
     cp -r --parents share/pixmaps $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple and Convenient Messaging App for VK";
     homepage = "https://vk.com/messenger";
     license = licenses.unfree;

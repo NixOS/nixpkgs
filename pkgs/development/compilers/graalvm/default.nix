@@ -150,7 +150,7 @@ let
                                                                           ];
 
   graal-mxcache = jvmci8-mxcache ++ [
-    # rec { sha1 = "5001adab652fc4eb35e30cdefbb0765442f8b7db"; name = "LLVM_ORG_LIBCXX_SRC_${sha1}/llvm-org-libcxx-src.tar.gz";                          url = https://lafo.ssw.uni-linz.ac.at/pub/llvm-org/compiler-rt-llvmorg-8.0.0-4-gd563e33a79-bgae3b177eaa-linux-amd64.tar.gz; }
+    # rec { sha1 = "5001adab652fc4eb35e30cdefbb0765442f8b7db"; name = "LLVM_ORG_LIBCXX_SRC_${sha1}/llvm-org-libcxx-src.tar.gz";                          url = "https://lafo.ssw.uni-linz.ac.at/pub/llvm-org/compiler-rt-llvmorg-8.0.0-4-gd563e33a79-bgae3b177eaa-linux-amd64.tar.gz"; }
     rec { sha1 = "5001adab652fc4eb35e30cdefbb0765442f8b7db"; name = "LLVM_ORG_COMPILER_RT_LINUX_${sha1}/llvm-org-compiler-rt-linux.tar.gz";            url = "https://lafo.ssw.uni-linz.ac.at/pub/llvm-org/compiler-rt-llvmorg-8.0.0-4-gd563e33a79-bgae3b177eaa-linux-amd64.tar.gz"; }
     rec { sha1 = "a990b2dba1c706f5c43c56fedfe70bad9a695852"; name = "LLVM_WRAPPER_${sha1}/llvm-wrapper.jar";                                           url = "mirror://maven/org/bytedeco/javacpp-presets/llvm/6.0.1-1.4.2/llvm-6.0.1-1.4.2.jar"; }
     rec { sha1 = "decbd95d46092fa9afaf2523b5b23d07ad7ad6bc"; name = "LLVM_WRAPPER_${sha1}/llvm-wrapper.sources.jar";                                   url = "mirror://maven/org/bytedeco/javacpp-presets/llvm/6.0.1-1.4.2/llvm-6.0.1-1.4.2-sources.jar"; }
@@ -270,7 +270,7 @@ in rec {
         --prefix PATH : ${lib.makeBinPath [ python27withPackages mercurial ]} \
         --set    FINDBUGS_HOME ${findbugs}
     '';
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/graalvm/mx";
       description = "Command-line tool used for the development of Graal projects";
       license = licenses.gpl2;
@@ -462,7 +462,7 @@ in rec {
         export CC="gcc"
         export CPP="gcc -E"
         export NIX_CXXSTDLIB_LINK=""
-        export NIX_TARGET_CXXSTDLIB_LINK=""
+        export NIX_CXXSTDLIB_LINK_FOR_TARGET=""
         export OPENSSL_PREFIX=$(realpath openssl)
         # this fixes error: impure path 'LibFFIHeaderDirectives' used in link
         export NIX_ENFORCE_PURITY=0
@@ -527,7 +527,7 @@ in rec {
     enableParallelBuilding = true;
     passthru.home = graalvm8;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/oracle/graal";
       description = "High-Performance Polyglot VM";
       license = licenses.gpl2;

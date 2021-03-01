@@ -80,7 +80,7 @@ function fetchLockedDep(builtinFetchGit) {
 
     const fileName = urlToName(url)
 
-    if (url.startsWith('git+')) {
+    if (url.startsWith('git+') || url.startsWith("git:")) {
       const rev = sha1OrRev
 
       const [_, branch] = nameWithVersion.split('#')

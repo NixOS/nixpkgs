@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -22,23 +22,29 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.9"; # Also update the hash in vectors.nix
+  version = "3.3.1"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vlqy2pki0fh1h6l6cbb43z3g2n9fv0849dzb5gqwjv0bkpx7b0c";
+    sha256 = "1ribd1vxq9wwz564mg60dzcy699gng54admihjjkgs9dx95pw5vy";
   };
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = lib.optionals (!isPyPy) [
+    cffi
+  ];
+
   buildInputs = [ openssl ]
-             ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+             ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     packaging
     six
-    enum34
-  ] ++ stdenv.lib.optional (!isPyPy) cffi
-  ++ stdenv.lib.optionals isPy27 [ ipaddress ];
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
+  ] ++ lib.optionals isPy27 [
+    ipaddress enum34
+  ];
 
   checkInputs = [
     cryptography_vectors
@@ -57,7 +63,7 @@ buildPythonPackage rec {
   # can do until nix 1.11's release
   __impureHostDeps = [ "/usr/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to

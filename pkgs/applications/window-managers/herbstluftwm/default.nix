@@ -1,29 +1,90 @@
-{ stdenv, fetchurl, pkgconfig, glib, libX11, libXext, libXinerama }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, asciidoc
+, xdotool, xorgserver, xsetroot, xterm, runtimeShell
+, nixosTests }:
 
-stdenv.mkDerivation rec {
-  name = "herbstluftwm-0.7.2";
+# Doc generation is disabled by default when cross compiling because asciidoc
+# dependency is broken when cross compiling for now
+
+let
+  cross = stdenv.buildPlatform != stdenv.targetPlatform;
+
+in stdenv.mkDerivation rec {
+  pname = "herbstluftwm";
+  version = "0.9.1";
 
   src = fetchurl {
-    url = "https://herbstluftwm.org/tarballs/${name}.tar.gz";
-    sha256 = "1kc18aj9j3nfz6fj4qxg9s3gg4jvn6kzi3ii24hfm0vqdpy17xnz";
+    url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
+    sha256 = "0r4qaklv97qcq8p0pnz4f2zqg69vfai6c2qi1ydi2kz24xqjf5hy";
   };
 
-  patchPhase = ''
-    substituteInPlace config.mk \
-      --replace "/usr/local" "$out" \
-      --replace "/etc" "$out/etc" \
-      --replace "/zsh/functions/Completion/X" "/zsh/site-functions" \
-      --replace "/usr/share" "\$(PREFIX)/share"
+  outputs = [
+    "out"
+    "doc" # share/doc exists with examples even without generated html documentation
+  ] ++ lib.optionals (!cross) [
+    "man"
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
+  ] ++ lib.optional cross "-DWITH_DOCUMENTATION=OFF";
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ] ++ lib.optional (!cross) asciidoc;
+
+  buildInputs = [
+    libX11
+    libXext
+    libXinerama
+    libXrandr
+  ];
+
+  patches = [
+    ./test-path-environment.patch
+  ];
+
+  postPatch = ''
+    patchShebangs doc/gendoc.py
+
+    # fix /etc/xdg/herbstluftwm paths in documentation and scripts
+    grep -rlZ /etc/xdg/herbstluftwm share/ doc/ scripts/ | while IFS="" read -r -d "" path; do
+      substituteInPlace "$path" --replace /etc/xdg/herbstluftwm $out/etc/xdg/herbstluftwm
+    done
+
+    # fix shebang in generated scripts
+    substituteInPlace tests/conftest.py --replace "/usr/bin/env bash" ${runtimeShell}
+    substituteInPlace tests/test_herbstluftwm.py --replace "/usr/bin/env bash" ${runtimeShell}
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libX11 libXext libXinerama ];
+  doCheck = true;
 
-  meta = {
+  checkInputs = [
+    (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
+    xdotool
+    xorgserver
+    xsetroot
+    xterm
+    python3.pkgs.pytestCheckHook
+  ];
+
+  # make the package's module avalaible
+  preCheck = ''
+    export PYTHONPATH="$PYTHONPATH:../python"
+  '';
+
+  pytestFlagsArray = [ "../tests" ];
+
+  passthru = {
+    tests.herbstluftwm = nixosTests.herbstluftwm;
+  };
+
+  meta = with lib; {
     description = "A manual tiling window manager for X";
-    homepage = "http://herbstluftwm.org/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    homepage = "https://herbstluftwm.org/";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thibautmarty ];
   };
 }

@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, ncurses, asciidoc, docbook_xsl, libxslt, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, docbook_xsl, libxslt, pkg-config }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "kakoune-unwrapped";
-  version = "2020.01.16";
+  version = "2020.09.01";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
     rev = "v${version}";
-    sha256 = "16v6z1nzj54j19fraxhb18jdby4zfs1br91gxpg9s2s4nsk0km0b";
+    sha256 = "091qzk0qs7hql0q51hix99srgma35mhdnjfd5ncfba1bmc1h8x5i";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses asciidoc docbook_xsl libxslt ];
   makeFlags = [ "debug=no" ];
 
@@ -25,9 +25,20 @@ stdenv.mkDerivation rec {
     export version="v${version}"
   '';
 
-  doInstallCheckPhase = true;
+  enableParallelBuilding = true;
+
+  doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/kak -ui json -E "kill 0"
+    $out/bin/kak -ui json -e "kill 0"
+  '';
+
+  postInstall = ''
+    # make share/kak/autoload a directory, so we can use symlinkJoin with plugins
+    cd "$out/share/kak"
+    autoload_target=$(readlink autoload)
+    rm autoload
+    mkdir autoload
+    ln -s --relative "$autoload_target" autoload
   '';
 
   meta = {

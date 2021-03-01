@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fuse3, bzip2, zlib, attr, cmake }:
+{ lib, stdenv, fetchFromGitHub, fuse3, bzip2, zlib, attr, cmake }:
 
 stdenv.mkDerivation {
   pname = "apfs-fuse-unstable";
@@ -15,7 +15,11 @@ stdenv.mkDerivation {
   buildInputs = [ fuse3 bzip2 zlib attr ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  postFixup = ''
+    ln -s $out/bin/apfs-fuse $out/bin/mount.fuse.apfs-fuse
+  '';
+
+  meta = with lib; {
     homepage    = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";
     license     = licenses.gpl2;

@@ -1,37 +1,35 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, intltool, itstool, python3, wrapGAppsHook
-, python3Packages, gst_all_1, gtk3
-, gobject-introspection, librsvg, gnome3, libnotify, gsound
-, meson, ninja, gsettings-desktop-schemas
+{ lib
+, fetchFromGitHub
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, python3
+, wrapGAppsHook
+, python3Packages
+, gst_all_1
+, gtk3
+, gobject-introspection
+, libpeas
+, librsvg
+, gnome3
+, libnotify
+, gsound
+, meson
+, ninja
+, gsettings-desktop-schemas
 }:
 
-let
-  version = "0.999";
-
-  # gst-transcoder will eventually be merged with gstreamer (according to
-  # gst-transcoder 1.8.0 release notes). For now the only user is pitivi so we
-  # don't bother exposing the package to all of nixpkgs.
-  gst-transcoder = stdenv.mkDerivation rec {
-    version = "1.14.1";
-    pname = "gst-transcoder";
-    src = fetchFromGitHub {
-      owner = "pitivi";
-      repo = "gst-transcoder";
-      rev = version;
-      sha256 = "16skiz9akavssii529v9nr8zd54w43livc14khdyzv164djg9q8f";
-    };
-    nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection python3 ];
-    buildInputs = with gst_all_1; [ gstreamer gst-plugins-base ];
-  };
-
-in python3Packages.buildPythonApplication rec {
-  name = "pitivi-${version}";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0mxp2p4gg976fp1vj3rb5rmpl5mqfzncm9vw2719irl32f1qlvyb";
-  };
+python3Packages.buildPythonApplication rec {
+  pname = "pitivi";
+  version = "2020.09.2";
 
   format = "other";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/pitivi/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0hzvv4wia4rk0kvq16y27imq2qd4q5lg3vx99hdcjdb1x3zqqfg0";
+  };
 
   patches = [
     # By default, the build picks up environment variables like PYTHONPATH
@@ -40,24 +38,56 @@ in python3Packages.buildPythonApplication rec {
     ./prevent-closure-contamination.patch
   ];
 
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    itstool
+    python3
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gobject-introspection
+    gtk3
+    libpeas
+    librsvg
+    gnome3.gnome-desktop
+    gsound
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    libnotify
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-editing-services
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+    gst-devtools
+  ]);
+
+  pythonPath = with python3Packages; [
+    pygobject3
+    gst-python
+    pyxdg
+    numpy
+    pycairo
+    matplotlib
+    dbus-python
+  ];
+
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig intltool itstool python3 wrapGAppsHook ];
-
-  buildInputs = [
-    gobject-introspection gtk3 librsvg gnome3.gnome-desktop gsound
-    gnome3.adwaita-icon-theme
-    gsettings-desktop-schemas libnotify
-    gst-transcoder
-  ] ++ (with gst_all_1; [
-    gstreamer gst-editing-services
-    gst-plugins-base (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad gst-plugins-ugly gst-libav gst-validate
-  ]);
-
-  pythonPath = with python3Packages; [ pygobject3 gst-python pyxdg numpy pycairo matplotlib dbus-python ];
+  # Fixes error
+  #     Couldn’t recognize the image file format for file ".../share/pitivi/pixmaps/asset-proxied.svg"
+  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
+  # and https://github.com/NixOS/nixpkgs/issues/89691#issuecomment-714398705.
+  strictDeps = false;
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -66,7 +96,7 @@ in python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-Linear video editor utilizing the power of GStreamer";
     homepage = "http://pitivi.org/";
     longDescription = ''

@@ -24,18 +24,21 @@ echo "\$LIBRARY_PATH is \`${LIBRARY_PATH-}'"
 if test "$noSysDirs" = "1"; then
 
     declare \
-        EXTRA_BUILD_FLAGS EXTRA_FLAGS EXTRA_TARGET_FLAGS \
-        EXTRA_BUILD_LDFLAGS EXTRA_TARGET_LDFLAGS
+        EXTRA_FLAGS_FOR_BUILD EXTRA_FLAGS EXTRA_FLAGS_FOR_TARGET \
+        EXTRA_LDFLAGS_FOR_BUILD EXTRA_LDFLAGS_FOR_TARGET
 
     # Extract flags from Bintools Wrappers
-    for pre in 'BUILD_' ''; do
-        curBintools="NIX_${pre}BINTOOLS"
+    for post in '_FOR_BUILD' ''; do
+        curBintools="NIX_BINTOOLS${post}"
 
         declare -a extraLDFlags=()
         if [[ -e "${!curBintools}/nix-support/orig-libc" ]]; then
             # Figure out what extra flags when linking to pass to the gcc
             # compilers being generated to make sure that they use our libc.
             extraLDFlags=($(< "${!curBintools}/nix-support/libc-ldflags") $(< "${!curBintools}/nix-support/libc-ldflags-before" || true))
+            if [ -e ${!curBintools}/nix-support/ld-set-dynamic-linker ]; then
+                extraLDFlags=-dynamic-linker=$(< ${!curBintools}/nix-support/dynamic-linker)
+            fi
 
             # The path to the Libc binaries such as `crti.o'.
             libc_libdir="$(< "${!curBintools}/nix-support/orig-libc")/lib"
@@ -47,20 +50,20 @@ if test "$noSysDirs" = "1"; then
         extraLDFlags=("-L$libc_libdir" "-rpath" "$libc_libdir"
                       "${extraLDFlags[@]}")
         for i in "${extraLDFlags[@]}"; do
-            declare EXTRA_${pre}LDFLAGS+=" -Wl,$i"
+            declare EXTRA_LDFLAGS${post}+=" -Wl,$i"
         done
     done
 
     # Extract flags from CC Wrappers
-    for pre in 'BUILD_' ''; do
-        curCC="NIX_${pre}CC"
-        curFIXINC="NIX_${pre}FIXINC_DUMMY"
+    for post in '_FOR_BUILD' ''; do
+        curCC="NIX_CC${post}"
+        curFIXINC="NIX_FIXINC_DUMMY${post}"
 
         declare -a extraFlags=()
         if [[ -e "${!curCC}/nix-support/orig-libc" ]]; then
             # Figure out what extra compiling flags to pass to the gcc compilers
             # being generated to make sure that they use our libc.
-            extraFlags=($(< "${!curCC}/nix-support/libc-cflags"))
+            extraFlags=($(< "${!curCC}/nix-support/libc-crt1-cflags") $(< "${!curCC}/nix-support/libc-cflags"))
 
             # The path to the Libc headers
             libc_devdir="$(< "${!curCC}/nix-support/orig-libc-dev")"
@@ -68,11 +71,11 @@ if test "$noSysDirs" = "1"; then
             # Use *real* header files, otherwise a limits.h is generated that
             # does not include Libc's limits.h (notably missing SSIZE_MAX,
             # which breaks the build).
-            declare NIX_${pre}FIXINC_DUMMY="$libc_devdir/include"
+            declare NIX_FIXINC_DUMMY${post}="$libc_devdir/include"
         else
             # Hack: support impure environments.
             extraFlags=("-isystem" "/usr/include")
-            declare NIX_${pre}FIXINC_DUMMY=/usr/include
+            declare NIX_FIXINC_DUMMY${post}=/usr/include
         fi
 
         extraFlags=("-I${!curFIXINC}" "${extraFlags[@]}")
@@ -88,13 +91,13 @@ if test "$noSysDirs" = "1"; then
             extraFlags=("-O2" "${extraFlags[@]}")
         fi
 
-        declare EXTRA_${pre}FLAGS="${extraFlags[*]}"
+        declare EXTRA_FLAGS${post}="${extraFlags[*]}"
     done
 
     if test -z "${targetConfig-}"; then
         # host = target, so the flags are the same
-        EXTRA_TARGET_FLAGS="$EXTRA_FLAGS"
-        EXTRA_TARGET_LDFLAGS="$EXTRA_LDFLAGS"
+        EXTRA_FLAGS_FOR_TARGET="$EXTRA_FLAGS"
+        EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
     fi
 
     # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
@@ -102,31 +105,31 @@ if test "$noSysDirs" = "1"; then
     # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx
     # for the startfiles.
     makeFlagsArray+=(
-        "BUILD_SYSTEM_HEADER_DIR=$NIX_BUILD_FIXINC_DUMMY"
-        "SYSTEM_HEADER_DIR=$NIX_BUILD_FIXINC_DUMMY"
+        "BUILD_SYSTEM_HEADER_DIR=$NIX_FIXINC_DUMMY_FOR_BUILD"
+        "SYSTEM_HEADER_DIR=$NIX_FIXINC_DUMMY_FOR_BUILD"
         "NATIVE_SYSTEM_HEADER_DIR=$NIX_FIXINC_DUMMY"
 
-        "LDFLAGS_FOR_BUILD=$EXTRA_BUILD_LDFLAGS"
+        "LDFLAGS_FOR_BUILD=$EXTRA_LDFLAGS_FOR_BUILD"
         #"LDFLAGS=$EXTRA_LDFLAGS"
-        "LDFLAGS_FOR_TARGET=$EXTRA_TARGET_LDFLAGS"
+        "LDFLAGS_FOR_TARGET=$EXTRA_LDFLAGS_FOR_TARGET"
 
-        "CFLAGS_FOR_BUILD=$EXTRA_BUILD_FLAGS $EXTRA_BUILD_LDFLAGS"
-        "CXXFLAGS_FOR_BUILD=$EXTRA_BUILD_FLAGS $EXTRA_BUILD_LDFLAGS"
-        "FLAGS_FOR_BUILD=$EXTRA_BUILD_FLAGS $EXTRA_BUILD_LDFLAGS"
+        "CFLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
+        "CXXFLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
+        "FLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
 
         # It seems there is a bug in GCC 5
         #"CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
         #"CXXFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
 
-        "CFLAGS_FOR_TARGET=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
-        "CXXFLAGS_FOR_TARGET=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
-        "FLAGS_FOR_TARGET=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
+        "CFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
+        "CXXFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
+        "FLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
     )
 
     if test -z "${targetConfig-}"; then
         makeFlagsArray+=(
             "BOOT_CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
-            "BOOT_LDFLAGS=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
+            "BOOT_LDFLAGS=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
         )
     fi
 
@@ -143,9 +146,9 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if test -n "${targetConfig-}"; then
-    # The host strip will destroy some important details of the objects
-    dontStrip=1
+if [ -n "${targetConfig-}" ]; then
+    # if stripping gcc, include target directory too
+    stripDebugList="${stripDebugList-lib lib32 lib64 libexec bin sbin} $targetConfig"
 fi
 
 eval "$oldOpts"
@@ -201,34 +204,34 @@ postConfigure() {
 
 preInstall() {
     mkdir -p "$out/${targetConfig}/lib"
-    mkdir -p "$lib/${targetConfig}/lib"
+    mkdir -p "${!outputLib}/${targetConfig}/lib"
     # Make ‘lib64’ symlinks to ‘lib’.
     if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
         ln -s lib "$out/${targetConfig}/lib64"
-        ln -s lib "$lib/${targetConfig}/lib64"
+        ln -s lib "${!outputLib}/${targetConfig}/lib64"
     fi
 }
 
 
 postInstall() {
-    # Move runtime libraries to $lib.
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "$lib"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "$lib"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "$lib"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "$lib"
-    moveToOutput "share/gcc-*/python" "$lib"
+    # Move runtime libraries to lib output.
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "${!outputLib}"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "${!outputLib}"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "${!outputLib}"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
+    moveToOutput "share/gcc-*/python" "${!outputLib}"
 
-    for i in "$lib/${targetConfig}"/lib/*.{la,py}; do
-        substituteInPlace "$i" --replace "$out" "$lib"
+    for i in "${!outputLib}/${targetConfig}"/lib/*.{la,py}; do
+        substituteInPlace "$i" --replace "$out" "${!outputLib}"
     done
 
     if [ -n "$enableMultilib" ]; then
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.so*" "$lib"
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.la"  "$lib"
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.dylib" "$lib"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.so*" "${!outputLib}"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.la"  "${!outputLib}"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.dylib" "${!outputLib}"
 
-        for i in "$lib/${targetConfig}"/lib64/*.{la,py}; do
-            substituteInPlace "$i" --replace "$out" "$lib"
+        for i in "${!outputLib}/${targetConfig}"/lib64/*.{la,py}; do
+            substituteInPlace "$i" --replace "$out" "${!outputLib}"
         done
     fi
 
@@ -240,7 +243,7 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    if type "patchelf"; then
+    if [[ buildConfig == *"linux"* ]]; then
         # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
         for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
             PREV_RPATH=`patchelf --print-rpath "$i"`
@@ -249,11 +252,21 @@ postInstall() {
         done
     fi
 
+    if [[ targetConfig == *"linux"* ]]; then
+        # For some reason, when building for linux on darwin, the libs retain
+        # RPATH to $out.
+        for i in "$lib"/"$targetConfig"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
+            PREV_RPATH=`patchelf --print-rpath "$i"`
+            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
+            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
+        done
+    fi
+
     if type "install_name_tool"; then
-        for i in "$lib"/lib/*.*.dylib; do
+        for i in "${!outputLib}"/lib/*.*.dylib "${!outputLib}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true
             for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
-              new_path=`echo "$old_path" | sed "s,$out,$lib,"`
+              new_path=`echo "$old_path" | sed "s,$out,${!outputLib},"`
               install_name_tool -change "$old_path" "$new_path" "$i" || true
             done
         done
@@ -276,7 +289,12 @@ postInstall() {
     done
 
     # Two identical man pages are shipped (moving and compressing is done later)
-    ln -sf gcc.1 "$out"/share/man/man1/g++.1
+    for i in "$out"/share/man/man1/*g++.1; do
+        if test -e "$i"; then
+            man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
+            ln -sf "$man_prefix"gcc.1 "$i"
+        fi
+    done
 }
 
 genericBuild

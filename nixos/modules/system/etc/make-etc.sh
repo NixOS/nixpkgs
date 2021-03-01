@@ -14,9 +14,9 @@ for ((i = 0; i < ${#targets[@]}; i++)); do
 
     else
 
-        mkdir -p "$out/etc/$(dirname "$target")"
-        if ! [ -e "$out/etc/$target" ]; then
-            ln -s "$source" "$out/etc/$target"
+        mkdir -p $out/etc/$(dirname $target)
+        if ! [ -e $out/etc/$target ]; then
+            ln -s $source $out/etc/$target
         else
             echo "duplicate entry $target -> $source"
             if test "$(readlink $out/etc/$target)" != "$source"; then
@@ -25,11 +25,11 @@ for ((i = 0; i < ${#targets[@]}; i++)); do
             fi
         fi
 
-        if test "${modes[$i]}" != symlink; then
-            echo "${modes[$i]}"  > "$out/etc/$target.mode"
-            echo "${users[$i]}"  > "$out/etc/$target.uid"
-            echo "${groups[$i]}" > "$out/etc/$target.gid"
+        if test "${modes_[$i]}" != symlink; then
+            echo "${modes_[$i]}"  > $out/etc/$target.mode
+            echo "${users_[$i]}"  > $out/etc/$target.uid
+            echo "${groups_[$i]}" > $out/etc/$target.gid
         fi
+
     fi
 done
-

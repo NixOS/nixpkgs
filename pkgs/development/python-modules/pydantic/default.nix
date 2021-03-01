@@ -8,18 +8,19 @@
 , isPy3k
 , pytest
 , pytestcov
+, pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.4";
+  version = "1.7.3";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zmnwyvvrj6nb2r1wh63yb6dzqaxw8m4njzqycjdq9911c5gwg6z";
+    sha256 = "xihEDmly0vprmA+VdeCoGXg9PjWRPmBWAwk/9f2DLts=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytestcov
+    pytest-mock
   ];
 
   checkPhase = ''

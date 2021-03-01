@@ -1,17 +1,17 @@
-{ stdenv, fetchPypi, buildPythonPackage, flask, limits }:
+{ lib, fetchPypi, buildPythonPackage, flask, limits }:
 
 buildPythonPackage rec {
   pname = "Flask-Limiter";
-  version = "1.1.0";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "905c35cd87bf60c92fd87922ae23fe27aa5fb31980bab31fc00807adee9f5a55";
+    sha256 = "021279c905a1e24f181377ab3be711be7541734b494f4e6db2b8edeba7601e48";
   };
 
   propagatedBuildInputs = [ flask limits ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
     license = licenses.mit;

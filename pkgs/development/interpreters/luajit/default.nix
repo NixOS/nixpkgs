@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, buildPackages
+{ lib, stdenv, fetchFromGitHub, buildPackages
 , name ? "luajit-${version}"
 , isStable
 , sha256
+, rev
 , version
 , extraMeta ? {}
 , callPackage
@@ -10,6 +11,7 @@
 , enableFFI ? true
 , enableJIT ? true
 , enableJITDebugModule ? enableJIT
+, enableGC64 ? true
 , enable52Compat ? false
 , enableValgrindSupport ? false
 , valgrind ? null
@@ -24,10 +26,11 @@ assert enableValgrindSupport -> valgrind != null;
 let
   luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 
-  XCFLAGS = with stdenv.lib; toString (
+  XCFLAGS = with lib; toString (
      optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
   ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
   ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+  ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
   ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
   ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
   ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
@@ -37,9 +40,10 @@ let
 in
 stdenv.mkDerivation rec {
   inherit name version;
-  src = fetchurl {
-    url = "http://luajit.org/download/LuaJIT-${version}.tar.gz";
-    inherit sha256;
+  src = fetchFromGitHub {
+    owner  = "LuaJIT";
+    repo   = "LuaJIT";
+    inherit sha256 rev;
   };
 
   luaversion = "5.1";
@@ -55,7 +59,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = false;
 
-  buildInputs = stdenv.lib.optional enableValgrindSupport valgrind;
+  buildInputs = lib.optional enableValgrindSupport valgrind;
 
   buildFlags = [
     "amalg" # Build highly optimized version
@@ -66,14 +70,14 @@ stdenv.mkDerivation rec {
     "CROSS=${stdenv.cc.targetPrefix}"
     # TODO: when pointer size differs, we would need e.g. -m32
     "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ stdenv.lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
+  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = XCFLAGS;
 
   postInstall = ''
     ( cd "$out/include"; ln -s luajit-*/* . )
     ln -s "$out"/bin/luajit-* "$out"/bin/lua
-  '' + stdenv.lib.optionalString (!isStable) ''
+  '' + lib.optionalString (!isStable) ''
     ln -s "$out"/bin/luajit-* "$out"/bin/luajit
   '';
 
@@ -95,11 +99,11 @@ stdenv.mkDerivation rec {
     interpreter = "${self}/bin/lua";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-performance JIT compiler for Lua 5.1";
     homepage    = "http://luajit.org";
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ thoughtpolice smironov vcunat andir ];
+    maintainers = with maintainers; [ thoughtpolice smironov vcunat andir lblasc ];
   } // extraMeta;
 }

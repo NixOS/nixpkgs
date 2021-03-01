@@ -1,15 +1,15 @@
-{ buildDunePackage, git, cohttp-lwt, alcotest, mtime, nocrypto }:
+{ buildDunePackage, git, cohttp, cohttp-lwt }:
 
 buildDunePackage {
-	pname = "git-http";
-	inherit (git) version src;
+  pname = "git-http";
+  inherit (git) version src minimumOCamlVersion;
 
-	buildInputs = [ alcotest mtime nocrypto ];
-	propagatedBuildInputs = [ git cohttp-lwt ];
-	doCheck = true;
+  useDune2 = true;
 
-	meta = {
-		description = "Client implementation of the “Smart” HTTP Git protocol in pure OCaml";
-		inherit (git.meta) homepage license maintainers;
-	};
+  propagatedBuildInputs = [ git cohttp cohttp-lwt ];
+
+  meta = {
+    description = "Client implementation of the “Smart” HTTP Git protocol in pure OCaml";
+    inherit (git.meta) homepage license maintainers;
+  };
 }

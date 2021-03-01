@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkgconfig, gtk-doc
+{ lib, stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkg-config, gtk-doc
 , docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted
-, cryptsetup, lvm2, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
+, cryptsetup, lvm2, dmraid, util-linux, libbytesize, libndctl, nss, volume_key
 , libxslt, docbook_xsl, gptfdisk, libyaml, autoconf-archive
 , thin-provisioning-tools, makeWrapper
 }:
 stdenv.mkDerivation rec {
   pname = "libblockdev";
-  version = "2.23";
+  version = "2.24";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
     rev = "${version}-1";
-    sha256 = "09gp9h05vy3llhnrg98gny8g57kgwnbi8522qyzjwyv7nmhs4zhz";
+    sha256 = "1gzwlwdv0jyb3lh2n016limy2ngfdsa05x7jvg9llf2ls672nq89";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -29,21 +29,21 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43
+    autoreconfHook pkg-config gtk-doc libxslt docbook_xsl docbook_xml_dtd_43
     python3 gobject-introspection autoconf-archive makeWrapper
   ];
 
   buildInputs = [
-    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid utillinux libbytesize
+    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid util-linux libbytesize
     libndctl nss volume_key libyaml
   ];
 
   postInstall = ''
     wrapProgram $out/bin/lvm-cache-stats --prefix PATH : \
-      ${stdenv.lib.makeBinPath [ thin-provisioning-tools ]}
+      ${lib.makeBinPath [ thin-provisioning-tools ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
     license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the utils

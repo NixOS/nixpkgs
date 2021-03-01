@@ -1,22 +1,30 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gotop";
-  version = "3.5.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01a2y2604dh2zfy5f2fxr306id0fbq0df91fpz2m8w7rpaszd6xr";
+    sha256 = "sha256-3t6I4ah9gUmPlIBRL86BdgiUaMNiKNEeoUSRMASz1Yc=";
   };
 
-  modSha256 = "1gbpxq2vyshln97gij5y9qsjyf3mkwfqwwhikc0cck3mnwiv87dd";
+  runVend = true;
+  vendorSha256 = "sha256-GcIaUIuTiSY1aKxRtclfl7hMNaZZx4uoVG7ahjF/4Hs=";
 
-  meta = with stdenv.lib; {
+  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=v${version}" ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  meta = with lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
     homepage = "https://github.com/xxxserxxx/gotop";
-    license = licenses.agpl3;
+    changelog = "https://github.com/xxxserxxx/gotop/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
   };

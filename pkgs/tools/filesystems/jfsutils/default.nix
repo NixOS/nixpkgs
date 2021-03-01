@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libuuid, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, libuuid, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "jfsutils-1.1.15";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "IBM JFS utilities";
     homepage = "http://jfs.sourceforge.net";
     license = licenses.gpl3;

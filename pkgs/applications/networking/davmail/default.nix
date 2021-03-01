@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, jre, glib, libXtst, gtk2, makeWrapper, unzip }:
+{ fetchurl, lib, stdenv, jre, glib, libXtst, gtk2, makeWrapper, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "davmail";
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     cp -vR ./* $out/share/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --prefix PATH : ${jre}/bin \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk2 libXtst ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://davmail.sourceforge.net/";
     description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     maintainers = [ maintainers.hinton ];

@@ -9,14 +9,14 @@ let
       };
     };
 
-    # prevent make-test.nix to change IP
+    # prevent make-test-python.nix to change IP
     networking.interfaces = {
       eth1.ipv4.addresses = lib.mkOverride 0 [ ];
     };
   };
 in {
-  name = "cotnainers-reloadable";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  name = "containers-reloadable";
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ danbst ];
   };
 

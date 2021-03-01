@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, rsync, xar, makeWrapper }:
+{ lib, stdenv, fetchurl, cpio, rsync, xar, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "smlnj-bootstrap";
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Compiler for the Standard ML '97 programming language";
     homepage    = "http://www.smlnj.org";
-    license     = stdenv.lib.licenses.free;
-    platforms   = stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.jwiegley ];
+    license     = lib.licenses.free;
+    platforms   = lib.platforms.darwin;
+    maintainers = [ lib.maintainers.jwiegley ];
   };
 }

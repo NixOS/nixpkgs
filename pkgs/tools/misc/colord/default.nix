@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , nixosTests
 , bash-completion
 , glib
 , polkit
-, pkgconfig
+, pkg-config
 , gettext
 , gusb
 , lcms2
@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "colord";
-  version = "1.4.4";
+  version = "1.4.5";
 
   outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
-    sha256 = "19f0938fr7nvvm3jr263dlknaq7md40zrac2npfyz25zc00yh3ws";
+    sha256 = "05sydi6qqqx1rrqwnga1vbg9srkf89wdcfw5w4p4m7r37m2flx5p";
   };
 
   patches = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     shared-mime-info
     vala
     wrapGAppsHook
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
     license = licenses.lgpl2Plus;

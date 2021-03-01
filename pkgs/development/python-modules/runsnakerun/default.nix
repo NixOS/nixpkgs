@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , squaremap
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ squaremap wxPython ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI Viewer for Python profiling runs";
     homepage = "http://www.vrplumber.com/programming/runsnakerun/";
     license = licenses.bsd3;

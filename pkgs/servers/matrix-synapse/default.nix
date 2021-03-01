@@ -1,33 +1,22 @@
 { lib, stdenv, python3, openssl
 , enableSystemd ? stdenv.isLinux, nixosTests
+, enableRedis ? false
+, callPackage
 }:
 
 with python3.pkgs;
 
 let
-  matrix-synapse-ldap3 = buildPythonPackage rec {
-    pname = "matrix-synapse-ldap3";
-    version = "0.1.4";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "01bms89sl16nyh9f141idsz4mnhxvjrc3gj721wxh1fhikps0djx";
-    };
-
-    propagatedBuildInputs = [ service-identity ldap3 twisted ];
-
-    # ldaptor is not ready for py3 yet
-    doCheck = !isPy3k;
-    checkInputs = [ ldaptor mock ];
-  };
-
-in buildPythonApplication rec {
+  plugins = python3.pkgs.callPackage ./plugins { };
+  tools = callPackage ./tools { };
+in
+buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.12.1";
+  version = "1.26.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0l3a5dvnahrzwqh8p0cnfr019bxxgd769jk2wprfvfd65h7p0g1r";
+    sha256 = "1jppwqxamj3a65fw2a87brz4iqgijaa4lja51wlxh2xdkqj0sn6l";
   };
 
   patches = [
@@ -45,18 +34,11 @@ in buildPythonApplication rec {
     jinja2
     jsonschema
     lxml
-    matrix-synapse-ldap3
     msgpack
     netaddr
     phonenumbers
     pillow
-    (prometheus_client.overrideAttrs (x: {
-      src = fetchPypi {
-        pname = "prometheus_client";
-        version = "0.3.1";
-        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
-      };
-    }))
+    prometheus_client
     psutil
     psycopg2
     pyasn1
@@ -72,22 +54,29 @@ in buildPythonApplication rec {
     twisted
     unpaddedbase64
     typing-extensions
-  ] ++ lib.optional enableSystemd systemd;
+    authlib
+    pyjwt
+  ] ++ lib.optional enableSystemd systemd
+    ++ lib.optional enableRedis hiredis;
 
   checkInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
 
-  passthru.tests = { inherit (nixosTests) matrix-synapse; };
-
   checkPhase = ''
+    ${lib.optionalString (!enableRedis) "rm -r tests/replication # these tests need the optional dependency 'hiredis'"}
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) matrix-synapse; };
+  passthru.plugins = plugins;
+  passthru.tools = tools;
+  passthru.python = python3;
+
+  meta = with lib; {
     homepage = "https://matrix.org";
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog pacien ma27 ];
+    maintainers = teams.matrix.members;
   };
 }

@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ stdenv, fetchurl, python3Packages, python2Packages, scons }:
+{ fetchurl, python3Packages, lib }:
 
 python3Packages.buildPythonApplication rec {
   pname = "scons";
@@ -13,9 +13,23 @@ python3Packages.buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru.py2 = scons.override { python3Packages = python2Packages; };
+  postPatch = lib.optionalString (lib.versionAtLeast version "4.0.0") ''
+    substituteInPlace setup.cfg \
+      --replace "build/dist" "dist"
+  '' + lib.optionalString (lib.versionAtLeast version "4.1.0") ''
+    substituteInPlace setup.cfg \
+      --replace "build/doc/man/" ""
+  '';
 
-  meta = with stdenv.lib; {
+  # The release tarballs don't contain any tests (runtest.py and test/*):
+  doCheck = lib.versionOlder version "4.0.0";
+
+  postInstall = lib.optionalString (lib.versionAtLeast version "4.1.0") ''
+    mkdir -p "$out/share/man/man1"
+    mv "$out/"*.1 "$out/share/man/man1/"
+  '';
+
+  meta = with lib; {
     description = "An improved, cross-platform substitute for Make";
     longDescription = ''
       SCons is an Open Source software construction tool. Think of

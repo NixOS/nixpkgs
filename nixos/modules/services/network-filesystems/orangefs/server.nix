@@ -83,14 +83,14 @@ in {
       };
 
       dataStorageSpace = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         example = "/data/storage";
         description = "Directory for data storage.";
       };
 
       metadataStorageSpace = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         example = "/data/meta";
         description = "Directory for meta data storage.";

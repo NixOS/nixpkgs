@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "4.4";
+  version = "4.7";
 
   src = fetchurl {
     url = "http://entrproject.org/code/${pname}-${version}.tar.gz";
-    sha256 = "1x2hyc8vc5dz6k7b3291vxz36wllhinvqrb0d8zx9bv0ydj6qmjl";
+    sha256 = "sha256-tsGrdkTYO7Kiadx0Fghno74PXfEWx+tFPCUFMXNTRCk=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://entrproject.org/";
     description = "Run arbitrary commands when files change";
     license = licenses.isc;

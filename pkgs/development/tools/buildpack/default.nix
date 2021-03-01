@@ -1,26 +1,33 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "pack";
-  version = "0.7.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0glfxrw3x35m4nmhr9xwlc14y5g9zni85rcrcn3dvkvgh4m6ipaj";
+    sha256 = "sha256-VTQ3NOskBp7ic8a/nn/ZbALJVff+Pb/ZHHbld/OxQdo=";
   };
 
-  goPackagePath = "github.com/buildpacks/pack";
+  vendorSha256 = "sha256-n8X2NyQiOpEQ0d/ek1kdxKFfaCFf0EucflVLZjOGMfY=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/pack" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/buildpacks/pack/cmd.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/buildpacks/pack.Version=${version}" ];
+
+  postInstall = ''
+    installShellCompletion --bash --name pack.bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash)
+    installShellCompletion --zsh --name _pack $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh)
+  '';
 
   meta = with lib; {
     homepage = "https://buildpacks.io/";
     changelog = "https://github.com/buildpacks/pack/releases/tag/v${version}";
-    description = "Local CLI for building apps using Cloud Native Buildpacks";
+    description = "CLI for building apps using Cloud Native Buildpacks";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

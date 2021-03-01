@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
@@ -9,9 +9,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.10";
+  pname = "dovecot";
+  version = "2.3.13";
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
@@ -20,8 +21,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
-    url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "1ibiz3k2flablkcqbkvfzsjnq5b5kxximhcrplflsjl57mr88ca7";
+    url = "https://dovecot.org/releases/2.3/${pname}-${version}.tar.gz";
+    sha256 = "1i7ijss79a23v7b6lycfzaa8r5rh01k0h0b9h0j4a6n11sw7by53";
   };
 
   enableParallelBuilding = true;
@@ -83,10 +84,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz globin ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ peti fpletz globin ];
+    platforms = lib.platforms.unix;
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;
+    inherit (nixosTests) dovecot;
   };
 }

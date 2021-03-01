@@ -1,25 +1,50 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, aiohttp, crccheck, pycryptodome, pycrypto
-, pytest, pytest-asyncio, asynctest }:
+{ lib
+, aiohttp
+, aiosqlite
+, asynctest
+, buildPythonPackage
+, crccheck
+, fetchFromGitHub
+, pycrypto
+, pycryptodome
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, tox
+, voluptuous }:
 
 buildPythonPackage rec {
-  pname = "zigpy-homeassistant";
-  version = "0.11.0";
+  pname = "zigpy";
+  version = "0.32.0";
 
-  nativeBuildInputs = [ pytest pytest-asyncio asynctest ];
-  buildInputs = [ aiohttp pycryptodome ];
-  propagatedBuildInputs = [ crccheck pycrypto ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "021wg9yhz8dsif60r8s5621mf63bsayjjb2bimhq0am03ql0fysl";
+  src = fetchFromGitHub {
+    owner = "zigpy";
+    repo = "zigpy";
+    rev = version;
+    sha256 = "18grqx1fzh539ccar0865shgd2mnfni65rjj787cq5j5p5rn0yc7";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    aiohttp
+    aiosqlite
+    crccheck
+    pycrypto
+    pycryptodome
+    voluptuous
+  ];
+
+  checkInputs = [
+    asynctest
+    pytest-aiohttp
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ etu mvnetbiz ];
     platforms = platforms.linux;
   };
 }

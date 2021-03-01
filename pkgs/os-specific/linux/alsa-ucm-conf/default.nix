@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "alsa-ucm-conf-${version}";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "0364fgzdm2qrsqvgqri25gzscbma7yqlv31wz8b1z9c5phlxkgvy";
+    sha256 = "0h6kzi1cfdqyxp4pwpqh5wb89c8s9wrgix315bvamffwfxf56frc";
   };
 
   dontBuild = true;
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+  meta = with lib; {
+    homepage = "https://www.alsa-project.org/";
     description = "ALSA Use Case Manager configuration";
 
     longDescription = ''

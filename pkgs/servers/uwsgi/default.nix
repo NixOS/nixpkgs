@@ -1,15 +1,16 @@
-{ stdenv, lib, fetchurl, pkgconfig, jansson, pcre
+{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
 , systemd, withSystemd ? stdenv.isLinux
+, libcap, withCap ? stdenv.isLinux
 , python2, python3, ncurses
 , ruby, php, libmysqlclient
 }:
 
 let php-embed = php.override {
-      config.php.embed = true;
-      config.php.apxs2 = false;
+      embedSupport = true;
+      apxs2Support = false;
     };
 
     pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
@@ -38,8 +39,12 @@ let php-embed = php.override {
                   (lib.nameValuePair "php" {
                     # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
                     path = "plugins/php";
-                    inputs = [ php-embed ] ++ php-embed.buildInputs;
-                    NIX_CFLAGS_LINK = [ "-L${libmysqlclient}/lib/mysql" ];
+                    inputs = [
+                        php-embed
+                        php-embed.extensions.session
+                        php-embed.extensions.session.dev
+                        php-embed.unwrapped.dev
+                    ] ++ php-embed.unwrapped.buildInputs;
                   })
                 ];
 
@@ -54,18 +59,24 @@ in
 
 stdenv.mkDerivation rec {
   pname = "uwsgi";
-  version = "2.0.18";
+  version = "2.0.19.1";
 
   src = fetchurl {
     url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
-    sha256 = "10zmk4npknigmbqcq1wmhd461dk93159px172112vyq0i19sqwj9";
+    sha256 = "0256v72b7zr6ds4srpaawk1px3bp0djdwm239w3wrxpw7dzk1gjn";
   };
 
-  nativeBuildInputs = [ python3 pkgconfig ];
+  patches = [
+        ./no-ext-session-php_session.h-on-NixOS.patch
+        ./additional-php-ldflags.patch
+  ];
+
+  nativeBuildInputs = [ python3 pkg-config ];
 
   buildInputs =  [ jansson pcre ]
               ++ lib.optional withPAM pam
               ++ lib.optional withSystemd systemd
+              ++ lib.optional withCap libcap
               ++ lib.concatMap (x: x.inputs) needed
               ;
 
@@ -73,6 +84,8 @@ stdenv.mkDerivation rec {
                  (  lib.optional withPAM "pam"
                  ++ lib.optional withSystemd "systemd_logger"
                  );
+
+  UWSGI_INCLUDES = lib.optionalString withCap "${libcap.dev}/include";
 
   passthru = {
     inherit python2 python3;
@@ -82,6 +95,16 @@ stdenv.mkDerivation rec {
     export pluginDir=$out/lib/uwsgi
     substituteAll ${./nixos.ini} buildconf/nixos.ini
   '';
+
+  # this is a hack to make the php plugin link with session.so (which on nixos is a separate package)
+  # the hack works in coordination with ./additional-php-ldflags.patch
+  UWSGICONFIG_PHP_LDFLAGS = lib.optionalString (builtins.any (x: x.name == "php") needed)
+        (lib.concatStringsSep "," [
+            "-Wl"
+            "-rpath=${php-embed.extensions.session}/lib/php/extensions/"
+            "--library-path=${php-embed.extensions.session}/lib/php/extensions/"
+            "-l:session.so"
+        ]);
 
   buildPhase = ''
     mkdir -p $pluginDir
@@ -94,13 +117,14 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  env.NIX_CFLAGS_LINK = toString (lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed);
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar schneefux globin ];
     platforms = platforms.unix;
   };
+
+  passthru.tests.uwsgi = nixosTests.uwsgi;
+
 }

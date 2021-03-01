@@ -1,39 +1,40 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d, xercesc, ode
-, eigen, qtbase, qttools, qtwebkit, opencascade-occt, gts, hdf5, vtk, medfile
-, zlib, python3Packages, swig, gfortran, libXmu, soqt, libf2c, libGLU
-, makeWrapper, pkgconfig, mpi ? null }:
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
+opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkg-config, mpi ? null }:
 
 assert mpi != null;
 
 let
   pythonPackages = python3Packages;
 in mkDerivation rec {
-  pname = "freecad";
-  version = "0.18.4";
+  pname = "freecad-unstable";
+  version = "2020-12-08";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
-    rev = version;
-    sha256 = "1phs9a0px5fnzpyx930cz39p5dis0f0yajxzii3c3sazgkzrd55s";
+    rev = "daea30341ea2d5eaf2bfb65614128a5fa2abc8b7";
+    sha256 = "1fza64lygqq35v7kzgqmiq5dvl5rpgkhlzv06f9dszdz44hznina";
   };
 
-  nativeBuildInputs = [ cmake ninja pkgconfig pythonPackages.pyside2-tools ];
-  buildInputs = [ cmake coin3d xercesc ode eigen opencascade-occt gts
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    pythonPackages.pyside2-tools
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
-    libGLU libXmu qtbase qttools qtwebkit
+    libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
+    GitPython # for addon manager
+    scipy pyyaml # (at least for) PyrateWorkbench
   ]);
-
-  # Fix missing app icon on Wayland. Has been upstreamed and should be safe to
-  # remove in versions >= 0.19
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/FreeCAD/FreeCAD/commit/c4d2a358ca125d51d059dfd72dcbfba326196dfc.patch";
-      sha256 = "0yqc9zrxgi2c2xcidm8wh7a9yznkphqvjqm9742qm5fl20p8gl4h";
-    })
-  ];
 
   cmakeFlags = [
     "-DBUILD_QT5=ON"
@@ -67,7 +68,7 @@ in mkDerivation rec {
     mv $out/share/doc $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     homepage = "https://www.freecadweb.org/";
     license = licenses.lgpl2Plus;

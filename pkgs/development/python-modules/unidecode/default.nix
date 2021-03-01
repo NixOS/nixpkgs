@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "Unidecode";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/Unidecode/";
     description = "ASCII transliterations of Unicode text";
     license = licenses.gpl2;

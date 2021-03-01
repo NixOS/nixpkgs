@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
 , ApplicationServices
@@ -10,39 +10,20 @@ let
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
     else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
+    else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
     else throw "ImageMagick is not supported on this platform.";
-
-  cfg = {
-    version = "6.9.10-71";
-    sha256 = "0c69xmr8k8c4dplgzxydm30s2dr8biq71x07hc15bw196nsx3srr";
-    patches = [];
-  }
-    # Freeze version on mingw so we don't need to port the patch too often.
-    # FIXME: This version has multiple security vulnerabilities
-    // lib.optionalAttrs (stdenv.hostPlatform.isMinGW) {
-        version = "6.9.2-0";
-        sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
-        patches = [(fetchpatch {
-          name = "mingw-build.patch";
-          url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/"
-            + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
-          sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
-        })];
-      };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "imagemagick";
-  inherit (cfg) version;
+  version = "6.9.11-60";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
-    rev = cfg.version;
-    inherit (cfg) sha256;
+    rev = version;
+    sha256 = "12810882a0kf4zlgyi290z9bjs921m05njbljkjfw6s1hf0mncl0";
   };
-
-  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -61,7 +42,7 @@ stdenv.mkDerivation {
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
     ;
 
-  nativeBuildInputs = [ pkgconfig libtool ];
+  nativeBuildInputs = [ pkg-config libtool ];
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
@@ -84,10 +65,10 @@ stdenv.mkDerivation {
     moveToOutput "bin/*-config" "$dev"
     moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
-      substituteInPlace "$file" --replace "${pkgconfig}/bin/pkg-config -config" \
-        ${pkgconfig}/bin/pkg-config
-      substituteInPlace "$file" --replace ${pkgconfig}/bin/pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
+      substituteInPlace "$file" --replace "${pkg-config}/bin/pkg-config -config" \
+        ${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config
+      substituteInPlace "$file" --replace ${pkg-config}/bin/pkg-config \
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
     done
   '' + lib.optionalString (ghostscript != null) ''
     for la in $out/lib/*.la; do
@@ -95,11 +76,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ the-kenny ];
     license = licenses.asl20;
   };
 }

@@ -3,9 +3,11 @@
 
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems; };
+with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
 
 {
 
@@ -38,7 +40,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs25 = gtkSupported;
+  emacs = linux;
   enscript = all;
   file = all;
   findutils = all;
@@ -78,9 +80,9 @@ with import ./release-lib.nix { inherit supportedSystems; };
   kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
+  lapack-reference = linux;
   less = all;
   lftp = all;
-  liblapack = linux;
   libtool = all;
   libtool_2 = all;
   libxml2 = all;
@@ -119,12 +121,12 @@ with import ./release-lib.nix { inherit supportedSystems; };
   ntp = linux;
   openssh = linux;
   openssl = all;
-  pan = gtkSupported;
+  pan = linux;
   par2cmdline = all;
   pciutils = linux;
   pdf2xml = all;
   perl = all;
-  pkgconfig = all;
+  pkg-config = all;
   pmccabe = linux;
   procps = linux;
   python = unix; # Cygwin builds fail
@@ -158,8 +160,8 @@ with import ./release-lib.nix { inherit supportedSystems; };
   udev = linux;
   unzip = all;
   usbutils = linux;
-  utillinux = linux;
-  utillinuxMinimal = linux;
+  util-linux = linux;
+  util-linuxMinimal = linux;
   w3m = all;
   webkitgtk = linux;
   wget = all;

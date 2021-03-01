@@ -1,28 +1,28 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, asciidoctor, pkgconfig, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, json_c, kmod, which, utillinux, systemd, keyutils
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
+, asciidoctor, pkg-config, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
+, json_c, kmod, which, util-linux, udev, keyutils
 }:
 
 stdenv.mkDerivation rec {
   pname = "libndctl";
-  version = "67";
+  version = "70.1";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "ndctl";
     rev    = "v${version}";
-    sha256 = "076jgw1g2aafqgnq705in0wnabysqk46dq5yxdv1qzgjmyhka39n";
+    sha256 = "09ymdibcr18vpmyf2n0xrnzgccfvr7iy3p2l5lbh7cgz7djyl5wq";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
-    [ autoreconfHook asciidoctor pkgconfig xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    [ autoreconfHook asciidoctor pkg-config xmlto docbook_xml_dtd_45 docbook_xsl libxslt
       which
     ];
 
   buildInputs =
-    [ json_c kmod utillinux systemd keyutils
+    [ json_c kmod util-linux udev keyutils
     ];
 
   configureFlags =
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     echo "m4_define([GIT_VERSION], [${version}])" > version.m4;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for managing the Linux Non-Volatile Memory Device sub-system";
     homepage    = "https://github.com/pmem/ndctl";
     license     = licenses.lgpl21;

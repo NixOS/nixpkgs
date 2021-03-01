@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , rustPlatform
 , fetchFromGitLab
 , fetchpatch
@@ -8,9 +8,9 @@
 , cargo
 , rustc
 , python3
-, pkgconfig
+, pkg-config
 , glib
-, libhandy
+, libhandy_0
 , gtk3
 , dbus
 , openssl
@@ -20,7 +20,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.4.7";
+  version = "0.4.8";
   pname = "gnome-podcasts";
 
   src = fetchFromGitLab {
@@ -28,15 +28,15 @@ rustPlatform.buildRustPackage rec {
     owner = "World";
     repo = "podcasts";
     rev = version;
-    sha256 = "0vy5i77bv8c22ldhrnr4z6kx22zqnb1lg3s7y8673bqjgd7dppi0";
+    sha256 = "0y2332zjq7vf1v38wzwz98fs19vpzy9kl7y0xbdzqr303l59hjb1";
   };
 
-  cargoSha256 = "1dlbdxsf9p2jzrsclm43k95y8m3zcd41qd9ajg1ii3fpnahi58kd";
+  cargoSha256 = "1jbii9k4bkrivdk1ffr6556q1sgk9j4jbzwnn8vbxmksyl1x328q";
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     cargo
     rustc
@@ -48,13 +48,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glib
     gtk3
-    libhandy
+    libhandy_0
     dbus
     openssl
     sqlite
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
   ];
 
   # use Meson/Ninja phases
@@ -71,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Listen to your favorite podcasts";
     homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3;

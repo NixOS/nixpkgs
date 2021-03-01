@@ -3,7 +3,7 @@
 , fetchurl
 , fetchpatch
 , gettext
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gnome3
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.60.1";
+  version = "0.62.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1i7h1jvsg115l5djn29n06xsqvygpfagczxy0i9f39zq6dr809ay";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "139had0zcggzrxx9rjy0a67mahzm474amafh168y11421iyfhsf3";
   };
 
   passthru = {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     patchShebangs src/box_drawing_generate.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnome.org/";
     description = "A library implementing a terminal emulator widget for GTK";
     longDescription = ''

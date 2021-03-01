@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoconf-archive
 , appstream-glib
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , libcanberra
 , gst_all_1
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-pomodoro";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "codito";
     repo = "gnome-pomodoro";
     rev = version;
-    sha256 = "1bjsjkbms9irn7nkzi0hmgr5vwcgh9xzr5vw4sk2n711wj5d96bi";
+    sha256 = "0990m8ydryd77kv25nfqli1n209i0h5dkjg9gkyww8bfrjhw47mc";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     libxml2
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
     longDescription = ''

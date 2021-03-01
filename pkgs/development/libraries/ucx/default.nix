@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, doxygen
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
 , numactl, rdma-core, libbfd, libiberty, perl, zlib
 }:
 
 let
-  version = "1.7.0";
+  version = "1.9.0";
 
 in stdenv.mkDerivation {
   name = "ucx-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "149p8s7jrg7pbbq0hw0qm8va119bsl19q4scgk94vjqliyc1s33h";
+    sha256 = "0i0ji5ivzxjqh3ys1m517ghw3am7cw1hvf40ma7hsq3wznsyx5s1";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unified Communication X library";
     homepage = "http://www.openucx.org";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex}:
+{lib, stdenv, fetchurl, flex}:
 
 stdenv.mkDerivation {
   name = "detox-1.2.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     install -m644 safe.tbl $out/share/detox/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://detox.sourceforge.net/";
     description = "Utility designed to clean up filenames";
     longDescription = ''

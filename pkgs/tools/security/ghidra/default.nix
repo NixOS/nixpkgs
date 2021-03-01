@@ -1,6 +1,15 @@
-{ stdenv, fetchurl, unzip, lib, makeWrapper, autoPatchelfHook
-, openjdk11, pam, makeDesktopItem, icoutils
-}: let
+{ stdenv
+, fetchzip
+, lib
+, makeWrapper
+, autoPatchelfHook
+, openjdk11
+, pam
+, makeDesktopItem
+, icoutils
+}:
+
+let
 
   pkg_path = "$out/lib/ghidra";
 
@@ -13,26 +22,26 @@
     categories = "Development;";
   };
 
+in stdenv.mkDerivation rec {
 
-in stdenv.mkDerivation {
+  pname = "ghidra";
+  version = "9.2.1";
+  versiondate = "20201215";
 
-  name = "ghidra-9.1";
-
-  src = fetchurl {
-    url = "https://ghidra-sre.org/ghidra_9.1_PUBLIC_20191023.zip";
-    sha256 = "0pl7s59008gvgwz4mxp7rz3xr3vaa12a6s5zvx2yr9jxx3gk1l99";
+  src = fetchzip {
+    url = "https://www.ghidra-sre.org/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    sha256 = "0rjzmx0nbv9flb666mk3w2dqliyfzjyc4ldjfmb5d29wpgnf9bnz";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    autoPatchelfHook
-    unzip
-  ];
+    icoutils
+  ]
+  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     stdenv.cc.cc.lib
     pam
-    icoutils
   ];
 
   dontStrip = true;
@@ -42,7 +51,7 @@ in stdenv.mkDerivation {
     mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
     ln -s ${desktopItem}/share/applications/* $out/share/applications
-    
+
     icotool -x "${pkg_path}/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
     for f in ghidra_*.png; do
@@ -61,9 +70,9 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.ck3d ];
+    maintainers = with maintainers; [ ck3d govanify ];
   };
 
 }

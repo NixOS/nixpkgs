@@ -17,9 +17,9 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = pkgs.python.buildEnv.override {
-    extraLibs = cfg.plugins pkgs.octoprint-plugins;
-  };
+  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+
+  package = pkgs.octoprint;
 
 in
 {
@@ -66,10 +66,11 @@ in
       };
 
       plugins = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = plugins: [];
         defaultText = "plugins: []";
-        example = literalExample "plugins: [ m3d-fio ]";
-        description = "Additional plugins.";
+        example = literalExample "plugins: with plugins; [ themeify stlviewer ]";
+        description = "Additional plugins to be used. Available plugins are passed through the plugins input.";
       };
 
       extraConfig = mkOption {
@@ -106,7 +107,6 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pluginsEnv ];
-      environment.PYTHONPATH = makeSearchPathOutput "lib" pkgs.python.sitePackages [ pluginsEnv ];
 
       preStart = ''
         if [ -e "${cfg.stateDir}/config.yaml" ]; then
@@ -119,7 +119,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.octoprint}/bin/octoprint serve -b ${cfg.stateDir}";
+        ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
       };

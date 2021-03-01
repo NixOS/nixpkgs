@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames }:
+{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, snappy }:
 
 stdenv.mkDerivation rec {
   pname = "leveldb";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "01kxga1hv4wp94agx5vl3ybxfw5klqrdsrb6p6ywvnjmjxm8322y";
   };
 
+  buildInputs = [ snappy ];
+
   nativeBuildInputs = []
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildPhase = ''
     make all
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     cp out-static/leveldbutil $out/bin
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/leveldb";
     description = "Fast and lightweight key/value database library by Google";
     license = licenses.bsd3;

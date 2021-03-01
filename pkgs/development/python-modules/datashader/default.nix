@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , dask
 , distributed
 , bokeh
@@ -25,16 +26,23 @@
 , fastparquet
 , testpath
 , nbconvert
+, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.9.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a423d61014ae8d2668848edab6c12a6244be6f249570bd7811dd5698d5ff633";
+    sha256 = "b1f80415f72f92ccb660aaea7b2881ddd35d07254f7c44101709d42e819d6be6";
   };
+  patches = [ (fetchpatch {
+    # Unpins pyct==0.46 (Sep. 11, 2020).
+    # Will be incorporated into the next datashader release after 0.11.1
+    url = "https://github.com/holoviz/datashader/pull/960/commits/d7a462fa399106c34fd0d44505a8a73789dbf874.patch";
+    sha256 = "1wqsk9dpxnkxr49fa7y5q6ahin80cvys05lnirs2w2p1dja35y4x";
+  })];
 
   propagatedBuildInputs = [
     dask
@@ -60,6 +68,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytest-benchmark
+    pytest_xdist # not needed
     flake8
     nbsmoke
     fastparquet
@@ -67,13 +76,9 @@ buildPythonPackage rec {
     nbconvert
   ];
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "'testpath<0.4'" "'testpath'"
-  '';
-
+  # dask doesn't do well with large core counts
   checkPhase = ''
-    pytest datashader
+    pytest -n $NIX_BUILD_CORES datashader -k 'not dask.array'
   '';
 
   meta = with lib; {

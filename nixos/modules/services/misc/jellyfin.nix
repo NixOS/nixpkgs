@@ -16,6 +16,14 @@ in
         description = "User account under which Jellyfin runs.";
       };
 
+      package = mkOption {
+        type = types.package;
+        example = literalExample "pkgs.jellyfin";
+        description = ''
+          Jellyfin package to use.
+        '';
+      };
+
       group = mkOption {
         type = types.str;
         default = "jellyfin";
@@ -35,10 +43,55 @@ in
         Group = cfg.group;
         StateDirectory = "jellyfin";
         CacheDirectory = "jellyfin";
-        ExecStart = "${pkgs.jellyfin}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
+        ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
         Restart = "on-failure";
+
+        # Security options:
+
+        NoNewPrivileges = true;
+
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+
+        # ProtectClock= adds DeviceAllow=char-rtc r
+        DeviceAllow = "";
+
+        LockPersonality = true;
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+
+        RemoveIPC = true;
+
+        RestrictNamespaces = true;
+        # AF_NETLINK needed because Jellyfin monitors the network connection
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" ];
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+
+          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@module"
+          "~@obsolete" "~@privileged" "~@setuid"
+        ];
       };
     };
+
+    services.jellyfin.package = mkDefault (
+      if versionAtLeast config.system.stateVersion "20.09" then pkgs.jellyfin
+        else pkgs.jellyfin_10_5
+    );
 
     users.users = mkIf (cfg.user == "jellyfin") {
       jellyfin = {

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "alsa-topology-conf-${version}";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "09cls485ckdjsp4azhv3nw7chyg3r7zrqgald6yp70f7cysxcwml";
+    sha256 = "01zdg6q4s6d01k39z96wi4vbhrfw1i2g4yi5dijwfk6a5vjfdq2m";
   };
 
   dontBuild = true;
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+  meta = with lib; {
+    homepage = "https://www.alsa-project.org/";
     description = "ALSA topology configuration files";
 
     longDescription = ''

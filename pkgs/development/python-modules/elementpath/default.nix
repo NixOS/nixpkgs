@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27 }:
 
 buildPythonPackage rec {
-  version = "1.4.3";
+  version = "2.1.3";
   pname = "elementpath";
   disabled = isPy27; # uses incompatible class syntax
 
@@ -9,19 +9,13 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "elementpath";
     rev = "v${version}";
-    sha256 = "18gqqdsrdlgwn93xnxy6ifxrk7ppaimijinflphxia2qcm8czkgf";
+    sha256 = "062l1dqbaz1pab3qz6x5zmja8m8gw1bxgfl4kx91gdh0zsiakg8j";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
 
-  pythonImportsCheck = [
-    "elementpath.xpath1_parser"
-    "elementpath.xpath2_parser"
-    "elementpath.xpath2_functions"
-    "elementpath.xpath_context"
-    "elementpath.xpath_selectors"
-  ];
+  pythonImportsCheck = [ "elementpath" ];
 
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";

@@ -80,6 +80,8 @@ in
             # Retry the command if we just installed it.
             if [ $? = 126 ]; then
               "$@"
+            else
+              return 127
             fi
           else
             # Indicate than there was an error so ZSH falls back to its default handler

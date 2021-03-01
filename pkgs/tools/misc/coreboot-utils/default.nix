@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.11";
+  version = "4.13";
 
-  meta = with stdenv.lib; {
+  commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
@@ -12,11 +12,11 @@ let
   };
 
   generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation (rec {
-    inherit pname version meta;
+    inherit pname version;
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "11xdm2c1blaqb32j98085sak78jldsw0xhrkzqs5b8ir9jdqbzcp";
+      sha256 = "0sl50aajnah4a138sr3jjm3ydc8gfh5vvlhviz3ypp95b9jdlya7";
     };
 
     enableParallelBuilding = true;
@@ -29,7 +29,9 @@ let
       "INSTALL=install"
       "PREFIX=${placeholder "out"}"
     ];
-  } // args);
+
+    meta = commonMeta // args.meta;
+  } // (removeAttrs args ["meta"]));
 
   utils = {
     msrtool = generic {
@@ -87,18 +89,19 @@ let
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
-      postFixup = let 
+      postFixup = let
         binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
+      in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
     };
   };
 
 in utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
-    paths = stdenv.lib.attrValues utils;
+    paths = lib.attrValues utils;
     postBuild = "rm -rf $out/sbin";
   }) // {
-    inherit meta version;
+    inherit version;
+    meta = commonMeta;
   };
 }

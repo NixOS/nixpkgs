@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel, kmod }:
+{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mv src/tuxedo_keyboard.ko $out/lib/modules/${kernel.modDirVersion}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Full color keyboard driver for tuxedo computers laptops";
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
     license = licenses.gpl2;

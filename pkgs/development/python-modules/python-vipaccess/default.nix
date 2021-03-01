@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , oath
@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "python-vipaccess";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g6mmf896wp036263zkkvi3ff59zcrzssjsw7csfmbisiszgdnrj";
+    sha256 = "f148d4534e3a4dda9050a6a038868594c1216ea2413f2144ca6697e0e20c9cad";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytest tests/ -k 'not test_check_token'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free software implementation of Symantec's VIP Access application and protocol";
     homepage = "https://github.com/dlenski/python-vipaccess";
     license = licenses.asl20;

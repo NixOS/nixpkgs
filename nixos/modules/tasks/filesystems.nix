@@ -7,8 +7,9 @@ let
 
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
-  nonEmptyStr = addCheckDesc "non-empty" types.str
-    (x: x != "" && ! (all (c: c == " " || c == "\t") (stringToCharacters x)));
+
+  isNonEmpty = s: (builtins.match "[ \t\n]*" s) == null;
+  nonEmptyStr = addCheckDesc "non-empty" types.str isNonEmpty;
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
@@ -28,10 +29,10 @@ let
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
-
       mountPoint = mkOption {
         example = "/mnt/usb";
-        type = nonEmptyStr;
+        type = addCheckDesc "non-empty without trailing slash" types.str
+          (s: isNonEmpty s && (builtins.match ".+/" s) == null);
         description = "Location of the mounted the file system.";
       };
 
@@ -159,7 +160,7 @@ in
           "/bigdisk".label = "bigdisk";
         }
       '';
-      type = types.loaOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
+      type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = "/"</literal>).  Each
@@ -193,7 +194,7 @@ in
 
     boot.specialFileSystems = mkOption {
       default = {};
-      type = types.loaOf (types.submodule coreFileSystemOpts);
+      type = types.attrsOf (types.submodule coreFileSystemOpts);
       internal = true;
       description = ''
         Special filesystems that are mounted very early during boot.
@@ -286,7 +287,7 @@ in
             before = [ mountPoint' "systemd-fsck@${device'}.service" ];
             requires = [ device'' ];
             after = [ device'' ];
-            path = [ pkgs.utillinux ] ++ config.system.fsPackages;
+            path = [ pkgs.util-linux ] ++ config.system.fsPackages;
             script =
               ''
                 if ! [ -e "${fs.device}" ]; then exit 1; fi

@@ -1,4 +1,7 @@
-#! @bash@/bin/sh -e
+#! @bash@/bin/sh
+
+# This can end up being called disregarding the shebang.
+set -e
 
 shopt -s nullglob
 

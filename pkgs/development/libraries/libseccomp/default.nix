@@ -1,37 +1,46 @@
-{ stdenv, fetchurl, getopt, makeWrapper, utillinux }:
+{ lib, stdenv, fetchurl, getopt, util-linux, gperf }:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.4.3";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "07crwxqzvl5k2b90a47ii9wgvi09s9hsy5b5jddw9ylp351d25fg";
+    sha256 = "0m8dlg1v7kflcxvajs4p76p275qwsm2abbf5mfapkakp7hw7wc7f";
   };
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
 
-  buildInputs = [ getopt makeWrapper ];
+  nativeBuildInputs = [ gperf ];
+  buildInputs = [ getopt ];
 
   patchPhase = ''
     patchShebangs .
   '';
 
-  checkInputs = [ utillinux ];
+  checkInputs = [ util-linux ];
   doCheck = false; # dependency cycle
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";
 
-  meta = with stdenv.lib; {
+  # Copy the python module code into a tarball that we can export and use as the
+  # src input for buildPythonPackage calls
+  postInstall = ''
+    cp -R ./src/python/ tmp-pythonsrc/
+    tar -zcf $pythonsrc --mtime="@$SOURCE_DATE_EPOCH" --sort=name --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
+  '';
+
+  meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
-    homepage    = "https://github.com/seccomp/libseccomp";
-    license     = licenses.lgpl21;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/seccomp/libseccomp";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"
-      "riscv64-linux" "riscv32-linux"
-      "sparc-linux" "sparc64-linux"
+      "riscv32-linux"
+      "sparc-linux"
+      "sparc64-linux"
     ];
     maintainers = with maintainers; [ thoughtpolice ];
   };

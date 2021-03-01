@@ -1,6 +1,6 @@
 { mkDerivation, fetchFromGitHub, fetchpatch
 , aeson, aeson-pretty, attoparsec, base, bytestring, conduit, conduit-extra
-, containers, exceptions, mtl, optparse-simple, parsec, scientific, stdenv
+, containers, exceptions, mtl, optparse-simple, parsec, scientific, lib
 , text, unordered-containers, vector
 }:
 mkDerivation rec {
@@ -30,8 +30,8 @@ mkDerivation rec {
     aeson aeson-pretty base bytestring conduit conduit-extra containers
     mtl optparse-simple text vector
   ];
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
   description = "Functional sed for JSON";
-  maintainers = with stdenv.lib.maintainers; [ fgaz ];
+  maintainers = with lib.maintainers; [ fgaz ];
   homepage = "https://github.com/chrisdone/jl";
 }

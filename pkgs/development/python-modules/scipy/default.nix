@@ -9,11 +9,11 @@ let
   });
 in buildPythonPackage rec {
   pname = "scipy";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59";
+    sha256 = "0rh5b1rwdcvvagld8vpxnpaibszy1skpx39a0fwzd5gx5pwcjvfb";
   };
 
   checkInputs = [ nose pytest ];
@@ -37,8 +37,6 @@ in buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  enableParallelBuilding = true;
-
   checkPhase = ''
     runHook preCheck
     pushd dist
@@ -52,6 +50,8 @@ in buildPythonPackage rec {
   };
 
   setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
+
+  SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
