@@ -1283,6 +1283,8 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron { };
 
+  chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
+
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
