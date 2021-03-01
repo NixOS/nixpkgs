@@ -7344,6 +7344,8 @@ in {
 
   skorch = callPackage ../development/python-modules/skorch { };
 
+  skybellpy = callPackage ../development/python-modules/skybellpy { };
+
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
