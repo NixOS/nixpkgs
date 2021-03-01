@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sameboy";
-  version = "0.13.6";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
     rev = "v${version}";
-    sha256 = "04w8lybi7ssnax37ka4qw7pmcm7cgnmk90p9m73zbyp5chgpqqzc";
+    sha256 = "0h42cixbf0m2qiwrqzygh0x166h9ikxa5dzi3jbqld2dygk932n7";
   };
 
   enableParallelBuilding = true;
@@ -16,20 +16,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ rgbds glib wrapGAppsHook ];
   buildInputs = [ SDL2 ];
 
-  makeFlags = "CONF=release DATA_DIR=$(out)/share/sameboy/";
+  makeFlags = [
+    "CONF=release"
+    "FREEDESKTOP=true"
+    "PREFIX=$(out)"
+  ];
 
-  patchPhase = ''
-    sed 's/-Werror //g' -i Makefile
-    sed 's@"libgtk-3.so"@"${gtk3}/lib/libgtk-3.so"@g' -i OpenDialog/gtk.c
-  '';
-
-  installPhase = ''
-    pushd build/bin/SDL
-    install -Dm755 sameboy $out/bin/sameboy
-    rm sameboy
-    mkdir -p $out/share/sameboy
-    cp -r * $out/share/sameboy
-    popd
+  postPatch = ''
+    substituteInPlace OpenDialog/gtk.c \
+      --replace '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
   '';
 
   meta = with lib; {
