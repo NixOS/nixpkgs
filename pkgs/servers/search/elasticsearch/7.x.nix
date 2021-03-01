@@ -50,8 +50,6 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [ zlib ];
 
-  dontPatchELF = true;
-
   installPhase = ''
     mkdir -p $out
     cp -R bin config lib modules plugins $out
@@ -66,13 +64,6 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
-  '';
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    for exe in $(find $out/modules/x-pack-ml/platform/${plat}-${arch}/bin -executable -type f); do
-      echo "patching $exe..."
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"
-    done
   '';
 
   passthru = { enableUnfree = true; };
