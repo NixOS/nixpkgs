@@ -5704,6 +5704,8 @@ in {
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
+  pymediaroom = callPackage ../development/python-modules/pymediaroom { };
+
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 
   pymemoize = callPackage ../development/python-modules/pymemoize { };
