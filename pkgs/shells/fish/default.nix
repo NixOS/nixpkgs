@@ -17,6 +17,7 @@
 , python3
 , cmake
 , fishPlugins
+, procps
 
 , runCommand
 , writeText
@@ -143,6 +144,41 @@ let
       sha256 = "sha256-TwKT7Z9qa3fkfUHvq+YvMxnobvyL+DzFhzMET7xvkhE=";
     };
 
+    # Fix FHS paths in tests
+    postPatch = ''
+      # src/fish_tests.cpp
+      sed -i 's|/bin/ls|${coreutils}/bin/ls|' src/fish_tests.cpp
+      sed -i 's|L"/usr"|L"/nix"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
+
+      # tests/checks/cd.fish
+      sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
+
+      # tests/checks/redirect.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/redirect.fish
+
+      # tests/checks/vars_as_commands.fish
+      sed -i 's|/usr/bin|${coreutils}/bin|' tests/checks/vars_as_commands.fish
+
+      # tests/checks/jobs.fish
+      sed -i 's|ps -o stat|${procps}/bin/ps -o stat|' tests/checks/jobs.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/jobs.fish
+
+      # tests/checks/job-control-noninteractive.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/job-control-noninteractive.fish
+
+      # tests/checks/complete.fish
+      sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
+    '' + lib.optionalString stdenv.isDarwin ''
+      # Tests use pkill/pgrep which are currently not built on Darwin
+      # See https://github.com/NixOS/nixpkgs/pull/103180
+      rm tests/pexpects/exit.py
+      rm tests/pexpects/job_summary.py
+      rm tests/pexpects/signals.py
+    '';
+
     nativeBuildInputs = [
       cmake
     ];
@@ -173,6 +209,18 @@ let
       groff
       gettext
     ] ++ lib.optional (!stdenv.isDarwin) man-db;
+
+    doCheck = true;
+
+    checkInputs = [
+      coreutils
+      (python3.withPackages(ps: [ps.pexpect]))
+      procps
+    ];
+
+    checkPhase = ''
+      make test
+    '';
 
     postInstall = with lib; ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
