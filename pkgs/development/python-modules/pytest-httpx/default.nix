@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit version;
     pname = "pytest_httpx";
     extension = "tar.gz";
-    sha256 = "13ld6nnsc3f7i4zl4qm1jh358z0awr6xfk05azwgngmjb7jmcz0a";
+    sha256 = "sha256-koyrYudZfWRYeK4nP9SLGvEd0xlf017FyZ2FN8CV0Ys=";
   };
 
   propagatedBuildInputs = [ httpx pytest ];
