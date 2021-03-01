@@ -480,7 +480,7 @@
     "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
     "media_player" = ps: with ps; [ aiohttp-cors ];
     "media_source" = ps: with ps; [ aiohttp-cors ];
-    "mediaroom" = ps: with ps; [ ]; # missing inputs: pymediaroom
+    "mediaroom" = ps: with ps; [ pymediaroom ];
     "melcloud" = ps: with ps; [ ]; # missing inputs: pymelcloud
     "melissa" = ps: with ps; [ ]; # missing inputs: py-melissa-climate
     "meraki" = ps: with ps; [ aiohttp-cors ];
@@ -924,7 +924,7 @@
     "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
     "weather" = ps: with ps; [ ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
-    "webostv" = ps: with ps; [ ]; # missing inputs: aiopylgtv
+    "webostv" = ps: with ps; [ aiopylgtv ];
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [ ]; # missing inputs: pywemo
     "whois" = ps: with ps; [ python-whois ];

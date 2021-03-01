@@ -8049,6 +8049,12 @@
     githubId = 3708689;
     name = "Roberto Di Remigio";
   };
+  robertoszek = {
+    email = "robertoszek@robertoszek.xyz";
+    github = "robertoszek";
+    githubId = 1080963;
+    name = "Roberto";
+  };
   robgssp = {
     email = "robgssp@gmail.com";
     github = "robgssp";

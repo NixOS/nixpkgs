@@ -284,6 +284,8 @@ in {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
+
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };
@@ -1280,6 +1282,8 @@ in {
     callPackage ../development/python-modules/cherrypy/17.nix { };
 
   chevron = callPackage ../development/python-modules/chevron { };
+
+  chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
 
@@ -5711,6 +5715,8 @@ in {
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
+
+  pymediaroom = callPackage ../development/python-modules/pymediaroom { };
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 

@@ -10869,6 +10869,7 @@ in
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-deb = callPackage ../tools/package-management/cargo-deb {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -10922,6 +10923,7 @@ in
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+  cargo-play = callPackage ../development/tools/rust/cargo-play { };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -24044,6 +24046,8 @@ in
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
   };
+
+  pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
   polybar = callPackage ../applications/misc/polybar { };
 
