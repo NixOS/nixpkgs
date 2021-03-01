@@ -1647,6 +1647,12 @@
     githubId = 3086255;
     name = "Barry Moore II";
   };
+  chisui = {
+    email = "philipp.dargel@neuland-bfi.de";
+    name = "Philipp Dargel";
+    github = "chisui";
+    githubId = 4526429;
+  };
   chkno = {
     email = "chuck@intelligence.org";
     github = "chkno";
