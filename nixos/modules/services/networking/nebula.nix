@@ -211,7 +211,6 @@ in
           group = nameToId netName;
           description = "Nebula service user for network ${netName}";
           isSystemUser = true;
-          packages = [ netCfg.package ];
         };
       }) cfg.networks);
 
