@@ -5,7 +5,7 @@
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
 , rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, src ? null, version ? null
 , migration ? false, patches ? []
-, tests ? {}
+, tests ? {}, mdbook
 }:
 
 with stdenv;
@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
       perlDeps perl nix
       postgresql # for running the tests
       nlohmann_json
-      boost
+      boost mdbook
     ];
 
   hydraPath = lib.makeBinPath (
