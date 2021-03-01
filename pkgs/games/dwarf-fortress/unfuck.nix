@@ -12,6 +12,7 @@
 , ncurses
 , glib
 , gtk2
+, gtk3
 , libsndfile
 , zlib
 , dfVersion
@@ -58,6 +59,10 @@ let
       unfuckRelease = "0.47.04";
       sha256 = "1wa990xbsyiiz7abq153xmafvvk1dmgz33rp907d005kzl1z86i9";
     };
+    "0.47.05" = {
+      unfuckRelease = "0.47.04";
+      sha256 = "1wa990xbsyiiz7abq153xmafvvk1dmgz33rp907d005kzl1z86i9";
+    };
   };
 
   release =
@@ -90,11 +95,16 @@ stdenv.mkDerivation {
     glew
     openalSoft
     ncurses
-    gtk2
     libsndfile
     zlib
     libGL
-  ];
+  ]
+  # switched to gtk3 in 0.47.05
+  ++ (if lib.versionOlder release.unfuckRelease "0.47.05" then [
+    gtk2
+  ] else [
+    gtk3
+  ]);
 
   # Don't strip unused symbols; dfhack hooks into some of them.
   dontStrip = true;
