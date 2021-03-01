@@ -1,7 +1,7 @@
 { lib, stdenv, requireFile, makeDesktopItem, libicns, imagemagick, jre, fetchzip }:
 
 let
-  version = "6.0.1";
+  version = "6.1.1";
   desktopItem = makeDesktopItem {
     name = "stm32CubeMX";
     exec = "stm32cubemx";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}.zip";
-    sha256 = "15vxca1pgpgxgiz4wisrw0lylffdwnn4n46z9n0q37f8hmzlrk8f";
+    sha256 = "0hkak00ssk0vv9b4yszqkrczqd77kgnmp2pzsmk3vr4jxz1ld3a9";
     stripRoot= false;
   };
 
