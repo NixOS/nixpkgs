@@ -10,7 +10,6 @@
 , itstool
 , libayatana-appindicator-gtk3
 , perlPackages
-, glibcLocales
 , meson
 , ninja
 }:
