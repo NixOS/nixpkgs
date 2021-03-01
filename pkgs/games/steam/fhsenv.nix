@@ -140,6 +140,7 @@ in buildFHSUserEnv rec {
 
     # dependencies for mesa drivers, needed inside pressure-vessel
     mesa.drivers
+    vulkan-loader
     expat
     wayland
     xlibs.libxcb
