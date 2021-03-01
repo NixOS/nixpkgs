@@ -1,10 +1,10 @@
 { lib, stdenv, callPackage
 , fetchFromGitHub, pkgconfig, rustPlatform
 , glib, cairo, pango
-, atk, gdk_pixbuf, gtk3-x11 
+, atk, gdk_pixbuf, gtk3-x11
 }:
 
-let 
+let
   mkRustPlatform = callPackage ./nightly-rust-platform.nix {};
   rustPlatform = mkRustPlatform { date = "2020-10-28"; channel = "nightly"; };
 in
