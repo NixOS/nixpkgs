@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       Some speech capability has also been incorporated.
     '';
     homepage = "https://brltty.app";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.bramd ];
     platforms = lib.platforms.all;
   };
