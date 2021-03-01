@@ -6,7 +6,6 @@
 , curl
 , doxygen
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg_3
 , libmediainfo
 , libraw
