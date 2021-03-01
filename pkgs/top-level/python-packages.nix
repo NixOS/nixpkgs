@@ -6634,6 +6634,8 @@ in {
 
   pyvex = callPackage ../development/python-modules/pyvex { };
 
+  pyvicare = callPackage ../development/python-modules/pyvicare { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvizio = callPackage ../development/python-modules/pyvizio { };

@@ -903,7 +903,7 @@
     "version" = ps: with ps; [ pyhaversion ];
     "vesync" = ps: with ps; [ pyvesync ];
     "viaggiatreno" = ps: with ps; [ ];
-    "vicare" = ps: with ps; [ ]; # missing inputs: PyViCare
+    "vicare" = ps: with ps; [ pyvicare ];
     "vilfo" = ps: with ps; [ ]; # missing inputs: vilfo-api-client
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
     "vizio" = ps: with ps; [ pyvizio ];
