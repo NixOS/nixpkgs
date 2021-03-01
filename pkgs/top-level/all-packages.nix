@@ -16374,8 +16374,6 @@ in
 
   polkit = callPackage ../development/libraries/polkit { };
 
-  polkit_qt4 = callPackage ../development/libraries/polkit-qt-1/qt-4.nix { };
-
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
   poppler_0_61 = callPackage ../development/libraries/poppler/0.61.nix { lcms = lcms2; };
 
