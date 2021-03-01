@@ -75,5 +75,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom ];
     platforms = platforms.unix;
+    # Could not find crypto++ installation or sources.
+    broken = true;
   };
 }
