@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, python3, bluez
 , tcl, acl, kmod, coreutils, shadow
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
-, systemdSupport ? stdenv.isLinux, systemd ? null }:
-
-assert alsaSupport -> alsaLib != null;
-assert systemdSupport -> systemd != null;
+, alsaSupport ? stdenv.isLinux, alsaLib
+, systemdSupport ? stdenv.isLinux, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "brltty";
