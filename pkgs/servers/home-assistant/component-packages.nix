@@ -480,7 +480,7 @@
     "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
     "media_player" = ps: with ps; [ aiohttp-cors ];
     "media_source" = ps: with ps; [ aiohttp-cors ];
-    "mediaroom" = ps: with ps; [ ]; # missing inputs: pymediaroom
+    "mediaroom" = ps: with ps; [ pymediaroom ];
     "melcloud" = ps: with ps; [ ]; # missing inputs: pymelcloud
     "melissa" = ps: with ps; [ ]; # missing inputs: py-melissa-climate
     "meraki" = ps: with ps; [ aiohttp-cors ];
