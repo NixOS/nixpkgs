@@ -41,6 +41,6 @@ cargoCheckHook() {
     runHook postCheck
 }
 
-if [ -z "${checkPhase-}" ]; then
+if [ -z "${dontCargoCheck-}" ] && [ -z "${checkPhase-}" ]; then
   checkPhase=cargoCheckHook
 fi
