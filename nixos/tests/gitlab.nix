@@ -11,6 +11,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
 
   nodes = {
     gitlab = { ... }: {
+      imports = [ common/user-account.nix ];
+
       virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
       systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
@@ -27,11 +29,31 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
         };
       };
 
+      services.dovecot2 = {
+        enable = true;
+        enableImap = true;
+      };
+
       services.gitlab = {
         enable = true;
         databasePasswordFile = pkgs.writeText "dbPassword" "xo0daiF4";
         initialRootPasswordFile = pkgs.writeText "rootPassword" initialRootPassword;
         smtp.enable = true;
+        extraConfig = {
+          incoming_email = {
+            enabled = true;
+            mailbox = "inbox";
+            address = "alice@localhost";
+            user = "alice";
+            password = "foobar";
+            host = "localhost";
+            port = 143;
+          };
+          pages = {
+            enabled = true;
+            host = "localhost";
+          };
+        };
         secrets = {
           secretFile = pkgs.writeText "secret" "r8X9keSKynU7p4aKlh4GO1Bo77g5a7vj";
           otpFile = pkgs.writeText "otpsecret" "Zu5hGx3YvQx40DvI8WoZJQpX2paSDOlG";
@@ -64,12 +86,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
   in
   ''
     gitlab.start()
+
     gitlab.wait_for_unit("gitaly.service")
     gitlab.wait_for_unit("gitlab-workhorse.service")
+    gitlab.wait_for_unit("gitlab-pages.service")
+    gitlab.wait_for_unit("gitlab-mailroom.service")
     gitlab.wait_for_unit("gitlab.service")
     gitlab.wait_for_unit("gitlab-sidekiq.service")
     gitlab.wait_for_file("/var/gitlab/state/tmp/sockets/gitlab.socket")
     gitlab.wait_until_succeeds("curl -sSf http://gitlab/users/sign_in")
+
     gitlab.succeed(
         "curl -isSf http://gitlab | grep -i location | grep -q http://gitlab/users/sign_in"
     )

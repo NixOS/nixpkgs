@@ -2558,6 +2558,8 @@ in
 
   lief = callPackage ../development/libraries/lief {};
 
+  libnbd = callPackage ../development/libraries/libnbd { };
+
   libndtypes = callPackage ../development/libraries/libndtypes { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
@@ -15777,6 +15779,8 @@ in
   libwpg = callPackage ../development/libraries/libwpg { };
 
   libx86 = callPackage ../development/libraries/libx86 {};
+
+  libxcrypt = callPackage ../development/libraries/libxcrypt { };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
