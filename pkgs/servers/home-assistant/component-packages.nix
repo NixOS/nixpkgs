@@ -924,7 +924,7 @@
     "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
     "weather" = ps: with ps; [ ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
-    "webostv" = ps: with ps; [ ]; # missing inputs: aiopylgtv
+    "webostv" = ps: with ps; [ aiopylgtv ];
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [ ]; # missing inputs: pywemo
     "whois" = ps: with ps; [ python-whois ];
