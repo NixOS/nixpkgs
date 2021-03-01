@@ -1,29 +1,32 @@
-{ lib, stdenv , fetchFromGitHub
-, pkg-config, autoreconfHook
-, db5, openssl, boost, zlib, miniupnpc, libevent
-, protobuf, util-linux, qt4, qrencode
-, withGui }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, db5
+, openssl, boost, zlib, miniupnpc, libevent, protobuf, qtbase ? null
+, wrapQtAppsHook ? null, qttools ? null, qmake ? null, qrencode, withGui
+, hexdump, Cocoa ? null }:
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.14.2";
+  pname = "dogecoin" + (optionalString (!withGui) "d");
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "1gw46q63mjzwvb17ck6p1bap2xpdrap08szw2kjhasa3yvd5swyy";
+    sha256 = "sha256-kozUnIislQDtgjeesYHKu4sB1j9juqaWvyax+Lb/0pc=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db5 openssl util-linux
-                  protobuf boost zlib miniupnpc libevent ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  preConfigure = lib.optionalString withGui ''
+    export LRELEASE=${lib.getDev qttools}/bin/lrelease
+  '';
 
-  configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui" ];
+  nativeBuildInputs = [ pkg-config autoreconfHook hexdump ]
+    ++ optionals withGui [ wrapQtAppsHook qttools ];
+
+  buildInputs = [ openssl db5 openssl protobuf boost zlib miniupnpc libevent ]
+    ++ optionals withGui [ qtbase qrencode Cocoa ];
+
+  configureFlags = [ "--with-incompatible-bdb" "--with-boost-libdir=${boost.out}/lib" ]
+    ++ optionals withGui [ "--with-gui" ];
 
   meta = {
     description = "Wow, such coin, much shiba, very rich";
@@ -36,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.dogecoin.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -26503,7 +26503,11 @@ in
   digibyte = libsForQt514.callPackage ../applications/blockchains/digibyte.nix { withGui = true; };
   digibyted = callPackage ../applications/blockchains/digibyte.nix { withGui = false; };
 
-  dogecoin  = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = true; };
+  dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin.nix {
+    boost = boost165;
+    withGui = true;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
   dogecoind = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = false; };
 
   electrs = callPackage ../applications/blockchains/electrs.nix { };
