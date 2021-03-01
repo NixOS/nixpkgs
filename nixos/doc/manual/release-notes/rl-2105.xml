@@ -523,6 +523,13 @@ self: super:
       as an hardware RNG, as it will automatically run the krngd task to periodically collect random
       data from the device and mix it into the kernel's RNG.
     </para>
+    <para>
+      The default SMTP port for GitLab has been changed to
+      <literal>25</literal> from its previous default of
+      <literal>465</literal>. If you depended on this default, you
+      should now set the <xref linkend="opt-services.gitlab.smtp.port" />
+      option.
+    </para>
    </listitem>
    <listitem>
     <para>

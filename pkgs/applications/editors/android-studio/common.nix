@@ -72,8 +72,8 @@ let
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
+        --set-default JAVA_HOME "$out/jre" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-        --set JAVA_HOME "$out/jre" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf} \
         --prefix PATH : "${lib.makeBinPath [

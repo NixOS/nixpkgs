@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "1.8.5";
+  version = "1.8.6";
   commit = "28aea3dfdede00443b52cc584814d80e8f896200";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "sha256-JjxibnGSDTjd0E9L3X2wnl9G713IYBs+O449RdrT19w=";
+    sha256 = "sha256-kJ3/1owK5T+FbcvjmK2CO+i/KwmVZRSGzF6fCt8J9E8=";
   };
 
   vendorSha256 = "sha256-rZ/ox180h9scocheYtMmKkoHY2/jH+I++vYX8R0fdlA=";

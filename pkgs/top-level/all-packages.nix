@@ -2558,6 +2558,8 @@ in
 
   lief = callPackage ../development/libraries/lief {};
 
+  libnbd = callPackage ../development/libraries/libnbd { };
+
   libndtypes = callPackage ../development/libraries/libndtypes { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
@@ -10867,6 +10869,7 @@ in
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-deb = callPackage ../tools/package-management/cargo-deb {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -10920,6 +10923,7 @@ in
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+  cargo-play = callPackage ../development/tools/rust/cargo-play { };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -15779,6 +15783,8 @@ in
   libwpg = callPackage ../development/libraries/libwpg { };
 
   libx86 = callPackage ../development/libraries/libx86 {};
+
+  libxcrypt = callPackage ../development/libraries/libxcrypt { };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
@@ -24043,6 +24049,8 @@ in
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
   };
+
+  pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
   polybar = callPackage ../applications/misc/polybar { };
 

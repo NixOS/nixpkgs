@@ -284,6 +284,8 @@ in {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
+
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };
@@ -1281,6 +1283,8 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron { };
 
+  chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
+
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
@@ -2043,6 +2047,8 @@ in {
 
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
+  editdistance = callPackage ../development/python-modules/editdistance { };
+
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
   edward = callPackage ../development/python-modules/edward { };
@@ -2060,6 +2066,8 @@ in {
   elementpath = callPackage ../development/python-modules/elementpath { };
 
   eliot = callPackage ../development/python-modules/eliot { };
+
+  elmax = callPackage ../development/python-modules/elmax { };
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
@@ -5707,6 +5715,8 @@ in {
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
+
+  pymediaroom = callPackage ../development/python-modules/pymediaroom { };
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 

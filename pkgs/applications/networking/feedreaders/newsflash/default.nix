@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitLab
 , meson
@@ -17,18 +18,22 @@
 , gst_all_1
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "newsflash";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    hash = "sha256-TeheK14COX1NIrql74eI8Wx4jtpUP1eO5mugT5LzlPY=";
+    hash = "sha256-Vu8PXdnayrglAFVfO+WZTzk4Qrb/3uqzQIwClnRHto8=";
   };
 
-  cargoHash = "sha256-Fbj4sabrwpfa0QNEN4l91y/6AuPIKu7QPzYNUO6RtU0=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-dWumQi/Bk7w2C8zVVExxguWchZU+K2qTC02otsiK9jA=";
+  };
 
   patches = [
     # Post install tries to generate an icon cache & update the
@@ -54,7 +59,11 @@ rustPlatform.buildRustPackage rec {
 
     # Provides glib-compile-resources to compile gresources
     glib
-  ];
+  ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
 
   buildInputs = [
     gtk3
@@ -75,13 +84,6 @@ rustPlatform.buildRustPackage rec {
     gst-plugins-good
     gst-plugins-bad
   ]);
-
-  # Unset default rust phases to use meson & ninja instead
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
-  installCheckPhase = null;
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";

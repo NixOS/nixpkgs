@@ -1,14 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , mpmath
 , numpy
-, pipdate
 , pybind11
 , pyfma
 , eigen
+, importlib-metadata
 , pytestCheckHook
 , matplotlib
+, dufte
 , isPy27
 }:
 
@@ -22,20 +24,24 @@ buildPythonPackage rec {
     sha256 = "36506aca53154528997ac22aee6292c83da0f4850bb375c149512b5284bd4948";
   };
 
+  nativeBuildInputs = [
+    pybind11
+  ];
+
   buildInputs = [
-    pybind11 eigen
+    eigen
   ];
 
   propagatedBuildInputs = [
     mpmath
     numpy
-    pipdate
     pyfma
-  ];
+  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   checkInputs = [
     pytestCheckHook
     matplotlib
+    dufte
   ];
 
   postConfigure = ''

@@ -416,6 +416,8 @@ let
       NLS_ISO8859_1    = module; # VFAT default for the iocharset= mount option
 
       DEVTMPFS = yes;
+
+      UNICODE = whenAtLeast "5.2" yes; # Casefolding support for filesystems
     };
 
     security = {

@@ -2,18 +2,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IapgDqRZ7VMWerusWcv++Ky4yWgGLMaq8rFhbPshFjE=";
+    sha256 = "sha256-EhIBkAPy+sZ629yxJ8GCVhEQx7gQypMFYquGpQJkke0=";
   };
 
-  cargoSha256 = "sha256-+Ch6nEGxYm2L4S9FkIkenDQovMZvQUJGOu5mR9T8r/Y=";
+  cargoSha256 = "sha256-nRrFC/6CgXZR78aJQVw2y2sKUmRpz8Rofo0N4vgeekg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/agate --help
+    $out/bin/agate --version 2>&1 | grep "agate ${version}"
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://proxy.vulpes.one/gemini/qwertqwefsday.eu/agate.gmi";

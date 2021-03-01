@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , archinfo
 , bitstring
 , fetchPypi
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa12e546599be3cce18d7daef70e93555bf681bd04f6449aa5a6e2bfebb8276b";
+    sha256 = "sha256-qhLlRlmb48zhjX2u9w6TVVv2gb0E9kSapabiv+u4J2s=";
   };
 
   propagatedBuildInputs = [
@@ -35,5 +36,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/angr/pyvex";
     license = with licenses; [ bsd2 gpl3Plus lgpl3Plus ];
     maintainers = with maintainers; [ fab ];
+    # ERROR: pyvex-X-py3-none-manylinux1_aarch64.whl is not a supported wheel on this platform.
+    broken = stdenv.isAarch64;
   };
 }
