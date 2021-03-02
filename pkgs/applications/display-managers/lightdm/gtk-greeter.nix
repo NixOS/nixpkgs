@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://launchpad.net/lightdm-gtk-greeter";
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };
 }
