@@ -1,4 +1,4 @@
-{ mkXfceDerivation, automakeAddFlags, gtk3, glib, libexif
+{ mkXfceDerivation, gtk3, glib, libexif
 , libxfce4ui, libxfce4util, xfconf }:
 
 mkXfceDerivation {
