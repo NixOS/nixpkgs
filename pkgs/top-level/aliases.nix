@@ -166,9 +166,7 @@ mapAliases ({
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
   emacsPackagesNg = emacs.pkgs; # added 2019-08-07
-  emacs26Packages = emacs26.pkgs; # added 2020-12-18
   emacs27Packages = emacs27.pkgs; # added 2020-12-18
-  emacs26WithPackages = emacs26.pkgs.withPackages; # added 2020-12-18
   emacs27WithPackages = emacs27.pkgs.withPackages; # added 2020-12-18
   emacsWithPackages = emacs.pkgs.withPackages; # added 2020-12-18
   emacsPackages = emacs.pkgs; # added 2020-12-18
