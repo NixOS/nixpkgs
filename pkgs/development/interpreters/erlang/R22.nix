@@ -5,9 +5,4 @@
 mkDerivation {
   version = "22.3.4.16";
   sha256 = "sha256-V0RwEPfjnHtEzShNh6Q49yGC5fbt2mNR4xy6f6iWvck=";
-
-  prePatch = ''
-    substituteInPlace make/configure.in --replace '`sw_vers -productVersion`' "''${MACOSX_DEPLOYMENT_TARGET:-10.12}"
-    substituteInPlace erts/configure.in --replace '-Wl,-no_weak_imports' ""
-  '';
 }
