@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.privoxy.org/";
     description = "Non-caching web proxy with advanced filtering capabilities";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.phreedom ];
   };
