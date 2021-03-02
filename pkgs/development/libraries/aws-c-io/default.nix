@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, s2n }:
+{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, s2n, Security }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-cal aws-c-common s2n ];
+  buildInputs = [ aws-c-cal aws-c-common s2n] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

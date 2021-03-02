@@ -13287,7 +13287,9 @@ in
 
   aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
 
-  aws-c-io = callPackage ../development/libraries/aws-c-io { };
+  aws-c-io = callPackage ../development/libraries/aws-c-io {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
