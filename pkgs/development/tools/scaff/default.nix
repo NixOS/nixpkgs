@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Painless and powerful scaffolding of projects";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with lib.maintainers; [ ];
     platforms = platforms.unix;
   };
 }

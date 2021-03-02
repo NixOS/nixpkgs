@@ -12860,8 +12860,6 @@ in
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
-  scaff = callPackage ../development/tools/scaff { };
-
   sd-local = callPackage ../development/tools/sd-local { };
 
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
