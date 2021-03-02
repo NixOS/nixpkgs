@@ -6638,6 +6638,8 @@ in {
 
   pyvex = callPackage ../development/python-modules/pyvex { };
 
+  pyvicare = callPackage ../development/python-modules/pyvicare { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvizio = callPackage ../development/python-modules/pyvizio { };
@@ -7345,6 +7347,8 @@ in {
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   skorch = callPackage ../development/python-modules/skorch { };
+
+  skybellpy = callPackage ../development/python-modules/skybellpy { };
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 

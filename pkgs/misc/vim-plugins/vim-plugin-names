@@ -373,6 +373,7 @@ nanotech/jellybeans.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
+nathunsmitty/nvim-ale-diagnostic@main
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/float-preview.nvim
