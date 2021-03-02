@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.6.0";
+  version = "3.7.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "clld";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10jcd2x99z5ym2aki92c54caw97b3xgrkjj83qpln26hbdwpaz99";
+    sha256 = "13shas7krf7j04gqxjn09ipy318hmrp1s3b5d576d5r1xfxakam4";
   };
 
   patchPhase = ''
