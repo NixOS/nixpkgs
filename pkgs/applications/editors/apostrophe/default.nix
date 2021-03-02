@@ -10,7 +10,6 @@ let
     regex setuptools python-Levenshtein pyenchant
     pygobject3 pycairo pypandoc chardet
   ]);
-  texliveDist = texlive.combined.scheme-medium;
 
 in stdenv.mkDerivation rec {
   pname = "apostrophe";
@@ -28,7 +27,7 @@ in stdenv.mkDerivation rec {
     appstream-glib wrapGAppsHook ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3
-    gnome3.adwaita-icon-theme webkitgtk gspell texliveDist
+    gnome3.adwaita-icon-theme webkitgtk gspell texlive
     glib-networking libhandy ];
 
   postPatch = ''
@@ -41,7 +40,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
-      --prefix PATH : "${texliveDist}/bin"
+      --prefix PATH : "${texlive}/bin"
       --prefix PATH : "${haskellPackages.pandoc-citeproc}/bin"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
