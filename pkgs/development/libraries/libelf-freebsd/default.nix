@@ -8,6 +8,7 @@ stdenv.mkDerivation (rec {
     url = "svn://svn.code.sf.net/p/elftoolchain/code/trunk";
     rev = (lib.strings.toInt version);
     name = "elftoolchain-${version}";
+    sha256 = "1rcmddjanlsik0b055x8k914r9rxs8yjsvslia2nh1bhzf1lxmqz";
   };
 
   buildInputs = [ gnum4 tet ];
