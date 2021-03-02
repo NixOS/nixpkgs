@@ -18934,6 +18934,8 @@ in
 
   criu = callPackage ../os-specific/linux/criu { };
 
+  cryptomator = callPackage ../tools/security/cryptomator { };
+
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
   cramfsprogs = callPackage ../os-specific/linux/cramfsprogs { };
