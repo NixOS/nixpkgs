@@ -33,10 +33,6 @@ stdenv.mkDerivation rec {
       --replace 'GIT_COMMIT_SHA' 'GIT_COMMIT_SHA="\\\"${src.rev}\\\"" # '
   '';
 
-  preFixup = ''
-    wrapQtApp $out/bin/librepcb
-  '';
-
   meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
     homepage    = "https://librepcb.org/";
