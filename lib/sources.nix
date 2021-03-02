@@ -144,6 +144,9 @@ let
   # points at the location of `base`. The returned source will be a reference
   # to a subpath of a store path when it is necessary to accomodate for the
   # relative locations of `extras`.
+  #
+  # When used in the `stdenv` `src` parameter, the whole source will be copied
+  # and the build script will `cd` into the path that corresponds to `base`.
   extend = base: lib.foldl union base;
 
   # Almost the identity of sources.extend when it comes to the filter function;
@@ -155,6 +158,9 @@ let
   #
   # Produce a new source identical to `source` except its string interpolation
   # (or `outPath`) resolves to a subpath that corresponds to `path`.
+  #
+  # When used in the `stdenv` `src` parameter, the whole of `source` will be
+  # copied and the build script will `cd` into the path that corresponds to `path`.
   pointAt = path: src:
     let
       orig = toSourceAttributes src;
