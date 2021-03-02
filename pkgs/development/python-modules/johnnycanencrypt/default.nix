@@ -5,7 +5,6 @@
 , rustPlatform
 , llvmPackages
 , pkg-config
-, maturin
 , pcsclite
 , nettle
 , requests
