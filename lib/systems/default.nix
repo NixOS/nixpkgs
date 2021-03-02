@@ -107,6 +107,11 @@ rec {
           powerpc64le = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
+      darwinArch = {
+        armv7a  = "armv7";
+        aarch64 = "arm64";
+      }.${final.parsed.cpu.name} or final.parsed.cpu.name;
+
       emulator = pkgs: let
         qemu-user = pkgs.qemu.override {
           smartcardSupport = false;
