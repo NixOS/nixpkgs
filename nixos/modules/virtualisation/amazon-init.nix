@@ -14,12 +14,11 @@ let
 
     isScript() {
         local fn="$1"
-        local fd
-        local magic
+        local fd magic
         exec {fd}< "$fn"
         read -r -n 2 -u "$fd" magic
         exec {fd}<&-
-        if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
+        [ "$magic" = \#! ]
     }
 
     if [ -s "$userData" ]; then
@@ -73,4 +72,3 @@ in {
     };
   };
 }
-
