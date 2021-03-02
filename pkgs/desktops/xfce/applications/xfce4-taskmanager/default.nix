@@ -1,4 +1,4 @@
-{ lib, mkXfceDerivation, exo, gtk3, libwnck3, libXmu }:
+{ mkXfceDerivation, exo, gtk3, libwnck3, libXmu }:
 
 mkXfceDerivation {
   category = "apps";

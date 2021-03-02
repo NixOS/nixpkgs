@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, python
 , buildPythonPackage
 , socat
 , psutil

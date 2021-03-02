@@ -18937,6 +18937,8 @@ in
 
   criu = callPackage ../os-specific/linux/criu { };
 
+  cryptomator = callPackage ../tools/security/cryptomator { };
+
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
   cramfsprogs = callPackage ../os-specific/linux/cramfsprogs { };
@@ -24658,10 +24660,7 @@ in
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
-  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
-    lua5 = lua5_1;
-    miniupnpc = miniupnpc_1;
-  };
+  eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
 

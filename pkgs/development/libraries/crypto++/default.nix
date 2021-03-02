@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nasm, which
+{ lib, stdenv, fetchFromGitHub
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !enableStatic
 }:
