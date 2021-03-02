@@ -1,4 +1,4 @@
-{ mkXfceDerivation, gtk3, gvfs, glib }:
+{ lib, mkXfceDerivation, gtk3, gvfs, glib }:
 
 mkXfceDerivation {
   category = "apps";
@@ -17,5 +17,6 @@ mkXfceDerivation {
 
   meta = {
     description = "A frontend to easily manage connections to remote filesystems";
+    license = with lib.licenses; [ gpl2Only ];
   };
 }
