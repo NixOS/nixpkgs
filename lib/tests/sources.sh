@@ -47,6 +47,17 @@ dir="$(nix eval --raw '(with import <nixpkgs/lib>; "${
 EOF
 ) || die "cleanSourceWith 1"
 
+
+dir="$(nix eval --raw '(with import <nixpkgs/lib>; "${
+  sources.filter (path: type: ! hasSuffix ".bar" path) ./.
+}")')"
+(cd $dir; find) | sort -f | diff -U10 - <(cat <<EOF
+.
+./module.o
+./README.md
+EOF
+) || die "sources.filter"
+
 dir="$(nix eval --raw '(with import <nixpkgs/lib>; "${
   cleanSourceWith { src = cleanSource '"$work"'; filter = path: type: ! hasSuffix ".bar" path; }
 }")')"

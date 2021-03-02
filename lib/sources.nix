@@ -97,6 +97,7 @@ let
       filter = path: type: filter path type && orig.filter path type;
       name = if name != null then name else orig.name;
     };
+  _filter = fn: src: cleanSourceWith { filter = fn; inherit src; };
 
   # sources.union : Source -> Source -> Source
   # sources.union a b
@@ -382,4 +383,5 @@ in {
     trace
     union
     ;
+  filter = _filter;
 }
