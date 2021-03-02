@@ -1,5 +1,5 @@
-import ../make-test-python.nix ({pkgs, lib, ...}: {
-  name = "php-fpm-nginx-test";
+import ../make-test-python.nix ({pkgs, lib, php, ...}: {
+  name = "php-${php.version}-fpm-nginx-test";
   meta.maintainers = lib.teams.php.members;
 
   machine = { config, lib, pkgs, ... }: {
@@ -25,6 +25,7 @@ import ../make-test-python.nix ({pkgs, lib, ...}: {
 
     services.phpfpm.pools."foobar" = {
       user = "nginx";
+      phpPackage = php;
       settings = {
         "listen.group" = "nginx";
         "listen.mode" = "0600";
@@ -44,7 +45,7 @@ import ../make-test-python.nix ({pkgs, lib, ...}: {
 
     # Check so we get an evaluated PHP back
     response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/")
-    assert "PHP Version ${pkgs.php.version}" in response, "PHP version not detected"
+    assert "PHP Version ${php.version}" in response, "PHP version not detected"
 
     # Check so we have database and some other extensions loaded
     for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite"]:
