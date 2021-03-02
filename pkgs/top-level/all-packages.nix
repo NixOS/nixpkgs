@@ -6950,6 +6950,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  kakoune-cr = callPackage ../tools/misc/kakoune-cr { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kbs2 = callPackage ../tools/security/kbs2 {
