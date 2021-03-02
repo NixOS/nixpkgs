@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , python
@@ -13,8 +14,8 @@
 buildPythonPackage rec {
   version = "0.52.0";
   pname = "numba";
-  # uses f-strings
-  disabled = pythonOlder "3.6";
+  # uses f-strings, python 3.9 is not yet supported
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
