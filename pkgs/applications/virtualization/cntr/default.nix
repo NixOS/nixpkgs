@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
     rev = version;
-    sha256 = "sha256-4ogyOKuz6702/sOQNvE+UP+cvQrPPU3VjL4b0FUfRNw=";
+    sha256 = "sha256-RwpRlcShvZVBR22xkJz50p10SEULXM9/gqVGNXiSM3M=";
   };
 
-  cargoSha256 = "sha256-lblvun2T1qpFiowld77Ti2MFPzhs5pOWWRbErORXYCM=";
+  cargoSha256 = "sha256-ezxIDaU270V5oqm1m8mt9QXu/SsrKomaxM2TnH+bSUY=";
 
   meta = with lib; {
     description = "A container debugging tool based on FUSE";
