@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    cc tie.c -o tie
+    ${stdenv.cc.targetPrefix}cc tie.c -o tie
   '';
 
   installPhase = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.ctan.org/tex-archive/web/tie";
     description = "Allow multiple web change files";
-    platforms = with platforms; unix;
+    platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];
     license = licenses.abstyles;
   };
