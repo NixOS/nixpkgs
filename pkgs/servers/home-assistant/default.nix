@@ -136,6 +136,7 @@ in with py.pkgs; buildPythonApplication rec {
     # test infrastructure
     asynctest
     pytest-aiohttp
+    pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     requests-mock
@@ -292,7 +293,10 @@ in with py.pkgs; buildPythonApplication rec {
 
   pytestFlagsArray = [
     # limit amout of runners to reduce race conditions
-    "-n 2"
+    "-n auto"
+    # retry racy tests that end in "RuntimeError: Event loop is closed"
+    "--reruns 3"
+    "--only-rerun RuntimeError"
     # assign tests grouped by file to workers
     "--dist loadfile"
     # tests are located in tests/
