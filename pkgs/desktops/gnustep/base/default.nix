@@ -1,7 +1,7 @@
 { aspell, audiofile
 , gsmakeDerivation
 , cups
-, fetchurl
+, fetchurl, fetchpatch
 , gmp, gnutls
 , libffi, binutils-unwrapped
 , libjpeg, libtiff, libpng, giflib, libungif
@@ -33,7 +33,13 @@ gsmakeDerivation {
     portaudio
     libiberty
   ];
-  patches = [ ./fixup-paths.patch ];
+  patches = [
+    ./fixup-paths.patch
+    (fetchpatch {  # for icu68 compatibility, remove with next update(?)
+      url = "https://github.com/gnustep/libs-base/commit/06fa7792a51cb970e5d010a393cb88eb127830d7.patch";
+      sha256 = "150n1sa34av9ywc04j36jvj7ic9x6pgr123rbn2mx5fj76q23852";
+    })
+  ];
 
   meta = {
     description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
