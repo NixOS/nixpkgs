@@ -5095,6 +5095,8 @@ in {
 
   pooch = callPackage ../development/python-modules/pooch { };
 
+  pook = callPackage ../development/python-modules/pook { };
+
   poolsense = callPackage ../development/python-modules/poolsense { };
 
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
