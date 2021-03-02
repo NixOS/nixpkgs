@@ -6043,6 +6043,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  kakoune-cr = callPackage ../applications/editors/kakoune.cr { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kbs2 = callPackage ../tools/security/kbs2 {
