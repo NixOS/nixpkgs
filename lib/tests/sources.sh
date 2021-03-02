@@ -149,6 +149,87 @@ dir="$(
 EOF
 ) || die "sources.extend: rhs filter doesn't influence lhs files"
 
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    extend
+      (cleanSource ./src)
+      [ ./README.md ]
+  }")'
+)"
+(cd "$dir" && find ..) | sort -f | diff -U10 - <(cat <<EOF
+..
+../README.md
+../src
+../src/bar.c
+EOF
+) || die "sources.extend: can add a file to parent directory"
+
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    pointAt ./. (
+      extend
+        (cleanSource ./src)
+        [ ./README.md ]
+    )
+  }")'
+)"
+(cd "$dir" && find .) | sort -f | diff -U10 - <(cat <<EOF
+.
+./README.md
+./src
+./src/bar.c
+EOF
+) || die "sources.pointAt can change to parent directory"
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    pointAt ./src (
+      extend
+        ./README.md
+        [ (cleanSource ./src) ]
+    )
+  }")'
+)"
+(cd "$dir" && find ..) | sort -f | diff -U10 - <(cat <<EOF
+..
+../README.md
+../src
+../src/bar.c
+EOF
+) || die "sources.pointAt can change to subdirectory"
+
+
+(
+  (
+    nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+      pointAt ./src (
+        extend
+          ./README.md
+          [ ./foo.bar ]
+      )
+      }")' || true
+  ) 2>&1 | grep 'is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call.' >/dev/null
+) || die "sources.pointAt does not cause accidental inclusion"
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    extend
+      (cleanSource ./src)
+      [ ./README.md
+        ./foo.bar
+      ]
+  }")'
+)"
+(cd "$dir" && find ..) | sort -f | diff -U10 - <(cat <<EOF
+..
+../foo.bar
+../README.md
+../src
+../src/bar.c
+EOF
+) || die "sources.extend: can add a file to parent directory"
+
 dir="$(nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
   setName "anna" (cleanSource ./.)
 }")')"

@@ -23,6 +23,7 @@ let
     readFile
     ;
   inherit (lib.filesystem)
+    commonPath
     pathHasPrefix
     pathIntersects
     absolutePathComponentsBetween
@@ -84,6 +85,9 @@ let
   #             Optional with default value: constant true (include everything)
   #             The function will be combined with the && operator such
   #             that src.filter is called lazily.
+  #             The entire store path is filtered, including the files that are
+  #             accessible via relative path from the subpath pointed to by
+  #             `pointAt` or `union`.
   #             For implementing a filter, see
   #             https://nixos.org/nix/manual/#builtin-filterSource
   #
@@ -97,54 +101,81 @@ let
       inherit (orig) origSrc;
       filter = path: type: filter path type && orig.filter path type;
       name = if name != null then name else orig.name;
+      subpath = orig.subpath;
     };
   _filter = fn: src: cleanSourceWith { filter = fn; inherit src; };
 
   # (private) sources.union : Source -> Source -> Source
   # sources.union a b
   #
-  # Combine the sources such that if a file occurs in a or b, it occurs in the
-  # sources.union a b.
+  # Combine the sources such that
+  #  - if a file occurs in `a` or `b`, it occurs in `union a b`.
+  #  - `"${union a b}"` refers to the location that corresponds to `"${a}"`
   #
-  # The root of union a b will be equal that of a.
-  # The root of b in union a b must be within the original source of a
-  # and will be present in union a b.
+  # When `b` wasn't originally in `a`, the latter property necessitates that
+  # `"${union a b}"` is a subpath of a store path, rather than a bare store path.
+  #
+  # When used in the `src` parameter, stdenv will copy the entire store path and
+  # change directory into the subpath that corresponds to the original root of
+  # `a`.
   union = left: right:
     let
       l = toSourceAttributes (enforceSubpathInvariant left);
       r = toSourceAttributes (enforceSubpathInvariant right);
-      valid =
-        if pathHasPrefix l.origSrc r.origSrc
-        then x: x
-        else
-          throw "sources.extend: The right-hand side must be equal to, or a subpath of the left-hand side, but the input ${toString r.origSrc} is not a subpath of ${toString l.origSrc}.";
-    in valid (
+      root = commonPath l.origSrc r.origSrc;
+    in
       fromSourceAttributes {
-        inherit (l) origSrc;
-        # TODO rule out filters that exclude a parent
+        origSrc = root;
         filter = path: type:
-          l.filter path type                # path is in l
-            || pathHasPrefix path r.origSrc # path leads up to r (always include because r.filter may not support paths above r.origSrc)
-            || (                            # path is in r
-              pathHasPrefix r.origSrc path
-                && r.filter path type
-            );
+          pathHasPrefix path l.origSrc # path leads up to l
+          || (pathHasPrefix l.origSrc path && l.filter path type)
+          || pathHasPrefix path r.origSrc # path leads up to r
+          || (pathHasPrefix r.origSrc path && r.filter path type);
         name = "source";
+        subpath = absolutePathComponentsBetween root l.origSrc ++ l.subpath;
       } // {
         satisfiesSubpathInvariant = true;
-      }
-    );
+      };
 
   # extend : SourceLike -> [SourceLike] -> Source
   # extend base extras : Source
   #
   # Produce a source that contains all the files in `base` and `extras` and
-  # points at the location of `base`.
+  # points at the location of `base`. The returned source will be a reference
+  # to a subpath of a store path when it is necessary to accomodate for the
+  # relative locations of `extras`.
   extend = base: lib.foldl union base;
 
   # Almost the identity of sources.extend when it comes to the filter function;
   # `extend` will always include the nodes that lead up to `path`.
   empty = path: cleanSourceWith { src = path; filter = _: _: false; };
+
+  # pointAt : Path -> Source -> Source
+  # pointAt path source
+  #
+  # Produce a new source identical to `source` except its string interpolation
+  # (or `outPath`) resolves to a subpath that corresponds to `path`.
+  pointAt = path: src:
+    let
+      orig = toSourceAttributes src;
+      valid =
+        if ! pathHasPrefix orig.origSrc path
+        then throw "sources.pointAt: new path is must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
+        else if ! pathExists path
+        then
+          # We could provide a function that allows this, but it seems to be a
+          # bad idea unless we encounter a _good_ use case.
+          throw "sources.pointAt: new path ${toString path} does not exist on the filesystem and would point to a file that doesn't exist in the store. This is usually a mistake."
+        else if ! orig.filter path (pathType path)
+        then
+          throw "sources.pointAt: new path ${toString path} is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call."
+        else x: x;
+    in
+      valid (fromSourceAttributes (orig // {
+        subpath = absolutePathComponentsBetween orig.origSrc path;
+       }) // {
+        satisfiesSubpathInvariant = orig.satisfiesSubpathInvariant or false;
+      });
 
   # sources.reparent: Path -> Source -> Source
   # sources.reparent parent source
@@ -292,16 +323,19 @@ let
       origSrc = if isFiltered then src.origSrc else src;
       filter = if isFiltered then src.filter else _: _: true;
       name = if isFiltered then src.name else "source";
+      subpath = if isFiltered then src.subpath else [];
     };
 
   # (private) fromSourceAttributes : SourceAttrs -> Source
   #
   # Inverse of toSourceAttributes for Source objects.
-  fromSourceAttributes = { origSrc, filter, name }:
-    {
+  fromSourceAttributes = { origSrc, filter, name, subpath }:
+    let
+      root = builtins.path { inherit filter name; path = origSrc; };
+    in {
       _isLibCleanSourceWith = true;
-      inherit origSrc filter name;
-      outPath = builtins.path { inherit filter name; path = origSrc; };
+      inherit origSrc filter name subpath root;
+      outPath = root + "${concatMapStrings (x: "/${x}") subpath}";
     };
 
   # (private) enforceSubpathInvariant : Source -> Source
@@ -385,9 +419,14 @@ in {
 
     sourceByRegex
     sourceFilesBySuffices
+    ;
 
+  # part of the interface meant to be referenced as source.* or localized
+  # let inherit.
+  inherit
     empty
     extend
+    pointAt
     reparent
     setName
     trace
