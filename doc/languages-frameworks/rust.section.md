@@ -72,8 +72,8 @@ For `cargoHash` you can use:
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
 best practices guide, Rust applications should always commit the `Cargo.lock`
 file in git to ensure a reproducible build. However, a few packages do not, and
-Nix depends on this file, so if it missing you can use `cargoPatches` to apply
-it in the `patchPhase`. Consider sending a PR upstream with a note to the
+Nix depends on this file, so if it is missing you can use `cargoPatches` to
+apply it in the `patchPhase`. Consider sending a PR upstream with a note to the
 maintainer describing why it's important to include in the application.
 
 The fetcher will verify that the `Cargo.lock` file is in sync with the `src`
@@ -146,6 +146,8 @@ where they are known to differ. But there are ways to customize the argument:
        rustc.platform = { foo = ""; bar = ""; };
      };
    }
+   ```
+
    will result in:
    ```shell
    --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}
@@ -156,7 +158,7 @@ path) can be passed directly to `buildRustPackage`:
 
 ```nix
 pkgs.rustPlatform.buildRustPackage {
-  (...)
+  /* ... */
   target = "x86_64-fortanix-unknown-sgx";
 }
 ```
@@ -190,6 +192,13 @@ rustPlatform.buildRustPackage {
 
 Please note that the code will be compiled twice here: once in `release` mode
 for the `buildPhase`, and again in `debug` mode for the `checkPhase`.
+
+Test flags, e.g., `--features xxx/yyy`, can be passed to `cargo test` via the
+`cargoTestFlags` attribute.
+
+Another attribute, called `checkFlags`, is used to pass arguments to the test
+binary itself, as stated
+(here)[https://doc.rust-lang.org/cargo/commands/cargo-test.html].
 
 #### Tests relying on the structure of the `target/` directory
 
