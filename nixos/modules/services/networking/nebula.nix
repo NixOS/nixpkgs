@@ -85,14 +85,6 @@ in
               description = "Port number to listen on.";
             };
 
-            punch = mkOption {
-              type = types.bool;
-              default = true;
-              description = ''
-                Continues to punch inbound/outbound at a regular interval to avoid expiration of firewall nat mappings.
-              '';
-            };
-
             tun.disable = mkOption {
               type = types.bool;
               default = false;
@@ -163,9 +155,6 @@ in
           listen = {
             host = netCfg.listen.host;
             port = netCfg.listen.port;
-          };
-          punchy = {
-            punch = netCfg.punch;
           };
           tun = {
             disabled = netCfg.tun.disable;
