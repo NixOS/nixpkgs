@@ -24574,6 +24574,8 @@ in
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
+  poke = callPackage ../applications/editors/poke { };
+
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
   poezio = python3Packages.poezio;
