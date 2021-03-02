@@ -177,6 +177,33 @@ let
         satisfiesSubpathInvariant = orig.satisfiesSubpathInvariant or false;
       });
 
+  # cutAt : Path -> Source -> Source
+  # cutAt path source
+  #
+  # Produces a source that starts at `path` and only contains nodes that are in `source`.
+  cutAt = path: src:
+    let
+      orig = toSourceAttributes src;
+      valid =
+        if ! pathHasPrefix orig.origSrc path
+        then throw "sources.cutAt: new source root must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
+        else if ! pathExists path
+        then
+          throw "sources.cutAt: new source root ${toString path} does not exist."
+        else if ! orig.filter path (pathType path)
+        then
+          throw "sources.cutAt: new path ${toString path} is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call."
+        else x: x;
+    in
+      valid (
+        fromSourceAttributes (orig // {
+          origSrc = path;
+          subpath = [];
+        })
+      ) // {
+        satisfiesSubpathInvariant = orig.satisfiesSubpathInvariant or false;
+      };
+
   # sources.reparent: Path -> Source -> Source
   # sources.reparent parent source
   #
@@ -424,6 +451,7 @@ in {
   # part of the interface meant to be referenced as source.* or localized
   # let inherit.
   inherit
+    cutAt
     empty
     extend
     pointAt

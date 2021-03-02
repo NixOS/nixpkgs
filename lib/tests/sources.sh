@@ -214,6 +214,22 @@ EOF
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+    cutAt ./src (
+      extend
+        ./README.md
+        [ (cleanSource ./src) ]
+    )
+  }")'
+)"
+(cd "$dir" && find .) | sort -f | diff -U10 - <(cat <<EOF
+.
+./bar.c
+EOF
+) || die "sources.cutAt only includes part of the tree"
+(echo "$dir" | grep -- '-source$' >/dev/null) || die "sources.cutAt produces a plain store path; not a subpath of a store path"
+
+dir="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
     extend
       (cleanSource ./src)
       [ ./README.md
