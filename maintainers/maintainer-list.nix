@@ -3151,6 +3151,12 @@
     githubId = 19961516;
     name = "Felix Weilbach";
   };
+  fliegendewurst = {
+    email = "arne.keller@posteo.de";
+    github = "FliegendeWurst";
+    githubId = 12560461;
+    name = "Arne Keller";
+  };
   flokli = {
     email = "flokli@flokli.de";
     github = "flokli";
