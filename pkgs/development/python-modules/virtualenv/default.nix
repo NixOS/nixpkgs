@@ -5,7 +5,6 @@
 , distlib
 , fetchPypi
 , filelock
-, fish
 , flaky
 , importlib-metadata
 , importlib-resources
@@ -56,7 +55,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     cython
-    fish
     flaky
     pytest-freezegun
     pytest-mock
