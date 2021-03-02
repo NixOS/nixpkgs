@@ -5,13 +5,13 @@
 
 import ./generic.nix (rec {
   pname = "Pillow";
-  version = "8.1.0";
+  version = "8.1.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fnvc07m15fv59bdlkds1q7rl9jrr3cbbn69sfqvzvdpjbknhxl8";
+    sha256 = "1fnvc07m15fv59bdlkds1q7rl9jrr3cbbn69sfqvzvdpjbknhxl9";
   };
 
   meta = with lib; {
