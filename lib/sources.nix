@@ -100,7 +100,7 @@ let
     };
   _filter = fn: src: cleanSourceWith { filter = fn; inherit src; };
 
-  # sources.union : Source -> Source -> Source
+  # (private) sources.union : Source -> Source -> Source
   # sources.union a b
   #
   # Combine the sources such that if a file occurs in a or b, it occurs in the
@@ -117,7 +117,7 @@ let
         if pathHasPrefix l.origSrc r.origSrc
         then x: x
         else
-          throw "sources.union: The right-hand side must be equal to, or a subpath of the left-hand side, but the input ${toString r.origSrc} is not a subpath of ${toString l.origSrc}.";
+          throw "sources.extend: The right-hand side must be equal to, or a subpath of the left-hand side, but the input ${toString r.origSrc} is not a subpath of ${toString l.origSrc}.";
     in valid (
       fromSourceAttributes {
         inherit (l) origSrc;
@@ -142,13 +142,14 @@ let
   # points at the location of `base`.
   extend = base: lib.foldl union base;
 
-  # Identity of sources.union when it comes to the filter function
+  # Almost the identity of sources.extend when it comes to the filter function;
+  # `extend` will always include the nodes that lead up to `path`.
   empty = path: cleanSourceWith { src = path; filter = _: _: false; };
 
   # sources.reparent: Path -> Source -> Source
   # sources.reparent parent source
   #
-  # Change source such that the root is at the parent directory, but include
+  # Change source such that the root is at the `parent` directory, but include
   # nothing except source and the path leading up to it.
   reparent = path: source: union (empty path) source;
 
@@ -316,12 +317,12 @@ let
   # This reflects the behavior of filterSource, which is sensible, composes
   # and provides good performance thanks to early cutoff.
   #
-  # This invariant is useful in a function like sources.union, which sometimes
+  # This invariant is useful in a function like sources.extend, which sometimes
   # queries subpaths of excluded paths.
   #
   enforceSubpathInvariant = src:
-    # Avoid memoization if the source claims to satisfy. Helps with chains of
-    # nested sources.union calls.
+    # Avoid memoization if the source claims to satisfy. Helps with performance
+    # of nested sources.union calls, compared to plain `memoizeSource`.
     if src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant
     then src
     else memoizeSource src;
@@ -390,7 +391,6 @@ in {
     reparent
     setName
     trace
-    union
     ;
   filter = _filter;
 }

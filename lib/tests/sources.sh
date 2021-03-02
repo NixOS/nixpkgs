@@ -72,7 +72,7 @@ touch "$work"/src/{bar.c,bar.o}
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-    union (empty ./.) ./src
+    extend (empty ./.) [ ./src ]
   }")')"
 (cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
 .
@@ -80,26 +80,26 @@ dir="$(
 ./src/bar.c
 ./src/bar.o
 EOF
-) || die "sources.union: basic"
+) || die "sources.extend: basic"
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-    union (empty ./.) (cleanSource ./src)
+    extend (empty ./.) [ (cleanSource ./src) ]
   }")')"
 (cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
 .
 ./src
 ./src/bar.c
 EOF
-) || die "sources.union: filtered rhs"
+) || die "sources.extend: filtered rhs"
 
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-    union
+    extend
       (cleanSourceWith { src = cleanSource ./.;
                          filter = path: type: baseNameOf path != "src"; })
-      ./src
+      [ ./src ]
   }")'
 )"
 (cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
@@ -110,15 +110,15 @@ dir="$(
 ./src/bar.c
 ./src/bar.o
 EOF
-) || die "sources.union: filtered lhs"
+) || die "sources.extend: filtered lhs"
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-    union 
+    extend
       (cleanSourceWith { src = cleanSource ./.;
                          filter = path: type: baseNameOf path != "src"; })
-      (cleanSourceWith { src = ./src; 
-                         filter = path: type: !hasSuffix ".c" path; })
+      [ (cleanSourceWith { src = ./src;
+                         filter = path: type: !hasSuffix ".c" path; }) ]
   }")'
 )"
 (cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
@@ -128,16 +128,16 @@ dir="$(
 ./src
 ./src/bar.o
 EOF
-) || die "sources.union: lhs filter doesn't influence rhs files"
+) || die "sources.extend: lhs filter doesn't influence rhs files"
 
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-    union
+    extend
       (cleanSourceWith { src = reparent ./. ./src;
                          filter = path: type: !hasSuffix ".c" path; })
-      (cleanSourceWith { src = cleanSource ./.;
-                         filter = path: type: baseNameOf path != "src"; })
+      [ (cleanSourceWith { src = cleanSource ./.;
+                         filter = path: type: baseNameOf path != "src"; }) ]
   }")'
 )"
 (cd "$dir"; find .) | sort -f | diff -U10 - <(cat <<EOF
@@ -147,7 +147,7 @@ dir="$(
 ./src
 ./src/bar.o
 EOF
-) || die "sources.union: rhs filter doesn't influence lhs files"
+) || die "sources.extend: rhs filter doesn't influence lhs files"
 
 dir="$(nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
   setName "anna" (cleanSource ./.)
