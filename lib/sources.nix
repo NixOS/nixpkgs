@@ -14,6 +14,7 @@ let
   inherit (lib)
     attrByPath
     boolToString
+    concatMapStrings
     filter
     getAttr
     isString
@@ -133,6 +134,13 @@ let
         satisfiesSubpathInvariant = true;
       }
     );
+
+  # extend : SourceLike -> [SourceLike] -> Source
+  # extend base extras : Source
+  #
+  # Produce a source that contains all the files in `base` and `extras` and
+  # points at the location of `base`.
+  extend = base: lib.foldl union base;
 
   # Identity of sources.union when it comes to the filter function
   empty = path: cleanSourceWith { src = path; filter = _: _: false; };
@@ -378,6 +386,7 @@ in {
     sourceFilesBySuffices
 
     empty
+    extend
     reparent
     setName
     trace
