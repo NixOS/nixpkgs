@@ -6919,7 +6919,6 @@
     githubId = 15930073;
     name = "Moritz Scheuren";
   };
-  
   p3psi = {
     email = "p3psi.boo@gmail.com";
     github = "p3psi-boo";
