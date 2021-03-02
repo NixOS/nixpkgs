@@ -12862,8 +12862,6 @@ in
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
-  scaff = callPackage ../development/tools/scaff { };
-
   sd-local = callPackage ../development/tools/sd-local { };
 
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
@@ -24576,6 +24574,8 @@ in
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
+
+  poke = callPackage ../applications/editors/poke { };
 
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
