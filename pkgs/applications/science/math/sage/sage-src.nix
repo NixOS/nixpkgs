@@ -9,6 +9,20 @@
 # This is done because multiple derivations rely on these sources and they should
 # all get the same sources with the same patches applied.
 
+let
+  # Fetch a diff between `base` and `rev` on sage's git server.
+  # Used to fetch trac tickets by setting the `base` to the last release and the
+  # `rev` to the last commit of the ticket.
+  fetchSageDiff = { base, name, rev, sha256, ...}@args: (
+    fetchpatch ({
+      inherit name sha256;
+      url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+      # We don't care about sage's own build system (which builds all its dependencies).
+      # Exclude build system changes to avoid conflicts.
+      excludes = [ "build/*" ];
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" ])
+  );
+in
 stdenv.mkDerivation rec {
   version = "9.2";
   pname = "sage-src";
@@ -40,17 +54,13 @@ stdenv.mkDerivation rec {
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
     ./patches/sphinx-docbuild-subprocesses.patch
 
-    # Sage's workaround to pretty print dicts (in
-    # src/sage/doctest/forker.py:init_sage) runs too late (after
-    # controller.load_environment(), which imports sage.all.*) to to
-    # affect sage.sandpiles.Sandpile{Config,Divisor}'s pretty printer.
-    # Due to the sandpiles module being lazily loaded, this only
-    # affects the first run (subsequent runs read from an import cache
-    # at ~/.sage/cache and are not affected), which is probably why
-    # other distributions don't hit this bug. This breaks two sandpile
-    # tests, so do the workaround a little bit earlier.
-    # https://trac.sagemath.org/ticket/31053
-    ./patches/register-pretty-printer-earlier.patch
+    # Register sorted dict pprinter earlier (https://trac.sagemath.org/ticket/31053)
+    (fetchSageDiff {
+      base = "9.3.beta4";
+      name = "register-pretty-printer-earlier.patch";
+      rev = "d658230ce06ca19f4a3b3a4576297ee82f2d2151";
+      sha256 = "sha256-9mPUV7K5PoLDH2vVaYaOfvDLDpmxU0Aj7m/eaXYotDs=";
+    })
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -63,14 +73,20 @@ stdenv.mkDerivation rec {
 
     # fix intermittent errors in Sage 9.2's psage.py (this patch is
     # already included in Sage 9.3): https://trac.sagemath.org/ticket/30730
-    (fetchpatch {
+    (fetchSageDiff {
+      base = "9.2.rc2";
       name = "fix-psage-is-locked.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=75df605f216ddc7b6ca719be942d666b241520e9";
+      rev = "75df605f216ddc7b6ca719be942d666b241520e9";
       sha256 = "0g9pl1wbb3sgs26d3bvv70cpa77sfskylv4kd255y1794f1fgk4q";
     })
 
     # fix intermittent errors in sagespawn.pyx: https://trac.sagemath.org/ticket/31052
-    ./patches/sagespawn-implicit-casting.patch
+    (fetchSageDiff {
+      base = "9.2";
+      name = "sagespawn-implicit-casting.patch";
+      rev = "2959ac792ebd6107fe87c9af1541083de5ba02d6";
+      sha256 = "sha256-bWIpEGir9Kawak5CJegBMNcHm/CqhWmdru+emeSsvO0=";
+    })
 
     # disable pexpect interrupt test (see https://trac.sagemath.org/ticket/30945)
     ./patches/disable-pexpect-intermittent-failure.patch
@@ -82,20 +98,7 @@ stdenv.mkDerivation rec {
   # compatible with never dependency versions when possible. All these changes
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
-  packageUpgradePatches = let
-    # Fetch a diff between `base` and `rev` on sage's git server.
-    # Used to fetch trac tickets by setting the `base` to the last release and the
-    # `rev` to the last commit of the ticket.
-    fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ...}@args: (
-      fetchpatch ({
-        inherit name;
-        url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
-        # We don't care about sage's own build system (which builds all its dependencies).
-        # Exclude build system changes to avoid conflicts.
-        excludes = [ "build/*" ];
-      } // builtins.removeAttrs args [ "rev" "base" ])
-    );
-  in [
+  packageUpgradePatches = [
     # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
     # now set the cache dir to be withing the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
@@ -105,7 +108,12 @@ stdenv.mkDerivation rec {
     ./patches/ignore-cmp-deprecation.patch
 
     # adapt sage's Image class to pillow 8.0.1 (https://trac.sagemath.org/ticket/30971)
-    ./patches/pillow-update.patch
+    (fetchSageDiff {
+      base = "9.3.beta2";
+      name = "pillow-8.0.1-update.patch";
+      rev = "f05f2d0aac9c4b5abe68105cee2cc7f2c8461847";
+      sha256 = "sha256-uY2UlgSd5hhOUUukB4Xc3Gjy0/e7p/qyq9jdvz10IOs=";
+    })
 
     # fix test output with sympy 1.7 (https://trac.sagemath.org/ticket/30985)
     ./patches/sympy-1.7-update.patch
