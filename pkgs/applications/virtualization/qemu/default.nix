@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
     ++ optionals libiscsiSupport [ libiscsi ]
     ++ optionals smbdSupport [ samba ];
 
-  enableParallelBuilding = true;
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
