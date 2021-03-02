@@ -123,6 +123,31 @@ stdenv.mkDerivation rec {
 
     # updated eclib output has punctuation changes and tidier whitespace
     ./patches/eclib-20210223-test-formatting.patch
+
+    # upgrade arb to 2.18.1 (https://trac.sagemath.org/ticket/28623)
+    (fetchSageDiff {
+      base = "9.3.beta3";
+      name = "arb-2.18.1-update.patch";
+      rev = "0c9c4ed35c2eaf34ae0d19387c07b7f460e4abce";
+      sha256 = "sha256-CjOJIsyyVCziAfvE6pWSihPO35IZMcY2/taXAsqhPLY=";
+    })
+
+    # giac 1.6.0-47 update (https://trac.sagemath.org/ticket/30537)
+    (fetchSageDiff {
+      base = "9.3.beta7";
+      name = "giac-1.6.0-47-update.patch";
+      rev = "f05720bf63dfaf33a4e3b6d3ed2c2c0ec46b5d31";
+      sha256 = "sha256-gDUq+84eXd5GxLBWUSI61GMJpBF2KX4LBVOt3mS1NF8=";
+    })
+
+    # Make gcd/lcm interact better with pari and gmpy2 (https://trac.sagemath.org/ticket/30849)
+    # needed for pari 2.13.1 update, which we will do in the future
+    (fetchSageDiff {
+      base = "9.3.beta0";
+      name = "make-gcd-lcm-interact-better-with-pari-and-gmpy2.patch";
+      rev = "75c1516f0abb9e6f8c335e38e4031f6ef674ed30";
+      sha256 = "sha256-RukkieIZcXNrju904H2oyGKdtpdE+9vNzvyjN2IBNg0=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
