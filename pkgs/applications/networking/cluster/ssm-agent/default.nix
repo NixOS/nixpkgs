@@ -11,9 +11,10 @@
 }:
 
 let
-  # The SSM agent doesn't pay attention to our /etc/os-release yet, and the lsb-release tool
-  # in nixpkgs doesn't seem to work properly on NixOS, so let's just fake the two fields SSM
-  # looks for. See https://github.com/aws/amazon-ssm-agent/issues/38 for upstream fix.
+  # Tests use lsb_release, so we mock it (the SSM agent used to not
+  # read from our /etc/os-release file, but now it does) because in
+  # reality, it won't (shouldn't) be used when active on a system with
+  # /etc/os-release. If it is, we fake the only two fields it cares about.
   fake-lsb-release = writeShellScriptBin "lsb_release" ''
     . /etc/os-release || true
 
@@ -47,9 +48,8 @@ buildGoPackage rec {
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
   ];
 
-  configurePhase = ''
-    export HOME=$(mktemp -d)
-
+  preConfigure = ''
+    rm -r ./Tools/src/goreportcard
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
@@ -63,23 +63,40 @@ buildGoPackage rec {
     substituteInPlace agent/session/shell/shell_unix.go \
         --replace '"script"' '"${util-linux}/bin/script"'
 
+    echo "${version}" > VERSION
+  '';
+
+  preBuild = ''
+    cp -r go/src/${goPackagePath}/vendor/src go
+
+    pushd go/src/${goPackagePath}
+
     # Note: if this step fails, please patch the code to fix it! Please only skip
     # tests if it is not feasible for the test to pass in a sandbox.
     make quick-integtest
 
-    echo "${version}" > VERSION
-
     make pre-release
     make pre-build
+
+    popd
   '';
 
-  buildPhase = ''
-    make build-linux
+  postBuild = ''
+    pushd go/bin
+
+    rm integration-cli versiongenerator generator
+
+    mv core amazon-ssm-agent
+    mv agent ssm-agent-worker
+    mv cli-main ssm-cli
+    mv worker ssm-document-worker
+    mv logging ssm-session-logger
+    mv sessionworker ssm-session-worker
+
+    popd
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv bin/linux_*/* $out/bin/
+  postFixup = ''
     wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bashInteractive}/bin
   '';
 
