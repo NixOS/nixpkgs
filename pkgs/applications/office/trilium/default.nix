@@ -14,21 +14,21 @@ let
   meta = with lib; {
     inherit description;
     homepage = "https://github.com/zadam/trilium";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ emmanuelrosa dtzWill ];
   };
 
-  version = "0.43.4";
+  version = "0.45.10";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "0kjysam5alsmnj93fcqq1ivawnra42gn7dch99rrfmvbkxp7hhr8";
+    sha256 = "06ykgcak7l3q812c4xrp720db3yq0v2lkrzkmwchlwp5rpwhqpck";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "128mvmp15mjpb5ipkmr0yn7ahby26shbix3f8q094f4zpxjp83zx";
+    sha256 = "1252zgyb23vfvy63cqd8jdjbm4w9ddwnp32z5vf1fqvd2rrz6lz9";
   };
 
 in {
@@ -95,12 +95,18 @@ in {
       libxkbfile
     ];
 
-    patches = [ ./0001-Use-console-logger-instead-of-rolling-files.patch ] ;
+    patches = [
+      # patch logger to use console instead of rolling files
+      ./0001-Use-console-logger-instead-of-rolling-files.patch
+    ];
+
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium-server
 
       cp -r ./* $out/share/trilium-server
+      runHook postInstall
     '';
 
     postFixup = ''
