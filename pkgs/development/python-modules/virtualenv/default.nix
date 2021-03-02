@@ -75,6 +75,9 @@ buildPythonPackage rec {
   disabledTests = [
     "test_can_build_c_extensions"
     "test_xonsh" # imports xonsh, which is not in pythonPackages
+    # tests search `python3`, fail on python2, pypy
+    "test_python_via_env_var"
+    "test_python_multi_value_prefer_newline_via_env_var"
   ];
 
   pythonImportsCheck = [ "virtualenv" ];
