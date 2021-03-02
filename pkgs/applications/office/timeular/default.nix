@@ -1,8 +1,7 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  libsecret
+{ lib
+, fetchurl
+, appimageTools
+, libsecret
 }:
 
 let
@@ -37,7 +36,7 @@ in appimageTools.wrapType2 rec {
       Assign an activity to each side and flip to start tracking your time.
       The desktop app tell you where every minute of your day is spent.
     '';
-    homepage = https://timeular.com;
+    homepage = "https://timeular.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ ktor ];
     platforms = [ "x86_64-linux" ];
