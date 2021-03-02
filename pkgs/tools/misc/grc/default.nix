@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "grc";
-  version = "1.11.3";
+  version = "1.12";
   format = "other";
 
   src = fetchFromGitHub {
     owner  = "garabik";
     repo   = "grc";
     rev    = "v${version}";
-    sha256 = "0b3wx9zr7l642hizk93ysbdss7rfymn22b2ykj4kpkf1agjkbv35";
+    sha256 = "1020dfnb0fh7x9xfqgsxfjjryhwgfnq33bjfvn5lidq3mf7zb62w";
   };
 
   postPatch = ''
