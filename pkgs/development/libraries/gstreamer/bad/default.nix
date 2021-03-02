@@ -79,6 +79,8 @@
 , x265
 , libxml2
 , srt
+, gstreamer
+, removeReferencesTo
 }:
 
 assert faacSupport -> faac != null;
@@ -108,6 +110,7 @@ in stdenv.mkDerivation rec {
     python3
     gettext
     gobject-introspection
+    removeReferencesTo
   ] ++ optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
@@ -283,6 +286,12 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
+  '';
+
+  # Remove references to gstreamer.dev
+  postInstall = ''
+    remove-references-to -t ${gstreamer.dev} $out/lib/gstreamer-1.0/libgstdvbsubenc.so
+    remove-references-to -t ${gstreamer.dev} $out/lib/libgstcodecparsers-1.0.so.0.*.0
   '';
 
   # This package has some `_("string literal")` string formats
