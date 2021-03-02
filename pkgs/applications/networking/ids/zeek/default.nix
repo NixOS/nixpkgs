@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , cmake
 , flex
@@ -16,9 +17,7 @@
 , fetchpatch
 , coreutils
 }:
-let
-  preConfigure = (import ./script.nix {inherit coreutils;});
-in
+
 stdenv.mkDerivation rec {
   pname = "zeek";
   version = "3.2.4";
@@ -31,9 +30,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison file ];
   buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig ]
     ++ lib.optionals stdenv.isDarwin [ gettext ];
-
-  #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
-  inherit preConfigure;
 
   patches = lib.optionals stdenv.cc.isClang [
     # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
@@ -50,6 +46,18 @@ stdenv.mkDerivation rec {
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
   ];
+
+  postInstall = ''
+    for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do
+      substituteInPlace $file \
+         --replace "/bin/rm" "${coreutils}/bin/rm" \
+         --replace "/bin/cat" "${coreutils}/bin/cat"
+    done
+
+    for file in $out/share/zeek/policy/misc/trim-trace-file.zeek $out/share/zeek/base/frameworks/logging/postprocessors/scp.zeek $out/share/zeek/base/frameworks/logging/postprocessors/sftp.zeek; do
+      substituteInPlace $file --replace "/bin/rm" "${coreutils}/bin/rm"
+    done
+  '';
 
   meta = with lib; {
     description = "Powerful network analysis framework much different from a typical IDS";
