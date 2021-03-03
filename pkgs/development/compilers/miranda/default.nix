@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ siraben ];
+    platforms = platforms.all;
   };
 }
