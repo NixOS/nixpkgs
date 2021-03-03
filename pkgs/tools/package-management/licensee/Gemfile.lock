@@ -9,7 +9,7 @@ GEM
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
     faraday-net_http (1.0.1)
-    licensee (9.15.0)
+    licensee (9.15.1)
       dotenv (~> 2.0)
       octokit (~> 4.20)
       reverse_markdown (~> 1.0)

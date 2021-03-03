@@ -154,7 +154,7 @@
      </term>
      <listitem>
       <para>
-       is for development-only files. These include C(++) headers, pkg-config, cmake and aclocal files. They go to <varname>dev</varname> or <varname>out</varname> by default.
+       is for development-only files. These include C(++) headers (<filename>include/</filename>), pkg-config (<filename>lib/pkgconfig/</filename>), cmake (<filename>lib/cmake/</filename>) and aclocal files (<varname>share/aclocal/</varname>). They go to <varname>dev</varname> or <varname>out</varname> by default.
       </para>
      </listitem>
     </varlistentry>
@@ -164,7 +164,7 @@
      </term>
      <listitem>
       <para>
-       is meant for user-facing binaries, typically residing in bin/. They go to <varname>bin</varname> or <varname>out</varname> by default.
+       is meant for user-facing binaries, typically residing in <filename>bin/</filename>. They go to <varname>bin</varname> or <varname>out</varname> by default.
       </para>
      </listitem>
     </varlistentry>
@@ -194,7 +194,7 @@
      </term>
      <listitem>
       <para>
-       is for <emphasis>developer</emphasis> documentation. Currently we count gtk-doc and devhelp books in there. It goes to <varname>devdoc</varname> or is removed (!) by default. This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
+       is for <emphasis>developer</emphasis> documentation. Currently we count gtk-doc and devhelp books, typically residing in <filename>share/gtk-doc/</filename> and <filename>share/devhelp/</filename>, in there. It goes to <varname>devdoc</varname> or is removed (!) by default. This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
       </para>
      </listitem>
     </varlistentry>
@@ -204,7 +204,7 @@
      </term>
      <listitem>
       <para>
-       is for man pages (except for section 3). They go to <varname>man</varname> or <varname>$outputBin</varname> by default.
+       is for man pages (except for section 3), typically residing in <filename>share/man/man[0-9]/</filename>. They go to <varname>man</varname> or <varname>$outputBin</varname> by default.
       </para>
      </listitem>
     </varlistentry>
@@ -214,7 +214,7 @@
      </term>
      <listitem>
       <para>
-       is for section 3 man pages. They go to <varname>devman</varname> or <varname>$outputMan</varname> by default.
+       is for section 3 man pages, typically residing in <filename>share/man/man3/</filename>. They go to <varname>devman</varname> or <varname>$outputMan</varname> by default.
       </para>
      </listitem>
     </varlistentry>
@@ -224,7 +224,7 @@
      </term>
      <listitem>
       <para>
-       is for info pages. They go to <varname>info</varname> or <varname>$outputBin</varname> by default.
+       is for info pages, typically residing in <filename>share/info/</filename>. They go to <varname>info</varname> or <varname>$outputBin</varname> by default.
       </para>
      </listitem>
     </varlistentry>
