@@ -61,14 +61,14 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.2.3";
+  hassVersion = "2021.3.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = pythonOlder "3.7.1";
+  disabled = pythonOlder "3.8";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -80,7 +80,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0s1jcd94wwvmvzq86w8s9dwfvnmjs9l661z9pc6kwgagggjjgd8c";
+    sha256 = "19hdsnzrkkw1fihccmfjsgcg1m7l22a19sbmlh2dy272ckbnhj9r";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -88,15 +88,15 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "aiohttp==3.7.4" "aiohttp>=3.7.3" \
       --replace "attrs==19.3.0" "attrs>=19.3.0" \
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
-      --replace "awesomeversion==21.2.2" "awesomeversion>=21.2.2" \
-      --replace "cryptography==3.2" "cryptography" \
+      --replace "cryptography==3.3.2" "cryptography" \
       --replace "httpx==0.16.1" "httpx>=0.16.1" \
+      --replace "jinja2>=2.11.3" "jinja2>=2.11.2" \
       --replace "pip>=8.0.3,<20.3" "pip" \
-      --replace "pytz>=2020.5" "pytz>=2020.4" \
+      --replace "pytz>=2021.1" "pytz>=2020.5" \
       --replace "pyyaml==5.4.1" "pyyaml" \
-      --replace "requests==2.25.1" "requests>=2.25.0" \
       --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
@@ -177,6 +177,7 @@ in with py.pkgs; buildPythonApplication rec {
     "emulated_hue"
     "esphome"
     "fan"
+    "faa_delays"
     "ffmpeg"
     "file"
     "filesize"
@@ -195,6 +196,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hddtemp"
     "history"
     "history_stats"
+    "homekit_controller"
     "homeassistant"
     "html5"
     "http"
@@ -211,6 +213,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent"
     "intent_script"
     "ipp"
+    "kmtronic"
     "light"
     "local_file"
     "local_ip"
@@ -221,6 +224,7 @@ in with py.pkgs; buildPythonApplication rec {
     "lovelace"
     "manual"
     "manual_mqtt"
+    "mazda"
     "media_player"
     "media_source"
     "met"
@@ -232,6 +236,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mqtt_json"
     "mqtt_room"
     "mqtt_statestream"
+    "mullvad"
     "notify"
     "number"
     "ozw"
@@ -239,6 +244,7 @@ in with py.pkgs; buildPythonApplication rec {
     "panel_iframe"
     "persistent_notification"
     "person"
+    "plaato"
     "prometheus"
     "proximity"
     "push"
@@ -247,6 +253,7 @@ in with py.pkgs; buildPythonApplication rec {
     "recorder"
     "rest"
     "rest_command"
+    "rituals_perfume_genie"
     "rmvtransport"
     "rss_feed_template"
     "safe_mode"
@@ -257,6 +264,7 @@ in with py.pkgs; buildPythonApplication rec {
     "shopping_list"
     "simulated"
     "sensor"
+    "smarttub"
     "smtp"
     "sql"
     "ssdp"
@@ -313,12 +321,16 @@ in with py.pkgs; buildPythonApplication rec {
 
   disabledTests = [
     # AssertionError: assert 1 == 0
+    "test_error_posted_as_event"
     "test_merge"
     # ModuleNotFoundError: No module named 'pyqwikswitch'
     "test_merge_id_schema"
     # keyring.errors.NoKeyringError: No recommended backend was available.
     "test_secrets_from_unrelated_fails"
     "test_secrets_credstash"
+    # generic/test_camera.py: AssertionError: 500 == 200
+    "test_fetching_without_verify_ssl"
+    "test_fetching_url_with_verify_ssl"
   ];
 
   preCheck = ''
