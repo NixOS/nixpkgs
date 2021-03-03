@@ -34,23 +34,20 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =
-      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.asar.gz";
-    sha256 = "AkPx7X00kEds7B1syXJPSV1+TJlqQ7NnR6w9wSG2BRw=";
+      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+    sha256 = "1acy0dny04c8rdxqvsq70aa7vd8rgyjarcrf57mhh26ai5wiw81s";
   };
 
   nativeBuildInputs = [ makeWrapper graphicsmagick ];
-
-  unpackPhase = ''
-    gzip -dc $src > obsidian.asar
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/obsidian \
-      --add-flags $out/share/electron/obsidian.asar
+      --add-flags $out/share/obsidian/app.asar
 
-    install -m 444 -D obsidian.asar $out/share/electron/obsidian.asar
+    install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
+    install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
 
     install -m 444 -D "${desktopItem}/share/applications/"* \
       -t $out/share/applications/
