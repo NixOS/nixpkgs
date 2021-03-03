@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
     license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen minijackson synthetica ];
+    maintainers = with maintainers; [ FlorianFranzen minijackson synthetica lovesegfault ];
     platforms = platforms.unix;
     homepage = "https://github.com/alexays/waybar";
   };
