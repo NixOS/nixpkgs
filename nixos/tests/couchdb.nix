@@ -39,42 +39,6 @@ with lib;
   in ''
     start_all()
 
-    couchdb1.wait_for_unit("couchdb.service")
-    couchdb1.wait_until_succeeds(
-        "${curlJqCheck "" "GET" "" ".couchdb" "Welcome"}"
-    )
-    couchdb1.wait_until_succeeds(
-        "${curlJqCheck "" "GET" "_all_dbs" ". | length" "2"}"
-    )
-    couchdb1.succeed("${curlJqCheck testlogin "PUT" "foo" ".ok" "true"}")
-    couchdb1.succeed(
-        "${curlJqCheck "" "GET" "_all_dbs" ". | length" "3"}"
-    )
-    couchdb1.succeed(
-        "${curlJqCheck testlogin "DELETE" "foo" ".ok" "true"}"
-    )
-    couchdb1.succeed(
-        "${curlJqCheck "" "GET" "_all_dbs" ". | length" "2"}"
-    )
-
-    couchdb2.wait_for_unit("couchdb.service")
-    couchdb2.wait_until_succeeds(
-        "${curlJqCheck "" "GET" "" ".couchdb" "Welcome"}"
-    )
-    couchdb2.wait_until_succeeds(
-        "${curlJqCheck "" "GET" "_all_dbs" ". | length" "0"}"
-    )
-    couchdb2.succeed("${curlJqCheck testlogin "PUT" "foo" ".ok" "true"}")
-    couchdb2.succeed(
-        "${curlJqCheck "" "GET" "_all_dbs" ". | length" "1"}"
-    )
-    couchdb2.succeed(
-        "${curlJqCheck testlogin "DELETE" "foo" ".ok" "true"}"
-    )
-    couchdb2.succeed(
-        "${curlJqCheck "" "GET" "_all_dbs" ". | length" "0"}"
-    )
-
     couchdb3.wait_for_unit("couchdb.service")
     couchdb3.wait_until_succeeds(
         "${curlJqCheck testlogin "GET" "" ".couchdb" "Welcome"}"
