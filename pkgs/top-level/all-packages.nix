@@ -19284,13 +19284,6 @@ in
     ];
   };
 
-  linux-rt_5_6 = callPackage ../os-specific/linux/kernel/linux-rt-5.6.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-    ];
-  };
-
   linux_5_10 = callPackage ../os-specific/linux/kernel/linux-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -19568,7 +19561,6 @@ in
 
   # Realtime kernel packages.
   linuxPackages-rt_5_4 = linuxPackagesFor pkgs.linux-rt_5_4;
-  linuxPackages-rt_5_6 = linuxPackagesFor pkgs.linux-rt_5_6;
   linuxPackages-rt_5_10 = linuxPackagesFor pkgs.linux-rt_5_10;
   linuxPackages-rt = linuxPackages-rt_5_4;
   linuxPackages-rt_latest = linuxPackages-rt_5_10;
