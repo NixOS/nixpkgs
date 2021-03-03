@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, zlib, xz
 , lz4
+, lzo
 , zstd
 }:
 
@@ -25,13 +26,13 @@ stdenv.mkDerivation {
     ./0001-Mksquashfs-add-no-hardlinks-option.patch
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
-  buildInputs = [ zlib xz zstd lz4 ];
+  buildInputs = [ zlib xz zstd lz4 lzo ];
 
   preBuild = "cd squashfs-tools";
 
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  makeFlags = [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" "LZ4_SUPPORT=1" ];
+  makeFlags = [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" "LZ4_SUPPORT=1" "LZO_SUPPORT=1"];
 
   meta = {
     homepage = "http://squashfs.sourceforge.net/";
