@@ -24,8 +24,6 @@ with lib;
   };
 
   nodes = {
-    couchdb1 = makeNode pkgs.couchdb testuser testpass;
-    couchdb2 = makeNode pkgs.couchdb2 testuser testpass;
     couchdb3 = makeNode pkgs.couchdb3 testuser testpass;
   };
 

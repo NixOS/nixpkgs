@@ -18542,10 +18542,6 @@ in
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
-  couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
-    erlang = erlangR21;
-  };
-
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
     erlang = erlangR22;
   };
