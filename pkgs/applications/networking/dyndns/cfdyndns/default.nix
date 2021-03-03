@@ -17,11 +17,6 @@ buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p $releaseDir/cfdyndns $out/bin/
-  '';
-
   meta = with lib; {
     description = "CloudFlare Dynamic DNS Client";
     homepage = "https://github.com/colemickens/cfdyndns";
