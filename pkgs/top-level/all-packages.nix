@@ -21306,6 +21306,7 @@ in
 
   apostrophe = callPackage ../applications/editors/apostrophe {
     pythonPackages = python3Packages;
+    texlive = texlive.combined.scheme-medium;
   };
 
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
