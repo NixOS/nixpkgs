@@ -33,14 +33,14 @@ let
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
     cd ${cfg.package}
-    sudo=exec
+    NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
+
+    cmd="${phpPackage}/bin/php occ $@"
     if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
+      su -c "$cmd" nextcloud
+    else
+      $cmd
     fi
-    export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
-    $sudo \
-      ${phpPackage}/bin/php \
-      occ "$@"
   '';
 
   inherit (config.system) stateVersion;
