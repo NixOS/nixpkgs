@@ -92,5 +92,6 @@ in with localPython.pkgs; buildPythonApplication rec {
     description = "A command line interface for Elastic Beanstalk";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.asl20;
+    broken = true;
   };
 }
