@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ openssl ];
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  outputs = [ "out" "man" "dev" ];
 
   enableParallelBuilding = true;
 
