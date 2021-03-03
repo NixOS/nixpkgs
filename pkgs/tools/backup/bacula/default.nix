@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Enterprise ready, Network Backup Tool";
     homepage    = "http://bacula.org/";
     license     = with licenses; [ agpl3Only bsd2 ];
-    maintainers = with maintainers; [ domenkozar lovek323 eleanor ];
+    maintainers = with maintainers; [ lovek323 eleanor ];
     platforms   = platforms.all;
   };
 }

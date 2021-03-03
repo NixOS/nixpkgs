@@ -10,7 +10,7 @@ import ../make-test-python.nix ({pkgs, lib, php, ...}: {
         testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
       in {
         root = "${testdir}/web";
-        locations."~ \.php$".extraConfig = ''
+        locations."~ \\.php$".extraConfig = ''
           fastcgi_pass unix:${config.services.phpfpm.pools.foobar.socket};
           fastcgi_index index.php;
           include ${pkgs.nginx}/conf/fastcgi_params;

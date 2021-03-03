@@ -26,6 +26,10 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) loki; };
 
+  buildFlagsArray = let t = "github.com/grafana/loki/pkg/build"; in ''
+    -ldflags=-s -w -X ${t}.Version=${version} -X ${t}.BuildUser=nix@nixpkgs -X ${t}.BuildDate=unknown -X ${t}.Branch=unknown -X ${t}.Revision=unknown
+  '';
+
   doCheck = true;
 
   meta = with lib; {

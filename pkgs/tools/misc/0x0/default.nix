@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/somasis/scripts/";
     maintainers = [ maintainers.ar1a ];
     license = licenses.unlicense;
+    platforms = platforms.unix;
   };
 }

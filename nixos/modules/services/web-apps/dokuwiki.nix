@@ -329,7 +329,7 @@ in
           extraConfig = "internal;";
         };
 
-        locations."~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+        locations."~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
           extraConfig = "expires 365d;";
         };
 
@@ -349,7 +349,7 @@ in
           '';
         };
 
-        locations."~ \.php$" = {
+        locations."~ \\.php$" = {
           extraConfig = ''
               try_files $uri $uri/ /doku.php;
               include ${pkgs.nginx}/conf/fastcgi_params;

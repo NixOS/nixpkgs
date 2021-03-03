@@ -1,13 +1,14 @@
-{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gnome2, gtk2, cairo
+{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gnome2, gtk3, cairo
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
-, libxcb, nss, nspr, alsaLib, cups, expat, udev, libpulseaudio }:
+, libxcb, nss, nspr, alsaLib, cups, expat, udev, libpulseaudio, at-spi2-atk }:
 
 let
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc gtk2 gnome2.GConf atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
+    stdenv.cc.cc gtk3 gnome2.GConf atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
     libXrender libX11 libXtst libXScrnSaver nss nspr alsaLib cups expat udev libpulseaudio
+    at-spi2-atk
   ];
 in
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     mv opt "$out/"
     ln -s "$out/opt/Hyper/hyper" "$out/bin/hyper"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:\$ORIGIN" "$out/opt/Hyper/hyper"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:$out/opt/Hyper:\$ORIGIN" "$out/opt/Hyper/hyper"
     mv usr/* "$out/"
   '';
   dontPatchELF = true;

@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cseed/arachne-pnr";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shell thoughtpolice ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , fetchurl
 , fetchzip
-, optipng
 , cairo
 , python3
 , pkg-config

@@ -6927,6 +6927,8 @@ in {
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 
+  rfcat = callPackage ../development/python-modules/rfcat { };
+
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl { });
 
   rich = callPackage ../development/python-modules/rich { };

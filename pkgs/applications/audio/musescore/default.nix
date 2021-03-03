@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "musescore";
-  version = "3.6";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${version}";
-    sha256 = "sha256-0M+idYnrgXyH6WLp+2jIYRnFzTB93v+dG1XHmSNyPjE=";
+    sha256 = "sha256-21ZI5rsc05ZWEyM0LeFr+212YViLYveZZBvVpskh8iA=";
   };
 
   patches = [

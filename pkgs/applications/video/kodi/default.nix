@@ -231,7 +231,6 @@ in stdenv.mkDerivation {
 
     cmakeFlags = [
       "-DAPP_RENDER_SYSTEM=${if useGbm then "gles" else "gl"}"
-      "-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}"
       "-Dlibdvdcss_URL=${libdvdcss.src}"
       "-Dlibdvdnav_URL=${libdvdnav.src}"
       "-Dlibdvdread_URL=${libdvdread.src}"
@@ -251,9 +250,11 @@ in stdenv.mkDerivation {
     # I'm guessing there is a thing waiting to time out
     doCheck = false;
 
-    # Need these tools on the build system when cross compiling,
-    # hacky, but have found no other way.
-    preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    preConfigure = ''
+      cmakeFlagsArray+=("-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}")
+    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      # Need these tools on the build system when cross compiling,
+      # hacky, but have found no other way.
       CXX=${stdenv.cc.targetPrefix}c++ LD=ld make -C tools/depends/native/JsonSchemaBuilder
       cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
 
@@ -293,6 +294,6 @@ in stdenv.mkDerivation {
       homepage    = "https://kodi.tv/";
       license     = licenses.gpl2;
       platforms   = platforms.linux;
-      maintainers = with maintainers; [ domenkozar titanous edwtjo peterhoeg sephalon ];
+      maintainers = with maintainers; [ titanous edwtjo peterhoeg sephalon ];
     };
 }
