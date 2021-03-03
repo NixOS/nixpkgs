@@ -250,13 +250,10 @@ let
       symbol_level = 0;
       fieldtrial_testing_like_official_build = true;
 
-      # Google API keys, see:
-      #   http://www.chromium.org/developers/how-tos/api-keys
-      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-      # please get your own set of keys.
+      # Google API key, see: https://www.chromium.org/developers/how-tos/api-keys
+      # Note: The API key is for NixOS/nixpkgs use ONLY.
+      # For your own distribution, please get your own set of keys.
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
-      google_default_client_id = "404761575300.apps.googleusercontent.com";
-      google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
