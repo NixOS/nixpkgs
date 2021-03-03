@@ -29427,6 +29427,8 @@ in
 
   sane-backends-git = callPackage ../applications/graphics/sane/backends/git.nix (config.sane or {});
 
+  senv = callPackage ../applications/misc/senv { };
+
   brlaser = callPackage ../misc/cups/drivers/brlaser { };
 
   fxlinuxprint = callPackage ../misc/cups/drivers/fxlinuxprint { };
