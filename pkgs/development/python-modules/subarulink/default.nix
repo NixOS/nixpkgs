@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "subarulink";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "G-Two";
     repo = pname;
     rev = "subaru-v${version}";
-    sha256 = "1ink9bhph6blidnfsqwq01grhp7ghacmkd4vzgb9hnhl9l52s1jq";
+    sha256 = "0mhy4np3g10k778062sp2q65cfjhp4y1fghn8yvs6qg6jmg047z6";
   };
 
   propagatedBuildInputs = [ aiohttp stdiomask ];
