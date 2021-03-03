@@ -23,6 +23,7 @@ let
     isAttrs
     isBool
     isFunction
+    isList
     isString
     length
     mapAttrs
@@ -188,6 +189,9 @@ rec {
       loadModule = args: fallbackFile: fallbackKey: m:
         if isFunction m || isAttrs m then
           unifyModuleSyntax fallbackFile fallbackKey (applyIfFunction fallbackKey m args)
+        else if isList m then
+          let defs = [{ file = fallbackFile; value = m; }]; in
+          throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
         else unifyModuleSyntax (toString m) (toString m) (applyIfFunction (toString m) (import m) args);
 
       /*
