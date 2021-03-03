@@ -365,6 +365,7 @@ in
   fetchgit = callPackage ../build-support/fetchgit {
     git = buildPackages.gitMinimal;
     cacert = buildPackages.cacert;
+    git-lfs = buildPackages.git-lfs;
   };
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
