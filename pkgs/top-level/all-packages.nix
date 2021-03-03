@@ -24577,6 +24577,8 @@ in
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  pothos = libsForQt5.callPackage ../applications/radio/pothos { };
+
   potrace = callPackage ../applications/graphics/potrace {};
 
   posterazor = callPackage ../applications/misc/posterazor { };
