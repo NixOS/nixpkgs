@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, nix }:
+{ lib, stdenv, fetchFromGitHub, gnugrep, nix, nixFlakes }:
 
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
@@ -14,9 +14,8 @@ stdenv.mkDerivation rec {
   # Substitute instead of wrapping because the resulting file is
   # getting sourced, not executed:
   postPatch = ''
-    substituteInPlace direnvrc \
-      --replace "\''${NIX_BIN_PREFIX:-}" "\''${NIX_BIN_PREFIX:-${nix}/bin/}" \
-      --replace "grep" "${gnugrep}/bin/grep"
+    sed -i "1a NIX_BIN_PREFIX=${nixFlakes}/bin/" direnvrc
+    substituteInPlace direnvrc --replace "grep" "${gnugrep}/bin/grep"
   '';
 
   installPhase = ''
