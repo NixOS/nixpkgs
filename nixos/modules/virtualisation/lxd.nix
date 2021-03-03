@@ -97,7 +97,7 @@ in {
     # does a bunch of unrelated things.
     systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
 
-    security.apparmor.packages = [ pkgs.lxcPackage ];
+    security.apparmor.packages = [ cfg.lxcPackage ];
     security.apparmor.profiles = [
       "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
       "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
