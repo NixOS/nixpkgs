@@ -1096,6 +1096,12 @@
     githubId = 1432730;
     name = "Benjamin Staffin";
   };
+  benneti = {
+    name = "Benedikt Tissot";
+    email = "benedikt.tissot@googlemail.com";
+    github = "benneti";
+    githubId = 11725645;
+  };
   bennofs = {
     email = "benno.fuenfstueck@gmail.com";
     github = "bennofs";
@@ -3094,6 +3100,12 @@
     github = "fehnomenal";
     githubId = 9959940;
     name = "Andreas Fehn";
+  };
+  felixscheinost = {
+    name = "Felix Scheinost";
+    email = "felix.scheinost@posteo.de";
+    github = "felixscheinost";
+    githubId = 31761492;
   };
   felixsinger = {
     email = "felixsinger@posteo.net";
@@ -7255,6 +7267,12 @@
     githubId = 13225611;
     name = "Nicolas Martin";
   };
+  p3psi = {
+    name = "Elliot Boo";
+    email = "p3psi.boo@gmail.com";
+    github = "p3psi-boo";
+    githubId = 43925055;
+  };
   periklis = {
     email = "theopompos@gmail.com";
     github = "periklis";
@@ -10825,23 +10843,5 @@
     email = "nejczupan+nix@gmail.com";
     github = "zupo";
     githubId = 311580;
-  };
-  felixscheinost = {
-    name = "Felix Scheinost";
-    email = "felix.scheinost@posteo.de";
-    github = "felixscheinost";
-    githubId = 31761492;
-  };
-  benneti = {
-    name = "Benedikt Tissot";
-    email = "benedikt.tissot@googlemail.com";
-    github = "benneti";
-    githubId = 11725645;
-  };
-  p3psi = {
-    name = "Elliot Boo";
-    email = "p3psi.boo@gmail.com";
-    github = "p3psi-boo";
-    githubId = 43925055;
   };
 }
