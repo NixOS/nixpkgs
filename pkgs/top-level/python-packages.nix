@@ -8667,6 +8667,10 @@ in {
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
+  zeek = disabledIf (!isPy3k) (toPythonModule (pkgs.zeek.override {
+    python3 = python;
+  })).py;
+
   zeep = callPackage ../development/python-modules/zeep { };
 
   zeitgeist = (toPythonModule (pkgs.zeitgeist.override { python3 = python; })).py;
