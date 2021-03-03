@@ -19895,6 +19895,8 @@ in
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
+  go-mockery = callPackage ../development/tools/go-mockery { };
+
   gomacro = callPackage ../development/tools/gomacro { };
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
