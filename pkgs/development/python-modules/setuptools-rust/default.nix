@@ -22,10 +22,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ semantic-version setuptools toml ];
 
-  # no tests
-  doCheck = false;
-  pythonImportsCheck = [ "setuptools_rust" ];
-
   meta = with lib; {
     description = "Setuptools plugin for Rust support";
     homepage = "https://github.com/PyO3/setuptools-rust";
