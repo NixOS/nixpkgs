@@ -69,6 +69,24 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=24049
+    ./CVE-2018-20623.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=24041
+    ./CVE-2018-20651.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=24005
+    ./CVE-2018-20671.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=25307
+    ./CVE-2020-35493.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=25319
+    ./CVE-2020-35494.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=25306
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=25308
+    ./CVE-2020-35495+CVE-2020-35496+CVE-2020-35497.patch
   ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
   [
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
