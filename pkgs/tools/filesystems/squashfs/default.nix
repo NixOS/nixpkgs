@@ -1,19 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, zlib, xz
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, xz
 , lz4
 , lzo
 , zstd
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "squashfs";
   version = "4.4";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
+    rev = version;
     sha256 = "0697fv8n6739mcyn57jclzwwbbqwpvjdfkv1qh9s56lvyqnplwaw";
-    # Tag "4.4" points to this commit.
-    rev = "52eb4c279cd283ed9802dd1ceb686560b22ffb67";
   };
 
   patches = [
@@ -28,17 +31,24 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib xz zstd lz4 lzo ];
 
-  preBuild = "cd squashfs-tools";
+  preBuild = ''
+    cd squashfs-tools
+  '' ;
 
-  installFlags = [ "INSTALL_DIR=\${out}/bin" ];
+  installFlags = [ "INSTALL_DIR=${placeholder "out"}/bin" ];
 
-  makeFlags = [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" "LZ4_SUPPORT=1" "LZO_SUPPORT=1"];
+  makeFlags = [
+    "XZ_SUPPORT=1"
+    "ZSTD_SUPPORT=1"
+    "LZ4_SUPPORT=1"
+    "LZO_SUPPORT=1"
+  ];
 
-  meta = {
-    homepage = "http://squashfs.sourceforge.net/";
+  meta = with lib; {
+    homepage = "https://github.com/plougher/squashfs-tools";
     description = "Tool for creating and unpacking squashfs filesystems";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ruuda ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ruuda ];
   };
 }
