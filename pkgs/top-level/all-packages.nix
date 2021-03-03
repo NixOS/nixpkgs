@@ -15494,8 +15494,6 @@ in
 
   libosmocore = callPackage ../applications/misc/libosmocore { };
 
-  libosmpbf = callPackage ../development/libraries/libosmpbf {};
-
   libotr = callPackage ../development/libraries/libotr { };
 
   libow = callPackage ../development/libraries/libow { };
