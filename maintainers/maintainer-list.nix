@@ -8175,6 +8175,12 @@
     githubId = 592876;
     name = "Robert W. Pearce";
   };
+  rpgwaiter = {
+    email = "rpgwaiter+nix@based.zone";
+    github = "rpgwaiter";
+    githubId = 12245941;
+    name = "Rpgwaiter";
+  };
   rprospero = {
     email = "rprospero+nix@gmail.com";
     github = "rprospero";
