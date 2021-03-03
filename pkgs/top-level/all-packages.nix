@@ -19821,6 +19821,8 @@ in
 
   nvme-cli = callPackage ../os-specific/linux/nvme-cli { };
 
+  nvmet-cli = callPackage ../os-specific/linux/nvmet-cli { };
+
   system76-firmware = callPackage ../os-specific/linux/firmware/system76-firmware { };
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
