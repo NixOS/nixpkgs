@@ -340,7 +340,7 @@ mapAliases ({
   liblapackWithoutAtlas = lapack-reference; # added 2018-11-05
   liblastfm = libsForQt5.liblastfm; # added 2020-06-14
   liblrdf = lrdf; # added 2018-04-25
-  libosmpbf = throw ("libosmpbf has been removed because it is no longer required by osrm-backend");
+  libosmpbf = throw "libosmpbf was removed because it is no longer required by osrm-backend";
   libqrencode = qrencode;  # added 2019-01-01
   librdf = lrdf; # added 2020-03-22
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
