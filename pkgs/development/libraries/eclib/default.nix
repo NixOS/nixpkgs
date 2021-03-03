@@ -14,7 +14,7 @@ assert withFlint -> flint != null;
 
 stdenv.mkDerivation rec {
   pname = "eclib";
-  version = "20210223"; # upgrade might break the sage interface
+  version = "20210226"; # upgrade might break the sage interface
   # sage tests to run:
   # src/sage/interfaces/mwrank.py
   # src/sage/libs/eclib
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "JohnCremona";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xnSw5cdg4PLa0GT/blCYDz/IG5aj+HG2NHSlyCiH9g0=";
+    sha256 = "sha256-nXPlWJcFrApwpPLFjuvm0bMuSzpBM3QMBaDkIVSbpeA=";
   };
   buildInputs = [
     pari
