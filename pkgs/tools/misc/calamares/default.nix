@@ -1,6 +1,6 @@
 { lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore
 , kservice, libatasmart, libxcb, libyamlcpp, parted, polkit-qt, python, qtbase
-, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, glibc, tzdata
+, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 }:
 
@@ -20,8 +20,6 @@ mkDerivation rec {
     libatasmart libxcb libyamlcpp parted polkit-qt python qtbase
     qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
-
-  enableParallelBuilding = false;
 
   cmakeFlags = [
     "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
