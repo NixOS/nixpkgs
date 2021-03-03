@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, rustPackages, pkg-config, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
+, withALSA ? true, alsaLib
+, withPulseAudio ? false, libpulseaudio
+, withPortAudio ? false, portaudio
 , withMpris ? false
 , withKeyring ? false
-, dbus ? null
+, dbus
 }:
 
 rustPackages.rustPlatform.buildRustPackage rec {
