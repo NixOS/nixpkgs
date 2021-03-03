@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication {
   propagatedBuildInputs = with pythonPackages; [ requests pip setuptools ];
 
   meta = with lib; {
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }
