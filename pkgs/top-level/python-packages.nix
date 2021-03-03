@@ -2157,6 +2157,8 @@ in {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  exrex = callPackage ../development/python-modules/exrex { };
+
   extras = callPackage ../development/python-modules/extras { };
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
@@ -4295,6 +4297,8 @@ in {
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
+
+  myjwt = callPackage ../development/python-modules/myjwt { };
 
   mypy = callPackage ../development/python-modules/mypy { };
 
@@ -6762,6 +6766,8 @@ in {
   quantities = callPackage ../development/python-modules/quantities { };
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
+
+  questionary = callPackage ../development/python-modules/questionary { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
 
