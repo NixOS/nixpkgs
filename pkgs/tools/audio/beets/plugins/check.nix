@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = [ flac liboggz mp3val ];
 
   # patch out broken tests
-  patches = [ ./beet-check-tests.patch ];
+  patches = [ ./check-tests.patch ];
 
   # patch out futures dependency, it is only needed for Python2 which we don't
   # support.
