@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git, build }:
+{ lib, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git, build, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "check-manifest";
@@ -16,7 +16,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ build pep517 toml ];
 
-  checkInputs = [ mock breezy git ];
+  checkInputs = [ mock breezy git pytestCheckHook ];
+
+  pythonImportsCheck = [ "check_manifest" ];
+
 
   meta = with lib; {
     homepage = "https://github.com/mgedmin/check-manifest";
