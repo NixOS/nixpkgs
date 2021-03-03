@@ -45,7 +45,7 @@ const templateDeps = (version: string, deps: PrefetchResult[]) =>
   `# auto-generated file -- DO NOT EDIT!
 {}:
 rec {
-  rustyV8Lib = {
+  librusty_v8 = {
     version = "${version}";
     sha256s = {
 ${deps.map((d) => `      ${d.arch.nix} = "${d.sha256}";`).join("\n")}
@@ -65,9 +65,9 @@ export async function updateDeps(
   // 0.0.0
   const version = await getRustyV8Version(owner, repo, denoVersion);
   if (typeof version !== "string") {
-    throw "no rusty_v8 version";
+    throw "no librusty_v8 version";
   }
-  log("rusty_v8 version:", version);
+  log("librusty_v8 version:", version);
   const existingVersion = await getExistingVersion(filePath);
   if (version === existingVersion) {
     log("Version already matches latest, skipping...");
