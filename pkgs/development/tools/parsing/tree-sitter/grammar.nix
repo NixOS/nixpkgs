@@ -11,6 +11,7 @@
 , version
   # source for the language grammar
 , source
+, location ? null
 }:
 
 stdenv.mkDerivation {
@@ -18,12 +19,18 @@ stdenv.mkDerivation {
   pname = "${language}-grammar";
   inherit version;
 
-  src = source;
+  src =
+    if location == null
+    then
+      source
+    else
+      "${source}/${location}"
+  ;
 
   buildInputs = [ tree-sitter ];
 
   dontUnpack = true;
-  configurePhase= ":";
+  configurePhase = ":";
   buildPhase = ''
     runHook preBuild
     scanner_cc="$src/src/scanner.cc"
