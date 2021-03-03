@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://android.googlesource.com/tools/repo";
     license = licenses.asl20;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }
