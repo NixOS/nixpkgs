@@ -2530,6 +2530,8 @@ in {
 
   gdrivefs = callPackage ../development/python-modules/gdrivefs { };
 
+  ge25519 = callPackage ../development/python-modules/ge25519 { };
+
   geant4 = disabledIf (!isPy3k) (toPythonModule (pkgs.geant4.override {
     enablePython = true;
     python3 = python;
