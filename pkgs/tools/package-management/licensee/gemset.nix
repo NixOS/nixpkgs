@@ -47,10 +47,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1di15x50kpqdhw1fvba4c1j6b106nfld85jxdc72xj4iyj1l6vi1";
+      sha256 = "1pvrz9fjvxzk3aq85zgh8dkw98kz54jmwi10k3shc8dqbrlvragy";
       type = "gem";
     };
-    version = "9.15.0";
+    version = "9.15.1";
   };
   mini_portile2 = {
     groups = ["default"];
