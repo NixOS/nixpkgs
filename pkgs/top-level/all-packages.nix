@@ -6842,20 +6842,19 @@ in
 
   opensm = callPackage ../tools/networking/opensm { };
 
-  openssh =
-    callPackage ../tools/networking/openssh {
-      hpnSupport = false;
-      etcDir = "/etc/ssh";
-      pam = if stdenv.isLinux then pam else null;
-    };
+  opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
 
-  openssh_hpn = pkgs.appendToName "with-hpn" (openssh.override {
-    hpnSupport = true;
-  });
+  openssh = opensshPackages.openssh.override {
+    etcDir = "/etc/ssh";
+  };
 
-  openssh_gssapi = pkgs.appendToName "with-gssapi" (openssh.override {
-    withGssapiPatches = true;
-  });
+  openssh_hpn = opensshPackages.openssh_hpn.override {
+    etcDir = "/etc/ssh";
+  };
+
+  openssh_gssapi = opensshPackages.openssh_gssapi.override {
+    etcDir = "/etc/ssh";
+  };
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
