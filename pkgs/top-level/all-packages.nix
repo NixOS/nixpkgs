@@ -15929,6 +15929,10 @@ in
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
+  mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
+
+  mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
+
   mapnik = callPackage ../development/libraries/mapnik { };
 
   marisa = callPackage ../development/libraries/marisa {};
@@ -16075,6 +16079,8 @@ in
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
   ndpi = callPackage ../development/libraries/ndpi { };
+
+  nemo-qml-plugin-dbus = libsForQt5.callPackage ../development/libraries/nemo-qml-plugin-dbus { };
 
   nifticlib = callPackage ../development/libraries/science/biology/nifticlib { };
 
@@ -16723,6 +16729,8 @@ in
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
+
+  s2geometry = callPackage ../development/libraries/s2geometry { };
 
   /* This package references ghc844, which we no longer have. Unfortunately, I
      have been unable to mark it as "broken" in a way that the ofBorg bot
@@ -24657,6 +24665,8 @@ in
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
+
+  pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
 
   pwdsafety = callPackage ../tools/security/pwdsafety { };
 
