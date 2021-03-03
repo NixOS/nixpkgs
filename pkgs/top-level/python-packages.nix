@@ -979,6 +979,8 @@ in {
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
 
+  bitlist = callPackage ../development/python-modules/bitlist { };
+
   bitmath = callPackage ../development/python-modules/bitmath { };
 
   bitstring = callPackage ../development/python-modules/bitstring { };
