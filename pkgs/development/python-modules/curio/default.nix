@@ -24,6 +24,11 @@ buildPythonPackage rec {
       url = "https://github.com/dabeaz/curio/commit/132376724bbfaa0a52d3d63d0791aa4ac1eb6f5f.patch";
       sha256 = "sha256-AxO0xRcR9l9/NKEJFwyZIoYcyZxpqOhpdNaeaYokVb4=";
     })
+    # Same as above
+    (fetchpatch {
+      url = "https://github.com/dabeaz/curio/commit/8ac2f12a2cdacbc750b01fc7459cee8879bc1ee3.patch";
+      sha256 = "sha256-2Si3fuDLrI09QuzJd1TrE0QY02G9e9m+1eHFTB/MrWU=";
+    })
   ];
 
   disabled = !isPy3k;
