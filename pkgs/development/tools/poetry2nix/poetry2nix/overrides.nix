@@ -250,6 +250,15 @@ self: super:
     }
   );
 
+  gdal = super.gdal.overridePythonAttrs (
+    old: {
+      preBuild = (old.preBuild or "") + ''
+        substituteInPlace setup.cfg \
+          --replace "../../apps/gdal-config" '${pkgs.gdal}/bin/gdal-config'
+      '';
+    }
+  );
+
   grandalf = super.grandalf.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
@@ -360,9 +369,13 @@ self: super:
     }
   );
 
-  # disable the removal of pyproject.toml, required because of setuptools_scm
   jaraco-functools = super.jaraco-functools.overridePythonAttrs (
     old: {
+      # required for the extra "toml" dependency in setuptools_scm[toml]
+      buildInputs = (old.buildInputs or [ ]) ++ [
+        self.toml
+      ];
+      # disable the removal of pyproject.toml, required because of setuptools_scm
       dontPreferSetupPy = true;
     }
   );
@@ -375,6 +388,15 @@ self: super:
         self.cryptography
         self.pyjwt
       ];
+    }
+  );
+
+  jsondiff = super.jsondiff.overridePythonAttrs (
+    old: {
+      preBuild = (old.preBuild or "") + ''
+        substituteInPlace setup.py \
+          --replace "'jsondiff=jsondiff.cli:main_deprecated'," ""
+      '';
     }
   );
 
@@ -558,6 +580,13 @@ self: super:
     buildInputs = oa.buildInputs ++ [ self.pbr ];
   });
 
+  moto = super.moto.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++
+        [ self.sshpubkeys ];
+    }
+  );
+
   mpi4py = super.mpi4py.overridePythonAttrs (
     old:
     let
@@ -674,6 +703,12 @@ self: super:
     }
   );
 
+  pdal = super.pdal.overridePythonAttrs (
+    old: {
+      PDAL_CONFIG = "${pkgs.pdal}/bin/pdal-config";
+    }
+  );
+
   peewee = super.peewee.overridePythonAttrs (
     old:
     let
@@ -733,9 +768,13 @@ self: super:
     '';
   });
 
-  # disable the removal of pyproject.toml, required because of setuptools_scm
   portend = super.portend.overridePythonAttrs (
     old: {
+      # required for the extra "toml" dependency in setuptools_scm[toml]
+      buildInputs = (old.buildInputs or [ ]) ++ [
+        self.toml
+      ];
+      # disable the removal of pyproject.toml, required because of setuptools_scm
       dontPreferSetupPy = true;
     }
   );
@@ -920,6 +959,16 @@ self: super:
     }
   );
 
+  pyproj = super.pyproj.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++
+        [ self.cython ];
+      PROJ_DIR = "${pkgs.proj}";
+      PROJ_LIBDIR = "${pkgs.proj}/lib";
+      PROJ_INCDIR = "${pkgs.proj.dev}/include";
+    }
+  );
+
   python-bugzilla = super.python-bugzilla.overridePythonAttrs (
     old: {
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
@@ -951,6 +1000,8 @@ self: super:
     super.pyqt5.overridePythonAttrs (
       old: {
         format = "other";
+
+        dontWrapQtApps = true;
 
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
           pkgs.pkg-config
@@ -1071,12 +1122,9 @@ self: super:
 
   pytest-runner = super.pytest-runner or super.pytestrunner;
 
-  python-jose = super.python-jose.overridePythonAttrs (
+  pytest-pylint = super.pytest-pylint.overridePythonAttrs (
     old: {
-      postPath = ''
-        substituteInPlace setup.py --replace "'pytest-runner'," ""
-        substituteInPlace setup.py --replace "'pytest-runner'" ""
-      '';
+      buildInputs = [ self.pytest-runner ];
     }
   );
 
@@ -1101,6 +1149,11 @@ self: super:
     '';
   });
 
+  python-jose = super.python-jose.overridePythonAttrs (
+    old: {
+      buildInputs = [ self.pytest-runner ];
+    }
+  );
 
   ffmpeg-python = super.ffmpeg-python.overridePythonAttrs (
     old: {
@@ -1233,9 +1286,13 @@ self: super:
     }
   );
 
-  # disable the removal of pyproject.toml, required because of setuptools_scm
   tempora = super.tempora.overridePythonAttrs (
     old: {
+      # required for the extra "toml" dependency in setuptools_scm[toml]
+      buildInputs = (old.buildInputs or [ ]) ++ [
+        self.toml
+      ];
+      # disable the removal of pyproject.toml, required because of setuptools_scm
       dontPreferSetupPy = true;
     }
   );
