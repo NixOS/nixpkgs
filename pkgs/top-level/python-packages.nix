@@ -5718,6 +5718,8 @@ in {
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
 
+  pymazda = callPackage ../development/python-modules/pymazda { };
+
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
