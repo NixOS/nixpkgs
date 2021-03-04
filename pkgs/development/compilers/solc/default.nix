@@ -98,7 +98,7 @@ let
       description = "Compiler for Ethereum smart contract language Solidity";
       homepage = "https://github.com/ethereum/solidity";
       license = licenses.gpl3;
-      platforms = with platforms; linux ++ darwin;
+      platforms = with platforms; linux; # darwin is currently broken
       maintainers = with maintainers; [ dbrock akru lionello sifmelcara ];
       inherit version;
     };
