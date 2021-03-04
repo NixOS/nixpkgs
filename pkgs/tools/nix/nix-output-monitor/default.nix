@@ -1,22 +1,23 @@
 { mkDerivation, ansi-terminal, async, attoparsec, base, containers
 , cassava, directory, HUnit, mtl, nix-derivation, process, relude, lib
 , stm, terminal-size, text, time, unix, wcwidth, fetchFromGitHub
-, expect, runtimeShell
+, lock-file, data-default, expect, runtimeShell
 }:
 mkDerivation rec {
   pname = "nix-output-monitor";
-  version = "1.0.1.1";
+  version = "1.0.2.0";
   src = fetchFromGitHub {
     owner = "maralorn";
     repo = "nix-output-monitor";
-    sha256 = "1wi1gsl5q1sy7k6k5wxhwpwzki7rghhbsyzm84hnw6h93w6401ax";
+    sha256 = "12spiddjy8xhbxdh89w46kg7p2asfa4qrldwb1kps178hdhjdrgz";
     rev = "v${version}";
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
     ansi-terminal async attoparsec base cassava containers directory mtl
-    nix-derivation relude stm terminal-size text time unix wcwidth
+    nix-derivation relude stm terminal-size text time unix wcwidth lock-file
+    data-default
   ];
   executableHaskellDepends = [
     ansi-terminal async attoparsec base containers directory mtl
