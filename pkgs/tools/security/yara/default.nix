@@ -7,7 +7,6 @@
 , withCrypto ? true, openssl
 , enableMagic ? true, file
 , enableCuckoo ? true, jansson
-, enableStatic ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature withCrypto "crypto")
     (lib.enableFeature enableMagic "magic")
     (lib.enableFeature enableCuckoo "cuckoo")
-    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature true "static")
   ];
 
   meta = with lib; {
