@@ -4732,7 +4732,6 @@ in
 
   gitui = callPackage ../applications/version-management/git-and-tools/gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
-    inherit (pkgs) openssl perl;
   };
 
   gogs = callPackage ../applications/version-management/gogs { };
