@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "etebase";
-  version = "0.31.1";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etebase-py";
     rev = "v${version}";
-    sha256 = "163iw64l8lwawf84qswcjsq9p8qddv9ysjrr3dzqpqxb2yb0sy39";
+    hash = "sha256-enGmfXW8eV6FgdHfJqXr1orAsGbxDz9xUY6T706sf5U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "0w8ypl6kj1mf6ahbdiwbd4jw6ldxdaig47zwk91jjsww5lbyx4lf";
+    hash = "sha256-4eJvFf6aY+DYkrYgam5Ok9941PX4uQOmtRznEY0+1TE=";
   };
 
   format = "pyproject";
