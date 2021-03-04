@@ -3,18 +3,17 @@
 , fetchFromGitHub
 , pkg-config, autoreconfHook
 , openssl, perl
-, tpm2Support ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtpms";
-  version = "0.7.4";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "libtpms";
     rev = "v${version}";
-    sha256 = "sha256-nZSBD3WshlZHVMBFmDBBdFkhBjNgtASfg6+lYOOAhZ8=";
+    sha256 = "sha256-/zvMXdAOb4J3YaqdVJvTUI1/JFC0OKwgiYwYgYB62Y4=";
   };
 
   nativeBuildInputs = [
@@ -24,14 +23,13 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ openssl ];
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  outputs = [ "out" "man" "dev" ];
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--with-openssl"
-  ] ++ lib.optionals tpm2Support [
-    "--with-tpm2" # TPM2 support is flagged experimental by upstream
+    "--with-tpm2"
   ];
 
   meta = with lib; {

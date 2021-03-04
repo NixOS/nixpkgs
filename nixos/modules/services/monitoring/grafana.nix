@@ -73,7 +73,7 @@ let
   notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
   provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
-    mkdir -p $out/{datasources,dashboards}
+    mkdir -p $out/{datasources,dashboards,notifiers}
     ln -sf ${datasourceFile} $out/datasources/datasource.yaml
     ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
     ln -sf ${notifierFile} $out/notifiers/notifier.yaml

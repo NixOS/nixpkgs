@@ -12,6 +12,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Substitute xrandr path with @xrandr@ so we can replace it with
+    # real path in substituteInPlace
+    ./xrandr.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace mons.sh --replace '@xrandr@' '${xrandr}/bin/xrandr'
+  '';
+
   nativeBuildInputs = [ help2man ];
   makeFlags = [
     "DESTDIR=$(out)"
@@ -22,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "POSIX Shell script to quickly manage 2-monitors display";
     homepage = "https://github.com/Ventto/mons.git";
     license = licenses.mit;
-    maintainers = [ maintainers.mschneider ];
+    maintainers = with maintainers; [ mschneider thiagokokada ];
   };
 }

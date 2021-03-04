@@ -797,6 +797,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel OpenGL;
   };
 
+  lifecycled = callPackage ../tools/misc/lifecycled { };
+
   lilyterm = callPackage ../applications/terminal-emulators/lilyterm {
     inherit (gnome2) vte;
     gtk = gtk2;
@@ -3008,6 +3010,26 @@ in
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python3Packages;
   };
+
+  beetsExternalPlugins =
+    let
+      pluginArgs = {
+        # This is a stripped down beets for testing of the external plugins.
+        beets = (beets.override {
+          enableAlternatives = false;
+          enableCopyArtifacts = false;
+          enableExtraFiles = false;
+        }).overrideAttrs (lib.const {
+          doInstallCheck = false;
+        });
+        pythonPackages = python3Packages;
+      };
+    in lib.recurseIntoAttrs {
+      alternatives = callPackage ../tools/audio/beets/plugins/alternatives.nix pluginArgs;
+      check = callPackage ../tools/audio/beets/plugins/check.nix pluginArgs;
+      copyartifacts = callPackage ../tools/audio/beets/plugins/copyartifacts.nix pluginArgs;
+      extrafiles = callPackage ../tools/audio/beets/plugins/extrafiles.nix pluginArgs;
+    };
 
   bento4 = callPackage ../tools/video/bento4 { };
 
@@ -8234,11 +8256,6 @@ in
   swec = callPackage ../tools/networking/swec { };
 
   swtpm = callPackage ../tools/security/swtpm { };
-  swtpm-tpm2 = swtpm.override {
-    libtpms = libtpms.override {
-      tpm2Support = true;
-    };
-  };
 
   svn2git = callPackage ../applications/version-management/git-and-tools/svn2git {
     git = gitSVN;
@@ -15912,6 +15929,10 @@ in
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
+  mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
+
+  mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
+
   mapnik = callPackage ../development/libraries/mapnik { };
 
   marisa = callPackage ../development/libraries/marisa {};
@@ -16058,6 +16079,8 @@ in
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
   ndpi = callPackage ../development/libraries/ndpi { };
+
+  nemo-qml-plugin-dbus = libsForQt5.callPackage ../development/libraries/nemo-qml-plugin-dbus { };
 
   nifticlib = callPackage ../development/libraries/science/biology/nifticlib { };
 
@@ -16706,6 +16729,8 @@ in
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
+
+  s2geometry = callPackage ../development/libraries/s2geometry { };
 
   /* This package references ghc844, which we no longer have. Unfortunately, I
      have been unable to mark it as "broken" in a way that the ofBorg bot
@@ -23384,6 +23409,12 @@ in
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
+  wrapHelm = callPackage ../applications/networking/cluster/helm/wrapper.nix { };
+
+  kubernetes-helm-wrapped = wrapHelm kubernetes-helm {};
+
+  kubernetes-helmPlugins = dontRecurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
+
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
   kupfer = callPackage ../applications/misc/kupfer {
@@ -23605,7 +23636,7 @@ in
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
 
-  magnetophonDSP = {
+  magnetophonDSP = lib.recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
     ConstantDetuneChorus  = callPackage ../applications/audio/magnetophonDSP/ConstantDetuneChorus { };
@@ -24634,6 +24665,8 @@ in
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
+
+  pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
 
   pwdsafety = callPackage ../tools/security/pwdsafety { };
 
