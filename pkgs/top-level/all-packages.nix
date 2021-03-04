@@ -22365,6 +22365,8 @@ in
 
   caerbannog = callPackage ../applications/misc/caerbannog { };
 
+  cardboard = callPackage ../applications/window-managers/cardboard { };
+
   cage = callPackage ../applications/window-managers/cage { };
 
   calf = callPackage ../applications/audio/calf {
