@@ -11753,6 +11753,10 @@ in
   pharo-spur64 = assert stdenv.is64bit; pharo-vms.spur64;
   pharo-launcher = callPackage ../development/pharo/launcher { };
 
+  umr = callPackage ../development/misc/umr {
+    llvmPackages = llvmPackages_latest;
+  };
+
   srandrd = callPackage ../tools/X11/srandrd { };
 
   srecord = callPackage ../development/tools/misc/srecord { };
