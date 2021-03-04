@@ -25,13 +25,13 @@
 , libsoup
 , libpulseaudio
 , libintl
-, darwin
+, Cocoa
 , lame
 , mpg123
 , twolame
-, gtkSupport ? false, gtk3 ? null
-, qt5Support ? false, qt5 ? null
-, raspiCameraSupport ? false, libraspberrypi ? null
+, gtkSupport ? false, gtk3
+, qt5Support ? false, qt5
+, raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
 , libXdamage
 , libXext
@@ -44,12 +44,8 @@
 , wavpack
 }:
 
-assert gtkSupport -> gtk3 != null;
-assert raspiCameraSupport -> ((libraspberrypi != null) && stdenv.isLinux && stdenv.isAarch64);
+assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
-let
-  inherit (lib) optionals;
-in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
   version = "1.18.2";
@@ -57,7 +53,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1929nhjsvbl4bw37nfagnfsnxz737cm2x3ayz9ayrn9lwkfm45zp";
   };
 
@@ -68,7 +64,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     nasm
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     wayland-protocols
   ];
 
@@ -98,39 +94,39 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXdamage
     wavpack
-  ] ++ optionals raspiCameraSupport [
+  ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
-  ] ++ optionals gtkSupport [
+  ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
-  ] ++ optionals qt5Support (with qt5; [
+  ] ++ lib.optionals qt5Support (with qt5; [
     qtbase
     qtdeclarative
     qtwayland
     qtx11extras
-  ]) ++ optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ] ++ optionals stdenv.isLinux [
+  ]) ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ] ++ lib.optionals stdenv.isLinux [
     libv4l
     libpulseaudio
     libavc1394
     libiec61883
     libgudev
     wayland
-  ] ++ optionals enableJack [
+  ] ++ lib.optionals enableJack [
     libjack2
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ optionals (!qt5Support) [
+  ] ++ lib.optionals (!qt5Support) [
     "-Dqt5=disabled"
-  ] ++ optionals (!gtkSupport) [
+  ] ++ lib.optionals (!gtkSupport) [
     "-Dgtk3=disabled"
-  ] ++ optionals (!enableJack) [
+  ] ++ lib.optionals (!enableJack) [
     "-Djack=disabled"
-  ] ++ optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!stdenv.isLinux) [
     "-Ddv1394=disabled" # Linux only
     "-Doss4=disabled" # Linux only
     "-Doss=disabled" # Linux only
@@ -138,7 +134,7 @@ stdenv.mkDerivation rec {
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
     "-Dximagesrc=disabled" # Linux-only
-  ] ++ optionals (!raspiCameraSupport) [
+  ] ++ lib.optionals (!raspiCameraSupport) [
     "-Drpicamsrc=disabled"
   ];
 
