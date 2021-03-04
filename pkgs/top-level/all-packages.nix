@@ -11031,7 +11031,9 @@ in
 
   smlpkg = callPackage ../tools/package-management/smlpkg { };
 
-  solc = callPackage ../development/compilers/solc { };
+  solc = solc_0_8;
+  solc_0_8 = callPackage ../development/compilers/solc { };
+  solc_0_7 = callPackage ../development/compilers/solc/0.7.nix { };
 
   souffle = callPackage ../development/compilers/souffle {
     autoreconfHook = buildPackages.autoreconfHook269;
