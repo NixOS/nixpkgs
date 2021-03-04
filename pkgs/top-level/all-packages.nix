@@ -15380,6 +15380,8 @@ in
     libmicrohttpd = libmicrohttpd_0_9_72;
   };
 
+  libjwt = callPackage ../development/libraries/libjwt { };
+
   libkate = callPackage ../development/libraries/libkate { };
 
   libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
