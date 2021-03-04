@@ -1,5 +1,5 @@
 {
-  stdenv, lib, fetchFromGitHub, makeDesktopItem, prusa-slicer
+  lib, fetchFromGitHub, makeDesktopItem, prusa-slicer
 }:
 let
   appname = "SuperSlicer";
