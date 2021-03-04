@@ -6255,6 +6255,12 @@
     githubId = 1776903;
     name = "Andrew Abbott";
   };
+  mitchmindtree = {
+    email = "mail@mitchellnordine.com";
+    github = "mitchmindtree";
+    githubId = 4587373;
+    name = "Mitchell Nordine";
+  };
   mjanczyk = {
     email = "m@dragonvr.pl";
     github = "mjanczyk";
