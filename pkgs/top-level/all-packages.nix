@@ -3942,7 +3942,9 @@ in
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
-  wrangler = callPackage ../development/tools/wrangler { };
+  wrangler = callPackage ../development/tools/wrangler {
+   inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
+  };
 
   wsl-open = callPackage ../tools/misc/wsl-open { };
 
