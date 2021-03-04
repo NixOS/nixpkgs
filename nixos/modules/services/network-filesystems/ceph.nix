@@ -316,7 +316,7 @@ in
     client = {
       enable = mkEnableOption "Ceph client configuration";
       extraConfig = mkOption {
-        type = with types; attrsOf str;
+        type = with types; attrsOf (attrsOf str);
         default = {};
         example = ''
           {
