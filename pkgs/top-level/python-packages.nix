@@ -4058,6 +4058,8 @@ in {
 
   mesa = callPackage ../development/python-modules/mesa { };
 
+  meshio = callPackage ../development/python-modules/meshio { };
+
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
 
   meson = disabledIf (pythonOlder "3.5") (toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
