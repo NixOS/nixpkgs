@@ -3,6 +3,8 @@ import ../make-test-python.nix ({pkgs, lib, php, ...}: {
   meta.maintainers = lib.teams.php.members;
 
   machine = { config, lib, pkgs, ... }: {
+    environment.systemPackages = [ php ];
+
     services.nginx = {
       enable = true;
 
@@ -50,5 +52,6 @@ import ../make-test-python.nix ({pkgs, lib, php, ...}: {
     # Check so we have database and some other extensions loaded
     for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite"]:
         assert ext in response, f"Missing {ext} extension"
+        machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
   '';
 })
