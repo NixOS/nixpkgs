@@ -21,7 +21,6 @@
   runtimeShell,
   shadow,
   skopeo,
-  stdenv,
   storeDir ? builtins.storeDir,
   substituteAll,
   symlinkJoin,

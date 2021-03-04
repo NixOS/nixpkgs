@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromBitbucket, makeWrapper, runCommand
+{ lib, mkDerivation, fetchFromBitbucket, makeWrapper, runCommand
 , python3, vapoursynth
 , qmake, qtbase, qtwebsockets
 }:

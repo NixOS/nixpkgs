@@ -7,7 +7,6 @@
   python2Packages,
   python3Packages,
   runCommand,
-  stdenv,
   writers,
   writeText
 }:
