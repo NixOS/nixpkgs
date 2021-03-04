@@ -7,17 +7,18 @@
 , withCrypto ? true, openssl
 , enableMagic ? true, file
 , enableCuckoo ? true, jansson
+, enableStatic ? true
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.1";
+  version = "4.0.5";
   pname = "yara";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v${version}";
-    sha256 = "0dy8jf0pdn0wilxy1pj6pqjxg7icxkwax09w54np87gl9p00f5rk";
+    sha256 = "1gkdll2ygdlqy1f27a5b84gw2bq75ss7acsx06yhiss90qwdaalq";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature withCrypto "crypto")
     (lib.enableFeature enableMagic "magic")
     (lib.enableFeature enableCuckoo "cuckoo")
+    (lib.enableFeature enableStatic "static")
   ];
 
   meta = with lib; {
