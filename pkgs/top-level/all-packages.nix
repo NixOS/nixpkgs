@@ -9386,6 +9386,8 @@ in
 
   zinit = callPackage ../shells/zsh/zinit {} ;
 
+  zs-apc-spdu-ctl = callPackage ../tools/networking/zs-apc-spdu-ctl { };
+
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-autopair = callPackage ../shells/zsh/zsh-autopair { };
@@ -23481,6 +23483,8 @@ in
   leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
 
   libowfat = callPackage ../development/libraries/libowfat { };
+
+  libowlevelzs = callPackage ../development/libraries/libowlevelzs { };
 
   librecad = libsForQt514.callPackage ../applications/misc/librecad { };
 
