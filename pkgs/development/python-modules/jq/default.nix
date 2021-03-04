@@ -8,9 +8,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "62d649c4f6f26ed91810c8db075f5fe05319c3dc99dbebcd2d31b0b697a4592e";
   };
+
   patches = [ ./jq-py-setup.patch ];
 
   buildInputs = [ jq ];
+
+  # no tests executed
+  doCheck = false;
+  pythonImportsCheck = [ "jq" ];
 
   meta = {
     description = "Python bindings for jq, the flexible JSON processor";

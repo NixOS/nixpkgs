@@ -179,7 +179,7 @@ mkDerivation rec {
       free and open source and great for both casual users and computer experts.
     '';
     license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
-    maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
+    maintainers = with maintainers; [ pSub AndersonTorres ];
     platforms = platforms.linux;
   };
 }

@@ -3,7 +3,7 @@
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
 , click, python-slugify, habanero, isbnlib, typing-extensions
 , prompt_toolkit, pygments, stevedore, tqdm, lxml
-, python-doi, isPy3k, pythonOlder, pytestcov
+, python-doi, isPy3k, pytestcov
 #, optional, dependencies
 , whoosh, pytest
 , stdenv

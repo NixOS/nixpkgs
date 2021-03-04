@@ -22,7 +22,9 @@ let
 
   php = cfg.phpPackage.override { apacheHttpd = pkg; };
 
-  phpMajorVersion = lib.versions.major (lib.getVersion php);
+  phpModuleName = let
+    majorVersion = lib.versions.major (lib.getVersion php);
+  in (if majorVersion == "8" then "php" else "php${majorVersion}");
 
   mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = pkg; };
 
@@ -63,7 +65,7 @@ let
     ++ optional enableSSL "ssl"
     ++ optional enableUserDir "userdir"
     ++ optional cfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
-    ++ optional cfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+    ++ optional cfg.enablePHP { name = phpModuleName; path = "${php}/modules/lib${phpModuleName}.so"; }
     ++ optional cfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
     ++ cfg.extraModules;
 

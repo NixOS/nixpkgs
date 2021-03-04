@@ -16,14 +16,14 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.17.3";
-  sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
-  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
+  version = "0.18.2";
+  sha256 = "1kh3bqn28nal3mmwszbih8hbq25vxy3zd45pzj904yf0ds5ql684";
+  cargoSha256 = "06jbn4ai5lrxzv51vfjzjs7kgxw4nh2vbafc93gma4k14gggyygc";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = version;
+    rev = "v${version}";
     inherit sha256;
     fetchSubmodules = true;
   };

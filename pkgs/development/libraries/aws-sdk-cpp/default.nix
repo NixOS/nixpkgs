@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n, zlib
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n-tls, zlib
 , aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
 , CoreAudio, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake curl ];
 
   buildInputs = [
-    curl openssl s2n zlib
+    curl openssl s2n-tls zlib
     aws-c-cal aws-c-common aws-c-event-stream aws-c-io aws-checksums
   ] ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||

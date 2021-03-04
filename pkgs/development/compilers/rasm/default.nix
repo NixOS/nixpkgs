@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
       # according to official documentation
-      cc rasm_v*.c -O2 -lm -lrt -o rasm
+      ${stdenv.cc.targetPrefix}cc rasm_v*.c -O2 -lm -o rasm
   '';
 
   installPhase = ''
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     # use -n option to display all licenses
     license = licenses.mit; # expat version
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

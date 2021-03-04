@@ -8,6 +8,7 @@
 , pytest-xdist
 , pytestCheckHook
 , urllib3
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,9 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ];
+
+  # AttributeError: 'KeywordMapping' object has no attribute 'get'
+  doCheck = ! isPy27;
 
   disabledTests = [
     # Disable tests that require network access and use httpbin

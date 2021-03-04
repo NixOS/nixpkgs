@@ -4,14 +4,13 @@
 , isPy27
 , semantic-version
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
   version = "0.11.6";
-
   disabled = isPy27;
 
   src = fetchPypi {
@@ -19,9 +18,13 @@ buildPythonPackage rec {
     sha256 = "a5b5954909cbc5d66b914ee6763f81fa2610916041c7266105a469f504a7c4ca";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ semantic-version setuptools toml ];
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "setuptools_rust" ];
 
   meta = with lib; {
     description = "Setuptools plugin for Rust support";

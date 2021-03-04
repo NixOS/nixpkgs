@@ -2,7 +2,7 @@
   "name": "element-desktop",
   "productName": "Element",
   "main": "src/electron-main.js",
-  "version": "1.7.21",
+  "version": "1.7.22",
   "description": "A feature-rich client for Matrix.org",
   "author": "Element",
   "repository": {
@@ -62,7 +62,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "10.2.0",
+    "electronVersion": "11.2.3",
     "files": [
       "package.json",
       {

@@ -8,7 +8,6 @@
 , requests
 , jsonschema
 , jsonpatch
-, pytest
 , httpretty
 , dmidecode
 , pytestCheckHook
@@ -17,11 +16,9 @@
 , openssh
 }:
 
-let version = "20.3";
-
-in buildPythonApplication {
+buildPythonApplication rec {
   pname = "cloud-init";
-  inherit version;
+  version = "20.3";
   namePrefix = "";
 
   src = fetchFromGitHub {
@@ -81,10 +78,10 @@ in buildPythonApplication {
     export TMPDIR=/tmp
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
-    maintainers = [ lib.maintainers.madjar lib.maintainers.phile314 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ madjar phile314 ];
+    platforms = platforms.all;
   };
 }

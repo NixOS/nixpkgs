@@ -18,11 +18,6 @@ stdenv.mkDerivation rec {
     sha256 = "1sba0w455rdkadkhxrx4fr63m0d9blsbb1q1hcshxw1k1z2nh1gk";
   };
 
-  prePatch = ''
-    substituteInPlace configure.ac \
-      --replace "codegendir pygtk-2.0" "codegendir pygobject-2.0"
-  '';
-
   nativeBuildInputs = [ pkg-config autoreconfHook gtk-doc gobject-introspection python2 python2Packages.pygtk dbus-glib ];
 
   buildInputs =

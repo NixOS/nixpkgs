@@ -242,6 +242,8 @@ let
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
 
+    directories =  callPackage ../development/ocaml-modules/directories { };
+
     dispatch =  callPackage ../development/ocaml-modules/dispatch { };
 
     dns =  callPackage ../development/ocaml-modules/dns { };

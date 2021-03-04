@@ -16,10 +16,10 @@
 }@args:
 
 stdenv.mkDerivation (args // {
-  name = "php-${pname}-${version}";
+  pname = "php-${php.version}-${pname}";
   extensionName = pname;
 
-  inherit src;
+  inherit version src;
 
   nativeBuildInputs = [ autoreconfHook re2c ] ++ nativeBuildInputs;
   buildInputs = [ php ] ++ peclDeps ++ buildInputs;

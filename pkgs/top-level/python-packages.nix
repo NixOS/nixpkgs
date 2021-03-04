@@ -126,7 +126,13 @@ in {
 
   # helpers
 
-  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
+  # We use build packages because we are making a setup hook to be used as a
+  # native build input. The script itself references both the build-time
+  # (build) and run-time (host) python from the explicitly passed in `python`
+  # attribute, so the `buildPackages` doesn't effect that.
+  wrapPython = pkgs.buildPackages.callPackage ../development/interpreters/python/wrap-python.nix {
+    inherit python;
+  };
 
   # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
   pythonPackages = self;
@@ -283,6 +289,8 @@ in {
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
+
+  aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
 
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
@@ -1281,6 +1289,8 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron { };
 
+  chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
+
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
@@ -2152,6 +2162,8 @@ in {
   executor = callPackage ../development/python-modules/executor { };
 
   exifread = callPackage ../development/python-modules/exifread { };
+
+  exrex = callPackage ../development/python-modules/exrex { };
 
   extras = callPackage ../development/python-modules/extras { };
 
@@ -4052,6 +4064,8 @@ in {
 
   mesa = callPackage ../development/python-modules/mesa { };
 
+  meshio = callPackage ../development/python-modules/meshio { };
+
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
 
   meson = disabledIf (pythonOlder "3.5") (toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
@@ -4291,6 +4305,8 @@ in {
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
+
+  myjwt = callPackage ../development/python-modules/myjwt { };
 
   mypy = callPackage ../development/python-modules/mypy { };
 
@@ -5708,6 +5724,8 @@ in {
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
+  pymediaroom = callPackage ../development/python-modules/pymediaroom { };
+
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 
   pymemoize = callPackage ../development/python-modules/pymemoize { };
@@ -6628,6 +6646,8 @@ in {
 
   pyvex = callPackage ../development/python-modules/pyvex { };
 
+  pyvicare = callPackage ../development/python-modules/pyvicare { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvizio = callPackage ../development/python-modules/pyvizio { };
@@ -6754,6 +6774,8 @@ in {
   quantities = callPackage ../development/python-modules/quantities { };
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
+
+  questionary = callPackage ../development/python-modules/questionary { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
 
@@ -6914,6 +6936,8 @@ in {
   rfc6555 = callPackage ../development/python-modules/rfc6555 { };
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
+
+  rfcat = callPackage ../development/python-modules/rfcat { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl { });
 
@@ -7335,6 +7359,8 @@ in {
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   skorch = callPackage ../development/python-modules/skorch { };
+
+  skybellpy = callPackage ../development/python-modules/skybellpy { };
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
@@ -8650,6 +8676,10 @@ in {
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
+
+  zeek = disabledIf (!isPy3k) (toPythonModule (pkgs.zeek.override {
+    python3 = python;
+  })).py;
 
   zeep = callPackage ../development/python-modules/zeep { };
 

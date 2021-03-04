@@ -16,9 +16,10 @@
   The first line (<literal>{ config, pkgs, ... }:</literal>) denotes that this
   is actually a function that takes at least the two arguments
   <varname>config</varname> and <varname>pkgs</varname>. (These are explained
-  later.) The function returns a <emphasis>set</emphasis> of option definitions
-  (<literal>{ <replaceable>...</replaceable> }</literal>). These definitions
-  have the form <literal><replaceable>name</replaceable> =
+  later, in chapter <xref linkend="sec-writing-modules" />) The function returns
+  a <emphasis>set</emphasis> of option definitions (<literal>{
+  <replaceable>...</replaceable> }</literal>). These definitions have the form
+  <literal><replaceable>name</replaceable> =
   <replaceable>value</replaceable></literal>, where
   <replaceable>name</replaceable> is the name of an option and
   <replaceable>value</replaceable> is its value. For example,

@@ -480,7 +480,7 @@
     "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
     "media_player" = ps: with ps; [ aiohttp-cors ];
     "media_source" = ps: with ps; [ aiohttp-cors ];
-    "mediaroom" = ps: with ps; [ ]; # missing inputs: pymediaroom
+    "mediaroom" = ps: with ps; [ pymediaroom ];
     "melcloud" = ps: with ps; [ ]; # missing inputs: pymelcloud
     "melissa" = ps: with ps; [ ]; # missing inputs: py-melissa-climate
     "meraki" = ps: with ps; [ aiohttp-cors ];
@@ -740,7 +740,7 @@
     "sisyphus" = ps: with ps; [ ]; # missing inputs: sisyphus-control
     "sky_hub" = ps: with ps; [ ]; # missing inputs: pyskyqhub
     "skybeacon" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
-    "skybell" = ps: with ps; [ ]; # missing inputs: skybellpy
+    "skybell" = ps: with ps; [ skybellpy ];
     "slack" = ps: with ps; [ ]; # missing inputs: slackclient
     "sleepiq" = ps: with ps; [ ]; # missing inputs: sleepyq
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
@@ -903,7 +903,7 @@
     "version" = ps: with ps; [ pyhaversion ];
     "vesync" = ps: with ps; [ pyvesync ];
     "viaggiatreno" = ps: with ps; [ ];
-    "vicare" = ps: with ps; [ ]; # missing inputs: PyViCare
+    "vicare" = ps: with ps; [ pyvicare ];
     "vilfo" = ps: with ps; [ ]; # missing inputs: vilfo-api-client
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
     "vizio" = ps: with ps; [ pyvizio ];
@@ -924,7 +924,7 @@
     "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
     "weather" = ps: with ps; [ ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
-    "webostv" = ps: with ps; [ ]; # missing inputs: aiopylgtv
+    "webostv" = ps: with ps; [ aiopylgtv ];
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [ ]; # missing inputs: pywemo
     "whois" = ps: with ps; [ python-whois ];

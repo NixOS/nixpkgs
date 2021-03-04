@@ -273,7 +273,7 @@
     name = "James Alexander Feldman-Crough";
   };
   aforemny = {
-    email = "alexanderforemny@googlemail.com";
+    email = "aforemny@posteo.de";
     github = "aforemny";
     githubId = 610962;
     name = "Alexander Foremny";
@@ -1711,6 +1711,12 @@
     githubId = 2245737;
     name = "Christopher Mark Poole";
   };
+  chuahou = {
+    email = "human+github@chuahou.dev";
+    github = "chuahou";
+    githubId = 12386805;
+    name = "Chua Hou";
+  };
   chvp = {
     email = "nixpkgs@cvpetegem.be";
     github = "chvp";
@@ -3070,6 +3076,12 @@
     github = "workflow";
     githubId = 1276854;
     name = "Florian Peter";
+  };
+  fbrs = {
+    email = "yuuki@protonmail.com";
+    github = "cideM";
+    githubId = 4246921;
+    name = "Florian Beeres";
   };
   fdns = {
     email = "fdns02@gmail.com";
@@ -7465,6 +7477,16 @@
     githubId = 11365056;
     name = "Kevin Liu";
   };
+  pnotequalnp = {
+    email = "kevin@pnotequalnp.com";
+    github = "pnotequalnp";
+    githubId = 46154511;
+    name = "Kevin Mullins";
+    keys = [{
+      longkeyid = "rsa4096/361820A45DB41E9A";
+      fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A";
+    }];
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";
@@ -8048,6 +8070,12 @@
     github = "robertodr";
     githubId = 3708689;
     name = "Roberto Di Remigio";
+  };
+  robertoszek = {
+    email = "robertoszek@robertoszek.xyz";
+    github = "robertoszek";
+    githubId = 1080963;
+    name = "Roberto";
   };
   robgssp = {
     email = "robgssp@gmail.com";
