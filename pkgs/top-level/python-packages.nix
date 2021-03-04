@@ -4247,6 +4247,8 @@ in {
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
+  mullvad-api = callPackage ../development/python-modules/mullvad-api { };
+
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
   multidict = callPackage ../development/python-modules/multidict { };
