@@ -43,7 +43,7 @@ in {
     [1] https://docs.nextcloud.com/server/18/admin_manual/release_schedule.html
   '';
 
-  # FIXME(@Ma27) remove on 2021-06
+  # FIXME(@Ma27) remove on 21.05
   nextcloud19 = generic {
     version = "19.0.6";
     sha256 = "sha256-pqqIayE0OyTailtd2zeYi+G1APjv/YHqyO8jCpq7KJg=";
