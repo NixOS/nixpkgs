@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with lib.maintainers; [ peti fpletz globin ];
+    maintainers = with lib.maintainers; [ peti fpletz globin ajs124 ];
     platforms = lib.platforms.unix;
   };
   passthru.tests = {
