@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "broadlink-cli";
-  version = "0.16";
+  version = "0.16.0";
 
   # the tools are available as part of the source distribution from GH but
   # not pypi, so we have to fetch them here.
