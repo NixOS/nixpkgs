@@ -16822,7 +16822,7 @@ in
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
-  s2n = callPackage ../development/libraries/s2n { };
+  s2n-tls = callPackage ../development/libraries/s2n-tls { };
 
   simavr = callPackage ../development/tools/simavr {
     avrgcc = pkgsCross.avr.buildPackages.gcc;
