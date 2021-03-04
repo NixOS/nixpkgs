@@ -12,10 +12,11 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
-  name = "R-4.0.4";
+  pname = "R";
+  version = "4.0.4";
 
   src = fetchurl {
-    url = "https://cran.r-project.org/src/base/R-4/${name}.tar.gz";
+    url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
     sha256 = "0bl098xcv8v316kqnf43v6gb4kcsv31ydqfm1f7qr824jzb2fgsj";
   };
 

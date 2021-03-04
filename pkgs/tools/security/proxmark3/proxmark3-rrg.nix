@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, gcc-arm-embedded, bluez5
+{ lib, mkDerivation, fetchFromGitHub, pkg-config, gcc-arm-embedded, bluez5
 , readline
 
 , hardwarePlatform ? "PM3RDV4"

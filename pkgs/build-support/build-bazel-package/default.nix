@@ -108,8 +108,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
       ${if removeRulesCC then "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}" else ""}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      ${if removeLocalConfigCc then "rm -rf $bazelOut/external/{local_config_cc,\@local_config_cc.marker}" else ""}
-      ${if removeLocal then "rm -rf $bazelOut/external/{local_*,\@local_*.marker}" else ""}
+      ${if removeLocalConfigCc then "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}" else ""}
+      ${if removeLocal then "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}" else ""}
 
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;

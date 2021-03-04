@@ -2,10 +2,11 @@
 , pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "serf-1.3.9";
+  pname = "serf";
+  version = "1.3.9";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/serf/${name}.tar.bz2";
+    url = "https://www.apache.org/dist/serf/${pname}-${version}.tar.bz2";
     sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
   };
 

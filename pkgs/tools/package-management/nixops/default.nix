@@ -63,7 +63,7 @@ in python2Packages.buildPythonApplication {
   meta = {
     homepage = "https://github.com/NixOS/nixops";
     description = "NixOS cloud provisioning and deployment tool";
-    maintainers = with lib.maintainers; [ aminechikhaoui eelco rob domenkozar ];
+    maintainers = with lib.maintainers; [ aminechikhaoui eelco rob ];
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl3;
   };

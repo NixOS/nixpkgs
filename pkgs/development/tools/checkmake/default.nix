@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, pandoc, lib }:
+{ buildGoPackage, fetchFromGitHub, git, pandoc, lib }:
 
 buildGoPackage rec {
   pname = "checkmake";

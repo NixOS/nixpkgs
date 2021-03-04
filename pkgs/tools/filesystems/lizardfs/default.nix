@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -45,5 +46,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rushmorem shamilton ];
+    # 'fprintf' was not declared in this scope
+    broken = true;
   };
 }

@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = "echo ${version} > .tarball-version";
 
+  postInstall = ''
+    # rules printed by the following invocation are static,
+    # they come from hardcoded configs in libuuu/config.cpp:48
+    $out/bin/uuu -udev > udev-rules 2>stderr.txt
+    rules_file="$(cat stderr.txt|grep '1: put above udev run into'|sed 's|^.*/||')"
+    install -D udev-rules "$out/lib/udev/rules.d/$rules_file"
+  '';
+
   meta = with lib; {
     description = "Freescale/NXP I.MX chip image deploy tools";
     longDescription = ''

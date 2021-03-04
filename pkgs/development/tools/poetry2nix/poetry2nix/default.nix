@@ -4,6 +4,9 @@
 , poetryLib ? import ./lib.nix { inherit lib pkgs; stdenv = pkgs.stdenv; }
 }:
 let
+  # Poetry2nix version
+  version = "1.16.0";
+
   inherit (poetryLib) isCompatible readTOML moduleName;
 
   /* The default list of poetry2nix override overlays */
@@ -70,8 +73,7 @@ let
 in
 lib.makeScope pkgs.newScope (self: {
 
-  # Poetry2nix version
-  version = "1.15.5";
+  inherit version;
 
   /* Returns a package of editable sources whose changes will be available without needing to restart the
      nix-shell.

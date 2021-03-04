@@ -65,10 +65,18 @@ let
 
   dashboardFile = pkgs.writeText "dashboard.yaml" (builtins.toJSON dashboardConfiguration);
 
+  notifierConfiguration = {
+    apiVersion = 1;
+    notifiers = cfg.provision.notifiers;
+  };
+
+  notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
+
   provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
-    mkdir -p $out/{datasources,dashboards}
+    mkdir -p $out/{datasources,dashboards,notifiers}
     ln -sf ${datasourceFile} $out/datasources/datasource.yaml
     ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
+    ln -sf ${notifierFile} $out/notifiers/notifier.yaml
   '';
 
   # Get a submodule without any embedded metadata:
@@ -79,80 +87,80 @@ let
     options = {
       name = mkOption {
         type = types.str;
-        description = "Name of the datasource. Required";
+        description = "Name of the datasource. Required.";
       };
       type = mkOption {
         type = types.enum ["graphite" "prometheus" "cloudwatch" "elasticsearch" "influxdb" "opentsdb" "mysql" "mssql" "postgres" "loki"];
-        description = "Datasource type. Required";
+        description = "Datasource type. Required.";
       };
       access = mkOption {
         type = types.enum ["proxy" "direct"];
         default = "proxy";
-        description = "Access mode. proxy or direct (Server or Browser in the UI). Required";
+        description = "Access mode. proxy or direct (Server or Browser in the UI). Required.";
       };
       orgId = mkOption {
         type = types.int;
         default = 1;
-        description = "Org id. will default to orgId 1 if not specified";
+        description = "Org id. will default to orgId 1 if not specified.";
       };
       url = mkOption {
         type = types.str;
-        description = "Url of the datasource";
+        description = "Url of the datasource.";
       };
       password = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Database password, if used";
+        description = "Database password, if used.";
       };
       user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Database user, if used";
+        description = "Database user, if used.";
       };
       database = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Database name, if used";
+        description = "Database name, if used.";
       };
       basicAuth = mkOption {
         type = types.nullOr types.bool;
         default = null;
-        description = "Enable/disable basic auth";
+        description = "Enable/disable basic auth.";
       };
       basicAuthUser = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Basic auth username";
+        description = "Basic auth username.";
       };
       basicAuthPassword = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Basic auth password";
+        description = "Basic auth password.";
       };
       withCredentials = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable/disable with credentials headers";
+        description = "Enable/disable with credentials headers.";
       };
       isDefault = mkOption {
         type = types.bool;
         default = false;
-        description = "Mark as default datasource. Max one per org";
+        description = "Mark as default datasource. Max one per org.";
       };
       jsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = "Datasource specific configuration";
+        description = "Datasource specific configuration.";
       };
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = "Datasource specific secure configuration";
+        description = "Datasource specific secure configuration.";
       };
       version = mkOption {
         type = types.int;
         default = 1;
-        description = "Version";
+        description = "Version.";
       };
       editable = mkOption {
         type = types.bool;
@@ -168,38 +176,96 @@ let
       name = mkOption {
         type = types.str;
         default = "default";
-        description = "Provider name";
+        description = "Provider name.";
       };
       orgId = mkOption {
         type = types.int;
         default = 1;
-        description = "Organization ID";
+        description = "Organization ID.";
       };
       folder = mkOption {
         type = types.str;
         default = "";
-        description = "Add dashboards to the specified folder";
+        description = "Add dashboards to the specified folder.";
       };
       type = mkOption {
         type = types.str;
         default = "file";
-        description = "Dashboard provider type";
+        description = "Dashboard provider type.";
       };
       disableDeletion = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable deletion when JSON file is removed";
+        description = "Disable deletion when JSON file is removed.";
       };
       updateIntervalSeconds = mkOption {
         type = types.int;
         default = 10;
-        description = "How often Grafana will scan for changed dashboards";
+        description = "How often Grafana will scan for changed dashboards.";
       };
       options = {
         path = mkOption {
           type = types.path;
-          description = "Path grafana will watch for dashboards";
+          description = "Path grafana will watch for dashboards.";
         };
+      };
+    };
+  };
+
+  grafanaTypes.notifierConfig = types.submodule {
+    options = {
+      name = mkOption {
+        type = types.str;
+        default = "default";
+        description = "Notifier name.";
+      };
+      type = mkOption {
+        type = types.enum ["dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook"];
+        description = "Notifier type.";
+      };
+      uid = mkOption {
+        type = types.str;
+        description = "Unique notifier identifier.";
+      };
+      org_id = mkOption {
+        type = types.int;
+        default = 1;
+        description = "Organization ID.";
+      };
+      org_name = mkOption {
+        type = types.str;
+        default = "Main Org.";
+        description = "Organization name.";
+      };
+      is_default = mkOption {
+        type = types.bool;
+        description = "Is the default notifier.";
+        default = false;
+      };
+      send_reminder = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Should the notifier be sent reminder notifications while alerts continue to fire.";
+      };
+      frequency = mkOption {
+        type = types.str;
+        default = "5m";
+        description = "How frequently should the notifier be sent reminders.";
+      };
+      disable_resolve_message = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Turn off the message that sends when an alert returns to OK.";
+      };
+      settings = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "Settings for the notifier type.";
+      };
+      secure_settings = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "Secure settings for the notifier type.";
       };
     };
   };
@@ -337,15 +403,21 @@ in {
     provision = {
       enable = mkEnableOption "provision";
       datasources = mkOption {
-        description = "Grafana datasources configuration";
+        description = "Grafana datasources configuration.";
         default = [];
         type = types.listOf grafanaTypes.datasourceConfig;
         apply = x: map _filter x;
       };
       dashboards = mkOption {
-        description = "Grafana dashboard configuration";
+        description = "Grafana dashboard configuration.";
         default = [];
         type = types.listOf grafanaTypes.dashboardConfig;
+        apply = x: map _filter x;
+      };
+      notifiers = mkOption {
+        description = "Grafana notifier configuration.";
+        default = [];
+        type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
       };
     };
@@ -391,12 +463,12 @@ in {
     smtp = {
       enable = mkEnableOption "smtp";
       host = mkOption {
-        description = "Host to connect to";
+        description = "Host to connect to.";
         default = "localhost:25";
         type = types.str;
       };
       user = mkOption {
-        description = "User used for authentication";
+        description = "User used for authentication.";
         default = "";
         type = types.str;
       };
@@ -417,7 +489,7 @@ in {
         type = types.nullOr types.path;
       };
       fromAddress = mkOption {
-        description = "Email address used for sending";
+        description = "Email address used for sending.";
         default = "admin@grafana.localhost";
         type = types.str;
       };
@@ -425,7 +497,7 @@ in {
 
     users = {
       allowSignUp = mkOption {
-        description = "Disable user signup / registration";
+        description = "Disable user signup / registration.";
         default = false;
         type = types.bool;
       };
@@ -451,17 +523,17 @@ in {
 
     auth.anonymous = {
       enable = mkOption {
-        description = "Whether to allow anonymous access";
+        description = "Whether to allow anonymous access.";
         default = false;
         type = types.bool;
       };
       org_name = mkOption {
-        description = "Which organization to allow anonymous access to";
+        description = "Which organization to allow anonymous access to.";
         default = "Main Org.";
         type = types.str;
       };
       org_role = mkOption {
-        description = "Which role anonymous users have in the organization";
+        description = "Which role anonymous users have in the organization.";
         default = "Viewer";
         type = types.str;
       };
@@ -470,7 +542,7 @@ in {
 
     analytics.reporting = {
       enable = mkOption {
-        description = "Whether to allow anonymous usage reporting to stats.grafana.net";
+        description = "Whether to allow anonymous usage reporting to stats.grafana.net.";
         default = true;
         type = types.bool;
       };
@@ -496,6 +568,9 @@ in {
       (optional (
         any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
       ) "Datasource passwords will be stored as plaintext in the Nix store!")
+      (optional (
+        any (x: x.secure_settings != null) cfg.provision.notifiers
+      ) "Notifier secure settings will be stored as plaintext in the Nix store!")
     ];
 
     environment.systemPackages = [ cfg.package ];

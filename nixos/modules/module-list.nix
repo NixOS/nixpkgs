@@ -490,6 +490,7 @@
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
+  ./services/misc/lifecycled.nix
   ./services/misc/mame.nix
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-synapse.nix
@@ -512,6 +513,7 @@
   ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
   ./services/misc/plex.nix
+  ./services/misc/plikd.nix
   ./services/misc/tautulli.nix
   ./services/misc/pinnwand.nix
   ./services/misc/pykms.nix

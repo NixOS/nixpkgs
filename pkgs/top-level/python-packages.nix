@@ -126,7 +126,13 @@ in {
 
   # helpers
 
-  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
+  # We use build packages because we are making a setup hook to be used as a
+  # native build input. The script itself references both the build-time
+  # (build) and run-time (host) python from the explicitly passed in `python`
+  # attribute, so the `buildPackages` doesn't effect that.
+  wrapPython = pkgs.buildPackages.callPackage ../development/interpreters/python/wrap-python.nix {
+    inherit python;
+  };
 
   # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
   pythonPackages = self;
@@ -2157,6 +2163,8 @@ in {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  exrex = callPackage ../development/python-modules/exrex { };
+
   extras = callPackage ../development/python-modules/extras { };
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
@@ -4060,6 +4068,8 @@ in {
 
   mesa = callPackage ../development/python-modules/mesa { };
 
+  meshio = callPackage ../development/python-modules/meshio { };
+
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
 
   meson = disabledIf (pythonOlder "3.5") (toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
@@ -4299,6 +4309,8 @@ in {
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
+
+  myjwt = callPackage ../development/python-modules/myjwt { };
 
   mypy = callPackage ../development/python-modules/mypy { };
 
@@ -6767,6 +6779,8 @@ in {
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
+  questionary = callPackage ../development/python-modules/questionary { };
+
   queuelib = callPackage ../development/python-modules/queuelib { };
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
@@ -6926,6 +6940,8 @@ in {
   rfc6555 = callPackage ../development/python-modules/rfc6555 { };
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
+
+  rfcat = callPackage ../development/python-modules/rfcat { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl { });
 

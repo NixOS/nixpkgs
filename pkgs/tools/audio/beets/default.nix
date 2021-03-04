@@ -3,8 +3,8 @@
 , runtimeShell
 , unstableGitUpdater
 
-# Attributes needed for tests of the external plugins
-, callPackage, beets
+# external plugins package set
+, beetsExternalPlugins
 
 , enableAbsubmit         ? lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor ? null
 , enableAcousticbrainz   ? true
@@ -116,15 +116,6 @@ let
     doInstallCheck = false;
   });
 
-  pluginArgs = externalTestArgs // { inherit pythonPackages; };
-
-  plugins = {
-    alternatives = callPackage ./plugins/alternatives.nix pluginArgs;
-    check = callPackage ./plugins/check.nix pluginArgs;
-    copyartifacts = callPackage ./plugins/copyartifacts.nix pluginArgs;
-    extrafiles = callPackage ./plugins/extrafiles.nix pluginArgs;
-  };
-
 in pythonPackages.buildPythonApplication rec {
   pname = "beets";
   # While there is a stable version, 1.4.9, it is more than 1000 commits behind
@@ -169,7 +160,7 @@ in pythonPackages.buildPythonApplication rec {
               || enableSubsonicupdate
               || enableAcousticbrainz)
                                     pythonPackages.requests
-    ++ optional enableCheck         plugins.check
+    ++ optional enableCheck         beetsExternalPlugins.check
     ++ optional enableConvert       ffmpeg
     ++ optional enableDiscogs       pythonPackages.discogs_client
     ++ optional enableGmusic        pythonPackages.gmusicapi
@@ -179,9 +170,9 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableSonosUpdate   pythonPackages.soco
     ++ optional enableThumbnails    pythonPackages.pyxdg
     ++ optional enableWeb           pythonPackages.flask
-    ++ optional enableAlternatives  plugins.alternatives
-    ++ optional enableCopyArtifacts plugins.copyartifacts
-    ++ optional enableExtraFiles    plugins.extrafiles
+    ++ optional enableAlternatives  beetsExternalPlugins.alternatives
+    ++ optional enableCopyArtifacts beetsExternalPlugins.copyartifacts
+    ++ optional enableExtraFiles    beetsExternalPlugins.extrafiles
   ;
 
   buildInputs = [
@@ -289,7 +280,8 @@ in pythonPackages.buildPythonApplication rec {
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
 
   passthru = {
-    externalPlugins = plugins;
+    # FIXME: remove in favor of pkgs.beetsExternalPlugins
+    externalPlugins = beetsExternalPlugins;
     updateScript = unstableGitUpdater { url = "https://github.com/beetbox/beets"; };
   };
 
@@ -297,7 +289,7 @@ in pythonPackages.buildPythonApplication rec {
     description = "Music tagger and library organizer";
     homepage = "http://beets.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ aszlig domenkozar doronbehar lovesegfault pjones ];
+    maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;
   };
 }

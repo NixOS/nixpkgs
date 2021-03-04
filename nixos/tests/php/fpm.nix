@@ -3,6 +3,8 @@ import ../make-test-python.nix ({pkgs, lib, php, ...}: {
   meta.maintainers = lib.teams.php.members;
 
   machine = { config, lib, pkgs, ... }: {
+    environment.systemPackages = [ php ];
+
     services.nginx = {
       enable = true;
 
@@ -10,7 +12,7 @@ import ../make-test-python.nix ({pkgs, lib, php, ...}: {
         testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
       in {
         root = "${testdir}/web";
-        locations."~ \.php$".extraConfig = ''
+        locations."~ \\.php$".extraConfig = ''
           fastcgi_pass unix:${config.services.phpfpm.pools.foobar.socket};
           fastcgi_index index.php;
           include ${pkgs.nginx}/conf/fastcgi_params;
@@ -48,7 +50,8 @@ import ../make-test-python.nix ({pkgs, lib, php, ...}: {
     assert "PHP Version ${php.version}" in response, "PHP version not detected"
 
     # Check so we have database and some other extensions loaded
-    for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite"]:
+    for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "apcu"]:
         assert ext in response, f"Missing {ext} extension"
+        machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
   '';
 })

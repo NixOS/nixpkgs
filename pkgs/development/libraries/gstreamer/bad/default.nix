@@ -79,6 +79,7 @@
 , x265
 , libxml2
 , srt
+, vo-aacenc
 }:
 
 assert faacSupport -> faac != null;
@@ -97,6 +98,7 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Use pkgconfig to inject the includedirs
     ./fix_pkgconfig_includedir.patch
   ];
 
@@ -115,6 +117,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     orc
+    # gobject-introspection has to be in both nativeBuildInputs and
+    # buildInputs. The build tries to link against libgirepository-1.0.so
     gobject-introspection
     faad2
     libass
@@ -161,6 +165,7 @@ in stdenv.mkDerivation rec {
     libxml2
     libintl
     srt
+    vo-aacenc
   ] ++ optionals enableZbar [
     zbar
   ] ++ optionals faacSupport [
@@ -239,7 +244,6 @@ in stdenv.mkDerivation rec {
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
-    "-Dvoaacenc=disabled" # required `vo-aacenc` library not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
     "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support

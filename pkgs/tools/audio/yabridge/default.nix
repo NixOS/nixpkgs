@@ -17,7 +17,7 @@ let
       owner = "fraillt";
       repo = "bitsery";
       rev = "v${version}";
-      sha256 = "132b0n0xlpcv97l6bhk9n57hg95pkhwqzvr9jkv57nmggn76s5q7";
+      hash = "sha256-Bxdtjn2v2lP2lCnvjzmct6QHT7FpwmXoSZtd2oEFS4w=";
     };
   };
 
@@ -28,7 +28,7 @@ let
       owner = "Naios";
       repo = "function2";
       rev = version;
-      sha256 = "0abrz2as62725g212qswi35nsdlf5wrhcz78hm2qidbgqr9rkir5";
+      hash = "sha256-JceZU8ZvtYhFheh8BjMvjjZty4hcYxHEK+IIo5X4eSk=";
     };
   };
 
@@ -39,7 +39,7 @@ let
       owner = "marzer";
       repo = "tomlplusplus";
       rev = "v${version}";
-      sha256 = "0fspinnpyk1c9ay0h3wl8d4bbm6aswlypnrw2c7pk2i4mh981b4b";
+      hash = "sha256-i6yAEqwkinkPEzzb6ynXytS1SEOUDwi8SixMf62NVzs=";
     };
   };
 
@@ -51,19 +51,19 @@ let
       repo = "vst3sdk";
       rev = version;
       fetchSubmodules = true;
-      sha256 = "1fqpylkbljifwdw2z75agc0yxnhmv4b09fxs3rvlw1qmm5mwx0p2";
+      sha256 = "sha256-4oLOa6kVB053Hrq7BBbZFdruAXuqnC944y5Kuib1F7s=";
     };
   };
 in stdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "3.0.0";
+  version = "3.0.1";
 
   # NOTE: Also update yabridgectl's cargoSha256 when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    sha256 = "0ha7jhnkd2i49q5rz2hp7sq6hv19bir99x51hs6nvvcf16hlf2bp";
+    hash = "sha256-BT8Qj8WvyRlBwSuIIlfWVhlG3RSv2sFnSskCcjPF/N0=";
   };
 
   # Unpack subproject sources

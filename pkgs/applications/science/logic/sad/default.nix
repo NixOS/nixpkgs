@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, haskell, spass }:
+{ lib, stdenv, fetchurl, haskell, spass }:
 
 stdenv.mkDerivation {
   name = "system-for-automated-deduction-2.3.25";
