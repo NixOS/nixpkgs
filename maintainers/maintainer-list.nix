@@ -261,7 +261,7 @@
     name = "James Alexander Feldman-Crough";
   };
   aforemny = {
-    email = "alexanderforemny@googlemail.com";
+    email = "aforemny@posteo.de";
     github = "aforemny";
     githubId = 610962;
     name = "Alexander Foremny";
