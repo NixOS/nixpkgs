@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "http://loop-aes.sourceforge.net/aespipe.README";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
