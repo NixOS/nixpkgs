@@ -7651,6 +7651,7 @@ broken-packages:
   - linx-gateway
   - lio-eci11
   - lio-simple
+  - lion
   - lipsum-gen
   - liquid
   - liquid-base
