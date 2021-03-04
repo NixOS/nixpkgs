@@ -5642,6 +5642,8 @@ in {
 
   pykka = callPackage ../development/python-modules/pykka { };
 
+  pykmtronic = callPackage ../development/python-modules/pykmtronic { };
+
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
