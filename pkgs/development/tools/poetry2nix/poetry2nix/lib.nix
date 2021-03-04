@@ -157,7 +157,7 @@ let
       missingBuildBackendError = "No build-system.build-backend section in pyproject.toml. "
         + "Add such a section as described in https://python-poetry.org/docs/pyproject/#poetry-and-pep-517";
       requires = lib.attrByPath [ "build-system" "requires" ] (throw missingBuildBackendError) pyProject;
-      requiredPkgs = builtins.map (n: lib.elemAt (builtins.match "([^!=<>~\[]+).*" n) 0) requires;
+      requiredPkgs = builtins.map (n: lib.elemAt (builtins.match "([^!=<>~[]+).*" n) 0) requires;
     in
     builtins.map (drvAttr: pythonPackages.${drvAttr} or (throw "unsupported build system requirement ${drvAttr}")) requiredPkgs;
 
