@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, perl, pkg-config, zlib
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, pkg-config, zlib
 , Security, libiconv, installShellFiles
 }:
 
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "18y4v1s102lh3gvgjwdd66qlsr75wpwpcj8zsk5y5r95a405dkfm";
   };
 
-  nativeBuildInputs = [ cmake pkg-config perl installShellFiles pandoc ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
