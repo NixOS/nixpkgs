@@ -1366,6 +1366,8 @@ in
 
   hakrawler = callPackage ../tools/security/hakrawler { };
 
+  harvid = callPackage ../tools/video/harvid { };
+
   hime = callPackage ../tools/inputmethods/hime {};
 
   hinit = haskell.lib.justStaticExecutables haskellPackages.hinit;
