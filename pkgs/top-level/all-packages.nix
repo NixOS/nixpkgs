@@ -8812,6 +8812,8 @@ in
 
   vo-amrwbenc = callPackage ../development/libraries/vo-amrwbenc { };
 
+  vo-aacenc = callPackage ../development/libraries/vo-aacenc { };
+
   vobcopy = callPackage ../tools/cd-dvd/vobcopy { };
 
   vobsub2srt = callPackage ../tools/cd-dvd/vobsub2srt { };
