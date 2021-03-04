@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.5";
+  version = "3.2.6";
   pname = "hal-hardware-analyzer";
 
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
     rev = "v${version}";
-    sha256 = "0hc10wbngh4gfiiy9ndkf1y6dclcgy38x1n9k5wpvmf13vdah3zy";
+    sha256 = "sha256-GRHRrAxZ10hmAXkGGSQEwNJTbnMbJ9jMyKnOUq+KoWo=";
   };
   # make sure bundled dependencies don't get in the way - install also otherwise
   # copies them in full to the output, bloating the package
