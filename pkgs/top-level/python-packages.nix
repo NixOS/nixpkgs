@@ -2173,6 +2173,8 @@ in {
 
   Fabric = callPackage ../development/python-modules/Fabric { };
 
+  faadelays = callPackage ../development/python-modules/faadelays { };
+
   fabulous = callPackage ../development/python-modules/fabulous { };
 
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
