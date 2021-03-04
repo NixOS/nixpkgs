@@ -1,5 +1,7 @@
 {
-  "context.properties": {},
+  "context.properties": {
+    "log.level": 0
+  },
   "context.spa-libs": {
     "audio.convert.*": "audioconvert/libspa-audioconvert",
     "support.*": "support/libspa-support"
@@ -11,5 +13,7 @@
     "libpipewire-module-adapter": null,
     "libpipewire-module-metadata": null,
     "libpipewire-module-session-manager": null
-  }
+  },
+  "filter.properties": {},
+  "stream.properties": {}
 }

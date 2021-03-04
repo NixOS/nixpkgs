@@ -1,5 +1,7 @@
 {
-  "context.properties": {},
+  "context.properties": {
+    "log.level": 0
+  },
   "context.spa-libs": {
     "support.*": "support/libspa-support"
   },

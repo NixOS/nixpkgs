@@ -20,6 +20,7 @@ let
 
   prioritizeNativeProtocol = {
     "context.modules" = {
+      # Most other modules depend on this, so put it first
       "libpipewire-module-protocol-native" = {
         _priority = -100;
         _content = null;
@@ -27,10 +28,22 @@ let
     };
   };
 
-  sessionManagerInvocation = {
-    "context.exec" = {
-      "${cfg.sessionManagerExecutable}" = {
-        args = "${lib.concatStringsSep " " cfg.sessionManagerArguments}";
+  fixDaemonModulePriorities = {
+    "context.modules" = {
+      # Most other modules depend on thism so put it first
+      "libpipewire-module-protocol-native" = {
+        _priority = -100;
+        _content = null;
+      };
+      # Needs to be before libpipewire-module-access
+      "libpipewire-module-portal" = {
+        _priority = -50;
+        _content = {
+          flags = [
+            "ifexists"
+            "nofail"
+          ];
+        };
       };
     };
   };
@@ -42,7 +55,7 @@ let
     client-rt = recursiveUpdate (builtins.fromJSON (builtins.readFile ./client-rt.conf.json)) prioritizeNativeProtocol;
     jack = recursiveUpdate (builtins.fromJSON (builtins.readFile ./jack.conf.json)) prioritizeNativeProtocol;
     # Remove session manager invocation from the upstream generated file, it points to the wrong path
-    pipewire = recursiveUpdate ((removeAttrs (builtins.fromJSON (builtins.readFile ./pipewire.conf.json)) ["context.exec"]) // sessionManagerInvocation) prioritizeNativeProtocol;
+    pipewire = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire.conf.json)) fixDaemonModulePriorities;
     pipewire-pulse = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json)) prioritizeNativeProtocol;
   };
 
@@ -138,24 +151,6 @@ in {
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire-pulse.conf.in
           '';
         };
-      };
-
-      sessionManagerExecutable = mkOption {
-        type = types.str;
-        default = "";
-        example = literalExample ''${pkgs.pipewire.mediaSession}/bin/pipewire-media-session'';
-        description = ''
-          Path to the session manager executable.
-        '';
-      };
-
-      sessionManagerArguments = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = literalExample ''["-p" "bluez5.msbc-support=true"]'';
-        description = ''
-          Arguments passed to the pipewire session manager.
-        '';
       };
 
       alsa = {

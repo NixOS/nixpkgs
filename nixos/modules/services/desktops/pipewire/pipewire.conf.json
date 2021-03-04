@@ -29,7 +29,12 @@
     "libpipewire-module-spa-node-factory": null,
     "libpipewire-module-client-node": null,
     "libpipewire-module-client-device": null,
-    "libpipewire-module-portal": null,
+    "libpipewire-module-portal": {
+      "flags": [
+        "ifexists",
+        "nofail"
+      ]
+    },
     "libpipewire-module-access": {
       "args": {}
     },
@@ -46,9 +51,5 @@
       }
     }
   },
-  "context.exec": {
-    "/nix/store/1q65a09arb7r4sdfz657p473kn3lqknk-pipewire-0.3.22/bin/pipewire-media-session": {
-      "args": ""
-    }
-  }
+  "context.exec": {}
 }

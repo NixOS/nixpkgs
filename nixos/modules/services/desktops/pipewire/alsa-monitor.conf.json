@@ -2,47 +2,33 @@
   "properties": {},
   "rules": [
     {
-      "actions": {
-        "update-props": {
-          "api": {
-            "acp": {
-              "auto-port": false,
-              "auto-profile": false
-            },
-            "alsa": {
-              "use-acp": true
-            }
-          }
-        }
-      },
       "matches": [
         {
-          "device": {
-            "name": "~alsa_card.*"
-          }
+          "device.name": "~alsa_card.*"
         }
-      ]
+      ],
+      "actions": {
+        "update-props": {
+          "api.alsa.use-acp": true,
+          "api.acp.auto-profile": false,
+          "api.acp.auto-port": false
+        }
+      }
     },
     {
-      "actions": {
-        "update-props": {
-          "node": {
-            "pause-on-idle": false
-          }
-        }
-      },
       "matches": [
         {
-          "node": {
-            "name": "~alsa_input.*"
-          }
+          "node.name": "~alsa_input.*"
         },
         {
-          "node": {
-            "name": "~alsa_output.*"
-          }
+          "node.name": "~alsa_output.*"
         }
-      ]
+      ],
+      "actions": {
+        "update-props": {
+          "node.pause-on-idle": false
+        }
+      }
     }
   ]
 }

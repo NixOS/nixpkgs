@@ -112,7 +112,8 @@ in {
   ###### implementation
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    services.pipewire.sessionManagerExecutable = builtins.unsafeDiscardStringContext "${cfg.package}/bin/pipewire-media-session";
+    systemd.packages = [ cfg.package ];
+    systemd.user.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
 
     environment.etc."pipewire/media-session.d/media-session.conf" = { text = toSPAJSON (recursiveUpdate defaults.media-session cfg.config.media-session); };
     environment.etc."pipewire/media-session.d/v4l2-monitor.conf" = { text = toSPAJSON (recursiveUpdate defaults.v4l2-monitor cfg.config.v4l2-monitor); };

@@ -1,10 +1,12 @@
 {
+  "context.properties": {},
+  "context.spa-libs": {
+    "api.bluez5.*": "bluez5/libspa-bluez5",
+    "api.alsa.*": "alsa/libspa-alsa",
+    "api.v4l2.*": "v4l2/libspa-v4l2",
+    "api.libcamera.*": "libcamera/libspa-libcamera"
+  },
   "context.modules": {
-    "libpipewire-module-protocol-native": null,
-    "libpipewire-module-adapter": null,
-    "libpipewire-module-client-device": null,
-    "libpipewire-module-client-node": null,
-    "libpipewire-module-metadata": null,
     "libpipewire-module-rtkit": {
       "args": {},
       "flags": [
@@ -12,14 +14,12 @@
         "nofail"
       ]
     },
+    "libpipewire-module-protocol-native": null,
+    "libpipewire-module-client-node": null,
+    "libpipewire-module-client-device": null,
+    "libpipewire-module-adapter": null,
+    "libpipewire-module-metadata": null,
     "libpipewire-module-session-manager": null
-  },
-  "context.properties": {},
-  "context.spa-libs": {
-    "api.alsa.*": "alsa/libspa-alsa",
-    "api.bluez5.*": "bluez5/libspa-bluez5",
-    "api.libcamera.*": "libcamera/libspa-libcamera",
-    "api.v4l2.*": "v4l2/libspa-v4l2"
   },
   "session.modules": {
     "default": [
@@ -29,9 +29,6 @@
       "suspend-node",
       "policy-node"
     ],
-    "with-alsa": [
-      "with-audio"
-    ],
     "with-audio": [
       "metadata",
       "default-nodes",
@@ -39,6 +36,9 @@
       "default-routes",
       "alsa-seq",
       "alsa-monitor"
+    ],
+    "with-alsa": [
+      "with-audio"
     ],
     "with-jack": [
       "with-audio"
