@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracy";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "0qfb30k6a8vi8vn65vv927wd9nynwwvc9crbmi7a55kp20hzg06r";
+    sha256 = "sha256-Fk/Kuc7DwmdoyLx/YjdEHQ7S0M+ksAXl9QqeSPH2vJ8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

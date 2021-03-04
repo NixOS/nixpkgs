@@ -1,4 +1,4 @@
-{ lib, isPy3k, fetchPypi, fetchpatch, buildPythonPackage
+{ lib, isPy3k, fetchPypi, buildPythonPackage
 , uvloop, postgresql }:
 
 buildPythonPackage rec {
@@ -15,6 +15,8 @@ buildPythonPackage rec {
     uvloop
     postgresql
   ];
+
+  pythonImportsCheck = [ "asyncpg" ];
 
   meta = with lib; {
     homepage = "https://github.com/MagicStack/asyncpg";

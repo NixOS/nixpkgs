@@ -1,5 +1,5 @@
 { lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby_2_7
+, yarn, callPackage, imagemagick, ffmpeg, file, ruby_2_7, writeShellScript
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
       fi
       chmod -R u+w node_modules
       rake webpacker:compile
+      rails assets:precompile
     '';
 
     installPhase = ''
@@ -96,10 +97,18 @@ stdenv.mkDerivation rec {
     ln -s /var/log/mastodon log
     ln -s /tmp tmp
   '';
+
   propagatedBuildInputs = [ imagemagick ffmpeg file mastodon-gems.wrappedRuby ];
-  installPhase = ''
+
+  installPhase = let
+    run-streaming = writeShellScript "run-streaming.sh" ''
+      # NixOS helper script to consistently use the same NodeJS version the package was built with.
+      ${nodejs-slim}/bin/node ./streaming
+    '';
+  in ''
     mkdir -p $out
     cp -r * $out/
+    ln -s ${run-streaming} $out/run-streaming.sh
   '';
 
   meta = with lib; {

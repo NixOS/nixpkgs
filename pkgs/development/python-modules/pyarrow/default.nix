@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools_scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { python3 = python; };

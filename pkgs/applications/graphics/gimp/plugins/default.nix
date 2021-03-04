@@ -81,6 +81,29 @@ in
     };
   };
 
+  farbfeld = pluginDerivation rec {
+    pname = "farbfeld";
+    version = "unstable-2019-08-12";
+
+    src = fetchFromGitHub {
+      owner = "ids1024";
+      repo = "gimp-farbfeld";
+      rev = "5feacebf61448bd3c550dda03cd08130fddc5af4";
+      sha256 = "1vmw7k773vrndmfffj0m503digdjmkpcqy2r3p3i5x0qw9vkkkc6";
+    };
+
+    installPhase = ''
+      installPlugin farbfeld
+    '';
+
+    meta = {
+      description = "Gimp plug-in for the farbfeld image format";
+      homepage = "https://github.com/ids1024/gimp-farbfeld";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ sikmir ];
+    };
+  };
+
   fourier = pluginDerivation rec {
     /* menu:
        Filters/Generic/FFT Forward

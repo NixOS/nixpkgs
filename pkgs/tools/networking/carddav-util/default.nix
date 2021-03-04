@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0f0raffdy032wlnxfck6ky60r163nhqfbr311y4ry55l60s4497n";
   };
 
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = with pythonPackages; [ requests vobject lxml ];
 

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
 , fetchpatch
 , alembic
@@ -47,10 +46,7 @@
 , tzlocal
 , unicodecsv
 , zope_deprecation
-, enum34
-, typing
 , nose
-, python
 , pythonOlder
 , pythonAtLeast
 }:

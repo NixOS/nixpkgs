@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   # tests not packaged with pypi release
   doCheck = false;
+  pythonImportsCheck = [ "cornice" ];
 
   meta = with lib; {
     homepage = "https://github.com/mozilla-services/cornice";
@@ -27,5 +28,4 @@ buildPythonPackage rec {
     license = licenses.mpl20;
     maintainers = [ maintainers.costrouc ];
   };
-
 }

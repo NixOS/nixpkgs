@@ -1,12 +1,13 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
 , pkg-config, which, perl, libXrandr
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
+, gtk3, wayland, wayland-protocols
 , libXinerama, libnotify, pango, xorgproto, librsvg, dunstify ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "dunst";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
     libXinerama libnotify pango xorgproto librsvg libXrandr
+    gtk3 wayland wayland-protocols
   ];
 
   outputs = [ "out" "man" ];

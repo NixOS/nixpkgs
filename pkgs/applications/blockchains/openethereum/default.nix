@@ -37,8 +37,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features final" ];
 
-  # test result: FAILED. 88 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
-  doCheck = false;
+  # Fix tests by preventing them from writing to /homeless-shelter.
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Exclude some tests that don't work in the sandbox
+  # - Nat test requires network access
+  checkFlags = "--skip configuration::tests::should_resolve_external_nat_hosts";
 
   meta = with lib; {
     description = "Fast, light, robust Ethereum implementation";

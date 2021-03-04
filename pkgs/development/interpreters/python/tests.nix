@@ -101,6 +101,24 @@ let
     };
   };
 
+  # Tests to ensure overriding works as expected.
+  overrideTests = let
+    extension = self: super: {
+      foobar = super.numpy;
+    };
+  in {
+    test-packageOverrides = let
+      myPython = let
+        self = python.override {
+          packageOverrides = extension;
+          inherit self;
+        };
+      in self;
+    in assert myPython.pkgs.foobar == myPython.pkgs.numpy; myPython.withPackages(ps: with ps; [ foobar ]);
+    # overrideScope is broken currently
+    # test-overrideScope = let
+    #  myPackages = python.pkgs.overrideScope extension;
+    # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
+  };
 
-
-in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests)
+in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests)

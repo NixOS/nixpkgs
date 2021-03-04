@@ -12,10 +12,6 @@
 , six
 , multipledispatch
 , packaging
-, pytest
-, xgboost
-, tensorflow
-, joblib
 , distributed
 }:
 

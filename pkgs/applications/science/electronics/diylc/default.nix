@@ -2,11 +2,11 @@
 
 let
   pname = "diylc";
-  version = "4.15.1";
+  version = "4.17.0";
   files = {
     app = fetchurl {
       url = "https://github.com/bancika/diy-layout-creator/releases/download/v${version}/diylc-${version}.zip";
-      sha256 = "09vzbxas654n8npxljqljf930y5gcjfvv3r4dv97dwk5sy66xvaf";
+      sha256 = "0cysqkrddhbs7rprm8xm21c286mz4apw66fxakhzlg50kjn0nwjv";
     };
     icon16 = fetchurl {
       url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_small.png";
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/share/diylc
     ${unzip}/bin/unzip -UU ${files.app} -d $out/share/diylc
     rm $out/share/diylc/diylc.exe
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     ${jre8}/bin/java -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
     EOF
     chmod +x $out/bin/diylc
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -67,5 +71,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/bancika/diy-layout-creator/releases";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ eduardosm ];
   };
 }

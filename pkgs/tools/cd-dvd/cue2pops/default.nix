@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   dontConfigure = true;
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install --directory --mode=755 $out/bin

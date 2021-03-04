@@ -29,9 +29,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xda4fj8p5102lh9xmrn5mv3s0ps6yykqj3mpjf72gf4zd6fzcn7";
   }) ];
 
-  buildInputs = [ which makeWrapper ocaml findlib
-    lwt_react pgocaml camlzip ocaml_sqlite3
-  ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ which ocaml findlib lwt_react pgocaml camlzip ocaml_sqlite3 ];
 
   propagatedBuildInputs = [ cryptokit ipaddr lwt_log lwt_ssl ocamlnet
     ocaml_pcre tyxml xml-light

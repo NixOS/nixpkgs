@@ -1,53 +1,87 @@
 { lib, stdenv, fetchurl, graalvm11-ce, glibcLocales }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.2.3";
+  version = "0.2.10";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "0lbdh3v3g3j00bn99bjhjj3gk1q9ks2alpvl9bxc00xpyw86f7z8";
+    sha256 = "1c7f0z1hi0vcfz532r3fhr4c64jjqppf94idpa1jziz1dljkwk85";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "0vh6k3dkzyk346jjzg6n4mdi65iybrmhb3js9lm73yc3ay2c5dyi";
+    sha256 = "0j6k3vmdljf3bjmj5dywhxjmxcs1axscc8dlnw94g5rwf9bin0dn";
   };
 
   dontUnpack = true;
 
-  LC_ALL = "en_US.UTF-8";
   nativeBuildInputs = [ graalvm11-ce glibcLocales ];
 
+  LC_ALL = "en_US.UTF-8";
+  BABASHKA_JAR = src;
+  BABASHKA_BINARY = "bb";
+  BABASHKA_XMX = "-J-Xmx4500m";
+
   buildPhase = ''
-    native-image \
-      -jar ${src} \
-      -H:Name=bb \
-      ${optionalString stdenv.isDarwin ''-H:-CheckToolchain''} \
-      -H:+ReportExceptionStackTraces \
-      -J-Dclojure.spec.skip-macros=true \
-      -J-Dclojure.compiler.direct-linking=true \
-      "-H:IncludeResources=BABASHKA_VERSION" \
-      "-H:IncludeResources=SCI_VERSION" \
-      -H:ReflectionConfigurationFiles=${reflectionJson} \
-      --initialize-at-build-time \
-      -H:Log=registerResource: \
-      -H:EnableURLProtocols=http,https \
-      --enable-all-security-services \
-      -H:+JNI \
-      --verbose \
-      --no-fallback \
-      --no-server \
-      --report-unsupported-elements-at-runtime \
-      "--initialize-at-run-time=org.postgresql.sspi.SSPIClient" \
-      "-J-Xmx4500m"
+    runHook preBuild
+
+    # https://github.com/babashka/babashka/blob/77daea7362d8e2562c89c315b1fbcefde6fa56a5/script/compile
+    args=("-jar" "$BABASHKA_JAR"
+          "-H:Name=$BABASHKA_BINARY"
+          "${lib.optionalString stdenv.isDarwin ''-H:-CheckToolchain''}"
+          "-H:+ReportExceptionStackTraces"
+          "-J-Dclojure.spec.skip-macros=true"
+          "-J-Dclojure.compiler.direct-linking=true"
+          "-H:IncludeResources=BABASHKA_VERSION"
+          "-H:IncludeResources=SCI_VERSION"
+          "-H:ReflectionConfigurationFiles=${reflectionJson}"
+          "--initialize-at-build-time"
+          # "-H:+PrintAnalysisCallTree"
+          # "-H:+DashboardAll"
+          # "-H:DashboardDump=reports/dump"
+          # "-H:+DashboardPretty"
+          # "-H:+DashboardJson"
+          "-H:Log=registerResource:"
+          "-H:EnableURLProtocols=http,https,jar"
+          "--enable-all-security-services"
+          "-H:+JNI"
+          "--verbose"
+          "--no-fallback"
+          "--no-server"
+          "--report-unsupported-elements-at-runtime"
+          "--initialize-at-run-time=org.postgresql.sspi.SSPIClient"
+          "--native-image-info"
+          "--verbose"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileReader"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileReader"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.MixerProvider"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.FormatConversionProvider"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileWriter"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiDeviceProvider"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.SoundbankReader"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileWriter"
+          "$BABASHKA_XMX")
+
+     native-image ''${args[@]}
+
+     runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bb $out/bin/bb
+
+    runHook postInstall
+  '';
+
+  installCheckPhase = ''
+    $out/bin/bb --version | grep '${version}'
+    $out/bin/bb '(+ 1 2)' | grep '3'
+    $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
   '';
 
   meta = with lib; {

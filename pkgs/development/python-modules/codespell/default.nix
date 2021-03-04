@@ -17,7 +17,7 @@ buildPythonApplication rec {
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
   '';
 
-  # tries to run not rully installed script
+  # tries to run not fully installed script
   disabledTests = [ "test_command" ];
 
   pythonImportsCheck = [ "codespell_lib" ];

@@ -1,8 +1,26 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 2576203..26162a0 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -91,12 +91,11 @@ qt5_add_translation(QM_FILES
+ )
+ 
+ configure_file(src/cmake.h.in cmake.h)
+-configure_file(data/icons/flags.qrc ${CircleFlags_SOURCE_DIR}/flags/flags.qrc COPYONLY)
+ 
+ add_executable(${PROJECT_NAME}
+     ${QM_FILES}
+     data/icons/engines/engines.qrc
+-    ${CircleFlags_SOURCE_DIR}/flags/flags.qrc
++    data/icons/flags.qrc
+     src/addlanguagedialog.cpp
+     src/addlanguagedialog.ui
+     src/cli.cpp
 diff --git i/cmake/ExternalLibraries.cmake w/cmake/ExternalLibraries.cmake
-index d8c88ae..47a12c0 100644
+index 21eba0a..b613d3e 100644
 --- i/cmake/ExternalLibraries.cmake
 +++ w/cmake/ExternalLibraries.cmake
-@@ -2,24 +2,20 @@ include(FetchContent)
+@@ -2,29 +2,24 @@ include(FetchContent)
  
  set(QAPPLICATION_CLASS QApplication)
  FetchContent_Declare(SingleApplication
@@ -30,4 +48,10 @@ index d8c88ae..47a12c0 100644
 +    SOURCE_DIR @qonlinetranslator@
  )
  
- FetchContent_MakeAvailable(SingleApplication QTaskbarControl QHotkey QOnlineTranslator)
+ FetchContent_Declare(CircleFlags
+-    GIT_REPOSITORY https://github.com/HatScripts/circle-flags
+-    GIT_TAG v2.0.0
++    SOURCE_DIR @circleflags@
+ )
+ 
+ FetchContent_MakeAvailable(SingleApplication QTaskbarControl QHotkey QOnlineTranslator CircleFlags)

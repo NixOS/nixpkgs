@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, nixosTests
+{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils
 , writeScript, common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
 
 with lib;
@@ -26,8 +26,8 @@ let
     };
 
     "2.13" = {
-      version = "2.13.4";
-      sha256 = "1alcnzmxga00nsvgy8yky91zw5b4q0xg2697vrrdgjlglpxiqwdw";
+      version = "2.13.5";
+      sha256 = "1ah5rw6xqksiayi5i95r3pcff961q71ilishzn2kmg673z0j2b7d";
       pname = "scala_2_13";
     };
   };
@@ -46,23 +46,25 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ jre ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-      mkdir -p $out
-      rm bin/*.bat
-      mv * $out
-      # put docs in correct subdirectory
-      mkdir -p $out/share/doc
-      mv $out/doc $out/share/doc/${name}
-      mv $out/man $out/share/man
+    runHook preInstall
+    mkdir -p $out
+    rm bin/*.bat
+    mv * $out
+    # put docs in correct subdirectory
+    mkdir -p $out/share/doc
+    mv $out/doc $out/share/doc/${name}
+    mv $out/man $out/share/man
     for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
           --prefix PATH ":" ${coreutils}/bin \
           --prefix PATH ":" ${gnugrep}/bin \
           --prefix PATH ":" ${jre}/bin \
           --set JAVA_HOME ${jre}
-      done
+    done
+    runHook postInstall
   '';
 
   doInstallCheck = true;

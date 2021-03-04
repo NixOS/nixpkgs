@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest six mock pyfakefs unittest2 ];
+  checkInputs = [ pytest mock pyfakefs unittest2 ];
 
   checkPhase = ''
     pytest pyu2f/tests

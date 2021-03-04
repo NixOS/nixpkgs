@@ -22,7 +22,6 @@
 , gnome-color-manager
 , gnome-desktop
 , gnome-online-accounts
-, gnome-session
 , gnome-settings-daemon
 , gnome3
 , grilo
@@ -59,6 +58,7 @@
 , shared-mime-info
 , sound-theme-freedesktop
 , tracker
+, tracker-miners
 , tzdata
 , udisks2
 , upower
@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "09i011hf23s2i4wim43vjys7y4y43cxl3kyvrnrwqvqgc5n0144d";
   };
+
   # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
   prePatch = (import ../gvc-with-ucm-prePatch.nix {
     inherit fetchFromGitLab;
@@ -101,6 +102,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     colord
     colord-gtk
+    epoxy
     fontconfig
     gdk-pixbuf
     glib
@@ -122,6 +124,7 @@ stdenv.mkDerivation rec {
     libgudev
     libhandy
     libkrb5
+    libnma
     libpulseaudio
     libpwquality
     librsvg
@@ -132,13 +135,12 @@ stdenv.mkDerivation rec {
     modemmanager
     mutter # schemas for the keybindings
     networkmanager
-    libnma
     polkit
     samba
     tracker
+    tracker-miners # for search locations dialog
     udisks2
     upower
-    epoxy
   ];
 
   patches = [
@@ -159,6 +161,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-control-center/commit/64686cfee330849945f6ff4dcc43393eb1a6e59c.patch";
       sha256 = "4VJU0q6qOtGzd/hmDncckInfEjCkC8+lXmDgxwc4VJU=";
+    })
+    # https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1173
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/-/commit/27e1140c9d4ad852b4dc6a132a14cd5532d52997.patch";
+      sha256 = "nU3szjKfXpRek8hhsxiCJNgMeDeIRK3QVo82D9R+kL4=";
     })
   ];
 

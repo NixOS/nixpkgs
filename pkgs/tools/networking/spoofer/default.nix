@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl protobuf libpcap traceroute ]
                 ++ optional withGUI qt5.qtbase ;
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";

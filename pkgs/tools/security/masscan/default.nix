@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=cc" ];
+  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     mkdir -p $out/bin

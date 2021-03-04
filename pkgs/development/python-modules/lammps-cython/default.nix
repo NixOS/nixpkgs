@@ -9,10 +9,7 @@
 , pymatgen
 , ase
 , pytestrunner
-, pytest_4
-, pytestcov
 , isPy3k
-, openssh
 }:
 
 buildPythonPackage rec {
@@ -26,7 +23,6 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ cython pytestrunner ];
-  checkInputs = [ pytest_4 pytestcov openssh ];
   propagatedBuildInputs = [ mpi4py pymatgen ase numpy ];
 
   preBuild = ''
@@ -44,10 +40,14 @@ buildPythonPackage rec {
     EOF
   '';
 
+  pythonImportsCheck = [ "lammps" ];
+
   meta = {
     description = "Pythonic Wrapper to LAMMPS using cython";
     homepage = "https://gitlab.com/costrouc/lammps-cython";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ costrouc ];
+    # fails import check
+    broken = true;
   };
 }

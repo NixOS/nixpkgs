@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  dontWrapQtApps = true;
+
   doCheck = true;
   preCheck = ''
     patchShebangs testo

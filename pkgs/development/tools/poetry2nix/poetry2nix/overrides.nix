@@ -46,6 +46,12 @@ self: super:
     }
   );
 
+  anyio = super.anyio.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py --replace 'setup()' 'setup(version="${old.version}")'
+    '';
+  });
+
   astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
@@ -82,7 +88,7 @@ self: super:
   );
 
   celery = super.celery.overridePythonAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
   });
 
   cssselect2 = super.cssselect2.overridePythonAttrs (
@@ -283,7 +289,7 @@ self: super:
       patchPhase = ''
         substituteInPlace setup.py \
           --replace "/usr/include/openjpeg-2.3" \
-                    "${pkgs.openjpeg.dev}/include/openjpeg-2.3"
+                    "${pkgs.openjpeg.dev}/include/${pkgs.openjpeg.dev.incDir}
         substituteInPlace setup.py \
           --replace "/usr/include/jxrlib" \
                     "$out/include/libjxr"
@@ -379,8 +385,8 @@ self: super:
   );
 
   jsonslicer = super.jsonslicer.overridePythonAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
-    buildInputs = old.buildInputs ++ [ pkgs.yajl ];
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkgconfig ];
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.yajl ];
   });
 
   jupyter = super.jupyter.overridePythonAttrs (
@@ -847,6 +853,11 @@ self: super:
     }
   );
 
+  pyfuse3 = super.pyfuse3.overridePythonAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.fuse3 ];
+  });
+
   pygame = super.pygame.overridePythonAttrs (
     old: rec {
       nativeBuildInputs = [
@@ -1156,6 +1167,11 @@ self: super:
       substituteInPlace setup.py --replace \'setuptools-markdown\' ""
     '';
   };
+
+
+  rmfuse = super.rmfuse.overridePythonAttrs (old: {
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
+  });
 
   scipy = super.scipy.overridePythonAttrs (
     old:

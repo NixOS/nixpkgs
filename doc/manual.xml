@@ -19,7 +19,7 @@
   <xi:include href="stdenv/meta.xml" />
   <xi:include href="stdenv/multiple-output.xml" />
   <xi:include href="stdenv/cross-compilation.chapter.xml" />
-  <xi:include href="stdenv/platform-notes.xml" />
+  <xi:include href="stdenv/platform-notes.chapter.xml" />
  </part>
  <part>
   <title>Builders</title>

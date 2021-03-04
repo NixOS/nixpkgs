@@ -6144,6 +6144,10 @@ let
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ TestDifferences ];
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/*
+    '';
   };
 
   DevelOverloadInfo = buildPerlPackage {
@@ -8449,6 +8453,20 @@ let
     doCheck = false;
   };
 
+  FunctionParameters = buildPerlPackage {
+    pname = "Function-Parameters";
+    version = "2.001003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.001003.tar.gz";
+      sha256 = "eaa22c6b43c02499ec7db0758c2dd218a3b2ab47a714b2bdf8010b5ee113c242";
+    };
+    buildInputs = [ DirSelf TestFatal ];
+    meta = {
+      description = "Define functions and methods with parameter lists (\"subroutine signatures\")";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Furl = buildPerlModule {
     pname = "Furl";
     version = "3.13";
@@ -8723,7 +8741,6 @@ let
       sha256 = "005m3inz12xcsd5sr056cm1kbhmxsx2ly88ifbdv6p6cwz0s05kk";
     };
     buildInputs = [ pkgs.glib ];
-    doCheck = false; # tests failing with glib 2.60 https://rt.cpan.org/Public/Bug/Display.html?id=128165
     meta = {
       homepage = "http://gtk2-perl.sourceforge.net/";
       description = "Perl wrappers for the GLib utility and Object libraries";
@@ -8739,13 +8756,20 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
       sha256 = "0mxg6pz8qfyipw0ypr54alij0c4adzg94f62702b2a6hkp5jhij6";
     };
-    checkInputs = [ pkgs.cairo ];
+    checkInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
+    preCheck = ''
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running tests, the library is not yet installed,
+      # though, so we need to replace the absolute path with a local one during build.
+      # We are using a symlink that we will delete after the execution of the tests.
+      mkdir -p $out/lib
+      ln -s $PWD/build/*.so $out/lib/
+    '';
+    postCheck = ''
+      rm -r $out/lib
+    '';
     meta = {
-      broken = true; # TODO: tests failing because "failed to load libregress.so"
-      # see https://github.com/NixOS/nixpkgs/pull/68115
-      # and https://github.com/NixOS/nixpkgs/issues/68116
-      # adding pkgs.gnome3.gjs does not fix it
       description = "Dynamically create Perl language bindings";
       license = lib.licenses.lgpl2Plus;
     };
@@ -8896,6 +8920,20 @@ let
     };
   };
 
+  gotofile = buildPerlPackage {
+    pname = "goto-file";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/goto-file-0.005.tar.gz";
+      sha256 = "c6cdd5ee4a6cdcbdbf314d92a4f9985dbcdf9e4258048cae76125c052aa31f77";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Stop parsing the current file and move on to a different one";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Graph = buildPerlPackage {
     pname = "Graph";
     version = "0.9712";
@@ -8904,6 +8942,22 @@ let
       sha256 = "1as4ngbqxrjv9f31hm3wg8pyiyrz5fbbvlpfsrm68k1yskwkgkcg";
     };
     propagatedBuildInputs = [ HeapFibonacci ];
+  };
+
+  GraphicsTIFF = buildPerlPackage {
+    pname = "Graphics-TIFF";
+    version = "9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
+      sha256 = "1n1r9r7f6hp2s6l361pyvb1i1pm9xqy0w9n3z5ygm7j64160kz9a";
+    };
+    buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
+    propagatedBuildInputs = [ Readonly ];
+    checkInputs = [ TestRequires TestDeep pkgs.hexdump ];
+    meta = {
+      description = "Perl extension for the libtiff library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   GraphViz = buildPerlPackage {
@@ -9076,6 +9130,30 @@ let
     meta = {
       description = "Perl interface to the 3.x series of the GTK toolkit";
       license = lib.licenses.lgpl21Plus;
+    };
+  };
+
+  Gtk3ImageView = buildPerlPackage {
+    pname = "Gtk3-ImageView";
+    version = "6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk3-ImageView-6.tar.gz";
+      sha256 = "0krkif9i3hrgjdskw05pcks40fmb43d21lxf4h8aclv0g8z647f0";
+    };
+    buildInputs = [ pkgs.gtk3 ];
+    propagatedBuildInputs = [ Readonly Gtk3 ];
+    # Tests are broken with PerlMagick and imagemagick version 7 as of 2021-02-22.
+    # See https://github.com/carygravel/gtk3-imageview/issues/19 and
+    # https://github.com/NixOS/nixpkgs/pull/114007#issuecomment-783595659.
+    doCheck = false;
+    checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    checkPhase = ''
+      ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
+        make test
+    '';
+    meta = {
+      description = "Image viewer widget for Gtk3";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -9720,12 +9798,11 @@ let
 
   HTTPDaemon = buildPerlPackage {
     pname = "HTTP-Daemon";
-    version = "6.12";
+    version = "6.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.12.tar.gz";
-      sha256 = "19hz9r6f1p406fk1pqyd99h96ipxsmknh4fh1xw0qrrq1k8vwiyz";
+      url = "mirror://cpan/authors/id/G/GA/GAAS/HTTP-Daemon-6.01.tar.gz";
+      sha256 = "1hmd2isrkilf0q0nkxms1q64kikjmcw9imbvrjgky6kh89vqdza3";
     };
-    buildInputs = [ CPANMetaCheck ModuleBuildTiny TestNeeds ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "A simple http server class";
@@ -10001,6 +10078,20 @@ let
     };
     propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
     meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ImagePNGLibpng = buildPerlPackage {
+    pname = "Image-PNG-Libpng";
+    version = "0.56";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
+      sha256 = "1nf7qcql7b2w98i859f76q1vb4b2zd0k0ypjbsw7ngs2zzmvzyzs";
+    };
+    buildInputs = [ pkgs.libpng ];
+    meta = {
+      description = "Perl interface to the C library \"libpng\"";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11777,6 +11868,20 @@ let
     propagatedBuildInputs = [ IOLockedFile ];
     meta = {
       description = "Helps us create simple logs for our application";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LongJump = buildPerlPackage {
+    pname = "Long-Jump";
+    version = "0.000001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Long-Jump-0.000001.tar.gz";
+      sha256 = "d5d6456d86992b559d8f66fc90960f919292cd3803c13403faac575762c77af4";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Mechanism for returning to a specific point from a deeply nested stack";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -13984,6 +14089,25 @@ let
     meta = {
       description = "A Mouse role for setting attributes from a simple configfile";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestPostgreSQL = buildPerlModule {
+    pname = "Test-PostgreSQL";
+    version = "1.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TJ/TJC/Test-PostgreSQL-1.27.tar.gz";
+      sha256 = "b1bd231693100cc40905fb0ba3173173201621de9c8301f21c5b593b0a46f907";
+    };
+    buildInputs = [ ModuleBuildTiny TestSharedFork pkgs.postgresql ];
+    propagatedBuildInputs = [ DBDPg DBI FileWhich FunctionParameters Moo TieHashMethod TryTiny TypeTiny ];
+
+    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+
+    meta = {
+      homepage = https://github.com/TJC/Test-postgresql;
+      description = "PostgreSQL runner for tests";
+      license = with lib.licenses; [ artistic2 ];
     };
   };
 
@@ -16370,6 +16494,21 @@ let
     };
   };
 
+  PDFBuilder = buildPerlPackage {
+    pname = "PDF-Builder";
+    version = "3.021";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.021.tar.gz";
+      sha256 = "1hc22s5gdspr5nyfmix3cwdzcw7z66pcqxy422ksmbninbzv4z93";
+    };
+    checkInputs = [ TestException TestMemoryCycle ];
+    propagatedBuildInputs = [ FontTTF ];
+    meta = {
+      description = "Facilitates the creation and modification of PDF files";
+      license = lib.licenses.lgpl21Plus;
+    };
+  };
+
   PDL = buildPerlPackage rec {
     pname = "PDL";
     version = "2.025";
@@ -16604,19 +16743,18 @@ let
     };
   };
 
-  PerlMagick = buildPerlPackage {
+  PerlMagick = buildPerlPackage rec {
     pname = "PerlMagick";
-    version = "6.89-1";
+    version = "7.0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.89-1.tar.gz";
-      sha256 = "0n9afy1z5bhf9phrbahnkwhgcmijn8jggpbzwrivw1zhliliiy68";
+      url = "mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-${version}.tar.gz";
+      sha256 = "1x05hdb3b6qs36x958b4w46qanvkqm6rpc44rlq4rd2w3gbp4lhx";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
       '';
-    doCheck = false;
   };
 
   PerlTidy = buildPerlPackage rec {
@@ -16630,6 +16768,10 @@ let
       description = "Indent and reformat perl scripts";
       license = lib.licenses.gpl2Plus;
     };
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/perltidy
+    '';
   };
 
   PHPSerialization = buildPerlPackage {
@@ -19754,6 +19896,55 @@ let
     };
   };
 
+  Test2Harness = buildPerlPackage {
+    pname = "Test2-Harness";
+    version = "1.000042";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000042.tar.gz";
+      sha256 = "aaf231a68af1a6ffd6a11188875fcf572e373e43c8285945227b9d687b43db2d";
+    };
+
+    checkPhase = ''
+      patchShebangs ./t ./scripts/yath
+      ./scripts/yath test -j $NIX_BUILD_CORES
+    '';
+
+    propagatedBuildInputs = [ DataUUID Importer LongJump ScopeGuard TermTable Test2PluginMemUsage Test2PluginUUID Test2Suite gotofile ];
+    meta = {
+      description = "A new and improved test harness with better Test2 integration";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Test2PluginMemUsage = buildPerlPackage {
+    pname = "Test2-Plugin-MemUsage";
+    version = "0.002003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-MemUsage-0.002003.tar.gz";
+      sha256 = "5e0662d5a823ae081641f5ce82843111eec1831cd31f883a6c6de54afdf87c25";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Collect and display memory usage information";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+   Test2PluginUUID = buildPerlPackage {
+    pname = "Test2-Plugin-UUID";
+    version = "0.002001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-UUID-0.002001.tar.gz";
+      sha256 = "4c6c8d484d7153d8779dc155a992b203095b5c5aa1cfb1ee8bcedcd0601878c9";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ DataUUID ];
+    meta = {
+      description = "Use REAL UUIDs in Test2";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Test2PluginNoWarnings = buildPerlPackage {
      pname = "Test2-Plugin-NoWarnings";
      version = "0.09";
@@ -22068,6 +22259,19 @@ let
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
     doCheck = false; /* test fails on some machines */
+  };
+
+  TieHashMethod = buildPerlPackage {
+    pname = "Tie-Hash-Method";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Tie-Hash-Method-0.02.tar.gz";
+      sha256 = "d513fbb51413f7ca1e64a1bdce6194df7ec6076dea55066d67b950191eec32a9";
+    };
+    meta = {
+      description = "Tied hash with specific methods overriden by callbacks";
+      license = with lib.licenses; [ artistic1 ];
+    };
   };
 
   TieRefHash = buildPerlPackage {

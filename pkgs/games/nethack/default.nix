@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
       -i sys/unix/hints/linux
     sed \
-      -e 's,^CC=.*$,CC=cc,' \
+      -e 's,^CC=.*$,CC=${stdenv.cc.targetPrefix}cc,' \
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -e 's,^CFLAGS=-g,CFLAGS=,' \

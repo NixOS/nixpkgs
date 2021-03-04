@@ -38,6 +38,8 @@ in stdenv.mkDerivation rec {
     ++ optional server readline
     ++ optional enableSqlite sqlite;
 
+  dontWrapQtApps = true;
+
   configureFlags = [ "--enable-shared" ]
     ++ optional sdlClient "--enable-client=sdl"
     ++ optionals qtClient [

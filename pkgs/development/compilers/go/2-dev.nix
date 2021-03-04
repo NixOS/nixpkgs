@@ -11,9 +11,7 @@ let
 
   inherit (lib) optionals optionalString;
 
-  go_bootstrap = callPackage ./bootstrap.nix {
-    inherit Security;
-  };
+  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out

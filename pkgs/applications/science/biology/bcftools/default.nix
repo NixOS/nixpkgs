@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "HSTDIR=${htslib}"
     "prefix=$(out)"
-    "CC=cc"
+    "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   preCheck = ''

@@ -1,21 +1,24 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy27
 , awkward0, backports_lzma, cachetools, lz4, pandas
-, pytestCheckHook, pytestrunner, pkgconfig, mock
+, pytestCheckHook, pkgconfig, mock
 , numpy, requests, uproot3-methods, xxhash, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "uproot3";
-  version = "3.14.2";
+  version = "3.14.4";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot3";
     rev = version;
-    sha256 = "sha256-6/e+qMgwyFUo8MRRTAaGp9WLPxE2fqMEK4paq26Epzc=";
+    sha256 = "sha256-hVJpKdYvyoCPyqgZzKYp30SvkYm+HWSNBdd9bYCYACE=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
+  '';
 
   propagatedBuildInputs = [
     awkward0

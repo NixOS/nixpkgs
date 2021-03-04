@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openfpgaloader";
-  version = "0.2.1";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "trabucayre";
     repo = "openFPGALoader";
     rev = "v${version}";
-    sha256 = "0j87mlghbanh6c7lrxv0x3p6zgd0wrkcs9b8jf6ifh7b3ivcfg82";
+    sha256 = "sha256-Qbw+vmpxiZXTGM0JwpS5mGzcsSJNegsvmncm+cOVrVE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

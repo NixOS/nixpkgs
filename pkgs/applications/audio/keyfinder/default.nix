@@ -20,6 +20,8 @@ mkDerivation rec {
        --replace "\$\$[QT_INSTALL_PREFIX]" "$out"
   '';
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Musical key detection for digital audio (graphical UI)";
     longDescription = ''

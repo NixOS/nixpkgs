@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dockle";
-  version = "0.3.1";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Zc2ZlyeWdRvyuJLDDTONfh0/q+HKR4lNtSFMjgJWrRY=";
+    sha256 = "sha256-oS3ZGQkDSRdVLluLNg56VGp6MCrRDlgjk1va1+xocas=";
   };
 
-  vendorSha256 = "sha256-4IJKXcnMXBqoEjsV4Xg2QYvKwxDDUjcZtrj9IRuT6i4=";
+  vendorSha256 = "sha256-npbUE3ch8TamW0aikdKuFElE4YDRKwNVUscuvmlQxl4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ btrfs-progs lvm2 ];
@@ -25,7 +25,15 @@ buildGoModule rec {
 
   preCheck = ''
     # Remove tests that use networking
-    rm pkg/scanner/scan_test.go pkg/utils/fetch_test.go
+    rm pkg/scanner/scan_test.go
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/dockle --help
+    $out/bin/dockle --version | grep "dockle version ${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

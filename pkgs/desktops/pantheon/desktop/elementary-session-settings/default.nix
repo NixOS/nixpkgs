@@ -11,7 +11,6 @@
 , wingpanel
 , orca
 , onboard
-, at-spi2-core
 , elementary-default-settings
 , elementary-settings-daemon
 , runtimeShell

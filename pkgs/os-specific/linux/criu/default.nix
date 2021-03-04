@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with python3.pkgs; [ python python3.pkgs.protobuf ];
 
   postPatch = ''
-    substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
-    substituteInPlace ./Documentation/Makefile --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./criu/Makefile --replace "-I/usr/include/libnl3" "-I${libnl.dev}/include/libnl3"
+    substituteInPlace ./Documentation/Makefile \
+      --replace "2>/dev/null" "" \
+      --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
     substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';

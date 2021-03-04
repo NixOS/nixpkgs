@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , lib
 , python3Packages
-, youtube-dl
 }:
 
 buildPythonApplication rec {

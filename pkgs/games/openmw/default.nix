@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     "-DDESIRED_QT_VERSION:INT=5"
   ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
     homepage = "http://openmw.org";

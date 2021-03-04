@@ -29,4 +29,6 @@ appleDerivation {
     cp ${Libc_old}/include/libkern/OSAtomic.h       $out/include/libkern
     cp ${Libc_old}/include/libkern/OSCacheControl.h $out/include/libkern
   '';
+
+  appleHeaders = builtins.readFile ./headers.txt;
 }

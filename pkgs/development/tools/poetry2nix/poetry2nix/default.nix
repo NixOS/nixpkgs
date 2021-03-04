@@ -71,7 +71,7 @@ in
 lib.makeScope pkgs.newScope (self: {
 
   # Poetry2nix version
-  version = "1.15.4";
+  version = "1.15.5";
 
   /* Returns a package of editable sources whose changes will be available without needing to restart the
      nix-shell.

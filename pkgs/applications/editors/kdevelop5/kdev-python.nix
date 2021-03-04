@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ threadweaver ktexteditor kdevelop-unwrapped ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     maintainers = [ maintainers.aanderse ];
     platforms = platforms.linux;

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [
     ## These are all taken from the popfile documentation as applicable to Linux
     ## http://getpopfile.org/docs/howtos:allplatformsrequireperl
     perl

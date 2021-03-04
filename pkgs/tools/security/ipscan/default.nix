@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $src .";
 
-  buildInputs = [ makeWrapper jdk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk ];
 
   installPhase = ''
     mkdir -p $out/share

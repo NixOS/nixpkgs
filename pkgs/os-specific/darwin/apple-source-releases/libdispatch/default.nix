@@ -22,4 +22,33 @@ appleDerivation {
                  typedef void* dispatch_block_t;
                  #endif'
   '';
+
+  appleHeaders = ''
+    dispatch/base.h
+    dispatch/benchmark.h
+    dispatch/block.h
+    dispatch/data.h
+    dispatch/data_private.h
+    dispatch/dispatch.h
+    dispatch/group.h
+    dispatch/introspection.h
+    dispatch/introspection_private.h
+    dispatch/io.h
+    dispatch/io_private.h
+    dispatch/layout_private.h
+    dispatch/mach_private.h
+    dispatch/object.h
+    dispatch/once.h
+    dispatch/private.h
+    dispatch/queue.h
+    dispatch/queue_private.h
+    dispatch/semaphore.h
+    dispatch/source.h
+    dispatch/source_private.h
+    dispatch/time.h
+    os/object.h
+    os/object_private.h
+    os/voucher_activity_private.h
+    os/voucher_private.h
+  '';
 }

@@ -1,4 +1,4 @@
-{ lib, supportedGhcVersions ? [ "865" "884" "8103" ], stdenv, haskellPackages
+{ lib, supportedGhcVersions ? [ "865" "884" "8104" ], stdenv, haskellPackages
 , haskell }:
 #
 # The recommended way to override this package is

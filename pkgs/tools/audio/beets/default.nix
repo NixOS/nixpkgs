@@ -1,7 +1,6 @@
 { stdenv, lib, fetchFromGitHub, writeScript, glibcLocales, diffPlugins, substituteAll
 , pythonPackages, imagemagick, gobject-introspection, gst_all_1
 , runtimeShell
-, fetchpatch
 , unstableGitUpdater
 
 # Attributes needed for tests of the external plugins

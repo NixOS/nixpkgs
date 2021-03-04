@@ -13,13 +13,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
-  version = "1.92";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
     rev = "v${version}";
-    sha256 = "105f660wzf9cpn24xzwaaa09igg5h3qhchafv190v5nqck6g1ssh";
+    sha256 = "sha256-Rd5XieB7K2BkSzrAr6Kmoa30xuwvsGKpPrsG2wrU1o8=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     intltool
     gobject-introspection
     wrapGAppsHook
+    python3.pkgs.pytestrunner
   ];
 
   buildInputs = [
@@ -47,19 +48,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    patchShebangs run_tests tests po
+    patchShebangs tests po
     # dbus-python is correctly passed in propagatedBuildInputs, but for some reason setup.py complains.
     # The wrapped terminator has the correct path added, so ignore this.
     substituteInPlace setup.py --replace "'dbus-python'," ""
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    ./run_tests
-
-    runHook postCheck
-  '';
+  doCheck = false;
 
   meta = with lib; {
     description = "Terminal emulator with support for tiling and tabs";

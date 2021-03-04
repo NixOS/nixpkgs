@@ -1,22 +1,21 @@
 { lib, stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
-, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused
-, nixosTests }:
+, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "830b72140583e2790bbd3649890ac8ef5371d0c6";
-  version = "2021-02-04";
+  rev = "f080234ba899bb49b0cf977b3683e6446b38c477";
+  version = "2021-02-24";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "0wq2mf8s254ns0sss5q394c1j2rnvl42x9l6kkrav505hbx0gyq6";
+    sha256 = "01n25s60ssxls8lkwrni91k35622lyaizymmprcqh243dg3g2qiv";
   };
 
   dontBuild = true;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -28,41 +27,40 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/sbt --prefix PATH : ${lib.makeBinPath [ which curl ]}
   '';
 
-  passthru = {
-    tests = { inherit (nixosTests) sbt-extras; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/sbt -h >/dev/null
+  '';
 
-    updateScript = writeScript "update.sh" ''
-      #!${stdenv.shell}
-      set -xo errexit
-      PATH=${
-        lib.makeBinPath [
-          common-updater-scripts
-          curl
-          cacert
-          git
-          nixfmt
-          nix
-          jq
-          coreutils
-          gnused
-        ]
-      }
-
-      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
-      latestSha="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
-
-      if [ ! "null" = "$latestSha" ]; then
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/development/tools/build-managers/sbt-extras/default.nix"
-        latestDate="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
-        update-source-version ${pname} "$latestSha" --version-key=rev
-        update-source-version ${pname} "$latestDate" --ignore-same-hash
-        nixfmt "$default_nix"
-      else
-        echo "${pname} is already up-to-date"
-      fi
-    '';
-  };
+  passthru.updateScript = writeScript "update.sh" ''
+     #!${stdenv.shell}
+     set -xo errexit
+     PATH=${
+       lib.makeBinPath [
+         common-updater-scripts
+         curl
+         cacert
+         git
+         nixfmt
+         nix
+         jq
+         coreutils
+         gnused
+       ]
+     }
+    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+     latestSha="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
+    if [ ! "null" = "$latestSha" ]; then
+       nixpkgs="$(git rev-parse --show-toplevel)"
+       default_nix="$nixpkgs/pkgs/development/tools/build-managers/sbt-extras/default.nix"
+       latestDate="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
+       update-source-version ${pname} "$latestSha" --version-key=rev
+       update-source-version ${pname} "$latestDate" --ignore-same-hash
+       nixfmt "$default_nix"
+     else
+       echo "${pname} is already up-to-date"
+     fi
+  '';
 
   meta = {
     description =

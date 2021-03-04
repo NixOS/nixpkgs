@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FQMYHxKxHEP+x98JbGyjaM0OL8QK/p3epsAWvQkv6bc=";
   };
 
-  nativeBuildInputs = [ cmake knightos-scas ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ readline SDL2 ];
+  buildInputs = [ readline SDL2 knightos-scas ];
 
   cmakeFlags = [ "-Denable-sdl=YES" ];
 

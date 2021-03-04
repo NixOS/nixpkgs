@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, which }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.4.1";
   pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
     rev = "v${version}";
-    sha256 = "18zgr1bjzz8v6rckz2q2hx9f2ssbv8qfwclzpbyjaz0c1c9lqqar";
+    sha256 = "sha256-kmi1FtJYPBUdMfJlzEsQkTwcYB99isP3yzH1EYlk54g=";
   };
 
   nativeBuildInputs = [ which ];

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wccVMEUAfTWs/8hnrT7nrxfYPHyNl+lXt+KUDkyplto=";
   };
 
-  buildInputs = [ rakudo makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ rakudo ];
 
   installPhase = ''
     mkdir -p "$out"

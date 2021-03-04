@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "13sbpv8ynq8sjackv93jqxymk0bsy76c5fc0v29wz97v53q3izjp";
   };
 
-  nativeBuildInputs = [ cmake bison flex ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ bison cmake flex ];
 
   buildInputs = [ boost ];
 

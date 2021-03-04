@@ -29,7 +29,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     composer = callPackage ../development/php-packages/composer { };
 
-    composer2 = callPackage ../development/php-packages/composer/2.0.nix { };
+    composer1 = callPackage ../development/php-packages/composer/1.x.nix { };
 
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 

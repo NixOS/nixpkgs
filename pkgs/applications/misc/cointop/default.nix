@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "cointop";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "miguelmota";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-P2LR42Qn5bBF5xcfCbxiGFBwkW/kAKVGiyED37OdZLo=";
+    sha256 = "sha256-4Ae8lzaec7JeYfmeLleatUS/xQUjea7O4XJ9DOgJIMs=";
   };
 
   goPackagePath = "github.com/miguelmota/cointop";

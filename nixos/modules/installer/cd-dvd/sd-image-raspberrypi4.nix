@@ -1,8 +1,14 @@
-# To build, use:
-# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-raspberrypi4.nix -A config.system.build.sdImage
-{ config, lib, pkgs, ... }:
-
+{ config, ... }:
 {
-  imports = [ ./sd-image-aarch64.nix ];
-  boot.kernelPackages = pkgs.linuxPackages_rpi4;
+  imports = [
+    ../sd-card/sd-image-raspberrypi4-installer.nix
+  ];
+  config = {
+    warnings = [
+      ''
+      .../cd-dvd/sd-image-raspberrypi4.nix is deprecated and will eventually be removed.
+      Please switch to .../sd-card/sd-image-raspberrypi4-installer.nix, instead.
+      ''
+    ];
+  };
 }

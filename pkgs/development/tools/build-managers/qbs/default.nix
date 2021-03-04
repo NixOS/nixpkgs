@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
+  dontWrapQtApps = true;
+
   qmakeFlags = [ "QBS_INSTALL_PREFIX=$(out)" "qbs.pro" ];
 
   buildInputs = [ qtbase qtscript ];

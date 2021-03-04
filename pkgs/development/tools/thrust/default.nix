@@ -22,7 +22,8 @@ in stdenv.mkDerivation rec {
     sha256 = "07rrnlj0gk500pvar4b1wdqm05p4n9yjwn911x93bd2qwc8r5ymc";
   };
 
-  buildInputs = [ thrustEnv makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ thrustEnv unzip ];
 
   phases = [ "installPhase" "fixupPhase" ];
 

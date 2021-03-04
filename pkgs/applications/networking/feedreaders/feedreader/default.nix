@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config, vala, gettext, python3
 , appstream-glib, desktop-file-utils, wrapGAppsHook, gnome-online-accounts
-, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, pantheon
+, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
 }:
 

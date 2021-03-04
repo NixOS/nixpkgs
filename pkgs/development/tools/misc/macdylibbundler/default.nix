@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "149p3dcnap4hs3nhq5rfvr3m70rrb5hbr5xkj1h0gsfp0d7gvxnj";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

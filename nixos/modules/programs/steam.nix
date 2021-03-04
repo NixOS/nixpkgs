@@ -4,6 +4,13 @@ with lib;
 
 let
   cfg = config.programs.steam;
+
+  steam = pkgs.steam.override {
+    extraLibraries = pkgs: with config.hardware.opengl;
+      if pkgs.hostPlatform.is64bit
+      then [ package ] ++ extraPackages
+      else [ package32 ] ++ extraPackages32;
+  };
 in {
   options.programs.steam.enable = mkEnableOption "steam";
 
@@ -18,7 +25,7 @@ in {
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages = [ pkgs.steam ];
+    environment.systemPackages = [ steam steam.run ];
   };
 
   meta.maintainers = with maintainers; [ mkg20001 ];

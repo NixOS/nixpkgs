@@ -30,7 +30,6 @@
 , systemd
 , libnma
 , tzdata
-, yelp
 , libgnomekbd
 , gsettings-desktop-schemas
 , gnome-tour

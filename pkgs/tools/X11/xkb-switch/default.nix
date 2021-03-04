@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xkb-switch";
-  version = "1.6.0";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "ierton";
     repo = "xkb-switch";
     rev = version;
-    sha256 = "11yn0y1kx04rqxh0d81b5q7kbyz58pi48bl7hyhlv7p8yndkfg4b";
+    sha256 = "sha256-DZAIL6+D+Hgs+fkJwRaQb9BHrEjAkxiqhOZyrR+Mpuk=";
   };
 
   nativeBuildInputs = [ cmake ];

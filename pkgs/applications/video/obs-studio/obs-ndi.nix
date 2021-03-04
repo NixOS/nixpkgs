@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-I${obs-studio.src}/UI/obs-frontend-api"
   ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Network A/V plugin for OBS Studio";
     homepage = "https://github.com/Palakis/obs-ndi";

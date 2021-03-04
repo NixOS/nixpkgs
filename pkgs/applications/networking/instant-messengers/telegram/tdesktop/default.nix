@@ -3,8 +3,9 @@
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
-# TODO: Shouldn't be required:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
+# Transitive dependencies:
+, pcre, xorg, util-linux, libselinux, libsepol, epoxy
+, at-spi2-core, libXtst, libthai, libdatrie
 , xdg-utils
 }:
 
@@ -22,12 +23,12 @@ let
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.5.8";
+  version = "2.6.1";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0zj1g24fi4m84p6zj9yk55v8sbhn0jdpdhp33y12d2msz0qwp2cw";
+    sha256 = "0wwb18wnh9sbfc6h7m8lj8qmc2n2p0zmp2977ddif6k2gi6qr1y7";
   };
 
   postPatch = ''
@@ -48,8 +49,9 @@ in mkDerivation rec {
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
     tg_owt
-    # TODO: Shouldn't be required:
-    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy at-spi2-core libXtst
+    # Transitive dependencies:
+    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
+    at-spi2-core libXtst libthai libdatrie
   ];
 
   cmakeFlags = [

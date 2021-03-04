@@ -101,6 +101,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  dontWrapQtApps = true;
+
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [

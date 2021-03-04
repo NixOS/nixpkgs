@@ -3,20 +3,20 @@
 haskellPackages.mkDerivation rec {
 
   pname = "carp";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
     rev = "v${version}";
-    sha256 = "07yk3gy4l6h3k7sh8al7lgwk75a13zxwfp7siqpb5gnnqr1z3brc";
+    sha256 = "sha256-nTSMY8bq0b/JvE/XQGDC4St2sqdni12E5WQU5FXnuCg=";
   };
 
-  buildDepends = [ makeWrapper ];
+  buildTools = [ makeWrapper ];
 
   executableHaskellDepends = with haskellPackages; [
-    HUnit blaze-markup blaze-html split cmdargs ansi-terminal cmark
-    edit-distance
+    HUnit blaze-markup blaze-html split ansi-terminal cmark
+    edit-distance hashable open-browser optparse-applicative
   ];
 
   isExecutable = true;

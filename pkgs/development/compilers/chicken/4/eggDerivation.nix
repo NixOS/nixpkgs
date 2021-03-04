@@ -18,7 +18,8 @@ in
 stdenv.mkDerivation ({
   name = "chicken-${name}";
   propagatedBuildInputs = buildInputs;
-  buildInputs = [ makeWrapper chicken ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ chicken ];
 
   CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
 

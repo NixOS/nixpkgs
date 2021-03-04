@@ -20,13 +20,13 @@ let
   optionOnOff = option: if option then "on" else "off";
 in stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.6.4";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "0vkgbw2ibvfr0zffnmmws7389msyqsiw8anfad6awvkda3z3rxjm";
+    sha256 = "sha256-unBToiLSpTtnung77z65iuUqiQHwfMVgmFZMUtKU7fQ=";
   };
 
   cmakeFlags = [

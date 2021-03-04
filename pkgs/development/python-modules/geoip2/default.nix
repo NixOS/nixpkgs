@@ -1,7 +1,6 @@
 { buildPythonPackage, lib, fetchPypi, isPy27
 , aiohttp
 , maxminddb
-, mock
 , mocket
 , requests
 , requests-mock

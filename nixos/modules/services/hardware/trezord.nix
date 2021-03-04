@@ -48,7 +48,7 @@ in {
 
     systemd.services.trezord = {
       description = "Trezor Bridge";
-      after = [ "systemd-udev-settle.service" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [];
       serviceConfig = {

@@ -20,7 +20,6 @@
 # Test Inputs
 , glibcLocales
 , hypothesis
-, moto
 , pytestCheckHook
 # Darwin inputs
 , runtimeShell
@@ -35,6 +34,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "06vhk75hmzgv1sfbjzgnsw9x10h7y6bd6s6z7d6lfnn7wcgc83zi";
   };
+  # See https://github.com/scipy/scipy/issues/13585 and https://github.com/pandas-dev/pandas/pull/40020
+  patches = [ ./fix-tests.patch ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = lib.optional stdenv.isDarwin libcxx;
@@ -54,21 +55,11 @@ buildPythonPackage rec {
     xlwt
   ];
 
-  checkInputs = [ pytestCheckHook glibcLocales moto hypothesis ];
+  checkInputs = [ pytestCheckHook glibcLocales hypothesis ];
 
   # doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
-
-  # For OSX, we need to add a dependency on libcxx, which provides
-  # `complex.h` and other libraries that pandas depends on to build.
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    cpp_sdk="${libcxx}/include/c++/v1";
-    echo "Adding $cpp_sdk to the setup.py common_include variable"
-    substituteInPlace setup.py \
-      --replace "['pandas/src/klib', 'pandas/src']" \
-                "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-  '';
 
   # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
   # release. https://github.com/pandas-dev/pandas/pull/30862

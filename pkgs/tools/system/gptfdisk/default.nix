@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gptfdisk";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchurl {
     # https://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
     # page clearly implies a preference for using SourceForge's bandwidth:
     url = "mirror://sourceforge/gptfdisk/${pname}-${version}.tar.gz";
-    sha256 = "0bybgp30pqxb6x5krxazkq4drca0gz4inxj89fpyr204rn3kjz8f";
+    sha256 = "sha256-3cVR1kOlPwvURANF064yxJsEp5fpwBA26kYLa7QWjKg=";
   };
 
   postPatch = ''

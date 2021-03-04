@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, wheel, watchdog, flake8
+{ lib, buildPythonPackage, fetchPypi, watchdog, flake8
 , pytest, pytestrunner, coverage, sphinx, twine }:
 
 buildPythonPackage rec {

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     # the default string formatting of regular expression flags which breaks test assertion
     "test_to_json_schema_complex_regular_expression"
   ];
-  disabledTestFiles = [
+  disabledTestPaths = [
     # for some reason jinja2 not picking up forms directory (1% of tests)
     "tests/test_forms.py"
   ];

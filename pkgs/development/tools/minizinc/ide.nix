@@ -20,6 +20,7 @@ mkDerivation {
   sourceRoot = "source/MiniZincIDE";
 
   enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
   postInstall = ''
     wrapProgram $out/bin/MiniZincIDE --prefix PATH ":" ${lib.makeBinPath [ minizinc ]}

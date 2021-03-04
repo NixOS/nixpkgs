@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   preConfigure = "patchShebangs configure";
   configureFlags = [ "--disable-lib64" "--disable-qt5-immodule" ];
-
+  dontWrapQtApps = true;
 
   meta = with lib; {
     homepage = "http://hime-ime.github.io/";

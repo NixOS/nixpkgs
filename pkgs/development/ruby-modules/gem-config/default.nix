@@ -201,13 +201,23 @@ in
 
   gitlab-markup = attrs: { meta.priority = 1; };
 
-  gitlab-pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.0") {
+  gitlab-pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.1") {
     dontBuild = false;
     postPatch = ''
-      sed -i 's;"https://gitlab.com.*";"${fetchurl {
-        url = "https://gitlab.com/gitlab-org/libpg_query/-/archive/gitlab-10-1.0.3/libpg_query-gitlab-10-1.0.3.tar.gz";
-        sha256 = "1519x4v6wrk189mjg4hlfah0f7hjy3syg8kk8b6g644gdspzs26j";
-      }}";' ext/pg_query/extconf.rb
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/10-1.0.3";
+        sha256 = "0jfij8apzxsdabl70j42xgd5f3ka1gdcrk764nccp66164gpcchk";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  };
+
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.0") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/10-1.0.4";
+        sha256 = "0f0kshhai0pnkqj0w4kgz3fssnvwidllc31n1fysxjjzdqlr1k48";
+      }}';" ext/pg_query/extconf.rb
     '';
   };
 

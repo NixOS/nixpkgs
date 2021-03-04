@@ -82,6 +82,14 @@ let
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
 
+    carton = callPackage ../development/ocaml-modules/carton { };
+
+    carton-git = callPackage ../development/ocaml-modules/carton/git.nix { };
+
+    carton-lwt = callPackage ../development/ocaml-modules/carton/lwt.nix {
+      git-binary = pkgs.git;
+    };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
@@ -391,8 +399,6 @@ let
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
-    imagelib-unix = callPackage ../development/ocaml-modules/imagelib/unix.nix { };
-
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
     integers = callPackage ../development/ocaml-modules/integers { };
@@ -425,9 +431,13 @@ let
       git-binary = pkgs.git;
     };
 
-    git-http = callPackage ../development/ocaml-modules/git-http { };
+    git-cohttp = callPackage ../development/ocaml-modules/git/cohttp.nix { };
 
-    git-unix = callPackage ../development/ocaml-modules/git-unix {
+    git-cohttp-unix = callPackage ../development/ocaml-modules/git/cohttp-unix.nix { };
+
+    git-cohttp-mirage = callPackage ../development/ocaml-modules/git/cohttp-mirage.nix { };
+
+    git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
     };
 
@@ -464,6 +474,8 @@ let
 
     irmin-chunk = callPackage ../development/ocaml-modules/irmin/chunk.nix { };
 
+    irmin-containers = callPackage ../development/ocaml-modules/irmin/containers.nix { };
+
     irmin-fs = callPackage ../development/ocaml-modules/irmin/fs.nix { };
 
     irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { };
@@ -472,7 +484,13 @@ let
 
     irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
 
-    irmin-mem = callPackage ../development/ocaml-modules/irmin/mem.nix { };
+    irmin-layers = callPackage ../development/ocaml-modules/irmin/layers.nix { };
+
+    irmin-mirage = callPackage ../development/ocaml-modules/irmin/mirage.nix { };
+
+    irmin-mirage-git = callPackage ../development/ocaml-modules/irmin/mirage-git.nix { };
+
+    irmin-mirage-graphql = callPackage ../development/ocaml-modules/irmin/mirage-graphql.nix { };
 
     irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { };
 
@@ -899,6 +917,8 @@ let
       inherit (pkgs) postgresql;
     };
 
+    ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
+
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
@@ -1056,6 +1076,8 @@ let
     sedlex_2 = callPackage ../development/ocaml-modules/sedlex/2.nix { };
 
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
+
+    sha = callPackage ../development/ocaml-modules/sha { };
 
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
@@ -1389,7 +1411,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_11;
+  ocamlPackages_latest = ocamlPackages_4_12;
 
   ocamlPackages = ocamlPackages_4_10;
 }

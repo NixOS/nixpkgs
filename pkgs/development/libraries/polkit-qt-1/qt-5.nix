@@ -16,6 +16,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ polkit glib qtbase ];
 
+  dontWrapQtApps = true;
+
   postFixup = ''
     # Fix library location in CMake module
     sed -i "$dev/lib/cmake/PolkitQt5-1/PolkitQt5-1Config.cmake" \

@@ -94,9 +94,6 @@ let
       # In uclibc cases, libgomp needs an additional '-ldl'
       # and as I don't know how to pass it, I disable libgomp.
       "--disable-libgomp"
-    ] ++ lib.optionals (targetPlatform.libc == "musl") [
-      # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
-      "--disable-libmpx"
     ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
@@ -147,6 +144,10 @@ let
       (lib.enableFeature enablePlugin "plugin")
     ]
 
+    # Support -m32 on powerpc64le
+    ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
+      "--enable-targets=powerpcle-linux"
+
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
     ++ lib.optionals (cloog != null) [
@@ -181,6 +182,9 @@ let
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
+    ++ lib.optional (targetPlatform.libc == "musl")
+      # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+      "--disable-libmpx"
     ++ lib.optionals (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"

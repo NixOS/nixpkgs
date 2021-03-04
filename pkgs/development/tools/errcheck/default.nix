@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "errcheck";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "kisielk";
     repo = "errcheck";
     rev = "v${version}";
-    sha256 = "sha256-ZmocFXtg+Thdup+RqDYC/Td3+m1nS0FydZecfsWXIzI=";
+    sha256 = "sha256-Przf2c2jFNdkUq7IOUD7ChXHiSayAz4xTsNzajycYZ0=";
   };
 
   vendorSha256 = "sha256-rluaBdW+w2zPThELlBwX/6LXDgc2aIk/ucbrsrABpVc=";

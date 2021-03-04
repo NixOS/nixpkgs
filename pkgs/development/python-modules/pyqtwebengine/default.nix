@@ -45,6 +45,8 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ pyqt5 ]
     ++ lib.optional (!isPy3k) enum34;
 
+  dontWrapQtApps = true;
+
   configurePhase = ''
     runHook preConfigure
 

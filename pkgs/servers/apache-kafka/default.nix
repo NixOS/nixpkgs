@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ps ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre bash gnugrep gnused coreutils ps ];
 
   installPhase = ''
     mkdir -p $out

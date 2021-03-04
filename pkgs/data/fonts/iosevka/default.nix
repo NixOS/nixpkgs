@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchFromGitHub, nodejs, nodePackages, remarshal
+{ stdenv, lib, nodejs, nodePackages, remarshal
 , ttfautohint-nox
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer

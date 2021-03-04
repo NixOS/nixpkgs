@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1914z0jgj7lni0nf3hslkjgkv87mhxdr92cmhmbzhpjgjgr23ydp";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase =
     let

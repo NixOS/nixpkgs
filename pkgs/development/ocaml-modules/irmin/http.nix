@@ -1,5 +1,5 @@
 { lib, buildDunePackage, cohttp-lwt, irmin, webmachine
-, checkseum, git-unix, irmin-git, irmin-mem, irmin-test
+, checkseum, git-unix, irmin-git, irmin-test, digestif, git-cohttp-unix
 }:
 
 buildDunePackage rec {
@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cohttp-lwt irmin webmachine ];
 
-  checkInputs = lib.optionals doCheck [ checkseum git-unix irmin-git irmin-mem irmin-test ];
+  checkInputs = [ digestif checkseum git-cohttp-unix git-unix irmin-git irmin-test ];
 
   doCheck = true;
 

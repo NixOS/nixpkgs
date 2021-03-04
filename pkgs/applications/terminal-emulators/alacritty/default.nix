@@ -52,16 +52,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "8alCFtr+3aJsqQ2Ra8u5/SRHfDvMq2kRvRCKo/zwMK0=";
+    sha256 = "sha256-VXV6w4OnhJBmvMKl7CynbhI9LclTKaSr+5DhHXMwSsc=";
   };
 
-  cargoSha256 = "kqRlxieChnhWtYYf67gi+2bncIzO56xpnv2uLjcINVM=";
+  cargoSha256 = "sha256-PWnNTMNZKxsfS1OAXe4G3zjfg5gK1SMTc0JJrW90iSM=";
 
   nativeBuildInputs = [
     cmake
@@ -90,12 +90,7 @@ rustPlatform.buildRustPackage rec {
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D $releaseDir/alacritty $out/bin/alacritty
-
-  '' + (
+  postInstall = (
     if stdenv.isDarwin then ''
       mkdir $out/Applications
       cp -r extra/osx/Alacritty.app $out/Applications
@@ -126,8 +121,6 @@ rustPlatform.buildRustPackage rec {
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-
-    runHook postInstall
   '';
 
   dontPatchELF = true;

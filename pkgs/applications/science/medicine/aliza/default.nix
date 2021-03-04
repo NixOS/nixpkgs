@@ -3,15 +3,16 @@
 with lib;
 stdenv.mkDerivation {
   pname = "aliza";
-  version = "1.98.32";
+  version = "1.98.43";
   src = fetchurl {
     # See https://www.aliza-dicom-viewer.com/download
-    url = "https://drive.google.com/uc?export=download&id=1nggavPhY_633T-AW9PdkcAgbWtzv3QKG";
-    sha256 = "00vbgv8ca9ckgkicyyngrb01yhhcqc8hygg2bls7b44c47hcc8zz";
+    url = "https://drive.google.com/uc?export=download&id=1HiDYUVN30oSWZWt3HBp7gNRBCLLtJM1I";
+    sha256 = "0d70q67j2q0wdn4m2fxljqb97jwmscqgg3rm1rkb77fi2ik206ra";
     name = "aliza.rpm";
   };
 
-  buildInputs = [ rpmextract makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ rpmextract ];
 
   unpackCmd = "rpmextract $curSrc";
 

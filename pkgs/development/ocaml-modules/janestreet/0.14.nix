@@ -533,6 +533,14 @@ rec {
     propagatedBuildInputs = [ ppxlib ];
   };
 
+  ppx_log = janePackage {
+    pname = "ppx_log";
+    hash = "10hnr5lpww3fw0bnidzngalbgy0j1wvz1g5ki9c9h558pnpvsazr";
+    minimumOCamlVersion = "4.08.0";
+    meta.description = "Ppx_sexp_message-like extension nodes for lazily rendering log messages";
+    propagatedBuildInputs = [ async_unix ppx_jane sexplib ];
+  };
+
   ppx_module_timer = janePackage {
     pname = "ppx_module_timer";
     hash = "163q1rpblwv82fxwyf0p4j9zpsj0jzvkfmzb03r0l49gqhn89mp6";

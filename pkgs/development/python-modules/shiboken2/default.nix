@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     "-DBUILD_TESTS=OFF"
   ];
 
+  dontWrapQtApps = true;
+
   postInstall = ''
     rm $out/bin/shiboken_tool.py
   '';

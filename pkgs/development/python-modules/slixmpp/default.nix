@@ -39,7 +39,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   # Exclude live tests
-  disabledTestFiles = [ "tests/live_test.py" ];
+  disabledTestPaths = [ "tests/live_test.py" ];
 
   pythonImportsCheck = [ "slixmpp" ];
 

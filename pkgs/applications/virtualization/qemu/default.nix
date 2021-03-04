@@ -50,8 +50,9 @@ stdenv.mkDerivation rec {
     sha256 = "1g0pvx4qbirpcn9mni704y03n3lvkmw2c0rbcwvydyr8ns4xh66b";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkg-config flex bison meson ninja autoPatchelfHook ]
-    ++ optionals gtkSupport [ wrapGAppsHook ];
+  nativeBuildInputs = [ python python.pkgs.sphinx pkg-config flex bison meson ninja ]
+    ++ optionals gtkSupport [ wrapGAppsHook ]
+    ++ optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs =
     [ zlib glib perl pixman
       vde2 texinfo makeWrapper lzo snappy
@@ -108,6 +109,10 @@ stdenv.mkDerivation rec {
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
     chmod +x ./scripts/shaderinclude.pl
     patchShebangs .
+    # avoid conflicts with libc++ include for <version>
+    mv VERSION QEMU_VERSION
+    substituteInPlace meson.build \
+      --replace "'VERSION'" "'QEMU_VERSION'"
   '' + optionalString stdenv.hostPlatform.isMusl ''
     NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
@@ -119,8 +124,6 @@ stdenv.mkDerivation rec {
       "--enable-guest-agent"
       "--sysconfdir=/etc"
     ]
-    # disable sysctl check on darwin.
-    ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional smartcardSupport "--enable-smartcard"
@@ -144,7 +147,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # the .desktop is both invalid and pointless
-    rm -f $out/share/applications/qemu.desktop
+    test -e $out/share/applications/qemu.desktop && rm -f $out/share/applications/qemu.desktop
 
     # copy qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin

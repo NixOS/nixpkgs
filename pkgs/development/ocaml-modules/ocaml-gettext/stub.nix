@@ -1,14 +1,16 @@
-{ lib, buildDunePackage, ocaml_gettext, ounit }:
+{ buildDunePackage, ocaml_gettext, dune-configurator, ounit }:
 
 buildDunePackage rec {
 
   pname = "gettext-stub";
 
-  inherit (ocaml_gettext) src version meta;
+  inherit (ocaml_gettext) src version useDune2 meta;
+
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [ ocaml_gettext ];
 
   doCheck = true;
 
-  checkInputs = lib.optional doCheck ounit;
+  checkInputs = [ ounit ];
 }

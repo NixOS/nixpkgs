@@ -35,7 +35,8 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  buildInputs = [ makeWrapper jre_headless util-linux ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre_headless util-linux ]
              ++ optional enableUnfree zlib;
 
   installPhase = ''

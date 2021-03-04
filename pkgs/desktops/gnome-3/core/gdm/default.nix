@@ -33,14 +33,9 @@
 
 let
 
-  icon = fetchurl {
-    url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/4f041870efa1a6f0799ef4b32bb7be2cafee7a74/logo/nixos.svg";
-    sha256 = "0b0dj408c1wxmzy6k0pjwc4bzwq286f1334s3cqqwdwjshxskshk";
-  };
-
   override = substituteAll {
     src = ./org.gnome.login-screen.gschema.override;
-    inherit icon;
+    icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
   };
 
 in

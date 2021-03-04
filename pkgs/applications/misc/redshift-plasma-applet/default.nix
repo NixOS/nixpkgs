@@ -35,6 +35,8 @@ stdenv.mkDerivation {
     kwindowsystem
   ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "KDE Plasma 5 widget for controlling Redshift";
     homepage = "https://github.com/kotelnik/plasma-applet-redshift-control";

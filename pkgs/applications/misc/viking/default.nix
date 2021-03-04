@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ makeWrapper intltool gettext gtk2 expat curl gpsd bc file gnome-doc-utils
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ intltool gettext gtk2 expat curl gpsd bc file gnome-doc-utils
     libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412 gexiv2
   ] ++ lib.optional withMapnik mapnik
     ++ lib.optional withGeoClue geoclue2

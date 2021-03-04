@@ -13,6 +13,12 @@ in stdenv.mkDerivation rec {
     sha256 = "0p0hpjajfkskhd7jiv5zwhfa8hi49q3mgifjlkqvy99xspv98ijj";
   };
 
+  postPatch = ''
+    substituteInPlace blas/Makefile \
+      --replace "ar rcv" "${stdenv.cc.targetPrefix}ar rcv" \
+      --replace "ranlib" "${stdenv.cc.targetPrefix}ranlib"
+  '';
+
   outputs = [ "bin" "dev" "out" ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];

@@ -19,7 +19,8 @@ stdenv.mkDerivation {
     sha256 = "1gr5l2fr9qbdccga8bhsrpvz6jxigvfkdxrln9wyf2xpps5cdjxh";
   };
 
-  buildInputs = [ goobook makeWrapper perl ConvertASN1 perlldap AuthenSASL ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ goobook perl ConvertASN1 perlldap AuthenSASL ]
     ++ optional (!stdenv.isDarwin) finger_bsd
     ++ optional   (abook != null) abook
     ++ optional   (gnupg != null) gnupg

@@ -3,7 +3,6 @@
 , pandas
 , pytestCheckHook
 , scikitlearn
-, tensorflow
 }:
 
 buildPythonPackage rec {
@@ -37,6 +36,7 @@ buildPythonPackage rec {
     "_generator"
     "show_versions"
     "test_make_imbalanced_iris"
+    "test_rusboost[SAMME.R]"
   ];
 
   meta = with lib; {

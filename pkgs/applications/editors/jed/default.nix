@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "CC=cc"
+    "CC=${stdenv.cc.targetPrefix}cc"
     "--with-slang=${slang}"
     "JED_ROOT=${placeholder "out"}/share/jed"
   ];

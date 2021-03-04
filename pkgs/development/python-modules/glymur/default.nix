@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, setuptools
 , python
 , scikitimage
 , openjpeg

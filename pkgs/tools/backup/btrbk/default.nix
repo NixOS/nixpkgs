@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
+{ lib, stdenv, fetchurl, bash, btrfs-progs, openssh, perl, perlPackages
 , util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -23,12 +23,6 @@ stdenv.mkDerivation rec {
 
     # Tainted Mode disables PERL5LIB
     substituteInPlace btrbk --replace "perl -T" "perl"
-
-    # Fix btrbk-mail
-    substituteInPlace contrib/cron/btrbk-mail \
-      --replace "/bin/date" "${coreutils}/bin/date" \
-      --replace "/bin/echo" "${coreutils}/bin/echo" \
-      --replace '$btrbk' 'btrbk'
 
     # Fix SSH filter script
     sed -i '/^export PATH/d' ssh_filter_btrbk.sh

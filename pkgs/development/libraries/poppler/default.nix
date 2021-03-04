@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
-  version = "20.12.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "21.01.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0dbv1y9i5ahg6namz6gw2d0njnmrigr4a80dbxvnqad4q232banh";
+    sha256 = "sha256-AW3eNOX4aOqYoyypm2QzJaloIoFQCUK3ET9OyI0g4vM=";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   preConfigure = lib.optionalString stdenv.isDarwin ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
+
+  dontWrapQtApps = true;
 
   cmakeFlags = [
     (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"

@@ -20,12 +20,6 @@ buildPythonPackage {
   inherit disabled;
   doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    # work around python distutils compiling C++ with $CC
-    lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
-    ++ lib.optional (lib.versionOlder protobuf.version "2.7.0") "-std=c++98"
-  );
-
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ six ] ++ lib.optionals isPy27 [ google-apputils ];

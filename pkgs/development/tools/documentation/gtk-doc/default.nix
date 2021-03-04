@@ -5,7 +5,7 @@
 , pkg-config
 , python3
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , libxslt
 , gettext
 , gnome3
@@ -14,7 +14,9 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gtk-doc";
-  version = "1.33.1";
+  version = "1.33.2";
+
+  outputDevdoc = "out";
 
   format = "other";
 
@@ -23,14 +25,12 @@ python3.pkgs.buildPythonApplication rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "L9CjhZ60F42xbo50x7cdKfJrav/9mf38pff8S4xkEVo=";
+    sha256 = "A6OXpazrJ05SUIO1ZPVN0xHTXOSov8UnPvUolZAv/Iw=";
   };
 
   patches = [
     passthru.respect_xml_catalog_files_var_patch
   ];
-
-  outputDevdoc = "out";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     libxslt
   ] ++ lib.optionals withDblatex [
     dblatex
@@ -50,7 +50,6 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonPath = with python3.pkgs; [
     pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
-    (anytree.override { withGraphviz = false; })
     lxml
   ];
 
@@ -79,8 +78,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
-    homepage = "https://www.gtk.org/gtk-doc";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub worldofpeace ];
+    homepage = "https://gitlab.gnome.org/GNOME/gtk-doc";
+    license = licenses.gpl2Plus;
+    maintainers = teams.gnome.members ++ (with maintainers; [ pSub ]);
   };
 }

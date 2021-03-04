@@ -19,6 +19,10 @@ stdenv.mkDerivation {
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
     ./4k-align.patch
+    # Add -no-hardlinks option. This is a rebased version of
+    # c37bb4da4a5fa8c1cf114237ba364692dd522262, can be removed
+    # when upgrading to the next version after 4.4
+    ./0001-Mksquashfs-add-no-hardlinks-option.patch
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ zlib xz zstd lz4 ];

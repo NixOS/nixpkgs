@@ -8,7 +8,7 @@ GEM
     rainbow (3.0.0)
     regexp_parser (2.0.3)
     rexml (3.2.4)
-    rubocop (1.9.1)
+    rubocop (1.10.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)

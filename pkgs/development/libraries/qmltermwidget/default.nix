@@ -32,6 +32,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  dontWrapQtApps = true;
+
   meta = {
     description = "A QML port of qtermwidget";
     homepage = "https://github.com/Swordfish90/qmltermwidget";

@@ -56,7 +56,8 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  buildInputs = [ makeWrapper perl python unzip libicns imagemagick ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl python unzip libicns imagemagick ];
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";

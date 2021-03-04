@@ -1,5 +1,4 @@
 { lib, stdenv
-, nixosTests
 , fetchFromGitHub
 , rustPlatform
 , asciidoctor
@@ -37,7 +36,15 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh complete/_rg
   '';
 
-  passthru.tests = { inherit (nixosTests) ripgrep; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    file="$(mktemp)"
+    echo "abc\nbcd\ncde" > "$file"
+    $out/bin/rg -N 'bcd' "$file"
+    $out/bin/rg -N 'cd' "$file"
+  '' + lib.optionalString withPCRE2 ''
+    echo '(a(aa)aa)' | $out/bin/rg -P '\((a*|(?R))*\)'
+  '';
 
   meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";

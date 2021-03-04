@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "1l6xsikd1113qd4y0mvjsl64gbi4327m9v4d593f27fxink39j8s";
+    sha256 = "sha256-EQqbWM/4CInFNndfD+k7embPUFLXgxRT44e/+Ik2TDs=";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "07zl5xhzgrgr5skba6cds5nal58pllf10gak0ap62j1k9gk2ych2";
+  vendorSha256 = "sha256-T6kGhje3K2HnR8xRuio6AsYbSwIdbWvAk3ZSnbm1NsA=";
 
   doCheck = false;
 
@@ -33,6 +33,6 @@ buildGoModule rec {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
-    maintainers = with maintainers; [ marsam dtzWill ];
+    maintainers = with maintainers; [ marsam dtzWill SuperSandro2000 ];
   };
 }

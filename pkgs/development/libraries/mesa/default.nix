@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.3.3";
+  version = "20.3.4";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0mnic7mfv5lgnn3swj7lbif8bl8pi2czlgr01jhq5s9q90nj2kpp";
+    sha256 = "1120kf280hg4h0a2505vxf6rdw8r2ydl3cg4iwkmpx0zxj3sj8fw";
   };
 
   prePatch = "patchShebangs .";
@@ -65,6 +65,10 @@ stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
+  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
+    # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
+    ./aarch64-darwin.patch
   ];
 
   postPatch = ''

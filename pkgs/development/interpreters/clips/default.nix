@@ -1,17 +1,19 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  version = "6.30";
+stdenv.mkDerivation rec {
+  version = "6.31";
   pname = "clips";
   src = fetchurl {
-    url = "mirror://sourceforge/clipsrules/CLIPS/6.30/clips_core_source_630.tar.Z";
-    sha256 = "1r0m59l3mk9cwzq3nmyr5qxrlkzp3njls4hfv8ml85dmqh7n3ysy";
+    url = "mirror://sourceforge/clipsrules/CLIPS/${version}/clips_core_source_${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }.tar.gz";
+    sha256 = "165k0z7dsv04q432sanmw0jxmxwf56cnhsdfw5ffjqxd3lzkjnv6";
   };
-  buildPhase = ''
-    make -C core -f ../makefiles/makefile.gcc
-  '';
+  makeFlags = [ "-C" "core" ];
   installPhase = ''
+    runHook preInstall
     install -D -t $out/bin core/clips
+    runHook postInstall
   '';
   meta = with lib; {
     description = "A Tool for Building Expert Systems";
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
       easier to implement and maintain than an algorithmic solution.
     '';
     license = licenses.publicDomain;
-    maintainers = [maintainers.league];
+    maintainers = [ maintainers.league ];
     platforms = platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
 { lib, stdenv, callPackage, fetchFromGitHub
-, cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
+, cmake, kodiPlain, libcec_platform, tinyxml, pugixml
 , steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
-, python2Packages, expat, glib, nspr, nss, openssl
+, python3Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
 with lib;
@@ -9,7 +9,7 @@ with lib;
 let self = rec {
 
   pluginDir = "/share/kodi/addons";
-  rel = "Leia";
+  rel = "Matrix";
 
   kodi = kodiPlain;
 
@@ -122,6 +122,7 @@ let self = rec {
       '';
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
+      broken = true; # requires port to python3
     };
 
   };
@@ -151,6 +152,7 @@ let self = rec {
       '';
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
+      broken = true; # requires port to python3
     };
 
   };
@@ -204,6 +206,7 @@ let self = rec {
       homepage = "https://forum.kodi.tv/showthread.php?tid=258159";
       description = "A ROM launcher for Kodi that uses HyperSpin assets.";
       maintainers = with maintainers; [ edwtjo ];
+      broken = true; # requires port to python3
     };
   in {
     service = mkKodiPlugin {
@@ -221,14 +224,14 @@ let self = rec {
 
   joystick = mkKodiABIPlugin rec {
     namespace = "peripheral.joystick";
-    version = "1.4.7";
+    version = "1.7.1";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
-      rev = "v${version}";
-      sha256 = "03gsp4kg41s3n4ib4wsv7m3krfipgwc2z07i4mnd5zvg0c4xrmap";
+      rev = "${version}-${rel}";
+      sha256 = "1dhj4afr9kj938xx70fq5r409mz6lbw4n581ljvdjj9lq7akc914";
     };
 
     meta = {
@@ -237,7 +240,7 @@ let self = rec {
       maintainers = with maintainers; [ edwtjo ];
     };
 
-    extraBuildInputs = [ udev ];
+    extraBuildInputs = [ tinyxml udev ];
   };
 
   simpleplugin = mkKodiPlugin rec {
@@ -256,6 +259,7 @@ let self = rec {
       homepage = src.meta.homepage;
       description = "Simpleplugin API";
       license = licenses.gpl3;
+      broken = true; # requires port to python3
     };
   };
 
@@ -263,14 +267,14 @@ let self = rec {
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.48";
+    version = "5.1.12";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "dc18ad002cd69257611d0032fba91f57bb199165";
-      sha256 = "0klk1jpjc243ak306k94mag4b4s17w68v69yb8lzzydszqkaqa7x";
+      rev = "v${version}";
+      sha256 = "04j1nhm7mh9chs995lz6bv1vsq5xzk7a7c0lmk4bnfv8jrfpj0w6";
     };
 
     meta = {
@@ -290,14 +294,14 @@ let self = rec {
 
   steam-controller = mkKodiABIPlugin rec {
     namespace = "peripheral.steamcontroller";
-    version = "0.10.0";
+    version = "0.11.0";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = namespace;
-      rev = "ea345392ab5aa4485f3a48d2037fa8a8e8ab82de";
-      sha256 = "1hbd8fdvn7xkr9csz1g9wah78nhnq1rkazl4zwa31y70830k3279";
+      rev = "f68140ca44f163a03d3a625d1f2005a6edef96cb";
+      sha256 = "09lm8i119xlsxxk0c64rnp8iw0crr90v7m8iwi9r31qdmxrdxpmg";
     };
 
     extraBuildInputs = [ libusb1 ];
@@ -314,13 +318,13 @@ let self = rec {
 
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
-    version = "3.1.4";
+    version = "3.5.1";
 
     src = fetchFromGitHub rec {
       owner = "teeedubb";
       repo = owner + "-xbmc-repo";
-      rev = "db67704c3e16bdcdd3bdfe2926c609f1f6bdc4fb";
-      sha256 = "001a7zs3a4jfzj8ylxv2klc33mipmqsd5aqax7q81fbgwdlndvbm";
+      rev = "8260bf9b464846a1f1965da495d2f2b7ceb81d55";
+      sha256 = "1fj3ry5s44nf1jzxk4bmnpa4b9p23nrpmpj2a4i6xf94h7jl7p5k";
     };
 
     propagatedBuildInputs = [ steam ];
@@ -356,6 +360,7 @@ let self = rec {
       homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
       description = "A comic book reader";
       maintainers = with maintainers; [ edwtjo ];
+      broken = true; # requires port to python3
     };
   };
 
@@ -363,13 +368,13 @@ let self = rec {
 
     plugin = "pvr-hts";
     namespace = "pvr.hts";
-    version = "4.4.14";
+    version = "8.2.2";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hts";
       rev = "${version}-${rel}";
-      sha256 = "1bcwcwd2yjhw85yk6lyhf0iqiclrsz7r7vpbxgc650fwqbb146gr";
+      sha256 = "0jnn9gfjl556acqjf92wzzn371gxymhbbi665nqgg2gjcan0a49q";
     };
 
     meta = {
@@ -385,13 +390,13 @@ let self = rec {
 
     plugin = "pvr-hdhomerun";
     namespace = "pvr.hdhomerun";
-    version = "3.5.0";
+    version = "7.1.0";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hdhomerun";
       rev = "${version}-${rel}";
-      sha256 = "1zrkvfn0im2qmvqm93pa3cg8xkxv61sxlj8nsz4r5z9v9nhqadf6";
+      sha256 = "0gbwjssnd319csq2kwlyjj1rskg19m1dxac5dl2dymvx5hn3zrgm";
     };
 
     meta = {
@@ -409,13 +414,13 @@ let self = rec {
 
     plugin = "pvr-iptvsimple";
     namespace = "pvr.iptvsimple";
-    version = "3.5.7";
+    version = "7.4.2";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.iptvsimple";
       rev = "${version}-${rel}";
-      sha256 = "17znib7c491h2ii4gagxradh0jyvgga0d548gbk4yjj2nc9qqc6d";
+      sha256 = "062i922qi0izkvn7v47yhyy2cf3fa7xc3k95b1gm9abfdwkk8ywr";
     };
 
     meta = {
@@ -426,7 +431,7 @@ let self = rec {
       license = licenses.gpl2Plus;
     };
 
-    extraBuildInputs = [ zlib rapidxml ];
+    extraBuildInputs = [ zlib pugixml ];
   };
 
   osmc-skin = mkKodiPlugin rec {
@@ -451,7 +456,7 @@ let self = rec {
     };
   };
 
-  yatp = python2Packages.toPythonModule (mkKodiPlugin rec {
+  yatp = python3Packages.toPythonModule (mkKodiPlugin rec {
     plugin = "yatp";
     namespace = "plugin.video.yatp";
     version = "3.3.2";
@@ -467,14 +472,15 @@ let self = rec {
 
     propagatedBuildInputs = [
       simpleplugin
-      python2Packages.requests
-      python2Packages.libtorrent-rasterbar
+      python3Packages.requests
+      python3Packages.libtorrent-rasterbar
     ];
 
     meta = {
       homepage = src.meta.homepage;
       description = "Yet Another Torrent Player: libtorrent-based torrent streaming for Kodi";
       license = licenses.gpl3;
+      broken = true; # requires port to python3
     };
   });
 
@@ -482,13 +488,13 @@ let self = rec {
 
     plugin = "inputstream-adaptive";
     namespace = "inputstream.adaptive";
-    version = "2.4.6";
+    version = "2.6.7";
 
     src = fetchFromGitHub {
       owner = "peak3d";
       repo = "inputstream.adaptive";
       rev = "${version}-${rel}";
-      sha256 = "09d9b35mpaf3g5m51viyan9hv7d2i8ndvb9wm0j7rs5gwsf0k71z";
+      sha256 = "1pwqmbr78wp12jn6rwv63npdfc456adwz0amlxf6gvgg43li6p7s";
     };
 
     extraBuildInputs = [ expat ];
@@ -509,14 +515,14 @@ let self = rec {
 
   vfs-sftp = mkKodiABIPlugin rec {
     namespace = "vfs.sftp";
-    version = "1.0.6";
+    version = "2.0.0";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "044kkzcpzvbyih4vys33r4hqw38xa82snmvl4qj1r80wnszc8af1";
+      sha256 = "06w74sh8yagrrp7a7rjaz3xrh1j3wdqald9c4b72c33gpk5997dk";
     };
 
     meta = with lib; {
@@ -531,14 +537,14 @@ let self = rec {
 
   vfs-libarchive = mkKodiABIPlugin rec {
     namespace = "vfs.libarchive";
-    version = "1.0.7";
+    version = "2.0.0";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "01qhv095h5j67ispm4iw18pd3kl7a0mnjkgm92al9qqiyif8lzgh";
+      sha256 = "1q62p1i6rvqk2zv6f1cpffkh95lgclys2xl4dwyhj3acmqdxd9i5";
     };
 
     meta = with lib; {

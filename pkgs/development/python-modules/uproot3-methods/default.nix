@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   # No tests on PyPi
   doCheck = false;
+  pythonImportsCheck = [ "uproot3_methods" ];
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/uproot3-methods";

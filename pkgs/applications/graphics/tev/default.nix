@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0fn5j9klzrjvz3bq8p9yp9nqikn2fr7bp98c1sxwpwwaadkqy9xf";
+    sha256 = "12wsy2zdfhg0ygkpvz58rk86qiy259fi9grb0jxiz8zcyd6x1ngk";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace "/usr/" "''${out}/"
   '';
+
+  cmakeFlags = [
+    "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/tev \

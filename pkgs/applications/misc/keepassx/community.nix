@@ -34,6 +34,8 @@
 , withKeePassNetworking ? true
 , withKeePassTouchID ? true
 , withKeePassFDOSecrets ? true
+
+, nixosTests
 }:
 
 with lib;
@@ -117,6 +119,8 @@ stdenv.mkDerivation rec {
     # Make it work without Qt in PATH.
     wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
   '';
+
+  passthru.tests = nixosTests.keepassxc;
 
   meta = {
     description = "Password manager to store your passwords safely and auto-type them into your everyday websites and applications";

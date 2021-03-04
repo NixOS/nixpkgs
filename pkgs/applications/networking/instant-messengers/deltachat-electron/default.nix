@@ -1,20 +1,25 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, fetchurl, appimageTools, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "deltachat-electron";
-  version = "1.3.0";
+  version = "1.15.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url =
       "https://download.delta.chat/desktop/v${version}/DeltaChat-${version}.AppImage";
-    sha256 = "1xyp8cg11px8rras12sncjmq85alyvz7ycw1v1py8w8rlz60wkij";
+    sha256 = "sha256-lItI1aIFHYQ3wGRVn4Yw0nA7qgfhyHT/43kKbY/1cgI=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
+
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  '';
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}

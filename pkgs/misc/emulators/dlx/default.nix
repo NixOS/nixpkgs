@@ -8,9 +8,9 @@ stdenv.mkDerivation {
     sha256 = "0q5hildq2xcig7yrqi26n7fqlanyssjirm7swy2a9icfxpppfpkn";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
-  makeFlags = [ "LINK=gcc" "CFLAGS=-O2" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "LINK=${stdenv.cc.targetPrefix}cc" "CFLAGS=-O2" ];
 
   hardeningDisable = [ "format" ];
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

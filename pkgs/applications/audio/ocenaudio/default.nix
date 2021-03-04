@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   dontBuild = true;
   dontStrip = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out

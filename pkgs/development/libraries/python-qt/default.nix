@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
                  "PYTHON_PATH=${python}/bin"
                  "PYTHON_LIB=${python}/lib"];
 
+  dontWrapQtApps = true;
+
   unpackCmd = "unzip $src";
 
   installPhase = ''
