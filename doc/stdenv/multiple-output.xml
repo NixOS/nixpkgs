@@ -26,7 +26,6 @@
   <para>
    A number of attributes can be used to work with a derivation with multiple outputs. The attribute <varname>outputs</varname> is a list of strings, which are the names of the outputs. For each of these names, an identically named attribute is created, corresponding to that output. The attribute <varname>meta.outputsToInstall</varname> is used to determine the default set of outputs to install when using the derivation name unqualified.
   </para>
-
  </section>
  <section xml:id="sec-multiple-outputs-installing">
   <title>Installing a split package</title>
