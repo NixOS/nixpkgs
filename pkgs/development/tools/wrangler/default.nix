@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation, perl }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
@@ -13,11 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0w845virvw7mvibc76ar2hbffhfzj2v8v1xkrsssrgzyaryb48jk";
 
-  nativeBuildInputs = [ perl ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+  buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ curl CoreFoundation CoreServices Security ];
+
+  OPENSSL_NO_VENDOR = 1;
 
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
