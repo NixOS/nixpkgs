@@ -26751,6 +26751,8 @@ in
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
+  cbonsai = callPackage ../games/cbonsai { };
+
   chessdb = callPackage ../games/chessdb { };
 
   chessx = libsForQt5.callPackage ../games/chessx { };
