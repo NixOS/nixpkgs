@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://shatteredpixel.com/";
     downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     # https://github.com/NixOS/nixpkgs/pull/99885#issuecomment-740065005
