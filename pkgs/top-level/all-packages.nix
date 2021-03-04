@@ -29353,6 +29353,8 @@ in
 
   sndio = callPackage ../misc/sndio { };
 
+  stork = callPackage ../applications/misc/stork { };
+
   oclgrind = callPackage ../development/tools/analysis/oclgrind { };
 
   opkg = callPackage ../tools/package-management/opkg { };
