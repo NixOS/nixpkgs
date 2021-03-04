@@ -58,7 +58,7 @@ After the new layer has been created, its closure (to which `contents`, `config`
 
 At the end of the process, only one new single layer will be produced and added to the resulting image.
 
-The resulting repository will only list the single image `image/tag`. In the case of [example_title](#ex-dockerTools-buildImage) it would be `redis/latest`.
+The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage) it would be `redis/latest`.
 
 It is possible to inspect the arguments with which an image was built using its `buildArgs` attribute.
 
@@ -278,7 +278,7 @@ The `name` argument is the name of the derivation output, which defaults to `fro
 
 ## shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
 
-This constant string is a helper for setting up the base files for managing users and groups, only if such files don\'t exist already. It is suitable for being used in a `runAsRoot` [co_title](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
+This constant string is a helper for setting up the base files for managing users and groups, only if such files don\'t exist already. It is suitable for being used in a [`buildImage` `runAsRoot`](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
 
 ```nix
 buildImage {
