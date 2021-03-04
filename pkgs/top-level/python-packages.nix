@@ -6523,6 +6523,8 @@ in {
 
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
+  python-smarttub = callPackage ../development/python-modules/python-smarttub { };
+
   python-snap7 = callPackage ../development/python-modules/python-snap7 {
     inherit (pkgs) snap7;
   };
