@@ -141,14 +141,18 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.libpng pkgs.zlib pkgs.poppler ];
           preBuild = ''
             make server/epdfinfo
-            remove-references-to \
-              -t ${pkgs.stdenv.cc.libc.dev} \
-              -t ${pkgs.glib.dev} \
-              -t ${pkgs.libpng.dev} \
-              -t ${pkgs.poppler.dev} \
-              -t ${pkgs.zlib.dev} \
-              -t ${pkgs.cairo.dev} \
-              server/epdfinfo
+            remove-references-to ${lib.concatStringsSep " " (
+              map (output: "-t " + output) (
+                [
+                  pkgs.glib.dev
+                  pkgs.libpng.dev
+                  pkgs.poppler.dev
+                  pkgs.zlib.dev
+                  pkgs.cairo.dev
+                ]
+                ++ lib.optional pkgs.stdenv.isLinux pkgs.stdenv.cc.libc.dev
+              )
+            )} server/epdfinfo
           '';
           recipe = pkgs.writeText "recipe" ''
             (pdf-tools

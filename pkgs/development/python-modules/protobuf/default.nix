@@ -1,6 +1,5 @@
 { buildPackages
 , lib
-, stdenv
 , fetchpatch
 , python
 , buildPythonPackage

@@ -1,17 +1,16 @@
 { lib, python3Packages, fetchFromGitHub }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "broadlink-cli";
-  inherit (python3Packages.broadlink) version;
+  version = "0.16.0";
 
   # the tools are available as part of the source distribution from GH but
   # not pypi, so we have to fetch them here.
   src = fetchFromGitHub {
     owner  = "mjg59";
     repo   = "python-broadlink";
-    # this rev is version 0.15.0
-    rev    = "99add9e6feea6e47be4f3a58783556d7838b759c";
-    sha256 = "1q1q62brvfjcb18i0j4ca5cxqzjwv1iywdrdby0yjqa4wm6ywq6b";
+    rev    = version;
+    sha256 = "sha256-fdwy58AopAcDp18APzvYionEbrKfTlH/yFpT1gG5iDs=";
   };
 
   format = "other";
@@ -23,8 +22,8 @@ python3Packages.buildPythonApplication {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin cli/broadlink_{cli,discovery}
-    install -Dm644 -t $out/share/doc/broadlink cli/README.md
+    install -Dm555 -t $out/bin cli/broadlink_{cli,discovery}
+    install -Dm444 -t $out/share/doc/broadlink cli/README.md
 
     runHook postInstall
   '';

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "flow-exporter";

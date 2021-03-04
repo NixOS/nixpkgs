@@ -603,6 +603,7 @@ mapAliases ({
   urxvt_theme_switch = rxvt-unicode-plugins.theme-switch; # added 2020-02-02
   urxvt_vtwheel = rxvt-unicode-plugins.vtwheel; # added 2020-02-02
   urxvt_bidi = rxvt-unicode-plugins.bidi; # added 2020-02-02
+  s2n = s2n-tls; # added 2021-03-03
   s6Dns = s6-dns; # added 2018-07-23
   s6Networking = s6-networking; # added 2018-07-23
   s6LinuxUtils = s6-linux-utils; # added 2018-07-23

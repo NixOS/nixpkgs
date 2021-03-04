@@ -126,7 +126,13 @@ in {
 
   # helpers
 
-  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
+  # We use build packages because we are making a setup hook to be used as a
+  # native build input. The script itself references both the build-time
+  # (build) and run-time (host) python from the explicitly passed in `python`
+  # attribute, so the `buildPackages` doesn't effect that.
+  wrapPython = pkgs.buildPackages.callPackage ../development/interpreters/python/wrap-python.nix {
+    inherit python;
+  };
 
   # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
   pythonPackages = self;
@@ -4061,6 +4067,8 @@ in {
   merkletools = callPackage ../development/python-modules/merkletools { };
 
   mesa = callPackage ../development/python-modules/mesa { };
+
+  meshio = callPackage ../development/python-modules/meshio { };
 
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
 

@@ -18,7 +18,6 @@ buildPythonPackage rec {
   pname = "pyside-shiboken";
   version = "1.2.4";
   format = "other";
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "PySide";

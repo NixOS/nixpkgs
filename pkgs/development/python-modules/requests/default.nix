@@ -33,6 +33,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # AttributeError: 'KeywordMapping' object has no attribute 'get'
+  doCheck = ! isPy27;
+
   disabledTests = [
     # Disable tests that require network access and use httpbin
     "requests.api.request"
@@ -56,7 +59,5 @@ buildPythonPackage rec {
     homepage = "http://docs.python-requests.org/en/latest/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    # AttributeError: 'KeywordMapping' object has no attribute 'get'
-    broken = isPy27;
   };
 }

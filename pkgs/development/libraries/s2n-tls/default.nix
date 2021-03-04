@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, openssl }:
 
 stdenv.mkDerivation rec {
-  pname = "s2n";
-  version = "0.10.23";
+  pname = "s2n-tls";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "awslabs";
+    owner = "aws";
     repo = pname;
     rev = "v${version}";
-    sha256 = "063wqpszhfcbxm7a7s6d6kinqd6b6dxij85lk9jjkrslg5fgqbki";
+    sha256 = "1q6kmgwb8jxmc4ijzk9pkqzz8lsbfsv9hyzqvy944w7306zx1r5h";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C99 implementation of the TLS/SSL protocols";
-    homepage = "https://github.com/awslabs/s2n";
+    homepage = "https://github.com/aws/s2n-tls";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
