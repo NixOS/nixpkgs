@@ -76,6 +76,9 @@
 
   # fruzzy dependency
 , nim
+
+  # nvim-treesitter dependency
+, tree-sitter
 }:
 
 self: super: {
@@ -332,6 +335,13 @@ self: super: {
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with super; [ popfix ];
+  });
+
+  nvim-treesitter = super.nvim-treesitter.overrideAttrs (old: {
+    postPatch = ''
+      rm -rf parser
+      ln -s ${tree-sitter.allGrammars} parser
+    '';
   });
 
   fzf-vim = super.fzf-vim.overrideAttrs (old: {
