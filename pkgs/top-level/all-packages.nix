@@ -1412,6 +1412,8 @@ in
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
+  xjadeo = callPackage ../tools/video/xjadeo { };
+
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
   go-audit = callPackage ../tools/system/go-audit { };
