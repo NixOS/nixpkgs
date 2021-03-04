@@ -3692,6 +3692,11 @@ in
     inherit (pythonPackages) mutagen python wrapPython;
   };
 
+  dirdiff = callPackage ../tools/text/dirdiff {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
+
   picotts = callPackage ../tools/audio/picotts { };
 
   wgetpaste = callPackage ../tools/text/wgetpaste { };
