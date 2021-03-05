@@ -29432,6 +29432,8 @@ in
 
   pyload = callPackage ../applications/networking/pyload {};
 
+  pyupgrade = with python3Packages; toPythonApplication pyupgrade;
+
   pwntools = with python3Packages; toPythonApplication pwntools;
 
   uae = callPackage ../misc/emulators/uae { };

@@ -6646,6 +6646,8 @@ in {
 
   pyupdate = callPackage ../development/python-modules/pyupdate { };
 
+  pyupgrade = callPackage ../development/python-modules/pyupgrade { };
+
   pyusb = callPackage ../development/python-modules/pyusb { libusb1 = pkgs.libusb1; };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
@@ -7981,6 +7983,8 @@ in {
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
   tokenizers = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
+
+  tokenize-rt = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenize-rt { }));
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
