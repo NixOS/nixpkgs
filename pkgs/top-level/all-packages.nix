@@ -8195,6 +8195,8 @@ in
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
+  ssb = callPackage ../tools/security/ssb { };
+
   ssb-patchwork = callPackage ../applications/networking/ssb-patchwork { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
@@ -9059,6 +9061,8 @@ in
   xdg-launch = callPackage ../applications/misc/xdg-launch { };
 
   xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
+
+  xkeysnail = callPackage ../tools/X11/xkeysnail { };
 
   xfstests = callPackage ../tools/misc/xfstests { };
 
@@ -13889,6 +13893,8 @@ in
 
   funambol = callPackage ../development/libraries/funambol { };
 
+  galer = callPackage ../tools/security/galer { };
+
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets { };
 
   gamin = callPackage ../development/libraries/gamin { };
@@ -14552,6 +14558,8 @@ in
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
 
   indilib = callPackage ../development/libraries/indilib { };
+  indi-3rdparty = callPackage ../development/libraries/indilib/indi-3rdparty.nix { };
+  indi-full = callPackage ../development/libraries/indilib/indi-full.nix { };
 
   inih = callPackage ../development/libraries/inih { };
 
@@ -29425,6 +29433,8 @@ in
   pykms = callPackage ../tools/networking/pykms { };
 
   pyload = callPackage ../applications/networking/pyload {};
+
+  pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
 

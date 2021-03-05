@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , cmake
 , cfitsio
@@ -23,10 +24,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WTRfV6f764tDGKnQVd1jeYN/qXa/VRTFK0mMalc+9aU=";
   };
 
-  patches = [
-    ./udev-dir.patch
-  ];
-
   nativeBuildInputs = [
     cmake
   ];
@@ -41,6 +38,11 @@ stdenv.mkDerivation rec {
     libjpeg
     gsl
     fftw
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
   ];
 
   meta = with lib; {

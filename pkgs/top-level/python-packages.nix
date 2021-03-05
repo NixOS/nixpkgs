@@ -174,6 +174,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  adb-enhanced = callPackage ../development/python-modules/adb-enhanced { };
+
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
 
   adb-shell = callPackage ../development/python-modules/adb-shell { };
@@ -279,6 +281,8 @@ in {
   aiolifx = callPackage ../development/python-modules/aiolifx { };
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
+
+  aiolyric = callPackage ../development/python-modules/aiolyric { };
 
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
 
@@ -4261,6 +4265,8 @@ in {
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
+  mullvad-api = callPackage ../development/python-modules/mullvad-api { };
+
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
   multidict = callPackage ../development/python-modules/multidict { };
@@ -4640,6 +4646,8 @@ in {
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
   openwrt-luci-rpc = disabledIf (!isPy3k) (callPackage ../development/python-modules/openwrt-luci-rpc { });
+
+  openwrt-ubus-rpc = callPackage ../development/python-modules/openwrt-ubus-rpc { };
 
   opt-einsum = if isPy27 then
     callPackage ../development/python-modules/opt-einsum/2.nix { }
@@ -5648,6 +5656,8 @@ in {
 
   pykka = callPackage ../development/python-modules/pykka { };
 
+  pykmtronic = callPackage ../development/python-modules/pykmtronic { };
+
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
@@ -5745,6 +5755,8 @@ in {
   pymetno = callPackage ../development/python-modules/pymetno { };
 
   pymitv = callPackage ../development/python-modules/pymitv { };
+
+  pymfy = callPackage ../development/python-modules/pymfy { };
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
@@ -5884,6 +5896,8 @@ in {
 
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
+  pyplaato  = callPackage ../development/python-modules/pyplaato { };
+
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
   pypoppler = callPackage ../development/python-modules/pypoppler { };
@@ -5973,6 +5987,8 @@ in {
   pyres = callPackage ../development/python-modules/pyres { };
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
+
+  pyrituals = callPackage ../development/python-modules/pyrituals { };
 
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
@@ -6635,6 +6651,8 @@ in {
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   pyupdate = callPackage ../development/python-modules/pyupdate { };
+
+  pyupgrade = callPackage ../development/python-modules/pyupgrade { };
 
   pyusb = callPackage ../development/python-modules/pyusb { libusb1 = pkgs.libusb1; };
 
@@ -7971,6 +7989,8 @@ in {
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
   tokenizers = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
+
+  tokenize-rt = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenize-rt { }));
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
