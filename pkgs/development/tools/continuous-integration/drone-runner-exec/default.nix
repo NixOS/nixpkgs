@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "drone-runner-exec";
-  version = "2020-04-19";
+  version = "unstable-2020-04-19";
 
   src = fetchFromGitHub {
     owner = "drone-runners";
