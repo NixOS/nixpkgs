@@ -4374,6 +4374,8 @@ in
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
 
+  freac = callPackage ../applications/audio/freac { };
+
   freedroid = callPackage ../games/freedroid { };
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
