@@ -3020,6 +3020,8 @@ in {
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
 
+  hsluv = callPackage ../development/python-modules/hsluv { };
+
   hstspreload = callPackage ../development/python-modules/hstspreload { };
 
   html2text = if isPy3k then
