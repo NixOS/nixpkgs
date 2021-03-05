@@ -13250,6 +13250,8 @@ in
 
   agg = callPackage ../development/libraries/agg { };
 
+  alass = callPackage ../applications/video/alass { };
+
   allegro = allegro4;
   allegro4 = callPackage ../development/libraries/allegro {};
   allegro5 = callPackage ../development/libraries/allegro/5.nix {};
