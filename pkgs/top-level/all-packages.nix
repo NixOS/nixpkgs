@@ -10907,9 +10907,8 @@ in
 
   muon = callPackage ../development/compilers/muon { };
 
-  nim = callPackage ../development/compilers/nim { };
-  nim-unwrapped = nim.unwrapped;
-  nimble-unwrapped = nim.nimble-unwrapped;
+  inherit (callPackages ../development/compilers/nim { })
+    nim-unwrapped nimble-unwrapped nim;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
