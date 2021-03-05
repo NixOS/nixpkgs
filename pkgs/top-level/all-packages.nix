@@ -7768,6 +7768,8 @@ in
 
   s6-portable-utils = skawarePackages.s6-portable-utils;
 
+  sacad = callPackage ../tools/misc/sacad { };
+
   safecopy = callPackage ../tools/system/safecopy { };
 
   sacd = callPackage ../tools/cd-dvd/sacd { };
@@ -13250,6 +13252,8 @@ in
 
   agg = callPackage ../development/libraries/agg { };
 
+  alass = callPackage ../applications/video/alass { };
+
   allegro = allegro4;
   allegro4 = callPackage ../development/libraries/allegro {};
   allegro5 = callPackage ../development/libraries/allegro/5.nix {};
@@ -15592,7 +15596,9 @@ in
 
   libpwquality = callPackage ../development/libraries/libpwquality { };
 
-  libqalculate = callPackage ../development/libraries/libqalculate { };
+  libqalculate = callPackage ../development/libraries/libqalculate {
+    readline = readline80;
+  };
 
   libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
 
@@ -18230,6 +18236,8 @@ in
   nix-binary-cache = callPackage ../servers/http/nix-binary-cache {};
 
   nix-tour = callPackage ../applications/misc/nix-tour {};
+
+  nosqli = callPackage ../tools/security/nosqli { };
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
@@ -25641,6 +25649,8 @@ in
   unison-ucm = callPackage ../development/compilers/unison { };
 
   urh = callPackage ../applications/radio/urh { };
+
+  uroboros = callPackage ../tools/system/uroboros { };
 
   uuagc = haskell.lib.justStaticExecutables haskellPackages.uuagc;
 
