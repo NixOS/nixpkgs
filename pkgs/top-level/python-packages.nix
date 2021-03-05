@@ -174,6 +174,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  adb-enhanced = callPackage ../development/python-modules/adb-enhanced { };
+
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
 
   adb-shell = callPackage ../development/python-modules/adb-shell { };
