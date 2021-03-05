@@ -5024,6 +5024,8 @@ in {
 
   ply = callPackage ../development/python-modules/ply { };
 
+  plyer = callPackage ../development/python-modules/plyer { };
+
   plyfile = callPackage ../development/python-modules/plyfile { };
 
   plyplus = callPackage ../development/python-modules/plyplus { };
