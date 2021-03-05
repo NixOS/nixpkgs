@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "1.2.3";
+  version = "1.2.4";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1jg93rjn1gxc66qmipw4z1c09l8hgfsydacjgkfjq7vg547lragp";
+    sha256 = "sha256-uqvM5F0rpw+xeCXYl4lGMt3r0ugPsUmSvujmTJ9HABk=";
   };
 
   nativeBuildInputs = [ poetry-core ];
