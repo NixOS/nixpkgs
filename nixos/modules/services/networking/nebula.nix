@@ -171,7 +171,8 @@ in
           # Create systemd service for Nebula.
           "nebula@${netName}" = {
             description = "Nebula VPN service for ${netName}";
-            after = [ "network.target" ];
+            wants = [ "basic.target" ];
+            after = [ "basic.target" "network.target" ];
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig = mkMerge [
