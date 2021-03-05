@@ -549,7 +549,7 @@
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control
     "nilu" = ps: with ps; [ ]; # missing inputs: niluclient
     "nissan_leaf" = ps: with ps; [ ]; # missing inputs: pycarwings2
-    "nmap_tracker" = ps: with ps; [ getmac ]; # missing inputs: python-nmap
+    "nmap_tracker" = ps: with ps; [ getmac python-nmap ];
     "nmbs" = ps: with ps; [ ]; # missing inputs: pyrail
     "no_ip" = ps: with ps; [ ];
     "noaa_tides" = ps: with ps; [ ]; # missing inputs: noaa-coops
