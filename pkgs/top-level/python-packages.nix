@@ -7974,6 +7974,8 @@ in {
 
   tokenizers = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
 
+  tokenize-rt = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenize-rt { }));
+
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
   tokenserver = callPackage ../development/python-modules/tokenserver { };
