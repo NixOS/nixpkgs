@@ -62,6 +62,42 @@ in
         };
       };
 
+    node3 = { ... } @ args:
+      makeNebulaNode args "node3" {
+        networking.interfaces.eth1.ipv4.addresses = [{
+          address = "192.168.1.3";
+          prefixLength = 24;
+        }];
+
+        services.nebula.networks.smoke = {
+          staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
+          isLighthouse = false;
+          lighthouses = [ "10.0.100.1" ];
+          firewall = {
+            outbound = [ { port = "any"; proto = "any"; host = "any"; } ];
+            inbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
+          };
+        };
+      };
+
+    node4 = { ... } @ args:
+      makeNebulaNode args "node4" {
+        networking.interfaces.eth1.ipv4.addresses = [{
+          address = "192.168.1.4";
+          prefixLength = 24;
+        }];
+
+        services.nebula.networks.smoke = {
+          staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
+          isLighthouse = false;
+          lighthouses = [ "10.0.100.1" ];
+          firewall = {
+            outbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
+            inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
+          };
+        };
+      };
+
   };
 
   testScript = let
@@ -119,14 +155,42 @@ in
     lighthouse.wait_for_unit("nebula@smoke.service")
     lighthouse.succeed("ping -c5 10.0.100.1")
 
-    # Create keys on node2 and have the lighthouse sign them.
+    # Create keys for node2's nebula service and test that it comes up.
     ${setUpPrivateKey "node2"}
     ${signKeysFor "node2" "10.0.100.2/24"}
-
-    # Reboot node2 and test that the nebula service comes up.
     ${restartAndCheckNebula "node2" "10.0.100.2"}
 
-    # Test that the node is now connected to the lighthouse.
-    node2.succeed("ping -c5 10.0.100.1")
+    # Create keys for node3's nebula service and test that it comes up.
+    ${setUpPrivateKey "node3"}
+    ${signKeysFor "node3" "10.0.100.3/24"}
+    ${restartAndCheckNebula "node3" "10.0.100.3"}
+
+    # Create keys for node4's nebula service and test that it comes up.
+    ${setUpPrivateKey "node4"}
+    ${signKeysFor "node4" "10.0.100.4/24"}
+    ${restartAndCheckNebula "node4" "10.0.100.4"}
+
+    # The lighthouse can ping node2 and node3
+    lighthouse.succeed("ping -c3 10.0.100.2")
+    lighthouse.succeed("ping -c3 10.0.100.3")
+
+    # node2 can ping the lighthouse, but not node3 because of its inbound firewall
+    node2.succeed("ping -c3 10.0.100.1")
+    node2.fail("ping -c3 10.0.100.3")
+
+    # node3 can ping the lighthouse and node2
+    node3.succeed("ping -c3 10.0.100.1")
+    node3.succeed("ping -c3 10.0.100.2")
+
+    # node4 can ping the lighthouse but not node2 or node3
+    node4.succeed("ping -c3 10.0.100.1")
+    node4.fail("ping -c3 10.0.100.2")
+    node4.fail("ping -c3 10.0.100.3")
+
+    # node2 can ping node3 now that node3 pinged it first
+    node2.succeed("ping -c3 10.0.100.3")
+    # node4 can ping node2 if node2 pings it first
+    node2.succeed("ping -c3 10.0.100.4")
+    node4.succeed("ping -c3 10.0.100.2")
   '';
 })
