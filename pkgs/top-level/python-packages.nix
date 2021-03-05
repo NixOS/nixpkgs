@@ -4637,6 +4637,8 @@ in {
 
   openwrt-luci-rpc = disabledIf (!isPy3k) (callPackage ../development/python-modules/openwrt-luci-rpc { });
 
+  openwrt-ubus-rpc = callPackage ../development/python-modules/openwrt-ubus-rpc { };
+
   opt-einsum = if isPy27 then
     callPackage ../development/python-modules/opt-einsum/2.nix { }
   else
