@@ -9618,7 +9618,7 @@
     name = "Tom Smeets";
   };
   toonn = {
-    email = "nnoot@toonn.io";
+    email = "nixpkgs@toonn.io";
     github = "toonn";
     githubId = 1486805;
     name = "Toon Nolten";
