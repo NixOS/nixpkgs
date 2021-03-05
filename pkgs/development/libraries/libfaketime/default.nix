@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-date-in-gzip-man-page.patch
+    ./nix-store-date.patch
   ] ++ (lib.optionals stdenv.cc.isClang [
     # https://github.com/wolfcw/libfaketime/issues/277
     ./0001-Remove-unsupported-clang-flags.patch
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $a \
         --replace /bin/bash ${stdenv.shell}
     done
+    substituteInPlace src/faketime.c --replace @DATE_CMD@ ${coreutils}/bin/date
   '';
 
   PREFIX = placeholder "out";
