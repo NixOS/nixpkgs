@@ -248,6 +248,24 @@ let
       '';
     };
 
+    knot = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.knot = {
+          enable = true;
+          extraArgs = [ "-v" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("knot.service")
+        wait_for_unit("prometheus-knot-exporter.service")
+        wait_for_open_port(9433)
+        succeed("curl -sSf 'localhost:9433' | grep -q 'knot_server_zone_count 0.0'")
+      '';
+    };
+
     keylight = {
       # A hardware device is required to properly test this exporter, so just
       # perform a couple of basic sanity checks that the exporter is running

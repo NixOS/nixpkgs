@@ -31,6 +31,7 @@ let
     "fritzbox"
     "json"
     "keylight"
+    "knot"
     "lnd"
     "mail"
     "mikrotik"
