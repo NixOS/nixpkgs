@@ -23006,6 +23006,8 @@ in
 
   smallwm = callPackage ../applications/window-managers/smallwm { };
 
+  smooth = callPackage ../development/libraries/smooth { };
+
   smos = callPackage ../applications/misc/smos { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
