@@ -15965,6 +15965,8 @@ in
 
   matterhorn = haskell.lib.justStaticExecutables haskellPackages.matterhorn;
 
+  maxflow = callPackage ../development/libraries/maxflow { };
+
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
   mdctags = callPackage ../development/tools/misc/mdctags { };
