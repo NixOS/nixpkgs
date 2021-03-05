@@ -221,7 +221,7 @@ in stdenv.mkDerivation {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH            ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo)}" \
+          --prefix PATH            ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
                  ++ lib.optional nfsSupport libnfs
