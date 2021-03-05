@@ -64,7 +64,7 @@ let
   mkExporterOpts = ({ name, port }: {
     enable = mkEnableOption "the prometheus ${name} exporter";
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = port;
       description = ''
         Port to listen on.
