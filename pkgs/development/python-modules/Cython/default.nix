@@ -49,6 +49,15 @@ in buildPythonPackage rec {
       url = "https://github.com/cython/cython/commit/28251032f86c266065e4976080230481b1a1bb29.patch";
       sha256 = "19rg7xs8gr90k3ya5c634bs8gww1sxyhdavv07cyd2k71afr83gy";
     })
+
+    # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
+    # it does not affect Python code unless the code explicitly uses the feature.
+    # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)
+    (fetchpatch {
+      name = "trashcan.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/cython/patches/trashcan.patch?id=4569a839f070a1a38d5dbce2a4d19233d25aeed2";
+      sha256 = "sha256-+pOF1XNTEtNseLpqPzrc1Jfwt5hGx7doUoccIhNneYY=";
+    })
   ];
 
   checkPhase = ''
