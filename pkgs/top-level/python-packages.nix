@@ -2173,6 +2173,8 @@ in {
 
   Fabric = callPackage ../development/python-modules/Fabric { };
 
+  faadelays = callPackage ../development/python-modules/faadelays { };
+
   fabulous = callPackage ../development/python-modules/fabulous { };
 
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
@@ -5722,6 +5724,8 @@ in {
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
 
+  pymazda = callPackage ../development/python-modules/pymazda { };
+
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
@@ -6522,6 +6526,8 @@ in {
   python_simple_hipchat = self.python-simple-hipchat;
 
   python-slugify = callPackage ../development/python-modules/python-slugify { };
+
+  python-smarttub = callPackage ../development/python-modules/python-smarttub { };
 
   python-snap7 = callPackage ../development/python-modules/python-snap7 {
     inherit (pkgs) snap7;
