@@ -5752,6 +5752,8 @@ in {
 
   pymitv = callPackage ../development/python-modules/pymitv { };
 
+  pymfy = callPackage ../development/python-modules/pymfy { };
+
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
   pymongo = callPackage ../development/python-modules/pymongo { };
