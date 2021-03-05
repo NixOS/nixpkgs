@@ -28,14 +28,12 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.1.5";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06vhk75hmzgv1sfbjzgnsw9x10h7y6bd6s6z7d6lfnn7wcgc83zi";
+    sha256 = "sha256-328QuFrveluyUlmtZRrRzB1rsJAAWVyrR+cYy6wlCx0=";
   };
-  # See https://github.com/scipy/scipy/issues/13585 and https://github.com/pandas-dev/pandas/pull/40020
-  patches = [ ./fix-tests.patch ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = lib.optional stdenv.isDarwin libcxx;
@@ -104,6 +102,10 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
+  ];
+
+  disabledTestPaths = [
+    "tests/io"
   ];
 
   # tests have relative paths, and need to reference compiled C extensions
