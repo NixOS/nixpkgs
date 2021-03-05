@@ -485,10 +485,15 @@ stdenv.mkDerivation {
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
     ''
 
-    + optionalString stdenv.targetPlatform.isDarwin ''
-      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
-      echo "-m${targetPlatform.darwinPlatform}-version-min=${targetPlatform.darwinMinVersion}" >> $out/nix-support/cc-cflags-before
-    ''
+    + optionalString stdenv.targetPlatform.isDarwin (
+      let darwinPlatformForCC =
+        if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
+        else targetPlatform.darwinPlatform;
+      in ''
+        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
+        echo "-m${darwinPlatformForCC}-version-min=${targetPlatform.darwinMinVersion}" >> $out/nix-support/cc-cflags-before
+      ''
+    )
 
     ##
     ## Extra custom steps
