@@ -5884,6 +5884,8 @@ in {
 
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
+  pyplaato  = callPackage ../development/python-modules/pyplaato { };
+
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
   pypoppler = callPackage ../development/python-modules/pypoppler { };
