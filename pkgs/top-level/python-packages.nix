@@ -8065,7 +8065,7 @@ in {
 
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
 
-  transmissionrpc = self.transmission-rpc; # alias for compatibility 2020-02-07
+  transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
 
   treq = callPackage ../development/python-modules/treq { };
 
@@ -8433,6 +8433,8 @@ in {
   webassets = callPackage ../development/python-modules/webassets { };
 
   web = callPackage ../development/python-modules/web { };
+
+  web-cache = callPackage ../development/python-modules/web-cache { };
 
   webcolors = callPackage ../development/python-modules/webcolors { };
 
