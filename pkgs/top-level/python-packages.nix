@@ -2668,7 +2668,7 @@ in {
         };
       });
 
-  googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
+  googleapis-common-protos = callPackage ../development/python-modules/googleapis-common-protos { };
 
   google-apputils = callPackage ../development/python-modules/google-apputils { };
 
