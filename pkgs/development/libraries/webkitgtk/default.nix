@@ -59,7 +59,7 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.30.3";
+  version = "2.30.5";
 
   outputs = [ "out" "dev" ];
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0zsy3say94d9bhaan0l6mfr59z03a5x4kngyy8b2i20n77q19skd";
+    sha256 = "07vzbbnvz69rn9pciji4axfpclp98bpj4a0br2z0gbn5wc4an3bx";
   };
 
   patches = optionals stdenv.isLinux [
@@ -155,9 +155,6 @@ stdenv.mkDerivation rec {
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
-    # ensure backward compatibility with the latest version of icu:
-    # http://linuxfromscratch.org/blfs/view/svn/x/webkitgtk.html
-    "-DCMAKE_CXX_FLAGS=-DU_DEFINE_FALSE_AND_TRUE=1"
   ] ++ optionals stdenv.isDarwin [
     "-DENABLE_GRAPHICS_CONTEXT_3D=OFF"
     "-DENABLE_GTKDOC=OFF"
