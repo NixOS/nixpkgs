@@ -12,7 +12,8 @@
  </para>
  <para>
   The current default by NixOS is <package>nextcloud19</package> though it's recommended
-  to upgrade to the latest version, <package>nextcloud20</package>.
+  to upgrade to the latest version, <package>nextcloud21</package>. Please note that it's necessary
+  to install <package>nextcloud20</package> first!
  </para>
  <section xml:id="module-services-nextcloud-basic-usage">
   <title>Basic usage</title>
