@@ -10838,4 +10838,10 @@
     github = "benneti";
     githubId = 11725645;
   };
+  p3psi = {
+    name = "Elliot Boo";
+    email = "p3psi.boo@gmail.com";
+    github = "p3psi-boo";
+    githubId = 43925055;
+  };
 }
