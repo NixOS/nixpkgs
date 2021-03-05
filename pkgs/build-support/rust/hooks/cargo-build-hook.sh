@@ -9,6 +9,10 @@ cargoBuildHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
+    if [ "${cargoBuildType}" != "debug" ]; then
+        cargoBuildProfileFlag="--${cargoBuildType}"
+    fi
+
     (
     set -x
     env \
@@ -19,7 +23,7 @@ cargoBuildHook() {
       cargo build -j $NIX_BUILD_CORES \
         --target @rustTargetPlatformSpec@ \
         --frozen \
-        --${cargoBuildType} \
+        ${cargoBuildProfileFlag} \
         ${cargoBuildFlags}
     )
 
