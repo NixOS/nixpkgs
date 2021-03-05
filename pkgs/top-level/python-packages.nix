@@ -8418,6 +8418,8 @@ in {
 
   watchdog = callPackage ../development/python-modules/watchdog { };
 
+  watchgod = callPackage ../development/python-modules/watchgod { };
+
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
