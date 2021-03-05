@@ -6,7 +6,7 @@
 , bottle
 , chardet
 , dateutil
-, google_api_python_client
+, google-api-python-client
 , lxml
 , oauth2client
 , ply
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     bottle
     chardet
     dateutil
-    google_api_python_client
+    google-api-python-client
     lxml
     oauth2client
     ply
