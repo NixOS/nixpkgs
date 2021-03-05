@@ -1154,6 +1154,8 @@ in
 
   inherit (nodePackages) castnow;
 
+  cbonsai = callPackage ../tools/misc/cbonsai { };
+
   certigo = callPackage ../tools/admin/certigo { };
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
