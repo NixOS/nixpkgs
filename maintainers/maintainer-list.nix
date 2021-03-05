@@ -10027,7 +10027,12 @@
     githubId = 45292658;
     name = "Julius Schmitt";
   };
-
+  vojta001 = {
+    email = "vojtech.kane@gmail.com";
+    github = "vojta001";
+    githubId = 7038383;
+    name = "Vojta Káně";
+  };
   volhovm = {
     email = "volhovm.cs@gmail.com";
     github = "volhovm";
