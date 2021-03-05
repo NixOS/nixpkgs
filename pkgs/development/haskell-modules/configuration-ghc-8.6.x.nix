@@ -102,4 +102,8 @@ self: super: {
   vector = dontCheck super.vector;
 
   mmorph = super.mmorph_1_1_3;
+
+  # https://github.com/haskellari/time-compat/issues/23
+  time-compat = dontCheck super.time-compat;
+
 }
