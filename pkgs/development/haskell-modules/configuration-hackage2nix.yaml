@@ -3105,6 +3105,7 @@ broken-packages:
   - aeson-applicative
   - aeson-decode
   - aeson-diff-generic
+  - aeson-extra
   - aeson-filthy
   - aeson-flowtyped
   - aeson-injector
@@ -3149,6 +3150,7 @@ broken-packages:
   - alga
   - algebra-checkers
   - algebra-dag
+  - algebra-driven-design
   - algebra-sql
   - algebraic
   - algebraic-prelude
@@ -3274,6 +3276,7 @@ broken-packages:
   - arbor-monad-metric
   - arbor-monad-metric-datadog
   - arch-hs
+  - arch-web
   - archive-libarchive
   - archiver
   - archlinux
@@ -3410,6 +3413,7 @@ broken-packages:
   - aws-lambda
   - aws-lambda-haskell-runtime-wai
   - aws-lambda-runtime
+  - aws-larpi
   - aws-mfa-credentials
   - aws-performance-tests
   - aws-route53
@@ -4392,6 +4396,7 @@ broken-packages:
   - crf-chain2-generic
   - crf-chain2-tiers
   - critbit
+  - criterion-cmp
   - criterion-compare
   - criterion-plus
   - criterion-to-html
@@ -4626,6 +4631,8 @@ broken-packages:
   - denominate
   - dense
   - dense-int-set
+  - dep-t
+  - dep-t-advice
   - dependent-hashmap
   - dependent-monoidal-map
   - dependent-state
@@ -4662,6 +4669,7 @@ broken-packages:
   - dhall-fly
   - dhall-nix
   - dhall-nixpkgs
+  - dhall-recursive-adt
   - dhall-text
   - dhall-to-cabal
   - dhcp-lease-parser
@@ -4793,6 +4801,7 @@ broken-packages:
   - docker-build-cacher
   - dockercook
   - docopt
+  - docrecords
   - DocTest
   - doctest-discover-configurator
   - doctest-driver-gen
@@ -5058,6 +5067,8 @@ broken-packages:
   - ethereum-merkle-patricia-db
   - euphoria
   - eurofxref
+  - evdev
+  - evdev-streamly
   - eve-cli
   - event
   - event-driven
@@ -5083,6 +5094,7 @@ broken-packages:
   - execs
   - executor
   - exference
+  - exh
   - exherbo-cabal
   - exif
   - exigo-schema
@@ -5427,6 +5439,7 @@ broken-packages:
   - ftp-conduit
   - ftphs
   - FTPLine
+  - ftree
   - ftshell
   - full-sessions
   - fullstop
@@ -5442,6 +5455,7 @@ broken-packages:
   - functional-arrow
   - functor
   - functor-combinators
+  - functor-combo
   - functor-friends
   - functor-infix
   - functor-products
@@ -5459,6 +5473,7 @@ broken-packages:
   - fused-effects-squeal
   - fused-effects-th
   - fusion
+  - futhark
   - futun
   - future
   - fuzzy-time-gen
@@ -5501,6 +5516,7 @@ broken-packages:
   - gelatin-gl
   - gelatin-sdl2
   - gelatin-shaders
+  - gemini-textboard
   - gemstone
   - gen-imports
   - gen-passwd
@@ -5518,6 +5534,7 @@ broken-packages:
   - generic-church
   - generic-enum
   - generic-enumeration
+  - generic-labels
   - generic-lens-labels
   - generic-lucid-scaffold
   - generic-maybe
@@ -5818,6 +5835,7 @@ broken-packages:
   - gross
   - GroteTrap
   - groundhog-converters
+  - group-theory
   - group-with
   - grouped-list
   - groups-generic
@@ -6087,6 +6105,7 @@ broken-packages:
   - haskell-lsp-client
   - haskell-ml
   - haskell-mpfr
+  - haskell-mpi
   - haskell-neo4j-client
   - haskell-openflow
   - haskell-overridez
@@ -6320,6 +6339,7 @@ broken-packages:
   - heckle
   - hedgehog-checkers
   - hedgehog-checkers-lens
+  - hedgehog-classes
   - hedgehog-fakedata
   - hedgehog-gen-json
   - hedgehog-generic
@@ -6407,6 +6427,8 @@ broken-packages:
   - hGelf
   - hgen
   - hgeometric
+  - hgeometry
+  - hgeometry-combinatorial
   - hgeometry-ipe
   - hgeometry-svg
   - hgeos
@@ -6979,6 +7001,7 @@ broken-packages:
   - hyperloglogplus
   - hyperpublic
   - hypher
+  - hzk
   - hzulip
   - i18n
   - I1M
@@ -7121,6 +7144,7 @@ broken-packages:
   - introduction
   - introduction-test
   - intset
+  - invert
   - invertible-hlist
   - invertible-syntax
   - io-capture
@@ -7264,11 +7288,13 @@ broken-packages:
   - json-incremental-decoder
   - json-litobj
   - json-pointer-hasql
+  - json-pointy
   - json-python
   - json-rpc-client
   - json-schema
   - json-sop
   - json-syntax
+  - json-to-haskell
   - json-togo
   - json-tokens
   - json-tools
@@ -7380,6 +7406,7 @@ broken-packages:
   - koellner-phonetic
   - kontra-config
   - korfu
+  - kparams
   - kqueue
   - kraken
   - krank
@@ -7549,6 +7576,7 @@ broken-packages:
   - lens-filesystem
   - lens-labels
   - lens-prelude
+  - lens-process
   - lens-simple
   - lens-text-encoding
   - lens-th-rewrite
@@ -7622,6 +7650,7 @@ broken-packages:
   - line-bot-sdk
   - line-drawing
   - linear-algebra-cblas
+  - linear-base
   - linear-circuit
   - linear-code
   - linear-maps
@@ -7771,6 +7800,7 @@ broken-packages:
   - LRU
   - ls-usb
   - lscabal
+  - lsfrom
   - LslPlus
   - lsystem
   - lti13
@@ -7984,6 +8014,7 @@ broken-packages:
   - Michelangelo
   - miconix-test
   - micro-recursion-schemes
+  - microbase
   - microformats2-parser
   - microformats2-types
   - microgroove
@@ -8040,6 +8071,9 @@ broken-packages:
   - ml-w
   - mlist
   - mm2
+  - mmark
+  - mmark-cli
+  - mmark-ext
   - mmsyn7h
   - mmtf
   - mmtl
@@ -8142,6 +8176,7 @@ broken-packages:
   - morfeusz
   - morley
   - morloc
+  - morpheus-graphql-app
   - morpheus-graphql-cli
   - morphisms-functors
   - morphisms-functors-inventory
@@ -8247,6 +8282,7 @@ broken-packages:
   - musicbrainz-email
   - musicScroll
   - musicxml
+  - musicxml2
   - mustache-haskell
   - mutable-iter
   - MutationOrder
@@ -8829,6 +8865,11 @@ broken-packages:
   - phoityne
   - phone-numbers
   - phone-push
+  - phonetic-languages-examples
+  - phonetic-languages-properties
+  - phonetic-languages-simplified-lists-examples
+  - phonetic-languages-simplified-properties-lists
+  - phonetic-languages-simplified-properties-lists-double
   - phooey
   - photoname
   - phraskell
@@ -8888,6 +8929,7 @@ broken-packages:
   - pit
   - pitchtrack
   - pivotal-tracker
+  - pixel-printer
   - pixelated-avatar-generator
   - pkcs10
   - pkcs7
@@ -9172,6 +9214,8 @@ broken-packages:
   - pure-zlib
   - purescheme-wai-routing-core
   - purescript
+  - purescript-ast
+  - purescript-cst
   - purescript-iso
   - purescript-tsd-gen
   - push-notifications
@@ -9246,6 +9290,7 @@ broken-packages:
   - quickpull
   - quickset
   - Quickson
+  - quickspec
   - quicktest
   - quickwebapp
   - quipper
@@ -9377,6 +9422,8 @@ broken-packages:
   - record-syntax
   - records
   - records-th
+  - recursion-schemes
+  - recursion-schemes-ext
   - recursors
   - red-black-record
   - reddit
@@ -9433,6 +9480,7 @@ broken-packages:
   - regex-tdfa-pipes
   - regex-tdfa-quasiquoter
   - regex-tdfa-rc
+  - regex-tdfa-text
   - regex-tdfa-unittest
   - regex-tdfa-utf8
   - regex-tre
@@ -9506,6 +9554,7 @@ broken-packages:
   - req-url-extra
   - reqcatcher
   - request-monad
+  - rere
   - rescue
   - reserve
   - reservoir
@@ -9551,6 +9600,7 @@ broken-packages:
   - rfc-redis
   - rfc-servant
   - rg
+  - rhbzquery
   - rhythm-game-tutorial
   - rib
   - ribbit
@@ -9561,6 +9611,7 @@ broken-packages:
   - riff
   - ring-buffer
   - ring-buffers
+  - rio-process-pool
   - riot
   - risc-v
   - risc386
@@ -9592,6 +9643,7 @@ broken-packages:
   - roc-cluster-demo
   - rock
   - rocksdb-haskell
+  - rocksdb-haskell-jprupp
   - rocksdb-query
   - roku-api
   - rollbar
@@ -9893,6 +9945,7 @@ broken-packages:
   - servant-server-namedargs
   - servant-smsc-ru
   - servant-snap
+  - servant-static-th
   - servant-streaming
   - servant-streaming-client
   - servant-streaming-docs
@@ -9927,6 +9980,7 @@ broken-packages:
   - setoid
   - setters
   - sexp
+  - sexp-grammar
   - sexpr-parser
   - sext
   - SFML
@@ -9949,6 +10003,7 @@ broken-packages:
   - shake-cabal-build
   - shake-dhall
   - shake-extras
+  - shake-futhark
   - shake-minify
   - shake-pack
   - shake-path
@@ -10087,6 +10142,7 @@ broken-packages:
   - slot-lambda
   - sloth
   - slug
+  - slugify
   - slynx
   - small-bytearray-builder
   - smallarray
@@ -10196,6 +10252,7 @@ broken-packages:
   - socketed
   - socketio
   - sockets
+  - sockets-and-pipes
   - socketson
   - sodium
   - soegtk
@@ -10323,6 +10380,8 @@ broken-packages:
   - stackage-types
   - stackage-upload
   - stackage2nix
+  - stackcollapse-ghc
+  - staged-gg
   - standalone-derive-topdown
   - standalone-haddock
   - starling
@@ -10409,6 +10468,7 @@ broken-packages:
   - streaming-utils
   - streaming-with
   - streamly-archive
+  - streamly-fsnotify
   - streamly-lmdb
   - streamproc
   - strelka
@@ -10599,6 +10659,7 @@ broken-packages:
   - tasty-fail-fast
   - tasty-groundhog-converters
   - tasty-hedgehog-coverage
+  - tasty-html
   - tasty-integrate
   - tasty-jenkins-xml
   - tasty-laws
@@ -10660,6 +10721,7 @@ broken-packages:
   - termination-combinators
   - termplot
   - terntup
+  - terraform-http-backend-pass
   - terrahs
   - tersmu
   - tesla
@@ -10692,6 +10754,7 @@ broken-packages:
   - texrunner
   - text-all
   - text-and-plots
+  - text-ascii
   - text-containers
   - text-format-heavy
   - text-generic-pretty
@@ -10994,6 +11057,7 @@ broken-packages:
   - type-structure
   - type-sub-th
   - type-tree
+  - type-unary
   - typeable-th
   - TypeClass
   - typed-encoding
@@ -11060,6 +11124,8 @@ broken-packages:
   - uniprot-kb
   - uniqueid
   - uniquely-represented-sets
+  - uniqueness-periods-vector-examples
+  - uniqueness-periods-vector-properties
   - units-attoparsec
   - unittyped
   - unitym-yesod
@@ -11073,8 +11139,10 @@ broken-packages:
   - unix-fcntl
   - unix-handle
   - unix-process-conduit
+  - unix-recursive
   - unix-simple
   - unlifted-list
+  - unliftio-messagebox
   - unliftio-streams
   - unm-hip
   - unordered-containers-rematch
@@ -11192,6 +11260,7 @@ broken-packages:
   - vect-floating-accelerate
   - vect-opengl
   - vector-bytestring
+  - vector-circular
   - vector-clock
   - vector-conduit
   - vector-endian
@@ -11246,6 +11315,10 @@ broken-packages:
   - vitrea
   - vk-aws-route53
   - VKHS
+  - vocoder
+  - vocoder-audio
+  - vocoder-conduit
+  - vocoder-dunai
   - voicebase
   - vowpal-utils
   - voyeur
@@ -11491,6 +11564,7 @@ broken-packages:
   - xlsx-templater
   - xml-catalog
   - xml-conduit-decode
+  - xml-conduit-selectors
   - xml-conduit-stylist
   - xml-enumerator
   - xml-enumerator-combinators
@@ -11543,6 +11617,7 @@ broken-packages:
   - YACPong
   - yahoo-finance-api
   - yahoo-finance-conduit
+  - yahoo-prices
   - yahoo-web-search
   - yajl
   - yajl-enumerator
@@ -11574,6 +11649,7 @@ broken-packages:
   - yap
   - yarr
   - yarr-image-io
+  - yasi
   - yavie
   - yaya-test
   - yaya-unsafe-test
