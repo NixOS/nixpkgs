@@ -25641,6 +25641,8 @@ in
 
   urh = callPackage ../applications/radio/urh { };
 
+  uroboros = callPackage ../tools/system/uroboros { };
+
   uuagc = haskell.lib.justStaticExecutables haskellPackages.uuagc;
 
   uucp = callPackage ../tools/misc/uucp { };
