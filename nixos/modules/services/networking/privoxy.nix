@@ -221,6 +221,8 @@ in
 
     services.privoxy.settings = {
       user-manual = "${pkgs.privoxy}/share/doc/privoxy/user-manual";
+      # This is needed for external filters
+      temporary-directory = "/tmp";
       filterfile = [ "default.filter" ];
       actionsfile =
         [ "match-all.action"
