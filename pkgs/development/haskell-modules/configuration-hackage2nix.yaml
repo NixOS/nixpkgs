@@ -73,11 +73,14 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  - ghcide < 0.7.4 # for hls 0.9.0
-  - hls-explicit-imports-plugin < 0.1.0.1 # for hls 0.9.0
-  - hls-plugin-api < 0.7.1.0 # for hls 0.9.0
-  - hls-retrie-plugin < 0.1.1.1 # for hls 0.9.0
-
+  # Don't update yet to remain compatible with haskell-language-server-0.9.0.
+  - ghcide < 0.7.4
+  - hls-class-plugin < 1
+  - hls-explicit-imports-plugin < 0.1.0.1
+  - hls-haddock-comments-plugin < 1
+  - hls-plugin-api < 0.7.1.0
+  - hls-retrie-plugin < 0.1.1.1
+  - hls-tactics-plugin < 1
   # Stackage Nightly 2021-03-01
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
