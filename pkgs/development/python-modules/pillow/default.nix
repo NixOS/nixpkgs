@@ -11,7 +11,7 @@ import ./generic.nix (rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fnvc07m15fv59bdlkds1q7rl9jrr3cbbn69sfqvzvdpjbknhxl9";
+    sha256 = "086g7nhv52wclrwnzbzs2x3nvyzs2hfq1bvgivsrp5f7r7wiiz7n";
   };
 
   meta = with lib; {
