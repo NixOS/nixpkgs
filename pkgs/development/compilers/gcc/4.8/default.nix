@@ -277,7 +277,7 @@ stdenv.mkDerivation ({
       EXTRA_FLAGS_FOR_TARGET
       EXTRA_LDFLAGS_FOR_TARGET
       ;
-    NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+    NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
   } // optionalAttrs (hostPlatform.system == "x86_64-solaris") {
     # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
     CC = "gcc -m64";

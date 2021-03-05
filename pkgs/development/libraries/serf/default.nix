@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   sconsFlags = [
     "OPENSSL=${openssl}"
     "ZLIB=${zlib}"
-  ] ++ stdenv.lib.optional (!stdenv.isCygwin)
+  ] ++ lib.optional (!stdenv.isCygwin)
     "GSSAPI=${kerberos.dev}";
 
   preConfigure = ''

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = if minimal then [ "out" ] else [ "bin" "doc" "man" "dev" "lib" "out" ];
 
-  buildInputs = stdenv.lib.optional (!minimal) oniguruma;
+  buildInputs = lib.optional (!minimal) oniguruma;
 
   configureFlags =
     if minimal then [ "--with-oniguruma=no" "--enable-all-static" ]
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     # jq is linked to libjq:
     ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  preFixup = stdenv.lib.optionalString minimal ''
+  preFixup = lib.optionalString minimal ''
     rm -r .libs $out/{include,share}
     patchelf --shrink-rpath $out/bin/jq
   '';

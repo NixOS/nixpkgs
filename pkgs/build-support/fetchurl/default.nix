@@ -14,7 +14,7 @@ let
   mirrorsFile =
     stdenvNoCC.mkDerivation {
       name = "mirrors-list";
-      env = stdenvNoCC.lib.mapAttrs (k: m: toString m) mirrors;
+      env = lib.mapAttrs (k: m: toString m) mirrors;
       buildCommand = ''
         # !!! this is kinda hacky.
         set | grep -E '^[a-zA-Z]+=.*://' > $out
