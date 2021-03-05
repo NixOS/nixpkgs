@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyxeoma";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c9q6xdh2ciisv0crlz069haz01gfkhd5kasyr14jng4vjpzinc7";
+    sha256 = "sha256-xqPthVAlZi35s1ri0crD+kF3WnYSZVgEvecnaoyrjRw=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
