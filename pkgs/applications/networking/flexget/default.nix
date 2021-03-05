@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     terminaltables
     zxcvbn
     # plugins
-    transmissionrpc
+    transmission-rpc
   ];
 
   meta = with lib; {
