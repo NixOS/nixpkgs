@@ -13889,6 +13889,8 @@ in
 
   funambol = callPackage ../development/libraries/funambol { };
 
+  galer = callPackage ../tools/security/galer { };
+
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets { };
 
   gamin = callPackage ../development/libraries/gamin { };
