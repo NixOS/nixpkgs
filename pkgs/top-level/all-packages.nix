@@ -15459,7 +15459,9 @@ in
 
   libpwquality = callPackage ../development/libraries/libpwquality { };
 
-  libqalculate = callPackage ../development/libraries/libqalculate { };
+  libqalculate = callPackage ../development/libraries/libqalculate {
+    readline = readline80;
+  };
 
   libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
 

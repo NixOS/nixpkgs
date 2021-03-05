@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkg-config autoreconfHook doxygen ];
   buildInputs = [ curl gettext libiconv readline ];
-  configureFlags = ["--with-readline=${readline.dev}"];
   propagatedBuildInputs = [ libxml2 mpfr icu ];
   enableParallelBuilding = true;
 
