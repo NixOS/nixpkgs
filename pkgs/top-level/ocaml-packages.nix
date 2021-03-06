@@ -238,6 +238,8 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    decompress-1-2 = callPackage ../development/ocaml-modules/decompress/1.2.nix { };
+
     diet =  callPackage ../development/ocaml-modules/diet { };
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
@@ -399,7 +401,9 @@ let
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
-    imagelib = callPackage ../development/ocaml-modules/imagelib { };
+    imagelib = callPackage ../development/ocaml-modules/imagelib {
+      decompress = decompress-1-2;
+    };
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
