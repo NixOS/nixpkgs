@@ -21,8 +21,6 @@ mkDerivation rec {
     qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
 
-  enableParallelBuilding = false;
-
   cmakeFlags = [
     "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
     "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"

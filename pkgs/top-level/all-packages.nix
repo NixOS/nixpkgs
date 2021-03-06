@@ -1838,7 +1838,7 @@ in
 
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
     python = python3;
-    boost = pkgs.boost.override { python = python3; };
+    boost = pkgs.boost.override { enablePython = true; python = python3; };
   };
 
   candle = libsForQt5.callPackage ../applications/misc/candle { };
