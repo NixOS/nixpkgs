@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, fetchpatch
 , stdlib-shims, bigarray-compat, fmt
 , alcotest, hxd, crowbar, bigstringaf
 }:
