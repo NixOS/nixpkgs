@@ -108,7 +108,7 @@ in rustPlatform.buildRustPackage {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "A parser generator tool and an incremental parsing library";
     longDescription = ''
@@ -122,10 +122,9 @@ in rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ Profpatsch ];
     # Aarch has test failures with how tree-sitter compiles the generated C files
     broken = stdenv.isAarch64;
   };
-
 }
