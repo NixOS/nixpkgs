@@ -6058,6 +6058,8 @@ in
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
+  libqrtr-glib = callPackage ../development/libraries/libqrtr-glib { };
+
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
