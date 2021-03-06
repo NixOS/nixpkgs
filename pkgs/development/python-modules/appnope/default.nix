@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "appnope";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71";
+    sha256 = "dd83cd4b5b460958838f6eb3000c660b1f9caf2a5b1de4264e941512f603258a";
   };
 
   meta = {

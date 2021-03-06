@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "7.1.0";
+  version = "7.1.1";
 
   checkInputs = [
     pytest
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "33f3f1003e2af4b4df20908fe62aa029999d136b966463746942efbfc821add3";
+    sha256 = "00c603a42365830c4722a2eb7663a25919551217ec09a243d3399fa8dd4ac403";
   };
 
   # Does not support Python 2
