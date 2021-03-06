@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fuse, pkg-config }:
+{ lib, stdenv, fetchurl, fuse, pkg-config, osxfuse }:
 
 stdenv.mkDerivation rec {
   version = "1.15.1";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse ];
+  buildInputs = if stdenv.isDarwin
+                then [ osxfuse ]
+                else [ fuse ];
   postFixup = ''
     ln -s $out/bin/bindfs $out/bin/mount.fuse.bindfs
   '';
