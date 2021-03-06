@@ -626,6 +626,7 @@ tpope/vim-tbone
 tpope/vim-unimpaired
 tpope/vim-vinegar
 travitch/hasksyn
+tremor-rs/tremor-vim
 triglav/vim-visual-increment
 troydm/zoomwintab.vim
 twerth/ir_black

@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , buildPythonPackage
 , pytestCheckHook
+, sysctl
 }:
 
 buildPythonPackage rec {
@@ -32,6 +34,13 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  # On Darwin sysctl is used to read CPU information.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cpuinfo/cpuinfo.py \
+      --replace "len(_program_paths('sysctl')) > 0" "True" \
+      --replace "_run_and_get_stdout(['sysctl'" "_run_and_get_stdout(['${sysctl}/bin/sysctl'"
+  '';
 
   meta = {
     description = "Get CPU info with pure Python 2 & 3";

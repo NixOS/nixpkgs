@@ -80,10 +80,7 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/alex-3.2.5.patch";
     sha256 = "0q8x49k3jjwyspcmidwr6b84s4y43jbf4wqfxfm6wz8x2dxx6nwh";
   });
-  doctest = appendPatch (dontCheck (doJailbreak super.doctest_0_18)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/doctest-0.17.patch";
-    sha256 = "16s2jcbk9hsww38i2wzxghbf0zpp5dc35hp6rd2n7d4z5xfavp62";
-  });
+  doctest = dontCheck (doJailbreak super.doctest_0_18_1);
   generic-deriving = appendPatch (doJailbreak super.generic-deriving) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/generic-deriving-1.13.1.patch";
     sha256 = "0z85kiwhi5p2wiqwyym0y8q8qrcifp125x5vm0n4482lz41kmqds";

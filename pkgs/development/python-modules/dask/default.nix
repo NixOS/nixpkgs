@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fsspec
 , pytestCheckHook
+, pytest-rerunfailures
 , pythonOlder
 , cloudpickle
 , numpy
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.01.0";
+  version = "2021.03.0";
 
   disabled = pythonOlder "3.5";
 
@@ -23,11 +24,12 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "V2cEOzV/L1zjyQ76zlGyN9CIkq6W8y8Yab4NQi3/Ju4=";
+    sha256 = "LACv7lWpQULQknNGX/9vH9ckLsypbqKDGnsNBgKT1eI=";
   };
 
   checkInputs = [
     pytestCheckHook
+    pytest-rerunfailures
   ];
 
   dontUseSetuptoolsCheck = true;
