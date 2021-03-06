@@ -8889,6 +8889,9 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  inherit (callPackages ../applications/networking/taler { })
+    taler-exchange taler-merchant;
+
   tangram = callPackage ../applications/networking/instant-messengers/tangram { };
 
   t1utils = callPackage ../tools/misc/t1utils { };
