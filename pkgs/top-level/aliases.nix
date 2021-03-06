@@ -260,6 +260,7 @@ mapAliases ({
   gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
   google-gflags = gflags; # added 2019-07-25
   google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # added 2021-03-07
+  google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # added 2021-03-07
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
