@@ -22,6 +22,11 @@ buildPythonPackage rec {
       url = "https://github.com/workhorsy/py-cpuinfo/commit/54c32da6678f9d75ec5acf4534056cdc85c2a04d.patch";
       sha256 = "sha256-3R46KrpACAQ1V0CQtz48V5mQXxvplUQrXnACtiE8WqY=";
     })
+    # Continuation of the patch above
+    (fetchpatch {
+      url = "https://github.com/workhorsy/py-cpuinfo/commit/0d00f4b99750f292c85ff23e1039ea9489cb7ec8.patch";
+      sha256 = "sha256-mHoXoCAEG2v3xpQppRFWzSvhYCp5i9CZkbEgtiLVzMs=";
+    })
   ];
 
   checkInputs = [
