@@ -188,6 +188,7 @@
 , "readability-cli"
 , "redoc-cli"
 , "reveal.js"
+, "rimraf"
 , "rollup"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
 , "s3http"
