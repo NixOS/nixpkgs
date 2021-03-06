@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.38.3";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "14kivmyphi7gbd7mgd4cnsiwl4cl7wih8kwzh7n79s2s4c5hj4ak";
+    sha256 = "0b93br66wdjk38yd0qvi4q9g42c2676lhsydaw5xwq6cx11bdaag";
 
 # Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
 # LLVM.  (The submodule is a specific tag in the LLVM source tree).
@@ -24,9 +24,9 @@ stdenv.mkDerivation (rec {
   };
 
   ponygbenchmark = fetchurl {
-    url = "https://github.com/google/benchmark/archive/v1.5.0.tar.gz";
-    sha256 = "06i2cr4rj126m1zfz0x1rbxv1mw1l7a11mzal5kqk56cdrdicsiw";
-    name = "v1.5.0.tar.gz";
+    url = "https://github.com/google/benchmark/archive/v1.5.2.tar.gz";
+    sha256 = "033hgsc76bcii1gwd8hdc7z1iqdnggk4f8cq0hzh98dsjsvxmjyw";
+    name = "v1.5.2.tar.gz";
   };
 
   nativeBuildInputs = [ cmake makeWrapper which ];
@@ -36,6 +36,7 @@ stdenv.mkDerivation (rec {
   # Sandbox disallows network access, so disabling problematic networking tests
   patches = [
     ./disable-tests.patch
+    ./fix-libstdcpp-path.patch
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
       googletest = fetchurl {
@@ -49,7 +50,7 @@ stdenv.mkDerivation (rec {
   postUnpack = ''
     mkdir -p source/build/build_libs/gbenchmark-prefix/src
     tar -C source/build/build_libs/gbenchmark-prefix/src -zxvf "$ponygbenchmark"
-    mv source/build/build_libs/gbenchmark-prefix/src/benchmark-1.5.0 \
+    mv source/build/build_libs/gbenchmark-prefix/src/benchmark-1.5.2 \
        source/build/build_libs/gbenchmark-prefix/src/benchmark
   '';
 
