@@ -12,8 +12,6 @@ let
 
     mopidy = callPackage ./mopidy.nix { };
 
-    mopidy-gmusic = callPackage ./gmusic.nix { };
-
     mopidy-iris = callPackage ./iris.nix { };
 
     mopidy-local = callPackage ./local.nix { };

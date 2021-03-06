@@ -23885,7 +23885,6 @@ in
 
   inherit (mopidyPackages)
     mopidy
-    mopidy-gmusic
     mopidy-iris
     mopidy-local
     mopidy-moped
