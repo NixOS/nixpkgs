@@ -11542,7 +11542,7 @@ in
   # Python package sets.
   python27Packages = python27.pkgs;
   python36Packages = python36.pkgs;
-  python37Packages = recurseIntoAttrs python37.pkgs;
+  python37Packages = python37.pkgs;
   python38Packages = recurseIntoAttrs python38.pkgs;
   python39Packages = recurseIntoAttrs python39.pkgs;
   python310Packages = python310.pkgs;
