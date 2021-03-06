@@ -4,7 +4,7 @@ let
   liftJaneStreet = self: super: super.janeStreet // super;
 
   mkOcamlPackages = ocaml:
-    (lib.makeScope newScope (self: with self;
+    (lib.makeScope newScope (self: with self; (lib.recurseIntoAttrs
   {
     inherit ocaml;
 
@@ -1396,7 +1396,7 @@ let
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
 
-  })).overrideScope' liftJaneStreet;
+  }))).overrideScope' liftJaneStreet;
 
 in let inherit (pkgs) callPackage; in rec
 {

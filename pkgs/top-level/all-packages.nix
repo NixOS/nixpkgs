@@ -10843,10 +10843,10 @@ in
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
-  ocaml-ng = callPackage ./ocaml-packages.nix { };
+  ocaml-ng = recurseIntoAttrs (callPackage ./ocaml-packages.nix { });
   ocaml = ocamlPackages.ocaml;
 
-  ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  ocamlPackages = ocaml-ng.ocamlPackages;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
