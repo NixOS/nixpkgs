@@ -29612,11 +29612,18 @@ in
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
-    polyml = lib.overrideDerivation polyml (attrs: {
+    polyml = polyml.overrideAttrs (attrs: {
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
+      version = "for-isabelle";
+      src = fetchFromGitHub {
+        owner = "polyml";
+        repo = "polyml";
+        rev = "f86ae3dc168612d51e7a73fbe3b7e02cb3bc1bac";
+        sha256 = "09f28jz6mnb4c0r1v57cwyw2vcwhdq57v6c5j8kwn2640cfl1gz7";
+      };
     });
 
-    java = openjdk11;
+    java = openjdk16;
     z3 = z3_4_4_0;
   };
 
