@@ -106,4 +106,8 @@ self: super: {
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;
 
+  # Builds only with ghc-8.10.x due to dependency on singleton-2.7
+  lol = markBroken super.lol;
+  lol-apps = markBroken super.lol-apps;
+  lol-cpp = markBroken super.lol-cpp;
 }

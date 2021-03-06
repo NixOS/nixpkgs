@@ -129,4 +129,9 @@ self: super: {
 
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
+
+  # Builds only with ghc-8.10.x due to dependency on singleton-2.7
+  lol = markBroken super.lol;
+  lol-apps = markBroken super.lol-apps;
+  lol-cpp = markBroken super.lol-cpp;
 }
