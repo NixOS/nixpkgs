@@ -75,6 +75,7 @@
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
+, "@electron-forge/cli"
 , "elm-oracle"
 , "emoj"
 , "emojione"
