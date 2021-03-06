@@ -15,6 +15,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    "test_input_output"
+  ];
+
   meta = with lib; {
     description = "Simple VTXXX-compatible linux terminal emulator";
     homepage = "https://github.com/selectel/pyte";
