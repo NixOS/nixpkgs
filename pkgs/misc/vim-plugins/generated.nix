@@ -4334,6 +4334,18 @@ let
     meta.homepage = "https://github.com/tjdevries/train.nvim/";
   };
 
+  tremor-vim = buildVimPluginFrom2Nix {
+    pname = "tremor-nvim";
+    version = "2020-11-19";
+    src = fetchFromGitHub {
+      owner = "tremor-rs";
+      repo = "tremor-vim";
+      rev = "17e53c33f3b0e825330580034ca60172b8ddaadc";
+      sha256 = "1gy67qjv0iwqza0yx9y8p5yzn5fszrp7szg1527h0ki3q69cfqki";
+    };
+    meta.homepage = "https://github.com/tremor-rs/tremor-vim";
+  };
+
   tslime-vim = buildVimPluginFrom2Nix {
     pname = "tslime-vim";
     version = "2020-09-09";
