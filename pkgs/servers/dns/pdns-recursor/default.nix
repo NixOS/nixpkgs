@@ -2,9 +2,6 @@
 , openssl, systemd, lua, luajit, protobuf
 , enableProtoBuf ? false
 }:
-assert enableProtoBuf -> protobuf != null;
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "pdns-recursor";
@@ -19,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost openssl systemd
     lua luajit
-  ] ++ optional enableProtoBuf protobuf;
+  ] ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [
     "--enable-reproducible"
@@ -32,7 +29,7 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.pdns-recursor;
   };
 
-  meta = {
+  meta = with lib; {
     description = "A recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;

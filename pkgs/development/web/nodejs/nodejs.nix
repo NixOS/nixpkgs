@@ -60,7 +60,7 @@ in
 
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-      inherit (stdenv.hostPlatform) gcc isArch32;
+      inherit (stdenv.hostPlatform) gcc isAarch32;
     in sharedConfigureFlags ++ [
       "--without-dtrace"
     ] ++ (optionals isCross [

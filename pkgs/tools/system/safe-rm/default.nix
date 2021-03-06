@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0zkmwxyl1870ar6jr9h537vmqgkckqs9jd1yv6m4qqzdsmg5gdbq";
   };
 
-  propagatedBuildInputs = [ perl coreutils ];
+  # pod2man
+  nativeBuildInputs = [ perl ];
+
+  propagatedBuildInputs = [ coreutils perl ];
 
   postFixup = ''
     sed -e 's@/bin/rm@${coreutils}/bin/rm@' -i $out/bin/safe-rm

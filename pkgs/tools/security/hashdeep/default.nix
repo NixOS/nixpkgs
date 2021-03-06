@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
-let version = "4.4";
-in stdenv.mkDerivation {
-  name = "hashdeep-${version}";
+stdenv.mkDerivation rec {
+  pname = "hashdeep";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "jessek";
@@ -18,6 +18,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/jessek/hashdeep";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
-    maintainers = [ lib.maintainers.karantan ];
+    maintainers = [ maintainers.karantan ];
   };
 }
