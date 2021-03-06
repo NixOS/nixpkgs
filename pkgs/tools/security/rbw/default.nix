@@ -20,15 +20,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "0.5.2";
+  version = "1.0.0"; # do not upgrate 1.1.0 yet, because it doesn't build on Darwin
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "1mxl71yz2iy5s6pbp33cwkfzzilkla4qqiskd6jsd5fdlrrwlxqm";
+    sha256 = "0yqn65izcwbh7g085hwq4wrg9y9jlz1xbrq69b6ypqxi9abqnp6q";
   };
 
-  cargoSha256 = "19gznam64s17kha3accgjks5rmd9kpqqgxg3dfrk7fg5v4431007";
+  cargoSha256 = "0x00clixdbpqif2wzhj3f4k9kpza623xs8a05wq4g15227kz7mlm";
 
   nativeBuildInputs = [
     pkg-config
