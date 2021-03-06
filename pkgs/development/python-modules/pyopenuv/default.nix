@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, async-timeout
 , asynctest
 , buildPythonPackage
 , fetchFromGitHub

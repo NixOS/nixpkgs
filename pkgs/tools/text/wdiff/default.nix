@@ -9,9 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "0sxgg0ms5lhi4aqqvz1rj4s77yi9wymfm3l3gbjfd1qchy66kzrl";
   };
 
+  # for makeinfo
+  nativeBuildInputs = [ texinfo ];
+
   buildInputs = [ texinfo ];
 
   checkInputs = [ which ];
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/wdiff/";

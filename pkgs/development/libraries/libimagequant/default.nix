@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
+  configureFlags = lib.optionals stdenv.isAarch64 [ "--disable-sse" ];
+
   meta = with lib; {
     homepage = "https://pngquant.org/lib/";
     description = "Image quantization library";

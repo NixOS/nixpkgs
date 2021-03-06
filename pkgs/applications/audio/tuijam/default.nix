@@ -22,7 +22,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     gmusicapi
-    google_api_python_client
+    google-api-python-client
     mpv
     pydbus
     pygobject3

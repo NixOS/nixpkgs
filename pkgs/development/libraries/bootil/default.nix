@@ -1,18 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, premake4 }:
 
 stdenv.mkDerivation {
-  name = "bootil-unstable-2015-12-17";
-
-  meta = {
-    description = "Garry Newman's personal utility library";
-    homepage = "https://github.com/garrynewman/bootil";
-    # License unsure - see https://github.com/garrynewman/bootil/issues/21
-    license = lib.licenses.free;
-    maintainers = [ lib.maintainers.abigailbuccaneer ];
-    platforms = lib.platforms.all;
-    # Build uses `-msse` and `-mfpmath=sse`
-    badPlatforms = [ "aarch64-linux" ];
-  };
+  pname = "bootil";
+  version = "unstable-2015-12-17";
 
   src = fetchFromGitHub {
     owner = "garrynewman";
@@ -21,11 +11,13 @@ stdenv.mkDerivation {
     sha256 = "03wq526r80l2px797hd0n5m224a6jibwipcbsvps6l9h740xabzg";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/garrynewman/bootil/pull/22.patch";
-    name = "github-pull-request-22.patch";
-    sha256 = "1qf8wkv00pb9w1aa0dl89c8gm4rmzkxfl7hidj4gz0wpy7a24qa2";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/garrynewman/bootil/pull/22.patch";
+      name = "github-pull-request-22.patch";
+      sha256 = "1qf8wkv00pb9w1aa0dl89c8gm4rmzkxfl7hidj4gz0wpy7a24qa2";
+    })
+  ];
 
   # Avoid guessing where files end up. Just use current directory.
   postPatch = ''
@@ -42,4 +34,15 @@ stdenv.mkDerivation {
     install -D libbootil_static.a $out/lib/libbootil_static.a
     cp -r include $out
   '';
+
+  meta = with lib; {
+    description = "Garry Newman's personal utility library";
+    homepage = "https://github.com/garrynewman/bootil";
+    # License unsure - see https://github.com/garrynewman/bootil/issues/21
+    license = licenses.free;
+    maintainers = [ maintainers.abigailbuccaneer ];
+    platforms = platforms.all;
+    # Build uses `-msse` and `-mfpmath=sse`
+    badPlatforms = [ "aarch64-linux" ];
+  };
 }

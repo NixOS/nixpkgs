@@ -24,6 +24,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dwarfmaster ];
-    inherit version;
   };
 }

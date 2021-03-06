@@ -2655,12 +2655,12 @@ in {
 
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
-  google_api_python_client =
-    let google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
+  google-api-python-client =
+    let google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
     in if isPy3k then
-      google_api_python_client
+      google-api-python-client
     else # Python 2.7 support was deprecated but is still needed by weboob and duplicity
-      google_api_python_client.overridePythonAttrs (old: rec {
+      google-api-python-client.overridePythonAttrs (old: rec {
         version = "1.7.6";
         src = old.src.override {
           inherit version;
@@ -2668,7 +2668,7 @@ in {
         };
       });
 
-  googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
+  googleapis-common-protos = callPackage ../development/python-modules/googleapis-common-protos { };
 
   google-apputils = callPackage ../development/python-modules/google-apputils { };
 
