@@ -1721,6 +1721,8 @@ in
 
   bmake = callPackage ../development/tools/build-managers/bmake { };
 
+  boca = callPackage ../development/libraries/boca { };
+
   bochs = callPackage ../applications/virtualization/bochs { };
 
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
@@ -4375,6 +4377,8 @@ in
   franz = callPackage ../applications/networking/instant-messengers/franz {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
+
+  freac = callPackage ../applications/audio/freac { };
 
   freedroid = callPackage ../games/freedroid { };
 
@@ -23018,6 +23022,8 @@ in
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
   smallwm = callPackage ../applications/window-managers/smallwm { };
+
+  smooth = callPackage ../development/libraries/smooth { };
 
   smos = callPackage ../applications/misc/smos { };
 
