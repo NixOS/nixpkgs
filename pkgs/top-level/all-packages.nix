@@ -6500,6 +6500,8 @@ in
 
   nethogs = callPackage ../tools/networking/nethogs { };
 
+  nethoscope = callPackage ../tools/networking/nethoscope { };
+
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
   netlify-cli = nodePackages.netlify-cli;
