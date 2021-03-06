@@ -331,6 +331,12 @@ in with py.pkgs; buildPythonApplication rec {
     # generic/test_camera.py: AssertionError: 500 == 200
     "test_fetching_without_verify_ssl"
     "test_fetching_url_with_verify_ssl"
+  ] ++ lib.optionals (stdenv.isAarch64) [
+    # tests getting stuck on aarch64
+    # components/stream/test_hls.py
+    "test_stream_ended"
+    # components/stream/test_recorder.py
+    "test_record_stream"
   ];
 
   preCheck = ''
