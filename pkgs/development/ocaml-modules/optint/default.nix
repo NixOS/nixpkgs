@@ -9,6 +9,8 @@ buildDunePackage rec {
     sha256 = "1a7gabxqmfvii8qnxq1clx43md2h9glskxhac8y8r0rhzblx3s1a";
   };
 
+  useDune2 = true;
+
   meta = {
     homepage = "https://github.com/mirage/optint";
     description = "Abstract type of integer between x64 and x86 architecture";
