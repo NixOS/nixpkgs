@@ -14,6 +14,10 @@ deployAndroidPackage {
   patchInstructions = lib.optionalString (os == "linux") (''
     patchShebangs .
 
+    # Fix the shebangs of the auto-generated scripts.
+    substituteInPlace $(pwd)/build/tools/make_standalone_toolchain.py \
+      --replace '#!/bin/bash' '#!${pkgs.bash}/bin/bash'
+
   '' + lib.optionalString (builtins.compareVersions (lib.getVersion package) "21" > 0) ''
     patch -p1 \
       --no-backup-if-mismatch < ${./make_standalone_toolchain.py_18.patch} || true
