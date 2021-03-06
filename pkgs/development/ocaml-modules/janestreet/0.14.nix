@@ -147,6 +147,11 @@ rec {
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [ async ctypes openssl ];
+    # in ctypes.foreign 0.18.0 threaded and unthreaded have been merged
+    postPatch = ''
+      substituteInPlace bindings/dune \
+        --replace "ctypes.foreign.threaded" "ctypes.foreign"
+    '';
   };
 
   async_unix = janePackage {
