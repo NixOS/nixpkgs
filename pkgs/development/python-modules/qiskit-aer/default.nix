@@ -27,7 +27,8 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.7.4";
+  version = "0.7.6";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    sha256 = "sha256-o6c1ZcGFZ3pwinzMTif1nqF29Wq0Nog1++ZoJGuiKxo=";
+    sha256 = "0595as4rxjrd5dqx54ywz3rjsjk0z7r41bq0z9r8y1h7zgvvlrmn";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'," ""
   '';
 
+  # Disable using conan for build
   preBuild = ''
     export DISABLE_CONAN=1
   '';

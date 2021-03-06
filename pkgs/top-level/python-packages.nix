@@ -6955,7 +6955,7 @@ in {
 
   retrying = callPackage ../development/python-modules/retrying { };
 
-  retworkx = disabledIf (pythonOlder "3.5") (toPythonModule (callPackage ../development/python-modules/retworkx { }));
+  retworkx = callPackage ../development/python-modules/retworkx { };
 
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
@@ -6972,6 +6972,8 @@ in {
   rich = callPackage ../development/python-modules/rich { };
 
   rig = callPackage ../development/python-modules/rig { };
+
+  ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 
   ripser = callPackage ../development/python-modules/ripser { };
 

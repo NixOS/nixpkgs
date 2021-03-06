@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "indi-3rdparty";
-  version = "1.8.8";
+  version = "1.8.9";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18ii9qsghrvj8y4y6c7bx6kjradybnmyq8i5phj7pv4r8w91rq7g";
+    sha256 = "0klvknhp7l6y2ab4vyv4jq7znk1gjl5b3709kyplm7dsh4b8bppy";
   };
 
   cmakeFlags = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.indilib.org/";
     description = "Third party drivers for the INDI astronomical software suite";
+    changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 ];
     platforms = [ "x86_64-linux" ];

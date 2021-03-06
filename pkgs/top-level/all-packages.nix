@@ -11258,7 +11258,7 @@ in
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
-  dhallPackages = callPackage ./dhall-packages.nix { };
+  dhallPackages = recurseIntoAttrs (callPackage ./dhall-packages.nix { });
 
   duktape = callPackage ../development/interpreters/duktape { };
 
@@ -15979,6 +15979,8 @@ in
   matio = callPackage ../development/libraries/matio { };
 
   matterhorn = haskell.lib.justStaticExecutables haskellPackages.matterhorn;
+
+  maxflow = callPackage ../development/libraries/maxflow { };
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
 

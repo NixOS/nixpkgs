@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple Python implementation of the Git file formats and protocols";
-    homepage = "https://samba.org/~jelmer/dulwich/";
+    homepage = "https://www.dulwich.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ koral ];
   };

@@ -16,6 +16,7 @@
 , gettext
 , coreutils
 , ncurses
+, caf
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "py" ];
 
   cmakeFlags = [
+    "-DCAF_ROOT=${caf}"
     "-DZEEK_PYTHON_DIR=${placeholder "py"}/lib/${python3.libPrefix}/site-packages"
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"

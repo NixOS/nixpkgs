@@ -4466,6 +4466,18 @@ let
     meta.homepage = "https://github.com/vhda/verilog_systemverilog.vim/";
   };
 
+  embark-vim = buildVimPluginFrom2Nix {
+    pname = "embark-vim";
+    version = "2021-02-23";
+    src = fetchFromGitHub {
+      owner = "embark-theme";
+      repo = "vim";
+      rev = "d9ea898794c486e2517823f24b9577ce4c488364";
+      sha256 = "0l1f9pl8nh8lkswwrsw13s8d10ccq0c1jfd3bpszsxc6ryjm0wqw";
+    };
+    meta.homepage = "https://github.com/embark-theme/vim/";
+  };
+
   vim-abolish = buildVimPluginFrom2Nix {
     pname = "vim-abolish";
     version = "2020-10-30";
