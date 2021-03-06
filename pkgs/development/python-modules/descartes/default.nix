@@ -21,5 +21,7 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/sgillies/descartes/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
+    # all tests are failing
+    broken = true;
   };
 }

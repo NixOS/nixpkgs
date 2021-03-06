@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, google_api_python_client
+, google-api-python-client
 , google-auth-oauthlib
 , jupyterhub
 , mwoauth
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "oauthenticator/tests" ];
 
   checkInputs = [
-    google_api_python_client
+    google-api-python-client
     google-auth-oauthlib
     mwoauth
     pyjwt

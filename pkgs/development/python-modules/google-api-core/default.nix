@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-auth
-, googleapis_common_protos
+, googleapis-common-protos
 , grpcio
 , protobuf
 , pytz
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    googleapis_common_protos
+    googleapis-common-protos
     google-auth
     grpcio
     protobuf
