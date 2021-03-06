@@ -2651,8 +2651,6 @@ in {
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
-  gmusicapi = callPackage ../development/python-modules/gmusicapi { };
-
   gntp = callPackage ../development/python-modules/gntp { };
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
