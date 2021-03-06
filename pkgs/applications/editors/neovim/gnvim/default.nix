@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   # The default build script tries to get the version through Git, so we
   # replace it
-  prePatch = ''
+  postPatch = ''
     cat << EOF > build.rs
     use std::env;
     use std::fs::File;
@@ -31,13 +31,13 @@ rustPlatform.buildRustPackage rec {
         f.write_all(b"const VERSION: &str = \"${version}\";").unwrap();
     }
     EOF
+
+    # Install the binary ourselves, since the Makefile doesn't have the path
+    # containing the target architecture
+    sed -e "/target\/release/d" -i Makefile
   '';
 
-  buildPhase = ''
-    make build
-  '';
-
-  installPhase = ''
+  postInstall = ''
     make install PREFIX="${placeholder "out"}"
   '';
 
