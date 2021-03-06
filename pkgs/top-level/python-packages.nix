@@ -4751,6 +4751,8 @@ in {
 
   partd = callPackage ../development/python-modules/partd { };
 
+  parts = callPackage ../development/python-modules/parts { };
+
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };
 
