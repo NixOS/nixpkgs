@@ -177,7 +177,7 @@ in stdenv.mkDerivation {
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
       sqlite libmysqlclient avahi lame
-      curl bzip2 zip unzip glxinfo
+      curl bzip2 zip glxinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpgerror libunistring
       libcrossguid libplist

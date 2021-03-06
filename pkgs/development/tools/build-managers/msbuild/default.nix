@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dotnet-sdk
     mono
+    unzip
   ];
 
   buildInputs = [
     dotnetPackages.Nuget
     glibcLocales
     makeWrapper
-    unzip
   ];
 
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=msbuild
