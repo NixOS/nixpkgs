@@ -2776,8 +2776,6 @@ in {
 
   googlemaps = callPackage ../development/python-modules/googlemaps { };
 
-  google-music = callPackage ../development/python-modules/google-music { };
-
   google-music-proto = callPackage ../development/python-modules/google-music-proto { };
 
   google-music-utils = callPackage ../development/python-modules/google-music-utils { };
