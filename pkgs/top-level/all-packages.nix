@@ -9400,6 +9400,8 @@ in
 
   zs-apc-spdu-ctl = callPackage ../tools/networking/zs-apc-spdu-ctl { };
 
+  zs-wait4host = callPackage ../tools/networking/zs-wait4host { };
+
   zstxtns-utils = callPackage ../tools/text/zstxtns-utils { };
 
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
