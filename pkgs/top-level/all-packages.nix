@@ -29653,6 +29653,8 @@ in
 
   monosat = callPackage ../applications/science/logic/monosat {};
 
+  naproche = callPackage ../applications/science/logic/naproche { };
+
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
   ott = callPackage ../applications/science/logic/ott { };
