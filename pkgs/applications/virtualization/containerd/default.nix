@@ -10,13 +10,13 @@
 
 buildGoPackage rec {
   pname = "containerd";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "09xvhjg5f8h90w1y94kqqnqzhbhd62dcdd9wb9sdqakisjk6zrl0";
+    sha256 = "0qjbfj1dw6pykxhh8zahcxlgpyjzgnrngk5vjaf34akwyan8nrxb";
   };
 
   goPackagePath = "github.com/containerd/containerd";
