@@ -4875,8 +4875,6 @@ in
 
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
 
-  google-music-scripts = callPackage ../tools/audio/google-music-scripts { };
-
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
 
   gdown = with python3Packages; toPythonApplication gdown;
