@@ -21,6 +21,7 @@ let
     mapAttrs
     pathExists
     readFile
+    sanitizeDerivationName
     ;
   inherit (lib.filesystem)
     commonPath
@@ -137,30 +138,60 @@ let
         satisfiesSubpathInvariant = true;
       };
 
-  # extend : SourceLike -> [SourceLike] -> Source
-  # extend base extras : Source
-  #
-  # Produce a source that contains all the files in `base` and `extras` and
-  # points at the location of `base`. The returned source will be a reference
-  # to a subpath of a store path when it is necessary to accomodate for the
-  # relative locations of `extras`.
-  #
-  # When used in the `stdenv` `src` parameter, the whole source will be copied
-  # and the build script will `cd` into the path that corresponds to `base`.
-  extend = base: lib.foldl union base;
+  /*
+    Produce a source that contains all the files in `base` and `extras` and
+    points at the location of `base`. The returned source will be a reference
+    to a subpath of a store path when it is necessary to accomodate for the
+    relative locations of `extras`.
 
-  # Almost the identity of sources.extend when it comes to the filter function;
-  # `extend` will always include the nodes that lead up to `path`.
+    When used in the `stdenv` `src` parameter, the whole source will be copied
+    and the build script will `cd` into the path that corresponds to `base`.
+
+    Type:
+      extend : SourceLike -> [SourceLike] -> Source
+  */
+  extend =
+    # Source-like object that serves as the starting point. The path `"${extend base extras}"` points to the same file as `"${base}"`
+    base:
+    # List of sources that will also be included in the store path.
+    extras:
+      lib.foldl union base extras;
+
+  /*
+    Almost the identity of sources.extend when it comes to the filter function;
+    `extend` will always include the nodes that lead up to `path`.
+
+    Type:
+      empty :: Path -> Source
+  */
   empty = path: cleanSourceWith { src = path; filter = _: _: false; };
 
-  # pointAt : Path -> Source -> Source
-  # pointAt path source
-  #
-  # Produce a new source identical to `source` except its string interpolation
-  # (or `outPath`) resolves to a subpath that corresponds to `path`.
-  #
-  # When used in the `stdenv` `src` parameter, the whole of `source` will be
-  # copied and the build script will `cd` into the path that corresponds to `path`.
+  /*
+    Produce a new source identical to `source` except its string interpolation
+    (or `outPath`) resolves to a subpath that corresponds to `path`.
+
+    When used in the `stdenv` `src` parameter, the whole of `source` will be
+    copied and the build script will `cd` into the path that corresponds to `path`.
+
+    Type:
+      pointAt :: Path -> Source -> Source
+
+    Example:
+      # suppose we have files ./foo.json and ./bar/default.json
+      src = sources.filter (path: type: type == "directory" || hasSuffix ".json" path) ./.
+      "${src}/bar/default.json"
+      => "/nix/store/pjn...-source/bar/default.json"
+      #  ^ exists
+
+      "${sources.pointAt ./bar src}/../foo.json"
+      => "/nix/store/pjn...-source/bar/../foo.json"
+      #  ^ exists; notice the store hash is the same
+
+      # contrast with cutAt
+      "${sources.cutAt ./bar src}/../foo.json"
+      => "/nix/store/ls9...-source/../foo.json"
+      #  ^ does not exist (resolves to /nix/store/foo.json)
+  */
   pointAt = path: src:
     let
       orig = toSourceAttributes src;
@@ -183,11 +214,33 @@ let
         satisfiesSubpathInvariant = orig.satisfiesSubpathInvariant or false;
       });
 
-  # cutAt : Path -> Source -> Source
-  # cutAt path source
-  #
-  # Produces a source that starts at `path` and only contains nodes that are in `source`.
-  cutAt = path: src:
+  /*
+    Produces a source that starts at `path` and only contains nodes that are in `src`.
+
+    Type:
+      cutAt :: Path -> SourceLike -> Source
+
+    Example:
+      # suppose we have files ./foo.json and ./bar/default.json
+      src = sources.filter (path: type: type == "directory" || hasSuffix ".json" path) ./.
+      "${src}/bar/default.json"
+      => "/nix/store/pjn...-source/bar/default.json"
+      #  ^ exists
+
+      "${sources.cutAt ./bar src}/default.json"
+      => "/nix/store/ls9...-source/default.json"
+      #  ^ exists, hash is not sensitive to foo.json
+
+      # contrast with pointAt
+      "${sources.pointAt ./bar src}/../foo.json"
+      => "/nix/store/pjn...-source/bar/../foo.json"
+      #  ^ exists, hash is sensitive to both file hashes
+  */
+  cutAt =
+    # The path that will form the new root of the source
+    path:
+    # A source that determines which nodes will be included, starting at `path`
+    src:
     let
       orig = toSourceAttributes src;
       valid =
@@ -210,11 +263,14 @@ let
         satisfiesSubpathInvariant = orig.satisfiesSubpathInvariant or false;
       };
 
-  # sources.reparent: Path -> Source -> Source
-  # sources.reparent parent source
-  #
-  # Change source such that the root is at the `parent` directory, but include
-  # nothing except source and the path leading up to it.
+  /*
+    Change source such that the root is at the `parent` directory, but include
+    nothing except source and the path leading up to it.
+
+    Type:
+      sources.reparent :: Path -> SourceLike -> Source
+
+  */
   reparent = path: source: union (empty path) source;
 
   /*
@@ -240,7 +296,32 @@ let
         satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
       };
 
-  setName = name: src: cleanSourceWith { inherit name src; };
+  /*
+    Change the name of a source; the part after the hash in the store path.
+
+    NOTE: `lib.sources` defaults to `source`. It is tempting to name it after the
+    last path component, but this was a bad default that led to unreproducable
+    store paths when the same directory contents were read from a different
+    location.
+
+    Type: sources.setName :: String -> SourceLike -> Source
+
+    Example:
+      src = with sources; setName "fizzbuzz"
+              (filter (path: type: !lib.hasSuffix ".nix" path) ./.);
+      "${src}"
+      => "/nix/store/cafri8rrc2bc1yvrsbmg5w6ci8rbqvzs-fizzbuzz""${src}"
+
+      src2 = sources.setName "easypeasy" ./.;
+      "${src2}"
+      => "/nix/store/crvhqahzla2nxxyilzigwki5bkf7nfpc-easypeasy"
+    */
+  setName =
+    # A string that will be the new name. It will be passed to `lib.sanitizeDerivationName`
+    name:
+    # A source-like value
+    src:
+    cleanSourceWith { name = sanitizeDerivationName name; inherit src; };
 
   # Filter sources by a list of regular expressions.
   #
@@ -465,5 +546,31 @@ in {
     setName
     trace
     ;
+
+  /*
+    Create a new source by deciding which files, directories, etc to keep.
+
+    By reducing the number of files that are available to a derivation, more
+    evaluations will result in the same hash and therefore do not need to be
+    rebuilt.
+
+    This function is similar to `builtins.filterSource`, but more useful
+    because it returns a `Source` object that can be used by the other functions
+    in `lib.sources`.
+
+    When nesting `sources.filter` calls, the inner call's predicate is respected
+    by combining it with the && operator. If you want the opposite effect, the
+    `sources.extend` function may be of interest.
+
+    Type: sources.filter :: (Path -> TypeString -> Bool) -> SourceLike -> Source
+
+    Example:
+      src = lib.sources.filter (path: type: !lib.hasSuffix ".nix" path) ./.;
+      "${src}"
+      => "/nix/store/cdklw7jpc3ffjxhvpzwl5aaysay07z0y-source"
+      src2 = lib.sources.filter (path: type: type == "directory" || lib.hasSuffix ".json" path)
+      "${src2}"
+      => "/nix/store/j7l6s884ngkdzzsnw8k3zxflsi6ax492-source"
+  */
   filter = _filter;
 }
