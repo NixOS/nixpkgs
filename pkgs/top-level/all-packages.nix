@@ -1362,6 +1362,8 @@ in
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  gtklp = callPackage ../tools/misc/gtklp { };
+
   google-amber = callPackage ../tools/graphics/amber { };
 
   hakrawler = callPackage ../tools/security/hakrawler { };
