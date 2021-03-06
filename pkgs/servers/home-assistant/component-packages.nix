@@ -679,7 +679,7 @@
     "rest_command" = ps: with ps; [ ];
     "rflink" = ps: with ps; [ ]; # missing inputs: rflink
     "rfxtrx" = ps: with ps; [ ]; # missing inputs: pyRFXtrx
-    "ring" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: ring_doorbell
+    "ring" = ps: with ps; [ ha-ffmpeg ring-doorbell ];
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
     "rmvtransport" = ps: with ps; [ PyRMVtransport ];
