@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome3 }:
+{ lib
+, stdenv
+, fetchurl
+, python3Packages
+, gtk3
+, pango
+, gobject-introspection
+, wrapGAppsHook
+, gnome3
+}:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -16,12 +25,25 @@ python3Packages.buildPythonApplication rec {
     sha256 = "13vhwsgv6mscgixypc0ixkgj0y7cpcm7z7wn1vmdrwp7kn8m3xgx";
   };
 
-  buildInputs = [ gtk3 gobject-introspection wrapGAppsHook gnome3.adwaita-icon-theme ];
+  buildInputs = [
+    gtk3
+    pango
+    gnome3.adwaita-icon-theme
+    gobject-introspection
+  ];
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
+
+  # wrapGAppsHook seems to be not cross-compile ready
+  strictDeps = false;
+
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
 
-
+  dontWrapGApps = true;
   preFixup = ''
-    export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # RuntimeError: could not create GtkClipboard object
