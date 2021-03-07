@@ -2113,6 +2113,8 @@ in {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+  enrich = callPackage ../development/python-modules/enrich { };
+
   entrance = callPackage ../development/python-modules/entrance {
     routerFeatures = false;
   };
