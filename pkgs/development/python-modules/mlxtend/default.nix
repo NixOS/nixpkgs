@@ -24,8 +24,12 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook ];
+
   # image tests download files over the network
-  pytestFlagsArray = [ "-sv" "--ignore=mlxtend/image" ];
+  pytestFlagsArray = [ "-sv" ];
+
+  disabledTestPaths = [ "mlxtend/image" ];
+
   # Fixed in master, but failing in release version
   # see: https://github.com/rasbt/mlxtend/pull/721
   disabledTests = [ "test_variance_explained_ratio" ];
