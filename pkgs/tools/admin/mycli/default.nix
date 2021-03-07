@@ -14,6 +14,12 @@ buildPythonApplication rec {
     sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
+      --replace "importlib_resources >= 5.0.0" "importlib_resources"
+  '';
+
   propagatedBuildInputs = [
     cli-helpers
     click
@@ -29,24 +35,18 @@ buildPythonApplication rec {
     sqlparse
   ];
 
-  checkInputs = [ pytest mock glibcLocales ];
+  checkInputs = [ pytestCheckHook mock glibcLocales ];
 
-  checkPhase = ''
+  preCheck = ''
     export HOME=.
     export LC_ALL="en_US.UTF-8"
-
-    py.test \
-      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
-      --replace "importlib_resources >= 5.0.0" "importlib_resources"
-  '';
+  disabledTestPaths = [
+    "mycli/packages/paramiko_stub/__init__.py"
+  ];
 
   meta = with lib; {
-    inherit version;
     description = "Command-line interface for MySQL";
     longDescription = ''
       Rich command-line interface for MySQL with auto-completion and
