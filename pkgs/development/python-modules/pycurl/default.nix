@@ -5,7 +5,7 @@
 , curl
 , openssl
 , bottle
-, pytest
+, pytestCheckHook
 , nose
 , flaky
 }:
@@ -31,34 +31,42 @@ buildPythonPackage rec {
 
   checkInputs = [
     bottle
-    pytest
+    pytestCheckHook
     nose
     flaky
   ];
-
-  # skip impure or flakey tests
-  # See also:
-  #   * https://github.com/NixOS/nixpkgs/issues/77304
-  checkPhase = ''
-    HOME=$TMPDIR pytest tests -k "not test_ssl_in_static_libs \
-                     and not test_keyfunction \
-                     and not test_keyfunction_bogus_return \
-                     and not test_libcurl_ssl_gnutls \
-                     and not test_libcurl_ssl_nss \
-                     and not test_libcurl_ssl_openssl" \
-                 --ignore=tests/getinfo_test.py \
-                 --ignore=tests/memory_mgmt_test.py \
-                 --ignore=tests/multi_memory_mgmt_test.py \
-                 --ignore=tests/multi_timer_test.py
-  '';
 
   preConfigure = ''
     substituteInPlace setup.py --replace '--static-libs' '--libs'
     export PYCURL_SSL_LIBRARY=openssl
   '';
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  # skip impure or flakey tests
+  # See also:
+  #   * https://github.com/NixOS/nixpkgs/issues/77304
+  disabledTestPaths = [
+    "tests/getinfo_test.py"
+    "tests/memory_mgmt_test.py"
+    "tests/multi_memory_mgmt_test.py"
+    "tests/multi_timer_test.py"
+  ];
+
+  disabledTests = [
+    "test_keyfunction"
+    "test_keyfunction_bogus_return"
+    "test_libcurl_ssl_gnutls"
+    "test_libcurl_ssl_nss"
+    "test_libcurl_ssl_openssl"
+    "test_ssl_in_static_libs"
+  ];
+
   meta = {
     homepage = "http://pycurl.sourceforge.net/";
     description = "Python wrapper for libcurl";
+    maintainers = [];
   };
 }
