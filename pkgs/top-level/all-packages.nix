@@ -16174,7 +16174,7 @@ in
 
   newman = callPackage ../development/web/newman {};
 
-  newt = callPackage ../development/libraries/newt { };
+  newt = callPackage ../development/libraries/newt { python = python3; };
 
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
