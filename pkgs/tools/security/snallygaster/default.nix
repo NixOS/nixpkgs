@@ -24,9 +24,9 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # we are not interested in linting the project
-    "--ignore=tests/test_codingstyle.py"
+    "tests/test_codingstyle.py"
   ];
 
   meta = with lib; {
