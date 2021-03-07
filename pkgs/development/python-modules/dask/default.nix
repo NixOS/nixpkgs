@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "dask";
   version = "2021.03.0";
-
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
@@ -59,16 +58,16 @@ buildPythonPackage rec {
   disabledTests = [
     "test_argwhere_str"
     "test_count_nonzero_str"
-    "rolling_methods"  # floating percision error ~0.1*10^8 small
+    "rolling_methods" # floating percision error ~0.1*10^8 small
     "num_workers_config" # flaky
-    "test_2args_with_array[pandas1-darray1-ldexp]"  # flaky
+    "test_2args_with_array[pandas1-darray1-ldexp]" # flaky
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimal task scheduling abstraction";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }
