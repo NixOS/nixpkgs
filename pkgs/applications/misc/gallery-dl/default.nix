@@ -12,10 +12,10 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ requests ];
 
   checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requires network access
-    "--ignore=test/test_results.py"
-    "--ignore=test/test_downloader.py"
+    "test/test_results.py"
+    "test/test_downloader.py"
   ];
 
   meta = with lib; {
