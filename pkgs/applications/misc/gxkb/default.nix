@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ gtk3 libwnck3 libxklavier ] ++ lib.optional appindicatorSupport libayatana-appindicator-gtk3;
 
-  configureFlags = lib.optional appindicatorSupport  "--enable-appindicator=yes";
+  configureFlags = lib.optional appindicatorSupport "--enable-appindicator=yes";
   outputs = [ "out" "man" ];
 
   meta = with lib; {
