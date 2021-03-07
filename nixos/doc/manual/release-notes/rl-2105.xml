@@ -74,6 +74,18 @@
        <xref linkend="opt-services.samba-wsdd.enable" /> Web Services Dynamic Discovery host daemon
      </para>
    </listitem>
+   <listitem>
+    <para>
+       Programs:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-programs.nethoscope.enable" /> enable nethoscope
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
 
  </section>
