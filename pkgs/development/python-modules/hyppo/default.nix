@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "hyppo";
   version = "0.1.3";
-
   disabled = isPy27;
 
   src = fetchFromGitHub {
@@ -29,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook pytestcov ];
-  pytestFlagsArray = [ "--ignore=docs" ];
+  disabledTestPaths = [ "docs" ];
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";
