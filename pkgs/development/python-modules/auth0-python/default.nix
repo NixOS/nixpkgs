@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # jwt package is not available in nixpkgs
-    "--ignore=auth0/v3/test/authentication/test_token_verifier.py"
+    "auth0/v3/test/authentication/test_token_verifier.py"
   ];
 
   # tries to ping websites (e.g. google.com)
