@@ -36,7 +36,7 @@ buildPythonPackage rec {
   preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
 
   # ignore network related tests, which fail in sandbox
-  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
+  disabledTestPaths = [ "tests/PyroTests/test_naming.py" ];
 
   disabledTests = [
     "StartNSfunc"
