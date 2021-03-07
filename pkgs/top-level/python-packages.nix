@@ -5705,6 +5705,8 @@ in {
 
   pylint-flask = callPackage ../development/python-modules/pylint-flask { };
 
+  pylint-flask-sqlalchemy = callPackage ../development/python-modules/pylint-flask-sqlalchemy { };
+
   pylint = if isPy3k then
     callPackage ../development/python-modules/pylint { }
   else
