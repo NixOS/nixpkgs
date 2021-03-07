@@ -19,14 +19,14 @@
 , requests
 , scikitimage
 , scipy
-, pytest
+, pytestCheckHook
 , pytest-benchmark
 , flake8
 , nbsmoke
 , fastparquet
 , testpath
 , nbconvert
-, pytest_xdist
+, pytest-xdist
 }:
 
 buildPythonPackage rec {
@@ -37,12 +37,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "b1f80415f72f92ccb660aaea7b2881ddd35d07254f7c44101709d42e819d6be6";
   };
-  patches = [ (fetchpatch {
-    # Unpins pyct==0.46 (Sep. 11, 2020).
-    # Will be incorporated into the next datashader release after 0.11.1
-    url = "https://github.com/holoviz/datashader/pull/960/commits/d7a462fa399106c34fd0d44505a8a73789dbf874.patch";
-    sha256 = "1wqsk9dpxnkxr49fa7y5q6ahin80cvys05lnirs2w2p1dja35y4x";
-  })];
+
+  patches = [
+    (fetchpatch {
+      # Unpins pyct==0.46 (Sep. 11, 2020).
+      # Will be incorporated into the next datashader release after 0.11.1
+      url = "https://github.com/holoviz/datashader/pull/960/commits/d7a462fa399106c34fd0d44505a8a73789dbf874.patch";
+      sha256 = "1wqsk9dpxnkxr49fa7y5q6ahin80cvys05lnirs2w2p1dja35y4x";
+    })
+  ];
 
   propagatedBuildInputs = [
     dask
@@ -66,9 +69,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytest-benchmark
-    pytest_xdist # not needed
+    pytest-xdist # not needed
     flake8
     nbsmoke
     fastparquet
@@ -77,9 +80,14 @@ buildPythonPackage rec {
   ];
 
   # dask doesn't do well with large core counts
-  checkPhase = ''
-    pytest -n $NIX_BUILD_CORES datashader -k 'not dask.array and not test_simple_nested'
-  '';
+  # checkPhase = ''
+  #   pytest -n $NIX_BUILD_CORES datashader -k 'not dask.array and not test_simple_nested'
+  # '';
+
+  pytestFlagsArray = [
+    "-n $NIX_BUILD_CORES"
+    "datashader"
+  ];
 
   meta = with lib; {
     description = "Data visualization toolchain based on aggregating into a grid";

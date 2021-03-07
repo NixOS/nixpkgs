@@ -1656,7 +1656,9 @@ in {
 
   datasette = callPackage ../development/python-modules/datasette { };
 
-  datashader = callPackage ../development/python-modules/datashader { };
+  datashader = callPackage ../development/python-modules/datashader {
+    dask = self.dask.override { withExtraComplete = true; };
+  };
 
   datashape = callPackage ../development/python-modules/datashape { };
 
