@@ -1131,6 +1131,8 @@ in
 
   bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 
+  blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
+
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
   bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
@@ -3116,9 +3118,7 @@ in
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
-  cadaver = callPackage ../tools/networking/cadaver {
-    openssl = openssl_1_0_2;
-  };
+  cadaver = callPackage ../tools/networking/cadaver { };
 
   davix = callPackage ../tools/networking/davix { };
 
@@ -16536,6 +16536,8 @@ in
 
   pybind11 = pythonPackages.pybind11;
 
+  pylode = callPackage ../misc/pylode {};
+
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
     inherit (qt514) qmake qttools qtwebengine qtxmlpatterns;
@@ -21606,6 +21608,8 @@ in
   bombono = callPackage ../applications/video/bombono {};
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
+
+  bottles = callPackage ../applications/misc/bottles { };
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
