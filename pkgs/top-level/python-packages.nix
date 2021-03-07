@@ -1244,6 +1244,8 @@ in {
 
   certipy = callPackage ../development/python-modules/certipy { };
 
+  certvalidator = callPackage ../development/python-modules/certvalidator { };
+
   cffi = callPackage ../development/python-modules/cffi { };
 
   cfgv = callPackage ../development/python-modules/cfgv { };
@@ -7371,6 +7373,8 @@ in {
   simpy = callPackage ../development/python-modules/simpy { };
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };
+
+  signify = callPackage ../development/python-modules/signify { };
 
   sip = callPackage ../development/python-modules/sip { };
 
