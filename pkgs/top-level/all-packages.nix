@@ -16536,6 +16536,8 @@ in
 
   pybind11 = pythonPackages.pybind11;
 
+  pylode = callPackage ../misc/pylode {};
+
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
     inherit (qt514) qmake qttools qtwebengine qtxmlpatterns;
