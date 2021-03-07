@@ -1,8 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestrunner
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -14,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "1dx0j8hhjwip1ackaj2m4hqrrx2iiv846ic4wa6ymrawwb8iq8m6";
   };
 
-  checkInputs = [ pytestrunner pytest ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "ManageSieve client library for remotely managing Sieve scripts";
