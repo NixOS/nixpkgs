@@ -989,6 +989,8 @@ in {
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
 
+  bitlist = callPackage ../development/python-modules/bitlist { };
+
   bitmath = callPackage ../development/python-modules/bitmath { };
 
   bitstring = callPackage ../development/python-modules/bitstring { };
@@ -1243,6 +1245,8 @@ in {
   certifi = callPackage ../development/python-modules/certifi { };
 
   certipy = callPackage ../development/python-modules/certipy { };
+
+  certvalidator = callPackage ../development/python-modules/certvalidator { };
 
   cffi = callPackage ../development/python-modules/cffi { };
 
@@ -2242,6 +2246,8 @@ in {
 
   fdint = callPackage ../development/python-modules/fdint { };
 
+  fe25519 = callPackage ../development/python-modules/fe25519 { };
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator { inherit (pkgs) glibcLocales; };
@@ -2456,6 +2462,8 @@ in {
   foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
   foundationdb61 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb61; };
 
+  fountains = callPackage ../development/python-modules/fountains { };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fpdf = callPackage ../development/python-modules/fpdf { };
@@ -2539,6 +2547,8 @@ in {
   gdown = callPackage ../development/python-modules/gdown { };
 
   gdrivefs = callPackage ../development/python-modules/gdrivefs { };
+
+  ge25519 = callPackage ../development/python-modules/ge25519 { };
 
   geant4 = disabledIf (!isPy3k) (toPythonModule (pkgs.geant4.override {
     enablePython = true;
@@ -4769,6 +4779,8 @@ in {
 
   partd = callPackage ../development/python-modules/partd { };
 
+  parts = callPackage ../development/python-modules/parts { };
+
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };
 
@@ -6497,6 +6509,8 @@ in {
       inherit (pkgs) pkg-config;
     };
 
+  python-nmap = callPackage ../development/python-modules/python-nmap { };
+
   python-nomad = callPackage ../development/python-modules/python-nomad { };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
@@ -7371,6 +7385,8 @@ in {
   simpy = callPackage ../development/python-modules/simpy { };
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };
+
+  signify = callPackage ../development/python-modules/signify { };
 
   sip = callPackage ../development/python-modules/sip { };
 

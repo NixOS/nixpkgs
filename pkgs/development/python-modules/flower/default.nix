@@ -35,11 +35,13 @@ buildPythonPackage rec {
 
   checkInputs = [ mock ];
 
+  pythonImportsCheck = [ "flower" ];
+
   meta = with lib; {
     description = "Celery Flower";
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.arnoldfarkas ];
-    broken = (celery.version == "5.0.2"); # currently broken with celery>=5.0 by https://github.com/mher/flower/pull/1021
+    broken = (celery.version >= "5.0.2"); # currently broken with celery>=5.0 by https://github.com/mher/flower/pull/1021
   };
 }
