@@ -3782,6 +3782,8 @@ in
 
   drone-cli = callPackage ../development/tools/continuous-integration/drone-cli { };
 
+  drone-runner-exec = callPackage ../development/tools/continuous-integration/drone-runner-exec { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
