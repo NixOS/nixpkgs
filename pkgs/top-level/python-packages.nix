@@ -1411,8 +1411,6 @@ in {
 
   coilmq = callPackage ../development/python-modules/coilmq { };
 
-  coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
-
   ColanderAlchemy = callPackage ../development/python-modules/colanderalchemy { };
 
   colander = callPackage ../development/python-modules/colander { };
