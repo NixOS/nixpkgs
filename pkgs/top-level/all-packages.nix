@@ -32320,6 +32320,8 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
+  phppgadmin = callPackage ../servers/web-apps/phppgadmin { };
+
   pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
 
   pgf = pgf2;
