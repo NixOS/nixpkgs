@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , mock
-, pytest
+, pytestCheckHook
 , requests
 , unittest2
 , six
@@ -19,13 +19,14 @@ buildPythonPackage rec {
     sha256 = "00dpf5bfsy07frsjihv1k10zmwcyq4bvkilbxha7h6nlwpcm2409";
   };
 
-  checkInputs = [ mock pytest requests unittest2 ];
   propagatedBuildInputs = [ six ];
 
+  checkInputs = [ mock pytestCheckHook requests unittest2 ];
+
   # Functional tests require networking
-  checkPhase = ''
-    py.test --ignore=tests/functional/test_iis.py
-  '';
+  disabledTestPaths = [
+    "tests/functional/test_iis.py"
+  ];
 
   meta = with lib; {
     description = "Calculates NTLM Authentication codes";
