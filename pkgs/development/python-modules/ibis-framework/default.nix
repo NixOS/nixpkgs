@@ -4,7 +4,7 @@
 , numpy
 , pandas
 , pyarrow
-, pytest
+, pytestCheckHook
 , pytz
 , regex
 , requests
@@ -46,15 +46,18 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "ibis"
   ];
 
   # ignore tests which require test dataset, or frameworks not available
-  checkPhase = ''
-    pytest ibis \
-      --ignore=ibis/tests/all \
-      --ignore=ibis/{sql,spark}
-  '';
+  disabledTestPaths = [
+    "ibis/tests/all"
+    "ibis/{sql,spark}"
+  ];
 
   meta = with lib; {
     description = "Productivity-centric Python Big Data Framework";
