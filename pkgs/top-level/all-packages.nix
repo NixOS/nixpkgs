@@ -7339,6 +7339,8 @@ in
     openssl = openssl_1_0_2;
   };
 
+  prs = callPackage ../tools/security/prs { };
+
   psw = callPackage ../tools/misc/psw { };
 
   pws = callPackage ../tools/misc/pws { };
