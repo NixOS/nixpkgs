@@ -26,16 +26,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi ];
 
+  checkInputs = [ pytestCheckHook pyserial ];
+
   installCheckPhase = ''
     # we want to import the installed module that also contains the compiled library
-    rm -rf smbus
+    rm -r smbu
     runHook pytestCheckPhase
   '';
 
   # requires hardware access
-  pytestFlagsArray = [ "--ignore=test/test_smbus_integration.py" ];
-
-  checkInputs = [ pytestCheckHook pyserial ];
+  disabledTestPaths = [
+    "test/test_smbus_integration.py"
+  ];
 
   meta = with lib; {
     description = "Python module for SMBus access through Linux I2C /dev interface";
