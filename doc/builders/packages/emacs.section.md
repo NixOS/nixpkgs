@@ -36,7 +36,7 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
       ;; load some packages
 
       (use-package company
-        :bind ("&lt;C-tab&gt;" . company-complete)
+        :bind ("<C-tab>" . company-complete)
         :diminish company-mode
         :commands (company-mode global-company-mode)
         :defer 1
