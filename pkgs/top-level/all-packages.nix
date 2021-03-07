@@ -10887,14 +10887,14 @@ in
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust_1_49 = callPackage ../development/compilers/rust/1_49.nix {
+  rust_1_50 = callPackage ../development/compilers/rust/1_50.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust = rust_1_49;
+  rust = rust_1_50;
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_49 = rust_1_49.packages.stable;
-  rustPackages = rustPackages_1_49;
+  rustPackages_1_50 = rust_1_50.packages.stable;
+  rustPackages = rustPackages_1_50;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
