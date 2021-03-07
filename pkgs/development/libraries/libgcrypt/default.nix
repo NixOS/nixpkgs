@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap
-, buildPackages, fetchpatch
-}:
+{ lib, stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap, buildPackages }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -12,15 +10,6 @@ stdenv.mkDerivation rec {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
     sha256 = "sha256-ssENCRUTsnHkcXcnRgex/7o9lbGIu/qHl/lIrskFPFo=";
   };
-
-  patches = [
-    # fix build on 32bit musl
-    (fetchpatch {
-      name = "fix_building_with_disable-asm_on_x86.patch";
-      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=commitdiff_plain;h=af23ab5c5482d625ff52e60606cf044e2b0106c8";
-      sha256 = "1m8apm8wra6fk89ggha4d0bba5absihm38zvb2khklqh9q5hj9jw";
-    })
-  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev";
