@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytestcov
   ];
 
-  pytestFlagsArray = [ "--ignore=docs" ];
+  disabledTestPaths = [ "docs" ];
   pythonImportsCheck = [ "pytest_factoryboy" ];
 
   meta = with lib; {
