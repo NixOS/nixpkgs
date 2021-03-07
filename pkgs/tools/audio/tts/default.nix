@@ -92,11 +92,11 @@ python3Packages.buildPythonApplication rec {
     mv TTS{,.old}
   '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requires tensorflow
-    "--ignore=tests/test_tacotron2_tf_model.py"
-    "--ignore=tests/test_vocoder_tf_melgan_generator.py"
-    "--ignore=tests/test_vocoder_tf_pqmf.py"
+    "tests/test_tacotron2_tf_model.py"
+    "tests/test_vocoder_tf_melgan_generator.py"
+    "tests/test_vocoder_tf_pqmf.py"
   ];
 
   meta = with lib; {
