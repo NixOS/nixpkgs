@@ -41,7 +41,7 @@ buildPythonPackage rec {
     HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [ "--ignore=tests/test_opener.py" ];
+  disabledTestPaths = [ "tests/test_opener.py" ];
 
   disabledTests = [
     "user_data_repr"
@@ -62,5 +62,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };
-
 }
