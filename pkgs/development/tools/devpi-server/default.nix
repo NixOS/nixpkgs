@@ -42,21 +42,26 @@ python3Packages.buildPythonApplication rec {
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
   '';
+
   pytestFlagsArray = [
     "./test_devpi_server"
     "--slow"
     "-rfsxX"
-    "--ignore=test_devpi_server/test_nginx_replica.py"
-    "--ignore=test_devpi_server/test_streaming_nginx.py"
-    "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
   ];
+
+  disabledTestPaths = [
+    "test_devpi_server/test_nginx_replica.py"
+    "test_devpi_server/test_streaming_nginx.py"
+    "test_devpi_server/test_streaming_replica_nginx.py"
+  ];
+
   disabledTests = [
     "root_passwd_hash_option"
     "TestMirrorIndexThings"
   ];
 
   meta = with lib;{
-    homepage = "http://doc.devpi.net";
+    homepage = "https://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
