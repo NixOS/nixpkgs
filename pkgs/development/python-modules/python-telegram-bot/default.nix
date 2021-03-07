@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   # --with-upstream-urllib3 is not working properly
   postPatch = ''
-    rm -rf telegram/vendor
+    rm -r telegram/vendor
 
     substituteInPlace requirements.txt \
       --replace 'APScheduler==3.6.3' 'APScheduler'
