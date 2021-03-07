@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, lib, python3 }:
 
 stdenv.mkDerivation rec {
-  pname = "knot-exporter-unstable";
-  version = "2020-01-30";
+  pname = "knot-exporter";
+  version = "unstable-2020-01-30";
 
   src = fetchFromGitHub {
     owner = "ghedo";
