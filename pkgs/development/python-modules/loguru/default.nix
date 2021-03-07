@@ -12,10 +12,17 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook colorama ];
 
-  pytestFlagsArray = lib.optionals stdenv.isDarwin [ "--ignore=tests/test_multiprocessing.py" ];
+  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/test_multiprocessing.py" ];
 
-  disabledTests = [ "test_time_rotation_reopening" "test_file_buffering" ]
-    ++ lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" "test_await_complete_inheritance" ];
+  disabledTests = [
+    "test_time_rotation_reopening"
+    "test_file_buffering"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_rotation_and_retention"
+    "test_rotation_and_retention_timed_file"
+    "test_renaming"
+    "test_await_complete_inheritance"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Delgan/loguru";
