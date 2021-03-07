@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
 , bleach
 , mt-940
-, pytest
+, pytestCheckHook
 , requests
 , sepaxml
 }:
@@ -20,12 +20,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   # ignore network calls and broken fixture
-  checkPhase = ''
-    pytest . --ignore=tests/test_client.py -k 'not robust_mode'
-  '';
+  disabledTestPaths = [
+    "tests/test_client.py"
+  ];
+
+  disabledTests = [
+    "robust_mode"
+];
 
   meta = with lib; {
     homepage = "https://github.com/raphaelm/python-fints/";
