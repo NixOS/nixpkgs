@@ -2785,8 +2785,12 @@ package-maintainers:
   roberth:
     - arion-compose
     - hercules-ci-agent
+    - hercules-ci-api
     - hercules-ci-api-agent
     - hercules-ci-api-core
+    - hercules-ci-cli
+    - hercules-ci-cnix-expr
+    - hercules-ci-cnix-store
   cdepillabout:
     - pretty-simple
     - spago
