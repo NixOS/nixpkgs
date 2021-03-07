@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , inform
 , pytestCheckHook
 , docopt
@@ -21,7 +23,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ inform ];
 
   checkInputs = [ pytestCheckHook docopt natsort voluptuous ];
-  pytestFlagsArray = [ "--ignore=build" ]; # Avoids an ImportMismatchError.
+  disabledTestPaths = [
+    # Avoids an ImportMismatchError.
+    "build"
+  ];
 
   meta = with lib; {
     description = "A human friendly data format";
