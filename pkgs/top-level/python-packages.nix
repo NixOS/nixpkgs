@@ -1274,7 +1274,10 @@ in {
 
   characteristic = callPackage ../development/python-modules/characteristic { };
 
-  chardet = callPackage ../development/python-modules/chardet { };
+  chardet = if isPy3k then
+    callPackage ../development/python-modules/chardet { }
+  else
+    callPackage ../development/python-modules/chardet/3.nix { };
 
   chart-studio = callPackage ../development/python-modules/chart-studio { };
 
