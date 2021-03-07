@@ -7128,12 +7128,16 @@ in {
 
   rtslib = callPackage ../development/python-modules/rtslib { };
 
+  ruamel-base = self.ruamel_base;
   ruamel_base = callPackage ../development/python-modules/ruamel_base { };
 
+  ruamel-ordereddict = self.ruamel_ordereddict;
   ruamel_ordereddict = callPackage ../development/python-modules/ruamel_ordereddict { };
 
+  ruamel-yaml = self.ruamel_yaml;
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
+  ruamel-yaml-clib = self.ruamel_yaml_clib;
   ruamel_yaml_clib = callPackage ../development/python-modules/ruamel_yaml_clib { };
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
