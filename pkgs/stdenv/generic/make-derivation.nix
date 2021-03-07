@@ -106,7 +106,12 @@ in rec {
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || (stdenv.noCC or false);
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = if stdenv.hostPlatform.isMusl
+                              # Musl-based platforms will keep "pie", other platforms will not.
+      defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
+                                # Except when:
+                                #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+                                #    - static armv7l, where compilation fails.
+                                !((stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) && stdenv.hostPlatform.isStatic)
                               then supportedHardeningFlags
                               else lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
