@@ -1,7 +1,6 @@
 { lib, stdenv, buildPythonPackage, fetchPypi
-, setuptools_scm
-, cheroot, contextlib2, portend, routes, six, zc_lockfile
-, backports_unittest-mock, objgraph, pathpy, pytest, pytestcov, backports_functools_lru_cache, requests_toolbelt
+, setuptools_scm, cheroot, contextlib2, portend, routes, six, zc_lockfile
+, backports_unittest-mock, objgraph, pathpy, pytestCheckHook, pytestcov, backports_functools_lru_cache, requests_toolbelt
 }:
 
 buildPythonPackage rec {
@@ -21,12 +20,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm ];
 
   checkInputs = [
-    backports_unittest-mock objgraph pathpy pytest pytestcov backports_functools_lru_cache requests_toolbelt
+    backports_unittest-mock objgraph pathpy pytestCheckHook pytestcov backports_functools_lru_cache requests_toolbelt
   ];
 
-  checkPhase = ''
-    pytest ${lib.optionalString stdenv.isDarwin "--ignore=cherrypy/test/test_wsgi_unix_socket.py"}
-  '';
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "cherrypy/test/test_wsgi_unix_socket.py"
+  ];
 
   meta = with lib; {
     homepage = "https://www.cherrypy.org";
