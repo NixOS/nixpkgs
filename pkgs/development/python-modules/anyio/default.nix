@@ -43,12 +43,12 @@ buildPythonPackage rec {
     uvloop
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # lots of DNS lookups
-    "--ignore=tests/test_sockets.py"
+    "tests/test_sockets.py"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin sandboxing limitations
-    "--ignore=tests/streams/test_tls.py"
+    "tests/streams/test_tls.py"
   ];
 
   pythonImportsCheck = [ "anyio" ];
