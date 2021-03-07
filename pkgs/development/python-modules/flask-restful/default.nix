@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k
-, nose, mock, blinker, pytest
+, nose, mock, blinker, pytestCheckHook
 , flask, six, pytz, aniso8601, pycrypto
 }:
 
@@ -14,13 +14,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask six pytz aniso8601 pycrypto ];
 
-  checkInputs = [ pytest nose mock blinker ];
+  checkInputs = [ pytestCheckHook nose mock blinker ];
 
   # test_reqparse.py: werkzeug move Multidict location (only imported in tests)
   # handle_non_api_error isn't updated for addition encoding argument
-  checkPhase = ''
-    pytest --ignore=tests/test_reqparse.py -k 'not handle_non_api_error'
-  '';
+  disabledTestPaths = [
+    "tests/test_reqparse.py"
+  ];
+
+  disabledTests = [
+    "handle_non_api_error"
+  ];
 
   meta = with lib; {
     homepage = "https://flask-restful.readthedocs.io/";
