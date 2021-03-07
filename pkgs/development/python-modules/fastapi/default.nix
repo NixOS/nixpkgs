@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   # disabled tests require orjson which requires rust nightly
-  pytestFlagsArray = [ "--ignore=tests/test_default_response_class.py" ];
+  disabledTestPaths = [ "tests/test_default_response_class.py" ];
   disabledTests = [ "test_get_custom_response" ];
 
   meta = with lib; {
