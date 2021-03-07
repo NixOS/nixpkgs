@@ -28,7 +28,6 @@
 buildPythonPackage rec {
   pname = "cirq";
   version = "0.9.1";
-
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -69,6 +68,7 @@ buildPythonPackage rec {
   doCheck = true;
   # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];  # cirq's importlib hook doesn't work here
   dontUseSetuptoolsCheck = true;
+
   checkInputs = [
     pytestCheckHook
     pytest-asyncio
@@ -80,10 +80,14 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--ignore=dev_tools"  # Only needed when developing new code, which is out-of-scope
-    "--ignore=cirq/contrib/"  # requires external (unpackaged) python packages, so untested.
     "--benchmark-disable" # Don't need to run benchmarks when packaging.
   ];
+
+  disabledTestPaths = [
+    "dev_tools"  # Only needed when developing new code, which is out-of-scope
+    "cirq/contrib/"  # requires external (unpackaged) python packages, so untested.
+  ];
+
   disabledTests = [
     "test_convert_to_ion_gates" # fails on some systems due to rounding error, 0.75 != 0.750...2
   ] ++ lib.optionals stdenv.isAarch64 [
