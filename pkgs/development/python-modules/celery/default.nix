@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, billiard, click, click-didyoumean, click-repl, kombu, pytz, vine
+, billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
 , boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
       --replace "moto==1.3.7" moto
   '';
 
-  propagatedBuildInputs = [ billiard click click-didyoumean click-repl kombu pytz vine ];
+  propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
 
   checkInputs = [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
 
@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/celery/celery/";
     description = "Distributed task queue";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }
