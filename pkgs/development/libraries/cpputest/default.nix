@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://cpputest.github.io/";
     description = "Unit testing and mocking framework for C/C++";
-    platforms = platforms.linux ;
+    platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = [ maintainers.juliendehos ];
   };

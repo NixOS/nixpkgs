@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     description = "Tool for making eBooks from fanfiction web sites";
     homepage = "https://github.com/JimmXinu/FanFicFare";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ dwarfmaster ];
   };
 }

@@ -1,24 +1,36 @@
-{ buildPythonPackage, lib, fetchPypi, file, stdenv }:
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, substituteAll
+, file
+, glibcLocales
+}:
 
 buildPythonPackage rec {
   pname = "python-magic";
   version = "0.4.22";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ca884349f2c92ce830e3f498c5b7c7051fe2942c3ee4332f65213b8ebff15a62";
+  src = fetchFromGitHub {
+    owner = "ahupp";
+    repo = "python-magic";
+    rev = version;
+    sha256 = "0zbdjr5shijs0jayz7gycpx0kn6v2bh83dpanyajk2vmy47jvbd6";
   };
 
-  postPatch = ''
-    substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
+  patches = [
+    (substituteAll {
+      src = ./libmagic-path.patch;
+      libmagic = "${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
+
+  checkInputs = [ glibcLocales ];
+
+  checkPhase = ''
+    LC_ALL="en_US.UTF-8" ${python.interpreter} test/test.py
   '';
-
-  doCheck = false;
-
-  # TODO: tests are failing
-  #checkPhase = ''
-  #  ${python}/bin/${python.executable} ./test.py
-  #'';
 
   meta = {
     description = "A python interface to the libmagic file type identification library";

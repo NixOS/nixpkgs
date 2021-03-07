@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mednafen.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
