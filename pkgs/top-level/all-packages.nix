@@ -9097,6 +9097,8 @@ in
 
   xwallpaper = callPackage ../tools/X11/xwallpaper { };
 
+  gxkb = callPackage ../applications/misc/gxkb { };
+
   xxkb = callPackage ../applications/misc/xxkb { };
 
   ugarit = callPackage ../tools/backup/ugarit {
