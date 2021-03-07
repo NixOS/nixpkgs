@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, callPackage, runCommand, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap, naproche }:
+{ lib, stdenv, fetchurl, callPackage, runCommand, coreutils, perl, perlPackages
+, makeWrapper, nettools, java, polyml, z3, rlwrap, naproche }:
 # nettools needed for hostname
 
 let
@@ -71,7 +72,20 @@ stdenv.mkDerivation rec {
     for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
+
+    substituteInPlace src/Pure/System/isabelle_system.scala \
+      --replace 'List("/usr/bin/env", "bash")' 'List("'$SHELL'")'
+
+    substituteInPlace lib/Tools/env \
+      --replace /usr/bin/env ${coreutils}/bin/env
+
+    rm -rf lib/classes heaps
     '');
+
+  buildPhase = ''
+    bin/isabelle env src/Pure/build-jars
+    bin/isabelle build -v -o system_heaps -b HOL
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
