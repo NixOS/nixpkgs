@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap, naproche }:
+{ lib, stdenv, fetchurl, callPackage, runCommand, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap, naproche }:
 # nettools needed for hostname
+
+let
+  sha1 = callPackage ./sha1.nix {};
+  ml_home = runCommand "ml-home" {} ''
+    mkdir $out
+    ln -s ${polyml}/bin/* $out
+    ln -s ${polyml}/lib/* $out
+    ln -s ${sha1}/lib/* $out
+  '';
+in
 
 stdenv.mkDerivation rec {
   pname = "isabelle";
@@ -18,7 +28,7 @@ stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ naproche perl polyml z3 ]
+  buildInputs = [ naproche perl ml_home z3 ]
              ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
@@ -37,7 +47,7 @@ stdenv.mkDerivation rec {
       ML_SYSTEM_64=true
       ML_SYSTEM=${polyml.name}
       ML_PLATFORM=${stdenv.system}
-      ML_HOME=${polyml}/bin
+      ML_HOME=${ml_home}
       ML_OPTIONS="--minheap 1000"
       POLYML_HOME="\$COMPONENT"
       ML_SOURCES="\$POLYML_HOME/src"
