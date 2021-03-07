@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, gnumake, yasm, python3Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame
@@ -57,41 +57,15 @@ let
     sha256 = "097dg6a7v4ia85jx1pmlpwzdpqcqxlrmniqd005q73zvgj67zc2p";
   };
 
-  cmakeProto = fetchurl {
-    url = "https://raw.githubusercontent.com/pramsey/libght/ca9b1121c352ea10170636e170040e1af015bad1/cmake/modules/CheckPrototypeExists.cmake";
-    sha256  = "1zai82gm5x55n3xvdv7mns3ja6a2k81x9zz0nk42j6s2yb0fkjxh";
-  };
-
-  cmakeProtoPatch = ''
-    # get rid of windows headers as they will otherwise be found first
-    rm -rf msvc
-
-    cp ${cmakeProto} cmake/${cmakeProto.name}
-    # we need to enable support for C++ for check_prototype_exists to do its thing
-    substituteInPlace CMakeLists.txt --replace 'LANGUAGES C' 'LANGUAGES C CXX'
-    if [ -f cmake/CheckHeadersSTDC.cmake ]; then
-      sed -i cmake/CheckHeadersSTDC.cmake \
-        -e '7iinclude(CheckPrototypeExists)'
-    fi
-  '';
-
-  kodiDependency = { name, version, rev, sha256, ... } @attrs:
-    let
-      attrs' = builtins.removeAttrs attrs ["name" "version" "rev" "sha256"];
-    in stdenv.mkDerivation ({
-      name = "kodi-${lib.toLower name}-${version}";
-      src = fetchFromGitHub {
-        owner = "xbmc";
-        repo  = name;
-        inherit rev sha256;
-      };
-    } // attrs');
-
-  ffmpeg = kodiDependency rec {
-    name    = "FFmpeg";
+  ffmpeg = stdenv.mkDerivation rec {
+    pname = "kodi-ffmpeg";
     version = "4.3.1";
-    rev     = "${version}-${rel}-Beta1";
-    sha256  = "1c5rwlxn6xj501iw7masdv2p6wb9rkmd299lmlkx97sw1kvxvg2w";
+    src = fetchFromGitHub {
+      owner   = "xbmc";
+      repo    = "FFmpeg";
+      rev     = "${version}-${rel}-Beta1";
+      sha256  = "1c5rwlxn6xj501iw7masdv2p6wb9rkmd299lmlkx97sw1kvxvg2w";
+    };
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
       sed -i 's/ --cpu=''${CPU}//' CMakeLists.txt
@@ -110,47 +84,25 @@ let
 
   # We can build these externally but FindLibDvd.cmake forces us to build it
   # them, so we currently just use them for the src.
-  libdvdcss = kodiDependency rec {
-    name              = "libdvdcss";
-    version           = "1.4.2";
-    rev               = "${version}-${rel}-Beta-5";
-    sha256            = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
-    buildInputs       = [ linuxHeaders ];
-    nativeBuildInputs = [ cmake pkg-config ];
-    postPatch = ''
-      rm -rf msvc
-
-      substituteInPlace config.h.cm \
-        --replace '#cmakedefine O_BINARY "''${O_BINARY}"' '#define O_BINARY 0'
-    '';
-    cmakeFlags = [
-      "-DBUILD_SHARED_LIBS=1"
-      "-DHAVE_LINUX_DVD_STRUCT=1"
-    ];
+  libdvdcss = fetchFromGitHub {
+    owner = "xbmc";
+    repo = "libdvdcss";
+    rev = "1.4.2-${rel}-Beta-5";
+    sha256 = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
   };
 
-  libdvdnav = kodiDependency rec {
-    name              = "libdvdnav";
-    version           = "6.0.0";
-    rev               = "${version}-${rel}-Alpha-3";
-    sha256            = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
-    buildInputs       = [ libdvdcss libdvdread ];
-    nativeBuildInputs = [ cmake pkg-config ];
-    postPatch         = cmakeProtoPatch;
-    postInstall = ''
-      mv $out/lib/liblibdvdnav.so $out/lib/libdvdnav.so
-    '';
+  libdvdnav = fetchFromGitHub {
+    owner = "xbmc";
+    repo = "libdvdnav";
+    rev = "6.0.0-${rel}-Alpha-3";
+    sha256 = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
   };
 
-  libdvdread = kodiDependency rec {
-    name              = "libdvdread";
-    version           = "6.0.0";
-    rev               = "${version}-${rel}-Alpha-3";
-    sha256            = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
-    buildInputs       = [ libdvdcss ];
-    nativeBuildInputs = [ cmake pkg-config ];
-    configureFlags    = [ "--with-libdvdcss" ];
-    postPatch         = cmakeProtoPatch;
+  libdvdread = fetchFromGitHub {
+    owner = "xbmc";
+    repo = "libdvdread";
+    rev = "6.0.0-${rel}-Alpha-3";
+    sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
   };
 
   kodi_platforms =
@@ -184,7 +136,6 @@ in stdenv.mkDerivation {
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fmt fstrcmp rapidjson
       lirc
-      # libdvdcss libdvdnav libdvdread
     ]
     ++ lib.optional x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
@@ -231,9 +182,9 @@ in stdenv.mkDerivation {
 
     cmakeFlags = [
       "-DAPP_RENDER_SYSTEM=${if useGbm then "gles" else "gl"}"
-      "-Dlibdvdcss_URL=${libdvdcss.src}"
-      "-Dlibdvdnav_URL=${libdvdnav.src}"
-      "-Dlibdvdread_URL=${libdvdread.src}"
+      "-Dlibdvdcss_URL=${libdvdcss}"
+      "-Dlibdvdnav_URL=${libdvdnav}"
+      "-Dlibdvdread_URL=${libdvdread}"
       "-DGIT_VERSION=${kodiReleaseDate}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
@@ -270,7 +221,7 @@ in stdenv.mkDerivation {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH            ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo)}" \
+          --prefix PATH            ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
                  ++ lib.optional nfsSupport libnfs

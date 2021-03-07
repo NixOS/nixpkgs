@@ -1,19 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, scramp
-, isPy3k
 , passlib
+, pythonOlder
+, scramp
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.17.0";
-  disabled = !isPy3k;
+  version = "1.18.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FBmMWv6yiRBuQO5uXkwFKcU2mTn2yliKAos3GnX+IN0=";
+    sha256 = "1nkjxf95ldda41mkmahbikhd1fvxai5lfjb4a5gyhialpz4g5fim";
   };
 
   propagatedBuildInputs = [ passlib scramp ];

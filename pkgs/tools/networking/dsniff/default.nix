@@ -53,8 +53,8 @@ in gcc9Stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    rev = "debian/${version}+debian-29";
-    sha256 = "10zz9krf65jsqvlcr72ycp5cd27xwr18jkc38zqp2i4j6x0caj2g";
+    rev = "debian/${version}+debian-30";
+    sha256 = "1fk2k0sfdp5g27i11g0sbzm7al52raz5yr1aibzssnysv7l9xgzh";
     name = "dsniff.tar.gz";
   };
 

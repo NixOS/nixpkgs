@@ -112,6 +112,9 @@ stdenv.mkDerivation rec {
 
     # workaround until we use sage's fork of threejs, which contains a "version" file
     ./patches/dont-grep-threejs-version-from-minified-js.patch
+
+    # updated eclib output has punctuation changes and tidier whitespace
+    ./patches/eclib-20210223-test-formatting.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
