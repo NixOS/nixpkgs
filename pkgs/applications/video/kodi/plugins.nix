@@ -557,6 +557,55 @@ self: super: with self; {
     extraBuildInputs = [ libarchive lzma bzip2 zlib lz4 lzo openssl ];
   };
 
+  # an example of a plugin that won't work when packaged with nix
+  # because other packages will modify this package at runtime...
+  skin-arctic-zephyr-mod = mkKodiPlugin rec {
+    plugin = "skin-artic-zephyr-mod";
+    namespace = "skin.arctic.zephyr.mod";
+    version = "1.1.22";
+
+    src = fetchFromGitHub {
+      owner = "beatmasterRS";
+      repo = namespace;
+      rev = version;
+      sha256 = "1b34s36gfkvqzn840xcj3md52b3wnxhd2r5f8dc1qrny5ylpymjn";
+    };
+
+    propagatedBuildInputs = [
+      script-skinshortcuts
+      script-globalsearch
+      script-image-resource-select
+      resource-images-weathericons-white
+      script-skin-helper-colorpicker
+      script-embuary-info
+      script-embuary-helper
+      plugin-video-themoviedb-helper
+    ];
+  };
+
+  # an example of a package that works great
+  plugin-video-netflix = mkKodiPlugin rec {
+    plugin = "plugin-video-netflix";
+    namespace = "plugin.video.netflix";
+    version = "1.14.1";
+
+    src = fetchFromGitHub {
+      owner = "CastagnaIT";
+      repo = namespace;
+      rev = "v${version}";
+      sha256 = "0vv3234gg4brp0gvrsl4vdskmpfbyk4z7cjmmj31zn4m8j33japn";
+    };
+
+    propagatedBuildInputs = [
+      inputstream-adaptive
+      script-module-addon-signals
+      script-module-inputstreamhelper
+      script-module-pycryptodome
+      script-module-requests
+      script-module-myconnpy
+    ];
+  };
+
   # addons which are included in kodi
   audioencoder-kodi-builtin-aac = null;
   audioencoder-kodi-builtin-wma = null;
