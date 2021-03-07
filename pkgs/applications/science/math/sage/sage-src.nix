@@ -112,6 +112,14 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-uY2UlgSd5hhOUUukB4Xc3Gjy0/e7p/qyq9jdvz10IOs=";
     })
 
+    # don't use deprecated numpy type aliases (https://trac.sagemath.org/ticket/31364)
+    (fetchSageDiff {
+      base = "9.3.beta7";
+      name = "dont-use-deprecated-numpy-type-aliases.patch";
+      rev = "dfdef60515d4a4269e82d91280f76a7fdf10bf97";
+      sha256 = "sha256-77/3LkT5J7DQN8IPlGJKB6ZcJPaF7xwje06JNns+0AE=";
+    })
+
     # fix test output with sympy 1.7 (https://trac.sagemath.org/ticket/30985)
     ./patches/sympy-1.7-update.patch
 
