@@ -70,7 +70,7 @@ buildPythonApplication rec {
   ];
 
   # Slack backend test has an import issue
-  pytestFlagsArray = [ "--ignore=tests/backend_tests/slack_test.py" ];
+  disabledTestPaths = [ "tests/backend_tests/slack_test.py" ];
 
   disabledTests = [
     "backup"
