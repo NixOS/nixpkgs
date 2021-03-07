@@ -1,10 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch, texlive, bison, flex, lapack, blas
 , gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
 , readline, gettext, libpng, libao, gfortran, perl
-, enableGUI ? false, libGL ? null, libGLU ? null, xorg ? null, fltk ? null
+, enableGUI ? false, libGL, libGLU, xorg, fltk
 }:
 
-assert enableGUI -> libGLU != null && libGL != null && xorg != null && fltk != null;
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
