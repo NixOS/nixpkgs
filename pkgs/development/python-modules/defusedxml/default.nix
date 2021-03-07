@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, python
 }:
 
 buildPythonPackage rec {
@@ -13,6 +14,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "183fz8xwclhkirwpvpldyypn47r8lgzfz2mk9jgyg7b37jg5vcc6";
   };
+
+  checkPhase = ''
+    ${python.interpreter} tests.py
+  '';
 
   pythonImportsCheck = [ "defusedxml" ];
 
