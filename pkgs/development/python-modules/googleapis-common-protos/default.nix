@@ -3,7 +3,6 @@
 , fetchPypi
 , grpc
 , protobuf
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
