@@ -12,6 +12,9 @@
 , dill
 , pandas
 , partd
+, pytest-xdist
+, withExtraComplete ? false
+, distributed
 }:
 
 buildPythonPackage rec {
@@ -26,13 +29,6 @@ buildPythonPackage rec {
     sha256 = "LACv7lWpQULQknNGX/9vH9ckLsypbqKDGnsNBgKT1eI=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-rerunfailures
-  ];
-
-  dontUseSetuptoolsCheck = true;
-
   propagatedBuildInputs = [
     bokeh
     cloudpickle
@@ -42,7 +38,19 @@ buildPythonPackage rec {
     pandas
     partd
     toolz
+  ] ++ lib.optionals withExtraComplete [
+    distributed
   ];
+
+  doCheck = false;
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-rerunfailures
+    pytest-xdist
+  ];
+
+  dontUseSetuptoolsCheck = true;
 
   postPatch = ''
     # versioneer hack to set version of github package
@@ -53,14 +61,11 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  #pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   disabledTests = [
-    "test_argwhere_str"
-    "test_count_nonzero_str"
-    "rolling_methods" # floating percision error ~0.1*10^8 small
-    "num_workers_config" # flaky
-    "test_2args_with_array[pandas1-darray1-ldexp]" # flaky
+    "test_annotation_pack_unpack"
+    "test_annotations_blockwise_unpack"
   ];
 
   meta = with lib; {
