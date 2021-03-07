@@ -5,7 +5,7 @@
 , numpy, toolz # dask[array]
 , scipy
 , pims
-, pytest
+, pytestCheckHook
 , pytest-flake8
 , scikitimage
 }:
@@ -20,9 +20,11 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pytest-flake8 ];
+
   propagatedBuildInputs = [ dask numpy toolz scipy pims ];
+
   checkInputs = [
-    pytest
+    pytestCheckHook
     scikitimage
   ];
 
@@ -34,9 +36,10 @@ buildPythonPackage rec {
   '';
 
   # scikit.external is not exported
-  checkPhase = ''
-    pytest --ignore=tests/test_dask_image/
-  '';
+  disabledTestPaths = [
+    "tests/test_dask_image"
+  ];
+
   pythonImportsCheck = [ "dask_image" ];
 
   meta = with lib; {
