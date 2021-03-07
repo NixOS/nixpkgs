@@ -44,8 +44,11 @@ buildPythonPackage rec {
     "--assert=plain"
     "--strict"
     "--tb=native"
+  ];
+
+  disabledTestPaths = [
     # ignore code linting tests
-    "--ignore=tests/test_sourcecode.py"
+    "tests/test_sourcecode.py"
   ];
 
   # force using installed/compiled uvloop vs source by moving tests to temp dir
