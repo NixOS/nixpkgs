@@ -87,9 +87,6 @@ stdenv.mkDerivation rec {
       rev = "2959ac792ebd6107fe87c9af1541083de5ba02d6";
       sha256 = "sha256-bWIpEGir9Kawak5CJegBMNcHm/CqhWmdru+emeSsvO0=";
     })
-
-    # disable pexpect interrupt test (see https://trac.sagemath.org/ticket/30945)
-    ./patches/disable-pexpect-intermittent-failure.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
