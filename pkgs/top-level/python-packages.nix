@@ -1068,6 +1068,8 @@ in {
 
   bpython = callPackage ../development/python-modules/bpython { };
 
+  bracex = callPackage ../development/python-modules/bracex { };
+
   braintree = callPackage ../development/python-modules/braintree { };
 
   branca = callPackage ../development/python-modules/branca { };
