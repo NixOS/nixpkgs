@@ -22899,6 +22899,8 @@ in
 
   hamster = callPackage ../applications/misc/hamster { };
 
+  hacpack = callPackage ../tools/compression/hacpack { };
+
   hashit = callPackage ../tools/misc/hashit { };
 
   hactool = callPackage ../tools/compression/hactool { };
