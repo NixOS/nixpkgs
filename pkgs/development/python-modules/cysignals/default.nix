@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , fetchPypi
 , buildPythonPackage
 , cython
@@ -15,6 +16,16 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1ckxzch3wk5cg80mppky5jib5z4fzslny3001r5zg4ar1ixbc1w1";
   };
+
+  patches = [
+    # fixes intermittent crashes in Sage tests (including in interfaces/singular.py)
+    # will be included in cysignals 1.10.3: https://github.com/sagemath/cysignals/pull/127
+    (fetchpatch {
+      name = "fix-verify_exc_value.patch";
+      url = "https://github.com/sagemath/cysignals/commit/49a7eee4bba3ab8f340cf56c371fa4f5ed702dcc.patch";
+      sha256 = "sha256-Pfc5tL9VDSP6ftDoHoIb+MDi5rjYqr0PRfIajFuuYVs=";
+    })
+  ];
 
   # explicit check:
   # build/src/cysignals/implementation.c:27:2: error: #error "cysignals must be compiled without _FORTIFY_SOURCE"
