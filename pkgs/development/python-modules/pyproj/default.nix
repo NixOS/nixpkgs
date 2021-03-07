@@ -59,5 +59,6 @@ buildPythonPackage rec {
     description = "Python interface to PROJ.4 library";
     homepage = "https://github.com/jswhit/pyproj";
     license = with lib.licenses; [ isc ];
+    maintainers = [ ];
   };
 }
