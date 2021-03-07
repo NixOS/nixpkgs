@@ -19,15 +19,15 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   # skip tests which require being online to download test vectors
-  pytestFlags = [
-     "--ignore=fastecdsa/tests/test_wycheproof_vectors.py"
-     "--ignore=fastecdsa/tests/test_rfc6979_ecdsa.py"
+  disabledTestPaths = [
+     "fastecdsa/tests/test_wycheproof_vectors.py"
+     "fastecdsa/tests/test_rfc6979_ecdsa.py"
   ];
 
   # skip tests for now, they fail with
   # ImportError: cannot import name '_ecdsa' from 'fastecdsa'
   # but the installed package works just fine
-  doCheck = false;
+  # doCheck = false;
 
   pythonImportsCheck = [ "fastecdsa" ];
 
