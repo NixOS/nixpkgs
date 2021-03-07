@@ -402,7 +402,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         buildInputs = [ pcre' ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
           valgrind.dev
         ];
-        patches = [] ++ lib.optionals (lib.versionOlder php.version "7.4") [
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
             --- a/ext/opcache/zend_file_cache.c
             +++ b/ext/opcache/zend_file_cache.c
