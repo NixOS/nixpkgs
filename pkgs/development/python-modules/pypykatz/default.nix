@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pypykatz";
-  version = "0.3.15";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = pname;
     rev = version;
-    sha256 = "0bx2jdcfr1pdy3jgzg8fr5id9ffl2m1nc81dqhcplxdj8p214yri";
+    sha256 = "sha256-dTpkwBYEAITdyKsRTfeJk40hgO8+wmxD3d2XXkvWUpc=";
   };
 
   propagatedBuildInputs = [
