@@ -78,6 +78,10 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  postFixup = ''
+    ln -s $out/lib/eog/libeog${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
