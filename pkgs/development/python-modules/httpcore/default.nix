@@ -40,11 +40,11 @@ buildPythonPackage rec {
     trio
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known
-    "--ignore=tests/test_threadsafety.py"
-    "--ignore=tests/sync_tests/test_interfaces.py"
-    "--ignore=tests/sync_tests/test_retries.py"
+    "tests/test_threadsafety.py"
+    "tests/sync_tests/test_interfaces.py"
+    "tests/sync_tests/test_retries.py"
   ];
 
   pythonImportsCheck = [ "httpcore" ];
