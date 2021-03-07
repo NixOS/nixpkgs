@@ -68,10 +68,10 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini --replace "--doctest-modules" ""
   '';
 
-  pytestFlagsArray = [
-    "--ignore=tests/test_proxy_connect.py"
-    "--ignore=tests/test_utils_display.py"
-    "--ignore=tests/test_command_check.py"
+  disabledTestPaths = [
+    "tests/test_proxy_connect.py"
+    "tests/test_utils_display.py"
+    "tests/test_command_check.py"
   ];
 
   disabledTests = [
