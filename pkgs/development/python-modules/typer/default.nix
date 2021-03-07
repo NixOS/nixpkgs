@@ -35,9 +35,10 @@ buildPythonPackage rec {
     black
     isort
   ];
-  pytestFlagsArray = [
-    "--ignore=tests/test_completion/test_completion.py"
-    "--ignore=tests/test_completion/test_completion_install.py"
+
+  disabledTestPaths = [
+    "tests/test_completion/test_completion.py"
+    "tests/test_completion/test_completion_install.py"
   ];
 
   meta = with lib; {
