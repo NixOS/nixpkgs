@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.7.4";
+  version = "3.7.4.post0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pn79h8fng4xi5gl1f6saw31nxgmgyxl41yf3vba1l21673yr12x";
+    sha256 = "493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf";
   };
 
   postPatch = ''
