@@ -8,6 +8,7 @@
   kak-auto-pairs = pkgs.callPackage ./kak-auto-pairs.nix { };
   kak-buffers = pkgs.callPackage ./kak-buffers.nix { };
   kak-fzf = pkgs.callPackage ./kak-fzf.nix { };
+  kakoune-gdb = pkgs.callPackage ./kakoune-gdb.nix { };
   kak-plumb = pkgs.callPackage ./kak-plumb.nix { };
   kak-powerline = pkgs.callPackage ./kak-powerline.nix { };
   kak-prelude = pkgs.callPackage ./kak-prelude.nix { };
