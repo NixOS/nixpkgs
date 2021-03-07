@@ -2000,6 +2000,8 @@ in
 
   slurp = callPackage ../tools/wayland/slurp { };
 
+  swaykbdd = callPackage ../tools/wayland/swaykbdd { };
+
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wev = callPackage ../tools/wayland/wev { };
