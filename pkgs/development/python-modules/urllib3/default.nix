@@ -46,6 +46,11 @@ buildPythonPackage rec {
     trustme
   ];
 
+  disabledTests = [
+    # socket.timeout: _ssl.c:1108: The handshake operation timed out
+    "test_ssl_custom_validation_failure_terminates"
+  ];
+
   pythonImportsCheck = [ "urllib3" ];
 
   meta = with lib; {
