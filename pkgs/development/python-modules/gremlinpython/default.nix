@@ -34,15 +34,18 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace 'addopts' '#addopts'
   '';
 
-  # many tests expect a running tinkerpop server
   pytestFlagsArray = [
-    "--ignore=tests/driver/test_client.py"
-    "--ignore=tests/driver/test_driver_remote_connection.py"
-    "--ignore=tests/driver/test_driver_remote_connection_threaded.py"
-    "--ignore=tests/process/test_dsl.py"
-    "--ignore=tests/structure/io/test_functionalityio.py"
     # disabledTests doesn't quite allow us to be precise enough for this
     "-k 'not (TestFunctionalGraphSONIO and (test_timestamp or test_datetime or test_uuid))'"
+  ];
+
+  # many tests expect a running tinkerpop server
+  disabledTestPaths = [
+    "tests/driver/test_client.py"
+    "tests/driver/test_driver_remote_connection.py"
+    "tests/driver/test_driver_remote_connection_threaded.py"
+    "tests/process/test_dsl.py"
+    "tests/structure/io/test_functionalityio.py"
   ];
 
   meta = with lib; {
