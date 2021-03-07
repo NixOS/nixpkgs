@@ -6257,7 +6257,9 @@ in {
   pytest-runner = self.pytestrunner; # added 2021-01-04
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
 
-  pytest-sanic = callPackage ../development/python-modules/pytest-sanic { };
+  pytest-sanic = callPackage ../development/python-modules/pytest-sanic {
+    sanic = self.sanic.override { doCheck = false; };
+  };
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
