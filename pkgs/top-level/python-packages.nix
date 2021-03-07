@@ -1622,7 +1622,9 @@ in {
 
   dask-gateway = callPackage ../development/python-modules/dask-gateway { };
 
-  dask-gateway-server = callPackage ../development/python-modules/dask-gateway-server { inherit (pkgs) go; };
+  dask-gateway-server = callPackage ../development/python-modules/dask-gateway-server {
+    inherit (pkgs) go;
+  };
 
   dask-glm = callPackage ../development/python-modules/dask-glm { };
 
@@ -1640,7 +1642,9 @@ in {
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
 
-  databricks-connect = callPackage ../development/python-modules/databricks-connect { inherit (pkgs) jdk; };
+  databricks-connect = callPackage ../development/python-modules/databricks-connect {
+    inherit (pkgs) jdk;
+  };
 
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
@@ -1840,8 +1844,8 @@ in {
 
   django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
 
-  django_hijack = callPackage ../development/python-modules/django-hijack
-    { }; # This package may need an older version of Django. Override the package set and set e.g. `django = super.django_1_9`. See the Nixpkgs manual for examples on how to override the package set.
+  django_hijack = callPackage ../development/python-modules/django-hijack { };
+  # This package may need an older version of Django. Override the package set and set e.g. `django = super.django_1_9`. See the Nixpkgs manual for examples on how to override the package set.
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
@@ -1929,7 +1933,9 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
-  dlib = callPackage ../development/python-modules/dlib { inherit (pkgs) dlib; };
+  dlib = callPackage ../development/python-modules/dlib {
+    inherit (pkgs) dlib;
+  };
 
   dlx = callPackage ../development/python-modules/dlx { };
 
@@ -1992,7 +1998,9 @@ in {
 
   dotty-dict = callPackage ../development/python-modules/dotty-dict { };
 
-  dot2tex = callPackage ../development/python-modules/dot2tex { inherit (pkgs) graphviz; };
+  dot2tex = callPackage ../development/python-modules/dot2tex {
+    inherit (pkgs) graphviz;
+  };
 
   dparse = callPackage ../development/python-modules/dparse { };
 
@@ -2010,11 +2018,15 @@ in {
 
   ds-store = callPackage ../development/python-modules/ds-store { };
 
-  ds4drv = callPackage ../development/python-modules/ds4drv { inherit (pkgs) fetchFromGitHub bluez; };
+  ds4drv = callPackage ../development/python-modules/ds4drv {
+    inherit (pkgs) bluez;
+  };
 
   dtopt = callPackage ../development/python-modules/dtopt { };
 
-  duckdb = callPackage ../development/python-modules/duckdb { duckdb = pkgs.duckdb; };
+  duckdb = callPackage ../development/python-modules/duckdb {
+    inherit (pkgs) duckdb;
+  };
 
   duecredit = callPackage ../development/python-modules/duecredit { };
 
@@ -2097,9 +2109,13 @@ in {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
-  entrance = callPackage ../development/python-modules/entrance { routerFeatures = false; };
+  entrance = callPackage ../development/python-modules/entrance {
+    routerFeatures = false;
+  };
 
-  entrance-with-router-features = callPackage ../development/python-modules/entrance { routerFeatures = true; };
+  entrance-with-router-features = callPackage ../development/python-modules/entrance {
+    routerFeatures = true;
+  };
 
   entrypoint2 = callPackage ../development/python-modules/entrypoint2 { };
 
@@ -2248,7 +2264,9 @@ in {
 
   feedgen = callPackage ../development/python-modules/feedgen { };
 
-  feedgenerator = callPackage ../development/python-modules/feedgenerator { inherit (pkgs) glibcLocales; };
+  feedgenerator = callPackage ../development/python-modules/feedgenerator {
+    inherit (pkgs) glibcLocales;
+  };
 
   feedparser = if isPy3k then
     callPackage ../development/python-modules/feedparser { }
@@ -2279,7 +2297,9 @@ in {
 
   fints = callPackage ../development/python-modules/fints { };
 
-  fiona = callPackage ../development/python-modules/fiona { gdal_2 = pkgs.gdal_2; };
+  fiona = callPackage ../development/python-modules/fiona {
+    gdal_2 = pkgs.gdal_2;
+  };
 
   fipy = callPackage ../development/python-modules/fipy { };
 
@@ -3781,7 +3801,9 @@ in {
   else
     (toPythonModule (pkgs.libtorrent-rasterbar.override { inherit python; })).python;
 
-  libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
+  libusb1 = callPackage ../development/python-modules/libusb1 {
+    inherit (pkgs) libusb1;
+  };
 
   libversion = callPackage ../development/python-modules/libversion {
     inherit (pkgs) libversion;
@@ -5605,8 +5627,6 @@ in {
   pyGtkGlade = self.pygtk.override {
     inherit (pkgs.gnome2) libglade;
   };
-
-  pyGtkGlade = self.pygtk.override { libglade = pkgs.gnome2.libglade; };
 
   pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
 
@@ -7773,7 +7793,9 @@ in {
 
   sybil = callPackage ../development/python-modules/sybil { };
 
-  symengine = callPackage ../development/python-modules/symengine { symengine = pkgs.symengine; };
+  symengine = callPackage ../development/python-modules/symengine {
+    inherit (pkgs) symengine;
+  };
 
   sympy = if isPy3k then
     callPackage ../development/python-modules/sympy { }
