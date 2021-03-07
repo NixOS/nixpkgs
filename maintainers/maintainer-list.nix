@@ -6415,6 +6415,12 @@
     githubId = 1572058;
     name = "Leonardo Cecchi";
   };
+  leonardp = {
+    email = "leonardp@tr-host.de";
+    github = "leonardp";
+    githubId = 1729812;
+    name = "Leonard Pollak";
+  };
   leshainc = {
     email = "leshainc@fomalhaut.me";
     github = "LeshaInc";
