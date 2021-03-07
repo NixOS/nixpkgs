@@ -8492,6 +8492,8 @@ in {
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 
+  wcmatch = callPackage ../development/python-modules/wcmatch { };
+
   wcwidth = callPackage ../development/python-modules/wcwidth { };
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
