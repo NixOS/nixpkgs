@@ -6499,6 +6499,8 @@ in {
       inherit (pkgs) pkg-config;
     };
 
+  python-nmap = callPackage ../development/python-modules/python-nmap { };
+
   python-nomad = callPackage ../development/python-modules/python-nomad { };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
