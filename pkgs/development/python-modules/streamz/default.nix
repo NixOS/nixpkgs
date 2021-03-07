@@ -4,7 +4,7 @@
 , flaky
 , graphviz
 , networkx
-, pytest
+, pytestCheckHook
 , requests
 , six
 , toolz
@@ -35,19 +35,22 @@ buildPythonPackage rec {
     distributed
     flaky
     graphviz
-    pytest
+    pytestCheckHook
     requests
   ];
 
   disabled = pythonOlder "3.6";
 
+  pytestFlagsArray = [
+    "--deselect=streamz/tests/test_sources.py::test_tcp_async"
+    "--deselect=streamz/tests/test_sources.py::test_tcp"
+  ];
+
   # Disable test_tcp_async because fails on sandbox build
   # disable kafka tests
-  checkPhase = ''
-    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async \
-      --deselect=streamz/tests/test_sources.py::test_tcp \
-      --ignore=streamz/tests/test_kafka.py
-  '';
+  disabledTestPaths = [
+    "streamz/tests/test_kafka.py"
+  ];
 
   meta = with lib; {
     description = "Pipelines to manage continuous streams of data";
