@@ -19,7 +19,9 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   # tries to compile programs with dependencies that aren't available
-  pytestFlagsArray = [ "--ignore=tests/setproctitle_test.py" ];
+  disabledTestPaths = [
+    "tests/setproctitle_test.py"
+  ];
 
   meta = with lib; {
     description = "Allows a process to change its title (as displayed by system tools such as ps and top)";
