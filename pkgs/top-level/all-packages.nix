@@ -9349,6 +9349,8 @@ in
 
   yeshup = callPackage ../tools/system/yeshup { };
 
+  ytfzf = callPackage ../tools/misc/ytfzf { };
+
   ytree = callPackage ../tools/misc/ytree { };
 
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
