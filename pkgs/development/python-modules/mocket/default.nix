@@ -42,12 +42,12 @@ buildPythonPackage rec {
     sure
   ];
 
-  pytestFlagsArray = [
-    "--ignore=tests/main/test_pook.py" # pook is not packaged
-    "--ignore=tests/main/test_redis.py" # requires a live redis instance
+  disabledTestPaths = [
+    "tests/main/test_pook.py" # pook is not packaged
+    "tests/main/test_redis.py" # requires a live redis instance
   ] ++ lib.optionals (pythonOlder "3.8") [
     # uses IsolatedAsyncioTestCase which is only available >= 3.8
-    "--ignore=tests/tests38/test_http_aiohttp.py"
+    "tests38/test_http_aiohttp.py"
   ];
 
   disabledTests = [
