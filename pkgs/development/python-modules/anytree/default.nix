@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook nose ];
 
-  pytestFlagsArray = lib.optionals (pythonOlder "3.4") [
+  disabledTestPaths = lib.optionals (pythonOlder "3.4") [
     # Use enums, which aren't available pre-python3.4
-    "--ignore=tests/test_resolver.py"
-    "--ignore=tests/test_search.py"
+    "tests/test_resolver.py"
+    "tests/test_search.py"
   ];
 
   meta = with lib; {
