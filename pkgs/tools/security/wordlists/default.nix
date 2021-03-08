@@ -1,7 +1,7 @@
 { lib
 , pkgs
 , runtimeShell
-, stdenv
+, symlinkJoin
 , tree
 }:
 
@@ -24,28 +24,22 @@ let
         in acc // { ${datum.name} = p; };
     in builtins.foldl' _packageWithLinkCommandFrom {} _wordlistData
   );
-in let
-  # Given an array of wordlist packages,
-  # return an array of bash commands to create symlinks to the files shared by each package.
-  allLinksCommandFor = wordlistPackages:
-    lib.concatStringsSep "\n" (builtins.map (x: "ln -s ${x}/share/${x.passthru.shared} $out/share/${x.passthru.shared}") wordlistPackages);
 
 in let
   packageConstructor = wordlistPackages:
-    stdenv.mkDerivation rec {
+    symlinkJoin rec {
       pname = "security-wordlists";
       version = "unstable-2020-11-23";
+
+      name = "${pname}-${version}";
+
+      paths = wordlistPackages;
 
       dontUnpack = true;
 
       propagatedBuildInputs = [ tree ];
 
-      installPhase = ''
-        # Create the links to the requested wordlists.
-        mkdir -p $out/share
-
-        ${allLinksCommandFor wordlistPackages}
-
+      postBuild = ''
         # Create a command to show the location of the links.
         mkdir -p $out/bin
         cat >> $out/bin/wordlists << __EOF__

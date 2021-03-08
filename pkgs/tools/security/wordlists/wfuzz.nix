@@ -3,10 +3,7 @@
 , wfuzz
 }:
 
-let
-  shared = "wfuzz";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "wfuzz";
   inherit (wfuzz) version;
 
@@ -14,10 +11,8 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/share
-    cp -R "$src/" "$out/share/${shared}"
+    cp -R "$src/" "$out/share/wfuzz"
   '';
-
-  passthru = { inherit shared; };
 
   meta = with lib; {
     inherit (wfuzz.meta) license homepage;

@@ -3,7 +3,6 @@
 }:
 
 let
-  shared = "dirbuster";
   version = "1.0-RC1";
 
 in fetchzip rec {
@@ -14,10 +13,8 @@ in fetchzip rec {
 
   postFetch = ''
     mkdir -p $out/share/dirbuster
-    unzip -j $downloadedFile ${name}/directory-list-\*.txt -d $out/share/${shared}
+    unzip -j $downloadedFile ${name}/directory-list-\*.txt -d $out/share/dirbuster
   '';
-
-  passthru = { inherit shared; };
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/dirbuster/";

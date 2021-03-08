@@ -4,10 +4,7 @@
 , stdenv
 }:
 
-let
-  shared = "nmap.lst";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "nmap";
   version = "unstable-2020-10-19";
 
@@ -21,10 +18,8 @@ in stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
-    install -m 444 -D $src $out/share/${shared}
+    install -m 444 -D $src $out/share/nmap.lst
   '';
-
-  passthru = { inherit shared; };
 
   meta = with lib; {
     inherit (nmap.meta) homepage license;

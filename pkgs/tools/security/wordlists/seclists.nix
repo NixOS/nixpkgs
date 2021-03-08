@@ -3,10 +3,7 @@
 , stdenv
 }:
 
-let
-  shared = "SecLists";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "SecLists";
   version = "unstable-2020-11-11";
 
@@ -20,11 +17,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/SecLists
     cp -R Discovery Fuzzing IOCs Miscellaneous Passwords Pattern-Matching Payloads Usernames Web-Shells \
-      $out/share/${shared}
-    find $out/share/${shared} -name "*.md" -delete
+      $out/share/SecLists
+    find $out/share/SecLists -name "*.md" -delete
   '';
-
-  passthru = { inherit shared; };
 
   meta = with lib; {
     homepage = "https://github.com/danielmiessler/SecLists";

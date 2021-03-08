@@ -3,10 +3,7 @@
 , stdenv
 }:
 
-let
-  shared = "rockyou.txt";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "rockyou";
   version = "0.3-1kali3";
 
@@ -24,10 +21,8 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -m 444 -D rockyou.txt $out/share/${shared}
+    install -m 444 -D rockyou.txt $out/share/rockyou.txt
   '';
-
-  passthru = { inherit shared; };
 
   meta = with lib; {
     license = "unknown";
