@@ -1,32 +1,24 @@
-diff --git a/clients/common/nm-polkit-listener.c b/clients/common/nm-polkit-listener.c
-index ace205e80..f19c1dea0 100644
---- a/clients/common/nm-polkit-listener.c
-+++ b/clients/common/nm-polkit-listener.c
-@@ -552,7 +552,7 @@ begin_authentication (AuthRequest *request)
- {
- 	int fd_flags;
- 	const char *helper_argv[] = {
--		POLKIT_PACKAGE_PREFIX "/lib/polkit-1/polkit-agent-helper-1",
-+		"/run/wrappers/bin/polkit-agent-helper-1",
- 		request->username,
- 		NULL,
- 	};
 diff --git a/clients/common/nm-vpn-helpers.c b/clients/common/nm-vpn-helpers.c
-index 74ff52bb2..638857df4 100644
+index 15c47c3ec..4d1913aa6 100644
 --- a/clients/common/nm-vpn-helpers.c
 +++ b/clients/common/nm-vpn-helpers.c
-@@ -213,10 +213,7 @@ nm_vpn_openconnect_authenticate_helper (const char *host,
- 		NULL,
- 	};
+@@ -208,15 +208,7 @@ nm_vpn_openconnect_authenticate_helper(const char *host,
+         NULL,
+     };
  
--	path = nm_utils_file_search_in_paths ("openconnect", "/usr/sbin/openconnect", DEFAULT_PATHS,
--	                                      G_FILE_TEST_IS_EXECUTABLE, NULL, NULL, error);
--	if (!path)
--		return FALSE;
-+	path = "@openconnect@/bin/openconnect";
+-    path = nm_utils_file_search_in_paths("openconnect",
+-                                         "/usr/sbin/openconnect",
+-                                         DEFAULT_PATHS,
+-                                         G_FILE_TEST_IS_EXECUTABLE,
+-                                         NULL,
+-                                         NULL,
+-                                         error);
+-    if (!path)
+-        return FALSE;
++    path = "@openconnect@/bin/openconnect";
  
- 	if (!g_spawn_sync (NULL,
- 	                   (char **) NM_MAKE_STRV (path, "--authenticate", host),
+     if (!g_spawn_sync(NULL,
+                       (char **) NM_MAKE_STRV(path, "--authenticate", host),
 diff --git a/data/84-nm-drivers.rules b/data/84-nm-drivers.rules
 index e398cb9f2..a43d61864 100644
 --- a/data/84-nm-drivers.rules
@@ -53,10 +45,10 @@ index 91ebd9a36..5201a56c3 100644
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
 diff --git a/libnm/meson.build b/libnm/meson.build
-index d3991ab19..58f01c666 100644
+index d0846419c..a7adb2cc6 100644
 --- a/libnm/meson.build
 +++ b/libnm/meson.build
-@@ -283,7 +283,6 @@ if enable_introspection
+@@ -280,7 +280,6 @@ if enable_introspection
      output: 'nm-settings-docs-gir.xml',
      command: [
        generate_setting_docs_env,
@@ -64,37 +56,37 @@ index d3991ab19..58f01c666 100644
        join_paths(meson.source_root(), 'tools', 'generate-docs-nm-settings-docs-gir.py'),
        '--lib-path', meson.current_build_dir(),
        '--gir', '@INPUT@',
-diff --git a/src/devices/nm-device.c b/src/devices/nm-device.c
-index de09e4807..2755db165 100644
---- a/src/devices/nm-device.c
-+++ b/src/devices/nm-device.c
-@@ -13705,14 +13705,14 @@ nm_device_start_ip_check (NMDevice *self)
- 			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
- 			if (gw) {
- 				_nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
--				ping_binary = nm_utils_find_helper ("ping", "/usr/bin/ping", NULL);
-+				ping_binary = "@iputils@/bin/ping";
- 				log_domain = LOGD_IP4;
- 			}
- 		} else if (priv->ip_config_6 && priv->ip_state_6 == NM_DEVICE_IP_STATE_DONE) {
- 			gw = nm_ip6_config_best_default_route_get (priv->ip_config_6);
- 			if (gw) {
- 				_nm_utils_inet6_ntop (&NMP_OBJECT_CAST_IP6_ROUTE (gw)->gateway, buf);
--				ping_binary = nm_utils_find_helper ("ping6", "/usr/bin/ping6", NULL);
-+				ping_binary = "@iputils@/bin/ping";
- 				log_domain = LOGD_IP6;
- 			}
- 		}
-diff --git a/src/nm-core-utils.c b/src/nm-core-utils.c
-index 3950c3c3a..a9436d75a 100644
---- a/src/nm-core-utils.c
-+++ b/src/nm-core-utils.c
-@@ -336,7 +336,7 @@ nm_utils_modprobe (GError **error, gboolean suppress_error_logging, const char *
+diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
+index 040dd0b4d..98aea3aa9 100644
+--- a/src/core/devices/nm-device.c
++++ b/src/core/devices/nm-device.c
+@@ -13957,14 +13957,14 @@ nm_device_start_ip_check(NMDevice *self)
+             gw = nm_ip4_config_best_default_route_get(priv->ip_config_4);
+             if (gw) {
+                 _nm_utils_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
+-                ping_binary = nm_utils_find_helper("ping", "/usr/bin/ping", NULL);
++                ping_binary = "@iputils@/bin/ping";
+                 log_domain  = LOGD_IP4;
+             }
+         } else if (priv->ip_config_6 && priv->ip_state_6 == NM_DEVICE_IP_STATE_DONE) {
+             gw = nm_ip6_config_best_default_route_get(priv->ip_config_6);
+             if (gw) {
+                 _nm_utils_inet6_ntop(&NMP_OBJECT_CAST_IP6_ROUTE(gw)->gateway, buf);
+-                ping_binary = nm_utils_find_helper("ping6", "/usr/bin/ping6", NULL);
++                ping_binary = "@iputils@/bin/ping";
+                 log_domain  = LOGD_IP6;
+             }
+         }
+diff --git a/src/core/nm-core-utils.c b/src/core/nm-core-utils.c
+index 9075c30dd..4b140e92b 100644
+--- a/src/core/nm-core-utils.c
++++ b/src/core/nm-core-utils.c
+@@ -333,7 +333,7 @@ nm_utils_modprobe(GError **error, gboolean suppress_error_logging, const char *a
  
- 	/* construct the argument list */
- 	argv = g_ptr_array_sized_new (4);
--	g_ptr_array_add (argv, "/sbin/modprobe");
-+	g_ptr_array_add (argv, "@kmod@/bin/modprobe");
- 	g_ptr_array_add (argv, "--use-blacklist");
- 	g_ptr_array_add (argv, (char *) arg1);
+     /* construct the argument list */
+     argv = g_ptr_array_sized_new(4);
+-    g_ptr_array_add(argv, "/sbin/modprobe");
++    g_ptr_array_add(argv, "@kmod@/bin/modprobe");
+     g_ptr_array_add(argv, "--use-blacklist");
+     g_ptr_array_add(argv, (char *) arg1);
  
