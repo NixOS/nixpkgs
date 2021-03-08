@@ -1,4 +1,9 @@
-{ stdenv, nixosTests, lib, fetchFromGitHub, python3
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, python3
+, nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -84,7 +89,14 @@ in with py.pkgs; buildPythonApplication rec {
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
-  patches = [];
+  patches = [
+    (fetchpatch {
+      # Fix I-frame interval in stream test video
+      # https://github.com/home-assistant/core/pull/47638
+      url = "https://github.com/home-assistant/core/commit/d9bf63103fde44ddd38fb6b9a510d82609802b36.patch";
+      sha256 = "1y34cmw9zqb2lxyzm0q7vxlm05wwz76mhysgnh1jn39484fn9f9m";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -331,12 +343,6 @@ in with py.pkgs; buildPythonApplication rec {
     # generic/test_camera.py: AssertionError: 500 == 200
     "test_fetching_without_verify_ssl"
     "test_fetching_url_with_verify_ssl"
-  ] ++ lib.optionals (stdenv.isAarch64) [
-    # tests getting stuck on aarch64
-    # components/stream/test_hls.py
-    "test_stream_ended"
-    # components/stream/test_recorder.py
-    "test_record_stream"
   ];
 
   preCheck = ''
