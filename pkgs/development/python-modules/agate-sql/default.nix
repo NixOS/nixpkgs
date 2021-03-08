@@ -1,20 +1,24 @@
 { lib, fetchPypi, buildPythonPackage, agate, sqlalchemy, crate }:
 
 buildPythonPackage rec {
-    pname = "agate-sql";
-    version = "0.5.5";
+  pname = "agate-sql";
+  version = "0.5.5";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "50a39754babef6cd0d1b1e75763324a49593394fe46ab1ea9546791b5e6b69a7";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "50a39754babef6cd0d1b1e75763324a49593394fe46ab1ea9546791b5e6b69a7";
+  };
 
-    propagatedBuildInputs = [ agate sqlalchemy crate ];
+  propagatedBuildInputs = [ agate sqlalchemy crate ];
 
-    meta = with lib; {
-      description = "Adds SQL read/write support to agate.";
-      homepage    = "https://github.com/wireservice/agate-sql";
-      license     = with licenses; [ mit ];
-      maintainers = with maintainers; [ vrthra ];
-    };
+  pythonImportsCheck = [ "agatesql" ];
+
+  meta = with lib; {
+    description = "Adds SQL read/write support to agate.";
+    homepage = "https://github.com/wireservice/agate-sql";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ vrthra ];
+    # FAIL: test_to_sql_create_statement_with_schema (tests.test_agatesql.TestSQL)
+    broken = true;
+  };
 }
