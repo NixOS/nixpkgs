@@ -1042,6 +1042,8 @@ in
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
+  aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
+
   iamy = callPackage ../tools/admin/iamy { };
 
   azure-cli = callPackage ../tools/admin/azure-cli { };
