@@ -5,18 +5,20 @@
 , git, nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
 
 stdenv.mkDerivation rec {
-  version = "2021-03-01";
+  version = "2021-03-08";
   pname = "oh-my-zsh";
-  rev = "6fbad5bf72fad4ecf30ba4d4ffee62bac582f0ed";
+  rev = "0ab87c26c17171ae6162ff379a0c704fa57dff2e";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "1sd9lhgrig4vpdy0d1ls551gzs7y9q4hq2m0jakslqliyx5d6mpn";
+    sha256 = "1ryf7wj7k7b63sg3ipjdmn3wnyjlh0saf2kz084jmy82hxhqpd8w";
   };
 
   installPhase = ''
+    runHook preInstall
+
     outdir=$out/share/oh-my-zsh
     template=templates/zshrc.zsh-template
 
@@ -64,6 +66,8 @@ stdenv.mkDerivation rec {
         . ~/.zsh_aliases
     fi
     EOF
+
+    runHook postInstall
   '';
 
   passthru = {
