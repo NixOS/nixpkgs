@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ppp, iproute }:
+{ lib, stdenv, fetchurl, perl, ppp, iproute }:
 
 stdenv.mkDerivation rec {
   pname = "pptp";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PPTP client for Linux";
     homepage = "http://pptpclient.sourceforge.net/";
     license = licenses.gpl2;

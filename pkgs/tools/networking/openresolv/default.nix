@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, coreutils }:
+{ lib, stdenv, fetchurl, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A program to manage /etc/resolv.conf";
     homepage = "https://roy.marples.name/projects/openresolv";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.linux;
   };
 }

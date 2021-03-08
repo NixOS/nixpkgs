@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, eigen, libav }:
+{ lib, stdenv, fetchFromGitHub, cmake, eigen, libav }:
 stdenv.mkDerivation {
   pname = "musly";
   version = "unstable-2017-04-26";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
   '' else "";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.musly.org";
     description = "A fast and high-quality audio music similarity library written in C/C++";
     longDescription = ''

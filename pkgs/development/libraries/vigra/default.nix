@@ -21,7 +21,8 @@ in stdenv.mkDerivation rec {
                                 sha256 = "1i1w6smijgb5z8bg9jaq84ccy00k2sxm87s37lgjpyix901gjlgi"; };
     in [ clangPatch ];
 
-  buildInputs = [ boost cmake fftw fftwSinglePrec hdf5 ilmbase libjpeg libpng
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost fftw fftwSinglePrec hdf5 ilmbase libjpeg libpng
                   libtiff numpy openexr python ];
 
   preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/lib/${python.libPrefix}/site-packages\"";
@@ -29,8 +30,6 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DWITH_OPENEXR=1" ]
             ++ stdenv.lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")
                   [ "-DCMAKE_CXX_FLAGS=-fPIC" "-DCMAKE_C_FLAGS=-fPIC" ];
-
-  enableParallelBuilding = true;
 
   # fails with "./test_watersheds3d: error while loading shared libraries: libvigraimpex.so.11: cannot open shared object file: No such file or directory"
   doCheck = false;

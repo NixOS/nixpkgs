@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "1.2.0";
+  version = "1.2.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62ca03e7f7963ba4ac1065ee48ff661f752b3db3c23549ed8933ab40196a3157";
+    sha256 = "f210646127d24be73cfc6d807e2cda1c6b2ab39b7a293008e8b46367af6f2204";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [

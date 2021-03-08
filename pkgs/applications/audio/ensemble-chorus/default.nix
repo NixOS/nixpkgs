@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fltk, alsaLib, freetype, libXrandr, libXinerama, libXcursor, lv2, libjack2, cmake, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, fltk, alsaLib, freetype, libXrandr, libXinerama, libXcursor, lv2, libjack2, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "ensemble-chorus";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     fltk alsaLib freetype libXrandr libXinerama libXcursor lv2 libjack2
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jpcima/ensemble-chorus";
     description = "Digital model of electronic string ensemble chorus";
     maintainers = [ maintainers.magnetophon ];

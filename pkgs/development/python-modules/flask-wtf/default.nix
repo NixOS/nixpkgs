@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
 
 buildPythonPackage rec {
   pname = "Flask-WTF";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   doCheck = false; # requires external service
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple integration of Flask and WTForms.";
     license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];

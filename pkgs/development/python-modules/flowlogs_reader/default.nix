@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ botocore boto3 docutils ];
   buildInputs = [ unittest2 mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
     homepage = "https://github.com/obsrvbl/flowlogs-reader";
     maintainers = with maintainers; [ cransom ];

@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPy3k
 , fetchPypi
 , pytest
 , markupsafe
-, setuptools 
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest -v tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://jinja.pocoo.org/";
     description = "Stand-alone template engine";
     license = licenses.bsd3;

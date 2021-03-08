@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
   libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook asciidoc libxml2 libxslt docbook_xsl ];
 
   # -z flag is not supported in darwin
-  preAutoreconf = stdenv.lib.optionalString stdenv.isDarwin ''
+  preAutoreconf = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace \
           'LDFLAGS="-Wl,-z,defs $LDFLAGS"' \
           'LDFLAGS="-Wl, $LDFLAGS"'
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
     "--enable-reverse"     # Enable reverse proxying.
   ] ++
   # See: https://github.com/tinyproxy/tinyproxy/issues/1
-  stdenv.lib.optional stdenv.isDarwin "--disable-regexcheck";
+  lib.optional stdenv.isDarwin "--disable-regexcheck";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
     license = licenses.gpl2;

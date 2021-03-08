@@ -1,4 +1,4 @@
-{ fetchFromGitHub, rustPlatform, stdenv }:
+{ fetchFromGitHub, rustPlatform, lib, stdenv }:
 
 with rustPlatform;
 
@@ -15,7 +15,7 @@ buildRustPackage rec {
 
   cargoSha256 = "1f3anrh2y8yg7l4nilwk0a7c7kq5yvg07cqh75igjdb5a7p9di0j";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple SSH tarpit inspired by endlessh";
     homepage = "https://github.com/Freaky/tarssh";
     license = [ licenses.mit ];

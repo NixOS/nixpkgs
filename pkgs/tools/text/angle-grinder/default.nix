@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 }:
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0y4c1gja0i3h2whjpm74yf3z1y85pkwmpmrl2fjsyy0mn493hzv8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Slice and dice logs on the command line";
     homepage = "https://github.com/rcoh/angle-grinder";
     license = licenses.mit;

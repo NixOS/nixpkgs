@@ -1,8 +1,8 @@
-{ fetchFromGitHub, stdenv, makeDesktopItem, openal, pkgconfig, libogg,
+{ fetchFromGitHub, lib, stdenv, makeDesktopItem, openal, pkg-config, libogg,
   libvorbis, SDL, SDL_image, makeWrapper, zlib, file,
   client ? true, server ? true }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vfn3d55vmmipdykrcfvgk6dddi9y95vlclsliirm7jdp20f15hd";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [ file zlib ] ++ optionals client [ openal SDL SDL_image libogg libvorbis ];
 
@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://assault.cubers.net";
     maintainers = [ ];
     platforms = platforms.linux; # should work on darwin with a little effort.
-    license = stdenv.lib.licenses.zlib;
+    license = lib.licenses.zlib;
   };
 }

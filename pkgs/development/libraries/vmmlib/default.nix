@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost lapack ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
 
-  enableParallelBuilding = true;
-
   doCheck = !stdenv.isDarwin;
 
   checkTarget = "test";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, dbus, glib, libtool, pkgconfig, udisks2 }:
+{ lib, stdenv, fetchurl, autoconf, automake, dbus, glib, libtool, pkgconfig, udisks2 }:
 
 stdenv.mkDerivation {
   name = "hal-flash-0.3.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   preConfigure = "libtoolize && aclocal && autoconf && automake --add-missing";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cshorler/hal-flash";
     description = "libhal stub library to satisfy the Flash Player DRM requirements";
     longDescription =

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, ocaml, zlib, db, perl, camlp4 }:
+{ lib, stdenv, fetchFromBitbucket, ocaml, zlib, db, perl, camlp4 }:
 
 stdenv.mkDerivation rec {
   pname = "sks";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # Copy the web examples for the NixOS module
   postInstall = "cp -R sampleWeb $webSamples";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An easily deployable & decentralized OpenPGP keyserver";
     longDescription = ''
       SKS is an OpenPGP keyserver whose goal is to provide easy to deploy,

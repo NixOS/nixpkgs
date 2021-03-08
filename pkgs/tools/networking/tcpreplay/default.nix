@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, tcpdump, Carbon, CoreServices }:
+{ lib, stdenv, fetchurl, libpcap, tcpdump, Carbon, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "tcpreplay";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libpcap ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Carbon CoreServices
     ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--with-tcpdump=${tcpdump}/bin"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A suite of utilities for editing and replaying network traffic";
     homepage = "http://tcpreplay.appneta.com/";
     license = with licenses; [ bsd3 gpl3 ];

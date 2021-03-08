@@ -52,6 +52,6 @@ pythonPackages.buildPythonApplication rec {
     description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.limeytexan ];
+    maintainers = teams.deshaw.members;
   };
 }

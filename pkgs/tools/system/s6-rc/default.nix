@@ -1,4 +1,4 @@
-{ stdenv, skawarePackages }:
+{ lib, stdenv, skawarePackages }:
 
 with skawarePackages;
 
@@ -8,7 +8,7 @@ buildPackage {
   sha256 = "1qpygkajalaziszhwfv5rr6hc27q05z8dayyv7im06z6vndimchs";
 
   description = "A service manager for s6-based systems";
-  platforms = stdenv.lib.platforms.linux;
+  platforms = lib.platforms.linux;
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 

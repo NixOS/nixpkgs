@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , removeReferencesTo
 , zlib
 , libjpeg
@@ -25,7 +25,7 @@ assert enableSystemd -> systemd != null;
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
   '';
 
-  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
+  nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus ]

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nix-update-script, pkgconfig, meson, ninja, python3, vala
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkgconfig, meson, ninja, python3, vala
 , gtk3, desktop-file-utils, gtksourceview, webkitgtk, gtkspell3, pantheon
 , libgee, discount, wrapGAppsHook }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Focus on your writing - designed for elementary OS";
     homepage = "https://github.com/lainsce/quilter";
     license = licenses.gpl2Plus;

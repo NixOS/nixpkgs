@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   version = "1.1.0";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0827vl2bxd6m2rbj00x7857cs7cic3mlg5nlhqzd0n73dm5vk2za";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
     maintainers = with maintainers; [ rvolosatovs ];

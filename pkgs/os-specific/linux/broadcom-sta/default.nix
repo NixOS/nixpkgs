@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchurl, kernel }:
 
 let
   version = "6.30.223.271";
@@ -7,8 +7,8 @@ let
     x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
   };
 
-  arch = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
-  tarballVersion = stdenv.lib.replaceStrings ["."] ["_"] version;
+  arch = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
+  tarballVersion = lib.replaceStrings ["."] ["_"] version;
   tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
 in
 stdenv.mkDerivation {
@@ -37,6 +37,8 @@ stdenv.mkDerivation {
     ./linux-5.1.patch
     # source: https://salsa.debian.org/Herrie82-guest/broadcom-sta/-/commit/247307926e5540ad574a17c062c8da76990d056f
     ./linux-5.6.patch
+    # source: https://gist.github.com/joanbm/5c640ac074d27fd1d82c74a5b67a1290
+    ./linux-5.9.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];
@@ -60,8 +62,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = with stdenv.lib.maintainers; [ phreedom ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ phreedom ];
+    platforms = lib.platforms.linux;
   };
 }

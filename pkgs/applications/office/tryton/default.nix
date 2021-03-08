@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
-, pkgconfig
+, pkg-config
 , librsvg
 , gobject-introspection
 , atk
@@ -16,7 +16,7 @@
 , wrapGAppsHook
 }:
 
-with stdenv.lib;
+with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];

@@ -1,4 +1,4 @@
-{ fetchgit, libcommuni, qtbase, qmake, stdenv }:
+{ fetchgit, libcommuni, qtbase, qmake, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "communi";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
   ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"
   '';
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rm -rf lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and elegant cross-platform IRC client";
     homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;

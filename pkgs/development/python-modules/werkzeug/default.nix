@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
 , pytestCheckHook, requests
 , pytest-timeout
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     "test_get_machine_id"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "A WSGI utility library for Python";
     license = licenses.bsd3;

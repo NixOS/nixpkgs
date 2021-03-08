@@ -1,0 +1,69 @@
+{
+  "name": "renderer",
+  "version": "1.0.0",
+  "author": "Grafana Labs",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/grafana/grafana-image-renderer.git"
+  },
+  "scripts": {
+    "tslint": "tslint -c tslint.json --project tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "prettier:check": "prettier --list-different \"**/*.ts\"",
+    "prettier:write": "prettier --list-different \"**/*.ts\" --write",
+    "precommit": "npm run tslint & npm run typecheck",
+    "watch": "tsc-watch --onSuccess \"node build/app.js server --config=dev.json\"",
+    "build": "tsc",
+    "start": "node build/app.js --config=dev.json"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.0",
+    "@grpc/proto-loader": "^0.5.4",
+    "@hapi/boom": "^9.1.0",
+    "express": "^4.16.3",
+    "express-prom-bundle": "^5.1.5",
+    "google-protobuf": "3.5.0",
+    "lodash": "^4.17.19",
+    "minimist": "^1.2.0",
+    "morgan": "^1.9.0",
+    "mz": "^2.7.0",
+    "prom-client": "^11.5.3",
+    "puppeteer": "^2.0.0",
+    "puppeteer-cluster": "^0.18.0",
+    "unique-filename": "^1.1.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.11.1",
+    "@types/node": "^10.0.9",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "pkg": "4.4.8",
+    "prettier": "^1.19.1",
+    "tsc-watch": "^4.2.3",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run precommit"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "pkg": {
+    "assets": "proto/*"
+  },
+  "bin": "build/app.js",
+  "engines": {
+    "node": ">=12 <13"
+  },
+  "volta": {
+    "node": "12.19.0"
+  }
+}

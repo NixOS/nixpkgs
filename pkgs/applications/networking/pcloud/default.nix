@@ -16,7 +16,7 @@
 
 {
   # Build dependencies
-  appimageTools, autoPatchelfHook, fetchzip, stdenv,
+  appimageTools, autoPatchelfHook, fetchzip, lib, stdenv,
 
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
@@ -26,13 +26,13 @@
 
 let
   pname = "pcloud";
-  version = "1.8.8";
+  version = "1.8.9";
   name = "${pname}-${version}";
 
   # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
   src = fetchzip {
-    url = "https://api.pcloud.com/getpubzip?code=XZpnMpXZPWyhRfdvXUhyY6XpdfmQmJiLRmmV&filename=${name}.zip";
-    hash = "sha256-z9OeFkH6EVthg5Dz2mN3jlBTMhiMt/6bUIYFeMO6EXk=";
+    url = "https://api.pcloud.com/getpubzip?code=XZjfKzXZ6h3uGRFId48VRNHHkuqajhRvMlPV&filename=${name}.zip";
+    hash = "sha256:1bwdwfwgy3wwzlggi8qhf5q2bq2kqiqi3mgvsr9w0mxyaxxv13r8";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -100,7 +100,7 @@ in stdenv.mkDerivation {
     chmod +x bin/pcloud
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
     license = licenses.unfree;

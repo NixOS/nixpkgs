@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, pythonPackages }:
 
-with stdenv.lib;
+with lib;
 
 pythonPackages.buildPythonApplication rec {
   pname = "neovim-remote";

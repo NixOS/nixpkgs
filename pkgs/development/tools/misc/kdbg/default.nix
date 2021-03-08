@@ -14,9 +14,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper ];
   buildInputs = [ qt5.qtbase ki18n kconfig kiconthemes kxmlgui kwindowsystem ];
 
-  enableParallelBuilding = true;
-
-
   postInstall = ''
     wrapProgram $out/bin/kdbg --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix}
   '';

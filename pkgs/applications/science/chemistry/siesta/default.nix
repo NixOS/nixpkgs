@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , gfortran, blas, lapack
 , mpi ? null, scalapack
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ blas lapack gfortran ]
-    ++ (stdenv.lib.optionals (mpi != null) [ mpi scalapack ]);
+    ++ (lib.optionals (mpi != null) [ mpi scalapack ]);
 
   enableParallelBuilding = true;
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     cp -a siesta $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A first-principles materials simulation code using DFT";
     longDescription = ''
          SIESTA is both a method and its computer program

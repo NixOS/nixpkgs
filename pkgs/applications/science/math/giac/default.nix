@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d0h1yb7qvh9x7wwv9yrzmcp712f49w1iljkxp4y6g9pzsmg1mmv";
   };
 
-  patches = stdenv.lib.optionals (!enableGUI) [
+  patches = lib.optionals (!enableGUI) [
     # when enableGui is false, giac is compiled without fltk. That means some
     # outputs differ in the make check. Patch around this:
     (fetchpatch {
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     readline gettext libpng libao perl ecm
     # gfortran.cc default output contains static libraries compiled without -fPIC
     # we want libgfortran.so.3 instead
-    (stdenv.lib.getLib gfortran.cc)
+    (lib.getLib gfortran.cc)
     lapack blas
-  ] ++ stdenv.lib.optionals enableGUI [
+  ] ++ lib.optionals enableGUI [
     libGL libGLU fltk xorg.libX11
   ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   # xcas Phys and Turtle menus are broken with split outputs
   # and interactive use is likely to need docs
-  outputs = [ "out" ] ++ stdenv.lib.optional (!enableGUI) "doc";
+  outputs = [ "out" ] ++ lib.optional (!enableGUI) "doc";
 
   doCheck = true;
   preCheck = ''
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
     "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
     "--enable-ao" "--enable-ecm" "--enable-glpk"
-  ] ++ stdenv.lib.optionals enableGUI [
+  ] ++ lib.optionals enableGUI [
     "--enable-gui" "--with-x"
   ];
 
@@ -94,13 +94,13 @@ stdenv.mkDerivation rec {
       mv "$out/share/giac/doc" "$doc/share/giac"
       mv "$out/share/giac/examples" "$doc/share/giac"
     fi
-  '' + stdenv.lib.optionalString (!enableGUI) ''
+  '' + lib.optionalString (!enableGUI) ''
     for i in pixmaps application-registry applications icons; do
       rm -r "$out/share/$i";
     done;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;

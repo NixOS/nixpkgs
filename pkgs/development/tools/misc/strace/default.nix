@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs --host strace-graph";
 
-  configureFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "--enable-mpers=check";
+  configureFlags = [ "--enable-mpers=check" ];
 
   meta = with stdenv.lib; {
     homepage = "https://strace.io/";

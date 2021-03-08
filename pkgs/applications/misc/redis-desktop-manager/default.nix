@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchFromGitiles, pkgconfig, libssh2
+{ stdenv, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yd4i944d4blw8jky0nxl7sfkkj975q4d328rdcbhizwvf6dx81f";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
     qtquick1 qtquickcontrols qtsvg qttools qtcharts

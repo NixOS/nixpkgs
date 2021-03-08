@@ -17,7 +17,9 @@ python3.pkgs.buildPythonApplication rec {
 
   preConfigure = ''
     substituteInPlace setup.py \
-      --replace 'requests>=2.24.0' 'requests~=2.23'
+      --replace 'requests>=2.24.0' 'requests~=2.23' \
+      --replace 'beautifulsoup4==4.9.1' 'beautifulsoup4~=4.9' \
+      --replace 'colorama==0.4.3' 'colorama~=0.4'
   '';
 
   preBuild = "export HOME=$NIX_BUILD_TOP";
@@ -35,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     [ blinker swspotify pytestCheckHook flask mock flask_testing ]
     ++ [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lyrics fetcher for currently playing Spotify song";
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
     license = licenses.mit;

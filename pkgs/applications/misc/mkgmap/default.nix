@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchsvn
 , jdk
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     cp ${fastutil} lib/compile/${fastutil.name}
     cp ${osmpbf} lib/compile/${osmpbf.name}
     cp ${protobuf} lib/compile/${protobuf.name}
-  '' + stdenv.lib.optionalString doCheck ''
+  '' + lib.optionalString doCheck ''
     mkdir -p lib/test
     cp ${fastutil} lib/test/${fastutil.name}
     cp ${osmpbf} lib/test/${osmpbf.name}
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     cp ${hamcrest-core} lib/test/${hamcrest-core.name}
 
     mkdir -p test/resources/in/img
-    ${stdenv.lib.concatMapStringsSep "\n" (res: ''
+    ${lib.concatMapStringsSep "\n" (res: ''
       cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
     '') testInputs}
   '';
@@ -70,12 +70,12 @@ stdenv.mkDerivation {
     cp -r dist/lib/ $out/share/java/mkgmap/
     makeWrapper ${jre}/bin/java $out/bin/mkgmap \
       --add-flags "-jar $out/share/java/mkgmap/mkgmap.jar"
-  '' + stdenv.lib.optionalString withExamples ''
+  '' + lib.optionalString withExamples ''
     mkdir -p $out/share/mkgmap
     cp -r dist/examples $out/share/mkgmap/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
     homepage = "http://www.mkgmap.org.uk";
     license = licenses.gpl2Only;

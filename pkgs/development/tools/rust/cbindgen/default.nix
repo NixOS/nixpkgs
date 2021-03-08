@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     "--skip test_expand"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A project for generating C bindings from Rust code";
     homepage = "https://github.com/eqrion/cbindgen";
     license = licenses.mpl20;

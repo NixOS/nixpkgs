@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , python
@@ -52,7 +52,7 @@ buildPythonPackage rec {
       ${python.interpreter} -m zope.testrunner --test-path=src []
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Zope Object Database: object database and persistence";
       homepage = "https://pypi.python.org/pypi/ZODB";
       license = licenses.zpl21;

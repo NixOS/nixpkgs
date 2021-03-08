@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake openssh ];
   buildInputs = [ mpi gfortran blas lapack ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   preConfigure = ''

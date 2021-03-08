@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
+{ lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
 , libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
 , pam ? null, glibcCross ? null
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "13407r6qwss00504qy740jghb2dzd561la7dhp47rg8w3g8jarpn";
   };
 
-  buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
+  buildInputs = lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
     docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-man"
     "--with-group-name-max-length=32"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
+  ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
 
-  preBuild = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "glibc")
+  preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc")
     ''
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
     '';
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       mv $out/bin/su $su/bin
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/shadow-maint";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = licenses.bsd3;

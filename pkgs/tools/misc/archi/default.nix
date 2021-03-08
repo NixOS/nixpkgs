@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchzip
 , autoPatchelfHook
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
         mv Archi.app "$out/Applications/"
       '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ArchiMate modelling toolkit";
     longDescription = ''
       Archi is an open source modelling toolkit to create ArchiMate

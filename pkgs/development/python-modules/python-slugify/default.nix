@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, python, text-unidecode }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, python, text-unidecode }:
 
 buildPythonPackage rec {
     pname = "python-slugify";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
       ${python.interpreter} test.py
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/un33k/python-slugify";
       description = "A Python Slugify application that handles Unicode";
       license = licenses.mit;

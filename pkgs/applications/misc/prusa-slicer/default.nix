@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK31
 , gtest, nlopt, xorg, makeDesktopItem
 , cgal_5, gmp, ilmbase, mpfr, qhull, openvdb, systemd
@@ -7,11 +7,9 @@ stdenv.mkDerivation rec {
   pname = "prusa-slicer";
   version = "2.2.0";
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -89,7 +87,7 @@ stdenv.mkDerivation rec {
     categories = "Development;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, bluez, txdbus, pytest, pytestcov }:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, bluez, txdbus, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "bleak";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   checkPhase = "AGENT_OS=linux py.test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth Low Energy platform Agnostic Klient for Python";
     homepage = "https://github.com/hbldh/bleak";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , substituteAll
 , meson
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     "-Dduplicity_command=${duplicity}/bin/duplicity"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple backup tool";
     longDescription = ''
       Déjà Dup is a simple backup tool. It hides the complexity \

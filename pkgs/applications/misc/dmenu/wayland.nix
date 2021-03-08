@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
+{ lib, stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
 , glib, wayland, libxkbcommon, makeWrapper
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     platforms = platforms.linux;
     description = "dmenu for wayland-compositors";

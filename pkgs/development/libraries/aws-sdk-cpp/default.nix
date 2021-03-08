@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib, fetchpatch
-, aws-c-common, aws-c-event-stream, aws-checksums
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n, zlib
+, aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
 , CoreAudio, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.7.90";
+  version = "1.8.113";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "0zpqi612qmm0n53crxiisv0vdif43ymg13kafy6vv43j2wmh66ga";
+    sha256 = "0y784cjrxgrin3ck5f2lk0riyy9kv928kcb9y0gzka65imgma48c";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake curl ];
 
   buildInputs = [
-    curl openssl zlib
-    aws-c-common aws-c-event-stream aws-checksums
+    curl openssl s2n zlib
+    aws-c-cal aws-c-common aws-c-event-stream aws-c-io aws-checksums
   ] ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
@@ -59,10 +59,6 @@ stdenv.mkDerivation rec {
   __darwinAllowLocalNetworking = true;
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/aws/aws-sdk-cpp/commit/42991ab549087c81cb630e5d3d2413e8a9cf8a97.patch";
-      sha256 = "0myq5cm3lvl5r56hg0sc0zyn1clbkd9ys0wr95ghw6bhwpvfv8gr";
-    })
     ./cmake-dirs.patch
   ];
 

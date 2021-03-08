@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchFromGitHub
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
 , mimiSupport ? false, gawk ? null }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # just needed when built from git
   buildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
 
-  postInstall = stdenv.lib.optionalString mimiSupport ''
+  postInstall = lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
   '' + ''
     sed  '2s#.#\
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     sed 's|\bwhich\b|type -P|g' -i "$out"/bin/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
     license = if mimiSupport then licenses.gpl2 else licenses.free;

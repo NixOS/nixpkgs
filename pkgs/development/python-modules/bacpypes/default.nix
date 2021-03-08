@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchFromGitHub
 , wheel, pytestCheckHook, pytestrunner }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     "test_recurring_task_5"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/JoelBender/bacpypes";
     description = "BACpypes provides a BACnet application layer and network layer written in Python for daemons, scripting, and graphical interfaces.";
     license = licenses.mit;

@@ -6,7 +6,7 @@
 , kio
 , kjobwidgets
 , kxmlgui
-, stdenv
+, lib, stdenv
 }:
 
 mkDerivation rec {
@@ -23,7 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kiconthemes kio kjobwidgets kxmlgui ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jeromerobert/k4dirstat";
     description = "A small utility program that sums up disk usage for directory trees";
     license = licenses.gpl2;

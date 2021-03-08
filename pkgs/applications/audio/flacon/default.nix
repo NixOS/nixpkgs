@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$bin_path";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Extracts audio tracks from an audio CD image to separate tracks";
     homepage = "https://flacon.github.io/";

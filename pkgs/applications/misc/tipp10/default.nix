@@ -1,4 +1,4 @@
-{ cmake, stdenv, mkDerivation, fetchFromGitLab,
+{ cmake, lib, stdenv, mkDerivation, fetchFromGitLab,
   qtmultimedia, qttools, ... }:
 
 mkDerivation rec {
@@ -15,7 +15,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake qttools ];
   buildInputs = [ qtmultimedia ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Learn and train typing with the ten-finger system";
     homepage = "https://gitlab.com/a_a/tipp10";
     license = licenses.gpl2;

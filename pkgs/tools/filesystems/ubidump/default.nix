@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python3, makeWrapper }:
 
 python3.pkgs.buildPythonApplication rec {
 
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/ubidump -h  > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "View or extract the contents of UBIFS images";
     homepage = "https://github.com/nlitsme/ubidump";
     license = licenses.mit;

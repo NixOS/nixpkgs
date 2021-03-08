@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
                  "-DENABLE_ECCODES_OMP_THREADS=${if enableOpenMPThreads then "ON" else "OFF"}"
                ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   # Only do tests that don't require downloading 120MB of testdata

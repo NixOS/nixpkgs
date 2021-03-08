@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , python
@@ -32,7 +32,7 @@ buildPythonPackage rec {
       -k "not test_peer_interface"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/altdesktop/python-dbus-next";
     description = "A zero-dependency DBus library for Python with asyncio support";
     license = licenses.mit;

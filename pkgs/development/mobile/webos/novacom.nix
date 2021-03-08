@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, webos, cmake, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, webos, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "novacom";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/novaterm --replace "exec novacom" "exec $out/bin/novacom"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for communicating with WebOS devices";
     license = licenses.asl20;
     maintainers = with maintainers; [ dtzWill ];

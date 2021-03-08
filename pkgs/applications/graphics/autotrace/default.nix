@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage, libpng12, imagemagick
+{ lib, stdenv, fetchurl, callPackage, libpng12, imagemagick
 , autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin
 , runtimeShell }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   autofig = callPackage ./autofig.nix {};
   nativeBuildInputs = [ autoreconfHook glib autofig pkgconfig gettext ];
   buildInputs = [ libpng12 imagemagick pstoedit ]
-    ++ stdenv.lib.optionals stdenv.isDarwin
+    ++ lib.optionals stdenv.isDarwin
        (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
 
   postUnpack = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     export PATH="$PATH:$PWD/wrappers"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://autotrace.sourceforge.net/";
     description = "Utility for converting bitmap into vector graphics";
     platforms = platforms.unix;

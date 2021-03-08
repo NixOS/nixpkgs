@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "google-fonts";
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];

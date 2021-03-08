@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       the PCMCIA subsystem to behave (almost) as every other
       hotpluggable bus system.
     ";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

@@ -264,7 +264,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
-  gnome-panel = callPackage ./misc/gnome-panel { };
+  gnome-panel = callPackage ./misc/gnome-panel {
+    autoreconfHook = pkgs.autoreconfHook269;
+  };
 
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 

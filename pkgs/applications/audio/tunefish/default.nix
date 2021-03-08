@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, python3
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3
 , alsaLib, curl, freetype, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
     license = licenses.gpl3Plus;

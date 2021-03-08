@@ -1,4 +1,4 @@
-{ buildPythonPackage, wrapPython, python, fetchurl, stdenv, cmake, qt5,
+{ buildPythonPackage, wrapPython, python, fetchurl, lib, stdenv, cmake, qt5,
   shiboken2, pyside2 }:
 
 stdenv.mkDerivation {
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PySide2 development tools";
     license = licenses.gpl2;
     homepage = "https://wiki.qt.io/Qt_for_Python";

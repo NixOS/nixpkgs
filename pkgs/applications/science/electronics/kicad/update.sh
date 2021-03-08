@@ -144,7 +144,7 @@ for version in "${all_versions[@]}"; do
           for lib in "${libs[@]}"; do
             echo "Checking ${lib}" >&2
             url="${gitlab}/libraries/kicad-${lib}.git"
-            lib_rev="$(${get_rev} "${url}" "${version}" | cut -f1 | head -n1)"
+            lib_rev="$(${get_rev} "${url}" "${version}" | cut -f1 | tail -n1)"
             has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
             has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256" || true)"
             if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
@@ -173,8 +173,8 @@ printf "}\n"
 } > "${tmp}"
 
 if grep '""' "${tmp}"; then
-	echo "empty value detected, out of space?" >&2
-	exit "1"
+  echo "empty value detected, out of space?" >&2
+  exit "1"
 fi
 
 mv "${tmp}" "${file}"

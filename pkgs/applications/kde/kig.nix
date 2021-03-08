@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kig";
+  pname = "kig";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ raskin ];

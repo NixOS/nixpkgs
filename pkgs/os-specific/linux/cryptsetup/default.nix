@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lvm2, json_c
+{ lib, stdenv, fetchurl, lvm2, json_c
 , openssl, libuuid, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
   };
 }

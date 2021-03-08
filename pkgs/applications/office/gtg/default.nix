@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , python3Packages
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = "xvfb-run python3 ../run-tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = " A personal tasks and TODO-list items organizer";
     longDescription = ''
       "Getting Things GNOME" (GTG) is a personal tasks and ToDo list organizer inspired by the "Getting Things Done" (GTD) methodology.

@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , intltool
 , automake111x
 , autoconf
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = with gnome2; [
-    pkgconfig
+    pkg-config
     intltool
     automake111x
     autoconf
@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Planner";
     description = "Project management application for GNOME";
     longDescription = ''

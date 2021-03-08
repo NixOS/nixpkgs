@@ -664,6 +664,8 @@ in
         # - There are only HDDs and we would set the system in a degraded state
         serviceConfig.ExecStart = ''${pkgs.runtimeShell} -c 'for pool in $(zpool list -H -o name); do zpool trim $pool;  done || true' '';
       };
+
+      systemd.timers.zpool-trim.timerConfig.Persistent = "yes";
     })
   ];
 }

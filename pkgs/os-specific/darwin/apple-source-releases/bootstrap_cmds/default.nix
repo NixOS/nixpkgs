@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, yacc, flex }:
+{ lib, stdenv, appleDerivation, yacc, flex }:
 
 appleDerivation {
   nativeBuildInputs = [ yacc flex ];
@@ -44,6 +44,6 @@ appleDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

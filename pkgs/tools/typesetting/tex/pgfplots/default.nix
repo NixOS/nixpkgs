@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
   name = "pgfplots-1.5.1";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cp -prd * $out/share/texmf-nix
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TeX package to draw plots directly in TeX in two and three dimensions";
     homepage = "http://pgfplots.sourceforge.net";
     platforms = platforms.unix;

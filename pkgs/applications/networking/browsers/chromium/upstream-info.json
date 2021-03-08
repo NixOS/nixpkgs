@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "87.0.4280.88",
-    "sha256": "1h09g9b2zxad85vd146ymvg3w2kpngpi78yig3dn1vrmhwr4aiiy",
-    "sha256bin64": "0n3fm6wf8zfkv135d50xl8xxrnng3q55vyxkck1da8jyvh18bijb",
+    "version": "87.0.4280.141",
+    "sha256": "0x9k809m36pfirnw2vnr9pk93nxdbgrvna0xf1rs3q91zkbr2x8l",
+    "sha256bin64": "0wq3yi0qyxzcid390w5rh4xjq92fjajvlifjl70g6sqnbk6vgvdp",
     "deps": {
       "gn": {
         "version": "2020-09-09",
@@ -13,14 +13,14 @@
     },
     "chromedriver": {
       "version": "87.0.4280.88",
-      "sha256_linux": "11plh2hs2zpa14ymlbnj92pa58krl28yw4c0s55wk8qsxvzvl02m",
+      "sha256_linux": "1insh1imi25sj4hdkbll5rzwnag8wvfxv4ckshpq8akl8r13p6lj",
       "sha256_darwin": "048hsqp6575r980m769lzznvxypmfcwn89f1d3ik751ymzmb5r78"
     }
   },
   "beta": {
-    "version": "88.0.4324.50",
-    "sha256": "17v0qp05785xc4whsbw6fmf0x5ccjx2mk6n4qy6z2mx2yjjjfv8q",
-    "sha256bin64": "01cphbd56l7g3cdmrvwynkzrpx9h3v7pz6ac76sxlp6irjzhbnva",
+    "version": "88.0.4324.87",
+    "sha256": "0pfrx8b2rmrxx5dfv4kc1ggrgi7kj7gbxrzqzd7rsvjpasyidbxg",
+    "sha256bin64": "07xl02zg5pi89l6dqrbqx2ibl8pm9v6njqfl8p4l2hwsb881hx8g",
     "deps": {
       "gn": {
         "version": "2020-11-05",
@@ -31,15 +31,15 @@
     }
   },
   "dev": {
-    "version": "89.0.4356.6",
-    "sha256": "1jq0wbaaz07kz2190rq3vl2b5spx3qfda4al9ygkm8man817d2nr",
-    "sha256bin64": "0dgvp2my328s4ah0hmp1hg1c3x21gkrz9mjvbfs54r2pjb7y5sbl",
+    "version": "89.0.4385.0",
+    "sha256": "0cwfwkaidxi86n80kcn3lxrwz90zp6ra9dib1nd4xnhpgl7vjjjf",
+    "sha256bin64": "1hvrdvmlqc95qb9gn7iihal4h1kzf6jqrhk9xvv45chsvwl79pmd",
     "deps": {
       "gn": {
-        "version": "2020-11-05",
+        "version": "2020-12-22",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "53d92014bf94c3893886470a1c7c1289f8818db0",
-        "sha256": "1xcm07qjk6m2czi150fiqqxql067i832adck6zxrishm70c9jbr9"
+        "rev": "0d67e272bdb8145f87d238bc0b2cb8bf80ccec90",
+        "sha256": "07mrfl9hbjldbgidwwhr482a0s0ppqzwa5j7v5nbqxj18j55iril"
       }
     }
   },

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     rev = version;
   };
 
-  buildInputs = [ cmake libusb-compat-0_1 libftdi ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libusb-compat-0_1 libftdi ];
 
   meta = with stdenv.lib; {
     description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";

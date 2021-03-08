@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
 , help2man
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://spatialaudio.net/ssr/";
     description = "The SoundScape Renderer (SSR) is a tool for real-time spatial audio reproduction";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.fridh ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.fridh ];
   };
 
 }

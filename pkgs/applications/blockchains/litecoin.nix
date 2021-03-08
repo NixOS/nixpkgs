@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub
+{ lib, stdenv, mkDerivation, fetchFromGitHub
 , pkgconfig, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, util-linux, qrencode
@@ -8,7 +8,7 @@
 , zeromq
 }:
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
 

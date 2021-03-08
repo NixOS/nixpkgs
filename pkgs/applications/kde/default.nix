@@ -35,15 +35,13 @@ let
 
   mkDerivation = args:
     let
-      inherit (args) name;
-      sname = args.sname or name;
-      inherit (srcs.${sname}) src version;
+      inherit (args) pname;
+      inherit (srcs.${pname}) src version;
       mkDerivation =
         libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
     in
       mkDerivation (args // {
-        pname = name;
-        inherit src version;
+        inherit pname version src;
 
         outputs = args.outputs or [ "out" ];
 
@@ -88,6 +86,7 @@ let
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
       k3b = callPackage ./k3b.nix {};
+      kaccounts-integration = callPackage ./kaccounts-integration.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};

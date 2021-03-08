@@ -1,4 +1,5 @@
 { stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+, OpenGL
 }:
 
 with stdenv.lib;
@@ -13,8 +14,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
-  buildInputs = [ xlibsWrapper libXmu libXi ];
-  propagatedBuildInputs = [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs = optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
+  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux

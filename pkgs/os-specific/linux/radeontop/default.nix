@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkgconfig, gettext, makeWrapper
 , ncurses, libdrm, libpciaccess, libxcb }:
 
 stdenv.mkDerivation rec {
   pname = "radeontop";
-  version = "2019-06-03";
+  version = "1.3";
 
   src = fetchFromGitHub {
-    sha256 = "1b1m30r2nfwqkajqw6m01xmfhlq83z1qylyijxg7962mp9x2k0gw";
-    rev = "v1.2";
+    sha256 = "sha256-tnIxM0+RfOIt714fEUWRP/4rEPHaOuCZFit9/RPdxis=";
+    rev = "v${version}";
     repo = "radeontop";
     owner = "clbr";
   };
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
     longDescription = ''
       View GPU utilization, both for the total activity percent and individual

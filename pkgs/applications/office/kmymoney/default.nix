@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   # Hidden dependency that wasn't included in CMakeLists.txt:
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools python2
     python3Packages.wrapPython wrapQtAppsHook

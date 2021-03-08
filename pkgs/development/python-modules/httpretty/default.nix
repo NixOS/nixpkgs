@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , tornado
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "tests.functional.test_requests.test_httpretty_should_allow_adding_and_overwritting_by_kwargs_u2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://httpretty.readthedocs.org/";
     description = "HTTP client request mocking tool";
     license = licenses.mit;

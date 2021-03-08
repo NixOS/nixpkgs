@@ -1,5 +1,5 @@
 { stdenv, lib, fetchpatch, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
-, pkgconfig, cmake, gnumake, yasm, python2Packages
+, pkg-config, cmake, gnumake, yasm, python2Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
@@ -83,7 +83,6 @@ let
         repo  = name;
         inherit rev sha256;
       };
-      enableParallelBuilding = true;
     } // attrs');
 
   ffmpeg = kodiDependency rec {
@@ -100,11 +99,11 @@ let
       "-DCROSSCOMPILING=ON"
       "-DCPU=${stdenv.hostPlatform.parsed.cpu.name}"
       "-DOS=${stdenv.hostPlatform.parsed.kernel.name}"
-      "-DPKG_CONFIG_EXECUTABLE=pkgconfig"
+      "-DPKG_CONFIG_EXECUTABLE=pkg-config"
     ];
     buildInputs = [ libidn libtasn1 p11-kit zlib libva ]
       ++ lib.optional  vdpauSupport    libvdpau;
-    nativeBuildInputs = [ cmake nasm pkgconfig gnutls ];
+    nativeBuildInputs = [ cmake nasm pkg-config gnutls ];
   };
 
   # We can build these externally but FindLibDvd.cmake forces us to build it
@@ -115,7 +114,7 @@ let
     rev               = "${version}-${rel}-Beta-5";
     sha256            = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
     buildInputs       = [ linuxHeaders ];
-    nativeBuildInputs = [ cmake pkgconfig ];
+    nativeBuildInputs = [ cmake pkg-config ];
     postPatch = ''
       rm -rf msvc
 
@@ -134,7 +133,7 @@ let
     rev               = "${version}-${rel}-Alpha-3";
     sha256            = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
     buildInputs       = [ libdvdcss libdvdread ];
-    nativeBuildInputs = [ cmake pkgconfig ];
+    nativeBuildInputs = [ cmake pkg-config ];
     postPatch         = cmakeProtoPatch;
     postInstall = ''
       mv $out/lib/liblibdvdnav.so $out/lib/libdvdnav.so
@@ -147,7 +146,7 @@ let
     rev               = "${version}-${rel}-Alpha-3";
     sha256            = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
     buildInputs       = [ libdvdcss ];
-    nativeBuildInputs = [ cmake pkgconfig ];
+    nativeBuildInputs = [ cmake pkg-config ];
     configureFlags    = [ "--with-libdvdcss" ];
     postPatch         = cmakeProtoPatch;
   };
@@ -209,7 +208,7 @@ in stdenv.mkDerivation {
       doxygen
       makeWrapper
       which
-      pkgconfig gnumake
+      pkg-config gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
       jre_headless yasm gettext python2Packages.python flatbuffers
 
@@ -241,8 +240,6 @@ in stdenv.mkDerivation {
       "-DCORE_PLATFORM_NAME=gbm"
       "-DGBM_RENDER_SYSTEM=gles"
     ];
-
-    enableParallelBuilding = true;
 
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -
     # I'm guessing there is a thing waiting to time out
@@ -285,7 +282,7 @@ in stdenv.mkDerivation {
       pythonPackages = python2Packages;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Media center";
       homepage    = "https://kodi.tv/";
       license     = licenses.gpl2;

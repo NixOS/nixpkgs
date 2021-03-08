@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, flex, bison, pkgconfig, libmnl, libnfnetlink
+{ fetchurl, lib, stdenv, flex, bison, pkgconfig, libmnl, libnfnetlink
 , libnetfilter_conntrack, libnetfilter_queue, libnetfilter_cttimeout
 , libnetfilter_cthelper, systemd
 , libtirpc
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ flex bison pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://conntrack-tools.netfilter.org/";
     description = "Connection tracking userspace tools";
     platforms = platforms.linux;

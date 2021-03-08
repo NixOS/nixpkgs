@@ -50,7 +50,7 @@ buildGoModule rec {
     "-ldflags=-X main.Version=${version} -X main.Mode=prod"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple server for sending and receiving messages in real-time per WebSocket";
     homepage = "https://gotify.net";
     license = licenses.mit;

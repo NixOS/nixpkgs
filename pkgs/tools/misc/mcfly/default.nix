@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1c8qjkpc8wi095zzmgd05721kdf1knh9la91l081mvwa3inwk6ax";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";
     description = "An upgraded ctrl-r for Bash whose history results make sense for what you're working on right now";
     changelog = "https://github.com/cantino/mcfly/blob/v${version}/CHANGELOG.txt";

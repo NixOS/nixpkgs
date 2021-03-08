@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D editor with support for procedural editing";
     homepage = "http://www.k-3d.org/";
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, postgresql }:
+{ lib, stdenv, fetchgit, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "smlar-unstable";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compute similary of any one-dimensional arrays";
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
     platforms = postgresql.meta.platforms;

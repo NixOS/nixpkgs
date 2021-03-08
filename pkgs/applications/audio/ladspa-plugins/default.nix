@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkgconfig
 , perlPackages }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://plugin.org.uk/";
     description = "LADSPA format audio plugins";
     license = licenses.gpl2;

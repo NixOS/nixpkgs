@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , pkgs
 , isPy3k
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "098xhd575ibvdx7i3dny3lwi851yxhjg2hn5jbbgrwj833rg5l5w";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cddb-py.sourceforge.net/";
     description = "CDDB and FreeDB audio CD track info access";
     license = licenses.gpl2Plus;

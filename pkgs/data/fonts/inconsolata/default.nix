@@ -1,4 +1,4 @@
-{ stdenv, google-fonts }:
+{ lib, stdenv, google-fonts }:
 
 stdenv.mkDerivation {
   pname = "inconsolata";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/*.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.levien.com/type/myfonts/inconsolata.html";
     description = "A monospace font for both screen and print";
     maintainers = with maintainers; [ mikoim raskin rycee ];

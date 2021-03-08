@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, util-linux, bash }:
+{ lib, stdenv, fetchurl, pkg-config, util-linux, bash }:
 
 stdenv.mkDerivation rec {
   pname = "bcache-tools";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gbsh2qw0a7kgck6w0apydiy37nnz5xvdgipa0yqrfmghl86vmv4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ util-linux ];
 
   # * Remove broken install rules (they ignore $PREFIX) for stuff we don't need
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/sbin" "$out/lib/udev/rules.d" "$out/share/man/man8"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "User-space tools required for bcache (Linux block layer cache)";
     longDescription = ''
       Bcache is a Linux kernel block layer cache. It allows one or more fast

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   # Without latex2man, no man pages are installed despite being
   # prebuilt in the source tarball.
-  configureFlags = "LATEX2MAN=${coreutils}/bin/true";
+  configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 

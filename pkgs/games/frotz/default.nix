@@ -5,7 +5,7 @@
 , libsndfile
 , libvorbis
 , ncurses
-, stdenv }:
+, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   version = "2.52";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://davidgriffith.gitlab.io/frotz/";
     changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${version}/NEWS";
     description = "A z-machine interpreter for Infocom games and other interactive fiction";

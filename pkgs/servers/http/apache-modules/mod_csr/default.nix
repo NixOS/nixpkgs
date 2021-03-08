@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
 
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RedWax CA service module to handle Certificate Signing Requests";
 
     homepage = "https://redwax.eu";

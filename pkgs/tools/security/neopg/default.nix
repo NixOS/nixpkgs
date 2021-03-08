@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , sqlite
@@ -6,7 +6,7 @@
 , boost
 , curl
 , gettext
-, pkgconfig
+, pkg-config
 , libusb1
 , gnutls }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [  cmake gettext pkgconfig ];
+  nativeBuildInputs = [  cmake gettext pkg-config ];
 
   buildInputs = [ sqlite botan2 boost curl libusb1 gnutls ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/3rdparty/googletest/googletest:$(pwd)/neopg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://neopg.io/";
     description = "Modern replacement for GnuPG 2";
     license = licenses.gpl3;

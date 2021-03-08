@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre8, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
+{ lib, stdenv, fetchurl, jre8, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin\/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://kafka.apache.org";
     description = "A high-throughput distributed messaging system";
     license = licenses.asl20;

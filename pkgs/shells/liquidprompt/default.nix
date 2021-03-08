@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       $out/share/zsh/plugins/liquidprompt/liquidprompt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-featured & carefully designed adaptive prompt for Bash & Zsh";
     homepage = "https://github.com/nojhan/liquidprompt";
     license = licenses.agpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, qttools
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, qttools
 , liblscp, libgig, qtbase, mkDerivation }:
 
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.linuxsampler.org";
     description = "Graphical frontend to LinuxSampler";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{stdenv, git, xdg_utils, gnugrep, fetchFromGitHub, makeWrapper}:
+{lib, stdenv, git, xdg_utils, gnugrep, fetchFromGitHub, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "git-open";
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp git-open $out/bin
     wrapProgram $out/bin/git-open \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git xdg_utils gnugrep ]}"
+      --prefix PATH : "${lib.makeBinPath [ git xdg_utils gnugrep ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/paulirish/git-open";
     description = "Open the GitHub page or website for a repository in your browser";
     license = licenses.mit;

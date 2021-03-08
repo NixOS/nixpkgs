@@ -297,6 +297,17 @@
     };
     version = "1.1.0";
   };
+  jekyll-polyglot = {
+    dependencies = ["jekyll"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "4ad9140733250b65bc1ffab84650c588d036d23129e82f0349d31e56f1fe10a8";
+      type = "gem";
+    };
+    version = "1.3.3";
+  };
   jekyll-redirect-from = {
     dependencies = ["jekyll"];
     groups = ["default"];

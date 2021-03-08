@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gotop";
@@ -18,7 +18,7 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
     homepage = "https://github.com/xxxserxxx/gotop";
     license = licenses.agpl3;

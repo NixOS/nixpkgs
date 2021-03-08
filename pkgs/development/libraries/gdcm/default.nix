@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     cd ../build
   '';
 
-  enableParallelBuilding = true;
-  buildInputs = [ cmake vtk_7 ]
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ vtk_7 ]
     ++ stdenv.lib.optional stdenv.isDarwin [
       darwin.apple_sdk.frameworks.ApplicationServices
       darwin.apple_sdk.frameworks.Cocoa

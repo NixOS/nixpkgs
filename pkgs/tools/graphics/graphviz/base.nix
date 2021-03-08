@@ -1,13 +1,13 @@
 { rev, sha256, version }:
 
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, cairo, expat, flex
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
 , fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango
 , yacc, fetchpatch, xorg ? null, ApplicationServices ? null }:
 
 assert stdenv.isDarwin -> ApplicationServices != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
   raw_patch =
     # https://gitlab.com/graphviz/graphviz/issues/1367 CVE-2018-10196
     fetchpatch {
@@ -17,13 +17,13 @@ let
       excludes = ["tests/*"]; # we don't run them and they don't apply
     };
   # the patch needs a small adaption for older versions
-  patchToUse = if stdenv.lib.versionAtLeast version "2.37" then raw_patch else
+  patchToUse = if lib.versionAtLeast version "2.37" then raw_patch else
   stdenv.mkDerivation {
     inherit (raw_patch) name;
     buildCommand = "sed s/dot_root/agroot/g ${raw_patch} > $out";
   };
   # 2.42 has the patch included
-  patches = optional (stdenv.lib.versionOlder version "2.42") patchToUse;
+  patches = optional (lib.versionOlder version "2.42") patchToUse;
 in
 
 stdenv.mkDerivation {
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
@@ -46,13 +46,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "fortify" ];
 
-  CPPFLAGS = stdenv.lib.optionalString (xorg != null && stdenv.isDarwin)
+  CPPFLAGS = lib.optionalString (xorg != null && stdenv.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ stdenv.lib.optional (xorg == null) "--without-x";
+  ] ++ lib.optional (xorg == null) "--without-x";
 
   inherit patches;
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";
     license = licenses.epl10;

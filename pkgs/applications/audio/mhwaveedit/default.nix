@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, SDL, alsaLib, autoreconfHook, gtk2, libjack2, ladspaH
+{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL, alsaLib, autoreconfHook, gtk2, libjack2, ladspaH
 , ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio, lame
 , vorbis-tools }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${vorbis-tools}/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical program for editing, playing and recording sound files";
     homepage = "https://github.com/magnush/mhwaveedit";
     license = licenses.gpl2Plus;

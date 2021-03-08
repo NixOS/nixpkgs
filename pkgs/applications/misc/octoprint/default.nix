@@ -172,7 +172,7 @@ let
 
               passthru.python = self.python;
 
-              meta = with stdenv.lib; {
+              meta = with lib; {
                 homepage = "https://octoprint.org/";
                 description = "The snappy web interface for your 3D printer";
                 license = licenses.agpl3;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libconfuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
+{ fetchurl, lib, stdenv, libconfuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "i3status-2.13";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";
     homepage = "https://i3wm.org";
     maintainers = [ ];
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ lib, stdenv, buildPythonPackage, fetchPypi,
   matplotlib, shapely
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     shapely
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library to use Shapely or GeoJSON objects as matplotlib paths";
     homepage = "https://bitbucket.org/sgillies/descartes/";
     license = licenses.bsd3;

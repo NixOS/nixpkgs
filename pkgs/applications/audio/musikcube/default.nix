@@ -10,7 +10,7 @@
 , libmicrohttpd
 , ncurses
 , pulseaudio
-, stdenv
+, lib, stdenv
 , taglib
 , systemdSupport ? stdenv.isLinux, systemd
 }:
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
     ncurses
     pulseaudio
     taglib
-  ] ++ stdenv.lib.optional systemdSupport systemd;
+  ] ++ lib.optional systemdSupport systemd;
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
     maintainers = [ maintainers.aanderse ];

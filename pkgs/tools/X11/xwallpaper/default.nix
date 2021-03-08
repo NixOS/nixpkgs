@@ -1,10 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
 , pixman
 , xcbutil
 , xcbutilimage
+, libseccomp
 , libjpeg
 , libpng
 , libXpm
@@ -24,9 +25,9 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ pixman xcbutilimage xcbutil libjpeg libpng libXpm ];
+  buildInputs = [ pixman xcbutilimage xcbutil libseccomp libjpeg libpng libXpm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/stoeckmann/xwallpaper";
     description = "Utility for setting wallpapers in X";
     license = licenses.isc;

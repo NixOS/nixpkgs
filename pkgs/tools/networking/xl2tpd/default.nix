@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpcap, ppp }:
+{ lib, stdenv, fetchFromGitHub, libpcap, ppp }:
 
 stdenv.mkDerivation rec {
   pname = "xl2tpd";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.xelerance.com/software/xl2tpd/";
     description = "Layer 2 Tunnelling Protocol Daemon (RFC 2661)";
     platforms = platforms.linux;

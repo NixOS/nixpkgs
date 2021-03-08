@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , django
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
   propagatedBuildInputs = [ django six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilize environment variables to configure your Django application";
     homepage = "https://github.com/joke2k/django-environ/";
     license = licenses.mit;

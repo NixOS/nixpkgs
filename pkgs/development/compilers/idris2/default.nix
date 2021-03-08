@@ -5,13 +5,13 @@
 # Uses scheme to bootstrap the build of idris2
 stdenv.mkDerivation rec {
   pname = "idris2";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "idris-lang";
     repo = "Idris2";
     rev = "v${version}";
-    sha256 = "044slgl2pwvj939kz3z92n6l182plc5fzng1n4z4k6bg11msqq14";
+    sha256 = "0sa2lpb7n6xqfknwld9rzm4bnb6qcd0ja1n63cnc5v8wdzr8q7kh";
   };
 
   strictDeps = true;

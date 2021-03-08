@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, knewstuff }:
 
 mkDerivation {
-  name = "kigo";
+  pname = "kigo";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.kigo";
     description = "An open-source implementation of the popular Go game";

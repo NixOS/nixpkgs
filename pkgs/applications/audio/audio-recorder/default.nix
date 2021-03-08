@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkgconfig, intltool
 , glib, dbus, gtk3, libappindicator-gtk3, gst_all_1
 , librsvg, wrapGAppsHook
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     glib dbus gtk3 librsvg libappindicator-gtk3
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
-  ]) ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
+  ]) ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audio recorder for GNOME and Unity Desktops";
     longDescription = ''
       This program allows you to record your favourite music or audio to a file.

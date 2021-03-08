@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses
+{ lib, stdenv, fetchurl, ncurses
 , patches ? [] # allow users to easily override config.def.h
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A terminal gopher client";
     homepage = "gopher://bitreich.org/1/scm/sacc";
     license = licenses.isc;

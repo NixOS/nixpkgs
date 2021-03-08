@@ -196,8 +196,6 @@ let
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
     '';
 
-    enableParallelBuilding = true;
-
     meta = with lib; {
       description = "Smart and user-friendly command line shell";
       homepage = "http://fishshell.com/";

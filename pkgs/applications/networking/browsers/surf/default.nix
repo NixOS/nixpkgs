@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple web browser based on WebKitGTK";
     longDescription = ''
       surf is a simple web browser based on WebKitGTK. It is able to display

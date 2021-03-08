@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace checkpoint/restore for Linux";
     homepage    = "https://criu.org";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ callPackage, wxGTK30, openssl_1_0_2 }:
+{ callPackage, wxGTK30, openssl_1_0_2, buildPackages }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix {};
@@ -20,6 +20,7 @@ rec {
       wxGTK = wxGTK30;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
+      autoconf = buildPackages.autoconf269;
     };
     erlangR23_odbc = erlangR23.override { odbcSupport = true; };
     erlangR23_javac = erlangR23.override { javacSupport = true; };
@@ -33,6 +34,7 @@ rec {
       wxGTK = wxGTK30;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
+      autoconf = buildPackages.autoconf269;
     };
     erlangR22_odbc = erlangR22.override { odbcSupport = true; };
     erlangR22_javac = erlangR22.override { javacSupport = true; };
@@ -44,6 +46,7 @@ rec {
     # R21
     erlangR21 = lib.callErlang ../development/interpreters/erlang/R21.nix {
       wxGTK = wxGTK30;
+      autoconf = buildPackages.autoconf269;
     };
     erlangR21_odbc = erlangR21.override { odbcSupport = true; };
     erlangR21_javac = erlangR21.override { javacSupport = true; };
@@ -55,6 +58,7 @@ rec {
     # R20
     erlangR20 = lib.callErlang ../development/interpreters/erlang/R20.nix {
       wxGTK = wxGTK30;
+      autoconf = buildPackages.autoconf269;
     };
     erlangR20_odbc = erlangR20.override { odbcSupport = true; };
     erlangR20_javac = erlangR20.override { javacSupport = true; };
@@ -67,6 +71,7 @@ rec {
     erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix {
       wxGTK = wxGTK30;
       openssl = openssl_1_0_2;
+      autoconf = buildPackages.autoconf269;
     };
     erlangR19_odbc = erlangR19.override { odbcSupport = true; };
     erlangR19_javac = erlangR19.override { javacSupport = true; };
@@ -79,6 +84,7 @@ rec {
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
       wxGTK = wxGTK30;
       openssl = openssl_1_0_2;
+      autoconf = buildPackages.autoconf269;
     };
     erlangR18_odbc = erlangR18.override { odbcSupport = true; };
     erlangR18_javac = erlangR18.override { javacSupport = true; };
@@ -89,6 +95,7 @@ rec {
 
     # Basho fork, using custom builder.
     erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
+      autoconf = buildPackages.autoconf269;
     };
     erlang_basho_R16B02_odbc = erlang_basho_R16B02.override {
       odbcSupport = true;

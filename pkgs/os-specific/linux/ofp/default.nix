@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , openssl, libpcap, odp-dpdk, dpdk
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "--disable-shared"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance TCP/IP stack";
     homepage = "http://www.openfastpath.org";
     license = licenses.bsd3;

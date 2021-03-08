@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
 , qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2, qtgraphicaleffects
 , faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123 }:
 let
@@ -17,7 +17,7 @@ in mkDerivation {
     sha256 = "04fpm6sc431dl9i5h53xpd6k85j22sv8aawl7b6wv2fzpfsd9fwa";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     faad2
@@ -38,8 +38,6 @@ in mkDerivation {
   cmakeFlags = [
     "-DRTLSDR=true" "-DSOAPYSDR=true"
   ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "A DAB/DAB+ Software Radio";

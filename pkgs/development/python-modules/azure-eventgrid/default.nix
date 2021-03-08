@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+  pythonImportsCheck = [ "azure.eventgrid" ];
 
   meta = with lib; {
     description = "A fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libX11, ncurses, libXext, libXft, fontconfig }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libX11, ncurses, libXext, libXft, fontconfig }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "0.7.2";

@@ -1,4 +1,4 @@
-{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkgconfig
+{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkg-config
 , kcoreaddons, ki18n, kwallet, mksh, pinentry-qt }:
 
 mkDerivation rec {
@@ -26,7 +26,7 @@ mkDerivation rec {
 
   makeFlags = [ "KDE_VER=5" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   # if using just kwallet, cmake will be added as a buildInput and fail the build
   propagatedBuildInputs = [ kcoreaddons ki18n (lib.getLib kwallet) ];
 

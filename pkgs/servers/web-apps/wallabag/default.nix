@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "wallabag";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp -R * $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web page archiver";
     longDescription = ''
       wallabag is a self hostable application for saving web pages.

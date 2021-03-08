@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , sphinx
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ReadTheDocs.org theme for Sphinx";
     homepage = "https://github.com/snide/sphinx_rtd_theme/";
     license = licenses.bsd3;

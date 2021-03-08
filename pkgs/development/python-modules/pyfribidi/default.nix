@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple wrapper around fribidi";
     homepage = "https://github.com/pediapress/pyfribidi";
     license = stdenv.lib.licenses.gpl2;

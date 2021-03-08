@@ -1,4 +1,4 @@
-{ stdenv, fetchzip,
+{ lib, stdenv, fetchzip,
   pkgconfig, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
   libucl, wayland, wayland-protocols, wlroots,
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # Must replace GNU Make by bmake
-  buildPhase = with stdenv.lib; concatStringsSep " " (
+  buildPhase = with lib; concatStringsSep " " (
     [ "bmake" "-j$NIX_BUILD_CORES" "PREFIX=$out" ]
     ++ optional stdenv.isLinux "WITH_POSIX_C_SOURCE=YES"
     ++ mapAttrsToList (feat: enabled:
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stacking Wayland compositor which is actively developed on FreeBSD but also supports Linux";
     homepage    = "https://hikari.acmelabs.space";
     license     = licenses.bsd2;

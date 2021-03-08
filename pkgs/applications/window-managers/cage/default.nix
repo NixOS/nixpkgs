@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland, scdoc, makeWrapper
 , wlroots, wayland-protocols, pixman, libxkbcommon
 , systemd, libGL, libX11
@@ -29,16 +29,16 @@ stdenv.mkDerivation rec {
     systemd libGL libX11
   ];
 
-  mesonFlags = [ "-Dxwayland=${stdenv.lib.boolToString (xwayland != null)}" ];
+  mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
 
-  postFixup = stdenv.lib.optionalString (xwayland != null) ''
+  postFixup = lib.optionalString (xwayland != null) ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 
   # Tests Cage using the NixOS module by launching xterm:
   passthru.tests.basic-nixos-module-functionality = nixosTests.cage;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Wayland kiosk that runs a single, maximized application";
     homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;

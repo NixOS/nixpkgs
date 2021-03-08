@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi
+{ lib, stdenv, fetchPypi
 , buildPythonPackage, pythonOlder
 , pytest, pytestrunner
 , parse, six, enum34
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jenisys/parse_type";
     description = "Simplifies to build parse types based on the parse module";
     license = licenses.bsd3;

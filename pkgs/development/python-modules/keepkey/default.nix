@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytest
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pytest
 , ecdsa , mnemonic, protobuf, hidapi, trezor }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # Remove impossible dependency constraint
   postPatch = "sed -i -e 's|hidapi==|hidapi>=|' setup.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "KeepKey Python client";
     homepage = "https://github.com/keepkey/python-keepkey";
     license = licenses.gpl3;

@@ -17,8 +17,6 @@ let
     buildInputs = [ zlib ]
       ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
-    enableParallelBuilding = true;
-
     patchPhase = ''
       sed s,-Werror,, -i CMakeLists.txt
     '';

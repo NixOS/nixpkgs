@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, pam, openssl, perl }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pam, openssl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "pam_ssh_agent_auth";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     # Allow multiple colon-separated authorized keys files to be
     # specified in the file= option.
     ./multiple-key-files.patch
+    ./edcsa-crash-fix.patch
   ];
 
   configureFlags = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/jbeverly/pam_ssh_agent_auth";
     description = "PAM module for authentication through the SSH agent";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.linux;
   };
 }

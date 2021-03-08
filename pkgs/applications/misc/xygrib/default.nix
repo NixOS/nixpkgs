@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg } :
+{ lib, stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg } :
 
 stdenv.mkDerivation rec {
   version = "1.2.6.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ bzip2 qtbase libnova proj openjpeg libpng ];
   cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-2.3" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
+    ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
   postInstall = if stdenv.isDarwin then ''
     mkdir -p "$out/Applications" "$out/XyGrib/XyGrib.app/Contents/Resources"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ln -s $out/XyGrib/XyGrib $out/bin/xygrib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://opengribs.org";
     description = "Weather Forecast Visualization";
     longDescription = ''XyGrib is a leading opensource weather visualization package.

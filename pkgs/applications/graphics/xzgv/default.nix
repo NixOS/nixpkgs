@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, libexif, pkgconfig, texinfo }:
+{ lib, stdenv, fetchurl, gtk2, libexif, pkgconfig, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "xzgv";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/share/{app-install/desktop,applications,info,pixmaps}
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/xzgv/";
     description = "Picture viewer for X with a thumbnail-based selector";
     license = licenses.gpl2;

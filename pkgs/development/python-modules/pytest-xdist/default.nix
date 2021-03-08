@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest_6
+{ lib, stdenv, fetchPypi, buildPythonPackage, execnet, pytest_6
 , setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
       -k "not (distribution_rsyncdirs_example or rsync or warning_captured_deprecated_in_pytest_6)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;

@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ boost miniupnpc openssl lmdb unbound readline ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Secure, private blockchain with smart contracts based on Monero";
     homepage = "https://dero.io/";

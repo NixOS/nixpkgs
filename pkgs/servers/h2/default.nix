@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "h2";
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
       chmod +x $out/bin/*.sh
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Java SQL database";
     homepage = "http://www.h2database.com/html/main.html";
     license = licenses.mpl20;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ mahe ];
   };
 }

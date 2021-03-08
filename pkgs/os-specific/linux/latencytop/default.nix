@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, glib, pkgconfig, gtk2 }:
+{ lib, stdenv, fetchurl, ncurses, glib, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "latencytop-0.5";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://latencytop.org";
     description = "Tool to show kernel reports on latencies (LATENCYTOP option)";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.viric ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pytest }:
 
 buildPythonPackage rec {
   pname = "boltons";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   checkPhase = "pytest tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mahmoud/boltons";
     description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
     longDescription = ''

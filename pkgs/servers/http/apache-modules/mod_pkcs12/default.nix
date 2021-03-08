@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_pkcs12";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RedWax CA service modules for PKCS#12 format files";
 
     homepage = "https://redwax.eu";

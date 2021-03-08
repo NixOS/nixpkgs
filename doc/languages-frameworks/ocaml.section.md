@@ -7,7 +7,7 @@ Given that most of the OCaml ecosystem is now built with dune, nixpkgs includes 
 Here is a simple package example. It defines an (optional) attribute `minimumOCamlVersion` that will be used to throw a descriptive evaluation error if building with an older OCaml is attempted. It uses the `fetchFromGitHub` fetcher to get its source. It sets the `doCheck` (optional) attribute to `true` which means that tests will be run with `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is complete. It uses `alcotest` as a build input (because it is needed to run the tests) and `bigstringaf` and `result` as propagated build inputs (thus they will also be available to libraries depending on this library). The library will be installed using the `angstrom.install` file that dune generates.
 
 ```nix
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildDunePackage
 , alcotest
@@ -35,8 +35,8 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/inhabitedtype/angstrom";
     description = "OCaml parser combinators built for speed and memory efficiency";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }
 ```
@@ -44,7 +44,7 @@ buildDunePackage rec {
 Here is a second example, this time using a source archive generated with `dune-release`. It is a good idea to use this archive when it is available as it will usually contain substituted variables such as a `%%VERSION%%` field. This library does not depend on any other OCaml library and no tests are run after building it.
 
 ```nix
-{ stdenv
+{ lib
 , fetchurl
 , buildDunePackage
 }:
@@ -60,7 +60,7 @@ buildDunePackage rec {
     sha256 = "1msg3vycd3k8qqj61sc23qks541cxpb97vrnrvrhjnqxsqnh6ygq";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-wtf8";
     description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates.";
     license = licenses.mit;

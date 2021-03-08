@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , python3
 , popt
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # we don't install python stuff as it borks up directories
   installTargets = [ "install-bin" "install-devel" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rhinstaller/isomd5sum";
     description = "Utilities for working with md5sum implanted in ISO images";
     platforms = platforms.linux;

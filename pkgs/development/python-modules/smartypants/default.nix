@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchhg
 , isPyPy
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1cmzz44d2hm6y8jj2xcq1wfr26760gi7iq92ha8xbhb1axzd7nq6";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python with the SmartyPants";
     homepage = "https://bitbucket.org/livibetter/smartypants.py";
     license = licenses.bsd3;

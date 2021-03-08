@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, glib, gtk-engine-murrine, gtk_engines, inkscape, optipng, sassc, which }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, glib, gtk-engine-murrine, gtk_engines, inkscape, optipng, sassc, which }:
 
 stdenv.mkDerivation rec {
   pname = "mojave-gtk-theme";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Mojave-gtk-theme";
     license = licenses.gpl3;

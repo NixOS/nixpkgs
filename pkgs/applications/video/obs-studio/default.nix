@@ -1,4 +1,4 @@
-{ config, stdenv
+{ config, lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
@@ -19,7 +19,7 @@
 , curl
 , xorg
 , makeWrapper
-, pkgconfig
+, pkg-config
 , libvlc
 , mbedtls
 
@@ -36,7 +36,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
 in mkDerivation rec {
   pname = "obs-studio";
@@ -50,7 +50,7 @@ in mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
+  nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
 
   buildInputs = [
     curl
@@ -105,12 +105,12 @@ in mkDerivation rec {
         --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
       addOpenGLRunpath $out/lib/lib*.so
       addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster

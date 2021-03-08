@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, stdenv, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # no tests exist
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for making eBooks from fanfiction web sites";
     homepage = "https://github.com/JimmXinu/FanFicFare";
     license = licenses.gpl3;

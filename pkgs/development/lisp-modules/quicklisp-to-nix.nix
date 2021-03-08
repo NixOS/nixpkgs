@@ -2848,6 +2848,13 @@ let quicklisp-to-nix-packages = rec {
            "fiasco" = quicklisp-to-nix-packages."fiasco";
        }));
 
+  "clfswm" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clfswm" or (x: {}))
+       (import ./quicklisp-to-nix-output/clfswm.nix {
+         inherit fetchurl;
+           "clx" = quicklisp-to-nix-packages."clx";
+       }));
 
   "cl-who" = buildLispPackage
     ((f: x: (x // (f x)))

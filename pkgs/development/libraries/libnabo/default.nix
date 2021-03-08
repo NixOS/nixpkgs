@@ -11,9 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "17vxlmszzpm95vvfdxnm98d5p297i10fyblblj6kf0ynq8r2mpsh";
   };
 
-  buildInputs = [cmake eigen boost];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ eigen boost ];
 
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3"

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 let version = "0.6.3"; in
   stdenv.mkDerivation {
   pname = "cconv";
@@ -11,7 +11,7 @@ let version = "0.6.3"; in
 
   nativeBuildInputs = [ autoreconfHook ];
   
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A iconv based simplified-traditional chinese conversion tool";
     homepage = "https://github.com/xiaoyjy/cconv";
     license = licenses.mit;

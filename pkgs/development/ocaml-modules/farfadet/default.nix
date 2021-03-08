@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
 , faraday
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.3"
+if !lib.versionAtLeast ocaml.version "4.3"
 then throw "farfadet is not available for OCaml ${ocaml.version}"
 else
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A printf-like for Faraday library";
     homepage = "https://github.com/oklm-wsh/Farfadet";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

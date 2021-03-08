@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , btrfs-progs
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ contextlib2 pyxdg pycparser alembic ]
     ++ stdenv.lib.optionals (!isPyPy) [ cffi ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deduplication for Btrfs";
     longDescription = ''
       Deduplication for Btrfs. bedup looks for new and changed files,

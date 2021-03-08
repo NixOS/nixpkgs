@@ -1,4 +1,4 @@
-{ stdenv, isPy27, buildPythonPackage, fetchPypi, scikitlearn }:
+{ lib, stdenv, isPy27, buildPythonPackage, fetchPypi, scikitlearn }:
 
 buildPythonPackage rec {
   pname = "mlrose";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sed -i 's,sklearn,scikit-learn,g' setup.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Machine Learning, Randomized Optimization and SEarch";
     homepage    = "https://github.com/gkhayes/mlrose";
     license     = licenses.bsd3;

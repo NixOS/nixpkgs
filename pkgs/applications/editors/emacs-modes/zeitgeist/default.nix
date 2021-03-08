@@ -20,6 +20,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Integreate Emacs with Zeitgeist";
     homepage = "http://zeitgeist-project.com/";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

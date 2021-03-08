@@ -1,4 +1,4 @@
-{ stdenv, fetchhg }:
+{ lib, stdenv, fetchhg }:
 
 stdenv.mkDerivation {
   pname = "u9fs";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
       cp u9fs $out/bin
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Serve 9P from Unix";
     homepage = "http://plan9.bell-labs.com/magic/man2html/4/u9fs";
     license = licenses.free;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib }:
+{ lib, stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "minimap2";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp minimap2.1 $out/share/man/man1
   '';
   
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A versatile pairwise aligner for genomic and spliced nucleotide sequences";
     homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;

@@ -7,12 +7,11 @@
 , six
 , stevedore
 , pyyaml
-, unicodecsv
 , cmd2
-, pytest
-, mock
+, pytestCheckHook
 , testtools
 , fixtures
+, which
 }:
 
 buildPythonPackage rec {
@@ -32,20 +31,21 @@ buildPythonPackage rec {
     stevedore
     pyyaml
     cmd2
-    unicodecsv
   ];
 
-  # remove version constraints
   postPatch = ''
-    sed -i '/cmd2/c\cmd2' requirements.txt
+    sed -i -e '/cmd2/c\cmd2' -e '/PrettyTable/c\PrettyTable' requirements.txt
   '';
 
-  checkInputs = [ fixtures mock pytest testtools ];
+  checkInputs = [ fixtures pytestCheckHook testtools which ];
   # add some tests
-  checkPhase = ''
-    pytest cliff/tests/test_{utils,app,command,help,lister}.py \
-      -k 'not interactive_mode'
-  '';
+  pytestFlagsArray = [
+    "cliff/tests/test_utils.py"
+    "cliff/tests/test_app.py"
+    "cliff/tests/test_command.py"
+    "cliff/tests/test_help.py"
+    "cliff/tests/test_lister.py"
+  ];
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";

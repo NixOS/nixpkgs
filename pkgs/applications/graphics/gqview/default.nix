@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2, libpng}:
+{lib, stdenv, fetchurl, pkgconfig, gtk2, libpng}:
 
 assert pkgconfig != null && gtk2 != null && libpng != null;
 # Note that we cannot just copy gtk's png attribute, since gtk might
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-lm";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast image viewer";
     homepage = "http://gqview.sourceforge.net";
     license = licenses.gpl2;

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   meta = {
     inherit version;
-    description = ''Fast Library for Number Theory'';
+    description = "Fast Library for Number Theory";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;

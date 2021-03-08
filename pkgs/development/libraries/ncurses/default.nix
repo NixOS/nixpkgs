@@ -3,7 +3,7 @@
 , abiVersion ? "6"
 , mouseSupport ? false
 , unicode ? true
-, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !enableStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 

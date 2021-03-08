@@ -1,5 +1,6 @@
 { lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
-, enableShared ? ! stdenv.hostPlatform.isMusl }:
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation {
   pname = "libc++";
@@ -37,8 +38,6 @@ stdenv.mkDerivation {
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
   ++ stdenv.lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
-
-  enableParallelBuilding = true;
 
   passthru = {
     isLLVM = true;

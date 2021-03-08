@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , llvm, qt48Full, qrencode, libmicrohttpd_0_9_70, libjack2, alsaLib, faust, curl
 , bc, coreutils, which, libsndfile, pkg-config
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     install rsrc/FaustLive.desktop "$out/share/applications"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A standalone just-in-time Faust compiler";
     longDescription = ''
       FaustLive is a standalone just-in-time Faust compiler. It tries to bring

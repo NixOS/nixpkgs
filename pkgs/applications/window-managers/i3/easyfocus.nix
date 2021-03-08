@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xorgproto, libxcb, xcbutilkeysyms
+{ lib, stdenv, fetchFromGitHub, pkgconfig, xorgproto, libxcb, xcbutilkeysyms
 , xorg , i3ipc-glib , glib
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     cp i3-easyfocus $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Focus and select windows in i3";
     homepage = "https://github.com/cornerman/i3-easyfocus";
     maintainers = with maintainers; [teto];

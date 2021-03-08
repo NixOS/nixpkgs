@@ -2,7 +2,7 @@
 , jq
 , makeWrapper
 , p7zip
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/bin/r2mod --prefix PATH : "${stdenv.lib.makeBinPath [ jq p7zip ]}";
+    wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [ jq p7zip ]}";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Risk of Rain 2 Mod Manager in Bash";
     homepage = "https://github.com/foldex/r2mod_cli";
     license = licenses.gpl3Only;

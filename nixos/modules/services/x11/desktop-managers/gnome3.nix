@@ -19,7 +19,7 @@ let
 
   defaultFavoriteAppsOverride = ''
     [org.gnome.shell]
-    favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
   nixos-gsettings-desktop-schemas = let
@@ -409,9 +409,7 @@ in
         baobab
         cheese
         eog
-        /* Not in good standing on nixos:
-         * https://github.com/NixOS/nixpkgs/issues/98819
-        /* epiphany */
+        epiphany
         gedit
         gnome-calculator
         gnome-calendar

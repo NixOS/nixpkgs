@@ -1,7 +1,10 @@
 { stdenv, fetchurl, curl, hdf5, netcdf
-, enable_cdi_lib ? false    # build, install and link to a CDI library [default=no]
-, enable_all_static ? false # build a completely statically linked CDO binary  [default=no]
-, enable_cxx ? false        # Use CXX as default compiler [default=no]
+, # build, install and link to a CDI library [default=no]
+  enable_cdi_lib ? false
+, # build a completely statically linked CDO binary
+  enable_all_static ? stdenv.hostPlatform.isStatic
+, # Use CXX as default compiler [default=no]
+  enable_cxx ? false
 }:
 
 stdenv.mkDerivation rec {

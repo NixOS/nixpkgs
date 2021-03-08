@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libjpeg, libtiff, libpng, freetype
 , fltk, gtk
 , libX11, libXext, libICE
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A NEXTStep-inspired window manager";
     longDescription = ''
       AfterStep is a window manager for the Unix X Window

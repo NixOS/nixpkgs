@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
 , django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
 }:
 buildPythonPackage rec {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://graphiteapp.org/";
     description = "Enterprise scalable realtime graphing";
     maintainers = with maintainers; [ offline basvandijk ];

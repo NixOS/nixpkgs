@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, util-linux }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "pam_mount";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     rm -r $out/var
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PAM module to mount volumes for a user session";
     homepage = "https://pam-mount.sourceforge.net/";
     license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];

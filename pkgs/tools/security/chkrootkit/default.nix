@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "chkrootkit-0.53";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp check_wtmpx chkdirs chklastlog chkproc chkrootkit chkutmp chkwtmp ifpromisc strings-static $out/sbin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Locally checks for signs of a rootkit";
     homepage = "http://www.chkrootkit.org/";
     license = licenses.bsd2;

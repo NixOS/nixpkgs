@@ -5,7 +5,7 @@
 , unixODBC ? null # odbcSupport
 , libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 , parallelBuild ? false
-, withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
+, systemd
 }:
 
 { baseName ? "erlang"
@@ -20,6 +20,7 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk8 ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
+, withSystemd ? stdenv.isLinux # systemd support in epmd
 , wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""

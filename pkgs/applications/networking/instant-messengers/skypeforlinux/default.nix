@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg
+{ lib, stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
 , gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk, libuuid, at-spi2-core }:
@@ -9,7 +9,7 @@ let
   # source of the latter disappears much faster.
   version = "8.66.0.74";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     alsaLib
     atk
     at-spi2-atk
@@ -108,13 +108,17 @@ in stdenv.mkDerivation {
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
       --replace /usr/bin/ $out/bin/
+    substituteInPlace $out/share/applications/skypeforlinux-share.desktop \
+      --replace /usr/bin/ $out/bin/
+    substituteInPlace $out/share/kservices5/ServiceMenus/skypeforlinux.desktop \
+      --replace /usr/bin/ $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux client for skype";
     homepage = "https://www.skype.com";
     license = licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ panaeon jraygauthier ];
+    maintainers = with lib.maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System-wide profiler for Linux";
     homepage = "https://wiki.gnome.org/Apps/Sysprof";
     longDescription = ''

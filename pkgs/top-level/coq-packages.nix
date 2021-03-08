@@ -1,12 +1,14 @@
 { lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
-, compcert
-}:
-
+, ocamlPackages_4_10, compcert
+}@args:
+let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
 let
   mkCoqPackages' = self: coq:
     let callPackage = self.callPackage; in {
-      inherit coq;
+      inherit coq lib;
       coqPackages = self;
+
+      mkCoqDerivation = callPackage ../build-support/coq {};
 
       contribs = recurseIntoAttrs
         (callPackage ../development/coq-modules/contribs {});
@@ -22,6 +24,7 @@ let
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+      coqeal = callPackage ../development/coq-modules/coqeal {};
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
@@ -39,19 +42,21 @@ let
       iris = callPackage ../development/coq-modules/iris {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
-      inherit (callPackage ../development/coq-modules/mathcomp {})
-        mathcomp_ mathcomp-config
-        mathcomp ssreflect
-        mathcomp-ssreflect mathcomp-fingroup mathcomp-algebra
-        mathcomp-solvable mathcomp-field mathcomp-character
-      ;
-      inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
-        mathcomp-extra-override mathcomp-extra-config mathcomp-extra
-        current-mathcomp-extra mathcomp-extra-fast mathcomp-extra-all
-        mathcomp-finmap mathcomp-bigenough mathcomp-real-closed
-        mathcomp-analysis multinomials coqeal
-      ;
+      mathcomp = callPackage ../development/coq-modules/mathcomp {};
+      ssreflect          = self.mathcomp.ssreflect;
+      mathcomp-ssreflect = self.mathcomp.ssreflect;
+      mathcomp-fingroup  = self.mathcomp.fingroup;
+      mathcomp-algebra   = self.mathcomp.algebra;
+      mathcomp-solvable  = self.mathcomp.solvable;
+      mathcomp-field     = self.mathcomp.field;
+      mathcomp-character = self.mathcomp.character;
+      mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
+      mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
+      mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
+      mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
+      mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       metalib = callPackage ../development/coq-modules/metalib { };
+      multinomials = callPackage ../development/coq-modules/multinomials {};
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
@@ -64,23 +69,22 @@ let
       VST = callPackage ../development/coq-modules/VST {
         compcert = compcert.override { version = "3.7"; };
       };
-
-      filterPackages = filterCoqPackages;
+      filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
 
-  filterCoqPackages = coq: set:
+  filterCoqPackages = set:
     lib.listToAttrs (
-      lib.concatMap (name:
-        let v = set.${name}; in
-        let p = v.compatibleCoqVersions or (_: true); in
-        lib.optional (p coq.coq-version)
-          (lib.nameValuePair name (
-            if lib.isAttrs v && v.recurseForDerivations or false
-            then filterCoqPackages coq v
-            else v))
+      lib.concatMap (name: let v = set.${name} or null; in
+          lib.optional (! v.meta.coqFilter or false)
+            (lib.nameValuePair name (
+              if lib.isAttrs v && v.recurseForDerivations or false
+              then filterCoqPackages v
+              else v))
       ) (lib.attrNames set)
     );
-
+  mkCoq = version: callPackage ../applications/science/logic/coq {
+    inherit version ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
+  };
 in rec {
 
   /* The function `mkCoqPackages` takes as input a derivation for Coq and produces
@@ -93,41 +97,17 @@ in rec {
    */
   mkCoqPackages = coq:
     let self = lib.makeScope newScope (lib.flip mkCoqPackages' coq); in
-    if coq.dontFilter or false then self else filterCoqPackages coq self;
+    self.filterPackages (! coq.dontFilter or false);
 
-  coq_8_5 = callPackage ../applications/science/logic/coq {
-    ocamlPackages = ocamlPackages_4_05;
-    version = "8.5pl3";
-  };
-  coq_8_6 = callPackage ../applications/science/logic/coq {
-    ocamlPackages = ocamlPackages_4_05;
-    version = "8.6.1";
-  };
-  coq_8_7 = callPackage ../applications/science/logic/coq {
-    ocamlPackages = ocamlPackages_4_09;
-    version = "8.7.2";
-  };
-  coq_8_8 = callPackage ../applications/science/logic/coq {
-    ocamlPackages = ocamlPackages_4_09;
-    version = "8.8.2";
-  };
-  coq_8_9 = callPackage ../applications/science/logic/coq {
-    ocamlPackages = ocamlPackages_4_09;
-    version = "8.9.1";
-  };
-  coq_8_10 = callPackage ../applications/science/logic/coq {
-    ocamlPackages = ocamlPackages_4_09;
-    version = "8.10.2";
-  };
-  coq_8_11 = callPackage ../applications/science/logic/coq {
-    version = "8.11.2";
-  };
-  coq_8_12 = callPackage ../applications/science/logic/coq {
-    version = "8.12.2";
-  };
-  coq_8_13 = callPackage ../applications/science/logic/coq {
-    version = "8.13+beta1";
-  };
+  coq_8_5  = mkCoq "8.5";
+  coq_8_6  = mkCoq "8.6";
+  coq_8_7  = mkCoq "8.7";
+  coq_8_8  = mkCoq "8.8";
+  coq_8_9  = mkCoq "8.9";
+  coq_8_10 = mkCoq "8.10";
+  coq_8_11 = mkCoq "8.11";
+  coq_8_12 = mkCoq "8.12";
+  coq_8_13 = mkCoq "8.13";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;

@@ -8,7 +8,7 @@
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
 , enableJemalloc ? false, jemalloc ? null
-, enableApp ? !stdenv.hostPlatform.isWindows
+, enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
 , enablePython ? false, python ? null, cython ? null, ncurses ? null, setuptools ? null
 }:
 

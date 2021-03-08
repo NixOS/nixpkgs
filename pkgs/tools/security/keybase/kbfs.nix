@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, keybase }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, keybase }:
 
 buildGoPackage {
   pname = "kbfs";
@@ -12,7 +12,7 @@ buildGoPackage {
 
   buildFlags = [ "-tags production" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://keybase.io/docs/kbfs";
     description = "The Keybase filesystem";
     platforms = platforms.unix;

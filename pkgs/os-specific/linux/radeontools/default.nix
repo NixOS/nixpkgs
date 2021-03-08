@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , autoreconfHook
 , pciutils
 , pkgconfig
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ xorg.libpciaccess ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lowlevel tools to tweak register and dump state on radeon GPUs";
     homepage = "https://airlied.livejournal.com/";
     license = licenses.zlib;

@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , fetchurl
 , python3
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , adwaita-icon-theme
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gedit/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0kc48a399achcz6vlqq0jk0b8ixbrzyv9xb22s5av76m5hyqalq0";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     perl
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gedit";
     description = "Official text editor of the GNOME desktop environment";
     maintainers = teams.gnome.members;

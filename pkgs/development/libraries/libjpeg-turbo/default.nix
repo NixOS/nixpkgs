@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, nasm, enableStatic ? false, enableShared ? true }:
+{ stdenv, fetchFromGitHub, cmake, nasm
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
 

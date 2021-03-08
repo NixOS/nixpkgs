@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , python
 , fetchPypi
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     make check
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cython bindings for PARI";
     license = licenses.gpl2;
     maintainers = teams.sage.members;

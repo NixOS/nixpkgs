@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "turbo-geth";
@@ -20,7 +20,7 @@ buildGoModule rec {
     "cmd/rpcdaemon"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ledgerwatch/turbo-geth/";
     description = "Ethereum node and geth fork focused on scalability and modularity";
     license = with licenses; [ lgpl3 gpl3 ];

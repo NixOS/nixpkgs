@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , freetype, fribidi
 , libXext, libXft, libXpm, libXrandr, libXrender, xorgproto
 , libXinerama
 , imlib2 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "fluxbox";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     substituteInPlace util/fluxbox-generate_menu.in \
       --subst-var-by PREFIX "$out"
   '';
-  
+
   meta = {
     description = "Full-featured, light-resource X window manager";
     longDescription = ''

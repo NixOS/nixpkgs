@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
-  enableParallelBuilding = true;
-
   doCheck = false; # hangs. or very expensive?
 
   meta = {

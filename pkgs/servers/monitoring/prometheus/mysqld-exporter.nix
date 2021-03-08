@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "mysqld_exporter";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "0nzbfzx4dzs3cagdid1fqddrqimgr8x6r8gmmxglrss05c8srgs8";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prometheus exporter for MySQL server metrics";
     homepage = "https://github.com/prometheus/mysqld_exporter";
     license = licenses.asl20;

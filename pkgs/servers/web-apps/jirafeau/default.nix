@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitLab, writeText }:
-
+{ lib, stdenv, fetchFromGitLab, writeText }:
 let
   localConfig = writeText "config.local.php" ''
     <?php
@@ -9,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jirafeau";
-  version = "4.1.1";
+  version = "4.3.0";
 
   src = fetchFromGitLab {
     owner = "mojo42";
     repo = "Jirafeau";
     rev = version;
-    sha256 = "09gq5zhynygpqj0skq7ifnn9yjjg7qnc6kjvaas7f53av2707z4c";
+    hash = "sha256-9v6rtxViXsolx5AKSp2HxcFyU1XJWFSiqzTBl+dQBD4=";
   };
 
   installPhase = ''
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     cp ${localConfig} $out/lib/config.local.php
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Website permitting upload of a file in a simple way and giving a unique link to it";
     license = licenses.agpl3;
     homepage = "https://gitlab.com/mojo42/Jirafeau";

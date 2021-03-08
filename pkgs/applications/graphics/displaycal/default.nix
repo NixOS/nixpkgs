@@ -1,5 +1,5 @@
 { python2
-, stdenv
+, lib, stdenv
 , fetchurl
 , pkgconfig
 , libXext
@@ -65,8 +65,8 @@ in buildPythonApplication rec {
   meta = {
     description = "Display Calibration and Characterization powered by Argyll CMS";
     homepage = "https://displaycal.net/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
   };
 }

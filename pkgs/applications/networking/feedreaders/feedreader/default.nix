@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkgconfig, vala, gettext, python3
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config, vala, gettext, python3
 , appstream-glib, desktop-file-utils, wrapGAppsHook, gnome-online-accounts
 , gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, pantheon
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext appstream-glib desktop-file-utils
+    meson ninja pkg-config vala gettext appstream-glib desktop-file-utils
     libxml2 python3 wrapGAppsHook
   ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern desktop application designed to complement existing web-based RSS accounts";
     homepage = "https://jangernert.github.io/FeedReader/";
     license = licenses.gpl3Plus;

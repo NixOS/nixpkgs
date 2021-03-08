@@ -1,4 +1,4 @@
-{ stdenv, libressl, fetchzip, fetchpatch, pkg-config }:
+{ lib, stdenv, libressl, fetchzip, fetchpatch, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "pounce";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.causal.agency/june/pounce";
     description = "Simple multi-client TLS-only IRC bouncer";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, pkgconfig, glib, libviper, libpseudo, gpm,
+{lib, stdenv, fetchurl, ncurses, pkgconfig, glib, libviper, libpseudo, gpm,
 libvterm}:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses glib libviper libpseudo gpm libvterm ];
  
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://vwm.sourceforge.net/";
     description = "Dynamic window manager for the console";
     license = licenses.gpl2Plus;

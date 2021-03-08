@@ -17,6 +17,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Popup descriptions of R objects";
     homepage = "https://github.com/myuhe/ess-R-object-popup.el";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

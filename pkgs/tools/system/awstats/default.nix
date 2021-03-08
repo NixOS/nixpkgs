@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, jdk }:
+{ lib, stdenv, fetchurl, perlPackages, jdk }:
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
@@ -52,7 +52,7 @@ perlPackages.buildPerlPackage rec {
     mv docs "$doc/share/doc/awstats"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-time logfile analyzer to get advanced statistics";
     homepage = "http://awstats.org";
     license = licenses.gpl3Plus;

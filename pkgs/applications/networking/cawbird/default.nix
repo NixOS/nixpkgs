@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , glib
 , gtk3
@@ -10,7 +10,7 @@
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , dconf
 , gst_all_1
 , wrapGAppsHook
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     python3
     gobject-introspection # for setup hook
@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
     patchShebangs data/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Native GTK Twitter client for the Linux desktop";
     longDescription = "Cawbird is a modern, easy and fun Twitter client. Fork of the discontinued Corebird.";
     homepage = "https://ibboard.co.uk/cawbird/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jonafato schmittlauch ];
+    maintainers = with lib.maintainers; [ jonafato schmittlauch ];
   };
 }

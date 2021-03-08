@@ -1,0 +1,34 @@
+diff --git a/passes/cmds/plugin.cc b/passes/cmds/plugin.cc
+index 3ed19497..f9534bd0 100644
+--- a/passes/cmds/plugin.cc
++++ b/passes/cmds/plugin.cc
+@@ -75,8 +75,27 @@ void load_plugin(std::string filename, std::vector<std::string> aliases)
+ 		#endif
+ 
+ 		void *hdl = dlopen(filename.c_str(), RTLD_LAZY|RTLD_LOCAL);
+-		if (hdl == NULL && orig_filename.find('/') == std::string::npos)
+-			hdl = dlopen((proc_share_dirname() + "plugins/" + orig_filename + ".so").c_str(), RTLD_LAZY|RTLD_LOCAL);
++		if (hdl == NULL && orig_filename.find('/') == std::string::npos) {
++			std::string install_dir = proc_share_dirname() + "plugins";
++
++			vector<string> all_dirs;
++			all_dirs.push_back(install_dir);
++
++			char* plugin_dirs = getenv("NIX_YOSYS_PLUGIN_DIRS");
++			if (plugin_dirs != NULL) {
++				std::string p(plugin_dirs), t;
++				std::stringstream ss(p);
++
++				while(std::getline(ss, t, ':')) {
++					all_dirs.push_back(t);
++				}
++			}
++
++			for (auto dir : all_dirs) {
++				hdl = dlopen((dir + "/" + orig_filename + ".so").c_str(), RTLD_LAZY|RTLD_LOCAL);
++				if (hdl != NULL) break;
++			}
++		}
+ 		if (hdl == NULL)
+ 			log_cmd_error("Can't load module `%s': %s\n", filename.c_str(), dlerror());
+ 		loaded_plugins[orig_filename] = hdl;

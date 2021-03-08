@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm3, libXau
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm3, libXau
 , libXdmcp, lcms2, libiptcdata, libcanberra-gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
 , lensfun, librsvg
 }:
@@ -32,13 +32,11 @@ stdenv.mkDerivation rec {
     echo "set(HG_VERSION $version)" > $sourceRoot/ReleaseInfo.cmake
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "RAW converter and digital photo processing software";
     homepage = "http://www.rawtherapee.com/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ jcumming mahe ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jcumming mahe ];
+    platforms = with lib.platforms; linux;
   };
 }

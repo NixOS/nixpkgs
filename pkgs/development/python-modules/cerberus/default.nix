@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestrunner, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytestrunner, pytest }:
 
 buildPythonPackage rec {
   pname = "Cerberus";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     pytest -k 'not nested_oneofs'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://python-cerberus.org/";
     description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
     license = licenses.mit;

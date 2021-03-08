@@ -16,28 +16,33 @@ with lib;
       enable = mkEnableOption "Virtuoso Opensource database server";
 
       config = mkOption {
+        type = types.lines;
         default = "";
         description = "Extra options to put into Virtuoso configuration file.";
       };
 
       parameters = mkOption {
+        type = types.lines;
         default = "";
         description = "Extra options to put into [Parameters] section of Virtuoso configuration file.";
       };
 
       listenAddress = mkOption {
+        type = types.str;
         default = "1111";
         example = "myserver:1323";
         description = "ip:port or port to listen on.";
       };
 
       httpListenAddress = mkOption {
+        type = types.nullOr types.str;
         default = null;
         example = "myserver:8080";
         description = "ip:port or port for Virtuoso HTTP server to listen on.";
       };
 
       dirsAllowed = mkOption {
+        type = types.nullOr types.str; # XXX Maybe use a list in the future?
         default = null;
         example = "/www, /home/";
         description = "A list of directories Virtuoso is allowed to access";

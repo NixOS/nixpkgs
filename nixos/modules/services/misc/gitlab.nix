@@ -44,6 +44,9 @@ let
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
 
+    [hooks]
+    custom_hooks_dir = "${cfg.statePath}/custom_hooks"
+
     [gitlab]
     secret_file = "${cfg.statePath}/gitlab_shell_secret"
     url = "http+unix://${pathUrlQuote gitlabSocket}"
@@ -65,7 +68,6 @@ let
     repos_path = "${cfg.statePath}/repositories";
     secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
-    custom_hooks_dir = "${cfg.statePath}/custom_hooks";
     redis = {
       bin = "${pkgs.redis}/bin/redis-cli";
       host = "127.0.0.1";
@@ -734,7 +736,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitAndTools.git
+        git
         ruby
         openssh
         nodejs
@@ -762,7 +764,7 @@ in {
       path = with pkgs; [
         openssh
         procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
-        gitAndTools.git
+        git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
         gzip
@@ -804,7 +806,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         exiftool
-        gitAndTools.git
+        git
         gnutar
         gzip
         openssh
@@ -852,7 +854,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitAndTools.git
+        git
         openssh
         nodejs
         procps

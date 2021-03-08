@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
 
 buildPythonPackage rec {
   pname = "amazon_kclpy";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Amazon Kinesis Client Library for Python";
     homepage = "https://github.com/awslabs/amazon-kinesis-client-python";
     license = licenses.amazonsl;

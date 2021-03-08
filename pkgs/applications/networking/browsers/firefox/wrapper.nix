@@ -3,9 +3,9 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd
+, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
 , gnome3/*.gnome-shell*/
-, browserpass, chrome-gnome-shell, uget-integrator, plasma5, bukubrow
+, browserpass, chrome-gnome-shell, uget-integrator, plasma5, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
 , udev
@@ -51,6 +51,7 @@ let
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
+      pipewireSupport = browser.pipewireSupport or false;
 
       plugins =
         let
@@ -80,7 +81,8 @@ let
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa ]
+      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver ]
+            ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
             ++ lib.optional useGlvnd libglvnd
@@ -172,7 +174,7 @@ let
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
         categories = "Network;WebBrowser;";
-        mimeType = stdenv.lib.concatStringsSep ";" [
+        mimeType = lib.concatStringsSep ";" [
           "text/html"
           "text/xml"
           "application/xhtml+xml"

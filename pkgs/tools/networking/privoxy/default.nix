@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, zlib, pcre, w3m, man }:
+{ lib, stdenv, fetchurl, autoreconfHook, zlib, pcre, w3m, man }:
 
 stdenv.mkDerivation rec {
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/var
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.privoxy.org/";
     description = "Non-caching web proxy with advanced filtering capabilities";
     license = licenses.gpl2;

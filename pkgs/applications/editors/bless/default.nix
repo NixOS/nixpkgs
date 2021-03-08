@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkgconfig
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bless --prefix MONO_PATH : "$MPATH" --prefix LD_LIBRARY_PATH : "$MPATH"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/afrantzis/bless";
     description = "Gtk# Hex Editor";
     maintainers = [ maintainers.mkg20001 ];

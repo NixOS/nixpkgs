@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXpm, libXext, libXfixes, libXmu }:
+{ lib, stdenv, fetchurl, pkgconfig, libX11, libXpm, libXext, libXfixes, libXmu }:
 
 stdenv.mkDerivation rec {
   pname = "wmsystemtray";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXpm libXext libXfixes libXmu ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A system tray for Windowmaker";
     homepage = "http://wmsystemtray.sourceforge.net";
     license = licenses.gpl2Only;

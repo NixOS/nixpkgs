@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , nixosTests
 , fetchFromGitHub
 , rustPlatform
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) lsd; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Peltoche/lsd";
     description = "The next gen ls command";
     license = licenses.asl20;

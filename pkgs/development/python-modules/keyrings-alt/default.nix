@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
 , pytest, backports_unittest-mock, keyring, setuptools_scm, toml
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "keyrings.alt"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     description = "Alternate keyring implementations";
     homepage = "https://github.com/jaraco/keyrings.alt";

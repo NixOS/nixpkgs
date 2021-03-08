@@ -1,28 +1,40 @@
-{
-  stdenv, fetchurl, lib,
-  pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
-  audit,
-  libgcrypt ? null,
-  libsodium ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, asciidoc
+, pkgconfig
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, dbus-glib
+, libcap_ng
+, libqb
+, libseccomp
+, polkit
+, protobuf
+, audit
+, libgcrypt
+, libsodium
 }:
-
-with stdenv.lib;
 
 assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
-  version = "0.7.8";
+  version = "1.0.0";
   pname = "usbguard";
 
-  repo = "https://github.com/USBGuard/usbguard";
-
-  src = fetchurl {
-    url = "${repo}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1il5immqfxh2cj8wn1bfk7l42inflzgjf07yqprpz7r3lalbxc25";
+  src = fetchFromGitHub {
+    owner = "USBGuard";
+    repo = pname;
+    rev = "usbguard-${version}";
+    sha256 = "sha256-CPuBQmDOpXWn0jPo4HRyDCZUpDy5NmbvUHxXoVbMd/I=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     asciidoc
     pkgconfig
     libxslt # xsltproc
@@ -54,10 +66,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "The USBGuard software framework helps to protect your computer against BadUSB";
+    longDescription = ''
+      USBGuard is a software framework for implementing USB device authorization
+      policies (what kind of USB devices are authorized) as well as method of
+      use policies (how a USB device may interact with the system). Simply put,
+      it is a USB device whitelisting tool.
+    '';
     homepage = "https://usbguard.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.tnias ];
   };
 }

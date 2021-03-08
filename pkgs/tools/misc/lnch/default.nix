@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   pname = "lnch";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0skzrjnbxq1yj7y64cq7angp4wqnrgw1xp9v8vw9zp8f8zwmpy0y";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/oem/lnch";
     description = "A small go app that launches a process and moves it out of the process group";
     license = licenses.publicDomain; # really I don't know

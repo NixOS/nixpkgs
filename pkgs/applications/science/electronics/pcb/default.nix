@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , gtk2
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "--disable-update-desktop-database"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Printed Circuit Board editor";
     homepage = "http://pcb.geda-project.org/";
     maintainers = with maintainers; [ mog ];

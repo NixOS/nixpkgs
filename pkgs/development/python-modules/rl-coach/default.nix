@@ -89,7 +89,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5"; # minimum required version
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enables easy experimentation with state of the art Reinforcement Learning algorithms";
     homepage = "https://nervanasystems.github.io/coach/";
     license = licenses.asl20;

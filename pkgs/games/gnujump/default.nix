@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_image, SDL_mixer }:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer }:
 
 stdenv.mkDerivation rec {
   pname = "gnujump";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lm";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://jump.gnu.sinusoid.es/index.php?title=Main_Page";
     description = "A clone of the simple yet addictive game Xjump";
     longDescription = ''

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, zlib, libtiff, libxml2, openssl, libiconv, libpng, cmake }:
+{ lib, stdenv, fetchFromGitHub, zlib, libtiff, libxml2, openssl, libiconv, libpng, cmake }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "dcmtk";
   version = "3.6.5";

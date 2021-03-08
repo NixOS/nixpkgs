@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, substituteAll
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, substituteAll
 , python, util-linux, pygit2, gitMinimal, git-annex, cacert
 }:
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "git_annex_adapter" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/alpernebbi/git-annex-adapter";
     description = "Call git-annex commands from Python";
     license = licenses.gpl3Plus;

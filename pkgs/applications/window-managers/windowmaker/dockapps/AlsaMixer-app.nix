@@ -1,4 +1,4 @@
-{ stdenv, dockapps-sources, pkg-config, libX11, libXpm, libXext, alsaLib }:
+{ lib, stdenv, dockapps-sources, pkg-config, libX11, libXpm, libXext, alsaLib }:
 
 stdenv.mkDerivation rec {
   pname = "AlsaMixer.app";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ln -s ${placeholder "out"}/bin/AlsaMixer.app ${placeholder "out"}/bin/AlsaMixer
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Alsa mixer application for Windowmaker";
     homepage = "https://www.dockapps.net/alsamixerapp";
     license = licenses.gpl2Plus;

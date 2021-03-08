@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
+{ lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
 , atk, at-spi2-atk, at-spi2-core, alsaLib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";
     license = licenses.postman;

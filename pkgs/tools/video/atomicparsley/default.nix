@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "atomicparsley";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ]
-                ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+                ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   installPhase = ''
     runHook preInstall
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI program for reading, parsing and setting metadata into MPEG-4 files";
     homepage = "https://github.com/wez/atomicparsley";
     license = licenses.gpl2Plus;

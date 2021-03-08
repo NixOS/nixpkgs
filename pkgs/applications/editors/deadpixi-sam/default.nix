@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
+{ lib, stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
 
 stdenv.mkDerivation rec {
   version = "2017-10-27";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     mv deadpixi-sam.desktop $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Updated version of the sam text editor";
     license = with licenses; lpl-102;

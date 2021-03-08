@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey_1_8_5, curl, help2man
+{ lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_1_8_5, curl, help2man
 , sphinx, which, file, pkgconfig, getopt }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--enable-js-trunk"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "http://couchdb.apache.org";
     license = licenses.asl20;

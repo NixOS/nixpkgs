@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio }:
 
 mkDerivation {
-  name = "kmag";
+  pname = "kmag";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/utilities/org.kde.kmag";
     description = "A small Linux utility to magnify a part of the screen";

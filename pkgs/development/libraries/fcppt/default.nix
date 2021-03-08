@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=false" "-DENABLE_BOOST=true" "-DENABLE_EXAMPLES=true" "-DENABLE_CATCH=true" "-DENABLE_TEST=true" ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Freundlich's C++ toolkit";
     longDescription = ''

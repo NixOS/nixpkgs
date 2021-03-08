@@ -76,8 +76,6 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/supertuxkart --set-default SUPERTUXKART_ASSETS_DIR "${assets}"
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "A Free 3D kart racing game";
     longDescription = ''

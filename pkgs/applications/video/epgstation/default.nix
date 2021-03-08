@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , common-updater-scripts
 , genericUpdater
@@ -82,7 +83,7 @@ let
 
       makeWrapper ${nodejs}/bin/npm $out/bin/epgstation \
        --run "cd $out/lib/node_modules/EPGStation" \
-       --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}
+       --prefix PATH : ${lib.makeBinPath runtimeDeps}
 
       popd
     '';
@@ -113,7 +114,7 @@ in
 pkg // {
   name = "${pname}-${version}";
 
-  meta = with stdenv.lib; pkg.meta // {
+  meta = with lib; pkg.meta // {
     maintainers = with maintainers; [ midchildan ];
 
     # NOTE: updateScript relies on this being correct

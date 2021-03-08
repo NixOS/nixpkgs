@@ -786,19 +786,27 @@
       };
     }
     {
-      name = "_gitlab_svgs___svgs_1.175.0.tgz";
+      name = "_gitlab_svgs___svgs_1.177.0.tgz";
       path = fetchurl {
-        name = "_gitlab_svgs___svgs_1.175.0.tgz";
-        url  = "https://registry.yarnpkg.com/@gitlab/svgs/-/svgs-1.175.0.tgz";
-        sha1 = "734f341784af1cd1d62d160a17bcdfb61ff7b04d";
+        name = "_gitlab_svgs___svgs_1.177.0.tgz";
+        url  = "https://registry.yarnpkg.com/@gitlab/svgs/-/svgs-1.177.0.tgz";
+        sha1 = "e481ed327a11d3834c8b1668d7485b9eefef97f5";
       };
     }
     {
-      name = "_gitlab_ui___ui_23.9.0.tgz";
+      name = "_gitlab_tributejs___tributejs_1.0.0.tgz";
       path = fetchurl {
-        name = "_gitlab_ui___ui_23.9.0.tgz";
-        url  = "https://registry.yarnpkg.com/@gitlab/ui/-/ui-23.9.0.tgz";
-        sha1 = "e21966130b41e624dbe4505911a79afb731c2d6b";
+        name = "_gitlab_tributejs___tributejs_1.0.0.tgz";
+        url  = "https://registry.yarnpkg.com/@gitlab/tributejs/-/tributejs-1.0.0.tgz";
+        sha1 = "672befa222aeffc83e7d799b0500a7a4418e59b8";
+      };
+    }
+    {
+      name = "_gitlab_ui___ui_24.8.1.tgz";
+      path = fetchurl {
+        name = "_gitlab_ui___ui_24.8.1.tgz";
+        url  = "https://registry.yarnpkg.com/@gitlab/ui/-/ui-24.8.1.tgz";
+        sha1 = "eb674d19aedf9c91b9a14aa7a66397d54b199fb7";
       };
     }
     {
@@ -1026,19 +1034,19 @@
       };
     }
     {
-      name = "_toast_ui_editor___editor_2.5.0.tgz";
+      name = "_toast_ui_editor___editor_2.5.1.tgz";
       path = fetchurl {
-        name = "_toast_ui_editor___editor_2.5.0.tgz";
-        url  = "https://registry.yarnpkg.com/@toast-ui/editor/-/editor-2.5.0.tgz";
-        sha1 = "02779b119eaa6dd7601249d75ca031e0b98400f1";
+        name = "_toast_ui_editor___editor_2.5.1.tgz";
+        url  = "https://registry.yarnpkg.com/@toast-ui/editor/-/editor-2.5.1.tgz";
+        sha1 = "42671c52ca4b97c84f684d09c2966711b36f41a7";
       };
     }
     {
-      name = "_toast_ui_vue_editor___vue_editor_2.5.0.tgz";
+      name = "_toast_ui_vue_editor___vue_editor_2.5.1.tgz";
       path = fetchurl {
-        name = "_toast_ui_vue_editor___vue_editor_2.5.0.tgz";
-        url  = "https://registry.yarnpkg.com/@toast-ui/vue-editor/-/vue-editor-2.5.0.tgz";
-        sha1 = "8094136588b0f726241b5f89d0754a7169f2ffee";
+        name = "_toast_ui_vue_editor___vue_editor_2.5.1.tgz";
+        url  = "https://registry.yarnpkg.com/@toast-ui/vue-editor/-/vue-editor-2.5.1.tgz";
+        sha1 = "0a221d74d5305c8ca20cb11d9eb8ff9206455cfc";
       };
     }
     {
@@ -4394,11 +4402,11 @@
       };
     }
     {
-      name = "dompurify___dompurify_2.2.2.tgz";
+      name = "dompurify___dompurify_2.2.4.tgz";
       path = fetchurl {
-        name = "dompurify___dompurify_2.2.2.tgz";
-        url  = "https://registry.yarnpkg.com/dompurify/-/dompurify-2.2.2.tgz";
-        sha1 = "cb8c2b1a2f3c8a0b565127504ae4eedec176a972";
+        name = "dompurify___dompurify_2.2.4.tgz";
+        url  = "https://registry.yarnpkg.com/dompurify/-/dompurify-2.2.4.tgz";
+        sha1 = "a98cd182b729bdd8715c3eb7a8bf8eafb2ff7410";
       };
     }
     {
@@ -7434,6 +7442,14 @@
       };
     }
     {
+      name = "jest_raw_loader___jest_raw_loader_1.0.1.tgz";
+      path = fetchurl {
+        name = "jest_raw_loader___jest_raw_loader_1.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/jest-raw-loader/-/jest-raw-loader-1.0.1.tgz";
+        sha1 = "ce9f56d54650f157c4a7d16d224ba5d613bcd626";
+      };
+    }
+    {
       name = "jest_regex_util___jest_regex_util_26.0.0.tgz";
       path = fetchurl {
         name = "jest_regex_util___jest_regex_util_26.0.0.tgz";
@@ -8938,11 +8954,11 @@
       };
     }
     {
-      name = "mock_apollo_client___mock_apollo_client_0.4.0.tgz";
+      name = "mock_apollo_client___mock_apollo_client_0.5.0.tgz";
       path = fetchurl {
-        name = "mock_apollo_client___mock_apollo_client_0.4.0.tgz";
-        url  = "https://registry.yarnpkg.com/mock-apollo-client/-/mock-apollo-client-0.4.0.tgz";
-        sha1 = "556a6090b1816dbf07e51093b652aca84aee979e";
+        name = "mock_apollo_client___mock_apollo_client_0.5.0.tgz";
+        url  = "https://registry.yarnpkg.com/mock-apollo-client/-/mock-apollo-client-0.5.0.tgz";
+        sha1 = "8f0d6a1ba0d349ebde87a1dcd85c7fd353076922";
       };
     }
     {
@@ -12658,14 +12674,6 @@
       };
     }
     {
-      name = "tributejs___tributejs_5.1.3.tgz";
-      path = fetchurl {
-        name = "tributejs___tributejs_5.1.3.tgz";
-        url  = "https://registry.yarnpkg.com/tributejs/-/tributejs-5.1.3.tgz";
-        sha1 = "980600fc72865be5868893078b4bfde721129eae";
-      };
-    }
-    {
       name = "trim_newlines___trim_newlines_1.0.0.tgz";
       path = fetchurl {
         name = "trim_newlines___trim_newlines_1.0.0.tgz";
@@ -13466,19 +13474,19 @@
       };
     }
     {
-      name = "vue_loader___vue_loader_15.9.3.tgz";
+      name = "vue_loader___vue_loader_15.9.5.tgz";
       path = fetchurl {
-        name = "vue_loader___vue_loader_15.9.3.tgz";
-        url  = "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.3.tgz";
-        sha1 = "0de35d9e555d3ed53969516cac5ce25531299dda";
+        name = "vue_loader___vue_loader_15.9.5.tgz";
+        url  = "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.5.tgz";
+        sha1 = "7a960dc420a3439deaacdda038fdcdbf7c432706";
       };
     }
     {
-      name = "vue_router___vue_router_3.4.5.tgz";
+      name = "vue_router___vue_router_3.4.9.tgz";
       path = fetchurl {
-        name = "vue_router___vue_router_3.4.5.tgz";
-        url  = "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.5.tgz";
-        sha1 = "d396ec037b35931bdd1e9b7edd86f9788dc15175";
+        name = "vue_router___vue_router_3.4.9.tgz";
+        url  = "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.9.tgz";
+        sha1 = "c016f42030ae2932f14e4748b39a1d9a0e250e66";
       };
     }
     {
@@ -13538,11 +13546,11 @@
       };
     }
     {
-      name = "vuex___vuex_3.5.1.tgz";
+      name = "vuex___vuex_3.6.0.tgz";
       path = fetchurl {
-        name = "vuex___vuex_3.5.1.tgz";
-        url  = "https://registry.yarnpkg.com/vuex/-/vuex-3.5.1.tgz";
-        sha1 = "f1b8dcea649bc25254cf4f4358081dbf5da18b3d";
+        name = "vuex___vuex_3.6.0.tgz";
+        url  = "https://registry.yarnpkg.com/vuex/-/vuex-3.6.0.tgz";
+        sha1 = "95efa56a58f7607c135b053350833a09e01aa813";
       };
     }
     {

@@ -1,15 +1,12 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "radicale";
-  version = "3.0.5";
+  pname = "Radicale";
+  version = "3.0.6";
 
-  # No tests in PyPI tarball
-  src = fetchFromGitHub {
-    owner = "Kozea";
-    repo = "Radicale";
-    rev = version;
-    sha256 = "0w8qkjm7b62cr49dbis41kvv3179sfmvvzlhlc0rbqss6vmwbq4p";
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    sha256 = "a9433d3df97135d9c02cec8dde4199444daf1b73ad161ded398d67b8e629fdc6";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

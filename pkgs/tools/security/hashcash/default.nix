@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "hashcash";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "DOC_INSTALL_PATH=${placeholder "out"}/share/doc/hashcash-$(version)"
   ];
   
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Proof-of-work algorithm used as spam and denial-of-service counter measure";
     homepage = "http://hashcash.org";
     license = licenses.gpl2;

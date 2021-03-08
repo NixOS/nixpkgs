@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -49,7 +49,7 @@ buildPythonPackage rec {
                    --ignore trackpy/tests/test_legacy_linking.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
     license = licenses.bsd3;

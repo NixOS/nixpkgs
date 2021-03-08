@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, expat
+{ lib, stdenv, fetchurl, pkgconfig, expat
 , buildsystem
 , libparserutils
 , libwapcaplet
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "Document Object Model library for netsurf browser";
     longDescription = ''

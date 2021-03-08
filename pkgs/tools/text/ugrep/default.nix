@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, bzip2, lz4, pcre2, xz, zlib }:
+{ lib, stdenv, fetchFromGitHub, boost, bzip2, lz4, pcre2, xz, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "ugrep";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost bzip2 lz4 pcre2 xz zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultra fast grep with interactive query UI";
     homepage = "https://github.com/Genivia/ugrep";
     maintainers = with maintainers; [ numkem ];

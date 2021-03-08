@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , imagemagickBig
-, pkgconfig
+, pkg-config
 , libX11
 , libv4l
 , qtbase
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     xmlto
     autoreconfHook
     docbook_xsl

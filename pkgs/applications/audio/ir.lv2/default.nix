@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, gtk2, lv2, libsamplerate, libsndfile, pkgconfig, zita-convolver }:
+{ lib, stdenv, fetchFromGitHub, fftw, gtk2, lv2, libsamplerate, libsndfile, pkgconfig, zita-convolver }:
 
 stdenv.mkDerivation rec {
   pname = "ir.lv2";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     install -Dm755 convert4chan "$out/bin/convert4chan"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://factorial.hu/plugins/lv2/ir";
     description = "Zero-latency, realtime, high performance signal convolver especially for creating reverb effects";
     license = licenses.gpl2;

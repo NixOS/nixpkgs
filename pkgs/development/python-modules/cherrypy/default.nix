@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
 , setuptools_scm
 , cheroot, portend, more-itertools, zc_lockfile, routes
 , jaraco_collections
@@ -45,7 +45,9 @@ buildPythonPackage rec {
         "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
   '';
 
-  meta = with stdenv.lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     homepage = "https://www.cherrypy.org";
     description = "A pythonic, object-oriented HTTP framework";
     license = licenses.bsd3;

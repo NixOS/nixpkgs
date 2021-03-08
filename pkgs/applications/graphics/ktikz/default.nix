@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, wrapQtAppsHook
 , poppler, gnuplot
 , qmake, qtbase, qttools
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.12";
   pname = "qtikz";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Editor for the TikZ language";
     homepage = "https://github.com/fhackenberger/ktikz";
     license = licenses.gpl2;

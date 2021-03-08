@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ decorator stevedore ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A caching front-end based on the Dogpile lock";
     homepage = "https://bitbucket.org/zzzeek/dogpile.cache";
     license = licenses.bsd3;

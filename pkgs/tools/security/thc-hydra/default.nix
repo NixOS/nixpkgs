@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
-, withGUI ? false, makeWrapper, pkgconfig, gtk2 }:
+, withGUI ? false, makeWrapper, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = lib.optionals withGUI [ pkgconfig makeWrapper ];
+  nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
 
   buildInputs = [
     zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --add-flags --hydra-path --add-flags "$out/bin/hydra"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very fast network logon cracker which support many different services";
     homepage = "https://www.thc.org/thc-hydra/";
     license = licenses.agpl3;

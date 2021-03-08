@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cp -r rc $out/share/kak/autoload/plugins/powerline
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Kakoune modeline, but with passion";
     homepage = "https://github.com/andreyorst/powerline.kak";
     license = licenses.mit;

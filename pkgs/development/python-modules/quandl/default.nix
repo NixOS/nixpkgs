@@ -1,11 +1,10 @@
-{
-  lib, fetchPypi, buildPythonPackage, isPy3k, pythonOlder,
-  # runtime dependencies
-  pandas, numpy, requests, inflection, python-dateutil, six, more-itertools, importlib-metadata,
-  # test suite dependencies
-  nose, unittest2, flake8, httpretty, mock, jsondate, parameterized, faker, factory_boy,
-  # additional runtime dependencies are required on Python 2.x
-  pyOpenSSL ? null, ndg-httpsclient ? null, pyasn1 ? null
+{ lib, fetchPypi, buildPythonPackage, isPy3k, pythonOlder
+# runtime dependencies
+, pandas, numpy, requests, inflection, python-dateutil, six, more-itertools, importlib-metadata
+# test suite dependencies
+, nose, unittest2, flake8, httpretty, mock, jsondate, parameterized, faker, factory_boy
+# additional runtime dependencies are required on Python 2.x
+, pyopenssl, ndg-httpsclient, pyasn1
 }:
 
 buildPythonPackage rec {
@@ -18,8 +17,6 @@ buildPythonPackage rec {
     pname = "Quandl";
     sha256 = "0zpw0nwqr4g56l9z4my0fahfgpcmfx74acbmv6nfx1dmq5ggraf3";
   };
-
-  doCheck = true;
 
   checkInputs = [
     nose
@@ -42,7 +39,7 @@ buildPythonPackage rec {
     six
     more-itertools
   ] ++ lib.optionals (!isPy3k) [
-    pyOpenSSL
+    pyopenssl
     ndg-httpsclient
     pyasn1
   ] ++ lib.optionals (pythonOlder "3.8") [

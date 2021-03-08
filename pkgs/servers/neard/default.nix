@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, systemd, glib, dbus, libnl, pythonPackages }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, systemd, glib, dbus, libnl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "neard-0.16";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib/neard "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Near Field Communication manager";
     homepage    = "https://01.org/linux-nfc";
     license     = licenses.gpl2;

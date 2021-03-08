@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, ocl-icd, vulkan-loader, linuxPackages }:
+{ lib, stdenv, fetchurl, makeWrapper, ocl-icd, vulkan-loader, linuxPackages }:
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
     for f in geekbench5 geekbench_x86_64 ; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) $out/bin/$f
-      wrapProgram $out/bin/$f --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/lib/"
+      wrapProgram $out/bin/$f --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/lib/"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform benchmark";
     homepage = "https://geekbench.com/";
     license = licenses.unfree;

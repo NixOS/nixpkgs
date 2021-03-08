@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, xorg }:
 
 stdenv.mkDerivation {
   pname = "spectrwm";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiling window manager";
     homepage    = "https://github.com/conformal/spectrwm";
     maintainers = with maintainers; [ christianharke ];

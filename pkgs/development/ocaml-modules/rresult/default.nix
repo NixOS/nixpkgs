@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-rresult-${version}";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 	inherit (topkg) buildPhase installPhase;
 
 	meta = {
-		license = stdenv.lib.licenses.isc;
+		license = lib.licenses.isc;
 		homepage = "https://erratique.ch/software/rresult";
 		description = "Result value combinators for OCaml";
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (ocaml.meta) platforms;
 	};
 }

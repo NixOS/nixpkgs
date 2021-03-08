@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/migonzalvar/dj-email-url";
     description = "Use an URL to configure email backend settings in your Django Application";
     license = licenses.bsd0;

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
+{lib, stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "fast-export";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Import mercurial into git";
     homepage = "https://repo.or.cz/w/fast-export.git";
     license = licenses.gpl2;

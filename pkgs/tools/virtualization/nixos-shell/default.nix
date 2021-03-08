@@ -1,4 +1,4 @@
-{ stdenv, nix, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, nix, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "nixos-shell";
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/nixos-shell \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ nix ]}
+      --prefix PATH : ${lib.makeBinPath [ nix ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spawns lightweight nixos vms in a shell";
     inherit (src.meta) homepage;
     license = licenses.mit;

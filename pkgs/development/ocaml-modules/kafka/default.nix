@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, base, cmdliner, ocaml_lwt,
+{ lib, stdenv, fetchFromGitHub, buildDunePackage, base, cmdliner, ocaml_lwt,
   rdkafka, zlib }:
 
 buildDunePackage rec {
@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ rdkafka zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/didier-wenzek/ocaml-kafka";
     description = "OCaml bindings for Kafka";
     license     = licenses.mit;

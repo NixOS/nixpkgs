@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
-, pytest
+, pytestCheckHook
 , pytestcov
 , jinja2
 , pyyaml
@@ -26,14 +26,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytestcov
   ];
 
-  # for some reason jinja2 not picking up forms directory (1% of tests)
-  checkPhase = ''
-    pytest --ignore=tests/test_forms.py
-  '';
+  disabledTests = [ "test_to_json_schema_complex_regular_expression" ];
 
   meta = with lib; {
     description = "A type system library for Python";

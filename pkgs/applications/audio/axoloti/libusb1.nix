@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    stdenv.lib.optional stdenv.isLinux systemd ++
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optional stdenv.isLinux systemd ++
+    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   patches = [
     (fetchpatch {
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     sed 's,-ludev,-L${lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.libusb.info";
     description = "User-space USB library";
     platforms = platforms.unix;

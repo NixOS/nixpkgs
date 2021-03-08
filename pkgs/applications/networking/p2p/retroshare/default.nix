@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
+{ lib, stdenv, fetchFromGitHub, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
 , libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv, qmake, ffmpeg_3
 , qtmultimedia, qtx11extras, qttools }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     cp libbitdht/src/bitdht/bdboot.txt $out/share/retroshare
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "";
     homepage = "http://retroshare.sourceforge.net/";
     license = licenses.gpl2Plus;

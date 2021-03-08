@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, installShellFiles, rustPlatform, rustfmt, xorg
-, pkgconfig, llvmPackages, clang, protobuf, python3 }:
+, pkg-config, llvmPackages, clang, protobuf, python3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
 
     clang
     llvmPackages.libclang

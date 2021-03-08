@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, makeWrapper, substituteAll }:
+{ lib, stdenv, python3Packages, fetchFromGitHub, makeWrapper, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "bpytop";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A resource monitor; python port of bashtop";
     homepage = src.meta.homepage;
     license = licenses.apsl20;

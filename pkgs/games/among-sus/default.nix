@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, port ? "1234" }:
+{ lib, stdenv, fetchgit, port ? "1234" }:
 
 stdenv.mkDerivation {
   pname = "among-sus-unstable";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     install -Dm755 among-sus $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~martijnbraam/among-sus";
     description = "Among us, but it's a text adventure";
     license = licenses.agpl3Plus;

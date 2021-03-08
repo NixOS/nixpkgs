@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pytest }:
 
 buildPythonPackage rec {
   version = "0.5.1";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/RKrahl/pytest-dependency";
     description = "Manage dependencies of tests";
     license = licenses.asl20;

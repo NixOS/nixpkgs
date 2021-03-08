@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, curl, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "hcxtools";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for capturing wlan traffic and conversion to hashcat and John the Ripper formats";
     homepage = "https://github.com/ZerBea/hcxtools";
     license = licenses.mit;

@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, fetchpatch, staticOnly ? false }:
+{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch
+, staticOnly ? stdenv.hostPlatform.isStatic
+}:
 
 # ?TODO: there's also python lib in there
 
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  patches = stdenv.lib.optional staticOnly (fetchpatch {
+  patches = lib.optional staticOnly (fetchpatch {
     # context from https://github.com/google/brotli/pull/655
     # updated patch from https://github.com/google/brotli/pull/655
     url = "https://github.com/google/brotli/commit/47a554804ceabb899ae924aaee54df806053d0d1.patch";
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   });
 
   cmakeFlags = []
-    ++ stdenv.lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
+    ++ lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [ "out" "dev" "lib" ];
 
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
 
     description = "A generic-purpose lossless compression algorithm and tool";

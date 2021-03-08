@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, mailman, mock }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, mailman, mock }:
 
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mailman archiver plugin for HyperKitty";
     homepage = "https://gitlab.com/mailman/mailman-hyperkitty";
     license = licenses.gpl3;

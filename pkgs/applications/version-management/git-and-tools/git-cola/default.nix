@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
 
 let
   inherit (python3Packages) buildPythonApplication pyqt5 sip pyinotify;
@@ -26,7 +26,7 @@ in buildPythonApplication rec {
 
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/git-cola/git-cola";
     description = "A sleek and powerful Git GUI";
     license = licenses.gpl2;

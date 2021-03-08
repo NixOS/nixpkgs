@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, cmake }:
+{ fetchFromGitHub, lib, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "scas";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Assembler and linker for the Z80";
     license     = licenses.mit;

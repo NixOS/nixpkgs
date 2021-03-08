@@ -7,7 +7,7 @@
 , pythonPackages
 , python3Packages
 }:
-with stdenv.lib;
+with lib;
 
 neovim:
 
@@ -37,7 +37,7 @@ let
       [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ];
   in
   symlinkJoin {
-      name = "neovim-${stdenv.lib.getVersion neovim}";
+      name = "neovim-${lib.getVersion neovim}";
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
       postBuild = lib.optionalString stdenv.isLinux ''

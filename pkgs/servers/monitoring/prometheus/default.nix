@@ -1,13 +1,15 @@
-{ stdenv, lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage, nixosTests }:
+{ stdenv, lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage, nixosTests
+, fetchpatch
+}:
 
 let
-  version = "2.22.2";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "04pf3shdfd25wf8snkan5hzv1gjzazjw06i11xaamnc8gfahnzdv";
+    sha256 = "sha256-UQ1r8271EiZDU/h2zta6toMRfk2GjXol8GexYL9n+BE=";
   };
 
   webui = mkYarnPackage {
@@ -29,15 +31,23 @@ in buildGoPackage rec {
 
   goPackagePath = "github.com/prometheus/prometheus";
 
+  patches = [
+    # Fix https://github.com/prometheus/prometheus/issues/8144
+    (fetchpatch {
+      url = "https://github.com/prometheus/prometheus/commit/8b64b70fe4a5aa2877c95aa12c6798b12d3ff7ec.patch";
+      sha256 = "sha256-RuXT5pBXv8z6WoE59KNGh+OXr1KGLGWs/n0Hjf4BuH8=";
+    })
+  ];
+
   postPatch = ''
     ln -s ${webui.node_modules} web/ui/react-app/node_modules
     ln -s ${webui} web/ui/static/react
   '';
 
+  buildFlags = "-tags=builtinassets";
   buildFlagsArray = let
     t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
   in [
-    "-tags=builtinassets"
     ''
       -ldflags=
          -X ${t}.Version=${version}

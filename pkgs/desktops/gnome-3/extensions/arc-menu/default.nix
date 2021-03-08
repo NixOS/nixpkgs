@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, glib, gettext, substituteAll, gnome-menus }:
+{ lib, stdenv, fetchFromGitLab, glib, gettext, substituteAll, gnome-menus }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-arc-menu";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   uuid = "arc-menu@linxgem33.com";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnome shell extension designed to replace the standard menu found in Gnome 3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dkabot ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, git }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, git }:
 
 stdenv.mkDerivation rec {
   pname = "directx-shader-compiler";
@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/lib $dev/include
     mv bin/dxc* $out/bin/
-    mv lib/libdxcompiler.so* $out/lib/
+    mv lib/libdxcompiler.so* lib/libdxcompiler.*dylib $out/lib/
     cp -r $src/include/dxc $dev/include/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compiler to compile HLSL programs into DXIL and SPIR-V";
     homepage = "https://github.com/microsoft/DirectXShaderCompiler";
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     license = licenses.ncsa;
     maintainers = with maintainers; [ expipiplus1 ];
   };

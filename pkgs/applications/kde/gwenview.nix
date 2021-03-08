@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "gwenview";
+  pname = "gwenview";
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];

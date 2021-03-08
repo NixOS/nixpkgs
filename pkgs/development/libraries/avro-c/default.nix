@@ -19,8 +19,6 @@ in stdenv.mkDerivation {
 
   buildInputs = [ jansson zlib ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";

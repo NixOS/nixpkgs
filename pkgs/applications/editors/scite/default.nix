@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2 }:
+{ lib, stdenv, fetchurl, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation {
   pname = "scite";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     make install prefix=$out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.scintilla.org/SciTE.html";
     description = "SCIntilla based Text Editor";
     license = licenses.mit;

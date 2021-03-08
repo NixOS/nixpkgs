@@ -7,7 +7,7 @@
 , libusb1
 , lzop
 , openssl
-, pkgconfig
+, pkg-config
 , buildPackages
 }:
 
@@ -38,7 +38,7 @@ let
       openssl
       libusb1
       lzop
-      pkgconfig
+      pkg-config
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 

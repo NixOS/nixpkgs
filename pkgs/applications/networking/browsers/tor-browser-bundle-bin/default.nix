@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeDesktopItem
 
@@ -57,7 +57,7 @@
 , extraPrefs ? ""
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   libPath = makeLibraryPath libPkgs;
@@ -91,19 +91,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.7";
+  version = "10.0.8";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "1phqsdf9lav0s111chlgyh4xiq2rm5zcxbx676i9711lkmc5l053";
+      sha256 = "23sp9vMbXg/c4o9wm+G0bW4KaP7lCUMpSQNK/5mSmeo=";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "1nkppwdcjbrx8nh3d6qvvkgd5by6ja5ckjgpbkhavyy2pqlxyqk8";
+      sha256 = "vliiyw8KSCiZ2ycCvqOPEW3qSDH9wXwIygU1RYAqA6g=";
     };
   };
 in
@@ -390,7 +390,7 @@ stdenv.mkDerivation rec {
       $out/bin/tor-browser --version >/dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = ''
       Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of

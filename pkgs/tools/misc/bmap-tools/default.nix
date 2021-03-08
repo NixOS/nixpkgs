@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ lib, stdenv, fetchFromGitHub, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "bmap-tools";
@@ -14,7 +14,7 @@ python2Packages.buildPythonApplication rec {
   # tests fail only on hydra.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "bmap-related tools";
     homepage = "https://github.com/intel/bmap-tools";
     license = licenses.gpl2;

@@ -14,7 +14,7 @@
 , libxml2
 , mkDerivation
 , pixman
-, pkgconfig
+, pkg-config
 , podofo
 , poppler
 , poppler_data
@@ -22,7 +22,7 @@
 , qtbase
 , qtimageformats
 , qttools
-, stdenv
+, lib, stdenv
 }:
 
 let
@@ -43,11 +43,9 @@ mkDerivation rec {
     sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -72,7 +70,7 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [
       erictapen
       kiwi

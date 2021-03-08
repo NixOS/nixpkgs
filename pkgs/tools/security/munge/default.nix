@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "munge-0.5.14";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       An authentication service for creating and validating credentials
     '';

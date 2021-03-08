@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mv usr/share/ppd/FujiXerox/* $out/share/cups/model
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fuji Xerox Linux Printer Driver";
     longDescription = ''
       DocuPrint P365/368 d

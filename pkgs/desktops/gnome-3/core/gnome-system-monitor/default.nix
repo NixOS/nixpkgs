@@ -1,4 +1,4 @@
-{ stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2
+{ lib, stdenv, gettext, fetchurl, pkg-config, gtkmm3, libxml2
 , bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
 , gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk-pixbuf, libgtop, systemd }:
 
@@ -7,14 +7,14 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1x5gd30g87im7fnqj63njlac69zywfd1r0vgsxkjag2hsns7mgvk";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig gettext itstool wrapGAppsHook meson ninja python3
+    pkg-config gettext itstool wrapGAppsHook meson ninja python3
   ];
   buildInputs = [
     bash gtk3 glib libxml2 gtkmm3 libgtop gdk-pixbuf gnome3.adwaita-icon-theme librsvg
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/SystemMonitor";
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
     maintainers = teams.gnome.members;

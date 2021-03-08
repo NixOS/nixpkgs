@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "docker-tools";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lnl7 ];
   };
 
@@ -246,6 +246,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
             ).strip()
             == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
+        )
+
+    with subtest("buildLayeredImage doesn't dereference /nix/store symlink layers"):
+        docker.succeed(
+            "docker load --input='${examples.layeredStoreSymlink}'",
+            "docker run --rm ${examples.layeredStoreSymlink.imageName} bash -c 'test -L ${examples.layeredStoreSymlink.passthru.symlink}'",
+            "docker rmi ${examples.layeredStoreSymlink.imageName}",
         )
   '';
 })

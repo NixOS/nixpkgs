@@ -1,4 +1,4 @@
-{ stdenv, skawarePackages }:
+{ lib, stdenv, skawarePackages }:
 
 with skawarePackages;
 
@@ -8,7 +8,7 @@ buildPackage {
   sha256 = "0wbv02zxaami88xbj2zg63kspz05bbplswg0c6ncb5g9khf52wa4";
 
   description = "A set of minimalistic Linux-specific system utilities";
-  platforms = stdenv.lib.platforms.linux;
+  platforms = lib.platforms.linux;
 
   outputs = [ "bin" "dev" "doc" "out" ];
 

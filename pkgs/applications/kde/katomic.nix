@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, knewstuff }:
 
 mkDerivation {
-  name = "katomic";
+  pname = "katomic";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.katomic";
     description = "Fun educational game built around molecular geometry";

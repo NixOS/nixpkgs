@@ -69,8 +69,6 @@ stdenv.mkDerivation rec {
     (opencvFlag "GSTREAMER" enableGStreamer)
   ];
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "bindnow" "relro" ];
 
   # Fix pkgconfig file that gets broken with multiple outputs

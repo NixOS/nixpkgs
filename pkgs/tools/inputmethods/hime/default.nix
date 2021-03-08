@@ -1,5 +1,5 @@
 {
-stdenv, fetchFromGitHub, pkgconfig, which, gtk2, gtk3, qt4, qt5, libXtst, lib,
+stdenv, fetchFromGitHub, pkg-config, which, gtk2, gtk3, qt4, qt5, libXtst, lib,
 }:
 
 # chewing and anthy do not work well
@@ -16,14 +16,14 @@ stdenv.mkDerivation {
     sha256 = "024w67q0clzxigsrvqbxpiy8firjvrqi7wbkkcapzzhzapv3nm8x";
   };
 
-  nativeBuildInputs = [ which pkgconfig ];
+  nativeBuildInputs = [ which pkg-config ];
   buildInputs = [ libXtst gtk2 gtk3 qt4 qt5.qtbase ];
 
   preConfigure = "patchShebangs configure";
   configureFlags = [ "--disable-lib64" "--disable-qt5-immodule" ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://hime-ime.github.io/";
     downloadPage = "https://github.com/hime-ime/hime/downloads";
     description = "A useful input method engine for Asia region";

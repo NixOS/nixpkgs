@@ -17,9 +17,8 @@ stdenv.mkDerivation rec {
   ];
   doCheck = true;
   meta = with stdenv.lib; {
-    inherit version;
-    description = ''A library for arbitrary-precision interval arithmetic'';
-    homepage = "http://arblib.org/";
+    description = "A library for arbitrary-precision interval arithmetic";
+    homepage = "https://arblib.org/";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = stdenv.lib.platforms.unix;

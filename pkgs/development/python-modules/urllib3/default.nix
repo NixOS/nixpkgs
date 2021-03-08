@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , pytest, mock, tornado, pyopenssl, cryptography
 , idna, certifi, ipaddress, pysocks }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock tornado ];
   propagatedBuildInputs = [ pyopenssl cryptography idna certifi ipaddress pysocks ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful, sanity-friendly HTTP client for Python";
     homepage = "https://github.com/shazow/urllib3";
     license = licenses.mit;

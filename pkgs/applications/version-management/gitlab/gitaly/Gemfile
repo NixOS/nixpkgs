@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rugged', '~> 0.28'
-gem 'github-linguist', '~> 7.11', require: 'linguist'
+gem 'github-linguist', '~> 7.12', require: 'linguist'
 gem 'gitlab-markup', '~> 1.7.1'
 gem 'activesupport', '~> 6.0.3.3'
 gem 'rdoc', '~> 6.0'

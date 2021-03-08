@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchFromGitHub, libbsd }:
+{ lib, stdenv, pkgconfig, fetchFromGitHub, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "kcgi";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kristaps.bsd.lv/kcgi";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = licenses.isc;

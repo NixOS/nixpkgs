@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
     pname = "dumptorrent";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       cp ./dumptorrent $out/bin
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Dump .torrent file information";
       homepage = "https://sourceforge.net/projects/dumptorrent/";
       license = licenses.gpl2;

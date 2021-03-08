@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
+{ lib, stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
 
 let
   version = "1.0.0";
@@ -46,7 +46,7 @@ in
       cp -a README $out/doc/README.driver
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.openprinting.org/driver/epson-201207w";
       description = "Epson printer driver (L110, L210, L300, L350, L355, L550, L555)";
       longDescription = ''

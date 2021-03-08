@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libressl
+{ lib, stdenv, fetchurl, libressl
 , privsepPath ? "/var/empty"
 , privsepUser ? "ntp"
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.openntpd.org/";
     license = licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";

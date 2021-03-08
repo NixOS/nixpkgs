@@ -3,6 +3,7 @@
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
 , systemd, withSystemd ? stdenv.isLinux
+, libcap, withCap ? stdenv.isLinux
 , python2, python3, ncurses
 , ruby, php, libmysqlclient
 }:
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
   buildInputs =  [ jansson pcre ]
               ++ lib.optional withPAM pam
               ++ lib.optional withSystemd systemd
+              ++ lib.optional withCap libcap
               ++ lib.concatMap (x: x.inputs) needed
               ;
 
@@ -82,6 +84,8 @@ stdenv.mkDerivation rec {
                  (  lib.optional withPAM "pam"
                  ++ lib.optional withSystemd "systemd_logger"
                  );
+
+  UWSGI_INCLUDES = lib.optionalString withCap "${libcap.dev}/include";
 
   passthru = {
     inherit python2 python3;
@@ -113,7 +117,7 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, SDL2, SDL2_ttf }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, SDL2, SDL2_ttf }:
 
 let
   font = fetchurl {
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern port of the classic 1982 text-mode game Snipes";
     homepage    = "https://www.vogons.org/viewtopic.php?f=7&t=49073";
     license     = licenses.free; # This reverse-engineered source code is released with the original authors' permission.

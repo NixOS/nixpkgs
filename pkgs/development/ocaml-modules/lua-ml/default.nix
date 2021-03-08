@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+if !lib.versionAtLeast ocaml.version "4.07"
 then throw "lua-ml is not available for OCaml ${ocaml.version}"
 else
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "An embeddable Lua 2.5 interpreter implemented in OCaml";
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

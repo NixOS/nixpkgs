@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.1.9";
+  version = "0.1.12";
 
   disabled = pythonOlder "3.6";
 
@@ -10,12 +10,13 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "crytic-compile";
     rev = version;
-    sha256 = "01mis7bqsh0l5vjl6jwibzy99djza35fxmywy56q8k4jbxwmdcna";
+    sha256 = "1q75n84yxv2cb6x7gqyk3vcwkxpq7pni30wgz3d1bk6pmi2pqgw6";
   };
 
   propagatedBuildInputs = [ pysha3 setuptools ];
 
   doCheck = false;
+  pythonImportsCheck = [ "crytic_compile" ];
 
   meta = with lib; {
     description = "Abstraction layer for smart contract build systems";

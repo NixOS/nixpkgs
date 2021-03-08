@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , convertdate
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "holidays" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dr-prodigy/python-holidays";
     description = "Generate and work with holidays in Python";
     license = licenses.mit;

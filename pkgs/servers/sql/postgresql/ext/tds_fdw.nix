@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql, freetds }:
+{ lib, stdenv, fetchFromGitHub, postgresql, freetds }:
 
 stdenv.mkDerivation rec {
   pname = "tds_fdw";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -D tds_fdw.control             -t $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PostgreSQL foreign data wrapper to connect to TDS databases (Sybase and Microsoft SQL Server)";
     homepage    = "https://github.com/tds-fdw/tds_fdw";
     maintainers = [ maintainers.steve-chavez ];

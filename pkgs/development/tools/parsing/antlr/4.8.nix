@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre
+{ lib, stdenv, fetchurl, jre
 , fetchFromGitHub, cmake, ninja, pkgconfig, libuuid, darwin }:
 
 let
@@ -26,7 +26,7 @@ let
         export sourceRoot=$sourceRoot/runtime/Cpp
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "C++ target for ANTLR 4";
         homepage = "https://www.antlr.org/";
         license = licenses.bsd3;
@@ -67,7 +67,7 @@ let
       jarLocation = "${antlr}/share/java/antlr-${version}-complete.jar";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Powerful parser generator";
       longDescription = ''
         ANTLR (ANother Tool for Language Recognition) is a powerful parser

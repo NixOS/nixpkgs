@@ -1,4 +1,4 @@
-{ stdenv, writeShellScriptBin, rss-bridge, php }:
+{ lib, stdenv, writeShellScriptBin, rss-bridge, php }:
 
 let
   phpWithExts = (php.withExtensions
@@ -19,7 +19,7 @@ in (writeShellScriptBin "rss-bridge-cli" ''
 '').overrideAttrs (oldAttrs: rec {
   version = rss-bridge.version;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line interface for RSS-Bridge";
     homepage = "https://github.com/RSS-Bridge/rss-bridge";
     license = licenses.unlicense;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig
 , glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3
 , json-glib, libunistring }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "-Dsystemd-unit-dir=./lib/systemd/system/"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configuration library for gaming mice";
     homepage    = "https://github.com/libratbag/libratbag";
     license     = licenses.mit;

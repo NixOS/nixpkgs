@@ -5,7 +5,7 @@
  <para>
   Nix packages can declare <emphasis>meta-attributes</emphasis> that contain information about a package such as a description, its homepage, its license, and so on. For instance, the GNU Hello package has a <varname>meta</varname> declaration like this:
 <programlisting>
-meta = with stdenv.lib; {
+meta = with lib; {
   description = "A program that produces a familiar, friendly greeting";
   longDescription = ''
     GNU Hello is a program that prints "Hello, world!" when you run it.
@@ -155,7 +155,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
       <itemizedlist>
        <listitem>
         <para>
-         Single license referenced by attribute (preferred) <literal>stdenv.lib.licenses.gpl3Only</literal>.
+         Single license referenced by attribute (preferred) <literal>lib.licenses.gpl3Only</literal>.
         </para>
        </listitem>
        <listitem>
@@ -170,7 +170,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
        </listitem>
        <listitem>
         <para>
-         Multiple licenses referenced by attribute (preferred) <literal>with stdenv.lib.licenses; [ asl20 free ofl ]</literal>.
+         Multiple licenses referenced by attribute (preferred) <literal>with lib.licenses; [ asl20 free ofl ]</literal>.
         </para>
        </listitem>
        <listitem>
@@ -211,9 +211,9 @@ hello-2.3  A program that produces a familiar, friendly greeting
      <para>
       The list of Nix platform types on which the package is supported. Hydra builds packages according to the platform specified. If no platform is specified, the package does not have prebuilt binaries. An example is:
 <programlisting>
-meta.platforms = stdenv.lib.platforms.linux;
+meta.platforms = lib.platforms.linux;
 </programlisting>
-      Attribute Set <varname>stdenv.lib.platforms</varname> defines <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix"> various common lists</link> of platforms types.
+      Attribute Set <varname>lib.platforms</varname> defines <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix"> various common lists</link> of platforms types.
      </para>
     </listitem>
    </varlistentry>
@@ -262,7 +262,7 @@ meta.platforms = stdenv.lib.platforms.linux;
      <para>
       The list of Nix platform types for which the Hydra instance at <literal>hydra.nixos.org</literal> will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of <varname>meta.platforms</varname>. Thus, the only reason to set <varname>meta.hydraPlatforms</varname> is if you want <literal>hydra.nixos.org</literal> to build the package on a subset of <varname>meta.platforms</varname>, or not at all, e.g.
 <programlisting>
-meta.platforms = stdenv.lib.platforms.linux;
+meta.platforms = lib.platforms.linux;
 meta.hydraPlatforms = [];
 </programlisting>
      </para>
@@ -294,7 +294,7 @@ meta.hydraPlatforms = [];
   <title>Licenses</title>
 
   <para>
-   The <varname>meta.license</varname> attribute should preferrably contain a value from <varname>stdenv.lib.licenses</varname> defined in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix"> <filename>nixpkgs/lib/licenses.nix</filename></link>, or in-place license description of the same format if the license is unlikely to be useful in another expression.
+   The <varname>meta.license</varname> attribute should preferrably contain a value from <varname>lib.licenses</varname> defined in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix"> <filename>nixpkgs/lib/licenses.nix</filename></link>, or in-place license description of the same format if the license is unlikely to be useful in another expression.
   </para>
 
   <para>
@@ -302,7 +302,7 @@ meta.hydraPlatforms = [];
    <variablelist>
     <varlistentry>
      <term>
-      <varname>stdenv.lib.licenses.free</varname>, <varname>"free"</varname>
+      <varname>lib.licenses.free</varname>, <varname>"free"</varname>
      </term>
      <listitem>
       <para>
@@ -312,7 +312,7 @@ meta.hydraPlatforms = [];
     </varlistentry>
     <varlistentry>
      <term>
-      <varname>stdenv.lib.licenses.unfreeRedistributable</varname>, <varname>"unfree-redistributable"</varname>
+      <varname>lib.licenses.unfreeRedistributable</varname>, <varname>"unfree-redistributable"</varname>
      </term>
      <listitem>
       <para>
@@ -325,7 +325,7 @@ meta.hydraPlatforms = [];
     </varlistentry>
     <varlistentry>
      <term>
-      <varname>stdenv.lib.licenses.unfree</varname>, <varname>"unfree"</varname>
+      <varname>lib.licenses.unfree</varname>, <varname>"unfree"</varname>
      </term>
      <listitem>
       <para>
@@ -335,7 +335,7 @@ meta.hydraPlatforms = [];
     </varlistentry>
     <varlistentry>
      <term>
-      <varname>stdenv.lib.licenses.unfreeRedistributableFirmware</varname>, <varname>"unfree-redistributable-firmware"</varname>
+      <varname>lib.licenses.unfreeRedistributableFirmware</varname>, <varname>"unfree-redistributable-firmware"</varname>
      </term>
      <listitem>
       <para>

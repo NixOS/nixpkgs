@@ -1,5 +1,5 @@
 { stdenv, lib, perl, fetchurl, python2
-, pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
+, pkg-config, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
 , gloox, nvidia-texture-tools
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0draa53xg69i5qhqym85658m45xhwkbiimaldj4sr3703rjgggq1";
   };
 
-  nativeBuildInputs = [ python2 perl pkgconfig ];
+  nativeBuildInputs = [ python2 perl pkg-config ];
 
   buildInputs = [
     spidermonkey_38 boost icu libxml2 libpng libjpeg
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     install -D build/resources/0ad.desktop $out/share/applications/0ad.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
     license = with licenses; [

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 
 , cmake
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
       portaudio
       zlib
     ]
-    ++ stdenv.lib.optional withLua lua;
+    ++ lib.optional withLua lua;
 
   buildFlags = "translations";
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
     homepage    = "https://xournalpp.github.io/";
     license     = licenses.gpl2Plus;

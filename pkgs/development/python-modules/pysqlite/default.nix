@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ${stdenv.lib.optionalString (!stdenv.isDarwin) ''export LDSHARED="$CC -pthread -shared"''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pysqlite.org/";
     description = "Python bindings for the SQLite embedded relational database engine";
     longDescription = ''

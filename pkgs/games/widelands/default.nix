@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, python, gettext
+{ lib, stdenv, fetchurl, cmake, python, gettext
 , boost, libpng, zlib, glew, lua, doxygen, icu
 , SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 }:
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   pname = "widelands";
   version = "20";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RTS with multiple-goods economy";
     homepage    = "http://widelands.org/";
     longDescription = ''
@@ -53,6 +53,4 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/applications/"
     cp -v "../debian/org.widelands.widelands.desktop" "$out/share/applications/"
   '';
-
-  enableParallelBuilding = true;
 }

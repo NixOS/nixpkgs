@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , glib
 , meson
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # See https://github.com/vala-lang/vala-lint/issues/133
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/vala-lang/vala-lint";
     description = "Check Vala code files for code-style errors";
     longDescription = ''

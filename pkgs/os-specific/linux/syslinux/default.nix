@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
+{ lib, stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "syslinux";
@@ -47,6 +47,7 @@ stdenv.mkDerivation {
       url = mkURL "26f0e7b2" "0018-prevent-pow-optimization.patch";
       sha256 = "1c8g0jz5yj9a0rsmryx9vdjsw4hw8mjfcg05c9pmyjg85w3dfp3m";
     })
+    ./gcc10.patch
   ];
 
   postPatch = ''
@@ -78,7 +79,7 @@ stdenv.mkDerivation {
     "PERL=perl"
     "HEXDATE=0x00000000"
   ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
+    ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 
@@ -90,7 +91,7 @@ stdenv.mkDerivation {
     rm -rf $out/share/syslinux/com32
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2;

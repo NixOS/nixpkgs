@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper
 , which, nodejs, mkYarnPackage, python2, nixosTests }:
 
 mkYarnPackage rec {
   name = "hedgedoc";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner  = "hedgedoc";
     repo   = "hedgedoc";
     rev    = version;
-    sha256 = "1zz5ni9cp1dhcvcrzks13pww5qm2wna2hh0k59pfz7c897rs1l7v";
+    sha256 = "1w3si1k27c8d9yka2v91883dlz57n0wasan4agi6gw17h9dzb1l6";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
@@ -61,7 +61,7 @@ mkYarnPackage rec {
 
   passthru.tests = { inherit (nixosTests) hedgedoc; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = "https://hedgedoc.org";

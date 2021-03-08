@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc, libxslt, docbook_xsl }:
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, libxslt, docbook_xsl }:
 
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Patches jumptables into TI calculator ROM files and generates an include file";
     license     = licenses.mit;

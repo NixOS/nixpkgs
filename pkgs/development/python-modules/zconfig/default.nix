@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , fetchpatch
 , buildPythonPackage
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Structured Configuration Library";
     homepage = "https://pypi.python.org/pypi/ZConfig";
     license = licenses.zpl20;

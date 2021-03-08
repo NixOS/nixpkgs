@@ -27,8 +27,8 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    cmake
     elfutils
     extra-cmake-modules
     kconfigwidgets
@@ -49,8 +49,6 @@ mkDerivation rec {
   postPatch = ''
     mkdir -p 3rdparty/perfparser/.git
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "A GUI for Linux perf";

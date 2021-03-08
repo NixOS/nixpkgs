@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, writeScript, desktop-file-utils
-, pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus-glib, ffmpeg_3, file, fontconfig, freetype
+, pkg-config, autoconf213, alsaLib, bzip2, cairo
+, dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
 , gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
 , libnotify, libstartup_notification, wrapGAppsHook
 , libGLU, libGL, perl, python2, libpulseaudio
@@ -11,19 +11,19 @@
 
 let
 
-  libPath = lib.makeLibraryPath [ ffmpeg_3 libpulseaudio ];
+  libPath = lib.makeLibraryPath [ ffmpeg libpulseaudio ];
   gtkVersion = if withGTK3 then "3" else "2";
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.16.0";
+  version = "28.17.0";
 
   src = fetchFromGitHub {
     githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "1svwbiar7c38c8xfw249mwnvayqq5868nkks7cbv9nyf2m9yap56";
+    sha256 = "0478xn5skpls91hkraykc308hppdc8vj9xbgvlm5wkv0y4dp7h5x";
     fetchSubmodules = true;
   };
 
@@ -43,11 +43,11 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    desktop-file-utils file gnum4 perl pkgconfig python2 wget which wrapGAppsHook
+    desktop-file-utils file gnum4 perl pkg-config python2 wget which wrapGAppsHook
   ];
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus-glib ffmpeg_3 fontconfig freetype
+    alsaLib bzip2 cairo dbus dbus-glib ffmpeg fontconfig freetype
     gnome2.GConf gtk2 hunspell libevent libjpeg libnotify
     libstartup_notification libGLU libGL
     libpulseaudio unzip yasm zip zlib
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configurePhase = ''
-    export MOZCONFIG=$(pwd)/mozconfig
+    export MOZCONFIG=$PWD/mozconfig
     export MOZ_NOSPAM=1
 
     # Keep this similar to the official .mozconfig file,
@@ -114,18 +114,18 @@ in stdenv.mkDerivation rec {
     '
   '';
 
-  buildPhase = "$src/mach build";
+  buildPhase = "./mach build";
 
   installPhase = ''
-    $src/mach install
+    ./mach install
 
     desktop-file-install --dir=$out/share/applications \
-      $src/palemoon/branding/official/palemoon.desktop
+      ./palemoon/branding/official/palemoon.desktop
 
     for iconname in default{16,22,24,32,48,256} mozicon128; do
       n=''${iconname//[^0-9]/}
       size=$n"x"$n
-      install -Dm644 $src/palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
+      install -Dm644 ./palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
     done
   '';
 

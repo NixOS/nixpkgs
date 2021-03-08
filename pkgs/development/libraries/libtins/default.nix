@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
-  enableParallelBuilding = true;
   doCheck = true;
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib

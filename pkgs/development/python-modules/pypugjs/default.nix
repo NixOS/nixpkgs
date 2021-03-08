@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, six, chardet, nose
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, six, chardet, nose
 , django, jinja2, tornado, pyramid, pyramid_mako, Mako }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     nosetests pypugjs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates";
     homepage = "https://github.com/kakulukia/pypugjs";
     license = licenses.mit;

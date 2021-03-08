@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtk2, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, gtk2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "praat";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Doing phonetics by computer";
     homepage = "https://www.fon.hum.uva.nl/praat/";
-    license = stdenv.lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
+    platforms = lib.platforms.linux;
   };
 }

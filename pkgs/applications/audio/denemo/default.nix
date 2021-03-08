@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libjack2, gettext, intltool, guile_2_0, lilypond
 , glib, libxml2, librsvg, libsndfile, aubio
 , gtk3, gtksourceview, evince, fluidsynth, rubberband
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music notation and composition software used with lilypond";
     homepage = "http://denemo.org";
     license = licenses.gpl3;

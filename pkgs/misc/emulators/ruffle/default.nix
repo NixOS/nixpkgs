@@ -4,7 +4,7 @@
 , pkg-config
 , python3
 , rustPlatform
-, stdenv
+, lib, stdenv
 , wayland
 , xorg
 }:
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "05kwfcbzjyyfhiqklhhlv06pinzw9bry4j8l9lk3k04c1q30gzkw";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";
     homepage = "https://ruffle.rs/";
     license = with licenses; [ mit asl20 ];

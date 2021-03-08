@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "agrep";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   # Related: https://github.com/Wikinaut/agrep/pull/11
-  prePatch = stdenv.lib.optionalString (stdenv.hostPlatform.isMusl || stdenv.isDarwin) ''
+  prePatch = lib.optionalString (stdenv.hostPlatform.isMusl || stdenv.isDarwin) ''
     sed -i '1i#include <sys/stat.h>' checkfil.c newmgrep.c recursiv.c
   '';
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Approximate grep for fast fuzzy string searching";
     homepage = "https://www.tgries.de/agrep/";
     license = licenses.isc;

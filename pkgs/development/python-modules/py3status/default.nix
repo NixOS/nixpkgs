@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extensible i3status wrapper";
     license = licenses.bsd3;
     homepage = "https://github.com/ultrabug/py3status";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname   = "hexyl";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1am9vs7l2wzgwqakrsl27x1y7jpn9xaqa4kr48wwqzka401h6j4m";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     changelog = "https://github.com/sharkdp/hexyl/releases/tag/v${version}";
     description = "A command-line hex viewer";
     longDescription = ''

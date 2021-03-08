@@ -8,8 +8,7 @@ let
   cfg = xcfg.desktopManager.plasma5;
 
   inherit (pkgs) kdeApplications kdeFrameworks plasma5;
-  libsForQt5 = pkgs.libsForQt514;
-  qt5 = pkgs.qt514;
+  inherit (pkgs) qt5 libsForQt5;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;

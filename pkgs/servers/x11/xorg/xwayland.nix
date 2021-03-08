@@ -1,8 +1,8 @@
-{ stdenv, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config
+{ lib, stdenv, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config
 , epoxy, libxslt, libunwind, makeWrapper, egl-wayland
 , defaultFontPath ? "" }:
 
-with stdenv.lib;
+with lib;
 
 xorgserver.overrideAttrs (oldAttrs: {
 

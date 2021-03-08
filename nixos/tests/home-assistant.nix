@@ -6,7 +6,7 @@ let
   mqttPassword = "secret";
 in {
   name = "home-assistant";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 

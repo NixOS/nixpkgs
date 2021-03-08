@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , uilib, SDL
 , buildsystem
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "TARGET=${uilib}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "Netsurf framebuffer abstraction library";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, libxcb }:
+{ lib, stdenv, fetchurl, perl, libxcb }:
 
 stdenv.mkDerivation {
   name = "lemonbar-1.4";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   
   prePatch = ''sed -i "s@/usr@$out@" Makefile'';
   
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight xcb based bar";
     homepage = "https://github.com/LemonBoy/bar";
     maintainers = [ maintainers.meisternu ];

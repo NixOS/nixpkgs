@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, freetds, readline, libiconv }:
+{ lib, stdenv, fetchurl, autoreconfHook, freetds, readline, libiconv }:
 
 let
   mainVersion = "2.5";
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line tool for querying Sybase/MSSQL databases";
     longDescription = ''
       Sqsh (pronounced skwish) is short for SQshelL (pronounced s-q-shell),

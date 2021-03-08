@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchurl
 , isPy37
@@ -63,7 +63,7 @@ in buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage = "https://pytorch.org/";
     license = licenses.unfree; # Includes CUDA and Intel MKL.

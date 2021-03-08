@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , libX11
 , libXi
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     else            if stdenv.isx86_64 then "pixilang_linux_x86_64"
     else                                    "";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Photoelectronic microtonal/spectral musical instrument";
     longDescription = ''
       Virtual ANS is a software simulator of the unique Russian synthesizer ANS

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, lua52Packages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, lua52Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "z-lua";
-  version = "1.8.7";
+  version = "1.8.10";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
     rev = version;
-    sha256 = "14n1abv7gh4zajq471bgzpcv8l1159g00h9x83h719i9kxxsa2ba";
+    sha256 = "0q0qs07kmkpjv68j2bjgsrv6shl76mssnchfv82vjf8abkf8343b";
   };
 
   dontBuild = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/skywind3000/z.lua";
     description = "A new cd command that helps you navigate faster by learning your habits";
     license = licenses.mit;

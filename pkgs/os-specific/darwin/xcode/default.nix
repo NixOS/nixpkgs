@@ -31,7 +31,7 @@ let requireXcode = version: sha256:
         rm -rf Xcode.app
       '';
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://developer.apple.com/downloads/";
       description = "Apple's XCode SDK";
       license = licenses.unfree;

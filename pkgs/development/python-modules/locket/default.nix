@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "locket";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # weird test requirements (spur.local>=0.3.7,<0.4)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Locket implements a lock that can be used by multiple processes provided they use the same path.";
     homepage = "https://github.com/mwilliamson/locket.py";
     license = licenses.bsd2;

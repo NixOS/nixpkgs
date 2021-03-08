@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, flask
+{ lib, stdenv, fetchPypi, buildPythonPackage, flask
 , brotli
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask brotli ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compress responses in your Flask app with gzip";
     homepage = "https://libwilliam.github.io/flask-compress/";
     license = licenses.mit;

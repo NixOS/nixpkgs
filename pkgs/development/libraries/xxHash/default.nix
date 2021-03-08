@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0hpbzdd6kfki5f61g103vp7pfczqkdj0js63avl0ss552jfb8h96";
   };
 
+  # Upstream Makefile does not anticipate that user may not want to
+  # build .so library.
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed -i 's/lib: libxxhash.a libxxhash/lib: libxxhash.a/' Makefile
+    sed -i '/LIBXXH) $(DESTDIR/ d' Makefile
+  '';
+
   outputs = [ "out" "dev" ];
 
   makeFlags = [ "PREFIX=$(dev)" "EXEC_PREFIX=$(out)" ];

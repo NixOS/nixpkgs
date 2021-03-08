@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -39,14 +39,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   mesonFlags = [
-    "-Dgnome_shell_version=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}"
+    "-Dgnome_shell_version=${lib.versions.majorMinor gnome3.gnome-shell.version}"
   ];
 
   postInstall = ''
     rm $out/share/themes/*/COPYING
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/nana-4/materia-theme";
     license = licenses.gpl2Only;

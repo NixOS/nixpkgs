@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Single-header C++11 library designed to make you love template metaprogramming";
     homepage = "https://github.com/brunocodutra/metal";

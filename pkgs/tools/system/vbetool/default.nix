@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pciutils, libx86, zlib }:
+{ lib, stdenv, fetchurl, pciutils, libx86, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "vbetool";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "LDFLAGS=-lpci" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video BIOS execution tool";
     homepage = "http://www.codon.org.uk/~mjg59/vbetool/";
     maintainers = [ maintainers.raskin ];

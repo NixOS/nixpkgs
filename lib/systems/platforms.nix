@@ -490,8 +490,9 @@ rec {
 
     # ARM
     else if platform.isAarch32 then let
-      version = platform.parsed.cpu.version or "";
-      in     if lib.versionOlder version "6" then sheevaplug
+      version = platform.parsed.cpu.version or null;
+      in     if version == null then pcBase
+        else if lib.versionOlder version "6" then sheevaplug
         else if lib.versionOlder version "7" then raspberrypi
         else armv7l-hf-multiplatform
     else if platform.isAarch64 then aarch64-multiplatform

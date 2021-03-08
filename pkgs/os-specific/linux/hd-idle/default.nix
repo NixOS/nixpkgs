@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "hd-idle-1.05";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "TARGET_DIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spins down external disks after a period of idle time";
     homepage = "http://hd-idle.sourceforge.net/";
     license = licenses.gpl2Plus;

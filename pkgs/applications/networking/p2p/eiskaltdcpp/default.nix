@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt4, boost, bzip2, libX11
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, qt4, boost, bzip2, libX11
 , fetchpatch, libiconv, pcre-cpp, libidn, lua5, miniupnpc, aspell, gettext }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ qt4 boost bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   patches = [
     (fetchpatch {
@@ -54,9 +54,7 @@ stdenv.mkDerivation rec {
     "-DWITH_LUASCRIPTS=ON"
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform program that uses the Direct Connect and ADC protocols";
     homepage = "https://github.com/eiskaltdcpp/eiskaltdcpp";
     license = licenses.gpl3Plus;

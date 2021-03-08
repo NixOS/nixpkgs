@@ -1,4 +1,4 @@
-{ stdenv, gcc
+{ lib, stdenv, gcc
 , jshon
 , glib
 , nspr
@@ -9,7 +9,7 @@
 , upstream-info
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
@@ -81,8 +81,8 @@ let
     dontStrip = true;
 
     meta = {
-      license = stdenv.lib.licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ taku0 ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [ taku0 ];
       platforms = platforms.x86_64;
     };
   };

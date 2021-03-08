@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkgconfig, libiconv, curl }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkgconfig, libiconv, curl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     git config --global user.email nixbld@localhost.localnet
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "cargo, make me a project";
     homepage = "https://github.com/ashleygwilliams/cargo-generate";
     license = licenses.asl20;

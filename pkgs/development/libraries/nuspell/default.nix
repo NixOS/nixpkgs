@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     rm -rf external/Catch2
     ln -sf ${catch2.src} external/Catch2

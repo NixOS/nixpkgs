@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPackages
 , fetchurl
 , binutils ? null
@@ -12,7 +12,7 @@
 , texinfo ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert interactive -> readline80 != null;
 assert withDocs -> texinfo != null;
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
       rm -rf "$out/share" "$out/bin/bashbug"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/bash/";
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +

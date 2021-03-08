@@ -85,7 +85,7 @@ let lispPackages = rec {
           buildSystems = [ "clx-truetype" ];
           parasites = [ "clx-truetype-test" ];
 
-          description = ''clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.'';
+          description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.";
           deps = with pkgs.lispPackages; [
                   alexandria bordeaux-threads cl-aa cl-fad cl-paths cl-paths-ttf cl-store
                           cl-vectors clx trivial-features zpb-ttf

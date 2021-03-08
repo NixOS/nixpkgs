@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, cln, gmp, git, swig, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, cln, gmp, git, swig, pkgconfig
 , readline, libantlr3c, boost, jdk, python3, antlr3_4
 }:
 
@@ -35,10 +35,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Production"
   ];
 
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://cvc4.cs.stanford.edu/web/";
     license     = licenses.gpl3;

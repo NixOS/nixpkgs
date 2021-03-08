@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
     install -Dm644 -t "$out/share/bash-completion/completions/mirtk" share/completion/bash/mirtk
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake gtest ];
   buildInputs = [ boost eigen python vtk zlib tbb ];
 

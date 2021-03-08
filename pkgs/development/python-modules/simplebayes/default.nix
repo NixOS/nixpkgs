@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , nose
@@ -27,7 +27,7 @@ buildPythonPackage {
 
   checkPhase = "nosetests tests/test.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Memory-based naive bayesian text classifier";
     homepage = "https://github.com/hickeroar/simplebayes";
     license = licenses.mit;

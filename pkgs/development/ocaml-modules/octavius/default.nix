@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "octavius is not available for OCaml ${ocaml.version}" else
 
 stdenv.mkDerivation {
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 	meta = {
 		description = "Ocamldoc comment syntax parser";
 		homepage = "https://github.com/ocaml-doc/octavius";
-		license = stdenv.lib.licenses.isc;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.isc;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (ocaml.meta) platforms;
 	};
 }

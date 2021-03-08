@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, python, pytest, glibcLocales }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, python, pytest, glibcLocales }:
 
 buildPythonPackage rec {
   version = "4.3.2";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m pytest pyfakefs/pytest_tests/pytest_plugin_test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
     license     = licenses.asl20;
     homepage    = "http://pyfakefs.org/";

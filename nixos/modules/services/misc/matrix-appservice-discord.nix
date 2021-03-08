@@ -5,7 +5,7 @@ with lib;
 let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
-  appDir = "${pkgs.matrix-appservice-discord}/lib/node_modules/matrix-appservice-discord";
+  appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
   cfg = config.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
   settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (builtins.toJSON cfg.settings);
@@ -22,12 +22,6 @@ in {
         default = {
           database = {
             filename = "${dataDir}/discord.db";
-
-            # TODO: remove those old config keys once the following issues are solved:
-            # * https://github.com/Half-Shot/matrix-appservice-discord/issues/490
-            # * https://github.com/Half-Shot/matrix-appservice-discord/issues/498
-            userStorePath = "${dataDir}/user-store.db";
-            roomStorePath = "${dataDir}/room-store.db";
           };
 
           # empty values necessary for registration file generation

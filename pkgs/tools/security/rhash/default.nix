@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which }:
+{ lib, stdenv, fetchFromGitHub, which }:
 
 stdenv.mkDerivation rec {
   version = "1.4.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-lib-shared" "install-lib-so-link" "install-lib-headers" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://rhash.sourceforge.net/";
     description = "Console utility and library for computing and verifying hash sums of files";
     license = licenses.bsd0;

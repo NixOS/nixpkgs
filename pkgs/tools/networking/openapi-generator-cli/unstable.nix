@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "5.0.0-2020-02-04";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
     homepage = "https://github.com/OpenAPITools/openapi-generator";
     license = licenses.asl20;

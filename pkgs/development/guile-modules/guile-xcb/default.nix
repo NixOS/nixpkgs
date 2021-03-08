@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, guile, texinfo }:
+{ lib, stdenv, fetchurl, pkgconfig, guile, texinfo }:
 
 let
   name = "guile-xcb-${version}";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
     ";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XCB bindings for Guile";
     homepage = "http://www.markwitmer.com/guile-xcb/guile-xcb.html";
     license = licenses.gpl3Plus;

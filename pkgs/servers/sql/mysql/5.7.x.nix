@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bison, pkgconfig
+{ lib, stdenv, fetchurl, cmake, bison, pkgconfig
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
 , cctools, CoreServices, developer_cmds
 , libtirpc, rpcsvc-proto
@@ -16,7 +16,7 @@ self = stdenv.mkDerivation rec {
     sha256 = "1fhv16zr46pxm1j8vb8x8mh3nwzglg01arz8gnazbmjqldr5idpq";
   };
 
-  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
+  preConfigure = lib.optional stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps
     export PATH=$PATH:$TMPDIR
   '';
@@ -24,7 +24,7 @@ self = stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake bison pkgconfig rpcsvc-proto ];
 
   buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib libtirpc ]
-     ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
+     ++ lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
 
   outputs = [ "out" "static" ];
 
@@ -58,7 +58,7 @@ self = stdenv.mkDerivation rec {
   ];
 
   CXXFLAGS = "-fpermissive -std=c++11";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in
@@ -75,7 +75,7 @@ self = stdenv.mkDerivation rec {
     mysqlVersion = "5.7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mysql.com/";
     description = "The world's most popular open source database";
     platforms = platforms.unix;

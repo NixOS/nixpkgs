@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
@@ -53,7 +53,7 @@ buildPythonPackage rec {
             and not test_conf_syslog"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rohe/pysaml2";
     description = "Python implementation of SAML Version 2 Standard";
     license = licenses.asl20;

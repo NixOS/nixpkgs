@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, rustPlatform, pkg-config, dbus }:
+{ lib, stdenv, fetchFromGitLab, rustPlatform, pkg-config, dbus }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sd-switch";
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A systemd unit switcher for Home Manager";
     homepage = "https://gitlab.com/rycee/sd-switch";
     license = licenses.gpl3Plus;

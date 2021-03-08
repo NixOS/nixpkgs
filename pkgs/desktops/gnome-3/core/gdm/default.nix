@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gdm/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "yliiBdXr/L2rVqEXFriY4Wrl3/Ia7nnQdgRkRGKOxNo=";
   };
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
 
     # Upstream checks some common paths to find an `X` binary. We already know it.
     echo #!/bin/sh > build-aux/find-x-server.sh
-    echo "echo ${stdenv.lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
+    echo "echo ${lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
     patchShebangs build-aux/find-x-server.sh
   '';
 
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
     initialVT = "7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program that manages graphical display servers and handles graphical user logins";
     homepage = "https://wiki.gnome.org/Projects/GDM";
     license = licenses.gpl2Plus;

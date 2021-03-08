@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl }:
 
 with stdenv;
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
   pname = "wraith";

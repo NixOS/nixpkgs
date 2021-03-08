@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonApplication
 , docopt, anytree
@@ -20,7 +20,7 @@ buildPythonApplication rec {
 
   postPatch = '' patchShebangs . '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The command line catalog tool for your offline data";
     homepage = "https://github.com/deadc0de6/catcli";
     license = licenses.gpl3;

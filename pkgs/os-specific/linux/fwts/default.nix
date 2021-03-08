@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoreconfHook, pkgconfig, glib, libtool, pcre
+{ lib, stdenv, fetchzip, autoreconfHook, pkgconfig, glib, libtool, pcre
 , json_c, flex, bison, dtc, pciutils, dmidecode, iasl, libbsd }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";
     description = "Firmware Test Suite";
     platforms = platforms.linux;

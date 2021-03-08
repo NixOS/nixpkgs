@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
 let versions = builtins.fromJSON (builtins.readFile ./versions.json);
     arch = if stdenv.isi686 then "386"

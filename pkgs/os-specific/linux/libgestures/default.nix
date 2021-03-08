@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, jsoncpp }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, jsoncpp }:
 
 stdenv.mkDerivation rec {
   name = "libgestures-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ChromiumOS libgestures modified to compile for Linux";
     license = licenses.bsd3;
     platforms = platforms.linux;

@@ -1,8 +1,8 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, jdk8, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, jdk8, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
 
 let
   jdk = jdk8;
-  libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
+  libpath = with xorg; lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
 in mkDerivation rec {
   pname = "multimc";
   version = "0.6.11";
@@ -16,8 +16,6 @@ in mkDerivation rec {
   nativeBuildInputs = [ cmake file makeWrapper ];
   buildInputs = [ qtbase jdk zlib ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [ "-DMultiMC_LAYOUT=lin-system" ];
 
   postInstall = ''
@@ -28,7 +26,7 @@ in mkDerivation rec {
     wrapProgram $out/bin/multimc --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk}/bin/:${xorg.xrandr}/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://multimc.org/";
     description = "A free, open source launcher for Minecraft";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "zookeeper";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     chmod -x $out/bin/zkEnv.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     license = licenses.asl20;

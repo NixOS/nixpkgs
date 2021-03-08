@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "uproot3";
-  version = "3.14.1";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot3";
     rev = version;
-    sha256 = "1npwh4l96wg3m24jhfc8i84nfwfc18flrmymf80fx101wmpi2qz8";
+    sha256 = "sha256-6/e+qMgwyFUo8MRRTAaGp9WLPxE2fqMEK4paq26Epzc=";
   };
 
   nativeBuildInputs = [ pytestrunner ];

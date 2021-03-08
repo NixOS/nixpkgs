@@ -21,7 +21,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DLIBTCOD_SAMPLES=OFF" ];
 
-  buildInputs = [ cmake SDL libGLU libGL upx zlib ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ SDL libGLU libGL upx zlib ];
 
   meta = {
     description = "API for roguelike games";

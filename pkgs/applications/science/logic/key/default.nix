@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , unzip
 , jdk
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
     touch $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Java formal verification tool";
     homepage = "https://www.key-project.org"; # also https://formal.iti.kit.edu/key/
     longDescription = ''

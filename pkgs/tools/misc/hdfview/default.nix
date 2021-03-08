@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ant, javac, hdf_java }:
+{ lib, stdenv, fetchurl, ant, javac, hdf_java }:
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
-    license = stdenv.lib.licenses.free; # BSD-like
+    license = lib.licenses.free; # BSD-like
     homepage = "https://support.hdfgroup.org/products/java/index.html";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

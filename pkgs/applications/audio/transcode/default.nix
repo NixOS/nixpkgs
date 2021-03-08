@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flac, lame, zlib, libjpeg, libvorbis, libtheora, libxml2
+{ lib, stdenv, fetchurl, flac, lame, zlib, libjpeg, libvorbis, libtheora, libxml2
 , lzo, libdvdread, pkgconfig, x264, libmpeg2, xvidcore }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Suite of command line utilities for transcoding video and audio codecs, and for converting between different container formats";
     homepage = "http://www.transcoding.org/";
     license = licenses.lgpl2Plus;

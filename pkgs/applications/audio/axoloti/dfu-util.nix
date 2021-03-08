@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb1-axoloti }:
+{ lib, stdenv, fetchurl, pkgconfig, libusb1-axoloti }:
 
 stdenv.mkDerivation rec {
   pname = "dfu-util";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n7h08avlzin04j93m6hkq9id6hxjiiix7ff9gc2n89aw6dxxjsm";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device firmware update (DFU) USB programmer";
     longDescription = ''
       dfu-util is a program that implements the host (PC) side of the USB

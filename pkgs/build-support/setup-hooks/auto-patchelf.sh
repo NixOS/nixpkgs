@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 declare -a autoPatchelfLibs
 declare -Ag autoPatchelfFailedDeps
 
@@ -11,6 +13,8 @@ runPatchelf() {
   patchelf "$@" || (echo "Command failed: patchelf $*" && exit 1)
 }
 
+# shellcheck disable=SC2154
+# (targetOffset is referenced but not assigned.)
 addEnvHooks "$targetOffset" gatherLibraries
 
 isExecutable() {
@@ -116,6 +120,8 @@ autoPatchelfFile() {
     interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
     if isExecutable "$toPatch"; then
         runPatchelf --set-interpreter "$interpreter" "$toPatch"
+        # shellcheck disable=SC2154
+        # (runtimeDependencies is referenced but not assigned.)
         if [ -n "$runtimeDependencies" ]; then
             for dep in $runtimeDependencies; do
                 rpath="$rpath${rpath:+:}$dep/lib"
@@ -129,11 +135,13 @@ autoPatchelfFile() {
     # clear the RPATH first.
     runPatchelf --remove-rpath "$toPatch"
 
+    # If the file is not a dynamic executable, ldd/sed will fail,
+    # in which case we return, since there is nothing left to do.
     local missing
     missing="$(
         ldd "$toPatch" 2> /dev/null | \
             sed -n -e 's/^[\t ]*\([^ ]\+\) => not found.*/\1/p'
-    )"
+    )" || return 0
 
     # This ensures that we get the output of all missing dependencies instead
     # of failing at the first one, because it's more useful when working on a
@@ -175,10 +183,10 @@ addAutoPatchelfSearchPath() {
         esac
     done
 
-    for file in \
-      $(find "$@" "${findOpts[@]}" \! -type d \
-          \( -name '*.so' -o -name '*.so.*' \))
-    do addToDepCache "$file"; done
+    while IFS= read -r -d '' file; do
+    addToDepCache "$file"
+    done <  <(find "$@" "${findOpts[@]}" \! -type d \
+            \( -name '*.so' -o -name '*.so.*' \) -print0)
 }
 
 autoPatchelf() {
@@ -231,6 +239,8 @@ autoPatchelf() {
       echo "autoPatchelfHook could not satisfy dependency $failedDep wanted by ${autoPatchelfFailedDeps[$failedDep]}"
       depsMissing=1
     done
+    # shellcheck disable=SC2154
+    # (autoPatchelfIgnoreMissingDeps is referenced but not assigned.)
     if [[ $depsMissing == 1 && -z "$autoPatchelfIgnoreMissingDeps" ]]; then
       echo "Add the missing dependencies to the build inputs or set autoPatchelfIgnoreMissingDeps=true"
       exit 1

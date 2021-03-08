@@ -122,7 +122,7 @@ in
       device = "/dev/something";
     };
 
-  services.mingetty = {
+  services.getty = {
     # Some more help text.
     helpLine = ''
       Log in as "root" with an empty password.  ${

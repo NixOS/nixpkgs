@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune
+{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
 , fix, menhir, merlin-extend, ppx_tools_versioned, utop, cppo
 }:
 
@@ -17,13 +17,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ menhir merlin-extend ppx_tools_versioned ];
 
-  buildInputs = [ ocaml findlib dune cppo fix utop menhir ];
+  buildInputs = [ ocaml findlib dune_2 cppo fix utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
-  inherit (dune) installPhase;
-
-  postInstall = ''
+  installPhase = ''
+    dune install --prefix=$out --libdir=$OCAMLFIND_DESTDIR
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
       --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH" \

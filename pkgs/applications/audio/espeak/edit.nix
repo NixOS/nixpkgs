@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, unzip, portaudio, wxGTK, sox }:
+{ lib, stdenv, fetchurl, pkgconfig, unzip, portaudio, wxGTK, sox }:
 
 stdenv.mkDerivation rec {
   name = "espeakedit-1.48.03";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
             -e "s|@prefix@|$out|" \
             -i "$file"
     done
-  '' + stdenv.lib.optionalString (portaudio.api_version == 19) ''
+  '' + lib.optionalString (portaudio.api_version == 19) ''
     cp src/portaudio19.h src/portaudio.h
   '';
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cp src/espeakedit "$out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Phoneme editor for espeak";
     homepage = "http://espeak.sourceforge.net/";
     license = licenses.gpl3Plus;

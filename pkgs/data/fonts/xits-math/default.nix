@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages}:
+{ lib, stdenv, fetchFromGitHub, python3Packages}:
 
 stdenv.mkDerivation rec {
   pname = "xits-math";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/fonts/opentype *.otf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/alif-type/xits";
     description = "OpenType implementation of STIX fonts with math support";
     license = licenses.ofl;

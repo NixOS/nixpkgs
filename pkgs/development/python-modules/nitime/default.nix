@@ -2,7 +2,7 @@
 , buildPythonPackage
 , python
 , fetchPypi
-, pytest
+, pytestCheckHook
 , cython
 , numpy
 , scipy
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     sha256 = "0hb3x5196z2zaawb8s7lhja0vd3n983ncaynqfl9qg315x9ax7i6";
   };
 
-  checkInputs = [ pytest ];
   buildInputs = [ cython ];
+
   propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
 
-  checkPhase = "pytest nitime/tests";
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nitime";

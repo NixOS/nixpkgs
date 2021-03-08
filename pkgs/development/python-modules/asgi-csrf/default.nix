@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy27, fetchFromGitHub, itsdangerous, python-multipart
+{ lib, stdenv, buildPythonPackage, isPy27, fetchFromGitHub, itsdangerous, python-multipart
 , pytestCheckHook, starlette, httpx, pytest-asyncio }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asgi_csrf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ASGI middleware for protecting against CSRF attacks";
     license = licenses.asl20;
     homepage = "https://github.com/simonw/asgi-csrf";

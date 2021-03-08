@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "nexus";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Repository manager for binary software components";
     homepage = "http://www.sonatype.org/nexus";
     license = licenses.epl10;

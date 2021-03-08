@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "rcm";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Management Suite for Dotfiles";
     homepage = "https://github.com/thoughtbot/rcm";
     license = licenses.bsd3;

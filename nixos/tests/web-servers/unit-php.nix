@@ -4,7 +4,7 @@ import ../make-test-python.nix ({pkgs, ...}:
 
 in {
   name = "unit-php-test";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ izorkin ];
+  meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   machine = { config, lib, pkgs, ... }: {
     services.unit = {

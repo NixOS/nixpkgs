@@ -1,7 +1,7 @@
 { mkDerivation, array, async, base, bytestring, containers
 , crackNum, deepseq, directory, doctest, filepath, generic-deriving
 , ghc, Glob, hlint, mtl, pretty, process, QuickCheck, random
-, stdenv, syb, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
+, lib, stdenv, syb, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
 , template-haskell, time, z3
 }:
 mkDerivation {
@@ -22,5 +22,5 @@ mkDerivation {
   testSystemDepends = [ z3 ];
   homepage = "http://leventerkok.github.com/sbv/";
   description = "SMT Based Verification: Symbolic Haskell theorem prover using SMT solving";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

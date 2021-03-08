@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, python27Packages, wget, diamond, hmmer }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, python27Packages, wget, diamond, hmmer }:
 
 python27Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";
@@ -30,7 +30,7 @@ python27Packages.buildPythonApplication rec {
   # the user can download only those that interest them.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast genome-wide functional annotation through orthology assignment";
     license = licenses.gpl2;
     homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";

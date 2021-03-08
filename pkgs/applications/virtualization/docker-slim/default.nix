@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoPackage
 , fetchFromGitHub
 , makeWrapper
@@ -36,7 +36,7 @@ buildGoPackage rec {
     wrapProgram "$out/bin/docker-slim" --add-flags '--state-path "$(pwd)"'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minify and secure Docker containers";
     homepage = "https://dockersl.im/";
     changelog = "https://github.com/docker-slim/docker-slim/blob/${version}/CHANGELOG.md";

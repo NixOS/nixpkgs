@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "kubeless";
@@ -28,7 +28,7 @@ buildGoPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kubeless.io";
     description = "The Kubernetes Native Serverless Framework";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 
 buildGoPackage {
@@ -15,7 +15,7 @@ buildGoPackage {
     sha256 = "16a2sqzbam5adbhfvilnpdabzwncs7kgpr0cn4gp09h2imzsprzw";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bronze1man/yaml2json";
     description = "Convert yaml to json";
     license = with licenses; [ mit ];

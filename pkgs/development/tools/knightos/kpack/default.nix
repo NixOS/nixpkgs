@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc, libxslt, docbook_xsl }:
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   pname = "kpack";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "A tool to create or extract KnightOS packages";
     license     = licenses.lgpl2Only;

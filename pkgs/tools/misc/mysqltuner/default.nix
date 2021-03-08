@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "mysqltuner";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -m0755 mysqltuner.pl $out/bin/mysqltuner
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
     homepage = "http://mysqltuner.com";
     license = licenses.gpl3;

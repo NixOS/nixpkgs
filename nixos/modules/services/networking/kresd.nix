@@ -135,6 +135,8 @@ in {
       CacheDirectory = "knot-resolver";
       CacheDirectoryMode = "0770";
     };
+    # We don't mind running stop phase from wrong version.  It seems less racy.
+    systemd.services."kresd@".stopIfChanged = false;
 
     # Try cleaning up the previously default location of cache file.
     # Note that /var/cache/* should always be safe to remove.

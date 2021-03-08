@@ -14,7 +14,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     pname = "KindleComicConverter";
     sha256 = "5dbee5dc5ee06a07316ae5ebaf21ffa1970094dbae5985ad735e2807ef112644";
   };
-  
+
   propagatedBuildInputs = with python3Packages ; [
     pillow
     pyqt5

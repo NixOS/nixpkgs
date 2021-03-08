@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , lvm2
@@ -11,7 +11,7 @@
 , python3
 , util-linux
 , check
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -29,16 +29,16 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libuuid ]
-    ++ stdenv.lib.optional (readline != null) readline
-    ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (lvm2 != null) lvm2;
+    ++ lib.optional (readline != null) readline
+    ++ lib.optional (gettext != null) gettext
+    ++ lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
        (if (readline != null)
         then [ "--with-readline" ]
         else [ "--without-readline" ])
-    ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
-    ++ stdenv.lib.optional enableStatic "--enable-static";
+    ++ lib.optional (lvm2 == null) "--disable-device-mapper"
+    ++ lib.optional enableStatic "--enable-static";
 
   # Tests were previously failing due to Hydra running builds as uid 0.
   # That should hopefully be fixed now.
@@ -59,13 +59,13 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/parted/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [
       # Add your name here!
     ];
 
     # GNU Parted requires libuuid, which is part of util-linux-ng.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

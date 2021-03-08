@@ -1,4 +1,4 @@
-{ fetchFromGitHub, rustPlatform, stdenv, fetchpatch
+{ fetchFromGitHub, rustPlatform, lib, stdenv, fetchpatch
 , CoreFoundation, libiconv, libresolv, Security }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = with stdenv;
     lib.optionals isDarwin [ CoreFoundation libiconv libresolv Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
     license = licenses.mit;

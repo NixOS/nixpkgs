@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake
 , python, qtbase, qttools }:
 
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free, easy to use and flexible tile map editor";
     homepage = "https://www.mapeditor.org/";
     license = with licenses; [

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, wrapGAppsHook
 , libX11, libzip, glfw, libpng, xorg, gnome3
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${gnome3.zenity}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high dynamic range (HDR) image comparison tool";
     longDescription = ''
       A high dynamic range (HDR) image comparison tool for graphics people. tev

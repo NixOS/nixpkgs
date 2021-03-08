@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, mpd_clientlib, ncurses, pcre, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, mpd_clientlib, ncurses, pcre, pkgconfig
 , taglib, curl }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp doc/vimpcrc.example $out/etc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A vi/vim inspired client for the Music Player Daemon (mpd)";
     homepage = "https://github.com/boysetsfrog/vimpc";
     license = licenses.gpl3;

@@ -1,7 +1,7 @@
 { at-spi2-core, cmake, dbus, dbus-glib, docbook_xsl, epoxy, fetchpatch, fetchFromGitHub
 , glib, gtk3, harfbuzz, libXdmcp, libXtst, libpthreadstubs
 , libselinux, libsepol, libtasn1, libxkbcommon, libxslt, p11-kit, pcre2
-, pkgconfig, stdenv, util-linuxMinimal, vte, wrapGAppsHook, xmlto
+, pkgconfig, lib, stdenv, util-linuxMinimal, vte, wrapGAppsHook, xmlto
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       libsepol libxkbcommon epoxy at-spi2-core libXtst libtasn1 p11-kit
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/realh/roxterm";
     license = licenses.gpl3;
     description = "Tabbed, VTE-based terminal emulator";

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, maven, jdk, makeWrapper, stdenv, ... }:
+{ fetchFromGitHub, maven, jdk, makeWrapper, lib, stdenv, ... }:
 stdenv.mkDerivation rec {
   pname = "exhibitor";
   version = "1.5.6";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       cd ${pomFileDir}
       mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/soabase/exhibitor";
     description = "ZooKeeper co-process for instance monitoring, backup/recovery, cleanup and visualization";
     license = licenses.asl20;
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/java
     mv target/$name.jar $out/share/java/
-    makeWrapper ${jdk}/bin/java $out/bin/startExhibitor.sh --add-flags "-jar $out/share/java/$name.jar" --suffix PATH : ${stdenv.lib.makeBinPath [ jdk ]}
+    makeWrapper ${jdk}/bin/java $out/bin/startExhibitor.sh --add-flags "-jar $out/share/java/$name.jar" --suffix PATH : ${lib.makeBinPath [ jdk ]}
   '';
 
 }

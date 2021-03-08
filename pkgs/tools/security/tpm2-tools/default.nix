@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib
-, pandoc, pkgconfig, makeWrapper, curl, openssl, tpm2-tss
+, pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss
 , abrmdSupport ? true, tpm2-abrmd ? null }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0117r0zzdnblkibv81y71v3limixsw5m7g9xwf7lcx8fc8836pdv";
   };
 
-  nativeBuildInputs = [ pandoc pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pandoc pkg-config makeWrapper ];
   buildInputs = [
     curl openssl tpm2-tss
   ];

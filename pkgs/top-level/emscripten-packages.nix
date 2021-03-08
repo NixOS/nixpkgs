@@ -178,7 +178,7 @@ rec {
         echo "================= /testing zlib using node ================="
       '';
 
-      postPatch = pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
+      postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
         substituteInPlace configure \
           --replace '/usr/bin/libtool' 'ar' \
           --replace 'AR="libtool"' 'AR="ar"' \

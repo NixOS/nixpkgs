@@ -37,8 +37,6 @@ in buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  enableParallelBuilding = true;
-
   checkPhase = ''
     runHook preCheck
     pushd dist

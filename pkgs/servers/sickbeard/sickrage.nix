@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
   pname = "sickrage";
@@ -24,7 +24,7 @@ python2.pkgs.buildPythonApplication rec {
     makeWrapper $out/SickBeard.py $out/bin/sickrage
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic Video Library Manager for TV Shows";
     longDescription = "It watches for new episodes of your favorite shows, and when they are posted it does its magic.";
     license     = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, makeWrapper
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, makeWrapper
 , boost, xercesc, hunspell, zlib, pcre16
 , qtbase, qttools, qtwebengine, qtxmlpatterns
 , python3Packages
@@ -36,9 +36,7 @@ mkDerivation rec {
        ''${qtWrapperArgs[@]}
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free, open source, multi-platform ebook (ePub) editor";
     homepage = "https://github.com/Sigil-Ebook/Sigil/";
     license = licenses.gpl3;

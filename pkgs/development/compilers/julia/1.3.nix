@@ -119,8 +119,6 @@ stdenv.mkDerivation rec {
     openspecfun pcre2 lapack
   ];
 
-  enableParallelBuilding = true;
-
   # Other versions of Julia pass the tests, but we are not sure why these fail.
   doCheck = false;
   checkTarget = "testall";

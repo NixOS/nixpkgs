@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation }:
+{ lib, stdenv, appleDerivation }:
 
 appleDerivation {
   dontBuild = true;
@@ -12,7 +12,7 @@ appleDerivation {
       --replace "CarbonCore/" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;

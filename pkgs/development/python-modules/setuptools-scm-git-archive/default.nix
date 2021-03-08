@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm, pytest }:
 
 buildPythonPackage rec {
   pname = "setuptools-scm-git-archive";
@@ -14,7 +14,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+  pythonImportsCheck = [ "setuptools_scm_git_archive" ];
+
+  meta = with lib; {
     description = "setuptools_scm plugin for git archives";
     homepage = "https://github.com/Changaco/setuptools_scm_git_archive";
     license = licenses.mit;

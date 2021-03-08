@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , libtool
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
                      "--enable-keccak"
                      "--enable-bflsc"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CPU/GPU miner in c for bitcoin";
     homepage = "https://github.com/ckolivas/cgminer";
     license = licenses.gpl3;

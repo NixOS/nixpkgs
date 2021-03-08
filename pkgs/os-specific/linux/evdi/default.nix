@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, kernel, libdrm }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, libdrm }:
 
 stdenv.mkDerivation rec {
   pname = "evdi";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extensible Virtual Display Interface";
     maintainers = with maintainers; [ eyjhb ];
     platforms = platforms.linux;

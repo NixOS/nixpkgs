@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitLab, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "snowblind";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{COPYING,CREDITS}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smooth blue theme based on Materia Design";
     homepage = "https://www.opencode.net/ju1464/Snowblind";
     license = licenses.gpl3;

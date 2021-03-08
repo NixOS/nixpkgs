@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib, libxmp }:
+{ lib, stdenv, fetchurl, pkgconfig, alsaLib, libxmp }:
 
 stdenv.mkDerivation rec {
   name = "xmp-4.1.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extended module player";
     homepage    = "http://xmp.sourceforge.net/";
     license     = licenses.gpl2Plus;

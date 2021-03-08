@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
-, libXi, pkgconfig }:
+, libXi, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "box2d";
@@ -12,10 +12,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "Box2D-${version}/Box2D";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    unzip cmake libGLU libGL freeglut libX11 xorgproto libXi
-  ];
+  nativeBuildInputs = [ cmake unzip pkg-config ];
+  buildInputs = [ libGLU libGL freeglut libX11 xorgproto libXi ];
 
   cmakeFlags = [
     "-DBOX2D_INSTALL=ON"

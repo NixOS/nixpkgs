@@ -1,4 +1,4 @@
-{ stdenv, unzip, src, name, postInstall ? "true", meta ? {}, findXMLCatalogs }:
+{ lib, stdenv, unzip, src, name, postInstall ? "true", meta ? {}, findXMLCatalogs }:
 
 stdenv.mkDerivation {
   inherit src name postInstall;
@@ -18,6 +18,6 @@ stdenv.mkDerivation {
   '';
 
   meta = meta // {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

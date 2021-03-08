@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kdebugsettings";
+  pname = "kdebugsettings";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.rittelle ];

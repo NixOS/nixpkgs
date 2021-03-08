@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, smlnj, rsync }:
+{ lib, stdenv, fetchurl, pkgconfig, smlnj, rsync }:
 
 stdenv.mkDerivation rec {
   pname = "twelf";
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       Standard ML.
     '';
     homepage = "http://twelf.org/wiki/Main_Page";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ jwiegley ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jwiegley ];
+    platforms = lib.platforms.unix;
   };
 }

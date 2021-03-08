@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     nss
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+
   mesonFlags = [
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
   ];

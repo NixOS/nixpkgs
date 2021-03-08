@@ -19,7 +19,7 @@ libbladeRF,
 mkDerivation,
 ocl-icd,
 opencv3,
-pkgconfig,
+pkg-config,
 qtbase,
 qtmultimedia,
 qtserialport,
@@ -32,17 +32,17 @@ uhd
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "4.21.1";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "y6BVwnSJXiapgm9pAuby1DLLeU5MSyB4uqEa3oS35/U=";
+    sha256 = "4iJoKs0BHmBR6JRFuTIqs0GW3SjhPRMPRlqdyTI38T4=";
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     glew opencv3 libusb1 boost libopus limesuite libav libiio libpulseaudio
     qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf

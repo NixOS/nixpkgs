@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp, libdrm
+{ lib, stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp, libdrm
 , pkgconfig, freetype, fontconfig, which, imagemagick, curl, sane-backends, libXpm
 , epoxy, poppler, mesa, lirc }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sed -e 's@$(HAVE_LINUX_FB_H)@yes@' -i GNUmakefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
     homepage = "https://www.kraxel.org/blog/linux/fbida/";
     license = licenses.gpl2;

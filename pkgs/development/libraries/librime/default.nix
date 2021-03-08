@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gmock ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage    = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";

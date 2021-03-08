@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub } :
+{ lib, stdenv, fetchFromGitHub } :
 stdenv.mkDerivation rec {
   pname = "proxychains";
   version = "4.2.0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Proxifier for SOCKS proxies";
     homepage = "http://proxychains.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland, scdoc, makeWrapper
 , wlroots, wayland-protocols, pixman, libxkbcommon
 , cairo , pango, fontconfig, pandoc, systemd
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "contrib" ];
 
   mesonFlags = [
-    "-Dxwayland=${stdenv.lib.boolToString withXwayland}"
+    "-Dxwayland=${lib.boolToString withXwayland}"
     "-Dversion_override=${version}"
   ];
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     cp $src/examples/config $contrib/share/cagebreak/config
   '';
 
-  postFixup = stdenv.lib.optionalString withXwayland ''
+  postFixup = lib.optionalString withXwayland ''
     wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
   '';
 
   passthru.tests.basic = nixosTests.cagebreak;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Wayland tiling compositor inspired by ratpoison";
     homepage = "https://github.com/project-repo/cagebreak";
     license = licenses.mit;

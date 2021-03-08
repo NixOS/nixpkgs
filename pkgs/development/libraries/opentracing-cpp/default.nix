@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "04kw19g8qrv3kd40va3sqbfish7kfczkdpxdwraifk9950wfs3gx";
   };
-  buildInputs = [ cmake ];
+
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "C++ implementation of the OpenTracing API";

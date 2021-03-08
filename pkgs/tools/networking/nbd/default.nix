@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, which }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which }:
 
 stdenv.mkDerivation rec {
   name = "nbd-3.20";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib ]
-    ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
+    ++ lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/${name}"
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
   # Glib calls `clock_gettime', which is in librt. Linking that library
   # here ensures that a proper rpath is added to the executable so that
   # it can be loaded at run-time.
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lrt -lpthread";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lrt -lpthread";
 
   meta = {
     homepage = "http://nbd.sourceforge.net";
     description = "Map arbitrary files as block devices over the network";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.peti ];
+    platforms = lib.platforms.linux;
   };
 }

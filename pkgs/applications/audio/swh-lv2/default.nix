@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwSinglePrec, libxslt, lv2, pkgconfig }:
+{ lib, stdenv, fetchurl, fftwSinglePrec, libxslt, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "swh-lv2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "make install-system";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://plugin.org.uk";
     description = "LV2 version of Steve Harris' SWH plugins";
     longDescription = ''

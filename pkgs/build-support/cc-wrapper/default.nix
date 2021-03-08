@@ -76,10 +76,14 @@ let
         cannonlake     = versionAtLeast ccVersion "8.0";
         icelake-client = versionAtLeast ccVersion "8.0";
         icelake-server = versionAtLeast ccVersion "8.0";
+        cascadelake    = versionAtLeast ccVersion "9.0";
+        cooperlake     = versionAtLeast ccVersion "10.0";
+        tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
         # AMD
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
+        znver3         = versionAtLeast ccVersion "11.0";
       }.${arch} or true
     else if isClang then
       { # Intel
@@ -437,7 +441,7 @@ stdenv.mkDerivation {
     '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString cc.langAda or false ''
-      hardening_unsupported_flags+=" stackprotector strictoverflow"
+      hardening_unsupported_flags+=" format stackprotector strictoverflow"
     '' + optionalString cc.langD or false ''
       hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''

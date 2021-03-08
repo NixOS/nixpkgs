@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, bison, m4
+{ lib, stdenv, buildPackages, fetchurl, bison, m4
 , fetchpatch, autoreconfHook, help2man
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = stdenv.buildPlatform != stdenv.hostPlatform;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/westes/flex";
     description = "A fast lexical analyser generator";
     license = licenses.bsd2;

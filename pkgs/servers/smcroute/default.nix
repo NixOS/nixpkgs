@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libcap }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libcap }:
 
 stdenv.mkDerivation rec {
   pname = "smcroute";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--with-systemd=\$(out)/lib/systemd/system"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Static multicast routing daemon";
     homepage = "https://troglobit.com/smcroute.html";
     license = licenses.gpl2Plus;

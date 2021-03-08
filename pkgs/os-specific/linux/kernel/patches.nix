@@ -41,7 +41,8 @@
   hardened = let
     mkPatch = kernelVersion: src: {
       name = lib.removeSuffix ".patch" src.name;
-      patch = fetchurl src;
+      patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
+      extra = src.extra;
     };
     patches = builtins.fromJSON (builtins.readFile ./hardened/patches.json);
   in lib.mapAttrs mkPatch patches;
@@ -75,6 +76,13 @@
       sha256 = "1l8xq02rd7vakxg52xm9g4zng0ald866rpgm8kjlh88mwwyjkrwv";
     };
   };
+
+  # Adapted for Linux 5.4 from:
+  # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04896832c94aae4842100cafb8d3a73e1bed3a45
+  rtl8761b_support =
+    { name = "rtl8761b-support";
+      patch = ./rtl8761b-support.patch;
+    };
 
   export_kernel_fpu_functions = {
     "4.14" = {

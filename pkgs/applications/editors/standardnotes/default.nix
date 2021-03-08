@@ -1,4 +1,4 @@
-{ stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
+{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
   , fetchurl, runtimeShell }:
 
 let
@@ -44,7 +44,7 @@ in appimageTools.wrapType2 rec {
     rm usr/lib/* AppRun standard-notes.desktop .so*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,

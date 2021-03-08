@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline }:
+{ lib, stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
   pname = "rlwrap";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Readline wrapper for console programs";
     homepage = "https://github.com/hanslub42/rlwrap";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ];
   };
 }

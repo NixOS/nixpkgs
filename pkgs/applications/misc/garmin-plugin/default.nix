@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, garmintools, libgcrypt, libusb-compat-0_1, pkgconfig, tinyxml, zlib }:
+{ lib, stdenv, fetchurl, garmintools, libgcrypt, libusb-compat-0_1, pkg-config, tinyxml, zlib }:
 stdenv.mkDerivation {
   name = "garmin-plugin-0.3.26";
   src = fetchurl {
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     sha256 = "15gads1fj4sj970m5960dgnhys41ksi4cm53ldkf67wn8dc9i4k0";
   };
   sourceRoot = "GarminPlugin-0.3.26/src";
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ garmintools libusb-compat-0_1 libgcrypt tinyxml zlib ];
   configureFlags = [
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   '';
   meta = {
     homepage = "http://www.andreas-diesner.de/garminplugin";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

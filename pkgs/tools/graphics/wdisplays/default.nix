@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gtk3, epoxy, wayland, wrapGAppsHook
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, gtk3, epoxy, wayland, wrapGAppsHook
 , fetchpatch
 }:
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "wdisplays";
   version = "1.0";
 
-  nativeBuildInputs = [ meson ninja pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
   buildInputs = [ gtk3 epoxy wayland ];
 

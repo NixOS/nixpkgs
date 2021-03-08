@@ -1,6 +1,6 @@
-{ stdenv, fetchpatch, python, cmake, llvm, ocaml, findlib, ctypes }:
+{ stdenv, lib, fetchpatch, python, cmake, llvm, ocaml, findlib, ctypes }:
 
-let version = stdenv.lib.getVersion llvm; in
+let version = lib.getVersion llvm; in
 
 stdenv.mkDerivation {
   pname = "ocaml-llvm";
@@ -8,7 +8,8 @@ stdenv.mkDerivation {
 
   inherit (llvm) src;
 
-  buildInputs = [ python cmake ocaml findlib ctypes ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ python ocaml findlib ctypes ];
   propagatedBuildInputs = [ llvm ];
 
   patches = [ (fetchpatch {
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DLLVM_OCAML_OUT_OF_TREE=TRUE"
     "-DLLVM_OCAML_INSTALL_PATH=${placeholder "out"}/ocaml"
-    "-DLLVM_OCAML_EXTERNAL_LLVM_LIBDIR=${stdenv.lib.getLib llvm}/lib"
+    "-DLLVM_OCAML_EXTERNAL_LLVM_LIBDIR=${lib.getLib llvm}/lib"
   ];
 
   buildFlags = [ "ocaml_all" ];
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
     inherit (llvm.meta) license homepage;
     platforms = ocaml.meta.platforms or [];
     description = "OCaml bindings distributed with LLVM";
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
+{ lib, stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
   pname = "yices";
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
   # Includes a fix for the embedded soname being libyices.so.2.5, but
   # only installing the libyices.so.2.5.x file.
   installPhase = let
-    ver_XdotY = stdenv.lib.versions.majorMinor version;
+    ver_XdotY = lib.versions.majorMinor version;
   in ''
       make install LDCONFIG=true
       ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://yices.csl.sri.com";
     license     = licenses.gpl3;

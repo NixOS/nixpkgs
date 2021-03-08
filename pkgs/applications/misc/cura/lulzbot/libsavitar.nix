@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
 
 buildPythonPackage {
   pname = "libsavitar-lulzbot";
@@ -23,7 +23,7 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.4.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ implementation of 3mf loading with SIP python bindings";
     homepage = "https://github.com/Ultimaker/libSavitar";
     license = licenses.lgpl3Plus;

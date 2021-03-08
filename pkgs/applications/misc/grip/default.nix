@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, glib, pkgconfig, libgnome, libgnomeui, vte
+{ lib, stdenv, fetchurl, gtk2, glib, pkg-config, libgnome, libgnomeui, vte
 , curl, cdparanoia, libid3tag, ncurses, libtool }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1si5kidwg0i2jg0brzyvjrzw24v3km2hdgd4kda1adzq81a3p1cs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 glib libgnome libgnomeui vte curl cdparanoia
     libid3tag ncurses libtool ];
 
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GTK-based audio CD player/ripper";
     homepage = "http://nostatic.org/grip";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    maintainers = with stdenv.lib.maintainers; [ marcweber peti ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ marcweber peti ];
+    platforms = lib.platforms.linux;
   };
 }

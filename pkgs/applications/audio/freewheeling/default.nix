@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     '' ;
 
     homepage = "http://freewheeling.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.sepi ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.sepi ];
+    platforms = lib.platforms.linux;
   };
 }

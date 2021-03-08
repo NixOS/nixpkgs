@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, pkgconfig, gettext, fetchFromGitHub, python3
+{ lib, stdenv, meson, ninja, pkgconfig, gettext, fetchFromGitHub, python3
 , wrapGAppsHook, gtk3, glib, desktop-file-utils, appstream-glib, gnome3
 , gobject-introspection }:
 
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_install.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK frontend for ratbagd mouse config daemon";
     homepage    = "https://github.com/libratbag/piper";
     license     = licenses.gpl2;

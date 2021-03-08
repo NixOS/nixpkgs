@@ -1,4 +1,4 @@
-{ stdenv, rpm, cpio, substituteAll }:
+{ lib, stdenv, rpm, cpio, substituteAll }:
 
 stdenv.mkDerivation {
   name = "rpmextract";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     inherit (stdenv) shell;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Script to extract RPM archives";
     platforms = platforms.all;
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig
 , glib, readline, pcre, systemd, udev }:
 
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     "-Dbuild-tests=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Connect external monitors via Wi-Fi";
     homepage    = "https://github.com/albfan/miraclecast";
     license     = licenses.lgpl21Plus;

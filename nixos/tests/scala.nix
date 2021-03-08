@@ -8,7 +8,7 @@ with pkgs.lib;
 let
   common = name: package: (import ./make-test-python.nix ({
     inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];
     };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook,
+{ lib, stdenv, fetchurl, autoreconfHook,
   gzip, bzip2, pkgconfig, flex, check,
   pam, coreutils
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
       # We get a warning in armv5tel-linux and the fuloong2f, so we
       # disable -Werror in it.
-      ${stdenv.lib.optionalString (stdenv.isAarch32 || stdenv.hostPlatform.isMips) ''
+      ${lib.optionalString (stdenv.isAarch32 || stdenv.hostPlatform.isMips) ''
         sed -i s/-Werror// src/Makefile.am
       ''}
     '';
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "setowner=" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "ftp://ftp.altlinux.org/pub/people/legion/kbd/";
     description = "Linux keyboard utilities and keyboard maps";
     platforms = platforms.linux;

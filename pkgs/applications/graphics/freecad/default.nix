@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
 xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
 opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
 gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
@@ -27,12 +27,13 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
-    cmake coin3d xercesc ode eigen opencascade-occt gts
+    coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
     libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
     GitPython # for addon manager
+    scipy pyyaml # (at least for) PyrateWorkbench
   ]);
 
   cmakeFlags = [
@@ -67,7 +68,7 @@ in mkDerivation rec {
     mv $out/share/doc $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     homepage = "https://www.freecadweb.org/";
     license = licenses.lgpl2Plus;

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, openssl, protobuf
 , gflags, abseil-cpp, libnsl
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.34.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.34.1"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "0kipk26kg2x06mrkhb74k8vk5cn4mr89kw1f9mb04n616wkxjyxy";
+    sha256 = "0p6si9i0gg885ag2x87a7jyzhgd5lhx2bh2vjj2ra1jn6y3vg6qk";
     fetchSubmodules = true;
   };
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags abseil-cpp ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libnsl ];
 

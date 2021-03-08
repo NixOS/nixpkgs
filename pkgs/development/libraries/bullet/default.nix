@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_UNIT_TESTS=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
     "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 

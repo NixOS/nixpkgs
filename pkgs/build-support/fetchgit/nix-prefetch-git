@@ -9,6 +9,7 @@ hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
+fetchLFS=
 builder=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
@@ -72,6 +73,7 @@ for arg; do
             --quiet) QUIET=true;;
             --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
+            --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
@@ -282,6 +284,11 @@ clone_user_rev() {
     local dir="$1"
     local url="$2"
     local rev="${3:-HEAD}"
+
+    if [ -n "$fetchLFS" ]; then
+        HOME=$TMPDIR
+        git lfs install
+    fi
 
     # Perform the checkout.
     case "$rev" in

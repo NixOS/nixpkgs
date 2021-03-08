@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "replace-2.24";
@@ -24,6 +24,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://replace.richardlloyd.org.uk/";
     description = "A tool to replace verbatim strings";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

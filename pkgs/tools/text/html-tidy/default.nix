@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libxslt }:
+{ lib, stdenv, fetchFromGitHub, cmake, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "html-tidy";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # ATM bin/tidy is statically linked, as upstream provides no other option yet.
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A HTML validator and `tidier'";
     longDescription = ''
       HTML Tidy is a command-line tool and C library that can be

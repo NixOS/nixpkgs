@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , xorgproto, libX11, libXext, libXi, libXrandr, libXrender
 , ncurses, pkgconfig, xorgserver, udev, libXinerama, pixman }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-I${pixman}/include/pixman-1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = [ maintainers.goibhniu ];
     description = "Wacom digitizer driver for X11";
     homepage = "http://linuxwacom.sourceforge.net";

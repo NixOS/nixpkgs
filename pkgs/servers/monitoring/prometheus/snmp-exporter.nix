@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, net-snmp, nixosTests }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, net-snmp, nixosTests }:
 
 buildGoPackage rec {
   pname = "snmp_exporter";
@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) snmp; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SNMP Exporter for Prometheus";
     homepage = "https://github.com/prometheus/snmp_exporter";
     license = licenses.asl20;

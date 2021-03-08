@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
 
 buildPythonPackage rec {
     pname = "dbf";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
       ${python.interpreter} dbf/test.py
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
       homepage    = "https://pypi.python.org/pypi/dbf";
       license     = licenses.bsd2;

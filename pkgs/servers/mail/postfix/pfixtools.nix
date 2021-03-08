@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     description = "A collection of postfix-related tools";
     license = with lib.licenses; [ bsd3 ];
     homepage = "https://github.com/Fruneau/pfixtools";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jerith666 ];
   };
 }

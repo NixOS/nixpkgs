@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , ncurses, python3, perl, textual-window-manager
 , gettext, vim, bc, screen }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/byobu/";
     description = "Text-based window manager and terminal multiplexer";
 

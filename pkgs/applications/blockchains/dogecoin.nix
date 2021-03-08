@@ -1,10 +1,10 @@
-{ stdenv , fetchFromGitHub
+{ lib, stdenv , fetchFromGitHub
 , pkgconfig, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, util-linux, qt4, qrencode
 , withGui }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
   version = "1.14.2";

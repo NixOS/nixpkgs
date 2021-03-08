@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , writeText
@@ -20,36 +20,37 @@
 # https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/master/scripts/known_good.json
 
 let
+  localSpirvHeaders = spirv-headers.overrideAttrs (_: {
+    src = fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "SPIRV-Headers";
+      rev = "f027d53ded7e230e008d37c8b47ede7cd308e19d";
+      sha256 = "12gp2mqcar6jj57jw9isfr62yn72kmvdcl0zga4gvrlyfhnf582q";
+    };
+  });
   localGlslang = (glslang.override {
     argSpirv-tools = spirv-tools.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Tools";
-        rev = "e128ab0d624ce7beb08eb9656bb260c597a46d0a";
-        sha256 = "0jj8zrl3dh9fq71jc8msx3f3ifb2vjcb37nl0w4sa8sdhfff74pv";
+        rev = "c9c1f54330d13a0bec1aa3f08d436249d8e35596";
+        sha256 = "0r5whsw9x8j4199xwxv293ar2ga73pm2s7rngw732ylh6rw3bkly";
       };
     });
-    argSpirv-headers = spirv-headers.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Headers";
-        rev = "ac638f1815425403e946d0ab78bac71d2bdbf3be";
-        sha256 = "1lkhs7pxcrfkmiizcxl0w5ajx6swwjv7w3iq586ipgh571fc75gx";
-      };
-    });
+    argSpirv-headers = localSpirvHeaders;
   }).overrideAttrs (_: {
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "glslang";
-      rev = "e00d27c6d65b7d3e72506a311d7f053da4051295";
-      sha256 = "00lzvzk613gpm1vsdxffmx52z3c52ijwvzk4sfhh95p71kdydhgv";
+      rev = "dd69df7f3dac26362e10b0f38efb9e47990f7537";
+      sha256 = "1iafbh524avsjg4pjiq156b62pck2rwlfl2pjnml8sjy285506rk";
     };
   });
 in
 
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.2.141.0";
+  version = "1.2.162.0";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "sdk-${version}";
-    sha256 = "1yfas7q122kx74nbjk3wxlyacysgncvlvq081a5dp238m88vkmbj";
+    sha256 = "1mpqmxh9zm20jdar59lp4yjpqfzxn2pwds6bkvnzihfy0pymf15k";
   };
 
   nativeBuildInputs = [
@@ -79,10 +80,9 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${localGlslang}"
+    "-DSPIRV_HEADERS_INSTALL_DIR=${localSpirvHeaders}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
   ];
 
@@ -97,9 +97,9 @@ stdenv.mkDerivation rec {
     sed "s|\([[:space:]]*set(INSTALL_DEFINES \''${INSTALL_DEFINES} -DRELATIVE_LAYER_BINARY=\"\)\(\$<TARGET_FILE_NAME:\''${TARGET_NAME}>\")\)|\1$out/lib/\2|" -i layers/CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
-    description = "LunarG Vulkan loader";
-    homepage    = "https://www.lunarg.com";
+  meta = with lib; {
+    description = "The official Khronos Vulkan validation layers";
+    homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
     platforms   = platforms.linux;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];

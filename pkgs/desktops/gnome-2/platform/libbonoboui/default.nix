@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, popt, libxml2, gtk2, libtool
+{ stdenv, fetchurl, bison, pkg-config, popt, libxml2, gtk2, libtool
 , intltool, libbonobo, GConf, libgnomecanvas, libgnome, libglade }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [ bison popt gtk2 libxml2 GConf libglade libtool ];
   propagatedBuildInputs = [ libbonobo libgnomecanvas libgnome ];
 }

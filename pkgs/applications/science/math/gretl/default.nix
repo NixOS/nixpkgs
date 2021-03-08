@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, curl, fftw, gmp, gnuplot, gtk3, gtksourceview3, json-glib
+{ lib, stdenv, fetchurl, curl, fftw, gmp, gnuplot, gtk3, gtksourceview3, json-glib
 , lapack, libxml2, mpfr, openblas, pkg-config, readline }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A software package for econometric analysis";
     longDescription = ''
       gretl is a cross-platform software package for econometric analysis,

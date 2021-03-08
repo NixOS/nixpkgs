@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, pruneLibtoolFiles, flex, bison
+{ lib, stdenv, fetchurl, pkgconfig, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
 , nftablesCompat ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "1.8.6";

@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "bind_exporter";
-  version = "20161221-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20161221-${lib.strings.substring 0 7 rev}";
   rev = "4e1717c7cd5f31c47d0c37274464cbaabdd462ba";
 
   goPackagePath = "github.com/digitalocean/bind_exporter";
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bind; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prometheus exporter for bind9 server";
     homepage = "https://github.com/digitalocean/bind_exporter";
     license = licenses.asl20;

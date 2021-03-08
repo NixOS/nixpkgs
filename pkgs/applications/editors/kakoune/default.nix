@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ncurses, asciidoc, docbook_xsl, libxslt, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, docbook_xsl, libxslt, pkgconfig }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "kakoune-unwrapped";
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     export version="v${version}"
   '';
 
-  doInstallCheckPhase = true;
+  doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/kak -ui json -E "kill 0"
+    $out/bin/kak -ui json -e "kill 0"
   '';
 
   postInstall = ''

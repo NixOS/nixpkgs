@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ocamlnet, cpu }:
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, ocamlnet, cpu }:
 
 buildDunePackage rec {
   pname = "parany";
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ocamlnet cpu ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Generalized map/reduce for multicore computing";
     maintainers = [ maintainers.bcdarwin ];

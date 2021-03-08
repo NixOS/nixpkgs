@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkgconfig
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   # Disabling check here to work with build sandboxing.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility that builds rust-generated WebAssembly package";
     homepage = "https://github.com/rustwasm/wasm-pack";
     license = with licenses; [ asl20 /* or */ mit ];

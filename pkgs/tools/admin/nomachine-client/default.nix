@@ -1,4 +1,4 @@
-{ stdenv, file, fetchurl, makeWrapper,
+{ lib, stdenv, file, fetchurl, makeWrapper,
   autoPatchelfHook, jsoncpp, libpulseaudio }:
 let
   versionMajor = "6.12";
@@ -81,7 +81,7 @@ in
     dontBuild = true;
     dontStrip = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "NoMachine remote desktop client (nxplayer)";
       homepage = "https://www.nomachine.com/";
       license = {

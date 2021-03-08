@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pip, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pip, pytest }:
 
 buildPythonPackage rec {
   pname = "setuptools_scm";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # Requires pytest, circular dependency
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bitbucket.org/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wrapQtAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, wrapQtAppsHook
 , alsaLib, boost, bzip2, fftw, fftwFloat, libX11, libfishsound, libid3tag
 , libjack2, liblo, libmad, libogg, liboggz, libpulseaudio, libsamplerate
 , libsndfile, lrdf, opusfile, qtbase, qtsvg, rubberband, serd, sord
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pitch and note annotation of unaccompanied melody";
     homepage = "https://www.sonicvisualiser.org/tony/";
     license = licenses.gpl2Plus;

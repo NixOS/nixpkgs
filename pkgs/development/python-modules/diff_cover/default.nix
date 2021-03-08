@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , inflect
 , jinja2
 , jinja2_pluralize
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytest -k 'not added_file_pylint_console and not file_does_not_exist'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
     license = licenses.asl20;

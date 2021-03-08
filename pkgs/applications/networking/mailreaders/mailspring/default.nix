@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
     alsaLib
     db
     glib
-    gtk3
+    # We don't know why with trackerSupport the executable fail to launch, See:
+    # https://github.com/NixOS/nixpkgs/issues/106732
+    (gtk3.override {trackerSupport = false; })
     libkrb5
     libsecret
     nss
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
     longDescription = ''
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.

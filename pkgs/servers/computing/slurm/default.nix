@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtool, curl
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python3, munge, perl, pam, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "20.11.0.1";
+  version = "20.11.2.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "0f750wlvm48j5b2fkvhy47zyagxfl6kbn2m9lx0spxwyn9qgh6bn";
+    sha256 = "02vz386ix28yr2lrn9z0hycqmw1d0npvwvx51fhp2mav66rrx79p";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${coreutils}/bin/echo"
-  '' + (stdenv.lib.optionalString enableX11 ''
+  '' + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
   '');
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
       libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi shadow.su
       pmix
-  ] ++ stdenv.lib.optionals enableX11 [ xorg.xauth ];
+  ] ++ lib.optionals enableX11 [ xorg.xauth ];
 
-  configureFlags = with stdenv.lib;
+  configureFlags = with lib;
     [ "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
       "--with-lz4=${lz4.dev}"
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.slurm = nixosTests.slurm;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.schedmd.com/";
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;

@@ -85,6 +85,4 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
-
-  enableParallelBuilding = true;
 }

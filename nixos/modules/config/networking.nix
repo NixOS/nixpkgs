@@ -193,6 +193,10 @@ in
           cat ${escapeShellArgs cfg.hostFiles} > $out
         '';
 
+        # /etc/netgroup: Network-wide groups.
+        netgroup.text = mkDefault ''
+        '';
+
         # /etc/host.conf: resolver configuration file
         "host.conf".text = ''
           multi on

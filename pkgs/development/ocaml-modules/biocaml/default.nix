@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, fetchpatch
+{ lib, buildDunePackage, fetchFromGitHub, fetchpatch
 , ounit, async, base64, camlzip, cfstream
 , core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm }:
 
@@ -21,7 +21,7 @@ buildDunePackage rec {
   checkInputs = [ ounit ];
   propagatedBuildInputs = [ async base64 camlzip cfstream core rresult uri xmlm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bioinformatics library for Ocaml";
     homepage = "http://${pname}.org";
     maintainers = [ maintainers.bcdarwin ];

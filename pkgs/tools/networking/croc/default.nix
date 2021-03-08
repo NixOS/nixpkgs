@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, callPackage}:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, callPackage}:
 
 buildGoModule rec {
   pname = "croc";
@@ -22,7 +22,7 @@ buildGoModule rec {
       local-relay = callPackage ./test-local-relay.nix {};
     };
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Easily and securely send things from one computer to another";
     homepage = "https://github.com/schollz/croc";

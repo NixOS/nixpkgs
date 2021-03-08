@@ -16,7 +16,7 @@ let
 
     pythonImportsCheck = [ pname ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Models for the spaCy NLP library";
       homepage    = "https://github.com/explosion/spacy-models";
       license     = licenses.${license};

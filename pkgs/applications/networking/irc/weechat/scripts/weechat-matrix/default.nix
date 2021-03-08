@@ -1,5 +1,5 @@
 { buildPythonPackage
-, stdenv
+, lib, stdenv
 , python
 , fetchFromGitHub
 , pyopenssl
@@ -71,7 +71,7 @@ in buildPythonPackage {
 
   dontPatchShebangs = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;

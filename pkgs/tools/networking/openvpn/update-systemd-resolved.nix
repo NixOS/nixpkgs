@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ iproute systemd coreutils util-linux ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Helper script for OpenVPN to directly update the DNS settings of a link through systemd-resolved via DBus";
     homepage = "https://github.com/jonathanio/update-systemd-resolved";
     maintainers = with maintainers; [ eadwu ];

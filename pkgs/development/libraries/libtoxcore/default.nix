@@ -28,8 +28,6 @@ let
 
     nativeBuildInputs = [ cmake pkgconfig ];
 
-    enableParallelBuilding = true;
-
     doCheck = false; # hangs, tries to access the net?
     checkInputs = [ check ];
 

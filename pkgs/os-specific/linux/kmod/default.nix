@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig
 , libxslt, xz, elf-header
-, withStatic ? false }:
+, withStatic ? stdenv.hostPlatform.isStatic
+}:
 
 let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
@@ -37,7 +38,7 @@ in stdenv.mkDerivation rec {
     ln -s bin $out/sbin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for loading and managing Linux kernel modules";
     longDescription = ''
       kmod is a set of tools to handle common tasks with Linux kernel modules

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, writeScript, cmake, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, callPackage, writeScript, cmake, wrapQtAppsHook
 , boost, qt5, llvmPackages, gcc, jdk, pythonPackages, desktop-file-utils
 , shared-mime-info, imagemagick, which, coreutils, maven, fetchpatch }:
 
@@ -203,7 +203,7 @@ stdenv.mkDerivation rec {
   # FIXME: some test cases are disabled in the patch phase
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.sourcetrail.com";
     description = "A cross-platform source explorer for C/C++ and Java";
     platforms = platforms.all;

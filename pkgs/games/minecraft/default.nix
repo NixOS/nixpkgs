@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , nixosTests
 , copyDesktopItems
@@ -41,7 +41,7 @@ let
     categories = "Game;";
   };
 
-  envLibPath = stdenv.lib.makeLibraryPath [
+  envLibPath = lib.makeLibraryPath [
     curl
     libpulseaudio
     systemd
@@ -50,7 +50,7 @@ let
     libXxf86vm # needed only for versions <1.13
   ];
 
-  libPath = stdenv.lib.makeLibraryPath ([
+  libPath = lib.makeLibraryPath ([
     alsaLib
     atk
     cairo
@@ -137,15 +137,15 @@ stdenv.mkDerivation rec {
     # Do not create `GPUCache` in current directory
     makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${stdenv.lib.getBin jre} \
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${lib.getBin jre} \
       --run "cd /tmp" \
       "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [ desktopItem ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
     maintainers = with maintainers; [ cpages ryantm infinisil ];

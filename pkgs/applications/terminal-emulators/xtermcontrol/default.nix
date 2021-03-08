@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "3.7";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
       To complete the feature set; xtermcontrol lets advanced users issue any xterm control sequence of their choosing.
     '';
     homepage = "http://thrysoee.dk/xtermcontrol";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.derchris ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.derchris ];
   };
 }

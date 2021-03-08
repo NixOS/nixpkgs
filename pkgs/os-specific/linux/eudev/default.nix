@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, gperf, util-linux, kmod}:
+{lib, stdenv, fetchurl, pkgconfig, glib, gperf, util-linux, kmod}:
 let
   s = # Generated upstream information
   rec {
@@ -50,9 +50,9 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''An udev fork by Gentoo'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = ''https://www.gentoo.org/proj/en/eudev/'';
     downloadPage = ''http://dev.gentoo.org/~blueness/eudev/'';
     updateWalker = true;

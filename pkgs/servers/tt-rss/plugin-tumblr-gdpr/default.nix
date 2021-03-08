@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ... }: stdenv.mkDerivation rec {
+{ lib, stdenv, fetchFromGitHub, ... }: stdenv.mkDerivation rec {
   pname = "tt-rss-plugin-tumblr-gdpr";
   version = "2.1";
 
@@ -15,7 +15,7 @@
     cp init.php $out/tumblr_gdpr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin for TT-RSS to workaround GDPR in Europe";
     longDescription = ''
       Plugin for TT-RSS to workaround GDPR in Europe.

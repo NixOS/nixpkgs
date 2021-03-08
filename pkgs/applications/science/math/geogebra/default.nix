@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
+{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
   version = "5-0-609-0";
@@ -19,7 +19,7 @@ let
     mimeType = "application/vnd.geogebra.file;application/vnd.geogebra.tool;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
     longDescription = ''
       Dynamic mathematics software for all levels of education that brings
@@ -27,7 +27,7 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];

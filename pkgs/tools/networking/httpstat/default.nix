@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, curl, pythonPackages, glibcLocales }:
+{ lib, stdenv, fetchFromGitHub, curl, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "httpstat";
-  version = "1.3.0";
+  version = "1.3.1";
   src = fetchFromGitHub {
     owner = "reorx";
     repo = pname;
     rev = version;
-    sha256 = "18k2glnyzxlmry19ijmndim2vqqn3c86smd7xc3haw6k7qafifx1";
+    sha256 = "sha256-zUdis41sQpJ1E3LdNwaCVj6gexi/Rk21IBUgoFISiDM=";
   };
   doCheck = false; # No tests
   buildInputs = [ glibcLocales ];
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "curl statistics made simple";
     homepage = "https://github.com/reorx/httpstat";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ nequissimus ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nequissimus ];
   };
 }

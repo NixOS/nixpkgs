@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   version = "4.6.5";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A forensic/data recovery tool";
     homepage = "https://www.sleuthkit.org/";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.ipl10;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.ipl10;
     inherit version;
   };
 }

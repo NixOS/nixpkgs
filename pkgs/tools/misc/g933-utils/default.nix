@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, udev, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, udev, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "g933-utils";
@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "16xgk4rc36d6lylh2dzv63ryq9s7fli3h2qva1m1p6f0gpasnk7w";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An application to configure Logitech wireless G933/G533 headsets";
     homepage = "https://github.com/ashkitten/g933-utils";
     license = licenses.mit;

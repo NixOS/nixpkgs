@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage , fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage , fetchPypi, pythonOlder
 , pytest, jupyter_core, pandas, ipywidgets, jupyter, altair }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
   checkInputs = [ altair ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:

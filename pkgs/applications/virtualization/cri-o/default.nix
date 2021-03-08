@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , btrfs-progs
 , buildGoModule
 , fetchFromGitHub
@@ -37,7 +37,7 @@ buildGoModule rec {
     libseccomp
     libselinux
     lvm2
-  ] ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+  ] ++ lib.optionals (glibc != null) [ glibc glibc.static ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
@@ -56,7 +56,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cri-o; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , ffmpeg_3, gtk3, imagemagick, libarchive, libspectre, libwebp, poppler
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
 
   prePatch = "patchShebangs .";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful image viewer with minimal UI";
     homepage = "http://www.pberndt.com/Programme/Linux/pqiv";
     license = licenses.gpl3;

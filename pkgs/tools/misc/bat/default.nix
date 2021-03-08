@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , nixosTests
 , rustPlatform
 , fetchFromGitHub
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
   # expected with certain flag combinations.
   postFixup = ''
     wrapProgram "$out/bin/bat" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
+      --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
   passthru.tests = { inherit (nixosTests) bat; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     license = with licenses; [ asl20 /* or */ mit ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl, bison, flex
 , zlib
 , usePAM ? stdenv.hostPlatform.isLinux, pam
@@ -15,17 +15,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ zlib.dev ] ++
-    stdenv.lib.optionals useSSL [ openssl ] ++
-    stdenv.lib.optionals usePAM [ pam ];
+    lib.optionals useSSL [ openssl ] ++
+    lib.optionals usePAM [ pam ];
 
   configureFlags = [
-    (stdenv.lib.withFeature usePAM "pam")
+    (lib.withFeature usePAM "pam")
   ] ++ (if useSSL then [
       "--with-ssl-incl-dir=${openssl.dev}/include"
       "--with-ssl-lib-dir=${openssl.out}/lib"
     ] else [
       "--without-ssl"
-  ]) ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]) ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # will need to check both these are true for musl
     "libmonit_cv_setjmp_available=yes"
     "libmonit_cv_vsnprintf_c99_conformant=yes"
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://mmonit.com/monit/";
     description = "Monitoring system";
-    license = stdenv.lib.licenses.agpl3;
-    maintainers = with stdenv.lib.maintainers; [ raskin wmertens ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.agpl3;
+    maintainers = with lib.maintainers; [ raskin wmertens ];
+    platforms = with lib.platforms; linux;
   };
 }

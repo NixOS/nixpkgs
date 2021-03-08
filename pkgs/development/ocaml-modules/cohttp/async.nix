@@ -1,9 +1,9 @@
-{ stdenv, buildDunePackage, async, cohttp, conduit-async, uri, ppx_sexp_conv
+{ lib, buildDunePackage, async, cohttp, conduit-async, uri, ppx_sexp_conv
 , logs, magic-mime }:
 
-if !stdenv.lib.versionAtLeast cohttp.version "0.99" then
+if !lib.versionAtLeast cohttp.version "0.99" then
 	cohttp
-else if !stdenv.lib.versionAtLeast async.version "0.13" then
+else if !lib.versionAtLeast async.version "0.13" then
 	throw "cohttp-async needs async-0.13 (hence OCaml >= 4.08)"
 else
 

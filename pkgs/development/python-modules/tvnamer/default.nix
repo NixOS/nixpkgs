@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # a ton of tests fail with: IOError: tvnamer/main.py could not be found in . or ..
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
     homepage = "https://github.com/dbr/tvnamer";
     license = licenses.unlicense;

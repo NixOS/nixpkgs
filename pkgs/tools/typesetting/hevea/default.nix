@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocamlPackages }:
+{ lib, stdenv, fetchurl, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   name = "hevea-2.34";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A quite complete and fast LATEX to HTML translator";
     homepage = "http://pauillac.inria.fr/~maranget/hevea/";
     license = licenses.qpl;

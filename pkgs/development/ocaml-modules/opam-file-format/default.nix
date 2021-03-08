@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Parser and printer for the opam file syntax";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
   };

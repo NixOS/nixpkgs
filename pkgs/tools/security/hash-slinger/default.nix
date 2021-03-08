@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, unbound, libreswan }:
+{ lib, stdenv, fetchFromGitHub, pythonPackages, unbound, libreswan }:
 
 let
   inherit (pythonPackages) python;
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
    meta = {
     description = "Various tools to generate special DNS records";
     homepage    = "https://github.com/letoams/hash-slinger";
-    license     = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.leenaars ];
+    license     = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.leenaars ];
   };
 }

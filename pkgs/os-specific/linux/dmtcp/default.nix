@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash, perl, python }:
+{ lib, stdenv, fetchFromGitHub, bash, perl, python }:
 
 stdenv.mkDerivation rec {
   pname = "dmtcp";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --replace "os.getenv('USER')" "\"nixbld1\""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed MultiThreaded Checkpointing";
     longDescription = ''
       DMTCP (Distributed MultiThreaded Checkpointing) is a tool to

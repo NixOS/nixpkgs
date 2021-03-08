@@ -32,7 +32,7 @@ let
 
   callPackage = pkgs.newScope self;
 
-  requiredLuaModules = drvs: with stdenv.lib; let
+  requiredLuaModules = drvs: with lib; let
     modules =  filter hasLuaModule drvs;
   in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
 
@@ -123,7 +123,7 @@ with self; {
         );
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;
@@ -134,13 +134,13 @@ with self; {
 
   vicious = toLuaModule(stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.3.1";
+    version = "2.5.0";
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "1yzhjn8rsvjjsfycdc993ms6jy2j5jh7x3r2ax6g02z5n0anvnbx";
+      sha256 = "0lb90334mz0my8ydsmnsnkki0xr58kinsg0hf9d6k4b0vjfi0r0a";
     };
 
     buildInputs = [ lua ];
@@ -151,7 +151,7 @@ with self; {
       printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A modular widget library for the awesome window manager";
       homepage    = "https://github.com/Mic92/vicious";
       license     = licenses.gpl2;

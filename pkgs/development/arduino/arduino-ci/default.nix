@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub,  makeWrapper, arduino-cli, ruby, python3 }:
+{ lib, stdenv, fetchFromGitHub,  makeWrapper, arduino-cli, ruby, python3 }:
 
 let
 
-  runtimePath = stdenv.lib.makeBinPath [
+  runtimePath = lib.makeBinPath [
     arduino-cli
     python3 # required by the esp8266 core
   ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/arduino-ci --prefix PATH ":" "${runtimePath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CI for Arduino Libraries";
     homepage = src.meta.homepage;
     license = licenses.mit;

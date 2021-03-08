@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     buildPythonPath "$pythonPath"
 
     wrapQtApp $out/bin/ykman-gui \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
+      --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
       --prefix PYTHONPATH : "$program_PYTHONPATH"
 
     mkdir -p $out/share/applications

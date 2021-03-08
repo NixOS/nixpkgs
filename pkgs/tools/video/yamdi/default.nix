@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchurl,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -D {,$out/share/man/}man1/yamdi.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet Another MetaData Injector for FLV";
     homepage = "http://yamdi.sourceforge.net/";
     license = licenses.bsd3;

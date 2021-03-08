@@ -11,18 +11,28 @@
 , glslang
 , lcms2
 , epoxy
+, libGL
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "2.72.2";
+  version = "3.104.0";
+
+  patches = [
+    (fetchpatch {
+      # support glslang>=11.0.0; Upstream MR: https://code.videolan.org/videolan/libplacebo/-/merge_requests/131
+      url = "https://code.videolan.org/videolan/libplacebo/-/commit/affd15a2faa1340d40dcf277a8acffe2987f517c.patch";
+      sha256 = "1nm27mdm9rn3wsbjdif46pici6mbzmfb6521ijl8ah4mxn9p1ikc";
+    })
+  ];
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ijqpx1pagc6qg63ynqrinvckwc8aaw1i0lx48gg5szwk8afib4i";
+    sha256 = "0p5mx8ch7cp7b54yrkl4fs8bcvqma1h461gx6ps4kagn4dsx8asb";
   };
 
   nativeBuildInputs = [
@@ -39,6 +49,8 @@ stdenv.mkDerivation rec {
     glslang
     lcms2
     epoxy
+    libGL
+    xorg.libX11
   ];
 
   mesonFlags = [

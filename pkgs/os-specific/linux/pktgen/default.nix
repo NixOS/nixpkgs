@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ dpdk libbsd libpcap lua5_3 numactl which ]
-    ++ stdenv.lib.optionals withGtk [gtk2];
+    ++ lib.optionals withGtk [gtk2];
 
   RTE_SDK = dpdk;
-  GUI = stdenv.lib.optionalString withGtk "true";
+  GUI = lib.optionalString withGtk "true";
 
   NIX_CFLAGS_COMPILE = "-msse3";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/include $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Traffic generator powered by DPDK";
     homepage = "http://dpdk.org/";
     license = licenses.bsdOriginal;

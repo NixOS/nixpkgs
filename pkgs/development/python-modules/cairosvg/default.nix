@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, fetchpatch
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, fetchpatch
 , cairocffi, cssselect2, defusedxml, pillow, tinycss2
 , pytest, pytestrunner, pytestcov, pytest-flake8, pytest-isort }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cairosvg.org";
     license = licenses.lgpl3;
     description = "SVG converter based on Cairo";

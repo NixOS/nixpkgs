@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "pybotvac";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python package for controlling Neato pybotvac Connected vacuum robot";
     homepage = "https://github.com/stianaske/pybotvac";
     license = licenses.mit;

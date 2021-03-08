@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , meson, ninja, pkgconfig, gettext, libxslt, docbook_xsl_ns
 , libcap, libidn2
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "20200821";

@@ -22,7 +22,7 @@
 , pcre
 , pkgconfig
 , pugixml
-, stdenv
+, lib, stdenv
 , swig
 , vips
 }:
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     "-DBUNDLED_GEXIV2=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fully non-destructive photo retouching program providing a complete RAW image editing workflow";
     homepage = "https://aferrero2707.github.io/PhotoFlow/";
     license = licenses.gpl3Plus;

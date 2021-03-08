@@ -1,4 +1,4 @@
-{ stdenv }:
+{ lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "wooting-udev-rules";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     install -Dpm644 $src $out/lib/udev/rules.d/70-wooting.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wooting.helpscoutdocs.com/article/34-linux-udev-rules";
     description = "udev rules that give NixOS permission to communicate with Wooting keyboards";
     platforms = platforms.linux;

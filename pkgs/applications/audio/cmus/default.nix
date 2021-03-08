@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
+{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
 , libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -39,7 +39,7 @@
 #, vtxSupport ? true, libayemu ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert samplerateSupport -> jackSupport;
 
@@ -120,13 +120,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
+    ++ lib.optional stdenv.cc.isClang clangGCC
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
     ++ flatten (concatMap (a: a.deps) opts);
 
   makeFlags = [ "LD=$(CC)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small, fast and powerful console music player for Linux and *BSD";
     homepage = "https://cmus.github.io/";
     license = licenses.gpl2;

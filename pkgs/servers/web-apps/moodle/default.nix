@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Free and open-source learning management system (LMS) written in PHP";
     license = licenses.gpl3Plus;

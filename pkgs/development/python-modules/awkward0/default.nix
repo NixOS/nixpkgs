@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "awkward0";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward-0.x";
     rev = version;
-    sha256 = "17zrw25h6g5m4ik1c5piqb7q2bxrshfm4hm3lzfz4s8gi0xjm5gz";
+    sha256 = "sha256-C6/byIGcabGjws5QI9sh5BO2M4Lhqkooh4mSjUEKCKU=";
   };
 
   nativeBuildInputs = [ pytestrunner ];

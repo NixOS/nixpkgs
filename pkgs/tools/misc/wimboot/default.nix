@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, libbfd, zlib, libiberty }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, libbfd, zlib, libiberty }:
 
 stdenv.mkDerivation rec {
   pname = "wimboot";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     cp wimboot.x86_64.efi $out/share/wimboot
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ipxe.org/wimboot";
     description = "Windows Imaging Format bootloader";
     license = licenses.gpl2;

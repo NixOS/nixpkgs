@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
+{ lib, stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
 
 stdenv.mkDerivation {
   name = "webalizer-2.23-05";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     "--enable-shared"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web server log file analysis program";
     homepage = "http://www.webalizer.org";
     platforms = platforms.unix;

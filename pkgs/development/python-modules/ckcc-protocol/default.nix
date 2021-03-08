@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ecdsa hidapi pyaes ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Communicate with your Coldcard using Python";
     homepage = "https://github.com/Coldcard/ckcc-protocol";
     license = licenses.gpl3;

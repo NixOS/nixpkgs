@@ -1,4 +1,4 @@
-{ stdenv, openssl, fetchFromGitHub }:
+{ lib, stdenv, openssl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "open-isns";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "iSNS server and client for Linux";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "https://github.com/gonzoleeman/open-isns";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

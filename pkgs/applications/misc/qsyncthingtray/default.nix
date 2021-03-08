@@ -53,8 +53,6 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://github.com/sieren/QSyncthingTray/";
     description = "A Traybar Application for Syncthing written in C++";

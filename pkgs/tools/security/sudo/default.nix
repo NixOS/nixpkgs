@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, pam, groff, sssd, nixosTests
+{ lib, stdenv, fetchurl, coreutils, pam, groff, sssd, nixosTests
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
 , withSssd ? false
@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.4p2";
+  version = "1.9.5p1";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    sha256 = "0r0g8z289ipw0zpkhmm33cpfm42j01jds2q1wilhh3flg7xg2jn3";
+    sha256 = "10kqdfbfpf3vk5ihz5gwynv4pxdf1lg6ircrlanyygb549yg7pad";
   };
 
   prePatch = ''
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
     "--enable-tmpfiles.d=no"
-  ] ++ stdenv.lib.optional withInsults [
+  ] ++ lib.optional withInsults [
     "--with-insults"
     "--with-all-insults"
-  ] ++ stdenv.lib.optional withSssd [
+  ] ++ lib.optional withSssd [
     "--with-sssd"
     "--with-sssd-lib=${sssd}/lib"
   ];
@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
 
     license = "https://www.sudo.ws/sudo/license.html";
 
-    maintainers = with stdenv.lib.maintainers; [ eelco delroth ];
+    maintainers = with lib.maintainers; [ eelco delroth ];
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

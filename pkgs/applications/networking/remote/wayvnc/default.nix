@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc
 , pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson pkg-config ninja scdoc wayland ];
   buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches

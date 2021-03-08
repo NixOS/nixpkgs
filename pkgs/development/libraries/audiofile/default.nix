@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   #
   # There might be a more sensible way to do this with autotools, but I am not
   # smart enough to discover it.
-  preBuild = lib.optionalString stdenv.targetPlatform.isStatic ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isStatic ''
     make -C libaudiofile $makeFlags
     sed -i "s/dependency_libs=.*/dependency_libs=' -lstdc++'/" libaudiofile/libaudiofile.la
   '';

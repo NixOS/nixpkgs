@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, autoreconfHook, pkgconfig, libusb1, hwdata , python3 }:
+{ lib, stdenv, fetchurl, substituteAll, autoreconfHook, pkgconfig, libusb1, hwdata , python3 }:
 
 stdenv.mkDerivation rec {
   name = "usbutils-012";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/lsusb.py" "$python"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.linux-usb.org/";
     description = "Tools for working with USB devices, such as lsusb";
     license = licenses.gpl2Plus;

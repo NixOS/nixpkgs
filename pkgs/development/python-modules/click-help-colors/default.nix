@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , click, pytest
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_help_colors" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Colorization of help messages in Click";
     homepage    = "https://github.com/r-m-n/click-help-colors";
     license     = licenses.mit;

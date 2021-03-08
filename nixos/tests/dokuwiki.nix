@@ -32,7 +32,7 @@ let
 
 in {
   name = "dokuwiki";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ _1000101 ];
   };
   machine = { ... }: {

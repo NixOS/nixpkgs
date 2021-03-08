@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , enum34, hpack, hyperframe, pytestCheckHook, hypothesis }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook hypothesis ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "http://hyper.rtfd.org/";
     license = licenses.mit;

@@ -1,6 +1,6 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , substituteAll
@@ -160,7 +160,7 @@ let
       pango
       tpm2-tss
       efivar
-    ] ++ stdenv.lib.optionals haveDell [
+    ] ++ lib.optionals haveDell [
       libsmbios
     ];
 
@@ -187,12 +187,12 @@ let
       # Our builder only adds $lib/lib to rpath but some things link
       # against libfwupdplugin which is in $out/lib.
       "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
-    ] ++ stdenv.lib.optionals (!haveDell) [
+    ] ++ lib.optionals (!haveDell) [
       "-Dplugin_dell=false"
       "-Dplugin_synaptics=false"
-    ] ++ stdenv.lib.optionals (!haveRedfish) [
+    ] ++ lib.optionals (!haveRedfish) [
       "-Dplugin_redfish=false"
-    ] ++ stdenv.lib.optionals haveFlashrom [
+    ] ++ lib.optionals haveFlashrom [
       "-Dplugin_flashrom=true"
     ];
 
@@ -250,12 +250,12 @@ let
         efibootmgr
         bubblewrap
         tpm2-tools
-      ] ++ stdenv.lib.optional haveFlashrom flashrom;
+      ] ++ lib.optional haveFlashrom flashrom;
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
         # See programs reached with fu_common_find_program_in_path in source
-        --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+        --prefix PATH : "${lib.makeBinPath binPath}"
       )
     '';
 
@@ -291,7 +291,7 @@ let
         "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
         "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
         "pki/fwupd-metadata/LVFS-CA.pem"
-      ] ++ stdenv.lib.optionals haveDell [
+      ] ++ lib.optionals haveDell [
         "fwupd/remotes.d/dell-esrt.conf"
       ];
 
@@ -302,7 +302,7 @@ let
       ];
 
       tests = let
-        listToPy = list: "[${stdenv.lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
+        listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
       in {
         installedTests = nixosTests.installed-tests.fwupd;
 
@@ -329,7 +329,7 @@ let
       };
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://fwupd.org/";
       maintainers = with maintainers; [ jtojnar ];
       license = licenses.lgpl21Plus;

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, gtk2, glib, gdk-pixbuf, alsaLib, nss, nspr, gconf
 , cups, libgcrypt_1_5, systemd, dbus, libXdamage, expat }:
-with stdenv.lib;
+with lib;
 
 let
   bracketsLibs = makeLibraryPath [

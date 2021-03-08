@@ -1,4 +1,4 @@
-{ lib, fetchurl, gettext, pkgconfig, texinfo, wrapGAppsHook
+{ lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook
 , buildPythonApplication, pycairo, pygobject3
 , gobject-introspection, gtk3, librsvg
 , alsaUtils, timidity, mpg123, vorbis-tools, csound, lilypond
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     ./webbrowser.patch
   ];
 
-  nativeBuildInputs = [ gettext pkgconfig texinfo wrapGAppsHook ];
+  nativeBuildInputs = [ gettext pkg-config texinfo wrapGAppsHook ];
   buildInputs = [ gobject-introspection gtk3 librsvg ];
   propagatedBuildInputs = [ pycairo pygobject3 ];
 

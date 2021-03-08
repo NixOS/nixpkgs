@@ -1,4 +1,4 @@
-{ stdenv, buildFHSUserEnv, fetchurl, makeWrapper, makeDesktopItem, libxslt, atk
+{ lib, stdenv, buildFHSUserEnv, fetchurl, makeWrapper, makeDesktopItem, libxslt, atk
 , fontconfig, freetype, gdk-pixbuf, glib, gtk2, libudev0-shim, libxml2
 , pango, pixman, libX11, libXext, libXinerama, libXrandr , libXrender
 , libXtst, libXcursor, libXi, libxkbfile , libXScrnSaver, zlib, liberation_ttf
@@ -70,7 +70,7 @@ in stdenv.mkDerivation {
     ln -s "${vmwareFHSUserEnv}/bin/vmware-view" "$out/bin/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows you to connect to your VMware Horizon virtual desktop";
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;

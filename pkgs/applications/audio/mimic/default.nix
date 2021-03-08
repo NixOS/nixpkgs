@@ -1,4 +1,4 @@
-{ config, stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
+{ config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
 , alsaLib, libtool, icu
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
 
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     alsaLib
     libtool
     icu
-  ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
+  ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
   meta = {
     description = "Mycroft's TTS engine, based on CMU's Flite (Festival Lite)";
     homepage = "https://mimic.mycroft.ai/";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.noneucat ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.noneucat ];
   };
 }

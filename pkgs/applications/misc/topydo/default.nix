@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
+{ lib, stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
 
 with python3Packages;
 
@@ -33,7 +33,7 @@ buildPythonApplication rec {
 
   LC_ALL="en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cli todo application compatible with the todo.txt format";
     homepage = "https://github.com/bram85/topydo";
     license = licenses.gpl3;

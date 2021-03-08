@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, mock }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, mock }:
 
 buildPythonPackage rec {
   pname = "cssutils";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # couple of failing tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python package to parse and build CSS";
     homepage = "http://cthedot.de/cssutils/";
     license = licenses.lgpl3Plus;

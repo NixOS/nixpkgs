@@ -1,4 +1,4 @@
-{ fetchFromGitHub, perl, stdenv }:
+{ fetchFromGitHub, perl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "sec-${meta.version}";
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://simple-evcorr.github.io";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     description = "Simple Event Correlator";
-    maintainers = [ stdenv.lib.maintainers.tv ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.tv ];
+    platforms = lib.platforms.all;
     version = "2.8.3";
   };
 }

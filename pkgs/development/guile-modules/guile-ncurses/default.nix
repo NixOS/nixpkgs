@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, guile, ncurses, libffi }:
+{ lib, stdenv, fetchurl, pkgconfig, guile, ncurses, libffi }:
 
 let
   name = "guile-ncurses-${version}";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   # XXX: 1 of 65 tests failed.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scheme interface to the NCurses libraries";
     longDescription = ''
       GNU Guile-Ncurses is a library for the Guile Scheme interpreter that

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytestrunner
 , configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing, importlib-metadata
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     py.test tests --ignore=tests/integration/test_checker.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code checking using pep8 and pyflakes";
     homepage = "https://pypi.python.org/pypi/flake8";
     license = licenses.mit;

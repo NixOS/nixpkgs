@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , ncurses }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
      ln -s tecoc Inspect )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A clone of the good old TECO editor";
     longDescription = ''
       For those who don't know: TECO is the acronym of Tape Editor and COrrector

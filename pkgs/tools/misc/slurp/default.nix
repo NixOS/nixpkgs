@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
 , cairo, libxkbcommon, wayland, wayland-protocols
 , buildDocs ? true, scdoc
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-  ] ++ stdenv.lib.optional buildDocs scdoc;
+  ] ++ lib.optional buildDocs scdoc;
 
   buildInputs = [
     cairo
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  mesonFlags = stdenv.lib.optional buildDocs "-Dman-pages=enabled";
+  mesonFlags = lib.optional buildDocs "-Dman-pages=enabled";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Select a region in a Wayland compositor";
     homepage = "https://github.com/emersion/slurp";
     license = licenses.mit;

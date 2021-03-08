@@ -12,7 +12,6 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake perl go ];
-  enableParallelBuilding = true;
 
   makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
 

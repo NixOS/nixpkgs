@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkgconfig, zlib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkg-config, zlib
 , darwin, libiconv, installShellFiles
 }:
 
@@ -26,9 +26,9 @@ buildRustPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig perl installShellFiles ];
+  nativeBuildInputs = [ cmake pkg-config perl installShellFiles ];
   buildInputs = [ zlib ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security ]
   ;
 
@@ -45,7 +45,7 @@ buildRustPackage rec {
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Replacement for 'ls' written in Rust";
     longDescription = ''
       exa is a modern replacement for ls. It uses colours for information by

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, runtimeShell, traceDeps ? false}:
+{ lib, stdenv, fetchurl, runtimeShell, traceDeps ? false, bash }:
 
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     rm $out/bin/steamdeps
-    ${stdenv.lib.optionalString traceDeps ''
+    ${lib.optionalString traceDeps ''
       cat > $out/bin/steamdeps <<EOF
       #!${runtimeShell}
       echo \$1 >> ${traceLog}
@@ -27,12 +27,18 @@ in stdenv.mkDerivation {
       chmod +x $out/bin/steamdeps
     ''}
 
+    # install udev rules
+    mkdir -p $out/etc/udev/rules.d/
+    cp ./subprojects/steam-devices/*.rules $out/etc/udev/rules.d/
+    substituteInPlace $out/etc/udev/rules.d/60-steam-input.rules \
+      --replace "/bin/sh" "${bash}/bin/bash"
+
     # this just installs a link, "steam.desktop -> /lib/steam/steam.desktop"
     rm $out/share/applications/steam.desktop
     sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A digital distribution platform";
     homepage = "http://store.steampowered.com/";
     license = licenses.unfreeRedistributable;

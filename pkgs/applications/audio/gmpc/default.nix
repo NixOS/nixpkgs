@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool, intltool, pkgconfig, glib
+{ lib, stdenv, fetchurl, libtool, intltool, pkgconfig, glib
 , gtk2, curl, mpd_clientlib, libsoup, gob2, vala, libunique
 , libSM, libICE, sqlite, hicolor-icon-theme, wrapGAppsHook
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libunique libmpd libSM libICE sqlite hicolor-icon-theme
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gmpclient.org";
     description = "A GTK2 frontend for Music Player Daemon";
     license = licenses.gpl2;

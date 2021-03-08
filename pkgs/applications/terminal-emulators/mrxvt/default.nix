@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXft, libXi, xorgproto, libSM, libICE
+{ lib, stdenv, fetchurl, libX11, libXft, libXi, xorgproto, libSM, libICE
 , freetype, pkgconfig, which }:
 
 stdenv.mkDerivation {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     sha256 = "1mqhmnlz32lvld9rc6c1hyz7gjw4anwf39yhbsjkikcgj1das0zl";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight multitabbed feature-rich X11 terminal emulator";
     longDescription = "
     	Multitabbed lightweight terminal emulator based on rxvt.

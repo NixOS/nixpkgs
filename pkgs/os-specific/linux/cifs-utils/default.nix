@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kerberos keyutils pam talloc ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "root_sbindir=$(out)/sbin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.samba.org/linux-cifs/cifs-utils/";
     description = "Tools for managing Linux CIFS client filesystems";
     platforms = platforms.linux;

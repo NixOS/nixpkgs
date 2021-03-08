@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, oauthlib }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, requests, oauthlib }:
 
 buildPythonPackage rec {
   pname = "discogs-client";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests oauthlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official Python API client for Discogs";
     license = licenses.bsd2;
     homepage = "https://github.com/discogs/discogs_client";

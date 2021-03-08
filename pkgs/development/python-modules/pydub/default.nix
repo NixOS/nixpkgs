@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, scipy, ffmpeg-full }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, scipy, ffmpeg-full }:
 
 buildPythonPackage rec {
   pname = "pydub";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     python test/test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manipulate audio with a simple and easy high level interface.";
     homepage    = "http://pydub.com/";
     license     = licenses.mit;

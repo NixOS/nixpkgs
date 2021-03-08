@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
+{ mkDerivation, lib, stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
 , qtbase, qtsvg, qttools, qtserialport, boost, libgit2
 }:
 
@@ -79,8 +79,8 @@ mkDerivation rec {
   meta = {
     description = "An open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.robberer ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.robberer ];
+    platforms = lib.platforms.linux;
   };
 }

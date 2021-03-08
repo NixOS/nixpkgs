@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, coverage, pytest, pytestcov }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, coverage, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "vulture";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ coverage pytest pytestcov ];
   checkPhase = "pytest";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Finds unused code in Python programs";
     homepage = "https://github.com/jendrikseipp/vulture";
     license = licenses.mit;

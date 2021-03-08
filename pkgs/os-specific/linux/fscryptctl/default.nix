@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 # Don't use this for anything important yet!
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)/bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A low-level tool that handles raw keys and manages policies for Linux
       filesystem encryption

@@ -87,7 +87,6 @@ stdenv.mkDerivation rec {
     "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
   ];
 
-  enableParallelBuilding = true;
   nativeBuildInputs =  [ cmake ];
 
   buildInputs = [ libGLU xlibsWrapper libXmu ]

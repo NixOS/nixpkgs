@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper, wrapGAppsHook
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, wrapGAppsHook
 
 # Buildtime dependencies.
 , check, pkgconfig, xxd
@@ -22,7 +22,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "netsurf";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     "TARGET=${uilib}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/";
     description = "A free, open source, small web browser";
     longDescription = ''

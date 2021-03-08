@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , trezor-udev-rules
@@ -19,8 +19,8 @@ buildGoModule rec {
 
   propagatedBuildInputs = [ trezor-udev-rules ];
 
-  meta = with stdenv.lib; {
-    description = "TREZOR Communication Daemon aka TREZOR Bridge";
+  meta = with lib; {
+    description = "Trezor Communication Daemon aka Trezor Bridge";
     homepage = "https://trezor.io";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ canndrew jb55 prusnak mmahut _1000101 ];

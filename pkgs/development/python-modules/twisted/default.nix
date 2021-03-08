@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   # Tests require network
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://twistedmatrix.com/";
     description = "Twisted, an event-driven networking engine written in Python";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "ijson";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   doCheck = false; # something about yajl
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Iterative JSON parser with a standard Python iterator interface";
     homepage = "https://github.com/ICRAR/ijson";
     license = licenses.bsd3;

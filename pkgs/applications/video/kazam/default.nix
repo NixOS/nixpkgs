@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
+{ lib, stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
 , gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio
 , fetchpatch }:
 
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A screencasting program created with design in mind";
     homepage = "https://code.launchpad.net/kazam";
     license = licenses.lgpl3;

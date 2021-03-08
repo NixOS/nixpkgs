@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
+{ lib, stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
 , lua, libGLU, libGL, pkgconfig, perl, autoreconfHook
 }:
 
@@ -67,9 +67,9 @@ stdenv.mkDerivation {
   meta = {
     description = "Free space simulation";
     homepage = "https://celestia.space/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

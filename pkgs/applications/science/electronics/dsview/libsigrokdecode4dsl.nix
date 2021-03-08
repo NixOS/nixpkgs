@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, autoreconfHook,
+{ lib, stdenv, pkgconfig, autoreconfHook,
 glib, check, python3, dsview
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     python3 glib check
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fork of the sigrokdecode library for usage with DSView";
     homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   pname = "flashbench";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     install -v -m644 README $out/share/doc/flashbench
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Testing tool for flash based memory devices";
     homepage = "https://github.com/bradfa/flashbench";
     platforms = platforms.linux;

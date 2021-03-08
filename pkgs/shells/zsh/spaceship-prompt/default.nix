@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "spaceship-prompt";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/site-functions/prompt_spaceship_setup"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Zsh prompt for Astronauts";
     homepage = "https://github.com/denysdovhan/spaceship-prompt/";
     license = licenses.mit;

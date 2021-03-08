@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , nose }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for CRCs and checksums";
     homepage = "https://bitbucket.org/martin_scharrer/crccheck";
     license = licenses.gpl3Plus;

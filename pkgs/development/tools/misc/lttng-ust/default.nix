@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liburcu, python }:
+{ stdenv, fetchurl, liburcu, python3 }:
 
 # NOTE:
 #   ./configure ...
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   preConfigure = ''
     patchShebangs .
   '';
-  
+
   propagatedBuildInputs = [ liburcu ];
 
   meta = with stdenv.lib; {

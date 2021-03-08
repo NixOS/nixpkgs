@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, qtbase,
+{ lib, stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, qtbase,
   kcoreaddons, kdoctools, ki18n, kio, kxmlgui, ktextwidgets,
   libksane
 }:
@@ -21,7 +21,7 @@ in mkDerivation rec {
     libksane
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "KDE simple image scanning application";
     homepage    = "http://www.kde.org/applications/graphics/skanlite/";
     license = licenses.gpl2;

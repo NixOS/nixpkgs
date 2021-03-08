@@ -6,11 +6,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.69";
+  name = "autoconf-2.70";
 
   src = fetchurl {
     url = "mirror://gnu/autoconf/${name}.tar.xz";
-    sha256 = "113nlmidxy9kjr45kg9x3ngar4951mvag1js2a3j8nxcz34wxsv4";
+    sha256 = "1ipckz0wr2mvhj9n3ys54fmf2aksin6bhqvzl304bn6rc1w257ps";
   };
 
   nativeBuildInputs = [ m4 perl ];
@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
   # There are many test failures on `i386-pc-solaris2.11'.
-  #doCheck = ((!stdenv.isCygwin) && (!stdenv.isSunOS));
-  doCheck = false;
+  doCheck = ((!stdenv.isCygwin) && (!stdenv.isSunOS));
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!
@@ -33,8 +32,6 @@ stdenv.mkDerivation rec {
   preCheck =''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
   '';
-
-  doInstallCheck = false; # fails
 
   meta = {
     homepage = "https://www.gnu.org/software/autoconf/";
@@ -50,7 +47,7 @@ stdenv.mkDerivation rec {
       can use, in the form of M4 macro calls.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
   };

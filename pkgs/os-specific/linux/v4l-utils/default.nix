@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     patchShebangs utils/libcecutil/cec-gen.pl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
     license = licenses.lgpl21Plus;

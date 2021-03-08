@@ -19,7 +19,7 @@ with lib;
 
 {
   name = "couchdb";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ fpletz ];
   };
 

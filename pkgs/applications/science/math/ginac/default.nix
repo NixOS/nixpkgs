@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cln, pkgconfig, readline, gmp, python }:
+{ lib, stdenv, fetchurl, cln, pkgconfig, readline, gmp, python }:
 
 stdenv.mkDerivation rec {
   name = "ginac-1.8.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ cln ];
 
-  buildInputs = [ readline ] ++ stdenv.lib.optional stdenv.isDarwin gmp;
+  buildInputs = [ readline ] ++ lib.optional stdenv.isDarwin gmp;
 
   nativeBuildInputs = [ pkgconfig python ];
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-rpath" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GiNaC is Not a CAS";
     homepage    = "http://www.ginac.de/";
     maintainers = with maintainers; [ lovek323 ];

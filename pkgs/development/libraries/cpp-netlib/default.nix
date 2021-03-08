@@ -12,13 +12,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ cmake boost openssl ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost openssl ];
 
   cmakeFlags = [
     "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
   ];
-
-  enableParallelBuilding = true;
 
   # The test driver binary lacks an RPath to the library's libs
   preCheck = ''

@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "libksane";
+  pname = "libksane";
   meta = with lib; {
     license = licenses.gpl2;
     maintainers = with maintainers; [ pshendry ];

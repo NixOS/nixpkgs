@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and Open Source messaging and emailing app that combines common web applications into one";
     homepage = "https://rambox.pro";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeDesktopItem
 , makeWrapper
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
       else throw "IPMIView is not supported on this platform";
     in
   ''
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/libawt_xawt.so
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ freetype ]}" ./jre/lib/amd64/libfontmanager.so
+    patchelf --set-rpath "${lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/libawt_xawt.so
+    patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/amd64/libfontmanager.so
     patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
   '';
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     # WORK_DIR: unfortunately the ikvm related binaries are loaded from
     #           and user configuration is written to files in the CWD
     makeWrapper $out/jre/bin/java $out/bin/IPMIView \
-      --set LD_LIBRARY_PATH "${stdenv.lib.makeLibraryPath [ fontconfig gcc-unwrapped.lib ]}" \
+      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ fontconfig gcc-unwrapped.lib ]}" \
       --prefix PATH : "$out/jre/bin:${iputils}/bin:${psmisc}/bin" \
       --add-flags "-jar $out/IPMIView20.jar" \
       --run 'WORK_DIR=''${XDG_DATA_HOME:-~/.local/share}/ipmiview
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
              cd $WORK_DIR'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.unfree;
     maintainers = with maintainers; [ vlaci ];
     platforms = [ "x86_64-linux" "i686-linux" ];

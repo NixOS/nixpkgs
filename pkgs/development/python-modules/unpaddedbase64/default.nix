@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0if3fjfxga0bwdq47v77fs9hrcqpmwdxry2i2a7pdqsp95258nxd";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/matrix-org/python-unpaddedbase64";
     description = "Unpadded Base64";
     license = licenses.asl20;

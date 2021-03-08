@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
   # Based on testing this issue seems to only occur with clang_7, so
   # please remove this when updating the default llvm versions to 8 or
   # later.
-  buildPhase = stdenv.lib.optionalString true ''
+  buildPhase = lib.optionalString true ''
     for i in {1..512}; do
         if ninja -j $NIX_BUILD_CORES; then
             break

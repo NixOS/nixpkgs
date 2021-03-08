@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
 , astring, fmt, fpath, logs, rresult
 }:
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 	meta = {
 		description = "Basic OS interaction for OCaml";
 		homepage = "https://erratique.ch/software/bos";
-		license = stdenv.lib.licenses.isc;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.isc;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (ocaml.meta) platforms;
 	};
 }

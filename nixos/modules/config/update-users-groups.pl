@@ -227,6 +227,15 @@ foreach my $u (@{$spec->{users}}) {
         $u->{hashedPassword} = hashPassword($u->{password});
     }
 
+    if (!defined $u->{shell}) {
+        if (defined $existing) {
+            $u->{shell} = $existing->{shell};
+        } else {
+            warn "warning: no declarative or previous shell for ‘$name’, setting shell to nologin\n";
+            $u->{shell} = "/run/current-system/sw/bin/nologin";
+        }
+    }
+
     $u->{fakePassword} = $existing->{fakePassword} // "x";
     $usersOut{$name} = $u;
 

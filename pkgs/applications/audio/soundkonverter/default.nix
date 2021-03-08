@@ -62,7 +62,7 @@ mkDerivation rec {
       stripLen = 1;
     })
   ];
-  enableParallelBuilding = true;
+
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig kdelibs4support makeWrapper ];
   propagatedBuildInputs = [ libkcddb kconfig kconfigwidgets ki18n kdelibs4support kio solid kwidgetsaddons kxmlgui qtbase phonon];
   buildInputs = [ taglib ] ++ runtimeDeps;

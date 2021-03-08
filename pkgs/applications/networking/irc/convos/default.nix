@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, shortenPerlShebang
+{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, shortenPerlShebang
 , nixosTests
 }:
 
-with stdenv.lib;
+with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
@@ -71,7 +71,7 @@ perlPackages.buildPerlPackage rec {
   meta = {
     homepage = "https://convos.chat";
     description = "Convos is the simplest way to use IRC in your browser";
-    license = stdenv.lib.licenses.artistic2;
+    license = lib.licenses.artistic2;
     maintainers = with maintainers; [ sgo ];
   };
 }

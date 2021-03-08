@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, guile, buildEnv
+{ lib, stdenv, fetchurl, pkgconfig, guile, buildEnv
 , SDL, SDL_image, SDL_ttf, SDL_mixer
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     };
   in [ "SDLMINUSI=-I${sdl}/include/SDL" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Guile bindings for SDL";
     homepage = "https://www.gnu.org/software/guile-sdl/";
     license = licenses.gpl3Plus;

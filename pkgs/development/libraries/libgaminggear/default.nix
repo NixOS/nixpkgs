@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     gtk2 libcanberra libnotify pcre sqlite xorg.libXdmcp xorg.libpthreadstubs
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DINSTALL_CMAKE_MODULESDIR=lib/cmake"
     "-DINSTALL_PKGCONFIGDIR=lib/pkgconfig"

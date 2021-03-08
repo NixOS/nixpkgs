@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkg-config
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
 , python3, gss, libmysqlclient, system-sendmail }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook gettext pkgconfig
+    autoreconfHook gettext pkg-config
   ];
 
   buildInputs = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     unset LD_LIBRARY_PATH
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''

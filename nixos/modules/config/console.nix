@@ -145,7 +145,8 @@ in
         '';
 
         systemd.services.systemd-vconsole-setup =
-          { before = [ "display-manager.service" ];
+          {
+            before = optional config.services.xserver.enable "display-manager.service";
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf consoleEnv ];
           };

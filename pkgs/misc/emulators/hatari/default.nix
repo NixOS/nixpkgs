@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, SDL, cmake }:
+{ lib, stdenv, fetchurl, zlib, SDL, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "hatari";
@@ -12,13 +12,14 @@ stdenv.mkDerivation rec {
   # For pthread_cancel
   cmakeFlags = [ "-DCMAKE_EXE_LINKER_FLAGS=-lgcc_s" ];
 
-  buildInputs = [ zlib SDL cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib SDL ];
 
   meta = {
     homepage = "http://hatari.tuxfamily.org/";
     description = "Atari ST/STE/TT/Falcon emulator";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
 }

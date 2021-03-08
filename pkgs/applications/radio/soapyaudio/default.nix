@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , hamlib, rtaudio, alsaLib, libpulseaudio, libjack2, libusb1, soapysdr
 } :
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-DUSE_HAMLIB=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pothosware/SoapyAudio";
     description = "SoapySDR plugin for amateur radio and audio devices";
     license = licenses.mit;

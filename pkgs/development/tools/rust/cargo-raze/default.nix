@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform
+{ lib, stdenv, fetchFromGitHub, rustPlatform
 , pkgconfig, curl, libgit2, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";
     homepage = "https://github.com/google/cargo-raze";
     license = licenses.asl20;

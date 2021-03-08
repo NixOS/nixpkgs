@@ -65,6 +65,6 @@ haskellPackages.callPackage
      testHaskellDepends = [HUnit] ++ libraryHaskellDepends;
      homepage = "https://github.com/olivierverdier/zsh-git-prompt#readme";
      description = "Informative git prompt for zsh";
-     license = stdenv.lib.licenses.mit;
+     license = lib.licenses.mit;
      maintainers = [lib.maintainers.league];
    }) {}

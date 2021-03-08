@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mfcj470dwlpr, makeWrapper}:
+{ lib, stdenv, fetchurl, mfcj470dwlpr, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj470dw-cupswrapper";
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J470DW CUPS wrapper driver";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj470dw_us_eu_as&os=128";
-    maintainers = [ stdenv.lib.maintainers.yochai ];
+    maintainers = [ lib.maintainers.yochai ];
   };
 }

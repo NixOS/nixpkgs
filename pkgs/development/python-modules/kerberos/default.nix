@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , kerberos
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kerberos high-level interface";
     homepage = "https://pypi.python.org/pypi/kerberos";
     license = licenses.asl20;

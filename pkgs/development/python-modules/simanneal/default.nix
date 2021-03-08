@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "simanneal";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   checkPhase = "pytest tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python implementation of the simulated annealing optimization technique";
     homepage = "https://github.com/perrygeo/simanneal";
     license = licenses.isc;

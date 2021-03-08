@@ -1,4 +1,4 @@
-{ stdenv, makeDesktopItem, fetchurl, jdk11, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk11, wrapGAppsHook, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     categories = "Office;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       homepage = "https://github.com/torakiki/pdfsam";
       description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
       license = licenses.agpl3;

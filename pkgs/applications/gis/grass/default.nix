@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   name = "grass";
   version = "7.6.1";
 
-  src = with stdenv.lib; fetchFromGitHub {
+  src = with lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = "${name}_${replaceStrings ["."] ["_"] version}";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
-  makeFlags = stdenv.lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+  makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://grass.osgeo.org/";
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [mpickering];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [mpickering];
   };
 }

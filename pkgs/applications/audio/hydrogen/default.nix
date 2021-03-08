@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook
 , alsaLib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
 , qtbase, qttools, qtxmlpatterns
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "-DWANT_DEBUG=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2;

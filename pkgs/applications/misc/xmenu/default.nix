@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, imlib2, libX11, libXft, libXinerama }:
+{ lib, stdenv, fetchFromGitHub, imlib2, libX11, libXft, libXinerama }:
 
 stdenv.mkDerivation rec {
   pname = "xmenu";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "sed -i \"s:/usr/local:$out:\" config.mk";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A menu utility for X";
     homepage = "https://github.com/phillbush/xmenu";
     license = licenses.mit;

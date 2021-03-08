@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , dask
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # hardcoded mpirun path in tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dask/dask-mpi";
     description = "Deploy Dask using mpi4py";
     license = licenses.bsd3;

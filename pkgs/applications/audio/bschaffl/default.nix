@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, cairo, libX11, lv2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cairo, libX11, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "bschaffl";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sjaehn/BSchaffl";
     description = "Pattern-controlled MIDI amp & time stretch LV2 plugin";
     maintainers = [ maintainers.magnetophon ];

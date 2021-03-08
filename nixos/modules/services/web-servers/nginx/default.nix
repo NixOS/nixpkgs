@@ -27,6 +27,33 @@ let
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
+  defaultFastcgiParams = {
+    SCRIPT_FILENAME   = "$document_root$fastcgi_script_name";
+    QUERY_STRING      = "$query_string";
+    REQUEST_METHOD    = "$request_method";
+    CONTENT_TYPE      = "$content_type";
+    CONTENT_LENGTH    = "$content_length";
+
+    SCRIPT_NAME       = "$fastcgi_script_name";
+    REQUEST_URI       = "$request_uri";
+    DOCUMENT_URI      = "$document_uri";
+    DOCUMENT_ROOT     = "$document_root";
+    SERVER_PROTOCOL   = "$server_protocol";
+    REQUEST_SCHEME    = "$scheme";
+    HTTPS             = "$https if_not_empty";
+
+    GATEWAY_INTERFACE = "CGI/1.1";
+    SERVER_SOFTWARE   = "nginx/$nginx_version";
+
+    REMOTE_ADDR       = "$remote_addr";
+    REMOTE_PORT       = "$remote_port";
+    SERVER_ADDR       = "$server_addr";
+    SERVER_PORT       = "$server_port";
+    SERVER_NAME       = "$server_name";
+
+    REDIRECT_STATUS   = "200";
+  };
+
   recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -179,6 +206,12 @@ let
       ${cfg.httpConfig}
     }''}
 
+    ${optionalString (cfg.streamConfig != "") ''
+    stream {
+      ${cfg.streamConfig}
+    }
+    ''}
+
     ${cfg.appendConfig}
   '';
 
@@ -283,6 +316,10 @@ let
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
       ''}
+      ${concatStringsSep "\n"
+        (mapAttrsToList (n: v: ''fastcgi_param ${n} "${v}";'')
+          (optionalAttrs (config.fastcgiParams != {})
+            (defaultFastcgiParams // config.fastcgiParams)))}
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
@@ -449,6 +486,21 @@ in
           This is mutually exclusive with the structured configuration
           via virtualHosts and the recommendedXyzSettings configuration
           options. See appendHttpConfig for appending to the generated http block.
+        ";
+      };
+
+      streamConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          server {
+            listen 127.0.0.1:53 udp reuseport;
+            proxy_timeout 20s;
+            proxy_pass 192.168.0.1:53535;
+          }
+        '';
+        description = "
+          Configuration lines to be set inside the stream block.
         ";
       };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, guile, texinfo }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, guile, texinfo }:
 
 let
   version = "1.0.0";
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   autoreconfPhase = "./autogen.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Concurrent ML-like concurrency for Guile";
     homepage = "https://github.com/wingo/fibers";
     license = licenses.lgpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, makeWrapper, libXpm
+{ lib, stdenv, fetchurl, xlibsWrapper, makeWrapper, libXpm
 , libXmu, libXi, libXp, Xaw3d, fig2dev
 }:
 
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ xlibsWrapper libXpm libXmu libXi libXp Xaw3d ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive drawing tool for X11";
     longDescription = ''
       Note that you need to have the <literal>netpbm</literal> tools

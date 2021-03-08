@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libseccomp
 , perl
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       --replace which ${which}/bin/which
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Start Linux programs with only selected syscalls enabled";
     homepage    = "https://github.com/vi/syscall_limiter";
     license     = licenses.mit;

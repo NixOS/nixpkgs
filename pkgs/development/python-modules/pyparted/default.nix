@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , isPyPy
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     make test PYTHON=${python.executable}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dcantrell/pyparted/";
     description = "Python interface for libparted";
     license = licenses.gpl2Plus;

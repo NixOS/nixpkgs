@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , bzip2
 , cmake
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     xlibsWrapper
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://voxelands.net/";
     description = "Infinite-world block sandbox game based on Minetest";
     license = licenses.gpl3Plus;

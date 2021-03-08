@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoconf
 , automake
 , libtool
@@ -27,11 +27,11 @@ stdenv.mkDerivation {
       intltool
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monitor database for DDCcontrol";
     homepage = "https://github.com/ddccontrol/ddccontrol-db";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.pakhfn ];
+    maintainers = [ lib.maintainers.pakhfn ];
   };
 }

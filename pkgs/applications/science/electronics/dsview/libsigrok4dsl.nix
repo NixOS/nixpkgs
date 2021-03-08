@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, autoreconfHook,
+{ lib, stdenv, pkgconfig, autoreconfHook,
 glib, libzip, libserialport, check, libusb1, libftdi,
 systemd, alsaLib, dsview
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     glib libzip libserialport libusb1 libftdi systemd check alsaLib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fork of the sigrok library for usage with DSView";
     homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;

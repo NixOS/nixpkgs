@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/opt/pencil
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI prototyping/mockup tool";
     homepage    = "https://pencil.evolus.vn/";
     license     = licenses.gpl2; # Commercial license is also available

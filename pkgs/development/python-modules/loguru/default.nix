@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, colorama, pytestCheckHook }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, colorama, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "loguru";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_time_rotation_reopening" "test_file_buffering" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" "test_await_complete_inheritance" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Delgan/loguru";
     description = "Python logging made (stupidly) simple";
     license = licenses.mit;

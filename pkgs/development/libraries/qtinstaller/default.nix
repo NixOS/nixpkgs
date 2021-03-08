@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''Qt installer framework'';
+    description = "Qt installer framework";
     inherit (qtbase.meta) platforms license homepage;
   };
 }

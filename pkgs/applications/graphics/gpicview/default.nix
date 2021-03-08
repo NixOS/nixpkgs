@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk2, fetchpatch }:
+{ lib, stdenv, fetchurl, intltool, pkgconfig, gtk2, fetchpatch }:
 
 stdenv.mkDerivation {
   name = "gpicview-0.2.4";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and fast image viewer for X";
     homepage    = "http://lxde.sourceforge.net/gpicview/";
     repositories.git = "git://lxde.git.sourceforge.net/gitroot/lxde/gpicview";

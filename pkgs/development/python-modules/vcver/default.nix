@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # circular dependency on test tool uranium https://pypi.org/project/uranium/
   doCheck = false;
 
-  pythonImportTests = [ "vcver" ];
+  pythonImportsCheck = [ "vcver" ];
 
   meta = with lib; {
     description = "Reference Implementation of vcver";

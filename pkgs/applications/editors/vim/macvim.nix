@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runCommand, ncurses, gettext
+{ lib, stdenv, fetchFromGitHub, runCommand, ncurses, gettext
 , pkgconfig, cscope, ruby, tcl, perl, luajit
 , darwin
 
@@ -175,7 +175,7 @@ stdenv.mkDerivation {
     (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vim - the text editor - for macOS";
     homepage    = "https://github.com/macvim-dev/macvim";
     license = licenses.vim;

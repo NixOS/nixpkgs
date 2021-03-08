@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, java, runtimeShell }:
+{ lib, stdenv, fetchurl, java, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "jbidwatcher";
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
       binary.
     '';
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

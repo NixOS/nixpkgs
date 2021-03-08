@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , intltool
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , adwaita-icon-theme
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     unzip
@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper, pkg-config
 , zlib, lzma, bzip2, mtools, dosfstools, zip, unzip, libconfuse, libsodium
 , libarchive, darwin, coreutils }:
 
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   patches = lib.optional stdenv.isDarwin [ ./fix-testrunner-darwin.patch ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper ];
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
   buildInputs = [ zlib lzma bzip2 libconfuse libsodium libarchive ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.DiskArbitration
     ];
   propagatedBuildInputs = [ zip unzip mtools dosfstools coreutils ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = "https://github.com/fhunleth/fwup";
     license = licenses.asl20;

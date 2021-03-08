@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libsigrok, libsigrokdecode }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, libsigrok, libsigrokdecode }:
 
 stdenv.mkDerivation rec {
   name = "sigrok-cli-0.7.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libsigrok libsigrokdecode ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line frontend for the sigrok signal analysis software suite";
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;

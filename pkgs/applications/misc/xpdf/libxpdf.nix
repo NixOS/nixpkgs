@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 }:
 
 stdenv.mkDerivation {
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     cp -v xpdf/*.h $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

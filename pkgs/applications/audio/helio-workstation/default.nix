@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , alsaLib, freetype, xorg, curl, libGL, libjack2, gnome3
 , pkgconfig, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "3.1";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "10pna4k43g648gapviykq2zk82iwy5rqff4lbfh5vzxqpg5v4ma6";
+    sha256 = "sha256-meeNqV1jKUwWc7P3p/LicPsbpzpKKFmQ1wP9DuXc9NY=";
   };
 
   buildInputs = [
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/helio" "$out/bin/Helio"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "One music sequencer for all major platforms, both desktop and mobile";
     homepage = "https://helio.fm/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.suhr ];
     platforms = [ "x86_64-linux" ];
   };

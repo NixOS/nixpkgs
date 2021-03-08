@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "arpa2";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "CMake Module library for the ARPA2 project";

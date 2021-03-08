@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , fetchFromGitLab
 , cmake
-, pkgconfig
+, pkg-config
 , opencv3
 , openexr
 , graphicsmagick
@@ -109,7 +109,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

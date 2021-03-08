@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ lib, stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "dstat";
@@ -16,7 +16,7 @@ python2Packages.buildPythonApplication rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dag.wieers.com/home-made/dstat/";
     description = "Versatile resource statistics tool";
     license = licenses.gpl2;

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, python3
+{ lib, stdenv, fetchFromGitHub, python3
 , libsepol, libselinux, checkpolicy
 , withGraphics ? false
 }:
 
-with stdenv.lib;
+with lib;
 with python3.pkgs;
 
 buildPythonApplication rec {
@@ -30,7 +30,7 @@ buildPythonApplication rec {
   setupPyBuildFlags = [ "-i" ];
 
   preBuild = ''
-    export SEPOL="${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    export SEPOL="${lib.getLib libsepol}/lib/libsepol.a"
   '';
 
   meta = {

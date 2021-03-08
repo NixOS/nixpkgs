@@ -1,5 +1,6 @@
 { stdenv, fetchurl
-, staticSupport ? false # Compile statically (support for packages that look for the static object)
+, # Compile statically (support for packages that look for the static object)
+  staticSupport ? stdenv.hostPlatform.isStatic
 }:
 
 let

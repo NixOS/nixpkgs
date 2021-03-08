@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , libxml2, gettext, itstool, meson, ninja, python3
 , vala, desktop-file-utils
 }:
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tetravex/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "06wihvqp2p52zd2dnknsc3rii69qib4a30yp15h558xrg44z3k8z";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     wrapGAppsHook itstool libxml2 gnome3.adwaita-icon-theme
-    pkgconfig gettext meson ninja python3 vala desktop-file-utils
+    pkg-config gettext meson ninja python3 vala desktop-file-utils
   ];
   buildInputs = [
     gtk3
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Tetravex";
     description = "Complete the puzzle by matching numbered tiles";
     maintainers = teams.gnome.members;

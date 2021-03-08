@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

@@ -31,8 +31,6 @@ mkDerivation {
     sha256 = "04585hdh98fvyhj4wsxf69xal2wvfa6lg76gad8pr6ww9abi5105";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
     guile_1_8

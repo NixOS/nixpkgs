@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytest test --ignore test/remote/test_remote.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Tools for Robot Framework and Test Libraries";
     homepage = "https://bitbucket.org/userzimmermann/robotframework-tools";
     license = licenses.gpl3;

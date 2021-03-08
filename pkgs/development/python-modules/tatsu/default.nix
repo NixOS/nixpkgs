@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , colorama, mypy, pyyaml, regex
 , dataclasses, typing
 , pytestrunner, pytest-mypy
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytest test/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generates Python parsers from grammars in a variation of EBNF";
     longDescription = ''
       TatSu (the successor to Grako) is a tool that takes grammars in a

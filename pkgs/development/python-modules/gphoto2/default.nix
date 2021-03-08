@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , pkgconfig
 , libgphoto2 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   doCheck = false; # No tests available
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python interface to libgphoto2";
     homepage = "https://github.com/jim-easterbrook/python-gphoto2";
     license = licenses.gpl3;

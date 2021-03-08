@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXaw }:
+{ lib, stdenv, fetchurl, libX11, libXaw }:
 
 stdenv.mkDerivation rec {
   name = "xbomb-2.2b";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     "INSTDIR=${placeholder ''out''}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.gedanken.org.uk/software/xbomb/";
     description = "Minesweeper for X11 with various grid sizes and shapes";
     license = licenses.gpl2Plus;

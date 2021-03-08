@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebSockets support for any application/server";
     homepage = "https://github.com/kanaka/websockify";
     license = licenses.lgpl3;

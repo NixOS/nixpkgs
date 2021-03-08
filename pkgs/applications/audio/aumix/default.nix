@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext, ncurses
+{lib, stdenv, fetchurl, gettext, ncurses
 , gtkGUI ? false
 , pkgconfig ? null
 , gtk2 ? null}:
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
       the command line or a script.
     '';
     homepage = "http://www.jpj.net/~trevor/aumix.html";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
 , libdaemon, popt, pkgconfig, libconfig, libpulseaudio, soxr }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Airtunes server and emulator with multi-room capabilities";
     license = licenses.mit;

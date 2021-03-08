@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, autoreconfHook
 , rlwrap ? null, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
 }:
 
@@ -7,8 +7,8 @@ let
   version = "5.44.0";
 
   searchPath =
-    stdenv.lib.makeBinPath
-      (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
+    lib.makeBinPath
+      (lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
 in
 stdenv.mkDerivation ({
   inherit version;
@@ -21,7 +21,7 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = stdenv.lib.filter (x: x != null) [
+  buildInputs = lib.filter (x: x != null) [
     sbcl ecl texinfo perl python makeWrapper
     gnuplot   # required in the test suite
   ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation ({
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (stdenv.lib.optionalString ecl-fasl ''
+   + (lib.optionalString ecl-fasl ''
      cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
    '')
   ;
@@ -63,7 +63,7 @@ stdenv.mkDerivation ({
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/undoing_true_false_printing_patch.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0fvi3rcjv6743sqsbgdzazy9jb6r1p1yq63zyj9fx42wd1hgf7yx";
     })
-  ] ++ stdenv.lib.optionals ecl-fasl [
+  ] ++ lib.optionals ecl-fasl [
     # build fasl, needed for ECL support
     (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/maxima.system.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
@@ -94,7 +94,7 @@ stdenv.mkDerivation ({
   meta = {
     description = "Computer algebra system";
     homepage = "http://maxima.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in
@@ -103,7 +103,7 @@ stdenv.mkDerivation ({
       symbolic integration, 3D plotting, and an ODE solver.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.peti ];
   };
 })

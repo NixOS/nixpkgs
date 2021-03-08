@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "hddtemp-0.3_beta15";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       ./configure --prefix=$out --with-db-path=$out/nix-support/hddtemp.db
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for displaying hard disk temperature";
     homepage = "https://savannah.nongnu.org/projects/hddtemp/";
     license = licenses.gpl2Plus;

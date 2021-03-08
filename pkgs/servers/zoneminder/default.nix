@@ -159,8 +159,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DWITH_SYSTEMD=ON"
     "-DZM_LOGDIR=/var/log/${dirName}"
@@ -196,7 +194,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
     license = licenses.gpl3;

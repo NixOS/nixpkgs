@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage, ncurses, gettext, pkgconfig
+{ lib, stdenv, fetchurl, callPackage, ncurses, gettext, pkgconfig
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
@@ -19,12 +19,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "vim_cv_toupper_broken=no"
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"

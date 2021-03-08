@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, zlib
+{ lib, stdenv, fetchgit, fetchpatch, zlib
 , gnutlsSupport ? false, gnutls ? null, nettle ? null
 , opensslSupport ? true, openssl ? null
 }:
@@ -8,7 +8,7 @@ assert (gnutlsSupport || opensslSupport);
 assert gnutlsSupport -> gnutlsSupport != null && nettle != null && !opensslSupport;
 assert opensslSupport -> openssl != null && !gnutlsSupport;
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation {
   pname = "rtmpdump";
   version = "2019-03-30";

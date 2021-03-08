@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake docbook_xml_dtd_45 docbook_xml_dtd_45 docbook_xsl doxygen pkg-config wrapQtAppsHook
   ];

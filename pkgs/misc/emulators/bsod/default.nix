@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses}:
+{lib, stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation {
   name = "bsod-0.1";
@@ -23,9 +23,9 @@ stdenv.mkDerivation {
       blue screen of death on the console.  Errors and drivers causing the
       error are selected randomly from a large set of examples.";
     homepage = "http://www.vanheusden.com/bsod/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.antono ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.antono ];
   };
 
 }

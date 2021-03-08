@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 }:
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1p18926pfff1yayb2i28v0nz37j52hqqv7244yfrzgidi29kyvbc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A human-friendly and fast alternative to cut and (sometimes) awk";
     homepage = "https://github.com/theryangeary/choose";
     license = licenses.gpl3;

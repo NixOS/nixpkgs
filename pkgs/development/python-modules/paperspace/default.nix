@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , boto3, requests, gradient_statsd, terminaltables
 , click-completion , click-didyoumean, click-help-colors
 , colorama, requests_toolbelt, gradient_sdk, progressbar2
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # tries to use /homeless-shelter to mimic container usage, etc
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python API for Paperspace Cloud";
     homepage    = "https://paperspace.com";
     license     = licenses.isc;

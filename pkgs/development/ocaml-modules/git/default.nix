@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildDunePackage
+{ stdenv, lib, fetchurl, buildDunePackage
 , alcotest, mtime, mirage-crypto-rng, tls, git-binary
 , angstrom, astring, cstruct, decompress, digestif, encore, duff, fmt, checkseum
 , fpath, hex, ke, logs, lru, ocaml_lwt, ocamlgraph, ocplib-endian, uri, rresult
@@ -24,7 +24,7 @@ buildDunePackage rec {
 	checkInputs = [ alcotest mtime mirage-crypto-rng tls git-binary ];
 	doCheck = !stdenv.isAarch64;
 
-	meta = with stdenv; {
+	meta = {
 		description = "Git format and protocol in pure OCaml";
 		license = lib.licenses.isc;
 		maintainers = [ lib.maintainers.vbgl ];

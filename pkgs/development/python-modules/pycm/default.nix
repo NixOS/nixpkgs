@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, numpy, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "pycm";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytest Test/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiclass confusion matrix library";
     homepage = "https://pycm.ir";
     license = licenses.mit;

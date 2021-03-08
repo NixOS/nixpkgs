@@ -18,7 +18,8 @@ buildPythonPackage rec {
 
   preConfigure = ''
     substituteInPlace setup.py \
-      --replace 'requests>=2.24.0' 'requests~=2.23'
+      --replace 'requests>=2.24.0' 'requests~=2.23' \
+      --replace 'flask-cors==3.0.8' 'flask-cors'
   '';
 
   checkPhase = ''
@@ -27,7 +28,9 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook mock ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "SwSpotify" ];
+
+  meta = with lib; {
     homepage = "https://github.com/SwagLyrics/SwSpotify";
     description = "Library to get the currently playing song and artist from Spotify";
     license = licenses.mit;

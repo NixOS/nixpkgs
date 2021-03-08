@@ -1,4 +1,6 @@
-{ brotli, cmake, pkgconfig, fetchFromGitHub, stdenv, static ? false }:
+{ brotli, cmake, pkgconfig, fetchFromGitHub, lib, stdenv
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "woff2";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     sed 's@^if (NOT BUILD_SHARED_LIBS)$@if (TRUE)@g' -i CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Webfont compression reference code";
     homepage = "https://github.com/google/woff2";
     license = licenses.mit;

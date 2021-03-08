@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , libhandy_0
 , modemmanager
 , gtk3
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     desktop-file-utils
     vala
     wrapGAppsHook
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A phone dialer and call handler";
     homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;

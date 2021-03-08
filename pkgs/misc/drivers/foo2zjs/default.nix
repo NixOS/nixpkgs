@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, foomatic-filters, bc, unzip, ghostscript, systemd, vim, time }:
+{ lib, stdenv, fetchurl, foomatic-filters, bc, unzip, ghostscript, systemd, vim, time }:
 
 stdenv.mkDerivation rec {
   name = "foo2zjs-20180519";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp -v getweb arm2hpdl "$out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ZjStream printer drivers";
     maintainers = with maintainers;
     [

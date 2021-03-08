@@ -1,4 +1,4 @@
-{stdenv, fetchurl, sconsPackages, boost, ladspaH, pkgconfig }:
+{lib, stdenv, fetchurl, sconsPackages, boost, ladspaH, pkgconfig }:
 
 stdenv.mkDerivation {
   version = "0.2-2";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sed -i "s/= check/= detail::filter_base<internal_type, checked>::check/" nova/source/dsp/filter.hpp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LADSPA plugins based on filters of nova";
     homepage = "http://klingt.org/~tim/nova-filters/";
     license = licenses.gpl2Plus;

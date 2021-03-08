@@ -22,7 +22,7 @@ let
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = modulesTree;
     firmware = firmware;
-    allowMissing = true;
+    allowMissing = false;
   };
 
 
@@ -513,7 +513,12 @@ in
     };
 
     boot.initrd.compressor = mkOption {
-      default = "gzip";
+      default = (
+        if lib.versionAtLeast config.boot.kernelPackages.kernel.version "5.9"
+        then "zstd"
+        else "gzip"
+      );
+      defaultText = "zstd if the kernel supports it (5.9+), gzip if not.";
       type = types.unspecified; # We don't have a function type...
       description = ''
         The compressor to use on the initrd image. May be any of:

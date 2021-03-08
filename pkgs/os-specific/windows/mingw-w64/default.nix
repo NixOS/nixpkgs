@@ -25,6 +25,6 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "stackprotector" "fortify" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.windows;
+    platforms = lib.platforms.windows;
   };
 }

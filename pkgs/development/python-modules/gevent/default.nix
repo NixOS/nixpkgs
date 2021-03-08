@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet
+{ lib, stdenv, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet
 , zope_interface
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # Bunch of failures.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
     license = licenses.mit;

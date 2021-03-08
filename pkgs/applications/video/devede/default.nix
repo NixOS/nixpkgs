@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, python3Packages, ffmpeg_3, mplayer, vcdimager, cdrkit, dvdauthor
+{ lib, stdenv, fetchFromGitLab, python3Packages, ffmpeg_3, mplayer, vcdimager, cdrkit, dvdauthor
 , gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
 
 let
@@ -44,7 +44,7 @@ in buildPythonApplication rec {
       --replace "/usr/local/share" "$out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DVD Creator for Linux";
     homepage = "http://www.rastersoft.com/programas/devede.html";
     license = licenses.gpl3;

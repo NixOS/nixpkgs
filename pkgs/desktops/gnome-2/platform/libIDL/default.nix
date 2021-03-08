@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex, bison, pkgconfig, glib, gettext}:
+{stdenv, fetchurl, flex, bison, pkg-config, glib, gettext}:
 
 stdenv.mkDerivation rec {
   name = "libIDL-${minVer}.14";
@@ -11,5 +11,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib gettext ];
 
-  nativeBuildInputs = [ flex bison pkgconfig ];
+  nativeBuildInputs = [ flex bison pkg-config ];
 }

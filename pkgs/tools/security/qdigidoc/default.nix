@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
+{ lib, stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkg-config
 , libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
 
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
     sha256 = "0llr2fj8vd097hcr1d0xmzdy4jydv0b5j5qlksbjffs22rqgal14";
   };
 
-  nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkg-config ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -40,7 +40,7 @@ mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;

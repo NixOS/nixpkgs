@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nixosTests
 , substituteAll, gd, geoip, perl
 , withDebug ? false
@@ -22,7 +22,7 @@
 , meta ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
 

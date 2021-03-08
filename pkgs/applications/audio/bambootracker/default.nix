@@ -1,5 +1,5 @@
 { mkDerivation
-, stdenv
+, lib, stdenv
 , fetchFromGitHub
 , qmake
 , qtbase
@@ -13,7 +13,7 @@
 }:
 let
 
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
 in
 mkDerivation rec {
@@ -40,7 +40,7 @@ mkDerivation rec {
     ++ optional pulseSupport "CONFIG+=use_pulse"
     ++ optionals jackSupport [ "CONFIG+=use_jack" "CONFIG+=jack_has_rename" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     homepage = "https://github.com/rerrahkr/BambooTracker";
     license = licenses.gpl2Only;

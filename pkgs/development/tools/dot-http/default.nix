@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dot-http";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     libiconv Security
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-based scriptable HTTP client";
     homepage = "https://github.com/bayne/dot-http";
     license = licenses.asl20;

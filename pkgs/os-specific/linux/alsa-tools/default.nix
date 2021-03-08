@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, pkgconfig, gtk2, gtk3, fltk13 }:
+{ lib, stdenv, fetchurl, alsaLib, pkgconfig, gtk2, gtk3, fltk13 }:
 # Comes from upstream as as bundle of several tools,
 # some use gtk2, some gtk3 (and some even fltk13).
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture tools";
 

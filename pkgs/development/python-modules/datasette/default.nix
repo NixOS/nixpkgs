@@ -14,6 +14,7 @@
 , python-baseconv
 , pyyaml
 , uvicorn
+, httpx
 # Check Inputs
 , pytestCheckHook
 , pytestrunner
@@ -26,13 +27,13 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.46";
+  version = "0.53";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";
     rev = version;
-    sha256 = "0g4dfq5ykifa9628cb4i7gvx98p8hvb99gzfxk3bkvq1v9p4kcqq";
+    sha256 = "1rsgxkvav1qy2ia2csm1jvabd8klh3ly8719979gdlx2il1cjjkz";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -52,6 +53,8 @@ buildPythonPackage rec {
     pyyaml
     uvicorn
     setuptools
+    httpx
+    asgiref
   ];
 
   checkInputs = [
@@ -59,7 +62,6 @@ buildPythonPackage rec {
     pytest-asyncio
     aiohttp
     beautifulsoup4
-    asgiref
   ];
 
   postConfigure = ''
@@ -75,9 +77,9 @@ buildPythonPackage rec {
 
   # takes 30-180 mins to run entire test suite, not worth the cpu resources, slows down reviews
   # with pytest-xdist, it still takes around 10mins with 32 cores
-  # just run the messages tests, as this should give some indictation of correctness
+  # just run the csv tests, as this should give some indictation of correctness
   pytestFlagsArray = [
-    "tests/test_messages.py"
+    "tests/test_csv.py"
   ];
   disabledTests = [
     "facet"

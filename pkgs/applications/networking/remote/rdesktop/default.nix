@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, openssl, libX11, krb5, libXcursor, libtasn1, nettle, gnutls, pkgconfig, autoreconfHook
+{lib, stdenv, fetchFromGitHub, openssl, libX11, krb5, libXcursor, libtasn1, nettle, gnutls, pkgconfig, autoreconfHook
 , enableCredssp ? (!stdenv.isDarwin)
 } :
 
@@ -15,18 +15,18 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [pkgconfig autoreconfHook];
   buildInputs = [openssl libX11 libXcursor libtasn1 nettle gnutls]
-    ++ stdenv.lib.optional enableCredssp krb5;
+    ++ lib.optional enableCredssp krb5;
 
   configureFlags = [
     "--with-ipv6"
     "--with-openssl=${openssl.dev}"
     "--disable-smartcard"
-  ] ++ stdenv.lib.optional (!enableCredssp) "--disable-credssp";
+  ] ++ lib.optional (!enableCredssp) "--disable-credssp";
 
   meta = {
     description = "Open source client for Windows Terminal Services";
     homepage = "http://www.rdesktop.org/";
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl2;
   };
 })

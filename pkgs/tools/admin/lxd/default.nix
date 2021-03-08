@@ -1,4 +1,4 @@
-{ stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
+{ lib, stdenv, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
 , libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
@@ -18,13 +18,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.9";
+  version = "4.10";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0sq3avgsrdzkbsil0xsri60xxi0bzf4l6w43w23lbhacrby1spj4";
+    sha256 = "0s8lbvh2vsqphvspyjyxp5s589gf2wrjpka8v496lf6fv1nsi5s8";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ buildGoPackage rec {
     # test binaries, code generation
     rm $out/bin/{deps,macaroon-identity,generate}
 
-    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath (
+    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       networkPkgs
       ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''
@@ -58,11 +58,11 @@ buildGoPackage rec {
     installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ installShellFiles pkgconfig makeWrapper ];
+  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
   buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
                   raft-canonical.dev sqlite-replication udev.dev ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;

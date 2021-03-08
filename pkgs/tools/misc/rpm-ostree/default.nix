@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ostree
 , rpm
@@ -6,7 +6,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , cargo
 , rustc
 , gobject-introspection
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     which
     autoconf
     automake
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
     homepage = "https://coreos.github.io/rpm-ostree/";
     license = licenses.lgpl2Plus;

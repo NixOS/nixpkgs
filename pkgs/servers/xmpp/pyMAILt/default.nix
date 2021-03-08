@@ -1,4 +1,4 @@
-{ stdenv, python, xmpppy, pythonPackages, fetchcvs, runtimeShell } :
+{ lib, stdenv, python, xmpppy, pythonPackages, fetchcvs, runtimeShell } :
 
 stdenv.mkDerivation rec {
   pname = "pyMAILt";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Email transport module for XMPP";
     platforms = platforms.unix;
     license = licenses.gpl2;

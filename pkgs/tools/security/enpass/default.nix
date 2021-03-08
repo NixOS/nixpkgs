@@ -2,7 +2,7 @@
 , glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
 , makeWrapper , python2Packages, lib
-, lsof, curl, libuuid, cups, mesa
+, lsof, curl, libuuid, cups, mesa, lzma, libxkbcommon
 }:
 
 let
@@ -38,6 +38,8 @@ let
     curl
     libuuid
     cups
+    lzma
+    libxkbcommon
   ]);
   package = stdenv.mkDerivation {
 
@@ -49,11 +51,12 @@ let
       url = "${baseUrl}/${data.path}";
     };
 
-    meta = {
-      description = "a well known password manager";
+    meta = with lib; {
+      description = "A well known password manager";
       homepage = "https://www.enpass.io/";
-      license = lib.licenses.unfree;
+      license = licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux"];
+      maintainers = with maintainers; [ ewok ];
     };
 
     buildInputs = [makeWrapper dpkg];

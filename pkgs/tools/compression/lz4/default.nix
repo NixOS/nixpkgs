@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, valgrind, fetchpatch
-, enableStatic ? false, enableShared ? true
+{ lib, stdenv, fetchFromGitHub, valgrind, fetchpatch
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   # TODO(@Ericson2314): Separate binaries and libraries
   outputs = [ "bin" "out" "dev" ];
 
-  buildInputs = stdenv.lib.optional doCheck valgrind;
+  buildInputs = lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
   ]
     # TODO make full dictionary
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
+    ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
     ;
 
   doCheck = false; # tests take a very long time
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
 
   # TODO(@Ericson2314): Make resusable setup hook for this issue on Windows.
   postInstall =
-    stdenv.lib.optionalString stdenv.hostPlatform.isWindows ''
+    lib.optionalString stdenv.hostPlatform.isWindows ''
       mv $out/bin/*.dll $out/lib
       ln -s $out/lib/*.dll
     ''
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
       moveToOutput bin "$bin"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely fast compression algorithm";
     longDescription = ''
       Very fast lossless compression algorithm, providing compression speed

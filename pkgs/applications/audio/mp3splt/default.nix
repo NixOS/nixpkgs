@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmp3splt }:
+{ lib, stdenv, fetchurl, pkgconfig, libmp3splt }:
 
 stdenv.mkDerivation rec {
   pname = "mp3splt";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility to split mp3, ogg vorbis and FLAC files without decoding";
     homepage = "https://sourceforge.net/projects/mp3splt/";
     license = licenses.gpl2;

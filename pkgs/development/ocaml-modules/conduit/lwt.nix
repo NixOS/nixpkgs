@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, ppx_sexp_conv, conduit, ocaml_lwt, sexplib }:
+{ buildDunePackage, ppx_sexp_conv, conduit, ocaml_lwt, sexplib }:
 
 buildDunePackage {
 	pname = "conduit-lwt";

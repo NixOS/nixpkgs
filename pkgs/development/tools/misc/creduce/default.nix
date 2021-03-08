@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
       lscpu ${util-linux}/bin/lscpu
   '';
 
-
-  enableParallelBuilding = true;
-
   postInstall = ''
     wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"
   '';

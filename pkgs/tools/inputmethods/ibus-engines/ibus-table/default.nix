@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, docbook2x, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, docbook2x, pkg-config
 , gtk3, dconf, gobject-introspection
 , ibus, python3, wrapGAppsHook }:
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook2x
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace "docbook2man" "docbook2man --sgml"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description  = "An IBus framework for table-based input methods";
     homepage     = "https://github.com/kaio/ibus-table/wiki";

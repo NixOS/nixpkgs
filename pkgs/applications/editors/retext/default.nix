@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
+{ lib, stdenv, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
 # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
 # available.
 , enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
@@ -55,7 +55,7 @@ in python.pkgs.buildPythonApplication {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/retext-project/retext/";
     description = "Simple but powerful editor for Markdown and reStructuredText";
     license = licenses.gpl3;

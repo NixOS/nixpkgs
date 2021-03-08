@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, glibcLocales }:
+{ lib, stdenv, fetchFromGitHub, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "i3minator";
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "i3 project manager similar to tmuxinator";
     longDescription = ''
       A simple "workspace manager" for i3. It allows to quickly
@@ -26,9 +26,9 @@ pythonPackages.buildPythonApplication rec {
       project is inspired by tmuxinator and uses i3-py.
     '';
     homepage = "https://github.com/carlesso/i3minator";
-    license = stdenv.lib.licenses.wtfpl;
+    license = lib.licenses.wtfpl;
     maintainers = with maintainers; [ domenkozar ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 
 }

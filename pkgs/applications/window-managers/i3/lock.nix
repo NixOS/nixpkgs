@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutilimage,
+{ fetchurl, lib, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutilimage,
   xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp *.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple screen locker like slock";
     longDescription = ''
       Simple screen locker. After locking, a colored background (default: white) or

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, alsaLib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, alsaLib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
 
 mkDerivation rec {
   version = "2.2.0";
@@ -39,7 +39,7 @@ mkDerivation rec {
     "INCLUDEPATH+=${libjack2}/include/jack"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A soundfont editor for creating musical instruments";
     homepage = "https://www.polyphone-soundfonts.com/";
     license = licenses.gpl3;

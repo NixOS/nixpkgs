@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation {
   pname = "cue2pops";
   version = "git-2018-01-04";

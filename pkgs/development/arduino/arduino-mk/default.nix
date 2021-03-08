@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, installShellFiles }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, installShellFiles }:
 
 stdenv.mkDerivation rec {
   version = "1.6.0";
@@ -22,12 +22,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Makefile for Arduino sketches";
     homepage = "https://github.com/sudar/Arduino-Makefile";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.eyjhb ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.eyjhb ];
+    platforms = platforms.unix;
   };
 }
-

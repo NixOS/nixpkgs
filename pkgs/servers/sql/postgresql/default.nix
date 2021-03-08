@@ -13,7 +13,10 @@ let
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, sha256, psqlSchema
+      , version, sha256, psqlSchema,
+
+      # for tests
+      nixosTests, thisAttr
     }:
   let
     atLeast = lib.versionAtLeast version;
@@ -142,6 +145,8 @@ let
                        postgresql = this;
                      }
                      this.pkgs;
+
+      tests.postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
     };
 
     meta = with lib; {
@@ -191,6 +196,7 @@ in self: {
     psqlSchema = "9.5";
     sha256 = "0an2k4m1da96897hyxlff8p4p63wg4dffwsfg57aib7mp4yzsp06";
     this = self.postgresql_9_5;
+    thisAttr = "postgresql_9_5";
     inherit self;
   };
 
@@ -199,6 +205,7 @@ in self: {
     psqlSchema = "9.6";
     sha256 = "1dkv916y7vrfbygrfbfvs6y3fxaysnh32i5j88nvcnnl16jcn21x";
     this = self.postgresql_9_6;
+    thisAttr = "postgresql_9_6";
     inherit self;
   };
 
@@ -207,6 +214,7 @@ in self: {
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
     sha256 = "0zhzj9skag1pgqas2rnd217vj41ilaalqna17j47gyngpvhbqmjr";
     this = self.postgresql_10;
+    thisAttr = "postgresql_10";
     inherit self;
   };
 
@@ -215,6 +223,7 @@ in self: {
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
     sha256 = "16bqp6ds37kbwqx7mk5gg3y6gv59wq6xz33iqwxldzk20vwd5rhk";
     this = self.postgresql_11;
+    thisAttr = "postgresql_11";
     inherit self;
   };
 
@@ -223,6 +232,7 @@ in self: {
     psqlSchema = "12";
     sha256 = "15gzg778da23sbfmy7sqg443f9ny480301lm7i3vay4m3ls2a3dx";
     this = self.postgresql_12;
+    thisAttr = "postgresql_12";
     inherit self;
   };
 
@@ -231,6 +241,7 @@ in self: {
     psqlSchema = "13";
     sha256 = "07z6zwr58dckaa97yl9ml240z83d1lhgaxw9aq49i8lsp21mqd0j";
     this = self.postgresql_13;
+    thisAttr = "postgresql_13";
     inherit self;
   };
 }

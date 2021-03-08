@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pathpy
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # No proper test suite
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny 'shelve'-like database with concurrency support";
     homepage = "https://github.com/vivainio/pickleshare";
     license = licenses.mit;

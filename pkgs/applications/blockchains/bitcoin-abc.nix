@@ -1,8 +1,8 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, openssl, db53, boost
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, openssl, db53, boost
 , zlib, miniupnpc, qtbase ? null , qttools ? null, util-linux, protobuf, qrencode, libevent
 , withGui, python3, jemalloc, zeromq4 }:
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
 
@@ -31,8 +31,6 @@ mkDerivation rec {
   postConfigure = ''
     find ./. -type f -iname "*.sh" -exec chmod +x {} \;
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (Cash client)";

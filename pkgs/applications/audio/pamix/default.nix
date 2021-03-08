@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkgconfig, cmake
 , libpulseaudio, ncurses }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libpulseaudio ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pulseaudio terminal mixer";
     homepage    = "https://github.com/patroclos/PAmix";
     license     = licenses.mit;

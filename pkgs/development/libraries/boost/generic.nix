@@ -8,7 +8,7 @@
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? !(stdenv.hostPlatform.libc == "msvcrt") # problems for now
+, enableShared ? !(with stdenv.hostPlatform; isStatic || libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false

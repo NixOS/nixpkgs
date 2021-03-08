@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pubs";
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     rm tests/test_git.py
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line bibliography manager";
     homepage = "https://github.com/pubs/pubs";
     license = licenses.lgpl3;

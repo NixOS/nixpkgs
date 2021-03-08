@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpng, python3
+{ lib, stdenv, fetchFromGitHub, libpng, python3
 , libGLU, libGL, qtbase, wrapQtAppsHook, ncurses
 , cmake, flex, lemon
 }:
@@ -40,9 +40,7 @@ in
       "-DGITBRANCH=${gitBranch}"
     ];
 
-    enableParallelBuilding = true;
-
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A computer-aided design (CAD) tool from a parallel universe";
       homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;

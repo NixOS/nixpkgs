@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, boost
+{ lib, stdenv, mkDerivation, fetchFromGitHub, boost
 , qtbase, qtwebkit, poppler, qmake, hunspell, html-tidy}:
 
 mkDerivation rec {
@@ -35,7 +35,7 @@ mkDerivation rec {
     cp theme.ini $out/share/nixnote2/theme.ini
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An unofficial client of Evernote";
     homepage = "http://www.nixnote.org/";
     license = licenses.gpl2Plus;

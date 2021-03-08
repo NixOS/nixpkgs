@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
   # aarch64
   configurePlatforms = [ "host" "build" ];
 
+  postConfigure = ''
+    sed -i configure \
+        -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
+  '';
+
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postFixup = ''

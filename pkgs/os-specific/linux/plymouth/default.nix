@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "plymouthd_confdir=$(out)/etc/plymouth"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/Plymouth";
     description = "A graphical boot animation";
     license = licenses.gpl2;

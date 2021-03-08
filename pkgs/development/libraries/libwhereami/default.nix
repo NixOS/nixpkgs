@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost curl leatherman ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Library to report hypervisor information from inside a VM";

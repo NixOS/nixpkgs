@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , libarchive
 , doxygen
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     "--with-dz80"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dgen.sourceforge.net/";
     description = "Sega Genesis/Mega Drive emulator";
     longDescription = ''

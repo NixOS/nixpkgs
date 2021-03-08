@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, git, pkg-config, python3
+{ lib, stdenv, fetchFromGitHub, cmake, git, pkg-config, python3
 , cairo, libsndfile, libxcb, libxkbcommon, xcbutil, xcbutilcursor, xcbutilkeysyms, zenity
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     build/surge-headless
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LV2 & VST3 synthesizer plug-in (previously released as Vember Audio Surge)";
     homepage = "https://surge-synthesizer.github.io";
     license = licenses.gpl3;

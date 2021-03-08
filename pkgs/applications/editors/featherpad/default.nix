@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, pkgconfig, qmake, qttools, qtbase, qtsvg, qtx11extras, fetchFromGitHub }:
+{ lib, stdenv, mkDerivation, pkgconfig, qmake, qttools, qtbase, qtsvg, qtx11extras, fetchFromGitHub }:
 mkDerivation rec {
   pname = "featherpad";
   version = "0.10.0";
@@ -13,7 +13,7 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake pkgconfig qttools ];
   buildInputs = [ qtbase qtsvg qtx11extras ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight Qt5 Plain-Text Editor for Linux";
     homepage = "https://github.com/tsujan/FeatherPad";
     platforms = platforms.linux;

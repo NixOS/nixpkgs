@@ -60,10 +60,10 @@ buildPythonPackage rec {
     sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
     make -C ../Tests
 
+    ${python.interpreter} -c "import pysvn"
+
     runHook postCheck
   '';
-
-  pythonImportCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn
@@ -75,10 +75,9 @@ buildPythonPackage rec {
     rm -v $out/share/doc/pysvn-${version}/generate_cpp_docs_from_html_docs.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for Subversion";
     homepage = "http://pysvn.tigris.org/";
     license = licenses.asl20;
   };
-
 }

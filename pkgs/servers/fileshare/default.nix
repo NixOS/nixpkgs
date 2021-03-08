@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp bin/release/fileshare $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small HTTP Server for quickly sharing files over the network";
     longDescription = "Fileshare is a simple tool for sharing the contents of a directory via a webserver and optionally allowing uploads.";
     homepage = "https://git.tkolb.de/Public/fileshare";

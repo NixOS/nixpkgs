@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub }:
+{ pkgs, lib, stdenv, fetchFromGitHub }:
 
 with pkgs.lib;
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${pkgs.git}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/petervanderdoes/gitflow";
     description = "Extend git with the Gitflow branching model";
     longDescription = ''

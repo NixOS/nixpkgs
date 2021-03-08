@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   doCheck = false;
   propagatedBuildInputs = [ requests dateutil pytz six msgpack ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
     license = licenses.mit;

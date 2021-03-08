@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, ladspaH, lilv, lv2, pkgconfig, serd, sord, sratom }:
+{ lib, stdenv, fetchFromGitHub, boost, ladspaH, lilv, lv2, pkgconfig, serd, sord, sratom }:
 
 stdenv.mkDerivation {
   pname = "plugin-torture";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     cp find-safe-plugins $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cth103/plugin-torture";
     description = "A tool to test LADSPA and LV2 plugins";
     license = licenses.gpl2;

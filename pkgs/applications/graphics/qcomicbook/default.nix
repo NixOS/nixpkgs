@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler }:
 
 mkDerivation rec {
   pname = "qcomicbook";
@@ -24,7 +24,7 @@ mkDerivation rec {
       --replace "Exec=qcomicbook" "Exec=$out/bin/qcomicbook"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/stolowski/QComicBook";
     description = "Comic book reader in Qt5";
     license = licenses.gpl2;

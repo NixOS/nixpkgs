@@ -1,30 +1,31 @@
-{ stdenv, fetchurl, python }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "2012-05-31";
+  version = "2020-12-17";
   pname = "woof";
 
-  src = fetchurl {
-    url = "http://www.home.unix-ag.org/simon/woof-${version}.py";
-    sha256 = "d84353d07f768321a1921a67193510bf292cf0213295e8c7689176f32e945572";
+  src = fetchFromGitHub {
+    owner = "simon-budig";
+    repo = "woof";
+    rev = "4aab9bca5b80379522ab0bdc5a07e4d652c375c5";
+    sha256 = "0ypd2fs8isv6bqmlrdl2djgs5lnk91y1c3rn4ar6sfkpsqp9krjn";
   };
 
-  buildInputs = [ python ];
+  propagatedBuildInputs = [ python3 ];
 
   dontUnpack = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp $src $out/bin/woof
-      chmod +x $out/bin/woof
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp $src/woof $out/bin/woof
+    chmod +x $out/bin/woof
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.home.unix-ag.org/simon/woof.html";
     description = "Web Offer One File - Command-line utility to easily exchange files over a local network";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

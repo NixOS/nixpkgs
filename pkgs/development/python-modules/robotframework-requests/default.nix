@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , unittest2
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [ unittest2 ];
   propagatedBuildInputs = [ robotframework lxml requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";
     homepage = "https://github.com/bulkan/robotframework-requests";
     license = licenses.mit;

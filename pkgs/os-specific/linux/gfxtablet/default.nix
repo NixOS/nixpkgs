@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, linuxHeaders}:
+{lib, stdenv, fetchFromGitHub, linuxHeaders}:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = ''Uinput driver for Android GfxTablet tablet-as-input-device app'';
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

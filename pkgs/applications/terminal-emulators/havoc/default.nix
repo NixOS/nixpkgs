@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkgconfig, libxkbcommon, wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     install -D -m 644 README.md -t $out/share/doc/${pname}-${version}/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal terminal emulator for Wayland";
     homepage = "https://github.com/ii8/havoc";
     license = with licenses; [ mit publicDomain ];

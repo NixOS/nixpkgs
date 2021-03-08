@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ lib, stdenv, fetchurl, pkgconfig, perl
 , buildsystem
 , libparserutils
 , libwapcaplet
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE= "-Wno-error=implicit-fallthrough";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "Cascading Style Sheets library for netsurf browser";
     longDescription = ''

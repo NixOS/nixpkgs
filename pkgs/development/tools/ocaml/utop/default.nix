@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, dune
+{ stdenv, fetchurl, ocaml, findlib
 , lambdaTerm, cppo, makeWrapper, buildDunePackage
 }:
 
@@ -8,11 +8,13 @@ else
 
 buildDunePackage rec {
   pname = "utop";
-  version = "2.4.3";
+  version = "2.6.0";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    sha256 = "107al0l3x4a5kkjka7glmhsqlm7pwzzc6shspiv5gsjb49pblc2f";
+    sha256 = "17n9igl74xcvj0mzdh2ybda29f2m48a5lj4yf8lrdqr7vg0982jd";
   };
 
   nativeBuildInputs = [ makeWrapper ];

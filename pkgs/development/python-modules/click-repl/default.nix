@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, click, prompt_toolkit }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, click, prompt_toolkit }:
 
 buildPythonPackage rec {
   pname = "click-repl";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click prompt_toolkit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
     license = licenses.mit;

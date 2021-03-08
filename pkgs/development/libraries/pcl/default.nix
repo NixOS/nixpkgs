@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
     sha256 = "1cli2rxqsk6nxp36p5mgvvahjz8hm4fb68yi8cf9nw4ygbcvcwb1";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qhull flann boost eigen libusb1 libpcap
                   libpng vtk qtbase libXt ]

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ lib, stdenv, fetchurl, makeDesktopItem
 , libX11, libXt, libXft, libXrender
 , ncurses, fontconfig, freetype
 , pkgconfig, gdk-pixbuf, perl
@@ -23,7 +23,7 @@ let
   };
 in
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "${pname}-unwrapped-${version}";
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
       mkdir -p $terminfo/share/terminfo
       export TERMINFO=$terminfo/share/terminfo
     ''
-    + stdenv.lib.optionalString perlSupport ''
+    + lib.optionalString perlSupport ''
       # make urxvt find its perl file lib/perl5/site_perl
       # is added to PERL5LIB automatically
       mkdir -p $out/$(dirname ${perl.libPrefix})

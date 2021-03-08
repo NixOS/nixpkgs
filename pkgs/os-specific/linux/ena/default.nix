@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   version = "2.3.0";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     xz $dest/ena.ko
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2;

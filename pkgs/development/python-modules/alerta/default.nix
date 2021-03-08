@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , six, click, requests, requests-hawk, pytz, tabulate, pythonOlder
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System command-line interface";
     license = licenses.asl20;

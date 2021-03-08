@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # tests fail  "AppRegistryNotReady("Apps aren't loaded yet.")"
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Efficient tree implementations for Django 1.6+";
     homepage = "https://tabo.pe/projects/django-treebeard/";
     maintainers = with maintainers; [ desiderius ];

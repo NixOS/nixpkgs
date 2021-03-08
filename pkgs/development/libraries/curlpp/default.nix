@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl ];
   nativeBuildInputs = [ cmake ];
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "https://www.curlpp.org/";

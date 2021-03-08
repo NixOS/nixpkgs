@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     rev   = version;
     sha256 = "071magxif5nrdddzk2z34czqmz1dfws4d7dqynb2zpn7cwhwxcpm";
   };
-  buildInputs = [ cmake sfml ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ sfml ];
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
 
   meta = with stdenv.lib; {

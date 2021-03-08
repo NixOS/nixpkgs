@@ -2,27 +2,31 @@
 , pkgconfig, libftdi1
 , python3, pypy3
 
-# PyPy yields large improvements in build time and runtime performance,
-# and IceStorm isn't intended to be used as a library other than by the
-# nextpnr build process (which is also sped up by using PyPy), so we
-# use it by default. See 18839e1 for more details.
+# PyPy yields large improvements in build time and runtime performance, and
+# IceStorm isn't intended to be used as a library other than by the nextpnr
+# build process (which is also sped up by using PyPy), so we use it by default.
+# See 18839e1 for more details.
+#
+# FIXME(aseipp, 3/1/2021): pypy seems a bit busted since stdenv upgrade to gcc
+# 10/binutils 2.34, so short-circuit this for now in passthru below (done so
+# that downstream overrides can't re-enable pypy and break their build somehow)
 , usePyPy ? stdenv.hostPlatform.system == "x86_64-linux"
 }:
 
 stdenv.mkDerivation rec {
   pname = "icestorm";
-  version = "2020.08.19";
+  version = "2020.12.04";
 
   passthru = rec {
-    pythonPkg = if usePyPy then pypy3 else python3;
+    pythonPkg = if (false && usePyPy) then pypy3 else python3;
     pythonInterp = pythonPkg.interpreter;
   };
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "icestorm";
-    rev    = "da52117ccd5b4147f64dc7345357ec5439cd7543";
-    sha256 = "072bl3vmvb06ry0ci3b1sfjpm3iigb874khzja4azcai969ybp4k";
+    rev    = "7afc64b480212c9ac2ce7cb1622731a69a7d212c";
+    sha256 = "0vxhqs2fampglg3xlfwb35229iv96kvlwp1gyxrdrmlpznhkqdrk";
   };
 
   nativeBuildInputs = [ pkgconfig ];

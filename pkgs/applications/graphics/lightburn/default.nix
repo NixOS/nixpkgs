@@ -1,4 +1,4 @@
-{ stdenv, patchelf, fetchurl, p7zip
+{ lib, stdenv, patchelf, fetchurl, p7zip
 , nss, nspr, libusb1
 , qtbase, qtmultimedia, qtserialport
 , autoPatchelfHook, wrapQtAppsHook
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Layout, editing, and control software for your laser cutter";
     homepage = "https://lightburnsoftware.com/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ q3k ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];
   };
 }

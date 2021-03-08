@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "grepcidr";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Filter IPv4 and IPv6 addresses matching CIDR patterns";
     homepage = "http://www.pc-tools.net/unix/grepcidr/";
     license = licenses.gpl3;

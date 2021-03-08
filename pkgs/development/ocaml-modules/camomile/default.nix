@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, cppo }:
+{ lib, fetchFromGitHub, buildDunePackage, cppo }:
 
 buildDunePackage rec {
   pname = "camomile";
@@ -17,8 +17,8 @@ buildDunePackage rec {
 
 	meta = {
 		inherit (src.meta) homepage;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		license = stdenv.lib.licenses.lgpl21;
+		maintainers = [ lib.maintainers.vbgl ];
+		license = lib.licenses.lgpl21;
 		description = "A Unicode library for OCaml";
 	};
 }

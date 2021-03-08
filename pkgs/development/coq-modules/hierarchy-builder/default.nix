@@ -1,43 +1,24 @@
-{ stdenv, fetchFromGitHub, which, coq, coq-elpi }:
+{ lib, mkCoqDerivation, which, coq, coq-elpi, version ? null }:
 
-let
-  versions = {
-      "0.10.0" =  {
-        rev = "v0.10.0";
-        sha256 = "1a3vry9nzavrlrdlq3cys3f8kpq3bz447q8c4c7lh2qal61wb32h";
-      };
-  };
-  version = x: versions.${x} // {version = x;};
-  params = {
-   "8.11" = version "0.10.0";
-   "8.12" = version "0.10.0";
-  };
-  param = params.${coq.coq-version};
-in
-
-stdenv.mkDerivation rec {
-  name = "coq${coq.coq-version}-hierarchy-builder-${param.version}";
-
-  src = fetchFromGitHub {
-    owner = "math-comp";
-    repo = "hierarchy-builder";
-    inherit (param) rev sha256;
-  };
+with lib; mkCoqDerivation {
+  pname = "hierarchy-builder";
+  owner = "math-comp";
+  inherit version;
+  defaultVersion = with versions; switch coq.coq-version [
+    { case = isGe "8.12";         out = "1.0.0"; }
+    { case = range "8.11" "8.12"; out = "0.10.0"; }
+  ] null;
+  release."1.0.0".sha256  = "0yykygs0z6fby6vkiaiv3azy1i9yx4rqg8xdlgkwnf2284hffzpp";
+  release."0.10.0".sha256 = "1a3vry9nzavrlrdlq3cys3f8kpq3bz447q8c4c7lh2qal61wb32h";
+  releaseRev = v: "v${v}";
 
   propagatedBuildInputs = [ coq-elpi ];
-  buildInputs = [ coq coq.ocaml coq.ocamlPackages.elpi ];
 
-  installPhase = ''make -f Makefile.coq VFILES=structures.v COQLIB=$out/lib/coq/${coq.coq-version}/ install'';
+  extraInstallFlags = [ "VFILES=structures.v" ];
 
   meta = {
     description = "Coq plugin embedding ELPI.";
-    maintainers = [ stdenv.lib.maintainers.cohencyril ];
-    license = stdenv.lib.licenses.lgpl21;
-    inherit (coq.meta) platforms;
-    inherit (src.meta) homepage;
-  };
-
-  passthru = {
-    compatibleCoqVersions = stdenv.lib.flip builtins.hasAttr params;
+    maintainers = [ maintainers.cohencyril ];
+    license = licenses.lgpl21;
   };
 }

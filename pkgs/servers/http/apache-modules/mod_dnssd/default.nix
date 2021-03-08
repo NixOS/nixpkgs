@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, apacheHttpd, apr, avahi }:
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, apacheHttpd, apr, avahi }:
 
 stdenv.mkDerivation rec {
   name = "mod_dnssd-0.6";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp src/.libs/mod_dnssd.so $out/modules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://0pointer.de/lennart/projects/mod_dnssd";
     description = "Provide Zeroconf support via DNS-SD using Avahi";
     license = licenses.asl20;

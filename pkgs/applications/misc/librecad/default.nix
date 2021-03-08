@@ -1,10 +1,11 @@
-{ boost
+{ lib
+, boost
 , fetchFromGitHub
 , fetchpatch
 , installShellFiles
 , mkDerivationWith
 , muparser
-, pkgconfig
+, pkg-config
 , qmake
 , qtbase
 , qtsvg
@@ -82,14 +83,14 @@ mkDerivationWith stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     installShellFiles
-    pkgconfig
+    pkg-config
     qmake
     qttools
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
     license = licenses.gpl2;

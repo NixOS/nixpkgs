@@ -53,8 +53,6 @@ stdenv.mkDerivation rec {
     python.pkgs.protobuf python.pkgs.six
   ];
 
-  enableParallelBuilding = true;
-
   outputs = [ "out" "python" ];
 
   meta = with stdenv.lib; {

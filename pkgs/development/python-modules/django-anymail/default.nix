@@ -1,5 +1,5 @@
 {
-    stdenv,
+    lib, stdenv,
     buildPythonPackage,
     fetchFromGitHub,
     six,
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   # this package allows multiple email backends
   # sparkpost is missing because it's not packaged yet
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
     license = licenses.bsd3;

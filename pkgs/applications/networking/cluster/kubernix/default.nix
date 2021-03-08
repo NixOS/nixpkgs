@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kubernix";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "17agwqx7nhzi124yq1s6zpqb227drrhp9c11r3jbicc08dz88bwg";
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";
     homepage = "https://github.com/saschagrunert/kubernix";
     license = with licenses; [ mit ];

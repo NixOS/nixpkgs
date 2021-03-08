@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libX11, libXext, libXft }:
 
 let version = "1.40"; in
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       sed "s|/usr/local|$out|g" Makefile.orig >> Makefile
     '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Small and simple stacking window manager";
       homepage    = "http://nickgravgaard.com/windowlab/";
       license     = licenses.gpl2;
