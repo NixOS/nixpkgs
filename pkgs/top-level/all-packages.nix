@@ -9405,6 +9405,8 @@ in
 
   zsh-bd = callPackage ../shells/zsh/zsh-bd { };
 
+  zsh-clipboard = callPackage ../shells/zsh/zsh-clipboard { };
+
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
   zsh-history = callPackage ../shells/zsh/zsh-history { };
