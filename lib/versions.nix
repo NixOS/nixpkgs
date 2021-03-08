@@ -13,6 +13,17 @@ in rec {
      Example:
        splitVersion "1.2.3"
        => ["1" "2" "3"]
+
+     Remark: the builtins version of `splitVersion` -- which is
+     considered first -- has a behaviour which is different from
+     `(lib.splitString ".")`. For example, it also recognizes `-` and
+     transitions between numbers and other strings as delimiters.
+     This behaviour is hence inconsistent between versions of nix and
+     should not be relied upon.
+
+     Example (discouraged):
+       splitVersion "1-2a+3"
+       => [ "1" "2" "a+" "3" ]
   */
   splitVersion = builtins.splitVersion or (lib.splitString ".");
 
@@ -77,8 +88,45 @@ in rec {
     - isEq v0 v <-> v is equal to v0                [*]
     - range low high v <-> v is between low and high [**]
 
-  [*]  truncating v to the same number of digits as v0
-  [**] truncating v to low for the lower bound and high for the upper bound
+    [*]  truncating v to the same number of digits as v0
+    [**] truncating v to low for the lower bound and high for the upper bound
+
+    Difference with `versionAtLeast` and `versionOlder`:
+    - `versionAtLeast` and `versionOlder` implement order relations on
+      version numbers, which are total assuming the only separator
+      which is used is `.`.
+
+    - `isGe`, `isLe`, `isLt`, and `isEq` are not order relations, they
+    are not antisymmetric (e.g. both `isLe "1.1" "1.1.2"` and `isLe
+    "1.1.2" "1.1"` are true).
+    `(isLe x) y` reads «`y` is a version which is lesser or equal to `x`».
+    Contrarily to `versionAtLeast`, it uses the first argument to
+    determine the length to truncate so that `isLe "1.1" "1.1.2"` is
+    true while `versionAtLeast "1.1" "1.1.2"` is false.
+
+    The main motivation is to be able to combine and read them nicely
+    with high order function such as:
+    - `filter`, e.g. the result of
+      ```
+      filter (versionAtLeast "1.0")
+             [ "1.3.1" "1.0.0" "1.0" "0.9.0" "1.0.2" ]
+      ```
+      is `[ "1.0" "0.9.0"]`.
+      In comparison
+      ```
+      filter (isLe "1.0")
+             [ "1.3.1" "1.0.0" "1.0" "0.9.0" "1.0.2" ]`
+      ```
+      returns `[ "1.0.0" "1.0" "0.9.0" "1.0.2" ]`, which can be read
+      naturally in English as «we keep versions that are lesser or
+      equal to "1.0"» and the outcome matches the expectations that
+      "1.0.0" and "1.0.2" belong to the family of "1.0" versions.
+        If you wanted to filter more precisely you should give the
+      patch version of the first argument of `isLe` instead (as in
+      `isLe "1.0.0"`, and if you wanted to exclude all "1.0", then you
+      should use `isLt "1.0"`.
+    - `switch` as in:
+      pkgs/development/coq-modules/mathcomp/default.nix#L21-L22
 
     Examples:
     - isGe "8.10" "8.10.1"
