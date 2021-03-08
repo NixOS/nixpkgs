@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     # Fixes a failing dbf related test. Won't be needed on 1.0.6 or later.
-    (fetchpatch{
+    (fetchpatch {
       url = "https://github.com/wireservice/csvkit/commit/5f22e664121b13d9ff005a9206873a8f97431dca.patch";
       sha256 = "1kg00z65x7l6dnm5nfsr5krs8m7mv23hhb1inkaqf5m5fpkpnvv7";
     })
@@ -23,17 +23,22 @@ python3.pkgs.buildPythonApplication rec {
     agate-dbf
     agate-sql
     six
-    setuptools  # `csvsql` requires pkg_resources https://github.com/NixOS/nixpkgs/issues/93594
+    setuptools
   ];
 
   checkInputs = with python3.pkgs; [
-    nose pytestCheckHook
+    nose
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "csvkit" ];
 
   meta = with lib; {
     description = "A suite of command-line tools for converting to and working with CSV";
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;
     homepage = "https://github.com/wireservice/csvkit";
+    # FAIL: test_to_sql_create_statement_with_schema (tests.test_agatesql.TestSQL)
+    broken = true;
   };
 }
