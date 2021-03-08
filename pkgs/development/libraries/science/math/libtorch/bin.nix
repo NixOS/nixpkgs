@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     # Copy headers and CMake files.
-    install -Dm755 -t $dev/lib lib/*.a
+    mkdir -p $dev
     cp -r include $dev
     cp -r share $dev
 
