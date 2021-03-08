@@ -8,8 +8,8 @@
 , fixDarwinDylibNames
 
 , cudaSupport
-, cudatoolkit_10_2
-, cudnn_cudatoolkit_10_2
+, cudatoolkit_11_1
+, cudnn_cudatoolkit_11_1
 }:
 
 let
@@ -109,8 +109,8 @@ in stdenv.mkDerivation {
 
   passthru.tests.cmake = callPackage ./test {
     inherit cudaSupport;
-    cudatoolkit = cudatoolkit_10_2;
-    cudnn = cudnn_cudatoolkit_10_2;
+    cudatoolkit = cudatoolkit_11_1;
+    cudnn = cudnn_cudatoolkit_11_1;
   };
 
   meta = with lib; {
