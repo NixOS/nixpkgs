@@ -10,7 +10,7 @@ let
     extensions = { enabled, all }:
       (with all;
         enabled
-        ++ optional cfg.imagemagick imagick
+        ++ optional (!cfg.disableImagemagick) imagick
         # Optionally enabled depending on caching settings
         ++ optional cfg.caching.apcu apcu
         ++ optional cfg.caching.redis redis
@@ -303,13 +303,13 @@ in {
       };
     };
 
-    imagemagick = mkOption {
+    disableImagemagick = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
-        Whether to load the ImageMagick module into PHP.
+        Whether to not load the ImageMagick module into PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
-        You may want to disable this for increased security. In that case, previews will still be available
+        You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
         See https://github.com/nextcloud/server/issues/13099
       '';
