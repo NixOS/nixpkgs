@@ -32,7 +32,6 @@
 
 # External plugins
 , enableAlternatives     ? false
-, enableCheck            ? false, liboggz
 , enableCopyArtifacts    ? false
 , enableExtraFiles       ? false
 
@@ -140,7 +139,6 @@ in pythonPackages.buildPythonApplication rec {
                   || enableSubsonicplaylist
                   || enableSubsonicupdate
                   || enableAcousticbrainz) pythonPackages.requests
-    ++ lib.optional enableCheck            beetsExternalPlugins.check
     ++ lib.optional enableConvert          ffmpeg
     ++ lib.optional enableDiscogs          pythonPackages.discogs_client
     ++ lib.optional enableKeyfinder        keyfinder-cli

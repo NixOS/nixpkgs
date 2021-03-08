@@ -3034,7 +3034,6 @@ in
       };
     in lib.recurseIntoAttrs {
       alternatives = callPackage ../tools/audio/beets/plugins/alternatives.nix pluginArgs;
-      check = callPackage ../tools/audio/beets/plugins/check.nix pluginArgs;
       copyartifacts = callPackage ../tools/audio/beets/plugins/copyartifacts.nix pluginArgs;
       extrafiles = callPackage ../tools/audio/beets/plugins/extrafiles.nix pluginArgs;
     };
