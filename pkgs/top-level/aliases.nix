@@ -558,6 +558,7 @@ mapAliases ({
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
   qvim = throw "qvim has been removed."; # added 2020-08-31
+  qweechat = throw "qweechat has been removed because it was broken"; # added 2021-03-08
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtcurve = libsForQt5.qtcurve;  # added 2020-11-07
   qtpfsgui = throw "qtpfsgui is now luminanceHDR"; # added 2019-06-26
