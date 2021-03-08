@@ -2401,6 +2401,8 @@ in {
 
   flask_script = callPackage ../development/python-modules/flask-script { };
 
+  flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
+
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
@@ -2408,6 +2410,8 @@ in {
   flask-sockets = callPackage ../development/python-modules/flask-sockets { };
 
   flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
+
+  flask-sslify = callPackage ../development/python-modules/flask-sslify { };
 
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
 
@@ -3834,6 +3838,8 @@ in {
   lightning = callPackage ../development/python-modules/lightning { };
 
   lightparam = callPackage ../development/python-modules/lightparam { };
+
+  lima = callPackage ../development/python-modules/lima { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
 
@@ -6402,6 +6408,8 @@ in {
 
   python-awair = callPackage ../development/python-modules/python-awair { };
 
+  python3-saml = callPackage ../development/python-modules/python3-saml { };
+
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
@@ -8646,6 +8654,10 @@ in {
   xmljson = callPackage ../development/python-modules/xmljson { };
 
   xmlschema = callPackage ../development/python-modules/xmlschema { };
+
+  xmlsec = callPackage ../development/python-modules/xmlsec {
+    inherit (pkgs) libxslt libxml2 libtool pkg-config xmlsec;
+  };
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
