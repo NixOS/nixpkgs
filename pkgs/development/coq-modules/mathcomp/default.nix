@@ -84,7 +84,7 @@ let
               };
             postBuild = ''
               cp -rf _build_doc/* .
-              rm -rf _build_doc
+              rm -r _build_doc
             '';
             postInstall =
               let tgt = "$out/share/coq/${coq.coq-version}/"; in
