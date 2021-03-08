@@ -35,7 +35,7 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, CGO_ENABLED ? go.CGO_ENABLED
+, CGO_ENABLED ? go.env.CGO_ENABLED
 
 , meta ? {}, ... } @ args:
 
@@ -77,17 +77,19 @@ let
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go.env) GOOS GOARCH GO386;
+    env = {
+      inherit (go.env) GOOS GOARCH GO386;
 
-    GOHOSTARCH = go.env.GOHOSTARCH or null;
-    GOHOSTOS = go.env.GOHOSTOS or null;
+      GOHOSTARCH = go.env.GOHOSTARCH or null;
+      GOHOSTOS = go.env.GOHOSTOS or null;
 
-    inherit CGO_ENABLED;
+      inherit CGO_ENABLED;
 
-    GO111MODULE = "off";
-    GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
+      GO111MODULE = "off";
+      GOFLAGS = lib.optionalString (!allowGoReference) "-trimpath";
 
-    GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+      GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+    };
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure

@@ -6,7 +6,7 @@ index dbe6446..d1b7546 100644
  import socket
  import string
  
-+sys.path.append('@env@')
++sys.path.append('@envPath@')
 +
  from websocket import ABNF, create_connection, WebSocketConnectionClosedException
  

@@ -168,36 +168,34 @@ stdenv.mkDerivation rec {
     find . -name '*.orig' -exec rm {} ';'
   '';
 
-  GOOS = stdenv.targetPlatform.parsed.kernel.name;
-  GOARCH = goarch stdenv.targetPlatform;
-  # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
-  # Go will nevertheless build a for host system that we will copy over in
-  # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
-  GOHOSTARCH = goarch stdenv.buildPlatform;
-
-  # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
-  # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${targetCC}/bin/${targetCC.targetPrefix}cc"
-    else
-      null;
-  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${targetCC}/bin/${targetCC.targetPrefix}c++"
-    else
-      null;
-
-  GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
-  GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
-  # Hopefully avoids test timeouts on Hydra
-  GO_TEST_TIMEOUT_SCALE = 3;
-
-  # Indicate that we are running on build infrastructure
-  # Some tests assume things like home directories and users exists
-  GO_BUILDER_NAME = "nix";
-
-  GOROOT_BOOTSTRAP="${goBootstrap}/share/go";
+  env = {
+    GOOS = stdenv.targetPlatform.parsed.kernel.name;
+    GOARCH = goarch stdenv.targetPlatform;
+    # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
+    # Go will nevertheless build a for host system that we will copy over in
+    # the install phase.
+    GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
+    GOHOSTARCH = goarch stdenv.buildPlatform;
+  
+    # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
+    # to be different from CC/CXX
+    CC_FOR_TARGET = optionalString (stdenv.buildPlatform != stdenv.targetPlatform)
+        "${targetCC}/bin/${targetCC.targetPrefix}cc";
+    CXX_FOR_TARGET = optionalString (stdenv.buildPlatform != stdenv.targetPlatform)
+        "${targetCC}/bin/${targetCC.targetPrefix}c++";
+  
+    GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+    GO386 = 387; # from Arch: don't assume sse2 on i686
+    CGO_ENABLED = 1;
+    # Hopefully avoids test timeouts on Hydra
+    GO_TEST_TIMEOUT_SCALE = 3;
+  
+    # Indicate that we are running on build infrastructure
+    # Some tests assume things like home directories and users exists
+    GO_BUILDER_NAME = "nix";
+  
+    GOROOT_BOOTSTRAP="${goBootstrap}/share/go";
+  };
 
   postConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -234,13 +232,13 @@ stdenv.mkDerivation rec {
   '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
-      rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
+    ${optionalString (!(env.GOHOSTARCH == env.GOARCH && env.GOOS == env.GOHOSTOS)) ''
+      rm -rf pkg/${env.GOHOSTOS}_${env.GOHOSTARCH} pkg/tool/${env.GOHOSTOS}_${env.GOHOSTARCH}
     ''}
   '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
     rm -rf bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
-      rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
+    ${optionalString (!(env.GOHOSTARCH == env.GOARCH && env.GOOS == env.GOHOSTOS)) ''
+      rm -rf pkg/${env.GOOS}_${env.GOARCH} pkg/tool/${env.GOOS}_${env.GOARCH}
     ''}
   '' else "");
 

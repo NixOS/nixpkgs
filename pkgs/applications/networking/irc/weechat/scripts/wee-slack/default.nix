@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./libpath.patch;
-      env = "${buildEnv {
+      envPath = "${buildEnv {
         name = "wee-slack-env";
         paths = with python3Packages; [ websocket_client six ];
       }}/${python3Packages.python.sitePackages}";

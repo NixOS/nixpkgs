@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./libpath.patch;
-      env = "${buildEnv {
+      envPath = "${buildEnv {
         name = "weechat-otr-env";
         paths = [ potr pycrypto ];
       }}/${python3Packages.python.sitePackages}";

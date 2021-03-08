@@ -6,7 +6,7 @@ index 0ccfb35..c42bebf 100644
  import shutil
  import sys
  
-+sys.path.append('@env@')
++sys.path.append('@envPath@')
 +
  import potr
  import weechat
