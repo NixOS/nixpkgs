@@ -232,6 +232,7 @@ mapAliases ({
   };
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
+  gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
   gnome-mpv = celluloid; # added 2019-08-22
   gnome15 = throw "gnome15 has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2019-12-10
   gmic_krita_qt = gmic-qt-krita; # added 2019-09-07
