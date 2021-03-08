@@ -5255,6 +5255,8 @@ in {
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
+  pure-cdb = callPackage ../development/python-modules/pure-cdb { };
+
   pure-eval = callPackage ../development/python-modules/pure-eval { };
 
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
