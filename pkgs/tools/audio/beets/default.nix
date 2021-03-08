@@ -8,6 +8,7 @@
 , enableAbsubmit         ? lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor
 , enableAcousticbrainz   ? true
 , enableAcoustid         ? true
+, enableAura             ? true
 , enableBadfiles         ? true, flac, mp3val
 , enableBeatport         ? true
 , enableBpsync           ? true
@@ -44,6 +45,7 @@ let
   optionalPlugins = {
     absubmit = enableAbsubmit;
     acousticbrainz = enableAcousticbrainz;
+    aura = enableAura;
     badfiles = enableBadfiles;
     beatport = enableBeatport;
     bpsync = enableBpsync;
@@ -102,13 +104,13 @@ in pythonPackages.buildPythonApplication rec {
   # unstable does not require bs1770gain[2].
   # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
   # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-01-29";
+  version = "unstable-2021-03-08";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "04ea754d00e2873ae9aa2d9e07c5cefd790eaee2";
-    sha256 = "sha256-BIa3hnOsBxThbA2WCE4q9eaFNtObr3erZBBqobVOSiQ=";
+    rev = "debd382837ef1d30574c2234710d536bb299f979";
+    sha256 = "sha256-I6ejW3f72fdzWoz7g4n8pDYz2NiHGrorLegUQhQOSiI=";
   };
 
   propagatedBuildInputs = [
@@ -126,31 +128,31 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.confuse
     pythonPackages.mediafile
     gobject-introspection
-  ] ++ lib.optional enableAbsubmit      essentia-extractor
-    ++ lib.optional enableAcoustid      pythonPackages.pyacoustid
-    ++ lib.optional enableBeatport      pythonPackages.requests_oauthlib
+  ] ++ lib.optional enableAbsubmit         essentia-extractor
+    ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
+    ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
     ++ lib.optional (enableFetchart
-              || enableDeezer
-              || enableEmbyupdate
-              || enableKodiupdate
-              || enableLoadext
-              || enablePlaylist
-              || enableSubsonicplaylist
-              || enableSubsonicupdate
-              || enableAcousticbrainz)
-                                    pythonPackages.requests
-    ++ lib.optional enableCheck         beetsExternalPlugins.check
-    ++ lib.optional enableConvert       ffmpeg
-    ++ lib.optional enableDiscogs       pythonPackages.discogs_client
-    ++ lib.optional enableKeyfinder     keyfinder-cli
-    ++ lib.optional enableLastfm        pythonPackages.pylast
-    ++ lib.optional enableMpd           pythonPackages.mpd2
-    ++ lib.optional enableSonosUpdate   pythonPackages.soco
-    ++ lib.optional enableThumbnails    pythonPackages.pyxdg
-    ++ lib.optional enableWeb           pythonPackages.flask
-    ++ lib.optional enableAlternatives  beetsExternalPlugins.alternatives
-    ++ lib.optional enableCopyArtifacts beetsExternalPlugins.copyartifacts
-    ++ lib.optional enableExtraFiles    beetsExternalPlugins.extrafiles
+                  || enableDeezer
+                  || enableEmbyupdate
+                  || enableKodiupdate
+                  || enableLoadext
+                  || enablePlaylist
+                  || enableSubsonicplaylist
+                  || enableSubsonicupdate
+                  || enableAcousticbrainz) pythonPackages.requests
+    ++ lib.optional enableCheck            beetsExternalPlugins.check
+    ++ lib.optional enableConvert          ffmpeg
+    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
+    ++ lib.optional enableKeyfinder        keyfinder-cli
+    ++ lib.optional enableLastfm           pythonPackages.pylast
+    ++ lib.optional enableMpd              pythonPackages.mpd2
+    ++ lib.optional enableSonosUpdate      pythonPackages.soco
+    ++ lib.optional enableThumbnails       pythonPackages.pyxdg
+    ++ lib.optional (enableAura
+                  || enableWeb)            pythonPackages.flask
+    ++ lib.optional enableAlternatives     beetsExternalPlugins.alternatives
+    ++ lib.optional enableCopyArtifacts    beetsExternalPlugins.copyartifacts
+    ++ lib.optional enableExtraFiles       beetsExternalPlugins.extrafiles
   ;
 
   buildInputs = [
