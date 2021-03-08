@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, expat, libaio, boost, binutils }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, expat, libaio, boost }:
 
 stdenv.mkDerivation rec {
   pname = "thin-provisioning-tools";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ expat libaio boost binutils ];
+  buildInputs = [ expat libaio boost ];
 
   enableParallelBuilding = true;
 

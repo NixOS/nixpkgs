@@ -47,7 +47,7 @@ else stdenv.mkDerivation {
 
 
   # darwin-specific
-  buildInputs = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
+  nativeBuildInputs = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
 
   # linux-specific
   installFlags = lib.optional isLinux

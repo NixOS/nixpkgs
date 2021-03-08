@@ -25,7 +25,8 @@ stdenv.mkDerivation {
                        -I${openfx.dev}/include/OpenFX
                       '';
 
-  buildInputs = [ unzip re2 openfx zlib ilmbase libGLU libGL openexr ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ re2 openfx zlib ilmbase libGLU libGL openexr ];
 
   enableParallelBuilding = true;
 

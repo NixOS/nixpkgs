@@ -9,7 +9,7 @@ mkDerivation {
   name = "kwindowsystem";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
-    broken = lib.versionOlder qtbase.version "5.7.0";
+    broken = lib.versionOlder qtbase.version "5.14.0";
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ libpthreadstubs libXdmcp qttools qtx11extras ];

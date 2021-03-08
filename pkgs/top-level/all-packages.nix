@@ -417,7 +417,7 @@ in
    else makeOverridable (import ../build-support/fetchurl) {
     inherit lib stdenvNoCC buildPackages;
     inherit cacert;
-    curl = buildPackages.curl.override (old: rec {
+    curl = buildPackages.curlMinimal.override (old: rec {
       # break dependency cycles
       fetchurl = stdenv.fetchurlBoot;
       zlib = buildPackages.zlib.override { fetchurl = stdenv.fetchurlBoot; };
@@ -3526,13 +3526,16 @@ in
   cudnn = cudnn_cudatoolkit_10;
 
   curlFull = curl.override {
-    idnSupport = true;
     ldapSupport = true;
+  };
+
+  curl = curlMinimal.override {
+    idnSupport = true;
     gssSupport = true;
     brotliSupport = true;
   };
 
-  curl = callPackage ../tools/networking/curl { };
+  curlMinimal = callPackage ../tools/networking/curl { };
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket { };
 
@@ -6059,6 +6062,8 @@ in
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
+  libqrtr-glib = callPackage ../development/libraries/libqrtr-glib { };
+
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
@@ -7185,7 +7190,7 @@ in
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    xcbuildHook = xcbuild6Hook;
+    xcbuildHook = if stdenv.targetPlatform.isAarch64 then xcbuildHook else xcbuild6Hook;
   };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
@@ -10895,14 +10900,14 @@ in
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust_1_49 = callPackage ../development/compilers/rust/1_49.nix {
+  rust_1_50 = callPackage ../development/compilers/rust/1_50.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust = rust_1_49;
+  rust = rust_1_50;
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_49 = rust_1_49.packages.stable;
-  rustPackages = rustPackages_1_49;
+  rustPackages_1_50 = rust_1_50.packages.stable;
+  rustPackages = rustPackages_1_50;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -11665,13 +11670,15 @@ in
     bison = buildPackages.bison_3_5;
   })
     ruby_2_6
-    ruby_2_7;
+    ruby_2_7
+    ruby_3_0;
 
   ruby = ruby_2_6;
   rubyPackages = rubyPackages_2_6;
 
   rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
+  rubyPackages_3_0 = recurseIntoAttrs ruby_3_0.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
 
@@ -16180,7 +16187,7 @@ in
 
   newman = callPackage ../development/web/newman {};
 
-  newt = callPackage ../development/libraries/newt { };
+  newt = callPackage ../development/libraries/newt { python = python3; };
 
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
@@ -16509,8 +16516,9 @@ in
     python = python37;
   };
 
-  protobuf = protobuf3_14;
+  protobuf = protobuf3_15;
 
+  protobuf3_15 = callPackage ../development/libraries/protobuf/3.15.nix { };
   protobuf3_14 = callPackage ../development/libraries/protobuf/3.14.nix { };
   protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
   protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };

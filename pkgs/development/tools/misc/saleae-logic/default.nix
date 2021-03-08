@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     categories = "Development";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     # Copy prebuilt app to $out

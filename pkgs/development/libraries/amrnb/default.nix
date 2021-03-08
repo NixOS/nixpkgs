@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1qgiw02n2a6r32pimnd97v2jkvnw449xrqmaxiivjy2jcr5h141q";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   configureFlags = [ "--cache-file=config.cache" "--with-downloader=true" ];
 

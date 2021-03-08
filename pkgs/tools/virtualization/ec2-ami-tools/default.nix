@@ -5,8 +5,7 @@ stdenv.mkDerivation rec {
 
   version = "1.5.7";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";

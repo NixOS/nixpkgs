@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   srcs = [ src "Source/lsiutil.tar.gz" ];
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   sourceRoot = "lsiutil";
 

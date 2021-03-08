@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "15l08clqqayi9izrgsz9achan6gl4x57wqsc8mad3yn0xayzz3qy";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook unzip ];
 
-  buildInputs = [ unzip zlib SDL readline libGLU libGL libX11 ];
+  buildInputs = [ zlib SDL readline libGLU libGL libX11 ];
 
   configureFlags = [
     "--target=default"

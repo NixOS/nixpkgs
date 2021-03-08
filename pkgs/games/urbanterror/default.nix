@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
        })
     ];
 
-  buildInputs = [ unzip SDL libGL libGLU openal curl libXxf86vm ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ SDL libGL libGLU openal curl libXxf86vm ];
   sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
 
   configurePhase = ''

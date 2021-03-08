@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "07hxmddg0l31kjfmaq84ni142lbbvgq6391r8bd79wpm819pnigr";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   preInstall = ''
     mkdir -p $out/bin

@@ -250,7 +250,9 @@ in {
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
 
-  aiohttp = callPackage ../development/python-modules/aiohttp { };
+  aiohttp = callPackage ../development/python-modules/aiohttp {
+    pytestCheckHook = self.pkgsBuildHost.pytestCheckHook.override { pytest = self.pytest_6_1; };
+  };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
@@ -6219,6 +6221,14 @@ in {
     callPackage ../development/python-modules/pytest { # hypothesis tests require pytest that causes dependency cycle
       hypothesis = self.hypothesis.override { doCheck = false; };
     };
+
+  pytest_6_1 = self.pytest_6.overridePythonAttrs (oldAttrs: rec {
+    version = "6.1.2";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e";
+    };
+  });
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 

@@ -47,8 +47,8 @@ in stdenv.mkDerivation {
   pname = "opam";
   version = "1.2.2";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ unzip curl ncurses ocaml ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ curl ncurses ocaml ];
 
   src = srcs.opam;
 

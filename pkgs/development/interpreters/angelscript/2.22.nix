@@ -8,13 +8,11 @@ let
     url="http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
     sha256 = "1pp853lbnz383ilp9wbgc3wv1dn7lpx3idz8dmzda94rckl7sd43";
   };
-  buildInputs = [
-    unzip
-  ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ unzip ];
+
   src = fetchurl {
     inherit (s) url sha256;
   };

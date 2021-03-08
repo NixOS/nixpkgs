@@ -38,7 +38,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkg-config qttools swig ];
+    [ autoconf automake doxygen lsb-release pkg-config qttools swig unzip ];
   buildInputs = [
     c-ares
     cryptopp
@@ -53,7 +53,6 @@ mkDerivation rec {
     qtbase
     qtx11extras
     sqlite
-    unzip
     wget
   ];
 

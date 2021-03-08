@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "12g70mgfifwssfvndzq94pin34dizlixhsga75vgj7dakysi2p7f";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
     mkdir "craftysrc"
