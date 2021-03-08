@@ -2897,7 +2897,10 @@ in {
 
   gspread = callPackage ../development/python-modules/gspread { };
 
-  gssapi = callPackage ../development/python-modules/gssapi { inherit (pkgs) darwin krb5Full; };
+  gssapi = callPackage ../development/python-modules/gssapi {
+    inherit (pkgs) krb5Full;
+    inherit (pkgs.darwin.apple_sdk.frameworks) GSS;
+  };
 
   gst-python = callPackage ../development/python-modules/gst-python {
     inherit (pkgs) meson;
