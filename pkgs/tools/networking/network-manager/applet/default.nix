@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.18.0";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12xiy8g8qk18jvxvn78mvq03zvzp06bww49na765jjw0rq541fyx";
+    sha256 = "0lsjkbv66hn7acl2pg9h6hz4b700zzv4cjwrwjvy7043blw0bcla";
   };
 
   mesonFlags = [
