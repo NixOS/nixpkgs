@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-sLmSnPXboAUXjXRqgDb88AJVUPSYylTbYYczIjhHg7w=";
   };
 
-  buildInputs = [ pytest-runner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 
