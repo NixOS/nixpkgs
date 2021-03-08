@@ -5,10 +5,10 @@
 , lib
 , makeWrapper
 , moreutils
-, stdenv
+, stdenvNoCC
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "zstxtns-utils";
   version = "0.0.3";
 

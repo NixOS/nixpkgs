@@ -1131,6 +1131,8 @@ in
 
   bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 
+  blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
+
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
   bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
@@ -1397,6 +1399,8 @@ in
   pacparser = callPackage ../tools/networking/pacparser { };
 
   pass = callPackage ../tools/security/pass { };
+
+  passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
 
   pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
 
@@ -1997,6 +2001,8 @@ in
   oguri = callPackage  ../tools/wayland/oguri { };
 
   slurp = callPackage ../tools/wayland/slurp { };
+
+  swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
@@ -3116,9 +3122,7 @@ in
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
-  cadaver = callPackage ../tools/networking/cadaver {
-    openssl = openssl_1_0_2;
-  };
+  cadaver = callPackage ../tools/networking/cadaver { };
 
   davix = callPackage ../tools/networking/davix { };
 
@@ -3665,6 +3669,8 @@ in
   dnsrecon = callPackage ../tools/security/dnsrecon { };
 
   dnstop = callPackage ../tools/networking/dnstop { };
+
+  dnsviz = python3Packages.callPackage ../tools/networking/dnsviz { };
 
   dnsx = callPackage ../tools/security/dnsx { };
 
@@ -4768,8 +4774,6 @@ in
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
   };
-
-  gmvault = callPackage ../tools/networking/gmvault { };
 
   gnash = callPackage ../misc/gnash {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -8561,7 +8565,9 @@ in
 
   trezorctl = with python3Packages; toPythonApplication trezor;
 
-  trezord = callPackage ../servers/trezord { };
+  trezord = callPackage ../servers/trezord {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
 
@@ -9011,6 +9017,8 @@ in
 
   tre = callPackage ../development/libraries/tre { };
 
+  tremor-rs = callPackage ../tools/misc/tremor-rs { };
+
   ts = callPackage ../tools/system/ts { };
 
   transfig = callPackage ../tools/graphics/transfig {
@@ -9095,6 +9103,8 @@ in
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   xwallpaper = callPackage ../tools/X11/xwallpaper { };
+
+  gxkb = callPackage ../applications/misc/gxkb { };
 
   xxkb = callPackage ../applications/misc/xxkb { };
 
@@ -11572,8 +11582,6 @@ in
 
   # Should eventually be moved inside Python interpreters.
   python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
-
-  python2nix = callPackage ../tools/package-management/python2nix { };
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
@@ -15569,6 +15577,8 @@ in
 
   libosmocore = callPackage ../applications/misc/libosmocore { };
 
+  libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
+
   libotr = callPackage ../development/libraries/libotr { };
 
   libow = callPackage ../development/libraries/libow { };
@@ -15594,6 +15604,8 @@ in
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
+
+  libpostal = callPackage ../development/libraries/libpostal { };
 
   libpaper = callPackage ../development/libraries/libpaper { };
 
@@ -16489,6 +16501,8 @@ in
 
   portmidi = callPackage ../development/libraries/portmidi {};
 
+  prime-server = callPackage ../development/libraries/prime-server { };
+
   primesieve = callPackage ../development/libraries/science/math/primesieve { };
 
   prison = callPackage ../development/libraries/prison { };
@@ -16543,6 +16557,8 @@ in
   pugixml = callPackage ../development/libraries/pugixml { };
 
   pybind11 = pythonPackages.pybind11;
+
+  pylode = callPackage ../misc/pylode {};
 
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
@@ -16700,6 +16716,8 @@ in
   rapidxml = callPackage ../development/libraries/rapidxml {};
 
   raul = callPackage ../development/libraries/audio/raul { };
+
+  raylib = callPackage ../development/libraries/raylib { };
 
   readline = readline6;
   readline6 = readline63;
@@ -17318,6 +17336,10 @@ in
 
   vale = callPackage ../tools/text/vale { };
 
+  valhalla = callPackage ../development/libraries/valhalla {
+    boost = boost.override { enablePython = true; python = python38; };
+  };
+
   vamp-plugin-sdk = callPackage ../development/libraries/audio/vamp-plugin-sdk { };
 
   vc = callPackage ../development/libraries/vc { };
@@ -17554,8 +17576,6 @@ in
   yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt {
     pythonPackages = python3Packages;
   };
-
-  yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
 
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization { };
 
@@ -17827,6 +17847,10 @@ in
   };
 
   adguardhome = callPackage ../servers/adguardhome {};
+
+  alerta = callPackage ../servers/monitoring/alerta/client.nix { };
+
+  alerta-server = callPackage ../servers/monitoring/alerta { };
 
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = pkgs.apacheHttpd_2_4;
@@ -21615,6 +21639,8 @@ in
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
+  bottles = callPackage ../applications/misc/bottles { };
+
   brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
@@ -22896,6 +22922,8 @@ in
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
   hamster = callPackage ../applications/misc/hamster { };
+
+  hacpack = callPackage ../tools/compression/hacpack { };
 
   hashit = callPackage ../tools/misc/hashit { };
 
@@ -24470,6 +24498,8 @@ in
   orpie = callPackage ../applications/misc/orpie { };
 
   osmo = callPackage ../applications/office/osmo { };
+
+  osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon {
     # https://developer.palemoon.org/build/linux/

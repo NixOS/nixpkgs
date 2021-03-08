@@ -1,13 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pkgs
+, rustPackages
 , fetchFromGitHub
 , rustPlatform
-  # Updater script
-, runtimeShell
 , writers
-  # Tests
 , nixosTests
-  # Apple dependencies
 , CoreServices
 , Security
 }:
@@ -23,13 +21,6 @@ in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
   inherit version;
 
-  meta = with lib; {
-    description = "Your project's nix-env";
-    homepage = "https://github.com/nix-community/lorri";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ grahamc Profpatsch ];
-  };
-
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
@@ -43,11 +34,10 @@ in (rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;
-  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix {};
+  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
-  nativeBuildInputs = with pkgs; [ rustPackages.rustfmt ];
-  buildInputs =
-    lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  nativeBuildInputs = [ rustPackages.rustfmt ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   # copy the docs to the $man and $doc outputs
   postInstall = ''
@@ -69,5 +59,12 @@ in (rustPlatform.buildRustPackage rec {
     tests = {
       nixos = nixosTests.lorri;
     };
+  };
+
+  meta = with lib; {
+    description = "Your project's nix-env";
+    homepage = "https://github.com/target/lorri";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ grahamc Profpatsch ];
   };
 })

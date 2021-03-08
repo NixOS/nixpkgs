@@ -6,8 +6,7 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url =
-      "https://download.delta.chat/desktop/v${version}/DeltaChat-${version}.AppImage";
+    url = "https://download.delta.chat/desktop/v${version}/DeltaChat-${version}.AppImage";
     sha256 = "sha256-iw2tU8qqXWbtEdLGlW8HNBHx8F2CgnCGCBUWpM407us=";
   };
 
