@@ -3927,6 +3927,8 @@ in {
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
+  lupa = callPackage ../development/python-modules/lupa { };
+
   lxc = callPackage ../development/python-modules/lxc { };
 
   lxml = callPackage ../development/python-modules/lxml { inherit (pkgs) libxml2 libxslt zlib; };
