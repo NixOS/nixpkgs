@@ -2670,8 +2670,6 @@ in {
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
-  gmusicapi = callPackage ../development/python-modules/gmusicapi { };
-
   gntp = callPackage ../development/python-modules/gntp { };
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
@@ -2794,12 +2792,6 @@ in {
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
   googlemaps = callPackage ../development/python-modules/googlemaps { };
-
-  google-music = callPackage ../development/python-modules/google-music { };
-
-  google-music-proto = callPackage ../development/python-modules/google-music-proto { };
-
-  google-music-utils = callPackage ../development/python-modules/google-music-utils { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
 

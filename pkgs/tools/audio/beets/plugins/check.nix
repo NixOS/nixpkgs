@@ -31,5 +31,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/geigerzaehler/beets-check";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
+    broken = true;
   };
 }

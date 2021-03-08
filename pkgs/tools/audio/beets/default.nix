@@ -16,7 +16,6 @@
 , enableDiscogs          ? true
 , enableEmbyupdate       ? true
 , enableFetchart         ? true
-, enableGmusic           ? true
 , enableKeyfinder        ? true, keyfinder-cli
 , enableKodiupdate       ? true
 , enableLastfm           ? true
@@ -54,7 +53,6 @@ let
     discogs = enableDiscogs;
     embyupdate = enableEmbyupdate;
     fetchart = enableFetchart;
-    gmusic = enableGmusic;
     keyfinder = enableKeyfinder;
     kodiupdate = enableKodiupdate;
     lastgenre = enableLastfm;
@@ -144,7 +142,6 @@ in pythonPackages.buildPythonApplication rec {
     ++ lib.optional enableCheck         beetsExternalPlugins.check
     ++ lib.optional enableConvert       ffmpeg
     ++ lib.optional enableDiscogs       pythonPackages.discogs_client
-    ++ lib.optional enableGmusic        pythonPackages.gmusicapi
     ++ lib.optional enableKeyfinder     keyfinder-cli
     ++ lib.optional enableLastfm        pythonPackages.pylast
     ++ lib.optional enableMpd           pythonPackages.mpd2
@@ -209,6 +206,9 @@ in pythonPackages.buildPythonApplication rec {
     echo echo completion tests passed > test/rsrc/test_completion.sh
 
     sed -i -e 's/len(mf.images)/0/' test/test_zero.py
+
+    # Google Play Music was discontinued
+    rm -r beetsplug/gmusic.py
   '';
 
   postInstall = ''
