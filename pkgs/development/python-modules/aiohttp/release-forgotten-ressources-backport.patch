@@ -1,0 +1,269 @@
+diff --git a/tests/test_client_session.py b/tests/test_client_session.py
+index 298dac9f..ee80623e 100644
+--- a/tests/test_client_session.py
++++ b/tests/test_client_session.py
+@@ -5,6 +5,7 @@ import json
+ import sys
+ from http.cookies import SimpleCookie
+ from io import BytesIO
++from typing import Any
+ from unittest import mock
+ 
+ import pytest
+@@ -30,7 +31,7 @@ def connector(loop):
+     proto = mock.Mock()
+     conn._conns["a"] = [(proto, 123)]
+     yield conn
+-    conn.close()
++    loop.run_until_complete(conn.close())
+ 
+ 
+ @pytest.fixture
+@@ -292,7 +293,7 @@ async def test_connector(create_session, loop, mocker) -> None:
+ 
+     await session.close()
+     assert connector.close.called
+-    connector.close()
++    await connector.close()
+ 
+ 
+ async def test_create_connector(create_session, loop, mocker) -> None:
+@@ -327,7 +328,7 @@ def test_connector_loop(loop) -> None:
+         )
+ 
+ 
+-def test_detach(session) -> None:
++def test_detach(loop: Any, session) -> None:
+     conn = session.connector
+     try:
+         assert not conn.closed
+@@ -336,7 +337,7 @@ def test_detach(session) -> None:
+         assert session.closed
+         assert not conn.closed
+     finally:
+-        conn.close()
++        loop.run_until_complete(conn.close())
+ 
+ 
+ async def test_request_closed_session(session) -> None:
+@@ -514,6 +515,7 @@ async def test_cookie_jar_usage(loop, aiohttp_client) -> None:
+ async def test_session_default_version(loop) -> None:
+     session = aiohttp.ClientSession(loop=loop)
+     assert session.version == aiohttp.HttpVersion11
++    await session.close()
+ 
+ 
+ async def test_session_loop(loop) -> None:
+@@ -632,6 +634,8 @@ async def test_request_tracing_exception() -> None:
+         )
+         assert not on_request_end.called
+ 
++    await session.close()
++
+ 
+ async def test_request_tracing_interpose_headers(loop, aiohttp_client) -> None:
+     async def handler(request):
+@@ -674,6 +678,7 @@ async def test_client_session_custom_attr(loop) -> None:
+     session = ClientSession(loop=loop)
+     with pytest.warns(DeprecationWarning):
+         session.custom = None
++    await session.close()
+ 
+ 
+ async def test_client_session_timeout_args(loop) -> None:
+@@ -698,21 +703,25 @@ async def test_client_session_timeout_args(loop) -> None:
+ async def test_client_session_timeout_default_args(loop) -> None:
+     session1 = ClientSession()
+     assert session1.timeout == client.DEFAULT_TIMEOUT
++    await session1.close()
+ 
+ 
+ async def test_client_session_timeout_argument() -> None:
+     session = ClientSession(timeout=500)
+     assert session.timeout == 500
++    await session.close()
+ 
+ 
+ async def test_requote_redirect_url_default() -> None:
+     session = ClientSession()
+     assert session.requote_redirect_url
++    await session.close()
+ 
+ 
+ async def test_requote_redirect_url_default_disable() -> None:
+     session = ClientSession(requote_redirect_url=False)
+     assert not session.requote_redirect_url
++    await session.close()
+ 
+ 
+ async def test_requote_redirect_setter() -> None:
+diff --git a/tests/test_connector.py b/tests/test_connector.py
+index 09841923..b017c855 100644
+--- a/tests/test_connector.py
++++ b/tests/test_connector.py
+@@ -1750,26 +1750,26 @@ async def test_limit_property(loop) -> None:
+     conn = aiohttp.BaseConnector(loop=loop, limit=15)
+     assert 15 == conn.limit
+ 
+-    conn.close()
++    await conn.close()
+ 
+ 
+ async def test_limit_per_host_property(loop) -> None:
+     conn = aiohttp.BaseConnector(loop=loop, limit_per_host=15)
+     assert 15 == conn.limit_per_host
+ 
+-    conn.close()
++    await conn.close()
+ 
+ 
+ async def test_limit_property_default(loop) -> None:
+     conn = aiohttp.BaseConnector(loop=loop)
+     assert conn.limit == 100
+-    conn.close()
++    await conn.close()
+ 
+ 
+ async def test_limit_per_host_property_default(loop) -> None:
+     conn = aiohttp.BaseConnector(loop=loop)
+     assert conn.limit_per_host == 0
+-    conn.close()
++    await conn.close()
+ 
+ 
+ async def test_force_close_and_explicit_keep_alive(loop) -> None:
+diff --git a/tests/test_web_functional.py b/tests/test_web_functional.py
+index a28fcd4f..7a19cfe6 100644
+--- a/tests/test_web_functional.py
++++ b/tests/test_web_functional.py
+@@ -324,7 +324,8 @@ async def test_post_single_file(aiohttp_client) -> None:
+ 
+     fname = here / "data.unknown_mime_type"
+ 
+-    resp = await client.post("/", data=[fname.open("rb")])
++    with fname.open("rb") as fd:
++        resp = await client.post("/", data=[fd])
+     assert 200 == resp.status
+ 
+ 
+@@ -875,12 +876,15 @@ async def test_response_with_streamer_no_params(aiohttp_client, fname) -> None:
+ 
+ 
+ async def test_response_with_file(aiohttp_client, fname) -> None:
++    outer_file_descriptor = None
+ 
+     with fname.open("rb") as f:
+         data = f.read()
+ 
+     async def handler(request):
+-        return web.Response(body=fname.open("rb"))
++        nonlocal outer_file_descriptor
++        outer_file_descriptor = fname.open("rb")
++        return web.Response(body=outer_file_descriptor)
+ 
+     app = web.Application()
+     app.router.add_get("/", handler)
+@@ -901,15 +905,21 @@ async def test_response_with_file(aiohttp_client, fname) -> None:
+     assert resp.headers.get("Content-Length") == str(len(resp_data))
+     assert resp.headers.get("Content-Disposition") == expected_content_disposition
+ 
++    outer_file_descriptor.close()
++
+ 
+ async def test_response_with_file_ctype(aiohttp_client, fname) -> None:
++    outer_file_descriptor = None
+ 
+     with fname.open("rb") as f:
+         data = f.read()
+ 
+     async def handler(request):
++        nonlocal outer_file_descriptor
++        outer_file_descriptor = fname.open("rb")
++
+         return web.Response(
+-            body=fname.open("rb"), headers={"content-type": "text/binary"}
++            body=outer_file_descriptor, headers={"content-type": "text/binary"}
+         )
+ 
+     app = web.Application()
+@@ -927,14 +937,19 @@ async def test_response_with_file_ctype(aiohttp_client, fname) -> None:
+     assert resp.headers.get("Content-Length") == str(len(resp_data))
+     assert resp.headers.get("Content-Disposition") == expected_content_disposition
+ 
++    outer_file_descriptor.close()
++
+ 
+ async def test_response_with_payload_disp(aiohttp_client, fname) -> None:
++    outer_file_descriptor = None
+ 
+     with fname.open("rb") as f:
+         data = f.read()
+ 
+     async def handler(request):
+-        pl = aiohttp.get_payload(fname.open("rb"))
++        nonlocal outer_file_descriptor
++        outer_file_descriptor = fname.open("rb")
++        pl = aiohttp.get_payload(outer_file_descriptor)
+         pl.set_content_disposition("inline", filename="test.txt")
+         return web.Response(body=pl, headers={"content-type": "text/binary"})
+ 
+@@ -953,6 +968,8 @@ async def test_response_with_payload_disp(aiohttp_client, fname) -> None:
+         == "inline; filename=\"test.txt\"; filename*=utf-8''test.txt"
+     )
+ 
++    outer_file_descriptor.close()
++
+ 
+ async def test_response_with_payload_stringio(aiohttp_client, fname) -> None:
+     async def handler(request):
+@@ -1565,6 +1582,7 @@ async def test_post_max_client_size(aiohttp_client) -> None:
+     assert (
+         "Maximum request body size 10 exceeded, " "actual body size 1024" in resp_text
+     )
++    data["file"].close()
+ 
+ 
+ async def test_post_max_client_size_for_file(aiohttp_client) -> None:
+@@ -1618,11 +1636,12 @@ async def test_response_with_bodypart_named(aiohttp_client, tmpdir) -> None:
+ 
+     f = tmpdir.join("foobar.txt")
+     f.write_text("test", encoding="utf8")
+-    data = {"file": open(str(f), "rb")}
+-    resp = await client.post("/", data=data)
++    with f.open("rb") as fd:
++        data = {"file": fd}
++        resp = await client.post("/", data=data)
+ 
+-    assert 200 == resp.status
+-    body = await resp.read()
++        assert 200 == resp.status
++        body = await resp.read()
+     assert body == b"test"
+ 
+     disp = multipart.parse_content_disposition(resp.headers["content-disposition"])
+@@ -1700,12 +1719,15 @@ async def test_response_context_manager(aiohttp_server) -> None:
+     app = web.Application()
+     app.router.add_route("GET", "/", handler)
+     server = await aiohttp_server(app)
+-    resp = await aiohttp.ClientSession().get(server.make_url("/"))
++    session = aiohttp.ClientSession()
++    resp = await session.get(server.make_url("/"))
+     async with resp:
+         assert resp.status == 200
+         assert resp.connection is None
+     assert resp.connection is None
+ 
++    await session.close()
++
+ 
+ async def test_response_context_manager_error(aiohttp_server) -> None:
+     async def handler(request):
+@@ -1726,6 +1748,8 @@ async def test_response_context_manager_error(aiohttp_server) -> None:
+ 
+     assert len(session._connector._conns) == 1
+ 
++    await session.close()
++
+ 
+ async def aiohttp_client_api_context_manager(aiohttp_server):
+     async def handler(request):

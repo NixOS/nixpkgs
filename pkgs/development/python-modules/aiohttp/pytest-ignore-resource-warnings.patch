@@ -1,0 +1,18 @@
+diff --git a/setup.cfg b/setup.cfg
+index 2f528bc4..b6dbaf72 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -38,6 +38,13 @@ addopts = --cov=aiohttp -v -rxXs --durations 10
+ filterwarnings = 
+ 	error
+ 	ignore:module 'ssl' has no attribute 'OP_NO_COMPRESSION'. The Python interpreter is compiled against OpenSSL < 1.0.0. Ref. https.//docs.python.org/3/library/ssl.html#ssl.OP_NO_COMPRESSION:UserWarning
++    ignore:Exception ignored in. <function _SSLProtocolTransport.__del__ at.:pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception
++    ignore:Exception ignored in. <coroutine object BaseConnector.close at 0x.:pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception
++    ignore:Exception ignored in. <coroutine object ClientSession._request at 0x.:pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception
++    ignore:Exception ignored in. <function ClientSession.__del__ at 0x.:pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception
++    ignore:Exception ignored in. <_io.FileIO .closed.>:pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception
++    ignore:Exception ignored in. <function _DeprecationWaiter.__del__ at.:pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception
++    ignore:Exception ignored in. <socket.socket
+ junit_suite_name = aiohttp_test_suite
+ norecursedirs = dist docs build .tox .eggs
+ minversion = 3.8.2

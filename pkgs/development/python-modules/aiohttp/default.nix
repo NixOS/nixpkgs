@@ -19,6 +19,7 @@
 , pytestCheckHook
 , re-assert
 , trustme
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,23 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf";
   };
+
+  patches = [
+    # Release all forgotten resources in tests
+    # https://github.com/aio-libs/aiohttp/commit/405766156a79c9b441049a0bcbc4b0e1ecdc164d
+    (fetchpatch {
+      url = "https://github.com/aio-libs/aiohttp/commit/405766156a79c9b441049a0bcbc4b0e1ecdc164d.patch";
+      excludes = [
+        "tests/test_web_functional.py"
+        "tests/test_client_session.py"
+      ];
+      sha256 = "12jdnrahp6sqxyyg5sj8478cpqwdfm5yqvsyh3cjvkpfaqdn73ni";
+    })
+    ./release-forgotten-ressources-backport.patch
+
+    # https://github.com/aio-libs/aiohttp/commit/942c1b801f0ce4b5cd0103be58eb0359edf698a2
+    ./pytest-ignore-resource-warnings.patch
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg --replace " --cov=aiohttp" ""
@@ -65,10 +83,16 @@ buildPythonPackage rec {
   disabledTests = [
     # Disable tests that require network access
     "test_mark_formdata_as_processed"
+    # AttributeError: 'Request' object has no attribute '_finish'
+    "test_remote_peername_unix"
+    # Exception ignored in: <function BaseConnector.__del__ at 0x7ffff53bb430>
+    "test_connect_with_limit_cancelled"
+    # NameError: name 'conn' is not defined
+    "test_connect_with_capacity_release_waiters"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [
-    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+    "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
     "test_close"
   ];
 
