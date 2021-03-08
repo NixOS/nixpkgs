@@ -26,7 +26,10 @@ let
     upload_max_filesize = cfg.maxUploadSize;
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
-  } // cfg.phpOptions;
+  } // cfg.phpOptions
+    // optionalAttrs cfg.caching.apcu {
+      "apc.enable_cli" = "1";
+    };
   phpOptionsStr = toKeyValue phpOptions;
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
@@ -85,7 +88,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud18" "nextcloud19" "nextcloud20" ];
+      relatedPackages = [ "nextcloud18" "nextcloud19" "nextcloud20" "nextcloud21" ];
     };
 
     maxUploadSize = mkOption {
@@ -264,6 +267,24 @@ in {
           may be served via HTTPS.
         '';
       };
+
+      defaultPhoneRegion = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        example = "DE";
+        description = ''
+          <warning>
+           <para>This option exists since Nextcloud 21! If older versions are used,
+            this will throw an eval-error!</para>
+          </warning>
+
+          <link xlink:href="https://www.iso.org/iso-3166-country-codes.html">ISO 3611-1</link>
+          country codes for automatic phone-number detection without a country code.
+
+          With e.g. <literal>DE</literal> set, the <literal>+49</literal> can be omitted for
+          phone-numbers.
+        '';
+      };
     };
 
     caching = {
@@ -329,6 +350,9 @@ in {
             && !(acfg.adminpass != null && acfg.adminpassFile != null));
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
+        { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
+          message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
+        }
       ];
 
       warnings = []
@@ -362,9 +386,10 @@ in {
           support upgrades that skip multiple versions (i.e. an upgrade from 17 to 19 isn't
           possible, but an upgrade from 18 to 19).
         '')
-        ++ (optional (versionOlder cfg.package.version "20") ''
-          The latest Nextcloud release is v20 which can be installed by setting
-          `services.nextcloud.package` to `pkgs.nextcloud20`.
+        ++ (optional (versionOlder cfg.package.version "21") ''
+          The latest Nextcloud release is v21 which can be installed by setting
+          `services.nextcloud.package` to `pkgs.nextcloud21`. Please note that if you're
+          on `pkgs.nextcloud19`, you'll have to install `pkgs.nextcloud20` first.
         '');
 
       services.nextcloud.package = with pkgs;
@@ -433,6 +458,7 @@ in {
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+              ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
             ];
           '';
           occInstallCmd = let
@@ -582,6 +608,14 @@ in {
               access_log off;
             '';
           };
+          "= /" = {
+            priority = 100;
+            extraConfig = ''
+              if ( $http_user_agent ~ ^DavClnt ) {
+                return 302 /remote.php/webdav/$is_args$args;
+              }
+            '';
+          };
           "/" = {
             priority = 900;
             extraConfig = "rewrite ^ /index.php;";
@@ -599,6 +633,9 @@ in {
               }
               location = /.well-known/caldav {
                 return 301 /remote.php/dav;
+              }
+              location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
+                return 301 /index.php$request_uri;
               }
               try_files $uri $uri/ =404;
             '';

@@ -30,6 +30,7 @@
 , libXrandr
 , libXrender
 , libXScrnSaver
+, libxshmfence
 , libXtst
 , mesa
 , nspr
@@ -72,6 +73,7 @@ rpath = lib.makeLibraryPath [
   libXi
   libXrandr
   libXrender
+  libxshmfence
   libXtst
   libuuid
   mesa
@@ -88,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.19.88";
+  version = "1.21.73";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "jySedvm9V3O4kri1PgoqC0OsC1gvB0Nwx8leoUZnHK0=";
+    sha256 = "12jkj9h1smipqlkidnd3r492yfnncl0b2dmjq22qp2vsrscc3jfg";
   };
 
   dontConfigure = true;
