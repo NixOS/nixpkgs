@@ -32,6 +32,6 @@ buildGoModule rec {
       You can feed it standard input, any number of files or any number of directories to recurse into.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ zowoq SuperSandro2000 ];
   };
 }
