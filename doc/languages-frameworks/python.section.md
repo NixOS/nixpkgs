@@ -1188,7 +1188,8 @@ community to help save time. No tool is preferred at the moment.
   expressions for your Python project. Note that [sharing derivations from
   pypi2nix with nixpkgs is possible but not
   encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
+- [nixpkgs-pytools](https://github.com/nix-community/nixpkgs-pytools)
+- [poetry2nix](https://github.com/nix-community/poetry2nix)
 
 ### Deterministic builds
 
