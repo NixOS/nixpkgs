@@ -1400,6 +1400,8 @@ in
 
   pass = callPackage ../tools/security/pass { };
 
+  passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
+
   pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
 
   pass-nodmenu = callPackage ../tools/security/pass {
