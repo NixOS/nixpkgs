@@ -22,8 +22,11 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
+  buildInputs = [
+    pytest
+  ];
   checkInputs = [ pytestCheckHook filelock ];
-  propagatedBuildInputs = [ execnet pytest pytest-forked psutil ];
+  propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
   # access file system
   disabledTests = [
