@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , makeWrapper
-, fetchFromGitHub
 # Dynamic libraries
 , alsaLib
 , atk
@@ -31,14 +30,13 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.5.7011.0206";
+  version = "5.5.7938.0228";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "00ahly3kjjznn73vcxgm5wj2pxgw6wdk6vzgd8svfmnl5kqq6c02";
+      sha256 = "KM8o2tgIn0lecOM4gKdTOdk/zsohlFqtNX+ca/S6FGY=";
     };
   };
-  dontUnpack = true;
 
   libs = lib.makeLibraryPath ([
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
@@ -68,8 +66,10 @@ let
     xorg.libXtst
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
-in stdenv.mkDerivation {
-  name = "zoom-${version}";
+in stdenv.mkDerivation rec {
+  pname = "zoom";
+  inherit version;
+  src = srcs.${stdenv.hostPlatform.system};
 
   dontUnpack = true;
 
@@ -80,7 +80,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir $out
-    tar -C $out -xf ${srcs.${stdenv.hostPlatform.system}}
+    tar -C $out -xf ${src}
     mv $out/usr/* $out/
     runHook postInstall
   '';

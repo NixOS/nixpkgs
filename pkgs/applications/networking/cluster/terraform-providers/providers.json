@@ -398,10 +398,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/helm",
     "repo": "terraform-provider-helm",
-    "rev": "v1.3.2",
-    "sha256": "0mpbf03483jqrwd9cx4pdn2pcv4swfs5nbp021gaqr0jf1w970x6",
+    "rev": "v2.0.2",
+    "sha256": "119zvlkwa7ygwsjxxdl7z8cqb0c4m6gy21356jnsasf4c3557rrb",
     "vendorSha256": null,
-    "version": "1.3.2"
+    "version": "2.0.2"
   },
   "heroku": {
     "owner": "terraform-providers",
@@ -504,9 +504,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v1.13.3",
-    "sha256": "01hkbb81r3k630s3ww6379p66h1fsd5cd1dz14jm833nsr142c0i",
-    "version": "1.13.3"
+    "rev": "v2.0.2",
+    "sha256": "129aylw6hxa44syfnb0kkkihwvlaa6d1jnxrcbwkql6xxhn9zizf",
+    "vendorSha256": null,
+    "version": "2.0.2"
   },
   "kubernetes-alpha": {
     "owner": "hashicorp",

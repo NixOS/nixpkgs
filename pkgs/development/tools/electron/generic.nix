@@ -14,6 +14,7 @@
 , mesa
 , libxkbcommon
 , libappindicator-gtk3
+, libxshmfence
 }:
 
 version: hashes:
@@ -60,6 +61,7 @@ let
     [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
     ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
     ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
+    ++ optionals (! versionOlder version "12.0.0") [ libxshmfence ]
   );
 
   linux = {

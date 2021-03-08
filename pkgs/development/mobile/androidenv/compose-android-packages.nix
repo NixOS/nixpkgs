@@ -24,7 +24,8 @@
 }:
 
 let
-  inherit (pkgs) stdenv lib fetchurl makeWrapper unzip;
+  inherit (pkgs) stdenv lib fetchurl;
+  inherit (pkgs.buildPackages) makeWrapper unzip;
 
   # Determine the Android os identifier from Nix's system identifier
   os = if stdenv.system == "x86_64-linux" then "linux"

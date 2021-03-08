@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, buildPackages
+, buildPackages, pkgsHostHost
 , pkg-config, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = glib.flattenInclude + ''
     substituteInPlace $dev/bin/freetype-config \
-      --replace ${buildPackages.pkg-config} ${pkg-config}
+      --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
 
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"

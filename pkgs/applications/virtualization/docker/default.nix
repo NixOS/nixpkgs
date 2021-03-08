@@ -1,11 +1,11 @@
-{ lib, callPackage }:
+{ lib, callPackage, fetchFromGitHub }:
 
 with lib;
 
 rec {
   dockerGen = {
       version, rev, sha256
-      , mobyRev, mobySha256
+      , moby-src
       , runcRev, runcSha256
       , containerdRev, containerdSha256
       , tiniRev, tiniSha256, buildxSupport ? false
@@ -65,12 +65,7 @@ rec {
       inherit version;
       inherit docker-runc docker-containerd docker-proxy docker-tini;
 
-      src = fetchFromGitHub {
-        owner = "moby";
-        repo = "moby";
-        rev = mobyRev;
-        sha256 = mobySha256;
-      };
+      src = moby-src;
 
       goPackagePath = "github.com/docker/docker";
 
@@ -211,6 +206,9 @@ rec {
       maintainers = with maintainers; [ offline tailhook vdemeester periklis ];
       platforms = with platforms; linux ++ darwin;
     };
+
+    # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
+    inherit moby-src;
   });
 
   # Get revisions from
@@ -219,8 +217,12 @@ rec {
     version = "20.10.2";
     rev = "v${version}";
     sha256 = "0z0hpm5hrqh7p8my8lmiwpym2shs48my6p0zv2cc34wym0hcly51";
-    mobyRev = "v${version}";
-    mobySha256 = "0c2zycpnwj4kh8m8xckv1raj3fx07q9bfaj46rr85jihm4p2dp5w";
+    moby-src = fetchFromGitHub {
+      owner = "moby";
+      repo = "moby";
+      rev = "v${version}";
+      sha256 = "0c2zycpnwj4kh8m8xckv1raj3fx07q9bfaj46rr85jihm4p2dp5w";
+    };
     runcRev = "ff819c7e9184c13b7c2607fe6c30ae19403a7aff"; # v1.0.0-rc92
     runcSha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
     containerdRev = "269548fa27e0089a8b8278fc4fc781d7f65a939b"; # v1.4.3

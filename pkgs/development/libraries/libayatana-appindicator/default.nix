@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   pname = "libayatana-appindicator-gtk${gtkVersion}";
   version = "0.5.5";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-appindicator";
