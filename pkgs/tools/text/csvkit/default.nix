@@ -38,7 +38,5 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;
     homepage = "https://github.com/wireservice/csvkit";
-    # FAIL: test_to_sql_create_statement_with_schema (tests.test_agatesql.TestSQL)
-    broken = true;
   };
 }

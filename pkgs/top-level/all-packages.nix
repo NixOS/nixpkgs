@@ -1400,6 +1400,8 @@ in
 
   pass = callPackage ../tools/security/pass { };
 
+  passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
+
   pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
 
   pass-nodmenu = callPackage ../tools/security/pass {
@@ -4769,8 +4771,6 @@ in
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
   };
-
-  gmvault = callPackage ../tools/networking/gmvault { };
 
   gnash = callPackage ../misc/gnash {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -17559,8 +17559,6 @@ in
     pythonPackages = python3Packages;
   };
 
-  yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
-
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization { };
 
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
@@ -17831,6 +17829,10 @@ in
   };
 
   adguardhome = callPackage ../servers/adguardhome {};
+
+  alerta = callPackage ../servers/monitoring/alerta/client.nix { };
+
+  alerta-server = callPackage ../servers/monitoring/alerta { };
 
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = pkgs.apacheHttpd_2_4;

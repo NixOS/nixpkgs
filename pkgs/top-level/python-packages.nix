@@ -334,10 +334,6 @@ in {
 
   alembic = callPackage ../development/python-modules/alembic { };
 
-  alerta = callPackage ../development/python-modules/alerta { };
-
-  alerta-server = callPackage ../development/python-modules/alerta-server { };
-
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
@@ -5258,6 +5254,8 @@ in {
   pulp = callPackage ../development/python-modules/pulp { };
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
+
+  pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
   pure-eval = callPackage ../development/python-modules/pure-eval { };
 

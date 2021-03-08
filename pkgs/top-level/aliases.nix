@@ -232,6 +232,7 @@ mapAliases ({
   };
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
+  gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
   gnome-mpv = celluloid; # added 2019-08-22
   gnome15 = throw "gnome15 has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2019-12-10
   gmic_krita_qt = gmic-qt-krita; # added 2019-09-07
@@ -786,6 +787,7 @@ mapAliases ({
   xv = xxv; # added 2020-02-22
   youtubeDL = youtube-dl;  # added 2014-10-26
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
+  yubikey-neo-manager = throw "yubikey-neo-manager has been removed because it was broken. Use yubikey-manager-qt instead."; # added 2021-03-08
   yuzu = yuzu-mainline; # added 2021-01-25
   zdfmediathk = mediathekview; # added 2019-01-19
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
