@@ -1,18 +1,30 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
-, pygments, importlib-metadata, isPy3k }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi
+, appdirs
+, black
+, importlib-metadata
+, isPy3k
+, jedi
+, prompt_toolkit
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.7";
+  version = "3.0.16";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34814eb410f854c823be4c4a34124e1dc8ca696da1c1fa611f9da606c5a8a609";
+    sha256 = "4b0f6e381a8251ec8d6aa94fe12f3400bf6edf789f89c8a6099f8a91d4a5d2e1";
   };
 
-  propagatedBuildInputs = [ appdirs prompt_toolkit docopt jedi pygments ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [
+    appdirs
+    black # yes, this is in install_requires
+    jedi
+    prompt_toolkit
+    pygments
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # no tests to run
   doCheck = false;

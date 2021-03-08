@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-kkH4px34VpnO/S1VjgQGU9Mm4/VpmiOtvlz2ubtStAk=";
+    sha256 = "sha256-BXs7aKUYiU5L2OjhhmJ+dkHvNcrnw5qREwOTB6npLnw=";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];

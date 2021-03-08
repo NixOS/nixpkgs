@@ -121,7 +121,7 @@ Use the `meta.broken` attribute to disable the package for unsupported Qt versio
 
 stdenv.mkDerivation {
   # ...
-  # Disable this library with Qt &lt; 5.9.0
+  # Disable this library with Qt < 5.9.0
   meta.broken = lib.versionOlder qtbase.version "5.9.0";
 }
 ```

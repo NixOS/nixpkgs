@@ -1136,9 +1136,9 @@ preBuild = ''
 
    <variablelist>
     <title>Variables controlling the install phase</title>
-     <varlistentry xml:id="var-stdenv-dontInstall">
+    <varlistentry xml:id="var-stdenv-dontInstall">
      <term>
-       <varname>dontInstall</varname>
+      <varname>dontInstall</varname>
      </term>
      <listitem>
       <para>
@@ -1839,10 +1839,7 @@ addEnvHooks "$hostOffset" myBashFunction
      </term>
      <listitem>
       <para>
-       This setup hook moves any systemd user units installed in the lib
-       subdirectory into share. In addition, a link is provided from share to
-       lib for compatibility. This is needed for systemd to find user services
-       when installed into the user profile.
+       This setup hook moves any systemd user units installed in the lib subdirectory into share. In addition, a link is provided from share to lib for compatibility. This is needed for systemd to find user services when installed into the user profile.
       </para>
      </listitem>
     </varlistentry>
@@ -2022,8 +2019,7 @@ addEnvHooks "$hostOffset" myBashFunction
        This is a special setup hook which helps in packaging proprietary software in that it automatically tries to find missing shared library dependencies of ELF files based on the given <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>.
       </para>
       <para>
-       You can also specify a <varname>runtimeDependencies</varname> variable which lists dependencies to be unconditionally added to <glossterm>rpath</glossterm> of all executables.
-       This is useful for programs that use <citerefentry>
+       You can also specify a <varname>runtimeDependencies</varname> variable which lists dependencies to be unconditionally added to <glossterm>rpath</glossterm> of all executables. This is useful for programs that use <citerefentry>
        <refentrytitle>dlopen</refentrytitle>
        <manvolnum>3</manvolnum> </citerefentry> to load libraries at runtime.
       </para>

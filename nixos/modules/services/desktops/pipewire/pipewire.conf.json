@@ -1,0 +1,55 @@
+{
+  "context.properties": {
+    "link.max-buffers": 16,
+    "core.daemon": true,
+    "core.name": "pipewire-0"
+  },
+  "context.spa-libs": {
+    "audio.convert.*": "audioconvert/libspa-audioconvert",
+    "api.alsa.*": "alsa/libspa-alsa",
+    "api.v4l2.*": "v4l2/libspa-v4l2",
+    "api.libcamera.*": "libcamera/libspa-libcamera",
+    "api.bluez5.*": "bluez5/libspa-bluez5",
+    "api.vulkan.*": "vulkan/libspa-vulkan",
+    "api.jack.*": "jack/libspa-jack",
+    "support.*": "support/libspa-support"
+  },
+  "context.modules": {
+    "libpipewire-module-rtkit": {
+      "args": {},
+      "flags": [
+        "ifexists",
+        "nofail"
+      ]
+    },
+    "libpipewire-module-protocol-native": null,
+    "libpipewire-module-profiler": null,
+    "libpipewire-module-metadata": null,
+    "libpipewire-module-spa-device-factory": null,
+    "libpipewire-module-spa-node-factory": null,
+    "libpipewire-module-client-node": null,
+    "libpipewire-module-client-device": null,
+    "libpipewire-module-portal": {
+      "flags": [
+        "ifexists",
+        "nofail"
+      ]
+    },
+    "libpipewire-module-access": {
+      "args": {}
+    },
+    "libpipewire-module-adapter": null,
+    "libpipewire-module-link-factory": null,
+    "libpipewire-module-session-manager": null
+  },
+  "context.objects": {
+    "spa-node-factory": {
+      "args": {
+        "factory.name": "support.node.driver",
+        "node.name": "Dummy-Driver",
+        "priority.driver": 8000
+      }
+    }
+  },
+  "context.exec": {}
+}

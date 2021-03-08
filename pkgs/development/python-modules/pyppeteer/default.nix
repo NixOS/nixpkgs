@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1bcc61575ff788249d3bcaee696d856fa1153401a5428cb7376d826dd68dd9b";
+    sha256 = "c2974be1afa13b17f7ecd120d265d8b8cd324d536a231c3953ca872b68aba4af";
   };
 
   # tests want to write to /homeless-shelter

@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "zha-ng";
     repo = "zigpy-znp";
     rev = "v${version}";
-    sha256 = "18dav2n5fqdigf8dl7gcqa9z8l6p2ig6l5q78gqg2wj7wjpncwyj";
+    sha256 = "1g5jssdnibhb4i4k1js9iy9w40cipf1gdnyp847x0bv6wblzx8rl";
   };
 
   propagatedBuildInputs = [
@@ -43,11 +43,6 @@ buildPythonPackage rec {
     pytest-timeout
     pytestcov
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # zigpy-znp was too slow to sync up with the zigpy 0.29 release and has API breakage, remove >0.3.0
-    "test_force_remove"
   ];
 
   meta = with lib; {

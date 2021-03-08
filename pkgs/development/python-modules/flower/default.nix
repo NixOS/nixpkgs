@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "171zckhk9ni14f1d82wf62hhciy0gx13fd02sr9m9qlj50fnv4an";
+    sha256 = "cf27a254268bb06fd4972408d0518237fcd847f7da4b4cd8055e228150ace8f3";
   };
 
   postPatch = ''
@@ -35,11 +35,13 @@ buildPythonPackage rec {
 
   checkInputs = [ mock ];
 
+  pythonImportsCheck = [ "flower" ];
+
   meta = with lib; {
     description = "Celery Flower";
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.arnoldfarkas ];
-    broken = (celery.version == "5.0.2"); # currently broken with celery>=5.0 by https://github.com/mher/flower/pull/1021
+    broken = (celery.version >= "5.0.2"); # currently broken with celery>=5.0 by https://github.com/mher/flower/pull/1021
   };
 }

@@ -754,6 +754,49 @@ self: super:
      once during the time when the timer was inactive.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>rustPlatform.buildRustPackage</literal> function is split into several hooks:
+     <package>cargoSetupHook</package> to set up vendoring for Cargo-based projects,
+     <package>cargoBuildHook</package> to build a project using Cargo,
+     <package>cargoInstallHook</package> to install a project using Cargo, and
+     <package>cargoCheckHook</package> to run tests in Cargo-based projects. With this change,
+     mixed-language projects can use the relevant hooks within builders other than
+     <literal>buildRustPackage</literal>. However, these changes also required several API changes to
+     <literal>buildRustPackage</literal> itself:
+
+     <itemizedlist>
+      <listitem>
+       <para>
+        The <literal>target</literal> argument was removed. Instead, <literal>buildRustPackage</literal>
+        will always use the same target as the C/C++ compiler that is used.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        The <literal>cargoParallelTestThreads</literal> argument was removed. Parallel tests are
+        now disabled through <literal>dontUseCargoParallelTests</literal>.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>rustPlatform.maturinBuildHook</literal> hook was added. This hook can be used
+     with <literal>buildPythonPackage</literal> to build Python packages that are written in Rust
+     and use Maturin as their build tool.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Kubernetes has <link xlink:href="https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/">deprecated docker</link> as container runtime.
+     As a consequence, the Kubernetes module now has support for configuration of custom remote container runtimes and enables containerd by default.
+     Note that containerd is more strict regarding container image OCI-compliance.
+     As an example, images with CMD or ENTRYPOINT defined as strings (not lists) will fail on containerd, while working fine on docker.
+     Please test your setup and container images with containerd prior to upgrading.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

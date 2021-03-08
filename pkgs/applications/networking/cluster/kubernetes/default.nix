@@ -20,18 +20,20 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.19.5";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "15bv620fj4x731f2z2a9dcdss18rk379kc40g49bpqsdn42jjx2z";
+    sha256 = "0nni351ya688dphdkpyq94p3wjw2kigg85kmalwdpv5wpz1abl5g";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
 
   outputs = [ "out" "man" "pause" ];
+
+  patches = [ ./fixup-addonmanager-lib-path.patch ];
 
   postPatch = ''
     # go env breaks the sandbox
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     ./hack/update-generated-docs.sh
-    (cd build/pause && cc pause.c -o pause)
+    (cd build/pause/linux && cc pause.c -o pause)
   '';
 
   installPhase = ''
@@ -61,14 +63,19 @@ stdenv.mkDerivation rec {
       install -D _output/local/go/bin/''${p##*/} -t $out/bin
     done
 
-    install -D build/pause/pause -t $pause/bin
+    install -D build/pause/linux/pause -t $pause/bin
     installManPage docs/man/man1/*.[1-9]
 
-    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
+    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the current working dir
+    # or in /opt. We have to patch this for now.
+    substitute cluster/addons/addon-manager/kube-addons-main.sh $out/bin/kube-addons \
+      --subst-var out
+
+    chmod +x $out/bin/kube-addons
     patchShebangs $out/bin/kube-addons
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
-    cp ${./mk-docker-opts.sh} $out/bin/mk-docker-opts.sh
+    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons-lib.sh
 
     for tool in kubeadm kubectl; do
       installShellCompletion --cmd $tool \

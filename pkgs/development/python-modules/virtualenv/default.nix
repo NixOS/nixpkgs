@@ -5,7 +5,6 @@
 , distlib
 , fetchPypi
 , filelock
-, fish
 , flaky
 , importlib-metadata
 , importlib-resources
@@ -24,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.2.1";
+  version = "20.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e0aac7525e880a429764cefd3aaaff54afb5d9f25c82627563603f5d7de5a6e5";
+    sha256 = "b7a8ec323ee02fb2312f098b6b4c9de99559b462775bc8fe3627a73706603c1b";
   };
 
   nativeBuildInputs = [
@@ -56,7 +55,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     cython
-    fish
     flaky
     pytest-freezegun
     pytest-mock
@@ -77,6 +75,9 @@ buildPythonPackage rec {
   disabledTests = [
     "test_can_build_c_extensions"
     "test_xonsh" # imports xonsh, which is not in pythonPackages
+    # tests search `python3`, fail on python2, pypy
+    "test_python_via_env_var"
+    "test_python_multi_value_prefer_newline_via_env_var"
   ];
 
   pythonImportsCheck = [ "virtualenv" ];

@@ -15,6 +15,7 @@
 , tzlocal
 , funcsigs
 , futures
+, setuptools
 , isPy3k
 }:
 
@@ -47,11 +48,14 @@ buildPythonPackage rec {
     pytz
     tzlocal
     funcsigs
+    setuptools
   ] ++ lib.optional (!isPy3k) futures;
 
   checkPhase = ''
     py.test
   '';
+
+  pythonImportsCheck = [ "apscheduler" ];
 
   # Somehow it cannot find pytestcov
   doCheck = false;

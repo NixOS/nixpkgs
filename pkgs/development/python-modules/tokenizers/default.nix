@@ -49,19 +49,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
+    hash = "sha256-N/dKjQwHKmJnB76q8ISQ3cjuW0Z4GqGavnFFx/w9JRQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+    hash = "sha256-3ICSjtiRfLOj+PXu6mcuDoAtod5uXAcabYWTLxEgI18=";
   };
 
   sourceRoot = "source/bindings/python";
