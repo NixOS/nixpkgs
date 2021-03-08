@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
   let
     pname = "sidequest";
-    version = "0.10.11";
+    version = "0.10.19";
 
     desktopItem = makeDesktopItem rec {
       name = "SideQuest";
@@ -15,8 +15,8 @@
       inherit pname version;
 
       src = fetchurl {
-        url = "https://github.com/the-expanse/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
-        sha256 = "0fw952kdh1gn00y6sx2ag0rnb2paxq9ikg4bzgmbj7rrd1c6l2k9";
+        url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
+        sha256 = "14zqp12nigc4kv6hppyx2s59mmriimnzczay4xi3vh7zcw207px2";
       };
 
       nativeBuildInputs = [ makeWrapper ];
@@ -46,8 +46,8 @@
 
       meta = with lib; {
         description = "An open app store and side-loading tool for Android-based VR devices such as the Oculus Go, Oculus Quest or Moverio BT 300";
-        homepage = "https://github.com/the-expanse/SideQuest";
-        downloadPage = "https://github.com/the-expanse/SideQuest/releases";
+        homepage = "https://github.com/SideQuestVR/SideQuest";
+        downloadPage = "https://github.com/SideQuestVR/SideQuest/releases";
         license = licenses.mit;
         maintainers = with maintainers; [ joepie91 rvolosatovs ];
         platforms = [ "x86_64-linux" ];
