@@ -3137,9 +3137,7 @@ in {
 
   hypothesis = if isPy3k then callPackage ../development/python-modules/hypothesis { } else self.hypothesis_4;
 
-  hypothesmith = callPackage ../development/python-modules/hypothesmith {
-    libcst = self.libcst.override { doCheck = false; };
-  };
+  hypothesmith = callPackage ../development/python-modules/hypothesmith { };
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
