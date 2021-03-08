@@ -15572,6 +15572,8 @@ in
 
   libosmocore = callPackage ../applications/misc/libosmocore { };
 
+  libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
+
   libotr = callPackage ../development/libraries/libotr { };
 
   libow = callPackage ../development/libraries/libow { };
@@ -15597,6 +15599,8 @@ in
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
+
+  libpostal = callPackage ../development/libraries/libpostal { };
 
   libpaper = callPackage ../development/libraries/libpaper { };
 
@@ -16492,6 +16496,8 @@ in
 
   portmidi = callPackage ../development/libraries/portmidi {};
 
+  prime-server = callPackage ../development/libraries/prime-server { };
+
   primesieve = callPackage ../development/libraries/science/math/primesieve { };
 
   prison = callPackage ../development/libraries/prison { };
@@ -17323,6 +17329,10 @@ in
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
 
   vale = callPackage ../tools/text/vale { };
+
+  valhalla = callPackage ../development/libraries/valhalla {
+    boost = boost.override { enablePython = true; python = python38; };
+  };
 
   vamp-plugin-sdk = callPackage ../development/libraries/audio/vamp-plugin-sdk { };
 
@@ -24480,6 +24490,8 @@ in
   orpie = callPackage ../applications/misc/orpie { };
 
   osmo = callPackage ../applications/office/osmo { };
+
+  osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon {
     # https://developer.palemoon.org/build/linux/
