@@ -9,7 +9,7 @@
 let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
-  pname = "network-manager";
+  pname = "networkmanager";
   version = "1.30.0";
 
   src = fetchurl {
