@@ -250,7 +250,9 @@ in {
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
 
-  aiohttp = callPackage ../development/python-modules/aiohttp { };
+  aiohttp = callPackage ../development/python-modules/aiohttp {
+    pytestCheckHook = self.pkgsBuildHost.pytestCheckHook.override { pytest = self.pytest_6_1; };
+  };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
