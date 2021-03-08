@@ -18,21 +18,21 @@ let
     url = "https://download.fcitx-im.org/data/lm_sc.3gm.arpa-${arpaVer}.tar.bz2";
     sha256 = "0bqy3l7mif0yygjrcm65qallszgn17mvgyxhvz7a54zaamyan6vm";
   };
-  dictVer = "20200715";
+  dictVer = "20210203";
   dict = fetchurl {
     url = "https://download.fcitx-im.org/data/dict.utf8-${dictVer}.tar.xz";
-    sha256 = "1ln7r64j8mc7wz4j0q4v8wd68wy7qqz4bz1dpxk7zqbdvza6rhr3";
+    sha256 = "1i3finrmzrfa2rqqb4jsm3nz70gbwgq3x53im0jqbkj0hg54ssrd";
   };
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-Ykj4/3yKUqK0BRqW1E2zFYNgeUOXQ1DsotmKU6c8vEg=";
+    sha256 = "sha256-WWTe/TuwpICk+AXdpV7rxrKra0LBjkDxgEy6Xg29yzY=";
     fetchSubmodules = true;
   };
 
