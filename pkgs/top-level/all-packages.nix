@@ -17559,8 +17559,6 @@ in
     pythonPackages = python3Packages;
   };
 
-  yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
-
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization { };
 
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
