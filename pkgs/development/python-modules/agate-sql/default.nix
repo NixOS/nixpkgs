@@ -1,15 +1,34 @@
-{ lib, fetchPypi, buildPythonPackage, agate, sqlalchemy, crate }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchFromGitHub
+, agate
+, sqlalchemy
+, crate
+, nose
+, geojson
+}:
 
 buildPythonPackage rec {
   pname = "agate-sql";
-  version = "0.5.5";
+  version = "0.5.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "50a39754babef6cd0d1b1e75763324a49593394fe46ab1ea9546791b5e6b69a7";
+  disabled = isPy27;
+
+  src = fetchFromGitHub {
+    owner = "wireservice";
+    repo = "agate-sql";
+    rev = version;
+    sha256 = "16rijcnvxrvw9mmyk4228dalrr2qb74y649g1l6qifiabx5ij78s";
   };
 
-  propagatedBuildInputs = [ agate sqlalchemy crate ];
+  propagatedBuildInputs = [ agate sqlalchemy ];
+
+  checkInputs = [ crate nose geojson ];
+
+  checkPhase = ''
+    nosetests
+  '';
 
   pythonImportsCheck = [ "agatesql" ];
 
@@ -18,7 +37,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/wireservice/agate-sql";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ vrthra ];
-    # FAIL: test_to_sql_create_statement_with_schema (tests.test_agatesql.TestSQL)
-    broken = true;
   };
 }
