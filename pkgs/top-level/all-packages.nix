@@ -2000,6 +2000,8 @@ in
 
   slurp = callPackage ../tools/wayland/slurp { };
 
+  swaykbdd = callPackage ../tools/wayland/swaykbdd { };
+
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wev = callPackage ../tools/wayland/wev { };
@@ -3662,6 +3664,8 @@ in
   dnsrecon = callPackage ../tools/security/dnsrecon { };
 
   dnstop = callPackage ../tools/networking/dnstop { };
+
+  dnsviz = python3Packages.callPackage ../tools/networking/dnsviz { };
 
   dnsx = callPackage ../tools/security/dnsx { };
 
@@ -9006,6 +9010,8 @@ in
 
   tre = callPackage ../development/libraries/tre { };
 
+  tremor-rs = callPackage ../tools/misc/tremor-rs { };
+
   ts = callPackage ../tools/system/ts { };
 
   transfig = callPackage ../tools/graphics/transfig {
@@ -9090,6 +9096,8 @@ in
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   xwallpaper = callPackage ../tools/X11/xwallpaper { };
+
+  gxkb = callPackage ../applications/misc/gxkb { };
 
   xxkb = callPackage ../applications/misc/xxkb { };
 
