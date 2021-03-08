@@ -307,6 +307,9 @@ gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
 gem 'gitlab-labkit', '0.14.0'
+# Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
+# because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
+gem 'thrift', '>= 0.14.0'
 
 # I18n
 gem 'ruby_parser', '~> 3.15', require: false
