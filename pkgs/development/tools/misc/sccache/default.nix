@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mozilla/sccache";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
   };
 }
