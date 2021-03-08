@@ -21629,6 +21629,8 @@ in
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
+  banking = callPackage ../applications/office/banking { };
+
   baresip = callPackage ../applications/networking/instant-messengers/baresip { };
 
   barrier = libsForQt5.callPackage ../applications/misc/barrier {};
