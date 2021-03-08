@@ -185,9 +185,9 @@ stdenv.mkDerivation rec {
     # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
     # to be different from CC/CXX
     CC_FOR_TARGET = lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform)
-      "${targetCC}/bin/${targetCC.targetPrefix}cc"
+      "${targetCC}/bin/${targetCC.targetPrefix}cc";
     CXX_FOR_TARGET = lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform)
-      "${targetCC}/bin/${targetCC.targetPrefix}c++"
+      "${targetCC}/bin/${targetCC.targetPrefix}c++";
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
     GO386 = 387; # from Arch: don't assume sse2 on i686
