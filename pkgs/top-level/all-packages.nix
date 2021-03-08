@@ -20961,6 +20961,8 @@ in
 
   openzone-cursors = callPackage ../data/themes/openzone { };
 
+  oranchelo-icon-theme = callPackage ../data/icons/oranchelo-icon-theme { };
+
   orbitron = callPackage ../data/fonts/orbitron { };
 
   orchis = callPackage ../data/themes/orchis { };
