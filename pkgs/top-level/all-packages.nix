@@ -27421,6 +27421,8 @@ in
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
+  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
+
   sienna = callPackage ../games/sienna { love = love_0_10; };
 
   sil = callPackage ../games/sil { };
