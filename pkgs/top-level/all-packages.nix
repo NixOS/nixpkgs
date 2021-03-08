@@ -11791,6 +11791,8 @@ in
 
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
+  trealla = callPackage ../development/interpreters/trealla { };
+
   wasm = ocamlPackages.wasm;
 
   proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
