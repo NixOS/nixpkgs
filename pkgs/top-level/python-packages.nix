@@ -334,10 +334,6 @@ in {
 
   alembic = callPackage ../development/python-modules/alembic { };
 
-  alerta = callPackage ../development/python-modules/alerta { };
-
-  alerta-server = callPackage ../development/python-modules/alerta-server { };
-
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
