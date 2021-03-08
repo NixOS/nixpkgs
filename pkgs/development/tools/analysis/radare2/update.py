@@ -124,6 +124,7 @@ def main() -> None:
 
         radare2_info = get_repo_info(dirname, radare2_rev)
 
+        git(dirname, "fetch", r2_cutter_rev)
         git(dirname, "checkout", r2_cutter_rev)
 
         timestamp = git(dirname, "log", "-n1", "--format=%at")
