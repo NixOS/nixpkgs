@@ -8544,7 +8544,9 @@ in
 
   trezorctl = with python3Packages; toPythonApplication trezor;
 
-  trezord = callPackage ../servers/trezord { };
+  trezord = callPackage ../servers/trezord {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
 
