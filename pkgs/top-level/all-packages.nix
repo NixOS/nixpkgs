@@ -11576,8 +11576,6 @@ in
   # Should eventually be moved inside Python interpreters.
   python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
 
-  python2nix = callPackage ../tools/package-management/python2nix { };
-
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
   pypi2nix = callPackage ../development/tools/pypi2nix {};
