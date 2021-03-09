@@ -2215,9 +2215,11 @@ in {
 
   fake_factory = callPackage ../development/python-modules/fake_factory { };
 
+  fake-useragent = callPackage ../development/python-modules/fake-useragent { };
+
   faker = callPackage ../development/python-modules/faker { };
 
-  fake-useragent = callPackage ../development/python-modules/fake-useragent { };
+  fakeredis = callPackage ../development/python-modules/fakeredis { };
 
   falcon = callPackage ../development/python-modules/falcon { };
 
@@ -3928,6 +3930,8 @@ in {
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
+
+  lupa = callPackage ../development/python-modules/lupa { };
 
   lxc = callPackage ../development/python-modules/lxc { };
 
