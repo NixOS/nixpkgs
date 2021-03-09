@@ -3183,7 +3183,6 @@ broken-packages:
   - amazon-emailer
   - amazon-emailer-client-snap
   - amazon-products
-  - amazonka
   - amazonka-s3-streaming
   - amby
   - AMI
