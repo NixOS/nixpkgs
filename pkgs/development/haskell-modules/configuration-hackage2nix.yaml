@@ -10475,7 +10475,6 @@ broken-packages:
   - strictly
   - string-isos
   - string-quote
-  - string-random
   - string-typelits
   - stringlike
   - stringtable-atom
