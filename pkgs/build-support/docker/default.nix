@@ -518,9 +518,9 @@ rec {
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
         nativeBuildInputs = [ jshon pigz coreutils findutils jq moreutils ];
-        # Image name and tag must be lowercase
+        # Image name must be lowercase
         imageName = lib.toLower name;
-        imageTag = if tag == null then "" else lib.toLower tag;
+        imageTag = if tag == null then "" else tag;
         inherit fromImage baseJson;
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
