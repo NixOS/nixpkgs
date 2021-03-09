@@ -16,11 +16,11 @@ let
   '';
 in stdenv.mkDerivation rec {
   pname = "remind";
-  version = "03.03.01";
+  version = "03.03.05";
 
   src = fetchurl {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    sha256 = "0y4l960529sl3sn4r4g36qpy3jk5h1x4algjy7an7sfiqb8n98fi";
+    sha256 = "sha256-Ye0X2Gvek/pyaNVxGKL773OWJvC4I6F5nEsRQgzWbsE=";
   };
 
   nativeBuildInputs = optional tkremind makeWrapper;
