@@ -6555,6 +6555,8 @@ in {
 
   python-socketio_4 = callPackage ../development/python-modules/python-socketio/4.nix { };
 
+  python-socks = callPackage ../development/python-modules/python-socks { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python_statsd = callPackage ../development/python-modules/python_statsd { };
