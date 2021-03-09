@@ -8,6 +8,7 @@
 , qttools
 , qtx11extras
 , qtsvg
+, polkit
 , polkit-qt
 , kwindowsystem
 , liblxqt
@@ -38,6 +39,7 @@ mkDerivation rec {
     qttools
     qtx11extras
     qtsvg
+    polkit
     polkit-qt
     kwindowsystem
     liblxqt

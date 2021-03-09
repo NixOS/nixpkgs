@@ -12778,9 +12778,7 @@ in
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
-  openocd = callPackage ../development/tools/misc/openocd {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  openocd = callPackage ../development/tools/misc/openocd { };
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
@@ -23267,6 +23265,8 @@ in
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
+  index-fm = libsForQt5.callPackage ../applications/misc/index-fm { };
+
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
@@ -27440,6 +27440,8 @@ in
   solarus-quest-editor = libsForQt5.callPackage ../development/tools/solarus-quest-editor { };
 
   soldat-unstable = callPackage ../games/soldat-unstable { };
+
+  sollya = callPackage ../development/interpreters/sollya { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
