@@ -5145,7 +5145,6 @@ broken-packages:
   - FailureT
   - fake
   - fake-type
-  - fakedata
   - fakedata-quickcheck
   - faktory
   - falling-turnip
