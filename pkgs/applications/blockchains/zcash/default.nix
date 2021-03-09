@@ -1,23 +1,24 @@
-{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
-, cargo, pkg-config
-, bash, curl, coreutils, boost17x, db62, libsodium, libevent, utf8cpp, util-linux
+{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper, fetchpatch
+, cargo, pkg-config, bash, curl, coreutils, boost174, db62, hexdump, libsodium, libevent
+, utf8cpp, util-linux, withWallet ? true, withDaemon ? true, withUtils ? true
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   pname = "zcash";
-  version = "4.1.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "185zrw276g545np0niw5hlhlppkjbf5a1r4rwhnbaimdjdii2dil";
+    sha256 = "00pn1jw8j90y7i8nc92b51znz4gczphvdzbkbcjx63cf6vk7v4ks";
   };
 
-  cargoSha256 = "0qxr6asf8zsya0f1ri39z2cnfpjk96hgwjchz2c7j87vibbvg6dc";
+  cargoSha256 = "1rl9sjbvpfrv1mlyb04vw1935qx0kz9cs177xl7izdva1ixk9blr";
 
-  nativeBuildInputs = [ autoreconfHook cargo makeWrapper pkg-config ];
-  buildInputs = [ bash boost17x db62 libevent libsodium utf8cpp ];
+  nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
+  buildInputs = [ boost174 libevent libsodium utf8cpp ]
+    ++ lib.optional withWallet db62;
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.
@@ -25,6 +26,14 @@ rustPlatform.buildRustPackage rec {
   buildPhase = "buildPhase";
   checkPhase = "checkPhase";
   installPhase = "installPhase";
+
+  patches = [
+    # See https://github.com/zcash/zcash/pull/5015
+    (fetchpatch {
+      url = "https://github.com/zcash/zcash/commit/a0ac27ec6ed434a233c7ad2468258f6e6e7e9688.patch";
+      sha256 = "0pmx1spql9p8vvpjgw7qf3qy46f4mh9ni16bq4ss1xz1z9zgjc4k";
+    })
+  ];
 
   postPatch = ''
     # Have to do this here instead of in preConfigure because
@@ -34,10 +43,12 @@ rustPlatform.buildRustPackage rec {
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost17x}/lib"
+    "--with-boost-libdir=${lib.getLib boost174}/lib"
     "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
     "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
-  ];
+  ] ++ lib.optional (!withWallet) "--disable-wallet"
+    ++ lib.optional (!withDaemon) "--without-daemon"
+    ++ lib.optional (!withUtils) "--without-utils";
 
   enableParallelBuilding = true;
 
