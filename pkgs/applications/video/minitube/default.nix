@@ -16,12 +16,11 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ phonon phonon-backend-vlc qtbase qtdeclarative qtx11extras mpv ];
   nativeBuildInputs = [ qmake qttools ];
 
-  qmakeFlags = [ "DEFINES+=APP_GOOGLE_API_KEY=${withAPIKey}" ];
+  buildInputs = [ phonon phonon-backend-vlc qtbase qtdeclarative qtx11extras mpv ];
 
-  enableParallelBuilding = true;
+  qmakeFlags = [ "DEFINES+=APP_GOOGLE_API_KEY=${withAPIKey}" ];
 
   meta = with lib; {
     description = "Stand-alone YouTube video player";
