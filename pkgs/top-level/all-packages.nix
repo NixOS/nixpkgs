@@ -9361,6 +9361,8 @@ in
 
   yeshup = callPackage ../tools/system/yeshup { };
 
+  ytfzf = callPackage ../tools/misc/ytfzf { };
+
   ytree = callPackage ../tools/misc/ytree { };
 
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
@@ -12972,7 +12974,7 @@ in
 
   inherit (callPackage ../development/tools/build-managers/shards { })
     shards_0_11
-    shards_0_13
+    shards_0_14
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
