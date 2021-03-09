@@ -1413,17 +1413,20 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
 
-  # 2021-02-11: Jailbreaking because of syntax error on bound revision
-  hls-explicit-imports-plugin = doJailbreak super.hls-explicit-imports-plugin;
+  # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
+  lsp-test = doDistribute (dontCheck self.lsp-test_0_13_0_0);
 
-  # 2021-02-08: Overrides because nightly is to old for hls 0.9.0
-  lsp-test = doDistribute (dontCheck self.lsp-test_0_11_0_7);
-  haskell-lsp = doDistribute self.haskell-lsp_0_23_0_0;
-  haskell-lsp-types = doDistribute self.haskell-lsp-types_0_23_0_0;
+  # 2021-03-09: Golden tests seem to be missing in hackage release:
+  # https://github.com/haskell/haskell-language-server/issues/1536
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
   # 1. test requires internet
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
   ghcide = doDistribute (unmarkBroken (dontCheck super.ghcide));
+
+  # 2020-03-09: Tests broken in hackage release, fixed on upstream
+  # https://github.com/wz1000/HieDb/issues/30
+  hiedb = dontCheck super.hiedb;
 
   data-tree-print = doJailbreak super.data-tree-print;
 
