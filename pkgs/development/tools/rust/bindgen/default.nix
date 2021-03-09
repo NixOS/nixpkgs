@@ -5,7 +5,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.55.1";
+  version = "0.57.0";
 
   RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cbc78zrhda4adza88g05sy04chixqay2ylgdjgmf13h607hp3kn";
+    sha256 = "sha256-0d8+Rkb4h1DoFUQ7u2/kPR/fUUz0YvI+hNT4iXL3mxY=";
   };
 
-  cargoSha256 = "1dv1ywdy701bnc2jv5jq0hnpal1snlizaj9w6k1wxyrp9szjd48w";
+  cargoSha256 = "sha256-cUDOi3QwjEJaBXGSQZQ76gZ702QLNok8fr6U2q+tVao=";
 
   #for substituteAll
   libclang = llvmPackages.libclang.lib;
