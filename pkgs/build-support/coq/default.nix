@@ -91,10 +91,12 @@ stdenv.mkDerivation (removeAttrs ({
 })
 // (optionalAttrs useDune2 {
   installPhase = ''
+    runHook preInstall
     dune install --prefix=$out
     mv $out/lib/coq $out/lib/TEMPORARY
     mkdir $out/lib/coq/
     mv $out/lib/TEMPORARY $out/lib/coq/${coq.coq-version}
+    runHook postInstall
   '';
 })
 // (optionalAttrs (args?useMelquiondRemake) rec {
