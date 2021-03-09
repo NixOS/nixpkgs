@@ -7,7 +7,7 @@ in {
     maintainers = [ globin eqyiel ];
   };
 
-  nodes = {
+  nodes = rec {
     # The only thing the client needs to do is download a file.
     client = { ... }: {
       services.davfs2.enable = true;
@@ -47,6 +47,11 @@ in {
 
       environment.systemPackages = [ cfg.services.nextcloud.occ ];
     };
+
+    nextcloudWithoutMagick = args@{ config, pkgs, lib, ... }:
+      lib.mkMerge
+      [ (nextcloud args)
+        { services.nextcloud.disableImagemagick = true; } ];
   };
 
   testScript = let
@@ -69,7 +74,8 @@ in {
       diff <(echo 'hi') <(${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file)
     '';
   in ''
-    start_all()
+    nextcloud.start()
+    client.start()
     nextcloud.wait_for_unit("multi-user.target")
     # This is just to ensure the nextcloud-occ program is working
     nextcloud.succeed("nextcloud-occ status")
@@ -82,5 +88,13 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
     assert "hi" in client.succeed("cat /mnt/dav/test-shared-file")
+
+    #client.succeed("nix path-info -r " + nextcloud.script + " | grep imagick")
+    #client.fail("nix path-info -r " + nextcloudWithoutMagick.script + " | grep imagick")
+    assert os.system("nix path-info -r " + nextcloud.script + " | grep imagick") == 0
+    assert (
+        os.system("nix path-info -r " + nextcloudWithoutMagick.script + " | grep imagick")
+        != 0
+    )
   '';
 })
