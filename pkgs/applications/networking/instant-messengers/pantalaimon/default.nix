@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.8.0";
+  version = "0.9.1";
 
   disabled = pythonOlder "3.6";
 
@@ -19,8 +19,10 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "0n86cdpw85qzlcr1ynvar0f0zbphmdz1jia9r75lmj07iw4r5hk9";
+    sha256 = "sha256-2pFJnFQFF1kXtZ1IF87+mOzYt8NalNxBfk1xDno8e0Q=";
   };
+
+  patches = [ ./update-matrix-nio.patch ];
 
   propagatedBuildInputs = [
     aiohttp
