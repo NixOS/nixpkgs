@@ -1621,8 +1621,7 @@ self: super: {
   amazonka = appendPatches (doJailbreak super.amazonka) [
     (pkgs.fetchpatch {
       stripLen = 1;
-      url =
-        "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
+      url = "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
       sha256 = "1x9l5xgvrh908di6whpavyp08cys11v3yn6rc21zw87xiyigdbi3";
     })
   ];
