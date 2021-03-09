@@ -12,17 +12,19 @@
 , c-ares
 , abseil-cpp
 , zlib
+, sqlite
+, re2
 }:
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.0.3";
+  version = "3.0.9";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "1abx5h6xy0h3mz29ial5si8smkmjzla050d130pcc6dzr4ic642w";
+    sha256 = "xac8PYo3qYjtQbDy8piOz5BQQpcVlAvMCv1qHrVZmPQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
     c-ares
     abseil-cpp
     zlib
+    sqlite
+    re2
   ];
 
   patches = [
