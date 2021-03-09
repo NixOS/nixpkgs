@@ -526,7 +526,9 @@ in {
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
-  async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
+  async-upnp-client = callPackage ../development/python-modules/async-upnp-client {
+    pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+  };
 
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
@@ -8524,7 +8526,13 @@ in {
 
   webthing = callPackage ../development/python-modules/webthing { };
 
-  werkzeug = callPackage ../development/python-modules/werkzeug { };
+  werkzeug = callPackage ../development/python-modules/werkzeug {
+    pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+    pytest-timeout = self.pytest-timeout.override {
+      pytest = self.pytest_6_1;
+      pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+    };
+  };
 
   west = callPackage ../development/python-modules/west { };
 
