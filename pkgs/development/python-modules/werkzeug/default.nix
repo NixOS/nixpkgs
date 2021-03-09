@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "A WSGI utility library for Python";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

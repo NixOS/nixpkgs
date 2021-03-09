@@ -8526,7 +8526,13 @@ in {
 
   webthing = callPackage ../development/python-modules/webthing { };
 
-  werkzeug = callPackage ../development/python-modules/werkzeug { };
+  werkzeug = callPackage ../development/python-modules/werkzeug {
+    pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+    pytest-timeout = self.pytest-timeout.override {
+      pytest = self.pytest_6_1;
+      pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+    };
+  };
 
   west = callPackage ../development/python-modules/west { };
 
