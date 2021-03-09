@@ -38,15 +38,15 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `name` specifies the name of the resulting image. This is the only required argument for `buildImage`.
 
-- `tag` specifies the tag of the resulting image. By default it\'s `null`, which indicates that the nix output hash will be used as tag.
+- `tag` specifies the tag of the resulting image. By default it's `null`, which indicates that the nix output hash will be used as tag.
 
-- `fromImage` is the repository tarball containing the base image. It must be a valid Docker image, such as exported by `docker save`. By default it\'s `null`, which can be seen as equivalent to `FROM scratch` of a `Dockerfile`.
+- `fromImage` is the repository tarball containing the base image. It must be a valid Docker image, such as exported by `docker save`. By default it's `null`, which can be seen as equivalent to `FROM scratch` of a `Dockerfile`.
 
-- `fromImageName` can be used to further specify the base image within the repository, in case it contains multiple images. By default it\'s `null`, in which case `buildImage` will peek the first image available in the repository.
+- `fromImageName` can be used to further specify the base image within the repository, in case it contains multiple images. By default it's `null`, in which case `buildImage` will peek the first image available in the repository.
 
-- `fromImageTag` can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it\'s `null`, in which case `buildImage` will peek the first tag available for the base image.
+- `fromImageTag` can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it's `null`, in which case `buildImage` will peek the first tag available for the base image.
 
-- `contents` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it\'s `null`.
+- `contents` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
 
 - `runAsRoot` is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied `contents` derivation. This can be similarly seen as `RUN ...` in a `Dockerfile`.
 
@@ -109,7 +109,7 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 : Tag of the generated image.
 
-    *Default:* the output path\'s hash
+    *Default:* the output path's hash
 
 `contents` _optional_
 
@@ -139,7 +139,7 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `extraCommands` _optional_
 
-: Shell commands to run while building the final layer, without access to most of the layer contents. Changes to this layer are \"on top\" of all the other layers, so can create additional directories and files.
+: Shell commands to run while building the final layer, without access to most of the layer contents. Changes to this layer are "on top" of all the other layers, so can create additional directories and files.
 
 ### Behavior of `contents` in the final image {#dockerTools-buildLayeredImage-arg-contents}
 
@@ -183,9 +183,9 @@ Modern Docker installations support up to 128 layers, however older versions sup
 
 If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However it will be impossible to extend the image further.
 
-The first (`maxLayers-2`) most \"popular\" paths will have their own individual layers, then layer \#`maxLayers-1` will contain all the remaining \"unpopular\" paths, and finally layer \#`maxLayers` will contain the Image configuration.
+The first (`maxLayers-2`) most "popular" paths will have their own individual layers, then layer \#`maxLayers-1` will contain all the remaining "unpopular" paths, and finally layer \#`maxLayers` will contain the Image configuration.
 
-Docker\'s Layers are not inherently ordered, they are content-addressable and are not explicitly layered until they are composed in to an Image.
+Docker's Layers are not inherently ordered, they are content-addressable and are not explicitly layered until they are composed in to an Image.
 
 ## streamLayeredImage {#ssec-pkgs-dockerTools-streamLayeredImage}
 
@@ -226,15 +226,15 @@ pullImage {
 
 - `imageDigest` specifies the digest of the image to be downloaded. This argument is required.
 
-- `finalImageName`, if specified, this is the name of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it\'s equal to `imageName`.
+- `finalImageName`, if specified, this is the name of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it's equal to `imageName`.
 
-- `finalImageTag`, if specified, this is the tag of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it\'s `latest`.
+- `finalImageTag`, if specified, this is the tag of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it's `latest`.
 
 - `sha256` is the checksum of the whole fetched image. This argument is required.
 
-- `os`, if specified, is the operating system of the fetched image. By default it\'s `linux`.
+- `os`, if specified, is the operating system of the fetched image. By default it's `linux`.
 
-- `arch`, if specified, is the cpu architecture of the fetched image. By default it\'s `x86_64`.
+- `arch`, if specified, is the cpu architecture of the fetched image. By default it's `x86_64`.
 
 `nix-prefetch-docker` command can be used to get required image parameters:
 
@@ -278,7 +278,7 @@ The `name` argument is the name of the derivation output, which defaults to `fro
 
 ## shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
 
-This constant string is a helper for setting up the base files for managing users and groups, only if such files don\'t exist already. It is suitable for being used in a [`buildImage` `runAsRoot`](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
+This constant string is a helper for setting up the base files for managing users and groups, only if such files don't exist already. It is suitable for being used in a [`buildImage` `runAsRoot`](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
 
 ```nix
 buildImage {
