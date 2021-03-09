@@ -1,6 +1,7 @@
-{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper, fetchpatch
-, cargo, pkg-config, bash, curl, coreutils, boost174, db62, hexdump, libsodium, libevent
-, utf8cpp, util-linux, withWallet ? true, withDaemon ? true, withUtils ? true
+{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
+, fetchpatch, cargo, pkg-config, curl, coreutils, boost174, db62, hexdump
+, libsodium, libevent, utf8cpp, util-linux, withWallet ? true, withDaemon ? true
+, withUtils ? true
 }:
 
 rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
