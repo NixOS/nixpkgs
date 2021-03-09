@@ -74,7 +74,7 @@ default-package-overrides:
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
 
-  # Stackage Nightly 2021-03-06
+  # Stackage Nightly 2021-03-09
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -208,7 +208,7 @@ default-package-overrides:
   - amazonka-waf ==1.6.1
   - amazonka-workspaces ==1.6.1
   - amazonka-xray ==1.6.1
-  - amqp ==0.20.0.1
+  - amqp ==0.21.0
   - amqp-utils ==0.5.0.0
   - annotated-wl-pprint ==0.7.0
   - ansi-terminal ==0.10.3
@@ -299,6 +299,8 @@ default-package-overrides:
   - basic-prelude ==0.7.0
   - bazel-runfiles ==0.12
   - bbdb ==0.8
+  - bcp47 ==0.2.0.3
+  - bcp47-orphans ==0.1.0.2
   - bcrypt ==0.0.11
   - bech32 ==1.1.0
   - bech32-th ==1.0.2
@@ -420,7 +422,7 @@ default-package-overrides:
   - cassava-megaparsec ==2.0.2
   - cast ==0.1.0.2
   - category ==0.2.5.0
-  - cayley-client ==0.4.13
+  - cayley-client ==0.4.14
   - cborg ==0.2.4.0
   - cborg-json ==0.2.2.0
   - cereal ==0.5.8.1
@@ -525,10 +527,10 @@ default-package-overrides:
   - conduit-extra ==1.3.5
   - conduit-parse ==0.2.1.0
   - conduit-zstd ==0.0.2.0
-  - conferer ==1.0.0.1
-  - conferer-aeson ==1.0.0.0
-  - conferer-hspec ==1.0.0.0
-  - conferer-warp ==1.0.0.0
+  - conferer ==1.1.0.0
+  - conferer-aeson ==1.1.0.0
+  - conferer-hspec ==1.1.0.0
+  - conferer-warp ==1.1.0.0
   - ConfigFile ==1.1.4
   - config-ini ==0.2.4.0
   - configurator ==0.3.0.0
@@ -540,7 +542,7 @@ default-package-overrides:
   - constraint ==0.1.4.0
   - constraints ==0.12
   - constraint-tuples ==0.1.2
-  - construct ==0.3
+  - construct ==0.3.0.1
   - contravariant ==1.5.3
   - contravariant-extras ==0.3.5.2
   - control-bool ==0.2.1
@@ -809,6 +811,7 @@ default-package-overrides:
   - fakedata-parser ==0.1.0.0
   - fakefs ==0.3.0.2
   - fakepull ==0.3.0.2
+  - faktory ==1.0.2.1
   - fast-digits ==0.3.0.0
   - fast-logger ==3.0.3
   - fast-math ==1.0.2
@@ -834,7 +837,7 @@ default-package-overrides:
   - FindBin ==0.0.5
   - fingertree ==0.1.4.2
   - finite-typelits ==0.1.4.2
-  - first-class-families ==0.8.0.0
+  - first-class-families ==0.8.0.1
   - first-class-patterns ==0.3.2.5
   - fitspec ==0.4.8
   - fixed ==0.3
@@ -910,6 +913,7 @@ default-package-overrides:
   - generic-optics ==2.0.0.0
   - GenericPretty ==1.2.2
   - generic-random ==1.3.0.1
+  - generics-eot ==0.4.0.1
   - generics-sop ==0.5.1.1
   - generics-sop-lens ==0.2.0.1
   - geniplate-mirror ==0.7.7
@@ -928,8 +932,14 @@ default-package-overrides:
   - genvalidity-mergeful ==0.2.0.0
   - genvalidity-mergeless ==0.2.0.0
   - genvalidity-path ==0.3.0.4
+  - genvalidity-persistent ==0.0.0.0
   - genvalidity-property ==0.5.0.1
   - genvalidity-scientific ==0.2.1.1
+  - genvalidity-sydtest ==0.0.0.0
+  - genvalidity-sydtest-aeson ==0.0.0.0
+  - genvalidity-sydtest-hashable ==0.0.0.0
+  - genvalidity-sydtest-lens ==0.0.0.0
+  - genvalidity-sydtest-persistent ==0.0.0.1
   - genvalidity-text ==0.7.0.2
   - genvalidity-time ==0.3.0.0
   - genvalidity-typed-uuid ==0.0.0.2
@@ -1000,7 +1010,7 @@ default-package-overrides:
   - gluturtle ==0.0.58.1
   - gnuplot ==0.5.6.1
   - google-isbn ==1.0.3
-  - gothic ==0.1.5
+  - gothic ==0.1.6
   - gpolyline ==0.1.0.1
   - graph-core ==0.3.0.0
   - graphite ==0.10.0.1
@@ -1103,7 +1113,7 @@ default-package-overrides:
   - hlibcpuid ==0.2.0
   - hlibgit2 ==0.18.0.16
   - hlibsass ==0.1.10.1
-  - hmatrix ==0.20.1
+  - hmatrix ==0.20.2
   - hmatrix-backprop ==0.1.3.0
   - hmatrix-gsl ==0.19.0.1
   - hmatrix-gsl-stats ==0.4.1.8
@@ -1157,6 +1167,7 @@ default-package-overrides:
   - hspec-core ==2.7.8
   - hspec-discover ==2.7.8
   - hspec-expectations ==0.8.2
+  - hspec-expectations-json ==1.0.0.2
   - hspec-expectations-lifted ==0.10.0
   - hspec-expectations-pretty-diff ==0.7.2.5
   - hspec-golden ==0.1.0.3
@@ -1268,7 +1279,7 @@ default-package-overrides:
   - immortal-queue ==0.1.0.1
   - inbox ==0.1.0
   - include-file ==0.1.0.4
-  - incremental-parser ==0.5.0.1
+  - incremental-parser ==0.5.0.2
   - indents ==0.5.0.1
   - indexed ==0.1.3
   - indexed-containers ==0.1.0.2
@@ -1284,7 +1295,7 @@ default-package-overrides:
   - inline-c-cpp ==0.4.0.3
   - inline-r ==0.10.4
   - inliterate ==0.1.0
-  - input-parsers ==0.1.0.1
+  - input-parsers ==0.2
   - insert-ordered-containers ==0.2.4
   - inspection-testing ==0.4.3.0
   - instance-control ==0.1.2.0
@@ -1728,7 +1739,7 @@ default-package-overrides:
   - packcheck ==0.5.1
   - packdeps ==0.6.0.0
   - pager ==0.1.1.0
-  - pagination ==0.2.1
+  - pagination ==0.2.2
   - pagure-cli ==0.2
   - pandoc ==2.11.4
   - pandoc-plot ==1.1.0
@@ -2037,6 +2048,7 @@ default-package-overrides:
   - runmemo ==1.0.0.1
   - rvar ==0.2.0.6
   - safe ==0.3.19
+  - safe-coloured-text ==0.0.0.0
   - safecopy ==0.10.4.1
   - safe-decimal ==0.2.0.0
   - safe-exceptions ==0.1.7.1
@@ -2090,7 +2102,7 @@ default-package-overrides:
   - seqalign ==0.2.0.4
   - seqid ==0.6.2
   - seqid-streams ==0.7.2
-  - sequence-formats ==1.6.0
+  - sequence-formats ==1.6.1
   - sequenceTools ==1.4.0.5
   - serf ==0.1.1.0
   - serialise ==0.2.3.0
@@ -2260,7 +2272,7 @@ default-package-overrides:
   - string-random ==0.1.4.0
   - stringsearch ==0.3.6.6
   - string-transform ==1.1.1
-  - stripe-concepts ==1.0.2.4
+  - stripe-concepts ==1.0.2.6
   - stripe-core ==2.6.2
   - stripe-haskell ==2.6.2
   - stripe-http-client ==2.6.2
@@ -2279,6 +2291,12 @@ default-package-overrides:
   - sweet-egison ==0.1.1.3
   - swish ==0.10.0.4
   - syb ==0.7.2.1
+  - sydtest ==0.1.0.0
+  - sydtest-discover ==0.0.0.0
+  - sydtest-persistent-sqlite ==0.0.0.0
+  - sydtest-servant ==0.0.0.0
+  - sydtest-wai ==0.0.0.0
+  - sydtest-yesod ==0.0.0.0
   - symbol ==0.2.4
   - symengine ==0.1.2.0
   - symmetry-operations-symbols ==0.0.2.1
@@ -2533,6 +2551,7 @@ default-package-overrides:
   - validity-bytestring ==0.4.1.1
   - validity-containers ==0.5.0.4
   - validity-path ==0.4.0.1
+  - validity-persistent ==0.0.0.0
   - validity-primitive ==0.0.0.1
   - validity-scientific ==0.2.0.3
   - validity-text ==0.3.1.1
@@ -2664,16 +2683,17 @@ default-package-overrides:
   - xss-sanitize ==0.3.6
   - xxhash-ffi ==0.2.0.0
   - yaml ==0.11.5.0
-  - yamlparse-applicative ==0.1.0.2
+  - yamlparse-applicative ==0.1.0.3
   - yesod ==1.6.1.0
   - yesod-auth ==1.6.10.1
   - yesod-auth-hashdb ==1.7.1.5
-  - yesod-auth-oauth2 ==0.6.1.7
+  - yesod-auth-oauth2 ==0.6.2.3
   - yesod-bin ==1.6.1
   - yesod-core ==1.6.18.8
   - yesod-fb ==0.6.1
   - yesod-form ==1.6.7
   - yesod-gitrev ==0.2.1
+  - yesod-markdown ==0.12.6.5
   - yesod-newsfeed ==1.7.0.0
   - yesod-page-cursor ==2.0.0.4
   - yesod-paginator ==1.1.1.0
