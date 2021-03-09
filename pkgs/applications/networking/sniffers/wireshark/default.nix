@@ -76,7 +76,7 @@ in stdenv.mkDerivation {
     install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
     mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
 
-    cp config.h $dev/include/
+    cp config.h $dev/include/wireshark/
     cp ../ws_*.h $dev/include
     cp ../epan/*.h $dev/include/epan/
     cp ../epan/wmem/*.h $dev/include/epan/wmem/
