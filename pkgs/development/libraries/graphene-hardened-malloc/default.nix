@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene-hardened-malloc";
-  version = "2";
+  version = "6";
 
   src = fetchurl {
     url = "https://github.com/GrapheneOS/hardened_malloc/archive/${version}.tar.gz";
-    sha256 = "0zsl4vl65ic6lw5rzcjzvcxg8makg683abnwvy60zfap8hvijvjb";
+    sha256 = "sha256-lyvTbeOi9bm6sedt/+0mDo9cb12QbJlgI9g67i49rv8=";
   };
 
   installPhase = ''
