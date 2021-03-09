@@ -662,8 +662,6 @@ in
 
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
 
-  tuijam = callPackage ../applications/audio/tuijam { inherit (python3Packages) buildPythonApplication; };
-
   opnplug = callPackage ../applications/audio/adlplug {
     adlplugChip = "-DADLplug_CHIP=OPN2";
     pname = "OPNplug";
@@ -1043,6 +1041,8 @@ in
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
+
+  aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
 
   iamy = callPackage ../tools/admin/iamy { };
 
@@ -3036,7 +3036,6 @@ in
       };
     in lib.recurseIntoAttrs {
       alternatives = callPackage ../tools/audio/beets/plugins/alternatives.nix pluginArgs;
-      check = callPackage ../tools/audio/beets/plugins/check.nix pluginArgs;
       copyartifacts = callPackage ../tools/audio/beets/plugins/copyartifacts.nix pluginArgs;
       extrafiles = callPackage ../tools/audio/beets/plugins/extrafiles.nix pluginArgs;
     };
@@ -4881,8 +4880,6 @@ in
   google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
 
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
-
-  google-music-scripts = callPackage ../tools/audio/google-music-scripts { };
 
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
 
@@ -20106,6 +20103,8 @@ in
 
   powerdns = callPackage ../servers/dns/powerdns { };
 
+  powerdns-admin = callPackage ../applications/networking/powerdns-admin { };
+
   dnsdist = callPackage ../servers/dns/dnsdist { };
 
   pdns-recursor = callPackage ../servers/dns/pdns-recursor { };
@@ -20970,6 +20969,8 @@ in
   open-sans = callPackage ../data/fonts/open-sans { };
 
   openzone-cursors = callPackage ../data/themes/openzone { };
+
+  oranchelo-icon-theme = callPackage ../data/icons/oranchelo-icon-theme { };
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
@@ -22402,17 +22403,6 @@ in
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
-  google-musicmanager = callPackage ../applications/audio/google-musicmanager {
-    inherit (qt514) qtbase qtwebkit;
-    # Downgrade to 1.34 to get libidn.so.11
-    libidn = (libidn.overrideAttrs (oldAttrs: {
-      src = fetchurl {
-        url = "mirror://gnu/libidn/libidn-1.34.tar.gz";
-        sha256 = "0g3fzypp0xjcgr90c5cyj57apx1cmy0c6y9lvw2qdcigbyby469p";
-      };
-    })).out;
-  };
-
   googler = callPackage ../applications/misc/googler {
     python = python3;
   };
@@ -22864,10 +22854,6 @@ in
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
   google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
-
-  google-play-music-desktop-player = callPackage ../applications/audio/google-play-music-desktop-player {
-    inherit (gnome2) GConf;
-  };
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
@@ -23934,7 +23920,6 @@ in
 
   inherit (mopidyPackages)
     mopidy
-    mopidy-gmusic
     mopidy-iris
     mopidy-local
     mopidy-moped
