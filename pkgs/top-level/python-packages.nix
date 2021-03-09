@@ -8471,7 +8471,9 @@ in {
 
   wasmer = callPackage ../development/python-modules/wasmer { };
 
-  watchdog = callPackage ../development/python-modules/watchdog { };
+  watchdog = callPackage ../development/python-modules/watchdog {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
