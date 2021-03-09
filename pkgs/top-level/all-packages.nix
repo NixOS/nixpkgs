@@ -15337,6 +15337,11 @@ in
 
   librime = callPackage ../development/libraries/librime {};
 
+  librsb = callPackage ../development/libraries/librsb {
+    # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
+    memHierarchy = "L3:16/64/8192K,L2:16/64/2048K,L1:8/64/16K";
+  };
+
   librtprocess = callPackage ../development/libraries/librtprocess { };
 
   libsamplerate = callPackage ../development/libraries/libsamplerate {
@@ -27310,8 +27315,6 @@ in
   privateer = callPackage ../games/privateer { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
-
-  qweechat = callPackage ../applications/networking/irc/qweechat { };
 
   qqwing = callPackage ../games/qqwing { };
 
