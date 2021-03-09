@@ -215,8 +215,13 @@ self: super: {
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
 
-  # https://github.com/haskell-nix/hnix-store/issues/127
-  hnix-store-core = addTestToolDepend super.hnix-store-core self.tasty-discover;
+  hnix-store-core = overrideCabal super.hnix-store-core (drv: {
+    # https://github.com/haskell-nix/hnix-store/issues/127
+    testToolDepends = (drv.testToolDepends or []) ++ [self.tasty-discover];
+    # Tests incorrectly assume the existence of /proc on Darwin.  Remove with
+    # next release. See: https://github.com/haskell-nix/hnix-store/issues/109
+    doCheck = !pkgs.stdenv.isDarwin;
+  });
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
