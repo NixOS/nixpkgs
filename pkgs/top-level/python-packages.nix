@@ -8723,7 +8723,9 @@ in {
 
   webthing = callPackage ../development/python-modules/webthing { };
 
-  werkzeug = callPackage ../development/python-modules/werkzeug { };
+  werkzeug = callPackage ../development/python-modules/werkzeug {
+    pytestCheckHook = self.pytest_6_1CheckHook;
+  };
 
   west = callPackage ../development/python-modules/west { };
 
