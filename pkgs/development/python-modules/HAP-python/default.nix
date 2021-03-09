@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
+, base36
 , cryptography
 , curve25519-donna
 , ecdsa
 , ed25519
 , fetchFromGitHub
 , h11
+, pyqrcode
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
@@ -15,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "HAP-python";
-  version = "3.3.2";
+  version = "3.4.0";
   disabled = pythonOlder "3.5";
 
   # pypi package does not include tests
@@ -23,15 +25,17 @@ buildPythonPackage rec {
     owner = "ikalchev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oDTyFIhf7oogYyh9LpmVtagi1kDXLCc/7c2UH1dL2Sg=";
+    sha256 = "0mkrs3fwiyp4am9fx1dnhd9h7rphfwymr46khw40xavrfb5jmsa7";
   };
 
   propagatedBuildInputs = [
+    base36
     cryptography
     curve25519-donna
     ecdsa
     ed25519
     h11
+    pyqrcode
     zeroconf
   ];
 
@@ -41,35 +45,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Disable tests requiring network access
+  disabledTestPaths = [
+    "tests/test_accessory_driver.py"
+    "tests/test_hap_handler.py"
+    "tests/test_hap_protocol.py"
+  ];
+
   disabledTests = [
-    # Disable tests needing network
-    "camera"
-    "pair"
-    "test_async_subscribe_client_topic"
-    "test_auto_add_aid_mac"
-    "test_connection_management"
-    "test_crypto_failure_closes_connection"
-    "test_empty_encrypted_data"
-    "test_external_zeroconf"
-    "test_get_accessories"
-    "test_get_characteristics"
-    "test_handle_set_handle_set"
-    "test_handle_snapshot_encrypted_non_existant_accessory"
-    "test_http_11_keep_alive"
-    "test_http10_close"
-    "test_mdns_service_info"
-    "test_mixing_service_char_callbacks_partial_failure"
-    "test_not_standalone_aid"
-    "test_persist"
-    "test_push_event"
-    "test_send_events"
-    "test_service_callbacks"
-    "test_set_characteristics_with_crypto"
-    "test_setup_endpoints"
-    "test_start"
-    "test_upgrade_to_encrypted"
+    "test_persist_and_load"
+    "test_we_can_connect"
+    "test_idle_connection_cleanup"
     "test_we_can_start_stop"
-    "test_xhm_uri"
+    "test_push_event"
   ];
 
   meta = with lib; {
