@@ -2973,8 +2973,6 @@ in
   });
 
   asciidoctor = callPackage ../tools/typesetting/asciidoctor {
-    # kindlegen is unfree, don't enable by default
-    kindlegen = null;
     # epubcheck pulls in Java, which is problematic on some platforms
     epubcheck = null;
   };
@@ -5952,8 +5950,6 @@ in
   jumanpp = callPackage ../tools/text/jumanpp {};
 
   jump = callPackage ../tools/system/jump {};
-
-  kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
   latex2html = callPackage ../tools/misc/latex2html { };
 
