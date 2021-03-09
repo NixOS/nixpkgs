@@ -24,7 +24,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.30.1";
+  version = "2.30.2";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0rwlbps9x8kgk2hsm0bvsrkpsk9bnbnz8alknbd7i688jnhai27r";
+    sha256 = "1ajz6lng6yldqm66lhrjfgbbxk09rq8cngv7hz9nqizrf46dkxs1";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -336,7 +336,7 @@ stdenv.mkDerivation {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system";
     license = lib.licenses.gpl2;
-    changelog = "https://raw.githubusercontent.com/git/git/${version}/Documentation/RelNotes/${version}.txt";
+    changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.txt";
 
     longDescription = ''
       Git, a popular distributed version control system designed to
