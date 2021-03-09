@@ -415,6 +415,7 @@ stdenv.mkDerivation {
       src/shared/generator.c \
       src/shutdown/shutdown.c \
       units/emergency.service.in \
+      units/modprobe@.service \
       units/rescue.service.in \
       units/systemd-logind.service.in \
       units/systemd-nspawn@.service.in; \
