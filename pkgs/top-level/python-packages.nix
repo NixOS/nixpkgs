@@ -2403,6 +2403,8 @@ in {
 
   flask_script = callPackage ../development/python-modules/flask-script { };
 
+  flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
+
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
@@ -2410,6 +2412,8 @@ in {
   flask-sockets = callPackage ../development/python-modules/flask-sockets { };
 
   flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
+
+  flask-sslify = callPackage ../development/python-modules/flask-sslify { };
 
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
 
@@ -2672,8 +2676,6 @@ in {
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
-  gmusicapi = callPackage ../development/python-modules/gmusicapi { };
-
   gntp = callPackage ../development/python-modules/gntp { };
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
@@ -2796,12 +2798,6 @@ in {
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
   googlemaps = callPackage ../development/python-modules/googlemaps { };
-
-  google-music = callPackage ../development/python-modules/google-music { };
-
-  google-music-proto = callPackage ../development/python-modules/google-music-proto { };
-
-  google-music-utils = callPackage ../development/python-modules/google-music-utils { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
 
@@ -3844,6 +3840,8 @@ in {
   lightning = callPackage ../development/python-modules/lightning { };
 
   lightparam = callPackage ../development/python-modules/lightparam { };
+
+  lima = callPackage ../development/python-modules/lima { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
 
@@ -6261,6 +6259,8 @@ in {
 
   pytest-check = callPackage ../development/python-modules/pytest-check { };
 
+  pytest-cid = callPackage ../development/python-modules/pytest-cid { };
+
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
   pytest-cov = self.pytestcov; # self 2021-01-04
@@ -6417,6 +6417,8 @@ in {
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
+
+  python3-saml = callPackage ../development/python-modules/python3-saml { };
 
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
@@ -8662,6 +8664,10 @@ in {
   xmljson = callPackage ../development/python-modules/xmljson { };
 
   xmlschema = callPackage ../development/python-modules/xmlschema { };
+
+  xmlsec = callPackage ../development/python-modules/xmlsec {
+    inherit (pkgs) libxslt libxml2 libtool pkg-config xmlsec;
+  };
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
