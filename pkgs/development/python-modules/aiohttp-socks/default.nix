@@ -1,16 +1,16 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, aiohttp, attrs }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, aiohttp, attrs, python-socks }:
 
 buildPythonPackage rec {
   pname = "aiohttp-socks";
-  version = "0.3.9";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit version;
     pname = "aiohttp_socks";
-    sha256 = "1mn2ng66951mri49f99zh3660j83kvqhr6dpx90s9fkjwk83hmjy";
+    sha256 = "sha256-uV3PujdAyEmfT/YzhG1yEIRZ0lZQ68GuiymcuBcIgBM=";
   };
 
-  propagatedBuildInputs = [ aiohttp attrs ];
+  propagatedBuildInputs = [ aiohttp attrs python-socks ];
 
   # Checks needs internet access
   doCheck = false;
