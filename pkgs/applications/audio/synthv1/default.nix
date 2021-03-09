@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "synthv1";
-  version = "0.9.15";
+  version = "0.9.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/synthv1/${pname}-${version}.tar.gz";
-    sha256 = "047y2l7ipzv00ly54f074v6p043xjml7vz0svc7z81bhx74vs0ix";
+    sha256 = "sha256-H+cB/N4MszWMPalP8xjs3NW213zRfNkSiUcGOl86Ubw=";
   };
 
   buildInputs = [ qtbase qttools libjack2 alsaLib liblo lv2 ];
