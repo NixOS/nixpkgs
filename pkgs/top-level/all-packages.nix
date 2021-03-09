@@ -27431,6 +27431,8 @@ in
 
   soldat-unstable = callPackage ../games/soldat-unstable { };
 
+  sollya = callPackage ../development/interpreters/sollya { };
+
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
 
