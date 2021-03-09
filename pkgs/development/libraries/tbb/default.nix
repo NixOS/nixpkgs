@@ -2,13 +2,13 @@
 
 with lib; stdenv.mkDerivation rec {
   pname = "tbb";
-  version = "2019_U9";
+  version = "2020_U3";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "1a39nflw7b2n51jfp3fdprnkpgzaspzww1dckfvaigflfli9s8rj";
+    sha256 = "sha256-prO2O5hd+Wz5iA0vfrqmyHFr0Ptzk64so5KpSpvuKmU=";
   };
 
   nativeBuildInputs = optional stdenv.isDarwin fixDarwinDylibNames;
