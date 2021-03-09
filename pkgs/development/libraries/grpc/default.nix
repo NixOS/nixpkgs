@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, openssl, protobuf
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, re2, openssl, protobuf
 , gflags, libnsl
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.35.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.36.1"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "0vxgp3kqxsglavzs91ybpkkh7aaywxcryacp5z3z6dpsgmw0mscd";
+    sha256 = "0lb6pls9m05bvr6bvqzp6apdchhsazc5866yvmgkm979xcrzdy2z";
     fetchSubmodules = true;
   };
   patches = [
@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ]
+  buildInputs = [ zlib c-ares c-ares.cmake-config re2 openssl protobuf gflags ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags =
     [ "-DgRPC_ZLIB_PROVIDER=package"
       "-DgRPC_CARES_PROVIDER=package"
+      "-DgRPC_RE2_PROVIDER=package"
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"
       "-DgRPC_GFLAGS_PROVIDER=package"
