@@ -1215,6 +1215,7 @@ mapAliases ({
     sddm-kcm systemsettings
     xdg-desktop-portal-kde
     plasma-phone-components
+    plasma-nano
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
