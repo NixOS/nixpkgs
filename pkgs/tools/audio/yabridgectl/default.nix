@@ -6,12 +6,12 @@ rustPlatform.buildRustPackage rec {
 
   src = yabridge.src;
   sourceRoot = "source/tools/yabridgectl";
-  cargoHash = "sha256-YSK1DWv9kb6kFUJ4UEhh6psKsVqwpFJjvjJgj2e4BAc=";
+  cargoHash = "sha256-mSp/IH7ZB7YSOBCFwNtHLYDz7CvWo2sO9VuPdqpl/u0=";
 
   patches = [
     # By default, yabridgectl locates libyabridge.so by using
-    # hard-coded distro-specific lib paths. This patch replaces those
-    # hard coded paths with lib paths from NIX_PROFILE.
+    # hard coded distro specific lib paths. This patch replaces those
+    # hard coded paths with lib paths from NIX_PROFILES.
     ./libyabridge-from-nix-profiles.patch
   ];
 
