@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.7.0";
+  version = "1.7.1";
   arch = "x86_64";
 
   desktopItem = makeDesktopItem rec {
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   inherit version;
   src = fetchzip {
     url = "https://tla.msr-inria.inria.fr/tlatoolbox/products/TLAToolbox-${version}-linux.gtk.${arch}.zip";
-    sha256 = "0v15wscawair5bghr5ixb4i062kmh9by1m0hnz2r1sawlqyafz02";
+    sha256 = "sha256-APFnH3u1GqxCWz+RHK8CuRMYTCXAPMQ/Y2UpN6vwQgk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
