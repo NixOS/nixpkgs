@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "bayespy";
-  version = "0.5.20";
+  version = "0.5.21";
 
   # Python 2 not supported and not some old Python 3 because MPL doesn't support
   # them properly.
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c16cdc73bbcd9a1124a0495056065b7ce938dbe6c2c780dc330c83fb4d2640a";
+    sha256 = "0d86e9ae73e6472c26aeb4de7abd9bf99492fedcbb0485ed7fa23609d2673b42";
   };
 
   checkInputs = [ pytest nose glibcLocales ];
