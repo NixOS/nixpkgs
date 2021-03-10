@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, isPy27
 , decorator
 , requests
 , typing
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     ++ lib.optional (pythonOlder "3.5") typing
     ++ lib.optional (pythonOlder "3.0") configparser;
 
+  doCheck = !isPy27;
   checkInputs = [
     click
     freezegun
