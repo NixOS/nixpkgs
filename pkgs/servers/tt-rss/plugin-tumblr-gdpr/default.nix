@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss-plugin-tumblr-gdpr";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "GregThib";
     repo = "ttrss-tumblr-gdpr";
     rev = "v${version}";
-    sha256 = "09cbghi5b6ww4i5677i39qc9rhpq70xmygp0d7x30239r3i23rpq";
+    sha256 = "sha256-oCdpgfOvXNui2KaS48WeyVy8Of6IlPOxQR6gmPiyH0s=";
   };
 
   installPhase = ''
