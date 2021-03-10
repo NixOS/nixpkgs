@@ -19,14 +19,14 @@ assert withWebKit -> webkitgtk != null;
 assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK30: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
+  version = "3.0.5";
   pname = "wxwidgets";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    sha256 = "19mqglghjjqjgz4rbybn3qdgn2cz9xc511nq1pvvli9wx2k8syl1";
+    sha256 = "1l33629ifx2dl2j71idqbd2qb6zb1d566ijpkvz6irrr50s6gbx7";
   };
 
   buildInputs = [
