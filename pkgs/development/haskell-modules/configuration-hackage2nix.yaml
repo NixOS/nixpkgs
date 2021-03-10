@@ -5169,8 +5169,6 @@ broken-packages:
   - FailureT
   - fake
   - fake-type
-  - fakedata
-  - fakedata-quickcheck
   - faktory
   - falling-turnip
   - fallingblocks
@@ -10501,7 +10499,6 @@ broken-packages:
   - strictly
   - string-isos
   - string-quote
-  - string-random
   - string-typelits
   - stringlike
   - stringtable-atom
