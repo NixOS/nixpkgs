@@ -20,6 +20,8 @@ buildPythonPackage rec {
   pname = "dateparser";
   version = "1.0.0";
 
+  disabled = !isPy3k;
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "159cc4e01a593706a15cd4e269a0b3345edf3aef8bf9278a57dac8adf5bf1e4a";
