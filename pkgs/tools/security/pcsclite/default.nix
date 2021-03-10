@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , autoreconfHook
+, libusb1
 , pkg-config
 , perl
 , python3
@@ -33,14 +34,14 @@ stdenv.mkDerivation rec {
     "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-  ]
-  ++ (if stdenv.isLinux then [
+  ] ++ (if stdenv.isLinux then [
     "--enable-ipcdir=/run/pcscd"
     "--enable-polkit"
     "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
   ] else [
     "--disable-libsystemd"
-  ]);
+  ]) ++ lib.optional (stdenv.hostPlatform.isMusl)
+      "--disable-libudev";
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
@@ -57,9 +58,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config perl ];
 
-  buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ dbus polkit systemd ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = [ python3 ] ++ lib.optionals stdenv.isLinux [
+    dbus
+    (if stdenv.hostPlatform.isMusl then libusb1 else systemd)
+  ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
