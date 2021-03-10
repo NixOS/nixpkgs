@@ -240,7 +240,8 @@ rec {
 
   core_kernel = janePackage {
     pname = "core_kernel";
-    hash = "012sp02v35j41lzkvf073620602fgiswz2n224j06mk3bm8jmjms";
+    version = "0.14.1";
+    hash = "0pikg4ln6177gbs0jfix7xj50zlcm7058h64lxnd7wspnj7mq8sd";
     meta.description = "System-independent part of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base_bigstring sexplib ];

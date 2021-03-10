@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "eiskaltdcpp";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "eiskaltdcpp";
     repo = "eiskaltdcpp";
     rev = "v${version}";
-    sha256 = "0ln8dafa8sni3289g30ndv1wr3ij5lz4abcb2qwcabb79zqxl8hy";
+    sha256 = "sha256-JmAopXFS6MkxW0wDQ1bC/ibRmWgOpzU0971hcqAehLU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

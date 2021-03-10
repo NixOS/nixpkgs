@@ -9,26 +9,26 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zexvTPEQw7iW1d3ahHmqTn+UaT/bJMlr1sVlWErc2ck=";
+    sha256 = "sha256-z5Ekryaa5KMShrjdsmFk9bXahtuc+6tec7dxH5/w7+A=";
   };
 
-  vendorSha256 = "sha256-bX1GfKbAbdEAnW3kPNsbF/cJWufxvuhm//G88qJ3u08=";
+  vendorSha256 = "sha256-ovmVNtzTQbg141IvbaF/+k5WHxX8wuK7z5gH9l2g5UE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-w"
-    "-s"
-    "-X github.com/AkihiroSuda/nerdctl/pkg/version.Version=v${version}"
-    "-X github.com/AkihiroSuda/nerdctl/pkg/version.Revision=<unknown>"
-  ];
+  preBuild =
+    let
+      t = "github.com/AkihiroSuda/nerdctl/pkg/version";
+    in
+    ''
+      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.Revision=<unknown>")
+    '';
 
   # Many checks require a containerd socket and running nerdctl after it's built
   doCheck = false;
