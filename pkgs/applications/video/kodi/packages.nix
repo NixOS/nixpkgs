@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, fetchFromGitHub
-, cmake, kodiPlain, libcec_platform, tinyxml, pugixml
+, cmake, kodi, libcec_platform, tinyxml, pugixml
 , steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
 , python3Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
@@ -11,7 +11,7 @@ let self = rec {
   addonDir = "/share/kodi/addons";
   rel = "Matrix";
 
-  kodi = kodiPlain;
+  inherit kodi;
 
   # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
   toKodiAddon = drv: drv.overrideAttrs(oldAttrs: {
@@ -30,11 +30,6 @@ let self = rec {
       modules = filter hasKodiAddon drvs;
     in unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
 
-  kodiWithAddons = func: callPackage ./wrapper.nix {
-    inherit kodi;
-    addons = requiredKodiAddons (func self);
-  };
-
   kodi-platform = stdenv.mkDerivation rec {
     project = "kodi-platform";
     version = "17.1";
@@ -48,7 +43,7 @@ let self = rec {
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ kodiPlain libcec_platform tinyxml ];
+    buildInputs = [ kodi libcec_platform tinyxml ];
   };
 
   buildKodiAddon =
@@ -86,7 +81,7 @@ let self = rec {
     dontStrip = true;
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ kodiPlain kodi-platform libcec_platform ] ++ extraBuildInputs;
+    buildInputs = [ kodi kodi-platform libcec_platform ] ++ extraBuildInputs;
 
     inherit extraRuntimeDependencies;
 

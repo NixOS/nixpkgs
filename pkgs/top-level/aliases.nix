@@ -303,6 +303,9 @@ mapAliases ({
   json_glib = json-glib; # added 2018-02-25
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
+  kodiGBM = kodi-gbm;
+  kodiPlain = kodi;
+  kodiPlainWayland = kodi-wayland;
   julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
   kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
