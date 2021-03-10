@@ -18,9 +18,11 @@ in
 
         services.spacecookie = {
           enable = true;
-          root = gopherRoot;
-          hostname = gopherHost;
           openFirewall = true;
+          settings = {
+            root = gopherRoot;
+            hostname = gopherHost;
+          };
         };
       };
 
