@@ -219,6 +219,31 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run bulk-layer ls /bin/hello",
         )
 
+    with subtest(
+        "Ensure the bulk layer weighted algorithms each pack hello correctly according to their strategy"
+    ):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.bulk-layer-bottom-weighted}'",
+            "docker run bulk-layer-bottom-weighted /bin/hello",
+        )
+
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.bulk-layer-top-weighted}'",
+            "docker run bulk-layer-top-weighted /bin/hello",
+        )
+
+        docker.succeed(
+            # The final application should have been compacted with other
+            # runtime dependencies into the final layer. E.g., the final layer
+            # does contain hello, but it is NOT a singleton.
+            "docker history bulk-layer-bottom-weighted --format '{{.Comment}}' | head -2 | tail -1 | grep -v \"\['${pkgs.hello}'\]\" | grep ${pkgs.hello}"
+        )
+
+        docker.succeed(
+            # The final application should have been installed by itself in the 2nd layer
+            "docker history bulk-layer-top-weighted  --format '{{.Comment}}' | head -2 | tail -1 | grep \"\['${pkgs.hello}'\]\""
+        )
+
     with subtest("Ensure correct behavior when no store is needed"):
         # This check tests that buildLayeredImage can build images that don't need a store.
         docker.succeed(
