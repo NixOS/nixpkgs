@@ -9,7 +9,6 @@ in
     name = "spacecookie";
     nodes = {
       ${gopherHost} = {
-        networking.firewall.allowedTCPPorts = [ 70 ];
         systemd.services.spacecookie = {
           preStart = ''
             mkdir -p ${gopherRoot}/directory
@@ -21,6 +20,7 @@ in
           enable = true;
           root = gopherRoot;
           hostname = gopherHost;
+          openFirewall = true;
         };
       };
 
