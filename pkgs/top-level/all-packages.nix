@@ -1733,6 +1733,8 @@ in
 
   borgbackup = callPackage ../tools/backup/borg { };
 
+  borgmatic = callPackage ../tools/backup/borgmatic { };
+
   boringtun = callPackage ../tools/networking/boringtun { };
 
   # Upstream recommends qt5.12 and it doesn't build with qt5.15

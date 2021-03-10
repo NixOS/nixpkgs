@@ -22,6 +22,8 @@ buildDunePackage (args // {
 
   inherit doCheck;
 
-  meta.license = lib.licenses.mit;
-  meta.homepage = "https://github.com/janestreet/${pname}";
+  meta = {
+    license = lib.licenses.mit;
+    homepage = "https://github.com/janestreet/${pname}";
+  } // args.meta;
 })
