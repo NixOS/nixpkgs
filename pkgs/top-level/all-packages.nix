@@ -28278,6 +28278,8 @@ in
 
   dcmtk = callPackage ../applications/science/medicine/dcmtk { };
 
+  xmedcon = callPackage ../applications/science/medicine/xmedcon { };
+
   ### SCIENCE/PHYSICS
 
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
