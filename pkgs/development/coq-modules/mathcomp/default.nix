@@ -63,8 +63,12 @@ let
         buildFlags = optional withDoc "doc";
 
         preBuild = ''
-          patchShebangs etc/utils/ssrcoqdep || true
-          patchShebangs etc/buildlibgraph || true
+          if [[ -f etc/utils/ssrcoqdep ]]
+          then patchShebangs etc/utils/ssrcoqdep
+          fi
+          if [[ -f etc/buildlibgraph ]]
+          then patchShebangs etc/buildlibgraph
+          fi
         '' + ''
           cd ${pkgpath}
         '' + optionalString (package == "all") pkgallMake;
