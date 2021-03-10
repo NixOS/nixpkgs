@@ -26264,7 +26264,7 @@ in
     useGbm = true;
   };
 
-  kodiPackages = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
+  kodiPackages = recurseIntoAttrs (callPackage ../applications/video/kodi/packages.nix {});
 
   kodi = wrapKodi {
     kodi = kodiPlain;
