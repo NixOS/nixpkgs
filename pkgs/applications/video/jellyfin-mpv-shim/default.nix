@@ -13,7 +13,6 @@ buildPythonApplication rec {
 
   patches = [
     ./disable-desktop-client.patch
-    ./disable-update-check.patch
   ];
 
   # override $HOME directory:
@@ -25,6 +24,12 @@ buildPythonApplication rec {
     export HOME=$TMPDIR
 
     rm jellyfin_mpv_shim/win_utils.py
+  '';
+
+  postPatch = ''
+    substituteInPlace jellyfin_mpv_shim/conf.py \
+      --replace "check_updates: bool = True" "check_updates: bool = False" \
+      --replace "notify_updates: bool = True" "notify_updates: bool = False"
   '';
 
   propagatedBuildInputs = [
