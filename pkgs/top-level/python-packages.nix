@@ -1472,7 +1472,10 @@ in {
 
   contextvars = callPackage ../development/python-modules/contextvars { };
 
-  convertdate = callPackage ../development/python-modules/convertdate { };
+  convertdate = if isPy27 then
+    callPackage ../development/python-modules/convertdate/2.2.x.nix { }
+  else
+    callPackage ../development/python-modules/convertdate { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
