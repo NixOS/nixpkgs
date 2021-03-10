@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clight";
-  version = "4.2";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
-    sha256 = "sha256-NmfnE6ZWgG9erBmrFFIhutnB1t2Ix/6jo+EeXYVtehg=";
+    sha256 = "sha256-sHp/KqRPzJmt+0PUFytIoJJypC168YmwnPxd4StmK0Y=";
   };
 
   # dbus-1.pc has datadir=/etc
