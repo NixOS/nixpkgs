@@ -9,6 +9,7 @@
 , qtx11extras
 , qtsvg
 , polkit-qt
+, polkit
 , kwindowsystem
 , liblxqt
 , libqtxdg
@@ -43,6 +44,7 @@ mkDerivation rec {
     liblxqt
     libqtxdg
     pcre
+    polkit
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
