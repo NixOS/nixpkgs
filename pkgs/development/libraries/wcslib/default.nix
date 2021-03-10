@@ -1,14 +1,14 @@
 { fetchurl,  lib, stdenv, flex }:
 
 stdenv.mkDerivation rec {
-  version = "7.3.1";
+  version = "7.4";
   pname = "wcslib";
 
   buildInputs = [ flex ];
 
   src = fetchurl {
     url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${pname}-${version}.tar.bz2";
-    sha256 ="0p0bp3jll9v2094a8908vk82m7j7qkjqzkngm1r9qj1v6l6j5z6c";
+    sha256 ="sha256-ohyWQTYFWtHWjKnT6XFDdKncP/L3ByYirwjMT1oMURw=";
   };
 
   prePatch = ''
