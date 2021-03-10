@@ -19,13 +19,13 @@ let
 in
 buildGoModule rec {
   pname = "argo";
-  version = "2.12.9";
+  version = "2.12.10";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "v${version}";
-    sha256 = "sha256-WfyP48qOdFZfQ0+8AZDYokw7WK7lSx5di7z07gsRPZk=";
+    sha256 = "sha256-A4s6D3/1FsqrJ+Jaql4IuyD9ySChL3SXqVvl8wUDRDE=";
   };
 
   vendorSha256 = "sha256-4XPMixVNj6PUKobNLwpsOBT7Zs/7pkhDtQacLIB5EfE=";
