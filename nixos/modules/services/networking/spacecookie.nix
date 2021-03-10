@@ -15,6 +15,18 @@ in {
 
       enable = mkEnableOption "spacecookie";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.haskellPackages.spacecookie;
+        example = literalExample ''
+          pkgs.haskell.lib.justStaticExecutables pkgs.haskellPackages.spacecookie
+        '';
+        description = ''
+          The spacecookie derivation to use. This can be used to
+          override the used package or to use another version.
+        '';
+      };
+
       hostname = mkOption {
         type = types.str;
         default = "localhost";
@@ -62,7 +74,7 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.haskellPackages.spacecookie}/bin/spacecookie ${configFile}";
+        ExecStart = "${lib.getBin cfg.package}/bin/spacecookie ${configFile}";
         FileDescriptorStoreMax = 1;
 
         DynamicUser = true;
