@@ -6,13 +6,14 @@ let
     stdenv.mkDerivation ({
       name = lib.strings.sanitizeDerivationName name;
       inherit buildCommand;
-      passAsFile = [ "buildCommand" ];
+      passAsFile = [ "buildCommand" ]
+        ++ (env.passAsFile or []);
     }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
           allowSubstitutes = false;
        })
-    // env);
+    // builtins.removeAttrs env [ "passAsFile" ]);
 
 in
 
