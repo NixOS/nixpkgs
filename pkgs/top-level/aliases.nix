@@ -780,7 +780,8 @@ mapAliases ({
   xara = throw "xara has been removed from nixpkgs. Unmaintained since 2006"; # added 2020-06-24
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
-  xbmcPlugins = kodiPlugins; # added 2018-04-25
+  xbmcPlugins = kodiPackages; # added 2018-04-25
+  kodiPlugins = kodiPackages; # added 2021-03-09;
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xmpppy = throw "xmpppy has been removed from nixpkgs as it is unmaintained and python2-only";
   pyIRCt = throw "pyIRCt has been removed from nixpkgs as it is unmaintained and python2-only";

@@ -26172,7 +26172,7 @@ in
 
   wrapKodi = { kodi }: callPackage ../applications/video/kodi/wrapper.nix {
     inherit kodi;
-    plugins = let inherit (lib) optional optionals; in with kodiPlugins;
+    addons = let inherit (lib) optional optionals; in with kodiPackages;
       ([]
       ++ optional (config.kodi.enableAdvancedLauncher or false) advanced-launcher
       ++ optional (config.kodi.enableAdvancedEmulatorLauncher or false)
@@ -26264,7 +26264,7 @@ in
     useGbm = true;
   };
 
-  kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
+  kodiPackages = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
 
   kodi = wrapKodi {
     kodi = kodiPlain;
