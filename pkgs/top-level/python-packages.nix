@@ -8363,7 +8363,10 @@ in {
 
   varint = callPackage ../development/python-modules/varint { };
 
-  vcrpy = callPackage ../development/python-modules/vcrpy { };
+  vcrpy = if isPy27 then
+    callPackage ../development/python-modules/vcrpy/3.nix { }
+  else
+    callPackage ../development/python-modules/vcrpy { };
 
   vcver = callPackage ../development/python-modules/vcver { };
 
