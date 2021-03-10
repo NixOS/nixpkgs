@@ -60,6 +60,16 @@ in {
           The root directory spacecookie serves via gopher.
         '';
       };
+
+      address = mkOption {
+        type = types.str;
+        default = "[::]";
+        description = ''
+          Address to listen on. Must be in the
+          <literal>ListenStream=</literal> syntax of
+          <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd.socket(5)</link>.
+        '';
+      };
     };
   };
 
@@ -68,7 +78,7 @@ in {
     systemd.sockets.spacecookie = {
       description = "Socket for the Spacecookie Gopher Server";
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "[::]:${toString cfg.port}" ];
+      listenStreams = [ "${cfg.address}:${toString cfg.port}" ];
       socketConfig = {
         BindIPv6Only = "both";
       };
