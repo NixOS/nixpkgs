@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "1.0.2";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2fcf06467553038e98fea9cfe36af2bf14063eb147a70958cfcaa8f5786acaf";
+    sha256 = "984b5dbe3a2a0483d7cb131609a17f4cbaa34dda306c419924858a88588fed7c";
   };
 
   buildInputs = [ mock ];
