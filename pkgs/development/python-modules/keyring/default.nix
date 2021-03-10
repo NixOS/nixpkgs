@@ -1,42 +1,45 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
-, dbus-python
-, entrypoints
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+, setuptools-scm
 , importlib-metadata
-, pytest
-, pytest-flake8
+, dbus-python
+, jeepney
 , secretstorage
-, setuptools_scm
-, toml
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.0.0";
-  disabled = isPy27;
+  version = "23.0.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "237ff44888ba9b3918a7dcb55c8f1db909c95b6f071bfb46c6918f33f453a68a";
+    sha256 = "045703609dd3fccfcdb27da201684278823b72af515aedec1a8515719a038cb8";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
-    toml
+    setuptools-scm
   ];
 
-  checkInputs = [ pytest pytest-flake8 ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints importlib-metadata ]
-  ++ lib.optional stdenv.isLinux secretstorage;
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ] ++ lib.optionals stdenv.isLinux [
+    dbus-python
+    jeepney
+    secretstorage
+  ];
 
-  # checks try to access a darwin path on linux
-  doCheck = false;
+  pythonImportsCheck = [ "keyring" ];
 
   meta = with lib; {
     description = "Store and access your passwords safely";
-    homepage    = "https://pypi.python.org/pypi/keyring";
-    license     = licenses.psfl;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage    = "https://github.com/jaraco/keyring";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;
   };
 }
