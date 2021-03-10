@@ -19306,8 +19306,8 @@ in
 
   busybox = callPackage ../os-specific/linux/busybox { };
   busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix {
-    # musl roadmap has RISC-V support projected for 1.1.20
-    busybox = if !stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.libc != "bionic"
+    # musl's busybox is already static
+    busybox = if stdenv.hostPlatform.libc != "bionic" && !stdenv.hostPlatform.isMusl
               then pkgsStatic.busybox
               else busybox;
   };
