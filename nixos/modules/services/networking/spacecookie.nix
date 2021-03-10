@@ -37,12 +37,19 @@ in {
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the necessary port in the firewall for spacecookie.
+        '';
+      };
+
       port = mkOption {
         type = types.port;
         default = 70;
         description = ''
-          Port the gopher service should be exposed on. The
-          firewall is not opened automatically.
+          Port the gopher service should be exposed on.
         '';
       };
 
@@ -99,6 +106,10 @@ in {
         # AF_INET replaced by BindIPv6Only=both
         RestrictAddressFamilies = "AF_UNIX AF_INET6";
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
     };
   };
 }
