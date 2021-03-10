@@ -4,10 +4,20 @@ with lib;
 
 let
   cfg = config.services.spacecookie;
-  configFile = pkgs.writeText "spacecookie.json" (lib.generators.toJSON {} {
-    inherit (cfg) hostname port root;
-  });
+
+  spacecookieConfig = {
+    inherit (cfg) port;
+  } // cfg.settings;
+
+  format = pkgs.formats.json {};
+
+  configFile = format.generate "spacecookie.json" spacecookieConfig;
+
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "spacecookie" "root" ] [ "services" "spacecookie" "settings" "root" ])
+    (mkRenamedOptionModule [ "services" "spacecookie" "hostname" ] [ "services" "spacecookie" "settings" "hostname" ])
+  ];
 
   options = {
 
@@ -27,16 +37,6 @@ in {
         '';
       };
 
-      hostname = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = ''
-          The hostname the service is reachable via. Clients
-          will use this hostname for further requests after
-          loading the initial gopher menu.
-        '';
-      };
-
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -53,14 +53,6 @@ in {
         '';
       };
 
-      root = mkOption {
-        type = types.path;
-        default = "/srv/gopher";
-        description = ''
-          The root directory spacecookie serves via gopher.
-        '';
-      };
-
       address = mkOption {
         type = types.str;
         default = "[::]";
@@ -70,10 +62,68 @@ in {
           <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd.socket(5)</link>.
         '';
       };
+
+      settings = mkOption {
+        type = types.submodule {
+          freeformType = format.type;
+
+          options.hostname = mkOption {
+            type = types.str;
+            default = "localhost";
+            description = ''
+              The hostname the service is reachable via. Clients
+              will use this hostname for further requests after
+              loading the initial gopher menu.
+            '';
+          };
+
+          options.root = mkOption {
+            type = types.path;
+            default = "/srv/gopher";
+            description = ''
+              The directory spacecookie should serve via gopher.
+              Files in there need to be world-readable since
+              the spacecookie service file sets
+              <literal>DynamicUser=true</literal>.
+            '';
+          };
+        };
+
+        description = ''
+          Settings for spacecookie. The settings set here are
+          directly translated to the spacecookie JSON config
+          file. See the
+          <link xlink:href="https://github.com/sternenseemann/spacecookie/#configuration">spacecookie documentation</link>
+          for explanations of all options.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !(cfg.settings ? user);
+        message = ''
+          spacecookie is started as a normal user, so the setuid
+          feature doesn't work. If you want to run spacecookie as
+          a specific user, set:
+          systemd.services.spacecookie.serviceConfig = {
+            DynamicUser = false;
+            User = "youruser";
+            Group = "yourgroup";
+          }
+        '';
+      }
+      {
+        assertion = !(cfg.settings ? port);
+        message = ''
+          The NixOS spacecookie module uses socket activation,
+          so the port option has no effect. Use the port option
+          in services.spacecookie instead.
+        '';
+      }
+    ];
 
     systemd.sockets.spacecookie = {
       description = "Socket for the Spacecookie Gopher Server";
