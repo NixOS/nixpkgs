@@ -1669,7 +1669,10 @@ in {
     inherit (pkgs.llvmPackages) libcxx;
   };
 
-  dateparser = callPackage ../development/python-modules/dateparser { };
+  dateparser = if isPy27 then
+    callPackage ../development/python-modules/dateparser/0.x.nix { }
+  else
+    callPackage ../development/python-modules/dateparser { };
 
   datrie = callPackage ../development/python-modules/datrie { };
 
