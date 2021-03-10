@@ -38,4 +38,4 @@ with lib; mkCoqDerivation {
     license = licenses.cecill-c;
   };
 }
-// optionalAttrs (args?useDune2) { inherit usedDune2; }
+// optionalAttrs (args?useDune2) { inherit useDune2; }
