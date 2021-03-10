@@ -1,20 +1,14 @@
-{ lib, buildPythonApplication, fetchFromGitHub, callPackage
+{ lib, buildPythonApplication, fetchPypi
 , mpv, python-mpv-jsonipc, jellyfin-apiclient-python
 , pillow, tkinter, pystray, jinja2, pywebview }:
 
-let
-  shaderPack = callPackage ./shader-pack.nix {};
-in
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
   version = "1.7.1";
 
-  src = fetchFromGitHub {
-    owner = "iwalton3";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0alrh5h3f8pq9mrq09jmpqa0yslxsjqwij6kwn24ggbwc10zkq75";
-    fetchSubmodules = true; # needed for display_mirror css file
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-Fo1auMiYUgJrJGJII+FfHspcke0r/VSSXzGwVNIHtEE=";
   };
 
   patches = [
@@ -31,11 +25,6 @@ buildPythonApplication rec {
     export HOME=$TMPDIR
 
     rm jellyfin_mpv_shim/win_utils.py
-  '';
-
-  postPatch = ''
-    # link the default shader pack
-    ln -s ${shaderPack} jellyfin_mpv_shim/default_shader_pack
   '';
 
   propagatedBuildInputs = [
