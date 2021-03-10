@@ -26254,13 +26254,13 @@ in
     gtk = gtk2;
   };
 
-  kodiPlain = callPackage ../applications/video/kodi { };
+  kodiPlain = callPackage ../applications/video/kodi/unwrapped.nix { };
 
-  kodiPlainWayland = callPackage ../applications/video/kodi {
+  kodiPlainWayland = callPackage ../applications/video/kodi/unwrapped.nix {
     useWayland = true;
   };
 
-  kodiGBM = callPackage ../applications/video/kodi {
+  kodiGBM = callPackage ../applications/video/kodi/unwrapped.nix {
     useGbm = true;
   };
 
