@@ -1462,7 +1462,10 @@ in {
 
   constantly = callPackage ../development/python-modules/constantly { };
 
-  construct = callPackage ../development/python-modules/construct { };
+  construct = if isPy27 then
+    callPackage ../development/python-modules/construct/2.10.54.nix { }
+  else
+    callPackage ../development/python-modules/construct { };
 
   consul = callPackage ../development/python-modules/consul { };
 
