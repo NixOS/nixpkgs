@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/rpodgorny/uptimed/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }
