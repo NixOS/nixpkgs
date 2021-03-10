@@ -311,6 +311,9 @@ stdenv.mkDerivation {
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
 
+    # flaky test which does fails when manually building
+    disable_test t5319-multi-pack-index
+
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available
       # when NO_PERL=1, and the test should be skipped, but the test suite does
