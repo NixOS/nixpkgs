@@ -3,9 +3,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfdesktop";
-  version = "4.14.2";
+  version = "4.16.0";
 
-  sha256 = "04fhm1pf9290sy3ymrmnfnm2x6fq5ldzvj5bjd9kz6zkx0nsq1za";
+  sha256 = "w/JNjyAlxZqfVpm8EBt+ieHhUziOtfd//XHzIjJjy/4=";
 
   buildInputs = [
     exo
