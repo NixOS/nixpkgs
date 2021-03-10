@@ -12,25 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "09znixn8mpkxipv2x3nrfxr2i8g7y58v25qssqf092j9lh85sf9h";
+    sha256 = "1i9ya38zcaj1vkfgy1n4gp5vqb59zlrd609pdmz4jqinrb0c5fgv";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}/bin" ];
 
   dontBuild = true;
-
-  # remove after next update
-  preInstall = ''
-    mkdir -p "$out/bin"
-  '';
 
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [

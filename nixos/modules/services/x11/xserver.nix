@@ -251,11 +251,10 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "radeon" "cirrus" "vesa" "modesetting" ];
+        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
         example = [
-          "ati_unfree" "amdgpu" "amdgpu-pro"
-          "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "amdgpu-pro"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists

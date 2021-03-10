@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-    pytest -k 'not test_run_playbook_github and not test_run_single_role_path_no_trailing_slash_script'
+    pytest -W ignore::DeprecationWarning -k 'not test_run_playbook_github and not test_run_single_role_path_no_trailing_slash_script'
   '';
 
   meta = with lib; {

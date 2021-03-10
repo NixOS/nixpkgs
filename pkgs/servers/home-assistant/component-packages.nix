@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.3.2";
+  version = "2021.3.3";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -609,7 +609,7 @@
     "otp" = ps: with ps; [ pyotp ];
     "ovo_energy" = ps: with ps; [ ]; # missing inputs: ovoenergy
     "owntracks" = ps: with ps; [ pynacl aiohttp-cors hass-nabucasa paho-mqtt ];
-    "ozw" = ps: with ps; [ aiohttp-cors homeassistant-pyozw paho-mqtt pydispatcher python-openzwave-mqtt ];
+    "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
     "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect ];
