@@ -6,7 +6,9 @@ let
   cfg = config.services.spacecookie;
 
   spacecookieConfig = {
-    inherit (cfg) port;
+    listen = {
+      inherit (cfg) port;
+    };
   } // cfg.settings;
 
   format = pkgs.formats.json {};
@@ -87,13 +89,53 @@ in {
               <literal>DynamicUser=true</literal>.
             '';
           };
+
+          options.log = {
+            enable = mkEnableOption "logging for spacecookie"
+              // { default = true; example = false; };
+
+            hide-ips = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                If enabled, spacecookie will hide personal
+                information of users like IP addresses from
+                log output.
+              '';
+            };
+
+            hide-time = mkOption {
+              type = types.bool;
+              # since we are starting with systemd anyways
+              # we deviate from the default behavior here:
+              # journald will add timestamps, so no need
+              # to double up.
+              default = true;
+              description = ''
+                If enabled, spacecookie will not print timestamps
+                at the beginning of every log line.
+              '';
+            };
+
+            level = mkOption {
+              type = types.enum [
+                "info"
+                "warn"
+                "error"
+              ];
+              default = "info";
+              description = ''
+                Log level for the spacecookie service.
+              '';
+            };
+          };
         };
 
         description = ''
           Settings for spacecookie. The settings set here are
           directly translated to the spacecookie JSON config
-          file. See the
-          <link xlink:href="https://github.com/sternenseemann/spacecookie/#configuration">spacecookie documentation</link>
+          file. See
+          <link xlink:href="https://sternenseemann.github.io/spacecookie/spacecookie.json.5.html">spacecookie.json(5)</link>
           for explanations of all options.
         '';
       };
@@ -116,11 +158,11 @@ in {
         '';
       }
       {
-        assertion = !(cfg.settings ? port);
+        assertion = !(cfg.settings ? listen || cfg.settings ? port);
         message = ''
           The NixOS spacecookie module uses socket activation,
-          so the port option has no effect. Use the port option
-          in services.spacecookie instead.
+          so the listen options have no effect. Use the port
+          and address options in services.spacecookie instead.
         '';
       }
     ];
