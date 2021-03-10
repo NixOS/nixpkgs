@@ -33,14 +33,14 @@ let
       };
   };
 in buildGoModule rec {
-  version = "13.8.4";
+  version = "13.8.5";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-y8uy70ccQPba+JJmWace4LgLJkJNzVdFhrvq0AB8G5w=";
+    sha256 = "sha256-hKIjKltPPmz50Ru7elpHdeoyGAqgp+txR3fKleqY7hM=";
   };
 
   vendorSha256 = "sha256-oVw6vXI3CyOn4l02PkYx3HVpZfzQPi3yBuf9tRvoWoM=";
