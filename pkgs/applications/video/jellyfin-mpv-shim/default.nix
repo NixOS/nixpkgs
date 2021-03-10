@@ -1,6 +1,21 @@
-{ lib, buildPythonApplication, fetchPypi
-, mpv, python-mpv-jsonipc, jellyfin-apiclient-python
-, pillow, tkinter, pystray, jinja2, pywebview }:
+{ lib
+, buildPythonApplication
+, copyDesktopItems
+, fetchPypi
+, makeDesktopItem
+, flask
+, jellyfin-apiclient-python
+, jinja2
+, mpv
+, pillow
+, pyqtwebengine
+, pystray
+, python-mpv-jsonipc
+, pywebview
+, qt5
+, tkinter
+, werkzeug
+}:
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
@@ -11,8 +26,41 @@ buildPythonApplication rec {
     sha256 = "sha256-Fo1auMiYUgJrJGJII+FfHspcke0r/VSSXzGwVNIHtEE=";
   };
 
-  patches = [
-    ./disable-desktop-client.patch
+  propagatedBuildInputs = [
+    jellyfin-apiclient-python
+    mpv
+    pillow
+    python-mpv-jsonipc
+
+    # gui dependencies
+    pystray
+    tkinter
+
+    # display_mirror dependencies
+    jinja2
+    pywebview
+
+    # desktop dependencies
+    flask
+    pyqtwebengine
+    werkzeug
+  ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    qt5.wrapQtAppsHook
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Jellyfin MPV Shim Desktop";
+      exec = "jellyfin-mpv-desktop";
+      icon = "jellyfin-mpv-desktop";
+      desktopName = "jellyfin-mpv-desktop";
+      comment = "MPV-based desktop and cast client for Jellyfin";
+      genericName = "MPV-based desktop and cast client for Jellyfin";
+      categories = "Video;AudioVideo;TV;Player";
+    })
   ];
 
   # override $HOME directory:
@@ -32,20 +80,14 @@ buildPythonApplication rec {
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
   '';
 
-  propagatedBuildInputs = [
-    jellyfin-apiclient-python
-    mpv
-    pillow
-    python-mpv-jsonipc
+  postInstall = ''
+    mkdir -p $out/share/pixmaps
+    cp jellyfin_mpv_shim/integration/jellyfin-256.png $out/share/pixmaps/jellyfin-mpv-desktop.png
+  '';
 
-    # gui dependencies
-    pystray
-    tkinter
-
-    # display_mirror dependencies
-    jinja2
-    pywebview
-  ];
+  postFixup = ''
+    wrapQtApp $out/bin/jellyfin-mpv-desktop
+  '';
 
   # no tests
   doCheck = false;
