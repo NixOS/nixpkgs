@@ -32,9 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.doof.me.uk/xcowsay";
-    description =
-      "A program based on cowsay that displays a cute cow and message on your desktop";
-    license = licenses.gpl3;
+    description = "Tool to display a cute cow and messages";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ das_j ];
   };
 }
