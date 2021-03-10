@@ -1,18 +1,17 @@
 diff --git a/out/extension.js b/out/extension.js
-index 375048c..fa5eff0 100644
+index 4a2c6a9..158fe28 100644
 --- a/out/extension.js
 +++ b/out/extension.js
-@@ -209,20 +209,7 @@ function pathToBinary() {
+@@ -215,19 +215,7 @@ function pathToBinary() {
          if (!_pathToBinaryPromise) {
              let command = vscodeUtils_1.config('terraform').get('languageServer.pathToBinary');
              if (!command) { // Skip install/upgrade if user has set custom binary path
 -                const installDir = `${extensionPath}/lsp`;
--                const installer = new languageServerInstaller_1.LanguageServerInstaller();
+-                const installer = new languageServerInstaller_1.LanguageServerInstaller(reporter);
 -                try {
 -                    yield installer.install(installDir);
 -                }
 -                catch (err) {
--                    vscode.window.showErrorMessage(err);
 -                    reporter.sendTelemetryException(err);
 -                    throw err;
 -                }
@@ -22,5 +21,5 @@ index 375048c..fa5eff0 100644
 -                command = `${installDir}/terraform-ls`;
 +                command = 'TERRAFORM-LS-PATH';
              }
-             _pathToBinaryPromise = Promise.resolve(command);
-         }
+             else {
+                 reporter.sendTelemetryEvent('usePathToBinary');
