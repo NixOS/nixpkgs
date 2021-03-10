@@ -1,5 +1,5 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough,
-  lib, version ? null, useDune ? false }@args:
+  lib, version ? null, useDune2 ? false }@args:
 with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
