@@ -1,15 +1,27 @@
-{lib, stdenv, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, lzma, pkg-config}:
+{lib, stdenv, fetchpatch, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, lzma, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "luntergroup";
     repo = "octopus";
     rev = "v${version}";
-    sha256 = "0y3g0xc3x3adbcmds6hh60023pfv1qrz6ak7jd88fg9vxi9bdrfb";
+    sha256 = "sha256-TZ57uKTZ87FWpLNGPY8kbML1EDM8fnEFbXR+Z3dmiao=";
   };
+
+  patches = [
+    # Backport TZ patchs (https://github.com/luntergroup/octopus/issues/149)
+    (fetchpatch {
+      url = "https://github.com/luntergroup/octopus/commit/3dbd8cc33616129ad356e99a4dae82e4f6702250.patch";
+      sha256 = "sha256-UCufVU9x+L1zCEhkr/48KFYRvh8w26w8Jr+O+wULKK8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/luntergroup/octopus/commit/af5a66a2792bd098fb53eb79fb4822625f09305e.patch";
+      sha256 = "sha256-r8jv6EZHfTWVLYUBau3F+ilOd9IeH8rmatorEY5LXP4=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ boost gmp htslib zlib lzma ];
