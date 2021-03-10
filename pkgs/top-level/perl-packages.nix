@@ -8016,6 +8016,7 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.67.tar.gz";
       sha256 = "1hpv4aprgypjxjx1kzbjnf6r29a98rw7mndlinixzk62vyz5sy0j";
     };
+    perlPreHook = "export LD=$CC";
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
     buildInputs = [ TestFatal TestWarnings ];
     meta = {
