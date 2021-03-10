@@ -34,7 +34,7 @@ in appimageTools.wrapType2 {
     homepage = "https://plexamp.com/";
     changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/25";
     license = licenses.unfree;
-    maintainers = with maintainers; [ killercup ];
+    maintainers = with maintainers; [ killercup synthetica ];
     platforms = [ "x86_64-linux" ];
   };
 }
