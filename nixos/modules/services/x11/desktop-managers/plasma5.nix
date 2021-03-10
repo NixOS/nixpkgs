@@ -373,9 +373,6 @@ in
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
 
-        # Plasma mobile
-        ++ lib.optional cfg.mobile.enable plasma-phone-components
-
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
@@ -469,6 +466,61 @@ in
       environment.etc = {
         "xdg/kwinrc".text     = lib.generators.toINI {} cfg.kwinrc;
         "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
+      };
+    })
+    (mkIf cfg.mobile.enable {
+      assertions = [
+        {
+          # The user interface breaks without NetworkManager
+          assertion = config.networking.networkmanager.enable;
+          message = "Plasma Mobile requires NetworkManager.";
+        }
+        {
+          # The user interface breaks without bluetooth
+          assertion = config.hardware.bluetooth.enable;
+          message = "Plasma Mobile requires Bluetooth.";
+        }
+        {
+          # The user interface breaks without pulse
+          assertion = config.hardware.pulseaudio.enable;
+          message = "Plasma Mobile requires pulseaudio.";
+        }
+      ];
+
+      environment.systemPackages =
+        with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
+        [
+          plasma-phone-components
+          plasma-nano
+        ];
+
+      # The following services are needed or the UI is broken.
+      hardware.bluetooth.enable = true;
+      hardware.pulseaudio.enable = true;
+      networking.networkmanager.enable = true;
+
+      # Recommendations can be found here:
+      #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg
+      # This configuration is the minimum required for Plasma Mobile to *work*.
+      services.xserver.desktopManager.plasma5 = {
+        kdeglobals = {
+          KDE = {
+            # This forces a numeric PIN for the lockscreen, which is the
+            # recommendation from upstream.
+            LookAndFeelPackage = lib.mkDefault "org.kde.plasma.phone";
+          };
+        };
+        kwinrc = {
+          Windows = {
+            # Forces windows to be maximized
+            Placement = lib.mkDefault "Maximizing";
+          };
+          "org.kde.kdecoration2" = {
+            # No decorations (title bar)
+            NoPlugin = lib.mkDefault "true";
+          };
+        };
       };
     })
   ];
