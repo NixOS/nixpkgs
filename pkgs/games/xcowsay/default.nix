@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xcowsay";
-  version = "1.5";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "http://www.nickg.me.uk/files/xcowsay-${version}.tar.gz";
-    sha256 = "0pyaa062z1ag26dhkm1yzp2hivnlmhlpqn5xg7mx9r1m652mm91y";
+    sha256 = "sha256-wypsfAp634wbaAI+fxzmr3J5AmvQzChVi/wp/BPxiA0=";
   };
 
   buildInputs = [
