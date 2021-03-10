@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mv $lib/lib/liblowdown.{so,dylib}
   '';
 
-  patches = lib.optional (!stdenv.hostPlatform.isStatic) ./shared.patch;
+  patches = lib.optional (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMusl) ./shared.patch;
 
   meta = with lib; {
     homepage = "https://kristaps.bsd.lv/lowdown/";
