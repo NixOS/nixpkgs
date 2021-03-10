@@ -26227,15 +26227,15 @@ in
     gtk = gtk2;
   };
 
-  kodiPackages = recurseIntoAttrs (callPackage ../applications/video/kodi/packages.nix {});
+  kodiPackages = recurseIntoAttrs (kodi.packages);
 
-  kodi = callPackage ../applications/video/kodi/unwrapped.nix { };
+  kodi = callPackage ../applications/video/kodi { };
 
-  kodi-wayland = callPackage ../applications/video/kodi/unwrapped.nix {
+  kodi-wayland = callPackage ../applications/video/kodi {
     useWayland = true;
   };
 
-  kodi-gbm = callPackage ../applications/video/kodi/unwrapped.nix {
+  kodi-gbm = callPackage ../applications/video/kodi {
     useGbm = true;
   };
 

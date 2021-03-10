@@ -1,9 +1,7 @@
 { lib, makeWrapper, buildEnv, kodi, addons }:
 
-let
-  drvName = builtins.parseDrvName kodi.name;
-in buildEnv {
-  name = "${drvName.name}-with-addons-${drvName.version}";
+buildEnv {
+  name = "${kodi.name}-env";
 
   paths = [ kodi ] ++ addons;
   pathsToLink = [ "/share" ];
@@ -22,9 +20,4 @@ in buildEnv {
             (plugin: plugin.extraRuntimeDependencies or []) addons)}"
     done
   '';
-
-  meta = kodi.meta // {
-    description = kodi.meta.description
-                + " (with addons: ${lib.concatMapStringsSep ", " (x: x.name) addons})";
-  };
 }
