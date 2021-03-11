@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_net }:
 
 stdenv.mkDerivation rec {
-  name = "maelstrom";
+  pname = "maelstrom";
   version = "3.0.7";
 
   src = fetchurl {
