@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, ... }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, nixosTests, ... }:
 
 stdenv.mkDerivation rec {
   pname = "sonarr";
@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.sonarr;
+  };
 
   meta = {
     description = "Smart PVR for newsgroup and bittorrent users";
