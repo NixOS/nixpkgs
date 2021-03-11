@@ -33,6 +33,10 @@ in {
     ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
+
+    extraMeta.knownVulnerabilities = [
+      "CVE-2021-28041"
+    ];
   };
 
   openssh_gssapi = common rec {
@@ -59,5 +63,9 @@ in {
     ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
+
+    extraMeta.knownVulnerabilities = [
+      "CVE-2021-28041"
+    ];
   };
 }
