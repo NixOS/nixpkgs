@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sonarr";
-  version = "2.0.0.5344";
+  version = "3.0.5.1144";
 
   src = fetchurl {
-    url = "https://download.sonarr.tv/v2/master/mono/NzbDrone.master.${version}.mono.tar.gz";
-    sha256 = "0bsxf7m2dir7gi0cfn8vdasr11q224b9mp6cixak9ss5zafwn59a";
+    url = "https://download.sonarr.tv/v3/main/${version}/Sonarr.main.${version}.linux.tar.gz";
+    sha256 = "1ajqh3hvjfsbs6rb2f8dnndxsycmlzamp0cwjwkh1j2dinbzdbvp";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,9 +14,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r * $out/bin/
-
     makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \
-      --add-flags "$out/bin/NzbDrone.exe" \
+      --add-flags "$out/bin/Sonarr.exe" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
