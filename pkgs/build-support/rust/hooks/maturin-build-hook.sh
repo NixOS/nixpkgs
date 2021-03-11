@@ -19,6 +19,7 @@ maturinBuildHook() {
         --target @rustTargetPlatformSpec@ \
         --manylinux off \
         --strip \
+        --interpreter $(command -v python) \
         --release \
         ${maturinBuildFlags-}
     )
