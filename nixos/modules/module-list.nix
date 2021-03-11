@@ -779,6 +779,7 @@
   ./services/networking/mstpd.nix
   ./services/networking/mtprotoproxy.nix
   ./services/networking/mullvad-vpn.nix
+  ./services/networking/multipath.nix
   ./services/networking/murmur.nix
   ./services/networking/mxisd.nix
   ./services/networking/namecoind.nix
