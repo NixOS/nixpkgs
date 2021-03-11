@@ -841,12 +841,14 @@ rec {
 
         cat ${baseJson} | jq '
           . + {
+            "store_dir": $store_dir,
             "store_layers": $store_layers,
             "customisation_layer", $customisation_layer,
             "repo_tag": $repo_tag,
             "created": $created
           }
-          ' --argjson store_layers "$store_layers" \
+          ' --arg store_dir "${storeDir}" \
+            --argjson store_layers "$store_layers" \
             --arg customisation_layer ${customisationLayer} \
             --arg repo_tag "$imageName:$imageTag" \
             --arg created "$created" |
