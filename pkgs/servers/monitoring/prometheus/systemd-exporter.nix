@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGittHub, }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "systemd_exporter";
@@ -12,6 +12,8 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-JDfRHczFnTP9sxA7polUE9qzJhSPIiAU58GBNDYkX4c=";
   };
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) systemd; };
 
   meta = with lib; {
     description = "Exporter for systemd unit metrics";
