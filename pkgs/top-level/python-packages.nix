@@ -53,7 +53,7 @@ let
   # See build-setupcfg/default.nix for documentation.
   buildSetupcfg = import ../build-support/build-setupcfg self;
 
-  fetchPypi = callPackage ../development/interpreters/python/fetchpypi.nix {};
+  fetchPypi = callPackage ../development/interpreters/python/fetchpypi.nix { };
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
@@ -74,7 +74,7 @@ let
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
-      passthru = (oldAttrs.passthru or {})// {
+      passthru = (oldAttrs.passthru or { })// {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
         requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
@@ -84,7 +84,7 @@ let
   # Convert a Python library to an application.
   toPythonApplication = drv:
     drv.overrideAttrs( oldAttrs: {
-      passthru = (oldAttrs.passthru or {}) // {
+      passthru = (oldAttrs.passthru or { }) // {
         # Remove Python prefix from name so we have a "normal" name.
         # While the prefix shows up in the store path, it won't be
         # used by `nix-env`.
@@ -1345,9 +1345,9 @@ in {
 
   click-threading = callPackage ../development/python-modules/click-threading { };
 
-  clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash {};
+  clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash { };
 
-  clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver {};
+  clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver { };
 
   cliff = callPackage ../development/python-modules/cliff { };
 
@@ -2932,7 +2932,7 @@ in {
 
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
-  gviz-api = callPackage ../development/python-modules/gviz-api {};
+  gviz-api = callPackage ../development/python-modules/gviz-api { };
 
   gwyddion = disabledIf isPy3k (toPythonModule (pkgs.gwyddion.override {
     pythonSupport = true;
@@ -7867,7 +7867,7 @@ in {
 
   tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
 
-  tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit {};
+  tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit { };
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
