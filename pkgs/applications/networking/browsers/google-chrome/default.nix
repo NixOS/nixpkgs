@@ -39,6 +39,9 @@
 
 , gsettings-desktop-schemas
 , gnome3
+
+# For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
+, libvaSupport ? true, libva
 }:
 
 with lib;
@@ -63,6 +66,7 @@ let
     kerberos libdrm mesa coreutils
     libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
+    ++ optional libvaSupport libva
     ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
