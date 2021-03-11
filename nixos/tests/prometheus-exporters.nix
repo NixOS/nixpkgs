@@ -75,6 +75,21 @@ let
       '';
     };
 
+    artifactory = {
+      exporterConfig = {
+        enable = true;
+        artiUsername = "artifactory-username";
+        artiPassword = "artifactory-password";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-artifactory-exporter.service")
+        wait_for_open_port(9531)
+        succeed(
+            "curl -sSf http://localhost:9531/metrics | grep -q 'artifactory_up'"
+        )
+      '';
+    };
+
     bind = {
       exporterConfig = {
         enable = true;

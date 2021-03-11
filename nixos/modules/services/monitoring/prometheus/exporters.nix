@@ -22,6 +22,7 @@ let
 
   exporterOpts = genAttrs [
     "apcupsd"
+    "artifactory"
     "bind"
     "bird"
     "blackbox"
