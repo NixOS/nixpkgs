@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace Requires.private Requires
   '';
 
-  passthru.python = python2;
-
   meta = with lib; {
     homepage = "https://telepathy.freedesktop.org";
     platforms = platforms.unix;
