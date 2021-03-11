@@ -1000,6 +1000,8 @@ in
 
   async = callPackage ../development/tools/async {};
 
+  async-profiler = callPackage ../development/tools/async-profiler { };
+
   atheme = callPackage ../servers/irc/atheme { };
 
   atinout = callPackage ../tools/networking/atinout { };
