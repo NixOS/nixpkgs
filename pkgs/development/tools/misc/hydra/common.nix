@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
       perlDeps perl nix
       postgresql # for running the tests
       nlohmann_json
-      boost mdbook
+      boost
     ];
 
   hydraPath = lib.makeBinPath (
@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
       gzip bzip2 lzma gnutar unzip git gitAndTools.top-git mercurial /*darcs*/ gnused breezy
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig mdbook ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
