@@ -311,7 +311,7 @@ stdenv.mkDerivation {
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
 
-    # flaky test which does fails when manually building
+    # Flaky tests:
     disable_test t5319-multi-pack-index
 
     ${lib.optionalString (!perlSupport) ''
