@@ -31,6 +31,12 @@ in {
       # See https://github.com/openssh/openssh-portable/pull/206
       ./ssh-copy-id-fix-eof.patch
     ];
+
+    extraNativeBuildInputs = [ autoreconfHook ];
+
+    extraMeta.knownVulnerabilities = [
+      "CVE-2021-28041"
+    ];
   };
 
   openssh_gssapi = common rec {
@@ -54,6 +60,12 @@ in {
         url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
         sha256 = "1z1ckzimlkm1dmr9f5fqjnjg28gsqcwx6xka0klak857548d2lp2";
       })
+    ];
+
+    extraNativeBuildInputs = [ autoreconfHook ];
+
+    extraMeta.knownVulnerabilities = [
+      "CVE-2021-28041"
     ];
   };
 }
