@@ -772,6 +772,8 @@ let
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
 
+      NVME_MULTIPATH = whenAtLeast "4.15" yes;
+
       PSI = whenAtLeast "4.20" yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
