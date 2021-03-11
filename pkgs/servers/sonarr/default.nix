@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Smart PVR for newsgroup and bittorrent users";
     homepage = "https://sonarr.tv/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fadenb purcell ];
     platforms = lib.platforms.all;
   };
