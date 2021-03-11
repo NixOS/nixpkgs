@@ -11,11 +11,6 @@ mkDerivation rec {
     sha256 = "X8jeESt+x5PxK3rTNC1h1Tpvue2WH09QRnG2g1eMoEE=";
   };
 
-  preConfigure = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "#find_package(Serialport REQUIRED)" "find_package(Qt5SerialPort REQUIRED)"
-  '';
-
   buildInputs = [ qtbase qtserialport ];
   nativeBuildInputs = [ cmake ];
 
