@@ -29132,8 +29132,6 @@ in
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
 
-  lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
-
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
