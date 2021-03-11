@@ -26232,11 +26232,11 @@ in
   kodi = callPackage ../applications/video/kodi { };
 
   kodi-wayland = callPackage ../applications/video/kodi {
-    useWayland = true;
+    waylandSupport = true;
   };
 
   kodi-gbm = callPackage ../applications/video/kodi {
-    useGbm = true;
+    gbmSupport = true;
   };
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };

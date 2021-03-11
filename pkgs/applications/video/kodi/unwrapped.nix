@@ -28,9 +28,9 @@
 , udevSupport ? true, udev ? null
 , usbSupport  ? false, libusb-compat-0_1 ? null
 , vdpauSupport ? true, libvdpau ? null
-, useWayland ? false, wayland ? null, wayland-protocols ? null
+, waylandSupport ? false, wayland ? null, wayland-protocols ? null
 , waylandpp ?  null, libxkbcommon ? null
-, useGbm ? false, mesa ? null, libinput ? null
+, gbmSupport ? false, mesa ? null, libinput ? null
 , buildPackages
 }:
 
@@ -42,8 +42,8 @@ assert sambaSupport -> samba != null;
 assert udevSupport  -> udev != null;
 assert usbSupport   -> libusb-compat-0_1 != null && ! udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
 assert vdpauSupport -> libvdpau != null;
-assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
-assert useGbm || useWayland || x11Support;
+assert waylandSupport -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
+assert gbmSupport || waylandSupport || x11Support;
 
 let
   kodiReleaseDate = "20210219";
@@ -106,13 +106,14 @@ let
   };
 
   kodi_platforms =
-    lib.optional useGbm "gbm" ++
-    lib.optional useWayland "wayland" ++
+    lib.optional gbmSupport "gbm" ++
+    lib.optional waylandSupport "wayland" ++
     lib.optional x11Support "x11"
   ;
 
 in stdenv.mkDerivation {
-    name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
+    pname = "kodi";
+    version = kodiVersion;
 
     src = kodi_src;
 
@@ -150,14 +151,14 @@ in stdenv.mkDerivation {
     ++ lib.optional  udevSupport     udev
     ++ lib.optional  usbSupport      libusb-compat-0_1
     ++ lib.optional  vdpauSupport    libvdpau
-    ++ lib.optionals useWayland [
+    ++ lib.optionals waylandSupport [
       wayland
       waylandpp.dev
       wayland-protocols
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
     ]
-    ++ lib.optional useGbm [
+    ++ lib.optional gbmSupport [
       libxkbcommon.dev
       mesa.dev
       libinput.dev
@@ -174,14 +175,14 @@ in stdenv.mkDerivation {
 
       # for TexturePacker
       giflib zlib libpng libjpeg lzo
-    ] ++ lib.optionals useWayland [ wayland-protocols waylandpp.bin ];
+    ] ++ lib.optionals waylandSupport [ wayland-protocols waylandpp.bin ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ];
 
     cmakeFlags = [
-      "-DAPP_RENDER_SYSTEM=${if useGbm then "gles" else "gl"}"
+      "-DAPP_RENDER_SYSTEM=${if gbmSupport then "gles" else "gl"}"
       "-Dlibdvdcss_URL=${libdvdcss}"
       "-Dlibdvdnav_URL=${libdvdnav}"
       "-Dlibdvdread_URL=${libdvdread}"
@@ -193,7 +194,7 @@ in stdenv.mkDerivation {
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
-    ] ++ lib.optional useWayland [
+    ] ++ lib.optional waylandSupport [
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
     ];
 
