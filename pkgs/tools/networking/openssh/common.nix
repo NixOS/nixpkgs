@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ pkg-config ]
-    ++ optional withKerberos kerberos.dev
+    ++ optional withKerberos kerberos
     ++ extraNativeBuildInputs;
   buildInputs = [ zlib openssl libedit ]
     ++ optional withFIDO libfido2
