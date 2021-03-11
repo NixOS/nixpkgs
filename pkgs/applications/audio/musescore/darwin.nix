@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://musescore.org/";
     license = licenses.gpl2;
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = [];
     repositories.git = "https://github.com/musescore/MuseScore";
   };
 }
