@@ -54,7 +54,7 @@ in {
         { services.nextcloud.disableImagemagick = true; } ];
   };
 
-  testScript = let
+  testScript = { nodes, ... }: let
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
@@ -73,7 +73,17 @@ in {
       #!${pkgs.runtimeShell}
       diff <(echo 'hi') <(${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file)
     '';
+
+    findInClosure = what: drv: pkgs.runCommand "find-in-closure" { exportReferencesGraph = [ "graph" drv ]; inherit what; } ''
+      test -e graph
+      grep "$what" graph >$out || true
+    '';
+    nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.config.system.build.vm;
+    nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.config.system.build.vm;
   in ''
+    assert open("${nextcloudUsesImagick}").read() != ""
+    assert open("${nextcloudWithoutDoesntUseIt}").read() == ""
+
     nextcloud.start()
     client.start()
     nextcloud.wait_for_unit("multi-user.target")
@@ -88,13 +98,5 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
     assert "hi" in client.succeed("cat /mnt/dav/test-shared-file")
-
-    #client.succeed("nix path-info -r " + nextcloud.script + " | grep imagick")
-    #client.fail("nix path-info -r " + nextcloudWithoutMagick.script + " | grep imagick")
-    assert os.system("nix path-info -r " + nextcloud.script + " | grep imagick") == 0
-    assert (
-        os.system("nix path-info -r " + nextcloudWithoutMagick.script + " | grep imagick")
-        != 0
-    )
   '';
 })
