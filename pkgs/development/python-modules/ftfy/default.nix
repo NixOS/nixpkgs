@@ -2,10 +2,8 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
-, html5lib
 , wcwidth
-, setuptools
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -20,18 +18,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    html5lib
     wcwidth
-    setuptools
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  # We suffix PATH like this because the tests want the ftfy executable
-  checkPhase = ''
-    PATH=$out/bin:$PATH pytest
+  preCheck = ''
+    export PATH=$out/bin:$PATH
   '';
 
   meta = with lib; {
