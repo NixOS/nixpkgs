@@ -835,6 +835,22 @@ let
       '';
     };
 
+    systemd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = { };
+      exporterTest = ''
+        wait_for_unit("prometheus-systemd-exporter.service")
+        wait_for_open_port(9558)
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep -q '{}'".format(
+                'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
+      '';
+    };
+
     tor = {
       exporterConfig = {
         enable = true;
