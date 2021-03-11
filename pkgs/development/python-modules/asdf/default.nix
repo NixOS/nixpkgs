@@ -48,5 +48,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/spacetelescope/asdf";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    # many ValueError in tests
+    broken = true;
   };
 }

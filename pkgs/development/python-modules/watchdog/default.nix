@@ -1,13 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
 , argh
 , pathtools
 , pyyaml
-, pkgs
 , pytest-cov
 , pytestCheckHook
+, CoreServices
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,7 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin
-    [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   propagatedBuildInputs = [
     argh
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/gorakhargosh/watchdog";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
+    # error: use of undeclared identifier 'kFSEventStreamEventFlagItemCloned'
+    broken = stdenv.isDarwin;
   };
-
 }

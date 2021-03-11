@@ -2899,7 +2899,10 @@ in {
 
   gspread = callPackage ../development/python-modules/gspread { };
 
-  gssapi = callPackage ../development/python-modules/gssapi { inherit (pkgs) darwin krb5Full; };
+  gssapi = callPackage ../development/python-modules/gssapi {
+    inherit (pkgs) krb5Full;
+    inherit (pkgs.darwin.apple_sdk.frameworks) GSS;
+  };
 
   gst-python = callPackage ../development/python-modules/gst-python {
     inherit (pkgs) meson;
@@ -3136,9 +3139,7 @@ in {
 
   hypothesis = if isPy3k then callPackage ../development/python-modules/hypothesis { } else self.hypothesis_4;
 
-  hypothesmith = callPackage ../development/python-modules/hypothesmith {
-    libcst = self.libcst.override { doCheck = false; };
-  };
+  hypothesmith = callPackage ../development/python-modules/hypothesmith { };
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
@@ -6368,7 +6369,9 @@ in {
   pytest-runner = self.pytestrunner; # added 2021-01-04
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
 
-  pytest-sanic = callPackage ../development/python-modules/pytest-sanic { };
+  pytest-sanic = callPackage ../development/python-modules/pytest-sanic {
+    sanic = self.sanic.override { doCheck = false; };
+  };
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
@@ -8480,7 +8483,9 @@ in {
 
   wasmer = callPackage ../development/python-modules/wasmer { };
 
-  watchdog = callPackage ../development/python-modules/watchdog { };
+  watchdog = callPackage ../development/python-modules/watchdog {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
