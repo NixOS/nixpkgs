@@ -243,9 +243,13 @@ while (my ($unit, $state) = each %{$activePrev}) {
                             foreach my $socket (@sockets) {
                                 if (defined $activePrev->{$socket}) {
                                     $unitsToStop{$socket} = 1;
-                                    $unitsToStart{$socket} = 1;
-                                    recordUnit($startListFile, $socket);
-                                    $socketActivated = 1;
+                                    # Only restart sockets that actually
+                                    # exist in new configuration:
+                                    if (-e "$out/etc/systemd/system/$socket") {
+                                        $unitsToStart{$socket} = 1;
+                                        recordUnit($startListFile, $socket);
+                                        $socketActivated = 1;
+                                    }
                                 }
                             }
                         }
