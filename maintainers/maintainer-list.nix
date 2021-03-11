@@ -6783,6 +6783,12 @@
     githubId = 16385648;
     name = "Niko Pavlinek";
   };
+  nixinator = {
+    email = "33lockdown33@protonmail.com";
+    github = "nixinator";
+    githubId = 66913205;
+    name = "Rick Sanchez";
+  };
   nixy = {
     email = "nixy@nixy.moe";
     github = "nixy";
