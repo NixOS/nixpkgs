@@ -14,7 +14,7 @@ common =
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive, libcpuid
-  , lowdown, mdbook
+  , lowdown_0_8, mdbook
   # Used by tests
   , gmock
   , busybox-sandbox-shell
@@ -45,7 +45,7 @@ common =
           [ autoreconfHook
             autoconf-archive
             bison flex
-            lowdown mdbook
+            lowdown_0_8 mdbook
             jq
            ];
 
@@ -54,7 +54,7 @@ common =
           brotli boost editline
         ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gmock lowdown libcpuid ]
+        ++ lib.optionals is24 [ libarchive gmock lowdown_0_8 libcpuid ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
