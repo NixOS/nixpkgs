@@ -19,30 +19,22 @@
 , libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
-, dbusSupport ? true, dbus ? null
-, joystickSupport ? true, cwiid ? null
-, nfsSupport ? true, libnfs ? null
-, pulseSupport ? true, libpulseaudio ? null
-, rtmpSupport ? true, rtmpdump ? null
-, sambaSupport ? true, samba ? null
-, udevSupport ? true, udev ? null
-, usbSupport  ? false, libusb-compat-0_1 ? null
-, vdpauSupport ? true, libvdpau ? null
-, waylandSupport ? false, wayland ? null, wayland-protocols ? null
-, waylandpp ?  null, libxkbcommon ? null
-, gbmSupport ? false, mesa ? null, libinput ? null
+, dbusSupport ? true, dbus
+, joystickSupport ? true, cwiid
+, nfsSupport ? true, libnfs
+, pulseSupport ? true, libpulseaudio
+, rtmpSupport ? true, rtmpdump
+, sambaSupport ? true, samba
+, udevSupport ? true, udev
+, usbSupport  ? false, libusb-compat-0_1
+, vdpauSupport ? true, libvdpau
+, waylandSupport ? false, wayland, wayland-protocols
+, waylandpp ?  null, libxkbcommon
+, gbmSupport ? false, mesa, libinput
 , buildPackages
 }:
 
-assert dbusSupport  -> dbus != null;
-assert nfsSupport   -> libnfs != null;
-assert pulseSupport -> libpulseaudio != null;
-assert rtmpSupport  -> rtmpdump != null;
-assert sambaSupport -> samba != null;
-assert udevSupport  -> udev != null;
-assert usbSupport   -> libusb-compat-0_1 != null && ! udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
-assert vdpauSupport -> libvdpau != null;
-assert waylandSupport -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
+assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
 assert gbmSupport || waylandSupport || x11Support;
 
 let
@@ -78,7 +70,7 @@ let
       "-DPKG_CONFIG_EXECUTABLE=pkg-config"
     ];
     buildInputs = [ libidn libtasn1 p11-kit zlib libva ]
-      ++ lib.optional  vdpauSupport    libvdpau;
+      ++ lib.optional vdpauSupport libvdpau;
     nativeBuildInputs = [ cmake nasm pkg-config gnutls ];
   };
 
@@ -105,11 +97,9 @@ let
     sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
   };
 
-  kodi_platforms =
-    lib.optional gbmSupport "gbm" ++
-    lib.optional waylandSupport "wayland" ++
-    lib.optional x11Support "x11"
-  ;
+  kodi_platforms = lib.optional gbmSupport "gbm"
+    ++ lib.optional waylandSupport "wayland"
+    ++ lib.optional x11Support "x11";
 
 in stdenv.mkDerivation {
     pname = "kodi";
@@ -143,7 +133,7 @@ in stdenv.mkDerivation {
       libXinerama libXrandr.dev libXtst libXfixes
     ]
     ++ lib.optional  dbusSupport     dbus
-    ++ lib.optional joystickSupport cwiid
+    ++ lib.optional  joystickSupport cwiid
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio
     ++ lib.optional  rtmpSupport     rtmpdump
@@ -222,7 +212,8 @@ in stdenv.mkDerivation {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH            ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
+          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
+            ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
                  ++ lib.optional nfsSupport libnfs
@@ -244,7 +235,7 @@ in stdenv.mkDerivation {
     meta = with lib; {
       description = "Media center";
       homepage    = "https://kodi.tv/";
-      license     = licenses.gpl2;
+      license     = licenses.gpl2Plus;
       platforms   = platforms.linux;
       maintainers = with maintainers; [ titanous edwtjo peterhoeg sephalon ];
     };

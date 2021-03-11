@@ -49,7 +49,7 @@ let self = rec {
   buildKodiAddon =
     { name ? "${attrs.pname}-${attrs.version}"
     , namespace
-    , sourceDir ? null
+    , sourceDir ? ""
     , ... } @ attrs:
   toKodiAddon (stdenv.mkDerivation ({
     name = "kodi-" + name;
@@ -59,7 +59,7 @@ let self = rec {
     extraRuntimeDependencies = [ ];
 
     installPhase = ''
-      ${if sourceDir == null then "" else "cd $src/$sourceDir"}
+      cd $src/$sourceDir
       d=$out${addonDir}/${namespace}
       mkdir -p $d
       sauce="."
