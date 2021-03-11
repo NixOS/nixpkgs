@@ -18,12 +18,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "jellyfin";
-  version = "10.6.4";
+  version = "10.7.0";
 
   # Impossible to build anything offline with dotnet
   src = fetchurl {
     url = "https://repo.jellyfin.org/releases/server/portable/versions/stable/combined/${version}/jellyfin_${version}.tar.gz";
-    sha256 = "OqN070aUKPk0dXAy8R/lKUnSWen+si/AJ6tkYh5ibqo=";
+    sha256 = "sha256-63T1EBjtTWxg41W5gBDYCthgnokZ/e/B1s6BmymO32w=";
   };
 
   buildInputs = [
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    dotnetCorePackages.aspnetcore_3_1
+    dotnetCorePackages.aspnetcore_5_0
     sqlite
   ];
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     install -dm 755 "$out/opt/jellyfin"
     cp -r * "$out/opt/jellyfin"
-    makeWrapper "${dotnetCorePackages.aspnetcore_3_1}/bin/dotnet" $out/bin/jellyfin \
+    makeWrapper "${dotnetCorePackages.aspnetcore_5_0}/bin/dotnet" $out/bin/jellyfin \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         sqlite fontconfig freetype stdenv.cc.cc.lib
       ]}:$out/opt/jellyfin/runtimes/${runtimeDir}/native/" \
