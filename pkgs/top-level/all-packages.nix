@@ -6891,11 +6891,18 @@ in
       pam = if stdenv.isLinux then pam else null;
     };
 
-  openssh_hpn = pkgs.appendToName "with-hpn" (openssh.override {
+  openssh_8_4 =
+    callPackage ../tools/networking/openssh/8.4.nix {
+      hpnSupport = false;
+      etcDir = "/etc/ssh";
+      pam = if stdenv.isLinux then pam else null;
+    };
+
+  openssh_hpn = pkgs.appendToName "with-hpn" (openssh_8_4.override {
     hpnSupport = true;
   });
 
-  openssh_gssapi = pkgs.appendToName "with-gssapi" (openssh.override {
+  openssh_gssapi = pkgs.appendToName "with-gssapi" (openssh_8_4.override {
     withGssapiPatches = true;
   });
 

@@ -20,14 +20,13 @@
 
 let
 
-  version = "8.5p1";
+  version = "8.4p1";
 
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
-    # patch is not available yet
-    sha256 = lib.fakeSha256;
+    sha256 = "1z1ckzimlkm1dmr9f5fqjnjg28gsqcwx6xka0klak857548d2lp2";
   };
 
 in
@@ -39,12 +38,12 @@ stdenv.mkDerivation rec {
   src = if hpnSupport then
       fetchurl {
         url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-${replaceStrings [ "." "p" ] [ "_" "_P" ] version}.tar.gz";
-        sha256 = "015qx6zxqnw80zhwim93ndmkrfvzwr649jfnnfy17av4lh333qsj";
+        sha256 = "1x2afjy1isslbg7qlvhhs4zhj2c8q2h1ljz0fc5b4h9pqcm9j540";
       }
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
-        sha256 = "09gc8rv7728chxraab85dzkdikaw4aph1wlcwcc9kai9si0kybzm";
+        sha256 = "091b3pxdlj47scxx6kkf4agkx8c8sdacdxx8m1dw1cby80pd40as";
       };
 
   patches =
@@ -54,7 +53,10 @@ stdenv.mkDerivation rec {
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
 
-      ./ssh-keysign-8.5.patch
+      ./ssh-keysign-8.4.patch
+
+      # See https://github.com/openssh/openssh-portable/pull/206
+      ./ssh-copy-id-fix-eof.patch
     ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
