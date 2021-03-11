@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   postPatch = ''
-    substituteInPlace Makefile.am --replace '-Werror' ''
+    substituteInPlace Makefile.am --replace '-Werror' ""
   '';
 
   nativeBuildInputs = [
