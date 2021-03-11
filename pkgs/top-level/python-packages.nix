@@ -1462,7 +1462,10 @@ in {
 
   constantly = callPackage ../development/python-modules/constantly { };
 
-  construct = callPackage ../development/python-modules/construct { };
+  construct = if isPy27 then
+    callPackage ../development/python-modules/construct/2.10.54.nix { }
+  else
+    callPackage ../development/python-modules/construct { };
 
   consul = callPackage ../development/python-modules/consul { };
 
@@ -1472,7 +1475,10 @@ in {
 
   contextvars = callPackage ../development/python-modules/contextvars { };
 
-  convertdate = callPackage ../development/python-modules/convertdate { };
+  convertdate = if isPy27 then
+    callPackage ../development/python-modules/convertdate/2.2.x.nix { }
+  else
+    callPackage ../development/python-modules/convertdate { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
@@ -1666,7 +1672,10 @@ in {
     inherit (pkgs.llvmPackages) libcxx;
   };
 
-  dateparser = callPackage ../development/python-modules/dateparser { };
+  dateparser = if isPy27 then
+    callPackage ../development/python-modules/dateparser/0.x.nix { }
+  else
+    callPackage ../development/python-modules/dateparser { };
 
   datrie = callPackage ../development/python-modules/datrie { };
 
@@ -8357,7 +8366,10 @@ in {
 
   varint = callPackage ../development/python-modules/varint { };
 
-  vcrpy = callPackage ../development/python-modules/vcrpy { };
+  vcrpy = if isPy27 then
+    callPackage ../development/python-modules/vcrpy/3.nix { }
+  else
+    callPackage ../development/python-modules/vcrpy { };
 
   vcver = callPackage ../development/python-modules/vcver { };
 
