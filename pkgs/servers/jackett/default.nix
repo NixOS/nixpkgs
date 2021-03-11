@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dotnetCorePackages, makeWrapper, curl, icu60, openssl, zlib }:
+{ lib, stdenv, fetchurl, dotnetCorePackages, makeWrapper, curl, icu60, openssl, zlib, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "jackett";
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ 
           curl icu60 openssl zlib ]}
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.jackett;
+  };
 
   meta = with lib; {
     description = "API Support for your favorite torrent trackers";
