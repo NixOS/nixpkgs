@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchFromGitHub
 , pymeeus
 , pytz
@@ -9,16 +8,14 @@
 
 buildPythonPackage rec {
   pname = "convertdate";
-  version = "2.3.0";
-
-  disabled = isPy27;
+  version = "2.2.2";
 
   # Tests are not available in the PyPI tarball so use GitHub instead.
   src = fetchFromGitHub {
     owner = "fitnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17j188zlp46zmq8qyy4z4f9v25l3zibkwzj8wp4fxqgimjnfj2nr";
+    sha256 = "1xgi7x9b9kxm0q51bqnmwdm5lp8vwhx5yk4d1b23r37spz9dbhw5";
   };
 
   propagatedBuildInputs = [

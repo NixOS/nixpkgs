@@ -72,3 +72,7 @@ This is used with Savannah repositories. The arguments expected are very similar
 ## `fetchFromRepoOrCz`
 
 This is used with repo.or.cz repositories. The arguments expected are very similar to fetchFromGitHub above.
+
+## `fetchFromSourcehut`
+
+This is used with sourcehut repositories. The arguments expected are very similar to fetchFromGitHub above. Don't forget the tilde (~) in front of the user name!

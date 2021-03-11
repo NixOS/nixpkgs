@@ -1001,6 +1001,10 @@ let
 
     ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix { };
 
+    ppx_cstubs = callPackage ../development/ocaml-modules/ppx_cstubs {
+      ppxlib = ppxlib.override { version = "0.22.0"; };
+    };
+
     ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
 
     ppx_deriving = callPackage ../development/ocaml-modules/ppx_deriving {};
