@@ -75,6 +75,21 @@ let
       '';
     };
 
+    artifactory = {
+      exporterConfig = {
+        enable = true;
+        artiUsername = "artifactory-username";
+        artiPassword = "artifactory-password";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-artifactory-exporter.service")
+        wait_for_open_port(9531)
+        succeed(
+            "curl -sSf http://localhost:9531/metrics | grep -q 'artifactory_up'"
+        )
+      '';
+    };
+
     bind = {
       exporterConfig = {
         enable = true;
@@ -245,6 +260,24 @@ let
         succeed(
             "curl -sSf 'localhost:7979/probe?target=http://localhost' | grep -q 'json_test_metric 1'"
         )
+      '';
+    };
+
+    knot = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.knot = {
+          enable = true;
+          extraArgs = [ "-v" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("knot.service")
+        wait_for_unit("prometheus-knot-exporter.service")
+        wait_for_open_port(9433)
+        succeed("curl -sSf 'localhost:9433' | grep -q 'knot_server_zone_count 0.0'")
       '';
     };
 
@@ -799,6 +832,22 @@ let
         wait_for_unit("prometheus-surfboard-exporter.service")
         wait_for_open_port(9239)
         succeed("curl -sSf localhost:9239/metrics | grep -q 'surfboard_up 1'")
+      '';
+    };
+
+    systemd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = { };
+      exporterTest = ''
+        wait_for_unit("prometheus-systemd-exporter.service")
+        wait_for_open_port(9558)
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep -q '{}'".format(
+                'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
       '';
     };
 

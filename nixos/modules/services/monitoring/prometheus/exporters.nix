@@ -3,7 +3,7 @@
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExample maintainers
                 mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-                optional types;
+                optional types mkOptionDefault flip attrNames;
 
   cfg = config.services.prometheus.exporters;
 
@@ -22,6 +22,7 @@ let
 
   exporterOpts = genAttrs [
     "apcupsd"
+    "artifactory"
     "bind"
     "bird"
     "blackbox"
@@ -31,6 +32,7 @@ let
     "fritzbox"
     "json"
     "keylight"
+    "knot"
     "lnd"
     "mail"
     "mikrotik"
@@ -51,6 +53,7 @@ let
     "smokeping"
     "sql"
     "surfboard"
+    "systemd"
     "tor"
     "unifi"
     "unifi-poller"
@@ -64,7 +67,7 @@ let
   mkExporterOpts = ({ name, port }: {
     enable = mkEnableOption "the prometheus ${name} exporter";
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = port;
       description = ''
         Port to listen on.
@@ -92,9 +95,8 @@ let
       '';
     };
     firewallFilter = mkOption {
-      type = types.str;
-      default = "-p tcp -m tcp --dport ${toString cfg.${name}.port}";
-      defaultText = "-p tcp -m tcp --dport ${toString port}";
+      type = types.nullOr types.str;
+      default = null;
       example = literalExample ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
@@ -122,12 +124,14 @@ let
 
   mkSubModule = { name, port, extraOpts, imports }: {
     ${name} = mkOption {
-      type = types.submodule {
+      type = types.submodule [{
         inherit imports;
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
-      };
+      } ({ config, ... }: mkIf config.openFirewall {
+        firewallFilter = mkOptionDefault "-p tcp -m tcp --dport ${toString config.port}";
+      })];
       internal = true;
       default = {};
     };
@@ -232,7 +236,13 @@ in
         Please specify either 'services.prometheus.exporters.sql.configuration' or
           'services.prometheus.exporters.sql.configFile'
       '';
-    } ];
+    } ] ++ (flip map (attrNames cfg) (exporter: {
+      assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
+      message = ''
+        The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
+        `openFirewall' is set to `true'!
+      '';
+    }));
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
