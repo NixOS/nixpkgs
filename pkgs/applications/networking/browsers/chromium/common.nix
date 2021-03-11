@@ -17,7 +17,7 @@
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
-, pipewire_0_2
+, pipewire
 , libva
 , libdrm, wayland, mesa, libxkbcommon # Ozone
 
@@ -140,7 +140,7 @@ let
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
-      pipewire_0_2
+      pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
@@ -263,6 +263,7 @@ let
       use_pulseaudio = true;
       link_pulseaudio = true;
     } // optionalAttrs (chromiumVersionAtLeast "89") {
+      rtc_pipewire_version = "0.3"; # TODO: Can be removed once ungoogled-chromium is at M90
       # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
       # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
       chrome_pgo_phase = 0;
