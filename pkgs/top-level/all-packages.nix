@@ -2351,6 +2351,8 @@ in
 
   fsmon = callPackage ../tools/misc/fsmon { };
 
+  fst = callPackage ../tools/text/fst { };
+
   fsql = callPackage ../tools/misc/fsql { };
 
   fop = callPackage ../tools/typesetting/fop {
@@ -11868,9 +11870,10 @@ in
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_2_5;
+  apacheKafka = apacheKafka_2_6;
   apacheKafka_2_4 = callPackage ../servers/apache-kafka { majorVersion = "2.4"; };
   apacheKafka_2_5 = callPackage ../servers/apache-kafka { majorVersion = "2.5"; };
+  apacheKafka_2_6 = callPackage ../servers/apache-kafka { majorVersion = "2.6"; };
 
   kt = callPackage ../tools/misc/kt {};
 

@@ -562,6 +562,21 @@ self: super:
      <xref linkend="opt-services.xserver.videoDrivers" /> no longer uses the deprecated <literal>cirrus</literal> and <literal>vesa</literal> device dependent X drivers by default. It also enables both <literal>amdgpu</literal> and <literal>nouveau</literal> drivers by default now.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <package>apacheKafka</package> packages are now built with
+      version-matched JREs. Versions 2.6 and above, the ones that recommend it,
+      use jdk11, while versions below remain on jdk8. The NixOS service has
+      been adjusted to start the service using the same version as the package,
+      adjustable with the new
+      <link linkend="opt-services.apache-kafka.jre">services.apache-kafka.jre</link>
+      option. Furthermore, the default list of
+      <link linkend="opt-services.apache-kafka.jvmOptions">services.apache-kafka.jvmOptions</link>
+      have been removed. You should set your own according to the
+      <link xlink:href="https://kafka.apache.org/documentation/#java">upstream documentation</link>
+      for your Kafka version.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
