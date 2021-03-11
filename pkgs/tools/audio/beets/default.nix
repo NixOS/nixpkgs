@@ -21,6 +21,7 @@
 , enableKodiupdate       ? true
 , enableLastfm           ? true
 , enableLoadext          ? true
+, enableLyrics           ? true
 , enableMpd              ? true
 , enablePlaylist         ? true
 , enableReplaygain       ? true
@@ -59,6 +60,7 @@ let
     lastgenre = enableLastfm;
     lastimport = enableLastfm;
     loadext = enableLoadext;
+    lyrics = enableLyrics;
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
     playlist = enablePlaylist;
@@ -73,7 +75,7 @@ let
   pluginsWithoutDeps = [
     "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
     "export" "filefilter" "fish" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
-    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs"
     "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "parentwork" "permissions" "play"
     "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
     "types" "unimported" "zero"
@@ -130,6 +132,8 @@ in pythonPackages.buildPythonApplication rec {
   ] ++ lib.optional enableAbsubmit         essentia-extractor
     ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
     ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
+    ++ lib.optional enableConvert          ffmpeg
+    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
     ++ lib.optional (enableFetchart
                   || enableDeezer
                   || enableEmbyupdate
@@ -139,10 +143,9 @@ in pythonPackages.buildPythonApplication rec {
                   || enableSubsonicplaylist
                   || enableSubsonicupdate
                   || enableAcousticbrainz) pythonPackages.requests
-    ++ lib.optional enableConvert          ffmpeg
-    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
     ++ lib.optional enableKeyfinder        keyfinder-cli
     ++ lib.optional enableLastfm           pythonPackages.pylast
+    ++ lib.optional enableLyrics           pythonPackages.beautifulsoup4
     ++ lib.optional enableMpd              pythonPackages.mpd2
     ++ lib.optional enableSonosUpdate      pythonPackages.soco
     ++ lib.optional enableThumbnails       pythonPackages.pyxdg
