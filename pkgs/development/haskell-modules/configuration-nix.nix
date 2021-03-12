@@ -446,9 +446,6 @@ self: super: builtins.intersectAttrs super {
   # requires an X11 display in test suite
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
 
-  # depends on 'hie' executable
-  lsp-test = dontCheck super.lsp-test;
-
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
