@@ -1420,9 +1420,9 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/1536
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
-  # 1. test requires internet
-  # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
-  ghcide = doDistribute (unmarkBroken (dontCheck super.ghcide));
+  # 2021-03-21 Test hangs
+  # https://github.com/haskell/haskell-language-server/issues/1562
+  ghcide = dontCheck super.ghcide;
 
   # 2020-03-09: Tests broken in hackage release
   # fixed on upstream, but not released in hiedb 0.3.0.1
