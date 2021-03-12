@@ -727,8 +727,19 @@ self: super: {
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
+  # 2021-03-12: All of this libraries have to restrictive upper bounds
+  # https://github.com/diagrams/diagrams-core/issues/112
+  active = doJailbreak super.active;
+  statestack = doJailbreak super.statestack;
+  force-layout = doJailbreak super.force-layout;
+  size-based = doJailbreak super.size-based;
+  dual-tree = doJailbreak super.dual-tree;
+  diagrams-core = doJailbreak super.diagrams-core;
+  diagrams-postscript = doJailbreak super.diagrams-postscript;
+  diagrams-svg = doJailbreak super.diagrams-svg;
+  diagrams-contrib = doJailbreak super.diagrams-contrib;
   # https://github.com/diagrams/diagrams-lib/issues/288
-  diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
+  diagrams-lib = doJailbreak (overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; }));
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
