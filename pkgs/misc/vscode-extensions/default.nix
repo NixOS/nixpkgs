@@ -381,19 +381,33 @@ let
         };
       };
 
-      github.github-vscode-theme = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "github-vscode-theme";
-          publisher = "github";
-          version = "1.1.5";
-          sha256 = "10f0098cce026d1f0c855fb7a66ea60b5d8acd2b76126ea94fe7361e49cd9ed2";
+      github = {
+        github-vscode-theme = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "github-vscode-theme";
+            publisher = "github";
+            version = "1.1.5";
+            sha256 =
+              "10f0098cce026d1f0c855fb7a66ea60b5d8acd2b76126ea94fe7361e49cd9ed2";
+          };
+          meta = with lib; {
+            description = "GitHub theme for VS Code";
+            downloadPage =
+              "https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme";
+            homepage = "https://github.com/primer/github-vscode-theme";
+            license = licenses.mit;
+            maintainers = with maintainers; [ hugolgst ];
+          };
         };
-        meta = with lib; {
-          description = "GitHub theme for VS Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme";
-          homepage = "https://github.com/primer/github-vscode-theme";
-          license = licenses.mit;
-          maintainers = with maintainers; [ hugolgst ];
+
+        vscode-pull-request-github = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "vscode-pull-request-github";
+            publisher = "github";
+            version = "0.22.0";
+            sha256 = "13p3z86vkra26npp5a78pxdwa4z6jqjzsd38arhgdnjgwmi6bnrw";
+          };
+          meta = { license = lib.licenses.mit; };
         };
       };
 
