@@ -755,6 +755,8 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  tfk8s = callPackage ../tools/misc/tfk8s { };
+
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
@@ -22873,6 +22875,10 @@ in
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
   google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
+
+  google-play-music-desktop-player = callPackage ../applications/audio/google-play-music-desktop-player {
+    inherit (gnome2) GConf;
+  };
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
