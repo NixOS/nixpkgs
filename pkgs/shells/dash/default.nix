@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, autoreconfHook, fetchurl }:
+{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, libedit }:
 
 stdenv.mkDerivation rec {
   pname = "dash";
@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
+  buildInputs = [ libedit ];
+
+  configureFlags = [ "--with-libedit" ];
 
   meta = with lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
