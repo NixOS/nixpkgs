@@ -26,12 +26,28 @@ in {
       '';
     };
 
-    capabilities = mkOption {
-      type = types.commas;
-      default = "view";
-      description = ''
-        Enable the view, add, and/or manage capabilities. E.g. view,add
-      '';
+    capabilities = {
+      view = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable the view capability.
+        '';
+      };
+      add = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the add capability.
+        '';
+      };
+      manage = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the manage capability.
+        '';
+      };
     };
 
     stateDir = mkOption {
@@ -86,6 +102,11 @@ in {
     users.groups.hledger = {};
 
     systemd.services.hledger-web = let
+      capabilityString = with cfg.capabilities; concatStringsSep "," (
+        (optional view "view")
+        ++ (optional add "add")
+        ++ (optional manage "manage")
+      );
       serverArgs = with cfg; escapeShellArgs ([
         "--serve"
         "--host=${host}"
