@@ -193,6 +193,7 @@
   ./programs/xwayland.nix
   ./programs/yabar.nix
   ./programs/zmap.nix
+  ./programs/zs-apc-spdu.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-autoenv.nix
