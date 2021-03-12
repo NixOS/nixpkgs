@@ -753,8 +753,8 @@ let
         mktplcRef = {
           name = "scala";
           publisher = "scala-lang";
-          version = "0.4.5";
-          sha256 = "0nrj32a7a86vwc9gfh748xs3mmfwbc304dp7nks61f0lx8b4wzxw";
+          version = "0.5.1";
+          sha256 = "0p9nhds2xn08xz8x822q15jdrdlqkg2wa1y7mk9k89n8n2kfh91g";
         };
         meta = {
           license = lib.licenses.mit;
