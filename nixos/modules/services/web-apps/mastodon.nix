@@ -28,6 +28,7 @@ let
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
+  // (if cfg.changeMaxTootChars != null then { MAX_TOOT_CHARS = toString(cfg.changeMaxTootChars); } else {})
   // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
   // cfg.extraConfig;
 
@@ -214,6 +215,12 @@ in {
         '';
         type = lib.types.bool;
         default = true;
+      };
+
+      changeMaxTootChars = lib.mkOption {
+        description = "Change maximum allowed character count. Default 500 character count.";
+        type = lib.types.nullOr lib.types.int;
+        default = null;
       };
 
       redis = {

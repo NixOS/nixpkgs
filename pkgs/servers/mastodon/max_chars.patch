@@ -1,0 +1,114 @@
+diff --git a/app/javascript/mastodon/features/compose/components/compose_form.js b/app/javascript/mastodon/features/compose/components/compose_form.js
+index 8af806e..93ece08 100644
+--- a/app/javascript/mastodon/features/compose/components/compose_form.js
++++ b/app/javascript/mastodon/features/compose/components/compose_form.js
+@@ -20,7 +20,9 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
+ import { length } from 'stringz';
+ import { countableText } from '../util/counter';
+ import Icon from 'mastodon/components/icon';
++import { max_toot_chars } from '../../../initial_state';
+ 
++const maxChars = max_toot_chars || 500;
+ const allowedAroundShortCode = '><\u0085\u0020\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\u2028\u2029\u0009\u000a\u000b\u000c\u000d';
+ 
+ const messages = defineMessages({
+@@ -86,7 +88,7 @@ class ComposeForm extends ImmutablePureComponent {
+     const fulltext = this.getFulltextForCharacterCounting();
+     const isOnlyWhitespace = fulltext.length !== 0 && fulltext.trim().length === 0;
+ 
+-    return !(isSubmitting || isUploading || isChangingUpload || length(fulltext) > 500 || (isOnlyWhitespace && !anyMedia));
++    return !(isSubmitting || isUploading || isChangingUpload || length(fulltext) > maxChars || (isOnlyWhitespace && !anyMedia));
+   }
+ 
+   handleSubmit = () => {
+@@ -249,7 +251,7 @@ class ComposeForm extends ImmutablePureComponent {
+             <PrivacyDropdownContainer />
+             <SpoilerButtonContainer />
+           </div>
+-          <div className='character-counter__wrapper'><CharacterCounter max={500} text={this.getFulltextForCharacterCounting()} /></div>
++          <div className='character-counter__wrapper'><CharacterCounter max={maxChars} text={this.getFulltextForCharacterCounting()} /></div>
+         </div>
+ 
+         <div className='compose-form__publish'>
+diff --git a/app/javascript/mastodon/initial_state.js b/app/javascript/mastodon/initial_state.js
+index 80d4390..d2960a4 100644
+--- a/app/javascript/mastodon/initial_state.js
++++ b/app/javascript/mastodon/initial_state.js
+@@ -26,5 +26,6 @@ export const showTrends = getMeta('trends');
+ export const title = getMeta('title');
+ export const cropImages = getMeta('crop_images');
+ export const disableSwiping = getMeta('disable_swiping');
++export const max_toot_chars = getMeta('max_toot_chars');
+ 
+ export default initialState;
+diff --git a/app/serializers/initial_state_serializer.rb b/app/serializers/initial_state_serializer.rb
+index 70263e0..9c78ccd 100644
+--- a/app/serializers/initial_state_serializer.rb
++++ b/app/serializers/initial_state_serializer.rb
+@@ -2,7 +2,8 @@
+ 
+ class InitialStateSerializer < ActiveModel::Serializer
+   attributes :meta, :compose, :accounts,
+-             :media_attachments, :settings
++             :media_attachments, :settings,
++             :max_toot_chars
+ 
+   has_one :push_subscription, serializer: REST::WebPushSubscriptionSerializer
+ 
+@@ -22,6 +23,7 @@ class InitialStateSerializer < ActiveModel::Serializer
+       mascot: instance_presenter.mascot&.file&.url,
+       profile_directory: Setting.profile_directory,
+       trends: Setting.trends,
++      max_toot_chars: StatusLengthValidator::MAX_CHARS,
+     }
+ 
+     if object.current_account
+@@ -76,6 +78,10 @@ class InitialStateSerializer < ActiveModel::Serializer
+     { accept_content_types: MediaAttachment.supported_file_extensions + MediaAttachment.supported_mime_types }
+   end
+ 
++  def max_toot_chars
++    StatusLengthValidator::MAX_CHARS
++  end
++
+   private
+ 
+   def instance_presenter
+diff --git a/app/serializers/rest/instance_serializer.rb b/app/serializers/rest/instance_serializer.rb
+index b388e44..def6d7b 100644
+--- a/app/serializers/rest/instance_serializer.rb
++++ b/app/serializers/rest/instance_serializer.rb
+@@ -5,7 +5,8 @@ class REST::InstanceSerializer < ActiveModel::Serializer
+ 
+   attributes :uri, :title, :short_description, :description, :email,
+              :version, :urls, :stats, :thumbnail,
+-             :languages, :registrations, :approval_required, :invites_enabled
++             :languages, :registrations, :approval_required, :invites_enabled,
++             :max_toot_chars
+ 
+   has_one :contact_account, serializer: REST::AccountSerializer
+ 
+@@ -39,6 +40,10 @@ class REST::InstanceSerializer < ActiveModel::Serializer
+     instance_presenter.thumbnail ? full_asset_url(instance_presenter.thumbnail.file.url) : full_pack_url('media/images/preview.jpg')
+   end
+ 
++  def max_toot_chars
++    StatusLengthValidator::MAX_CHARS
++  end
++
+   def stats
+     {
+       user_count: instance_presenter.user_count,
+diff --git a/app/validators/status_length_validator.rb b/app/validators/status_length_validator.rb
+index 93bae2f..92ee5e6 100644
+--- a/app/validators/status_length_validator.rb
++++ b/app/validators/status_length_validator.rb
+@@ -1,7 +1,7 @@
+ # frozen_string_literal: true
+ 
+ class StatusLengthValidator < ActiveModel::Validator
+-  MAX_CHARS = 500
++  MAX_CHARS = (ENV['MAX_TOOT_CHARS'] || 500).to_i
+ 
+   def validate(status)
+     return unless status.local? && !status.reblog?
