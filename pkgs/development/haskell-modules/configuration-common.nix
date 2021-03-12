@@ -215,9 +215,6 @@ self: super: {
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
 
-  # https://github.com/haskell-nix/hnix-store/issues/127
-  hnix-store-core = addTestToolDepend super.hnix-store-core self.tasty-discover;
-
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
 
