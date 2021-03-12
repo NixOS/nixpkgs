@@ -30595,6 +30595,10 @@ in
 
   openring = callPackage ../applications/misc/openring { };
 
+  openvino = callPackage ../development/libraries/openvino {
+    python = python3;
+  };
+
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
   duti = callPackage ../os-specific/darwin/duti {

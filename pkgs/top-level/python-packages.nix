@@ -4821,6 +4821,11 @@ in {
 
   opentracing = callPackage ../development/python-modules/opentracing { };
 
+  openvino = disabledIf isPy27 (toPythonModule (pkgs.openvino.override {
+    inherit (self) python;
+    enablePython = true;
+  }));
+
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
   openwrt-luci-rpc = disabledIf (!isPy3k) (callPackage ../development/python-modules/openwrt-luci-rpc { });
