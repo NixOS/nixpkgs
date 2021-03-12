@@ -34,9 +34,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib
     libgudev
     libmbim
+  ];
+
+  propagatedBuildInputs = [
+    glib
     libqrtr-glib
   ];
 
