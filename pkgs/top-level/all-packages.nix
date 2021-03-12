@@ -4099,6 +4099,8 @@ in
 
   emem = callPackage ../applications/misc/emem { };
 
+  empty = callPackage ../tools/misc/empty { };
+
   emulsion = callPackage ../applications/graphics/emulsion {
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices Foundation OpenGL;
   };
