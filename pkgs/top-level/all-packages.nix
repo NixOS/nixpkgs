@@ -755,6 +755,8 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  tfk8s = callPackage ../tools/misc/tfk8s { };
+
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
