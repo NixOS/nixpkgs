@@ -1658,4 +1658,7 @@ self: super: {
     })
   ];
 
+  # Test suite does not compile.
+  feed = dontCheck super.feed;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
