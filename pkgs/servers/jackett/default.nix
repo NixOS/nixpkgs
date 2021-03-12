@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${dotnetCorePackages.netcore_3_1}/bin/dotnet" $out/bin/Jackett \
       --add-flags "$out/share/${pname}-${version}/jackett.dll" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-          curl icu60 openssl zlib ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl icu60 openssl zlib ]}
   '';
 
   passthru.tests = {
