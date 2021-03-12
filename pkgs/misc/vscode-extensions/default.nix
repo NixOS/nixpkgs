@@ -857,6 +857,18 @@ let
         };
       };
 
+      timonwong.shellcheck = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "shellcheck";
+          publisher = "timonwong";
+          version = "0.12.3";
+          sha256 = "1i9rszgnac2z1kyahmgxmz05ib7z14s458fvvjlzmvl64fa1fdvf";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tomoki1207.pdf = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "pdf";
