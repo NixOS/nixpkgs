@@ -7,8 +7,6 @@ let
     "ghc865Binary"
     "ghc8102Binary"
     "ghc8102BinaryMinimal"
-    "ghcjs"
-    "ghcjs86"
     "integer-simple"
     "native-bignum"
     "ghcHEAD"
@@ -60,12 +58,6 @@ in {
       minimal = true;
     };
 
-    ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
-      bootPkgs = packages.ghc822Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_6;
-      llvmPackages = pkgs.llvmPackages_6;
-    };
     ghc882 = callPackage ../development/compilers/ghc/8.8.2.nix {
       bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -137,13 +129,6 @@ in {
       llvmPackages = pkgs.llvmPackages_10;
       libffi = pkgs.libffi;
     };
-    ghcjs = compiler.ghcjs86;
-    ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc865;
-      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
-      stage0 = ../development/compilers/ghcjs-ng/8.6/stage0.nix;
-      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix {};
-    };
 
     # The integer-simple attribute set contains all the GHC compilers
     # build with integer-simple instead of integer-gmp.
@@ -196,11 +181,6 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc865 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc865;
-      ghc = bh.compiler.ghc865;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-    };
     ghc882 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc882;
       ghc = bh.compiler.ghc882;
@@ -245,13 +225,6 @@ in {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
-    };
-    ghcjs = packages.ghcjs86;
-    ghcjs86 = callPackage ../development/haskell-modules rec {
-      buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs86;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers
