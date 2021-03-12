@@ -10992,7 +10992,6 @@ in
   julia = julia_15;
   julia-lts = julia_10;
   julia-stable = julia_15;
-  julia_1 = julia_10;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
