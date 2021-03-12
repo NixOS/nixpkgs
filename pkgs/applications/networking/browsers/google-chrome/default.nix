@@ -42,6 +42,9 @@
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
 , libvaSupport ? true, libva
+
+# For Vulkan support (--enable-features=Vulkan)
+, vulkanSupport ? true, vulkan-loader
 }:
 
 with lib;
@@ -67,6 +70,7 @@ let
     libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva
+    ++ optional vulkanSupport vulkan-loader
     ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
