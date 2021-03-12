@@ -813,4 +813,7 @@ self: super: builtins.intersectAttrs super {
   # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
   doctest-driver-gen = dontCheck super.doctest-driver-gen;
 
+  # Tests access internet
+  prune-juice = dontCheck super.prune-juice;
+
 }

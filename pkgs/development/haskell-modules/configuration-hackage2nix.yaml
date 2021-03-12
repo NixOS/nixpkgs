@@ -3854,7 +3854,6 @@ broken-packages:
   - cabal-install-bundle
   - cabal-install-ghc72
   - cabal-install-ghc74
-  - cabal-install-parsers
   - cabal-lenses
   - cabal-meta
   - cabal-mon
@@ -9192,7 +9191,6 @@ broken-packages:
   - provenience
   - proxy-kindness
   - proxy-mapping
-  - prune-juice
   - psc-ide
   - pseudo-boolean
   - pseudo-trie
