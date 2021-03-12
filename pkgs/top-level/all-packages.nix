@@ -22866,6 +22866,10 @@ in
 
   google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
+  google-play-music-desktop-player = callPackage ../applications/audio/google-play-music-desktop-player {
+    inherit (gnome2) GConf;
+  };
+
   gosmore = callPackage ../applications/misc/gosmore { };
 
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel {
