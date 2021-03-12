@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-libedit" ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
     description = "A POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
