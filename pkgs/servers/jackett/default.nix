@@ -1,12 +1,24 @@
 { lib, stdenv, fetchurl, dotnetCorePackages, makeWrapper, curl, icu60, openssl, zlib, nixosTests }:
 
-stdenv.mkDerivation rec {
+let
+  suffix = {
+    x86_64-linux = "LinuxAMDx64";
+    aarch64-linux = "LinuxARM64";
+    x86_64-darwin = "macOS";
+  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  hash = {
+    x86_64-linux = "1mpm8kji4npc44cs51r75xxdq74gxxdnfffazlbgypcabcb46gzp";
+    aarch64-linux = "18slsjzqs52frmbq6a0c3zrpa5fgf9sfxmzbkrffllc8m54rhcjn";
+    x86_64-darwin = "161df7s2skg8wbd7kpbs9qhyka0ywqcbc44zpz4c16mvax0a6wls";
+  }."${stdenv.hostPlatform.system}";
+
+in stdenv.mkDerivation rec {
   pname = "jackett";
-  version = "0.17.671";
+  version = "0.17.677";
 
   src = fetchurl {
-    url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
-    sha256 = "19yhfyznkqdwj408hz5481lvaz7ri6sib7bsmh0lxg0mvx35rq9r";
+    url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.${suffix}.tar.gz";
+    sha256 = hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Jackett/Jackett/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }
