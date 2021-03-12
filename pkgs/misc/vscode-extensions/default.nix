@@ -562,6 +562,18 @@ let
         };
       };
 
+      mishkinf.goto-next-previous-member = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "goto-next-previous-member";
+          publisher = "mishkinf";
+          version = "0.0.5";
+          sha256 = "0kgzap1k924i95al0a63hxcsv8skhaapgfpi9d7vvaxm0fc10l1i";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "one-dark-theme";
