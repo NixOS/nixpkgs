@@ -35,6 +35,7 @@ let
       # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
       # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
       license = with licenses; [ mit publicDomain bsd3 asl20 ];
+      maintainers = with maintainers; [ mindavi ];
       platforms = platforms.all;
     };
   };
