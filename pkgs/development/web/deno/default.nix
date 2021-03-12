@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, callPackage
 , fetchurl
 , fetchFromGitHub
 , rust
@@ -7,6 +8,7 @@
 , installShellFiles
 , Security
 , CoreServices
+, librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,25 +31,16 @@ rustPlatform.buildRustPackage rec {
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance
   preBuild =
-    let
-      inherit (import ./deps.nix { }) librusty_v8;
-      arch = rust.toRustTarget stdenv.hostPlatform;
-      librusty_v8_release = fetchurl {
-        url = "https://github.com/denoland/rusty_v8/releases/download/v${librusty_v8.version}/librusty_v8_release_${arch}.a";
-        sha256 = librusty_v8.sha256s.${stdenv.hostPlatform.system};
-        meta = { inherit (librusty_v8) version; };
-      };
-    in
+    let arch = rust.toRustTarget stdenv.hostPlatform; in
     ''
-      _rusty_v8_setup() {
+      _librusty_v8_setup() {
         for v in "$@"; do
-          dir="target/$v/gn_out/obj"
-          mkdir -p "$dir" && cp "${librusty_v8_release}" "$dir/librusty_v8.a"
+          install -D ${librusty_v8} "target/$v/gn_out/obj/librusty_v8.a"
         done
       }
 
       # Copy over the `librusty_v8.a` file inside target/XYZ/gn_out/obj, symlink not allowed
-      _rusty_v8_setup "debug" "release" "${arch}/release"
+      _librusty_v8_setup "debug" "release" "${arch}/release"
     '';
 
   # Tests have some inconsistencies between runs with output integration tests
