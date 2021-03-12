@@ -10832,7 +10832,7 @@ in
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_03;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_04;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
@@ -29148,8 +29148,6 @@ in
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
-
-  lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
