@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ciscomobilityexpress";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd3fe893d8a44f5ac1d46580af88e07f1066e73744763aca4ef2226f87d575ff";
+    sha256 = "d8787245598e8371a83baa4db1df949d8a942c43f13454fa26ee3b09c3ccafc0";
   };
 
   propagatedBuildInputs = [ requests ];
