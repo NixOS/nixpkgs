@@ -48,6 +48,18 @@ let
         };
       };
 
+      alygin.vscode-tlaplus = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tlaplus";
+          publisher = "alygin";
+          version = "1.5.3";
+          sha256 = "1cy0qn8iyjrinscn9p5ckpsa2hyryapxfi7is6s2zk2mpligbb1d";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       antfu.icons-carbon = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "icons-carbon";
