@@ -188,6 +188,8 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+    # Broadway daemon
+    moveToOutput bin/broadwayd "$out"
 
     # TODO: patch glib directly
     for f in $dev/bin/gtk-encode-symbolic-svg; do
