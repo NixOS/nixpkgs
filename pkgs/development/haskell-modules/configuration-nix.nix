@@ -812,4 +812,8 @@ self: super: builtins.intersectAttrs super {
   # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
   # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
   hadolint = disableCabalFlag super.hadolint "static";
+
+  # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
+  doctest-driver-gen = dontCheck super.doctest-driver-gen;
+
 }

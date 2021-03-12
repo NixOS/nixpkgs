@@ -4825,7 +4825,6 @@ broken-packages:
   - docrecords
   - DocTest
   - doctest-discover-configurator
-  - doctest-driver-gen
   - doctest-prop
   - docusign-base
   - docusign-base-minimal
