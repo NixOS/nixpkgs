@@ -12,8 +12,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
-    pytest
     flask
     werkzeug
   ];
