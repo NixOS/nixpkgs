@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "promscale";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rXOAAd08NTWFRGnJoAY9xllw6dAA7Xu3qcImIVq9ewE=";
+    sha256 = "sha256-f/fpCyAw9BQ6ccEZm/xsTCjINjFtX3Q6SmPuJNVSJVI=";
   };
 
   vendorSha256 = "sha256-/woSbtrOI3BVBhh+A2kO1CB1BLzBciwOqvSbGkFeMEU=";

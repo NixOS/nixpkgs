@@ -254,5 +254,21 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm ${examples.layeredStoreSymlink.imageName} bash -c 'test -L ${examples.layeredStoreSymlink.passthru.symlink}'",
             "docker rmi ${examples.layeredStoreSymlink.imageName}",
         )
+
+    with subtest("buildImage supports registry/ prefix in image name"):
+        docker.succeed(
+            "docker load --input='${examples.prefixedImage}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}' | grep -F '${examples.prefixedImage.imageName}'"
+        )
+
+    with subtest("buildLayeredImage supports registry/ prefix in image name"):
+        docker.succeed(
+            "docker load --input='${examples.prefixedLayeredImage}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}' | grep -F '${examples.prefixedLayeredImage.imageName}'"
+        )
   '';
 })

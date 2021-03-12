@@ -91,9 +91,11 @@ self: super: {
   # plugin, since part of the fzf vim plugin is included in the main fzf
   # program.
   fzfWrapper = buildVimPluginFrom2Nix {
+    inherit (fzf) src version;
     pname = "fzf";
-    version = fzf.version;
-    src = fzf.src;
+    postInstall = ''
+      ln -s ${fzf}/bin/fzf $target/bin/fzf
+    '';
   };
 
   skim = buildVimPluginFrom2Nix {

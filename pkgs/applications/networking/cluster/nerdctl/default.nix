@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
+, installShellFiles
 , buildkit
 , cni-plugins
 , extraPackages ? [ ]
@@ -9,23 +10,20 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-z5Ekryaa5KMShrjdsmFk9bXahtuc+6tec7dxH5/w7+A=";
+    sha256 = "sha256-tMzob+ljGBKkfbxwMqy+8bqVp51Eqyx4kXhsj/LRfzQ=";
   };
 
-  vendorSha256 = "sha256-ovmVNtzTQbg141IvbaF/+k5WHxX8wuK7z5gH9l2g5UE=";
+  vendorSha256 = "sha256-zUX/kneVz8uXmxly8yqmcttK3Wj4EmBaT8gmg3hDms4=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  preBuild =
-    let
-      t = "github.com/AkihiroSuda/nerdctl/pkg/version";
-    in
+  preBuild = let t = "github.com/AkihiroSuda/nerdctl/pkg/version"; in
     ''
       buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.Revision=<unknown>")
     '';
@@ -37,17 +35,19 @@ buildGoModule rec {
     wrapProgram $out/bin/nerdctl \
       --prefix PATH : "${lib.makeBinPath ([ buildkit ] ++ extraPackages)}" \
       --prefix CNI_PATH : "${cni-plugins}/bin"
+
+    # nerdctl panics without XDG_RUNTIME_DIR set
+    export XDG_RUNTIME_DIR=$TMPDIR
+
+    installShellCompletion --cmd nerdctl \
+      --bash <($out/bin/nerdctl completion bash)
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
-    # nerdctl expects XDG_RUNTIME_DIR to be set
-    export XDG_RUNTIME_DIR=$TMPDIR
-
     $out/bin/nerdctl --help
-    # --version will error without containerd.sock access
-    $out/bin/nerdctl --help | grep "${version}"
+    $out/bin/nerdctl --version | grep "nerdctl version ${version}"
     runHook postInstallCheck
   '';
 
