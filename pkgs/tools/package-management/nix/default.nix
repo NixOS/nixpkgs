@@ -56,7 +56,7 @@ common =
         ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is24 [ libarchive gmock lowdown ]
-        ++ lib.optional (stdenv.isx86_64) libcpuid
+        ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
