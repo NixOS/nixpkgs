@@ -785,6 +785,18 @@ let
         };
       };
 
+      shyykoserhiy.vscode-spotify = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-spotify";
+          publisher = "shyykoserhiy";
+          version = "3.2.1";
+          sha256 = "14d68rcnjx4a20r0ps9g2aycv5myyhks5lpfz0syr2rxr4kd1vh6";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       skyapps.fish-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "fish-vscode";
