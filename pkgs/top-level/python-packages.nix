@@ -124,6 +124,8 @@ in {
     venvShellHook
     wheelUnpackHook;
 
+  pytest_6_1CheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+
   # helpers
 
   # We use build packages because we are making a setup hook to be used as a
