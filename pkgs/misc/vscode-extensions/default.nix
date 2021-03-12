@@ -958,6 +958,18 @@ let
         };
       };
 
+      yzhang.markdown-all-in-one = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-all-in-one";
+          publisher = "yzhang";
+          version = "3.4.0";
+          sha256 = "0ihfrsg2sc8d441a2lkc453zbw1jcpadmmkbkaf42x9b9cipd5qb";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
       WakaTime.vscode-wakatime = callPackage ./wakatime {};
