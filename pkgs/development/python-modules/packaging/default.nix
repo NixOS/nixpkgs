@@ -6,6 +6,7 @@
 , pytestCheckHook
 , pretend
 , flit-core
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -22,19 +23,17 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [ pyparsing six ];
+  propagatedBuildInputs = [ pyparsing setuptools six ];
 
   checkInputs = [
     pytestCheckHook
     pretend
   ];
 
-  checkPhase = ''
-    py.test tests
-  '';
-
   # Prevent circular dependency
   doCheck = false;
+
+  pythonImportsCheck = [ "packaging" ];
 
   meta = with lib; {
     description = "Core utilities for Python packages";
