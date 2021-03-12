@@ -577,6 +577,37 @@ self: super:
       for your Kafka version.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <package>kodi</package> package has been modified to allow concise addon management. Consider
+     the following configuration from previous releases of NixOS to install <package>kodi</package>,
+     including the <package>kodiPackages.inputstream-adaptive</package> and <package>kodiPackages.vfs-sftp</package>
+     addons:
+
+     <programlisting>
+environment.systemPackages = [
+  pkgs.kodi
+];
+
+nixpkgs.config.kodi = {
+  enableInputStreamAdaptive = true;
+  enableVFSSFTP = true;
+};
+     </programlisting>
+
+     All Kodi <literal>config</literal> flags have been removed, and as a result the above configuration
+     should now be written as:
+
+     <programlisting>
+environment.systemPackages = [
+  (pkgs.kodi.withPackages (p: with p; [
+    inputstream-adaptive
+    vfs-sftp
+  ]))
+];
+     </programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
