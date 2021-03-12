@@ -804,8 +804,20 @@ let
           version = "0.2.1";
           sha256 = "0y1ivymn81ranmir25zk83kdjpjwcqpnc9r3jwfykjd9x0jib2hl";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      slevesque.vscode-multiclip = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-multiclip";
+          publisher = "slevesque";
+          version = "0.1.5";
+          sha256 = "1cg8dqj7f10fj9i0g6mi3jbyk61rs6rvg9aq28575rr52yfjc9f9";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
