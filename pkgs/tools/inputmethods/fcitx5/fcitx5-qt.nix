@@ -48,6 +48,7 @@ mkDerivation rec {
     homepage = "https://github.com/fcitx/fcitx5-qt";
     license = with licenses; [ lgpl21Plus bsd3 ];
     maintainers = with maintainers; [ poscat ];
+    broken = lib.versionOlder qtbase.version "5.13";
     platforms = platforms.linux;
   };
 }
