@@ -4,7 +4,7 @@
 
 mkDerivation rec {
   pname = "cockatrice";
-  version = "2021-01-26-Release-2.8.0";
+  version = "2021-02-03-Development-2.8.1-beta";
 
   src = fetchFromGitHub {
     owner = "Cockatrice";
