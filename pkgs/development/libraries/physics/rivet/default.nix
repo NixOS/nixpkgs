@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
@@ -11,6 +11,26 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
+
+    # fix for new python and fix transparency gs 9.52
+    # gs 9.52 opacity fix
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/rivet/commit/25c4bee19882fc56407b0a438f86e1a11753d5e6.diff";
+      sha256 = "18p2wk54r0qfq6l27z6805zq1z5jhk5sbxbjixgibzq8prj1a78v";
+    })
+
+    # make-plots: fix wrong logic in Plot.set_xmax()
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/rivet/commit/d371c6c10cf67a41c0e4e27c16ff5723d6276ad2.diff";
+      sha256 = "0w622rd5darj7qafbbc84blznvy5rnhsdyr2n1i1fkz19mrf5h2p";
+    })
+
+    # fix https://gitlab.com/hepcedar/rivet/-/issues/200
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/rivet/commit/442dbd17dcb3bd6e30b26e54c50f6a8237f966f9.diff";
+      includes = [ "bin/make-pgfplots" "bin/make-plots" "bin/make-plots-fast" ];
+      sha256 = "0c3rysgcib49km1zdpgsdai3xi4s6ijqgxp4whn04mrh3qf4bmr3";
+    })
   ];
 
   latex = texlive.combine { inherit (texlive)
