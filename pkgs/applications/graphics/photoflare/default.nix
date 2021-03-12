@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "photoflare";
-  version = "1.6.6";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "PhotoFlare";
     repo = "photoflare";
     rev = "v${version}";
-    sha256 = "07lrlxagv1bljj607s8m0zsbzx9jrvi18bnxahnm7r4i5car5x2d";
+    sha256 = "sha256-Gx3YP29NrNHp0p05a1O4Xb9kqkA6pQLTJZ3/wOx+BWY=";
   };
 
   nativeBuildInputs = [ qmake qttools ];
