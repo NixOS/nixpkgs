@@ -127,6 +127,15 @@ let
       assert elem type [ "veth" "zone" ]; {
         v4 = mkIPOptions 4;
         v6 = mkIPOptions 6;
+      } // optionalAttrs (type == "zone") {
+        hostAddresses = mkOption {
+          default = [];
+          type = types.listOf types.str;
+          description = ''
+            Address of the container on the host-side, i.e. the
+            subnet and address assigned to <literal>vz-&lt;name&gt;</literal>.
+          '';
+        };
       };
 
   mkImage = name: config:
@@ -418,6 +427,7 @@ in {
             matchConfig = mkMatchCfg "zone" name;
             address = zone.v4.addrPool
               ++ zone.v6.addrPool
+              ++ zone.hostAddresses
               ++ (flatten (flip mapAttrsToList cfg
                 (name: config: optionals (config.zone != null && config.network != null)
                   (config.network.v4.static.hostAddresses ++ config.network.v6.static.hostAddresses)

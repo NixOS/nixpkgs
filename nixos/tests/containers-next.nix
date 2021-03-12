@@ -187,7 +187,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         network.v6.addrPool = lib.mkForce [];
         network.v4.addrPool = lib.mkForce [];
         network.v4.static.containerPool = [ "10.100.200.10/24" ];
-        network.v4.static.hostAddresses = [ "10.100.200.1/24" ];
         config = { pkgs, ... }: {
           environment.systemPackages = [ pkgs.hello pkgs.nmap pkgs.dnsutils ];
           systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
@@ -205,7 +204,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     systemd.nspawn.publicnet.networkConfig.VirtualEthernet = "no";
 
     nixos.containers.zones = {
-      foo = {};
+      foo.hostAddresses = [ "10.100.200.1/24" ];
     };
 
     systemd.network.networks."20-ve-container1".networkConfig.DNS = "fd24::1";
