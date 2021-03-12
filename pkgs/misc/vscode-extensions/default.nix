@@ -135,6 +135,18 @@ let
         };
       };
 
+      codezombiech.gitignore = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitignore";
+          publisher = "codezombiech";
+          version = "0.6.0";
+          sha256 = "0gnc0691pwkd9s8ldqabmpfvj0236rw7bxvkf0bvmww32kv1ia0b";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       CoenraadS.bracket-pair-colorizer = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/CoenraadS.bracket-pair-colorizer/changelog";
@@ -784,6 +796,7 @@ let
           license = lib.licenses.mit;
         };
       };
+
 
       shyykoserhiy.vscode-spotify = buildVscodeMarketplaceExtension {
         mktplcRef = {
