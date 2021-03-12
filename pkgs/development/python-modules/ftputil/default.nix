@@ -1,13 +1,13 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, freezegun }:
 
 buildPythonPackage rec {
-  version = "4.0.0";
+  version = "5.0.0";
   pname = "ftputil";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d494c47f24fd3f8fbe92d40d90e0902c0e04288f200688af2b16d6b46fe441e1";
+    sha256 = "0dc82fa0a8ea385e8222b72bedb1ec31caac07822b6a1a9139adc98b0b051d06";
   };
 
   checkInputs = [ pytest freezegun ];
