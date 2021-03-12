@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1shfj67kq6qzd0ngyfk09hpzfggybcfxv5s7hqs87nq9l51bssv8";
+    sha256 = "11q3svns3a2ywfci739krxbh67cx691qja772wq22606blyygyjy";
   };
 
   nativeBuildInputs = lib.optionals (pythonOlder "3.5") [ mock ];
