@@ -55,12 +55,6 @@ in {
       minimal = true;
     };
 
-    ghc882 = callPackage ../development/compilers/ghc/8.8.2.nix {
-      bootPkgs = packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_7;
-      llvmPackages = pkgs.llvmPackages_7;
-    };
     ghc883 = callPackage ../development/compilers/ghc/8.8.3.nix {
       bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -171,11 +165,6 @@ in {
       ghc = bh.compiler.ghc8102BinaryMinimal;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
-    };
-    ghc882 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc882;
-      ghc = bh.compiler.ghc882;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
     };
     ghc883 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc883;
