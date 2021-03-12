@@ -20,7 +20,7 @@ let
       "-DLWS_WITH_PLUGINS=ON"
       "-DLWS_WITH_IPV6=ON"
       "-DLWS_WITH_SOCKS5=ON"
-    ];
+    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON";
 
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 

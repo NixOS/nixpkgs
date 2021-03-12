@@ -1,8 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.0-k3s2" }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.4-k3s1" }:
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "4.2.0";
+  version = "4.3.0";
 
   excludedPackages = "tools";
 
@@ -10,20 +10,17 @@ buildGoModule rec {
     owner = "rancher";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-R2RbQlceOD/uY3IdLLiM23gESh/oWnsiTWxHeH/Si18=";
+    sha256 = "sha256-ybEYKr0rQY8Qg74V1mXqShq5Z2d/Adf0bSSbEMIyo3I=";
   };
 
   vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-w"
-    "-s"
-    "-X github.com/rancher/k3d/v4/version.Version=v${version}"
-    "-X github.com/rancher/k3d/v4/version.K3sVersion=v${k3sVersion}"
-  ];
+  preBuild = let t = "github.com/rancher/k3d/v4/version"; in
+    ''
+      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.K3sVersion=v${k3sVersion}")
+    '';
 
   doCheck = false;
 
@@ -36,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/rancher/k3d";
+    changelog = "https://github.com/rancher/k3d/blob/v${version}/CHANGELOG.md";
     description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container - k3d";
     longDescription = ''
       k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
@@ -44,7 +42,7 @@ buildGoModule rec {
       multi-node k3s cluster on a single machine using docker.
     '';
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
+    platforms = platforms.linux;
   };
 }

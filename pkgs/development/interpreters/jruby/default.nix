@@ -23,7 +23,7 @@ jruby = stdenv.mkDerivation rec {
 
      for i in $out/bin/jruby{,.bash}; do
        wrapProgram $i \
-         --set JAVA_HOME ${jre}
+         --set JAVA_HOME ${jre.home}
      done
 
      ln -s $out/bin/jruby $out/bin/ruby
