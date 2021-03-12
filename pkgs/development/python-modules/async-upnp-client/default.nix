@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , voluptuous, aiohttp, async-timeout, python-didl-lite, defusedxml
-, pytest_6, pytest-asyncio }:
+, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest_6
+    pytestCheckHook
     pytest-asyncio
   ];
 

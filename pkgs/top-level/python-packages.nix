@@ -538,7 +538,9 @@ in {
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
-  async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
+  async-upnp-client = callPackage ../development/python-modules/async-upnp-client {
+    pytestCheckHook = self.pytest_6_1CheckHook;
+  };
 
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
