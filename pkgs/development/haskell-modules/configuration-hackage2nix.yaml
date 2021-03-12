@@ -9192,6 +9192,7 @@ broken-packages:
   - provenience
   - proxy-kindness
   - proxy-mapping
+  - prune-juice
   - psc-ide
   - pseudo-boolean
   - pseudo-trie
@@ -10005,6 +10006,7 @@ broken-packages:
   - sha1
   - shade
   - shadower
+  - shake-bench
   - shake-bindist
   - shake-cabal-build
   - shake-dhall
