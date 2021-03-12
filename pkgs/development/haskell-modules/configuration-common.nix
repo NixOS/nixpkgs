@@ -1424,7 +1424,8 @@ self: super: {
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
   ghcide = doDistribute (unmarkBroken (dontCheck super.ghcide));
 
-  # 2020-03-09: Tests broken in hackage release, fixed on upstream
+  # 2020-03-09: Tests broken in hackage release
+  # fixed on upstream, but not released in hiedb 0.3.0.1
   # https://github.com/wz1000/HieDb/issues/30
   hiedb = dontCheck super.hiedb;
 
