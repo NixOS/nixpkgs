@@ -10005,7 +10005,6 @@ broken-packages:
   - sha1
   - shade
   - shadower
-  - shake-bench
   - shake-bindist
   - shake-cabal-build
   - shake-dhall
