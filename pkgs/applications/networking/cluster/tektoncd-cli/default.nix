@@ -45,7 +45,6 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-
   meta = with lib; {
     homepage = "https://tekton.dev";
     changelog = "https://github.com/tektoncd/cli/releases/tag/v${version}";
