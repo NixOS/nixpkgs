@@ -17492,12 +17492,8 @@ in
     stdenv = gcc6Stdenv;
   });
 
-  v8_6_x = v8;
   v8 = callPackage ../development/libraries/v8 {
     inherit (python2Packages) python;
-  } // lib.optionalAttrs stdenv.isLinux {
-    # doesn't build with gcc7
-    stdenv = gcc6Stdenv;
   };
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
