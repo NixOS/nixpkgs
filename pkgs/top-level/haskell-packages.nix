@@ -65,16 +65,6 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
-    ghc8103 = callPackage ../development/compilers/ghc/8.10.3.nix {
-      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
-        else
-          packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_9;
-      llvmPackages = pkgs.llvmPackages_9;
-    };
     ghc8104 = callPackage ../development/compilers/ghc/8.10.4.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
       bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
@@ -148,11 +138,6 @@ in {
       buildHaskellPackages = bh.packages.ghc884;
       ghc = bh.compiler.ghc884;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
-    };
-    ghc8103 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8103;
-      ghc = bh.compiler.ghc8103;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
     ghc8104 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc8104;
