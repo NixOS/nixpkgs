@@ -946,6 +946,18 @@ let
         };
       };
 
+      xyz.local-history = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "local-history";
+          publisher = "xyz";
+          version = "1.8.1";
+          sha256 = "1mfmnbdv76nvwg4xs3rgsqbxk8hw9zr1b61har9c3pbk9r4cay7v";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
       WakaTime.vscode-wakatime = callPackage ./wakatime {};
