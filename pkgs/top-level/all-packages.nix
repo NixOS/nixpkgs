@@ -633,6 +633,8 @@ in
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
+  _7zz = callPackage ../tools/archivers/7zz { };
+
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
   a2ps = callPackage ../tools/text/a2ps { };
