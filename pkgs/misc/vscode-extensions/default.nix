@@ -253,6 +253,18 @@ let
         };
       };
 
+      edonet.vscode-command-runner = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-command-runner";
+          publisher = "edonet";
+          version = "0.0.116";
+          sha256 = "0fxvplyk080m0cdsvzynp6wjillrd4flr5qz7af7fibb2jbmfdkn";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       elmtooling.elm-ls-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elm-ls-vscode";
