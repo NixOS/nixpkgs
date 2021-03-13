@@ -31,6 +31,7 @@ let
     "dovecot"
     "fritzbox"
     "json"
+    "jitsi"
     "keylight"
     "knot"
     "lnd"
