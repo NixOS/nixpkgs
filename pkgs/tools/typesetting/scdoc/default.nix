@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromSourcehut }:
 
 stdenv.mkDerivation rec {
   pname = "scdoc";
   version = "1.11.1";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
-    sha256 = "007pm3gspvya58cwb12wpnrm9dq5p28max2s0b2y9rq80nqgqag5";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = pname;
+    rev = version;
+    sha256 = "1g37j847j3h4a4qbbfbr6vvsxpifj9v25jgv25nd71d1n0dxlhvk";
   };
 
   postPatch = ''
