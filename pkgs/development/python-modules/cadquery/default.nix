@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, toPythonModule
 , isPy3k
 , pythonOlder
 , pythonAtLeast
@@ -23,7 +24,7 @@
 }:
 
 let
-  pythonocc-core-cadquery = stdenv.mkDerivation {
+  pythonocc-core-cadquery = toPythonModule (stdenv.mkDerivation {
     pname = "pythonocc-core-cadquery";
     version = "0.18.2";
 
@@ -61,7 +62,7 @@ let
       "-DSMESH_LIB_PATH=${smesh}/lib"
       "-DPYTHONOCC_WRAP_SMESH=TRUE"
     ];
-  };
+  });
 
 in
   buildPythonPackage rec {
