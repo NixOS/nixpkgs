@@ -29,7 +29,7 @@
    <listitem>
     <para>
      <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 was
-     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finnally</link>
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finally</link>
      packaged, along with a rewrite to the Nix expressions, allowing users to
      override the features upstream supports selecting to compile or not to.
      Additionally, the attribute <code>gnuradio</code> and <code>gnuradio3_7</code>
