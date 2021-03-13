@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "redkite";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "iurie-sw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16j9zp5i7svq3g38rfb6h257qfgnd2brrxi7cjd2pdax9xxwj40y";
+    sha256 = "sha256-bf8kz9RyhDDuUHKiKvLiQLBIEXbIyoy3yuKfSpSYYv0=";
   };
 
   nativeBuildInputs = [ cmake ];
