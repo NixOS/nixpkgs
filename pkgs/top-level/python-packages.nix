@@ -8518,7 +8518,9 @@ in {
 
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 
-  urllib3 = callPackage ../development/python-modules/urllib3 { };
+  urllib3 = callPackage ../development/python-modules/urllib3 {
+    pytestCheckHook = self.pytest_6_1CheckHook;
+  };
 
   urwid = callPackage ../development/python-modules/urwid { };
 
