@@ -24395,7 +24395,9 @@ in
 
   oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
 
-  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
+  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
+    ffmpeg = ffmpeg-full.override { srt = srt; };
+  };
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
 
