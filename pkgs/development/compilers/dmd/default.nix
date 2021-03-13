@@ -171,5 +171,7 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [ ThomasMader lionello ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    # many tests are failing
+    broken = true;
   };
 }
