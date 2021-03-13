@@ -951,6 +951,8 @@ in {
 
   bellows = callPackage ../development/python-modules/bellows { };
 
+  beniget = callPackage ../development/python-modules/beniget { };
+
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };
