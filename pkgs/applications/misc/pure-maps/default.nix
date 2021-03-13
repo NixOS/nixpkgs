@@ -1,7 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, wrapQtAppsHook
 , qmake, qttools, kirigami2, qtquickcontrols2, qtlocation, qtsensors
 , nemo-qml-plugin-dbus, mapbox-gl-qml, s2geometry
-, python3, pyotherside, python3Packages
+, python3, pyotherside
 }:
 
 mkDerivation rec {
@@ -16,12 +16,15 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake python3 qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake python3 qttools wrapQtAppsHook python3.pkgs.wrapPython
+  ];
   buildInputs = [
     kirigami2 qtquickcontrols2 qtlocation qtsensors
     nemo-qml-plugin-dbus pyotherside mapbox-gl-qml s2geometry
   ];
-  propagatedBuildInputs = with python3Packages; [ gpxpy pyxdg ];
+
+  pythonPath = with python3.pkgs; [ gpxpy pyxdg ];
 
   postPatch = ''
     substituteInPlace pure-maps.pro \
@@ -32,8 +35,9 @@ mkDerivation rec {
 
   dontWrapQtApps = true;
   postInstall = ''
+    buildPythonPath "$out/share $pythonPath"
     wrapQtApp $out/bin/pure-maps \
-      --prefix PYTHONPATH : "$out/share"
+      --prefix PYTHONPATH : "$out/share:$program_PYTHONPATH"
   '';
 
   meta = with lib; {
