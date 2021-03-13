@@ -23815,6 +23815,8 @@ in
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
+  metadata-cleaner = callPackage ../applications/misc/metadata-cleaner { };
+
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {
