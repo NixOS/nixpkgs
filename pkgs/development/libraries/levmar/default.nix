@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    sed -i 's/define HAVE_LAPACK/undef HAVE_LAPACK/' levmar.h
+    substituteInPlace levmar.h --replace "define HAVE_LAPACK" "undef HAVE_LAPACK"
     sed -i 's/LAPACKLIBS=.*/LAPACKLIBS=/' Makefile
+    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   installPhase = ''
@@ -23,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "ANSI C implementations of Levenberg-Marquardt, usable also from C++";
     homepage = "https://www.ics.forth.gr/~lourakis/levmar/";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }
