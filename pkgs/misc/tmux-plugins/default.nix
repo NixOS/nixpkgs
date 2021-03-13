@@ -49,6 +49,8 @@ let
     }));
 
 in rec {
+  inherit mkTmuxPlugin;
+
   battery = mkTmuxPlugin {
     pluginName = "battery";
     version = "unstable-2019-07-04";
