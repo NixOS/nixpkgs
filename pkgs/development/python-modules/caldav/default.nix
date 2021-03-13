@@ -34,6 +34,10 @@ buildPythonPackage rec {
     tzlocal
   ];
 
+  checkPhase = ''
+    nosetests tests
+  '';
+
   # xandikos and radicale is only a optional test dependency, not available for python3
   postPatch = ''
     substituteInPlace setup.py \
@@ -45,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This project is a CalDAV (RFC4791) client library for Python.";
-    homepage = "https://pythonhosted.org/caldav/";
+    homepage = "https://github.com/python-caldav/caldav";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz ];
     #broken = true; # requires radicale which is not packaged yet
