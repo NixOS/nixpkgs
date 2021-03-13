@@ -10,7 +10,7 @@ mkDerivation rec {
     owner = "Cockatrice";
     repo = "Cockatrice";
     rev = version;
-    sha256 = "0q8ffcklb2b7hcqhy3d2f9kz9aw22pp04pc9y4sslyqmf17pwnz9";
+    sha256 = "0g1d7zq4lh4jf08mvvgp6m2r2gdvy4y1mhf46c0s8607h2l8vavh";
   };
 
   buildInputs = [
