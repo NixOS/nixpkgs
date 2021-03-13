@@ -10590,6 +10590,8 @@ in
 
   knightos-z80e = callPackage ../development/tools/knightos/z80e { };
 
+  koka = haskellPackages.callPackage ../development/compilers/koka { };
+
   kotlin = callPackage ../development/compilers/kotlin { };
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
