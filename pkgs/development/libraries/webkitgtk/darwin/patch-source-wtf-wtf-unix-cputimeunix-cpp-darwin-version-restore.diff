@@ -1,0 +1,79 @@
+diff --git Source/WTF/wtf/unix/CPUTimeUnix.cpp Source/WTF/wtf/unix/CPUTimeUnix.cpp
+index 27990893..fe279865 100644
+--- Source/WTF/wtf/unix/CPUTimeUnix.cpp
++++ Source/WTF/wtf/unix/CPUTimeUnix.cpp
+@@ -26,6 +26,68 @@
+ #include "config.h"
+ #include "CPUTime.h"
+ 
++#if OS(DARWIN)
++#import <mach/mach.h>
++#import <mach/mach_time.h>
++#import <mach/task.h>
++#import <mach/task_info.h>
++#import <mach/thread_info.h>
++#import <sys/time.h>
++
++#include <wtf/Optional.h>
++
++namespace WTF {
++
++static const int64_t microsecondsPerSecond = 1000000;
++
++static int64_t timeValueToMicroseconds(const time_value_t& value)
++{
++    int64_t result = value.seconds;
++    result *= microsecondsPerSecond;
++    result += value.microseconds;
++    return result;
++}
++
++Optional<CPUTime> CPUTime::get()
++{
++    // Account for current threads.
++    task_thread_times_info threadInfoData;
++    mach_msg_type_number_t threadInfoCount = TASK_THREAD_TIMES_INFO_COUNT;
++    kern_return_t result = task_info(mach_task_self(), TASK_THREAD_TIMES_INFO, reinterpret_cast<task_info_t>(&threadInfoData), &threadInfoCount);
++    if (result != KERN_SUCCESS)
++        return nullopt;
++
++    int64_t userTime = timeValueToMicroseconds(threadInfoData.user_time);
++    int64_t systemTime = timeValueToMicroseconds(threadInfoData.system_time);
++
++    // Account for termined threads.
++    task_basic_info taskInfoData;
++    mach_msg_type_number_t taskInfoCount = TASK_BASIC_INFO_COUNT;
++    result = task_info(mach_task_self(), TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&taskInfoData), &taskInfoCount);
++    if (result != KERN_SUCCESS)
++        return nullopt;
++
++    userTime += timeValueToMicroseconds(taskInfoData.user_time);
++    systemTime += timeValueToMicroseconds(taskInfoData.system_time);
++
++    return CPUTime { MonotonicTime::now(), Seconds::fromMicroseconds(userTime), Seconds::fromMicroseconds(systemTime) };
++}
++
++Seconds CPUTime::forCurrentThread()
++{
++    mach_msg_type_number_t infoCount = THREAD_BASIC_INFO_COUNT;
++    thread_basic_info_data_t info;
++
++    mach_port_t threadPort = mach_thread_self();
++    thread_info(threadPort, THREAD_BASIC_INFO, reinterpret_cast<thread_info_t>(&info), &infoCount);
++    mach_port_deallocate(mach_task_self(), threadPort);
++
++    return Seconds(info.user_time.seconds + info.system_time.seconds) + Seconds::fromMicroseconds(info.user_time.microseconds + info.system_time.microseconds);
++}
++
++}
++#else //OS(DARWIN)
++
+ #include <sys/resource.h>
+ #include <sys/time.h>
+ #include <time.h>
+@@ -54,3 +114,4 @@ Seconds CPUTime::forCurrentThread()
+ }
+ 
+ }
++#endif //OS(DARWIN)
+\ No newline at end of file

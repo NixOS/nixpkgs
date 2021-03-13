@@ -1,0 +1,11 @@
+--- Source/WebKit/PlatformGTK.cmake.orig	2017-09-29 02:02:31.000000000 +0800
++++ Source/WebKit/PlatformGTK.cmake	2017-09-29 02:02:53.000000000 +0800
+@@ -1092,7 +1092,7 @@
+ 
+ add_library(webkit2gtkinjectedbundle MODULE "${WEBKIT_DIR}/WebProcess/InjectedBundle/API/glib/WebKitInjectedBundleMain.cpp")
+ ADD_WEBKIT_PREFIX_HEADER(webkit2gtkinjectedbundle)
+-target_link_libraries(webkit2gtkinjectedbundle WebKit)
++target_link_libraries(webkit2gtkinjectedbundle WebKit WebCore)
+ 
+ target_include_directories(webkit2gtkinjectedbundle PRIVATE
+     ${WebKit_INCLUDE_DIRECTORIES}

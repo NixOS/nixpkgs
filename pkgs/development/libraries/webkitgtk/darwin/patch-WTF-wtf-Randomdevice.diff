@@ -1,0 +1,87 @@
+diff --git Source/WTF/wtf/RandomDevice.cpp Source/WTF/wtf/RandomDevice.cpp
+index 89165f03..99251674 100644
+--- Source/WTF/wtf/RandomDevice.cpp
++++ Source/WTF/wtf/RandomDevice.cpp
+@@ -30,7 +30,7 @@
+ #include <stdint.h>
+ #include <stdlib.h>
+ 
+-#if !OS(DARWIN) && !OS(FUCHSIA) && OS(UNIX)
++#if (1)
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+@@ -41,7 +41,7 @@
+ #include <wincrypt.h> // windows.h must be included before wincrypt.h.
+ #endif
+ 
+-#if OS(DARWIN)
++#if (0)
+ #include <CommonCrypto/CommonCryptoError.h>
+ #include <CommonCrypto/CommonRandom.h>
+ #endif
+@@ -52,7 +52,7 @@
+ 
+ namespace WTF {
+ 
+-#if !OS(DARWIN) && !OS(FUCHSIA) && OS(UNIX)
++#if (1)
+ NEVER_INLINE NO_RETURN_DUE_TO_CRASH static void crashUnableToOpenURandom()
+ {
+     CRASH();
+@@ -64,7 +64,7 @@ NEVER_INLINE NO_RETURN_DUE_TO_CRASH static void crashUnableToReadFromURandom()
+ }
+ #endif
+ 
+-#if !OS(DARWIN) && !OS(FUCHSIA) && !OS(WINDOWS)
++#if (1)
+ RandomDevice::RandomDevice()
+ {
+     int ret = 0;
+@@ -77,7 +77,7 @@ RandomDevice::RandomDevice()
+ }
+ #endif
+ 
+-#if !OS(DARWIN) && !OS(FUCHSIA) && !OS(WINDOWS)
++#if (1)
+ RandomDevice::~RandomDevice()
+ {
+     close(m_fd);
+@@ -88,11 +88,11 @@ RandomDevice::~RandomDevice()
+ // https://bugs.webkit.org/show_bug.cgi?id=170190
+ void RandomDevice::cryptographicallyRandomValues(unsigned char* buffer, size_t length)
+ {
+-#if OS(DARWIN)
++#if (0)
+     RELEASE_ASSERT(!CCRandomGenerateBytes(buffer, length));
+ #elif OS(FUCHSIA)
+     zx_cprng_draw(buffer, length);
+-#elif OS(UNIX)
++#elif (1)
+     ssize_t amountRead = 0;
+     while (static_cast<size_t>(amountRead) < length) {
+         ssize_t currentRead = read(m_fd, buffer + amountRead, length - amountRead);
+diff --git Source/WTF/wtf/RandomDevice.h Source/WTF/wtf/RandomDevice.h
+index 411bde3e..9c9c6da8 100644
+--- Source/WTF/wtf/RandomDevice.h
++++ Source/WTF/wtf/RandomDevice.h
+@@ -35,7 +35,7 @@ class RandomDevice {
+     WTF_MAKE_NONCOPYABLE(RandomDevice);
+     WTF_MAKE_FAST_ALLOCATED;
+ public:
+-#if OS(DARWIN) || OS(FUCHSIA) || OS(WINDOWS)
++#if (0)
+     RandomDevice() = default;
+ #else
+     RandomDevice();
+@@ -48,8 +48,8 @@ public:
+     void cryptographicallyRandomValues(unsigned char* buffer, size_t length);
+ 
+ private:
+-#if OS(DARWIN) || OS(FUCHSIA) || OS(WINDOWS)
+-#elif OS(UNIX)
++#if (0)
++#elif (1)
+     int m_fd { -1 };
+ #else
+ #error "This configuration doesn't have a strong source of randomness."

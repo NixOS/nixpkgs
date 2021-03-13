@@ -1,0 +1,13 @@
+diff --git Source/WTF/wtf/spi/darwin/ProcessMemoryFootprint.h Source/WTF/wtf/spi/darwin/ProcessMemoryFootprint.h
+index 90852df6..525ace42 100644
+--- Source/WTF/wtf/spi/darwin/ProcessMemoryFootprint.h
++++ Source/WTF/wtf/spi/darwin/ProcessMemoryFootprint.h
+@@ -27,7 +27,7 @@
+ 
+ #if OS(DARWIN)
+ 
+-#if !PLATFORM(IOS_FAMILY_SIMULATOR) && __has_include(<libproc.h>)
++#if !PLATFORM(IOS_FAMILY_SIMULATOR) && __has_include(<libproc.h>) && (__MAC_OS_X_VERSION_MIN_REQUIRED >= 1090)
+ #    include <libproc.h>
+ #    if RUSAGE_INFO_CURRENT >= 4
+ #        define HAS_MAX_FOOTPRINT

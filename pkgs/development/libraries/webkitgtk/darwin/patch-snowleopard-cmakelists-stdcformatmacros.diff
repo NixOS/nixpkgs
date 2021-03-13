@@ -1,0 +1,12 @@
+--- CMakeLists.txt.orig	2017-08-14 17:41:03.000000000 -0700
++++ CMakeLists.txt	2017-08-14 17:43:39.000000000 -0700
+@@ -18,6 +18,9 @@
+     set(ENABLE_TOOLS ON)
+ endif ()
+ 
++add_definitions(-D__STDC_FORMAT_MACROS)
++add_definitions(-DTARGET_OS_IOS=0)
++
+ # -----------------------------------------------------------------------------
+ # Determine which port will be built
+ # -----------------------------------------------------------------------------

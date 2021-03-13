@@ -1,0 +1,67 @@
+--- Source/WTF/wtf/RAMSize.cpp.orig	2019-10-14 22:59:02.000000000 -0700
++++ Source/WTF/wtf/RAMSize.cpp	2019-10-14 23:02:19.000000000 -0700
+@@ -29,6 +29,15 @@
+ #include <mutex>
+ #include <wtf/StdLibExtras.h>
+ 
++#if OS(DARWIN)
++#import <dispatch/dispatch.h>
++#import <mach/host_info.h>
++#import <mach/mach.h>
++#import <mach/mach_error.h>
++#import <math.h>
++static const size_t ramSizeGuess = 512 * MB;
++#else
++
+ #if OS(WINDOWS)
+ #include <windows.h>
+ #elif defined(USE_SYSTEM_MALLOC) && USE_SYSTEM_MALLOC
+@@ -39,6 +47,8 @@
+ #include <bmalloc/bmalloc.h>
+ #endif
+ 
++#endif //OS(DARWIN)
++
+ namespace WTF {
+ 
+ #if OS(WINDOWS)
+@@ -47,6 +57,29 @@
+ 
+ static size_t computeRAMSize()
+ {
++#if OS(DARWIN)
++    host_basic_info_data_t hostInfo;
++
++    mach_port_t host = mach_host_self();
++    mach_msg_type_number_t count = HOST_BASIC_INFO_COUNT;
++    kern_return_t r = host_info(host, HOST_BASIC_INFO, (host_info_t)&hostInfo, &count);
++    mach_port_deallocate(mach_task_self(), host);
++    if (r != KERN_SUCCESS) {
++        LOG_ERROR("%s : host_info(%d) : %s.\n", __FUNCTION__, r, mach_error_string(r));
++        return ramSizeGuess;
++    }
++
++    if (hostInfo.max_mem > std::numeric_limits<size_t>::max())
++        return std::numeric_limits<size_t>::max();
++
++    size_t sizeAccordingToKernel = static_cast<size_t>(hostInfo.max_mem);
++    size_t multiple = 128 * MB;
++
++    // Round up the memory size to a multiple of 128MB because max_mem may not be exactly 512MB
++    // (for example) and we have code that depends on those boundaries.
++    return ((sizeAccordingToKernel + multiple - 1) / multiple) * multiple;
++#else
++
+ #if OS(WINDOWS)
+     MEMORYSTATUSEX status;
+     status.dwLength = sizeof(status);
+@@ -65,6 +98,9 @@
+ #else
+     return bmalloc::api::availableMemory();
+ #endif
++
++#endif //OS(DARWIN)
++
+ }
+ 
+ size_t ramSize()

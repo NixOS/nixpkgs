@@ -1,0 +1,13 @@
+--- Source/JavaScriptCore/jit/ExecutableAllocator.cpp.orig	2019-11-30 14:05:23.000000000 -0800
++++ Source/JavaScriptCore/jit/ExecutableAllocator.cpp	2019-11-30 14:07:28.000000000 -0800
+@@ -43,6 +43,10 @@
+ #include <sys/mman.h>
+ #endif
+ 
++#if OS(DARWIN) && (__MAC_OS_X_VERSION_MAX_ALLOWED <= 1070)
++#include <sys/fcntl.h>
++#endif
++
+ #if PLATFORM(IOS_FAMILY)
+ #include <wtf/cocoa/Entitlements.h>
+ #endif

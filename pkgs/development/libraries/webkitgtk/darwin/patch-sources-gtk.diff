@@ -1,0 +1,13 @@
+--- Source/WebKit/PlatformGTK.cmake.orig	2019-11-08 10:28:00.000000000 +0100
++++ Source/WebKit/PlatformGTK.cmake	2020-07-21 15:22:28.000000000 +0200
+@@ -32,6 +32,10 @@
+     "SourcesGTK.txt"
+ )
+ 
++find_library(APPKIT_FRAMEWORK NAMES AppKit)
++target_link_libraries(WebKit PRIVATE ${APPKIT_FRAMEWORK})
++list(APPEND WebKit_SOURCES WebProcess/gtk/NSApplicationActivationPolicy.mm)
++
+ list(APPEND WebKit_MESSAGES_IN_FILES
+     UIProcess/ViewGestureController.messages.in
+ 

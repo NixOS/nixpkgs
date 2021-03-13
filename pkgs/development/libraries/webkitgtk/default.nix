@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , perl
+, fetchpatch
 , python3
 , ruby
 , bison
@@ -63,20 +64,45 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
     sha256 = "07vzbbnvz69rn9pciji4axfpclp98bpj4a0br2z0gbn5wc4an3bx";
   };
 
-  patches = optionals stdenv.isLinux [
+  patches = optionals stdenv.hostPlatform.isLinux [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
     })
     ./libglvnd-headers.patch
-  ];
+    ./darwin/patch-WTF-wtf-Randomdevice.diff
+    ./darwin/patch-WTF-wtf-spi-darwin-ProcessMemoryFootprint-h.diff
+    ./darwin/patch-Webcore-page-crypto.diff
+    ./darwin/patch-bundle-link-webcore.diff
+    ./darwin/patch-enable-plugin-architecture-unix.diff
+    ./darwin/patch-ramsize.diff
+    ./darwin/patch-snowleopard-cmakelists-stdcformatmacros.diff
+    ./darwin/patch-source-wtf-wtf-osallocatorposix-cpp-map-jit.diff
+    ./darwin/patch-source-wtf-wtf-unix-cputimeunix-cpp-darwin-version-restore.diff
+    ./darwin/patch-sources-gtk.diff
+    ./darwin/patch-web-process-main.diff
+    ./darwin/patch-webcore-platform-audio-directconvolver-disable-veclib.diff
+    ./darwin/patch-webkit2gtk-272-macports.diff
+    ./darwin/patch-webkit2gtk-macports.diff
+    ./darwin/patch-webkit2gtk-source-javascriptcore-jit-executableallocator-missingfcntl-h-older-systems.diff
+    ./darwin/process-executable-path.diff
+  # ];
+  ] ++ optional stdenv.hostPlatform.isDarwin [
+     (fetchpatch {
+       name = "use_apple_icu_as_fallback.patch";
+       url = "https://bug-220081-attachments.webkit.org/attachment.cgi?id=416707&action=diff&format=raw";
+       excludes = [ "ChangeLog" "Source/WTF/ChangeLog" ];
+       sha256 = "000was24gskf3m1i23rx6k98vn77n4d49qr54rdf2nb1b1fjmf42";
+     })
+   ]
+  ;
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ignore gettext in cmake_prefix_path so that find_program doesn't
@@ -134,10 +160,12 @@ stdenv.mkDerivation rec {
     libXdmcp
     libXt
     libXtst
-  ]) ++ optionals stdenv.isDarwin [
+  ]) ++ optionals stdenv.hostPlatform.isDarwin [
     libedit
     readline
   ] ++ optionals stdenv.isLinux [
+    libwpe
+    libwpe-fdo
     bubblewrap
     libseccomp
     systemd
@@ -156,6 +184,7 @@ stdenv.mkDerivation rec {
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
   ] ++ optionals stdenv.isDarwin [
+    "-DENABLE_GRAPHICS_CONTEXT_GL=OFF"
     "-DENABLE_GRAPHICS_CONTEXT_3D=OFF"
     "-DENABLE_GTKDOC=OFF"
     "-DENABLE_MINIBROWSER=OFF"
@@ -167,11 +196,16 @@ stdenv.mkDerivation rec {
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_ACCELERATE=0"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+    "-DUSE_SYSTEMD=OFF"
+    "-DUSE_APPLE_ICU=OFF"
+    "-DENABLE_WEB_CRYPTO=OFF"
+  ] ++ optional (stdenv.hostPlatform.isLinux && enableGLES) "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .
-  '';
+  '' + '' 
+     sed -i '1i#include<malloc/malloc.h>' Source/WTF/wtf/FastMalloc.cpp
+   '';
 
   meta = {
     description = "Web content rendering engine, GTK port";

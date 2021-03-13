@@ -1,0 +1,22 @@
+diff --git Source/WebCore/page/Crypto.cpp Source/WebCore/page/Crypto.cpp
+index 69c36e97..07969aad 100644
+--- Source/WebCore/page/Crypto.cpp
++++ Source/WebCore/page/Crypto.cpp
+@@ -36,7 +36,7 @@
+ #include <JavaScriptCore/ArrayBufferView.h>
+ #include <wtf/CryptographicallyRandomNumber.h>
+ 
+-#if OS(DARWIN)
++#if OS(DARWIN) && (__MAC_OS_X_VERSION_MIN_REQUIRED > 1090)
+ #include <CommonCrypto/CommonCryptor.h>
+ #include <CommonCrypto/CommonRandom.h>
+ #endif
+@@ -58,7 +58,7 @@ ExceptionOr<void> Crypto::getRandomValues(ArrayBufferView& array)
+         return Exception { TypeMismatchError };
+     if (array.byteLength() > 65536)
+         return Exception { QuotaExceededError };
+-#if OS(DARWIN)
++#if OS(DARWIN) && (__MAC_OS_X_VERSION_MIN_REQUIRED > 1090)
+     auto rc = CCRandomGenerateBytes(array.baseAddress(), array.byteLength());
+     RELEASE_ASSERT(rc == kCCSuccess);
+ #else

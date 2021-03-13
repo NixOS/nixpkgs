@@ -1,0 +1,92 @@
+diff --git Source/WebKit/NetworkProcess/NetworkLoadParameters.h Source/WebKit/NetworkProcess/NetworkLoadParameters.h
+index de74d33a..fb021faa 100644
+--- Source/WebKit/NetworkProcess/NetworkLoadParameters.h
++++ Source/WebKit/NetworkProcess/NetworkLoadParameters.h
+@@ -35,6 +35,9 @@
+ #include <WebCore/SecurityOrigin.h>
+ #include <wtf/ProcessID.h>
+ 
++/* audit_token_t */
++#include <mach/message.h>
++
+ namespace WebKit {
+ 
+ enum class PreconnectOnly { No, Yes };
+diff --git Source/WebKit/Platform/IPC/ArgumentCoders.h Source/WebKit/Platform/IPC/ArgumentCoders.h
+index f1ea1ecb..12ceec79 100644
+--- Source/WebKit/Platform/IPC/ArgumentCoders.h
++++ Source/WebKit/Platform/IPC/ArgumentCoders.h
+@@ -34,6 +34,9 @@
+ #include <wtf/Unexpected.h>
+ #include <wtf/WallTime.h>
+ 
++/* audit_token_t */
++#include <mach/message.h>
++
+ namespace IPC {
+ 
+ // An argument coder works on POD types
+diff --git Source/WebKit/Shared/SandboxExtension.h Source/WebKit/Shared/SandboxExtension.h
+index 5839d3fc..6f110183 100644
+--- Source/WebKit/Shared/SandboxExtension.h
++++ Source/WebKit/Shared/SandboxExtension.h
+@@ -33,6 +33,9 @@
+ #include <wtf/Vector.h>
+ #include <wtf/text/WTFString.h>
+ 
++/* audit_token_t */
++#include <mach/message.h>
++
+ namespace IPC {
+ class Encoder;
+ class Decoder;
+diff --git Source/WebKit/UIProcess/API/glib/WebKitProtocolHandler.cpp Source/WebKit/UIProcess/API/glib/WebKitProtocolHandler.cpp
+index 57e8a557..45df4cf6 100644
+--- ./Source/WebKit/UIProcess/API/glib/WebKitProtocolHandler.cpp.orig	2019-11-22 04:57:54.000000000 -0800
++++ ./Source/WebKit/UIProcess/API/glib/WebKitProtocolHandler.cpp	2019-11-27 05:52:39.000000000 -0800
+@@ -273,7 +273,7 @@
+         "  <td><div class=\"titlename\">Type</div></td>"
+         "  <td>%s</td>"
+         " </tbody></tr>",
+-        PlatformDisplay::sharedDisplay().type() == PlatformDisplay::Type::Wayland ? "Wayland" : "X11");
++        "X11");
+ #endif
+ 
+     auto rect = IntRect(screenRect(nullptr));
+@@ -333,9 +333,10 @@
+         " </tbody></tr>",
+         webGLEnabled(request) ? "Yes" : "No");
+ 
++#if USE(GLX)
+     auto glContext = GLContext::createOffscreenContext();
+     glContext->makeContextCurrent();
+-
++#endif
+     g_string_append_printf(html,
+         " <tbody><tr>"
+         "  <td><div class=\"titlename\">API</div></td>"
+@@ -349,7 +350,7 @@
+         "  <td>%s</td>"
+         " </tbody></tr>",
+         nativeInterface());
+-
++#if USE(GLX)
+     g_string_append_printf(html,
+         " <tbody><tr>"
+         "  <td><div class=\"titlename\">GL_RENDERER</div></td>"
+@@ -377,7 +378,6 @@
+         "  <td>%s</td>"
+         " </tbody></tr>",
+         reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION)));
+-
+ #if USE(OPENGL_ES)
+     g_string_append_printf(html,
+         " <tbody><tr>"
+@@ -402,6 +402,7 @@
+         extensions->str);
+     g_string_free(extensions, TRUE);
+ #endif
++#endif
+ 
+     bool isGLX = false;
+ #if USE(GLX)

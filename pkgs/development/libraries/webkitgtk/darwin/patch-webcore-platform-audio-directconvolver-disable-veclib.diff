@@ -1,0 +1,11 @@
+--- Source/WebCore/platform/audio/DirectConvolver.cpp.orig	2019-10-24 21:10:45.000000000 -0700
++++ Source/WebCore/platform/audio/DirectConvolver.cpp	2019-10-24 21:11:19.000000000 -0700
+@@ -32,7 +32,7 @@
+ 
+ #include "DirectConvolver.h"
+ 
+-#if OS(DARWIN)
++#if OS(DARWIN) && 0
+ #include <Accelerate/Accelerate.h>
+ #endif
+ 
