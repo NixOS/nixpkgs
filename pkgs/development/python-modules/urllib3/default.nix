@@ -46,6 +46,10 @@ buildPythonPackage rec {
     trustme
   ];
 
+  disabledTests = [
+    "test_connection_closed_on_read_timeout_preload_false"
+  ];
+
   pythonImportsCheck = [ "urllib3" ];
 
   meta = with lib; {
