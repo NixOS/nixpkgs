@@ -10,16 +10,15 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deadd-notification-center";
-  version = "1.7.3";
+  version = "2021-03-10";
 
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
-    rev = version;
-    sha256 = "QaOLrtlhQyhMOirk6JO1yMGRrgycHmF9FAdKNbN2TRk=";
+    rev = "640ce0f";
+    sha256 = "12ldr8vppylr90849g3mpjphmnr4lp0vsdkj01a5f4bv4ksx35fm";
   };
 
-  dontUnpack = true;
 
   nativeBuildInputs = [
     autoPatchelfHook
