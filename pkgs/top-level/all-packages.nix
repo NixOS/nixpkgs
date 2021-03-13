@@ -26217,6 +26217,8 @@ in
     gtk = gtk2;
   };
 
+  xa = callPackage ../development/compilers/xa/xa.nix { };
+
   x11basic = callPackage ../development/compilers/x11basic {
     autoconf = buildPackages.autoconf269;
   };
