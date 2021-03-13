@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , docbook_xml_dtd_45
 , docbook-xsl-nons
@@ -92,6 +93,15 @@ stdenv.mkDerivation rec {
     # Don’t hardcode flatpak binary path in launchers stored under user’s profile otherwise they will break after Flatpak update.
     # https://github.com/NixOS/nixpkgs/issues/43581
     ./use-flatpak-from-path.patch
+
+    # Hardcode flatpak binary path for flatpak-spawn.
+    # When calling the portal’s Spawn command with FLATPAK_SPAWN_FLAGS_CLEAR_ENV flag,
+    # it will clear environment, including PATH, making the flatpak run fail.
+    # https://github.com/flatpak/flatpak/pull/4174
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/commit/495449daf6d3c072519a36c9e4bc6cc1da4d31db.patch";
+      sha256 = "gOX/sGupAE7Yg3MVrMhFXzWHpFn+izVyjtkuPzIckuY=";
+    })
 
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
