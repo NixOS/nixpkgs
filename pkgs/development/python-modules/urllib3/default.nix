@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , brotli
 , buildPythonPackage
 , certifi
@@ -45,6 +46,14 @@ buildPythonPackage rec {
     tornado
     trustme
   ];
+
+  disabledTests = if stdenv.hostPlatform.isAarch64 then
+    [
+      "test_connection_closed_on_read_timeout_preload_false"
+      "test_ssl_failed_fingerprint_verification"
+      ]
+  else
+    null;
 
   pythonImportsCheck = [ "urllib3" ];
 
