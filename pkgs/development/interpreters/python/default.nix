@@ -118,7 +118,7 @@ with pkgs;
   };
 
   sources = {
-    "python38" = {
+    python38 = {
       sourceVersion = {
         major = "3";
         minor = "8";
@@ -126,6 +126,15 @@ with pkgs;
         suffix = "";
       };
       sha256 = "1n8rjb3jn0j8dvi1qn94rxayc9rh982d8wgkrjy41n1x15k4mwka";
+    };
+    python39 = {
+      sourceVersion = {
+        major = "3";
+        minor = "9";
+        patch = "5";
+        suffix = "";
+      };
+      sha256 = "10vdf46q5ldnzkprm8pldvr5a9hrdpxjv7mpzgdw6vj3cl318nhc";
     };
   };
 
@@ -176,18 +185,11 @@ in {
     inherit passthruFun;
   } // sources.python38);
 
-  python39 = callPackage ./cpython {
+  python39 = callPackage ./cpython ({
     self = python39;
-    sourceVersion = {
-      major = "3";
-      minor = "9";
-      patch = "5";
-      suffix = "";
-    };
-    sha256 = "10vdf46q5ldnzkprm8pldvr5a9hrdpxjv7mpzgdw6vj3cl318nhc";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python39);
 
   python310 = callPackage ./cpython {
     self = python310;
@@ -224,7 +226,7 @@ in {
     includeSiteCustomize = false;
     enableOptimizations = false;
     mimetypesSupport = false;
-  } // sources.python38)).overrideAttrs(old: {
+  } // sources.python39)).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {
       maintainers = [];
