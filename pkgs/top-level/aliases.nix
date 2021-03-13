@@ -302,6 +302,9 @@ mapAliases ({
   json_glib = json-glib; # added 2018-02-25
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
+  kodiGBM = kodi-gbm;
+  kodiPlain = kodi;
+  kodiPlainWayland = kodi-wayland;
   julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
   kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
@@ -780,7 +783,8 @@ mapAliases ({
   xara = throw "xara has been removed from nixpkgs. Unmaintained since 2006"; # added 2020-06-24
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
-  xbmcPlugins = kodiPlugins; # added 2018-04-25
+  xbmcPlugins = kodiPackages; # added 2018-04-25
+  kodiPlugins = kodiPackages; # added 2021-03-09;
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xmpppy = throw "xmpppy has been removed from nixpkgs as it is unmaintained and python2-only";
   pyIRCt = throw "pyIRCt has been removed from nixpkgs as it is unmaintained and python2-only";

@@ -57,6 +57,13 @@
      for the motivation).
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://kodi.tv/">Kodi</link> has been updated to version 19.0 "Matrix". See
+     the <link xlink:href="https://kodi.tv/article/kodi-190-matrix-release">announcement</link> for
+     further details.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -575,6 +582,37 @@ self: super:
       have been removed. You should set your own according to the
       <link xlink:href="https://kafka.apache.org/documentation/#java">upstream documentation</link>
       for your Kafka version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <package>kodi</package> package has been modified to allow concise addon management. Consider
+     the following configuration from previous releases of NixOS to install <package>kodi</package>,
+     including the <package>kodiPackages.inputstream-adaptive</package> and <package>kodiPackages.vfs-sftp</package>
+     addons:
+
+     <programlisting>
+environment.systemPackages = [
+  pkgs.kodi
+];
+
+nixpkgs.config.kodi = {
+  enableInputStreamAdaptive = true;
+  enableVFSSFTP = true;
+};
+     </programlisting>
+
+     All Kodi <literal>config</literal> flags have been removed, and as a result the above configuration
+     should now be written as:
+
+     <programlisting>
+environment.systemPackages = [
+  (pkgs.kodi.withPackages (p: with p; [
+    inputstream-adaptive
+    vfs-sftp
+  ]))
+];
+     </programlisting>
     </para>
    </listitem>
   </itemizedlist>
