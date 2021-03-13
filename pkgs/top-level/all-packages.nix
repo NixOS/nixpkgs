@@ -19601,7 +19601,8 @@ in
 
     rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
 
-    rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
+    rtw88 = callPackage ../os-specific/linux/rtw88 { };
+    rtlwifi_new = rtw88;
 
     openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
     openafs_1_9 = callPackage ../servers/openafs/1.9/module.nix { };
@@ -20183,7 +20184,7 @@ in
 
   rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
 
-  rtlwifi_new-firmware = callPackage ../os-specific/linux/firmware/rtlwifi_new-firmware { };
+  rtw88-firmware = callPackage ../os-specific/linux/firmware/rtw88-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
