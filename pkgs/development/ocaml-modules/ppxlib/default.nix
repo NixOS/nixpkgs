@@ -25,6 +25,10 @@ let param = {
     sha256 = "1ciy6va2gjrpjs02kha83pzh0x1gkmfsfsdgabbs1v14a8qgfibm";
     min_version = "4.07";
   };
+  "0.22.0" = {
+    sha256 = "0kf7lgcwygf6zlx7rwddqpqvasa6v7xiq0bqal8vxlib6lpg074q";
+    min_version = "4.07";
+  };
 }."${version}"; in
 
 if param ? max_version && lib.versionAtLeast ocaml.version param.max_version

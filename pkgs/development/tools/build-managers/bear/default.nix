@@ -60,5 +60,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.babariviere ];
+    # ld: symbol(s) not found for architecture x86_64
+    broken = stdenv.isDarwin;
   };
 }

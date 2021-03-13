@@ -1,22 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, mock }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "1.0.2";
+  version = "2.0.0";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2fcf06467553038e98fea9cfe36af2bf14063eb147a70958cfcaa8f5786acaf";
+    sha256 = "984b5dbe3a2a0483d7cb131609a17f4cbaa34dda306c419924858a88588fed7c";
   };
 
-  buildInputs = [ mock ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  # couple of failing tests
-  doCheck = false;
+  disabledTests = [
+    "test_parseUrl" # accesses network
+  ];
+
+  pythonImportsCheck = [ "cssutils" ];
 
   meta = with lib; {
-    description = "A Python package to parse and build CSS";
-    homepage = "http://cthedot.de/cssutils/";
+    description = "A CSS Cascading Style Sheets library for Python";
+    homepage = "https://github.com/jaraco/cssutils";
+    changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -482,6 +482,8 @@ in
 
   fetchFromSavannah = callPackage ../build-support/fetchsavannah {};
 
+  fetchFromSourcehut = callPackage ../build-support/fetchsourcehut { };
+
   fetchFromGitLab = callPackage ../build-support/fetchgitlab {};
 
   fetchFromGitiles = callPackage ../build-support/fetchgitiles {};
@@ -508,6 +510,8 @@ in
   libredirect = callPackage ../build-support/libredirect { };
 
   madonctl = callPackage ../applications/misc/madonctl { };
+
+  maelstrom = callPackage ../games/maelstrom { };
 
   copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
 
@@ -750,6 +754,8 @@ in
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
+
+  tfk8s = callPackage ../tools/misc/tfk8s { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
 
@@ -2350,6 +2356,8 @@ in
   fselect = callPackage ../tools/misc/fselect { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
+
+  fst = callPackage ../tools/text/fst { };
 
   fsql = callPackage ../tools/misc/fsql { };
 
@@ -10822,7 +10830,7 @@ in
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_03;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_04;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
@@ -11865,9 +11873,10 @@ in
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_2_5;
+  apacheKafka = apacheKafka_2_6;
   apacheKafka_2_4 = callPackage ../servers/apache-kafka { majorVersion = "2.4"; };
   apacheKafka_2_5 = callPackage ../servers/apache-kafka { majorVersion = "2.5"; };
+  apacheKafka_2_6 = callPackage ../servers/apache-kafka { majorVersion = "2.6"; };
 
   kt = callPackage ../tools/misc/kt {};
 
@@ -13476,6 +13485,8 @@ in
   cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
+
+  hci = callPackage ../development/tools/continuous-integration/hci { };
 
   niv = lib.getBin (haskell.lib.justStaticExecutables haskellPackages.niv);
 
@@ -18578,6 +18589,7 @@ in
   };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
+  prometheus-artifactory-exporter = callPackage ../servers/monitoring/prometheus/artifactory-exporter.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-bird-exporter = callPackage ../servers/monitoring/prometheus/bird-exporter.nix { };
@@ -18593,6 +18605,7 @@ in
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
   prometheus-keylight-exporter = callPackage ../servers/monitoring/prometheus/keylight-exporter.nix { };
+  prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
   prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
   prometheus-mail-exporter = callPackage ../servers/monitoring/prometheus/mail-exporter.nix { };
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
@@ -18615,6 +18628,7 @@ in
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
+  prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
   prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
@@ -22860,6 +22874,10 @@ in
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
   google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
+
+  google-play-music-desktop-player = callPackage ../applications/audio/google-play-music-desktop-player {
+    inherit (gnome2) GConf;
+  };
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
@@ -29135,8 +29153,6 @@ in
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
-
-  lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 

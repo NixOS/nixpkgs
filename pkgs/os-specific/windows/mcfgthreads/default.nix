@@ -18,6 +18,10 @@ stdenv.mkDerivation {
     rm -r "$sourceRoot/debug" "$sourceRoot/release"
   '';
 
+  postPatch = ''
+    substituteInPlace Makefile.am --replace '-Werror' ""
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
   ];

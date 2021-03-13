@@ -2,32 +2,44 @@
 , gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
 , readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGL, libGLU, xorg, fltk
+, enableMicroPy ? false, python3
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
-  version = "1.5.0-87"; # TODO try to remove preCheck phase on upgrade
+  version = "1.6.0-47"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "1d0h1yb7qvh9x7wwv9yrzmcp712f49w1iljkxp4y6g9pzsmg1mmv";
+    sha256 = "sha256-c5A9/I6L/o3Y3dxEPoTKpw/fJqYMr6euLldaQ1HWT5c=";
   };
 
-  patches = lib.optionals (!enableGUI) [
-    # when enableGui is false, giac is compiled without fltk. That means some
-    # outputs differ in the make check. Patch around this:
+  patches = [
     (fetchpatch {
-      url    = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/nofltk-check.patch?id=7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26";
+      name = "pari_2_11.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/pari_2_11.patch?id=21ba7540d385a9864b44850d6987893dfa16bfc0";
+      sha256 = "sha256-vEo/5MNzMdYRPWgLFPsDcMT1W80Qzj4EPBjx/B8j68k=";
+    })
+  ] ++ lib.optionals (!enableGUI) [
+    # when enableGui is false, giac is compiled without fltk. That
+    # means some outputs differ in the make check. Patch around this:
+    (fetchpatch {
+      name = "nofltk-check.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/nofltk-check.patch?id=7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26";
       sha256 = "0xkmfc028vg5w6va04gp2x2iv31n8v4shd6vbyvk4blzgfmpj2cw";
     })
   ];
 
   postPatch = ''
-    for i in doc/*/Makefile*; do
+    for i in doc/*/Makefile* micropython*/xcas/Makefile*; do
       substituteInPlace "$i" --replace "/bin/cp" "cp";
     done;
+  '' +
+  # workaround for 1.6.0-47, should not be necessary in future versions
+  lib.optionalString (!enableMicroPy) ''
+    sed -i -e 's/micropython-[0-9.]* //' Makefile*
   '';
 
   nativeBuildInputs = [
@@ -44,7 +56,7 @@ stdenv.mkDerivation rec {
     lapack blas
   ] ++ lib.optionals enableGUI [
     libGL libGLU fltk xorg.libX11
-  ];
+  ] ++ lib.optional enableMicroPy python3;
 
   /* fixes:
   configure:16211: checking for main in -lntl
@@ -58,13 +70,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ] ++ lib.optional (!enableGUI) "doc";
 
   doCheck = true;
-  preCheck = ''
-    # One test in this file fails. That test just tests a part of the pari
-    # interface that isn't actually used in giac. Of course it would be better
-    # to only remove that one test, but that would require a patch.
-    # Removing the whole test set should be good enough for now.
-    # Upstream report: https://xcas.univ-grenoble-alpes.fr/forum/viewtopic.php?f=4&t=2102#p10326
-    echo > check/chk_fhan11
+  preCheck = lib.optionalString (!enableGUI) ''
+    # even with the nofltk patch, some changes in src/misc.cc (grep
+    # for HAVE_LIBFLTK) made it so that giac behaves differently
+    # when fltk is disabled. disable these tests for now.
+    echo > check/chk_fhan2
+    echo > check/chk_fhan9
   '';
 
   enableParallelBuilding = true;
@@ -75,7 +86,7 @@ stdenv.mkDerivation rec {
     "--enable-ao" "--enable-ecm" "--enable-glpk"
   ] ++ lib.optionals enableGUI [
     "--enable-gui" "--with-x"
-  ];
+  ] ++ lib.optional (!enableMicroPy) "--disable-micropy";
 
   postInstall = ''
     # example Makefiles contain the full path to some commands

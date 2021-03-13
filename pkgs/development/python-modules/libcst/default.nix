@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , hypothesis
-, doCheck ? true
 , dataclasses
 , hypothesmith
 , pytestCheckHook
@@ -29,12 +28,13 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ hypothesis typing-inspect pyyaml ]
+  propagatedBuildInputs = [ hypothesis typing-extensions typing-inspect pyyaml ]
     ++ lib.optional (pythonOlder "3.7") dataclasses;
 
   checkInputs = [ black hypothesmith isort pytestCheckHook ];
 
-  inherit doCheck;
+  # can't run tests due to circular dependency on hypothesmith -> licst
+  doCheck = false;
 
   preCheck = ''
     python -m libcst.codegen.generate visitors
@@ -44,8 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "libcst" ];
 
   meta = with lib; {
-    description =
-      "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
+    description = "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
     homepage = "https://github.com/Instagram/libcst";
     license = with licenses; [ mit asl20 psfl ];
     maintainers = with maintainers; [ ruuda SuperSandro2000 ];

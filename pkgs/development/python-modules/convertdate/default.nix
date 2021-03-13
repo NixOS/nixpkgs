@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchFromGitHub
 , pymeeus
 , pytz
@@ -9,6 +10,8 @@
 buildPythonPackage rec {
   pname = "convertdate";
   version = "2.3.0";
+
+  disabled = isPy27;
 
   # Tests are not available in the PyPI tarball so use GitHub instead.
   src = fetchFromGitHub {

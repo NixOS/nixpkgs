@@ -29,7 +29,7 @@
    <listitem>
     <para>
      <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 was
-     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finnally</link>
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finally</link>
      packaged, along with a rewrite to the Nix expressions, allowing users to
      override the features upstream supports selecting to compile or not to.
      Additionally, the attribute <code>gnuradio</code> and <code>gnuradio3_7</code>
@@ -565,6 +565,21 @@ self: super:
    <listitem>
     <para>
      The <literal>kindlegen</literal> package is gone, because it is no longer supported or hosted by Amazon. Sadly, its replacement, Kindle Previewer, has no Linux support. However, there are other ways to generate MOBI files. See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/96439">the discussion</link> for more info.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <package>apacheKafka</package> packages are now built with
+      version-matched JREs. Versions 2.6 and above, the ones that recommend it,
+      use jdk11, while versions below remain on jdk8. The NixOS service has
+      been adjusted to start the service using the same version as the package,
+      adjustable with the new
+      <link linkend="opt-services.apache-kafka.jre">services.apache-kafka.jre</link>
+      option. Furthermore, the default list of
+      <link linkend="opt-services.apache-kafka.jvmOptions">services.apache-kafka.jvmOptions</link>
+      have been removed. You should set your own according to the
+      <link xlink:href="https://kafka.apache.org/documentation/#java">upstream documentation</link>
+      for your Kafka version.
     </para>
    </listitem>
   </itemizedlist>

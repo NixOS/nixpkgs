@@ -93,4 +93,7 @@ self: super: {
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
 
+  # The test suite seems pretty broken.
+  base64-bytestring = dontCheck super.base64-bytestring;
+
 }

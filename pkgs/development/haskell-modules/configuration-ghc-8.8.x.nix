@@ -52,9 +52,15 @@ self: super: {
   haddock = self.haddock_2_23_1;
   haddock-api = self.haddock-api_2_23_1;
 
-  # These builds need Cabal 3.2.x.
+  # These builds need newer versions of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+  cabal-install = super.cabal-install.override {
+    Cabal = super.Cabal_3_4_0_0;
+    hackage-security = super.hackage-security.override { Cabal = super.Cabal_3_4_0_0; };
+    # Using dontCheck to break test dependency cycles
+    edit-distance = dontCheck (super.edit-distance.override { random = super.random_1_2_0; });
+    random = super.random_1_2_0;
+  };
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
