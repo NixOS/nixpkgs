@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration libiconv ];
+
   checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
 
   postInstall = ''
@@ -27,6 +29,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A daemon for managing long running shell commands";
     homepage = "https://github.com/Nukesor/pueue";
+    changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };
