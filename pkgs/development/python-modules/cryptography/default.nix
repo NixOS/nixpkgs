@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
+  ] ++ [
     rustPlatform.cargoSetupHook
     setuptools-rust
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
