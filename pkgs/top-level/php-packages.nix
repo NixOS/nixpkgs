@@ -138,6 +138,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
+    swoole = callPackage ../development/php-packages/swoole { };
+
     v8 = buildPecl {
       version = "0.2.2";
       pname = "v8";
