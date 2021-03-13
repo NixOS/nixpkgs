@@ -41,18 +41,18 @@ stdenv.mkDerivation rec {
   pname = "uhd";
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "4.0.0.0";
+  version = "3.15.0.0";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
     rev = "v${version}";
-    sha256 = "NCyiI4pIPw0nBRFdUGpgZ/x2mWz+Qm78ZGACUnSbGSs=";
+    sha256 = "0jknln88a69fh244670nb7qrflbyv0vvdxfddb5g8ncpb6hcg8qf";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz";
-    sha256 = "Xfx0bsHUQ5+Dp+xk0sVWWP83oyXQcUH5AX4PNEE7fY4=";
+    sha256 = "1fir1a13ac07mqhm4sr34cixiqj2difxq0870qv1wr7a7cbfw6vp";
   };
 
   cmakeFlags = [

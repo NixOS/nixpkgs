@@ -240,16 +240,24 @@ mapAliases ({
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gnunet_git = throw "gnunet_git was removed due to gnunet becoming stable"; # added 2019-05-27
-  gnuradio-nacl = gr-nacl; # added 2019-05-27
-  gnuradio-gsm = gr-gsm; # added 2019-05-27
-  gnuradio-ais = gr-ais; # added 2019-05-27
-  gnuradio-limesdr = gr-limesdr; # added 2019-05-27
-  gnuradio-rds = gr-rds; # added 2019-05-27
-  gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
-  # added 20-10-2020
+  # Added 2020-10-16
   gnuradio-with-packages = gnuradio3_7.override {
-    extraPackages = [ gr-nacl gr-gsm gr-ais gr-limesdr gr-rds gr-osmosdr ];
+    extraPackages = lib.attrVals [
+      "osmosdr" "ais" "gsm" "nacl" "rds" "limesdr"
+    ] gnuradio3_7Packages;
   };
+  gnuradio-nacl = gnuradio3_7.pkgs.nacl; # added 2019-05-27, changed 2020-10-16
+  gnuradio-gsm = gnuradio3_7.pkgs.gsm; # added 2019-05-27, changed 2020-10-16
+  gnuradio-ais = gnuradio3_7.pkgs.ais; # added 2019-05-27, changed 2020-10-16
+  gnuradio-limesdr = gnuradio3_7.pkgs.limesdr; # added 2019-05-27, changed 2020-10-16
+  gnuradio-rds = gnuradio3_7.pkgs.rds; # added 2019-05-27, changed 2020-10-16
+  gnuradio-osmosdr = gnuradio3_7.pkgs.osmosdr; # added 2019-05-27, changed 2020-10-16
+  gr-nacl = gnuradio3_7.pkgs.nacl; # added 2019-05-27, changed 2020-10-16
+  gr-gsm = gnuradio3_7.pkgs.gsm; # added 2019-05-27, changed 2020-10-16
+  gr-ais = gnuradio3_7.pkgs.ais; # added 2019-05-27, changed 2020-10-16
+  gr-limesdr = gnuradio3_7.pkgs.limesdr; # added 2019-05-27, changed 2020-10-16
+  gr-rds = gnuradio3_7.pkgs.rds; # added 2019-05-27, changed 2020-10-16
+  gr-osmosdr = gnuradio3_7.pkgs.osmosdr; # added 2019-05-27, changed 2020-10-16
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
