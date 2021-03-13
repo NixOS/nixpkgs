@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -43,6 +44,12 @@ buildPythonPackage rec {
   doCheck = !isPy27;
   pytestFlagsArray = [ "--ignore python2" ];
   pythonImportsCheck = [ "httplib2" ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # flaky test on darwin
+    "test_timeout_subsequent"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A comprehensive HTTP client library";
