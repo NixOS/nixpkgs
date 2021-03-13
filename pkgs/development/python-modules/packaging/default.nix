@@ -5,7 +5,7 @@
 , six
 , pytestCheckHook
 , pretend
-, flit-core
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [ pyparsing six ];
