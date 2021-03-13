@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vector";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner  = "timberio";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "02qbn9w9286ran8vjry9090r9ym9bj9xxvyzavw7gk53sg56m8gl";
+    sha256 = "0sw05472znxmggckxjbrl3b8ky8nsw42xmrsb41p8z4q0aw115fd";
   };
 
-  cargoSha256 = "0zynyc7vkdf5pzz4svymsn3w8r834hc5gqxm1jk6myidvnyh2xsp";
+  cargoSha256 = "0mfhrdqry6qrzfx5px1zqgfv5iqa186vl2yh290ibinkxy0x5fa9";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl protobuf rdkafka ]
                 ++ lib.optional stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
