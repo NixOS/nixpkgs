@@ -129,6 +129,8 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
   '';
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,
     # as using a wrapper with LD_LIBRARY_PATH causes segmentation
