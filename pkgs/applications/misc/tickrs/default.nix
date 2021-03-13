@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "tarkah";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FbbxkAP1RQVYL91mlAw0PcEWUDxgCrCd9QjLPE+bqmo=";
+    sha256 = "sha256-8m4mIXTqc6rDMIjODbHJL7ipH5Y4WwgsWcSmw/SaiIo=";
   };
 
-  cargoSha256 = "sha256-94U84/UxHAf5yrCnqpxjwHi/ekFHbFBs9b7pBewKvjw=";
+  cargoSha256 = "sha256-ZcRFQT2CxqpO35UqK79g2Jq5SPOLZ88WiG36issC5kY=";
 
   nativeBuildInputs = [ perl ];
 
