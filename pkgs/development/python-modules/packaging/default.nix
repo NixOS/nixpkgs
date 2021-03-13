@@ -29,10 +29,6 @@ buildPythonPackage rec {
     pretend
   ];
 
-  checkPhase = ''
-    py.test tests
-  '';
-
   # Prevent circular dependency
   doCheck = false;
 
