@@ -233,6 +233,29 @@ let
       '';
     };
 
+    jitsi = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
+        services.jitsi-videobridge = {
+          enable = true;
+          apis = [ "colibri" "rest" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("jitsi-videobridge2.service")
+        wait_for_open_port(8080)
+        wait_for_unit("prometheus-jitsi-exporter.service")
+        wait_for_open_port(9700)
+        wait_until_succeeds(
+            'journalctl -eu prometheus-jitsi-exporter.service -o cat | grep -q "key=participants"'
+        )
+        succeed("curl -sSf 'localhost:9700/metrics' | grep -q 'jitsi_participants 0'")
+      '';
+    };
+
     json = {
       exporterConfig = {
         enable = true;

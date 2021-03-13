@@ -31,6 +31,7 @@ let
     "dovecot"
     "fritzbox"
     "json"
+    "jitsi"
     "keylight"
     "knot"
     "lnd"
@@ -130,7 +131,7 @@ let
           inherit name port;
         } // extraOpts);
       } ({ config, ... }: mkIf config.openFirewall {
-        firewallFilter = mkOptionDefault "-p tcp -m tcp --dport ${toString config.port}";
+        firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
       })];
       internal = true;
       default = {};
