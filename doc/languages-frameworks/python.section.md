@@ -7,8 +7,9 @@
 #### Overview
 
 Several versions of the Python interpreter are available on Nix, as well as a
-high amount of packages. The attribute `python` refers to the default
-interpreter, which is currently CPython 2.7. It is also possible to refer to
+high amount of packages. The attribute `python3` refers to the default
+interpreter, which is currently CPython 3.8. The attribute `python` refers to
+CPython 2.7 for backwards-compatibility. It is also possible to refer to
 specific versions, e.g. `python38` refers to CPython 3.8, and `pypy` refers to
 the default PyPy interpreter.
 
