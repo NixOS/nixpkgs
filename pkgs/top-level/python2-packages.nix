@@ -67,6 +67,8 @@ with self; with super; {
 
   imagecodecs-lite = disabled super.imagecodecs-lite;
 
+  importlib-metadata = callPackage ../development/python-modules/importlib-metadata/2.nix { };
+
   isort = callPackage ../development/python-modules/isort/4.nix { };
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client/5.nix { };
