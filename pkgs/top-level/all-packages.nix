@@ -22342,6 +22342,10 @@ in
   gnuradioMinimal = gnuradio.override {
     wrap = false;
     unwrapped = gnuradio.unwrapped.override {
+      volk = volk.override {
+        # So it will not reference python
+        enableModTool = false;
+      };
       features = {
         gnuradio-companion = false;
         python-support = false;
@@ -22368,6 +22372,9 @@ in
   gnuradio3_7Minimal = gnuradio3_7.override {
     wrap = false;
     unwrapped = gnuradio3_7.unwrapped.override {
+      volk = volk.override {
+        enableModTool = false;
+      };
       features = {
         gnuradio-companion = false;
         python-support = false;

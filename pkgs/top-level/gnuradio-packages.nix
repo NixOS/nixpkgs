@@ -16,9 +16,10 @@ let
 
   callPackage = self.newScope {
     inherit (gnuradio)
-      # Packages that are potentially overriden and commonly
+      # Packages that are potentially overriden and used as deps here.
       boost
       uhd
+      volk
     ;
     inherit mkDerivationWith mkDerivation;
   };

@@ -85,9 +85,6 @@ rec {
   ;
   postInstall = ""
     # Gcc references
-    + lib.optionalString (hasFeature "volk" features) ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)
-    ''
     + lib.optionalString (hasFeature "gnuradio-runtime" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime.so)
     ''

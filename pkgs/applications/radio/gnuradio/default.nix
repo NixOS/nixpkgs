@@ -214,6 +214,11 @@ let
     qt = qt5;
     gtk = gtk3;
   });
+  inherit (shared) hasFeature; # function
+in
+
+stdenv.mkDerivation rec {
+  inherit pname;
   inherit (shared)
     version
     src
@@ -229,7 +234,7 @@ let
   ;
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost;
+    inherit boost volk;
   } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
@@ -246,6 +251,9 @@ let
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
       "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
     ]
+    ++ lib.optionals (hasFeature "volk" features && volk != null) [
+      "-DENABLE_INTERNAL_VOLK=OFF"
+    ]
   ;
 
   postInstall = shared.postInstall
@@ -253,19 +261,6 @@ let
     # set that reference).
     + lib.optionalString (!hasFeature "python-support" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-    ''
-  ;
-  preConfigure = ""
-    # If python-support is disabled, don't install volk's (git submodule)
-    # volk_modtool - it references python.
-    #
-    # NOTE: on the next release, volk will always be required to be installed
-    # externally (submodule removed upstream). Hence this hook will fail and
-    # we'll need to package volk while able to tell it to install or not
-    # install python referencing files. When we'll be there, this will help:
-    # https://github.com/gnuradio/volk/pull/404
-    + lib.optionalString (!hasFeature "python-support" features) ''
-      sed -i -e "/python\/volk_modtool/d" volk/CMakeLists.txt
     ''
   ;
   patches = [
@@ -287,25 +282,4 @@ let
       sha256 = "1ajf4797f869lqv436xw61s29qdbn7f01i0970kfxv3yahd34p9v";
     })
   ];
-in
-
-stdenv.mkDerivation rec {
-  inherit
-    pname
-    version
-    src
-    nativeBuildInputs
-    buildInputs
-    cmakeFlags
-    preConfigure
-    # disallowedReferences
-    stripDebugList
-    patches
-    postInstall
-    passthru
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
 }
