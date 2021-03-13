@@ -6780,6 +6780,8 @@ in {
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
+  pythran = callPackage ../development/python-modules/pythran { };
+
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
   pytile = callPackage ../development/python-modules/pytile { };
