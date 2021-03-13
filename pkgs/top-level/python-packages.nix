@@ -3217,7 +3217,10 @@ in {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
-  importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
+  importlib-metadata = if pythonOlder "3.6" then
+    callPackage ../development/python-modules/importlib-metadata/2.nix { }
+  else
+    callPackage ../development/python-modules/importlib-metadata { };
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources { };
 
