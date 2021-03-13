@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchgit, ... }:
+{ lib, buildGoModule, fetchgit, nixosTests }:
 
 buildGoModule rec {
   pname = "jitsiexporter";
@@ -11,6 +11,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = null;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) jitsi; };
 
   meta = with lib; {
     description = "Export Jitsi Videobridge metrics to Prometheus";
