@@ -327,7 +327,13 @@ in with passthru; stdenv.mkDerivation {
 
   setupHook = python-setup-hook sitePackages;
 
-  postInstall = ''
+  postInstall = let
+    # References *not* to nuke from (sys)config files
+    keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
+    ] ++ optionals tzdataSupport [
+      tzdata
+    ]);
+  in ''
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/${libPrefix}/test/*; do
@@ -363,8 +369,8 @@ in with passthru; stdenv.mkDerivation {
     done
 
     # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
-    find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out ${optionalString tzdataSupport "-e ${tzdata}"} '{}' +
-    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out ${optionalString tzdataSupport "-e ${tzdata}"} '{}' +
+    find $out/lib/python*/config-* -type f -print -exec nuke-refs ${keep-references} '{}' +
+    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs ${keep-references} '{}' +
 
     # Make the sysconfigdata module accessible on PYTHONPATH
     # This allows build Python to import host Python's sysconfigdata
