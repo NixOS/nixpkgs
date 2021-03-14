@@ -182,8 +182,10 @@ checkout_ref(){
     fi
 
     if test -n "$ref"; then
-        # --depth option is ignored on http repository.
-        clean_git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
+        # --depth option fails on dumb http repositories.
+        clean_git fetch ${builder:+--progress} --depth 1 origin +"$ref" ||
+          clean_git fetch ${builder:+--progress} origin +"$ref" ||
+          return 1
         clean_git checkout -b "$branchName" FETCH_HEAD || return 1
     else
         return 1
