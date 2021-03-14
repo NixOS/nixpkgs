@@ -829,12 +829,14 @@ mapAliases ({
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   xv = xxv; # added 2020-02-22
+  yacc = bison; # moved from top-level 2021-03-14
   youtubeDL = youtube-dl;  # added 2014-10-26
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
   yubikey-neo-manager = throw "yubikey-neo-manager has been removed because it was broken. Use yubikey-manager-qt instead."; # added 2021-03-08
   yuzu = yuzu-mainline; # added 2021-01-25
   zimreader = throw "zimreader has been removed from nixpkgs as it has been replaced by kiwix-serve and stopped working with modern zimlib versions."; # added 2021-03-28
   zdfmediathk = mediathekview; # added 2019-01-19
+
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
   # spidermonkey is not ABI upwards-ompatible, so only allow this for nix-shell
   spidermonkey = spidermonkey_78; # added 2020-10-09

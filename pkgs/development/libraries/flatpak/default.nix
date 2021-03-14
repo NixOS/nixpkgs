@@ -13,7 +13,7 @@
 , xmlto
 , appstream-glib
 , substituteAll
-, yacc
+, bison
 , xdg-dbus-proxy
 , p11-kit
 , bubblewrap
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     pkg-config
     xmlto
     appstream-glib
-    yacc
+    bison
     wrapGAppsNoGuiHook
   ];
 

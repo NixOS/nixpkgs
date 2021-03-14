@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, xlibsWrapper, libpng, libjpeg, expat, libXaw
-, yacc, libtool, fontconfig, pango, gd, libwebp
+, bison, libtool, fontconfig, pango, gd, libwebp
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xlibsWrapper libpng libjpeg expat libXaw yacc
+    xlibsWrapper libpng libjpeg expat libXaw bison
     libtool fontconfig pango gd libwebp
   ];
 

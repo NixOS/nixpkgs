@@ -12256,7 +12256,6 @@ in
   });
 
   bison = callPackage ../development/tools/parsing/bison { };
-  yacc = bison; # TODO: move to aliases.nix
 
   # Ruby fails to build with current bison
   bison_3_5 = pkgs.bison.overrideAttrs (oldAttrs: rec {

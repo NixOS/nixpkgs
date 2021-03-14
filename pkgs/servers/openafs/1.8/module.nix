@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, which, autoconf, automake, flex, yacc
+{ lib, stdenv, fetchurl, which, autoconf, automake, flex, bison
 , kernel, glibc, perl, libtool_2, libkrb5, fetchpatch }:
 
 with (import ./srcs.nix {
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which yacc ]
+  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
     ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ libkrb5 ];
