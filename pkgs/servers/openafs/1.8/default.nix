@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
-, yacc , glibc, perl, kerberos, libxslt, docbook_xsl, file
+, yacc , glibc, perl, libkrb5, libxslt, docbook_xsl, file
 , docbook_xml_dtd_43, libtool_2
 , withDevdoc ? false, doxygen, dblatex # Extra developer documentation
 , ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ autoconf automake flex libxslt libtool_2 perl
     which yacc ] ++ optionals withDevdoc [ doxygen dblatex ];
 
-  buildInputs = [ kerberos ncurses ];
+  buildInputs = [ libkrb5 ncurses ];
 
   patches = [ ./bosserver.patch ./cross-build.patch ] ++ optional (tsmbac != null) ./tsmbac.patch;
 
