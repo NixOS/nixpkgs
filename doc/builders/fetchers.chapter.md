@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
 The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
 
-`fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and and performs normalization on them before computing the checksum. For example it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
+`fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
 
 
 Other fetcher functions allow you to add source code directly from a VCS such as subversion or git. These are mostly straightforward nambes based on the name of the command used with the VCS system. Because they give you a working repository, they act most like `fetchzip`.

@@ -335,7 +335,7 @@ Above, we were mostly just focused on use cases and what to do to get started
 creating working Python environments in nix.
 
 Now that you know the basics to be up and running, it is time to take a step
-back and take a deeper look at at how Python packages are packaged on Nix. Then,
+back and take a deeper look at how Python packages are packaged on Nix. Then,
 we will look at how you can use development mode with your code.
 
 #### Python library packages in Nixpkgs
@@ -936,7 +936,7 @@ because their behaviour is different:
 
 * `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables
   as well as the items listed in `setup_requires`.
-* `buildInputs ? []`: Build and/or run-time dependencies that need to be be
+* `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
 * `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These
