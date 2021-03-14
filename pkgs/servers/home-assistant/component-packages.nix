@@ -385,7 +385,7 @@
     "image_processing" = ps: with ps; [ aiohttp-cors ];
     "imap" = ps: with ps; [ aioimaplib ];
     "imap_email_content" = ps: with ps; [ ];
-    "incomfort" = ps: with ps; [ ]; # missing inputs: incomfort-client
+    "incomfort" = ps: with ps; [ incomfort-client ];
     "influxdb" = ps: with ps; [ influxdb-client influxdb ];
     "input_boolean" = ps: with ps; [ ];
     "input_datetime" = ps: with ps; [ ];
