@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "v${version}";
-    sha256 = "15298prs2f4wiyn8lf475qicp3y22lcjdcpwp2fmrya642vnr6w5";
+    sha256 = "sha256-wMYsgZXNP8kTt/x8c4e96BXrbjIZZ6RsH04BfD0zGwo=";
   };
 
   patches = [
