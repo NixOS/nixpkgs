@@ -5961,6 +5961,8 @@ in {
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
+  pynetdicom = callPackage ../development/python-modules/pynetdicom { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 { };

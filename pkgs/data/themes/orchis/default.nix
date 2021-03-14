@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "orchis";
-  version = "2021-01-22";
+  version = "2021-02-28";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "1m0wilvrscg2xnkp6a90j0iccxd8ywvfpza1345sc6xmml9gvjzc";
+    sha256 = "sha256-HmC2e34n1eThFGgw9OzSgp5VFJOylyozpXgk9SO84+I=";
   };
 
   nativeBuildInputs = [ gtk3 ];
