@@ -5583,11 +5583,13 @@ in
   kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
   wrapKakoune = kakoune: attrs: callPackage ../applications/editors/kakoune/wrapper.nix (attrs // { inherit kakoune; });
-  kakounePlugins = callPackage ../applications/editors/kakoune/plugins { };
+  kakounePlugins = recurseIntoAttrs (callPackage ../applications/editors/kakoune/plugins { });
+
   kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
   kakoune = wrapKakoune kakoune-unwrapped {
     plugins = [ ];  # override with the list of desired plugins
   };
+  kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
   kak-lsp = callPackage ../tools/misc/kak-lsp {
     inherit (darwin.apple_sdk.frameworks) Security;
