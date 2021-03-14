@@ -1,9 +1,12 @@
 { stdenv, openjdk, fetchurl, graknHome?"~/.grakn_home", fetchzip}:
-let graknDir = "grakn-core-all-linux-2.0.0-alpha-9";
+
+let graknDir = "grakn-core-all-linux-2.0.0-alpha-9"; # name of the grakn download directory
 in
 stdenv.mkDerivation rec {
     pname = "grakn";
-    version = "1.8.4";
+    version = "1.8.4";      # Grakn Version
+
+    # different archives for different machines
 
     linuxSrc = builtins.fetchTarball {
         url = "https://github.com/graknlabs/grakn/releases/download/2.0.0-alpha-9/grakn-core-all-linux-2.0.0-alpha-9.tar.gz";
@@ -20,34 +23,49 @@ stdenv.mkDerivation rec {
         sha256 = "1w51anjd1gwsjqawjkd6yx4m0z5vd1cryap2i30ysm5jca8afn5j";
     };
 
+
+    # picking the correct archive
+
     src = if stdenv.hostPlatform.isWindows
             then windowsSrc
             else if stdenv.isDarwin 
                 then macSrc
                 else linuxSrc ;
 
-    buildDepends = [ openjdk ];
+    buildDepends = [ openjdk ]; # grakn runs on java
+
     buildPhase = ''
         graknFile=./${graknDir}/grakn
+
+        # replace the paths of the grakn boot script with the nix paths
         sed -i "20s#^JAVA_BIN=java\$#JAVA_BIN=${openjdk}/bin/java#" $graknFile
         sed -i "85s#java#${openjdk}/bin/java#" $graknFile
         sed -i "54s#java#${openjdk}/bin/java#" $graknFile
         sed -i "79s#java#${openjdk}/bin/java#" $graknFile
         '';
     installPhase = ''
+        # copy the files to $out
         mkdir $out
         cp -r ./${graknDir} $out
+
+        # add a wrapper script to $out that will move grakn to $graknHome
+        # this is necessary because grakn needs a writable environment
         echo "
+# on the first start copy everything to graknHome
 if [ ! -f ${graknHome}/grakn ]; then 
     mkdir -p ${graknHome}; 
     cp -r $out/${graknDir}/* ${graknHome}; 
+    
+    # correct permissions so that grakn and the user can write there 
+    # (by default they are readonly because of the cp
     chmod -R u+rw ${graknHome}
     chmod u+x ${graknHome}/grakn
 fi; 
 ${graknHome}/grakn \$@; 
             " > $out/grakn
+        
+        # make grakn executable
         chmod +x $out/grakn
-        cd $out
         '';
 
     doCheck = true;
