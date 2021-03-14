@@ -4,7 +4,7 @@
 , cmake
 , gmp
 , glog
-, gmock
+, gtest
 , openssl
 , gflags
 , gnuradio3_8
@@ -42,7 +42,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
     armadillo
     gnuradio3_8.unwrapped.boost
     glog
-    gmock
+    gtest
     openssl
     gflags
     orc

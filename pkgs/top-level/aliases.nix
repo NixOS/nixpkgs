@@ -269,6 +269,7 @@ mapAliases ({
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
+  gmock = gtest; # moved from top-level 2021-03-14
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobby5 = gobby; # added 2021-02-01
