@@ -1,5 +1,5 @@
 { faust
-, jack2Full
+, jack2
 , qt4
 , libsndfile
 , alsaLib
@@ -16,7 +16,7 @@ faust.wrapWithBuildEnv {
   ];
 
   propagatedBuildInputs = [
-    jack2Full
+    jack2
     qt4
     libsndfile
     alsaLib

@@ -311,6 +311,7 @@ mapAliases ({
   inotifyTools = inotify-tools;
   inter-ui = inter; # added 2021-03-27
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
+  jack2Full = jack2; # moved from top-level 2021-03-14
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
   jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
   jbuilder = dune_1; # added 2018-09-09
