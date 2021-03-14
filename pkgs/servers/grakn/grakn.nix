@@ -1,14 +1,30 @@
-{ stdenv, openjdk, fetchurl, graknHome?"~/.grakn_home"}:
+{ stdenv, openjdk, fetchurl, graknHome?"~/.grakn_home", fetchzip}:
 let graknDir = "grakn-core-all-linux-2.0.0-alpha-9";
 in
 stdenv.mkDerivation rec {
     pname = "grakn";
     version = "1.8.4";
 
-    src = builtins.fetchTarball {
+    linuxSrc = builtins.fetchTarball {
         url = "https://github.com/graknlabs/grakn/releases/download/2.0.0-alpha-9/grakn-core-all-linux-2.0.0-alpha-9.tar.gz";
         sha256 = "04g5n6nhffs1gc8gzmrblz6sv74sgi9c9vk6b3dsh2133zm8h8mk";
     };
+
+    windowsSrc = fetchzip {
+        url = "https://github.com/graknlabs/grakn/releases/download/2.0.0-alpha-9/grakn-core-all-windows-2.0.0-alpha-9.zip";
+        sha256 = "05gzpxwyscj63lqcl2nydfzqq7911a0wai2gm6hzqjqdadl9r363";
+    };
+ 
+    macSrc = fetchzip {
+        url = "https://github.com/graknlabs/grakn/releases/download/2.0.0-alpha-9/grakn-core-all-mac-2.0.0-alpha-9.zip";
+        sha256 = "1w51anjd1gwsjqawjkd6yx4m0z5vd1cryap2i30ysm5jca8afn5j";
+    };
+
+    src = if stdenv.hostPlatform.isWindows
+            then windowsSrc
+            else if stdenv.isDarwin 
+                then macSrc
+                else linuxSrc ;
 
     buildDepends = [ openjdk ];
     buildPhase = ''
