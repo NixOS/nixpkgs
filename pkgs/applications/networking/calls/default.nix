@@ -3,7 +3,6 @@
 , fetchFromGitLab
 , meson
 , ninja
-, cmake
 , pkg-config
 , libhandy
 , modemmanager
@@ -15,6 +14,7 @@
 , evolution-data-server
 , folks
 , desktop-file-utils
+, appstream-glib
 , libpeas
 , dbus
 , vala
@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qmjdhnr95dawccw1ss8hc3lk0cypj86xg2amjq7avzn86ryd76l";
+    sha256 = "0igap5ynq269xqaky6fqhdg2dpsvxa008z953ywa4s5b5g5dk3dd";
   };
 
   nativeBuildInputs = [
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     desktop-file-utils
+    appstream-glib
     vala
-    cmake
     wrapGAppsHook
   ];
 
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
     NO_AT_BRIDGE=1 \
+    XDG_DATA_DIRS=${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test --print-errorlogs
