@@ -35,7 +35,7 @@
 , fuse
 , nixosTests
 , libsoup
-, lzma
+, xz
 , zstd
 , ostree
 , polkit
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     libcap
     libseccomp
     libsoup
-    lzma
+    xz
     zstd
     polkit
     python3

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
+, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
 , writeShellScript
 
 # for update.nix
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "geoip" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
+  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
     lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];

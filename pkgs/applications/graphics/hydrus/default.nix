@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, lzma
+, xz
 , qt5
 , wrapQtAppsHook
 , miniupnpc_2
@@ -39,7 +39,7 @@ pythonPackages.buildPythonPackage rec {
     service-identity
     twisted
     lz4
-    lzma
+    xz
     pysocks
     matplotlib
     qtpy
