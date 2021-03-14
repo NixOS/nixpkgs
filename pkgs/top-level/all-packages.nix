@@ -4140,6 +4140,8 @@ in
 
   expect = callPackage ../tools/misc/expect { };
 
+  expliot = python3Packages.callPackage ../tools/security/expliot { };
+
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
   Fabric = with python3Packages; toPythonApplication Fabric;
