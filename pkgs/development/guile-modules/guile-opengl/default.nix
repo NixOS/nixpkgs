@@ -18,6 +18,6 @@ in stdenv.mkDerivation {
     homepage = "https://www.gnu.org/software/guile-opengl/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
