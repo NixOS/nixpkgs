@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
-, ApplicationServices
+, ApplicationServices, x11Support ? true
 }:
 
 let
@@ -48,6 +48,7 @@ stdenv.mkDerivation {
       ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
+    ++ lib.optionals (!x11Support) ["--without-x"]
     ;
 
   nativeBuildInputs = [ pkg-config libtool ];
@@ -62,7 +63,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
+    ++ lib.optionals (x11Support && !stdenv.hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
     ;
 
