@@ -18,14 +18,14 @@
 
 buildPythonApplication rec {
   pname = "jrnl";
-  version = "2.7";
+  version = "2.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hyjjw9mxy73n3pkliaaif135h2sd4iy43pw9d5zynid5abnr3yz";
+    sha256 = "1m1shgnvwzzs0g6ph7rprwxd7w8zj0x4sbgiqsv9z41k6li7xj4r";
   };
 
   nativeBuildInputs = [ poetry ];
