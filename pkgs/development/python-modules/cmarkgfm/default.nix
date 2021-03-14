@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, cffi, pytest }:
+{ lib
+, buildPythonPackage
+, cffi
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
@@ -11,15 +16,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "cmarkgfm" ];
 
   meta = with lib; {
     description = "Minimal bindings to GitHub's fork of cmark";
     homepage = "https://github.com/jonparrott/cmarkgfm";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }
