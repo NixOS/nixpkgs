@@ -108,6 +108,19 @@ with pkgs;
           python = self;
         };
   };
+
+  sources = {
+    "python38" = {
+      sourceVersion = {
+        major = "3";
+        minor = "8";
+        patch = "8";
+        suffix = "";
+      };
+      sha256 = "fGZCSf935EPW6g5M8OWH6ukYyjxI0IHRkV/iofG8xcw=";
+    };
+  };
+
 in {
 
   python27 = callPackage ./cpython/2.7 {
@@ -149,18 +162,11 @@ in {
     inherit passthruFun;
   };
 
-  python38 = callPackage ./cpython {
+  python38 = callPackage ./cpython ({
     self = python38;
-    sourceVersion = {
-      major = "3";
-      minor = "8";
-      patch = "8";
-      suffix = "";
-    };
-    sha256 = "fGZCSf935EPW6g5M8OWH6ukYyjxI0IHRkV/iofG8xcw=";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python38);
 
   python39 = callPackage ./cpython {
     self = python39;
@@ -189,8 +195,9 @@ in {
   };
 
   # Minimal versions of Python (built without optional dependencies)
-  python3Minimal = (python38.override {
+  python3Minimal = (callPackage ./cpython ({
     self = python3Minimal;
+    inherit passthruFun;
     pythonAttr = "python3Minimal";
     # strip down that python version as much as possible
     openssl = null;
@@ -209,7 +216,7 @@ in {
     includeSiteCustomize = false;
     enableOptimizations = false;
     mimetypesSupport = false;
-  }).overrideAttrs(old: {
+  } // sources.python38)).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {
       maintainers = [];
