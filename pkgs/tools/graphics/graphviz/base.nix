@@ -2,9 +2,7 @@
 
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
 , fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango
-, yacc, fetchpatch, xorg ? null, ApplicationServices ? null }:
-
-assert stdenv.isDarwin -> ApplicationServices != null;
+, yacc, fetchpatch, xorg ? null, ApplicationServices }:
 
 let
   inherit (lib) optional optionals optionalString;
