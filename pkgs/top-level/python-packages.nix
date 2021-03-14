@@ -4809,6 +4809,8 @@ in {
 
   oyaml = callPackage ../development/python-modules/oyaml { };
 
+  packageurl-python = callPackage ../development/python-modules/packageurl-python { };
+
   packaging = if isPy3k
     then callPackage ../development/python-modules/packaging { }
     else callPackage ../development/python-modules/packaging/2.nix { };
