@@ -100,67 +100,6 @@ let self = rec {
     '';
   } // attrs));
 
-  advanced-launcher = buildKodiAddon rec {
-
-    pname = "advanced-launcher";
-    namespace = "plugin.program.advanced.launcher";
-    version = "2.5.8";
-
-    src = fetchFromGitHub {
-      owner = "edwtjo";
-      repo = pname;
-      rev = version;
-      sha256 = "142vvgs37asq5m54xqhjzqvgmb0xlirvm0kz6lxaqynp0vvgrkx2";
-    };
-
-    meta = {
-      homepage = "https://forum.kodi.tv/showthread.php?tid=85724";
-      description = "A program launcher for Kodi";
-      longDescription = ''
-        Advanced Launcher allows you to start any Linux, Windows and
-        macOS external applications (with command line support or not)
-        directly from the Kodi GUI. Advanced Launcher also give you
-        the possibility to edit, download (from Internet resources)
-        and manage all the meta-data (informations and images) related
-        to these applications.
-      '';
-      platforms = platforms.all;
-      maintainers = with maintainers; [ edwtjo ];
-      broken = true; # requires port to python3
-    };
-
-  };
-
-  advanced-emulator-launcher = buildKodiAddon rec {
-
-    pname = "advanced-emulator-launcher";
-    namespace = "plugin.program.advanced.emulator.launcher";
-    version = "0.9.6";
-
-    src = fetchFromGitHub {
-      owner = "Wintermute0110";
-      repo = namespace;
-      rev = version;
-      sha256 = "1sv9z77jj6bam6llcnd9b3dgkbvhwad2m1v541rv3acrackms2z2";
-    };
-
-    meta = {
-      homepage = "https://forum.kodi.tv/showthread.php?tid=287826";
-      description = "A program launcher for Kodi";
-      longDescription = ''
-        Advanced Emulator Launcher is a multi-emulator front-end for Kodi
-        scalable to collections of thousands of ROMs. Includes offline scrapers
-        for MAME and No-Intro ROM sets and also supports scrapping ROM metadata
-        and artwork online. ROM auditing for No-Intro ROMs using No-Intro XML
-        DATs. Launching of games and standalone applications is also available.
-      '';
-      platforms = platforms.all;
-      maintainers = with maintainers; [ edwtjo ];
-      broken = true; # requires port to python3
-    };
-
-  };
-
   controllers = let
     pname = "game-controller";
     version = "1.0.3";
@@ -194,35 +133,6 @@ let self = rec {
     // (mkController "nes")
     // (mkController "ps");
 
-  hyper-launcher = let
-    pname = "hyper-launcher";
-    version = "1.5.2";
-    src = fetchFromGitHub rec {
-      name = pname + "-" + version + ".tar.gz";
-      owner = "teeedubb";
-      repo = owner + "-xbmc-repo";
-      rev = "f958ba93fe85b9c9025b1745d89c2db2e7dd9bf6";
-      sha256 = "1dvff24fbas25k5kvca4ssks9l1g5rfa3hl8lqxczkaqi3pp41j5";
-    };
-    meta = {
-      homepage = "https://forum.kodi.tv/showthread.php?tid=258159";
-      description = "A ROM launcher for Kodi that uses HyperSpin assets.";
-      maintainers = with maintainers; [ edwtjo ];
-      broken = true; # requires port to python3
-    };
-  in {
-    service = buildKodiAddon {
-      pname = pname + "-service";
-      version = "1.2.1";
-      namespace = "service.hyper.launcher";
-      inherit src meta;
-    };
-    plugin = buildKodiAddon {
-      namespace = "plugin.hyper.launcher";
-      inherit pname version src meta;
-    };
-  };
-
   joystick = buildKodiBinaryAddon rec {
     pname = namespace;
     namespace = "peripheral.joystick";
@@ -242,26 +152,6 @@ let self = rec {
     };
 
     extraBuildInputs = [ tinyxml udev ];
-  };
-
-  simpleplugin = buildKodiAddon rec {
-    pname = "simpleplugin";
-    namespace = "script.module.simpleplugin";
-    version = "2.3.2";
-
-    src = fetchFromGitHub {
-      owner = "romanvm";
-      repo = namespace;
-      rev = "v.${version}";
-      sha256 = "0myar8dqjigb75pcc8zx3i5z79p1ifgphgb82s5syqywk0zaxm3j";
-    };
-
-    meta = {
-      homepage = src.meta.homepage;
-      description = "Simpleplugin API";
-      license = licenses.gpl3;
-      broken = true; # requires port to python3
-    };
   };
 
   svtplay = buildKodiAddon rec {
@@ -454,34 +344,6 @@ let self = rec {
       license = licenses.cc-by-nc-sa-30;
     };
   };
-
-  yatp = python3Packages.toPythonModule (buildKodiAddon rec {
-    pname = "yatp";
-    namespace = "plugin.video.yatp";
-    version = "3.3.2";
-
-    src = fetchFromGitHub {
-      owner = "romanvm";
-      repo = "kodi.yatp";
-      rev = "v.${version}";
-      sha256 = "12g1f57sx7dy6wy7ljl7siz2qs1kxcmijcg7xx2xpvmq61x9qa2d";
-    };
-
-    patches = [ ./yatp/dont-monkey.patch ];
-
-    propagatedBuildInputs = [
-      simpleplugin
-      python3Packages.requests
-      python3Packages.libtorrent-rasterbar
-    ];
-
-    meta = {
-      homepage = src.meta.homepage;
-      description = "Yet Another Torrent Player: libtorrent-based torrent streaming for Kodi";
-      license = licenses.gpl3;
-      broken = true; # requires port to python3
-    };
-  });
 
   inputstream-adaptive = buildKodiBinaryAddon rec {
 
