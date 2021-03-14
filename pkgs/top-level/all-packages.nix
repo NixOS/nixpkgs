@@ -29997,6 +29997,8 @@ in
 
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
 
+  zxing-cpp = callPackage ../development/libraries/zxing-cpp { };
+
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
   openmsx = callPackage ../misc/emulators/openmsx {
