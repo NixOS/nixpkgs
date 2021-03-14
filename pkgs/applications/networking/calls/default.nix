@@ -12,6 +12,7 @@
 , feedbackd
 , callaudiod
 , evolution-data-server
+, glib
 , folks
 , desktop-file-utils
 , appstream-glib
@@ -20,6 +21,10 @@
 , vala
 , wrapGAppsHook
 , xvfb_run
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +39,8 @@ stdenv.mkDerivation rec {
     sha256 = "0igap5ynq269xqaky6fqhdg2dpsvxa008z953ywa4s5b5g5dk3dd";
   };
 
+  outputs = [ "out" "devdoc" ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -42,6 +49,9 @@ stdenv.mkDerivation rec {
     appstream-glib
     vala
     wrapGAppsHook
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
   ];
 
   buildInputs = [
@@ -62,10 +72,10 @@ stdenv.mkDerivation rec {
     xvfb_run
   ];
 
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   mesonFlags = [
-    # docs fail to build
-    # https://source.puri.sm/Librem5/calls/issues/99
-    "-Dgtk_doc=false"
+    "-Dgtk_doc=true"
   ];
 
   doCheck = true;
