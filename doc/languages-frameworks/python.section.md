@@ -638,7 +638,7 @@ are disabled.
 
 #### Using pythonImportsCheck
 
-Although unit tests are highly prefered to valid correctness of a package. Not
+Although unit tests are highly prefered to validate correctness of a package, not
 all packages have test suites that can be ran easily, and some have none at all.
 To help ensure the package still works, `pythonImportsCheck` can attempt to import
 the listed modules.
@@ -1551,13 +1551,11 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 ### Contributing guidelines
 
-Following rules are desired to be respected:
+The following rules are desired to be respected:
 
 * Python libraries are called from `python-packages.nix` and packaged with
   `buildPythonPackage`. The expression of a library should be in
   `pkgs/development/python-modules/<name>/default.nix`.
-* Libraries in `pkgs/top-level/python-packages.nix` are sorted
-  alphanumerically to avoid merge conflicts and ease locating attributes.
 * Python applications live outside of `python-packages.nix` and are packaged
   with `buildPythonApplication`.
 * Make sure libraries build for all Python interpreters.
@@ -1567,8 +1565,11 @@ Following rules are desired to be respected:
   case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python
   libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
-* Attribute names in `python-packages.nix` should be normalized according to
-  [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This
-  means that characters should be converted to lowercase and `.` and `_` should
-  be replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz )
-* Attribute names in `python-packages.nix` should be sorted alphanumerically.
+* Attribute names in `python-packages.nix` as well as `pname`s should match the
+  library's name on PyPI, but be normalized according to [PEP
+  0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
+  that characters should be converted to lowercase and `.` and `_` should be
+  replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
+  If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Attribute names in `python-packages.nix` should be sorted alphanumerically to
+  avoid merge conflicts and ease locating attributes.
