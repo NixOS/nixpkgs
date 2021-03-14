@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
       homepage = "http://www.vassalengine.org/";
       license = licenses.lgpl21Only;
       maintainers = with maintainers; [ tvestelind ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
   };
 }

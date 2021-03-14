@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, fetchFromGitHub
-, cmake, kodiPlain, libcec_platform, tinyxml, pugixml
+, cmake, kodi, libcec_platform, tinyxml, pugixml
 , steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
 , python3Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
@@ -8,32 +8,27 @@ with lib;
 
 let self = rec {
 
-  pluginDir = "/share/kodi/addons";
+  addonDir = "/share/kodi/addons";
   rel = "Matrix";
 
-  kodi = kodiPlain;
+  inherit kodi;
 
   # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
-  toKodiPlugin = drv: drv.overrideAttrs(oldAttrs: {
+  toKodiAddon = drv: drv.overrideAttrs(oldAttrs: {
     # Use passthru in order to prevent rebuilds when possible.
     passthru = (oldAttrs.passthru or {})// {
-      kodiPluginFor = kodi;
-      requiredKodiPlugins = requiredKodiPlugins drv.propagatedBuildInputs;
+      kodiAddonFor = kodi;
+      requiredKodiAddons = requiredKodiAddons drv.propagatedBuildInputs;
     };
   });
 
-  # Check whether a derivation provides a Kodi plugin.
-  hasKodiPlugin = drv: drv ? kodiPluginFor && drv.kodiPluginFor == kodi;
+  # Check whether a derivation provides a Kodi addon.
+  hasKodiAddon = drv: drv ? kodiAddonFor && drv.kodiAddonFor == kodi;
 
-  # Get list of required Kodi plugins given a list of derivations.
-  requiredKodiPlugins = drvs: let
-      modules = filter hasKodiPlugin drvs;
-    in unique (modules ++ concatLists (catAttrs "requiredKodiPlugins" modules));
-
-  kodiWithPlugins = func: callPackage ./wrapper.nix {
-    inherit kodi;
-    plugins = requiredKodiPlugins (func self);
-  };
+  # Get list of required Kodi addons given a list of derivations.
+  requiredKodiAddons = drvs: let
+      modules = filter hasKodiAddon drvs;
+    in unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
 
   kodi-platform = stdenv.mkDerivation rec {
     project = "kodi-platform";
@@ -48,36 +43,45 @@ let self = rec {
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ kodiPlain libcec_platform tinyxml ];
+    buildInputs = [ kodi libcec_platform tinyxml ];
   };
 
-  mkKodiPlugin = { plugin, namespace, version, sourceDir ? null, ... }@args:
-  toKodiPlugin (stdenv.mkDerivation ({
-    name = "kodi-plugin-${plugin}-${version}";
+  buildKodiAddon =
+    { name ? "${attrs.pname}-${attrs.version}"
+    , namespace
+    , sourceDir ? ""
+    , ... } @ attrs:
+  toKodiAddon (stdenv.mkDerivation ({
+    name = "kodi-" + name;
 
     dontStrip = true;
 
     extraRuntimeDependencies = [ ];
 
     installPhase = ''
-      ${if sourceDir == null then "" else "cd $src/$sourceDir"}
-      d=$out${pluginDir}/${namespace}
+      cd $src/$sourceDir
+      d=$out${addonDir}/${namespace}
       mkdir -p $d
       sauce="."
       [ -d ${namespace} ] && sauce=${namespace}
       cp -R "$sauce/"* $d
     '';
-  } // args));
+  } // attrs));
 
-  mkKodiABIPlugin = { plugin, namespace, version, extraBuildInputs ? [],
-    extraRuntimeDependencies ? [], extraInstallPhase ? "", ... }@args:
-  toKodiPlugin (stdenv.mkDerivation ({
-    name = "kodi-plugin-${plugin}-${version}";
+  buildKodiBinaryAddon =
+    { name ? "${attrs.pname}-${attrs.version}"
+    , namespace
+    , version
+    , extraBuildInputs ? []
+    , extraRuntimeDependencies ? []
+    , extraInstallPhase ? "", ... } @ attrs:
+  toKodiAddon (stdenv.mkDerivation ({
+    name = "kodi-" + name;
 
     dontStrip = true;
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ kodiPlain kodi-platform libcec_platform ] ++ extraBuildInputs;
+    buildInputs = [ kodi kodi-platform libcec_platform ] ++ extraBuildInputs;
 
     inherit extraRuntimeDependencies;
 
@@ -86,25 +90,25 @@ let self = rec {
       "-DOVERRIDE_PATHS=1"
     ];
 
-    # kodi checks for plugin .so libs existance in the addon folder (share/...)
+    # kodi checks for addon .so libs existance in the addon folder (share/...)
     # and the non-wrapped kodi lib/... folder before even trying to dlopen
     # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
     installPhase = let n = namespace; in ''
       make install
-      ln -s $out/lib/addons/${n}/${n}.so.${version} $out${pluginDir}/${n}/${n}.so.${version}
+      ln -s $out/lib/addons/${n}/${n}.so.${version} $out${addonDir}/${n}/${n}.so.${version}
       ${extraInstallPhase}
     '';
-  } // args));
+  } // attrs));
 
-  advanced-launcher = mkKodiPlugin rec {
+  advanced-launcher = buildKodiAddon rec {
 
-    plugin = "advanced-launcher";
+    pname = "advanced-launcher";
     namespace = "plugin.program.advanced.launcher";
     version = "2.5.8";
 
     src = fetchFromGitHub {
       owner = "edwtjo";
-      repo = plugin;
+      repo = pname;
       rev = version;
       sha256 = "142vvgs37asq5m54xqhjzqvgmb0xlirvm0kz6lxaqynp0vvgrkx2";
     };
@@ -127,9 +131,9 @@ let self = rec {
 
   };
 
-  advanced-emulator-launcher = mkKodiPlugin rec {
+  advanced-emulator-launcher = buildKodiAddon rec {
 
-    plugin = "advanced-emulator-launcher";
+    pname = "advanced-emulator-launcher";
     namespace = "plugin.program.advanced.emulator.launcher";
     version = "0.9.6";
 
@@ -175,8 +179,8 @@ let self = rec {
     };
 
     mkController = controller: {
-        ${controller} = mkKodiPlugin rec {
-          plugin = pname + "-" + controller;
+        ${controller} = buildKodiAddon rec {
+          pname = pname + "-" + controller;
           namespace = "game.controller." + controller;
           sourceDir = "addons/" + namespace;
           inherit version src meta;
@@ -209,23 +213,22 @@ let self = rec {
       broken = true; # requires port to python3
     };
   in {
-    service = mkKodiPlugin {
-      plugin = pname + "-service";
+    service = buildKodiAddon {
+      pname = pname + "-service";
       version = "1.2.1";
       namespace = "service.hyper.launcher";
       inherit src meta;
     };
-    plugin = mkKodiPlugin {
-      plugin = pname;
+    plugin = buildKodiAddon {
       namespace = "plugin.hyper.launcher";
-      inherit version src meta;
+      inherit pname version src meta;
     };
   };
 
-  joystick = mkKodiABIPlugin rec {
+  joystick = buildKodiBinaryAddon rec {
+    pname = namespace;
     namespace = "peripheral.joystick";
     version = "1.7.1";
-    plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
@@ -243,8 +246,8 @@ let self = rec {
     extraBuildInputs = [ tinyxml udev ];
   };
 
-  simpleplugin = mkKodiPlugin rec {
-    plugin = "simpleplugin";
+  simpleplugin = buildKodiAddon rec {
+    pname = "simpleplugin";
     namespace = "script.module.simpleplugin";
     version = "2.3.2";
 
@@ -263,16 +266,16 @@ let self = rec {
     };
   };
 
-  svtplay = mkKodiPlugin rec {
+  svtplay = buildKodiAddon rec {
 
-    plugin = "svtplay";
+    pname = "svtplay";
     namespace = "plugin.video.svtplay";
     version = "5.1.12";
 
     src = fetchFromGitHub {
-      name = plugin + "-" + version + ".tar.gz";
+      name = pname + "-" + version + ".tar.gz";
       owner = "nilzen";
-      repo = "xbmc-" + plugin;
+      repo = "xbmc-" + pname;
       rev = "v${version}";
       sha256 = "04j1nhm7mh9chs995lz6bv1vsq5xzk7a7c0lmk4bnfv8jrfpj0w6";
     };
@@ -292,10 +295,10 @@ let self = rec {
 
   };
 
-  steam-controller = mkKodiABIPlugin rec {
+  steam-controller = buildKodiBinaryAddon rec {
+    pname = namespace;
     namespace = "peripheral.steamcontroller";
     version = "0.11.0";
-    plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "kodi-game";
@@ -314,9 +317,9 @@ let self = rec {
 
   };
 
-  steam-launcher = mkKodiPlugin {
+  steam-launcher = buildKodiAddon {
 
-    plugin = "steam-launcher";
+    pname = "steam-launcher";
     namespace = "script.steam.launcher";
     version = "3.5.1";
 
@@ -343,8 +346,8 @@ let self = rec {
     };
   };
 
-  pdfreader = mkKodiPlugin rec {
-    plugin = "pdfreader";
+  pdfreader = buildKodiAddon rec {
+    pname = "pdfreader";
     namespace = "plugin.image.pdf";
     version = "2.0.2";
 
@@ -362,9 +365,9 @@ let self = rec {
     };
   };
 
-  pvr-hts = mkKodiABIPlugin rec {
+  pvr-hts = buildKodiBinaryAddon rec {
 
-    plugin = "pvr-hts";
+    pname = "pvr-hts";
     namespace = "pvr.hts";
     version = "8.2.2";
 
@@ -384,9 +387,9 @@ let self = rec {
 
   };
 
-  pvr-hdhomerun = mkKodiABIPlugin rec {
+  pvr-hdhomerun = buildKodiBinaryAddon rec {
 
-    plugin = "pvr-hdhomerun";
+    pname = "pvr-hdhomerun";
     namespace = "pvr.hdhomerun";
     version = "7.1.0";
 
@@ -408,9 +411,9 @@ let self = rec {
 
   };
 
-  pvr-iptvsimple = mkKodiABIPlugin rec {
+  pvr-iptvsimple = buildKodiBinaryAddon rec {
 
-    plugin = "pvr-iptvsimple";
+    pname = "pvr-iptvsimple";
     namespace = "pvr.iptvsimple";
     version = "7.4.2";
 
@@ -432,9 +435,9 @@ let self = rec {
     extraBuildInputs = [ zlib pugixml ];
   };
 
-  osmc-skin = mkKodiPlugin rec {
+  osmc-skin = buildKodiAddon rec {
 
-    plugin = "osmc-skin";
+    pname = "osmc-skin";
     namespace = "skin.osmc";
     version = "18.0.0";
 
@@ -454,8 +457,8 @@ let self = rec {
     };
   };
 
-  yatp = python3Packages.toPythonModule (mkKodiPlugin rec {
-    plugin = "yatp";
+  yatp = python3Packages.toPythonModule (buildKodiAddon rec {
+    pname = "yatp";
     namespace = "plugin.video.yatp";
     version = "3.3.2";
 
@@ -482,9 +485,9 @@ let self = rec {
     };
   });
 
-  inputstream-adaptive = mkKodiABIPlugin rec {
+  inputstream-adaptive = buildKodiBinaryAddon rec {
 
-    plugin = "inputstream-adaptive";
+    pname = "inputstream-adaptive";
     namespace = "inputstream.adaptive";
     version = "2.6.7";
 
@@ -500,7 +503,7 @@ let self = rec {
     extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
 
     extraInstallPhase = let n = namespace; in ''
-      ln -s $out/lib/addons/${n}/libssd_wv.so $out/${pluginDir}/${n}/libssd_wv.so
+      ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
     '';
 
     meta = {
@@ -511,10 +514,10 @@ let self = rec {
     };
   };
 
-  vfs-sftp = mkKodiABIPlugin rec {
+  vfs-sftp = buildKodiBinaryAddon rec {
+    pname = namespace;
     namespace = "vfs.sftp";
     version = "2.0.0";
-    plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
@@ -533,10 +536,10 @@ let self = rec {
     extraBuildInputs = [ openssl libssh zlib ];
   };
 
-  vfs-libarchive = mkKodiABIPlugin rec {
+  vfs-libarchive = buildKodiBinaryAddon rec {
+    pname = namespace;
     namespace = "vfs.libarchive";
     version = "2.0.0";
-    plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";

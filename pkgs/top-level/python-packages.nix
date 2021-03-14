@@ -124,6 +124,8 @@ in {
     venvShellHook
     wheelUnpackHook;
 
+  pytestCheckHook_6_1 = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+
   # helpers
 
   # We use build packages because we are making a setup hook to be used as a
@@ -251,7 +253,7 @@ in {
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
 
   aiohttp = callPackage ../development/python-modules/aiohttp {
-    pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+    pytestCheckHook = self.pytestCheckHook_6_1;
   };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
@@ -537,7 +539,7 @@ in {
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
   async-upnp-client = callPackage ../development/python-modules/async-upnp-client {
-    pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+    pytestCheckHook = self.pytestCheckHook_6_1;
   };
 
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
@@ -8336,7 +8338,7 @@ in {
   trimesh = callPackage ../development/python-modules/trimesh { };
 
   trio = callPackage ../development/python-modules/trio {
-    pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
+    pytestCheckHook = self.pytestCheckHook_6_1;
   };
 
   trollius = callPackage ../development/python-modules/trollius { };
@@ -8528,7 +8530,9 @@ in {
 
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 
-  urllib3 = callPackage ../development/python-modules/urllib3 { };
+  urllib3 = callPackage ../development/python-modules/urllib3 {
+    pytestCheckHook = self.pytestCheckHook_6_1;
+  };
 
   urwid = callPackage ../development/python-modules/urwid { };
 
@@ -8732,11 +8736,7 @@ in {
   webthing = callPackage ../development/python-modules/webthing { };
 
   werkzeug = callPackage ../development/python-modules/werkzeug {
-    pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
-    pytest-timeout = self.pytest-timeout.override {
-      pytest = self.pytest_6_1;
-      pytestCheckHook = self.pytestCheckHook.override { pytest = self.pytest_6_1; };
-    };
+    pytestCheckHook = self.pytestCheckHook_6_1;
   };
 
   west = callPackage ../development/python-modules/west { };
