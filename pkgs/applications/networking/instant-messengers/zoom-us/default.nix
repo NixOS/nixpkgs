@@ -101,8 +101,12 @@ in stdenv.mkDerivation rec {
     rm $out/bin/zoom
     # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
     # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
+    # Also clear Qt environment variables to prevent
+    # zoom from tripping over "foreign" Qt ressources.
     makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
       --run "cd $out/opt/zoom" \
+      --unset QML2_IMPORT_PATH \
+      --unset QT_PLUGIN_PATH \
       --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps qttools.dev util-linux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
