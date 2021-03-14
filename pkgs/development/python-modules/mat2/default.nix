@@ -77,6 +77,9 @@ buildPythonPackage rec {
   postInstall = ''
     install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
+    install -Dm 444 nautilus/mat2.py -t "$out/share/nautilus-python/extensions"
+    buildPythonPath "$out $pythonPath"
+    patchPythonScript "$out/share/nautilus-python/extensions/mat2.py"
   '' + lib.optionalString dolphinIntegration ''
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
