@@ -120,6 +120,11 @@ self: super: {
     extraLibraries = [ pkgs.blas ];
   });
 
+  # Requires wrapQtAppsHook
+  qtah-cpp-qt5 = overrideCabal super.qtah-cpp-qt5 (drv: {
+    buildDepends = [ pkgs.qt5.wrapQtAppsHook ];
+  });
+
   # The Haddock phase fails for one reason or another.
   deepseq-magic = dontHaddock super.deepseq-magic;
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1

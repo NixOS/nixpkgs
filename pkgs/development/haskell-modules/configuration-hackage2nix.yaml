@@ -6127,7 +6127,6 @@ broken-packages:
   - haskell-reflect
   - haskell-rules
   - haskell-spacegoo
-  - haskell-src
   - haskell-src-exts-observe
   - haskell-src-exts-prisms
   - haskell-src-exts-qq
@@ -6623,10 +6622,6 @@ broken-packages:
   - hopencl
   - HOpenCV
   - hopfield
-  - hoppy-docs
-  - hoppy-generator
-  - hoppy-runtime
-  - hoppy-std
   - hops
   - hoq
   - horizon
@@ -9254,10 +9249,6 @@ broken-packages:
   - qr-imager
   - qr-repa
   - qsem
-  - qtah-cpp-qt5
-  - qtah-examples
-  - qtah-generator
-  - qtah-qt5
   - QuadEdge
   - QuadTree
   - quantfin
