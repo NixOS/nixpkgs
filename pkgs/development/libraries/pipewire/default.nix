@@ -39,11 +39,11 @@ let
     fontDirectories = [];
   };
 
-  mesonBool = b: if b then "true" else "false";
+  mesonEnable = b: if b then "enabled" else "disabled";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.23";
+    version = "0.3.24";
 
     outputs = [
       "out"
@@ -61,7 +61,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      hash = "sha256:1HMUrE1NBmrdBRMKX3LRlXaCEH3wqP2jGtW8Rp9oyQA=";
+      hash = "sha256:PcY20FTtUtJYAwCscEs+HfkdwDksYPFZIVTVORP1ooI=";
     };
 
     patches = [
@@ -103,22 +103,23 @@ let
     ++ lib.optionals bluezSupport [ bluez libopenaptx ldacbt sbc fdk_aac ];
 
     mesonFlags = [
-      "-Ddocs=true"
-      "-Dman=false" # we don't have xmltoman
-      "-Dexamples=${mesonBool withMediaSession}" # only needed for `pipewire-media-session`
+      "-Ddocs=enabled"
+      "-Dman=disabled" # we don't have xmltoman
+      "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
-      "-Dinstalled_tests=true"
+      "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
-      "-Dgstreamer=${mesonBool gstreamerSupport}"
-      "-Dffmpeg=${mesonBool ffmpegSupport}"
-      "-Dbluez5=${mesonBool bluezSupport}"
-      "-Dbluez5-backend-hsp-native=${mesonBool nativeHspSupport}"
-      "-Dbluez5-backend-hfp-native=${mesonBool nativeHfpSupport}"
-      "-Dbluez5-backend-ofono=${mesonBool ofonoSupport}"
-      "-Dbluez5-backend-hsphfpd=${mesonBool hsphfpdSupport}"
+      "-Dlibcamera=disabled"
+      "-Dgstreamer=${mesonEnable gstreamerSupport}"
+      "-Dffmpeg=${mesonEnable ffmpegSupport}"
+      "-Dbluez5=${mesonEnable bluezSupport}"
+      "-Dbluez5-backend-hsp-native=${mesonEnable nativeHspSupport}"
+      "-Dbluez5-backend-hfp-native=${mesonEnable nativeHfpSupport}"
+      "-Dbluez5-backend-ofono=${mesonEnable ofonoSupport}"
+      "-Dbluez5-backend-hsphfpd=${mesonEnable hsphfpdSupport}"
       "-Dpipewire_config_dir=/etc/pipewire"
     ];
 
