@@ -52,7 +52,10 @@ in stdenv.mkDerivation rec {
   # Use shared libraries to decrease size
   buildFlags = [ "shared" ];
 
-  makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
+  makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ]
+              ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
+              ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
