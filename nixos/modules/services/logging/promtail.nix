@@ -28,6 +28,16 @@ in {
         which get escaped and are then passed to Loki.
       '';
     };
+
+    supplementaryGroups = mkOption {
+      type = listOf str;
+      default = [ ];
+      example = [ "nginx" ];
+      description = ''
+        Supplementary groups passed to promtail service,
+        this may be necessary to grant promtail access to other user's log files.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -70,10 +80,12 @@ in {
         MemoryDenyWriteExecute = true;
         PrivateUsers = true;
 
-        SupplementaryGroups = lib.optional (allowSystemdJournal) "systemd-journal";
-      } // (optionalAttrs (!pkgs.stdenv.isAarch64) { # FIXME: figure out why this breaks on aarch64
-        SystemCallFilter = "@system-service";
-      });
+        SupplementaryGroups = cfg.supplementaryGroups
+          ++ lib.optional (allowSystemdJournal) "systemd-journal";
+      } // (optionalAttrs
+        (!pkgs.stdenv.isAarch64) { # FIXME: figure out why this breaks on aarch64
+          SystemCallFilter = "@system-service";
+        });
     };
 
     users.groups.promtail = {};
