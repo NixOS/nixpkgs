@@ -53,9 +53,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # watchgod required the watchgod package, which isn't available in nixpkgs
-    "--ignore=tests/supervisors/test_reload.py"
+    "tests/supervisors/test_reload.py"
   ];
 
   disabledTests = [

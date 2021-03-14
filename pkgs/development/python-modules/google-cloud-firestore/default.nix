@@ -39,10 +39,10 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # tests are broken
-    "--ignore=tests/system/test_system.py"
-    "--ignore=tests/system/test_system_async.py"
+    "tests/system/test_system.py"
+    "tests/system/test_system_async.py"
   ];
 
   disabledTests = [

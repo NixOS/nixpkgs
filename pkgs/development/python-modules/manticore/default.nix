@@ -51,13 +51,13 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
   preCheck = "export PATH=${yices}/bin:${z3}/bin:$PATH";
-  pytestFlagsArray = [
-    "--ignore=tests/ethereum" # TODO: enable when solc works again
-    "--ignore=tests/ethereum_bench"
+  disabledTestPaths = [
+    "tests/ethereum" # TODO: enable when solc works again
+    "tests/ethereum_bench"
   ] ++ lib.optionals (!stdenv.isLinux) [
-    "--ignore=tests/native"
-    "--ignore=tests/other/test_locking.py"
-    "--ignore=tests/other/test_state_introspection.py"
+    "tests/native"
+    "tests/other/test_locking.py"
+    "tests/other/test_state_introspection.py"
   ];
   disabledTests = [
     # failing tests

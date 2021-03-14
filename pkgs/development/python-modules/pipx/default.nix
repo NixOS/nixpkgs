@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pipx";
   version = "0.16.1.0";
-
   disabled = pythonOlder "3.6";
 
   # no tests in the pypi tarball, so we directly fetch from github
@@ -40,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   # disable tests, which require internet connection
-  pytestFlagsArray = [ "--ignore=tests/test_install_all_packages.py" ];
+  disabledTestPaths = [ "tests/test_install_all_packages.py" ];
   disabledTests = [
     "install"
     "inject"
@@ -57,8 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description =
-      "Install and Run Python Applications in Isolated Environments";
+    description = "Install and Run Python Applications in Isolated Environments";
     homepage = "https://github.com/pipxproject/pipx";
     license = licenses.mit;
     maintainers = with maintainers; [ yevhenshymotiuk ];

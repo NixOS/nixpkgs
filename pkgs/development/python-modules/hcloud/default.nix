@@ -7,7 +7,7 @@
 , flake8
 , isort
 , mock
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future requests python-dateutil ];
 
-  checkInputs = [ flake8 isort mock pytest ];
+  checkInputs = [ flake8 isort mock pytestCheckHook ];
 
   # Skip integration tests since they require a separate external fake API endpoint.
-  checkPhase = ''
-    pytest --ignore=tests/integration
-  '';
+  disabledTestPaths = [
+    "tests/integration"
+  ];
 
   meta = with lib; {
     description = "Official Hetzner Cloud python library";

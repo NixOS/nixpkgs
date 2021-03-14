@@ -100,18 +100,17 @@ buildPythonPackage rec {
     "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
+  disabledTestPaths = [
+    "test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
   ] ++ lib.optionals (!withClassicalFunctionCompiler ) [
-    "--ignore=test/python/classical_function_compiler/"
+    "test/python/classical_function_compiler/"
   ];
   disabledTests = [
     # Flaky tests
     "test_cx_equivalence"
     "test_pulse_limits"
-  ]
   # Disabling slow tests for build constraints
-  ++ [
+  ] ++ [
     "test_all_examples"
     "test_controlled_random_unitary"
     "test_controlled_standard_gates_1"

@@ -43,9 +43,9 @@ buildPythonPackage rec {
     "test_build_api_url"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=tests/unit/test_bucket.py"
-    "--ignore=tests/system/test_system.py"
+  disabledTestPaths = [
+    "tests/unit/test_bucket.py"
+    "tests/system/test_system.py"
   ];
 
   # prevent google directory from shadowing google imports

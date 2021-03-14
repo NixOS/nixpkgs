@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, pytest, pyjwt }:
+, grequests, mock, responses, pytestCheckHook, pyjwt }:
 
 buildPythonPackage rec {
   pname = "PyFxA";
@@ -21,17 +21,18 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    grequests mock responses pytest
+    grequests mock responses pytestCheckHook
   ];
 
   # test_oath is mostly network calls
-  checkPhase = ''
-    pytest --ignore=fxa/tests/test_oauth.py
-  '';
+  disabledTestPaths = [
+    "fxa/tests/test_oauth.py"
+  ];
 
   meta = with lib; {
     description = "Firefox Accounts client library for Python";
     homepage = "https://github.com/mozilla/PyFxA";
     license = licenses.mpl20;
+    maintainers = [ ];
   };
 }

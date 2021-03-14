@@ -24,7 +24,7 @@
 , withScikitQuant ? false
 , scikit-quant ? null
 , withCplex ? false
-, cplex ? null
+, cplex
   # Check Inputs
 , ddt
 , pytestCheckHook
@@ -91,7 +91,10 @@ buildPythonPackage rec {
       >> qiskit/optimization/__init__.py
   '';
 
-  postInstall = "rm -rf $out/${python.sitePackages}/docs";  # Remove docs dir b/c it can cause conflicts.
+  # Remove docs dir b/c it can cause conflicts.
+  postInstall = ''
+    rm -r $out/${python.sitePackages}/docs
+  '';
 
   checkInputs = [
     pytestCheckHook
@@ -99,6 +102,7 @@ buildPythonPackage rec {
     pytest-timeout
     qiskit-aer
   ];
+
   pythonImportsCheck = [
     "qiskit.aqua"
     "qiskit.aqua.algorithms"
@@ -107,15 +111,19 @@ buildPythonPackage rec {
     "qiskit.ml"
     "qiskit.optimization"
   ];
+
   pytestFlagsArray = [
     "--timeout=30"
     "--durations=10"
-  ] ++ lib.optionals (!withPyscf) [
-    "--ignore=test/chemistry/test_qeom_ee.py"
-    "--ignore=test/chemistry/test_qeom_vqe.py"
-    "--ignore=test/chemistry/test_vqe_uccsd_adapt.py"
-    "--ignore=test/chemistry/test_bopes_sampler.py"
   ];
+
+  disabledTestPaths = lib.optionals (!withPyscf) [
+    "test/chemistry/test_qeom_ee.py"
+    "test/chemistry/test_qeom_vqe.py"
+    "test/chemistry/test_vqe_uccsd_adapt.py"
+    "test/chemistry/test_bopes_sampler.py"
+  ];
+
   disabledTests = [
     # Disabled due to missing pyscf
     "test_validate" # test/chemistry/test_inputparser.py

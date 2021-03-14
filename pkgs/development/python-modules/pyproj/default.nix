@@ -37,10 +37,13 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook mock ];
 
   # prevent importing local directory
-  preCheck = "cd test";
-  pytestFlagsArray = [
-    "--ignore=test_doctest_wrapper.py"
-    "--ignore=test_datadir.py"
+  preCheck = ''
+    cd test
+  '';
+
+  disabledTestPaths = [
+    "test_doctest_wrapper.py"
+    "test_datadir.py"
   ];
 
   disabledTests = [
@@ -56,5 +59,6 @@ buildPythonPackage rec {
     description = "Python interface to PROJ.4 library";
     homepage = "https://github.com/jswhit/pyproj";
     license = with lib.licenses; [ isc ];
+    maintainers = [ ];
   };
 }

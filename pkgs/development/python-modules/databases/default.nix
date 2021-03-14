@@ -4,7 +4,7 @@
 , sqlalchemy
 , aiocontextvars
 , isPy27
-, pytest
+, pytestCheckHook
 , asyncpg
 , aiomysql
 , aiosqlite
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     asyncpg
     aiomysql
     aiosqlite
@@ -36,9 +36,10 @@ buildPythonPackage rec {
 
   # big chunk to tests depend on existing posgresql and mysql databases
   # some tests are better than no tests
-  checkPhase = ''
-    pytest --ignore=tests/test_integration.py --ignore=tests/test_databases.py
-  '';
+  disabledTestPaths = [
+    "tests/test_integration.py"
+    "tests/test_databases.py"
+  ];
 
   meta = with lib; {
     description = "Async database support for Python";

@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , notebook
 , nbdime
 , git
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -23,11 +24,15 @@ buildPythonPackage rec {
   # all Tests on darwin fail or are skipped due to sandbox
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest jupyterlab_git/ --ignore=jupyterlab_git/tests/test_handlers.py
-  '';
+  pytestFlagsArray = [
+    "jupyterlab_git/"
+  ];
+
+  disabledTestPaths = [
+    "jupyterlab_git/tests/test_handlers.py"
+  ];
 
   pythonImportsCheck = [ "jupyterlab_git" ];
 

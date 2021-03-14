@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "graspologic";
   version = "0.3";
-
   disabled = isPy27;
 
   src = fetchFromGitHub {
@@ -37,7 +36,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook pytestcov ];
-  pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
+
+  disabledTestPaths = [
+    "docs"
+    "tests/test_sklearn.py"
+  ];
+
   disabledTests = [ "gridplot_outputs" ];
 
   meta = with lib; {

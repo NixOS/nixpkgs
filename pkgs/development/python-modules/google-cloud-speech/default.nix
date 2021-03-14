@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   checkInputs = [ mock pytestCheckHook pytest-asyncio ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requrire credentials
-    "--ignore=tests/system/gapic/v1/test_system_speech_v1.py"
-    "--ignore=tests/system/gapic/v1p1beta1/test_system_speech_v1p1beta1.py"
+    "tests/system/gapic/v1/test_system_speech_v1.py"
+    "tests/system/gapic/v1p1beta1/test_system_speech_v1p1beta1.py"
   ];
 
   pythonImportsCheck = [

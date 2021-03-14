@@ -32,7 +32,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ cython ];
+
   buildInputs = [ libev ];
+
   propagatedBuildInputs = [ six geomet ]
     ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
@@ -45,9 +47,6 @@ buildPythonPackage rec {
   '') + ''
     # increase tolerance for time-based test
     substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
-  '';
-  postCheck = ''
-    unset NIX_REDIRECTS LD_PRELOAD
   '';
 
   checkInputs = [
@@ -66,15 +65,23 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "tests/unit"
-    # requires puresasl
-    "--ignore=tests/unit/advanced/test_auth.py"
   ];
+
+  disabledTestPaths = [
+    # requires puresasl
+    "tests/unit/advanced/test_auth.py"
+  ];
+
   disabledTests = [
     # doesn't seem to be intended to be run directly
     "_PoolTests"
     # attempts to make connection to localhost
     "test_connection_initialization"
   ];
+
+  postCheck = ''
+    unset NIX_REDIRECTS LD_PRELOAD
+  '';
 
   meta = with lib; {
     description = "A Python client driver for Apache Cassandra";

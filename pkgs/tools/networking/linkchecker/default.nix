@@ -26,23 +26,28 @@ buildPythonApplication rec {
 
   checkInputs = [
     parameterized
-    pytest
+    pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i 's/^requests.*$/requests>=2.2/' requirements.txt
-    sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
+  # postPatch = ''
+  #   sed -i 's/^requests.*$/requests>=2.2/' requirements.txt
+  #   sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
+  # '';
+
+  # network tests fails on darwin
+  preCheck = ''
+    rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
   '';
 
   # test_timeit2 is flakey, and depends sleep being precise to the milisecond
-  checkPhase = ''
-    ${lib.optionalString stdenv.isDarwin ''
-      # network tests fails on darwin
-      rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
-    ''}
-      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
-        -k 'not TestLoginUrl and not test_timeit2'
-  '';
+  disabledTestPaths = [
+    "tests/checker/{test_telnet,telnetserver}.py"
+  ];
+
+  disabledTests = [
+    "TestLoginUrl"
+    "test_timeit2"
+  ];
 
   meta = {
     description = "Check websites for broken links";

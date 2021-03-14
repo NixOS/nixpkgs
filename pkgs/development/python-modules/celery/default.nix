@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
-, boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
+, boto3, case, moto, pytestCheckHook, pytest-celery, pytest-subtests, pytest-timeout
 }:
 
 buildPythonPackage rec {
@@ -19,20 +19,26 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
 
-  checkInputs = [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
+  checkInputs = [ boto3 case moto pytestCheckHook pytest-celery pytest-subtests pytest-timeout ];
 
   # ignore test that's incompatible with pytest5
   # test_eventlet touches network
   # test_mongodb requires pymongo
   # test_multi tries to create directories under /var
-  checkPhase = ''
-    pytest -k 'not restore_current_app_fallback and not msgpack and not on_apply and not pytest' \
-      --ignore=t/unit/contrib/test_pytest.py \
-      --ignore=t/unit/concurrency/test_eventlet.py \
-      --ignore=t/unit/bin/test_multi.py \
-      --ignore=t/unit/apps/test_multi.py \
-      --ignore=t/unit/backends/test_mongodb.py
-  '';
+  disabledTestPaths = [
+    "t/unit/contrib/test_pytest.py"
+    "t/unit/concurrency/test_eventlet.py"
+    "t/unit/bin/test_multi.py"
+    "t/unit/apps/test_multi.py"
+    "t/unit/backends/test_mongodb.py"
+  ];
+
+  disabledTests = [
+    "restore_current_app_fallback"
+    "msgpack"
+    "on_apply"
+    "pytest"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/celery/celery/";

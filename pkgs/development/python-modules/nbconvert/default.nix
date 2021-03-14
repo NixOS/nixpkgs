@@ -36,7 +36,7 @@ buildPythonPackage rec {
     entrypoints bleach mistune jinja2 pygments traitlets testpath
     jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client
     defusedxml
-    (nbclient.override { doCheck = false; }) # avoid infinite recursion
+    nbclient
     jupyterlab-pygments
   ];
 
@@ -47,13 +47,12 @@ buildPythonPackage rec {
     HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "--ignore=nbconvert/preprocessors/tests/test_execute.py"
+  disabledTestPaths = [
+    "nbconvert/preprocessors/tests/test_execute.py"
     # can't resolve template paths within sandbox
-    "--ignore=nbconvert/tests/base.py"
-    "--ignore=nbconvert/tests/test_nbconvertapp.py"
+    "nbconvert/tests/base.py"
+    "nbconvert/tests/test_nbconvertapp.py"
   ];
-
 
   disabledTests = [
     "test_export"

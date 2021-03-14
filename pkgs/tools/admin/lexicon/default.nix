@@ -7,7 +7,7 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       # until https://github.com/ags-slc/localzone/issues/1 gets resolved
-      dnspython = super.dnspython.overridePythonAttrs(oldAttrs: rec {
+      dnspython = super.dnspython.overridePythonAttrs (oldAttrs: rec {
         pname = "dnspython";
         version = "1.16.0";
         # since name is defined from the previous derivation, need to override
@@ -21,13 +21,13 @@ let
         };
       });
 
-      localzone = super.localzone.overridePythonAttrs(oldAttrs: rec {
+      localzone = super.localzone.overridePythonAttrs (oldAttrs: rec {
         meta = oldAttrs.meta // { broken = false; };
       });
     };
   };
 in
-  with py.pkgs;
+with py.pkgs;
 
 buildPythonApplication rec {
   pname = "lexicon";
@@ -64,15 +64,15 @@ buildPythonApplication rec {
 
   checkInputs = [
     mock
-    pytest
+    pytestCheckHook
     pytestcov
     pytest_xdist
     vcrpy
   ];
 
-  checkPhase = ''
-    pytest --ignore=lexicon/tests/providers/test_auto.py
-  '';
+  disabledTestPaths = [
+    "lexicon/tests/providers/test_auto.py"
+  ];
 
   meta = with lib; {
     description = "Manipulate DNS records on various DNS providers in a standardized way";

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "roombapy";
   version = "1.6.2-1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
@@ -19,13 +20,11 @@ buildPythonPackage rec {
     sha256 = "14k7bys479xwpa4alpdwphzmxm3x8kc48nfqnshn1wj94vyxc425";
   };
 
-  format = "pyproject";
-
   nativeBuildInputs = [ poetry ];
   propagatedBuildInputs = [ paho-mqtt ];
 
   checkInputs = [ hbmqtt pytest-asyncio pytestCheckHook ];
-  pytestFlagsArray = [ "tests/" "--ignore=tests/test_discovery.py" ];
+  disabledTestPaths = [ "tests/test_discovery.py" ];
   pythonImportsCheck = [ "roombapy" ];
 
   meta = with lib; {

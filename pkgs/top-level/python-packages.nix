@@ -4479,7 +4479,9 @@ in {
 
   nbconflux = callPackage ../development/python-modules/nbconflux { };
 
-  nbconvert = callPackage ../development/python-modules/nbconvert { };
+  nbconvert = callPackage ../development/python-modules/nbconvert {
+    nbclient = self.nbclient.override { doCheck = false; };
+  };
 
   nbdime = callPackage ../development/python-modules/nbdime { };
 

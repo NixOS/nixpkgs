@@ -13,16 +13,17 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pbr setuptools_scm ];
+
   propagatedBuildInputs = [ six ]
+
     ++ lib.optionals isPy27 [ futures monotonic typing ];
 
   checkInputs = [ pytest sphinx tornado ]
     ++ lib.optionals isPy3k [ typeguard ];
-  checkPhase = if isPy27 then ''
-    pytest --ignore='tenacity/tests/test_asyncio.py'
-  '' else ''
-    pytest
-  '';
+
+  disabledTestPaths = lib.optionals isPy27 [
+    "tenacity/tests/test_asyncio.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jd/tenacity";

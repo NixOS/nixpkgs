@@ -35,18 +35,18 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  pytestFlags = lib.optionals (xineBackend || !withGstPlugins) [
-    "--ignore=tests/plugin/test_replaygain.py"
+  disabledTestPaths = lib.optionals (xineBackend || !withGstPlugins) [
+    "tests/plugin/test_replaygain.py"
   ] ++ [
     # requires networking
-    "--ignore=tests/test_browsers_iradio.py"
+    "tests/test_browsers_iradio.py"
     # the default theme doesn't have the required icons
-    "--ignore=tests/plugin/test_trayicon.py"
+    "tests/plugin/test_trayicon.py"
     # upstream does actually not enforce source code linting
-    "--ignore=tests/quality"
+    "tests/quality"
     # build failure on Arch Linux
     # https://github.com/NixOS/nixpkgs/pull/77796#issuecomment-575841355
-    "--ignore=tests/test_operon.py"
+    "tests/test_operon.py"
   ];
 
   checkPhase = ''

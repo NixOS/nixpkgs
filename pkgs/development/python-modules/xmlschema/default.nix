@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , elementpath
 , lxml
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "1.4.1";
   pname = "xmlschema";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
@@ -17,23 +17,28 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ elementpath ];
 
-  checkInputs = [ lxml pytest ];
+  checkInputs = [ lxml pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "elementpath~=2.0.0" "elementpath~=2.0"
   '';
 
+  pytestFlagsArray = [ "tests" ];
+
   # Ignore broken fixtures, and tests for files which don't exist.
   # For darwin, we need to explicity say we can't reach network
-  checkPhase = ''
-    pytest tests \
-      --ignore=tests/test_factory.py \
-      --ignore=tests/test_schemas.py \
-      --ignore=tests/test_memory.py \
-      --ignore=tests/test_validation.py \
-      -k 'not element_tree_import_script and not export_remote'
-  '';
+  disabledTestPaths = [
+    "tests/test_factory.py"
+    "tests/test_schemas.py"
+    "tests/test_memory.py"
+    "tests/test_validation.py"
+  ];
+
+  disabledTests = [
+    "element_tree_import_script"
+    "export_remote"
+  ];
 
   meta = with lib; {
     description = "XML Schema validator and data conversion library for Python";

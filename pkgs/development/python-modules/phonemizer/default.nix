@@ -50,8 +50,8 @@ buildPythonApplication rec {
 
   # We tried to package festvial, but were unable to get the backend running,
   # so let's disable related tests.
-  pytestFlagsArray = [
-    "--ignore=test/test_festival.py"
+  disabledTestPaths = [
+    "test/test_festival.py"
   ];
 
   disabledTests = [

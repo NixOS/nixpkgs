@@ -57,7 +57,7 @@ buildPythonPackage rec {
   '';
 
   # Exclude tests that requires network features
-  pytestFlagsArray = [ "--ignore=integration_tests" ];
+  disabledTestPaths = [ "integration_tests" ];
   disabledTests = [
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
     "test_org_installation"

@@ -4,7 +4,6 @@
 , glibcLocales
 , lib
 , pythonOlder
-
 , aiohttp
 , aiohttp-swagger
 , aiohttp-jinja2
@@ -51,9 +50,9 @@ buildPythonPackage rec {
     flask
     swagger-ui-bundle
   ]
-  ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson pytest-aiohttp ]
-  ++ lib.optional (pythonOlder "3.7") glibcLocales
-  ;
+    ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson pytest-aiohttp ]
+    ++ lib.optional (pythonOlder "3.7") glibcLocales;
+
   propagatedBuildInputs = [
     clickclick
     jsonschema
@@ -64,11 +63,9 @@ buildPythonPackage rec {
     openapi-spec-validator
     swagger-ui-bundle
     flask
-  ]
-  ++ lib.optional (pythonOlder "3.4") pathlib
-  ++ lib.optional (pythonOlder "3.6") typing
-  ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson ]
-  ;
+  ] ++ lib.optional (pythonOlder "3.4") pathlib
+    ++ lib.optional (pythonOlder "3.6") typing
+    ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson ];
 
   preConfigure = lib.optional (pythonOlder "3.7") ''
     export LANG=en_US.UTF-8

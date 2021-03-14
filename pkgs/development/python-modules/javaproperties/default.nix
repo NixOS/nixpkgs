@@ -18,10 +18,19 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   checkInputs = [ dateutil pytest ];
-  checkPhase = ''
+
+  preCheck = ''
     rm tox.ini
-    pytest -k 'not dumps and not time' --ignore=test/test_propclass.py
   '';
+
+  disabledTestPaths = [
+    "test/test_propclass.py"
+  ];
+
+  disabledTests = [
+    "dumps"
+    "time"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure API Management Client Library for Python";

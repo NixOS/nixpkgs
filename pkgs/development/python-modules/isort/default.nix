@@ -6,8 +6,7 @@
 , pytestCheckHook
 }:
 
-let
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "isort";
   version = "5.6.4";
   format = "pyproject";
@@ -45,9 +44,9 @@ in buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  pytestFlagsArray = [
-    "--ignore=tests/integration/" # pulls in 10 other packages
-    "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
+  disabledTestPaths = [
+    "tests/integration/" # pulls in 10 other packages
+    "tests/unit/profiles/test_black.py" # causes infinite recursion to include black
   ];
 
   disabledTests = [

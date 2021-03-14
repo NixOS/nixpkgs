@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, xorgserver, pytest, pytest-xvfb, i3, python, xlib, xdpyinfo
+, xorgserver, pytestCheckHook, pytest-xvfb, i3, python, xlib, xdpyinfo
 , makeFontsConf, coreutils
 }:
 
@@ -13,24 +13,25 @@ buildPythonPackage rec {
     rev    = "v${version}";
     sha256 = "13bzs9dcv27czpnnbgz7a037lm8h991c8gk0qzzk5mq5yak24715";
   };
+
   propagatedBuildInputs = [ xlib ];
 
   fontsConf = makeFontsConf {
     fontDirectories = [ ];
   };
+
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
-  checkInputs = [ pytest xdpyinfo pytest-xvfb xorgserver i3 ];
+  checkInputs = [ pytestCheckHook xdpyinfo pytest-xvfb xorgserver i3 ];
 
   postPatch = ''
     substituteInPlace test/i3.config \
       --replace /bin/true ${coreutils}/bin/true
   '';
 
-  checkPhase = ''
-    py.test --ignore=test/aio/test_shutdown_event.py \
-            --ignore=test/test_shutdown_event.py
-  '';
-
+  disabledTestPaths = [
+    "test/aio/test_shutdown_event.py"
+    "test/test_shutdown_event.py"
+  ];
 
   meta = with lib; {
     description = "An improved Python library to control i3wm and sway";

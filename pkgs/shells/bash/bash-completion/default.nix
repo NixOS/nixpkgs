@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , fetchpatch
 , autoreconfHook
 , perl
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     # pkill, pwdx, renice, and reptyr completions
     ps
     python3Packages.pexpect
-    python3Packages.pytest
+    python3Packages.pytestCheckHook
     bashInteractive
   ];
 
@@ -43,21 +45,21 @@ stdenv.mkDerivation rec {
   #   because they try to touch network
   # - ignore test_ls because impure logic
   # - ignore test_screen because it assumes vt terminals exist
-  checkPhase = ''
-    pytest . \
-      ${lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) "--ignore=test/t/test_gcc.py"} \
-      --ignore=test/t/test_chsh.py \
-      --ignore=test/t/test_ether_wake.py \
-      --ignore=test/t/test_ifdown.py \
-      --ignore=test/t/test_ifstat.py \
-      --ignore=test/t/test_ifup.py \
-      --ignore=test/t/test_iperf.py \
-      --ignore=test/t/test_iperf3.py \
-      --ignore=test/t/test_nethogs.py \
-      --ignore=test/t/unit/test_unit_ip_addresses.py \
-      --ignore=test/t/test_ls.py \
-      --ignore=test/t/test_screen.py
-  '';
+  disabledTestPaths =
+    lib.optional (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) "test/t/test_gcc.py"
+    ++ [
+      "test/t/test_chsh.py"
+      "test/t/test_ether_wake.py"
+      "test/t/test_ifdown.py"
+      "test/t/test_ifstat.py"
+      "test/t/test_ifup.py"
+      "test/t/test_iperf.py"
+      "test/t/test_iperf3.py"
+      "test/t/test_nethogs.py"
+      "test/t/unit/test_unit_ip_addresses.py"
+      "test/t/test_ls.py"
+      "test/t/test_screen.py"
+    ];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*

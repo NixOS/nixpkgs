@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   checkInputs = [ faker mock nose pytestCheckHook ];
   # example credentials aren't present
-  pytestFlagsArray = [ "--ignore=tests/unit/credentials_test.py" ];
+  disabledTestPaths = [ "tests/unit/credentials_test.py" ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
