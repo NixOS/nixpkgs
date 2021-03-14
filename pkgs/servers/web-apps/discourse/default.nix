@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, runCommandNoCC, lib
+{ stdenv, makeWrapper, runCommandNoCC, lib, nixosTests
 , fetchFromGitHub, bundlerEnv, ruby, replace, gzip, gnutar, git
 , util-linux, gawk, imagemagick, optipng, pngquant, libjpeg, jpegoptim
 , gifsicle, libpsl, redis, postgresql, which, brotli, procps
@@ -228,6 +228,7 @@ let
     passthru = {
       inherit rubyEnv runtimeEnv runtimeDeps rake;
       ruby = rubyEnv.wrappedRuby;
+      tests = nixosTests.discourse;
     };
   };
 in discourse
