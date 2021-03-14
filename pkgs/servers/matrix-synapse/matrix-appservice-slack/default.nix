@@ -24,7 +24,7 @@ nodePackages.package.override {
 
   meta = with lib; {
     description = "A Matrix <--> Slack bridge";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ beardhatcode ];
     license = licenses.asl20;
   };
 }
