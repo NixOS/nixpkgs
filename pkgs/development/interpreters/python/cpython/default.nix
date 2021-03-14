@@ -4,7 +4,7 @@
 , libffi
 , gdbm
 , lzma
-, mime-types
+, mime-types ? null, mimetypesSupport ? true
 , ncurses
 , openssl
 , readline
@@ -54,6 +54,8 @@ assert x11Support -> tcl != null
                   && libX11 != null;
 
 assert bluezSupport -> bluez != null;
+
+assert mimetypesSupport -> mime-types != null;
 
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
   "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
@@ -188,6 +190,7 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+  ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
   ] ++ optionals (isPy35 || isPy36) [
@@ -250,6 +253,7 @@ in with passthru; stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
+  '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace "@mime-types@" "${mime-types}"
   '' + optionalString (x11Support && (tix != null)) ''
