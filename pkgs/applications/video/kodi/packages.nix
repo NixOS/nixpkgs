@@ -186,15 +186,13 @@ let self = rec {
           inherit version src meta;
         };
       };
-    in (mkController "default")
-    // (mkController "dreamcast")
+    in (mkController "dreamcast")
     // (mkController "gba")
     // (mkController "genesis")
     // (mkController "mouse")
     // (mkController "n64")
     // (mkController "nes")
-    // (mkController "ps")
-    // (mkController "snes");
+    // (mkController "ps");
 
   hyper-launcher = let
     pname = "hyper-launcher";
