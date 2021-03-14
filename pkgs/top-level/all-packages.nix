@@ -91,6 +91,38 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
+  stdenvUutilsCoreutils =
+    let
+      uutils-coreutils = pkgs.uutils-coreutils;
+      bintools = wrapBintoolsWith {
+        bintools = stdenv.cc.bintools.bintools;
+        coreutils = buildPackages.uutils-coreutils;
+      };
+    in
+    stdenv.override {
+      cc = stdenv.cc.override {
+        coreutils = buildPackages.uutils-coreutils;
+        inherit bintools;
+      };
+
+      initialPath = (lib.remove buildPackages.coreutils stdenv.initialPath) ++ [
+        buildPackages.uutils-coreutils
+      ];
+      allowedRequisites = lib.mapNullable (
+        rs:
+        (lib.remove [
+          buildPackages.bintools
+          buildPackages.expand-response-params
+          buildPackages.coreutils
+        ] rs)
+        ++ [
+          buildPackages.bintools
+          buildPackages.expand-response-params
+          buildPackages.uutils-coreutils
+        ]
+      ) (stdenv.allowedRequisites or null);
+    };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
