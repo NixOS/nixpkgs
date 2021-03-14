@@ -10296,9 +10296,8 @@ in
     });
 
   inherit (callPackage ../development/compilers/haxe {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
-  }) haxe_3_2 haxe_3_4;
-  haxe = haxe_3_4;
+  }) haxe_4_2;
+  haxe = haxe_4_2;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 

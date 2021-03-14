@@ -572,6 +572,8 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
+    luv = callPackage ../development/ocaml-modules/luv { };
+
     lwt = callPackage ../development/ocaml-modules/lwt {
       ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
     };

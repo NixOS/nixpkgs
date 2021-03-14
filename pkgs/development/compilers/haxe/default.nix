@@ -1,14 +1,10 @@
-{ lib, stdenv, fetchgit, coreutils, ocamlPackages, zlib, pcre, neko }:
-
-let inherit (ocamlPackages) ocaml camlp4; in
+{ lib, stdenv, fetchgit, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls }:
 
 let
-  generic = { version, sha256, prePatch }:
+  generic = { version, sha256, buildInputs, prePatch }:
     stdenv.mkDerivation {
       pname = "haxe";
-      inherit version;
-
-      buildInputs = [ocaml zlib pcre neko camlp4];
+      inherit version buildInputs prePatch;
 
       src = fetchgit {
         url = "https://github.com/HaxeFoundation/haxe.git";
@@ -16,8 +12,6 @@ let
         fetchSubmodules = true;
         rev = "refs/tags/${version}";
       };
-
-      inherit prePatch;
 
       buildFlags = [ "all" "tools" ];
 
@@ -78,25 +72,16 @@ let
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
         license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt
-        maintainers = [ maintainers.marcweber ];
+        maintainers = [ maintainers.locallycompact ];
         platforms = platforms.linux ++ platforms.darwin;
       };
     };
 in {
-  # this old version is required to compile some libraries
-  haxe_3_2 = generic {
-    version = "3.2.1";
-    sha256 = "1x9ay5a2llq46fww3k07jxx8h1vfpyxb522snc6702a050ki5vz3";
+  haxe_4_2 = generic {
+    version = "4.2.1";
+    sha256 = "sha256-0j6M21dh8DB1gC/bPYNJrVuDbJyqQbP+61ItO5RBUcA=";
+    buildInputs = [zlib pcre neko mbedtls] ++ (with ocaml-ng.ocamlPackages_4_10; [ocaml findlib sedlex_2 xml-light ptmap camlp5 sha ocaml_extlib dune_2 luv]);
     prePatch = ''
-      sed -i -e 's|"/usr/lib/haxe/std/";|"'"$out/lib/haxe/std/"'";\n&|g' main.ml
-      sed -i -e 's|"neko"|"${neko}/bin/neko"|g' extra/haxelib_src/src/tools/haxelib/Main.hx
-    '';
-  };
-  haxe_3_4 = generic {
-    version = "3.4.6";
-    sha256 = "1myc4b8fwp0f9vky17wv45n34a583f5sjvajsc93f5gm1wanp4if";
-    prePatch = ''
-      sed -i -re 's!(let +prefix_path += +).*( +in)!\1"'"$out/"'"\2!' src/main.ml
       sed -i -e 's|"neko"|"${neko}/bin/neko"|g' extra/haxelib_src/src/haxelib/client/Main.hx
     '';
   };
