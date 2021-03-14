@@ -3393,6 +3393,12 @@
       fingerprint = "74B1 F67D 8E43 A94A 7554  0768 9CCC E364 02CB 49A6";
     }];
   };
+  haskie = {
+    name = "Fabian Schneider";
+    email = "faebl.taylor@pm.me";
+    github = "haskie-lambda";
+    githubId = 23012490;
+  };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
     github = "haslersn";

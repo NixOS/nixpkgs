@@ -80,5 +80,6 @@ ${graknHome}/grakn \$@;
         homepage = "https://www.grakn.ai/";
         license = licenses.gpl3Plus;
         platforms = platforms.all;
+        maintainers = [ maintainers.haskie ];
     };
 }
