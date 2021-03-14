@@ -88,6 +88,7 @@ in stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
+    '' + lib.optionalString enableX11 ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
     mkdir -p $bin/share/applications
     cat > $bin/share/applications/mupdf.desktop <<EOF
