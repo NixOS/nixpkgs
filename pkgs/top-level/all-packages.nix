@@ -168,6 +168,8 @@ in
   buildFHSUserEnvChroot = callPackage ../build-support/build-fhs-userenv { };
   buildFHSUserEnvBubblewrap = callPackage ../build-support/build-fhs-userenv-bubblewrap { };
 
+  grakn = callPackage ../servers/grakn/grakn.nix {};
+
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
