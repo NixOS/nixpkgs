@@ -32,6 +32,8 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Pyserial within Nixpkgs already includes the necessary fix, remove the
+    # pyserial version check from labgrid.
     ./0001-serialdriver-remove-pyserial-version-check.patch
   ];
 
