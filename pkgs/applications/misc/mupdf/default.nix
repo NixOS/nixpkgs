@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU gumbo ]
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
                 ++ lib.optionals enableGL (
