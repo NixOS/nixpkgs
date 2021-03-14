@@ -10821,7 +10821,7 @@ in
     ocamlformat # latest version
     ocamlformat_0_11_0 ocamlformat_0_12 ocamlformat_0_13_0 ocamlformat_0_14_0
     ocamlformat_0_14_1 ocamlformat_0_14_2 ocamlformat_0_14_3 ocamlformat_0_15_0
-    ocamlformat_0_15_1 ocamlformat_0_16_0;
+    ocamlformat_0_15_1 ocamlformat_0_16_0 ocamlformat_0_17_0;
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -14656,6 +14656,8 @@ in
   jama = callPackage ../development/libraries/jama { };
 
   jansson = callPackage ../development/libraries/jansson { };
+
+  jasper = callPackage ../development/libraries/jasper { };
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
@@ -29106,6 +29108,8 @@ in
 
   keynav = callPackage ../tools/X11/keynav { };
 
+  kgx = callPackage ../applications/terminal-emulators/kgx { };
+
   kmon = callPackage ../tools/system/kmon { };
 
   kompose = callPackage ../applications/networking/cluster/kompose { };
@@ -30002,6 +30006,8 @@ in
   xcpc = callPackage ../misc/emulators/xcpc { };
 
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
+
+  zxing-cpp = callPackage ../development/libraries/zxing-cpp { };
 
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
