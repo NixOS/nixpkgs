@@ -8524,9 +8524,12 @@ in {
 
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 
-  urllib3 = callPackage ../development/python-modules/urllib3 {
-    pytestCheckHook = self.pytestCheckHook_6_1;
-  };
+  urllib3 = if isPy3k then
+    callPackage ../development/python-modules/urllib3 {
+      pytestCheckHook = self.pytestCheckHook_6_1;
+    }
+  else
+    callPackage ../development/python-modules/urllib3/2.nix { };
 
   urwid = callPackage ../development/python-modules/urwid { };
 
