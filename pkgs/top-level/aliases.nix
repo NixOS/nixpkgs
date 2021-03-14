@@ -310,6 +310,7 @@ mapAliases ({
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   inter-ui = inter; # added 2021-03-27
+  iproute = iproute2; # moved from top-level 2021-03-14
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
   jack2Full = jack2; # moved from top-level 2021-03-14
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21

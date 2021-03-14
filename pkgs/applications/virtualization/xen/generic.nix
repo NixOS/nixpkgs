@@ -13,7 +13,7 @@ config:
 
 # Scripts
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
-, iproute, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
+, iproute2, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
 , lvm2, util-linux, procps, systemd
 
 # Documentation
@@ -31,7 +31,7 @@ let
   scriptEnvPath = concatMapStringsSep ":" (x: "${x}/bin") [
     which perl
     coreutils gawk gnused gnugrep diffutils util-linux multipath-tools
-    iproute inetutils iptables bridge-utils openvswitch nbd drbd
+    iproute2 inetutils iptables bridge-utils openvswitch nbd drbd
   ];
 
   withXenfiles = f: concatStringsSep "\n" (mapAttrsToList f config.xenfiles);

@@ -85,7 +85,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.libreswan pkgs.iproute ];
+    environment.systemPackages = [ pkgs.libreswan pkgs.iproute2 ];
 
     systemd.services.ipsec = {
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";

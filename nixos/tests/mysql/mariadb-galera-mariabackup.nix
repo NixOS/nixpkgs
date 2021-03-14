@@ -2,7 +2,7 @@ import ./../make-test-python.nix ({ pkgs, ...} :
 
 let
   mysqlenv-common      = pkgs.buildEnv { name = "mysql-path-env-common";      pathsToLink = [ "/bin" ]; paths = with pkgs; [ bash gawk gnutar inetutils which ]; };
-  mysqlenv-mariabackup = pkgs.buildEnv { name = "mysql-path-env-mariabackup"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ gzip iproute netcat procps pv socat ]; };
+  mysqlenv-mariabackup = pkgs.buildEnv { name = "mysql-path-env-mariabackup"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ gzip iproute2 netcat procps pv socat ]; };
 
 in {
   name = "mariadb-galera-mariabackup";

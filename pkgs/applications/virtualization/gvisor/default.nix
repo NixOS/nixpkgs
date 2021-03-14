@@ -5,7 +5,7 @@
 , git
 , glibcLocales
 , go
-, iproute
+, iproute2
 , iptables
 , makeWrapper
 , procps
@@ -87,7 +87,7 @@ in buildBazelPackage rec {
 
       # Needed for the 'runsc do' subcomand
       wrapProgram $out/bin/runsc \
-        --prefix PATH : ${lib.makeBinPath [ iproute iptables procps ]}
+        --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
     '';
   };
 
