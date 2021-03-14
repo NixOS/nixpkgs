@@ -3256,6 +3256,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  incomfort-client = callPackage ../development/python-modules/incomfort-client { };
+
   incremental = callPackage ../development/python-modules/incremental { };
 
   inflect = callPackage ../development/python-modules/inflect { };
