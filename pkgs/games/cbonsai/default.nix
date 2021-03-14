@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitLab, ncurses, pkg-config, nix-update-script }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.0.1";
   pname = "cbonsai";
 
   src = fetchFromGitLab {
     owner = "jallbrit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jc34j627pnyjgs8hjxqaa89j24gyf0rq9w61mkhgg0kria62as7";
+    sha256 = "sha256-UTjbc0kGHOQse4sZF94p4LAwMk9vsZg1QHq8iuDcTDk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
