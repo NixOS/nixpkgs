@@ -7,7 +7,7 @@
  <section xml:id="function-library-lib.attrsets.attrByPath">
   <title><function>lib.attrset.attrByPath</function></title>
 
-  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet</literal>
+  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet -> Any</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.attrByPath" />
