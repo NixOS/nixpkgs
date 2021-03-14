@@ -4141,6 +4141,8 @@ in
 
   expect = callPackage ../tools/misc/expect { };
 
+  expliot = python3Packages.callPackage ../tools/security/expliot { };
+
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
   Fabric = with python3Packages; toPythonApplication Fabric;
@@ -5582,11 +5584,13 @@ in
   kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
   wrapKakoune = kakoune: attrs: callPackage ../applications/editors/kakoune/wrapper.nix (attrs // { inherit kakoune; });
-  kakounePlugins = callPackage ../applications/editors/kakoune/plugins { };
+  kakounePlugins = recurseIntoAttrs (callPackage ../applications/editors/kakoune/plugins { });
+
   kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
   kakoune = wrapKakoune kakoune-unwrapped {
     plugins = [ ];  # override with the list of desired plugins
   };
+  kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
   kak-lsp = callPackage ../tools/misc/kak-lsp {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -26690,7 +26694,7 @@ in
 
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
-  zcash = callPackage ../applications/blockchains/zcash { };
+  zcash = callPackage ../applications/blockchains/zcash { stdenv = llvmPackages_11.stdenv; };
 
   openethereum = callPackage ../applications/blockchains/openethereum { };
 
@@ -28497,7 +28501,7 @@ in
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
-  tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix {gtk = gtk2;};
+  tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix {};
 
   aiger = callPackage ../applications/science/logic/aiger {};
 

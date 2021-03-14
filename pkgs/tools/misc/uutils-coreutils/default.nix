@@ -1,8 +1,15 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cargo, cmake, sphinx, lib, prefix ? "uutils-"
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, sphinx
 , Security
+, prefix ? "uutils-"
+, buildMulticallBinary ? true
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "uutils-coreutils";
   version = "0.0.4";
 
@@ -13,21 +20,32 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-z5lDKJpFxXDCQq+0Da/63GGoUXacy5TSn+1gJiMvicc=";
   };
 
-  # too many impure/platform-dependent tests
-  doCheck = false;
+  postPatch = ''
+    # can be removed after https://github.com/uutils/coreutils/pull/1815 is included
+    substituteInPlace GNUmakefile \
+      --replace uutils coreutils
+  '';
 
-  cargoSha256 = "sha256-x/nn2JNe8x+I0G2Vbr2PZAHCghwLBDhKAhkHPQFeL0M=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-x/nn2JNe8x+I0G2Vbr2PZAHCghwLBDhKAhkHPQFeL0M=";
+  };
 
-  makeFlags =
-    [ "CARGO=${cargo}/bin/cargo" "PREFIX=$(out)" "PROFILE=release" "INSTALLDIR_MAN=$(out)/share/man/man1" ]
-    ++ lib.optional (prefix != null) [ "PROG_PREFIX=${prefix}" ];
+  nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
 
-  nativeBuildInputs = [ cmake cargo sphinx ];
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  # empty {build,install}Phase to use defaults of `stdenv.mkDerivation` rather than rust defaults
-  buildPhase = "";
-  installPhase = "";
+  makeFlags = [
+    "CARGO=${cargo}/bin/cargo"
+    "PREFIX=${placeholder "out"}"
+    "PROFILE=release"
+    "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
+  ] ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+
+  # too many impure/platform-dependent tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
@@ -36,7 +54,7 @@ rustPlatform.buildRustPackage rec {
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
     homepage = "https://github.com/uutils/coreutils";
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [ siraben SuperSandro2000 ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

@@ -15,9 +15,9 @@
  </part>
  <part>
   <title>Standard environment</title>
-  <xi:include href="stdenv/stdenv.xml" />
-  <xi:include href="stdenv/meta.xml" />
-  <xi:include href="stdenv/multiple-output.xml" />
+  <xi:include href="stdenv/stdenv.chapter.xml" />
+  <xi:include href="stdenv/meta.chapter.xml" />
+  <xi:include href="stdenv/multiple-output.chapter.xml" />
   <xi:include href="stdenv/cross-compilation.chapter.xml" />
   <xi:include href="stdenv/platform-notes.chapter.xml" />
  </part>
