@@ -402,6 +402,7 @@ mapAliases ({
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   marathon = throw "marathon has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
+  mysql = mariadb; # moved from top-level 2021-03-14
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
   matcha = throw "matcha was renamed to matcha-gtk-theme"; # added 2020-05-09
   mathics = throw "mathics has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
