@@ -4910,6 +4910,8 @@ in
 
   gparted = callPackage ../tools/misc/gparted { };
 
+  gpt2tc = callPackage ../tools/text/gpt2tc { };
+
   ldmtool = callPackage ../tools/misc/ldmtool { };
 
   gpodder = callPackage ../applications/audio/gpodder { };
