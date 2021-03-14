@@ -5831,6 +5831,8 @@ in
 
   mcfly = callPackage ../tools/misc/mcfly { };
 
+  m2r = python3Packages.callPackage ../tools/text/m2r { };
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
