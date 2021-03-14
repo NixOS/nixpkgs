@@ -10,13 +10,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "genxword";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "riverrun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00czdvyb5wnrk3x0g529afisl8v4frfys9ih0nzf1fs4jkzjcijg";
+    sha256 = "17h8saja45bv612yk0pra9ncbp2mjnx5n10q25nqhl765ks4bmb5";
   };
 
   nativeBuildInputs = [

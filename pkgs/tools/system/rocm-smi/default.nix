@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "rocm-smi";
-  version = "3.10.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";

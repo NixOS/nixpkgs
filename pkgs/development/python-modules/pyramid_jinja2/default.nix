@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , webtest
@@ -18,11 +18,12 @@ buildPythonPackage rec {
   buildInputs = [ webtest ];
   propagatedBuildInputs = [ jinja2 pyramid ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "pyramid_jinja2" ];
+
+  meta = with lib; {
     description = "Jinja2 template bindings for the Pyramid web framework";
     homepage = "https://github.com/Pylons/pyramid_jinja2";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

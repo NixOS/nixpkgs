@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , lxml
@@ -22,7 +22,7 @@ buildPythonPackage {
     sha256 = "1mikvzp27wxkzpr2lii4wg1hhx8h610agckqynvsrdc8v3nw9ciw";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lpod/lpod-python/";
     description = "Library implementing the ISO/IEC 26300 OpenDocument Format standard (ODF) ";
     license = licenses.gpl3;

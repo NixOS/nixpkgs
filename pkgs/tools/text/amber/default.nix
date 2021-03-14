@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform
+{ lib, stdenv, fetchFromGitHub, rustPlatform
 , Security
 }:
 
@@ -15,9 +15,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0h47xqqq8f8m28rl1s6r305cf3dvk94aa86j6m0rk535i2jqfvhp";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code search-and-replace tool";
     homepage = "https://github.com/dalance/amber";
     license = with licenses; [ mit ];

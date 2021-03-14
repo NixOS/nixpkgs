@@ -1,8 +1,7 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , substituteAll
 , gtk-doc
@@ -15,8 +14,7 @@
 , gusb
 , sqlite
 , libarchive
-, glib-networking
-, libsoup
+, curl
 , help2man
 , libjcat
 , libxslt
@@ -32,6 +30,7 @@
 , docbook-xsl-nons
 , ninja
 , gcab
+, gnutls
 , python3
 , wrapGAppsHook
 , json-glib
@@ -75,6 +74,9 @@ let
   # only redfish for x86_64
   haveRedfish = stdenv.isx86_64;
 
+  # only use msr if x86 (requires cpuid)
+  haveMSR = isx86;
+
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
   # Experimental
@@ -89,7 +91,13 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.5.1";
+    # A regression is present in https://github.com/fwupd/fwupd/commit/fde4b1676a2c64e70bebd88f7720307c62635654
+    # released with 1.5.6.
+    # Fix for the regression: https://github.com/fwupd/fwupd/pull/2902
+    # Maintainer says a new release is to be expected in a few days:
+    #   https://twitter.com/hughsient/status/1362476792297185289
+    # In the mean time, please do not release 1.5.6 and go strait to 1.5.7
+    version = "1.5.5";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -98,7 +106,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "0fpxcl6bighiipyl4qspjhi0lwisrgq8jdahm68mk34rmrx50sgf";
+      sha256 = "0c2m9qz1g7zxqc6w90w9hksf8y9hvlh0vyvx06q01x893j5hzxh6";
     };
 
     patches = [
@@ -119,12 +127,6 @@ let
         # Needs a different set of modules than po/make-images.
         inherit installedTestsPython;
       })
-
-      # Skip tests requiring network.
-      (fetchpatch {
-        url = "https://github.com/fwupd/fwupd/commit/db15442c7c217610954786bd40779c14ed0e034b.patch";
-        sha256 = "/jzpGMJcqLisjecKpSUfA8ZCU53n7BOPR6tMgEX/qL8=";
-      })
     ];
 
     nativeBuildInputs = [
@@ -137,6 +139,7 @@ let
       shared-mime-info
       valgrind
       gcab
+      gnutls
       docbook_xml_dtd_43
       docbook-xsl-nons
       help2man
@@ -152,14 +155,13 @@ let
       gusb
       sqlite
       libarchive
-      libsoup
+      curl
       elfutils
       gnu-efi
       libgudev
       colord
       libjcat
       libuuid
-      glib-networking
       json-glib
       umockdev
       bash-completion
@@ -169,13 +171,18 @@ let
       pango
       tpm2-tss
       efivar
-    ] ++ stdenv.lib.optionals haveDell [
+    ] ++ lib.optionals haveDell [
       libsmbios
     ];
 
     mesonFlags = [
       "-Dgtkdoc=true"
       "-Dplugin_dummy=true"
+      # We are building the official releases.
+      "-Dsupported_build=true"
+      # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
+      # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
+      "-Dsoup_session_compat=false"
       "-Dudevdir=lib/udev"
       "-Dsystemd_root_prefix=${placeholder "out"}"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -191,13 +198,15 @@ let
       # Our builder only adds $lib/lib to rpath but some things link
       # against libfwupdplugin which is in $out/lib.
       "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
-    ] ++ stdenv.lib.optionals (!haveDell) [
+    ] ++ lib.optionals (!haveDell) [
       "-Dplugin_dell=false"
       "-Dplugin_synaptics=false"
-    ] ++ stdenv.lib.optionals (!haveRedfish) [
+    ] ++ lib.optionals (!haveRedfish) [
       "-Dplugin_redfish=false"
-    ] ++ stdenv.lib.optionals haveFlashrom [
+    ] ++ lib.optionals haveFlashrom [
       "-Dplugin_flashrom=true"
+    ] ++ lib.optionals (!haveMSR) [
+      "-Dplugin_msr=false"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
@@ -254,12 +263,12 @@ let
         efibootmgr
         bubblewrap
         tpm2-tools
-      ] ++ stdenv.lib.optional haveFlashrom flashrom;
+      ] ++ lib.optional haveFlashrom flashrom;
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
         # See programs reached with fu_common_find_program_in_path in source
-        --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+        --prefix PATH : "${lib.makeBinPath binPath}"
       )
     '';
 
@@ -278,16 +287,14 @@ let
 
     passthru = {
       filesInstalledToEtc = [
-        "fwupd/ata.conf"
         "fwupd/daemon.conf"
-        "fwupd/redfish.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
         "fwupd/remotes.d/vendor-directory.conf"
         "fwupd/thunderbolt.conf"
         "fwupd/upower.conf"
-        "fwupd/uefi.conf"
+        "fwupd/uefi_capsule.conf"
         "pki/fwupd/GPG-KEY-Hughski-Limited"
         "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
         "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
@@ -295,8 +302,10 @@ let
         "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
         "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
         "pki/fwupd-metadata/LVFS-CA.pem"
-      ] ++ stdenv.lib.optionals haveDell [
+      ] ++ lib.optionals haveDell [
         "fwupd/remotes.d/dell-esrt.conf"
+      ] ++ lib.optionals haveRedfish [
+        "fwupd/redfish.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf
@@ -306,7 +315,7 @@ let
       ];
 
       tests = let
-        listToPy = list: "[${stdenv.lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
+        listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
       in {
         installedTests = nixosTests.installed-tests.fwupd;
 
@@ -333,7 +342,7 @@ let
       };
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://fwupd.org/";
       maintainers = with maintainers; [ jtojnar ];
       license = licenses.lgpl21Plus;

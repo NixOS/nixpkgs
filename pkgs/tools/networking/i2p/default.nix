@@ -1,4 +1,4 @@
-{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
   pname = "wrapper";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     rm $out/{osid,postinstall.sh,INSTALL-headless.txt}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
     license = licenses.gpl2;

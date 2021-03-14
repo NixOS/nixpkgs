@@ -1,46 +1,51 @@
 {
-  stdenv, extra-cmake-modules, fetchurl,
+  lib, mkDerivation, extra-cmake-modules, fetchurl,
 
   kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui, wrapQtAppsHook,
+  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
 
-  qtx11extras, qtwebsockets,
+
+  qtx11extras, qtwebsockets, qtkeychain, libsecret,
 
   eigen, zlib,
 
-  cfitsio, indilib, xplanet, libnova, gsl
+  cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kstars";
-  version = "3.4.3";
+  version = "3.5.2";
 
   src = fetchurl {
-    url = "https://mirrors.mit.edu/kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "0j5yxg6ay6sic194skz6vjzg6yvrpb3gvypvs0frjrcjbsl1j4f8";
+    url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
+    sha256 = "sha256-iX7rMQbctdK3AeH4ZvH+T4rv1ZHwn55urJh150KoXXU=";
   };
 
   patches = [
-    ./indi-fix.patch
+    # Patches ksutils.cpp to use nix store prefixes to find program binaries of
+    # indilib and xplanet dependencies. Without the patch, Ekos is unable to spawn
+    # indi servers for local telescope/camera control.
+    ./fs-fixes.patch
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui
+    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
 
-    qtx11extras qtwebsockets
+    qtx11extras qtwebsockets qtkeychain libsecret
 
     eigen zlib
 
-    cfitsio indilib xplanet libnova gsl
+    cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
   ];
 
   cmakeFlags = [
-    "-DINDI_NIX_ROOT=${indilib}"
+    "-DINDI_NIX_ROOT=${indi-full}"
+    "-DXPLANET_NIX_ROOT=${xplanet}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual planetarium astronomy software";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
     longDescription = ''
@@ -48,8 +53,8 @@ stdenv.mkDerivation rec {
       The display includes up to 100 million stars, 13.000 deep-sky objects, all 8 planets, the Sun and Moon, and thousands of comets, asteroids, supernovae, and satellites.
       For students and teachers, it supports adjustable simulation speeds in order to view phenomena that happen over long timescales, the KStars Astrocalculator to predict conjunctions, and many common astronomical calculations.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput ];
+    maintainers = with maintainers; [ timput hjones2199 ];
   };
 }

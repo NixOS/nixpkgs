@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gfortran, lhapdf, python2, zlib }:
+{ lib, stdenv, fetchFromGitHub, gfortran, lhapdf, python2, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "apfel";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PDF Evolution Library";
     license     = licenses.gpl3;
     homepage    = "https://apfel.mi.infn.it/";

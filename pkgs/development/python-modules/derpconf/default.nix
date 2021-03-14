@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "derpconf";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "derpconf abstracts loading configuration files for your app";
     homepage = "https://github.com/globocom/derpconf";
     license = licenses.mit;

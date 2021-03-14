@@ -37,11 +37,11 @@ assert stdenv.hostPlatform.system != "powerpc-linux";
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.27.12";
+  version = "1.28.6";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0bgadm8p319fws66ca4rpv9fx2bllbphgn892rh78db81lz20i5v";
+    sha256 = "sha256-fSblLddWTJKRzw4VAQp+p3xPe5grB2xITgN6vKr0xLc=";
   };
 
   configureFlags = [ "--enable-recollq" "--disable-webkit" ]
@@ -85,13 +85,13 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin perl}/bin/perl
       fi
     done
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey_38 }:
+{ lib, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey_38 }:
 
 let
   beautifulsoup = pythonPackages.callPackage ./beautifulsoup.nix {
@@ -50,7 +50,7 @@ in pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and open source downloader for 1-click-hosting sites";
     homepage = "https://github.com/pyload/pyload";
     license = licenses.gpl3;

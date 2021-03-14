@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , libebml }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yhr9hhgljva1fx3b0r4s3wkkypdfgsysbl35a4g3krkbhaa9rsd";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libebml ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=YES"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to parse Matroska files";
     homepage = "https://matroska.org/";
     license = licenses.lgpl21;

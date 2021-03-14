@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib }:
+{ lib, stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "applgrid";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The APPLgrid project provides a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
     license     = licenses.gpl3;
     homepage    = "http://applgrid.hepforge.org";

@@ -9,7 +9,7 @@
 
 assert (!libsOnly) -> kernel != null;
 
-with stdenv.lib;
+with lib;
 
 # This derivation requires a maximum of gcc49, Linux kernel 4.1 and xorg.xserver 1.17
 # and will not build or run using versions newer
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ATI Catalyst display drivers";
     homepage = "http://support.amd.com/us/gpudownload/Pages/index.aspx";
     license = licenses.unfree;

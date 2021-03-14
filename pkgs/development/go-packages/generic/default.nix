@@ -10,9 +10,6 @@
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
-# Disabled flag
-, disabled ? false
-
 # Go import path of the package
 , goPackagePath
 
@@ -37,6 +34,8 @@
 # Do not enable this without good reason
 # IE: programs coupled with the compiler
 , allowGoReference ? false
+
+, CGO_ENABLED ? go.CGO_ENABLED
 
 , meta ? {}, ... } @ args:
 
@@ -78,15 +77,17 @@ let
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go) GOOS GOARCH GO386 CGO_ENABLED;
+    inherit (go) GOOS GOARCH GO386;
 
     GOHOSTARCH = go.GOHOSTARCH or null;
     GOHOSTOS = go.GOHOSTOS or null;
 
+    inherit CGO_ENABLED;
+
     GO111MODULE = "off";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
-    GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+    GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -249,7 +250,5 @@ let
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta;
   });
-in if disabled then
-  throw "${package.name} not supported for go ${go.meta.branch}"
-else
+in
   package

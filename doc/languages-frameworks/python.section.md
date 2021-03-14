@@ -1,4 +1,4 @@
-# Python
+# Python {#python}
 
 ## User Guide
 
@@ -334,7 +334,7 @@ Above, we were mostly just focused on use cases and what to do to get started
 creating working Python environments in nix.
 
 Now that you know the basics to be up and running, it is time to take a step
-back and take a deeper look at at how Python packages are packaged on Nix. Then,
+back and take a deeper look at how Python packages are packaged on Nix. Then,
 we will look at how you can use development mode with your code.
 
 #### Python library packages in Nixpkgs
@@ -609,6 +609,10 @@ Using the example above, the analagous pytestCheckHook usage would be:
     # touches network
     "download"
     "update"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_failing.py"
   ];
 ```
 
@@ -914,7 +918,7 @@ because their behaviour is different:
 
 * `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables
   as well as the items listed in `setup_requires`.
-* `buildInputs ? []`: Build and/or run-time dependencies that need to be be
+* `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
 * `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These
@@ -1184,7 +1188,8 @@ community to help save time. No tool is preferred at the moment.
   expressions for your Python project. Note that [sharing derivations from
   pypi2nix with nixpkgs is possible but not
   encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
+- [nixpkgs-pytools](https://github.com/nix-community/nixpkgs-pytools)
+- [poetry2nix](https://github.com/nix-community/poetry2nix)
 
 ### Deterministic builds
 
@@ -1550,9 +1555,9 @@ Following rules are desired to be respected:
 
 * Python libraries are called from `python-packages.nix` and packaged with
   `buildPythonPackage`. The expression of a library should be in
-  `pkgs/development/python-modules/<name>/default.nix`. Libraries in
-  `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid
-  merge conflicts.
+  `pkgs/development/python-modules/<name>/default.nix`.
+* Libraries in `pkgs/top-level/python-packages.nix` are sorted
+  alphanumerically to avoid merge conflicts and ease locating attributes.
 * Python applications live outside of `python-packages.nix` and are packaged
   with `buildPythonApplication`.
 * Make sure libraries build for all Python interpreters.
@@ -1566,3 +1571,4 @@ Following rules are desired to be respected:
   [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This
   means that characters should be converted to lowercase and `.` and `_` should
   be replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz )
+* Attribute names in `python-packages.nix` should be sorted alphanumerically.

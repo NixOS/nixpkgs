@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, tie }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, tie }:
 
 stdenv.mkDerivation rec {
   pname = "cwebbin";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     make -f Makefile.unix install $makeFlags
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Literate Programming in C/C++";
     platforms = with platforms; unix;

@@ -1,4 +1,4 @@
-{ stdenv, python38Packages, fetchPypi
+{ lib, python38Packages, fetchPypi
 , fftw, alsaLib, pulseaudio, wxPython_4_0 }:
 
 python38Packages.buildPythonApplication rec {
@@ -16,7 +16,7 @@ python38Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A SDR transceiver for radios that use the Hermes protocol";
     longDescription = ''
       QUISK is a Software Defined Radio (SDR) transceiver. You supply radio

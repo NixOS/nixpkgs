@@ -56,15 +56,14 @@ let
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
     cloudfoundry = callPackage ./cloudfoundry {};
-    elasticsearch = callPackage ./elasticsearch {};
     gandi = callPackage ./gandi {};
     hcloud = callPackage ./hcloud {};
     keycloak = callPackage ./keycloak {};
     libvirt = callPackage ./libvirt {};
     linuxbox = callPackage ./linuxbox {};
     lxd = callPackage ./lxd {};
-    shell = callPackage ./shell {};
     vpsadmin = callPackage ./vpsadmin {};
+    vercel = callPackage ./vercel {};
   };
 in
   automated-providers // special-providers

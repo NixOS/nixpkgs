@@ -1,16 +1,16 @@
-{ stdenv, fetchzip, buildGoModule, go-bindata, nixosTests }:
+{ lib, fetchzip, buildGoModule, go-bindata, nixosTests }:
 
 buildGoModule rec {
   pname = "traefik";
-  version = "2.3.4";
+  version = "2.4.6";
 
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    sha256 = "1vdnd6nb8bfiwd51rrqhrc9p8lh3fhny49lapgbzk36ynqc97bi5";
+    sha256 = "1f2gj9axmdisp4yza5pa60x2s79vdybgsb5ddyfwkl5m89sh0r2z";
     stripRoot = false;
   };
 
-  vendorSha256 = "0h3j0b034yh70c9bscj1k1jy8igsr7p0i014yr0zl7wlc6s6c9bp";
+  vendorSha256 = "1w9crp4bk5dk0ph558w9mj8cylm2z6bc81hghmv86ild524a0l9v";
 
   doCheck = false;
 
@@ -30,7 +30,7 @@ buildGoModule rec {
       -X github.com/traefik/traefik/v2/pkg/version.Codename=$CODENAME")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://traefik.io";
     description = "A modern reverse proxy";
     license = licenses.mit;

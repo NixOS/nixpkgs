@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "jdatetime";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jalali datetime binding for python";
     homepage = "https://pypi.python.org/pypi/jdatetime";
     license = licenses.psfl;

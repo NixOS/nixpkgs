@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, fetchzip
+{ lib, stdenv, fetchpatch, fetchurl, fetchzip
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
 , cmake
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
   ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
+  ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
   ;
 
   patches = [
@@ -121,9 +121,9 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     let
-      arch = stdenv.lib.head (stdenv.lib.splitString "-" stdenv.system);
+      arch = lib.head (lib.splitString "-" stdenv.system);
       march = {
-        x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64";
+        x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
         i686 = "pentium4";
         aarch64 = "armv8-a";
       }.${arch}
@@ -166,12 +166,10 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_ZLIB=1"
     ];
 
-  LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64); (stdenv.lib.makeLibraryPath [
+  LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64); (lib.makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr blas lapack openlibm
     openspecfun pcre2
   ]);
-
-  enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
   checkTarget = "testall";
@@ -206,8 +204,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ raskin rob garrison ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

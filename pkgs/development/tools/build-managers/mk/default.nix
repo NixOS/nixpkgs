@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "mk-2006-01-31";
@@ -9,6 +9,6 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

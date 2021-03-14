@@ -1,4 +1,4 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{ buildGoModule, lib, fetchFromGitHub, installShellFiles }:
 buildGoModule rec {
   pname = "aws-vault";
   version = "6.2.0";
@@ -11,6 +11,16 @@ buildGoModule rec {
   };
 
   vendorSha256 = "18lmxx784377x1v0gr6fkdx5flhcajsqlzyjx508z0kih6ammc0z";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd aws-vault \
+      --bash $src/contrib/completions/bash/aws-vault.bash \
+      --fish $src/contrib/completions/fish/aws-vault.fish \
+      --zsh $src/contrib/completions/zsh/aws-vault.zsh
+  '';
+
 
   doCheck = false;
 

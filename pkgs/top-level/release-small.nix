@@ -126,7 +126,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   pciutils = linux;
   pdf2xml = all;
   perl = all;
-  pkgconfig = all;
+  pkg-config = all;
   pmccabe = linux;
   procps = linux;
   python = unix; # Cygwin builds fail

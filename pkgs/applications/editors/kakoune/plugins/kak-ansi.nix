@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "kak-ansi";
@@ -22,7 +22,7 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
     ' rc/ansi.kak >$out/share/kak/autoload/plugins/ansi.kak
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kakoune support for rendering ANSI code";
     homepage = "https://github.com/eraserhd/kak-ansi";
     license = licenses.unlicense;

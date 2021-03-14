@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
+{ stdenv, lib, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
 , lwt_log, ocamlnet, ocaml_pcre, cryptokit, tyxml, xml-light, ipaddr
 , pgocaml, camlzip, ocaml_sqlite3
 , makeWrapper, fetchpatch
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.06.1"
+if !lib.versionAtLeast ocaml.version "4.06.1"
 then throw "ocsigenserver is not available for OCaml ${ocaml.version}"
 else
 
@@ -29,9 +29,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xda4fj8p5102lh9xmrn5mv3s0ps6yykqj3mpjf72gf4zd6fzcn7";
   }) ];
 
-  buildInputs = [ which makeWrapper ocaml findlib
-    lwt_react pgocaml camlzip ocaml_sqlite3
-  ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ which ocaml findlib lwt_react pgocaml camlzip ocaml_sqlite3 ];
 
   propagatedBuildInputs = [ cryptokit ipaddr lwt_log lwt_ssl ocamlnet
     ocaml_pcre tyxml xml-light
@@ -58,9 +57,9 @@ stdenv.mkDerivation rec {
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    maintainers = [ lib.maintainers.gal_bolle ];
   };
 
 }

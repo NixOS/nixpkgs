@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , extra-cmake-modules
 , botan2
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec{
   ];
 
   runtimeDeps = [ mesa-demos vulkan-tools ];
-  binPath = stdenv.lib.makeBinPath runtimeDeps;
+  binPath = lib.makeBinPath runtimeDeps;
 
   dontWrapQtApps = true;
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec{
     wrapQtApp $out/bin/corectrl --prefix PATH ":" ${binPath}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/corectrl/corectrl/";
     description = "Control your computer hardware via application profiles";
     longDescription = ''

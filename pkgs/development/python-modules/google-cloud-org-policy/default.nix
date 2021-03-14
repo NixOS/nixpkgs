@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, google_api_core }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, google-api-core }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
@@ -9,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "0ncgcnbvmgqph54yh2pjx2hh82gnkhsrw5yirp4wlf7jclh6j9xh";
   };
 
-  disabled = pythonOlder "3.5";
-
-  propagatedBuildInputs = [ google_api_core ];
+  propagatedBuildInputs = [ google-api-core ];
 
   # No tests in repo
   doCheck = false;
@@ -22,6 +20,6 @@ buildPythonPackage rec {
     description = "Protobufs for Google Cloud Organization Policy.";
     homepage = "https://github.com/googleapis/python-org-policy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
   };
 }

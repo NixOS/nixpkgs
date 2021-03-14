@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
     cp -r --parents share/pixmaps $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple and Convenient Messaging App for VK";
     homepage = "https://vk.com/messenger";
     license = licenses.unfree;

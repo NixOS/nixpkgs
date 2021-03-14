@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "packet-cli";
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official Packet CLI";
     homepage = "https://github.com/packethost/packet-cli";
     license = licenses.mit;

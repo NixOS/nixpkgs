@@ -1,20 +1,5 @@
-diff --git a/crawl-ref/source/Makefile b/crawl-ref/source/Makefile
---- a/crawl-ref/source/Makefile
-+++ b/crawl-ref/source/Makefile
-@@ -248,9 +248,9 @@ ifeq ($(uname_S),Darwin)
- 	STRIP := strip -x
- 	NEED_APPKIT = YesPlease
- 	LIBNCURSES_IS_UNICODE = Yes
--	NO_PKGCONFIG = Yes
--	BUILD_SQLITE = YesPlease
--	BUILD_ZLIB = YesPlease
-+	#NO_PKGCONFIG = Yes
-+	#BUILD_SQLITE = YesPlease
-+	#BUILD_ZLIB = YesPlease
- 	ifdef TILES
- 		EXTRA_LIBS += -framework AppKit -framework AudioUnit -framework CoreAudio -framework ForceFeedback -framework Carbon -framework IOKit -framework OpenGL -framework AudioToolbox -framework CoreVideo contrib/install/$(ARCH)/lib/libSDL2main.a
- 		BUILD_FREETYPE = YesPlease
 diff --git a/crawl-ref/source/util/find_font b/crawl-ref/source/util/find_font
+index f8b576fd63..b95c21c0a1 100755
 --- a/crawl-ref/source/util/find_font
 +++ b/crawl-ref/source/util/find_font
 @@ -1,6 +1,6 @@
@@ -25,7 +10,7 @@ diff --git a/crawl-ref/source/util/find_font b/crawl-ref/source/util/find_font
  
  name=$1
  [ "$name" ] || { echo "Usage: $0 <fontname.ttf>" >&2; exit 100; }
-@@ -11,6 +11,6 @@
+@@ -11,6 +11,6 @@ name=$1
          for dir in $FONTDIRS; do
              [ -d "$dir" ] && echo "$dir"
          done
@@ -34,6 +19,7 @@ diff --git a/crawl-ref/source/util/find_font b/crawl-ref/source/util/find_font
        | head -n1
  } 2>/dev/null
 diff --git a/crawl-ref/source/windowmanager-sdl.cc b/crawl-ref/source/windowmanager-sdl.cc
+index e29ccff507..9bf01e040a 100644
 --- a/crawl-ref/source/windowmanager-sdl.cc
 +++ b/crawl-ref/source/windowmanager-sdl.cc
 @@ -20,7 +20,7 @@

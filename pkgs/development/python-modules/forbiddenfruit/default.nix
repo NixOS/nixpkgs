@@ -1,16 +1,16 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
 }:
 
 buildPythonPackage rec {
-  version = "0.1.3";
+  version = "0.1.4";
   pname = "forbiddenfruit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1188a07cc24a9bd2c529dad06490b80a6fc88cde968af4d7861da81686b2cc8c";
+    sha256 = "e3f7e66561a29ae129aac139a85d610dbf3dd896128187ed5454b6421f624253";
   };
 
   checkInputs = [ nose ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Patch python built-in objects";
     homepage = "https://pypi.python.org/pypi/forbiddenfruit";
     license = licenses.mit;

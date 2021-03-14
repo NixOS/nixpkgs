@@ -21,7 +21,7 @@ buildPythonPackage rec {
           and not test_conditional_upload and not test_conditional_download_with_older_target \
   ''
   # need until https://ftputil.sschwarzer.net/trac/ticket/140#ticket is fixed
-  + lib.optionalString stdenv.isDarwin ''and not test_error_message_reuse''
+  + lib.optionalString stdenv.isDarwin "and not test_error_message_reuse"
   + ''"'';
 
   meta = with lib; {

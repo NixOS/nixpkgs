@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , libmediainfo
 , setuptools_scm
 , pytest, glibcLocales }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     py.test -k 'not test_parse_url' tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper for the mediainfo library";
     homepage = "https://github.com/sbraz/pymediainfo";
     license = licenses.mit;

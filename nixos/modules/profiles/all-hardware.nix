@@ -3,8 +3,10 @@
 # enabled in the initrd.  Its primary use is in the NixOS installation
 # CDs.
 
-{ ... }:
-
+{ pkgs, lib,... }:
+let
+  platform = pkgs.stdenv.hostPlatform;
+in
 {
 
   # The initrd has to contain any module that might be necessary for
@@ -42,7 +44,10 @@
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
       # VMware support.
-      "mptspi" "vmw_balloon" "vmwgfx" "vmw_vmci" "vmw_vsock_vmci_transport" "vmxnet3" "vsock"
+      "mptspi" "vmxnet3" "vsock"
+    ] ++ lib.optional platform.isx86 "vmw_balloon"
+    ++ lib.optionals (!platform.isAarch64) [ # not sure where else they're missing
+      "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.
       "hv_storvsc"

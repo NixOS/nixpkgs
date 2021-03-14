@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ future requests requests_oauthlib ];
   checkInputs = [ pytest responses hypothesis ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python wrapper around the Twitter API";
     homepage = "https://github.com/bear/python-twitter";
     license = licenses.asl20;

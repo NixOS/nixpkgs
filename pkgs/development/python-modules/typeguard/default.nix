@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , pythonOlder
-, stdenv
+, lib
 , setuptools_scm
 , pytest
 , typing-extensions
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.3";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
     license = licenses.mit;

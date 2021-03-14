@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, pkgconfig, libjack2
+{ mkDerivation, lib, fetchurl, pkg-config, libjack2
 , alsaLib, liblo, libsndfile, lv2, qtbase, qttools
 , rubberband
 }:
@@ -12,7 +12,7 @@ mkDerivation rec {
     sha256 = "ePhM9OTLJp1Wa2D9Y1Dqq/69WlEhEp3ih9yNUIJU5Y4=";
   };
 
-  nativeBuildInputs = [ qttools pkgconfig ];
+  nativeBuildInputs = [ qttools pkg-config ];
 
   buildInputs = [ libjack2 alsaLib liblo libsndfile lv2 qtbase rubberband ];
 

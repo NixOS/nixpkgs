@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "suid-chroot";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/chmod u+s/d' Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Setuid-safe wrapper for chroot";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;

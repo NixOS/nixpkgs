@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
+{ lib, stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
 , texinfo, libX11, xorgproto, libXi, gmp
 , libXext, libXt, libXaw, libXmu } :
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU Common Lisp compiler working via GCC";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;

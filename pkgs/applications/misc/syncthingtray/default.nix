@@ -1,5 +1,4 @@
 { mkDerivation
-, stdenv
 , lib
 , fetchFromGitHub
 , qtbase
@@ -20,24 +19,29 @@
 }:
 
 mkDerivation rec {
-  version = "1.1.0";
+  version = "1.1.3";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "0nzkzx870hzil2kny1irp4w2kxz5gmpchr2qxb7q4f9cnih92n0j";
+    sha256 = "sha256-ovit2XSkxSjcbpqQUv8IzMqfsfItbtXLbx0/Vy0+J0Y=";
   };
 
   buildInputs = [ qtbase cpp-utilities qtutilities ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]
-    ++ lib.optionals plasmoidSupport [ extra-cmake-modules plasma-framework ]
+    ++ lib.optionals plasmoidSupport [ plasma-framework ]
   ;
 
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ]
+    ++ lib.optionals plasmoidSupport [ extra-cmake-modules ]
+  ;
 
   # No tests are available by upstream, but we test --help anyway
   doInstallCheck = true;
@@ -57,7 +61,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Martchus/syncthingtray";
     description = "Tray application and Dolphin/Plasma integration for Syncthing";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux;
   };

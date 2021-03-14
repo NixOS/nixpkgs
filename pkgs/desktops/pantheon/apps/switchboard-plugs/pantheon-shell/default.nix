@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nix-update-script, pantheon, meson, ninja, pkgconfig, vala, glib
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pantheon, meson, ninja, pkg-config, vala, glib
 , libgee, granite, gexiv2, elementary-settings-daemon, gtk3, gnome-desktop
 , gala, wingpanel, elementary-dock, switchboard, gettext, bamf, fetchpatch }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Desktop Plug";
     homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
     license = licenses.gpl3Plus;

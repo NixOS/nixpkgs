@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, xorg }:
+{ lib, stdenv, fetchsvn, xorg }:
 
 stdenv.mkDerivation {
   pname = "xlife";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     install -Dm755 lifeconv -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://litwr2.atspace.eu/xlife.php";
     description = "Conway's Game of Life and other cellular automata, for X";
     license = licenses.hpndSellVariant;

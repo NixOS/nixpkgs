@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "py";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     "py"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";
     homepage = "https://pylib.readthedocs.org/";
     license = licenses.mit;

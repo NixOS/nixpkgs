@@ -1,11 +1,13 @@
-{ callPackage
+{ lib
+, stdenv
+, callPackage
 , stdenvNoCC
 , fetchurl
 , rpmextract
 , undmg
 , darwin
 , validatePkgConfig
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 /*
@@ -134,7 +136,7 @@ in stdenvNoCC.mkDerivation {
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+  '' + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
@@ -144,7 +146,7 @@ in stdenvNoCC.mkDerivation {
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool
   # explicitly and ignore the error.
-  postFixup = stdenvNoCC.lib.optionalString stdenvNoCC.isDarwin ''
+  postFixup = lib.optionalString stdenvNoCC.isDarwin ''
     for f in $out/lib/*.dylib; do
       install_name_tool -id $out/lib/$(basename $f) $f || true
     done
@@ -159,7 +161,7 @@ in stdenvNoCC.mkDerivation {
 
   passthru.tests.pkg-config = callPackage ./test { };
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "Intel Math Kernel Library";
     longDescription = ''
       Intel Math Kernel Library (Intel MKL) optimizes code with minimal effort

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, cudatoolkit, ncurses, addOpenGLRunpath }:
+{ lib, stdenv, fetchFromGitHub, cmake, cudatoolkit, ncurses, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   pname = "nvtop";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/bin/nvtop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A (h)top like task monitor for NVIDIA GPUs";
     homepage = "https://github.com/Syllo/nvtop";
     license = licenses.gpl3;

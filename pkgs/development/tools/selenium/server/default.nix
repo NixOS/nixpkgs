@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, jre
+{ lib, stdenv, fetchurl, makeWrapper, jre
 , htmlunit-driver, chromedriver, chromeSupport ? true }:
 
-with stdenv.lib;
+with lib;
 
 let
   minorVersion = "3.141";
@@ -18,7 +18,8 @@ in stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -p $out/share/lib/${pname}-${version}

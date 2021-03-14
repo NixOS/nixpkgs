@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib}:
+{lib, stdenv, fetchurl, zlib}:
 
 stdenv.mkDerivation rec {
   pname = "cramfsswap";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     install --target $out/bin -D cramfsswap
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Swap endianess of a cram filesystem (cramfs)";
     homepage = "https://packages.debian.org/sid/utils/cramfsswap";
     license = licenses.gpl2;

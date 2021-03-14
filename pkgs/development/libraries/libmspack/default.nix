@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "libmspack-0.7.1alpha";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A de/compression library for various Microsoft formats";
     homepage = "https://www.cabextract.org.uk/libmspack";
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, curl, tzdata, fetchpatch, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, cmake, curl, tzdata, fetchpatch, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "howard-hinnant-date-unstable";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     description = "A date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";

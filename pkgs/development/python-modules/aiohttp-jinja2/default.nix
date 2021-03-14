@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp }:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp, pytestcov }:
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp jinja2 ];
 
-  checkInputs = [ pytest pytest-aiohttp ];
+  checkInputs = [ pytest pytest-aiohttp pytestcov ];
 
   checkPhase = ''
     pytest -W ignore::DeprecationWarning

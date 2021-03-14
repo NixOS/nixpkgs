@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchgit, libubox, libjson }:
+{ lib, stdenv, cmake, fetchgit, libubox, libjson }:
 
 stdenv.mkDerivation {
   pname = "ubus";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ libubox libjson ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenWrt system message/RPC bus";
     homepage = "https://git.openwrt.org/?p=project/ubus.git;a=summary";
     license = licenses.lgpl21;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "git-fire-unstable-2017-08-27";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     install -D -m755 $src/git-fire $out/bin/git-fire
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Push ALL changes in a git repository
     '';

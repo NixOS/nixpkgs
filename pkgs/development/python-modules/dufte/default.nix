@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -6,24 +6,25 @@
 , importlib-metadata
 , matplotlib
 , numpy
+, exdown
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dufte";
-  version = "0.2.9";
+  version = "0.2.12";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nkaczipbsm8c14j9svxry2wigmn5iharibb6b8g062sjaph8x17";
+    sha256 = "0ag1d7h1wijkc7v2vpgkbqjlnpiwd4nh8zhxiby0989bpmlp3jr3";
   };
   format = "pyproject";
 
   propagatedBuildInputs = [
     matplotlib
     numpy
-  ] ++ stdenv.lib.optionals (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
@@ -32,10 +33,11 @@ buildPythonPackage rec {
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
-  checkInputs = [ pytestCheckHook ];
+
+  checkInputs = [ exdown pytestCheckHook ];
   pythonImportsCheck = [ "dufte" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clean matplotlib plots";
     homepage = "https://github.com/nschloe/dufte";
     license = licenses.gpl3Plus;

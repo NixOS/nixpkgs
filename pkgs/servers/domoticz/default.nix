@@ -1,4 +1,4 @@
-{ stdenv,
+{ lib, stdenv,
   fetchzip,
   makeWrapper,
   cmake,
@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     cp -r ${minizip-src}/* $sourceRoot/extern/minizip
   '';
-
-  enableParallelBuilding = true;
 
   buildInputs = [
     openssl
@@ -88,7 +86,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/domoticz --set LD_LIBRARY_PATH ${python3}/lib;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Home automation system";
     longDescription = ''
       Domoticz is a home automation system that lets you monitor and configure

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "qwt-5.2.3";
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     qmakeFlags="$qmakeFlags INSTALLBASE=$out -after doc.path=$out/share/doc/${name}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt widgets for technical applications";
     homepage = "http://qwt.sourceforge.net/";
     # LGPL 2.1 plus a few exceptions (more liberal)
-    license = stdenv.lib.licenses.qwt;
+    license = lib.licenses.qwt;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };

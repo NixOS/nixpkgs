@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 let
   version = "7.6.1";
 in stdenv.mkDerivation {
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   makeFlags = [ "prefix=$(out)" ];
   preInstall = "mkdir -p $out/lib";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libjson.sourceforge.net/";
     description = "A JSON reader and writer";
     longDescription = ''

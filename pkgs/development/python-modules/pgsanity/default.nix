@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , python
 , fetchPypi
 , buildPythonPackage
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ postgresql ];
   propagatedBuildInputs = [ postgresql ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/markdrago/pgsanity";
     description = "Checks the syntax of Postgresql SQL files";
     longDescription = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
       run it through ecpg and
       let ecpg report on the syntax errors of the SQL.
     '';
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ nalbyuites ];
   };
 }

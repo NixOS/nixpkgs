@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , perl
 , python3
@@ -7,7 +7,7 @@
 , gperf
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , gobject-introspection
 , libnotify
@@ -55,11 +55,11 @@
 
 assert enableGeoLocation -> geoclue2 != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.30.3";
+  version = "2.30.5";
 
   outputs = [ "out" "dev" ];
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0zsy3say94d9bhaan0l6mfr59z03a5x4kngyy8b2i20n77q19skd";
+    sha256 = "07vzbbnvz69rn9pciji4axfpclp98bpj4a0br2z0gbn5wc4an3bx";
   };
 
   patches = optionals stdenv.isLinux [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     ./libglvnd-headers.patch
   ];
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ignore gettext in cmake_prefix_path so that find_program doesn't
     # pick up the wrong gettext. TODO: Find a better solution for
     # this, maybe make cmake not look up executables in
@@ -94,10 +94,11 @@ stdenv.mkDerivation rec {
     gperf
     ninja
     perl
-    pkgconfig
+    pkg-config
     python3
     ruby
     glib # for gdbus-codegen
+  ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
 

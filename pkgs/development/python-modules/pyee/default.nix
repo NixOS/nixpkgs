@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, vcversioner, pytestrunner, mock, pytest, pytest-asyncio, pytest-trio, twisted, zipp, pyparsing, pyhamcrest, futures, attrs, stdenv, isPy27 }:
+{ buildPythonPackage, fetchPypi, lib, vcversioner, pytestrunner, mock, pytest, pytest-asyncio, pytest-trio, twisted, zipp, pyparsing, pyhamcrest, futures, attrs, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pyee";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pytest-trio
     pytestrunner
     twisted
-  ] ++ stdenv.lib.optional isPy27 [
+  ] ++ lib.optional isPy27 [
     attrs
     futures
     pyparsing

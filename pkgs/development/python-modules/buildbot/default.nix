@@ -1,7 +1,7 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, future, sqlalchemy,
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
+  python, twisted, jinja2, zope_interface, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
-  txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
+  txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
   parameterized, git, openssh, glibcLocales, nixosTests }:
 
@@ -9,7 +9,7 @@ let
   withPlugins = plugins: buildPythonPackage {
     name = "${package.name}-with-plugins";
     phases = [ "installPhase" "fixupPhase" ];
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
     installPhase = ''
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.8.4";
+    version = "3.0.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0i2sbxhsqyk2yr234il0zsyp1rf2v1l5hmzvw0yrgds6jpr19cqv";
+      sha256 = "0li47fpm398dk69q6g2zjaxx46w00g3n0jszz88kf57sakri553y";
     };
 
     propagatedBuildInputs = [
@@ -51,7 +51,7 @@ let
     checkInputs = [
       treq
       txrequests
-      pyjade
+      pypugjs
       boto3
       moto
       mock
@@ -73,13 +73,6 @@ let
       # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
-
-      # fix compatibility with the latest SQLAlchemy
-      (fetchpatch {
-        url = "https://github.com/buildbot/buildbot/commit/96f3cd1c5f5c82b733baecb133576366ecf544fc.patch";
-        sha256 = "0n1jm13h08j7ksbs8ixayn3wziq5hzyp3kscz9fpgxd8gl885y5n";
-        stripLen = 1;
-      })
     ];
 
     postPatch = ''

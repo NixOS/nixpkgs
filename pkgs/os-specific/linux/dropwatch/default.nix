@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , libnl, readline, libbfd, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qmax0l7z1qik42c949fnvjh5r6awk4gpgzdsny8iwnmwzjyp8b8";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libbfd libnl ncurses readline zlib ];
 
   # To avoid running into https://sourceware.org/bugzilla/show_bug.cgi?id=14243 we need to define:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux kernel dropped packet monitor";
     homepage = "https://github.com/nhorman/dropwatch";
     license = licenses.gpl2;

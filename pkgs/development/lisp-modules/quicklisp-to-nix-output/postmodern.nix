@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''postmodern'';
-  version = ''20201016-git'';
+  baseName = "postmodern";
+  version = "20201016-git";
 
   parasites = [ "postmodern/tests" ];
 
-  description = ''PostgreSQL programming API'';
+  description = "PostgreSQL programming API";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-postgres" args."cl-postgres_slash_tests" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."fiveam" args."flexi-streams" args."global-vars" args."ironclad" args."md5" args."s-sql" args."s-sql_slash_tests" args."simple-date" args."simple-date_slash_postgres-glue" args."split-sequence" args."uax-15" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2020-10-16/postmodern-20201016-git.tgz'';
-    sha256 = ''1svaiksbqcaq8sh7q6sj9kzazdfl360zqr2nzhwbgy4xnaj4vf3n'';
+    url = "http://beta.quicklisp.org/archive/postmodern/2020-10-16/postmodern-20201016-git.tgz";
+    sha256 = "1svaiksbqcaq8sh7q6sj9kzazdfl360zqr2nzhwbgy4xnaj4vf3n";
   };
 
   packageName = "postmodern";

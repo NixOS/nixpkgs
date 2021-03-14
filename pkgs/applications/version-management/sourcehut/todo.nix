@@ -1,7 +1,6 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , srht, redis, alembic, pystache
-, pytest, factory_boy, writeText }:
+, pytest, factory_boy }:
 
 buildPythonPackage rec {
   pname = "todosrht";
@@ -34,7 +33,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://todo.sr.ht/~sircmpwn/todo.sr.ht";
     description = "Ticket tracking service for the sr.ht network";
     license = licenses.agpl3;

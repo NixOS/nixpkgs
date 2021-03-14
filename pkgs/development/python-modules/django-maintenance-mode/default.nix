@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytest, django }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytest, django }:
 
 buildPythonPackage rec {
   pname = "django-maintenance-mode";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shows a 503 error page when maintenance-mode is on";
     homepage = "https://github.com/fabiocaccamo/django-maintenance-mode";
     maintainers = with maintainers; [ mrmebelman ];

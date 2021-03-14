@@ -1,6 +1,6 @@
 { elk6Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
@@ -9,7 +9,7 @@
 , zlib
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation (rec {
   version = elk6Version;
@@ -35,7 +35,8 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  buildInputs = [ makeWrapper jre_headless util-linux ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre_headless util-linux ]
              ++ optional enableUnfree zlib;
 
   installPhase = ''
@@ -61,7 +62,7 @@ stdenv.mkDerivation (rec {
   };
 } // optionalAttrs enableUnfree {
   dontPatchELF = true;
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
   runtimeDependencies = [ zlib ];
   postFixup = ''
     for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do

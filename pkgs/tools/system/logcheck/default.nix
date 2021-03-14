@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, lockfileProgs, perlPackages }:
+{ lib, stdenv, fetchurl, lockfileProgs, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "logcheck";
-  version = "1.3.20";
+  version = "1.3.22";
   _name    = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
-    sha256 = "1rmkvxhcwr9gb6z4dlgr6rrx5l70hshlxdggs6qx0w1ljcmx1dlz";
+    sha256 = "sha256-e7XeRNlFsexlVskK2OnLTmNV/ES2xWU+/+AElexV6E4=";
   };
 
   prePatch = ''
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "SHAREDIR=share/logtail/detectrotate"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mails anomalies in the system logfiles to the administrator";
     longDescription = ''
       Mails anomalies in the system logfiles to the administrator.

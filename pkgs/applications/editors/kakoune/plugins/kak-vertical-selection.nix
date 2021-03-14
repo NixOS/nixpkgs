@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, lib }:
 stdenv.mkDerivation {
   name = "kak-vertical-selection";
   version = "2019-04-11";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     cp -r vertical-selection.kak $out/share/kak/autoload/plugins
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Select up and down lines that match the same pattern in Kakoune";
     homepage = "https://github.com/occivink/kakoune-vertical-selection";
     license = licenses.unlicense;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, scipy, ffmpeg-full }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, scipy, ffmpeg-full }:
 
 buildPythonPackage rec {
   pname = "pydub";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
 
   # disable a test that fails on aarch64 due to rounding errors
-  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+  postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace test/test.py \
       --replace "test_overlay_with_gain_change" "notest_overlay_with_gain_change"
   '';
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     python test/test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manipulate audio with a simple and easy high level interface.";
     homepage    = "http://pydub.com/";
     license     = licenses.mit;

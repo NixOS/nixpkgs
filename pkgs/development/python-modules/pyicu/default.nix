@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/PyICU/";
     description = "Python extension wrapping the ICU C++ API";
     license = licenses.mit;

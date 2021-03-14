@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, angstrom, ocaml_lwt }:
+{ lib, fetchFromGitHub, buildDunePackage, angstrom, ocaml_lwt }:
 
 buildDunePackage rec {
   pname = "angstrom-lwt-unix";
@@ -14,6 +14,6 @@ buildDunePackage rec {
   meta = {
     inherit (angstrom.meta) homepage license;
     description = "Lwt_unix support for Angstrom";
-    maintainers = with stdenv.lib.maintainers; [ romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

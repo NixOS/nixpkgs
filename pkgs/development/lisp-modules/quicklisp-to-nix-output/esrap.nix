@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''esrap'';
-  version = ''20200325-git'';
+  baseName = "esrap";
+  version = "20200325-git";
 
   parasites = [ "esrap/tests" ];
 
-  description = ''A Packrat / Parsing Grammar / TDPL parser for Common Lisp.'';
+  description = "A Packrat / Parsing Grammar / TDPL parser for Common Lisp.";
 
   deps = [ args."alexandria" args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/esrap/2020-03-25/esrap-20200325-git.tgz'';
-    sha256 = ''1pwgjsm19nxx8d4iwbn3x7g08r6qyq1vmp9m83m87r53597b3a68'';
+    url = "http://beta.quicklisp.org/archive/esrap/2020-03-25/esrap-20200325-git.tgz";
+    sha256 = "1pwgjsm19nxx8d4iwbn3x7g08r6qyq1vmp9m83m87r53597b3a68";
   };
 
   packageName = "esrap";

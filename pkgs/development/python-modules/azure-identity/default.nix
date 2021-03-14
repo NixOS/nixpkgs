@@ -18,7 +18,6 @@
 buildPythonPackage rec {
   pname = "azure-identity";
   version = "1.5.0";
-  disabled = isPy38;
 
   src = fetchPypi {
     inherit pname version;
@@ -37,11 +36,6 @@ buildPythonPackage rec {
     msrest
     msrestazure
   ];
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace msal-extensions~=0.1.3 msal-extensions
-  '';
 
   pythonImportsCheck = [ "azure.identity" ];
 

@@ -24,8 +24,6 @@ rec {
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
-      # Just a guess, based on `system`
-      platform = platforms.select final;
       # Determine whether we are compatible with the provided CPU
       isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
       # Derived meta-data
@@ -79,12 +77,23 @@ rec {
       };
       isStatic = final.isWasm || final.isRedox;
 
-      kernelArch =
+      # Just a guess, based on `system`
+      inherit
+        ({
+          linux-kernel = args.linux-kernel or {};
+          gcc = args.gcc or {};
+          rustc = args.rust or {};
+        } // platforms.select final)
+        linux-kernel gcc rustc;
+
+      linuxArch =
         if final.isAarch32 then "arm"
         else if final.isAarch64 then "arm64"
-        else if final.isx86_32 then "x86"
-        else if final.isx86_64 then "ia64"
+        else if final.isx86_32 then "i386"
+        else if final.isx86_64 then "x86_64"
         else if final.isMips then "mips"
+        else if final.isPower then "powerpc"
+        else if final.isRiscV then "riscv"
         else final.parsed.cpu.name;
 
       qemuArch =
@@ -124,10 +133,12 @@ rec {
         then "${qemu-user}/bin/qemu-${final.qemuArch}"
         else if final.isWasi
         then "${pkgs.wasmtime}/bin/wasmtime"
+        else if final.isMmix
+        then "${pkgs.mmixware}/bin/mmix"
         else throw "Don't know how to run ${final.config} executables.";
 
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // mapAttrs (n: v: v final.platform.gcc.arch or "default") architectures.predicates
+      // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert lib.foldl

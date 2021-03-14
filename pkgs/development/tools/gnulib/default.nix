@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit, python3 }:
 
 stdenv.mkDerivation {
   pname = "gnulib";
@@ -10,19 +10,26 @@ stdenv.mkDerivation {
     sha256 = "0hkg3nql8nsll0vrqk4ifda0v4kpi67xz42r8daqsql6c4rciqnw";
   };
 
-  dontFixup = true;
-  # no "make install", gnulib is a collection of source code
+  postPatch = ''
+    patchShebangs gnulib-tool.py
+  '';
+
+  buildInputs = [ python3 ];
+
   installPhase = ''
-    mkdir -p $out; mv * $out/
-    ln -s $out/lib $out/include
     mkdir -p $out/bin
+    cp -r * $out/
+    ln -s $out/lib $out/include
     ln -s $out/gnulib-tool $out/bin/
   '';
 
-  meta = {
+  # do not change headers to not update all vendored build files
+  dontFixup = true;
+
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/gnulib/";
     description = "Central location for code to be shared among GNU packages";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
 }

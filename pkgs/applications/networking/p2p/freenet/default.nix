@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils, substituteAll }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils, substituteAll }:
 
 let
   freenet_ext = fetchurl {
@@ -73,8 +73,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "Decentralised and censorship-resistant network";
     homepage = "https://freenetproject.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

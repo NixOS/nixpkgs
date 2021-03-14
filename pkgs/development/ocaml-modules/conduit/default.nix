@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage
 , ppx_sexp_conv, sexplib, astring, uri, logs
 , ipaddr, ipaddr-sexp
 }:
@@ -20,8 +20,8 @@ buildDunePackage rec {
 
   meta = {
     description = "A network connection establishment library";
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ alexfmpe vbgl ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ alexfmpe vbgl ];
     homepage = "https://github.com/mirage/ocaml-conduit";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, curl, libxml2 }:
+{ lib, stdenv, fetchurl, curl, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "xmlrpc-c-1.51.06";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight RPC library based on XML and HTTP";
     homepage = "http://xmlrpc-c.sourceforge.net/";
     # <xmlrpc-c>/doc/COPYING also lists "Expat license",

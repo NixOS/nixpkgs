@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, lv2, zita-resampler }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, lv2, zita-resampler }:
 
 stdenv.mkDerivation rec {
   pname = "tamgamp.lv2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sadko4u/tamgamp.lv2";
     description = "Guitar amplifier simulator";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "valkyrie-2.0.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake4Hook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.valgrind.org/";
     description = "Qt4-based GUI for the Valgrind 3.6.x series";
     license = licenses.gpl2;

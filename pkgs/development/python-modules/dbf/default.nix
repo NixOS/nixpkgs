@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
+{ lib, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
 
 buildPythonPackage rec {
     pname = "dbf";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
       sha256 = "a4a7a8cdc113d840142d21a796c16c7d329ad35c48f17156446732c83ebc571a";
     };
 
-    propagatedBuildInputs = [ aenum ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
+    propagatedBuildInputs = [ aenum ] ++ lib.optional (pythonOlder "3.4") enum34;
 
     doCheck = !isPy3k;
     # tests are not yet ported.
@@ -19,7 +19,7 @@ buildPythonPackage rec {
       ${python.interpreter} dbf/test.py
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
       homepage    = "https://pypi.python.org/pypi/dbf";
       license     = licenses.bsd2;

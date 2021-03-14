@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, bash, curl, darwin, zlib
+{ lib, stdenv, makeWrapper, bash, curl, darwin, zlib
 , version
 , src
 , platform
@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optionalString;
+  inherit (lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
@@ -24,7 +24,7 @@ rec {
     inherit version;
     inherit src;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
@@ -32,7 +32,7 @@ rec {
     };
 
     buildInputs = [ bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+      ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -46,7 +46,7 @@ rec {
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/rustc"
-        '' + optionalString (stdenv.lib.versionAtLeast version "1.46")
+        '' + optionalString (lib.versionAtLeast version "1.46")
         # rustc bootstrap needs libz starting from 1.46
         ''
           ln -s ${zlib}/lib/libz.so.1 $out/lib/libz.so.1
@@ -76,15 +76,15 @@ rec {
     inherit version;
     inherit src;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ makeWrapper bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ bash ] ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .

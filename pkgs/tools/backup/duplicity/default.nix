@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch
 , fetchurl
 , pythonPackages
@@ -14,16 +14,16 @@
 , gettext
 }:
 let
-  inherit (stdenv.lib.versions) majorMinor splitVersion;
-  majorMinorPatch = v: builtins.concatStringsSep "." (stdenv.lib.take 3 (splitVersion v));
+  inherit (lib.versions) majorMinor splitVersion;
+  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
 in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.8.13";
+  version = "0.8.17";
 
   src = fetchurl {
     url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "0lflg1ay4q4w9qzpmh6y2hza4fc3ig12q44qkd80ks17hj21bxa6";
+    sha256 = "114rwkf9b3h4fcagrx013sb7krc4hafbwl9gawjph2wd9pkv2wx2";
   };
 
   patches = [
@@ -33,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
     # Our Python infrastructure runs test in installCheckPhase so we need
     # to make the testing code stop assuming it is run from the source directory.
     ./use-installed-scripts-in-test.patch
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     ./linux-disable-timezone-test.patch
   ];
 
@@ -49,6 +49,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     b2sdk
     boto
+    boto3
     cffi
     cryptography
     ecdsa
@@ -62,7 +63,7 @@ pythonPackages.buildPythonApplication rec {
     pycrypto
     pydrive
     future
-  ] ++ stdenv.lib.optionals (!isPy3k) [
+  ] ++ lib.optionals (!isPy3k) [
     enum
   ];
 
@@ -71,7 +72,7 @@ pythonPackages.buildPythonApplication rec {
     gnutar # Add 'tar' to PATH.
     librsync # Add 'rdiff' to PATH.
     par2cmdline # Add 'par2' to PATH.
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     util-linux # Add 'setsid' to PATH.
   ] ++ (with pythonPackages; [
     lockfile
@@ -83,7 +84,7 @@ pythonPackages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/duplicity \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
+      --prefix PATH : "${lib.makeBinPath [ gnupg ncftp rsync ]}"
   '';
 
   preCheck = ''
@@ -99,7 +100,7 @@ pythonPackages.buildPythonApplication rec {
 
     # Don't run developer-only checks (pep8, etc.).
     export RUN_CODE_TESTS=0
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # Work around the following error when running tests:
     # > Max open files of 256 is too low, should be >= 1024.
     # > Use 'ulimit -n 1024' or higher to correct.
@@ -111,7 +112,7 @@ pythonPackages.buildPythonApplication rec {
   # > OSError: out of pty devices
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://www.nongnu.org/duplicity";
     license = licenses.gpl2Plus;

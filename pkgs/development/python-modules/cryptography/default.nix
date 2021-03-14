@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, isPy27
-, ipaddress
+, rustPlatform
+, setuptools-rust
 , openssl
 , cryptography_vectors
 , darwin
@@ -13,37 +13,47 @@
 , isPyPy
 , cffi
 , pytest
+, pytest-subtests
 , pretend
 , iso8601
 , pytz
 , hypothesis
-, enum34
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.2.1"; # Also update the hash in vectors.nix
+  version = "3.4.6"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qxz02kfsrihq1h4afyqwcsv9nh3s9mmrr6y9lhi4angw05y3mfk";
+    sha256 = "11wgsihfq72fav67c3igi0xbhbd6c5dj869byd1jkq0fbcz24cid";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "${pname}-${version}/${cargoRoot}";
+    name = "${pname}-${version}";
+    sha256 = "1i0sd2y4a5g1yqwcpw2ycp6p4p8sk5v7clblq756i5864j52v6w1";
+  };
+
+  cargoRoot = "src/rust";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = stdenv.lib.optionals (!isPyPy) [
+  nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
-  ];
+  ] ++ [
+    rustPlatform.cargoSetupHook
+    setuptools-rust
+  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-             ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+             ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     packaging
     six
-  ] ++ stdenv.lib.optionals (!isPyPy) [
+  ] ++ lib.optionals (!isPyPy) [
     cffi
-  ] ++ stdenv.lib.optionals isPy27 [
-    ipaddress enum34
   ];
 
   checkInputs = [
@@ -52,6 +62,7 @@ buildPythonPackage rec {
     iso8601
     pretend
     pytest
+    pytest-subtests
     pytz
   ];
 
@@ -63,7 +74,7 @@ buildPythonPackage rec {
   # can do until nix 1.11's release
   __impureHostDeps = [ "/usr/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to

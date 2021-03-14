@@ -71,7 +71,7 @@ in
       #utmp = 29; # unused
       # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
-      #disnix = 33; # unused
+      #disnix = 33; # module removed
       osgi = 34;
       tor = 35;
       cups = 36;
@@ -143,7 +143,7 @@ in
       nix-ssh = 104;
       dictd = 105;
       couchdb = 106;
-      searx = 107;
+      #searx = 107; # dynamically allocated as of 2020-10-27
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
@@ -387,7 +387,7 @@ in
       utmp = 29;
       # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
-      disnix = 33;
+      #disnix = 33; # module removed
       osgi = 34;
       tor = 35;
       #cups = 36; # unused
@@ -457,7 +457,7 @@ in
       #nix-ssh = 104; # unused
       dictd = 105;
       couchdb = 106;
-      searx = 107;
+      #searx = 107; # dynamically allocated as of 2020-10-27
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;

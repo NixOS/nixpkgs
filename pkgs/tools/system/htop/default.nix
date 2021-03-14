@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "3.0.2";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    sha256 = "1qmqhbnc5yw4brd24yrp85k09770c1c00nl03mkv5pdz2bvqivk7";
+    sha256 = "sha256-9zecDd3oZ24RyOLnKdJmR29Chx6S24Kvuf/F7RYzl4I=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses
   ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive process viewer for Linux";
     homepage = "https://htop.dev";
     license = licenses.gpl2Only;

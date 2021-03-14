@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, cmake, python3 }:
+{ lib, fetchurl, python3Packages, cmake, python3 }:
 
 let
   pythonPackages = python3Packages;
@@ -26,9 +26,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib ; {
+  meta = with lib ; {
     description = "Management of analyses and data in DNA metabarcoding";
     homepage = "https://git.metabarcoding.org/obitools/obitools3";
     license = licenses.cecill20;

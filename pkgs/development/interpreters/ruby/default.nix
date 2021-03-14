@@ -1,6 +1,6 @@
 { stdenv, buildPackages, lib
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
-, zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
+, zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
 , makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
@@ -44,12 +44,13 @@ let
       , groff, docSupport ? true
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
+      , jemalloc, jemallocSupport ? false
       # By default, ruby has 3 observed references to stdenv.cc:
       #
       # - If you run:
       #     ruby -e "puts RbConfig::CONFIG['configure_args']"
       # - In:
-      #     $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+      #     $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
@@ -94,6 +95,7 @@ let
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
+          ++ (op jemallocSupport jemalloc)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
@@ -134,6 +136,7 @@ let
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
           ++ op (!jitSupport) "--disable-jit-support"
           ++ op (!docSupport) "--disable-install-doc"
+          ++ op (jemallocSupport) "--with-jemalloc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
             # that tk is installed
@@ -159,7 +162,7 @@ let
           export GEM_HOME="$out/${passthru.gemPath}"
         '';
 
-        installFlags = stdenv.lib.optional docSupport "install-doc";
+        installFlags = lib.optional docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
           # Remove unnecessary groff reference from runtime closure, since it's big
@@ -172,7 +175,7 @@ let
                 $out/lib/libruby*
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
-                $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+                $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
             ''
           }
           # Bundler tries to create this directory
@@ -184,7 +187,7 @@ let
           addRubyLibPath() {
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
-            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.targetPlatform.system}
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
           }
 
           addEnvHooks "$hostOffset" addGemPath
@@ -208,7 +211,7 @@ let
 
         disallowedRequisites = op (!jitSupport) stdenv.cc.cc;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "The Ruby language";
           homepage    = "http://www.ruby-lang.org/en/";
           license     = licenses.ruby;
@@ -243,14 +246,6 @@ let
     ) args; in self;
 
 in {
-  ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "8" "";
-    sha256 = {
-      src = "16md4jspjwixjlbhx3pnd5iwpca07p23ghkxkqd82sbchw3xy2vc";
-      git = "19gkk3q9l33cwkfsp5k8f8fipq7gkyqkqirm9farbvy425519rv2";
-    };
-  };
-
   ruby_2_6 = generic {
     version = rubyVersion "2" "6" "6" "";
     sha256 = {

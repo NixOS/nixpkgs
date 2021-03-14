@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.5.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1j6h98whgkcxrh30bwvnxvyqxrxchgpdgqhl0j71xz7x72dqxijd";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of GStreamer effects to be used in different GNOME Modules";
     homepage = "https://wiki.gnome.org/Projects/GnomeVideoEffects";
     platforms = platforms.linux;

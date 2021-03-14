@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, libX11 }:
+{ lib, stdenv, fetchurl, perl, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "xkbset-0.5";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/xkbset-gui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://faculty.missouri.edu/~stephen/software/#xkbset";
     description = "Program to help manage many of XKB features of X window";
     maintainers = with maintainers; [ drets ];

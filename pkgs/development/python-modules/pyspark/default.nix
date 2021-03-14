@@ -1,12 +1,12 @@
-{ buildPythonPackage, fetchPypi, stdenv, py4j }:
+{ buildPythonPackage, fetchPypi, lib, py4j }:
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "38b485d3634a86c9a2923c39c8f08f003fdd0e0a3d7f07114b2fb4392ce60479";
+    sha256 = "d4f2ced43394ad773f7b516a4bbcb5821a940462a17b1a25f175c83771b62ebc";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # Tests assume running spark...
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
     license = licenses.asl20;

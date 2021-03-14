@@ -13,7 +13,7 @@
 , libuuid
 , libzip
 , opencascade
-, pkgconfig
+, pkg-config
 , podofo
 , python3
 , sqlite
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    sha256 = "13c4p60vrmwmnrv2jcr2gc1cxnimy7j8yp1p6434pbbk2py9k8mx";
+    sha256 = "0mra6kf1c2qixfzqva6r01qms5kdabbhhblhk5is6h6nq78i8640";
   };
 
   buildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     boost.dev
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

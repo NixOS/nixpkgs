@@ -10,7 +10,7 @@ let
     { pkgs, databaseType, ... }:
     {
       name = "keycloak";
-      meta = with pkgs.stdenv.lib.maintainers; {
+      meta = with pkgs.lib.maintainers; {
         maintainers = [ talyz ];
       };
 

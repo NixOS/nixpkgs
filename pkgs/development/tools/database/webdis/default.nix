@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, hiredis, http-parser, jansson, libevent, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, hiredis, http-parser, jansson, libevent, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "webdis";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "CONFDIR=${placeholder "out"}/share/webdis"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Redis HTTP interface with JSON output";
     homepage = "https://webd.is/";
     license = licenses.bsd2;

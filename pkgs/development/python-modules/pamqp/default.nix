@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = [ mock nose pep8 pylint mccabe ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RabbitMQ Focused AMQP low-level library";
     homepage = "https://pypi.python.org/pypi/pamqp";
     license = licenses.bsd3;

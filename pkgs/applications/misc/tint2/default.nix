@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , pkg-config
 , cmake
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/o9000/tint2";
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
     license = licenses.gpl2;

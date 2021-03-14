@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "soxr-0.1.3";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An audio resampling library";
     homepage = "http://soxr.sourceforge.net";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

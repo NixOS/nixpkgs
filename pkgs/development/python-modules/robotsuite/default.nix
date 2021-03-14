@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , unittest2, lxml, robotframework
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
       --replace robotframework-python3 robotframework
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python unittest test suite for Robot Framework";
     homepage = "https://github.com/collective/robotsuite/";
     license = licenses.gpl3;

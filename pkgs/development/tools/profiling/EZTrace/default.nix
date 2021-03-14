@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl, autoconf, gfortran
 , libelf, libiberty, zlib, libbfd, libopcodes
 , buildPackages
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
-    license = stdenv.lib.licenses.cecill-b;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = lib.licenses.cecill-b;
+    maintainers = with lib.maintainers; [ ];
   };
 }

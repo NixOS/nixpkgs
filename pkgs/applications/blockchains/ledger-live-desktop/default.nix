@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
+{ lib, fetchurl, appimageTools, imagemagick }:
 
 let
   pname = "ledger-live-desktop";
-  version = "2.18.0";
+  version = "2.23.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    sha256 = "19sx9n5mij68v07vy65h1c16rgbpll3kagr437cjb7r95k3nk2zn";
+    sha256 = "0id9zbpfq3knv8qwkhplbl9pwrvdkn212pafwh4vpjbbp4yimhq5";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -26,7 +26,7 @@ in appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wallet app for Ledger Nano S and Ledger Blue";
     homepage = "https://www.ledger.com/live";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "apparix-11-062";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://micans.org/apparix";
     description = "Add directory bookmarks, distant listing, and distant editing to the command line";
     maintainers = with maintainers; [ lethalman ];

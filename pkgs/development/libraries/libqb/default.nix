@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "libqb-0.17.2";
+  pname = "libqb";
+  version = "2.0.3";
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/releases/q/u/quarterback/${name}.tar.xz";
-    sha256 = "1zpl45p3n6dn1jgbsrrmccrmv2mvp8aqmnl0qxfjf7ymkrj9qhcs";
+  src = fetchFromGitHub {
+    owner = "ClusterLabs";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-a9CnqfrQUL0DdPPOJjfh9tQ0O8iRHPP3iBmy3MKvt/0=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [ libxml2 ];
+
+  meta = with lib; {
     homepage = "https://github.com/clusterlabs/libqb";
     description = "A library providing high performance logging, tracing, ipc, and poll";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.unix;
   };
 }

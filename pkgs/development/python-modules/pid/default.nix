@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pidfile featuring stale detection and file-locking";
     homepage = "https://github.com/trbs/pid/";
     license = licenses.asl20;

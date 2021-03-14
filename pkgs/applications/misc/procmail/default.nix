@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "procmail-3.22";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     sha256 = "05z1c803n5cppkcq99vkyd5myff904lf9sdgynfqngfk9nrpaz08";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mail processing and filtering utility";
     homepage = "http://www.procmail.org/";
     license = licenses.gpl2;

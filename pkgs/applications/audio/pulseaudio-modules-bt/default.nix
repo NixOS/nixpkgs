@@ -2,7 +2,7 @@
 , runCommand
 , fetchFromGitHub
 , pulseaudio
-, pkgconfig
+, pkg-config
 , ffmpeg
 , patchelf
 , fdk_aac
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     patchelf
     cmake
   ];
@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/EHfive/pulseaudio-modules-bt";
     description = "LDAC, aptX, aptX HD, AAC codecs (A2DP Audio) support for Linux PulseAudio";
     platforms = platforms.linux;

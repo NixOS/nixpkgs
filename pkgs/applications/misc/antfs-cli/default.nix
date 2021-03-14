@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication {
   pname = "antfs-cli";
   version = "unstable-2017-02-11";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Tigge/antfs-cli";
     description = "Extracts FIT files from ANT-FS based sport watches";
     license = licenses.mit;

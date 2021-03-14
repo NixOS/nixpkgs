@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, elfutils, zlib }:
+{ lib, stdenv, fetchgit, cmake, elfutils, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "pahole";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.kernel.org/cgit/devel/pahole/pahole.git/";
     description = "Pahole and other DWARF utils";
     license = licenses.gpl2;

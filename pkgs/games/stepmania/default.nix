@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     ln -s $out/stepmania-5.1/stepmania $out/bin/stepmania
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://www.stepmania.com/";
     description = "Free dance and rhythm game for Windows, Mac, and Linux";

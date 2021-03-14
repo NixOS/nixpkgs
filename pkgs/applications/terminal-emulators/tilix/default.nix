@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , meson
 , ninja
 , python3
-, pkgconfig
+, pkg-config
 , dmd
 , dconf
 , dbus
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     dmd
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
     homepage = "https://gnunn1.github.io/tilix-web";
     license = licenses.mpl20;

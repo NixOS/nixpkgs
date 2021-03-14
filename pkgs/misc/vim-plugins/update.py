@@ -503,9 +503,9 @@ def parse_args():
 
 
 def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
-    files_staged = repo.index.add([str(f.resolve()) for f in files])
+    repo.index.add([str(f.resolve()) for f in files])
 
-    if files_staged:
+    if repo.index.diff("HEAD"):
         print(f'committing to nixpkgs "{message}"')
         repo.index.commit(message)
     else:

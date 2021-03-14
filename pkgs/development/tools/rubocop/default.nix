@@ -14,6 +14,5 @@ bundlerEnv {
     homepage = "https://docs.rubocop.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam leemachin ];
-    platforms = platforms.unix;
   };
 }

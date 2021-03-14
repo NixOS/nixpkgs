@@ -1,7 +1,8 @@
 { lib
-, fetchFromGitHub
+, fetchPypi
 , buildPythonPackage
 , aplpy
+, joblib
 , astropy
 , radio_beam
 , pytest
@@ -11,31 +12,20 @@
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.4.5";
+  version = "0.5.0";
+  format = "pyproject";
 
-  # Fetch from GitHub instead of PyPi, as 0.4.5 isn't available in PyPi
-  src = fetchFromGitHub {
-    owner = "radio-astro-tools";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1xc1m6vpl0bm600fx9vypa7zcvwg7yvhgn0w89y6v9d1vl0qcs7z";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "17zisr26syfb8kn89xj17lrdycm0hsmy5yp5zrn236wgd8rjriki";
   };
 
-  propagatedBuildInputs = [ astropy radio_beam ];
-
   nativeBuildInputs = [ astropy-helpers ];
-
+  propagatedBuildInputs = [ astropy radio_beam joblib ];
   checkInputs = [ aplpy pytest pytest-astropy ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
-  '';
-
-  # Tests must be run in the build directory
   checkPhase = ''
-    cd build/lib
-    pytest
+    pytest spectral_cube
   '';
 
   meta = {

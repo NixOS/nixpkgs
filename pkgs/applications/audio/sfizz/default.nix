@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libjack2 libsndfile ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-DSFIZZ_TESTS=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sfztools/sfizz";
     description = "SFZ jack client and LV2 plugin";
     license = licenses.bsd2;

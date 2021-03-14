@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, qtbase ? null, qttools ? null, util-linux, protobuf, qrencode, libevent
 , withGui }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-classic-" + version;
-  version = "1.3.8";
+  version = "1.3.8uahf";
 
   src = fetchFromGitHub {
     owner = "bitcoinclassic";
     repo = "bitcoinclassic";
     rev = "v${version}";
-    sha256 = "06ij9v7zbdnhxq9429nnxiw655cp8idldj18l7fmj94gqx07n5vh";
+    sha256 = "sha256-V1cOB5FLotGS5jup/aVaiDiyr/v2KJ2SLcIu/Hrjuwk=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc util-linux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
                                           ];
 
   enableParallelBuilding = true;
+
+  dontWrapQtApps = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (Classic client)";

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
+{ lib, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
 , sox, accuraterip-checksum, libsndfile, util-linux, substituteAll }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
-  version = "0.9.1.dev7+g${stdenv.lib.substring 0 7 src.rev}";
+  version = "0.9.1.dev7+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao util-linux flac sox ])
+    "--prefix" "PATH" ":" (lib.makeBinPath [ accuraterip-checksum cdrdao util-linux flac sox ])
   ];
 
   preBuild = ''
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     HOME=$TMPDIR
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/whipper-team/whipper";
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ rycee emily ];

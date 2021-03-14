@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ pkgs, ...}: let
   adminuser = "root";
 in {
   name = "nextcloud-with-mysql-and-memcached";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ];
   };
 

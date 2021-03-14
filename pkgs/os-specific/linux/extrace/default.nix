@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "extrace";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -m644 LICENSE "$out/share/licenses/extrace/LICENSE"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/leahneukirchen/extrace";
     description = "Trace exec() calls system-wide";
     license = with licenses; [ gpl2 bsd2 ];

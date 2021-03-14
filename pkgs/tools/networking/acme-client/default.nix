@@ -1,23 +1,23 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , apple_sdk ? null
 , libbsd
 , libressl
-, pkgconfig
+, pkg-config
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "acme-client";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.xz";
-    sha256 = "0gmdvmyw8a61w08hrxllypf7rpnqg0fxipbk3zmvsxj7m5i6iysj";
+    sha256 = "sha256-AYI7WfRTb5R0/hDX5Iqkq5nrLZ4gQecAGObSajSA+vw=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbsd libressl ] ++ optional stdenv.isDarwin apple_sdk.sdk;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

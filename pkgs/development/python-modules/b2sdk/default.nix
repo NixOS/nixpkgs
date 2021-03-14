@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, isPy27, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm, isPy27, pytestCheckHook
 , requests, arrow, logfury, tqdm }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # requires unpackaged dependencies like liccheck
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze).";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     license = licenses.mit;

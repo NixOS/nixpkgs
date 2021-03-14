@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cc65.github.io/";
     description = "C compiler for processors of 6502 family";
     longDescription = ''
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
   };
 }

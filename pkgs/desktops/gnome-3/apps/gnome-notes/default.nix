@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , gettext
 , fetchurl
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , itstool
 , desktop-file-utils
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
+    url = "mirror://gnome/sources/bijiben/${lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
     sha256 = "H/bMCsbGKQe/KgmhchXt0vF7dNrKs6XIminDBJFyvis=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     libxml2
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Note editor designed to remain simple to use";
     homepage = "https://wiki.gnome.org/Apps/Notes";
     license = licenses.gpl3;

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.19.0";
+  version = "0.20.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ffpfny3z8v3g0drirm27qafafbbvbc4h5k8v7yiwirnh0vn9v46";
+    sha256 = "4ffcddae6218cf6753a02af36ca9fb1c92eec4689441789ee2e9963230882388";
   };
 
   buildInputs = [

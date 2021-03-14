@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libextractor, gettext }:
+{ lib, stdenv, fetchurl, libextractor, gettext }:
 
 stdenv.mkDerivation rec {
   name = "doodle-0.7.1";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://grothoff.org/christian/doodle/";
     description = "Tool to quickly index and search documents on a computer";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

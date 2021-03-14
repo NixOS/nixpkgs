@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     PATH=$out/bin:$PATH pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
     license = licenses.mit;

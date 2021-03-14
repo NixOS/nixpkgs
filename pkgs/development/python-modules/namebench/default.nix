@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , isPyPy
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sed -i "s|import os|import os; os.chdir(\"$out/namebench\")|" "$out/bin/namebench.py"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/namebench"; # Formerly https://code.google.com/archive/p/namebench/
     description = "Find fastest DNS servers available";
     license = with licenses; [

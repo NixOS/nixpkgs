@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libhdhomerun, gcc, gnumake, pkg-config, gtk2 }:
+{ lib, stdenv, fetchurl, libhdhomerun, gcc, gnumake, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "hdhomerun-config-gui";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -vDm 755 src/hdhomerun_config_gui $out/usr/bin/hdhomerun_config_gui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for configuring Silicondust HDHomeRun TV tuners";
     homepage = "https://www.silicondust.com/support/linux";
     license = licenses.gpl3Only;

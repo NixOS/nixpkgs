@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "cpuid";
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = [ "i686-linux" "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "http://etallen.com/cpuid.html";
-    maintainers = with stdenv.lib.maintainers; [ blitz ];
+    maintainers = with lib.maintainers; [ blitz ];
   };
 
 }

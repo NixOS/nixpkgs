@@ -19,7 +19,8 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = !stdenv.targetPlatform.isRiscV;
+    useMusl = with stdenv.targetPlatform; !isRiscV &&
+                (system == "powerpc64-linux" -> parsed.abi.name != "elfv1");
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -258,7 +259,7 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
+      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"

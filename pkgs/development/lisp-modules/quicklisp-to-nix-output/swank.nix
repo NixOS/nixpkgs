@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''swank'';
-  version = ''slime-v2.26'';
+  baseName = "swank";
+  version = "slime-v2.26";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/slime/2020-09-25/slime-v2.26.tgz'';
-    sha256 = ''0zba4vm73g9zamhqkqcb0prm51kf4clixm2rjz89mq180qa7rrqc'';
+    url = "http://beta.quicklisp.org/archive/slime/2020-09-25/slime-v2.26.tgz";
+    sha256 = "0zba4vm73g9zamhqkqcb0prm51kf4clixm2rjz89mq180qa7rrqc";
   };
 
   packageName = "swank";

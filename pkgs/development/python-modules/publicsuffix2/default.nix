@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, requests }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname = "publicsuffix2";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Get a public suffix for a domain name using the Public Suffix
       List. Forked from and using the same API as the publicsuffix package.

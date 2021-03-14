@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages }:
+{ lib, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "dotfiles";
@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   checkInputs = with pythonPackages; [ pytest ];
   propagatedBuildInputs = with pythonPackages; [ click ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easily manage your dotfiles";
     homepage = "https://github.com/jbernard/dotfiles";
     license = licenses.isc;

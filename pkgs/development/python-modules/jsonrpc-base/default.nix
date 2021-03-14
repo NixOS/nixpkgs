@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-base";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A JSON-RPC client library base interface";
     homepage = "https://github.com/armills/jsonrpc-base";
     license = licenses.bsd3;

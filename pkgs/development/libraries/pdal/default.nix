@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_PLUGIN_RIVLIB=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = licenses.bsd3;

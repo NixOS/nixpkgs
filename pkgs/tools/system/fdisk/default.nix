@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, parted, libuuid, gettext, guile }:
+{ fetchurl, lib, stdenv, parted, libuuid, gettext, guile }:
 
 stdenv.mkDerivation rec {
   name = "gnufdisk-2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
       cfdisk.  It uses GNU Parted.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     homepage = "https://www.gnu.org/software/fdisk/";
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

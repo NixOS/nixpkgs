@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "6.8.8";
+  version = "6.8.9";
   pname = "frostwire";
 
   src = fetchurl {
     url = "https://dl.frostwire.com/frostwire/${version}/frostwire-${version}.amd64.tar.gz";
-    sha256 = "0zxk0nv7m1k4n8n82h1rkh239a58s7j643lgqbw3qx45bdy4sf4k";
+    sha256 = "0f5vyliwncryj6hj5xx0dycxycxddsn28n6zixjrn56jajijyl6q";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${jre}/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
     license = licenses.gpl2;

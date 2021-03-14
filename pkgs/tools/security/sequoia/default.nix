@@ -23,16 +23,18 @@ assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "0.20.0";
+  # Upstream has separate version numbering for the library and the CLI frontend.
+  # This derivation provides the CLI frontend, and thus uses its version number.
+  version = "0.24.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia";
-    rev = "v${version}";
-    sha256 = "sha256-br5GRzWprQTixNrE0WpNIB7Ayj5oEfyCg5JY4MnX5rA=";
+    rev = "sq/v${version}";
+    sha256 = "0zavkf0grkqljyiywcprsiv8igidk8vc3yfj3fzqvbhm43vnnbdw";
   };
 
-  cargoSha256 = "sha256-SpCdoLCtvU9jpG/ivB/+4KhRdKZxN3/+7P/RlR6n9/c=";
+  cargoSha256 = "172f0gsy5hssrqv0l1np3c0qd1ayp6nqbpqmgwrkc4l37y5fn232";
 
   nativeBuildInputs = [
     pkg-config
@@ -97,7 +99,7 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
     license = licenses.gpl3;

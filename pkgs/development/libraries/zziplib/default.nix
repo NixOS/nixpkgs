@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , perl
 , pkg-config
 , fetchFromGitHub
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkTarget = "check";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to extract data from files archived in a zip file";
 
     longDescription = ''

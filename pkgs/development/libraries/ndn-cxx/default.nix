@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , doxygen
 , pkg-config
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     "--boost-libs=${boost.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://named-data.net/";
+  meta = with lib; {
+    homepage = "https://named-data.net/";
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)

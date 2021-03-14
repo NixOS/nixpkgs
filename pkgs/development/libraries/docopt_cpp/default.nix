@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
   version = "0.6.3";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   checkPhase = "LD_LIBRARY_PATH=$(pwd) python ./run_tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++11 port of docopt";
     homepage = "https://github.com/docopt/docopt.cpp";
     license = with licenses; [ mit boost ];

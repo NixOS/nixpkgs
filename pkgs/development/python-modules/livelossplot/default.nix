@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytest tests tests/external_test_examples.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Live training loss plot in Jupyter for Keras, PyTorch, and others";
     homepage = "https://github.com/stared/livelossplot";
     license = licenses.mit;

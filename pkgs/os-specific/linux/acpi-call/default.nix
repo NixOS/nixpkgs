@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "acpi-call";
@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "acpi_call";
-    rev = "3d7c9fe5ed3fc5ed5bafd39d54b1fdc7a09ce710";
-    sha256 = "09kp8zl392h99wjwzqrdw2xcfnsc944hzmfwi8n1y7m2slpdybv3";
+    rev = "fe4cd0124099b88b61f83006023bc0d95e742e75";
+    sha256 = "1rksbg78i7y2wzam9p6kbhx8rmkaiq0kqg8nj7k0j6d25m79289s";
   };
 
   hardeningDisable = [ "pic" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -D -m755 examples/turn_off_gpu.sh $out/bin/test_discrete_video_off.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ raskin mic92 ];
     inherit (src.meta) homepage;
     platforms = platforms.linux;

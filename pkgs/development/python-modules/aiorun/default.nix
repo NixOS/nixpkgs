@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , isPy27
 , pygments
-, pytest
+, pytestCheckHook
 , pytestcov
 , uvloop
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytestcov
     uvloop
   ];
@@ -37,9 +37,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-     pytest
-  '';
+  pythonImportsCheck = [ "aiorun" ];
 
   meta = with lib; {
     description = "Boilerplate for asyncio applications";

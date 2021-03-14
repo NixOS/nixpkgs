@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi
+{ lib, fetchPypi
 , buildPythonPackage, python
 }:
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     ${python.interpreter} test_parse.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/r1chardj0n3s/parse";
     description = "parse() is the opposite of format()";
     license = licenses.bsdOriginal;

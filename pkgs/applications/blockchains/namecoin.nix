@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, qrencode, hexdump
+{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, qt4, protobuf, qrencode, hexdump
 , withGui }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   version = "nc0.20.1";
   name = "namecoin" + toString (optional (!withGui) "d") + "-" + version;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     hexdump
   ];
 

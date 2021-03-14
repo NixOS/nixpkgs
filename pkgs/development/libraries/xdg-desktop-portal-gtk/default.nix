@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gnome3.gnome-settings-daemon # schemas needed for settings api (fonts, etc)
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

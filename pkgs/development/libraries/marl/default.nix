@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub }:
+{ lib, stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "marl";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # Turn on the flag to install after building the library.
   cmakeFlags = ["-DMARL_INSTALL=ON"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/marl";
     description = "A hybrid thread / fiber task scheduler written in C++ 11";
     platforms = platforms.all;

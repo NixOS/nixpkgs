@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   checkPhase = ''
     pushd test
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/convimg $out/bin/convimg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Image palette quantization";
     longDescription = ''
       This program is used to convert images to other formats,

@@ -1,5 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , srht, pyyaml }:
 
 buildPythonPackage rec {
@@ -23,7 +22,9 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
     description = "Ad-hoc text file hosting service for the sr.ht network";
     license = licenses.agpl3;

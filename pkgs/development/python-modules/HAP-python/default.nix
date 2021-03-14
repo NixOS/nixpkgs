@@ -1,42 +1,64 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, curve25519-donna, ed25519
-, cryptography, ecdsa, zeroconf, pytest }:
+{ lib
+, buildPythonPackage
+, base36
+, cryptography
+, curve25519-donna
+, ecdsa
+, ed25519
+, fetchFromGitHub
+, h11
+, pyqrcode
+, pytest-asyncio
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, zeroconf
+}:
 
 buildPythonPackage rec {
   pname = "HAP-python";
-  version = "3.0.0";
+  version = "3.4.0";
+  disabled = pythonOlder "3.5";
 
   # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07s1kjm9cz4m4ksj506la1ks3dq2b5mk412rjj9rpj98b0mxrr84";
+    sha256 = "0mkrs3fwiyp4am9fx1dnhd9h7rphfwymr46khw40xavrfb5jmsa7";
   };
 
-  disabled = !isPy3k;
-
   propagatedBuildInputs = [
-    curve25519-donna
-    ed25519
+    base36
     cryptography
+    curve25519-donna
     ecdsa
+    ed25519
+    h11
+    pyqrcode
     zeroconf
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
+  ];
 
-  #disable tests needing network
-  checkPhase = ''
-    pytest -k 'not test_persist \
-    and not test_setup_endpoints \
-    and not test_auto_add_aid_mac \
-    and not test_service_callbacks \
-    and not test_send_events \
-    and not test_not_standalone_aid \
-    and not test_start_stop_async_acc \
-    and not test_external_zeroconf \
-    and not test_start_stop_sync_acc'
-  '';
+  # Disable tests requiring network access
+  disabledTestPaths = [
+    "tests/test_accessory_driver.py"
+    "tests/test_hap_handler.py"
+    "tests/test_hap_protocol.py"
+  ];
+
+  disabledTests = [
+    "test_persist_and_load"
+    "test_we_can_connect"
+    "test_idle_connection_cleanup"
+    "test_we_can_start_stop"
+    "test_push_event"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ikalchev/HAP-python";

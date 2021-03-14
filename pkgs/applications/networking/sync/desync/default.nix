@@ -1,22 +1,22 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "desync";
-  version = "0.4.0";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/folbricht/desync";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "folbricht";
     repo = "desync";
-    sha256 = "17qh0g1paa7212j761q9z246k10a3xrwd8fgiizw3lr9adn50kdk";
+    sha256 = "0j9hixgkja268r2zn2dglrmlrb2z57sgz6q3wqb8dfwpan7b5rsy";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "1gajh99jb6mbwk93dypddhl7r7n8h2s11s3s82firbrb5k24s4pz";
 
-  meta = with stdenv.lib; {
+  # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
+  doCheck = false;
+
+  meta = with lib; {
     description = "Content-addressed binary distribution system";
     longDescription = "An alternate implementation of the casync protocol and storage mechanism with a focus on production-readiness";
     homepage = "https://github.com/folbricht/desync";

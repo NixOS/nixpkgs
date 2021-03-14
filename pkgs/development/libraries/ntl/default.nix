@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       else
         "generic" # "chooses options that should be OK for most platforms"
     }"
-    "CXX=c++"
+    "CXX=${stdenv.cc.targetPrefix}c++"
   ] ++ lib.optionals withGf2x [
     "NTL_GF2X_LIB=on"
     "GF2X_PREFIX=${gf2x}"

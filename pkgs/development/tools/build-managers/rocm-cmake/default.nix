@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-cmake";
-  version = "3.10.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CMake modules for common build tasks for the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/rocm-cmake";
     license = licenses.mit;

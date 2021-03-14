@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchFromGitHub
 , libpulseaudio
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Shell extension adding audio device chooser to panel";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];

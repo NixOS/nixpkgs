@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , fetchpatch
 , scons
 , boost
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     {name="fix_ffmpeg30.patch";               sha256="sha256-vKEbvbjYVRzEaVYC8XOJBPmk6FDXI/WA0X/dldRRO8c=";}
   ]);
 
-  nativeBuildInputs = [ wrapGAppsHook scons pkgconfig gettext ];
+  nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
 
   buildInputs = [
     boost
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a DVD authoring program for personal computers";
     homepage = "https://www.bombono.org/";
     license = licenses.gpl2Only;

@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , gettext
 , makeWrapper
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , dbus
@@ -36,7 +36,7 @@
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
-with stdenv.lib;
+with lib;
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
@@ -60,13 +60,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.23";
+  version = "1.5.24";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "0qnblqhz8wyhchnm36zrxhbvi9g4fcwcgmw7p60yjybdlhq4asc7";
+    sha256 = "sha256-1qx06MlEUjSS067FdQG1Bdi4ZAh3hPcNjUX5PIiC3Sk=";
   };
 
   patches = [
@@ -101,8 +101,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "test_execsdir=${placeholder ''installedTests''}/libexec/installed-tests/ibus"
-    "test_sourcesdir=${placeholder ''installedTests''}/share/installed-tests/ibus"
+    "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
+    "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
   ];
 
   nativeBuildInputs = [
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     gettext
     makeWrapper
-    pkgconfig
+    pkg-config
     python3BuildEnv
     vala
     wrapGAppsHook

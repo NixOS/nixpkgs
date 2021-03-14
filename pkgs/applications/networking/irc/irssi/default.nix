@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
+{ lib, stdenv, fetchurl, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
 
 stdenv.mkDerivation rec {
   pname = "irssi";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g2nxazn4lszmd6mf1s36x5ablk4999g1qx7byrnvgnjsihjh62k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
 
   configureFlags = [
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = "https://irssi.org";
     description = "A terminal based IRC client";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    license     = lib.licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2, pyyaml, flask }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, unittest2, pyyaml, flask }:
 
 let
   testPath =
@@ -9,11 +9,11 @@ in
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "4.5.1";
+  version = "4.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d5d42a3547a8a8d3b7aa8f4325e5042231bbc86718c89e123c0c62c103cd9d5";
+    sha256 = "93db83fac85bcb861469c0db1af11f4bc874aa2f9380151189a05d38c21afd60";
   };
 
   propagatedBuildInputs = [ six ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     unit2 discover -s tests/unit -p "${testPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dependency injection microframework for Python";
     homepage = "https://github.com/ets-labs/python-dependency-injector";
     license = licenses.bsd3;

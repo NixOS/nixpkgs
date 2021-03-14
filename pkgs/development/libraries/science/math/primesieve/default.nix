@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "primesieve";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g60br3p8di92jx3pr2bb51xh15gg57l7qvwzwn7xf7l585hgi7v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast C/C++ prime number generator";
     homepage = "https://primesieve.org/";
     license = licenses.bsd2;

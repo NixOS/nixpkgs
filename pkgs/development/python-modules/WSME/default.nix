@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pbr
 , six
 , simplegeneric
@@ -22,6 +23,8 @@
 buildPythonPackage rec {
   pname = "WSME";
   version = "0.10.0";
+
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;

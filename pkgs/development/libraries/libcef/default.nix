@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, alsaLib, atk, cairo, cups, dbus, expat, fontconfig
+{ lib, stdenv, fetchurl, cmake, alsaLib, atk, cairo, cups, dbus, expat, fontconfig
 , GConf, gdk-pixbuf, glib, gtk2, libX11, libxcb, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXScrnSaver
 , libXtst, nspr, nss, pango, libpulseaudio, systemd, at-spi2-atk, at-spi2-core
@@ -6,7 +6,7 @@
 
 let
   libPath =
-    stdenv.lib.makeLibraryPath [
+    lib.makeLibraryPath [
       alsaLib atk cairo cups dbus expat fontconfig GConf gdk-pixbuf glib gtk2
       libX11 libxcb libXcomposite libXcursor libXdamage libXext libXfixes libXi
       libXrandr libXrender libXScrnSaver libXtst nspr nss pango libpulseaudio
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cp -r ../include $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "http://opensource.spotify.com/cefbuilds/index.html";
     maintainers = with maintainers; [ puffnfresh ];

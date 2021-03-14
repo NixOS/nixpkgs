@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, python, gtest
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, pkg-config, python, gtest
 , boost, cryptopp, curl, fuse, openssl
 }:
 
@@ -44,11 +44,9 @@ stdenv.mkDerivation rec {
       --replace "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
   '';
 
-  nativeBuildInputs = [ cmake gtest pkgconfig python ];
+  nativeBuildInputs = [ cmake gtest pkg-config python ];
 
   buildInputs = [ boost cryptopp curl fuse openssl ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"
@@ -68,7 +66,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cryptographic filesystem for the cloud";
     homepage    = "https://www.cryfs.org";
     license     = licenses.lgpl3;

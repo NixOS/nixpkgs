@@ -52,9 +52,15 @@ self: super: {
   haddock = self.haddock_2_23_1;
   haddock-api = self.haddock-api_2_23_1;
 
-  # These builds need Cabal 3.2.x.
+  # These builds need newer versions of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+  cabal-install = super.cabal-install.override {
+    Cabal = super.Cabal_3_4_0_0;
+    hackage-security = super.hackage-security.override { Cabal = super.Cabal_3_4_0_0; };
+    # Using dontCheck to break test dependency cycles
+    edit-distance = dontCheck (super.edit-distance.override { random = super.random_1_2_0; });
+    random = super.random_1_2_0;
+  };
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
@@ -123,4 +129,10 @@ self: super: {
   # ghc versions which don‘t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+
+  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
+  vector = dontCheck super.vector;
 }

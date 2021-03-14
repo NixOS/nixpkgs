@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "060102";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
 }

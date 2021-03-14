@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11 }:
+{ lib, stdenv, fetchFromGitHub, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "devour";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Devour hides your current window when launching an external program";
     longDescription = "Devour hides your current window before launching an external program and unhides it after quitting";
     homepage = "https://github.com/salman-abedin/devour";

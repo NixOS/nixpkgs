@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libjack2, libGL, pkgconfig, xorg }:
+{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkg-config, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "dragonfly-reverb";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     patchShebangs dpf/utils/generate-ttl.sh
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libjack2 xorg.libX11 libGL
   ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/michaelwillis/dragonfly-reverb";
     description = "A hall-style reverb based on freeverb3 algorithms";
     maintainers = [ maintainers.magnetophon ];

@@ -2,11 +2,12 @@
 , fetchFromGitHub
 , kernel
 , stdenv
+, lib
 , util-linux
 }:
 
 let
-  common = import ../../../development/python-modules/openrazer/common.nix { inherit stdenv fetchFromGitHub; };
+  common = import ../../../development/python-modules/openrazer/common.nix { inherit lib fetchFromGitHub; };
 in
 stdenv.mkDerivation (common // {
   name = "openrazer-${common.version}-${kernel.version}";

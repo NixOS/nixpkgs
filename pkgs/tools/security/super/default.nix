@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "super-3.30.0";
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
         in /etc/super.tab); and 2) “setuid”, which allows root to
         execute a command under a different uid.
       '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

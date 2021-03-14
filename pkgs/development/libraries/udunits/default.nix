@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook,
   texinfo, bison, flex, expat, file
 }:
 
 stdenv.mkDerivation rec {
   pname = "udunits";
   version = "2.2.27.6";
-  
+
   src = fetchFromGitHub {
     owner = "Unidata";
     repo = "UDUNITS-2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook texinfo bison flex file ];
   buildInputs = [ expat ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.unidata.ucar.edu/software/udunits/";
     description = "A C-based package for the programatic handling of units of physical quantities";
     license = licenses.bsdOriginal;

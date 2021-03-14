@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation {
   name = "kak-auto-pairs";
   version = "2020-07-14";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     cp -r rc $out/share/kak/autoload/plugins/auto-pairs
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Kakoune extension to enable automatic closing of pairs";
     homepage = "https://github.com/alexherbo2/auto-pairs.kak";
     license = licenses.unlicense;

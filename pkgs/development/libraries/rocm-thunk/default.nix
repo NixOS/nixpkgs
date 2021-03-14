@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-thunk";
-  version = "3.10.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCT-Thunk-Interface";
     rev = "rocm-${version}";
-    hash = "sha256-FLH+GHXA0zepbR1wPPSez/hx1hiG2kkCTneDKhJJRjU=";
+    hash = "sha256-2kLSlGwX3pD8I5pXwV5L0k9l8OzJRkUvnAqv5E+gcd4=";
   };
 
   preConfigure = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp -r $src/include $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Radeon open compute thunk interface";
     homepage = "https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface";
     license = with licenses; [ bsd2 mit ];

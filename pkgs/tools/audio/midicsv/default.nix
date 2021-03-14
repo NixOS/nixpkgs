@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "midicsv-1.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Losslessly translate MIDI to CSV and back";
     homepage = "http://www.fourmilab.ch/webtools/midicsv/";
     license = licenses.publicDomain;

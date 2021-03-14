@@ -1,22 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, crystal, shards, makeWrapper, pkgconfig, which
-, openssl, readline, libyaml, zlib }:
+{ lib
+, fetchFromGitHub
+, crystal
+, shards
+, makeWrapper
+, pkg-config
+, which
+, openssl
+, readline
+, libyaml
+, zlib
+}:
 
 crystal.buildCrystalPackage rec {
   pname = "icr";
-  version = "0.8.0";
+  version = "unstable-2020-10-06";
 
   src = fetchFromGitHub {
     owner = "crystal-community";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1bz2bhs6csyg2rhrlknlvaiilq3vq8plxjh1hdxmbrfi3n6c7k5a";
+    repo = "icr";
+    rev = "8c57cd7c1fdf8088cb05c1587bd6c40d244a8a80";
+    sha256 = "sha256-b0w6oG2npNgdi2ZowMlJy0iUxQWqb9+DiruQl7Ztb0E=";
   };
 
   shardsFile = ./shards.nix;
 
   buildInputs = [ libyaml openssl readline zlib ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig which ];
+  nativeBuildInputs = [ makeWrapper pkg-config which ];
 
   # tests are failing due to our sandbox
   doCheck = false;
@@ -26,7 +36,7 @@ crystal.buildCrystalPackage rec {
       --prefix PATH : ${lib.makeBinPath [ crystal shards makeWrapper which ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive console for the Crystal programming language";
     homepage = "https://github.com/crystal-community/icr";
     license = licenses.mit;

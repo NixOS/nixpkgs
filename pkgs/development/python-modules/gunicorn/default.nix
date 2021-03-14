@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , coverage
 , mock
 , pytest
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gunicorn" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/benoitc/gunicorn";
     description = "WSGI HTTP Server for UNIX";
     license = licenses.mit;

@@ -14,18 +14,18 @@ let
   };
 in with python.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cxdpc3lxgzakzgvdyyrn234380dm05svnwr8av5nrjp4nm9s8z4";
+    sha256 = "1p6agvp136q6km7gjfv8dpjn6x4ap770lqa40ifblyhw13bsrqlh";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -37,11 +37,9 @@ in with python.pkgs; buildPythonApplication rec {
     sqlalchemy
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest
-  '';
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = nixosTests.pinnwand;
 

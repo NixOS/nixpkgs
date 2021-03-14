@@ -5,14 +5,15 @@
 
 let
   generic =
-    { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
+    { callPackage, lib, stdenv, nixosTests, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
-    , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
+    , pkg-config, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
     , systemd, system-sendmail, valgrind, xcbuild
 
     , version
     , sha256
     , extraPatches ? []
+    , packageOverrides ? (final: prev: {})
 
     # Sapi flags
     , cgiSupport ? true
@@ -49,8 +50,8 @@ let
               php = generic filteredArgs;
 
               php-packages = (callPackage ../../../top-level/php-packages.nix {
-                php = phpWithExtensions;
-              });
+                phpPackage = phpWithExtensions;
+              }).overrideScope' packageOverrides;
 
               allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
               enabledExtensions =
@@ -96,7 +97,7 @@ let
                     (enabledExtensions ++ (getDepsRecursively enabledExtensions)));
 
               extNames = map getExtName enabledExtensions;
-              extraInit = writeText "php.ini" ''
+              extraInit = writeText "php-extra-init-${version}.ini" ''
                 ${lib.concatStringsSep "\n"
                   (lib.textClosureList extensionTexts extNames)}
                 ${extraConfig}
@@ -111,15 +112,17 @@ let
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
-                  tests = nixosTests.php;
-                  inherit (php-packages) packages extensions buildPecl;
+                  # Select the right php tests for the php version
+                  tests = nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
+                  inherit (php-packages) extensions buildPecl;
+                  packages = php-packages.tools;
                   meta = php.meta // {
                     outputsToInstall = [ "out" ];
                   };
                 };
                 paths = [ php ];
                 postBuild = ''
-                  cp ${extraInit} $out/lib/php.ini
+                  ln -s ${extraInit} $out/lib/php.ini
 
                   wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
 
@@ -147,7 +150,7 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ]
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c ]
             ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =
@@ -267,7 +270,7 @@ let
             inherit ztsSupport;
           };
 
-          meta = with stdenv.lib; {
+          meta = with lib; {
             description = "An HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;

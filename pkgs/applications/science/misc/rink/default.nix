@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, ncurses }:
+{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config, ncurses }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.5.1";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unit-aware calculator";
     homepage = "https://rinkcalc.app";
     license = with licenses; [ mpl20 gpl3 ];

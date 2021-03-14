@@ -35,6 +35,10 @@ buildPythonPackage rec {
     xxhash
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace '"tqdm>=4.27,<4.50.0"' '"tqdm>=4.27"'
+  '';
+
   # Tests require pervasive internet access.
   doCheck = false;
 

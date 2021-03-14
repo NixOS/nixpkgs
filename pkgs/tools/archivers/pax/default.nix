@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "pax";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -Dm444 mans/pax{,cpio,tar}.1 -t $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "POSIX standard archive tool from MirBSD";
     homepage = "https://www.mirbsd.org/pax.htm";
     license = licenses.bsd3;

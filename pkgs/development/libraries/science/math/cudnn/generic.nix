@@ -25,9 +25,12 @@ stdenv.mkDerivation {
   installPhase = ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "$p:${lib.makeLibraryPath [ stdenv.cc.cc ]}" $1
+      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc ]}:\$ORIGIN/" $1
     }
-    fixRunPath lib64/libcudnn.so
+
+    for lib in lib64/lib*.so; do
+      fixRunPath $lib
+    done
 
     mkdir -p $out
     cp -a include $out/include
@@ -38,13 +41,7 @@ stdenv.mkDerivation {
   # See the explanation in addOpenGLRunpath.
   postFixup = ''
     for lib in $out/lib/lib*.so; do
-      # patchelf fails on libcudnn_cnn_infer due to it being too big.
-      # Most programs will still get the RPATH since they link to
-      # other things.
-      # (https://github.com/NixOS/patchelf/issues/222)
-      if [ "$(basename $lib)" != libcudnn_cnn_infer.so ]; then
-        addOpenGLRunpath $lib
-      fi
+      addOpenGLRunpath $lib
     done
   '';
 
@@ -57,7 +54,7 @@ stdenv.mkDerivation {
     majorVersion = lib.versions.major version;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
     license = licenses.unfree;

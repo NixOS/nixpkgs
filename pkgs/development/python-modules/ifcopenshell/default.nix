@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , substituteAll
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "-DLIBXML2_LIBRARIES=${libxml2.out}/lib/${if stdenv.isDarwin then "libxml2.dylib" else "libxml2.so"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source IFC library and geometry engine";
     homepage    = http://ifcopenshell.org/;
     license     = licenses.lgpl3;

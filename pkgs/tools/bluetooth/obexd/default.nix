@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus, openobex, bluez, libical }:
+{ lib, stdenv, fetchurl, pkg-config, glib, dbus, openobex, bluez, libical }:
 
 stdenv.mkDerivation rec {
   name = "obexd-0.48";
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib dbus openobex bluez libical ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.bluez.org/";
     platforms = platforms.linux;
     license = licenses.gpl3;

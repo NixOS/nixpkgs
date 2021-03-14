@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , bash, python3, yosys
 , yices, boolector, z3, aiger
 }:
@@ -31,6 +31,9 @@ stdenv.mkDerivation {
 
     substituteInPlace sbysrc/sby_core.py \
       --replace '##yosys-program-prefix##' '"${yosys}/bin/"'
+
+    substituteInPlace sbysrc/sby.py \
+      --replace '/usr/bin/env python3' '${python3}/bin/python'
   '';
 
   buildPhase = "true";
@@ -51,8 +54,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Tooling for Yosys-based verification flows";
     homepage    = "https://symbiyosys.readthedocs.io/";
-    license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ thoughtpolice emily ];
+    platforms   = lib.platforms.all;
   };
 }

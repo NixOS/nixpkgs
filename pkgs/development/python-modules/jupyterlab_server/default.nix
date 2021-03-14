@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , notebook
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JupyterLab Server";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;

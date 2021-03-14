@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib}:
+{lib, stdenv, fetchurl, zlib}:
 
 stdenv.mkDerivation {
   name = "id3lib-3.8.3";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails to compile
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading, writing, and manipulating ID3v1 and ID3v2 tags";
     homepage = "http://id3lib.sourceforge.net";
     platforms = platforms.unix;

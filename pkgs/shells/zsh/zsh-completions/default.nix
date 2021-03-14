@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub}:
+{ lib, stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   pname = "zsh-completions";
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Additional completion definitions for zsh";
     homepage = "https://github.com/zsh-users/zsh-completions";
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.olejorgenb ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.olejorgenb ];
   };
 }

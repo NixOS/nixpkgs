@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, kernel }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
 
-assert stdenv.lib.versionAtLeast kernel.version "3.5";
+assert lib.versionAtLeast kernel.version "3.5";
 
 stdenv.mkDerivation rec {
   pname = "digimend";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "DESTDIR=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DIGImend graphics tablet drivers for the Linux kernel";
     homepage = "https://digimend.github.io/";
     license = licenses.gpl2;

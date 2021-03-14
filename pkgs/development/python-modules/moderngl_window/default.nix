@@ -7,7 +7,6 @@
 , pyglet
 , pillow
 , pyrr
-, pytest
 }:
 
 buildPythonPackage rec {

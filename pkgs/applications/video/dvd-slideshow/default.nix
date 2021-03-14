@@ -65,8 +65,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Suite of command line programs that creates a slideshow-style video from groups of pictures";
     homepage = "http://dvd-slideshow.sourceforge.net/wiki/Main_Page";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.robbinch ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.robbinch ];
   };
 }

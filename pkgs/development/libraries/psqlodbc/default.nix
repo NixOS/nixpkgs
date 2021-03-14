@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libiodbc, postgresql, openssl }:
+{ lib, stdenv, fetchurl, libiodbc, postgresql, openssl }:
 
 stdenv.mkDerivation rec {
   name = "psqlodbc-09.01.0200";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-iodbc=${libiodbc}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
     license = licenses.lgpl2;

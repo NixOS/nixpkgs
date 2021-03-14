@@ -1,5 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , buildGoModule
 , srht, minio, pygit2, scmsrht }:
 
@@ -67,7 +66,9 @@ in buildPythonPackage rec {
     cp ${buildAPI "${src}/api"}/bin/api $out/bin/gitsrht-api
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
     license = licenses.agpl3;

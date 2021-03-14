@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p9qnrqx72y4jrhawgbpwisgily7zg4rh39hpky4x56d5afvjgqc";
+    sha256 = "0ihcxdkbm1lq79fdjmcrj316zh6sjlc3162yynww8nggv2mlnz6v";
   };
 
   postPatch = ''
@@ -14,6 +14,11 @@ buildPythonPackage rec {
     # Do we have to care about that with Nix...?
     substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
   '';
+
+  # No tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "buildbot_pkg" ];
 
   disabled = !isPy3k;
 

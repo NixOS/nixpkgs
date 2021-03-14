@@ -1,4 +1,4 @@
-{ stdenv, gnu-efi, openssl, sbsigntool, perl, perlPackages,
+{ lib, stdenv, gnu-efi, openssl, sbsigntool, perl, perlPackages,
 help2man, fetchgit }:
 stdenv.mkDerivation rec {
   pname = "efitools";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for manipulating UEFI secure boot platforms";
     homepage = "https://git.kernel.org/cgit/linux/kernel/git/jejb/efitools.git";
     license = licenses.gpl2;

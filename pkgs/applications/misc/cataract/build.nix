@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
 , glib
-, pkgconfig
+, pkg-config
 , libxml2
 , exiv2
-, imagemagick
+, imagemagick6
 , version
 , sha256
 , rev }:
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ glib libxml2 exiv2 imagemagick ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ glib libxml2 exiv2 imagemagick6 ];
 
   prePatch = ''
     sed -i 's|#include <exiv2/exif.hpp>|#include <exiv2/exiv2.hpp>|' src/jpeg-utils.cpp
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     cp src/cgg{,-dirgen} $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cgg.bzatek.net/";
     description = "A simple static web photo gallery, designed to be clean and easily usable";
     license = licenses.gpl2;

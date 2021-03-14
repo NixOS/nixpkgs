@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
+{ lib, stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
 , makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
 , extraModulePaths ? []
 , version }:
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/stumpwm/modules
     cp -r modules/* $out/share/stumpwm/modules/
-    for d in ${stdenv.lib.concatStringsSep " " extraModulePaths}; do
+    for d in ${lib.concatStringsSep " " extraModulePaths}; do
       cp -r --no-preserve=mode "$d" $out/share/stumpwm/modules/
     done
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     cp $out/share/stumpwm/modules/util/stumpish/stumpish $out/bin/
     chmod +x $out/bin/stumpish
     wrapProgram $out/bin/stumpish \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap gnused gnugrep coreutils xprop ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ rlwrap gnused gnugrep coreutils xprop ]}"
 
     # Paths in the compressed image $out/bin/stumpwm are not
     # recognized by Nix. Add explicit reference here.
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     inherit sbcl lispPackages contrib;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiling window manager for X11";
     homepage    = "https://github.com/stumpwm/";
     license     = licenses.gpl2Plus;

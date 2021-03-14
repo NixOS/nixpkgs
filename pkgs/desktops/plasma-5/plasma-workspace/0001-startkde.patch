@@ -1,19 +1,33 @@
-From 6477e377fcca39c07ef5f91a55084d7d74715d00 Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Tue, 28 Jan 2020 05:00:53 -0600
-Subject: [PATCH 1/2] startkde
+From d653bc84c8aed33072237ed858194a8a73b6a2e7 Mon Sep 17 00:00:00 2001
+From: Tom Hall <tahall256@protonmail.ch>
+Date: Mon, 7 Sep 2020 18:09:52 +0100
+Subject: [PATCH] startkde
 
 ---
+ startkde/plasma-session/startup.cpp     |  2 +-
  startkde/startplasma-waylandsession.cpp |  2 +-
  startkde/startplasma-x11.cpp            |  2 +-
- startkde/startplasma.cpp                | 24 ++++++++++--------------
- 3 files changed, 12 insertions(+), 16 deletions(-)
+ startkde/startplasma.cpp                | 22 +++++++++-------------
+ 4 files changed, 12 insertions(+), 16 deletions(-)
 
+diff --git a/startkde/plasma-session/startup.cpp b/startkde/plasma-session/startup.cpp
+index 89cc144ba..8ca9e81d2 100644
+--- a/startkde/plasma-session/startup.cpp
++++ b/startkde/plasma-session/startup.cpp
+@@ -211,7 +211,7 @@ Startup::Startup(QObject *parent):
+     upAndRunning(QStringLiteral("ksmserver"));
+     const AutoStart autostart;
+ 
+-    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
++    QProcess::execute(QStringLiteral(NIXPKGS_START_KDEINIT_WRAPPER), QStringList());
+ 
+     KJob* phase1;
+     QProcessEnvironment kdedProcessEnv;
 diff --git a/startkde/startplasma-waylandsession.cpp b/startkde/startplasma-waylandsession.cpp
-index 87c71c6b3..5fc53140e 100644
+index f59654d18..5e3a93db0 100644
 --- a/startkde/startplasma-waylandsession.cpp
 +++ b/startkde/startplasma-waylandsession.cpp
-@@ -67,7 +67,7 @@ int main(int /*argc*/, char** /*argv*/)
+@@ -61,7 +61,7 @@ int main(int argc, char** argv)
      waitForKonqi();
      out << "startplasma-waylandsession: Shutting down...\n";
  
@@ -23,10 +37,10 @@ index 87c71c6b3..5fc53140e 100644
      cleanupX11();
      out << "startplasma-waylandsession: Done.\n";
 diff --git a/startkde/startplasma-x11.cpp b/startkde/startplasma-x11.cpp
-index 3314b6283..14cbe29fa 100644
+index ae1c4d101..0df24b5be 100644
 --- a/startkde/startplasma-x11.cpp
 +++ b/startkde/startplasma-x11.cpp
-@@ -111,7 +111,7 @@ int main(int /*argc*/, char** /*argv*/)
+@@ -110,7 +110,7 @@ int main(int argc, char** argv)
  
      out << "startkde: Shutting down...\n";
  
@@ -36,10 +50,10 @@ index 3314b6283..14cbe29fa 100644
      cleanupPlasmaEnvironment();
      cleanupX11();
 diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
-index 4c9f5cef6..5ea4c2cf1 100644
+index a055d5635..62afb1513 100644
 --- a/startkde/startplasma.cpp
 +++ b/startkde/startplasma.cpp
-@@ -34,7 +34,7 @@ QTextStream out(stderr);
+@@ -41,7 +41,7 @@ QTextStream out(stderr);
  void messageBox(const QString &text)
  {
      out << text;
@@ -48,7 +62,7 @@ index 4c9f5cef6..5ea4c2cf1 100644
  }
  
  QStringList allServices(const QLatin1String& prefix)
-@@ -242,15 +242,15 @@ void setupX11()
+@@ -262,15 +262,15 @@ void setupX11()
  //     If the user has overwritten fonts, the cursor font may be different now
  //     so don't move this up.
  
@@ -69,20 +83,7 @@ index 4c9f5cef6..5ea4c2cf1 100644
  }
  
  // TODO: Check if Necessary
-@@ -267,11 +267,7 @@ bool syncDBusEnvironment()
- {
-     int exitCode;
-     // At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
--    if (!QStandardPaths::findExecutable(QStringLiteral("dbus-update-activation-environment")).isEmpty()) {
--        exitCode = runSync(QStringLiteral("dbus-update-activation-environment"), { QStringLiteral("--systemd"), QStringLiteral("--all") });
--    } else {
--        exitCode = runSync(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR "/ksyncdbusenv"), {});
--    }
-+		exitCode = runSync(QStringLiteral(NIXPKGS_DBUS_UPDATE_ACTIVATION_ENVIRONMENT), { QStringLiteral("--systemd"), QStringLiteral("--all") });
-     return exitCode == 0;
- }
- 
-@@ -287,7 +283,7 @@ void setupFontDpi()
+@@ -306,7 +302,7 @@ void setupFontDpi()
      //TODO port to c++?
      const QByteArray input = "Xft.dpi: " + QByteArray::number(fontsCfg.readEntry("forceFontDPI", 0));
      QProcess p;
@@ -91,7 +92,7 @@ index 4c9f5cef6..5ea4c2cf1 100644
      p.setProcessChannelMode(QProcess::ForwardedChannels);
      p.write(input);
      p.closeWriteChannel();
-@@ -309,7 +305,7 @@ QProcess* setupKSplash()
+@@ -328,7 +324,7 @@ QProcess* setupKSplash()
          KConfigGroup ksplashCfg = cfg.group("KSplash");
          if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
              p = new QProcess;
@@ -100,15 +101,6 @@ index 4c9f5cef6..5ea4c2cf1 100644
          }
      }
      return p;
-@@ -331,7 +327,7 @@ bool startKDEInit()
- {
-     // We set LD_BIND_NOW to increase the efficiency of kdeinit.
-     // kdeinit unsets this variable before loading applications.
--    const int exitCode = runSync(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), { QStringLiteral("--kded"), QStringLiteral("+kcminit_startup") }, { QStringLiteral("LD_BIND_NOW=true") });
-+    const int exitCode = runSync(QStringLiteral(NIXPKGS_START_KDEINIT_WRAPPER), { QStringLiteral("--kded"), QStringLiteral("+kcminit_startup") }, { QStringLiteral("LD_BIND_NOW=true") });
-     if (exitCode != 0) {
-         messageBox(QStringLiteral("startkde: Could not start kdeinit5. Check your installation."));
-         return false;
 -- 
-2.25.1
+2.28.0
 

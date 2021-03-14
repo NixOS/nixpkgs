@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , h5py
 , pytestCheckHook
 , netcdf4
@@ -15,6 +16,13 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "09bbnpsvwksb07wijn7flyyza56h5b2g2cw0hb3slmwxz6cgcjmr";
   };
+
+  patches = [
+    (fetchpatch{
+      url = "https://patch-diff.githubusercontent.com/raw/h5netcdf/h5netcdf/pull/82.patch";
+    sha256 = "0x9bq9jl4kvw152adkpcyqslhpi7miv80hrnpl2w2y798mmbs0s4";
+    })
+  ];
 
   propagatedBuildInputs = [
     h5py

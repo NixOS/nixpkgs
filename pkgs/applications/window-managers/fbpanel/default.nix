@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libX11, libXmu, libXpm, gtk2, libpng, libjpeg, libtiff, librsvg, gdk-pixbuf, gdk-pixbuf-xlib
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "e14542cc81ea06e64dd4708546f5fd3f5e01884c3e4617885c7ef22af8cf3965";
   };
   buildInputs =
-    [ pkgconfig libX11 libXmu libXpm gtk2 libpng libjpeg libtiff librsvg gdk-pixbuf gdk-pixbuf-xlib.dev ];
+    [ pkg-config libX11 libXmu libXpm gtk2 libpng libjpeg libtiff librsvg gdk-pixbuf gdk-pixbuf-xlib.dev ];
 
   preConfigure = "patchShebangs .";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS="-lX11";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A stand-alone panel";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

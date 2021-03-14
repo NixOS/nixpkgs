@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, fetchFromGitHub, zlib, libibmad, openssl }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, zlib, libibmad, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "mstflint";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;  # the build fails without this. should probably be reported upstream
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
     license = with licenses; [ gpl2 bsd2 ];

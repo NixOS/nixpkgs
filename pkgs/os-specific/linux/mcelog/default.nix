@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, util-linux }:
+{ lib, stdenv, fetchFromGitHub, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "mcelog";
-  version = "173";
+  version = "175";
 
   src = fetchFromGitHub {
     owner  = "andikleen";
     repo   = "mcelog";
     rev    = "v${version}";
-    sha256 = "1ili11kqacn6jkjpk11vhycgygdl92mymgb1sx22lcwq2x0d248m";
+    sha256 = "sha256-Xzbck/nRdTR9H5o2XVFlFdNLz2ve65KEcefKAKe0eW8=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
     longDescription = ''
       The mcelog daemon accounts memory and some other errors in various ways

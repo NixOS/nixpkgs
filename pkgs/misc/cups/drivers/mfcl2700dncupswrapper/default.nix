@@ -1,4 +1,4 @@
-{ coreutils, dpkg, fetchurl, gnugrep, gnused, makeWrapper, mfcl2700dnlpr, perl, stdenv }:
+{ coreutils, dpkg, fetchurl, gnugrep, gnused, makeWrapper, mfcl2700dnlpr, perl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "mfcl2700dncupswrapper-${meta.version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
 
     wrapProgram $dir/cupswrapper/brother_lpdwrapper_MFCL2700DN \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils gnugrep gnused ]}
+      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}
 
     mkdir -p $out/lib/cups/filter
     mkdir -p $out/share/cups/model
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother MFC-L2700DN CUPS wrapper driver";
     homepage = "http://www.brother.com/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.tv ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.tv ];
+    platforms = lib.platforms.linux;
     version = "3.2.0-1";
   };
 }

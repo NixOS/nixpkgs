@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "proj-5.2.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   doCheck = stdenv.is64bit;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cartographic Projections Library";
     homepage = "https://proj4.org";
     license = licenses.mit;

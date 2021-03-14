@@ -1,4 +1,4 @@
-{ fetchFromGitHub, automake, autoconf, which, pkgconfig, libtool, stdenv }:
+{ fetchFromGitHub, automake, autoconf, which, pkg-config, libtool, lib, stdenv }:
 stdenv.mkDerivation rec {
   pname = "libcoap";
   version = "4.2.1";
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
     autoconf
     which
     libtool
-    pkgconfig
+    pkg-config
   ];
   preConfigure = "./autogen.sh";
   configureFlags = [
     "--disable-documentation"
     "--disable-shared"
   ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/obgm/libcoap";
     description = "A CoAP (RFC 7252) implementation in C";
     platforms = platforms.linux;

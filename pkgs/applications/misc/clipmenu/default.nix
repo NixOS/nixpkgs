@@ -1,36 +1,45 @@
-{ clipnotify, makeWrapper, xsel, dmenu, util-linux, gawk, stdenv, fetchFromGitHub, fetchpatch, lib }:
-let
-  runtimePath = lib.makeBinPath [ clipnotify xsel dmenu util-linux gawk ];
-in
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, clipnotify
+, coreutils
+, dmenu
+, gawk
+, util-linux
+, xdotool
+, xsel
+}:
 stdenv.mkDerivation rec {
   pname = "clipmenu";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner  = "cdown";
     repo   = "clipmenu";
     rev    = version;
-    sha256 = "0ddj5xcwrdb2qvrndvhv8j6swcqc8dvv5i00pqk35rfk5mrl4hwv";
+    sha256 = "sha256-nvctEwyho6kl4+NXi76jT2kG7nchmI2a7mgxlgjXA5A=";
   };
-  
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/cdown/clipmenu/commit/443b58583ef216e2405e4a38d401f7c36386d21e.patch";
-      sha256 = "12m4rpw7jbr31c919llbsmn8dcf7yh9aijln4iym6h2lylzqzzdz";
-    })
-  ];
-  
-  makeFlags = [ "PREFIX=$(out)" ];
-  buildInputs = [ makeWrapper ];
-  nativeBuildInputs = [ xsel clipnotify ];
 
-  installPhase = ''
-    for bin in $out/bin/*; do
-      wrapProgram "$bin" --prefix PATH : "${runtimePath}"
-    done
+  postPatch = ''
+    sed -i init/clipmenud.service \
+      -e "s,/usr/bin,$out/bin,"
   '';
 
-  meta = with stdenv.lib; {
+  makeFlags = [ "PREFIX=$(out)" ];
+  nativeBuildInputs = [ makeWrapper xsel clipnotify ];
+
+  postFixup = ''
+    sed -i "$out/bin/clipctl" -e 's,clipmenud\$,\.clipmenud-wrapped\$,'
+
+    wrapProgram "$out/bin/clipmenu" \
+      --prefix PATH : "${lib.makeBinPath [ xsel ]}"
+
+    wrapProgram "$out/bin/clipmenud" \
+      --set PATH "${lib.makeBinPath [ clipnotify coreutils gawk util-linux xdotool xsel ]}"
+  '';
+
+  meta = with lib; {
     description = "Clipboard management using dmenu";
     inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];

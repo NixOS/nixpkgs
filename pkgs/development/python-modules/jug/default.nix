@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
 , zlib
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "jug" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Task-Based Parallelization Framework";
     license = licenses.mit;
     homepage = "https://jug.readthedocs.io/";

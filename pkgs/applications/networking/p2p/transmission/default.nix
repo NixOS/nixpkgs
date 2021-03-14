@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , openssl
 , curl
 , libevent
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
     ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ]
   ++ lib.optionals enableGTK3 [ wrapGAppsHook ]

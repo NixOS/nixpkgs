@@ -1,20 +1,20 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildGoModule
 }:
 
 buildGoModule rec {
   pname = "rtsp-simple-server";
-  version = "0.12.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "aler9";
     repo = pname;
     rev = "v${version}";
-    sha256 = "094brxiiapm7402q0ysaha2xk3wymc2kz8vqisjyiswz7wf4wsx0";
+    sha256 = "sha256-U0wZ0NrvCQjMLDDjO6Jf6uu5FlHar7Td2zhoU2+MMkM=";
   };
 
-  vendorSha256 = "007dyw825jsfma7sq5llxllhrzbkhqxr985s1nhg5cdd803gz42p";
+  vendorSha256 = "sha256-dfAuq4iw3NQ4xaabPv7MQ88CYXgivRBeyvbmJ3SSjbI=";
 
   # Tests need docker
   doCheck = false;
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-ldflags=-X main.Version=${version}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Ready-to-use RTSP server and RTSP proxy that allows to read and publish video and audio streams"
     ;

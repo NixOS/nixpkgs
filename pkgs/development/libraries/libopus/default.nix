@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , fixedPoint ? false, withCustomModes ? true }:
 
 let
@@ -15,14 +15,14 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = stdenv.lib.optional fixedPoint "--enable-fixed-point"
-                ++ stdenv.lib.optional withCustomModes "--enable-custom-modes";
+  configureFlags = lib.optional fixedPoint "--enable-fixed-point"
+                ++ lib.optional withCustomModes "--enable-custom-modes";
 
-  doCheck = true;
+  doCheck = !stdenv.isi686; # test_unit_LPC_inv_pred_gain fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.opus-codec.org/";
     platforms = platforms.unix;
   };

@@ -1,4 +1,4 @@
-{ lib, fetchurl, pkgconfig, buildDunePackage, gtk3, cairo2 }:
+{ lib, fetchurl, pkg-config, buildDunePackage, gtk3, cairo2 }:
 
 buildDunePackage rec {
   version = "3.1.1";
@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "1ygc1yh99gh44h958yffw1vxdlfpn799d4x1s36c2jfbi8f0dir2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ gtk3 cairo2 ];
 
   meta = {

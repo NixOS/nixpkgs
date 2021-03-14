@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1j8pxqxb2c10hrfq34nfx75pc0cz6044j4w458nnxbgvl5b8cdcb";
+    sha256 = "0al64v12ddi6bgrr2z86jh21c02wg5l0mxjcmk9xlsvdx0d94cdx";
   };
 
   nativeBuildInputs = [
@@ -44,9 +44,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "GUI frontend for sudo/su";
     homepage = "https://github.com/lxqt/lxqt-sudo";
-    license = licenses.lgpl21;
+    description = "GUI frontend for sudo/su";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

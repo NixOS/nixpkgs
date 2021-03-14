@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , six, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel_yaml
 }:
 
@@ -18,11 +18,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel_yaml ];
 
-  disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";
     homepage = "https://construct.readthedocs.org/";
     license = licenses.mit;

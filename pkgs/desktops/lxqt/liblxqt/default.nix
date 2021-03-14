@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "liblxqt";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "01vfy7r7h0c5axlwqwsxg3pzdlaicnf2474bcq3jwk12gipvj5sd";
+    sha256 = "1rp26g1ygzzy1cm7md326sv99zjz4y12pa402nlf2vrf2lzbwfmk";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,9 @@ mkDerivation rec {
     libqtxdg
     xorg.libXScrnSaver
   ];
+
+  # convert name of wrapped binary, e.g. .lxqt-whatever-wrapped to the original name, e.g. lxqt-whatever so binaries can find their resources
+  patches = [ ./fix-application-path.patch ];
 
   postPatch = ''
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt

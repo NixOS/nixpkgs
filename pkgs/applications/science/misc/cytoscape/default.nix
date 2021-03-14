@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, substituteAll, coreutils }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, substituteAll, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "cytoscape";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [jre makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}
@@ -36,8 +37,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.cytoscape.org";
     description = "A general platform for complex network analysis and visualization";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [stdenv.lib.maintainers.mimame];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [lib.maintainers.mimame];
+    platforms = lib.platforms.unix;
   };
 }

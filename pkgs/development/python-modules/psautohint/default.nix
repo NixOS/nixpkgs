@@ -1,20 +1,21 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools, lxml, fs
+, fonttools
+, lxml, fs # for fonttools extras
 , setuptools_scm
-, pytest, pytestcov, pytest_xdist, pytest-randomly
+, pytestCheckHook, pytestcov, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "psautohint";
-  version = "2.1.2";
+  version = "2.3.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = "adobe-type-tools";
-    repo   = pname;
-    sha256 = "1s2l54gzn11y07zaggprwif7r3ia244qijjhkbvjdx4jsgc5df8n";
-    rev    = "v${version}";
+    owner = "adobe-type-tools";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1y7mqc2myn1gfzg4h018f8xza0q535shnqg6snnaqynz20i8jcfh";
     fetchSubmodules = true; # data dir for tests
   };
 
@@ -28,8 +29,24 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fonttools lxml fs ];
 
-  checkInputs = [ pytest pytestcov pytest_xdist pytest-randomly ];
-  checkPhase = "pytest tests";
+  checkInputs = [
+    pytestCheckHook
+    pytestcov
+    pytest_xdist
+  ];
+  disabledTests = [
+    # Test that fails on pytest >= v6
+    # https://github.com/adobe-type-tools/psautohint/issues/284#issuecomment-742800965
+    "test_hashmap_old_version"
+    # Slow tests, reduces test time from ~5 mins to ~30s
+    "test_mmufo"
+    "test_flex_ufo"
+    "test_ufo"
+    "test_flex_otf"
+    "test_multi_outpath"
+    "test_mmhint"
+    "test_otf"
+  ];
 
   meta = with lib; {
     description = "Script to normalize the XML and other data inside of a UFO";

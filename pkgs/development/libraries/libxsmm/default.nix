@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, coreutils, gfortran, gnused
+{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
 , python3, util-linux, which
 
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 let
@@ -42,11 +42,11 @@ in stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library targeting Intel Architecture for specialized dense and sparse matrix operations, and deep learning primitives";
     license = licenses.bsd3;
     homepage = "https://github.com/hfp/libxsmm";
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ chessai ];
+    maintainers = with lib.maintainers; [ chessai ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   version = "1.17.6";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.epl10;
     homepage = "https://github.com/coin-or/Clp";
     description = "An open-source linear programming solver written in C++";

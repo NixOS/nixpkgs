@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
+{ lib, stdenv, fetchurl, openssl, db, groff, libtool
+, withCyrusSasl ? true
+, cyrus_sasl
+}:
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.4.56";
+  version = "2.4.57";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    sha256 = "1q0m26kbab96r73y0dll0c36411kvfillal0i75kngy9cc1hwli5";
+    sha256 = "sha256-x7pH4ebstbQ289Qygd9Xq+/6mSYhQa7IImKLwiD2tFo=";
   };
 
   # TODO: separate "out" and "bin"
@@ -34,12 +37,11 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--enable-crypt"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-yielding_select=yes"
     "ac_cv_func_memcmp_working=yes"
-  ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
-    ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  ] ++ lib.optional (!withCyrusSasl) "--without-cyrus-sasl"
+    ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   postBuild = ''
     make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
@@ -54,19 +56,21 @@ stdenv.mkDerivation rec {
     "moduledir=$(out)/lib/modules"
   ];
 
-  # 1. Fixup broken libtool
-  # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`
+  # 1. Libraries left in the build location confuse `patchelf --shrink-rpath`
   #    Delete these to let patchelf discover the right path instead.
   #    FIXME: that one can be removed when https://github.com/NixOS/patchelf/pull/98
   #    is in Nixpkgs patchelf.
+  # 2. Fixup broken libtool for openssl and cyrus_sasl (if it is not disabled)
   preFixup = ''
-    sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
-        -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
-        -i $out/lib/libldap.la -i $out/lib/libldap_r.la
-
-    rm -rf $out/var
+    rm -r $out/var
     rm -r libraries/*/.libs
     rm -r contrib/slapd-modules/passwd/*/.libs
+    for f in $out/lib/libldap.la $out/lib/libldap_r.la; do
+      substituteInPlace "$f" --replace '-lssl' '-L${openssl.out}/lib -lssl'
+  '' + lib.optionalString withCyrusSasl ''
+      substituteInPlace "$f" --replace '-lsasl2' '-L${cyrus_sasl.out}/lib -lsasl2'
+  '' + ''
+    done
   '';
 
   postInstall = ''
@@ -75,7 +79,7 @@ stdenv.mkDerivation rec {
     chmod +x "$out"/lib/*.{so,dylib}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.openldap.org/";
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;

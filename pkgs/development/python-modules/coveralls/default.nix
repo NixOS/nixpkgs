@@ -36,6 +36,10 @@ buildPythonPackage rec {
     pytestrunner
   ];
 
+  postPatch = ''
+    sed -i "s/'coverage>=\([^,]\+\),.*',$/'coverage>=\1',/" setup.py
+  '';
+
   # FIXME: tests requires .git directory to be present
   doCheck = false;
 

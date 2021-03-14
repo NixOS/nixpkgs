@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub } :
+{ lib, stdenv, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
   version = "2.5.2";
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/kholtman/afio";
     description = "Fault tolerant cpio archiver targeting backups";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     /*
      * Licensing is complicated due to the age of the code base, but
      * generally free. See the file ``afio_license_issues_v5.txt`` for
      * a comprehensive discussion.
      */
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
   };
 }

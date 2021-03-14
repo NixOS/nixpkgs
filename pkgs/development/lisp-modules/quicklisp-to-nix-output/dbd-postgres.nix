@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''dbd-postgres'';
-  version = ''cl-dbi-20200610-git'';
+  baseName = "dbd-postgres";
+  version = "cl-dbi-20200610-git";
 
-  description = ''Database driver for PostgreSQL.'';
+  description = "Database driver for PostgreSQL.";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-postgres" args."cl-ppcre" args."closer-mop" args."dbi" args."ironclad" args."md5" args."split-sequence" args."trivial-garbage" args."uax-15" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2020-06-10/cl-dbi-20200610-git.tgz'';
-    sha256 = ''1d7hwywcqzqwmr5b42c0mmjq3v3xxd4cwb4fn5k1wd7j6pr0bkas'';
+    url = "http://beta.quicklisp.org/archive/cl-dbi/2020-06-10/cl-dbi-20200610-git.tgz";
+    sha256 = "1d7hwywcqzqwmr5b42c0mmjq3v3xxd4cwb4fn5k1wd7j6pr0bkas";
   };
 
   packageName = "dbd-postgres";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "cloc";
@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */Unix)
   '';
 
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
-    perl AlgorithmDiff ParallelForkManager RegexpCommon
-  ]);
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [ perl AlgorithmDiff ParallelForkManager RegexpCommon ]);
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];
 
@@ -26,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A program that counts lines of source code";
     homepage = "https://github.com/AlDanial/cloc";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ rycee ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ rycee ];
   };
 }

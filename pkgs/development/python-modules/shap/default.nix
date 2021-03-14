@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -60,11 +60,13 @@ buildPythonPackage rec {
     "test_single_row_gradient_boosting_regressor"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
+    # ModuleNotFoundError: No module named 'sklearn.ensemble.iforest'
+    broken = true;
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , zlib
 , fetchpatch
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "py3" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     makeWrapper
   ];
@@ -82,21 +82,21 @@ stdenv.mkDerivation rec {
       sha256 = "0pdy9sw49lxpaiwq073cisk0npir5bkch70nimdmpszxwp3fv1d8";
     })
 
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     (fetchpatch {
       url = "https://github.com/libproxy/libproxy/commit/44158f03f8522116758d335688ed840dfcb50ac8.patch";
       sha256 = "0axfvb6j7gcys6fkwi9dkn006imhvm3kqr83gpwban8419n0q5v1";
     })
   ];
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # config_gnome3 uses the helper to find GNOME proxy settings
     wrapProgram $out/libexec/pxgsettings --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
   '';
 
   doCheck = false; # fails 1 out of 10 tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.lgpl21;
     homepage = "http://libproxy.github.io/libproxy/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 let
   arch_table = {
     "x86_64-linux" = "linux-x86_64";
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     cp streaming_extractor_music $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://acousticbrainz.org/download";
     description = "AcousticBrainz audio feature extractor";
     license = licenses.agpl3Plus;

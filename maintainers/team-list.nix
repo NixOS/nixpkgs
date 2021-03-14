@@ -29,11 +29,31 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  beam = {
+    members = [
+      ankhers
+      Br1ght0ne
+      DianaOlympos
+      gleber
+      happysalada
+      yurrriq
+    ];
+    scope = "Maintain BEAM-related packages and modules.";
+  };
+
   cinnamon = {
     members = [
       mkg20001
     ];
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
+  };
+
+  deshaw = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      limeytexan
+    ];
+    scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
   };
 
   freedesktop = {

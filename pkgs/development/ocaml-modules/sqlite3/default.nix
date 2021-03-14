@@ -1,4 +1,4 @@
-{ lib, fetchurl, sqlite, pkgconfig, buildDunePackage }:
+{ lib, fetchurl, sqlite, pkg-config, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "sqlite3";
@@ -10,7 +10,7 @@ buildDunePackage rec {
     sha256 = "0sba74n0jvzxibrclhbpqscil36yfw7i9jj9q562yhza6rax9p82";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ sqlite ];
 
   meta = with lib; {

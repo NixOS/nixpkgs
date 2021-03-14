@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "redis_exporter";
@@ -24,7 +24,7 @@ buildGoPackage rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) redis; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prometheus exporter for Redis metrics";
     inherit (src.meta) homepage;
     license = licenses.mit;

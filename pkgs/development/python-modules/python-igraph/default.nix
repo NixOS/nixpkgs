@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchPypi, lib, isPy3k
-, pkgconfig, igraph
+, pkg-config, igraph
 , texttable }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.8.3";
   disabled = !isPy3k; # fails to build
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ igraph ];
   propagatedBuildInputs = [ texttable ];
 

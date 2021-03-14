@@ -18,7 +18,6 @@ buildPythonPackage rec {
   pname = "pyside-shiboken";
   version = "1.2.4";
   format = "other";
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "PySide";
@@ -26,8 +25,6 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "0x2lyg52m6a0vn0665pgd1z1qrydglyfxxcggw6xzngpnngb6v5v";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake pkg-config pysideApiextractor pysideGeneratorrunner sphinx qt4 ];
 
@@ -51,11 +48,11 @@ buildPythonPackage rec {
     "-DPYTHON3_LIBRARY=${lib.getLib python}/lib"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
-    license = lib.licenses.gpl2;
-    homepage = "http://www.pyside.org/docs/shiboken/";
+    license = licenses.gpl2;
+    homepage = "http://www.pyside.org/";
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "swarm-2019-03-11";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     install -Dm644 Doc/swarm.1 $out/share/man/man1/swarm.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Verification script generator for Spin";
     homepage = "http://spinroot.com/";
     license = licenses.free;

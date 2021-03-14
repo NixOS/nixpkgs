@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   doCheck = stdenv.hostPlatform.isLinux;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to measure, monitor and analyze memory behavior";
     homepage = "https://pythonhosted.org/Pympler/";
     license = licenses.asl20;

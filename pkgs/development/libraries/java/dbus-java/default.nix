@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext, jdk8, libmatthew_java}:
+{lib, stdenv, fetchurl, gettext, jdk8, libmatthew_java}:
 
 let jdk = jdk8; in
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   JAVA_HOME=jdk;
   JAVA="${jdk}/bin/java";
-  PREFIX=''''${out}'';
+  PREFIX="\${out}";
   JAVAUNIXLIBDIR="${libmatthew_java}/lib/jni";
   JAVAUNIXJARDIR="${libmatthew_java}/share/java";
   buildInputs = [ gettext jdk ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
            -e "s|install: install-bin install-man install-doc|install: install-bin|" Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = [ maintainers.sander ];
     license = licenses.afl21;

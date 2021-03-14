@@ -1,29 +1,32 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
-, pytest
+, pytestCheckHook
+, sysctl
 }:
 
 buildPythonPackage rec {
   pname = "py-cpuinfo";
-  version = "5.0.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
      owner = "workhorsy";
      repo = pname;
      rev = "v${version}";
-     sha256 = "0lxl9n6djaz5h1zrb2jca4qwl41c2plxy8chr7yhcxnzg0srddqi";
+     sha256 = "10qfaibyb2syiwiyv74l7d97vnmlk079qirgnw3ncklqjs0s3gbi";
   };
 
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
-    runHook preCheck
-    pytest -k "not TestActual"
-    runHook postCheck
+  # On Darwin sysctl is used to read CPU information.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cpuinfo/cpuinfo.py \
+      --replace "len(_program_paths('sysctl')) > 0" "True" \
+      --replace "_run_and_get_stdout(['sysctl'" "_run_and_get_stdout(['${sysctl}/bin/sysctl'"
   '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Get CPU info with pure Python 2 & 3";

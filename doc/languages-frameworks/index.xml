@@ -8,11 +8,11 @@
  <xi:include href="agda.section.xml" />
  <xi:include href="android.section.xml" />
  <xi:include href="beam.section.xml" />
- <xi:include href="bower.xml" />
+ <xi:include href="bower.section.xml" />
  <xi:include href="coq.section.xml" />
  <xi:include href="crystal.section.xml" />
  <xi:include href="emscripten.section.xml" />
- <xi:include href="gnome.xml" />
+ <xi:include href="gnome.section.xml" />
  <xi:include href="go.section.xml" />
  <xi:include href="haskell.section.xml" />
  <xi:include href="idris.section.xml" />
@@ -22,7 +22,7 @@
  <xi:include href="maven.section.xml" />
  <xi:include href="node.section.xml" />
  <xi:include href="ocaml.section.xml" />
- <xi:include href="perl.xml" />
+ <xi:include href="perl.section.xml" />
  <xi:include href="php.section.xml" />
  <xi:include href="python.section.xml" />
  <xi:include href="qt.section.xml" />

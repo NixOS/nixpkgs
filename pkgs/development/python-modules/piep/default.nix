@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pygments ];
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bringing the power of python to stream editing";
     homepage = "https://github.com/timbertson/piep";
     maintainers = with maintainers; [ timbertson ];

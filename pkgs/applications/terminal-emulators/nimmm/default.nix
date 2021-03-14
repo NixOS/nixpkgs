@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nim, termbox, pcre }:
+{ lib, stdenv, fetchFromGitHub, nim, termbox, pcre }:
 
 let
   noise = fetchFromGitHub {
@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     install -Dt $out/bin src/nimmm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal file manager written in nim";
     homepage = "https://github.com/joachimschmidt557/nimmm";
     license = licenses.gpl3;

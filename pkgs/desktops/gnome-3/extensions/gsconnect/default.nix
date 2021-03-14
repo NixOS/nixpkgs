@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , substituteAll
 , openssl
@@ -15,7 +15,6 @@
 , gnome3
 , gjs
 , nixosTests
-, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
     "-Dsshkeygen_path=${openssh}/bin/ssh-keygen"
     "-Dsession_bus_services_dir=${placeholder "out"}/share/dbus-1/services"
     "-Dpost_install=true"
-    "-Dinstalled_test_prefix=${placeholder ''installedTests''}"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   postPatch = ''
@@ -107,7 +106,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki";
     license = licenses.gpl2Plus;

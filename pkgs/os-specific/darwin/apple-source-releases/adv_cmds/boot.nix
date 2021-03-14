@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, fetchzip, bsdmake, perl, flex, yacc
+{ lib, appleDerivation, fetchzip, bsdmake, perl, flex, yacc
 }:
 
 # this derivation sucks
@@ -85,7 +85,7 @@ in appleDerivation {
   setOutputFlags = false;
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ gridaphobe ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ gridaphobe ];
   };
 }

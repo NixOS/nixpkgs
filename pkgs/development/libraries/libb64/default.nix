@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "libb64";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "ANSI C routines for fast base64 encoding/decoding";
-    license = stdenv.lib.licenses.publicDomain;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
   };
 }

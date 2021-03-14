@@ -251,11 +251,10 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "radeon" "cirrus" "vesa" "modesetting" ];
+        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
         example = [
-          "ati_unfree" "amdgpu" "amdgpu-pro"
-          "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "amdgpu-pro"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
@@ -441,6 +440,7 @@ in
 
       serverFlagsSection = mkOption {
         default = "";
+        type = types.lines;
         example =
           ''
           Option "BlankTime" "0"
@@ -515,6 +515,19 @@ in
         example = { x = 2048; y = 2048; };
         description = ''
           Virtual screen size for Xrandr.
+        '';
+      };
+
+      logFile = mkOption {
+        type = types.nullOr types.str;
+        default = "/dev/null";
+        example = "/var/log/Xorg.0.log";
+        description = ''
+          Controls the file Xorg logs to.
+
+          The default of <literal>/dev/null</literal> is set so that systemd services (like <literal>displayManagers</literal>) only log to the journal and don't create their own log files.
+
+          Setting this to <literal>null</literal> will not pass the <literal>-logfile</literal> argument to Xorg which allows it to log to its default logfile locations instead (see <literal>man Xorg</literal>). You probably only want this behaviour when running Xorg manually (e.g. via <literal>startx</literal>).
         '';
       };
 
@@ -636,7 +649,7 @@ in
         xorg.xprop
         xorg.xauth
         pkgs.xterm
-        pkgs.xdg_utils
+        pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
@@ -692,11 +705,10 @@ in
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
-        # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
-         "-logfile" "/dev/null"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
+        ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
         ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
         ++ optional (!cfg.enableTCP) "-nolisten tcp"
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"

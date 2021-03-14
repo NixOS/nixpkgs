@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , cmake
 , llvm
@@ -16,8 +16,6 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     moveToOutput include "$dev"
     moveToOutput lib "$dev"
@@ -26,8 +24,8 @@ stdenv.mkDerivation {
   meta = {
     description = "The LLVM Linker";
     homepage    = "https://lld.llvm.org/";
-    license     = stdenv.lib.licenses.ncsa;
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.ncsa;
+    platforms   = lib.platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
   };
 }

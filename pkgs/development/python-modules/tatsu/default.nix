@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , colorama, mypy, pyyaml, regex
 , dataclasses, typing
 , pytestrunner, pytest-mypy
@@ -25,15 +25,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ colorama mypy pyyaml regex ]
-    ++ stdenv.lib.optionals (pythonOlder "3.7") [ dataclasses ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
   checkInputs = [ pytest-mypy ];
 
   checkPhase = ''
     pytest test/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generates Python parsers from grammars in a variation of EBNF";
     longDescription = ''
       TatSu (the successor to Grako) is a tool that takes grammars in a

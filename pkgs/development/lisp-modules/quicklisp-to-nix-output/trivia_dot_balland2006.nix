@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivia_dot_balland2006'';
-  version = ''trivia-20200925-git'';
+  baseName = "trivia_dot_balland2006";
+  version = "trivia-20200925-git";
 
-  description = ''Optimizer for Trivia based on (Balland 2006)'';
+  description = "Optimizer for Trivia based on (Balland 2006)";
 
   deps = [ args."alexandria" args."closer-mop" args."introspect-environment" args."iterate" args."lisp-namespace" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_trivial" args."trivial-cltl2" args."type-i" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz'';
-    sha256 = ''192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z'';
+    url = "http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz";
+    sha256 = "192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z";
   };
 
   packageName = "trivia.balland2006";

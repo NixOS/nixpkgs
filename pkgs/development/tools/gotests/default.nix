@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gotests";
@@ -19,7 +19,7 @@ buildGoPackage rec {
   meta = {
     description = "Generate Go tests from your source code";
     homepage = "https://github.com/cweill/gotests";
-    maintainers = with stdenv.lib.maintainers; [ vdemeester ];
-    license = stdenv.lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.asl20;
   };
 }

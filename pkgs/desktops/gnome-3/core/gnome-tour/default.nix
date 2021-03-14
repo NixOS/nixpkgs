@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , rustPlatform
 , gettext
 , meson
@@ -15,14 +16,16 @@
 , gnome3
 , libhandy
 , librsvg
+, rustc
+, cargo
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "gnome-tour";
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-hV/C/Lyz6e9zhe3FRw4Sox5gMqThDP57wVCTgcekjng=";
   };
 
@@ -30,6 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     appstream-glib
+    cargo
     desktop-file-utils
     gettext
     glib # glib-compile-resources
@@ -37,6 +41,8 @@ rustPlatform.buildRustPackage rec {
     ninja
     pkg-config
     python3
+    rustPlatform.cargoSetupHook
+    rustc
     wrapGAppsHook
   ];
 
@@ -47,12 +53,6 @@ rustPlatform.buildRustPackage rec {
     libhandy
     librsvg
   ];
-
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
     description = "GNOME Greeter & Tour";
     maintainers = teams.gnome.members;

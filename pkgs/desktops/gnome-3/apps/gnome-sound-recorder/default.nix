@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gettext
 , gobject-introspection
 , wrapGAppsHook
@@ -19,15 +19,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "I5A/c2G+QQhw+6lHIJFnuW9JB2MGQdM8y6qOQvV0tpk=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "2Z6k+WPsEInpzVl6fUQ5ihHs7xMeQUInGhyQwVuqRSE=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     meson
     ninja
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and modern sound recorder";
     homepage = "https://wiki.gnome.org/Apps/SoundRecorder";
     license = licenses.gpl2Plus;

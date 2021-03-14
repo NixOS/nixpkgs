@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchgit, pkgconfig, libubox }:
+{ lib, stdenv, cmake, fetchgit, pkg-config, libubox }:
 
 stdenv.mkDerivation {
   pname = "uci";
@@ -13,9 +13,9 @@ stdenv.mkDerivation {
   hardeningDisable = [ "all" ];
   cmakeFlags = [ "-D BUILD_LUA:BOOL=OFF" ];
   buildInputs = [ libubox ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenWrt Unified Configuration Interface";
     homepage = "https://git.openwrt.org/?p=project/uci.git;a=summary";
     license = licenses.lgpl21;

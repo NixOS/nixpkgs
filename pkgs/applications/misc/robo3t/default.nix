@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig, libGL,
+{ lib, stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig, libGL,
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [makeWrapper];
 
-  ldLibraryPath = stdenv.lib.makeLibraryPath [
+  ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc
     zlib
     glib
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://robomongo.org/";
     description = "Query GUI for mongodb";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.eperuffo ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.eperuffo ];
   };
 }

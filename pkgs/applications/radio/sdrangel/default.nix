@@ -9,7 +9,7 @@ fftwFloat,
 glew,
 hackrf,
 lib,
-libav,
+ffmpeg,
 libiio,
 libopus,
 libpulseaudio,
@@ -19,39 +19,41 @@ libbladeRF,
 mkDerivation,
 ocl-icd,
 opencv3,
-pkgconfig,
+pkg-config,
 qtbase,
 qtmultimedia,
 qtserialport,
 qtwebsockets,
 rtl-sdr,
 serialdv,
+soapysdr-with-plugins,
 uhd
 }:
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "4.21.1";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "y6BVwnSJXiapgm9pAuby1DLLeU5MSyB4uqEa3oS35/U=";
+    sha256 = "4iJoKs0BHmBR6JRFuTIqs0GW3SjhPRMPRlqdyTI38T4=";
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    glew opencv3 libusb1 boost libopus limesuite libav libiio libpulseaudio
+    glew opencv3 libusb1 boost libopus limesuite ffmpeg libiio libpulseaudio
     qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf
     fftwFloat codec2 cm256cc serialdv qtserialport
-    libbladeRF uhd
+    libbladeRF uhd soapysdr-with-plugins
   ];
   cmakeFlags = [
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
     "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
 
   LD_LIBRARY_PATH = "${ocl-icd}/lib";

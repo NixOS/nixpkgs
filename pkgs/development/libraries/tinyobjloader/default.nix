@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tinyobjloader/tinyobjloader";
     description = "Tiny but powerful single file wavefront obj loader";
     license = licenses.mit;

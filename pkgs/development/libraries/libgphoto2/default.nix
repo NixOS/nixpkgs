@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gettext
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext
 , libusb1
 , libtool
 , libexif
@@ -7,20 +7,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
-  version = "2.5.23";
+  version = "2.5.26";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "1sc2ycx11khf0qzp1cqxxx1qymv6bjfbkx3vvbwz6wnbyvsigxz2";
+    sha256 = "0lnlxflj04ng9a0hm2nb2067kqs4kp9kx1z4gg395cgbfd7lx6j6";
   };
 
   patches = [];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gettext
     libtool
   ];
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
       from digital cameras.
     '';
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

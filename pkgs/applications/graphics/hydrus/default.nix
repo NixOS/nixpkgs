@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , lzma
 , qt5
@@ -10,14 +10,14 @@
 
 pythonPackages.buildPythonPackage {
   pname = "hydrus";
-  version = "413";
+  version = "426";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "9fbed11bef499e01a6799b298bea7d0967d30430";
-    sha256 = "1dl7qpzmlxl376lzm0chmwvf4nl55wz6fwcsw0ikb33rm8r33gq4";
+    rev = "1acdc258e5bb2ae22f5eafaf3dac8d9265dba5e2";
+    sha256 = "1snihd433hx36s6d5hsnq4qg0xs6ag4822lwm5fqak64n22ad2qb";
   };
 
   nativeBuildInputs = [
@@ -103,7 +103,7 @@ pythonPackages.buildPythonPackage {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Danbooru-like image tagging and searching system for the desktop";
     license = licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";

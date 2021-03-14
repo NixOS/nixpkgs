@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+
 , bash
 , binutils-unwrapped
 , coreutils
@@ -15,7 +16,7 @@ rec {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = with pkgs; stdenv.lib.makeBinPath [
+    path = lib.makeBinPath [
       bash
       binutils-unwrapped
       coreutils
@@ -65,7 +66,7 @@ rec {
       xorg.xrandr
       which
       perl
-      xdg_utils
+      xdg-utils
       iana-etc
       krb5
     ];
@@ -120,7 +121,6 @@ rec {
       libusb1
       udev
       dbus-glib
-      libav
       atk
       at-spi2-atk
       libudev0-shim

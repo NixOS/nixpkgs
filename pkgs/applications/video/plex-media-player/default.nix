@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, cmake, python3, mkDerivation
+{ lib, fetchFromGitHub, fetchurl, pkg-config, cmake, python3, mkDerivation
 , libX11, libXrandr, qtbase, qtwebchannel, qtwebengine, qtx11extras
 , libvdpau, SDL2, mpv, libGL }:
 let
@@ -21,7 +21,7 @@ in mkDerivation rec {
     sha256 = "XFwcSHn9wG30bDMGFITBmhp6/VI1RLmxMxFFxjntTmw=";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake python3 ];
+  nativeBuildInputs = [ pkg-config cmake python3 ];
   buildInputs = [ libX11 libXrandr qtbase qtwebchannel qtwebengine qtx11extras
                   libvdpau SDL2 mpv libGL ];
 
@@ -38,7 +38,7 @@ in mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Streaming media player for Plex";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];

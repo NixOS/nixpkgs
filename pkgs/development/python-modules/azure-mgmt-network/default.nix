@@ -10,14 +10,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "16.0.0";
+  version = "17.1.0";
   pname = "azure-mgmt-network";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "6159a8c44590cc58841690c27c7d4acb0cd9ad0a1e5178c1d35e0f48e3c3c0e9";
+    sha256 = "f47852836a5960447ab534784a9285696969f007744ba030828da2eab92621ab";
   };
 
   propagatedBuildInputs = [

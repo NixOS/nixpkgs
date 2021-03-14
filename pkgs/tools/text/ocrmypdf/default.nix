@@ -7,6 +7,7 @@
 , python3
 , python3Packages
 , qpdf
+, lib
 , stdenv
 , tesseract4
 , unpaper
@@ -29,18 +30,17 @@ let
 in
 buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "11.3.3";
+  version = "11.6.0";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "0qv34clid65p11dgqalyk7b7myn5ibiz8i9xxhxkmjblw297p6ak";
+    sha256 = "0inmmpam0vcm5n4sm6lh9p5swk44clknvm1cdwk9cax01mdqljza";
   };
 
   nativeBuildInputs = with python3Packages; [
-    pytestrunner
     setuptools
     setuptools-scm-git-archive
     setuptools_scm
@@ -65,8 +65,7 @@ buildPythonApplication rec {
     pytest
     pytest-helpers-namespace
     pytest_xdist
-    pytestcov
-    pytestrunner
+    pytest-cov
     python-xmp-toolkit
     pytestCheckHook
   ] ++ runtimeDeps;
@@ -74,16 +73,16 @@ buildPythonApplication rec {
   patches = [
     (substituteAll {
       src = ./liblept.patch;
-      liblept = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
+      liblept = "${lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = licenses.gpl3;
+    license = with licenses; [ mpl20 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.kiwi ];
   };

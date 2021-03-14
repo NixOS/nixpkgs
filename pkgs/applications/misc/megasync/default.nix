@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoconf
 , automake
 , c-ares
@@ -6,7 +6,6 @@
 , curl
 , doxygen
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg_3
 , libmediainfo
 , libraw
@@ -16,7 +15,7 @@
 , libzen
 , lsb-release
 , mkDerivation
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , qtx11extras
@@ -39,7 +38,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkgconfig qttools swig ];
+    [ autoconf automake doxygen lsb-release pkg-config qttools swig ];
   buildInputs = [
     c-ares
     cryptopp
@@ -109,7 +108,7 @@ mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage = "https://mega.nz/";

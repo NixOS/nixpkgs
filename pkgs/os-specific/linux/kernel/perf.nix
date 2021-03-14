@@ -1,5 +1,5 @@
 { lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
-, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
+, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkg-config, libunwind, binutils
 , libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
 , zlib, withGtk ? false, gtk2 ? null
 }:
@@ -36,12 +36,12 @@ stdenv.mkDerivation {
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-    flex bison libiberty audit makeWrapper pkgconfig python3
+    flex bison libiberty audit makeWrapper pkg-config python3
   ];
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
     libopcodes python3 perl
-  ] ++ stdenv.lib.optional withGtk gtk2
+  ] ++ lib.optional withGtk gtk2
     ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]);
 
   # Note: we don't add elfutils to buildInputs, since it provides a
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

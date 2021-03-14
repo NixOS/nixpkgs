@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , pkg-config
 , gettext
 , fetchFromGitLab
-, python3
-, libhandy_0
+, python3Packages
+, libhandy
 , libpwquality
 , wrapGAppsHook
 , gtk3
@@ -15,9 +15,9 @@
 , desktop-file-utils
 , appstream-glib }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gnome-passwordsafe";
-  version = "3.99.2";
+  version = "5.0";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "World";
     repo = "PasswordSafe";
     rev = version;
-    sha256 = "0pi2l4gwf8paxm858mxrcsk5nr0c0zw5ycax40mghndb6b1qmmhf";
+    sha256 = "8EFKLNK7rZlYL2g/7FmaC5r5hcdblsnod/aB8NYiBvY=";
   };
 
   nativeBuildInputs = [
@@ -44,31 +44,18 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     glib
     gdk-pixbuf
-    libhandy_0
+    libhandy
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     pygobject3
     construct
-
-    # pykeepass 3.2.1 changed some exception types, and is not backwards compatible.
-    # Remove override once the MR is merged upstream.
-    # https://gitlab.gnome.org/World/PasswordSafe/-/merge_requests/79
-    (pykeepass.overridePythonAttrs (old: rec {
-      version = "3.2.0";
-      src = fetchPypi {
-        pname = "pykeepass";
-        inherit version;
-        sha256 = "1ysjn92bixq8wkwhlbhrjj9z0h80qnlnj7ks5478ndkzdw5gxvm1";
-      };
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pycryptodome ];
-    }))
-
+    pykeepass
   ] ++ [
     libpwquality # using the python bindings
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/PasswordSafe";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp inc/CRC.h $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/d-bahr/CRCpp";
     description = "Easy to use and fast C++ CRC library";
     platforms = platforms.all;

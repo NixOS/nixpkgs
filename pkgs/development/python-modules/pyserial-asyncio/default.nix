@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , pyserial }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyserial ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "asyncio extension package for pyserial";
     homepage = "https://github.com/pyserial/pyserial-asyncio";
     license = licenses.bsd3;

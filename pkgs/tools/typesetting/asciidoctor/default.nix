@@ -13,6 +13,7 @@ let
       "asciidoctor"
       "asciidoctor-pdf"
       "asciidoctor-epub3"
+      "asciidoctor-revealjs"
     ];
 
     buildInputs = [ makeWrapper ];

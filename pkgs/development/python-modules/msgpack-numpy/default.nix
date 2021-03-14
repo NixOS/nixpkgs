@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ${python.interpreter} msgpack_numpy.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Numpy data type serialization using msgpack";
     homepage = "https://github.com/lebedov/msgpack-numpy";
     license = licenses.bsd3;

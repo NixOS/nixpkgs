@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, perl, kmod, libelf }:
+{ lib, stdenv, fetchurl, kernel, perl, kmod, libelf }:
 let
   version = "1.63";
 in
@@ -41,6 +41,6 @@ stdenv.mkDerivation {
     homepage = "https://sourceforge.net/projects/ndiswrapper";
     license = "GPL";
     platforms = [ "i686-linux" "x86_64-linux" ];
-    broken = stdenv.lib.versionAtLeast kernel.version "5.8";
+    broken = lib.versionAtLeast kernel.version "5.8";
   };
 }

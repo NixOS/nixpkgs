@@ -1,0 +1,53 @@
+{
+  "context.properties": {},
+  "context.spa-libs": {
+    "api.bluez5.*": "bluez5/libspa-bluez5",
+    "api.alsa.*": "alsa/libspa-alsa",
+    "api.v4l2.*": "v4l2/libspa-v4l2",
+    "api.libcamera.*": "libcamera/libspa-libcamera"
+  },
+  "context.modules": {
+    "libpipewire-module-rtkit": {
+      "args": {},
+      "flags": [
+        "ifexists",
+        "nofail"
+      ]
+    },
+    "libpipewire-module-protocol-native": null,
+    "libpipewire-module-client-node": null,
+    "libpipewire-module-client-device": null,
+    "libpipewire-module-adapter": null,
+    "libpipewire-module-metadata": null,
+    "libpipewire-module-session-manager": null
+  },
+  "session.modules": {
+    "default": [
+      "flatpak",
+      "portal",
+      "v4l2",
+      "suspend-node",
+      "policy-node"
+    ],
+    "with-audio": [
+      "metadata",
+      "default-nodes",
+      "default-profile",
+      "default-routes",
+      "alsa-seq",
+      "alsa-monitor"
+    ],
+    "with-alsa": [
+      "with-audio"
+    ],
+    "with-jack": [
+      "with-audio"
+    ],
+    "with-pulseaudio": [
+      "with-audio",
+      "bluez5",
+      "restore-stream",
+      "streams-follow-default"
+    ]
+  }
+}

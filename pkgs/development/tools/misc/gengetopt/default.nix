@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, texinfo, help2man }:
+{ fetchurl, lib, stdenv, texinfo, help2man }:
 
 stdenv.mkDerivation rec {
   pname = "gengetopt";
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gengetopt/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

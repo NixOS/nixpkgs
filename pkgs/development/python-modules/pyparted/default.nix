@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , isPyPy
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sed -i -e '
       s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
     ' tests/test__ped_ped.py
-  '' + stdenv.lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.isi686 ''
     # remove some integers in this test case which overflow on 32bit systems
     sed -i -r -e '/class *UnitGetSizeTestCase/,/^$/{/[0-9]{11}/d}' \
       tests/test__ped_ped.py
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     make test PYTHON=${python.executable}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dcantrell/pyparted/";
     description = "Python interface for libparted";
     license = licenses.gpl2Plus;

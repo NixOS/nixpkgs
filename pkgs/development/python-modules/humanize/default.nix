@@ -1,9 +1,11 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, mock
 , setuptools_scm
+, setuptools
+, pytestCheckHook
+, freezegun
 }:
 
 buildPythonPackage rec {
@@ -17,16 +19,14 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  checkInputs = [ mock ];
+  propagatedBuildInputs = [ setuptools ];
+  checkInputs = [ pytestCheckHook freezegun ];
 
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python humanize utilities";
     homepage = "https://github.com/jmoiron/humanize";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ rmcgibbo ];
   };
 
 }

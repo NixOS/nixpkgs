@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , entrypoints
 , glibcLocales
 , ipython
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pandas
     six
     toolz
-  ] ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [
     glibcLocales
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pytest --doctest-modules altair
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A declarative statistical visualization library for Python.";
     homepage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;

@@ -416,4 +416,29 @@ rec {
     contents = crossPkgs.hello;
   };
 
+  # layered image where a store path is itself a symlink
+  layeredStoreSymlink =
+  let
+    target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
+    symlink = pkgs.runCommandNoCC "symlink" {} "ln -s ${target} $out";
+  in
+    pkgs.dockerTools.buildLayeredImage {
+      name = "layeredstoresymlink";
+      tag = "latest";
+      contents = [ pkgs.bash symlink ];
+    } // { passthru = { inherit symlink; }; };
+
+  # image with registry/ prefix
+  prefixedImage = pkgs.dockerTools.buildImage {
+    name = "registry-1.docker.io/image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
+
+  # layered image with registry/ prefix
+  prefixedLayeredImage = pkgs.dockerTools.buildLayeredImage {
+    name = "registry-1.docker.io/layered-image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
 }

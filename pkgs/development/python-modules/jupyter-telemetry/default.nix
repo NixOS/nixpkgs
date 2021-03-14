@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     python-json-logger jsonschema ruamel_yaml traitlets
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Telemetry for Jupyter Applications and extensions";
     homepage = "https://jupyter-telemetry.readthedocs.io/";
     license = licenses.bsd3;

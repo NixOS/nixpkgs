@@ -1,11 +1,9 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , argcomplete
 , colorama
 , jmespath
-, knack
 , pygments
 , pyyaml
 , six

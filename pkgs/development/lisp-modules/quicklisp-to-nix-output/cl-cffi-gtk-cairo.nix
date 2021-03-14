@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-cffi-gtk-cairo'';
-  version = ''cl-cffi-gtk-20201016-git'';
+  baseName = "cl-cffi-gtk-cairo";
+  version = "cl-cffi-gtk-20201016-git";
 
-  description = ''A Lisp binding to Cairo'';
+  description = "A Lisp binding to Cairo";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-cffi-gtk-glib" args."iterate" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-cffi-gtk/2020-10-16/cl-cffi-gtk-20201016-git.tgz'';
-    sha256 = ''1m91597nwwrps32awvk57k3h4jjq603ja0kf395n2jxvckfz0a55'';
+    url = "http://beta.quicklisp.org/archive/cl-cffi-gtk/2020-10-16/cl-cffi-gtk-20201016-git.tgz";
+    sha256 = "1m91597nwwrps32awvk57k3h4jjq603ja0kf395n2jxvckfz0a55";
   };
 
   packageName = "cl-cffi-gtk-cairo";

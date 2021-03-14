@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , vala
 , gobject-introspection
 , gtk-doc
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-DzceLtK5IWL+/T3edD5kjKCKahsrBQBIZ/vdx+IR5CQ=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     meson
     ninja
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     luajit
     openexr
     suitesparse
-  ] ++ stdenv.lib.optional stdenv.isDarwin OpenCL;
+  ] ++ lib.optional stdenv.isDarwin OpenCL;
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
     license = licenses.lgpl3Plus;

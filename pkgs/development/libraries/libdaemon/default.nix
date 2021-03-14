@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "libdaemon-0.14";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-includes.patch ];
 
   configureFlags = [ "--disable-lynx" ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     [ # Can't run this test while cross-compiling
       "ac_cv_func_setpgrp_void=yes"
     ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight C library that eases the writing of UNIX daemons";
     homepage = "http://0pointer.de/lennart/projects/libdaemon/";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

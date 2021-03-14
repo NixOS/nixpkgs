@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs }:
+{ lib, stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
   name = "zeitgeist-20120221";
@@ -20,6 +20,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Integreate Emacs with Zeitgeist";
     homepage = "http://zeitgeist-project.com/";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

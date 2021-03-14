@@ -27,11 +27,13 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = "osgi";
         description = "User account under which Apache Felix runs.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "osgi";
         description = "Group account under which Apache Felix runs.";
       };

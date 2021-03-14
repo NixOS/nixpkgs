@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Functions for server CLI applications used by humans";
     homepage = "https://github.com/joeyespo/path-and-address";
     license = licenses.mit;

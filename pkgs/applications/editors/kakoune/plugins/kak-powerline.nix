@@ -1,12 +1,12 @@
-{ stdenv, git, fetchFromGitHub }:
+{ stdenv, git, fetchFromGitHub, lib }:
 stdenv.mkDerivation {
   name = "kak-powerline";
-  version = "2019-07-23";
+  version = "2020-08-22";
   src = fetchFromGitHub {
-    owner = "andreyorst";
+    owner = "jdugan6240";
     repo = "powerline.kak";
-    rev = "82b01eb6c97c7380b7da253db1fd484a5de13ea4";
-    sha256 = "1480wp2jc7c84z1wqmpf09lzny6kbnbhiiym2ffaddxrd4ns9i6z";
+    rev = "d641b2cd8024f872bcda23f9256e7aff36da02ae";
+    sha256 = "65948f5ef3ab2f46f6d186ad752665c251d887631d439949decc2654a67958a4";
   };
 
   configurePhase = ''
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
     cp -r rc $out/share/kak/autoload/plugins/powerline
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Kakoune modeline, but with passion";
-    homepage = "https://github.com/andreyorst/powerline.kak";
+    homepage = "https://github.com/jdugan6240/powerline.kak";
     license = licenses.mit;
     maintainers = with maintainers; [ nrdxp ];
     platform = platforms.all;

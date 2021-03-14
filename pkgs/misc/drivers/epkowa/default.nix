@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , makeWrapper
 , symlinkJoin
-, pkgconfig
+, pkg-config
 , libtool
 , gtk2
 , libxml2
@@ -19,8 +19,8 @@
 }:
 let common_meta = {
   homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
-  license = with stdenv.lib.licenses; epson;
-  platforms = with stdenv.lib.platforms; linux;
+  license = with lib.licenses; epson;
+  platforms = with lib.platforms; linux;
 };
 in
 ############################
@@ -62,6 +62,40 @@ let plugins = {
         $registry --add interpreter usb 0x04b8 0x0142 "$plugin/lib/esci/libesci-interpreter-perfection-v330 $plugin/share/esci/esfwad.bin"
       '';
       hw = "Perfection V330 Photo";
+    };
+    meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
+  };
+  v370 = stdenv.mkDerivation rec {
+    name = "iscan-v370-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "1ff7adp9mha1i2ibllz540xkagpy8r757h4s3h60bgxbyzv2yggr";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v370-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+
+
+      mkdir -p $out/share $out/lib
+      cp -r usr/share/{iscan-data,iscan}/ $out/share
+      cp -r usr/lib64/iscan $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x014a "$plugin/lib/esci/libiscan-plugin-perfection-v370 $plugin/share/esci/esfwdd.bin"
+      '';
+      hw = "Perfection V37/V370";
     };
     meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
   };
@@ -227,7 +261,7 @@ let plugins = {
 in
 let fwdir = symlinkJoin {
   name = "esci-firmware-dir";
-  paths = stdenv.lib.mapAttrsToList (name: value: value + /share/esci) plugins;
+  paths = lib.mapAttrsToList (name: value: value + /share/esci) plugins;
 };
 in
 let iscan-data = stdenv.mkDerivation rec {
@@ -261,7 +295,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk2
     libxml2
@@ -303,7 +337,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
     registry=$out/bin/iscan-registry;
   '' +
-  stdenv.lib.concatStrings (stdenv.lib.mapAttrsToList
+  lib.concatStrings (lib.mapAttrsToList
     (name: value: ''
       plugin=${value};
       ${value.passthru.registrationCommand}
@@ -315,7 +349,7 @@ stdenv.mkDerivation rec {
       Includes gui-less iscan (aka. Image Scan! for Linux).
       Supported hardware: at least :
     '' +
-    stdenv.lib.concatStringsSep ", " (stdenv.lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
-    maintainers = with stdenv.lib.maintainers; [ symphorien dominikh ];
+    lib.concatStringsSep ", " (lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
+    maintainers = with lib.maintainers; [ symphorien dominikh ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , mono
 , glib
 , pango
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool which ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
 
   buildInputs = [
     mono glib pango gtk2 GConf libglade libgnomecanvas
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     gtk = gtk2;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical User Interface Toolkit for mono and .Net";
     homepage = "https://www.mono-project.com/docs/gui/gtksharp";
     platforms = platforms.linux;

@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , python3, boost
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2020.11.25";
+  version = "2021.01.02";
 
   # git describe --tags
-  realVersion = with stdenv.lib; with builtins;
-    "1.0-476-g${substring 0 7 (elemAt srcs 0).rev}";
+  realVersion = with lib; with builtins;
+    "1.0-482-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
-       owner  = "SymbiFlow";
+       owner  = "YosysHQ";
        repo   = "prjtrellis";
-       rev    = "a441cd9d0390648e96bf27096626eb2c904096de";
-       sha256 = "1rsck44n4mf9v3vfac51ksrhcs84s7q297nq1kjkzzvmsx09gd9k";
+       rev    = "60c05b3f4e71fd78d4fba5c31f9974694245199e";
+       sha256 = "1k37mxwxv9fpm6xnrxlqqap7zqh2dvgqncphj3asi2rz0kh07ppf";
        name   = "trellis";
      })
 
     (fetchFromGitHub {
-      owner  = "SymbiFlow";
+      owner  = "YosysHQ";
       repo   = "prjtrellis-db";
       rev    = "2cf058e7a3ba36134d21e34823e9b2ecaaceac2c";
       sha256 = "1hjaw5jkwiaiznm2z0smy88m2cdz63cd51z4nibajfih7ikvkj6g";
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     # TODO: should this be in stdenv instead?
     "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
   ];
-  enableParallelBuilding = true;
 
   preConfigure = with builtins; ''
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
     cd libtrellis
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "Documentation and bitstream tools for Lattice ECP5 FPGAs";
     longDescription = ''
       Project Trellis documents the Lattice ECP5 architecture
@@ -55,8 +54,8 @@ stdenv.mkDerivation rec {
       open Verilog to bitstream toolchain for these devices.
     '';
     homepage    = "https://github.com/SymbiFlow/prjtrellis";
-    license     = stdenv.lib.licenses.isc;
+    license     = lib.licenses.isc;
     maintainers = with maintainers; [ q3k thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms   = lib.platforms.all;
   };
 }

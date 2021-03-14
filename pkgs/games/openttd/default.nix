@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgconfig, which, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
+{ lib, stdenv, fetchurl, fetchzip, pkg-config, which, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
 , writeScriptBin, makeWrapper, runtimeShell
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     sha256 = "0fxmfz1mm95a2x0rnzfff9wb8q57w0cvsdd0z7agdcbyakph25n1";
   };
 
-  nativeBuildInputs = [ pkgconfig which makeWrapper ];
+  nativeBuildInputs = [ pkg-config which makeWrapper ];
   buildInputs = [ SDL2 libpng xz zlib freetype fontconfig libxdg_basedir ]
-    ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 
@@ -51,30 +51,30 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/games/ $out/bin
 
-    ${stdenv.lib.optionalString withOpenGFX ''
+    ${lib.optionalString withOpenGFX ''
       cp ${opengfx}/* $out/share/games/openttd/baseset
     ''}
 
     mkdir -p $out/share/games/openttd/data
 
-    ${stdenv.lib.optionalString withOpenSFX ''
+    ${lib.optionalString withOpenSFX ''
       cp ${opensfx}/*.{obs,cat} $out/share/games/openttd/data
     ''}
 
     mkdir $out/share/games/openttd/baseset/openmsx
 
-    ${stdenv.lib.optionalString withOpenMSX ''
+    ${lib.optionalString withOpenMSX ''
       cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
     ''}
 
-    ${stdenv.lib.optionalString withFluidSynth ''
+    ${lib.optionalString withFluidSynth ''
       wrapProgram $out/bin/openttd \
         --add-flags -m \
         --add-flags extmidi:cmd=${playmidi}/bin/playmidi
     ''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
     longDescription = ''
       OpenTTD is a transportation economics simulator. In single player mode,

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, subversion, fuse, apr, perl }: 
+{ lib, stdenv, fetchurl, automake, autoconf, subversion, fuse, apr, perl }:
 
 stdenv.mkDerivation {
   name = "svnfs-0.4";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   meta = {
     description = "FUSE filesystem for accessing Subversion repositories";
     homepage = "http://www.jmadden.eu/index.php/svnfs/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
   };
 }

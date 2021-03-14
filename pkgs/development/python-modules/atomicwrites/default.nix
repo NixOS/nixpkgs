@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "atomicwrites";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
   checkInputs = [ pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Atomic file writes on POSIX";
     homepage = "https://pypi.python.org/pypi/atomicwrites";
     maintainers = with maintainers; [ matthiasbeyer ];

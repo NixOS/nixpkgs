@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "redo-c";
   version = "0.2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     cp '${./Makefile}' Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of the redo build system in portable C with zero dependencies";
     homepage = "https://github.com/leahneukirchen/redo-c";
     license = licenses.cc0;

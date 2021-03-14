@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages, hping }:
+{ lib, fetchFromGitHub, python2Packages, hping }:
 let
   rev  = "bf14bbff";
 in python2Packages.buildPythonApplication rec {
@@ -23,7 +23,7 @@ in python2Packages.buildPythonApplication rec {
     substituteInPlace knockknock.py --replace 'existsInPath("hping3")' '"${hping}/bin/hping3"'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple, secure port knocking daemon and client written in Python";
     homepage    = "http://www.thoughtcrime.org/software/knockknock/";
     license     = licenses.gpl3;

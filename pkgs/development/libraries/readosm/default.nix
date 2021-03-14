@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, expat, zlib, geos, libspatialite }:
+{ lib, stdenv, fetchurl, expat, zlib, geos, libspatialite }:
 
 stdenv.mkDerivation rec {
   name = "readosm-1.1.0a";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open source library to extract valid data from within an Open Street Map input file";
     homepage = "https://www.gaia-gis.it/fossil/readosm";
-    license = with stdenv.lib.licenses; [ mpl11 gpl2Plus lgpl21Plus ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with lib.licenses; [ mpl11 gpl2Plus lgpl21Plus ];
+    platforms = lib.platforms.linux;
   };
 }

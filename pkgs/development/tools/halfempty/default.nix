@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, util-linux, scowl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, util-linux, scowl }:
 
 stdenv.mkDerivation rec {
   pname = "halfempty";
-  version = "0.30";
+  version = "0.40";
 
   src = fetchFromGitHub {
     owner = "googleprojectzero";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0838pw0ccjvlxmjygzrnppz1fx1a10vjzdgjbxgb4wgpqjr8v6vc";
+    sha256 = "sha256-YGq6fneAMo2jCpLPrjzRJ0eeOsStKaK5L+lwQfqcfpY=";
   };
 
-  nativeBuildInputs = [ pkgconfig util-linux ];
+  nativeBuildInputs = [ pkg-config util-linux ];
   buildInputs = [ glib ];
 
   enableParallelBuilding = true;

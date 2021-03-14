@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
+{ lib, stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-findlib";
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.maggesi
-      stdenv.lib.maintainers.vbmithr
+      lib.maintainers.maggesi
+      lib.maintainers.vbmithr
     ];
   };
 }

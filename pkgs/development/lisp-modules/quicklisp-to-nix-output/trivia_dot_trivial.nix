@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivia_dot_trivial'';
-  version = ''trivia-20200925-git'';
+  baseName = "trivia_dot_trivial";
+  version = "trivia-20200925-git";
 
   description = ''Base level system of Trivia with a trivial optimizer.
  Systems that intend to enhance Trivia should depend on this package, not the TRIVIA system,
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."closer-mop" args."lisp-namespace" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivial-cltl2" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz'';
-    sha256 = ''192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z'';
+    url = "http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz";
+    sha256 = "192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z";
   };
 
   packageName = "trivia.trivial";

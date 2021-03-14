@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "mill";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.lihaoyi.com/mill";
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
       modules (written in Java or Scala) or through an external subprocesses.
     '';
     maintainers = with maintainers; [ scalavision ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

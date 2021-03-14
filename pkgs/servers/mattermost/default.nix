@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
 
 let
   version = "5.25.3";
@@ -48,7 +48,7 @@ in
     name = "mattermost-${version}";
     paths = [ mattermost-server mattermost-webapp ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Open-source, self-hosted Slack-alternative";
       homepage = "https://www.mattermost.org";
       license = with licenses; [ agpl3 asl20 ];

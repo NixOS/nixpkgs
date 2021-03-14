@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchgit, qtbase, qtquickcontrols, qmake, makeDesktopItem }:
+{ mkDerivation, lib, fetchgit, qtbase, qtquickcontrols, qmake, makeDesktopItem }:
 
 # we now have libqmatrixclient so a future version of tensor that supports it
 # should use that
@@ -45,7 +45,7 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://matrix.org/docs/projects/client/tensor.html";
     description = "Cross-platform Qt5/QML-based Matrix client";
     license = licenses.gpl3;

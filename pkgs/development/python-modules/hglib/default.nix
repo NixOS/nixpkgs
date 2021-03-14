@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, substituteAll, python, nose, mercurial }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, substituteAll, python, nose, mercurial }:
 
 buildPythonPackage rec {
   pname = "python-hglib";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg" -v
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mercurial Python library";
     homepage = "http://selenic.com/repo/python-hglib";
     license = licenses.mit;

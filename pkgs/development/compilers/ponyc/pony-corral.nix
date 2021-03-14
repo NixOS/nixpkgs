@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ponyc }:
+{ lib, stdenv, fetchFromGitHub, ponyc }:
 
 stdenv.mkDerivation ( rec {
   pname = "corral";
@@ -15,7 +15,7 @@ stdenv.mkDerivation ( rec {
 
   installFlags = [ "prefix=${placeholder "out"}" "install" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Corral is a dependency management tool for ponylang (ponyc)";
     homepage = "https://www.ponylang.io";
     license = licenses.bsd2;

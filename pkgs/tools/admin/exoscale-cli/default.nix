@@ -1,14 +1,14 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "exoscale-cli";
-  version = "1.21.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner  = "exoscale";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "12z5mbw7yzhyhzl6499xlhzpgysarjql4qlrpmwfpb8ij1hk8q6i";
+    sha256 = "sha256-uriXZ4fEUswSBh9hv122wkAPHOnmt6+AodKkCHAMSh8=";
   };
 
   goPackagePath = "github.com/exoscale/cli";
@@ -27,7 +27,7 @@ buildGoPackage rec {
   meta = {
     description = "Command-line tool for everything at Exoscale: compute, storage, dns";
     homepage    = "https://github.com/exoscale/cli";
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ dramaturg ];
+    license     = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dramaturg ];
   };
 }

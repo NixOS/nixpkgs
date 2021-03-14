@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
-, pkgconfig
+, pkg-config
 , gtk3
 , perl
 , vte
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cppODnUKQpS9kFkkOqxU3yqAElAVn8VQtQsP4Carkos=";
   };
 
-  nativeBuildInputs = [ cmake perl pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake perl pkg-config makeWrapper ];
 
   buildInputs = [ gtk3 vte pcre2 glib ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.pleyades.net/david/projects/sakura";
     description = "A terminal emulator based on GTK and VTE";
     longDescription = ''

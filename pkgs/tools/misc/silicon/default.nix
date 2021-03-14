@@ -2,7 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , llvmPackages
 , expat
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [ libxcb ]
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreText Security ];
 
-  nativeBuildInputs = [ cmake pkgconfig ]
+  nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";

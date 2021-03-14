@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, glib, gnome3, gettext }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-EasyScreenCast";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   uuid = "EasyScreenCast@iacopodeenosee.gmail.com";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplifies the use of the video recording function integrated in gnome shell";
     homepage = "https://github.com/EasyScreenCast/EasyScreenCast";
     license = licenses.gpl3Plus;

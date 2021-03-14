@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "wsl-open";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     installManPage wsl-open.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open files with xdg-open from Windows Subsystem for Linux (WSL) in Windows applications";
     homepage = "https://gitlab.com/4U6U57/wsl-open";
     license = licenses.mit;

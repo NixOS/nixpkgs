@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ black pytest toml ];
 
+  # does not contain tests
+  doCheck = false;
   pythonImportsCheck = [ "pytest_black" ];
 
   meta = with lib; {

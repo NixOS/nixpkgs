@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-move-transition";
-  version = "2.0.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
     rev = version;
-    sha256 = "0kr868lxlanq0y98f2hb70y92ac2nla8khsj879kjf3z6dqdpd66";
+    sha256 = "0cl6z3cvdjmbisvfcy281pcg6rhxmyfs31rwv7q4x39352rcs1nw";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     substituteInPlace move-source-filter.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
     substituteInPlace move-value-filter.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
     substituteInPlace move-transition.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
+    substituteInPlace audio-move.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
   '';
 
   # obs-studio expects the shared object to be located in bin/32bit or bin/64bit

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "argon2_cffi";
-  version = "19.2.0";
+  version = "20.1.0";
 
   src = fetchPypi {
     pname = "argon2-cffi";
     inherit version;
-    sha256 = "ffaa623eea77b497ffbdd1a51e941b33d3bf552c60f14dbee274c4070677bda3";
+    sha256 = "0zgr4mnnm0p4i99023safb0qb8cgvl202nly1rvylk2b7qnrn0nq";
   };
 
   propagatedBuildInputs = [ cffi six ] ++ lib.optional (!isPy3k) enum34;

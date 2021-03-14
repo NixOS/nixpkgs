@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
     homepage = "http://stgt.sourceforge.net/";
     license = licenses.gpl2;

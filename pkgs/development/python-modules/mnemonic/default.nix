@@ -1,20 +1,28 @@
-{ lib, fetchPypi, buildPythonPackage, pbkdf2 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "mnemonic";
   version = "0.19";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4e37eb02b2cbd56a0079cabe58a6da93e60e3e4d6e757a586d9f23d96abea931";
+  src = fetchFromGitHub {
+    owner = "trezor";
+    repo = "python-${pname}";
+    rev = "v${version}";
+    sha256 = "0rs3szdikkgypiwn43ad3lwh7zvpccw39j5ggkziq6v7pnw3isaq";
   };
 
-  propagatedBuildInputs = [ pbkdf2 ];
+  checkInputs = [ pytestCheckHook ];
 
-  meta = {
-    description = "Implementation of Bitcoin BIP-0039";
+  pythonImportsCheck = [ "mnemonic" ];
+
+  meta = with lib; {
+    description = "Reference implementation of BIP-0039";
     homepage = "https://github.com/trezor/python-mnemonic";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ np ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ np prusnak ];
   };
 }

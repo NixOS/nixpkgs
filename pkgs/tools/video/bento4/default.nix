@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake
 }:
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     find -maxdepth 1 -executable -type f -exec mv --target-directory="$out/bin" {} \;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Full-featured MP4 format and MPEG DASH library and tools";
     homepage = "http://bento4.com";
     license = licenses.gpl2Plus;

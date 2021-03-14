@@ -1,26 +1,24 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, base, cmdliner, ocaml_lwt,
-  rdkafka, zlib }:
+{ lib, fetchurl, buildDunePackage
+, rdkafka, zlib }:
 
 buildDunePackage rec {
   pname = "kafka";
-  version = "0.4";
+  version = "0.5";
 
-  src = fetchFromGitHub {
-    owner = "didier-wenzek";
-    repo = "ocaml-kafka";
-    rev = version;
-    sha256 = "0lb8x0wh7sf8v9mjwhq32azjz54kw49fsjfb7m76z4nhxfkjw5hy";
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/didier-wenzek/ocaml-kafka/releases/download/${version}/kafka-${version}.tbz";
+    sha256 = "0m9212yap0a00hd0f61i4y4fna3141p77qj3mm7jl1h4q60jdhvy";
   };
-
-  buildInputs = [ base cmdliner ocaml_lwt zlib ];
 
   propagatedBuildInputs = [ rdkafka zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/didier-wenzek/ocaml-kafka";
     description = "OCaml bindings for Kafka";
     license     = licenses.mit;
-    maintainers = [ maintainers.rixed ];
+    maintainers = [ maintainers.vbgl ];
   };
 }
 

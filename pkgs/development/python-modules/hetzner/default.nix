@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "152fklxff08s71v0b78yp5ajwpqyszm3sd7j0qsrwa2x9ik4968h";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/RedMoonStudios/hetzner";
     description = "High-level Python API for accessing the Hetzner robot";
     license = licenses.bsd3;

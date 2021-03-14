@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xorgproto, unzip }:
+{ lib, stdenv, fetchurl, libX11, xorgproto, unzip }:
 
 stdenv.mkDerivation {
   name = "seturgent-2012-08-17";
@@ -18,10 +18,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-      platforms = stdenv.lib.platforms.linux;
+      platforms = lib.platforms.linux;
       description = "Set an application's urgency hint (or not)";
-      maintainers = [ stdenv.lib.maintainers.yarr ];
+      maintainers = [ lib.maintainers.yarr ];
       homepage = "https://github.com/hiltjo/seturgent";
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchCrate
 , rustPlatform
 , pkg-config
@@ -13,26 +13,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-alpha.17";
+  version = "1.0.0-alpha.46";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "03r383fkqx17sb2c0kz71lbn0rdas7nd9yw7ni5fbmrq8rlk9brv";
+    sha256 = "0x095g26qdch1m3izkn8ynwk1xg1qyz9ia8di23j61k7z2rqk0j5";
   };
 
-  cargoSha256 = "0dfmldklklax8nb3pry0h80kih1k1idfjgaxinxkk1iflcm3cwqn";
+  cargoSha256 = "0cw1y4vmhn70a94512mppk0kfh9xdfm0v4rp3zm00y06jzq1a1fp";
 
-  cargoBuildFlags = stdenv.lib.optional gitImportSupport "--features=git";
+  cargoBuildFlags = lib.optional gitImportSupport "--features=git";
 
   doCheck = false;
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libsodium xxHash zstd ]
-    ++ (stdenv.lib.optionals gitImportSupport [ libgit2 ])
-    ++ (stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ (lib.optionals gitImportSupport [ libgit2 ])
+    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreServices Security SystemConfiguration
     ]));
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed version control system";
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];

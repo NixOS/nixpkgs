@@ -77,6 +77,7 @@ in {
           '';
         };
         extraPackages = mkOption {
+          type = types.functionTo (types.listOf types.package);
           default = ps: [];
           defaultText = "ps: []";
           example = literalExample ''

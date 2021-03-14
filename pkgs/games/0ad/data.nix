@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zeroad-unwrapped }:
+{ lib, stdenv, fetchurl, zeroad-unwrapped }:
 
 stdenv.mkDerivation rec {
   pname = "0ad-data";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp -r binaries/data $out/share/0ad/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, open-source game of ancient warfare -- data files";
     homepage = "https://play0ad.com/";
     license = licenses.cc-by-sa-30;

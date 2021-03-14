@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpulseaudio, libnotify, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, libpulseaudio, libnotify, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ponymix";
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libpulseaudio libnotify ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   postPatch = ''substituteInPlace Makefile --replace "\$(DESTDIR)/usr" "$out"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI PulseAudio Volume Control";
     homepage = "https://github.com/falconindy/ponymix";
     license = licenses.mit;

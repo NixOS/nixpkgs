@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , pkgconfig
+{ lib, stdenv, fetchFromGitHub , pkg-config
 , pcsclite
 , autoreconfHook
 , libnfc
@@ -14,13 +14,13 @@ stdenv.mkDerivation {
     rev = "0e48e8e";
     sha256 = "1cxnvhhlcbm8h49rlw5racspb85fmwqqhd3gzzpzy68vrs0b37vg";
   };
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ pcsclite libnfc ];
 
   configureFlags = [ "--prefix=$(out)" ];
   makeFlags = [ "DESTDIR=/" "usbdropdir=$(out)/pcsc/drivers" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PC/SC IFD Handler based on libnfc";
     longDescription =
     '' libnfc Interface Plugin to be used in <code>services.pcscd.plugins</code>.

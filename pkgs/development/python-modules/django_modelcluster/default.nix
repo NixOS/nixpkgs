@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytz
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytz six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";
     homepage = "https://github.com/torchbox/django-modelcluster/";
     license = licenses.bsd2;

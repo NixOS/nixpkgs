@@ -1,4 +1,4 @@
-{stdenv, gcc, glibc, fetchurl, fetchgit, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkg-config, perl, gnome2, gtk2, pango, sqlite, libxml2, zlib, gmp, smlnj }:
+{lib, stdenv, gcc, glibc, fetchurl, fetchgit, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkg-config, perl, gnome2, gtk2, pango, sqlite, libxml2, zlib, gmp, smlnj }:
 
 stdenv.mkDerivation {
   name = "aliceml-1.4-7d44dc8e";
@@ -50,8 +50,8 @@ stdenv.mkDerivation {
       programming.
     '';
     homepage = "https://www.ps.uni-saarland.de/alice/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.doublec ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.doublec ];
     broken = true;
   };
 }

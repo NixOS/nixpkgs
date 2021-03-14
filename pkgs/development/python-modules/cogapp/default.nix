@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "cogapp";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code generator for executing Python snippets in source files";
     homepage = "http://nedbatchelder.com/code/cog";
     license = licenses.mit;

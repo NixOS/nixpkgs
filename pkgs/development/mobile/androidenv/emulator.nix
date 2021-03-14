@@ -38,7 +38,7 @@ deployAndroidPackage {
 
     # Wrap emulator so that it can load required libraries at runtime
     wrapProgram $out/libexec/android-sdk/emulator/emulator \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ 
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         pkgs.dbus
         pkgs.systemd
       ]} \

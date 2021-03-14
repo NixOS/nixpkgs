@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # tests not included with release
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jezdez/django-discover-runner";
     description = "A Django test runner based on unittest2's test discovery";
     license = licenses.bsd0;

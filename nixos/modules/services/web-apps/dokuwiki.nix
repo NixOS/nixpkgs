@@ -329,14 +329,14 @@ in
           extraConfig = "internal;";
         };
 
-        locations."~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+        locations."~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
           extraConfig = "expires 365d;";
         };
 
         locations."/" = {
           priority = 1;
           index = "doku.php";
-          extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
+          extraConfig = "try_files $uri $uri/ @dokuwiki;";
         };
 
         locations."@dokuwiki" = {
@@ -349,7 +349,7 @@ in
           '';
         };
 
-        locations."~ \.php$" = {
+        locations."~ \\.php$" = {
           extraConfig = ''
               try_files $uri $uri/ /doku.php;
               include ${pkgs.nginx}/conf/fastcgi_params;

@@ -2,12 +2,12 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
   # C Inputs
 , blas
 , catch2
 , cmake
 , cython
+, fmt
 , muparserx
 , ninja
 , nlohmann_json
@@ -27,7 +27,8 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.7.1";
+  version = "0.7.6";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    sha256 = "07l0wavdknx0y4vy0hwgw24365sg4nb6ygl3lpa098np85qgyn4y";
+    sha256 = "0595as4rxjrd5dqx54ywz3rjsjk0z7r41bq0z9r8y1h7zgvvlrmn";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   buildInputs = [
     blas
     catch2
+    fmt
     muparserx
     nlohmann_json
     spdlog
@@ -59,10 +61,14 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  patches = [
-    # TODO: remove in favor of qiskit-aer PR #877 patch once accepted/stable
-    ./remove-conan-install.patch
-  ];
+  postPatch = ''
+    substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'," ""
+  '';
+
+  # Disable using conan for build
+  preBuild = ''
+    export DISABLE_CONAN=1
+  '';
 
   dontUseCmakeConfigure = true;
 

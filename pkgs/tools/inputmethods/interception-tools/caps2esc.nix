@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, cmake }:
+{ lib, stdenv, fetchFromGitLab, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "caps2esc";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/interception/linux/plugins/caps2esc";
     description = "Transforming the most useless key ever into the most useful one";
     license = licenses.mit;

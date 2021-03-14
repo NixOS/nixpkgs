@@ -6,7 +6,7 @@
 , lib
 , libzip
 , mkDerivation
-, pkgconfig
+, pkg-config
 , python3
 , qtbase
 , qtmultimedia
@@ -16,14 +16,14 @@
 
 mkDerivation rec {
   pname = "ppsspp";
-  version = "1.10.3";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-W41Poq5S+opkasIGYo13SQZWQF1HjfFnH7u9DW5HNA0=";
+    sha256 = "19948jzqpclf8zfzp3k7s580xfjgqcyfwlcp7x7xj8h8lyypzymx";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ mkDerivation rec {
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig python3 ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
   buildInputs = [
     SDL2

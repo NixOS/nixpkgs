@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "blockbook-frontend";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ _1000101 ];
   };
 

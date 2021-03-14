@@ -565,7 +565,7 @@ in
         assertions = [
           {
             assertion = (cfg.databaseUseSSL && cfg.databaseType == "postgresql") -> (cfg.databaseCaCert != null);
-            message = ''A CA certificate must be specified (in 'services.keycloak.databaseCaCert') when PostgreSQL is used with SSL'';
+            message = "A CA certificate must be specified (in 'services.keycloak.databaseCaCert') when PostgreSQL is used with SSL";
           }
         ];
 

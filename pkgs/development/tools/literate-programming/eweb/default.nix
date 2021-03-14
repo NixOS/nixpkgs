@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, asciidoc }:
+{ lib, stdenv, fetchurl, python3, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "eweb";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp etangle.w etangle.html $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://eweb.sourceforge.net/";
     description = "An Asciidoc-based literate programming tool, written in Python";
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation {
   name = "typespeed-0.6.5";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--datadir=\${out}/share/" ];
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A curses based typing game";
     homepage = "http://typespeed.sourceforge.net/";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchurl }:
+{ lib, buildDunePackage, fetchurl }:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.02.3";
@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ocaml-ppx/ocaml-syntax-shims";
     description = "Backport new syntax to older OCaml versions";
     license = licenses.mit;

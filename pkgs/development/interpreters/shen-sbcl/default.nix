@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , shen-sources
 , sbcl
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     install -m755 -D bin/sbcl/shen $out/bin/shen-sbcl
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://shenlanguage.org;
     description = "Port of Shen running on Steel Bank Common Lisp";
     platforms = sbcl.meta.platforms;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , intltool
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;

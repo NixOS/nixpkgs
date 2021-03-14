@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libpcap, libseccomp, pkgconfig }:
+{ lib, fetchFromGitHub, rustPlatform, libpcap, libseccomp, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffglue";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "01ya9535whi2kviw57f25n8h05ckpb4bq1h7qav6srai97rm937s";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libpcap libseccomp ];
 

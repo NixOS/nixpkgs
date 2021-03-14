@@ -1,7 +1,7 @@
 
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "babeld";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 

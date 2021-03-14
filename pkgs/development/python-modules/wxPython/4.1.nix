@@ -3,10 +3,9 @@
 , fetchPypi
 , buildPythonPackage
 , which
-, pkgconfig
+, pkg-config
 , python
 , isPy27
-, pyopengl
 , doxygen
 , cairo
 , ncurses
@@ -30,7 +29,7 @@ buildPythonPackage rec {
   # https://github.com/wxWidgets/Phoenix/issues/1316
   doCheck = false;
 
-  nativeBuildInputs = [ which doxygen wxGTK pkgconfig ];
+  nativeBuildInputs = [ which doxygen wxGTK pkg-config ];
 
   buildInputs = [
     wxGTK.gtk

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://icl.utk.edu/papi/";
     description = "PAPI provides the tool designer and application engineer with a consistent interface and methodology for use of the performance counter hardware found in most major microprocessors";
     license = licenses.bsdOriginal;

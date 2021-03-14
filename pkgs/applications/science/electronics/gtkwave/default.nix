@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, gtk3, gperf, pkgconfig, bzip2, tcl, tk, wrapGAppsHook, judy, xz }:
+{ lib, stdenv, fetchurl, glib, gtk3, gperf, pkg-config, bzip2, tcl, tk, wrapGAppsHook, judy, xz }:
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ma30jyc94iid3v3m8aw4i2lyiqfxkpsdvdmmaibynk400cbzivl";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ glib gtk3 gperf bzip2 tcl tk judy xz ];
 
   configureFlags = [
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "VCD/Waveform viewer for Unix and Win32";
     homepage    = "http://gtkwave.sourceforge.net";
-    license     = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    license     = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms   = lib.platforms.linux;
   };
 }

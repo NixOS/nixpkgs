@@ -7,7 +7,7 @@
 , decorator
 , nose
 , krb5Full
-, darwin
+, GSS
 , parameterized
 , shouldbe
 , cython
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.GSS
+    GSS
   ];
 
   checkInputs = [

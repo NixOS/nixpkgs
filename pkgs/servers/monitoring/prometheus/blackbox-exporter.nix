@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "blackbox_exporter";
@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) blackbox; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Blackbox probing of endpoints over HTTP, HTTPS, DNS, TCP and ICMP";
     homepage = "https://github.com/prometheus/blackbox_exporter";
     license = licenses.asl20;

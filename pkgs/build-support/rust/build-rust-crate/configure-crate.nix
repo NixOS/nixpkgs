@@ -144,7 +144,7 @@ in ''
   export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
-  export NUM_JOBS=1
+  export NUM_JOBS=$NIX_BUILD_CORES
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
 

@@ -1,11 +1,11 @@
-{ config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
-, obex_data_server, xdg_utils, dnsmasq, dhcp, libappindicator, iproute
+{ config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
+, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute
 , gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
   pythonPackages = python3Packages;
-  binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp iproute ];
+  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute ];
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection intltool pkgconfig pythonPackages.cython
+    gobject-introspection intltool pkg-config pythonPackages.cython
     pythonPackages.wrapPython wrapGAppsHook
     autoreconfHook # drop when below patch is removed
   ];

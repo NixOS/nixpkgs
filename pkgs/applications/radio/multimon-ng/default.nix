@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt4, qmake4Hook, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, qt4, qmake4Hook, libpulseaudio }:
 let
   version = "1.1.9";
 in
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cp multimon-ng $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multimon is a digital baseband audio protocol decoder";
     longDescription = ''
       multimon-ng a fork of multimon, a digital baseband audio
@@ -37,7 +37,8 @@ stdenv.mkDerivation {
       ZVEI3 DZVEI PZVEI EEA EIA CCIR MORSE CW
     '';
     homepage = "https://github.com/EliasOenal/multimon-ng";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
+    maintainers = [ maintainers.markuskowa ];
   };
 }

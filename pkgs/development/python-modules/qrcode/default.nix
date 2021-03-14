@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six pillow pymaging_png setuptools ];
   checkInputs = [ mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quick Response code generation for Python";
     homepage = "https://pypi.python.org/pypi/qrcode";
     license = licenses.bsd3;

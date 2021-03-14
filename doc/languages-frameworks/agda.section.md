@@ -1,9 +1,4 @@
----
-title: Agda
-author: Alex Rice (alexarice)
-date: 2020-01-06
----
-# Agda
+# Agda {#agda}
 
 ## How to use Agda
 
@@ -51,7 +46,7 @@ depend: standard-library
 More information can be found in the [official Agda documentation on library management](https://agda.readthedocs.io/en/v2.6.1/tools/package-system.html).
 
 ## Compiling Agda
-Agda modules can be compiled with the `--compile` flag. A version of `ghc` with `ieee` is made available to the Agda program via the `--with-compiler` flag.
+Agda modules can be compiled with the `--compile` flag. A version of `ghc` with `ieee754` is made available to the Agda program via the `--with-compiler` flag.
 This can be overridden by a different version of `ghc` as follows:
 
 ```

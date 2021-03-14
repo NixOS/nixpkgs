@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, xmlto, docbook_xml_dtd_412, docbook_xsl }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, xmlto, docbook_xml_dtd_412, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   pname = "libieee1284";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parallel port communication library";
     homepage = "http://cyberelk.net/tim/software/libieee1284/";
     license = licenses.gpl2Plus;

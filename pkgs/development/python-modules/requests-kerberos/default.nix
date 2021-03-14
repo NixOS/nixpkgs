@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, requests, pykerberos, mock }:
+{ lib, fetchFromGitHub, buildPythonPackage, requests, pykerberos, mock }:
 
 buildPythonPackage rec {
   pname = "requests-kerberos";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # they have a setup.py which mentions a test suite that doesn't exist...
   patches = [ ./fix_setup.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An authentication handler for using Kerberos with Python Requests.";
     homepage    = "https://github.com/requests/requests-kerberos";
     license     = licenses.isc;

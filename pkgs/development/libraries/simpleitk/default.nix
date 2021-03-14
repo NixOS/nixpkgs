@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, swig, lua, itk }:
+{ lib, stdenv, fetchFromGitHub, cmake, swig, lua, itk }:
 
 stdenv.mkDerivation rec {
   pname = "simpleitk";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # 2.0.0: linker error building examples
   cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" "-DBUILD_SHARED_LIBS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.simpleitk.org";
     description = "Simplified interface to ITK";
     maintainers = with maintainers; [ bcdarwin ];

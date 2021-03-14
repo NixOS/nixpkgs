@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, perlPackages,
+{ lib, stdenv, fetchzip, makeWrapper, perlPackages,
 ... }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [
     ## These are all taken from the popfile documentation as applicable to Linux
     ## http://getpopfile.org/docs/howtos:allplatformsrequireperl
     perl
@@ -49,11 +50,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An email classification system that automatically sorts messages and fights spam";
     homepage = "http://getpopfile.org";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
     # Should work on macOS, but havent tested it.
     # Windows support is more complicated.
     # http://getpopfile.org/docs/faq:systemrequirements
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

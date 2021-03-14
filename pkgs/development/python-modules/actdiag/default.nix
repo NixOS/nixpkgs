@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , nose, docutils, blockdiag, reportlab }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose reportlab ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;

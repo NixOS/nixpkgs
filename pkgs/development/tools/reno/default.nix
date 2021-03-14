@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , git
 , gnupg1
 , python3Packages
@@ -49,7 +49,7 @@ with python3Packages; buildPythonApplication rec {
     $out/bin/reno -h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Release Notes Manager";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, lib }:
 stdenv.mkDerivation {
   name = "kak-buffers";
   version = "2019-04-03";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     cp -r buffers.kak $out/share/kak/autoload/plugins
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Ease navigation between opened buffers in Kakoune";
     homepage = "https://github.com/Delapouite/kakoune-buffers";
     license = licenses.mit;

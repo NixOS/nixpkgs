@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , awscli
 , jq
 , fetchgit
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bash-my-aws.org";
     description = "CLI commands for AWS";
     license = licenses.mit;

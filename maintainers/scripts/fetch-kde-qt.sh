@@ -14,13 +14,12 @@ fi
 
 tmp=$(mktemp -d)
 pushd $tmp >/dev/null
-wget -nH -r -c --no-parent "${WGET_ARGS[@]}" -A '*.tar.xz.sha256' -A '*.mirrorlist' >/dev/null
-find -type f -name '*.mirrorlist' -delete
+wget -nH -r -c --no-parent "${WGET_ARGS[@]}" >/dev/null
 
 csv=$(mktemp)
 find . -type f | while read src; do
     # Sanitize file name
-    filename=$(gawk '{ print $2 }' "$src" | tr '@' '_')
+    filename=$(basename "$src" | tr '@' '_')
     nameVersion="${filename%.tar.*}"
     name=$(echo "$nameVersion" | sed -e 's,-[[:digit:]].*,,' | sed -e 's,-opensource-src$,,' | sed -e 's,-everywhere-src$,,')
     version=$(echo "$nameVersion" | sed -e 's,^\([[:alpha:]][[:alnum:]]*-\)\+,,')
@@ -40,8 +39,8 @@ gawk -F , "{ print \$1 }" $csv | sort | uniq | while read name; do
     latestVersion=$(echo "$versions" | sort -rV | head -n 1)
     src=$(gawk -F , "/^$name,$latestVersion,/ { print \$3 }" $csv)
     filename=$(gawk -F , "/^$name,$latestVersion,/ { print \$4 }" $csv)
-    url="$(dirname "${src:2}")/$filename"
-    sha256=$(gawk '{ print $1 }' "$src")
+    url="${src:2}"
+    sha256=$(nix-hash --type sha256 --base32 --flat "$src")
     cat >>"$SRCS" <<EOF
   $name = {
     version = "$latestVersion";

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.2.1";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    sha256 = "1kp4ib0a64cc9qylny48ff5q9ciklzx93yhv7fgqhl1v2c7fm1jp";
+    sha256 = "sha256-BkvsCIcm3qnfECNhY3DIPnBRih6D7rOHOQu9oc0YDZA=";
   };
 
   vendorSha256 = "1ma7nvyn6ylbi8bd7x900i94pzs877kfy9xh0nf1bbify1vcpd29";
@@ -32,6 +32,6 @@ buildGoModule rec {
       You can feed it standard input, any number of files or any number of directories to recurse into.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ zowoq SuperSandro2000 ];
   };
 }

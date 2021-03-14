@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-manjaro";
-  version = "1.6";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "133b9ri1yhvwrm9fm648mq0xnbr9mccy6yar7d390n4659j09v3s";
+    sha256 = "0zxj20inwdfxhsc7cq6b3ijkxmrhnrwvbmyb1lw4vfjs4p4wrws0";
   };
 
   buildInputs = [
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manjaro Style (green version) of Marwaita GTK theme";
     homepage = "https://www.pling.com/p/1351213/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

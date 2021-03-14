@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn }:
+{ lib, stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
   pname = "xavs";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs tools/patcheck
     patchShebangs tools/regression-test.pl
     patchShebangs tools/xavs-format
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace config.guess --replace 'uname -p' 'uname -m'
     substituteInPlace configure \
       --replace '-O4' '-O3' \
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "--disable-asm"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AVS encoder and decoder";
     homepage    = "http://xavs.sourceforge.net/";
     license     = licenses.lgpl2;

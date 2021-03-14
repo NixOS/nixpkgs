@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "robotframework";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic test automation framework";
     homepage = "https://robotframework.org/";
     license = licenses.asl20;

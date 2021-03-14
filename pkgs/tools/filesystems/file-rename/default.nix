@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchurl, perlPackages, makeWrapper }:
 
 perlPackages.buildPerlPackage {
   pname = "File-Rename";
@@ -24,7 +24,7 @@ perlPackages.buildPerlPackage {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Perl extension for renaming multiple files";
     license = licenses.artistic1;
     maintainers = with maintainers; [ peterhoeg ];

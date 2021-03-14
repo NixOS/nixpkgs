@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , slicerator
@@ -23,8 +23,9 @@ buildPythonPackage rec {
 
   # not everything packaged with pypi release
   doCheck = false;
+  pythonImportsCheck = [ "pims" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/soft-matter/pims";
     description = "Python Image Sequence: Load video and sequential images in many formats with a simple, consistent interface";
     license = licenses.bsdOriginal;

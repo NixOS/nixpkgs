@@ -1,28 +1,39 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, coverage
-, glibcLocales
-, flake8
 , setuptools_scm
 , pytestCheckHook
+, pytest-asyncio
+, pytest-timeout
+, numpy
+, pandas
+, rich
+, tkinter
 }:
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.54.0";
+  version = "4.58.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c0d04e06ccc0da1bd3fa5ae4550effcce42fcad947b4a6cafa77bdc9b09ff22";
+    sha256 = "1fjvaag1wy70gglxjkfnn0acrya7fbhzi4adbs1bpap8x03wffn2";
   };
 
   nativeBuildInputs = [
     setuptools_scm
   ];
 
-  checkInputs = [ nose coverage glibcLocales flake8 pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-timeout
+    # tests of optional features
+    numpy
+    pandas
+    rich
+    tkinter
+  ];
 
   # Remove performance testing.
   # Too sensitive for on Hydra.

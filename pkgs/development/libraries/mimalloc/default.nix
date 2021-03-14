@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja
+{ lib, stdenv, fetchFromGitHub, cmake, ninja
 , secureBuild ? false
 }:
 
@@ -17,11 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  enableParallelBuilding = true;
-  cmakeFlags = stdenv.lib.optional secureBuild [ "-DMI_SECURE=ON" ];
+  cmakeFlags = lib.optional secureBuild [ "-DMI_SECURE=ON" ];
 
   postInstall = let
-    rel = stdenv.lib.versions.majorMinor version;
+    rel = lib.versions.majorMinor version;
   in ''
     # first, install headers, that's easy
     mkdir -p $dev
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compact, fast, general-purpose memory allocator";
     homepage    = "https://github.com/microsoft/mimalloc";
     license     = licenses.bsd2;

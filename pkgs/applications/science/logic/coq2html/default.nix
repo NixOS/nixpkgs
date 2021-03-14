@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ocaml }:
+{ lib, stdenv, fetchgit, ocaml }:
 
 let
   version = "20170720";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp coq2html $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTML documentation generator for Coq source files";
     longDescription = ''
       coq2html is an HTML documentation generator for Coq source files. It is

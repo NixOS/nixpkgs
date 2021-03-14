@@ -1,8 +1,8 @@
-{ stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkgconfig
+{ lib, stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
 , zlib, bzip2, lzma, libgcrypt
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "cygwin-setup";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "024wxaaxkf7p1i78bh5xrsqmfz7ss2amigbfl2r5w9h87zqn9aq3";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool flex bison pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool flex bison pkg-config ];
 
   buildInputs = let
     mkStatic = flip overrideDerivation (o: {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, groff }:
+{ lib, stdenv, fetchurl, ncurses, groff }:
 
 stdenv.mkDerivation {
 
@@ -37,8 +37,8 @@ stdenv.mkDerivation {
        already been applied, and will ignore them.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 
 }

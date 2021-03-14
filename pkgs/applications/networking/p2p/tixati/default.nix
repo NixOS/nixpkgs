@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, zlib, dbus, dbus-glib, gtk2, gdk-pixbuf, cairo, pango }:
+{ lib, stdenv, fetchurl, glib, zlib, dbus, dbus-glib, gtk2, gdk-pixbuf, cairo, pango }:
 
 stdenv.mkDerivation rec {
   pname = "tixati";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath ${stdenv.lib.makeLibraryPath [ glib zlib dbus dbus-glib gtk2 gdk-pixbuf cairo pango ]} \
+             --set-rpath ${lib.makeLibraryPath [ glib zlib dbus dbus-glib gtk2 gdk-pixbuf cairo pango ]} \
              tixati
     install -D tixati         $out/bin/tixati
     install -D tixati.desktop $out/share/applications/tixati.desktop
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Torrent client";
     homepage = "http://www.tixati.com";
     license = licenses.unfree;

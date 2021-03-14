@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, lib
 , python
 , serpent
 , dill
@@ -32,20 +31,26 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook ];
+
   # add testsupport.py to PATH
   preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
+
   # ignore network related tests, which fail in sandbox
   pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
+
   disabledTests = [
     "StartNSfunc"
     "Broadcast"
     "GetIP"
   ];
 
-  meta = with stdenv.lib; {
+  # otherwise the tests hang the build
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro4";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-    };
+  };
 }

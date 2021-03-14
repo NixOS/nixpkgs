@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, slang, ncurses }:
+{ lib, stdenv, fetchurl, slang, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "most";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ slang ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A terminal pager similar to 'more' and 'less'";
     longDescription = ''
       MOST is a powerful paging program for Unix, VMS, MSDOS, and win32

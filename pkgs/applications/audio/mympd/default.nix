@@ -1,8 +1,9 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
-, mpd_clientlib
+, libmpdclient
 , openssl
 , lua5_3
 , libid3tag
@@ -12,21 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mympd";
-  version = "6.8.1";
+  version = "6.10.0";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${version}";
-    sha256 = "dIGg2mLxN6XBDH3GFXtF7nB9a/zf/qMlPCvIulFRXn8=";
+    sha256 = "sha256-QGJti1tKKJlumLgABPmROplF0UVGMWMnyRXLb2cEieQ=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    mpd_clientlib
+    libmpdclient
     openssl
     lua5_3
     libid3tag
@@ -46,8 +44,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://jcorporation.github.io/mympd";
     description = "A standalone and mobile friendly web mpd client with a tiny footprint and advanced features";
-    maintainers = [ stdenv.lib.maintainers.doronbehar ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.doronbehar ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

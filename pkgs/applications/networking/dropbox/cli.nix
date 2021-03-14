@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
-, pkgconfig
+, pkg-config
 , fetchurl
 , python3
 , dropbox
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     gdk-pixbuf
     # only for build, the install command also wants to use GTK through introspection
@@ -63,8 +63,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.dropbox.com";
     description = "Command line client for the dropbox daemon";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     # NOTE: Dropbox itself only works on linux, so this is ok.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

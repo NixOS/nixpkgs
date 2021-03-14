@@ -1,8 +1,13 @@
 { fetchNuGet }: [
   (fetchNuGet {
+    name = "AngleSharp.Css";
+    version = "0.14.2";
+    sha256 = "1d34a8ab5dri4wlw07jvk7b1z0d0zizwihwpdfva3sxhb4279ahd";
+  })
+  (fetchNuGet {
     name = "AngleSharp";
-    version = "0.9.11";
-    sha256 = "17vf1bizskkxr8pf547lk2b48m12wv3si83gxk145i73bf9gi64a";
+    version = "0.14.0";
+    sha256 = "1zgwhh1fp2mmaplvpgm86rpmslix3wqfxf0d3hxx1gxwfgr6wxm6";
   })
   (fetchNuGet {
     name = "AWSSDK.Core";
@@ -136,8 +141,18 @@
   })
   (fetchNuGet {
     name = "HtmlSanitizer";
-    version = "4.0.217";
-    sha256 = "0szay9mf5mmrp1hx0yc175aaalv76qg0j515lfs133j1d95lj26d";
+    version = "5.0.372";
+    sha256 = "1gllp58vdbql2ybwf05i2178x7p4g8zyyk64317d1pyss5217g7r";
+  })
+  (fetchNuGet {
+    name = "McMaster.NETCore.Plugins.Mvc";
+    version = "1.3.1";
+    sha256 = "1dh58ijwn6q6id0jpzr4hpfl0y4ak43zq4m8rsi5j2qv8vasq1mi";
+  })
+  (fetchNuGet {
+    name = "McMaster.NETCore.Plugins";
+    version = "1.3.1";
+    sha256 = "0jrp7sshnvg7jcb52gfhwmg1jy31k9dxdf4061yggwcgpfskyg7n";
   })
   (fetchNuGet {
     name = "Microsoft.AspNet.SignalR.Client";
@@ -208,11 +223,6 @@
     name = "Microsoft.AspNetCore.Razor.Language";
     version = "3.1.1";
     sha256 = "0arqmy04dd0r4wm2fin66gxxwj2kirbgxyf3w7kq6f73lrnazhq0";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Bcl.AsyncInterfaces";
-    version = "1.1.0";
-    sha256 = "1dq5yw7cy6s42193yl4iqscfw5vzkjkgv0zyy32scr4jza6ni1a1";
   })
   (fetchNuGet {
     name = "Microsoft.Bcl.AsyncInterfaces";
@@ -296,23 +306,18 @@
   })
   (fetchNuGet {
     name = "Microsoft.DotNet.PlatformAbstractions";
+    version = "3.1.0";
+    sha256 = "1fg1zggza45pa8zlcf8llqh6v47fqi44azsia68kmsg2q9r1r4mq";
+  })
+  (fetchNuGet {
+    name = "Microsoft.DotNet.PlatformAbstractions";
     version = "3.1.4";
     sha256 = "1s5h96zdc3vh1v03gizmqfw5hmksajw10bdrj79pm8brbyzipxia";
   })
   (fetchNuGet {
     name = "Microsoft.EntityFrameworkCore.Abstractions";
-    version = "3.1.0";
-    sha256 = "1bd6hilnwp47z3l14qspdxi5f5nhv6rivarc6w8wil425bq0h3pd";
-  })
-  (fetchNuGet {
-    name = "Microsoft.EntityFrameworkCore.Abstractions";
     version = "3.1.4";
     sha256 = "07l7137pzwh0k4m53ji5j6a2zmbbzrl164p18wxcri77ds5is4g7";
-  })
-  (fetchNuGet {
-    name = "Microsoft.EntityFrameworkCore.Analyzers";
-    version = "3.1.0";
-    sha256 = "1pjn4wwhxgsiap7byld114kx6m0nm6696r8drspqic7lskm4y305";
   })
   (fetchNuGet {
     name = "Microsoft.EntityFrameworkCore.Analyzers";
@@ -346,28 +351,13 @@
   })
   (fetchNuGet {
     name = "Microsoft.EntityFrameworkCore";
-    version = "3.1.0";
-    sha256 = "1l12lsk1xfrv5pjnm0b9w9kncgdh0pcjcbxl4zrsg82s7bs7dhda";
-  })
-  (fetchNuGet {
-    name = "Microsoft.EntityFrameworkCore";
     version = "3.1.4";
     sha256 = "11w63yp7fk9qwmnq3lmpf1h30mlbzfx4zpm89vrs0lprj86g0742";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Caching.Abstractions";
-    version = "3.1.0";
-    sha256 = "0j5m2a48rwyzzvbz0hpr2md35iv78b86zyqjnrjq0y4vb7sairc0";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Caching.Abstractions";
     version = "3.1.4";
     sha256 = "09f96pvpyzylpdaiw3lsvr7p6rs4i21mmhsxl6pkivg5lpfb79sk";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Caching.Memory";
-    version = "3.1.0";
-    sha256 = "1hi61647apn25kqjcb37nqafp8fikymdrk43j3kxjbwwwx507jy1";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Caching.Memory";
@@ -391,11 +381,6 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Configuration.Abstractions";
-    version = "3.1.0";
-    sha256 = "1f7h52kamljglx5k08ccryilvk6d6cvr9c26lcb6b2c091znzk0q";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Configuration.Abstractions";
     version = "3.1.4";
     sha256 = "0r33m68y1vgpmqams4sgciizl0w6y97qkp93m0hyn0nlkxqf72l6";
   })
@@ -403,11 +388,6 @@
     name = "Microsoft.Extensions.Configuration.Binder";
     version = "2.0.0";
     sha256 = "1prvdbma6r18n5agbhhabv6g357p1j70gq4m9g0vs859kf44nrgc";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Configuration.Binder";
-    version = "3.1.0";
-    sha256 = "13jj7jxihiswmhmql7r5jydbca4x5qj6h7zq10z17gagys6dc7pw";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Configuration.Binder";
@@ -441,11 +421,6 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Configuration";
-    version = "3.1.0";
-    sha256 = "1rszgz0rd5kvib5fscz6ss3pkxyjwqy0xpd4f2ypgzf5z5g5d398";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Configuration";
     version = "3.1.4";
     sha256 = "0npc18pjl86d06czb0fy6ln3prfpwfb16p6709xx2jrsl96dp9bp";
   })
@@ -461,11 +436,6 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.DependencyInjection.Abstractions";
-    version = "3.1.0";
-    sha256 = "1pvms778xkyv1a3gfwrxnh8ja769cxi416n7pcidn9wvg15ifvbh";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.DependencyInjection.Abstractions";
     version = "3.1.4";
     sha256 = "03ys96pqca93zwxvh0vprzms09i9y0lmq32w98m6klbizq01fc06";
   })
@@ -476,11 +446,6 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.DependencyInjection";
-    version = "3.1.0";
-    sha256 = "1xc61dy07bn2q73mx1z3ylrw80xpa682qjby13gklnqq636a3gab";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.DependencyInjection";
     version = "3.1.4";
     sha256 = "0rhyjgdpjm56drvrvqd9v1xq1qhyrpwwn2pjsz17g2s462rwliqx";
   })
@@ -488,6 +453,11 @@
     name = "Microsoft.Extensions.DependencyModel";
     version = "2.0.4";
     sha256 = "041i1vlcibpzgalxxzdk81g5pgmqvmz2g61k0rqa2sky0wpvijx9";
+  })
+  (fetchNuGet {
+    name = "Microsoft.Extensions.DependencyModel";
+    version = "3.1.0";
+    sha256 = "12nrdw3q9wl5zry8gb3sw003a0iyk2gvps2ij813l7lim38wy1mi";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.DependencyModel";
@@ -561,11 +531,6 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Logging.Abstractions";
-    version = "3.1.0";
-    sha256 = "1zyalrcksszmn9r5xjnirfh7847axncgzxkk3k5srbvlcch8fw8g";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Logging.Abstractions";
     version = "3.1.4";
     sha256 = "1rkl0yqmi5vfivn641866v2mdsgdy8amym546y6lzbab39g24b5n";
   })
@@ -581,11 +546,6 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Logging";
-    version = "3.1.0";
-    sha256 = "1d3yhqj1rav7vswm747j7w8fh8paybji4rz941hhlq4b12mfqfh4";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Logging";
     version = "3.1.4";
     sha256 = "04asfrhfrcl3ijilry2pr28ql5m6pgrwapadikgcg66jjxbx75zq";
   })
@@ -598,11 +558,6 @@
     name = "Microsoft.Extensions.Options";
     version = "2.0.0";
     sha256 = "0g4zadlg73f507krilhaaa7h0jdga216syrzjlyf5fdk25gxmjqh";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Options";
-    version = "3.1.0";
-    sha256 = "0akccwhpn93a4qrssyb3rszdsp3j4p9hlxbsb7yhqb78xydaqhyh";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Options";
@@ -628,11 +583,6 @@
     name = "Microsoft.Extensions.Primitives";
     version = "2.1.0";
     sha256 = "1r9gzwdfmb8ysnc4nzmyz5cyar1lw0qmizsvrsh252nhlyg06nmb";
-  })
-  (fetchNuGet {
-    name = "Microsoft.Extensions.Primitives";
-    version = "3.1.0";
-    sha256 = "1w1y22njywwysi8qjnj4m83qhbq0jr4mmjib0hfawz6cwamh7xrb";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Primitives";
@@ -670,6 +620,11 @@
     sha256 = "1507hnpr9my3z4w1r6xk5n0s1j3y6a2c2cnynj76za7cphxi1141";
   })
   (fetchNuGet {
+    name = "Microsoft.NETCore.Platforms";
+    version = "3.1.0";
+    sha256 = "1gc1x8f95wk8yhgznkwsg80adk1lc65v9n5rx4yaa4bc5dva0z3j";
+  })
+  (fetchNuGet {
     name = "Microsoft.NETCore.Targets";
     version = "1.0.1";
     sha256 = "0ppdkwy6s9p7x9jix3v4402wb171cdiibq7js7i13nxpdky7074p";
@@ -700,6 +655,11 @@
     sha256 = "0j0c1wj4ndj21zsgivsc24whiya605603kxrbiw6wkfdync464wq";
   })
   (fetchNuGet {
+    name = "Microsoft.Win32.SystemEvents";
+    version = "4.7.0";
+    sha256 = "0pjll2a62hc576hd4wgyasva0lp733yllmk54n37svz5ac7nfz0q";
+  })
+  (fetchNuGet {
     name = "MySqlConnector";
     version = "0.61.0";
     sha256 = "0b0mc41dsih4p1ky3kcmibsz4bw14w439nraq5732wjfkq2sqdxg";
@@ -728,6 +688,11 @@
     name = "NBitcoin";
     version = "5.0.60";
     sha256 = "0pin4ldfz5lfxyd47mj1ypyp8lmj0v5nq5zvygdjna956vphd39v";
+  })
+  (fetchNuGet {
+    name = "NBitcoin";
+    version = "5.0.68";
+    sha256 = "0k275mbp9wannm10pqj4nv8agjc1f6hsrfhl0m6ax1apv81sfxcd";
   })
   (fetchNuGet {
     name = "NBitpayClient";
@@ -850,6 +815,11 @@
     sha256 = "1lv1ljaz8df835jgmp3ny1xgqqjf1s9f25baw7bf8d24qlf25i2g";
   })
   (fetchNuGet {
+    name = "QRCoder";
+    version = "1.4.1";
+    sha256 = "1xgwhpqrm4ycnj8nk4ibxfwkmkiwc5i15l1za3ci5alghlpcb6ch";
+  })
+  (fetchNuGet {
     name = "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl";
     version = "4.3.0";
     sha256 = "16rnxzpk5dpbbl1x354yrlsbvwylrq456xzpsha1n9y3glnhyx9d";
@@ -868,11 +838,6 @@
     name = "runtime.native.System.IO.Compression";
     version = "4.3.0";
     sha256 = "1vvivbqsk6y4hzcid27pqpm5bsi6sc50hvqwbcx8aap5ifrxfs8d";
-  })
-  (fetchNuGet {
-    name = "runtime.native.System.Net.Http";
-    version = "4.0.1";
-    sha256 = "1hgv2bmbaskx77v8glh7waxws973jn4ah35zysnkxmf0196sfxg6";
   })
   (fetchNuGet {
     name = "runtime.native.System.Net.Http";
@@ -950,9 +915,14 @@
     sha256 = "1p4dgxax6p7rlgj4q73k73rslcnz4wdcv8q2flg1s8ygwcm58ld5";
   })
   (fetchNuGet {
+    name = "Selenium.Support";
+    version = "3.141.0";
+    sha256 = "1gqwzbfq7i9jz830b0jibsis0qfxs8sl10n1nja02c6s637cwzib";
+  })
+  (fetchNuGet {
     name = "Selenium.WebDriver.ChromeDriver";
-    version = "85.0.4183.8700";
-    sha256 = "0klyqmwa6yc0ibbmci51mzb2vl6n13qlk06chc9w78i0a43fs382";
+    version = "87.0.4280.8800";
+    sha256 = "1zrizydlhjv81r1fa5g8wzxrx1cxly3ip7pargj48hdx419iblfr";
   })
   (fetchNuGet {
     name = "Selenium.WebDriver";
@@ -1066,11 +1036,6 @@
   })
   (fetchNuGet {
     name = "System.Collections.Immutable";
-    version = "1.7.0";
-    sha256 = "1gik4sn9jsi1wcy1pyyp0r4sn2g17cwrsh24b2d52vif8p2h24zx";
-  })
-  (fetchNuGet {
-    name = "System.Collections.Immutable";
     version = "1.7.1";
     sha256 = "1nh4nlxfc7lbnbl86wwk1a3jwl6myz5j6hvgh5sp4krim9901hsq";
   })
@@ -1136,18 +1101,8 @@
   })
   (fetchNuGet {
     name = "System.Diagnostics.DiagnosticSource";
-    version = "4.0.0";
-    sha256 = "1n6c3fbz7v8d3pn77h4v5wvsfrfg7v1c57lg3nff3cjyh597v23m";
-  })
-  (fetchNuGet {
-    name = "System.Diagnostics.DiagnosticSource";
     version = "4.3.0";
     sha256 = "0z6m3pbiy0qw6rn3n209rrzf9x1k4002zh90vwcrsym09ipm2liq";
-  })
-  (fetchNuGet {
-    name = "System.Diagnostics.DiagnosticSource";
-    version = "4.7.0";
-    sha256 = "0cr0v5dz8l5ackxv6b772fjcyj2nimqmrmzanjs4cw2668v568n1";
   })
   (fetchNuGet {
     name = "System.Diagnostics.DiagnosticSource";
@@ -1180,6 +1135,11 @@
     sha256 = "1m3bx6c2s958qligl67q7grkwfz3w53hpy7nc97mh6f7j5k168c4";
   })
   (fetchNuGet {
+    name = "System.Drawing.Common";
+    version = "4.7.0";
+    sha256 = "0yfw7cpl54mgfcylvlpvrl0c8r1b0zca6p7r3rcwkvqy23xqcyhg";
+  })
+  (fetchNuGet {
     name = "System.Dynamic.Runtime";
     version = "4.0.11";
     sha256 = "1pla2dx8gkidf7xkciig6nifdsb494axjvzvann8g2lp3dbqasm9";
@@ -1191,18 +1151,8 @@
   })
   (fetchNuGet {
     name = "System.Globalization.Calendars";
-    version = "4.0.1";
-    sha256 = "0bv0alrm2ck2zk3rz25lfyk9h42f3ywq77mx1syl6vvyncnpg4qh";
-  })
-  (fetchNuGet {
-    name = "System.Globalization.Calendars";
     version = "4.3.0";
     sha256 = "1xwl230bkakzzkrggy1l1lxmm3xlhk4bq2pkv790j5lm8g887lxq";
-  })
-  (fetchNuGet {
-    name = "System.Globalization.Extensions";
-    version = "4.0.1";
-    sha256 = "0hjhdb5ri8z9l93bw04s7ynwrjrhx2n0p34sf33a9hl9phz69fyc";
   })
   (fetchNuGet {
     name = "System.Globalization.Extensions";
@@ -1301,11 +1251,6 @@
   })
   (fetchNuGet {
     name = "System.Net.Http";
-    version = "4.1.0";
-    sha256 = "1i5rqij1icg05j8rrkw4gd4pgia1978mqhjzhsjg69lvwcdfg8yb";
-  })
-  (fetchNuGet {
-    name = "System.Net.Http";
     version = "4.3.0";
     sha256 = "1i4gc757xqrzflbk7kc5ksn20kwwfjhw9w7pgdkn19y3cgnl302j";
   })
@@ -1330,11 +1275,6 @@
     sha256 = "0c87k50rmdgmxx7df2khd9qj7q35j9rzdmm2572cc55dygmdk3ii";
   })
   (fetchNuGet {
-    name = "System.Net.Requests";
-    version = "4.0.11";
-    sha256 = "13mka55sa6dg6nw4zdrih44gnp8hnj5azynz47ljsh2791lz3d9h";
-  })
-  (fetchNuGet {
     name = "System.Net.Security";
     version = "4.3.0";
     sha256 = "1aa5igz31ivk6kpgsrwck3jccab7wd88wr52lddmgypmbh9mmf87";
@@ -1348,11 +1288,6 @@
     name = "System.Net.Sockets";
     version = "4.3.0";
     sha256 = "1ssa65k6chcgi6mfmzrznvqaxk8jp0gvl77xhf1hbzakjnpxspla";
-  })
-  (fetchNuGet {
-    name = "System.Net.WebHeaderCollection";
-    version = "4.0.1";
-    sha256 = "10bxpxj80c4z00z3ksrfswspq9qqsw8jwxcbzvymzycb97m9b55q";
   })
   (fetchNuGet {
     name = "System.Net.WebHeaderCollection";
@@ -1596,18 +1531,8 @@
   })
   (fetchNuGet {
     name = "System.Security.Cryptography.Cng";
-    version = "4.2.0";
-    sha256 = "118jijz446kix20blxip0f0q8mhsh9bz118mwc2ch1p6g7facpzc";
-  })
-  (fetchNuGet {
-    name = "System.Security.Cryptography.Cng";
     version = "4.3.0";
     sha256 = "1k468aswafdgf56ab6yrn7649kfqx2wm9aslywjam1hdmk5yypmv";
-  })
-  (fetchNuGet {
-    name = "System.Security.Cryptography.Csp";
-    version = "4.0.0";
-    sha256 = "1cwv8lqj8r15q81d2pz2jwzzbaji0l28xfrpw29kdpsaypm92z2q";
   })
   (fetchNuGet {
     name = "System.Security.Cryptography.Csp";
@@ -1623,11 +1548,6 @@
     name = "System.Security.Cryptography.Encoding";
     version = "4.3.0";
     sha256 = "1jr6w70igqn07k5zs1ph6xja97hxnb3mqbspdrff6cvssgrixs32";
-  })
-  (fetchNuGet {
-    name = "System.Security.Cryptography.OpenSsl";
-    version = "4.0.0";
-    sha256 = "16sx3cig3d0ilvzl8xxgffmxbiqx87zdi8fc73i3i7zjih1a7f4q";
   })
   (fetchNuGet {
     name = "System.Security.Cryptography.OpenSsl";
@@ -1648,11 +1568,6 @@
     name = "System.Security.Cryptography.ProtectedData";
     version = "4.5.0";
     sha256 = "11qlc8q6b7xlspayv07718ibzvlj6ddqqxkvcbxv5b24d5kzbrb7";
-  })
-  (fetchNuGet {
-    name = "System.Security.Cryptography.X509Certificates";
-    version = "4.1.0";
-    sha256 = "0clg1bv55mfv5dq00m19cp634zx6inm31kf8ppbq1jgyjf2185dh";
   })
   (fetchNuGet {
     name = "System.Security.Cryptography.X509Certificates";
@@ -1688,6 +1603,11 @@
     name = "System.Security.Principal";
     version = "4.3.0";
     sha256 = "12cm2zws06z4lfc4dn31iqv7072zyi4m910d4r6wm8yx85arsfxf";
+  })
+  (fetchNuGet {
+    name = "System.Text.Encoding.CodePages";
+    version = "4.5.0";
+    sha256 = "19x38911pawq4mrxrm04l2bnxwxxlzq8v8rj4cbxnfjj8pnd3vj3";
   })
   (fetchNuGet {
     name = "System.Text.Encoding.CodePages";

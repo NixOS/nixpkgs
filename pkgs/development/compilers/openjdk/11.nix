@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, bash, pkgconfig, autoconf, cpio, file, which, unzip
+{ stdenv, lib, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
@@ -11,8 +11,8 @@
 let
   major = "11";
   minor = "0";
-  update = "9";
-  build = "11";
+  update = "10";
+  build = "9";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -22,10 +22,10 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "11j2rqz9nag5y562g99py4p72f2kv4wwwyrnaspmrzax00wynyx7";
+      sha256 = "06pm3hpz4ggiqwvkgzxr39y9kga7vk4flakfznz5979bvgb926vw";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf ];
     buildInputs = [
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
@@ -136,7 +136,7 @@ let
 
     disallowedReferences = [ openjdk11-bootstrap ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";

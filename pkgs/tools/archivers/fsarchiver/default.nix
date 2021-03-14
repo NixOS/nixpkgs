@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , zlib, bzip2, lzma, lzo, lz4, zstd, xz
 , libgcrypt, e2fsprogs, util-linux, libgpgerror }:
 
 let
-  version = "0.8.5";
+  version = "0.8.6";
 
 in stdenv.mkDerivation {
   pname = "fsarchiver";
@@ -13,11 +13,11 @@ in stdenv.mkDerivation {
     owner = "fdupoux";
     repo = "fsarchiver";
     rev = version;
-    sha256 = "1rvwq5v3rl14bqxjm1ibfapyicf0sa44nw7451v10kx39lp56ylp";
+    sha256 = "sha256-7AfCI4abcUijobEl6FO+5A/FRwxPkNko44u85WbTwuc=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook pkg-config
   ];
 
   buildInputs = [
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     libgcrypt e2fsprogs util-linux libgpgerror
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File system archiver for linux";
     longDescription = ''
       FSArchiver is a system tool that allows you to save the contents of a

@@ -61,6 +61,7 @@ in {
       };
 
       advertisedAddresses = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = "List of IP addresses this server is advertised under. See NetInfo(5)";
       };

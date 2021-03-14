@@ -1,4 +1,4 @@
-{ stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
+{ lib, stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkg-config, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -111,6 +111,7 @@
 , opensslExtlib ? false, openssl ? null
 , libpulseaudio ? null # Pulseaudio input support
 , rav1e ? null # AV1 encoder (focused on speed and safety)
+, svt-av1 ? null # AV1 encoder/decoder (focused on speed and correctness)
 , rtmpdump ? null # RTMP[E] support
 #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
@@ -183,7 +184,7 @@
 
 let
   inherit (stdenv) isCygwin isDarwin isFreeBSD isLinux isAarch64;
-  inherit (stdenv.lib) optional optionals optionalString enableFeature;
+  inherit (lib) optional optionals optionalString enableFeature;
 in
 
 /*
@@ -250,13 +251,18 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-dqpmpDFETTuWHWolMoLaubU4BeDEuQaBNA0wmzL1f8o=";
       name = "fix_libsrt.patch";
     })
+    # Patch ffmpeg for svt-av1 until version 4.4
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOMediaCodec/SVT-AV1/v0.8.4/ffmpeg_plugin/0001-Add-ability-for-ffmpeg-to-run-svt-av1.patch";
+      sha256 = "1p4g8skr5gjw5h1648j7qrks81zx49lrnx9g0p81qgnrvxc2wwx0";
+    })
   ];
 
   prePatch = ''
     patchShebangs .
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's/#ifndef __MAC_10_11/#if 1/' ./libavcodec/audiotoolboxdec.c
-  '' + stdenv.lib.optionalString (frei0r != null) ''
+  '' + lib.optionalString (frei0r != null) ''
     substituteInPlace libavfilter/vf_frei0r.c \
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
     substituteInPlace doc/filters.texi \
@@ -393,6 +399,7 @@ stdenv.mkDerivation rec {
     (enableFeature (libpulseaudio != null) "libpulse")
     #(enableFeature quvi "libquvi")
     (enableFeature (rav1e != null) "librav1e")
+    (enableFeature (svt-av1 != null) "libsvtav1")
     (enableFeature (rtmpdump != null) "librtmp")
     #(enableFeature (schroedinger != null) "libschroedinger")
     (enableFeature (SDL2 != null) "sdl2")
@@ -423,13 +430,13 @@ stdenv.mkDerivation rec {
     "--enable-cross-compile"
   ];
 
-  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv libXext lzma openal openjpeg libpulseaudio rav1e rtmpdump opencore-amr
+    libxcb libXv libXext lzma openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
@@ -460,7 +467,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, doxygen, perl, pam, nspr, nss, openldap
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, doxygen, perl, pam, nspr, nss, openldap
 , db, cyrus_sasl, svrcore, icu, net-snmp, kerberos, pcre, perlPackages, libevent, openssl, python
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "141iv1phgk1lw74sfjj3v7wy6qs0q56lvclwv2p0hqn1wg8ic4q6";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig doxygen ];
+  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
   buildInputs = [
     perl pam nspr nss openldap db cyrus_sasl svrcore icu
     net-snmp kerberos pcre libevent openssl python
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
     "--with-db-lib=${db.out}/lib"
     "--with-sasl=${cyrus_sasl.dev}"
     "--with-netsnmp=yes"
-    "--with-netsnmp-inc=${stdenv.lib.getDev net-snmp}/include"
-    "--with-netsnmp-lib=${stdenv.lib.getLib net-snmp}/lib"
+    "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
+    "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
   ];
 
   enableParallelBuilding = true;
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   passthru.version = version;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.port389.org/";
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl3Plus;

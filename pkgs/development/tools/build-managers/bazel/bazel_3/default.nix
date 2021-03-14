@@ -25,11 +25,11 @@
 }:
 
 let
-  version = "3.3.1";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0ir796kl8r9hpr3li26qsdy1z2lx2bv82zmk4a2s7q64clyg9wg0";
+    sha256 = "1cfrbs23lg0jnl22ddylx3clcjw7bdpbix7r5lqibab346s5n9fy";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -49,13 +49,15 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       # `bazel query` wants all of these to be available regardless of platform.
-      srcs."java_tools_javac11_darwin-v8.0.zip"
-      srcs."java_tools_javac11_linux-v8.0.zip"
-      srcs."java_tools_javac11_windows-v8.0.zip"
-      srcs."coverage_output_generator-v2.1.zip"
+      srcs."java_tools_javac11_darwin-v10.0.zip"
+      srcs."java_tools_javac11_linux-v10.0.zip"
+      srcs."java_tools_javac11_windows-v10.0.zip"
+      srcs."coverage_output_generator-v2.5.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.19.0rc1.tar.gz"
+      srcs."android_tools_pkg-0.19.0rc3.tar.gz"
       srcs."bazel-toolchains-3.1.0.tar.gz"
+      srcs."com_github_grpc_grpc"
+      srcs.upb
       srcs.rules_pkg
       srcs.rules_cc
       srcs.rules_java
@@ -98,7 +100,7 @@ let
     [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip file zip ];
 
   # Java toolchain used for the build and tests
-  javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
+  javaToolchain = "@bazel_tools//tools/jdk:toolchain_${buildJdkName}";
 
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
@@ -112,7 +114,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v8.0.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v10.0.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
@@ -169,12 +171,18 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   patches = [
-    ./python-shebang.patch
-
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
     ../trim-last-argument-to-gcc-if-empty.patch
+
+    # On Darwin, using clang 6 to build fails because of a linker error (see #105573),
+    # but using clang 7 fails because libarclite_macosx.a cannot be found when linking
+    # the xcode_locator tool.
+    # This patch removes using the -fobjc-arc compiler option and makes the code
+    # compile without automatic reference counting. Caveat: this leaks memory, but
+    # we accept this fact because xcode_locator is only a short-lived process used during the build.
+    ./no-arc.patch
 
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
@@ -370,6 +378,8 @@ stdenv.mkDerivation rec {
         src/tools/xcode/realpath/BUILD \
         src/tools/xcode/stdredirect/BUILD \
         tools/osx/BUILD
+
+      substituteInPlace scripts/bootstrap/compile.sh --replace ' -mmacosx-version-min=10.9' ""
 
       # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
       sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc

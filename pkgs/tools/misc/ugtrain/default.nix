@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config scanmem ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ugtrain/ugtrain";
     description = "The Universal Elite Game Trainer for CLI (Linux game trainer research project)";
     maintainers = with maintainers; [ mtrsk ];

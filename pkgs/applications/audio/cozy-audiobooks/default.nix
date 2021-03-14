@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub
+{ lib, fetchFromGitHub
 , ninja
 , meson
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson ninja pkg-config
     wrapGAppsHook
     appstream-glib
     desktop-file-utils
@@ -78,7 +78,7 @@ python3Packages.buildPythonApplication rec {
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern audio book player for Linux using GTK 3";
     homepage = "https://cozy.geigi.de/";
     maintainers = [ maintainers.makefu ];

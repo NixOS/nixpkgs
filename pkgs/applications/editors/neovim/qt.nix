@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
 , msgpack, neovim, pythonPackages, qtbase }:
 
 let
@@ -27,8 +27,6 @@ let
 
     nativeBuildInputs = [ cmake doxygen ];
 
-    enableParallelBuilding = true;
-
     preCheck = ''
       # The GUI tests require a running X server, disable them
       sed -i ../test/CMakeLists.txt \
@@ -37,7 +35,7 @@ let
 
     doCheck = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Neovim client library and GUI, in Qt5";
       homepage = "https://github.com/equalsraf/neovim-qt";
       license     = licenses.isc;

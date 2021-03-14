@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, darwin, fixDarwinDylibNames, buildPackages, ninja
+{ lib, stdenv, fetchurl, nspr, perl, zlib
+, sqlite, ninja
+, darwin, fixDarwinDylibNames, buildPackages
+, useP11kit ? true, p11-kit
 , # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
@@ -15,7 +18,7 @@ let
   #       It will rebuild itself using the version of this package (NSS) and if
   #       an update is required do the required changes to the expression.
   #       Example: nix-shell ./maintainers/scripts/update.nix --argstr package cacert
-  version = "3.59";
+  version = "3.60";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
@@ -24,13 +27,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "096fs3z21r171q24ca3rq53p1389xmvqz1f2rpm7nlm8r9s82ag6";
+    sha256 = "0ggyj3ax3kal65sl1vl4nfhx2s08blg4dg8iwlxcax5qb9bxbaw4";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
 
   buildInputs = [ zlib sqlite ];
 
@@ -63,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
      substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
      substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
    '';
@@ -96,9 +99,9 @@ in stdenv.mkDerivation rec {
       -Dhost_arch=${host} \
       -Duse_system_zlib=1 \
       --enable-libpkix \
-      ${stdenv.lib.optionalString enableFIPS "--enable-fips"} \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--clang"} \
-      ${stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
+      ${lib.optionalString enableFIPS "--enable-fips"} \
+      ${lib.optionalString stdenv.isDarwin "--clang"} \
+      ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
     runHook postBuild
   '';
@@ -139,11 +142,16 @@ in stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nss-config
   '';
 
+  postInstall = lib.optionalString useP11kit ''
+    # Replace built-in trust with p11-kit connection
+    ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi.so
+  '';
+
   postFixup = let
     isCross = stdenv.hostPlatform != stdenv.buildPlatform;
     nss = if isCross then buildPackages.nss.tools else "$out";
   in
-  (stdenv.lib.optionalString enableFIPS (''
+  (lib.optionalString enableFIPS (''
     for libname in freebl3 nssdbm3 softokn3
     do '' +
     (if stdenv.isDarwin
@@ -166,7 +174,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
     license = licenses.mpl20;

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, zip, buildPackages
 , which, readline, zlib, icu }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "60.9.0";
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   setOutputFlags = false; # Configure script only understands --includedir
 
   buildInputs = [ readline zlib icu ];
-  nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
+  nativeBuildInputs = [ autoconf213 pkg-config perl which python2 zip ];
 
   patches = [
     # Fixed in 62.0
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.

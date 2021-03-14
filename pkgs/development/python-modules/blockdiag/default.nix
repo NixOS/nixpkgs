@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , setuptools, funcparserlib, pillow, webcolors, reportlab, docutils
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # require network and fail
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;

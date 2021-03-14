@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -15,10 +15,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enables the “changeset evolution” feature of Mercurial core";
     homepage = "https://www.mercurial-scm.org/doc/evolution/";
     maintainers = with maintainers; [ xavierzwirtz ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

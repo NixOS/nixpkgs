@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , mbedtls
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse mbedtls ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Read BitLocker encrypted partitions in Linux";
     homepage    = "https://github.com/aorimn/dislocker";
     license     = licenses.gpl2;

@@ -15,31 +15,45 @@ with lib;
   options = {
 
     services.gnome3.evolution-data-server = {
-
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable Evolution Data Server, a collection of services for
-          storing addressbooks and calendars.
-        '';
+      enable = mkEnableOption "Evolution Data Server, a collection of services for storing addressbooks and calendars.";
+      plugins = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        description = "Plugins for Evolution Data Server.";
+      };
+    };
+    programs.evolution = {
+      enable = mkEnableOption "Evolution, a Personal information management application that provides integrated mail, calendaring and address book functionality.";
+      plugins = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        example = literalExample "[ pkgs.evolution-ews ]";
+        description = "Plugins for Evolution.";
       };
 
     };
-
   };
-
 
   ###### implementation
 
-  config = mkIf config.services.gnome3.evolution-data-server.enable {
+  config =
+    let
+      bundle = pkgs.evolutionWithPlugins.override { inherit (config.services.gnome3.evolution-data-server) plugins; };
+    in
+    mkMerge [
+      (mkIf config.services.gnome3.evolution-data-server.enable {
+        environment.systemPackages = [ bundle ];
 
-    environment.systemPackages = [ pkgs.gnome3.evolution-data-server ];
+        services.dbus.packages = [ bundle ];
 
-    services.dbus.packages = [ pkgs.gnome3.evolution-data-server ];
-
-    systemd.packages = [ pkgs.gnome3.evolution-data-server ];
-
-  };
-
+        systemd.packages = [ bundle ];
+      })
+      (mkIf config.programs.evolution.enable {
+        services.gnome3.evolution-data-server = {
+          enable = true;
+          plugins = [ pkgs.evolution ] ++ config.programs.evolution.plugins;
+        };
+        services.gnome3.gnome-keyring.enable = true;
+      })
+    ];
 }

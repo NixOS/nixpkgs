@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheHttpd, jdk }:
+{ lib, stdenv, fetchurl, apacheHttpd, jdk }:
 
 stdenv.mkDerivation rec {
   name = "tomcat-connectors-1.2.48";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ apacheHttpd jdk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides web server plugins to connect web servers with Tomcat";
     homepage = "https://tomcat.apache.org/download-connectors.cgi";
     license = licenses.asl20;

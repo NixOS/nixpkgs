@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 let
   perlLibs = with perlPackages; [ NetDBus XMLTwig XMLParser ];
 in
 stdenv.mkDerivation {
   pname = "hsphfpd";
-  version = "2020-11-27";
+  version = "2020-12-05";
 
   src = fetchFromGitHub {
     owner = "pali";
     repo = "hsphfpd-prototype";
-    rev = "58ffbf8f1b457e46801039d572cd344472828714";
-    sha256 = "1hyg3cz6s58k6a7a3hcbs6wfk14cflnikd9psi7sirq6cn1z0ggb";
+    rev = "d294d064879591e9570ca3f444fa3eee2f269df8";
+    sha256 = "0pm5rbsfrm04hnifzdmsyz17rjk8h9h6d19jaikjc5y36z03xf1c";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth HSP/HFP daemon";
     homepage = "https://github.com/pali/hsphfpd-prototype";
     license = licenses.artistic1;

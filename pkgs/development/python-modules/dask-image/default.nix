@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , dask
 , numpy, toolz # dask[array]
 , scipy
@@ -38,8 +37,9 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest --ignore=tests/test_dask_image/
   '';
+  pythonImportsCheck = [ "dask_image" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dask/dask-image";
     description = "Distributed image processing";
     license = licenses.bsdOriginal;

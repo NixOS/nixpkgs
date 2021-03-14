@@ -26,6 +26,15 @@ buildPythonPackage rec {
     mutatormath
   ];
 
+  checkPhase = ''
+    runHook preCheck
+    for t in Tests/*.py; do
+      # https://github.com/LettError/ufoProcessor/issues/32
+      [[ "$(basename "$t")" = "tests_fp.py" ]] || python "$t"
+    done
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Read, write and generate UFOs with designspace data";
     homepage = "https://github.com/LettError/ufoProcessor";

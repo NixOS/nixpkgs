@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, cmake
+{ lib, stdenv, fetchurl, pkg-config, cmake
 , perl, gmp, libtap, gperf
 , perlPackages, python3 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "freecell-solver";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake perl pkgconfig
+    cmake perl pkg-config
   ] ++ (with perlPackages; TaskFreecellSolverTesting.buildInputs ++ [
     GamesSolitaireVerify StringShellQuote TaskFreecellSolverTesting TemplateToolkit
   ]);

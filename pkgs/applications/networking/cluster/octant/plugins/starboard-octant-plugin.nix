@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "starboard-octant-plugin";
-  version = "0.6.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rgfk8l3yz7xwghr06vcgpi6zzjynxxvyg2r78fgp7wpw7bh3rmd";
+    sha256 = "sha256-wis2ECCVXQeD7GiCMJQai+wDM8QJ1j5dPnE5O/I3wpM=";
   };
 
-  vendorSha256 = "1f6x66zgrmm7x661d0d0qqharrpyb2bsi10swlgx68y5yz285296";
+  vendorSha256 = "sha256-T0wDbAl5GXphZIBrM36OwRCojnJ/cbXNqsjtCzUDZ6s=";
+
+  buildFlagsArray = [ "-ldflags=" "-s" "-w" ];
 
   meta = with lib; {
     description = "Octant plugin for viewing Starboard security information";

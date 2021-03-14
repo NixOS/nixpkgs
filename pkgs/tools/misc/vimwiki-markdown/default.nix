@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonApplication
 , fetchPypi
 , markdown
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     pygments
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vimwiki markdown plugin";
     homepage = "https://github.com/WnP/vimwiki_markdown";
     license = licenses.mit;

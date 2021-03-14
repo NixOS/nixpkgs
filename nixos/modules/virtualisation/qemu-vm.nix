@@ -7,7 +7,7 @@
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
@@ -136,10 +136,8 @@ let
             cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS" || exit 1
             chmod 0644 "$NIX_EFI_VARS" || exit 1
           fi
-        '' else ''
-        ''}
-      '' else ''
-      ''}
+        '' else ""}
+      '' else ""}
 
       cd $TMPDIR
       idx=0
@@ -187,8 +185,7 @@ let
                 efiVars=$out/efi-vars.fd
                 cp ${efiVarsDefault} $efiVars
                 chmod 0644 $efiVars
-              '' else ''
-              ''}
+              '' else ""}
             '';
           buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
@@ -269,12 +266,26 @@ in
 
   options = {
 
+    virtualisation.fileSystems = options.fileSystems;
+
     virtualisation.memorySize =
       mkOption {
         default = 384;
         description =
           ''
             Memory size (M) of virtual machine.
+          '';
+      };
+
+    virtualisation.msize =
+      mkOption {
+        default = null;
+        type = types.nullOr types.ints.unsigned;
+        description =
+          ''
+            msize (maximum packet size) option passed to 9p file systems, in
+            bytes. Increasing this should increase performance significantly,
+            at the cost of higher RAM usage.
           '';
       };
 
@@ -662,11 +673,12 @@ in
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
     fileSystems = mkVMOverride (
+      cfg.fileSystems //
       { "/".device = cfg.bootDevice;
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
         "/tmp" = mkIf config.boot.tmpOnTmpfs
@@ -679,13 +691,13 @@ in
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" ];
+            options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
         "/tmp/shared" =
           { device = "shared";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" ];
+            options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
       } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)

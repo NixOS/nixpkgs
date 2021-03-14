@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "c14-cli";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0b1piviy6vvdbak8y8bc24rk3c1fi67vv3352pmnzvrhsar2r5yf";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C14 is designed for data archiving & long-term backups";
     homepage = "https://www.online.net/en/storage/c14-cold-storage";
     license = licenses.mit;

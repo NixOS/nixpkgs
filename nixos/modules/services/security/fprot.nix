@@ -16,16 +16,19 @@ in {
           description = ''
             product.data file. Defaults to the one supplied with installation package.
           '';
+          type = types.path;
         };
 
         frequency = mkOption {
           default = 30;
+          type = types.int;
           description = ''
             Update virus definitions every X minutes.
           '';
         };
 
         licenseKeyfile = mkOption {
+          type = types.path;
           description = ''
             License keyfile. Defaults to the one supplied with installation package.
           '';

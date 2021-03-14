@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, pkg-config }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = "BSD-style";
 
     homepage = "http://pupnp.sourceforge.net/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

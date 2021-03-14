@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, which
+{ lib, stdenv, fetchFromGitHub, which
 , boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
-, glew, zlib, icu, pkgconfig, cairo, libvpx }:
+, glew, zlib, icu, pkg-config, cairo, libvpx }:
 
 stdenv.mkDerivation {
   pname = "anura-engine";
@@ -10,13 +10,13 @@ stdenv.mkDerivation {
     owner = "anura-engine";
     repo = "anura";
     # trunk branch as of 2018-11-28
-    rev = "8070111467802dc772c0a6c7806ecd16b0bcdaa9";
-    sha256 = "0xbqwfmws69n7iiz17n93h4jiw39cwyf7hxw0qi2c8cccr37b1nr";
+    rev = "a05f413f255d2854019134be817c253a03da3d9f";
+    sha256 = "1hd57q8gbn1zdpibnqd3ma0z1ycayc2f4r9j4m2m9kc6yf4v7w7b";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    which pkgconfig
+    which pkg-config
   ];
 
   buildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     cp -a anura $out/bin/frogatto
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/anura-engine/anura";
     description = "Game engine used by Frogatto";
     license = licenses.zlib;

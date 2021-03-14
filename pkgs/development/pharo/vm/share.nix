@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   version = "1.0";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Shared files for Pharo";
     homepage = "https://pharo.org";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

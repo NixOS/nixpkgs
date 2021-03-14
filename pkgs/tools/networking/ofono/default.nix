@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , glib
 , dbus
 , ell
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -46,9 +46,17 @@ stdenv.mkDerivation rec {
     "--enable-external-ell"
   ];
 
+  postInstall = ''
+    rm -r $out/etc/ofono
+    ln -s /etc/ofono $out/etc/ofono
+  '';
+
+  enableParallelBuilding = true;
+  enableParallelChecking = false;
+
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Infrastructure for building mobile telephony (GSM/UMTS) applications";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;

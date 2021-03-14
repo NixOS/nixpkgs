@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchurl, unzip, jre, makeDesktopItem, copyDesktopItems }:
 
 let
   desktopItem = makeDesktopItem {
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   desktopItems = [ desktopItem ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.jgoodies.com/freeware/jdiskreport/";
     description = "A graphical utility to visualize disk usage";
     license = licenses.unfreeRedistributable; #TODO freedist, libs under BSD-3

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy decorator imageio imageio-ffmpeg tqdm requests proglog
-  ] ++ (stdenv.lib.optionals advancedProcessing [
+  ] ++ (lib.optionals advancedProcessing [
     opencv3 scikitimage scikitlearn scipy matplotlib youtube-dl
   ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
     license = licenses.mit;

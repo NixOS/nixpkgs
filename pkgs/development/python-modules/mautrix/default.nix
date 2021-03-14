@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.8.3";
+  version = "0.8.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bnflaz0nkjvps3b87ig02d3pymnrgrwcd0p0s6qyzx9s08lcz5x";
+    sha256 = "ccaa1691affa5f257e13d61f7c46088ff0affdd782331b01bfdcbd0b3eb5e10e";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   # no tests available
   doCheck = false;
+
+  pythonImportsCheck = [ "mautrix" ];
 
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-python";

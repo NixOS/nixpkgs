@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
+{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
-      pname = "rainloop${stdenv.lib.optionalString (edition != "") "-${edition}"}";
+      pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.14.0";
 
       buildInputs = [ unzip ];
@@ -12,7 +12,7 @@
       '';
 
       src = fetchurl {
-        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${stdenv.lib.optionalString (edition != "") "-"}${version}.zip";
+        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${lib.optionalString (edition != "") "-"}${version}.zip";
         sha256 = sha256;
       };
 
@@ -38,7 +38,7 @@
         chmod 700 $out/data
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
         downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";

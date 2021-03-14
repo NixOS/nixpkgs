@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libstrangle";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteAllInPlace src/strangle.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/milaq/libstrangle";
     description = "Frame rate limiter for Linux/OpenGL";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc
+{ fetchurl, lib, mkDerivation, pkg-config, python, file, bc
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
@@ -12,7 +12,7 @@ mkDerivation rec {
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     qtbase qtsvg python file/*for libmagic*/ bc
     hunspell makeWrapper # enchant

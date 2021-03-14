@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , fetchurl
 , wrapGAppsHook
 , gnome-video-effects
 , libcanberra-gtk3
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , clutter-gtk
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/cheese/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     maintainers = teams.gnome.members;

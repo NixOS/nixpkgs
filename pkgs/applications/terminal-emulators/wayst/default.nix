@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , freetype
 , fontconfig
 , libGL
@@ -13,7 +13,7 @@
 , wayland
 
 , libnotify
-, xdg_utils
+, xdg-utils
 , makeDesktopItem
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     fontconfig
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/settings.c \
-      --replace xdg-open ${xdg_utils}/bin/xdg-open
+      --replace xdg-open ${xdg-utils}/bin/xdg-open
     substituteInPlace src/main.c \
       --replace notify-send ${libnotify}/bin/notify-send
   '';

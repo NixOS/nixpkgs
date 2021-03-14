@@ -5,7 +5,7 @@
 To update the list of packages from Org (ELPA),
 
 1. Run `./update-org`.
-2. Check for evaluation errors: `nix-instantiate ../../../.. -A emacsPackagesNg.orgPackages`.
+2. Check for evaluation errors: `nix-instantiate ../../../.. -A emacs.pkgs.orgPackages`.
 3. `git commit -m "org-packages $(date -Idate)" -- org-generated.nix`
 
 */

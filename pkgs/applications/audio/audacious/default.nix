@@ -1,6 +1,6 @@
 {
   mkDerivation, lib, fetchurl, fetchpatch,
-  gettext, pkgconfig,
+  gettext, pkg-config,
   qtbase,
   alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
   libcddb, libcdio, libcdio-paranoia, libcue, libjack2, libmad, libmms, libmodplug,
@@ -22,7 +22,7 @@ mkDerivation rec {
     sha256 = "0ny5w1agr9jaz5w3wyyxf1ygmzmd1sivaf97lcm4z4w6529520lz";
   };
 
-  nativeBuildInputs = [ gettext pkgconfig ];
+  nativeBuildInputs = [ gettext pkg-config ];
 
   buildInputs = [
     # Core dependencies

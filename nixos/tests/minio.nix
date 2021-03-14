@@ -20,7 +20,7 @@ let
     '';
 in {
   name = "minio";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ bachp ];
   };
 

@@ -1,14 +1,14 @@
-{ stdenv, R, libcxx, xvfb_run, util-linux, Cocoa, Foundation, gettext, gfortran }:
+{ stdenv, lib, R, libcxx, xvfb_run, util-linux, Cocoa, Foundation, gettext, gfortran }:
 
 { name, buildInputs ? [], requireX ? false, ... } @ attrs:
 
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R gettext] ++
-                stdenv.lib.optionals requireX [util-linux xvfb_run] ++
-                stdenv.lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
+                lib.optionals requireX [util-linux xvfb_run] ++
+                lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+    lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   configurePhase = ''
     runHook preConfigure

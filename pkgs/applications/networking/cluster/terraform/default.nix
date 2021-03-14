@@ -38,10 +38,11 @@ let
 
       subPackages = [ "." ];
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description =
           "Tool for building, changing, and versioning infrastructure";
         homepage = "https://www.terraform.io/";
+        changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
         license = licenses.mpl20;
         maintainers = with maintainers; [
           Chili-Man
@@ -116,7 +117,7 @@ let
         else
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
-            buildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeWrapper ];
 
             buildCommand = pluginDir + ''
               mkdir -p $out/bin/
@@ -135,18 +136,9 @@ let
     "recurseForDerivations"
   ];
 in rec {
-  terraform_0_11 = pluggable (generic {
-    version = "0.11.14";
-    sha256 = "1bzz5wy13gh8j47mxxp6ij6yh20xmxd9n5lidaln3mf1bil19dmc";
-    patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
-  });
-
-  terraform_0_11-full = terraform_0_11.full;
-
   terraform_0_12 = pluggable (generic {
-    version = "0.12.29";
-    sha256 = "18i7vkvnvfybwzhww8d84cyh93xfbwswcnwfrgvcny1qwm8rsaj8";
+    version = "0.12.30";
+    sha256 = "0mv2nsy2ygb1kgkw98xckihcdqxpzhdmks5p2gi2l7wb7lx51yz2";
     patches = [
         ./provider-path.patch
         (fetchpatch {
@@ -158,16 +150,16 @@ in rec {
   });
 
   terraform_0_13 = pluggable (generic {
-    version = "0.13.5";
-    sha256 = "1fnydzm5h65pdy2gkq403sllx05cvpldkdzdpcy124ywljb4x9d8";
+    version = "0.13.6";
+    sha256 = "04vas8i894ssfhncdvljdvmvj2qzfrcs20zcv71l1wmnnv9ibs6l";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
 
   terraform_0_14 = pluggable (generic {
-    version = "0.14.0";
-    sha256 = "0pbglnvb6cx8zrz791lfa67dmjqfsyysbxm2083b1lhlmbybi9ax";
-    vendorSha256 = "1gxhdj98np482jm76aj6zbbmkn7vfk8b878hzz59iywgbdr1r4m1";
+    version = "0.14.8";
+    sha256 = "0kpw8w28pfyr136z5d4pxw7g9ch6rk2lfwh3lwz25mngq1lljmn0";
+    vendorSha256 = "1d93aqkjdrvabkvix6h1qaxpjzv7w1wa7xa44czdnjs2lapx4smm";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
@@ -180,7 +172,7 @@ in rec {
     mainTf = writeText "main.tf" ''
       resource "random_id" "test" {}
     '';
-    terraform = terraform_0_11.withPlugins (p: [ p.random ]);
+    terraform = terraform_0_12.withPlugins (p: [ p.random ]);
     test =
       runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e

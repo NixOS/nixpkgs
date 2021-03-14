@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , makeWrapper
 , buildGoModule
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.10.1";
+  version = "1.12.1";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -20,45 +21,45 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dhh64mxfhk610wr7bpakzgmc4a4iyhfkkl3qhjp6a46g9iygana";
+    sha256 = "0ickzq2swhabxqcg32n1i99bam6ip7c0mhhncgvmw332w6pzgvlb";
   };
 
-  vendorSha256 = "07wv6yahx4yzr3h1x93x4r5rvw8wbfk836f04b4r9xjbnpq7lb2a";
+  vendorSha256 = "0i0dhipp1gdn0xdl4bpi13ksxf7dc9biz9riapm988bldcr5s1kr";
+
+  subPackages = [ "." ];
 
   doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
-  wrapperPath = stdenv.lib.makeBinPath (
+  wrapperPath = lib.makeBinPath (
     [
       git
       gnupg
       xclip
-    ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard
+    ] ++ lib.optional stdenv.isLinux wl-clipboard
   );
 
   postInstall = ''
+    HOME=$TMPDIR
     for shell in bash fish zsh; do
       $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
-  '' + stdenv.lib.optionalString passAlias ''
+  '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
 
   postFixup = ''
-    for bin in $out/bin/*; do
-      wrapProgram $bin \
-        --prefix PATH : "${wrapperPath}"
-    done
+    wrapProgram $out/bin/gopass --prefix PATH : "${wrapperPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of

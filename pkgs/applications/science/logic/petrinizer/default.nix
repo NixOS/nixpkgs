@@ -1,6 +1,6 @@
 { mkDerivation, callPackage, buildPackages
 , async, base, bytestring, containers, fetchFromGitLab, mtl
-, parallel-io, parsec, stdenv, stm, transformers
+, parallel-io, parsec, lib, stm, transformers
 }:
 let
   z3 = callPackage ./z3.nix { gomp = null; z3 = buildPackages.z3; };
@@ -26,6 +26,6 @@ mkDerivation rec {
     transformers
   ];
   description = "Safety and Liveness Analysis of Petri Nets with SMT solvers";
-  license = stdenv.lib.licenses.gpl3;
-  maintainers = with stdenv.lib.maintainers; [ raskin ];
+  license = lib.licenses.gpl3;
+  maintainers = with lib.maintainers; [ raskin ];
 }

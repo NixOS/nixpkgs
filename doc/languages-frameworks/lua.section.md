@@ -1,10 +1,4 @@
----
-title: Lua
-author: Matthieu Coudron
-date: 2019-02-05
----
-
-# User's Guide to Lua Infrastructure
+# User's Guide to Lua Infrastructure {#users-guide-to-lua-infrastructure}
 
 ## Using Lua
 
@@ -56,7 +50,7 @@ and install it in your profile with
 ```shell
 nix-env -iA nixpkgs.myLuaEnv
 ```
-The environment is is installed by referring to the attribute, and considering
+The environment is installed by referring to the attribute, and considering
 the `nixpkgs` channel was used.
 
 #### Lua environment defined in `/etc/nixos/configuration.nix`
@@ -135,7 +129,7 @@ the whitelist maintainers/scripts/luarocks-packages.csv and updated by running m
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
 The automation only goes so far though and some packages need to be customized.
 These customizations go in `pkgs/development/lua-modules/overrides.nix`.
-For instance if the rockspec defines `external_dependencies`, these need to be manually added in in its rockspec file then it won't work.
+For instance if the rockspec defines `external_dependencies`, these need to be manually added in its rockspec file then it won't work.
 
 You can try converting luarocks packages to nix packages with the command `nix-shell -p luarocks-nix` and then `luarocks nix PKG_NAME`.
 Nix rely on luarocks to install lua packages, basically it runs:
@@ -187,7 +181,7 @@ luaposix = buildLuarocksPackage {
   disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ bit32 lua std_normalize ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with maintainers; [ vyp lblasc ];
@@ -249,4 +243,3 @@ Following rules should be respected:
 
 * Make sure libraries build for all Lua interpreters.
 * Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.
-

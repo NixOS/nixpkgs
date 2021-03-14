@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, portaudio }:
+{ lib, stdenv, fetchurl, unzip, portaudio }:
 
 stdenv.mkDerivation rec {
   name = "espeak-1.48.04";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     makeFlags="PREFIX=$out DATADIR=$out/share/espeak-data"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compact open source software speech synthesizer";
     homepage = "http://espeak.sourceforge.net/";
     license = licenses.gpl3Plus;

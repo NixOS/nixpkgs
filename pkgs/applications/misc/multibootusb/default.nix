@@ -1,6 +1,6 @@
 { fetchFromGitHub, libxcb, mtools, p7zip, parted, procps, qemu, unzip, zip,
   coreutils, gnugrep, which, gnused, e2fsprogs, autoPatchelfHook, gptfdisk,
-  python36Packages, qt5, runtimeShell, stdenv, util-linux, wrapQtAppsHook }:
+  python36Packages, qt5, runtimeShell, lib, util-linux, wrapQtAppsHook }:
 
 # Note: Multibootusb is tricky to maintain. It relies on the
 # $PYTHONPATH variable containing some of their code, so that
@@ -98,17 +98,18 @@ python36Packages.buildPythonApplication rec {
       --prefix "PYTHONPATH" ":" "$out/lib/${python36Packages.python.libPrefix}/site-packages"
 
       # Add some runtime dependencies
-      --prefix "PATH" ":" "${stdenv.lib.makeBinPath runTimeDeps}"
+      --prefix "PATH" ":" "${lib.makeBinPath runTimeDeps}"
 
       # Finally, move to directory that contains data
       --run "cd $out/share/${pname}"
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiboot USB creator for Linux live disks";
     homepage = "http://multibootusb.org/";
     license = licenses.gpl2;
     maintainers = []; # Looking for a maintainer!
+    broken = true; # "name 'config' is not defined", added 2021-02-06
   };
 }

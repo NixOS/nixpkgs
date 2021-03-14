@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , jdk8
 , unzip
@@ -30,7 +30,7 @@ EOS
     chmod +x $out/bin/xmage
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Magic Another Game Engine";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];

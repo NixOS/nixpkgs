@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, perl, openssl, db, zlib, uwimap, html-tidy, pam}:
+{ lib, stdenv, fetchurl, fetchpatch, perl, openssl, db, zlib, uwimap, html-tidy, pam}:
 
 let
-  ssl = stdenv.lib.optionals uwimap.withSSL
+  ssl = lib.optionals uwimap.withSSL
     "-e 's/CCLIENT_SSL_ENABLE.*= false/CCLIENT_SSL_ENABLE=true/'";
 in
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www-uxsup.csx.cam.ac.uk/~dpc22/prayer/";
     description = "Yet another Webmail interface for IMAP servers on Unix systems written in C";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

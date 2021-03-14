@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -6,7 +6,7 @@
 , substituteAll
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Keyboard Plug";
     homepage = "https://github.com/elementary/switchboard-plug-keyboard";
     license = licenses.gpl2Plus;

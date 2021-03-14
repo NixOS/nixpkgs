@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ostree
 , rpm
@@ -6,7 +6,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , cargo
 , rustc
 , gobject-introspection
@@ -40,17 +40,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2020.8";
+  version = "2021.2";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1iyl6bjkj3drlwds579bh25xcmlwj9lkkbdmcdanq5b3shbmpyhi";
+    sha256 = "sha256-msu5LReTYupgoS6Rm2nrMz9jauciAD99hh+w8BhSYn4=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     which
     autoconf
     automake
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
     homepage = "https://coreos.github.io/rpm-ostree/";
     license = licenses.lgpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , alsaLib
 , audiofile
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
       After a sound is rendered, it can be played and then saved to a .WAV file.
     '';
     homepage = "https://sourceforge.net/projects/industrializer/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

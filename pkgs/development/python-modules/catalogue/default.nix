@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -21,11 +21,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny library for adding function or object registries";
     homepage = "https://github.com/explosion/catalogue";
     changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
   };
 }

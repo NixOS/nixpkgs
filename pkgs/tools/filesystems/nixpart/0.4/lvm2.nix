@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, util-linux, coreutils }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, systemd, util-linux, coreutils }:
 
 let
   v = "2.02.106";
@@ -28,11 +28,11 @@ stdenv.mkDerivation {
     "--disable-readline"
     "--enable-udev_rules"
     "--enable-udev_sync"
-    "--enable-pkgconfig"
+    "--enable-pkg-config"
     "--enable-applib"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];
 
   preConfigure =
@@ -68,9 +68,9 @@ stdenv.mkDerivation {
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

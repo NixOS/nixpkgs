@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, p7zip, win-virtio }:
+{ lib, stdenv, fetchurl, p7zip, win-virtio }:
 
 let
   src_usbdk_x86 = fetchurl {
@@ -60,7 +60,7 @@ stdenv.mkDerivation  {
     in
       (copy "amd64" "w8.1") + (copy "x86" "w8.1");
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Windows SPICE Drivers";
     homepage = "https://www.spice-space.org/";
     license = [ licenses.asl20 ]; # See https://github.com/vrozenfe/qxl-dod
