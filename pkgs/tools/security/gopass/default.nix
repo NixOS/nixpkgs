@@ -13,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.12.1";
+  version = "1.12.2";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -21,10 +21,10 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ickzq2swhabxqcg32n1i99bam6ip7c0mhhncgvmw332w6pzgvlb";
+    sha256 = "14ylvb7crx32h7inklvvxjc72jz9xq3dhzr5905i76kgx57h64w9";
   };
 
-  vendorSha256 = "0i0dhipp1gdn0xdl4bpi13ksxf7dc9biz9riapm988bldcr5s1kr";
+  vendorSha256 = "0gjzghrykdw1vp873yi7k8piz3gshzndm12jm6dxgl0ph4335a54";
 
   subPackages = [ "." ];
 
@@ -46,6 +46,8 @@ buildGoModule rec {
       $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
+    go run helpers/man/main.go > gopass.1
+    installManPage gopass.1
   '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';

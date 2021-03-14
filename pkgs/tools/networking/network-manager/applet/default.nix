@@ -11,7 +11,6 @@
 , polkit
 , modemmanager
 , libnma
-, mobile-broadband-provider-info
 , glib-networking
 , gsettings-desktop-schemas
 , libgudev
@@ -26,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.18.0";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12xiy8g8qk18jvxvn78mvq03zvzp06bww49na765jjw0rq541fyx";
+    sha256 = "0lsjkbv66hn7acl2pg9h6hz4b700zzv4cjwrwjvy7043blw0bcla";
   };
 
   mesonFlags = [
@@ -51,6 +50,7 @@ stdenv.mkDerivation rec {
     libgudev
     modemmanager
     jansson
+    glib
     glib-networking
     libappindicator-gtk3
     gnome3.adwaita-icon-theme
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/network-manager-applet/";
     description = "NetworkManager control applet for GNOME";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom ];
     platforms = platforms.linux;
   };
