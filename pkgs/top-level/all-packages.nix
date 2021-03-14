@@ -10295,6 +10295,8 @@ in
       graphviz = graphviz-nox;
     });
 
+  hashlink = callPackage ../development/compilers/hashlink { };
+
   inherit (callPackage ../development/compilers/haxe {
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   }) haxe_3_2 haxe_3_4;
