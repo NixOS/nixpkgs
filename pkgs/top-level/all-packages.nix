@@ -16046,6 +16046,8 @@ in
 
   mdctags = callPackage ../development/tools/misc/mdctags { };
 
+  md4c = callPackage ../development/libraries/md4c { };
+
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
