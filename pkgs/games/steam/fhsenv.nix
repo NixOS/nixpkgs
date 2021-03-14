@@ -143,10 +143,10 @@ in buildFHSUserEnv rec {
     vulkan-loader
     expat
     wayland
-    xlibs.libxcb
-    xlibs.libXdamage
-    xlibs.libxshmfence
-    xlibs.libXxf86vm
+    xorg.libxcb
+    xorg.libXdamage
+    xorg.libxshmfence
+    xorg.libXxf86vm
     llvm_11.lib
     libelf
   ] ++ (if (!nativeOnly) then [
