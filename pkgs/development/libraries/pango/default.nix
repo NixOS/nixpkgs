@@ -10,6 +10,7 @@ with lib;
 let
   pname = "pango";
   version = "1.47.0";
+  generateGtkDocs = !stdenv.isDarwin && x11Support;
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -19,7 +20,7 @@ in stdenv.mkDerivation rec {
   };
 
   # FIXME: docs fail on darwin
-  outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
+  outputs = [ "bin" "dev" "out" ] ++ optional generateGtkDocs "devdoc";
 
   nativeBuildInputs = [
     meson ninja
@@ -39,8 +40,8 @@ in stdenv.mkDerivation rec {
     optional x11Support libXft;
 
   mesonFlags = [
-    "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
-  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dgtk_doc=${if !generateGtkDocs then "false" else "true"}"
+  ] ++ lib.optionals (stdenv.isDarwin || !x11Support) [
     "-Dxft=disabled"  # only works with x11
   ];
 
