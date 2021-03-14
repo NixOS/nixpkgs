@@ -80,7 +80,7 @@ Most of the function arguments have reasonable default settings.
 
 You can specify license names:
 
-* `extraLicenses` is a list of of license names.
+* `extraLicenses` is a list of license names.
   You can get these names from repo.json or `querypackages.sh licenses`. The SDK
   license (`android-sdk-license`) is accepted for you if you set accept_license
   to true. If you are doing something like working with preview SDKs, you will
