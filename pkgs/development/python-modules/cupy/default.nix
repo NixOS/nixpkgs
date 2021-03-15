@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage
 , fetchPypi, isPy3k, linuxPackages
 , fastrlock, numpy, six, wheel, pytest, mock, setuptools
-, cudatoolkit, cudnn, nccl
+, cudatoolkit, cudnn, cutensor, nccl
 }:
 
 buildPythonPackage rec {
@@ -25,6 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cudatoolkit
     cudnn
+    cutensor
     linuxPackages.nvidia_x11
     nccl
     fastrlock
