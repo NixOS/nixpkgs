@@ -613,6 +613,11 @@ in mkLicense lset) ({
     fullName  = "University of Illinois/NCSA Open Source License";
   };
 
+  nlpl = {
+    spdxId = "NLPL";
+    fullName = "No Limit Public License";
+  };
+
   nposl3 = {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
