@@ -16762,6 +16762,8 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
+  grakn = callPackage ../servers/grakn/grakn.nix { };
+
   gerbera = callPackage ../servers/gerbera { };
 
   gobetween = callPackage ../servers/gobetween { };
