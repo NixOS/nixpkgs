@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "neko";
-  version = "2.2.0";
+  version = "v2-3-0";
 
   src = fetchurl {
-    url = "https://nekovm.org/media/neko-${version}-src.tar.gz";
-    sha256 = "1qv47zaa0vzhjlq5wb71627n7dbsxpc1gqpg0hsngjxnbnh1q46g";
+    url = "https://github.com/HaxeFoundation/neko/archive/${version}.tar.gz";
+    sha256 = "sha256-hQ5+MXva8k7WUu/v+JwcshOAyhnyDmiilshPa61O6ZU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config git ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A high-level dynamically typed programming language";
     homepage = "https://nekovm.org";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.marcweber ];
+    maintainers = [ maintainers.locallycompact ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
