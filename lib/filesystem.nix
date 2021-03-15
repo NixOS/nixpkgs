@@ -1,11 +1,19 @@
 { lib }:
 
 let
+  inherit (lib.attrsets)
+    mapAttrs
+    ;
+  inherit (lib.lists)
+    head
+    tail
+    ;
   inherit (lib.strings)
     hasPrefix
     ;
   inherit (lib.filesystem)
     pathHasPrefix
+    absolutePathComponentsBetween
     ;
 in
 
@@ -122,5 +130,50 @@ in
           else go (dirOf d) ++ [(baseNameOf d)];
       in
         go (/. + descendant);
+
+  /*
+    Memoize a function that takes a path argument.
+
+    Example:
+
+      analyzeTree = dir:
+        let g = memoizePathFunction (p: t: expensiveFunction p) (p: {}) dir;
+        in presentExpensiveData g;
+
+    Type:
+      memoizePathFunction :: (Path -> Type -> a) -> (Path -> a) -> Path -> (Path -> a)
+  */
+  memoizePathFunction =
+    # Function to memoize
+    f:
+    # What to return when a path does not exist, as a function of the path
+    missing:
+    # Filesystem location below which the returned function is defined. `/.` may be acceptable, but a path closer to the data of interest is better.
+    root:
+    let
+      makeTree = dir: type: {
+        value = f dir type;
+        children =
+          if type == "directory"
+            then mapAttrs
+                  (key: type: makeTree (dir + "/${key}") type)
+                  (builtins.readDir dir)
+            else {};
+      };
+
+      # This is where the memoization happens
+      tree = makeTree root (lib.pathType root);
+
+      lookup = notFound: list: subtree:
+        if list == []
+        then subtree.value
+        else if subtree.children ? ${head list}
+        then lookup notFound (tail list) subtree.children.${head list}
+        else notFound;
+    in
+      path: lookup
+        (missing path)
+        (absolutePathComponentsBetween root path)
+        tree;
 
 }

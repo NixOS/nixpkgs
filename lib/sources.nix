@@ -17,14 +17,19 @@ let
     concatMapStrings
     filter
     getAttr
+    head
     isString
     mapAttrs
     pathExists
     readFile
+    tail
+    ;
+  inherit (lib.strings)
     sanitizeDerivationName
     ;
   inherit (lib.filesystem)
     commonPath
+    memoizePathFunction
     pathHasPrefix
     pathIntersects
     absolutePathComponentsBetween
@@ -106,38 +111,6 @@ let
     };
   _filter = fn: src: cleanSourceWith { filter = fn; inherit src; };
 
-  # (private) sources.union : Source -> Source -> Source
-  # sources.union a b
-  #
-  # Combine the sources such that
-  #  - if a file occurs in `a` or `b`, it occurs in `union a b`.
-  #  - `"${union a b}"` refers to the location that corresponds to `"${a}"`
-  #
-  # When `b` wasn't originally in `a`, the latter property necessitates that
-  # `"${union a b}"` is a subpath of a store path, rather than a bare store path.
-  #
-  # When used in the `src` parameter, stdenv will copy the entire store path and
-  # change directory into the subpath that corresponds to the original root of
-  # `a`.
-  union = left: right:
-    let
-      l = toSourceAttributes (enforceSubpathInvariant left);
-      r = toSourceAttributes (enforceSubpathInvariant right);
-      root = commonPath l.origSrc r.origSrc;
-    in
-      fromSourceAttributes {
-        origSrc = root;
-        filter = path: type:
-          pathHasPrefix path l.origSrc # path leads up to l
-          || (pathHasPrefix l.origSrc path && l.filter path type)
-          || pathHasPrefix path r.origSrc # path leads up to r
-          || (pathHasPrefix r.origSrc path && r.filter path type);
-        name = "source";
-        subpath = absolutePathComponentsBetween root l.origSrc ++ l.subpath;
-      } // {
-        satisfiesSubpathInvariant = true;
-      };
-
   /*
     Produce a source that contains all the files in `base` and `extras` and
     points at the location of `base`. The returned source will be a reference
@@ -155,7 +128,29 @@ let
     base:
     # List of sources that will also be included in the store path.
     extras:
-      lib.foldl union base extras;
+    let
+      baseAttrs = toSourceAttributes base;
+      extrasAttrs = map toSourceAttributes extras;
+      root = lib.foldl' (a: b: commonPath a b.origSrc) baseAttrs.origSrc extrasAttrs;
+      sourcesIncludingPath =
+        memoizePathFunction
+          (path: type:
+            if path == root
+            then [ baseAttrs ] ++ extrasAttrs
+            else filter
+                  (attr: pathHasPrefix path attr.origSrc # path leads up to origSrc
+                    || (pathHasPrefix attr.origSrc path && attr.filter path type))
+                  (sourcesIncludingPath (dirOf path))
+          )
+          (path: throw "sources.extend: path does not exist: ${toString path}")
+          root;
+    in
+      fromSourceAttributes {
+        origSrc = root;
+        filter = path: type: sourcesIncludingPath path != [];
+        name = "source";
+        subpath = absolutePathComponentsBetween root base.origSrc ++ base.subpath;
+      };
 
   /*
     Almost the identity of sources.extend when it comes to the filter function;
@@ -210,9 +205,7 @@ let
     in
       valid (fromSourceAttributes (orig // {
         subpath = absolutePathComponentsBetween orig.origSrc path;
-       }) // {
-        satisfiesSubpathInvariant = orig.satisfiesSubpathInvariant or false;
-      });
+       }));
 
   /*
     Produces a source that starts at `path` and only contains nodes that are in `src`.
@@ -259,9 +252,7 @@ let
           origSrc = path;
           subpath = [];
         })
-      ) // {
-        satisfiesSubpathInvariant = orig.satisfiesSubpathInvariant or false;
-      };
+      );
 
   /*
     Change source such that the root is at the `parent` directory, but include
@@ -271,7 +262,7 @@ let
       sources.reparent :: Path -> SourceLike -> Source
 
   */
-  reparent = path: source: union (empty path) source;
+  reparent = path: source: extend (empty path) [source];
 
   /*
     Add logging to a source, for troubleshooting the filtering behavior.
@@ -292,9 +283,7 @@ let
             in
               builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
         }
-      ) // {
-        satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
-      };
+      );
 
   /*
     Change the name of a source; the part after the hash in the store path.
@@ -452,70 +441,6 @@ let
       outPath = root + "${concatMapStrings (x: "/${x}") subpath}";
     };
 
-  # (private) enforceSubpathInvariant : Source -> Source
-  #
-  # Enforces
-  #
-  #   forall source, a, b.
-  #   pathHasPrefix source.origSrc a -> source.filter (a + "/${b}") x -> source.filter a x
-  #
-  # which means filter only returns true for paths whose ancestry up to
-  # origSrc is also included.
-  #
-  # This reflects the behavior of filterSource, which is sensible, composes
-  # and provides good performance thanks to early cutoff.
-  #
-  # This invariant is useful in a function like sources.extend, which sometimes
-  # queries subpaths of excluded paths.
-  #
-  enforceSubpathInvariant = src:
-    # Avoid memoization if the source claims to satisfy. Helps with performance
-    # of nested sources.union calls, compared to plain `memoizeSource`.
-    if src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant
-    then src
-    else memoizeSource src;
-
-  # (private) memoizeSource : Source -> Source
-  #
-  # Does the work of enforcing the subpath invariant, while avoiding recomputation.
-  #
-  # See enforceSubpathInvariant
-  memoizeSource = src:
-    let
-      attrs = toSourceAttributes src;
-    in
-      if src?memoized && src.memoized
-      then src
-      else
-        fromSourceAttributes (attrs // {
-          filter = memoizeSourceFilter attrs.origSrc attrs.filter;
-        }) // {
-          memoized = true;
-          satisfiesSubpathInvariant = true;
-        };
-
-  # See memoizeSource
-  memoizeSourceFilter = origSrc: fn:
-    let
-      makeTree = dir:
-        mapAttrs (key: type:
-          let
-            path' = dir + "/${key}";
-          in
-            if fn path' type
-            then
-              if type == "directory"
-              then makeTree path'
-              else true
-            else false
-         ) (builtins.readDir dir);
-
-      # This is where the memoization happens
-      tree = makeTree origSrc;
-    in
-      path: _type:
-        attrByPath (absolutePathComponentsBetween origSrc path) false tree != false;
-
 in {
   inherit
     pathType
@@ -548,7 +473,7 @@ in {
     ;
 
   /*
-    Create a new source by deciding which files, directories, etc to keep.
+    Use a function to remove files, directories, etc from a source.
 
     By reducing the number of files that are available to a derivation, more
     evaluations will result in the same hash and therefore do not need to be
