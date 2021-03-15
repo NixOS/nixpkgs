@@ -21,7 +21,7 @@ let
 #https://github.com/NixOS/nixpkgs/pull/38300
 in with python.pkgs; buildPythonPackage rec {
   pname = "bepasty";
-  version = "0.5.0";
+  version = "1.0.0";
 
   propagatedBuildInputs = [
     flask
