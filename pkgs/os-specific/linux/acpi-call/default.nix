@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ raskin mic92 ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/nix-community/acpi_call";
     platforms = platforms.linux;
     description = "A module allowing arbitrary ACPI calls; use case: hybrid video";
+    license = licenses.gpl3Plus;
   };
 }
