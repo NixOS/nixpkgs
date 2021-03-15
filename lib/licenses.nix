@@ -596,6 +596,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName  = "University of Illinois/NCSA Open Source License";
   };
 
+  nlpl = spdx {
+    spdxId = "NLPL";
+    fullName = "No Limit Public License";
+  };
+
   nposl3 = spdx {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
