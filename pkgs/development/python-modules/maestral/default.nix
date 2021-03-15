@@ -3,25 +3,23 @@
 , fetchFromGitHub
 , pythonOlder
 , python
-, alembic, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, sqlalchemy, survey, watchdog
+, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
 , importlib-metadata
-, importlib-resources
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.4.2";
+  version = "1.4.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "sha256-ibAYuaPSty275/aQ0DibyWe2LjPoEpdWgElTnR+MEs8=";
+    sha256 = "sha256-3GleQNkJrGIkFqOL2Dq0jTpgw7ts9ecpovKbyh3OrEI=";
   };
 
   propagatedBuildInputs = [
-    alembic
     click
     desktop-notifier
     dropbox
@@ -34,13 +32,10 @@ buildPythonPackage rec {
     requests
     setuptools
     sdnotify
-    sqlalchemy
     survey
     watchdog
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
   makeWrapperArgs = [
