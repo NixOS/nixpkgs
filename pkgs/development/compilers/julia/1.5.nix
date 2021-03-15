@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub
+{ lib, stdenv, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, cmake
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -28,10 +27,10 @@ stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
 
-   src = fetchzip {
-     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-     sha256 = src_sha256;
-   };
+  src = fetchzip {
+    url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
+    sha256 = src_sha256;
+  };
 
   patches = [
     ./use-system-utf8proc-julia-1.3.patch
