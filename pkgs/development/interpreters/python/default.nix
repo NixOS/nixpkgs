@@ -73,13 +73,14 @@ with pkgs;
           optionalExtensions = cond: as: if cond then as else [];
           python2Extension = import ../../../top-level/python2-packages.nix;
           extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ [ overrides ]);
+          aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ../../../top-level/python-aliases.nix lib self super);
         in lib.makeScopeWithSplicing
           pkgs.splicePackages
           pkgs.newScope
           otherSplices
           keep
           extra
-          (lib.extends extensions pythonPackagesFun))
+          (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
         {
           overrides = packageOverrides;
         };
