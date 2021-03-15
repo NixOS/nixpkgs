@@ -28,6 +28,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A python interface to the mpv media player";
     homepage = "https://github.com/jaseg/python-mpv";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
   };
 }
