@@ -8860,6 +8860,8 @@ in {
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
+  xmldiff = callPackage ../development/python-modules/xmldiff { };
+
   xmljson = callPackage ../development/python-modules/xmljson { };
 
   xmlschema = callPackage ../development/python-modules/xmlschema { };
