@@ -1,7 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3 python3Packages.requests
 
-import hashlib
 import os
 import re
 import requests
