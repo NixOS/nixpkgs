@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://imapsync.lamiral.info/";
     description = "Mail folder synchronizer between IMAP servers";
-    license = licenses.gpl2Plus;
+    license = licenses.nlpl;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };
