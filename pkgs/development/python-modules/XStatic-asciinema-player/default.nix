@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "XStatic-asciinema-player";
-  version = "1.0.0";
+  version = "2.6.1.1";
 
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb11ad0d43deff3a1c3690c74f0c731cff5b862c73339df2edd91133e1496fbc";
+    sha256 = "c80e960b4ebb4adf360e6e92b5a08a756ad106198d7a6b307ad20ef22a1d7dcc";
   };
 
   doCheck = false; # pypi version doesn't include tests
