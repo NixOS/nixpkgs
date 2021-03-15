@@ -2200,6 +2200,8 @@ in {
 
   evernote = callPackage ../development/python-modules/evernote { };
 
+  evohome-async = callPackage ../development/python-modules/evohome-async { };
+
   ewmh = callPackage ../development/python-modules/ewmh { };
 
   exdown = callPackage ../development/python-modules/exdown { };
@@ -3269,6 +3271,8 @@ in {
   };
 
   imutils = callPackage ../development/python-modules/imutils { };
+
+  incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
 

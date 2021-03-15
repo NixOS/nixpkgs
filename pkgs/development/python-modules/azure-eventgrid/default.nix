@@ -3,23 +3,25 @@
 , fetchPypi
 , msrest
 , azure-common
+, azure-core
 , msrestazure
 }:
 
 buildPythonPackage rec {
   pname = "azure-eventgrid";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c82c4bf6ea59aeec69ce8f95f1b6a4edc6d733874aeb056669c9d2806168c86e";
+    sha256 = "bdaeead61458e90f3e36e30692689da9f9f67bbef075a526f446c2d0228b0cd1";
   };
 
   propagatedBuildInputs = [
+    azure-common
+    azure-core
     msrest
     msrestazure
-    azure-common
   ];
 
   # has no tests
