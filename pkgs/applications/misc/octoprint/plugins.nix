@@ -278,6 +278,27 @@ in {
     };
   };
 
+  telegram = buildPlugin rec {
+    pname = "Telegram";
+    version = "1.6.4";
+
+    src = fetchFromGitHub {
+      owner = "fabianonline";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "14d9f9a5m1prcikd7y26qks6c2ls6qq4b97amn24q5a8k5hbgl94";
+    };
+
+    propagatedBuildInputs = with super; [ pillow ];
+
+    meta = with lib; {
+      description = "Plugin to send status messages and receive commands via Telegram messenger.";
+      homepage = "https://github.com/fabianonline/OctoPrint-Telegram";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
+    };
+  };
+
   themeify = buildPlugin rec {
     pname = "Themeify";
     version = "1.2.2";
