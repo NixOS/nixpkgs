@@ -1,4 +1,4 @@
-{lib, stdenv, makeWrapper, fetchFromGitHub, perl, openssl, perlPackages }:
+{lib, stdenv, makeWrapper, fetchFromGitHub, perl, openssl, perlPackages, procps }:
 
 stdenv.mkDerivation rec {
   pname = "imapsync";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     DataUniqid JSONWebToken TestMockGuard LWP CryptOpenSSLRSA
     LWPProtocolHttps Readonly TestPod TestMockObject ParseRecDescent
     IOSocketInet6 NTLM
-  ];
+  ] ++ [ procps ];
 
   meta = with lib; {
     homepage = "https://imapsync.lamiral.info/";
