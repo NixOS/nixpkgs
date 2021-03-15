@@ -68,15 +68,16 @@
 
 Security fixes are submitted in the same way as other changes and thus the same guidelines apply.
 
-If the security fix comes in the form of a patch and a CVE is available, then the name of the patch should be the CVE identifier, so e.g. `CVE-2019-13636.patch` in the case of a patch that is included in the Nixpkgs tree. If a patch is fetched the name needs to be set as well, e.g.:
-
-```nix
-(fetchpatch {
-  name = "CVE-2019-11068.patch";
-  url = "https://gitlab.gnome.org/GNOME/libxslt/commit/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch";
-  sha256 = "0pkpb4837km15zgg6h57bncp66d5lwrlvkr73h0lanywq7zrwhj8";
-})
-```
+- If a new version fixing the vulnerability has been released, update the package;
+- If the security fix comes in the form of a patch and a CVE is available, then add the patch to the Nixpkgs tree, and apply it to the package.
+  The name of the patch should be the CVE identifier, so e.g. `CVE-2019-13636.patch`; If a patch is fetched the name needs to be set as well, e.g.:
+  ```nix
+  (fetchpatch {
+    name = "CVE-2019-11068.patch";
+    url = "https://gitlab.gnome.org/GNOME/libxslt/commit/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch";
+    sha256 = "0pkpb4837km15zgg6h57bncp66d5lwrlvkr73h0lanywq7zrwhj8";
+  })
+  ```
 
 If a security fix applies to both master and a stable release then, similar to regular changes, they are preferably delivered via master first and cherry-picked to the release branch.
 
