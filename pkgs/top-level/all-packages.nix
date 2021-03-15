@@ -21906,6 +21906,8 @@ in
     inherit (gnome2) libgnomeui GConf;
   };
 
+  corrscope = libsForQt5.callPackage ../applications/video/corrscope { };
+
   csa = callPackage ../applications/audio/csa { };
 
   csound = callPackage ../applications/audio/csound {
