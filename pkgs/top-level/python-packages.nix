@@ -1589,6 +1589,7 @@ in {
     cudatoolkit = pkgs.cudatoolkit_10_0;
     cudnn = pkgs.cudnn_cudatoolkit_10_0;
     nccl = pkgs.nccl_cudatoolkit_10;
+    cutensor = pkgs.cutensor_cudatoolkit_10;
   };
 
   curio = callPackage ../development/python-modules/curio { };
