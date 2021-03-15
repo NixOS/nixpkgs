@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.3.00.30857";
+  version = "1.4.00.4855";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "06r48h1fr2si2g5ng8hsnbcmr70iapnafj21v5bzrzzrigzb2n2h";
+    sha256 = "1g0lsydz4l536qf890drdz6g86xb0sm3326hz3ymj9pi8vvbs7d9";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -38,9 +38,13 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg-utils}/bin")
+    gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
+    gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{opt,bin}
 
     mv share/teams $out/opt/
@@ -54,6 +58,8 @@ stdenv.mkDerivation rec {
     # Work-around screen sharing bug
     # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
     rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
+
+    runHook postInstall
   '';
 
   dontAutoPatchelf = true;
