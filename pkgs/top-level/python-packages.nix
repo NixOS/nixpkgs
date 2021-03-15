@@ -7662,7 +7662,7 @@ in {
 
   sly = callPackage ../development/python-modules/sly { };
 
-  smart_open = callPackage ../development/python-modules/smart_open { };
+  smart-open = callPackage ../development/python-modules/smart-open { };
 
   smartypants = callPackage ../development/python-modules/smartypants { };
 

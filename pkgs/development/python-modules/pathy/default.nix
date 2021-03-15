@@ -4,7 +4,7 @@
 , pytestCheckHook
 , typer
 , dataclasses
-, smart_open
+, smart-open
 , pytest
 , mock
 , google-cloud-storage
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-nb8my/5rkc7thuHnXZHe1Hg8j+sLBlYyJcLHWrrKZ5M=";
   };
 
-  propagatedBuildInputs = [ smart_open typer google-cloud-storage ];
+  propagatedBuildInputs = [ smart-open typer google-cloud-storage ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
