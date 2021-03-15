@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, ronn, libpng, uthash
-, xorg }:
+{ lib, stdenv, coreutils, fetchFromGitHub, autoconf, automake, pkg-config, procps, ronn,
+libpng, uthash , which, xnee, xorg, python3Packages }:
 
 stdenv.mkDerivation rec {
   version = "1.6.0";
@@ -34,6 +34,18 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
+
+  checkInputs = [
+    coreutils
+    procps
+    python3Packages.xvfbwrapper
+    which
+    xnee
+    xorg.xeyes
+    xorg.xprop
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/sagb/alttab";
