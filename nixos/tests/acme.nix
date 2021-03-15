@@ -334,6 +334,21 @@ in import ./make-test-python.nix ({ lib, ... }: {
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
 
+      with subtest("Certificates and accounts have safe + valid permissions"):
+          group = "${nodes.webserver.config.security.acme.certs."a.example.test".group}"
+          webserver.succeed(
+              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+          )
+          webserver.succeed(
+              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/.lego/a.example.test/**/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+          )
+          webserver.succeed(
+              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test | tee /dev/stderr | grep '750 acme {group}' | wc -l) -eq 1"
+          )
+          webserver.succeed(
+              f"test $(find /var/lib/acme/accounts -type f -exec stat -L -c \"%a %U %G\" {{}} \\; | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
+          )
+
       with subtest("Can generate valid selfsigned certs"):
           webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
           webserver.succeed("systemctl start acme-selfsigned-a.example.test.service")
