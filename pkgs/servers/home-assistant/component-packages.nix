@@ -236,7 +236,7 @@
     "etherscan" = ps: with ps; [ ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [ ]; # missing inputs: lakeside
     "everlights" = ps: with ps; [ pyeverlights ];
-    "evohome" = ps: with ps; [ ]; # missing inputs: evohome-async
+    "evohome" = ps: with ps; [ evohome-async ];
     "ezviz" = ps: with ps; [ ]; # missing inputs: pyezviz
     "faa_delays" = ps: with ps; [ faadelays ];
     "facebook" = ps: with ps; [ ];
