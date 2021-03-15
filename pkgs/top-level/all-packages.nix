@@ -22852,10 +22852,6 @@ in
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
-  jbidwatcher = callPackage ../applications/misc/jbidwatcher {
-    java = if stdenv.isLinux then jre else jdk;
-  };
-
   qrcodegen = callPackage ../development/libraries/qrcodegen { };
 
   qrencode = callPackage ../development/libraries/qrencode { };
