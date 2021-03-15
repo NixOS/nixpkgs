@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "197sl23irn6s9pd54rxj5vcp5y8dv65jb9yfqgr2g56cxg7q6k7i";
   };
 
+  patches = [
+    ./uutils-mkdirp.patch
+  ];
+
   nativeBuildInputs = [ m4 perl ];
   buildInputs = [ m4 ];
 
@@ -30,14 +34,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Make the Autotest test suite run in parallel.
-  preCheck =''
+  preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/autoconf/";
     description = "Part of the GNU Build System";
-
     longDescription = ''
       GNU Autoconf is an extensible package of M4 macros that produce
       shell scripts to automatically configure software source code
@@ -47,9 +50,8 @@ stdenv.mkDerivation rec {
       file that lists the operating system features that the package
       can use, in the form of M4 macro calls.
     '';
-
-    license = lib.licenses.gpl3Plus;
-
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

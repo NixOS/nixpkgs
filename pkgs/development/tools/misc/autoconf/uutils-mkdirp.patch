@@ -1,0 +1,12 @@
+--- a/lib/autoconf/programs.m4
++++ b/lib/autoconf/programs.m4
+@@ -672,7 +672,8 @@
+ 	   case `"$as_dir$ac_prog$ac_exec_ext" --version 2>&1` in #(
+ 	     'mkdir ('*'coreutils) '* | \
+ 	     'BusyBox '* | \
+-	     'mkdir (fileutils) '4.1*)
++	     'mkdir (fileutils) '4.1* | \
++		 'mkdir 0.0.'*)
+ 	       ac_cv_path_mkdir=$as_dir$ac_prog$ac_exec_ext
+ 	       break 3;;
+ 	   esac
