@@ -13,7 +13,6 @@
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enableWideVine ? false
-, enableVaapi ? false # Disabled by default due to unofficial support
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
@@ -167,8 +166,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
-      ${lib.optionalString enableVaapi "--add-flags --enable-accelerated-video-decode"}
+      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

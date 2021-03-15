@@ -26,11 +26,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.12.0";
+  version = "5.13.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-N3/y1kSWyM36LpwbimftJ67h4zfk2j9hcvUi/pQL3YU=";
+    sha256 = "sha256-GDFAZxZmkio7e7kVjhYqhNdhXIlUPJF0iMWVl0uWVCM=";
   };
 
   patches = [
