@@ -52,6 +52,25 @@ in {
     };
   };
 
+  costestimation = buildPlugin rec {
+    pname = "CostEstimation";
+    version = "3.2.0";
+
+    src = fetchFromGitHub {
+      owner = "OllisGit";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "1j476jcw7gh8zqqdc5vddwv5wpjns7cd1hhpn7m9fxq3d5bi077w";
+    };
+
+    meta = with lib; {
+      description = "Plugin to display the estimated print cost for the loaded model.";
+      homepage = "https://github.com/malnvenshorn/OctoPrint-CostEstimation";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
+    };
+  };
+
   curaenginelegacy = buildPlugin rec {
     pname = "CuraEngineLegacy";
     version = "1.1.1";
