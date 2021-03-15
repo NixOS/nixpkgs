@@ -17644,6 +17644,8 @@ in
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
+  glpng = callPackage ../development/libraries/glpng { };
+
   gsignond = callPackage ../development/libraries/gsignond {
     plugins = [];
   };
