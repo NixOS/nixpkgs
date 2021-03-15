@@ -23,7 +23,6 @@
 , pciutils
 , procps
 , util-linux
-, qttools
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -107,7 +106,7 @@ in stdenv.mkDerivation rec {
       --run "cd $out/opt/zoom" \
       --unset QML2_IMPORT_PATH \
       --unset QT_PLUGIN_PATH \
-      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps qttools.dev util-linux ]} \
+      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     # Backwards compatiblity: we used to call it zoom-us
