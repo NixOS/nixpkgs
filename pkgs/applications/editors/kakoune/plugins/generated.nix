@@ -31,12 +31,12 @@ let
     pname = "connect-kak";
     version = "2021-02-24";
     src = fetchFromGitHub {
-      owner = "alexherbo2";
+      owner = "kakounedotcom";
       repo = "connect.kak";
       rev = "a536605a208149eed58986bda54f3dda215dfe61";
       sha256 = "1svw64zk28sn271vjyzvq21zaln13vnx59rxnxah6adq8n5nkr4a";
     };
-    meta.homepage = "https://github.com/alexherbo2/connect.kak/";
+    meta.homepage = "https://github.com/kakounedotcom/connect.kak/";
   };
 
   fzf-kak = buildKakounePluginFrom2Nix {
@@ -163,12 +163,12 @@ let
     pname = "prelude-kak";
     version = "2021-02-24";
     src = fetchFromGitHub {
-      owner = "alexherbo2";
+      owner = "kakounedotcom";
       repo = "prelude.kak";
       rev = "5dbdc020c546032885c1fdb463e366cc89fc15ad";
       sha256 = "1pncr8azqvl2z9yvzhc68p1s9fld8cvak8yz88zgrp5ypx2cxl8c";
     };
-    meta.homepage = "https://github.com/alexherbo2/prelude.kak/";
+    meta.homepage = "https://github.com/kakounedotcom/prelude.kak/";
   };
 
   replace-mode-kak = buildKakounePluginFrom2Nix {
