@@ -2155,7 +2155,7 @@ in
 
   long-shebang = callPackage ../misc/long-shebang {};
 
-  lowdown = callPackage ../tools/typesetting/lowdown { };
+  inherit (callPackage ../tools/typesetting/lowdown { }) lowdown lowdown_0_8;
 
   numatop = callPackage ../os-specific/linux/numatop { };
 

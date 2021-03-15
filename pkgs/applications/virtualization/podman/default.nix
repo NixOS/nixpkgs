@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "2.1.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "0cy842wlyasxlxnwxkwhwgj148s30kfxnhgxa6ar26fly432aa68";
+    sha256 = "sha256-+z28Z0KvaJa32+eTGFsNX8g/WVd3BohKoBnNPU/kpWM=";
   };
 
   vendorSha256 = null;
@@ -55,8 +55,9 @@ buildGoModule rec {
     mv bin/{podman-remote,podman}
   '' + ''
     install -Dm555 bin/podman $out/bin/podman
-    installShellCompletion --bash completions/bash/podman
-    installShellCompletion --zsh completions/zsh/_podman
+    installShellCompletion --bash completions/bash/*
+    installShellCompletion --fish completions/fish/*
+    installShellCompletion --zsh completions/zsh/*
     MANDIR=$man/share/man make install.man-nobuild
   '';
 
@@ -65,6 +66,7 @@ buildGoModule rec {
   meta = with stdenv.lib; {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
+    changelog = "https://github.com/containers/podman/blob/v${version}/changelog.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;
