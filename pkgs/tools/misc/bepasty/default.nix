@@ -40,7 +40,7 @@ in with python.pkgs; buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y3smw9620w2ia4zfsl2svb9j7mkfgc8z1bzjffyk1w5vryhwikh";
+    sha256 = "sha256-rgb/xFYvZ44JUGw+RYfJVfg6stE/y/YjY6XSwO32Qkc=";
   };
 
   checkInputs = [
