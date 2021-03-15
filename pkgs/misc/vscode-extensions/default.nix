@@ -48,6 +48,18 @@ let
         };
       };
 
+      antfu.icons-carbon = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "icons-carbon";
+          publisher = "antfu";
+          version = "0.2.2";
+          sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       ms-python.vscode-pylance = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-pylance";
