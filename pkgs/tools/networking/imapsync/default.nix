@@ -1,12 +1,13 @@
-{lib, stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
+{lib, stdenv, makeWrapper, fetchFromGitHub, perl, openssl, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "imapsync";
   version = "1.727";
-
-  src = fetchurl {
-    url = "https://releases.pagure.org/imapsync/imapsync-${version}.tgz";
-    sha256 = "1axacjw2wyaphczfw3kfmi5cl83fyr8nb207nks40fxkbs8q5dlr";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "0ckd968aimrxr6w7p6y67xspjbc9yijv7s7pc2yaricxxg26pg3q";
   };
 
   patchPhase = ''
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://www.linux-france.org/prj/imapsync/";
+    homepage = "https://imapsync.lamiral.info/";
     description = "Mail folder synchronizer between IMAP servers";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
