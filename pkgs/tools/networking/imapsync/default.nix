@@ -2,13 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "imapsync";
-  version = "1.727";
+  version = "2.140";
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0ckd968aimrxr6w7p6y67xspjbc9yijv7s7pc2yaricxxg26pg3q";
+    sha256 = "1k4rf582c3434yxj9brsjz0awakd84xwikghyq0h54darqwfm23j";
   };
+
+  patches = [
+    ./patch-makefile.patch
+    ./patch-prerequisites.patch
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -18,10 +23,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = with perlPackages; [ perl openssl MailIMAPClient TermReadKey
+  buildInputs = with perlPackages; [ perl openssl CGI EncodeIMAPUTF7 FileTail ModuleScanDeps PackageStashXS MailIMAPClient TermReadKey
     IOSocketSSL DigestHMAC URI FileCopyRecursive IOTee UnicodeString
     DataUniqid JSONWebToken TestMockGuard LWP CryptOpenSSLRSA
-    LWPProtocolHttps Readonly TestPod TestMockObject ParseRecDescent
+    LWPProtocolHttps Readonly RegexpCommon SysMemInfo TestDeep TestFatal TestPod TestRequires TestMockObject ParseRecDescent
     IOSocketInet6 NTLM
   ] ++ [ procps ];
 

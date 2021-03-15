@@ -1,0 +1,26 @@
+diff --git a/INSTALL.d/prerequisites_imapsync b/INSTALL.d/prerequisites_imapsync
+index bbac1f4..46c72b8 100755
+--- a/INSTALL.d/prerequisites_imapsync
++++ b/INSTALL.d/prerequisites_imapsync
+@@ -3,7 +3,6 @@
+ # $Id: prerequisites_imapsync,v 1.35 2019/11/27 15:58:46 gilles Exp gilles $
+ 
+ MODULES_MANDATORY='
+-App::cpanminus
+ Authen::NTLM
+ CGI
+ Compress::Zlib
+@@ -36,7 +35,6 @@ Module::ScanDeps
+ Net::SSLeay
+ Package::Stash
+ Package::Stash::XS
+-PAR::Packer
+ Parse::RecDescent
+ Pod::Usage
+ Readonly
+@@ -285,5 +283,4 @@ then
+         search_modules_any "$@"
+ fi
+ 
+-test_cpanm
+ exit $EXIT
