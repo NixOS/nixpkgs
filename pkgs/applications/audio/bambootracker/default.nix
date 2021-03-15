@@ -62,6 +62,14 @@ mkDerivation rec {
 
   postConfigure = "make qmake_all";
 
+  # installs app bundle on darwin, re-extract the binary
+  # wrapQtAppsHook fails to wrap mach-o binaries, manually call wrapper (https://github.com/NixOS/nixpkgs/issues/102044)
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv $out/bin/BambooTracker{.app/Contents/MacOS/BambooTracker,}
+    rm -r $out/bin/BambooTracker.app
+    wrapQtApp $out/bin/BambooTracker
+  '';
+
   meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     homepage = "https://rerrahkr.github.io/BambooTracker";
