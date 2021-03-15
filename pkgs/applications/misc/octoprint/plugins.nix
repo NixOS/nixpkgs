@@ -13,6 +13,25 @@ self: super: let
 in {
   inherit buildPlugin;
 
+  m86motorsoff = buildPlugin rec {
+    pname = "M84MotorsOff";
+    version = "0.1.0";
+
+    src = fetchFromGitHub {
+      owner = "ntoff";
+      repo = "Octoprint-M84MotOff";
+      rev = "v${version}";
+      sha256 = "1w6h4hia286lbz2gy33rslq02iypx067yqn413xcipb07ivhvdq7";
+    };
+
+    meta = with lib; {
+      description = "Changes the \"Motors off\" button in octoprint's control tab to issue an M84 command to allow compatibility with Repetier firmware Resources";
+      homepage = "https://github.com/ntoff/OctoPrint-M84MotOff";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
+    };
+  };
+
   abl-expert = buildPlugin rec {
     pname = "ABL_Expert";
     version = "0.6";
