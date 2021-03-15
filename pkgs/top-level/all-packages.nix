@@ -5695,7 +5695,7 @@ in
 
   lego = callPackage ../tools/admin/lego { };
 
-  leocad = callPackage ../applications/graphics/leocad { };
+  leocad = libsForQt5.callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
 
