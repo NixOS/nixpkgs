@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     buildPhase = ''
         graknFile=./${graknDir}/grakn
         # replace the paths of the grakn boot script with the nix paths
-        sed -i "20s#^JAVA_BIN=java\$#JAVA_BIN=${openjdk}/bin/java#" $graknFile
-        sed -i "85s#java#${openjdk}/bin/java#" $graknFile
-        sed -i "54s#java#${openjdk}/bin/java#" $graknFile
-        sed -i "79s#java#${openjdk}/bin/java#" $graknFile
+        sed -i "20s#^JAVA_BIN=java\$#JAVA_BIN=${openjdk}/bin/java#" ${graknDir}/grakn
+        sed -i "85s#java#${openjdk}/bin/java#" ${graknDir}/grakn
+        sed -i "54s#java#${openjdk}/bin/java#" ${graknDir}/grakn
+        sed -i "79s#java#${openjdk}/bin/java#" ${graknDir}/grakn
         '';
     installPhase = ''
         mkdir $out
