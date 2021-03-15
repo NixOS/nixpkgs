@@ -1029,4 +1029,7 @@ in
       cfg.package.rake
     ];
   };
+
+  meta.doc = ./discourse.xml;
+  meta.maintainers = [ lib.maintainers.talyz ];
 }
