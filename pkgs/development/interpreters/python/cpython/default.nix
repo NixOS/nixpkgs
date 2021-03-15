@@ -330,6 +330,7 @@ in with passthru; stdenv.mkDerivation {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
+      (placeholder "out")
     ] ++ optionals tzdataSupport [
       tzdata
     ]);
