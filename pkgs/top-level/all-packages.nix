@@ -28281,6 +28281,8 @@ in
 
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
+  professor = callPackage ../applications/science/physics/professor { };
+
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
 
   sherpa = callPackage ../applications/science/physics/sherpa {};
