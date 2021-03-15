@@ -90,6 +90,25 @@ in {
     };
   };
 
+  displayprogress = buildPlugin rec {
+    pname = "DisplayProgress";
+    version = "0.1.3";
+
+    src = fetchFromGitHub {
+      owner = "OctoPrint";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "080prvfwggl4vkzyi369vxh1n8231hrl8a44f399laqah3dn5qw4";
+    };
+
+    meta = with lib; {
+      description = "Displays the job progress on the printer's display";
+      homepage = "https://github.com/OctoPrint/OctoPrint-DisplayProgress";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
+    };
+  };
+
   displaylayerprogress = buildPlugin rec {
     pname = "OctoPrint-DisplayLayerProgress";
     version = "1.24.0";
