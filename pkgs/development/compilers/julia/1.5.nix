@@ -19,8 +19,8 @@ with lib;
 let
   majorVersion = "1";
   minorVersion = "5";
-  maintenanceVersion = "3";
-  src_sha256 = "sha256:0jds8lrhk4hfdv7dg5p2ibzin9ivga7wrx7zwcmz6dqp3x792n1i";
+  maintenanceVersion = "4";
+  src_sha256 = "1ba1v7hakgj95xvhyff0zcp0574qv6vailjl48wl1f8w5k54lsw2";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
