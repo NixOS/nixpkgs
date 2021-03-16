@@ -24572,6 +24572,8 @@ in
     wxGTK = wxGTK30-gtk3;
   };
 
+  pdfslicer = callPackage ../applications/misc/pdfslicer { };
+
   pekwm = callPackage ../applications/window-managers/pekwm { };
 
   pencil = callPackage ../applications/graphics/pencil {
