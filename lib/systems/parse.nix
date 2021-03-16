@@ -337,17 +337,9 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
-        { assertion = platform: platform.system != "powerpc64-linux";
-          message = ''
-            The "gnu" ABI is ambiguous on big-endian 64-bit PPC. Use "elfv1" or "elfv2" instead.
-          '';
-        }
       ];
     };
     gnuabi64     = { abi = "64"; };
-
-    elfv1        = { abi = "elfv1"; };
-    elfv2        = { abi = "elfv2"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };
@@ -452,7 +444,6 @@ rec {
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
-          else if cpu == "powerpc64" then abis.elfv2
           else abis.gnu
         else                     abis.unknown;
     };
