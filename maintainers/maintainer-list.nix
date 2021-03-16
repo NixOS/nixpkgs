@@ -2405,6 +2405,12 @@
     githubId = 1708810;
     name = "Daniel Vianna";
   };
+  dnr = {
+    email = "dnr@dnr.im";
+    github = "dnr";
+    githubId = 466723;
+    name = "David Reiss";
+  };
   dochang = {
     email = "dochang@gmail.com";
     github = "dochang";
