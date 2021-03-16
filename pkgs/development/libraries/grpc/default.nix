@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib c-ares c-ares.cmake-config re2 openssl protobuf gflags ]
+  propagatedBuildInputs = [ c-ares re2 zlib ];
+  buildInputs = [ c-ares.cmake-config openssl protobuf gflags ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags =
