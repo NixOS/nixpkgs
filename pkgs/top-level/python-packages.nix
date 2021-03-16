@@ -6438,6 +6438,8 @@ in {
 
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
+  pytest-error-for-skips = callPackage ../development/python-modules/pytest-error-for-skips { };
+
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
 
   pytest-factoryboy = callPackage ../development/python-modules/pytest-factoryboy { };

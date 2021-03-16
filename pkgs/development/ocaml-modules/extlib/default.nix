@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, cppo, minimal ? true }:
+{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, cppo, minimal ? true }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
 
@@ -9,6 +9,13 @@ stdenv.mkDerivation {
     url = "http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.7.tar.gz";
     sha256 = "1sxmzc1mx3kg62j8kbk0dxkx8mkf1rn70h542cjzrziflznap0s1";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ygrek/ocaml-extlib/pull/55.patch";
+      sha256 = "0mj3xii56rh8j8brdyv5d06rbs6jjjcy4ib9chafkq3f3sbq795p";
+    })
+  ];
 
   buildInputs = [ ocaml findlib cppo ];
 
