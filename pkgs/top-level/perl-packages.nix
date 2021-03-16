@@ -1843,7 +1843,7 @@ let
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-LDAP-1.016.tar.gz";
       sha256 = "0cm399vxqqf05cjgs1j5v3sk4qc6nmws5nfhf52qvpbwc4m82mq8";
     };
-    propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessorFast ];
+    propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessor ];
     buildInputs = [ TestMockObject TestException NetLDAPServerTest ];
     meta = {
       description= "Authentication from an LDAP Directory";
