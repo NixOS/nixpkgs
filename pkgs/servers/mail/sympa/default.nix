@@ -56,7 +56,7 @@ let
     IOSocketSSL
     MailDKIM
     NetDNS
-    NetLDAP
+    perlldap
     NetSMTP
     SOAPLite
   ]);

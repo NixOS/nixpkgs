@@ -1843,7 +1843,7 @@ let
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-LDAP-1.016.tar.gz";
       sha256 = "0cm399vxqqf05cjgs1j5v3sk4qc6nmws5nfhf52qvpbwc4m82mq8";
     };
-    propagatedBuildInputs = [ NetLDAP CatalystPluginAuthentication ClassAccessorFast ];
+    propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessorFast ];
     buildInputs = [ TestMockObject TestException NetLDAPServerTest ];
     meta = {
       description= "Authentication from an LDAP Directory";
@@ -15365,7 +15365,7 @@ let
       url = "mirror://cpan/authors/id/A/AA/AAR/Net-LDAP-Server-0.43.tar.gz";
       sha256 = "0qmh3cri3fpccmwz6bhwp78yskrb3qmalzvqn0a23hqbsfs4qv6x";
     };
-    propagatedBuildInputs = [ NetLDAP ConvertASN1 ];
+    propagatedBuildInputs = [ perlldap ConvertASN1 ];
     meta = {
       description = "LDAP server side protocol handling";
       license = with lib.licenses; [ artistic1 ];
@@ -15392,7 +15392,7 @@ let
       url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-Server-Test-0.22.tar.gz";
       sha256 = "13idip7jky92v4adw60jn2gcc3zf339gsdqlnc9nnvqzbxxp285i";
     };
-    propagatedBuildInputs = [ NetLDAP NetLDAPServer DataDump NetLDAPSID ];
+    propagatedBuildInputs = [ perlldap NetLDAPServer DataDump NetLDAPSID ];
     meta = {
       description= "test Net::LDAP code";
       license = with lib.licenses; [ artistic1 ];
