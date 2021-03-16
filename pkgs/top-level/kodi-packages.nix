@@ -64,6 +64,8 @@ let self = rec {
 
   joystick = callPackage ../applications/video/kodi-packages/joystick { };
 
+  netflix = callPackage ../applications/video/kodi-packages/netflix { };
+
   svtplay = callPackage ../applications/video/kodi-packages/svtplay { };
 
   steam-controller = callPackage ../applications/video/kodi-packages/steam-controller { };
@@ -80,10 +82,28 @@ let self = rec {
 
   osmc-skin = callPackage ../applications/video/kodi-packages/osmc-skin { };
 
-  inputstream-adaptive = callPackage ../applications/video/kodi-packages/inputstream-adaptive { };
-
   vfs-sftp = callPackage ../applications/video/kodi-packages/vfs-sftp { };
 
   vfs-libarchive = callPackage ../applications/video/kodi-packages/vfs-libarchive { };
+
+  # addon packages (dependencies)
+
+  certifi = callPackage ../applications/video/kodi-packages/certifi { };
+
+  chardet = callPackage ../applications/video/kodi-packages/chardet { };
+
+  idna = callPackage ../applications/video/kodi-packages/idna { };
+
+  inputstream-adaptive = callPackage ../applications/video/kodi-packages/inputstream-adaptive { };
+
+  inputstreamhelper = callPackage ../applications/video/kodi-packages/inputstreamhelper { };
+
+  myconnpy = callPackage ../applications/video/kodi-packages/myconnpy { };
+
+  requests = callPackage ../applications/video/kodi-packages/requests { };
+
+  signals = callPackage ../applications/video/kodi-packages/signals { };
+
+  urllib3 = callPackage ../applications/video/kodi-packages/urllib3 { };
 
 }; in self
