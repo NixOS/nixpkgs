@@ -11702,7 +11702,7 @@ in
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
 
-  self = pkgsi686Linux.callPackage ../development/interpreters/self { };
+  self-lang = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
   spark = callPackage ../applications/networking/cluster/spark { };
 
