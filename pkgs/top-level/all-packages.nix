@@ -26843,6 +26843,8 @@ in
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
+  chromium-bsu = callPackage ../games/chromium-bsu { };
+
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
   clonehero-unwrapped = pkgs.callPackage ../games/clonehero { };
