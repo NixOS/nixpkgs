@@ -3615,6 +3615,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  gtrunsec = {
+    email = "gtrunsec@hardenedlinux.org";
+    github = "GTrunSec";
+    githubId = 21156405;
+    name = "GuangTao Zhang";
+  };
   guibou = {
     email = "guillaum.bouchard@gmail.com";
     github = "guibou";

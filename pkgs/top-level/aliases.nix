@@ -303,6 +303,7 @@ mapAliases ({
   inotifyTools = inotify-tools;
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
+  jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
   jbuilder = dune_1; # added 2018-09-09
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
