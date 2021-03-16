@@ -49,7 +49,7 @@ let
   targetInfo = ndkInfoFun stdenv.targetPlatform;
 
   sdkVer = stdenv.targetPlatform.sdkVer;
-  prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
+  prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config);
 in
 
 rec {
@@ -78,6 +78,14 @@ rec {
       cp $out/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.o $out/lib/
 
       cp -r $out/${targetInfo.triple}/bin/* $out/bin
+      for f in $out/bin/${targetInfo.triple}*; do
+        cp $f ''${f/${targetInfo.triple}/${prefix}}
+      done
+      rm $out/bin/${prefix}-gcc $out/bin/${prefix}-g++
+
+      for f in $out/bin/clang*; do
+        cp $f ''${f/clang/${prefix}-clang}
+      done
       patchShebangs $out/
 
       rm -r $out/lib64
@@ -102,6 +110,7 @@ rec {
       echo "-target ${targetInfo.toolchain}" >> $out/nix-support/cc-cflags
       echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
       echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
+      echo "-I${binaries}/include -I${binaries}/sysroot/include -I${binaries}/sysroot/usr/include -I${binaries}/sysroot/include/c++/v1" >> $out/nix-support/cc-cflags
       echo "-L${binaries}/lib" >> $out/nix-support/cc-ldflags
     '';
   };
