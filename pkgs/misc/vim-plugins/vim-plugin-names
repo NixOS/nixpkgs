@@ -115,6 +115,7 @@ ervandew/supertab
 esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
+f-person/git-blame.nvim
 farmergreg/vim-lastplace
 fatih/vim-go
 fcpg/vim-osc52

@@ -1605,6 +1605,18 @@ let
     meta.homepage = "https://github.com/eagletmt/ghcmod-vim/";
   };
 
+  git-blame-nvim = buildVimPluginFrom2Nix {
+    pname = "git-blame-nvim";
+    version = "2021-02-20";
+    src = fetchFromGitHub {
+      owner = "f-person";
+      repo = "git-blame.nvim";
+      rev = "0ae9a1bd371b92e666c55b64447d8f75d5c7665a";
+      sha256 = "0i9gwpi00mn9mn20v8qz4q8v1dq79vq7f2i5f8ssnrgprqmc87zr";
+    };
+    meta.homepage = "https://github.com/f-person/git-blame.nvim/";
+  };
+
   git-messenger-vim = buildVimPluginFrom2Nix {
     pname = "git-messenger-vim";
     version = "2021-02-28";
