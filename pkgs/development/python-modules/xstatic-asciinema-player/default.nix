@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  pname = "XStatic-asciinema-player";
+  pname = "xstatic-asciinema-player";
   version = "2.6.1.1";
 
 
