@@ -1,0 +1,12 @@
+{ runCommandNoCC, installShellFiles, openssh }:
+
+runCommandNoCC "ssh-copy-id-${openssh.version}" {
+  nativeBuildInputs = [ installShellFiles ];
+  meta = openssh.meta // {
+    description = "A tool to copy SSH public keys to a remote machine";
+    priority = (openssh.meta.priority or 0) - 1;
+  };
+} ''
+  install -Dm 755 {${openssh},$out}/bin/ssh-copy-id
+  installManPage ${openssh}/share/man/man1/ssh-copy-id.1.gz
+''
