@@ -490,17 +490,45 @@ in {
             touch /var/lib/machines/${container}/etc/{os-release,machine-id} || true
           '';
 
+          partOf = [ "machines.target" ];
+          before = [ "machines.target" ];
+
           ${reloadProp} = true;
 
-          serviceConfig = mkIf (activation.strategy == "reload") {
-            ExecReload = if activation.reloadScript != null
-              then "${activation.reloadScript}"
-              else "${pkgs.writeShellScriptBin "activate" ''
-                pid=$(machinectl show ${container} --value --property Leader)
-                ${pkgs.utillinux}/bin/nsenter -t "$pid" -m -u -i -n -p \
-                  -- ${images.${container}.container.config.system.build.toplevel}/bin/switch-to-configuration test
-              ''}/bin/activate";
-          };
+          serviceConfig = mkMerge [
+            {
+              # Inherit settings from `systemd-nspawn@.service`.
+              # Workaround since settings from `systemd-nspawn@.service`-settings are not
+              # picked up if an override exists and `systemd-nspawn@ldap` exists.
+              RestartForceExitStatus = 133;
+              RequiresMountFor = "/var/lib/machines/${container}";
+              Type = "notify";
+              Delegate = "yes";
+              TasksMax = 16384;
+              WatchdogSec = "3min";
+              SuccessExitStatus = 133;
+              KillMode = "mixed";
+              DevicePolicy = "closed";
+              DeviceAllow = [
+                "/dev/net/tun rwm"
+                "char-pts rw"
+                "/dev/loop-control rw"
+                "block-loop rw"
+                "block-blkext rw"
+                "/dev/mapper/control rw"
+                "block-device-mapper rw"
+              ];
+            }
+            (mkIf (activation.strategy == "reload") {
+              ExecReload = if activation.reloadScript != null
+                then "${activation.reloadScript}"
+                else "${pkgs.writeShellScriptBin "activate" ''
+                  pid=$(machinectl show ${container} --value --property Leader)
+                  ${pkgs.utillinux}/bin/nsenter -t "$pid" -m -u -i -n -p \
+                    -- ${images.${container}.container.config.system.build.toplevel}/bin/switch-to-configuration test
+                ''}/bin/activate";
+            })
+          ];
         }
       ));
     };

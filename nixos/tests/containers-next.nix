@@ -281,6 +281,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         client.wait_until_succeeds("ping fd24::2 -c3 >&2")
         client.succeed("curl -sSf 'http://[fd24::2]' | grep -q 'Welcome to nginx'")
 
+    with subtest("machinectl reboot"):
+        server.succeed("machinectl reboot container0")
+        server.wait_until_fails("ping -4 container0 -c3 >&2")
+        server.wait_until_succeeds("ping -4 container0 -c3 >&2")
+
     with subtest("Dynamic networking"):
         # Test IPv4LL, DHCP & SLAAC addrs reachability.
         server.wait_until_succeeds("ping -6 -c3 container1 >&2")
