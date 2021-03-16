@@ -19,6 +19,6 @@ buildPythonPackage rec {
       that you can use on your website by simply adding <asciinema-player> tag
     '';
     homepage = "https://github.com/asciinema/asciinema-player";
-    license = lib.licenses.apache;
+    license = lib.licenses.asl20;
   };
 }
