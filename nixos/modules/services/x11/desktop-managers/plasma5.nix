@@ -213,6 +213,15 @@ in
         Enable support for running the Plasma Mobile shell.
       '';
     };
+
+    mobile.installRecommendedSoftware = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Installs software recommended for use with Plasma Mobile, but which
+        is not strictly required for Plasma Mobile to run.
+      '';
+    };
   };
 
   imports = [
@@ -491,11 +500,17 @@ in
         with libsForQt5;
         with plasma5; with kdeApplications; with kdeFrameworks;
         [
+          # Basic packages without which Plasma Mobile fails to work properly.
           plasma-phone-components
           plasma-nano
           pkgs.maliit-framework
           pkgs.maliit-keyboard
-        ];
+        ]
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) [
+          # Additional software made for Plasma Mobile.
+          pkgs.angelfish
+        ]
+      ;
 
       # The following services are needed or the UI is broken.
       hardware.bluetooth.enable = true;
@@ -524,6 +539,8 @@ in
           };
         };
       };
+
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-phone-components ];
     })
   ];
 }
