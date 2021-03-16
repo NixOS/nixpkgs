@@ -74,7 +74,7 @@ default-package-overrides:
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
 
-  # Stackage Nightly 2021-03-12
+  # Stackage Nightly 2021-03-14
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -88,7 +88,7 @@ default-package-overrides:
   - aeson-attoparsec ==0.0.0
   - aeson-better-errors ==0.9.1.0
   - aeson-casing ==0.2.0.0
-  - aeson-combinators ==0.0.4.1
+  - aeson-combinators ==0.0.5.0
   - aeson-commit ==1.3
   - aeson-compat ==0.3.9
   - aeson-default ==0.9.1.0
@@ -208,7 +208,7 @@ default-package-overrides:
   - amazonka-waf ==1.6.1
   - amazonka-workspaces ==1.6.1
   - amazonka-xray ==1.6.1
-  - amqp ==0.21.0
+  - amqp ==0.22.0
   - amqp-utils ==0.6.1.0
   - annotated-wl-pprint ==0.7.0
   - ansi-terminal ==0.10.3
@@ -457,7 +457,7 @@ default-package-overrides:
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.6
   - circular ==0.3.1.1
-  - citeproc ==0.3.0.8
+  - citeproc ==0.3.0.9
   - clash-ghc ==1.2.5
   - clash-lib ==1.2.5
   - clash-prelude ==1.2.5
@@ -482,7 +482,7 @@ default-package-overrides:
   - co-log ==0.4.0.1
   - co-log-concurrent ==0.5.0.0
   - co-log-core ==0.2.1.1
-  - Color ==0.3.0
+  - Color ==0.3.1
   - colorful-monoids ==0.2.1.3
   - colorize-haskell ==1.0.1
   - colour ==2.3.5
@@ -712,7 +712,7 @@ default-package-overrides:
   - dual ==0.1.1.1
   - dublincore-xml-conduit ==0.1.0.2
   - dunai ==0.7.0
-  - duration ==0.1.0.0
+  - duration ==0.2.0.0
   - dvorak ==0.1.0.0
   - dynamic-state ==0.3.1
   - dyre ==0.8.12
@@ -951,7 +951,7 @@ default-package-overrides:
   - ghc-byteorder ==4.11.0.0.10
   - ghc-check ==0.5.0.3
   - ghc-core ==0.5.6
-  - ghc-events ==0.15.1
+  - ghc-events ==0.16.0
   - ghc-exactprint ==0.6.4
   - ghcid ==0.8.7
   - ghci-hexcalc ==0.1.1.0
@@ -969,7 +969,7 @@ default-package-overrides:
   - ghc-typelits-extra ==0.4.2
   - ghc-typelits-knownnat ==0.7.5
   - ghc-typelits-natnormalise ==0.7.4
-  - ghc-typelits-presburger ==0.5.2.0
+  - ghc-typelits-presburger ==0.6.0.0
   - ghost-buster ==0.1.1.0
   - gi-atk ==2.0.22
   - gi-cairo ==1.0.24
@@ -1100,13 +1100,13 @@ default-package-overrides:
   - hfsevents ==0.1.6
   - hgrev ==0.2.6
   - hidapi ==0.1.5
-  - hie-bios ==0.7.4
+  - hie-bios ==0.7.5
   - hi-file-parser ==0.1.0.0
   - higher-leveldb ==0.6.0.0
   - highlighting-kate ==0.6.4
   - hinfo ==0.0.3.0
   - hinotify ==0.4.1
-  - hint ==0.9.0.3
+  - hint ==0.9.0.4
   - hjsmin ==0.2.0.4
   - hkd-default ==1.1.0.0
   - hkgr ==0.2.7
@@ -1288,7 +1288,7 @@ default-package-overrides:
   - indexed-traversable ==0.1.1
   - infer-license ==0.2.0
   - inflections ==0.4.0.6
-  - influxdb ==1.9.1
+  - influxdb ==1.9.1.1
   - ini ==0.4.1
   - inj ==1.0
   - inline-c ==0.9.1.4
@@ -1344,7 +1344,7 @@ default-package-overrides:
   - ix-shapable ==0.1.0
   - jack ==0.7.1.4
   - jalaali ==1.0.0.0
-  - jira-wiki-markup ==1.3.3
+  - jira-wiki-markup ==1.3.4
   - jose ==0.8.4
   - jose-jwt ==0.9.0
   - js-chart ==2.9.4.1
@@ -1551,7 +1551,7 @@ default-package-overrides:
   - mixed-types-num ==0.4.1
   - mltool ==0.2.0.1
   - mmap ==0.5.9
-  - mmark ==0.0.7.3
+  - mmark ==0.0.7.2
   - mmark-cli ==0.0.5.0
   - mmark-ext ==0.2.1.3
   - mmorph ==1.1.5
@@ -1997,7 +1997,7 @@ default-package-overrides:
   - regex-compat ==0.95.2.1
   - regex-compat-tdfa ==0.95.1.4
   - regex-pcre ==0.95.0.0
-  - regex-pcre-builtin ==0.95.1.3.8.43
+  - regex-pcre-builtin ==0.95.2.3.8.43
   - regex-posix ==0.96.0.0
   - regex-tdfa ==1.3.1.0
   - regex-with-pcre ==1.1.0.0
@@ -2168,7 +2168,7 @@ default-package-overrides:
   - singleton-bool ==0.1.5
   - singleton-nats ==0.4.5
   - singletons ==2.7
-  - singletons-presburger ==0.5.0.0
+  - singletons-presburger ==0.6.0.0
   - siphash ==1.0.3
   - sitemap-gen ==0.1.0.0
   - sized ==1.0.0.0
@@ -2248,7 +2248,7 @@ default-package-overrides:
   - storable-record ==0.0.5
   - storable-tuple ==0.0.3.3
   - storablevector ==0.2.13.1
-  - store ==0.7.9
+  - store ==0.7.10
   - store-core ==0.4.4.4
   - store-streaming ==0.2.0.3
   - stratosphere ==0.59.1
@@ -2281,7 +2281,7 @@ default-package-overrides:
   - structs ==0.1.5
   - structured ==0.1.0.1
   - structured-cli ==2.6.0.0
-  - subcategories ==0.1.0.0
+  - subcategories ==0.1.1.0
   - sum-type-boilerplate ==0.1.1
   - sundown ==0.6
   - superbuffer ==0.3.1.1
@@ -2387,7 +2387,7 @@ default-package-overrides:
   - tf-random ==0.5
   - th-abstraction ==0.4.2.0
   - th-bang-compat ==0.0.1.0
-  - th-compat ==0.1.1
+  - th-compat ==0.1.2
   - th-constraint-compat ==0.0.1.0
   - th-data-compat ==0.1.0.0
   - th-desugar ==1.11
@@ -2396,7 +2396,7 @@ default-package-overrides:
   - these-lens ==1.0.1.2
   - these-optics ==1.0.1.2
   - these-skinny ==0.7.4
-  - th-expand-syns ==0.4.6.0
+  - th-expand-syns ==0.4.8.0
   - th-extras ==0.0.0.4
   - th-lift ==0.8.2
   - th-lift-instances ==0.1.18
