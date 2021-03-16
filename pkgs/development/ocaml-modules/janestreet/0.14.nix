@@ -222,7 +222,8 @@ rec {
 
   core = janePackage {
     pname = "core";
-    hash = "1m9h73pk9590m8ngs1yf4xrw61maiqmi9glmlrl12qhi0wcja5f3";
+    version = "0.14.1";
+    hash = "1isrcl07nkmdm6akqsqs9z8s6zvva2lvg47kaagy7gsbyszrqb82";
     meta.description = "System-independent part of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ core_kernel spawn timezone ];

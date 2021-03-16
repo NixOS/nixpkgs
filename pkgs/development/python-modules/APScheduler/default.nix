@@ -1,8 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
 , pytestCheckHook
+, pytest-asyncio
+, pytest-tornado
 , pytestcov
 , sqlalchemy
 , tornado
@@ -33,15 +36,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytest-asyncio
+    pytest-tornado
     pytestCheckHook
     pytestcov
     sqlalchemy
     tornado
     twisted
     mock
-    trollius
     gevent
-  ];
+  ] ++ lib.optionals (!isPy3k) [ trollius ];
 
   propagatedBuildInputs = [
     six
@@ -50,6 +54,11 @@ buildPythonPackage rec {
     funcsigs
     setuptools
   ] ++ lib.optional (!isPy3k) futures;
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_submit_job"
+    "test_max_instances"
+  ];
 
   pythonImportsCheck = [ "apscheduler" ];
 

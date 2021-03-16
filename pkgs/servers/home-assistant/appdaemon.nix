@@ -1,4 +1,7 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
 let
   python = python3.override {
@@ -24,10 +27,11 @@ let
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
   version = "4.0.5";
+  disabled = python.pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "home-assistant";
-    repo = "appdaemon";
+    owner = "AppDaemon";
+    repo = pname;
     rev = version;
     sha256 = "7o6DrTufAC+qK3dDfpkuQMQWuduCZ6Say/knI4Y07QM=";
   };
@@ -63,12 +67,13 @@ in python.pkgs.buildPythonApplication rec {
       --replace "feedparser==5.2.1" "feedparser>=5.2.1" \
       --replace "aiohttp_jinja2==1.2.0" "aiohttp_jinja2>=1.2.0" \
       --replace "pygments==2.6.1" "pygments>=2.6.1" \
-      --replace "paho-mqtt==1.5.0" "paho-mqtt>=1.5.0"
+      --replace "paho-mqtt==1.5.0" "paho-mqtt>=1.5.0" \
+      --replace "websocket-client==0.57.0" "websocket-client>=0.57.0"
   '';
 
   meta = with lib; {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
-    homepage = "https://github.com/home-assistant/appdaemon";
+    homepage = "https://github.com/AppDaemon/appdaemon";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg dotlambda ];
   };
