@@ -23070,7 +23070,7 @@ let
       sha256 = "582db53a091f8da3670c037733314f2510af5e8ee0ba42a0e391e2f2e3ca7734";
     };
     prePatch = "rm examples.pl";
-    propagatedBuildInputs = [ LWPProtocolhttps ];
+    propagatedBuildInputs = [ LWPProtocolHttps ];
     meta = {
       description = "Accessing Twilio's REST API with Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
