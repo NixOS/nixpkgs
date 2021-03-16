@@ -19,8 +19,9 @@ buildPythonPackage rec {
       --replace 'attrs<=' 'attrs>=' \
       --replace 'colorama==' 'colorama>=' \
       --replace 'PyYAML==' 'PyYAML>=' \
-      --replace 'marshmallow<' 'marshmallow>='
-  '';
+      --replace 'marshmallow<' 'marshmallow>=' \
+      --replace 'websocket-client==' 'websocket-client>='
+   '';
 
   propagatedBuildInputs = [ attrs boto3 requests gradient_statsd terminaltables
     click-completion click-didyoumean click-help-colors requests_toolbelt
