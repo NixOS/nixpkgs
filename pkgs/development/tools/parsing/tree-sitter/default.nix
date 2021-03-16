@@ -71,6 +71,35 @@ let
     in
     lib.mapAttrs change grammars;
 
+  # Usage:
+  # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
+  #
+  # or for all grammars:
+  # pkgs.tree-sitter.withPlugins (_: allGrammars)
+  # which is equivalent to
+  # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
+  withPlugins = grammarFn:
+    let
+      grammars = grammarFn builtGrammars;
+    in
+    linkFarm "grammars"
+      (map
+        (drv:
+          let
+            name = lib.strings.getName drv;
+          in
+          {
+            name =
+              (lib.strings.removePrefix "tree-sitter-"
+                (lib.strings.removeSuffix "-grammar" name))
+              + stdenv.hostPlatform.extensions.sharedLibrary;
+            path = "${drv}/parser";
+          }
+        )
+        grammars);
+
+  allGrammars = builtins.attrValues builtGrammars;
+
 in
 rustPlatform.buildRustPackage {
   pname = "tree-sitter";
@@ -111,7 +140,7 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars builtGrammars;
+    inherit grammars builtGrammars withPlugins allGrammars;
 
     tests = {
       # make sure all grammars build
