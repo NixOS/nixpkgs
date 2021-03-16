@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "v${version}";
-    sha256 = "116cicz4d506ds3m9bmnb7f9nkp07hyzcrw29ljhznh1i620msim";
+    sha256 = "1x2i8nv0nncgvr07znhh2slngbrg8qcsz2zqx76bcyq9hssn6yal";
   };
 
   patches = [
