@@ -177,7 +177,6 @@ hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
-hugolgst/vimsence
 iamcco/coc-spell-checker
 ianks/vim-tsx
 idanarye/vim-merginal
@@ -689,6 +688,7 @@ Vimjas/vim-python-pep8-indent
 vimlab/split-term.vim
 vimoutliner/vimoutliner
 vimpostor/vim-tpipeline
+vimsence/vimsence
 vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
