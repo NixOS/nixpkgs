@@ -14866,7 +14866,7 @@ let
       url = "mirror://cpan/authors/id/E/ES/ESTRABD/MySQL-Diff-0.60.tar.gz";
       sha256 = "5d7080a4bd5714ff9ef536aa774a7adb3c6f0e760215ca6c39d8a3545344f956";
     };
-    propagatedBuildInputs = [ pkgs.mysql-client FileSlurp StringShellQuote ];
+    propagatedBuildInputs = [ pkgs.mariadb.client FileSlurp StringShellQuote ];
     meta = {
       homepage = "https://github.com/estrabd/mysqldiff";
       description = "Generates a database upgrade instruction set";
