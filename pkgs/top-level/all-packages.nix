@@ -6090,6 +6090,8 @@ in
 
   libnixxml = callPackage ../development/libraries/libnixxml { };
 
+  libplctag = callPackage ../development/libraries/libplctag { };
+
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
   libportal = callPackage ../development/libraries/libportal { };
