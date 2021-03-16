@@ -77,13 +77,14 @@ in with builtins; {
   # ------------------------------------------------------
 
   foundationdb61 = cmakeBuild {
-    version = "6.1.12";
+    version = "6.1.13";
     branch  = "release-6.1";
-    sha256  = "1yh5hx6rim41m0dwhnb2pcwz67wlnk0zwvyw845d36b29gwy58ab";
+    sha256  = "10vd694dcnh2pp91mri1m80kfbwjanhiy50c53c5ncqfa6pwvk00";
 
     patches = [
       ./patches/clang-libcxx.patch
       ./patches/suppress-clang-warnings.patch
+      ./patches/stdexcept-6.1.patch
       glibc230-fix
     ];
   };

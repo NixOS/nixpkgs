@@ -1,8 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
-, pytest
+, setuptools-scm
+, pytestCheckHook
+, pytest-asyncio
+, pytest-tornado
 , pytestcov
 , sqlalchemy
 , tornado
@@ -15,6 +18,7 @@
 , tzlocal
 , funcsigs
 , futures
+, setuptools
 , isPy3k
 }:
 
@@ -28,37 +32,39 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
-    pytest
+    pytest-asyncio
+    pytest-tornado
+    pytestCheckHook
     pytestcov
     sqlalchemy
     tornado
     twisted
     mock
-    trollius
     gevent
-  ];
+  ] ++ lib.optionals (!isPy3k) [ trollius ];
 
   propagatedBuildInputs = [
     six
     pytz
     tzlocal
     funcsigs
+    setuptools
   ] ++ lib.optional (!isPy3k) futures;
 
-  checkPhase = ''
-    py.test
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_submit_job"
+    "test_max_instances"
+  ];
 
-  # Somehow it cannot find pytestcov
-  doCheck = false;
+  pythonImportsCheck = [ "apscheduler" ];
 
   meta = with lib; {
     description = "A Python library that lets you schedule your Python code to be executed";
-    homepage = "https://pypi.python.org/pypi/APScheduler/";
+    homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
   };
 }

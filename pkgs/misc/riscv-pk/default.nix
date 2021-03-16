@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, payload ? null }: let
-  rev = "e5846a2bc707eaa58dc8ab6a8d20a090c6ee8570";
-  sha256 = "1clynpp70fnbgsjgxx7xi0vrdrj1v0h8zpv0x26i324kp2gwylf4";
-  revCount = "438";
-  shortRev = "e5846a2";
-in stdenv.mkDerivation {
-  name = "riscv-pk-0.1pre${revCount}_${shortRev}";
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, payload ? null }:
+
+stdenv.mkDerivation rec {
+  pname = "riscv-pk";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "riscv-pk";
-    inherit rev sha256;
+    rev = "v${version}";
+    sha256 = "1cc0rz4q3a1zw8756b8yysw8lb5g4xbjajh5lvqbjix41hbdx6xz";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

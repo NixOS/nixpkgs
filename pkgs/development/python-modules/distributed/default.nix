@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2.30.1";
+  version = "2021.3.0";
   disabled = pythonOlder "3.6";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1421d3b84a0885aeb2c4bdc9e8896729c0f053a9375596c9de8864e055e2ac8e";
+    sha256 = "sha256-Qn/n4Ee7rXQTxl1X5W+k1rHPkh/SBqPSyquUv5FTw9s=";
   };
 
   propagatedBuildInputs = [
@@ -38,11 +38,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "distributed" ];
 
-  meta = {
+  meta = with lib; {
     description = "Distributed computation in Python.";
     homepage = "https://distributed.readthedocs.io/en/latest/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.x86; # fails on aarch64
-    maintainers = with lib.maintainers; [ teh costrouc ];
+    license = licenses.bsd3;
+    platforms = platforms.x86; # fails on aarch64
+    maintainers = with maintainers; [ teh costrouc ];
   };
 }

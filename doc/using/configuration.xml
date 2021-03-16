@@ -170,7 +170,7 @@
 </programlisting>
     </para>
     <para>
-      Note that <literal>allowlistedLicenses</literal> only applies to unfree licenses unless <literal>allowUnfree</literal> is enabled. It is not a generic allowlist for all types of licenses. <literal>blocklistedLicenses</literal> applies to all licenses.
+     Note that <literal>allowlistedLicenses</literal> only applies to unfree licenses unless <literal>allowUnfree</literal> is enabled. It is not a generic allowlist for all types of licenses. <literal>blocklistedLicenses</literal> applies to all licenses.
     </para>
    </listitem>
   </itemizedlist>

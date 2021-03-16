@@ -1,12 +1,10 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
-let
-  version = "0.196";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "metamath";
-  inherit version;
+  version = "0.196";
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "metamath";
@@ -25,7 +23,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "http://us.metamath.org";
     downloadPage = "http://us.metamath.org/#downloads";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.taneb ];
     platforms = platforms.all;
   };

@@ -91,9 +91,11 @@ self: super: {
   # plugin, since part of the fzf vim plugin is included in the main fzf
   # program.
   fzfWrapper = buildVimPluginFrom2Nix {
+    inherit (fzf) src version;
     pname = "fzf";
-    version = fzf.version;
-    src = fzf.src;
+    postInstall = ''
+      ln -s ${fzf}/bin/fzf $target/bin/fzf
+    '';
   };
 
   skim = buildVimPluginFrom2Nix {
@@ -656,7 +658,7 @@ self: super: {
   });
 
   lf-vim = super.lf-vim.overrideAttrs (old: {
-    dependencies = with super; [ vim-bbye ];
+    dependencies = with super; [ vim-floaterm ];
   });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
@@ -729,7 +731,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "042dbg80mx0khm8xahm4l490s7bfbav362r0mz5bfhq4fy2s9nsi";
+          cargoSha256 = "F+kIVnO7MBuaYRa2MPsD3eQ2d5W5VxHhxHKeo/ic6TE=";
         };
       in
       ''

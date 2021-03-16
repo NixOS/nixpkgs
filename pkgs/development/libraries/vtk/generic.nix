@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchurl {
-    url = "${meta.homepage}files/release/${majorVersion}/VTK-${version}.tar.gz";
+    url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
     sha256 = sourceSha256;
   };
 
@@ -94,6 +94,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
     # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
-    broken = if stdenv.isDarwin && (majorVersion == 7 || majorVersion == 8) then true else false;
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
   };
 }

@@ -48,6 +48,18 @@ let
         };
       };
 
+      antfu.icons-carbon = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "icons-carbon";
+          publisher = "antfu";
+          version = "0.2.2";
+          sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       ms-python.vscode-pylance = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-pylance";
@@ -365,8 +377,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.198";
-          sha256 = "0riy2k8dbsnpk8vkv814fr8zh87y425s24nklcx4b7mfrszv7xbn";
+          version = "0.0.205";
+          sha256 = "0s7bmnsx40lz9wiijrh7cnazwqvmkhsbnidl832qx27pzk0977ix";
         };
         meta = with lib; {
           license = licenses.mit;

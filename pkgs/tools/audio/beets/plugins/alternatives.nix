@@ -2,19 +2,26 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "0.9.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
-    # This is 0.8.2 with fixes against Beets 1.4.6 and Python 3 compatibility.
     rev = "v${version}";
-    sha256 = "19160gwg5j6asy8mc21g2kf87mx4zs9x2gbk8q4r6330z4kpl5pm";
+    sha256 = "1dsz94fb29wra1f9580w20bz2f1bgkj4xnsjgwgbv14flbfw4bp0";
   };
 
-  nativeBuildInputs = [ beets pythonPackages.nose ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "addopts = --cov --cov-report=term --cov-report=html" ""
+  '';
 
-  checkPhase = "nosetests";
+  nativeBuildInputs = [ beets ];
+
+  checkInputs = with pythonPackages; [
+    pytestCheckHook
+    mock
+  ];
 
   meta = {
     description = "Beets plugin to manage external files";

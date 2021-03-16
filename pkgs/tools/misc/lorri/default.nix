@@ -1,37 +1,28 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pkgs
+, rustPackages
 , fetchFromGitHub
 , rustPlatform
-  # Updater script
-, runtimeShell
 , writers
-  # Tests
 , nixosTests
-  # Apple dependencies
 , CoreServices
 , Security
 }:
 
 let
   # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
-  version = "1.2";
-  gitRev = "43a260c221d5dac4a44fd82271736c8444474eec";
-  sha256 = "0g6zq27dpr8bdan5xrqchybpbqwnhhc7x8sxbfygigbqd3xv9i6n";
-  cargoSha256 = "1zmlp14v7av0znmjyy2aq83lc74503p6r0l11l9iw7s3xad8rda4";
+  version = "1.3.1";
+  gitRev = "df83b9b175fecc8ec8b02096c5cfe2db3d00b92e";
+  sha256 = "1df6p0b482vhymw3z7gimc441jr7aix9lhdbcm5wjvw9f276016f";
+  cargoSha256 = "1f9b2h3zakw7qmlnc4rqhxnw80sl5h4mj8cghr82iacxwqz499ql";
 
 in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
   inherit version;
 
-  meta = with lib; {
-    description = "Your project's nix-env";
-    homepage = "https://github.com/target/lorri";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ grahamc Profpatsch ];
-  };
-
   src = fetchFromGitHub {
-    owner = "target";
+    owner = "nix-community";
     repo = pname;
     rev = gitRev;
     inherit sha256;
@@ -43,11 +34,10 @@ in (rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;
-  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix {};
+  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
-  nativeBuildInputs = with pkgs; [ rustPackages.rustfmt ];
-  buildInputs =
-    lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  nativeBuildInputs = [ rustPackages.rustfmt ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   # copy the docs to the $man and $doc outputs
   postInstall = ''
@@ -69,5 +59,12 @@ in (rustPlatform.buildRustPackage rec {
     tests = {
       nixos = nixosTests.lorri;
     };
+  };
+
+  meta = with lib; {
+    description = "Your project's nix-env";
+    homepage = "https://github.com/target/lorri";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ grahamc Profpatsch ];
   };
 })

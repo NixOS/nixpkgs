@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   # AttributeError: 'KeywordMapping' object has no attribute 'get'
-  doCheck = ! isPy27;
+  doCheck = !isPy27;
 
   disabledTests = [
     # Disable tests that require network access and use httpbin

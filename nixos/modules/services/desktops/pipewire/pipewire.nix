@@ -18,11 +18,53 @@ let
     ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
 
+  prioritizeNativeProtocol = {
+    "context.modules" = {
+      # Most other modules depend on this, so put it first
+      "libpipewire-module-protocol-native" = {
+        _priority = -100;
+        _content = null;
+      };
+    };
+  };
+
+  fixDaemonModulePriorities = {
+    "context.modules" = {
+      # Most other modules depend on thism so put it first
+      "libpipewire-module-protocol-native" = {
+        _priority = -100;
+        _content = null;
+      };
+      # Needs to be before libpipewire-module-access
+      "libpipewire-module-portal" = {
+        _priority = -50;
+        _content = {
+          flags = [
+            "ifexists"
+            "nofail"
+          ];
+        };
+      };
+    };
+  };
+
+  # Use upstream config files passed through spa-json-dump as the base
+  # Patched here as necessary for them to work with this module
+  defaults = {
+    client = recursiveUpdate (builtins.fromJSON (builtins.readFile ./client.conf.json)) prioritizeNativeProtocol;
+    client-rt = recursiveUpdate (builtins.fromJSON (builtins.readFile ./client-rt.conf.json)) prioritizeNativeProtocol;
+    jack = recursiveUpdate (builtins.fromJSON (builtins.readFile ./jack.conf.json)) prioritizeNativeProtocol;
+    # Remove session manager invocation from the upstream generated file, it points to the wrong path
+    pipewire = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire.conf.json)) fixDaemonModulePriorities;
+    pipewire-pulse = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json)) prioritizeNativeProtocol;
+  };
+
   # Helpers for generating the pipewire JSON config file
   mkSPAValueString = v:
   if builtins.isList v then "[${lib.concatMapStringsSep " " mkSPAValueString v}]"
   else if lib.types.attrs.check v then
     "{${lib.concatStringsSep " " (mkSPAKeyValue v)}}"
+  else if builtins.isString v then "\"${lib.generators.mkValueStringDefault { } v}\""
   else lib.generators.mkValueStringDefault { } v;
 
   mkSPAKeyValue = attrs: map (def: def.content) (
@@ -64,129 +106,51 @@ in {
         '';
       };
 
-      config = mkOption {
-        type = types.attrs;
-        description = ''
-          Configuration for the pipewire daemon.
-        '';
-        default = {
-          properties = {
-            ## set-prop is used to configure properties in the system
-            #
-            # "library.name.system" = "support/libspa-support";
-            # "context.data-loop.library.name.system" = "support/libspa-support";
-            "link.max-buffers" = 16; # version < 3 clients can't handle more than 16
-            #"mem.allow-mlock" = false;
-            #"mem.mlock-all" = true;
-            ## https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/src/pipewire/pipewire.h#L93
-            #"log.level" = 2; # 5 is trace, which is verbose as hell, default is 2 which is warnings, 4 is debug output, 3 is info
-
-            ## Properties for the DSP configuration
-            #
-            #"default.clock.rate" = 48000;
-            #"default.clock.quantum" = 1024;
-            #"default.clock.min-quantum" = 32;
-            #"default.clock.max-quantum" = 8192;
-            #"default.video.width" = 640;
-            #"default.video.height" = 480;
-            #"default.video.rate.num" = 25;
-            #"default.video.rate.denom" = 1;
-          };
-
-          spa-libs = {
-            ## add-spa-lib <factory-name regex> <library-name>
-            #
-            # used to find spa factory names. It maps an spa factory name
-            # regular expression to a library name that should contain
-            # that factory.
-            #
-            "audio.convert*" = "audioconvert/libspa-audioconvert";
-            "api.alsa.*" = "alsa/libspa-alsa";
-            "api.v4l2.*" = "v4l2/libspa-v4l2";
-            "api.libcamera.*" = "libcamera/libspa-libcamera";
-            "api.bluez5.*" = "bluez5/libspa-bluez5";
-            "api.vulkan.*" = "vulkan/libspa-vulkan";
-            "api.jack.*" = "jack/libspa-jack";
-            "support.*" = "support/libspa-support";
-            # "videotestsrc" = "videotestsrc/libspa-videotestsrc";
-            # "audiotestsrc" = "audiotestsrc/libspa-audiotestsrc";
-          };
-
-          modules = {
-            ##  <module-name> = { [args = "<key>=<value> ..."]
-            #                     [flags = ifexists] }
-            #                     [flags = [ifexists]|[nofail]}
-            #
-            # Loads a module with the given parameters.
-            # If ifexists is given, the module is ignoed when it is not found.
-            # If nofail is given, module initialization failures are ignored.
-            #
-            libpipewire-module-rtkit = {
-              args = {
-                #rt.prio = 20;
-                #rt.time.soft = 200000;
-                #rt.time.hard = 200000;
-                #nice.level = -11;
-              };
-              flags = "ifexists|nofail";
-            };
-            libpipewire-module-protocol-native = { _priority = -100; _content = "null"; };
-            libpipewire-module-profiler = "null";
-            libpipewire-module-metadata = "null";
-            libpipewire-module-spa-device-factory = "null";
-            libpipewire-module-spa-node-factory = "null";
-            libpipewire-module-client-node = "null";
-            libpipewire-module-client-device = "null";
-            libpipewire-module-portal = "null";
-            libpipewire-module-access = {
-              args.access = {
-                allowed = ["${builtins.unsafeDiscardStringContext cfg.sessionManagerExecutable}"];
-                rejected = [];
-                restricted = [];
-                force = "flatpak";
-              };
-            };
-            libpipewire-module-adapter = "null";
-            libpipewire-module-link-factory = "null";
-            libpipewire-module-session-manager = "null";
-          };
-
-          objects = {
-            ## create-object [-nofail] <factory-name> [<key>=<value> ...]
-            #
-            # Creates an object from a PipeWire factory with the given parameters.
-            # If -nofail is given, errors are ignored (and no object is created)
-            #
-          };
-
-
-          exec = {
-            ## exec <program-name>
-            #
-            # Execute the given program. This is usually used to start the
-            # session manager. run the session manager with -h for options
-            #
-            "${builtins.unsafeDiscardStringContext cfg.sessionManagerExecutable}" = { args = "\"${lib.concatStringsSep " " cfg.sessionManagerArguments}\""; };
-          };
+      config = {
+        client = mkOption {
+          type = types.attrs;
+          default = {};
+          description = ''
+            Configuration for pipewire clients. For details see
+            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client.conf.in
+          '';
         };
-      };
 
-      sessionManagerExecutable = mkOption {
-        type = types.str;
-        default = "";
-        example = literalExample ''${pkgs.pipewire.mediaSession}/bin/pipewire-media-session'';
-        description = ''
-          Path to the session manager executable.
-        '';
-      };
+        client-rt = mkOption {
+          type = types.attrs;
+          default = {};
+          description = ''
+            Configuration for realtime pipewire clients. For details see
+            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client-rt.conf.in
+          '';
+        };
 
-      sessionManagerArguments = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = literalExample ''["-p" "bluez5.msbc-support=true"]'';
-        description = ''
-          Arguments passed to the pipewire session manager.
-        '';
+        jack = mkOption {
+          type = types.attrs;
+          default = {};
+          description = ''
+            Configuration for the pipewire daemon's jack module. For details see
+            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/jack.conf.in
+          '';
+        };
+
+        pipewire = mkOption {
+          type = types.attrs;
+          default = {};
+          description = ''
+            Configuration for the pipewire daemon. For details see
+            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire.conf.in
+          '';
+        };
+
+        pipewire-pulse = mkOption {
+          type = types.attrs;
+          default = {};
+          description = ''
+            Configuration for the pipewire-pulse daemon. For details see
+            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire-pulse.conf.in
+          '';
+        };
       };
 
       alsa = {
@@ -253,13 +217,16 @@ in {
       source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
     };
 
+    environment.etc."pipewire/client.conf" = { text = toSPAJSON (recursiveUpdate defaults.client cfg.config.client); };
+    environment.etc."pipewire/client-rt.conf" = { text = toSPAJSON (recursiveUpdate defaults.client-rt cfg.config.client-rt); };
+    environment.etc."pipewire/jack.conf" = { text = toSPAJSON (recursiveUpdate defaults.jack cfg.config.jack); };
+    environment.etc."pipewire/pipewire.conf" = { text = toSPAJSON (recursiveUpdate defaults.pipewire cfg.config.pipewire); };
+    environment.etc."pipewire/pipewire-pulse.conf" = { text = toSPAJSON (recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse); };
+
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
 
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
-    systemd.user.services.pipewire.environment = {
-      "PIPEWIRE_LINK_PASSIVE" = "1";
-      "PIPEWIRE_CONFIG_FILE" = pkgs.writeText "pipewire.conf" (toSPAJSON cfg.config);
-    };
+    systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
   };
 }

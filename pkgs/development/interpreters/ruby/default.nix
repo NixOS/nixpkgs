@@ -50,7 +50,7 @@ let
       # - If you run:
       #     ruby -e "puts RbConfig::CONFIG['configure_args']"
       # - In:
-      #     $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+      #     $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
@@ -175,7 +175,7 @@ let
                 $out/lib/libruby*
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
-                $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+                $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
             ''
           }
           # Bundler tries to create this directory
@@ -187,7 +187,7 @@ let
           addRubyLibPath() {
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
-            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.targetPlatform.system}
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
           }
 
           addEnvHooks "$hostOffset" addGemPath

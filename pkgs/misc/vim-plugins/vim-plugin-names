@@ -106,6 +106,7 @@ eikenb/acp
 elixir-editors/vim-elixir
 elmcast/elm-vim
 elzr/vim-json
+embark-theme/vim as embark-vim
 embear/vim-localvimrc
 enomsg/vim-haskellConcealPlus
 enricobacis/vim-airline-clock
@@ -197,6 +198,7 @@ jacoborus/tender.vim
 jakwings/vim-pony
 jamessan/vim-gnupg@main
 jaredgorski/SpaceCamp
+jasonccox/vim-wayland-clipboard
 jaxbot/semantic-highlight.vim
 JazzCore/ctrlp-cmatcher
 jceb/vim-hier
@@ -262,6 +264,7 @@ kchmck/vim-coffee-script
 KeitaNakamura/neodark.vim
 keith/investigate.vim
 keith/swift.vim
+kevinhwang91/nvim-bqf@main
 kevinhwang91/nvim-hlslens@main
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
@@ -624,6 +627,7 @@ tpope/vim-tbone
 tpope/vim-unimpaired
 tpope/vim-vinegar
 travitch/hasksyn
+tremor-rs/tremor-vim@main
 triglav/vim-visual-increment
 troydm/zoomwintab.vim
 twerth/ir_black
@@ -704,6 +708,7 @@ whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+windwp/nvim-autopairs
 wlangstroth/vim-racket
 wsdjeg/vim-fetch
 xavierd/clang_complete

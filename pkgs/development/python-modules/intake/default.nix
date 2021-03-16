@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.0";
+  version = "0.6.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c284abeb74927a7366dcab6cefc010c4d050365b8af61c37326a2473a490a4e";
+    sha256 = "f09800203fcaf1512f9234e54dbd07ec2b5217aafd21716385725ec052f5a52e";
   };
 
   propagatedBuildInputs = [

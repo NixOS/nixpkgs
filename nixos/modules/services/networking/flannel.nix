@@ -162,10 +162,7 @@ in {
         NODE_NAME = cfg.nodeName;
       };
       path = [ pkgs.iptables ];
-      preStart = ''
-        mkdir -p /run/flannel
-        touch /run/flannel/docker
-      '' + optionalString (cfg.storageBackend == "etcd") ''
+      preStart = optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
         until ${pkgs.etcdctl}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
         do
@@ -177,6 +174,7 @@ in {
         ExecStart = "${cfg.package}/bin/flannel";
         Restart = "always";
         RestartSec = "10s";
+        RuntimeDirectory = "flannel";
       };
     };
 

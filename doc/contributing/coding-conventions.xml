@@ -180,17 +180,12 @@ args.stdenv.mkDerivation (args // {
    </listitem>
    <listitem>
     <para>
-     Arguments should be listed in the order they are used, with the
-     exception of <varname>lib</varname>, which always goes first.
+     Arguments should be listed in the order they are used, with the exception of <varname>lib</varname>, which always goes first.
     </para>
    </listitem>
    <listitem>
     <para>
-     Prefer using the top-level <varname>lib</varname> over its alias
-     <literal>stdenv.lib</literal>.  <varname>lib</varname> is unrelated to
-     <varname>stdenv</varname>, and so <literal>stdenv.lib</literal> should only
-     be used as a convenience alias when developing to avoid having to modify
-     the function inputs just to test something out.
+     Prefer using the top-level <varname>lib</varname> over its alias <literal>stdenv.lib</literal>. <varname>lib</varname> is unrelated to <varname>stdenv</varname>, and so <literal>stdenv.lib</literal> should only be used as a convenience alias when developing to avoid having to modify the function inputs just to test something out.
     </para>
    </listitem>
   </itemizedlist>
@@ -689,8 +684,7 @@ args.stdenv.mkDerivation (args // {
        </varlistentry>
        <varlistentry>
         <term>
-         If it’s a <emphasis>theme</emphasis> for a <emphasis>desktop environment</emphasis>,
-         a <emphasis>window manager</emphasis> or a <emphasis>display manager</emphasis>:
+         If it’s a <emphasis>theme</emphasis> for a <emphasis>desktop environment</emphasis>, a <emphasis>window manager</emphasis> or a <emphasis>display manager</emphasis>:
         </term>
         <listitem>
          <para>

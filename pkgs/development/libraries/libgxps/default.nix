@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgxps";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "157s4c9gjjss6yd7qp7n4q6s72gz1k4ilsx4xjvp357azk49z4qs";
+    sha256 = "bSeGclajXM+baSU+sqiKMrrKO5fV9O9/guNmf6Q1JRw=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config gobject-introspection ];

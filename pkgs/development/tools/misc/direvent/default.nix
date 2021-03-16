@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Directory event monitoring daemon";
     homepage = "https://www.gnu.org.ua/software/direvent/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ puffnfresh ];
   };
 }

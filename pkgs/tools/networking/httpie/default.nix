@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication rec {
 
   outputs = [ "out" "doc" "man" ];
 
+  nativeBuildInputs = [ docutils ];
+
   propagatedBuildInputs = with python3Packages; [ pygments requests requests-toolbelt setuptools ];
 
   checkInputs = with python3Packages; [
@@ -49,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     sed -e 's/^|build|//g' -i README.rst
 
     toHtml() {
-      ${docutils}/bin/rst2html5 \
+      rst2html5 \
         --strip-elements-with-class=no-web \
         --title=http \
         --no-generator \
@@ -63,7 +65,7 @@ python3Packages.buildPythonApplication rec {
     toHtml CHANGELOG.rst $docdir/html/CHANGELOG.html
     toHtml CONTRIBUTING.rst $docdir/html/CONTRIBUTING.html
 
-    ${docutils}/bin/rst2man \
+    rst2man \
       --strip-elements-with-class=no-web \
       --title=http \
       --no-generator \

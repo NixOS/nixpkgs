@@ -45,12 +45,6 @@ stdenv.mkDerivation {
   version = nvidia_x11.settingsVersion;
   inherit src;
 
-  patches = [
-    # Fix a race condition in parallel builds.
-    # https://github.com/NVIDIA/nvidia-settings/issues/59#issuecomment-770302032
-    ./nvidia-setttings-parallel-build.patch
-  ];
-
   nativeBuildInputs = [ pkg-config m4 ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]

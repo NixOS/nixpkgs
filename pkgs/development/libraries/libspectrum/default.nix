@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, perl, pkg-config, audiofile, bzip2, glib, libgcrypt, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libspectrum-1.4.4";
+  name = "libspectrum-1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/fuse-emulator/${name}.tar.gz";
-    sha256 = "1cc0jx617sym6qj1f9fm115q44cq5azsxplqq2cgrg0pmlmjpyzx";
+    sha256 = "sha256-o1PLRumxooEGHYFjU+oBDQpv545qF6oLe3QnHKXkrPw=";
   };
 
   nativeBuildInputs = [ perl pkg-config ];

@@ -242,6 +242,7 @@
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
+  ./services/backup/borgmatic.nix
   ./services/backup/duplicati.nix
   ./services/backup/duplicity.nix
   ./services/backup/mysql-backup.nix
@@ -637,6 +638,7 @@
   ./services/networking/coredns.nix
   ./services/networking/corerad.nix
   ./services/networking/coturn.nix
+  ./services/networking/croc.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
@@ -1053,6 +1055,7 @@
   ./testing/service-runner.nix
   ./virtualisation/anbox.nix
   ./virtualisation/container-config.nix
+  ./virtualisation/containerd.nix
   ./virtualisation/containers.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix

@@ -7,18 +7,17 @@
 , pytest_xdist
 , pytest-django
 , mock
-, django
 }:
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
     rev = "v${version}";
-    sha256 = "0xwqw60dbn1x2294galcs08vm6ydcr677lr8slqz8a3ry6sgkhn9";
+    sha256 = "sha256-dWtEyyWpg0rxEwyhBdPyApzgS9o60HVGbtY76ELHvX8=";
   };
 
   checkInputs = [
@@ -31,6 +30,7 @@ buildPythonPackage rec {
 
   # Darwin sandbox causes most tests to fail.
   doCheck = !stdenv.isDarwin;
+  pythonImportsCheck = [ "diskcache" ];
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";

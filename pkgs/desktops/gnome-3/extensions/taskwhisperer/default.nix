@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell, gnome3 }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-taskwhisperer";

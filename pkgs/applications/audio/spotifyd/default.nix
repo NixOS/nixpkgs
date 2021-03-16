@@ -1,24 +1,24 @@
-{ lib, fetchFromGitHub, rustPackages_1_45, pkg-config, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
+{ lib, fetchFromGitHub, rustPackages, pkg-config, openssl
+, withALSA ? true, alsaLib
+, withPulseAudio ? false, libpulseaudio
+, withPortAudio ? false, portaudio
 , withMpris ? false
 , withKeyring ? false
-, dbus ? null
+, dbus
 }:
 
-rustPackages_1_45.rustPlatform.buildRustPackage rec {
+rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     rev = "v${version}";
-    sha256 = "055njhy9if4qpsbgbr6615xxhcx9plava1m4l323vi4dbw09wh5r";
+    sha256 = "1a578h13iv8gqmskzlncfr42jlg5gp0zfcizv4wbd48y9hl8fh2l";
   };
 
-  cargoSha256 = "1ijrl208607abjwpr3cajcbj6sr35bk6ik778a58zf28kzdhrawc";
+  cargoSha256 = "1sm5yfgjx5xfnqqh1v8ycwzxw4kl6dq5gcvsdnc4h1cj3pdhbpcc";
 
   cargoBuildFlags = [
     "--no-default-features"
@@ -39,6 +39,7 @@ rustPackages_1_45.rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An open source Spotify client running as a UNIX daemon";
     homepage = "https://github.com/Spotifyd/spotifyd";
+    changelog = "https://github.com/Spotifyd/spotifyd/raw/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ anderslundstedt Br1ght0ne marsam ];
     platforms = platforms.unix;

@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
+    "--with-frozenpaths"
     "--with-quantum-depth=${toString quantumdepth}"
     "--with-gslib=yes"
   ];

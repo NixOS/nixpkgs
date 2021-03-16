@@ -50,6 +50,12 @@ self: super: {
     random = super.random_1_2_0;
   };
 
+  # cabal-install-parsers is written for Cabal 3.4
+  cabal-install-parsers = super.cabal-install-parsers.override {
+    Cabal = super.Cabal_3_4_0_0;
+    base16-bytestring = super.base16-bytestring_1_0_1_0;
+  };
+
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   system-fileio = doJailbreak super.system-fileio;

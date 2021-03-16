@@ -1,15 +1,28 @@
-{ lib, fetchurl, buildDunePackage
-, cppo, ppxlib, ppx_derivers, result, ounit, ocaml-migrate-parsetree
+{ lib
+, fetchurl
+, buildDunePackage
+, cppo
+, ppxlib
+, ppx_derivers
+, result
+, ounit
+, ocaml-migrate-parsetree
+, ocaml-migrate-parsetree-2-1
 }:
 
 let params =
-  if lib.versionAtLeast ppxlib.version "0.15"
-  then {
+  if lib.versionAtLeast ppxlib.version "0.20" then {
+    version = "5.2.1";
+    sha256 = "11h75dsbv3rs03pl67hdd3lbim7wjzh257ij9c75fcknbfr5ysz9";
+    useOMP2 = true;
+  } else if lib.versionAtLeast ppxlib.version "0.15" then {
     version = "5.1";
     sha256 = "1i64fd7qrfzbam5hfbl01r0sx4iihsahcwqj13smmrjlnwi3nkxh";
+    useOMP2 = false;
   } else {
     version = "5.0";
     sha256 = "0fkzrn4pdyvf1kl0nwvhqidq01pnq3ql8zk1jd56hb0cxaw851w3";
+    useOMP2 = false;
   }
 ; in
 
@@ -25,7 +38,13 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ppxlib cppo ];
-  propagatedBuildInputs = [ ocaml-migrate-parsetree ppx_derivers result ];
+  propagatedBuildInputs = [
+    (if params.useOMP2
+    then ocaml-migrate-parsetree-2-1
+    else ocaml-migrate-parsetree)
+    ppx_derivers
+    result
+  ];
 
   doCheck = true;
   checkInputs = [ ounit ];

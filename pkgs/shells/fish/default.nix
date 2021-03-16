@@ -17,6 +17,7 @@
 , python3
 , cmake
 , fishPlugins
+, procps
 
 , runCommand
 , writeText
@@ -130,7 +131,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.1.2";
+    version = "3.2.0";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -139,13 +140,44 @@ let
       # the shell's actual version (and what it displays when running `fish
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
-      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1vblmb3x2k2cb0db5jdyflppnlqsm7i6jjaidyhmvaaw7ch2gffm";
+      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
+      sha256 = "sha256-TwKT7Z9qa3fkfUHvq+YvMxnobvyL+DzFhzMET7xvkhE=";
     };
 
-    # We don't have access to the codesign executable, so we patch this out.
-    # For more information, see: https://github.com/fish-shell/fish-shell/issues/6952
-    patches = lib.optional stdenv.isDarwin ./dont-codesign-on-mac.diff;
+    # Fix FHS paths in tests
+    postPatch = ''
+      # src/fish_tests.cpp
+      sed -i 's|/bin/ls|${coreutils}/bin/ls|' src/fish_tests.cpp
+      sed -i 's|L"/usr"|L"/nix"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
+
+      # tests/checks/cd.fish
+      sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
+
+      # tests/checks/redirect.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/redirect.fish
+
+      # tests/checks/vars_as_commands.fish
+      sed -i 's|/usr/bin|${coreutils}/bin|' tests/checks/vars_as_commands.fish
+
+      # tests/checks/jobs.fish
+      sed -i 's|ps -o stat|${procps}/bin/ps -o stat|' tests/checks/jobs.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/jobs.fish
+
+      # tests/checks/job-control-noninteractive.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/job-control-noninteractive.fish
+
+      # tests/checks/complete.fish
+      sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
+    '' + lib.optionalString stdenv.isDarwin ''
+      # Tests use pkill/pgrep which are currently not built on Darwin
+      # See https://github.com/NixOS/nixpkgs/pull/103180
+      rm tests/pexpects/exit.py
+      rm tests/pexpects/job_summary.py
+      rm tests/pexpects/signals.py
+    '';
 
     nativeBuildInputs = [
       cmake
@@ -159,6 +191,8 @@ let
 
     cmakeFlags = [
       "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
+    ] ++ lib.optionals stdenv.isDarwin [
+      "-DMAC_CODESIGN_ID=OFF"
     ];
 
     preConfigure = ''
@@ -176,16 +210,23 @@ let
       gettext
     ] ++ lib.optional (!stdenv.isDarwin) man-db;
 
+    doCheck = true;
+
+    checkInputs = [
+      coreutils
+      (python3.withPackages(ps: [ps.pexpect]))
+      procps
+    ];
+
+    checkPhase = ''
+      make test
+    '';
+
     postInstall = with lib; ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
-      sed -i "s|which |${which}/bin/which |"               \
-             "$out/share/fish/functions/type.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
           -i "$out/share/fish/functions/fish_prompt.fish"
-      sed -e "s|gettext |${gettext}/bin/gettext |"         \
-          -e "s|which |${which}/bin/which |"               \
-          -i "$out/share/fish/functions/_.fish"
       sed -e "s|uname|${coreutils}/bin/uname|"             \
           -i "$out/share/fish/functions/__fish_pwd.fish"   \
              "$out/share/fish/functions/prompt_pwd.fish"
@@ -255,7 +296,7 @@ let
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no
             # tempfile to check)
-            sed -e "s@, mode='w'@, mode='w', delete=False@" -i webconfig.py
+            sed -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
 
             # we delete everything after the fileurl is assigned
             sed -e '/fileurl =/q' -i webconfig.py

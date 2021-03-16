@@ -75,6 +75,7 @@
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
+, "@electron-forge/cli"
 , "elm-oracle"
 , "emoj"
 , "emojione"
@@ -188,6 +189,7 @@
 , "readability-cli"
 , "redoc-cli"
 , "reveal.js"
+, "rimraf"
 , "rollup"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
 , "s3http"

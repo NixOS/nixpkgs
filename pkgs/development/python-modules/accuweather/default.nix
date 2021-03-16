@@ -1,22 +1,43 @@
-{ aiohttp, buildPythonPackage, fetchFromGitHub, lib, pytest, pytestCheckHook
-, pytestcov, pytestrunner, pytest-asyncio, python, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestrunner
+, aiohttp
+, aioresponses
+, pytestCheckHook
+, pytestcov
+, pytest-asyncio
+}:
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "0.0.11";
+  version = "0.1.0";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "1sgbw9yldf81phwx6pbvqg9sp767whxymyj0ca9pwx1r6ipr080h";
+    sha256 = "0jp2x7fgg1shgr1fx296rni00lmjjmjgg141giljzizgd04dwgy3";
   };
 
+  postPatch = ''
+    # we don't have pytest-error-for-skips packaged
+    substituteInPlace pytest.ini --replace "--error-for-skips" ""
+  '';
+
   nativeBuildInputs = [ pytestrunner ];
+
   propagatedBuildInputs = [ aiohttp ];
-  checkInputs = [ pytestCheckHook pytestcov pytest-asyncio ];
+
+  checkInputs = [
+    aioresponses
+    pytestCheckHook
+    pytestcov
+    pytest-asyncio
+  ];
 
   meta = with lib; {
     description =

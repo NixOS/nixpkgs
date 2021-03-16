@@ -2,7 +2,7 @@
 , llvmPackages_11, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
-, pipewire_0_2
+, pipewire
 , gcc, nspr, nss, runCommand
 , lib
 
@@ -13,7 +13,6 @@
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enableWideVine ? false
-, enableVaapi ? false # Disabled by default due to unofficial support
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
@@ -161,14 +160,13 @@ in stdenv.mkDerivation {
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire_0_2 ];
+    libPath = lib.makeLibraryPath [ libva pipewire ];
 
   in with lib; ''
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
-      ${lib.optionalString enableVaapi "--add-flags --enable-accelerated-video-decode"}
+      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

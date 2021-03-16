@@ -6,17 +6,6 @@ let
   defaultOverrides = commonOverrides ++ [
     (mkOverride "aiofiles" "0.5.0"
       "98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af")
-    (self: super: {
-      py-cpuinfo = super.py-cpuinfo.overridePythonAttrs (oldAttrs: rec {
-        version = "7.0.0";
-        src = fetchFromGitHub {
-           owner = "workhorsy";
-           repo = "py-cpuinfo";
-           rev = "v${version}";
-           sha256 = "10qfaibyb2syiwiyv74l7d97vnmlk079qirgnw3ncklqjs0s3gbi";
-        };
-      });
-    })
   ];
 
   python = python3.override {
@@ -62,6 +51,6 @@ in python.pkgs.buildPythonPackage {
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

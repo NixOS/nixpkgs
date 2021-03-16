@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
+, installShellFiles
 , buildkit
 , cni-plugins
 , extraPackages ? [ ]
@@ -9,26 +10,23 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zexvTPEQw7iW1d3ahHmqTn+UaT/bJMlr1sVlWErc2ck=";
+    sha256 = "sha256-tMzob+ljGBKkfbxwMqy+8bqVp51Eqyx4kXhsj/LRfzQ=";
   };
 
-  vendorSha256 = "sha256-bX1GfKbAbdEAnW3kPNsbF/cJWufxvuhm//G88qJ3u08=";
+  vendorSha256 = "sha256-zUX/kneVz8uXmxly8yqmcttK3Wj4EmBaT8gmg3hDms4=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-w"
-    "-s"
-    "-X github.com/AkihiroSuda/nerdctl/pkg/version.Version=v${version}"
-    "-X github.com/AkihiroSuda/nerdctl/pkg/version.Revision=<unknown>"
-  ];
+  preBuild = let t = "github.com/AkihiroSuda/nerdctl/pkg/version"; in
+    ''
+      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.Revision=<unknown>")
+    '';
 
   # Many checks require a containerd socket and running nerdctl after it's built
   doCheck = false;
@@ -37,17 +35,19 @@ buildGoModule rec {
     wrapProgram $out/bin/nerdctl \
       --prefix PATH : "${lib.makeBinPath ([ buildkit ] ++ extraPackages)}" \
       --prefix CNI_PATH : "${cni-plugins}/bin"
+
+    # nerdctl panics without XDG_RUNTIME_DIR set
+    export XDG_RUNTIME_DIR=$TMPDIR
+
+    installShellCompletion --cmd nerdctl \
+      --bash <($out/bin/nerdctl completion bash)
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
-    # nerdctl expects XDG_RUNTIME_DIR to be set
-    export XDG_RUNTIME_DIR=$TMPDIR
-
     $out/bin/nerdctl --help
-    # --version will error without containerd.sock access
-    $out/bin/nerdctl --help | grep "${version}"
+    $out/bin/nerdctl --version | grep "nerdctl version ${version}"
     runHook postInstallCheck
   '';
 

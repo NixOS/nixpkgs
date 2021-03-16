@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lewo ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
   };
 }

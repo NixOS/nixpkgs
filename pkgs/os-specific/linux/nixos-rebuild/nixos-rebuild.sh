@@ -325,20 +325,6 @@ cleanup() {
 trap cleanup EXIT
 
 
-
-# If the Nix daemon is running, then use it.  This allows us to use
-# the latest Nix from Nixpkgs (below) for expression evaluation, while
-# still using the old Nix (via the daemon) for actual store access.
-# This matters if the new Nix in Nixpkgs has a schema change.  It
-# would upgrade the schema, which should only happen once we actually
-# switch to the new configuration.
-# If --repair is given, don't try to use the Nix daemon, because the
-# flag can only be used directly.
-if [ -z "$repair" ] && systemctl show nix-daemon.socket nix-daemon.service | grep -q ActiveState=active; then
-    export NIX_REMOTE=${NIX_REMOTE-daemon}
-fi
-
-
 # First build Nix, since NixOS may require a newer version than the
 # current one.
 if [ -n "$rollback" -o "$action" = dry-build ]; then

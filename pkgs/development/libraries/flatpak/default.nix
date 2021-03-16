@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchurl
 , autoreconfHook
-, docbook_xml_dtd_412
 , docbook_xml_dtd_45
 , docbook-xsl-nons
 , which
@@ -53,14 +52,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.10.1";
+  version = "1.10.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1dywvfpmszvp2wy5hvpzy8z6gz2gzmi9p302njp52p9vpx14ydf1";
+    sha256 = "sha256-2xUnOdBy+P8pnk6IjYljobRTjaexDguGUlvkOPLh3eQ=";
   };
 
   patches = [
@@ -105,9 +104,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     libxml2
-    # Remove 4.1.2 again once the following is merged
-    # https://github.com/flatpak/flatpak/pull/4102
-    docbook_xml_dtd_412
     docbook_xml_dtd_45
     docbook-xsl-nons
     which

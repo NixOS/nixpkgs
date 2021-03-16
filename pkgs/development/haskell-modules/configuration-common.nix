@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1lvl6i3ym7dyg215fkmslf3rnk29hz7f21jn91y1mghrhch7hvhl";
+      sha256 = "1y9js3n8ml2g492nivy7gk371rdmibwydb4fwzzwbviya280akaq";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -727,8 +727,19 @@ self: super: {
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
+  # 2021-03-12: All of this libraries have to restrictive upper bounds
+  # https://github.com/diagrams/diagrams-core/issues/112
+  active = doJailbreak super.active;
+  statestack = doJailbreak super.statestack;
+  force-layout = doJailbreak super.force-layout;
+  size-based = doJailbreak super.size-based;
+  dual-tree = doJailbreak super.dual-tree;
+  diagrams-core = doJailbreak super.diagrams-core;
+  diagrams-postscript = doJailbreak super.diagrams-postscript;
+  diagrams-svg = doJailbreak super.diagrams-svg;
+  diagrams-contrib = doJailbreak super.diagrams-contrib;
   # https://github.com/diagrams/diagrams-lib/issues/288
-  diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
+  diagrams-lib = doJailbreak (overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; }));
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
@@ -1413,17 +1424,21 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
 
-  # 2021-02-11: Jailbreaking because of syntax error on bound revision
-  hls-explicit-imports-plugin = doJailbreak super.hls-explicit-imports-plugin;
+  # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
+  lsp-test = doDistribute (dontCheck self.lsp-test_0_13_0_0);
 
-  # 2021-02-08: Overrides because nightly is to old for hls 0.9.0
-  lsp-test = doDistribute (dontCheck self.lsp-test_0_11_0_7);
-  haskell-lsp = doDistribute self.haskell-lsp_0_23_0_0;
-  haskell-lsp-types = doDistribute self.haskell-lsp-types_0_23_0_0;
+  # 2021-03-09: Golden tests seem to be missing in hackage release:
+  # https://github.com/haskell/haskell-language-server/issues/1536
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
-  # 1. test requires internet
-  # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
-  ghcide = doDistribute (unmarkBroken (dontCheck super.ghcide));
+  # 2021-03-21 Test hangs
+  # https://github.com/haskell/haskell-language-server/issues/1562
+  ghcide = dontCheck super.ghcide;
+
+  # 2020-03-09: Tests broken in hackage release
+  # fixed on upstream, but not released in hiedb 0.3.0.1
+  # https://github.com/wz1000/HieDb/issues/30
+  hiedb = dontCheck super.hiedb;
 
   data-tree-print = doJailbreak super.data-tree-print;
 
@@ -1487,13 +1502,6 @@ self: super: {
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
 
-  # Use an already merged upstream patch fixing the build with primitive >= 0.7.2
-  # The version bounds were correctly specified before, so we need to jailbreak as well
-  streamly = appendPatch (doJailbreak super.streamly) (pkgs.fetchpatch {
-    url = "https://github.com/composewell/streamly/commit/2c88cb631fdcb5c0d3a8bc936e1e63835800be9b.patch";
-    sha256 = "0g2m0y46zr3xs9fswkm4h9adhsg6gzl5zwgidshsjh3k3rq4h7b1";
-  });
-
   # https://github.com/ekmett/half/issues/35
   half = if pkgs.stdenv.isAarch64
     then dontCheck super.half
@@ -1522,8 +1530,25 @@ self: super: {
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
 
-  # 2020-11-27: cxx-options is broken in Cabal 3.2.0.0
-  hercules-ci-agent = addSetupDepend super.hercules-ci-agent self.Cabal_3_2_1_0;
+  hercules-ci-agent = super.hercules-ci-agent.override {
+    cachix =
+      # https://github.com/cachix/cachix/pull/361
+      (appendPatch
+        (addBuildDepend super.cachix super.hercules-ci-cnix-store)
+        (pkgs.fetchpatch {
+          name = "cachix-361.patch";
+          url = "https://patch-diff.githubusercontent.com/raw/cachix/cachix/pull/361.patch";
+          sha256 = "0wwlcpmnqmvk1css5f723dzgjvg4jr7i58ifhni5zg9h5iwycdfr";
+          stripLen = 1;
+          includes = ["*.cabal" "*.hs"];
+        })
+        );
+  };
+
+  hercules-ci-cli = generateOptparseApplicativeCompletion "hci" (
+    # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
+    addBuildDepend (unmarkBroken super.hercules-ci-cli) super.hercules-ci-optparse-applicative
+  );
 
   # 2020-12-05: http-client is fixed on too old version
   essence-of-live-coding-warp = super.essence-of-live-coding-warp.override {
@@ -1608,5 +1633,32 @@ self: super: {
       })
     ];
   });
+
+  # cabal-install switched to build type simple in 3.2.0.0
+  # as a result, the cabal(1) man page is no longer installed
+  # automatically. Instead we need to use the `cabal man`
+  # command which generates the man page on the fly and
+  # install it to $out/share/man/man1 ourselves in this
+  # override.
+  # The commit that introduced this change:
+  # https://github.com/haskell/cabal/commit/91ac075930c87712eeada4305727a4fa651726e7
+  cabal-install = overrideCabal super.cabal-install (old: {
+    postInstall = old.postInstall + ''
+      mkdir -p "$out/share/man/man1"
+      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+    '';
+  });
+
+  # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
+  amazonka = appendPatches (doJailbreak super.amazonka) [
+    (pkgs.fetchpatch {
+      stripLen = 1;
+      url = "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
+      sha256 = "1x9l5xgvrh908di6whpavyp08cys11v3yn6rc21zw87xiyigdbi3";
+    })
+  ];
+
+  # Test suite does not compile.
+  feed = dontCheck super.feed;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

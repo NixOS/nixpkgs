@@ -4,12 +4,17 @@
 
 buildPythonPackage rec {
   pname = "pyroma";
-  version = "2.6";
+  version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00j1j81kiipi5yppmk385cbfccf2ih0xyapl7pw6nqhrf8vh1764";
+    sha256 = "2527423e3a24ccd56951f3ce1b0ebbcc4fa0518c82fca882e696c78726ab9c2f";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pygments < 2.6" "pygments"
+  '';
 
   propagatedBuildInputs = [ docutils pygments setuptools ];
 

@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchhg, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
+{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
 , libX11, libGL }:
 
-stdenv.mkDerivation {
-  name = "glpaper";
+stdenv.mkDerivation rec {
+  pname = "glpaper";
   version = "unstable-2020-10-11";
 
-  src = fetchhg {
-    url = "https://hg.sr.ht/~scoopta/glpaper";
+  src = fetchFromSourcehut {
+    owner = "~scoopta";
+    repo = pname;
+    vc = "hg";
     rev = "9e7ec7cd270af330039c395345c7d23c04682267";
     sha256 = "sha256-yBHRg6eg+PK/ixuM0MBty3RJY9qcemr3Dt+8SAitqnk=";
   };

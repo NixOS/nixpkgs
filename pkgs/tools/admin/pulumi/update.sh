@@ -3,13 +3,13 @@
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="2.21.2"
+VERSION="2.22.0"
 
 # Grab latest release ${VERSION} from
 # https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
     "auth0=1.8.1"
-    "aws=3.30.1"
+    "aws=3.32.0"
     "cloudflare=2.13.1"
     "consul=2.8.1"
     "datadog=2.16.1"

@@ -1,31 +1,33 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , rustPlatform
 , fetchFromGitHub
 
   # Check inputs
 , pytestCheckHook
+, networkx
 , numpy
 }:
 
 buildPythonPackage rec {
   pname = "retworkx";
-  version = "0.6.0";
+  version = "0.8.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "retworkx";
     rev = version;
-    sha256 = "11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20";
+    sha256 = "0plpri6a3d6f1000kmcah9066vq2i37d14bdf8sm96493fhpqhrd";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-heOBK8qi2nuc/Ib+I/vLzZ1fUUD/G/KTw9d7M4Hz5O0=";
+    hash = "sha256-+k779gmge8wDdoZrWn9ND47kUqt7pqe75Zuj2Byfefo=";
   };
-
-  format = "pyproject";
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
@@ -33,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
   doInstallCheck = true;
 
-  installCheckInputs = [ pytestCheckHook numpy ];
+  installCheckInputs = [ pytestCheckHook networkx numpy ];
 
   preCheck = ''
     export TESTDIR=$(mktemp -d)

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
-    sha256 = "jzNopLndYH9dIdm30pyDaZNksHwS4i5LTZUXRmcrTp8=";
+    sha256 = "sha256-Htk2NHgYVL622URx67BUtounAUopLTahaSqfAqd3+ZI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

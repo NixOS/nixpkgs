@@ -1,12 +1,14 @@
-{ lib, stdenv, rustPlatform, fetchurl, pkg-config, ncurses, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromSourcehut, pkg-config, ncurses, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asuka";
   version = "0.8.1";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~julienxx/${pname}/archive/${version}.tar.gz";
-    sha256 = "07i80qmdpwfdgwrk1gzs10wln91v23qjrsk0x134xf5mjnakxc06";
+  src = fetchFromSourcehut {
+    owner = "~julienxx";
+    repo = pname;
+    rev = version;
+    sha256 = "1y8v4qc5dng3v9k0bky1xlf3qi9pk2vdsi29lff4ha5310467f0k";
   };
 
   cargoSha256 = "0p0x4ch04kydg76bfal5zqzr9hvn5268wf3k2v9h7g8r4y8xqlhw";

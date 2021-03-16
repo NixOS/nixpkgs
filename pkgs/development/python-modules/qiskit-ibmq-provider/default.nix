@@ -22,6 +22,7 @@
 , nbconvert
 , nbformat
 , pproxy
+, qiskit-aer
 , vcrpy
 }:
 
@@ -38,7 +39,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.11.1";
+  version = "0.12.1";
 
   disabled = pythonOlder "3.6";
 
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "0b5mnq8f5844idnsmp84lpkvlpszfwwi998yvggcgaayw1dbk53h";
+    sha256 = "1i5dj5dl0hxqd61bdflyy6yq958fj9qhf6s6m40n1vnql7g50gdx";
   };
 
   propagatedBuildInputs = [
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     nbconvert
     nbformat
     pproxy
+    qiskit-aer
     vcrpy
   ] ++ lib.optionals (!withVisualization) visualizationPackages;
 

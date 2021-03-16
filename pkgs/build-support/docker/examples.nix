@@ -427,4 +427,18 @@ rec {
       tag = "latest";
       contents = [ pkgs.bash symlink ];
     } // { passthru = { inherit symlink; }; };
+
+  # image with registry/ prefix
+  prefixedImage = pkgs.dockerTools.buildImage {
+    name = "registry-1.docker.io/image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
+
+  # layered image with registry/ prefix
+  prefixedLayeredImage = pkgs.dockerTools.buildLayeredImage {
+    name = "registry-1.docker.io/layered-image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
 }

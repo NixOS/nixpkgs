@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = pname;
-    rev = "b4fa30e57ec8976fb1c10bd36737bc784351b93e";
-    sha256 = "0gfs9lm4ih3h3fmgqylw05ii1h0d6mpjfxadnw3wymnjsspfb0m4";
+    rev = "acd36ab6ccee67a652b6d84aedc4c2828abac5c6";
+    sha256 = "0mh4gh6qij70clp64m4jw6q7dafr7gwjqpvpaf9vc6h10g1rhzrx";
   };
 
   relAssetsPath = "share/${pname}";
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/niklasf/fishnet-assets";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ tu-maurice ];
+    platforms = [ "x86_64-linux" ];
   };
 }

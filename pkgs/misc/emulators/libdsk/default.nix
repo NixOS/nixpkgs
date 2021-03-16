@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libdsk";
-  version = "1.5.14";
+  version = "1.5.15";
 
   src = fetchurl {
     url = "https://www.seasip.info/Unix/LibDsk/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fQc6QAj160OskhAo1zQsQKiLgDgZRInU/derP2pEw54=";
+    sha256 = "sha256-7VjVgGRy3+SE+9mdPpBKiNzv1tg2akXpkHfv2dVoODs=";
   };
 
   meta = with lib; {
@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.seasip.info/Unix/LibDsk/";
     license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

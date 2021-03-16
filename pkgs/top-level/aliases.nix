@@ -232,6 +232,7 @@ mapAliases ({
   };
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
+  gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
   gnome-mpv = celluloid; # added 2019-08-22
   gnome15 = throw "gnome15 has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2019-12-10
   gmic_krita_qt = gmic-qt-krita; # added 2019-09-07
@@ -239,16 +240,24 @@ mapAliases ({
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gnunet_git = throw "gnunet_git was removed due to gnunet becoming stable"; # added 2019-05-27
-  gnuradio-nacl = gr-nacl; # added 2019-05-27
-  gnuradio-gsm = gr-gsm; # added 2019-05-27
-  gnuradio-ais = gr-ais; # added 2019-05-27
-  gnuradio-limesdr = gr-limesdr; # added 2019-05-27
-  gnuradio-rds = gr-rds; # added 2019-05-27
-  gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
-  # added 20-10-2020
+  # Added 2020-10-16
   gnuradio-with-packages = gnuradio3_7.override {
-    extraPackages = [ gr-nacl gr-gsm gr-ais gr-limesdr gr-rds gr-osmosdr ];
+    extraPackages = lib.attrVals [
+      "osmosdr" "ais" "gsm" "nacl" "rds" "limesdr"
+    ] gnuradio3_7Packages;
   };
+  gnuradio-nacl = gnuradio3_7.pkgs.nacl; # added 2019-05-27, changed 2020-10-16
+  gnuradio-gsm = gnuradio3_7.pkgs.gsm; # added 2019-05-27, changed 2020-10-16
+  gnuradio-ais = gnuradio3_7.pkgs.ais; # added 2019-05-27, changed 2020-10-16
+  gnuradio-limesdr = gnuradio3_7.pkgs.limesdr; # added 2019-05-27, changed 2020-10-16
+  gnuradio-rds = gnuradio3_7.pkgs.rds; # added 2019-05-27, changed 2020-10-16
+  gnuradio-osmosdr = gnuradio3_7.pkgs.osmosdr; # added 2019-05-27, changed 2020-10-16
+  gr-nacl = gnuradio3_7.pkgs.nacl; # added 2019-05-27, changed 2020-10-16
+  gr-gsm = gnuradio3_7.pkgs.gsm; # added 2019-05-27, changed 2020-10-16
+  gr-ais = gnuradio3_7.pkgs.ais; # added 2019-05-27, changed 2020-10-16
+  gr-limesdr = gnuradio3_7.pkgs.limesdr; # added 2019-05-27, changed 2020-10-16
+  gr-rds = gnuradio3_7.pkgs.rds; # added 2019-05-27, changed 2020-10-16
+  gr-osmosdr = gnuradio3_7.pkgs.osmosdr; # added 2019-05-27, changed 2020-10-16
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
@@ -259,6 +268,8 @@ mapAliases ({
   goimports = gotools; # added 2018-09-16
   gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
   google-gflags = gflags; # added 2019-07-25
+  google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # added 2021-03-07
+  google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # added 2021-03-07
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
@@ -292,13 +303,16 @@ mapAliases ({
   inotifyTools = inotify-tools;
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
-  jasper = throw "jasper has been removed: abandoned upstream with many vulnerabilities";
-  jbuilder = dune; # added 2018-09-09
+  jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+  jbuilder = dune_1; # added 2018-09-09
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
+  kodiGBM = kodi-gbm;
+  kodiPlain = kodi;
+  kodiPlainWayland = kodi-wayland;
   julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
   kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
@@ -353,6 +367,7 @@ mapAliases ({
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
   libstdcxxHook = throw "libstdcxx hook has been removed because cc-wrapper is now directly aware of the c++ standard library intended to be used."; # 2020-06-22
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
+  lilypond-unstable = lilypond; # added 2021-03-11
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
@@ -383,6 +398,7 @@ mapAliases ({
   mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # added 2020-05-23
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained; try mcomix3 a Python 3 fork"; # added 2019-12-10, modified 2020-11-25
   mirage = throw "mirage has been femoved from nixpkgs, as it's unmaintained"; # added 2019-12-10
+  mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mysql-client = hiPrio mariadb.client;
@@ -553,11 +569,13 @@ mapAliases ({
   phonon-backend-vlc = throw "phonon-backend-vlc: Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon = throw "phonon: Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
   pynagsystemd = throw "pynagsystemd was removed as it was unmaintained and incompatible with recent systemd versions. Instead use its fork check_systemd."; # added 2020-10-24
+  python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead."; # added 2021-03-08
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
   qvim = throw "qvim has been removed."; # added 2020-08-31
+  qweechat = throw "qweechat has been removed because it was broken"; # added 2021-03-08
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtcurve = libsForQt5.qtcurve;  # added 2020-11-07
   qtpfsgui = throw "qtpfsgui is now luminanceHDR"; # added 2019-06-26
@@ -729,6 +747,7 @@ mapAliases ({
   trilium = throw "trilium has been removed. Please use trilium-desktop instead."; # added 2020-04-29
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
+  tuijam = throw "tuijam has been removed because Google Play Music was discontinued"; # added 2021-03-07
   uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
@@ -772,7 +791,8 @@ mapAliases ({
   xara = throw "xara has been removed from nixpkgs. Unmaintained since 2006"; # added 2020-06-24
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
-  xbmcPlugins = kodiPlugins; # added 2018-04-25
+  xbmcPlugins = kodiPackages; # added 2018-04-25
+  kodiPlugins = kodiPackages; # added 2021-03-09;
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xmpppy = throw "xmpppy has been removed from nixpkgs as it is unmaintained and python2-only";
   pyIRCt = throw "pyIRCt has been removed from nixpkgs as it is unmaintained and python2-only";
@@ -786,6 +806,7 @@ mapAliases ({
   xv = xxv; # added 2020-02-22
   youtubeDL = youtube-dl;  # added 2014-10-26
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
+  yubikey-neo-manager = throw "yubikey-neo-manager has been removed because it was broken. Use yubikey-manager-qt instead."; # added 2021-03-08
   yuzu = yuzu-mainline; # added 2021-01-25
   zdfmediathk = mediathekview; # added 2019-01-19
   gnome_user_docs = gnome-user-docs; # added 2019-11-20

@@ -68,6 +68,10 @@ let
       dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
     });
 
+    "@electron-forge/cli" = super."@electron-forge/cli".override {
+      buildInputs = [ self.node-pre-gyp self.rimraf ];
+    };
+
     git-ssb = super.git-ssb.override {
       buildInputs = [ self.node-gyp-build ];
       meta.broken = since "10";

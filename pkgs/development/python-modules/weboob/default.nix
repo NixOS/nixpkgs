@@ -6,7 +6,7 @@
 , futures
 , gdata
 , gnupg
-, google_api_python_client
+, google-api-python-client
 , html2text
 , libyaml
 , lxml
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     feedparser
     gdata
     gnupg
-    google_api_python_client
+    google-api-python-client
     html2text
     libyaml
     lxml

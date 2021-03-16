@@ -147,6 +147,11 @@ rec {
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [ async ctypes openssl ];
+    # in ctypes.foreign 0.18.0 threaded and unthreaded have been merged
+    postPatch = ''
+      substituteInPlace bindings/dune \
+        --replace "ctypes.foreign.threaded" "ctypes.foreign"
+    '';
   };
 
   async_unix = janePackage {
@@ -217,7 +222,8 @@ rec {
 
   core = janePackage {
     pname = "core";
-    hash = "1m9h73pk9590m8ngs1yf4xrw61maiqmi9glmlrl12qhi0wcja5f3";
+    version = "0.14.1";
+    hash = "1isrcl07nkmdm6akqsqs9z8s6zvva2lvg47kaagy7gsbyszrqb82";
     meta.description = "System-independent part of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ core_kernel spawn timezone ];
@@ -240,7 +246,8 @@ rec {
 
   core_kernel = janePackage {
     pname = "core_kernel";
-    hash = "012sp02v35j41lzkvf073620602fgiswz2n224j06mk3bm8jmjms";
+    version = "0.14.1";
+    hash = "0pikg4ln6177gbs0jfix7xj50zlcm7058h64lxnd7wspnj7mq8sd";
     meta.description = "System-independent part of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base_bigstring sexplib ];

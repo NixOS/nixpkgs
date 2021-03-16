@@ -2,25 +2,22 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.28.7";
+  version = "0.28.12";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pM3R85gdP2eVoXx//2tKePNAi14eM8Ut+eXR+vB0Ukk=";
+    sha256 = "sha256-oHujPgnS76FYihzZV5ZzPP+4+77zNtYozH9jhqJJyVI=";
   };
 
-  vendorSha256 = "sha256-lRJerUYafpkXAGf8MEM8SeG3aB86mlMo7iLpeHFAnd4=";
+  vendorSha256 = "sha256-SVrDBDGK809O+RaE3gOa9U1agY6hSGI/k3FUCgm+5PA=";
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-s"
-    "-w"
-    "-X main.VERSION=v${version}"
-  ];
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X main.VERSION=v${version}")
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

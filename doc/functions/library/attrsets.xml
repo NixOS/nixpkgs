@@ -7,7 +7,7 @@
  <section xml:id="function-library-lib.attrsets.attrByPath">
   <title><function>lib.attrset.attrByPath</function></title>
 
-  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet</literal>
+  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet -> Any</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.attrByPath" />
@@ -1677,8 +1677,7 @@ recursiveUpdate
   <xi:include href="./locations.xml" xpointer="lib.attrsets.recurseIntoAttrs" />
 
   <para>
-   Make various Nix tools consider the contents of the resulting
-   attribute set when looking for what to build, find, etc.
+   Make various Nix tools consider the contents of the resulting attribute set when looking for what to build, find, etc.
   </para>
 
   <para>
@@ -1720,7 +1719,7 @@ recursiveUpdate
   <xi:include href="./locations.xml" xpointer="lib.attrsets.cartesianProductOfSets" />
 
   <para>
-    Return the cartesian product of attribute set value combinations.
+   Return the cartesian product of attribute set value combinations.
   </para>
 
   <variablelist>
@@ -1749,5 +1748,4 @@ cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
 ]]></programlisting>
   </example>
  </section>
-
 </section>

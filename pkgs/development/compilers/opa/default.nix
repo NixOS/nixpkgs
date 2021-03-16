@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qs91rq9xrafv2mf2v415k8lv91ab3ycz0xkpjh1mng5ca3pjlf3";
   };
 
-  patches = [ ./ocaml-4.03.patch ];
+  patches = [ ./ocaml-4.03.patch ./ocaml-4.04.patch ];
 
   # Paths so the opa compiler code generation will use the same programs as were
   # used to build opa.

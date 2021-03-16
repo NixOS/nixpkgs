@@ -7,7 +7,7 @@ in {
     maintainers = [ globin eqyiel ];
   };
 
-  nodes = {
+  nodes = rec {
     # The only thing the client needs to do is download a file.
     client = { ... }: {
       services.davfs2.enable = true;
@@ -47,9 +47,14 @@ in {
 
       environment.systemPackages = [ cfg.services.nextcloud.occ ];
     };
+
+    nextcloudWithoutMagick = args@{ config, pkgs, lib, ... }:
+      lib.mkMerge
+      [ (nextcloud args)
+        { services.nextcloud.disableImagemagick = true; } ];
   };
 
-  testScript = let
+  testScript = { nodes, ... }: let
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
@@ -68,8 +73,19 @@ in {
       #!${pkgs.runtimeShell}
       diff <(echo 'hi') <(${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file)
     '';
+
+    findInClosure = what: drv: pkgs.runCommand "find-in-closure" { exportReferencesGraph = [ "graph" drv ]; inherit what; } ''
+      test -e graph
+      grep "$what" graph >$out || true
+    '';
+    nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.config.system.build.vm;
+    nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.config.system.build.vm;
   in ''
-    start_all()
+    assert open("${nextcloudUsesImagick}").read() != ""
+    assert open("${nextcloudWithoutDoesntUseIt}").read() == ""
+
+    nextcloud.start()
+    client.start()
     nextcloud.wait_for_unit("multi-user.target")
     # This is just to ensure the nextcloud-occ program is working
     nextcloud.succeed("nextcloud-occ status")

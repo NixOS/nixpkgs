@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/RadeonOpenCompute/rocm-cmake";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

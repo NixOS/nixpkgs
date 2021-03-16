@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "teler";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = "teler";
     rev = "v${version}";
-    sha256 = "sha256-6OeGlpimQtw4w26HRzw2wmd3wjASY199p8XXPD/JMy8=";
+    sha256 = "sha256-0tx/oyHl6s1mj7NyWMZGCJoSuOeB+BMlBrnGY4IN/i4=";
   };
 
-  vendorSha256 = "sha256-L+wjurURpesCA2IK0r1sxvOUvNJT1wiRp75kpe6LH5s=";
+  vendorSha256 = "sha256-KvUnDInUqFW7FypgsppIBQZKNu6HVsEeHtGwdqYtoys=";
 
   # test require internet access
   doCheck = false;

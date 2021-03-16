@@ -238,6 +238,8 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    decompress-1-2 = callPackage ../development/ocaml-modules/decompress/1.2.nix { };
+
     diet =  callPackage ../development/ocaml-modules/diet { };
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
@@ -276,7 +278,7 @@ let
 
     dum = callPackage ../development/ocaml-modules/dum { };
 
-    dune = callPackage ../development/tools/ocaml/dune { };
+    dune_1 = callPackage ../development/tools/ocaml/dune/1.nix { };
 
     dune_2 =
       if lib.versionAtLeast ocaml.version "4.08"
@@ -399,7 +401,9 @@ let
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
-    imagelib = callPackage ../development/ocaml-modules/imagelib { };
+    imagelib = callPackage ../development/ocaml-modules/imagelib {
+      decompress = decompress-1-2;
+    };
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
@@ -1000,6 +1004,10 @@ let
     ppx_blob = callPackage ../development/ocaml-modules/ppx_blob { };
 
     ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix { };
+
+    ppx_cstubs = callPackage ../development/ocaml-modules/ppx_cstubs {
+      ppxlib = ppxlib.override { version = "0.22.0"; };
+    };
 
     ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
 

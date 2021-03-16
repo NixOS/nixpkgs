@@ -30,6 +30,7 @@
 , libXrandr
 , libXrender
 , libXScrnSaver
+, libxshmfence
 , libXtst
 , mesa
 , nspr
@@ -72,6 +73,7 @@ rpath = lib.makeLibraryPath [
   libXi
   libXrandr
   libXrender
+  libxshmfence
   libXtst
   libuuid
   mesa
@@ -88,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.20.110";
+  version = "1.21.76";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "0xmf74qh85f2jvi90q4cw2n7cvx5p46xmdr2iznfy09hdsymxfry";
+    sha256 = "JFZaPS9NmwZeyEdDqOrKG9VEQP7wIyqkR/Sk44GVxps=";
   };
 
   dontConfigure = true;
@@ -158,7 +160,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
-    changelog = "https://github.com/brave/brave-browser/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md";
     longDescription = ''
       Brave browser blocks the ads and trackers that slow you down,
       chew up your bandwidth, and invade your privacy. Brave lets you

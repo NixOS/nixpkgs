@@ -65,7 +65,7 @@ assert (versionAtLeast version "4.9");
   PANIC_TIMEOUT = freeform "-1";
 
   GCC_PLUGINS = yes; # Enable gcc plugin options
-  # Gather additional entropy at boot time for systems that may = no;ot have appropriate entropy sources.
+  # Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
   GCC_PLUGIN_LATENT_ENTROPY = yes;
 
   GCC_PLUGIN_STRUCTLEAK = whenAtLeast "4.11" yes; # A port of the PaX structleak plugin
@@ -78,6 +78,14 @@ assert (versionAtLeast version "4.9");
   ACPI_CUSTOM_METHOD = no; # Allows writing directly to physical memory
   PROC_KCORE         = no; # Exposes kernel text image layout
   INET_DIAG          = no; # Has been used for heap based attacks in the past
+
+  # INET_DIAG=n causes the following options to not exist anymore, but since they are defined in common-config.nix,
+  # make them optional
+  INET_DIAG_DESTROY = option no;
+  INET_RAW_DIAG     = option no;
+  INET_TCP_DIAG     = option no;
+  INET_UDP_DIAG     = option no;
+  INET_MPTCP_DIAG   = option no;
 
   # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
   CC_STACKPROTECTOR_REGULAR = whenOlder "4.18" no;

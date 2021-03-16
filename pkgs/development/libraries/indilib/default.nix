@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , cmake
 , cfitsio
@@ -14,18 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "indilib";
-  version = "1.8.8";
+  version = "1.8.9";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${version}";
-    sha256 = "sha256-WTRfV6f764tDGKnQVd1jeYN/qXa/VRTFK0mMalc+9aU=";
+    sha256 = "sha256-W6LfrKL56K1B6srEfbNcq1MZwg7Oj8qoJkQ83ZhYhFs=";
   };
-
-  patches = [
-    ./udev-dir.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -43,9 +40,15 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+  ];
+
   meta = with lib; {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
+    changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 ];
     platforms = [ "x86_64-linux" ];
