@@ -5690,6 +5690,18 @@ let
     meta.homepage = "https://github.com/voldikss/vim-floaterm/";
   };
 
+  vim-flog = buildVimPluginFrom2Nix {
+    pname = "vim-flog";
+    version = "2021-03-16";
+    src = fetchFromGitHub {
+      owner = "rbong";
+      repo = "vim-flog";
+      rev = "904b964eb0f878e44f47d39898e72fc0b939756b";
+      sha256 = "07x8xafcvpg6dgxlvmf46gh7a9xvnrxj7i326q73g3yfh5xpma6c";
+    };
+    meta.homepage = "https://github.com/rbong/vim-flog/";
+  };
+
   vim-flutter = buildVimPluginFrom2Nix {
     pname = "vim-flutter";
     version = "2020-09-14";
