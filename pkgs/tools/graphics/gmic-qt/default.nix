@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchpatch
 , variant ? "standalone"
 , fetchFromGitHub
 , cmake
@@ -86,6 +87,23 @@ mkDerivation rec {
     sha256 = "nLxgCJ/+VIKD3dg4YFdGh1GhMyyytGTRrY6KljJK6N0=";
   };
 
+  patches = [
+    # Add support for GIMP 3
+    # https://github.com/c-koi/gmic-qt/pull/78
+    (fetchpatch {
+      url = "https://github.com/c-koi/gmic-qt/commit/585ef8769c784392949a1b4c41f9ccf1f2ba590f.patch";
+      sha256 = "JU6jQySWLXCho468RJZUyRq+i8qrmh1MuogsLkOp3jk=";
+    })
+    (fetchpatch {
+      url = "https://github.com/c-koi/gmic-qt/commit/71926d35359be608302d801d913eec808f8e5fc8.patch";
+      sha256 = "jL6p/+5dylSZccqPtoHb5zOqY5NkqbiQtlMHVe+q6sc=";
+    })
+    (fetchpatch {
+      url = "https://github.com/c-koi/gmic-qt/commit/0cd224e6aad35def163cfe5b697ad6e3f9896449.patch";
+      sha256 = "r7na6BkgKxD8fILjhmj8TJSdOLVDW24fEwlHrGaodcc=";
+    })
+  ];
+
   unpackPhase = ''
     cp -r ${gmic} gmic
     ln -s ${gmic-community} gmic-community
@@ -118,12 +136,12 @@ mkDerivation rec {
   ] ++ variants.${variant}.extraDeps or [];
 
   cmakeFlags = [
-    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
+    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else if variant == "gimp" && gimp.majorVersion == "2.99" then "gimp3" else variant}"
   ];
 
   postFixup = lib.optionalString (variant == "gimp") ''
-    echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt"
-    wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt"
+    echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
+    wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
   '';
 
   meta = with lib; {
