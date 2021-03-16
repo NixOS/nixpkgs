@@ -6574,33 +6574,33 @@ in
   };
 
   # stripped down, needed by steam
-  networkmanager098 = callPackage ../tools/networking/network-manager/0.9.8 { };
+  networkmanager098 = callPackage ../tools/networking/networkmanager/0.9.8 { };
 
-  networkmanager = callPackage ../tools/networking/network-manager { };
+  networkmanager = callPackage ../tools/networking/networkmanager { };
 
-  networkmanager-iodine = callPackage ../tools/networking/network-manager/iodine { };
+  networkmanager-iodine = callPackage ../tools/networking/networkmanager/iodine { };
 
-  networkmanager-openvpn = callPackage ../tools/networking/network-manager/openvpn { };
+  networkmanager-openvpn = callPackage ../tools/networking/networkmanager/openvpn { };
 
-  networkmanager-l2tp = callPackage ../tools/networking/network-manager/l2tp { };
+  networkmanager-l2tp = callPackage ../tools/networking/networkmanager/l2tp { };
 
-  networkmanager-vpnc = callPackage ../tools/networking/network-manager/vpnc { };
+  networkmanager-vpnc = callPackage ../tools/networking/networkmanager/vpnc { };
 
-  networkmanager-openconnect = callPackage ../tools/networking/network-manager/openconnect { };
+  networkmanager-openconnect = callPackage ../tools/networking/networkmanager/openconnect { };
 
-  networkmanager-fortisslvpn = callPackage ../tools/networking/network-manager/fortisslvpn { };
+  networkmanager-fortisslvpn = callPackage ../tools/networking/networkmanager/fortisslvpn { };
 
-  networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan { };
+  networkmanager_strongswan = callPackage ../tools/networking/networkmanager/strongswan { };
 
-  networkmanager-sstp = callPackage ../tools/networking/network-manager/sstp { };
+  networkmanager-sstp = callPackage ../tools/networking/networkmanager/sstp { };
 
-  networkmanagerapplet = callPackage ../tools/networking/network-manager/applet { };
+  networkmanagerapplet = callPackage ../tools/networking/networkmanager/applet { };
 
-  libnma = callPackage ../tools/networking/network-manager/libnma { };
+  libnma = callPackage ../tools/networking/networkmanager/libnma { };
 
-  networkmanager_dmenu = callPackage ../tools/networking/network-manager/dmenu  { };
+  networkmanager_dmenu = callPackage ../tools/networking/networkmanager/dmenu  { };
 
-  nm-tray = libsForQt5.callPackage ../tools/networking/network-manager/tray.nix { };
+  nm-tray = libsForQt5.callPackage ../tools/networking/networkmanager/tray.nix { };
 
   newsboat = callPackage ../applications/networking/feedreaders/newsboat {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
