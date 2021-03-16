@@ -106,7 +106,7 @@ eikenb/acp
 elixir-editors/vim-elixir
 elmcast/elm-vim
 elzr/vim-json
-embark-theme/vim as embark-vim
+embark-theme/vim@main as embark-vim
 embear/vim-localvimrc
 enomsg/vim-haskellConcealPlus
 enricobacis/vim-airline-clock
