@@ -12,7 +12,6 @@ let
     DBI
     DateTimeFormatMail
     DateTimeTimeZone
-    DigestMD5
     Encode
     FCGI
     FileCopyRecursive
@@ -28,7 +27,6 @@ let
     libintl_perl
 
     MHonArc
-    MIMEBase64
     MIMECharset
     MIMETools
     MIMEEncWords
@@ -57,7 +55,7 @@ let
     MailDKIM
     NetDNS
     perlldap
-    NetSMTP
+    libnet
     SOAPLite
   ]);
 in
