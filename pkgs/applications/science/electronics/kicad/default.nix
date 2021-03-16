@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
 , gnome3
+, dconf
 , wxGTK30
 , wxGTK31
 , makeWrapper
@@ -191,7 +192,7 @@ stdenv.mkDerivation rec {
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
     # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
-    "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
+    "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
 
     "--set-default KISYSMOD ${footprints}/share/kicad/modules"
     "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
