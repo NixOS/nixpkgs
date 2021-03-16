@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "ginkgo";
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
-    sha256 = "sha256-w2eP8mDGHHZGYQUU7lOe7gp3tdr9VO/NP5fFBWOWt/A=";
+    sha256 = "sha256-lZ2PIfZSvBxVIAEpRgsLvTWPFRsh2ZpXkame6pk0Cio=";
   };
-  vendorSha256 = "sha256-fB9/cf2VOMXWLHnnHJZDmOutIUvPleWBGCirJrypCts=";
+  vendorSha256 = "sha256:1nqam6y2dar8320yb5fg9chsvswq8fb1rrvr5kbcaf4mzmqpy7vw";
   doCheck = false;
 
   meta = with lib; {
