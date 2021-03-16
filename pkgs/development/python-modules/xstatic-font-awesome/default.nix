@@ -4,7 +4,6 @@ buildPythonPackage rec {
   pname = "XStatic-Font-Awesome";
   version = "4.7.0.0";
 
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "e01fb480caaa7c7963dcb3328a4700e631bef6070db0e8b685816d220e685f6c";
