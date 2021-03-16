@@ -504,7 +504,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       { name = "xmlreader";
         buildInputs = [ libxml2 ];
         internalDeps = [ php.extensions.dom ];
-        env.NIX_CFLAGS_COMPILE = [ "-I../.." "-DHAVE_DOM" ];
+        env.NIX_CFLAGS_COMPILE = "-I../.. -DHAVE_DOM";
         configureFlags = [ "--enable-xmlreader" ]
           # Required to build on darwin.
           ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}"; }

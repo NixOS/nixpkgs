@@ -67,7 +67,7 @@ in openmw.overrideAttrs (oldAttrs: rec {
   patches = [
     ./tes3mp.patch
   ];
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   preConfigure = ''
     substituteInPlace files/version.in \

@@ -17,7 +17,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  NIX_CFLAGS_COMPILE = "-I${graphicsmagick}/include/GraphicsMagick";
+  env.NIX_CFLAGS_COMPILE = "-I${graphicsmagick}/include/GraphicsMagick";
 
   enableParallelBuilding = true;
 

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libticonv
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${libticables2}/include/tilp2";
+  env.NIX_CFLAGS_COMPILE = "-I${libticables2}/include/tilp2";
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";

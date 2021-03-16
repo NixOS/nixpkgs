@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
          Cocoa
        ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin (toString [
     "-framework CoreAudio"
     "-framework CoreMIDI"
     "-framework CoreServices"
     "-framework Cocoa"
-  ];
+  ]);
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;

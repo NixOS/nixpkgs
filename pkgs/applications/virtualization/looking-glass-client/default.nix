@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   sourceRoot = "source/client";
-  NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
+  env.NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
 
   meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";

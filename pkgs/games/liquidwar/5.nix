@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  env.NIX_CFLAGS_COMPILE = [ "-lm" ];
+  env.NIX_CFLAGS_COMPILE = "-lm";
 
   meta = with lib; {
     description = "The classic version of a quick tactics game LiquidWar";

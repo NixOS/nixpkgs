@@ -294,7 +294,7 @@ stdenv.mkDerivation ({
 
 // optionalAttrs (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt" && crossStageStatic) {
   makeFlags = [ "all-gcc" "all-target-libgcc" ];
-  installTargets = "install-gcc install-target-libgcc";
+  installTargets = [ "install-gcc" "install-target-libgcc" ];
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }

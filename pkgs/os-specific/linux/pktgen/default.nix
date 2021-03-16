@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     [ dpdk libbsd libpcap lua5_3 numactl which ]
     ++ lib.optionals withGtk [gtk2];
 
-  RTE_SDK = dpdk;
-  GUI = lib.optionalString withGtk "true";
+  env.RTE_SDK = toString dpdk;
+  env.GUI = lib.optionalString withGtk "true";
 
   env.NIX_CFLAGS_COMPILE = "-msse3";
 

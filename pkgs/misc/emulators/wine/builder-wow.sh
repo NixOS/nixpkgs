@@ -1,5 +1,7 @@
 ## build described at http://wiki.winehq.org/Wine64
 
+source .attrs.sh
+
 source $stdenv/setup
 
 unpackPhase
@@ -11,14 +13,14 @@ mkdir -p $TMP/wine-wow $TMP/wine64
 
 cd $TMP/wine64
 sourceRoot=`pwd`
-configureFlags="--enable-win64"
+configureFlags=("--enable-win64")
 configurePhase
 buildPhase
 # checkPhase
 
 cd $TMP/wine-wow
 sourceRoot=`pwd`
-configureFlags="--with-wine64=../wine64"
+configureFlags=("--with-wine64=../wine64")
 configurePhase
 buildPhase
 # checkPhase

@@ -120,7 +120,7 @@ in stdenv.mkDerivation rec {
     "--with-backends=jack,alsa,dummy"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${qm-dsp}/include/qm-dsp";
+  env.NIX_CFLAGS_COMPILE = "-I${qm-dsp}/include/qm-dsp";
 
   # ardour's wscript has a "tarball" target but that required the git revision
   # be available. Since this is an unzipped tarball fetched from github we

@@ -68,7 +68,7 @@ let
           cd ${pkgpath}
         '' + optionalString (package == "all") pkgallMake;
 
-        installTargets = "install" + optionalString withDoc " doc";
+        installTargets = [ "install" ] ++ optional withDoc "doc";
 
         meta = {
           homepage    = "https://math-comp.github.io/";

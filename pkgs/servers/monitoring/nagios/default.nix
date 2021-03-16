@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--localstatedir=/var/lib/nagios" ];
   buildFlags = [ "all" ];
-  CFLAGS = "-ldl";
+  env.CFLAGS = "-ldl";
 
   # Do not create /var directories
   preInstall = ''

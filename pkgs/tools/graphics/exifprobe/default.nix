@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c1fhc0v1m452lgnfcijnvrc0by06qfbhn3zkliqi60kv8l2isbp";
   };
 
-  CFLAGS = [ "-O2" ];
+  env.CFLAGS = "-O2";
 
   installFlags = [ "DESTDIR=$(out)" ];
 

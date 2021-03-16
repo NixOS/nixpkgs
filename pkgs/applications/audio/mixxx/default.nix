@@ -45,7 +45,7 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
+    "--set" "LOCALE_ARCHIVE" "${glibcLocales}/lib/locale/locale-archive"
   ];
 
   meta = with lib; {

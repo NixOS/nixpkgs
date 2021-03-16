@@ -158,7 +158,7 @@ let
             [ pcre' ]
 
             # Enable sapis
-            ++ lib.optional pearSupport [ libxml2.dev ]
+            ++ lib.optional pearSupport libxml2.dev
 
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
@@ -167,7 +167,7 @@ let
             ++ lib.optional valgrindSupport valgrind
           ;
 
-          CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+          env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
           configureFlags =
             # Disable all extensions
@@ -184,7 +184,7 @@ let
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport    "--enable-fpm"
-            ++ lib.optional pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
+            ++ lib.optionals pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
             ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
               "--enable-libxml"
               "--with-libxml-dir=${libxml2.dev}"

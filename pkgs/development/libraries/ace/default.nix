@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool ];
   buildInputs = [ perl ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=format-security"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   patchPhase = ''substituteInPlace ./MPC/prj_install.pl \
     --replace /usr/bin/perl "${perl}/bin/perl"'';

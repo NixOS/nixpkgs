@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/*
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   patches = [
     ./0001-strip-bin-prefix.patch

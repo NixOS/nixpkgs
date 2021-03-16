@@ -11,6 +11,6 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  installTargets = "install-ounit version='${ounit2.version}'";
+  installTargets = [ "install-ounit" "version='${ounit2.version}'" ];
 
 }

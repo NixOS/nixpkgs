@@ -406,7 +406,7 @@ in (mkDrv rec {
       gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
       gst-libav
     ])
-    ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
+    ++ lib.optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
     inherit srcs jdk;

@@ -96,7 +96,7 @@ qtModule {
       --replace 'libs = [ "sandbox" ]' 'libs = [ "/usr/lib/libsandbox.1.dylib" ]'
     '');
 
-  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
     "-Wno-class-memaccess"
   ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
@@ -116,7 +116,7 @@ qtModule {
     # TODO remove when new Apple SDK is in
     #
     "-fno-objc-arc"
-  ];
+  ]);
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES

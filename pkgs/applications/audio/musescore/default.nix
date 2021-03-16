@@ -29,7 +29,7 @@ mkDerivation rec {
   qtWrapperArgs = [
     # Work around crash on update from 3.4.2 to 3.5.0
     # https://bugreports.qt.io/browse/QTBUG-85967
-    "--set QML_DISABLE_DISK_CACHE 1"
+    "--set" "QML_DISABLE_DISK_CACHE" "1"
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];

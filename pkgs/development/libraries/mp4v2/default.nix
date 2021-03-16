@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ./fix-build-clang.patch
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=narrowing" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
   # `faac' expects `mp4.h'.
   postInstall = "ln -s mp4v2/mp4v2.h $out/include/mp4.h";

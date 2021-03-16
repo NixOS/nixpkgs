@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   # after autoreconfHook, glib and zlib are not found, so force link against
   # them
-  NIX_LDFLAGS = "-lglib-2.0 -lz";
+  env.NIX_LDFLAGS = "-lglib-2.0 -lz";
 
   enableParallelBuilding = true;
 

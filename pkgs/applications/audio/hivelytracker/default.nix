@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: try to exclude gtk and glib from darwin builds
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${SDL}/include/SDL"
     "-I${SDL_image}/include/SDL"
     "-I${SDL_ttf}/include/SDL"

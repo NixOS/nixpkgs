@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0d3y747lsh1wkalc39nxd088rbypxigm991lk3j91zpn56whrpha";
   };
 
-  buildInputs = lib.optional enableUnicodeHelp [ icu.dev ];
-  cmakeFlags = lib.optional enableUnicodeHelp [ "-DCXXOPTS_USE_UNICODE_HELP=TRUE" ];
-  nativeBuildInputs = [ cmake ] ++ lib.optional enableUnicodeHelp [ pkg-config ];
+  buildInputs = lib.optional enableUnicodeHelp icu.dev;
+  cmakeFlags = lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
+  nativeBuildInputs = [ cmake ] ++ lib.optional enableUnicodeHelp pkg-config;
 
   doCheck = true;
 

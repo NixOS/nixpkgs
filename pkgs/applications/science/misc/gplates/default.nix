@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_LINK="-ldl -lpthread -lutil";
+  env.NIX_CFLAGS_LINK = "-ldl -lpthread -lutil";
 
   meta = with lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";

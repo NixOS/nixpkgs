@@ -21,7 +21,7 @@ mkDerivation rec {
   buildInputs = [ eigen suitesparse blas lapack libGLU qtbase libqglviewer ];
 
   # Silence noisy warning
-  CXXFLAGS = "-Wno-deprecated-copy";
+  env.CXXFLAGS = "-Wno-deprecated-copy";
 
   dontWrapQtApps = true;
 

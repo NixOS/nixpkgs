@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   prePatch = (if gimxAuth == "afterglow" then (import ./variant.nix).afterglow
               else "");
 
-  makeFlags = "build-core";
+  makeFlags = [ "build-core" ];
   installPhase = ''
     runHook preInstall
 

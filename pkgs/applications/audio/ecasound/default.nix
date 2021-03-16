@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  configureFlags = "--enable-liblilv --with-extra-cppflags=-Dnullptr=0";
+  configureFlags = [ "--enable-liblilv" "--with-extra-cppflags=-Dnullptr=0" ];
 
   postPatch = ''
     sed -i -e '

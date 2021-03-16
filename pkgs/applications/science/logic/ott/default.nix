@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config opaline ];
   buildInputs = [ ocaml ];
 
-  installTargets = "ott.install";
+  installTargets = [ "ott.install" ];
 
   postInstall = ''
     opaline -prefix $out

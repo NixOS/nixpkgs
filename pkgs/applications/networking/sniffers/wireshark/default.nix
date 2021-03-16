@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
   ];
 
   # Avoid referencing -dev paths because of debug assertions.
-  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+  env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
   nativeBuildInputs = [
     bison cmake flex pkg-config

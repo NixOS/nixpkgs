@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
 
   # recommended build flags for performance optimized foot builds
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
-  CFLAGS =
+  env.CFLAGS =
     if !doPgo
     then "-O3 -fno-plt"
     else pgoCflags;

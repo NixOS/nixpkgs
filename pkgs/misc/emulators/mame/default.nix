@@ -28,7 +28,7 @@ in mkDerivation {
   };
 
   hardeningDisable = [ "fortify" ];
-  env.NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized -Wno-error=missing-braces";
 
   makeFlags = [
     "TOOLS=1"

@@ -19,5 +19,5 @@ mkDerivation {
     kdelibs4support kpty syntax-highlighting libmtp libssh openexr openslp
     phonon qtsvg samba solid gperf
   ];
-  CXXFLAGS = [ "-I${ilmbase.dev}/include/OpenEXR" ];
+  env.CXXFLAGS = "-I${ilmbase.dev}/include/OpenEXR";
 }

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
-  NIX_CFLAGS_COMPILE = ''
+  env.NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
     -DDEFAULT_PATH_VALUE="/no-such-path"

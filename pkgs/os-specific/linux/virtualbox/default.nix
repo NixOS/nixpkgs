@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  env.KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   makeFlags = [ "INSTALL_MOD_PATH=$(out)" ];
   installTargets = [ "install" ];

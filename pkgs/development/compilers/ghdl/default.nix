@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1gyh0xckwbzgslbpw9yrpj4gqs9fm1a2qpbzl0sh143fk1kwjlly";
   };
 
-  LIBRARY_PATH = "${stdenv.cc.libc}/lib";
+  env.LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
-  buildInputs = [ gnat zlib ] ++ lib.optional (backend == "llvm") [ llvm ];
+  buildInputs = [ gnat zlib ] ++ lib.optional (backend == "llvm") llvm;
 
   preConfigure = ''
     # If llvm 7.0 works, 7.x releases should work too.

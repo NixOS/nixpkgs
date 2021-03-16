@@ -20,7 +20,7 @@ mkDerivation rec {
   '';
 
   # Package expects qt5 subdirectory of mapbox-gl-native to be in the include path
-  NIX_CFLAGS_COMPILE = "-I${mapbox-gl-native}/include/qt5";
+  env.NIX_CFLAGS_COMPILE = "-I${mapbox-gl-native}/include/qt5";
 
   meta = with lib; {
     description = "Unofficial Mapbox GL Native bindings for Qt QML";

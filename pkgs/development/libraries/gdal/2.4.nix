@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  CXXFLAGS = "-fpermissive";
+  env.CXXFLAGS = "-fpermissive";
 
   postPatch = ''
     sed -i '/ifdef bool/i\
