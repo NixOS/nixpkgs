@@ -73,6 +73,7 @@ in
     NIX_LDFLAGS = "-lm";
     hardeningDisable = [ "format" ];
     meta = with lib; {
+      broken = gimp.majorVersion != "2.0";
       description = "The GIMP Animation Package";
       homepage = "https://www.gimp.org";
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
@@ -97,6 +98,7 @@ in
     '';
 
     meta = {
+      broken = gimp.majorVersion != "2.0";
       description = "Gimp plug-in for the farbfeld image format";
       homepage = "https://github.com/ids1024/gimp-farbfeld";
       license = lib.licenses.mit;
@@ -133,6 +135,7 @@ in
     '';
 
     meta = with lib; {
+      broken = gimp.majorVersion != "2.0";
       description = "GIMP plug-in to do the fourier transform";
       homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
       license = with licenses; [ gpl3Plus ];
@@ -160,6 +163,9 @@ in
       rev = "v${version}";
       sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
     };
+    meta = {
+      broken = gimp.majorVersion != "2.0";
+    };
   };
 
   texturize = pluginDerivation {
@@ -185,6 +191,9 @@ in
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
     };
     installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
+    meta = {
+      broken = gimp.majorVersion != "2.0";
+    };
   };
 
   lqrPlugin = pluginDerivation rec {
@@ -199,6 +208,10 @@ in
       repo = "gimp-lqr-plugin";
       rev = "v${version}";
       sha256 = "81ajdZ2zQi/THxnBlSeT36tVTEzrS1YqLGpHMhFTKAo=";
+    };
+
+    meta = {
+      broken = gimp.majorVersion != "2.0";
     };
   };
 
@@ -224,6 +237,7 @@ in
     ";
 
     meta = {
+      broken = gimp.majorVersion != "2.0";
       description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
       homepage = "http://lensfun.sebastiankraft.net/";
