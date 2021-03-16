@@ -8352,6 +8352,8 @@ in
 
   swiften = callPackage ../development/libraries/swiften { };
 
+  squeekboard = callPackage ../applications/accessibility/squeekboard { };
+
   t = callPackage ../tools/misc/t { };
 
   tabnine = callPackage ../development/tools/tabnine { };
