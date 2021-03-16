@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
@@ -7,6 +7,10 @@ buildKodiAddon rec {
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "0vsd68izv1ix0hb1gm74qq3zff0sxmhfhjyh7y9005zzp2gpi62v";
+  };
+
+  passthru.updateScript = addonUpdateScript {
+    attrPath = "kodi.packages.certifi";
   };
 
   meta = with lib; {

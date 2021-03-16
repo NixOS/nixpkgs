@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "signals";
   namespace = "script.module.addon.signals";
@@ -7,6 +7,10 @@ buildKodiAddon rec {
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "1qcjbakch8hvx02wc01zv014nmzgn6ahc4n2bj5mzr114ppd3hjs";
+  };
+
+  passthru.updateScript = addonUpdateScript {
+    attrPath = "kodi.packages.signals";
   };
 
   meta = with lib; {

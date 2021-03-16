@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "urllib3";
   namespace = "script.module.urllib3";
@@ -7,6 +7,10 @@ buildKodiAddon rec {
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "080yq8ns0sag6rmdag1hjwi0whcmp35wzqjp3by92m81cpszs75q";
+  };
+
+  passthru.updateScript = addonUpdateScript {
+    attrPath = "kodi.packages.urllib3";
   };
 
   meta = with lib; {

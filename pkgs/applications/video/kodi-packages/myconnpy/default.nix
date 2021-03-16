@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "myconnpy";
   namespace = "script.module.myconnpy";
@@ -7,6 +7,10 @@ buildKodiAddon rec {
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "1cx3qdzw9lkkmbyvyrmc2i193is20fihn2sfl7kmv43f708vam0k";
+  };
+
+  passthru.updateScript = addonUpdateScript {
+    attrPath = "kodi.packages.myconnpy";
   };
 
   meta = with lib; {

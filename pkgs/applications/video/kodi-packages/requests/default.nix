@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, certifi, chardet, idna, urllib3 }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript, certifi, chardet, idna, urllib3 }:
 buildKodiAddon rec {
   pname = "requests";
   namespace = "script.module.requests";
@@ -15,6 +15,10 @@ buildKodiAddon rec {
     idna
     urllib3
   ];
+
+  passthru.updateScript = addonUpdateScript {
+    attrPath = "kodi.packages.requests";
+  };
 
   meta = with lib; {
     homepage = "http://python-requests.org";

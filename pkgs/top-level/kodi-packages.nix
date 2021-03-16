@@ -30,6 +30,10 @@ let self = rec {
     in
       unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
 
+  # package update scripts
+
+  addonUpdateScript = callPackage ../applications/video/kodi-packages/addon-update-script { };
+
   # package builders
 
   buildKodiAddon = callPackage ../applications/video/kodi/build-kodi-addon.nix { };
