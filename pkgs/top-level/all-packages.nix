@@ -15680,6 +15680,8 @@ in
 
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
+  libseat = callPackage ../development/libraries/libseat { };
+
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
   libsigcxx12 = callPackage ../development/libraries/libsigcxx/1.2.nix { };
