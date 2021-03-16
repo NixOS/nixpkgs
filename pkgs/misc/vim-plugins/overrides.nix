@@ -50,6 +50,9 @@
 , CoreFoundation
 , CoreServices
 
+# nvim-treesitter dependencies
+, tree-sitter
+
   # sved dependencies
 , glib
 , gobject-introspection
@@ -362,6 +365,24 @@ self: super: {
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with super; [ popfix ];
+  });
+
+  # Usage:
+  # pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
+  # or for all grammars:
+  # pkgs.vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)
+  nvim-treesitter = super.nvim-treesitter.overrideAttrs (old: {
+    passthru.withPlugins =
+      grammarFn: self.nvim-treesitter.overrideAttrs (_: {
+        postPatch =
+          let
+            grammars = tree-sitter.withPlugins grammarFn;
+          in
+          ''
+            rm -r parser
+            ln -s ${grammars} parser
+          '';
+      });
   });
 
   onehalf = super.onehalf.overrideAttrs (old: {
