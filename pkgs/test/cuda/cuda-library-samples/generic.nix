@@ -30,7 +30,7 @@ let
         cuSPARSE, cuSOLVER, cuFFT, cuRAND, NPP and nvJPEG.
       '';
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ obsidian-systems-maintainence ];
+      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
     };
   };
 in

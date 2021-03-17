@@ -64,6 +64,6 @@ stdenv.mkDerivation {
     homepage = "https://developer.nvidia.com/cutensor";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ obsidian-systems-maintainence ];
+    maintainers = with maintainers; [ obsidian-systems-maintenance ];
   };
 }
