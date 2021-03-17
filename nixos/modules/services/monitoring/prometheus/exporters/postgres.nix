@@ -62,7 +62,7 @@ in
         </programlisting>
 
         Note that this file needs to be available on the host on which
-        <literal>Prometheus</literal> is running.
+        this exporter is running.
       '';
     };
 
