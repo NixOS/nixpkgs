@@ -1,7 +1,6 @@
 { lib, stdenv, fetchzip }@args:
-let lib' = lib; in
-let lib = import ../extra-lib.nix {lib = lib';}; in
-with builtins; with lib;
+let lib' = import ../extra-lib.nix {inherit lib;}; in
+with builtins; with lib';
 let
   default-fetcher = {domain ? "github.com", owner ? "", repo, rev, name ? "source", sha256 ? null, ...}@args:
     let ext = if args?sha256 then "zip" else "tar.gz";
