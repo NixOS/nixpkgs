@@ -34,6 +34,11 @@ buildPythonPackage rec {
     sha256 = "698cd7bc3c7d1b82bb728bae835724a486a8c376647aec336aa21a60113c3645";
   };
 
+  patches = [
+    # Backport of https://github.com/aio-libs/aiohttp/commit/2545222a3853e31ace15d87ae0e2effb7da0c96b
+    ./CVE-2021-21330.patch
+  ];
+
   checkInputs = [
     pytestrunner pytestCheckHook gunicorn async_generator pytest_xdist
     pytest-mock pytestcov trustme brotlipy freezegun
