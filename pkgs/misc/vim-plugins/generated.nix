@@ -5186,6 +5186,18 @@ let
     meta.homepage = "https://github.com/tpope/vim-commentary/";
   };
 
+  vim-concourse = buildVimPluginFrom2Nix {
+    pname = "vim-concourse";
+    version = "2016-11-21";
+    src = fetchFromGitHub {
+      owner = "luan";
+      repo = "vim-concourse";
+      rev = "7f61ca5d291fddd6d7ff04b03bf347f04bfe4344";
+      sha256 = "0ilf7r0lwx8f7shqxbs9av3gsnary8nbh3xhrfzwsivh8psi7qf6";
+    };
+    meta.homepage = "https://github.com/luan/vim-concourse/";
+  };
+
   vim-cool = buildVimPluginFrom2Nix {
     pname = "vim-cool";
     version = "2020-04-18";
