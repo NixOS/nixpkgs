@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, catch, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, gtest
+, pkg-config
 }:
 
 let
@@ -6,27 +12,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "microsoft_gsl";
-  version = "2.1.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
     rev = "v${version}";
-    sha256 = "09f08lxqm00152bx9yrizlgabzpzxlpbv06h00z4w78yxywgxlgx";
+    sha256 = "0gbvr48f03830g3154bjhw92b8ggmg6wwh5xyb8nppk9v6w752l0";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "search-gtest-via-pkg-config.patch";
+      url = "https://github.com/microsoft/GSL/commit/9355982fc5b64727c6506109f60cad25d272b18f.patch";
+      sha256 = "1rhvrazrnjjydjy0gkabdj7x6616gymhmbyq3118s5nmp7rld70w";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake gtest pkg-config ];
 
   # build phase just runs the unit tests, so skip it if
   # we're doing a cross build
-  nativeBuildInputs = [ catch cmake ];
-  buildPhase = if nativeBuild then "make" else "true";
-
-  # https://github.com/microsoft/GSL/issues/806
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-Wno-catch-value" ];
-
-  installPhase = ''
-    mkdir -p $out/include
-    mv ../include/ $out/
-  '';
+  dontBuild = !nativeBuild;
 
   meta = with lib; {
     description = "C++ Core Guideline support library";
@@ -38,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/Microsoft/GSL";
     license     = licenses.mit;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice xwvvvvwx yuriaisaka ];
+    maintainers = with maintainers; [ dotlambda thoughtpolice xwvvvvwx yuriaisaka ];
   };
 }
