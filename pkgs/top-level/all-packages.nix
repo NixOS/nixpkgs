@@ -3266,8 +3266,6 @@ in
 
   colordiff = callPackage ../tools/text/colordiff { };
 
-  concurrencykit = callPackage ../development/libraries/concurrencykit { };
-
   connect = callPackage ../tools/networking/connect { };
 
   conspy = callPackage ../os-specific/linux/conspy {};
