@@ -73,6 +73,6 @@ buildDunePackage {
     description = "OCaml Language Server Protocol implementation";
     license = lib.licenses.isc;
     platforms = platforms.unix;
-    maintainers = [ maintainers.symphorien ];
+    maintainers = [ maintainers.symphorien maintainers.marsam ];
   };
 }
