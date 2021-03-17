@@ -3965,6 +3965,8 @@ in
 
   vorta = libsForQt5.callPackage ../applications/backup/vorta { };
 
+  vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit { };
+
   utahfs = callPackage ../applications/networking/utahfs { };
 
   wakeonlan = callPackage ../tools/networking/wakeonlan { };
