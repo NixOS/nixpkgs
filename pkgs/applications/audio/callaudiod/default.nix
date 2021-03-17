@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "callaudiod";
-  version = "0.0.4";
+  version = "0.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "mobian1";
     repo = pname;
     rev = version;
-    sha256 = "07k7xp5a9c4d4lq7amaj6cg6b3gsd77x9wvf7nzcf4vpaph4yiyj";
+    sha256 = "087589z45xvldn2m1g79y0xbwzylwkjmfk83s5xjixyq0wqmfppd";
   };
 
   nativeBuildInputs = [
