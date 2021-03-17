@@ -6987,6 +6987,12 @@
     githubId = 3359345;
     name = "obadz";
   };
+  obsidian-systems-maintainence = {
+    name = "Obsidian Systems Maintenance";
+    email = "maintainer@obsidian.systems";
+    github = "obsidian-systems-maintenance";
+    githubId = 80847921;
+  };
   odi = {
     email = "oliver.dunkl@gmail.com";
     github = "odi";
