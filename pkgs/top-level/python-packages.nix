@@ -3134,6 +3134,8 @@ in {
 
   hug = callPackage ../development/python-modules/hug { };
 
+  huggingface-hub = callPackage ../development/python-modules/huggingface-hub { };
+
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   humanize = callPackage ../development/python-modules/humanize { };
