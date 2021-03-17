@@ -2889,6 +2889,12 @@
     githubId = 3787281;
     name = "Erik Rybakken";
   };
+  erin = {
+    name = "Erin van der Veen";
+    email = "erin@erinvanderveen.nl";
+    github = "ErinvanderVeen";
+    githubId = 10973664;
+  };
   erosennin = {
     email = "ag@sologoc.com";
     github = "erosennin";
