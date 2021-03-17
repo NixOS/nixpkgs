@@ -14,10 +14,10 @@
 , lib
 }:
 let
-  version = "1.4.0";
+  version = "1.4.1";
   src = fetchzip {
     url = "https://github.com/ocaml/ocaml-lsp/releases/download/${version}/jsonrpc-${version}.tbz";
-    sha256 = "16vvwq3d9xmr91r6yv5i2gyqcdliji7asyq4g6iygi617233fa33";
+    sha256 = "0hzpw17qfhb0cxgwah1fv4k300r363dy1kv0977anl44dlanx1v5";
   };
 
   # unvendor some (not all) dependencies.
