@@ -1664,4 +1664,16 @@ self: super: {
   # Test suite does not compile.
   feed = dontCheck super.feed;
 
+  spacecookie = overrideCabal super.spacecookie (old: {
+    buildTools = (old.buildTools or []) ++ [ pkgs.installShellFiles ];
+    # let testsuite discover the resulting binary
+    preCheck = ''
+      export SPACECOOKIE_TEST_BIN=./dist/build/spacecookie/spacecookie
+    '' + (old.preCheck or "");
+    # install man pages shipped in the sdist
+    postInstall = ''
+      installManPage docs/man/*
+    '' + (old.postInstall or "");
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
