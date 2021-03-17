@@ -4918,6 +4918,8 @@ in
 
   ldmtool = callPackage ../tools/misc/ldmtool { };
 
+  gphotos-sync = callPackage ../tools/backup/gphotos-sync { };
+
   gpodder = callPackage ../applications/audio/gpodder { };
 
   gpp = callPackage ../development/tools/gpp { };
