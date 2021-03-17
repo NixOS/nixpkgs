@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "openmp";
   inherit version;
 
-  src = fetch pname "0bh5cswgpc79awlq8j5i7hp355adaac7s6zaz0zwp6mkflxli1yi";
+  src = fetch pname "0kw1g7ndvwi0g7lx5d55mp81h9vffxz820l9r2wjdvvfs3dsyq05";
 
   patches = [
     # Fix compilation on aarch64-darwin, remove after the next release.

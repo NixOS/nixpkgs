@@ -3,11 +3,12 @@
 , buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, darwin
 }:
 
 let
-  release_version = "11.1.0";
-  candidate = ""; # empty or "rcN"
+  release_version = "12.0.0";
+  candidate = "rc3"; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
   targetConfig = stdenv.targetPlatform.config;
@@ -17,7 +18,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "18n1w1hkv931xzq02b34wglbv6zd6sd0r5kb8piwvag7klj7qw3n";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1p6ln69iciwwpng226mfvxf3vylfvbz73y0a4y4v2rg7pn7hk671";
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
@@ -79,9 +80,15 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld.nix {};
+    lld = callPackage ./lld.nix {
+      libunwind = libraries.libunwind;
+    };
 
-    lldb = callPackage ./lldb.nix {};
+    lldb = callPackage ./lldb.nix {
+      inherit (darwin) libobjc bootstrap_cmds;
+      inherit (darwin.apple_sdk.libs) xpc;
+      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
+    };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
     # fully LLVM toolchain from scratch. No GCC toolchain should be

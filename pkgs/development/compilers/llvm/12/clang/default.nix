@@ -8,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "12sm91qx2m79cvj75a9aazf2x8xybjbd593dv6v7rxficpq8i0ha";
+    src = fetch "clang" "1xg2wy86zdj1d4h33n9mmb4j0x8bp9a5pk4qnnx3imlh8n6vhrqj";
     inherit clang-tools-extra_src;
 
     unpackPhase = ''
@@ -16,7 +16,6 @@ let
       mv clang-* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
-      mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
     nativeBuildInputs = [ cmake python3 lld ]
@@ -50,9 +49,6 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
-    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace tools/extra/clangd/CMakeLists.txt \
-        --replace "NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB" FALSE
     '';
 
     outputs = [ "out" "lib" "python" ];
