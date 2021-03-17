@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetch
+, libunwind
 , cmake
 , libxml2
 , llvm
@@ -10,10 +11,17 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  src = fetch pname "1kk61i7z5bi9i11rzsd2b388d42if1c7a45zkaa4mk0yps67hyh1";
+  src = fetch pname "097pxd7hgipr538vi48q8fi5svbd03bx3d078a06wigmvb7kzvw1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm libxml2 ];
+
+  postPatch = ''
+    substituteInPlace MachO/CMakeLists.txt --replace \
+      '(''${LLVM_MAIN_SRC_DIR}/' '('
+    mkdir -p libunwind/include
+    tar -xf "${libunwind.src}" --wildcards -C libunwind/include --strip-components=2 "libunwind-*/include/"
+  '';
 
   outputs = [ "out" "dev" ];
 

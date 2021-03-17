@@ -11,7 +11,12 @@
 , clang-unwrapped
 , python3
 , version
-, darwin
+, libobjc
+, xpc
+, Foundation
+, bootstrap_cmds
+, Carbon
+, Cocoa
 , lit
 , enableManpages ? false
 }:
@@ -20,7 +25,7 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "1vlyg015dyng43xqb8cg2l6r9ix8klibxsajazbfnckdnh54hwxj";
+  src = fetch pname "077fli9l0fg4kpa5l9vrj810s13ajs15d745lg4l8kmjkbw7p3yh";
 
   patches = [ ./lldb-procfs.patch ];
 
@@ -35,12 +40,12 @@ stdenv.mkDerivation (rec {
     llvm
   ]
   ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-    darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.bootstrap_cmds
-    darwin.apple_sdk.frameworks.Carbon
-    darwin.apple_sdk.frameworks.Cocoa
+    libobjc
+    xpc
+    Foundation
+    bootstrap_cmds
+    Carbon
+    Cocoa
   ];
 
   hardeningDisable = [ "format" ];
@@ -81,9 +86,8 @@ stdenv.mkDerivation (rec {
   '';
 
   propagatedBuildInputs = [];
-
+  # manually install lldb man page
   installPhase = ''
-    # manually install lldb man page
     mkdir -p $out/share/man/man1
     install docs/man/lldb.1 -t $out/share/man/man1/
   '';

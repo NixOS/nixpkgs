@@ -32,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "199yq3a214avcbi4kk2q0ajriifkvsr0l2dkx3a666m033ihi1ff";
-  polly_src = fetch "polly" "031r23ijhx7v93a5n33m2nc0x9xyqmx0d8xg80z7q971p6qd63sq";
+  src = fetch pname "1lpdkndjb8cxpcyjv9glqp58687j8y8cvd7r72pw6sbqkkzq86g5";
+  polly_src = fetch "polly" "002a8q3lgspvqdb8fi09cl11x438x6a2d2sb026jargrx92i5vas";
 
   unpackPhase = ''
     unpackFile $src
@@ -69,6 +69,9 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
+    substituteInPlace unittests/IR/CMakeLists.txt \
+      --replace "PassBuilderCallbacksTest.cpp" ""
+    rm unittests/IR/PassBuilderCallbacksTest.cpp
   '' + optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
@@ -122,11 +125,11 @@ in stdenv.mkDerivation (rec {
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvm_11}/bin/llvm-tblgen"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm_12}/bin/llvm-tblgen"
   ];
 
   postBuild = ''
-    rm -fR $out
+    rm -R $out
   '';
 
   preCheck = ''
@@ -170,8 +173,6 @@ in stdenv.mkDerivation (rec {
   buildPhase = ''
     make docs-llvm-man
   '';
-
-  propagatedBuildInputs = [];
 
   installPhase = ''
     make -C docs install
