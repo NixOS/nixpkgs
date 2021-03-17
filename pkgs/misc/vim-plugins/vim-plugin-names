@@ -485,6 +485,7 @@ raghur/vim-ghost
 Raimondi/delimitMate
 rakr/vim-one
 rbgrouleff/bclose.vim
+rbong/vim-flog
 reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim
