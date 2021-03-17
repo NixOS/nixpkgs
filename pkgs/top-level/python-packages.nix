@@ -7326,7 +7326,7 @@ in {
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   sane = callPackage ../development/python-modules/sane {
-    inherit (pkgs) saneBackends;
+    inherit (pkgs) sane-backends;
   };
 
   sampledata = callPackage ../development/python-modules/sampledata { };

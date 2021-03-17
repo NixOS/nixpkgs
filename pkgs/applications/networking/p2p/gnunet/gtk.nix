@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, gnome3
+, glade
 , gnunet
 , gnutls
 , gtk3
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.glade
+    glade
     gnunet
     gnutls
     gtk3

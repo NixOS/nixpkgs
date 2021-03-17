@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, saneBackends
+, sane-backends
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    saneBackends
+    sane-backends
   ];
 
   meta = with lib; {

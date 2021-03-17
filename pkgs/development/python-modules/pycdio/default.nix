@@ -26,7 +26,7 @@ buildPythonPackage rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ nose pkgs.pkgconfig pkgs.swig ];
+  nativeBuildInputs = [ nose pkgs.pkg-config pkgs.swig ];
   buildInputs = [ setuptools pkgs.libcdio ]
     ++ lib.optional stdenv.isDarwin pkgs.libiconv;
 
