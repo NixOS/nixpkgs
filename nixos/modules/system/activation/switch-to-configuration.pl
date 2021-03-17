@@ -129,6 +129,24 @@ sub parseKeyValues {
     }
 }
 
+sub parseNspawn {
+    my ($filename) = @_;
+    my $info = {};
+    parseKeyValuesArray($info, read_file($filename));
+    return $info;
+}
+
+sub parseKeyValuesArray {
+    my $info = shift;
+    foreach my $line (@_) {
+        $line =~ /^([^=]+)=(.*)$/ or next;
+        unless (exists $info->{$1}) {
+            $info->{$1} = ();
+        }
+        push @{$info->{$1}}, $2;
+    }
+}
+
 sub boolIsTrue {
     my ($s) = @_;
     return $s eq "yes" || $s eq "true";
@@ -214,7 +232,9 @@ sub handleModifiedUnit {
                     recordUnit($startListFile, $unit);
                 }
 
-                $unitsToStop->{$unit} = 1;
+                if (index($unit, "systemd-nspawn@") == -1) {
+                    $unitsToStop{$unit} = 1;
+                }
             }
         }
     }
@@ -234,6 +254,42 @@ $unitsToRestart{$_} = 1 foreach
 $unitsToReload{$_} = 1 foreach
     split('\n', read_file($reloadListFile, err_mode => 'quiet') // "");
 
+
+sub deepCmp {
+    my ($a, $b) = @_;
+    if (@$a != @$b) {
+        return 1;
+    }
+    foreach (my $i = 0; $i < @$a; $i++) {
+        if (@$a[$i] ne @$b[$i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+sub compareNspawnUnits {
+    my ($old, $new) = @_;
+    my $contentsOld = parseNspawn($old);
+    my $contentsNew = parseNspawn($new);
+
+    foreach (keys %$contentsOld) {
+        my $oldKey = $_;
+        foreach (keys %$contentsNew) {
+            my $newKey = $_;
+            next if $newKey ne $oldKey
+                or $newKey eq 'Parameters'
+                or $newKey eq 'X-ActivationStrategy';
+
+            if (deepCmp($contentsOld->{$oldKey}, $contentsNew->{$newKey}) != 0) {
+                return (1, $contentsNew->{'X-ActivationStrategy'}[0] // "dynamic");
+            }
+        }
+    }
+
+    return (0, $contentsNew->{'X-ActivationStrategy'}[0] // "dynamic");
+}
+
 my @currentNspawnUnits = glob("/etc/systemd/nspawn/*.nspawn");
 my @upcomingNspawnUnits = glob("$out/etc/systemd/nspawn/*.nspawn");
 foreach (@upcomingNspawnUnits) {
@@ -244,11 +300,13 @@ foreach (@upcomingNspawnUnits) {
     $orig =~ s/^$out//;
     if ($orig ~~ @currentNspawnUnits) {
         if (fingerprintUnit($_) ne fingerprintUnit($orig)) {
-            my $info = parseUnit("$out/etc/systemd/system/systemd-nspawn\@$unit.service");
-            if (($info->{'X-ReloadIfChanged'} // "false") eq "true") {
-                $unitsToReload{$unitName} = 1;
-            } elsif (($info->{'X-RestartIfChanged'} // "true") ne "false") {
-                $unitsToRestart{$unitName} = 1;
+            my ($eq, $strategy) = compareNspawnUnits($orig, $_);
+            if ($strategy ne "none") {
+                if ($strategy ne "restart" and ($eq == 0 or $strategy eq "reload")) {
+                    $unitsToReload{$unitName} = 1;
+                } elsif ($eq == 1) {
+                    $unitsToRestart{$unitName} = 1;
+                }
             }
         }
     } else {
@@ -257,7 +315,7 @@ foreach (@upcomingNspawnUnits) {
 }
 
 foreach (@currentNspawnUnits) {
-    unless ("$out$_" ~~ @upcomingNspawnUnits) {
+    unless (-f "$out$_") {
         my $unit = basename($_);
         $unit =~ s/\.nspawn//;
         my $unitName = "systemd-nspawn\@$unit.service";

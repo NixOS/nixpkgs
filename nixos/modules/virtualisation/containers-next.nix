@@ -194,6 +194,7 @@ let
           Parameters = "${container.config.system.build.toplevel}/init";
           Ephemeral = yesNo config.ephemeral;
           KillSignal = "SIGRTMIN+3";
+          X-ActivationStrategy = config.activation.strategy;
         }
         (mkIf (!config.ephemeral) {
           LinkJournal = mkDefault "guest";
@@ -292,11 +293,15 @@ in {
 
           activation = {
             strategy = mkOption {
-              type = types.enum [ "none" "reload" "restart" ];
-              default = "none";
+              type = types.enum [ "none" "reload" "restart" "dynamic" ];
+              default = "dynamic";
               description = ''
                 Decide whether to <emphasis>restart</emphasis> or <emphasis>reload</emphasis>
                 the container during activation.
+
+                <literal>dynamic</literal> checks whether the <filename>.nspawn</filename>-unit
+                has changed (apart from the init-script) and if that's the case, it will be
+                rebooted, otherwise a restart will happen.
               '';
             };
 
@@ -478,12 +483,6 @@ in {
       services = listToAttrs (flip map (attrNames cfg) (container:
         let
           inherit (cfg.${container}) activation;
-          reloadProp =
-            if activation.strategy == "none"
-              then null
-            else if activation.strategy == "reload"
-              then "reloadIfChanged"
-            else "restartIfChanged";
         in nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
             mkdir -p /var/lib/machines/${container}/{etc,var}
@@ -493,15 +492,13 @@ in {
           partOf = [ "machines.target" ];
           before = [ "machines.target" ];
 
-          ${reloadProp} = true;
-
+          #unitConfig.RequiresMountsFor = "/var/lib/machines/${container}";
           serviceConfig = mkMerge [
             {
               # Inherit settings from `systemd-nspawn@.service`.
               # Workaround since settings from `systemd-nspawn@.service`-settings are not
               # picked up if an override exists and `systemd-nspawn@ldap` exists.
               RestartForceExitStatus = 133;
-              RequiresMountFor = "/var/lib/machines/${container}";
               Type = "notify";
               Delegate = "yes";
               TasksMax = 16384;
@@ -518,8 +515,9 @@ in {
                 "/dev/mapper/control rw"
                 "block-device-mapper rw"
               ];
+              X-ActivationStrategy = activation.strategy;
             }
-            (mkIf (activation.strategy == "reload") {
+            (mkIf (elem activation.strategy [ "reload" "dynamic" ]) {
               ExecReload = if activation.reloadScript != null
                 then "${activation.reloadScript}"
                 else "${pkgs.writeShellScriptBin "activate" ''

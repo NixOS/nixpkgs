@@ -1,93 +1,144 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: let
+  instances.dynamic = {
+    activation.strategy = "dynamic";
+    network.v4.static.containerPool = [ "10.231.136.2/24" ];
+    network.v4.static.hostAddresses = [ "10.231.136.1/24" ];
+  };
+
+  instances.teststop = {
+    network.v4.static.containerPool = [ "10.231.137.2/24" ];
+    network.v4.static.hostAddresses = [ "10.231.137.1/24" ];
+  };
+
+  instances.restart = {
+    activation.strategy = "restart";
+    network.v4.static.containerPool = [ "10.231.138.2/24" ];
+    network.v4.static.hostAddresses = [ "10.231.138.1/24" ];
+  };
+
+  instances.reload = {
+    activation.strategy = "reload";
+    network.v4.static.containerPool = [ "10.231.139.2/24" ];
+    network.v4.static.hostAddresses = [ "10.231.139.1/24" ];
+  };
+
+  instances.none = {
+    activation.strategy = "none";
+    network.v4.static.containerPool = [ "10.231.140.2/24" ];
+    network.v4.static.hostAddresses = [ "10.231.140.1/24" ];
+  };
+
+  testvm = { ... }: {
+    systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+    networking = {
+      useDHCP = false;
+      useNetworkd = true;
+      interfaces.eth0.useDHCP = true;
+    };
+  };
+in {
   name = "container-tests";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
-  nodes = {
+  nodes = rec {
     base = { ... }: {
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-        interfaces.eth0.useDHCP = true;
-      };
-      nixos.containers.instances.test = {
-        network.v4.static.containerPool = [ "10.231.136.2/24" ];
-        network.v4.static.hostAddresses = [ "10.231.136.1/24" ];
-        activation.strategy = "reload";
-      };
-      nixos.containers.instances.test2 = {
-        sharedNix = false;
-        network.v4.static.containerPool = [ "10.231.137.2/24" ];
-        network.v4.static.hostAddresses = [ "10.231.137.1/24" ];
-        activation.strategy = "restart";
-      };
+      imports = [ testvm ];
+      nixos.containers = { inherit instances; };
     };
-    configchange = { ... }: {
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-        interfaces.eth0.useDHCP = true;
-      };
-      nixos.containers.instances.test = {
-        network.v4.static.containerPool = [ "10.231.136.2/24" ];
-        network.v4.static.hostAddresses = [ "10.231.136.1/24" ];
-        activation.strategy = "reload";
-        config = {
-          services.nginx = {
-            enable = true;
-            virtualHosts."localhost" = {
-              listen = [
-                { addr = "10.231.136.2"; port = 80; ssl = false; }
-              ];
+    configchange = { lib, pkgs, ... }: {
+      imports = [ testvm ];
+      nixos.containers.instances = lib.mkMerge [
+        (lib.filterAttrs (name: lib.const (name != "teststop")) instances)
+        {
+          dynamic.config = {
+            services.nginx = {
+              enable = true;
+              virtualHosts."localhost" = {
+                listen = [
+                  { addr = "10.231.136.2"; port = 80; ssl = false; }
+                ];
+              };
             };
+            networking.firewall.allowedTCPPorts = [ 80 ];
           };
-          networking.firewall.allowedTCPPorts = [ 80 ];
-        };
-      };
-      nixos.containers.instances.test2 = {
-        sharedNix = false;
-        network.v4.static.containerPool = [ "10.231.137.2/24" ];
-        network.v4.static.hostAddresses = [ "10.231.137.1/24" ];
-        activation.strategy = "restart";
-        config = { pkgs, ... }: {
-          environment.systemPackages = with pkgs; [ hello ];
-        };
-      };
+        }
+      ];
+
+      systemd.nspawn.restart.filesConfig.BindReadOnly = [ "/etc:/tmp" ];
+      systemd.nspawn.reload.filesConfig.BindReadOnly = [ "/etc:/tmp" ];
+    };
+    configchange2 = {
+      # TODO: dynamic, new container, network changes
+      imports = [ configchange ];
     };
   };
+  skipLint = true;
 
   testScript = { nodes, ... }: let
     change = nodes.configchange.config.system.build.toplevel;
   in ''
     base.start()
     base.wait_for_unit("network.target")
-    assert "test" in base.succeed("machinectl")
-    base.wait_until_succeeds("ping -c3 10.231.136.1 >&2")
-    base.wait_until_succeeds("ping -c3 10.231.136.2 >&2")
-    base.wait_until_succeeds("ping -c3 10.231.137.2 >&2")
+    base.wait_for_unit("machines.target")
 
-    base.fail("curl 10.231.136.2 -sSf --connect-timeout 10")
+    with subtest("Initial state"):
+        available = base.succeed("machinectl")
+        for i in ['dynamic', 'teststop', 'restart', 'reload']:
+            assert i in available, f"Expected machine {i} in `machinectl output!"
 
-    out = base.succeed(
-        "${change}/bin/switch-to-configuration test 2>&1 | tee /dev/stderr"
-    )
+        for i in range(136, 141):
+            base.wait_until_succeeds(f"ping -c3 10.231.{str(i)}.2 >&2")
 
-    assert "reloading the following units: systemd-nspawn@test.service" in out
-    assert (
-        "restarting the following units: systemd-nspawn@test.service, systemd-nspawn@test2.service"
-        not in out
-    )
+        base.fail("curl 10.231.136.2 -sSf --connect-timeout 10")
 
-    base.wait_until_succeeds("ping -c3 10.231.136.2 >&2")
-    base.wait_until_succeeds("ping -c3 10.231.137.2 >&2")
-    base.execute("curl 10.231.136.2 -sSf --connect-timeout 10 | grep 'Welcome to nginx'")
+        for m in ['reload', 'restart']:
+            base.fail(
+                f"systemd-run -M {m} --pty --quiet -- /bin/sh --login -c 'test -e /tmp/systemd'"
+            )
 
-    base.succeed("systemd-run -M test2 --pty --quiet -- /bin/sh --login -c 'hello'")
+    with subtest("Activate changes"):
+        act_output = base.succeed(
+            "${change}/bin/switch-to-configuration test 2>&1 | tee /dev/stderr"
+        ).split('\n')
 
-    base.execute("machinectl poweroff test")
-    base.execute("machinectl poweroff test2")
-    base.sleep(3)
+        units = {}
+        for state in ['stopping', 'starting', 'restarting', 'reloading']:
+            units[state] = []
+            outline = f"{state} the following units: "
+            for line in act_output:
+                if line.startswith(outline):
+                    units[state] = line.replace(outline, "").split(', ')
+                    break
+
+        print(units)
+        assert "systemd-nspawn@reload.service" in units['reloading']
+        assert "systemd-nspawn@reload.service" not in units['restarting']
+
+        assert "systemd-nspawn@restart.service" in units['restarting']
+        assert "systemd-nspawn@restart.service" not in units['reloading']
+
+        assert "systemd-nspawn@dynamic.service" in units['reloading']
+        assert "systemd-nspawn@dynamic.service" not in units['restarting']
+
+        assert "systemd-nspawn@reload.service" not in units['starting']
+        assert "systemd-nspawn@restart.service" not in units['starting']
+        assert "systemd-nspawn@teststop.service" in units['stopping']
+        assert "systemd-nspawn@none.service" not in act_output
+
+    with subtest("Check for successful activation"):
+        base.wait_until_succeeds("curl 10.231.136.2 -sSf --connect-timeout 10")
+        base.fail("ping -c3 10.231.137.2 -c3")
+
+        base.succeed(
+            f"systemd-run -M restart --pty --quiet -- /bin/sh --login -c 'test -e /tmp/systemd'"
+        )
+
+        # A reload is forced for this machine, but a reload doesn't refresh bind mounts.
+        base.fail(
+            f"systemd-run -M reload --pty --quiet -- /bin/sh --login -c 'test -e /tmp/systemd'"
+        )
 
     base.shutdown()
   '';
