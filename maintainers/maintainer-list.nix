@@ -2725,6 +2725,12 @@
     githubId = 1753498;
     name = "Dejan Lukan";
   };
+  electrified = {
+    email = "ed@maidavale.org";
+    github = "electrified";
+    githubId = 103082;
+    name = "Ed Brindley";
+  };
   elliottvillars = {
     email = "elliottvillars@gmail.com";
     github = "elliottvillars";
