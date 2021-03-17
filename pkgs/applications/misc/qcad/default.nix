@@ -25,6 +25,7 @@ mkDerivationWith stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Patch directory lookup, remove __DATE__ and executable name
     ./application-dir.patch
   ];
 
@@ -90,12 +91,10 @@ mkDerivationWith stdenv.mkDerivation rec {
     qttools
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
   };
