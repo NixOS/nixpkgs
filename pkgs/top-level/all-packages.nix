@@ -21103,6 +21103,8 @@ in
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
+  sjasmplus = callPackage ../development/compilers/sjasmplus { };
+
   skeu = callPackage ../data/themes/skeu { };
 
   sweet = callPackage ../data/themes/sweet { };
