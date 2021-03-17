@@ -1,0 +1,34 @@
+diff --git a/third-party/CMakeLists.txt b/third-party/CMakeLists.txt
+index 31fc934..16c2f42 100644
+--- a/third-party/CMakeLists.txt
++++ b/third-party/CMakeLists.txt
+@@ -1,13 +1,13 @@
+ add_subdirectory (adda25-threadpool)
+ add_subdirectory (catch2)
+-add_subdirectory (fmtlib)
+-add_subdirectory (GSL)
++find_package (fmt REQUIRED)
++find_package (Microsoft.GSL REQUIRED)
+ add_subdirectory (LouisCharlesC-safe)
+-add_subdirectory (spdlog)
++find_package (spdlog REQUIRED)
+ add_subdirectory (stduuid)
+ 
+ set (RANGE_V3_TESTS OFF)
+ set (RANGE_V3_EXAMPLES OFF)
+ set (RANGE_V3_PERF OFF)
+ set (RANGE_V3_HEADER_CHECKS OFF)
+-add_subdirectory (range-v3)
++find_package (range-v3 REQUIRED)
+diff --git a/third-party/stduuid/CMakeLists.txt b/third-party/stduuid/CMakeLists.txt
+index b785a64..db1eeb4 100644
+--- a/third-party/stduuid/CMakeLists.txt
++++ b/third-party/stduuid/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ add_library (stduuid INTERFACE)
+ target_include_directories (stduuid INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+-target_link_libraries (stduuid INTERFACE GSL)
++target_link_libraries (stduuid INTERFACE Microsoft.GSL)
+ 
+ # FIXME: In Apple platforms, we need to link against CoreFoundation
+ if (NOT WIN32)
