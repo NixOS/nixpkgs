@@ -54,7 +54,9 @@ stdenv.mkDerivation rec {
 
     # Desktop item icons
     mkdir -p $out/share/icons/hicolor/{48x48,64x64,128x128}/apps
-    cp Installer/renoise-{48,64,128}.png $out/share/icons/hicolor/{48x48,64x64,128x128}/apps/renoise.png
+    cp Installer/renoise-48.png $out/share/icons/hicolor/48x48/apps/renoise.png
+    cp Installer/renoise-64.png $out/share/icons/hicolor/64x64/apps/renoise.png
+    cp Installer/renoise-128.png $out/share/icons/hicolor/128x128/apps/renoise.png
   '';
 
   postFixup = ''
