@@ -5152,6 +5152,8 @@ in {
 
   plugwise = callPackage ../development/python-modules/plugwise { };
 
+  plum-py = callPackage ../development/python-modules/plum-py { };
+
   plumbum = callPackage ../development/python-modules/plumbum { };
 
   ply = callPackage ../development/python-modules/ply { };
