@@ -4195,6 +4195,12 @@
     githubId = 175537;
     name = "Johannes Lötzsch";
   };
+  jackgerrits = {
+    email = "jack@jackgerrits.com";
+    github = "jackgerrits";
+    githubId = 7558482;
+    name = "Jack Gerrits";
+  };
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
