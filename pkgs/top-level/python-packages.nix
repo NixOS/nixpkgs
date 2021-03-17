@@ -951,6 +951,8 @@ in {
 
   bellows = callPackage ../development/python-modules/bellows { };
 
+  beniget = callPackage ../development/python-modules/beniget { };
+
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };
@@ -2184,6 +2186,8 @@ in {
 
   evernote = callPackage ../development/python-modules/evernote { };
 
+  evohome-async = callPackage ../development/python-modules/evohome-async { };
+
   ewmh = callPackage ../development/python-modules/ewmh { };
 
   exdown = callPackage ../development/python-modules/exdown { };
@@ -3130,6 +3134,8 @@ in {
 
   hug = callPackage ../development/python-modules/hug { };
 
+  huggingface-hub = callPackage ../development/python-modules/huggingface-hub { };
+
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   humanize = callPackage ../development/python-modules/humanize { };
@@ -3253,6 +3259,8 @@ in {
   };
 
   imutils = callPackage ../development/python-modules/imutils { };
+
+  incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
 
@@ -5949,6 +5957,8 @@ in {
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
+  pynetdicom = callPackage ../development/python-modules/pynetdicom { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 { };
@@ -6404,6 +6414,8 @@ in {
 
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
+  pytest-error-for-skips = callPackage ../development/python-modules/pytest-error-for-skips { };
+
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
 
   pytest-factoryboy = callPackage ../development/python-modules/pytest-factoryboy { };
@@ -6777,6 +6789,8 @@ in {
   python-wink = callPackage ../development/python-modules/python-wink { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
+
+  pythran = callPackage ../development/python-modules/pythran { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
@@ -7314,7 +7328,7 @@ in {
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   sane = callPackage ../development/python-modules/sane {
-    inherit (pkgs) saneBackends;
+    inherit (pkgs) sane-backends;
   };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
@@ -8849,6 +8863,8 @@ in {
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
+
+  xmldiff = callPackage ../development/python-modules/xmldiff { };
 
   xmljson = callPackage ../development/python-modules/xmljson { };
 

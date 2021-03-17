@@ -106,7 +106,7 @@ eikenb/acp
 elixir-editors/vim-elixir
 elmcast/elm-vim
 elzr/vim-json
-embark-theme/vim as embark-vim
+embark-theme/vim@main as embark-vim
 embear/vim-localvimrc
 enomsg/vim-haskellConcealPlus
 enricobacis/vim-airline-clock
@@ -115,6 +115,7 @@ ervandew/supertab
 esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
+f-person/git-blame.nvim
 farmergreg/vim-lastplace
 fatih/vim-go
 fcpg/vim-osc52
@@ -177,7 +178,6 @@ hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
-hugolgst/vimsence
 iamcco/coc-spell-checker
 ianks/vim-tsx
 idanarye/vim-merginal
@@ -485,6 +485,7 @@ raghur/vim-ghost
 Raimondi/delimitMate
 rakr/vim-one
 rbgrouleff/bclose.vim
+rbong/vim-flog
 reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim
@@ -689,6 +690,7 @@ Vimjas/vim-python-pep8-indent
 vimlab/split-term.vim
 vimoutliner/vimoutliner
 vimpostor/vim-tpipeline
+vimsence/vimsence
 vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
@@ -716,6 +718,7 @@ xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
 Xuyuanp/nerdtree-git-plugin
+yamatsum/nvim-nonicons@main
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
 Yilin-Yang/vim-markbar

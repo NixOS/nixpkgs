@@ -20,6 +20,13 @@ with lib;
         services.miniflux.enable = true;
       };
 
+    withoutSudo =
+      { ... }:
+      {
+        services.miniflux.enable = true;
+        security.sudo.enable = false;
+      };
+
     customized =
       { ... }:
       {
@@ -43,6 +50,13 @@ with lib;
     default.wait_for_open_port(${toString defaultPort})
     default.succeed("curl --fail 'http://localhost:${toString defaultPort}/healthcheck' | grep -q OK")
     default.succeed(
+        "curl 'http://localhost:${toString defaultPort}/v1/me' -u '${defaultUsername}:${defaultPassword}' -H Content-Type:application/json | grep -q '\"is_admin\":true'"
+    )
+
+    withoutSudo.wait_for_unit("miniflux.service")
+    withoutSudo.wait_for_open_port(${toString defaultPort})
+    withoutSudo.succeed("curl --fail 'http://localhost:${toString defaultPort}/healthcheck' | grep -q OK")
+    withoutSudo.succeed(
         "curl 'http://localhost:${toString defaultPort}/v1/me' -u '${defaultUsername}:${defaultPassword}' -H Content-Type:application/json | grep -q '\"is_admin\":true'"
     )
 

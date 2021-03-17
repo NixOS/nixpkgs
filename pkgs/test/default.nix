@@ -47,5 +47,7 @@ with pkgs;
 
   texlive = callPackage ./texlive {};
 
+  cuda = callPackage ./cuda { };
+
   writers = callPackage ../build-support/writers/test.nix {};
 }

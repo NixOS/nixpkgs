@@ -36,6 +36,7 @@ let
     only_admins_can_pause_the_game = true;
     autosave_only_on_server = true;
     admins = [];
+    non_blocking_saving = cfg.nonBlockingSaving;
   } // cfg.extraSettings;
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
@@ -191,6 +192,15 @@ in
         example = 10;
         description = ''
           Autosave interval in minutes.
+        '';
+      };
+      nonBlockingSaving = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Highly experimental feature, enable only at your own risk of losing your saves.
+          On UNIX systems, server will fork itself to create an autosave.
+          Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
         '';
       };
     };

@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bluescreen303 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -3615,6 +3615,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  gtrunsec = {
+    email = "gtrunsec@hardenedlinux.org";
+    github = "GTrunSec";
+    githubId = 21156405;
+    name = "GuangTao Zhang";
+  };
   guibou = {
     email = "guillaum.bouchard@gmail.com";
     github = "guibou";
@@ -6980,6 +6986,12 @@
     github = "obadz";
     githubId = 3359345;
     name = "obadz";
+  };
+  obsidian-systems-maintainence = {
+    name = "Obsidian Systems Maintenance";
+    email = "maintainer@obsidian.systems";
+    github = "obsidian-systems-maintenance";
+    githubId = 80847921;
   };
   odi = {
     email = "oliver.dunkl@gmail.com";

@@ -64,7 +64,7 @@ $ dotnet --info
 
 The `dotnetCorePackages.sdk_X_Y` is preferred over the old dotnet-sdk as both major and minor version are very important for a dotnet environment. If a given minor version isn't present (or was changed), then this will likely break your ability to build a project.
 
-## dotnetCorePackages.sdk vs vs dotnetCorePackages.net vs dotnetCorePackages.netcore vs dotnetCorePackages.aspnetcore
+## dotnetCorePackages.sdk vs dotnetCorePackages.net vs dotnetCorePackages.netcore vs dotnetCorePackages.aspnetcore
 
 The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given version. The `net`, `netcore` and `aspnetcore` packages are meant to serve as minimal runtimes to deploy alongside already built applications. For runtime versions >= .NET 5 `net` is used while `netcore` is used for older .NET Core runtime version.
 

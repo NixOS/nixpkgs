@@ -46,13 +46,13 @@ let
 in
 mkDerivation rec {
   pname = "crow-translate";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "crow-translate";
     repo = "crow-translate";
     rev = version;
-    sha256 = "sha256-YOsp/noGsYthre18fMyBj9s+YFzdHJfIJzJSm43wiZ0=";
+    sha256 = "sha256-kpr3Xn1ZLBS1fVhhJ/sxo8UgB4M+SdOVhddnU8pNUfA=";
   };
 
   patches = [

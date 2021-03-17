@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.3.3";
+  version = "2021.3.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -236,7 +236,7 @@
     "etherscan" = ps: with ps; [ ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [ ]; # missing inputs: lakeside
     "everlights" = ps: with ps; [ pyeverlights ];
-    "evohome" = ps: with ps; [ ]; # missing inputs: evohome-async
+    "evohome" = ps: with ps; [ evohome-async ];
     "ezviz" = ps: with ps; [ ]; # missing inputs: pyezviz
     "faa_delays" = ps: with ps; [ faadelays ];
     "facebook" = ps: with ps; [ ];
@@ -385,7 +385,7 @@
     "image_processing" = ps: with ps; [ aiohttp-cors ];
     "imap" = ps: with ps; [ aioimaplib ];
     "imap_email_content" = ps: with ps; [ ];
-    "incomfort" = ps: with ps; [ ]; # missing inputs: incomfort-client
+    "incomfort" = ps: with ps; [ incomfort-client ];
     "influxdb" = ps: with ps; [ influxdb-client influxdb ];
     "input_boolean" = ps: with ps; [ ];
     "input_datetime" = ps: with ps; [ ];

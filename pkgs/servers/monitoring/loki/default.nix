@@ -2,19 +2,25 @@
 }:
 
 buildGoModule rec {
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "O/3079a67j1i9pgf18SBx0iJcQPVmb0H+K/PzQVBCDQ=";
+    sha256 = "sha256-mEu9z3lhHSE0NMXXViX4OBbIiNba7/RPr+AFmIM77g4=";
   };
 
   vendorSha256 = null;
 
-  subPackages = [ "..." ];
+  subPackages = [
+    # TODO split every executable into its own package
+    "cmd/loki"
+    "cmd/loki-canary"
+    "cmd/promtail"
+    "cmd/logcli"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];

@@ -127,7 +127,7 @@ self = stdenv.mkDerivation {
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
+       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.adwaita-icon-theme wrapGAppsHook ]
        else [ ocamlPackages.lablgtk ]);
 
   postPatch = ''
