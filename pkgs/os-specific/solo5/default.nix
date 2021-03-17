@@ -51,15 +51,14 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkInputs = [ util-linux qemu ];
-  checkPhase = if stdenv.hostPlatform.isLinux then
-    ''
+  checkPhase = ''
+    runHook preCheck
     patchShebangs tests
     ./tests/bats-core/bats ./tests/tests.bats
-    ''
-  else
-    null;
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Sandboxed execution environment";
