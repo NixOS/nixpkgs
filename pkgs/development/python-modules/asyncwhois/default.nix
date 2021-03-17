@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "0.3.0";
+  version = "0.3.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1514fz942yix7fh4yg982mxjp8c0qb6a0i4fw5wsc3xx4g86zcdg";
+    sha256 = "1wp6pwnc1inzzn9nhkwq9m9ab1aylw0hzq94w6p2dsm2njfqma8h";
   };
 
   propagatedBuildInputs = [
