@@ -68,27 +68,30 @@ rec {
     dontPatch = true;
     autoPatchelfIgnoreMissingDeps = true;
     installPhase = ''
-      mkdir -p $out/
-      ${androidndk}/libexec/android-sdk/ndk-bundle/build/tools/make-standalone-toolchain.sh --arch=${targetInfo.arch} --install-dir=$out/ --platform=${sdkVer} --force
-      cp $out/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib/
-      cp $out/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib/
+      ${androidndk}/libexec/android-sdk/ndk-bundle/build/tools/make-standalone-toolchain.sh --arch=${targetInfo.arch} --install-dir=$out/toolchain --platform=${sdkVer} --force
+      ln -vfs $out/toolchain/sysroot/usr/lib $out/lib
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib/
       chmod +w $out/lib/*
-      cp $out/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.so $out/lib/
-      cp $out/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.a $out/lib/
-      cp $out/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.o $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.so $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.o $out/lib/
 
-      cp -r $out/${targetInfo.triple}/bin/* $out/bin
+      echo "INPUT(-lc++_static)" > $out/lib/libc++.a
+
+      ln -s $out/toolchain/bin $out/bin
+      ln -s $out/toolchain/${targetInfo.triple}/bin/* $out/bin/
       for f in $out/bin/${targetInfo.triple}*; do
-        cp $f ''${f/${targetInfo.triple}/${prefix}}
+        ln -s $f ''${f/${targetInfo.triple}/${prefix}}
       done
-      rm $out/bin/${prefix}-gcc $out/bin/${prefix}-g++
-
-      for f in $out/bin/clang*; do
-        cp $f ''${f/clang/${prefix}-clang}
+      for f in `find $out/toolchain -type d -name ${targetInfo.triple}`; do
+        ln -s $f ''${f/${targetInfo.triple}/${prefix}}
       done
-      patchShebangs $out/
+      rm $out/bin/${prefix}-gcc $out/bin/${prefix}-g++ 
 
-      rm -r $out/lib64
+      
+
+      patchShebangs $out/bin
+
     '';
   };
 
@@ -110,7 +113,7 @@ rec {
       echo "-target ${targetInfo.toolchain}" >> $out/nix-support/cc-cflags
       echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
       echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
-      echo "-I${binaries}/include -I${binaries}/sysroot/include -I${binaries}/sysroot/usr/include -I${binaries}/sysroot/include/c++/v1" >> $out/nix-support/cc-cflags
+      #echo "-I${binaries}/include -I${binaries}/sysroot/include -I${binaries}/sysroot/usr/include -I${binaries}/sysroot/include/c++/v1" >> $out/nix-support/cc-cflags
       echo "-L${binaries}/lib" >> $out/nix-support/cc-ldflags
     '';
   };
