@@ -15,13 +15,12 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   postPatch = ''
-    substitueInPlace \
+    substituteInPlace Makefile \
       --replace "DESTDIR" "PREFIX" \
-      --replace "CC = gcc" "CC = cc" \
-      --replace "LDD = gcc" "LDD = ld" \
+      --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
+      --replace "LDD = gcc" "LDD = ${stdenv.cc.targetPrefix}cc" \
       --replace "CFLAGS = -O2" "CFLAGS ?=" \
-      --replace "LDFLAGS = -lc" "LDFLAGS ?= -lc" \
-      Makefile
+      --replace "LDFLAGS = -lc" "LDFLAGS ?= -lc"
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
