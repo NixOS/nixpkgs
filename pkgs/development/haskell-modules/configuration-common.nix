@@ -85,6 +85,7 @@ self: super: {
   kademlia = dontCheck super.kademlia;
 
   # Tests require older versions of tasty.
+  cborg = (doJailbreak super.cborg).override { base16-bytestring = self.base16-bytestring_0_1_1_7; };
   hzk = dontCheck super.hzk;
   resolv = doJailbreak super.resolv;
   tdigest = doJailbreak super.tdigest;
