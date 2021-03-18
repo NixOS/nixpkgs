@@ -1,5 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, version ? if lib.versionAtLeast ocaml.version "4.07" then "0.15.0" else "0.13.0"
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, version
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 , stdlib-shims, ocaml-migrate-parsetree-2-1
 }:

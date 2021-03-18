@@ -929,7 +929,14 @@ let
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
-    ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
+    ppxlib = callPackage ../development/ocaml-modules/ppxlib {
+      version =
+        if lib.versionAtLeast ocaml.version "4.12"
+        then "0.22.0"
+        else if lib.versionAtLeast ocaml.version "4.07"
+        then "0.15.0"
+        else "0.13.0";
+    };
 
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
