@@ -8405,6 +8405,8 @@ in
 
   tdns-cli = callPackage ../tools/networking/tdns-cli { };
 
+  tea = callPackage ../tools/misc/tea { };
+
   ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = libsForQt514.callPackage ../applications/networking/remote/teamviewer { };
