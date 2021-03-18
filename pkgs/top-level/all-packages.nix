@@ -1743,6 +1743,8 @@ in
 
   boringtun = callPackage ../tools/networking/boringtun { };
 
+  bookstack = callPackage ../servers/web-apps/bookstack { };
+
   # Upstream recommends qt5.12 and it doesn't build with qt5.15
   boomerang = libsForQt512.callPackage ../development/tools/boomerang { };
 
