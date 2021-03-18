@@ -130,6 +130,8 @@ mkDerivation rec {
 
   postFixup = ''
     mv $out/share/doc $out
+    ln -s $out/bin/FreeCAD $out/bin/freecad
+    ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
   meta = with lib; {
