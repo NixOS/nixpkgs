@@ -1859,6 +1859,12 @@
       fingerprint = "68B8 0D57 B2E5 4AC3 EC1F  49B0 B37E 0F23 7101 6A4C";
     }];
   };
+  collares = {
+    email = "mauricio@collares.org";
+    github = "collares";
+    githubId = 244239;
+    name = "Mauricio Collares";
+  };
   copumpkin = {
     email = "pumpkingod@gmail.com";
     github = "copumpkin";
