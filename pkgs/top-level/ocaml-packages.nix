@@ -785,6 +785,8 @@ let
 
     ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
+    ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
+
     ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
     gettext-stub = callPackage ../development/ocaml-modules/ocaml-gettext/stub.nix { };
