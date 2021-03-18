@@ -6907,6 +6907,7 @@ broken-packages:
   - http-wget
   - http2-client-grpc
   - http2-grpc-proto-lens
+  - http2-grpc-proto3-wire
   - https-everywhere-rules
   - https-everywhere-rules-raw
   - httpspec
@@ -6954,6 +6955,7 @@ broken-packages:
   - hw-kafka-avro
   - hw-prim-bits
   - hw-simd
+  - hw-simd-cli
   - hw-uri
   - hwall-auth-iitk
   - hweblib
@@ -9174,6 +9176,7 @@ broken-packages:
   - proto-lens-combinators
   - proto-lens-descriptors
   - proto3-suite
+  - proto3-wire
   - protobuf-native
   - protocol
   - protocol-buffers-descriptor-fork
@@ -10041,6 +10044,7 @@ broken-packages:
   - Shpadoinkle-examples
   - Shpadoinkle-html
   - Shpadoinkle-router
+  - Shpadoinkle-template
   - Shpadoinkle-widgets
   - shpider
   - shuffle
@@ -11355,6 +11359,7 @@ broken-packages:
   - wai-middleware-route
   - wai-middleware-static-caching
   - wai-middleware-travisci
+  - wai-middleware-validation
   - wai-rate-limit-redis
   - wai-request-spec
   - wai-responsible
