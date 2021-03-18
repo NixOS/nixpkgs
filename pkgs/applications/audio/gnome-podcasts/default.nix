@@ -75,5 +75,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    # couldn't read /build/source/build/podcasts-gtk/resources/resources.gresource: No such file or directory (os error 2)
+    broken = true;
   };
 }

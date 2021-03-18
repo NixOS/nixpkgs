@@ -19,10 +19,9 @@ let
           requests
           websocket_client
           ipaddress
-          backports_ssl_match_hostname
           docker_pycreds
           uptime
-        ];
+        ] ++ lib.optionals (self.pythonOlder "3.7") [ backports_ssl_match_hostname ];
 
         # due to flake8
         doCheck = false;

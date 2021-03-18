@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.4.9";
 
   src = fetchurl {
-    url =
-      "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
+    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
     sha256 = "sha256-lUaBGfdkFJk2czCmCkuKYhHm6n+L3n1kfGexndj9224=";
   };
 
