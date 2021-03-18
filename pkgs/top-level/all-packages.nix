@@ -190,7 +190,10 @@ in
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
-  castxml = callPackage ../development/tools/castxml { };
+  castxml = callPackage ../development/tools/castxml {
+    inherit (llvmPackages) clang-unwrapped libclang llvm;
+    inherit (python3Packages) sphinx;
+  };
 
   cen64 = callPackage ../misc/emulators/cen64 { };
 
@@ -5835,6 +5838,8 @@ in
 
   mcfly = callPackage ../tools/misc/mcfly { };
 
+  m2r = python3Packages.callPackage ../tools/text/m2r { };
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -9304,6 +9309,8 @@ in
   xmage = callPackage ../games/xmage { };
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
+
+  xmldiff = python3Packages.callPackage ../tools/text/xml/xmldiff { };
 
   xmlformat = callPackage ../tools/text/xml/xmlformat { };
 
@@ -16051,6 +16058,8 @@ in
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
   mdctags = callPackage ../development/tools/misc/mdctags { };
+
+  md4c = callPackage ../development/libraries/md4c { };
 
   mdds = callPackage ../development/libraries/mdds { };
 
