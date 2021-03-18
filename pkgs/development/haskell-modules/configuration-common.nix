@@ -86,6 +86,7 @@ self: super: {
 
   # Tests require older tasty
   hzk = dontCheck super.hzk;
+  text-short = doJailbreak super.text-short;
 
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
