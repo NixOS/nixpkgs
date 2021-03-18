@@ -822,9 +822,12 @@ self: super: {
   # Jailbreak is necessary to break out of tasty < 1.x dependency.
   cryptohash-sha256 = markUnbroken (doJailbreak super.cryptohash-sha256);
 
+  # The test suite has all kinds of out-dated dependencies, so it feels easier
+  # to just disable it.
+  cryptohash-sha1 = dontCheck super.cryptohash-sha1;
+  cryptohash-md5 = dontCheck super.cryptohash-md5;
+
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
-  cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
-  cryptohash-md5 = doJailbreak super.cryptohash-md5;
   gitHUD = dontCheck super.gitHUD;
   githud = dontCheck super.githud;
 
