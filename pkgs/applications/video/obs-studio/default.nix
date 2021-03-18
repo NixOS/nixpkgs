@@ -17,6 +17,7 @@
 , libv4l
 , x264
 , curl
+, wayland
 , xorg
 , makeWrapper
 , pkg-config
@@ -67,6 +68,7 @@ in mkDerivation rec {
     qtx11extras
     qtsvg
     speex
+    wayland
     x264
     libvlc
     makeWrapper
