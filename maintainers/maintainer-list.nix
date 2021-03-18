@@ -6999,7 +6999,7 @@
     githubId = 3359345;
     name = "obadz";
   };
-  obsidian-systems-maintainence = {
+  obsidian-systems-maintenance = {
     name = "Obsidian Systems Maintenance";
     email = "maintainer@obsidian.systems";
     github = "obsidian-systems-maintenance";

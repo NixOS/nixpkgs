@@ -46,6 +46,6 @@ stdenv.mkDerivation {
     description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
     # CUDA itself is proprietary, but these sample apps are not.
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ obsidian-systems-maintainence ];
+    maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
   };
 }

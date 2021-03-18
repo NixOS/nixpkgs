@@ -3545,6 +3545,18 @@ in
 
   cudnn = cudnn_cudatoolkit_10;
 
+  cutensorPackages = callPackages ../development/libraries/science/math/cutensor { };
+  inherit (cutensorPackages)
+    cutensor_cudatoolkit_10
+    cutensor_cudatoolkit_10_1
+    cutensor_cudatoolkit_10_2
+    cutensor_cudatoolkit_11
+    cutensor_cudatoolkit_11_0
+    cutensor_cudatoolkit_11_1
+    cutensor_cudatoolkit_11_2;
+
+  cutensor = cutensor_cudatoolkit_10;
+
   curlFull = curl.override {
     idnSupport = true;
     ldapSupport = true;
