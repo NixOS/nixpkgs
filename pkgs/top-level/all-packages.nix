@@ -2633,6 +2633,8 @@ in
 
   massren = callPackage ../tools/misc/massren { };
 
+  mat2 = with python3.pkgs; toPythonApplication mat2;
+
   maxcso = callPackage ../tools/archivers/maxcso {};
 
   medusa = callPackage ../tools/security/medusa { };
@@ -23888,6 +23890,8 @@ in
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
+
+  metadata-cleaner = callPackage ../applications/misc/metadata-cleaner { };
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
