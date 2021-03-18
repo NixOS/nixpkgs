@@ -9360,6 +9360,8 @@ in
 
   yafaray-core = callPackage ../tools/graphics/yafaray-core { };
 
+  yapf = with python3Packages; toPythonApplication yapf;
+
   yarn = callPackage ../development/tools/yarn  { };
 
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { };
