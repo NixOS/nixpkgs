@@ -58,7 +58,7 @@ let
             Type = "forking";
             Restart = "on-failure";
             ExecStart = "${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -u ${variant} -g ${variant}";
-            ExecReload = "${pkg}/bin/${birdc} configure";
+            ExecReload = "/bin/sh -c '${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -p && ${pkg}/bin/${birdc} configure'";
             ExecStop = "${pkg}/bin/${birdc} down";
             CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_FOWNER" "CAP_DAC_OVERRIDE" "CAP_SETUID" "CAP_SETGID"
                                       # see bird/sysdep/linux/syspriv.h
