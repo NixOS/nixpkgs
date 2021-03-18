@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , certifi
-, six
-, setuptools-scm
+, fetchPypi
+, flaky
+, pytestCheckHook
 , pythonOlder
+, setuptools-scm
+, six
 }:
 
 buildPythonPackage rec {
@@ -19,10 +21,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ certifi six ];
+  propagatedBuildInputs = [
+    certifi
+    six
+  ];
 
-  # tests require last.fm credentials
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    flaky
+  ];
+
+  pythonImportsCheck = [ "pylast" ];
 
   meta = with lib; {
     description = "Python interface to last.fm (and compatibles)";
