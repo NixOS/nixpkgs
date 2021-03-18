@@ -12418,7 +12418,7 @@ in
   ffuf = callPackage ../tools/security/ffuf { };
 
   flow = callPackage ../development/tools/analysis/flow {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_09;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
