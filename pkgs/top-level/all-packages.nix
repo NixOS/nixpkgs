@@ -8595,6 +8595,8 @@ in
 
   trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
 
+  trunk = callPackage ../development/tools/trunk { };
+
   tthsum = callPackage ../applications/misc/tthsum { };
 
   chaps = callPackage ../tools/security/chaps { };
