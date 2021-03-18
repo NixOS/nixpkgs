@@ -84,8 +84,9 @@ self: super: {
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
-  # Tests require older tasty
+  # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
+  resolv = doJailbreak super.resolv;
   text-short = doJailbreak super.text-short;
 
   # Tests require a Kafka broker running locally
