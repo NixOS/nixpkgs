@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types;
+  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
 
   generic = variant:
     let
@@ -26,6 +26,14 @@ let
               <link xlink:href='http://bird.network.cz/'/>
             '';
           };
+          checkConfig = mkOption {
+            type = types.bool;
+            default = true;
+            description = ''
+              Whether the config should be checked at build time.
+              Disabling this might become necessary if the config includes files not present during build time.
+            '';
+          };
         };
       };
 
@@ -36,7 +44,7 @@ let
         environment.etc."bird/${variant}.conf".source = pkgs.writeTextFile {
           name = "${variant}.conf";
           text = cfg.config;
-          checkPhase = ''
+          checkPhase = optionalString cfg.checkConfig ''
             ${pkg}/bin/${birdBin} -d -p -c $out
           '';
         };
