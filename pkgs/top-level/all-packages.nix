@@ -3325,6 +3325,8 @@ in
 
   usbsdmux = callPackage ../development/tools/misc/usbsdmux { };
 
+  usbview = callPackage ../tools/misc/usbview { };
+
   anthy = callPackage ../tools/inputmethods/anthy { };
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
