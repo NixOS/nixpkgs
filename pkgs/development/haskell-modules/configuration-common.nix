@@ -1649,4 +1649,19 @@ self: super: {
     '' + (old.postInstall or "");
   });
 
+  # Patch and jailbreak can be removed at next release, chatter > 0.9.1.0
+  # * Remove dependency on regex-tdfa-text
+  # * Jailbreak as bounds on cereal are too strict
+  # * Disable test suite which doesn't compile
+  #   https://github.com/creswick/chatter/issues/38
+  chatter = appendPatch
+    (dontCheck (doJailbreak (super.chatter.override { regex-tdfa-text = null; })))
+    (pkgs.fetchpatch {
+      url = "https://github.com/creswick/chatter/commit/e8c15a848130d7d27b8eb5e73e8a0db1366b2e62.patch";
+      sha256 = "1dzak8d12h54vss5fxnrclygz0fz9ygbqvxd5aifz5n3vrwwpj3g";
+    });
+
+  # test suite doesn't compile anymore due to changed hunit/tasty APIs
+  fullstop = dontCheck super.fullstop;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
