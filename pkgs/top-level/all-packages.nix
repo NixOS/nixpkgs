@@ -2633,6 +2633,8 @@ in
 
   massren = callPackage ../tools/misc/massren { };
 
+  mat2 = with python3.pkgs; toPythonApplication mat2;
+
   maxcso = callPackage ../tools/archivers/maxcso {};
 
   medusa = callPackage ../tools/security/medusa { };
@@ -3542,6 +3544,18 @@ in
     cudnn_cudatoolkit_11_2;
 
   cudnn = cudnn_cudatoolkit_10;
+
+  cutensorPackages = callPackages ../development/libraries/science/math/cutensor { };
+  inherit (cutensorPackages)
+    cutensor_cudatoolkit_10
+    cutensor_cudatoolkit_10_1
+    cutensor_cudatoolkit_10_2
+    cutensor_cudatoolkit_11
+    cutensor_cudatoolkit_11_0
+    cutensor_cudatoolkit_11_1
+    cutensor_cudatoolkit_11_2;
+
+  cutensor = cutensor_cudatoolkit_10;
 
   curlFull = curl.override {
     ldapSupport = true;
@@ -7742,6 +7756,8 @@ in
     gperf = gperf_3_0;
   };
 
+  rpm2targz = callPackage ../tools/archivers/rpm2targz { };
+
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
@@ -8407,6 +8423,8 @@ in
   };
 
   tdns-cli = callPackage ../tools/networking/tdns-cli { };
+
+  tea = callPackage ../tools/misc/tea { };
 
   ted = callPackage ../tools/typesetting/ted { };
 
@@ -12426,7 +12444,7 @@ in
   ffuf = callPackage ../tools/security/ffuf { };
 
   flow = callPackage ../development/tools/analysis/flow {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_09;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -15696,6 +15714,8 @@ in
   libschrift = callPackage ../development/libraries/libschrift { };
 
   libsearpc = callPackage ../development/libraries/libsearpc { };
+
+  libseat = callPackage ../development/libraries/libseat { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
@@ -23896,6 +23916,8 @@ in
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
+
+  metadata-cleaner = callPackage ../applications/misc/metadata-cleaner { };
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 

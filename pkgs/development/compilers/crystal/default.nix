@@ -214,6 +214,8 @@ let
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 fabianhjr manveru peterhoeg ];
         platforms = builtins.attrNames archs;
+        # Error running at_exit handler: Nil assertion failed
+        broken = lib.versions.minor version == "32" && stdenv.isDarwin;
       };
     })
   );

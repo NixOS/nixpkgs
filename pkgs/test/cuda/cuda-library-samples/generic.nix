@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, addOpenGLRunpath
 , cudatoolkit
+, cutensor_cudatoolkit
 }:
 
 let
@@ -29,7 +30,7 @@ let
         cuSPARSE, cuSOLVER, cuFFT, cuRAND, NPP and nvJPEG.
       '';
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ obsidian-systems-maintainence ];
+      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
     };
   };
 in
@@ -47,5 +48,23 @@ in
     src = "${src}/cuSOLVER";
 
     sourceRoot = "cuSOLVER/gesv";
+  });
+
+  cutensor = stdenv.mkDerivation (commonAttrs // {
+    pname = "cuda-library-samples-cutensor";
+
+    src = "${src}/cuTENSOR";
+
+    cmakeFlags = [
+      "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"
+    ];
+
+    # CUTENSOR_ROOT is double escaped
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace "\''${CUTENSOR_ROOT}/include" "${cutensor_cudatoolkit.dev}/include"
+    '';
+
+    CUTENSOR_ROOT = cutensor_cudatoolkit;
   });
 }

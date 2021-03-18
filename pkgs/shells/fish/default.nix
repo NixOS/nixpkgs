@@ -131,7 +131,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.2.0";
+    version = "3.2.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -141,7 +141,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-TwKT7Z9qa3fkfUHvq+YvMxnobvyL+DzFhzMET7xvkhE=";
+      sha256 = "2OSfQJDTd43xfdgl5KKoAZIBVoJCPNndArZnXWXDr1s=";
     };
 
     # Fix FHS paths in tests
@@ -214,7 +214,7 @@ let
 
     checkInputs = [
       coreutils
-      (python3.withPackages(ps: [ps.pexpect]))
+      (python3.withPackages (ps: [ ps.pexpect ]))
       procps
     ];
 

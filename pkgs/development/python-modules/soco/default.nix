@@ -30,10 +30,12 @@ buildPythonPackage rec {
     sha256 = "sha256-CCgkzUkt9YqTJt9tPBLmYXW6ZuRoMDd7xahYmNXgfM0=";
   };
 
-  patches = [(fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/SoCo/SoCo/pull/811.patch";
-    sha256 = "sha256-GBd74c8zc25ROO411SZ9TTa+bi8yXJaaOQqY9FM1qj4=";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/SoCo/SoCo/pull/811.patch";
+      sha256 = "sha256-GBd74c8zc25ROO411SZ9TTa+bi8yXJaaOQqY9FM1qj4=";
+    })
+  ];
 
   # N.B. These exist because:
   # 1. Upstream's pinning isn't well maintained, leaving dependency versions no

@@ -9143,10 +9143,6 @@ let
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
-    # Tests are broken with PerlMagick and imagemagick version 7 as of 2021-02-22.
-    # See https://github.com/carygravel/gtk3-imageview/issues/19 and
-    # https://github.com/NixOS/nixpkgs/pull/114007#issuecomment-783595659.
-    doCheck = false;
     checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
@@ -16756,6 +16752,11 @@ let
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
+
+        # Enable HDRI support to match the native ImageMagick 7 defaults
+        # See: https://github.com/ImageMagick/ImageMagick/issues/3402#issuecomment-801195538
+        substituteInPlace Makefile.PL \
+          --replace 'MAGICKCORE_HDRI_ENABLE=0' 'MAGICKCORE_HDRI_ENABLE=1'
       '';
   };
 

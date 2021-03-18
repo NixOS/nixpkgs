@@ -6,22 +6,16 @@
 
 buildPythonPackage rec {
   pname = "TatSu";
-  version = "5.0.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c16fcxf0xjkh5py9bnj6ljb9krhrj57mkwayl1w1dvzwl5lkgj3";
+    sha256 = "07bmdnwh99p60cgzhlb8s5vwi5v4r5zi8shymxnnarannkc66hzn";
   };
 
-  # Since version 5.0.0 only >=3.8 is officially supported, but ics is not
-  # compatible with Python 3.8 due to aiohttp:
-  disabled = pythonOlder "3.7";
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "python_requires='>=3.8'," "python_requires='>=3.7',"
-  '';
+  disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ colorama mypy pyyaml regex ]

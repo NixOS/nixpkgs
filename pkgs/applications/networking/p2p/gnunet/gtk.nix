@@ -39,5 +39,7 @@ stdenv.mkDerivation rec {
   meta = gnunet.meta // {
     description = "GNUnet GTK User Interface";
     homepage = "https://git.gnunet.org/gnunet-gtk.git";
+    # configure: error: compiling gnunet-gtk requires GNUnet core headers
+    broken = true;
   };
 }
