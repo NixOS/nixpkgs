@@ -1,7 +1,48 @@
 { lib, newScope, pkgs, config }:
 
 let
+  defaultVersion = [ "4" "10" ];
+
   liftJaneStreet = self: super: super.janeStreet // super;
+
+  whitelist = ocamlVersion: [
+    "ocaml"
+    "dune_2"
+    "stog"
+    "google-drive-ocamlfuse"
+    "hol_light"
+    "dune-release"
+    "reason"
+    "bap"
+    "findlib"
+    "ctypes"
+  ] ++ lib.optionals (lib.versionOlder ocamlVersion "4.12") [
+    "dune_1"
+  ];
+
+  # override setting hydraPlatforms = [] for all packages in
+  # ocamlPackages except a few whitelisted ones
+  normalPkgsNoHydra = self: super:
+    let
+      isDefaultVersion = v:
+        lib.take 2 (lib.splitVersion v) == defaultVersion;
+      transformAttr = name: value:
+        let
+          allowedAttrs = whitelist super.ocaml.version;
+        in
+          if lib.elem name allowedAttrs || !lib.isDerivation value
+          then value
+          else value // {
+            meta = (value.meta or {}) // {
+              hydraPlatforms = [];
+            };
+          };
+    in
+      if isDefaultVersion super.ocaml.version
+      then super # default set gets no special treatment
+      else lib.mapAttrs transformAttr super;
+
+  overrides = lib.composeExtensions liftJaneStreet normalPkgsNoHydra;
 
   mkOcamlPackages = ocaml:
     (lib.makeScope newScope (self: with self; (lib.recurseIntoAttrs
@@ -1396,11 +1437,10 @@ let
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
 
-  }))).overrideScope' liftJaneStreet;
+  }))).overrideScope' overrides;
 
-in let inherit (pkgs) callPackage; in rec
-{
-
+in let inherit (pkgs) callPackage; in lib.fix
+(self: {
   ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix { });
 
   ocamlPackages_4_01_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.01.0.nix { });
@@ -1427,7 +1467,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_12;
+  ocamlPackages_latest = self.ocamlPackages_4_12;
 
-  ocamlPackages = ocamlPackages_4_10;
-}
+  ocamlPackages = self."ocamlPackages_${lib.concatStringsSep "_" defaultVersion}";
+})
