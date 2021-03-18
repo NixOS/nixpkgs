@@ -16756,6 +16756,11 @@ let
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
+
+        # Enable HDRI support to match the native ImageMagick 7 defaults
+        # See: https://github.com/ImageMagick/ImageMagick/issues/3402#issuecomment-801195538
+        substituteInPlace Makefile.PL \
+          --replace 'MAGICKCORE_HDRI_ENABLE=0' 'MAGICKCORE_HDRI_ENABLE=1'
       '';
   };
 
