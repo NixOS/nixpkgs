@@ -2,8 +2,6 @@
 , yacc, libtool, fontconfig, pango, gd, libwebp
 }:
 
-assert libpng != null && libjpeg != null && expat != null;
-
 stdenv.mkDerivation rec {
   name = "graphviz-2.0";
 

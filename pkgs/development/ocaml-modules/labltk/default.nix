@@ -56,6 +56,10 @@ let param =
     version = "8.06.9";
     sha256 = "1k42k3bjkf22gk39lwwzqzfhgjyhxnclslldrzpg5qy1829pbnc0";
   };
+  "4.12" = mkNewParam {
+    version = "8.06.10";
+    sha256 = "06cck7wijq4zdshzhxm6jyl8k3j0zglj2axsyfk6q1sq754zyf4a";
+  };
 }.${builtins.substring 0 4 ocaml.version};
 in
 

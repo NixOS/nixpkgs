@@ -225,7 +225,7 @@ $out/lib/common-lisp/query-fs"
       x.deps;
   };
   cl-cffi-gtk-glib = addNativeLibs [pkgs.glib];
-  cl-cffi-gtk-gdk-pixbuf = addNativeLibs [pkgs.gdk_pixbuf];
+  cl-cffi-gtk-gdk-pixbuf = addNativeLibs [pkgs.gdk-pixbuf];
   cl-cffi-gtk-cairo = addNativeLibs [pkgs.cairo];
   cl-cffi-gtk-pango = addNativeLibs [pkgs.pango];
   cl-cffi-gtk-gdk = addNativeLibs [pkgs.gtk3];
