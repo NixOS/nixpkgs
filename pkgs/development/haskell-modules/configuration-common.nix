@@ -456,9 +456,6 @@ self: super: {
   # https://github.com/afcowie/locators/issues/1
   locators = dontCheck super.locators;
 
-  # Test suite won't compile against tasty-hunit 0.9.x.
-  zlib = dontCheck super.zlib;
-
   # Test suite won't compile against tasty-hunit 0.10.x.
   binary-parser = dontCheck super.binary-parser;
   binary-parsers = dontCheck super.binary-parsers;
