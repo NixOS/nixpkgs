@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
-  version = "1.6.2";
+  version = "1.7.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tFYMQYbnFTJTkZtJ+ZASWL6qsf/CK7EzTYukZm/wBgI=";
+    sha256 = "sha256-OyJ29pbVTkEJwnt5LfHSCjo76eUex4TTkIhXMmiHTNI=";
   };
 
   propagatedBuildInputs = [ requests websocket_client ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jellyfin_apiclient_python" ];
 
   meta = with lib; {
-    homepage = "https://github.com/iwalton3/jellyfin-apiclient-python";
+    homepage = "https://github.com/jellyfin/jellyfin-apiclient-python";
     description = "Python API client for Jellyfin";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jojosch ];
