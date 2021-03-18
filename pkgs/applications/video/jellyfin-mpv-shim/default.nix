@@ -20,11 +20,11 @@
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-X7UL5uUegdtHc8PGucLc8OQpWnw0fxV88z4k5FgmIE0=";
+    sha256 = "sha256-6izvS8jCZERf5wEhOrgfRbRpr38kZAZ2t1OjiRk5pNY=";
   };
 
   propagatedBuildInputs = [
@@ -55,10 +55,10 @@ buildPythonApplication rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Jellyfin MPV Shim Desktop";
-      exec = "jellyfin-mpv-desktop";
-      icon = "jellyfin-mpv-desktop";
-      desktopName = "jellyfin-mpv-desktop";
+      name = "Jellyfin Desktop";
+      exec = "jellyfin-desktop";
+      icon = "jellyfin-desktop";
+      desktopName = "jellyfin-desktop";
       comment = "MPV-based desktop and cast client for Jellyfin";
       genericName = "MPV-based desktop and cast client for Jellyfin";
       categories = "Video;AudioVideo;TV;Player";
@@ -84,10 +84,11 @@ buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/pixmaps
-    cp jellyfin_mpv_shim/integration/jellyfin-256.png $out/share/pixmaps/jellyfin-mpv-desktop.png
+    cp jellyfin_mpv_shim/integration/jellyfin-256.png $out/share/pixmaps/jellyfin-desktop.png
   '';
 
   postFixup = ''
+    wrapQtApp $out/bin/jellyfin-desktop
     wrapQtApp $out/bin/jellyfin-mpv-desktop
   '';
 
@@ -96,7 +97,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "jellyfin_mpv_shim" ];
 
   meta = with lib; {
-    homepage = "https://github.com/iwalton3/jellyfin-mpv-shim";
+    homepage = "https://github.com/jellyfin/jellyfin-desktop";
     description = "Allows casting of videos to MPV via the jellyfin mobile and web app";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jojosch ];
