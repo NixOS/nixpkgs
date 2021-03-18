@@ -2731,6 +2731,7 @@ extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
   - Cabal == 3.2.*                      # required for cabal-install etc.
+  - base16-bytestring < 1               # required for cabal-install etc.
   - dhall == 1.29.0                     # required for ats-pkg
   - dhall == 1.37.1                     # required for spago 0.19.0.
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
