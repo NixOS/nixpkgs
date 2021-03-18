@@ -89,4 +89,5 @@ self: super: {
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
+
 }
