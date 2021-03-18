@@ -5867,6 +5867,8 @@ in {
 
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
 
+  pylitterbot = callPackage ../development/python-modules/pylitterbot { };
+
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
   pylru = callPackage ../development/python-modules/pylru { };
