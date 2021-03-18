@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     description = "SFTP Virtual Filesystem add-on for Kodi";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = teams.kodi.members;
   };
 
   extraBuildInputs = [ openssl libssh zlib ];

@@ -16,6 +16,7 @@ buildKodiBinaryAddon rec {
     description = "Kodi's IPTV Simple client addon";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
+    maintainers = teams.kodi.members;
   };
 
   extraBuildInputs = [ zlib pugixml ];

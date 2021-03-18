@@ -96,6 +96,18 @@ with lib.maintainers; {
     scope = "Maintain Jitsi.";
   };
 
+  kodi = {
+    members = [
+      aanderse
+      cpages
+      edwtjo
+      minijackson
+      peterhoeg
+      sephalon
+    ];
+    scope = "Maintain Kodi and related packages.";
+  };
+
   matrix = {
     members = [
       ma27

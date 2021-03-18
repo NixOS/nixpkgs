@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     homepage = "https://github.com/kodi-pvr/pvr.hdhomerun";
     description = "Kodi's HDHomeRun PVR client addon";
     platforms = platforms.all;
-    maintainers = with maintainers; [ titanous ];
+    maintainers = teams.kodi.members;
   };
 
   extraBuildInputs = [ jsoncpp libhdhomerun ];

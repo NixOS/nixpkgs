@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     description = "LibArchive Virtual Filesystem add-on for Kodi";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = teams.kodi.members;
   };
 
   extraBuildInputs = [ libarchive lzma bzip2 zlib lz4 lzo openssl ];

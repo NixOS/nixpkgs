@@ -16,6 +16,6 @@ buildKodiAddon rec {
   meta = with lib; {
     description = "Add support for different gaming controllers.";
     platforms = platforms.all;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = teams.kodi.members;
   };
 }

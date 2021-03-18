@@ -23,6 +23,6 @@ buildKodiBinaryAddon rec {
     homepage = "https://github.com/peak3d/inputstream.adaptive";
     description = "Kodi inputstream addon for several manifest types";
     platforms = platforms.all;
-    maintainers = with maintainers; [ sephalon ];
+    maintainers = teams.kodi.members;
   };
 }

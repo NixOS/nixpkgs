@@ -23,6 +23,6 @@ buildKodiAddon {
       restart/maximise. Running pre/post Steam scripts can be
       configured via the addon.
     '';
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = teams.kodi.members;
   };
 }
