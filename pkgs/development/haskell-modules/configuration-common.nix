@@ -89,6 +89,7 @@ self: super: {
   resolv = doJailbreak super.resolv;
   tdigest = doJailbreak super.tdigest;
   text-short = doJailbreak super.text-short;
+  tree-diff = doJailbreak super.tree-diff;
 
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
