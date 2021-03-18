@@ -8949,6 +8949,8 @@ in {
 
   yt = callPackage ../development/python-modules/yt { };
 
+  ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
+
   yubico-client = callPackage ../development/python-modules/yubico-client { };
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
