@@ -8,8 +8,8 @@
 , fixDarwinDylibNames
 
 , cudaSupport
-, cudatoolkit_10_2
-, cudnn_cudatoolkit_10_2
+, cudatoolkit_11_1
+, cudnn_cudatoolkit_11_1
 }:
 
 let
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     # Copy headers and CMake files.
-    install -Dm755 -t $dev/lib lib/*.a
+    mkdir -p $dev
     cp -r include $dev
     cp -r share $dev
 
@@ -109,8 +109,8 @@ in stdenv.mkDerivation {
 
   passthru.tests.cmake = callPackage ./test {
     inherit cudaSupport;
-    cudatoolkit = cudatoolkit_10_2;
-    cudnn = cudnn_cudatoolkit_10_2;
+    cudatoolkit = cudatoolkit_11_1;
+    cudnn = cudnn_cudatoolkit_11_1;
   };
 
   meta = with lib; {

@@ -3,7 +3,7 @@
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, nixosTests }:
+  parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.0.0";
+    version = "3.0.2";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0li47fpm398dk69q6g2zjaxx46w00g3n0jszz88kf57sakri553y";
+      sha256 = "0iywcvq1sx9z5f37pw7g9qqm19fr3bymzawb0i2afm737hxr2xfp";
     };
 
     propagatedBuildInputs = [
@@ -67,6 +67,9 @@ let
       git
       openssh
       glibcLocales
+      # optional dependency that was accidentally made required for tests
+      # https://github.com/buildbot/buildbot/pull/5857
+      ldap3
     ];
 
     patches = [

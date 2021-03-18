@@ -65,7 +65,7 @@ vendorSha256=$(
 )
 [[ "$vendorSha256" ]]
 sed --in-place \
-    -e "s/vendorSha256 = \".*\"/vendorSha256 = \"$vendorSha256\"/" \
+    -e "s#vendorSha256 = \".*\"#vendorSha256 = \"$vendorSha256\"#" \
     "$version_nix"
 
 echo "vendorSha256 updated" >&2

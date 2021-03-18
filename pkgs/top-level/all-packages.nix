@@ -190,7 +190,10 @@ in
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
-  castxml = callPackage ../development/tools/castxml { };
+  castxml = callPackage ../development/tools/castxml {
+    inherit (llvmPackages) clang-unwrapped libclang llvm;
+    inherit (python3Packages) sphinx;
+  };
 
   cen64 = callPackage ../misc/emulators/cen64 { };
 
@@ -1743,6 +1746,8 @@ in
 
   boringtun = callPackage ../tools/networking/boringtun { };
 
+  bookstack = callPackage ../servers/web-apps/bookstack { };
+
   # Upstream recommends qt5.12 and it doesn't build with qt5.15
   boomerang = libsForQt512.callPackage ../development/tools/boomerang { };
 
@@ -3266,8 +3271,6 @@ in
 
   colordiff = callPackage ../tools/text/colordiff { };
 
-  concurrencykit = callPackage ../development/libraries/concurrencykit { };
-
   connect = callPackage ../tools/networking/connect { };
 
   conspy = callPackage ../os-specific/linux/conspy {};
@@ -3618,7 +3621,8 @@ in
   };
 
   deno = callPackage ../development/web/deno {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices Metal Foundation;
   };
 
   detox = callPackage ../tools/misc/detox { };
@@ -5712,7 +5716,7 @@ in
 
   lego = callPackage ../tools/admin/lego { };
 
-  leocad = callPackage ../applications/graphics/leocad { };
+  leocad = libsForQt5.callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
 
@@ -5837,6 +5841,8 @@ in
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
   mcfly = callPackage ../tools/misc/mcfly { };
+
+  m2r = python3Packages.callPackage ../tools/text/m2r { };
 
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -9310,6 +9316,8 @@ in
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
+  xmldiff = python3Packages.callPackage ../tools/text/xml/xmldiff { };
+
   xmlformat = callPackage ../tools/text/xml/xmlformat { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
@@ -9364,6 +9372,8 @@ in
   xwinwrap = callPackage ../tools/X11/xwinwrap {};
 
   yafaray-core = callPackage ../tools/graphics/yafaray-core { };
+
+  yapf = with python3Packages; toPythonApplication yapf;
 
   yarn = callPackage ../development/tools/yarn  { };
 
@@ -16057,6 +16067,8 @@ in
 
   mdctags = callPackage ../development/tools/misc/mdctags { };
 
+  md4c = callPackage ../development/libraries/md4c { };
+
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
@@ -16417,11 +16429,12 @@ in
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_1;
+    libressl_3_1
+    libressl_3_2;
 
   # Please keep this pointed to the latest version. See also
   # https://discourse.nixos.org/t/nixpkgs-policy-regarding-libraries-available-in-multiple-versions/7026/2
-  libressl = libressl_3_1;
+  libressl = libressl_3_2;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -17652,6 +17665,8 @@ in
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
+  glpng = callPackage ../development/libraries/glpng { };
+
   gsignond = callPackage ../development/libraries/gsignond {
     plugins = [];
   };
@@ -18614,7 +18629,6 @@ in
   prometheus-bird-exporter = callPackage ../servers/monitoring/prometheus/bird-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
-  prometheus-cups-exporter = callPackage ../servers/monitoring/prometheus/cups-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
   prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
@@ -22625,7 +22639,20 @@ in
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
-  freecad = libsForQt5.callPackage ../applications/graphics/freecad { };
+  freecad = libsForQt5.callPackage ../applications/graphics/freecad {
+    inherit (python3Packages)
+      GitPython
+      boost
+      matplotlib
+      pivy
+      pycollada
+      pyside2
+      pyside2-tools
+      python
+      pyyaml
+      scipy
+      shiboken2;
+  };
 
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -26848,6 +26875,8 @@ in
   chessx = libsForQt5.callPackage ../games/chessx { };
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
+
+  chromium-bsu = callPackage ../games/chromium-bsu { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 

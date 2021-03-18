@@ -2,13 +2,8 @@
 /*
 #!nix-shell -i "deno run --allow-net --allow-run --allow-read --allow-write" -p deno git nix-prefetch
 */
-import {
-  commit,
-  getExistingVersion,
-  getLatestVersion,
-  logger,
-} from "./common.ts";
-import { Architecture, updateDeps } from "./deps.ts";
+import { getExistingVersion, getLatestVersion, logger } from "./common.ts";
+import { Architecture, updateLibrustyV8 } from "./librusty_v8.ts";
 import { updateSrc } from "./src.ts";
 
 const log = logger("update");
@@ -19,11 +14,12 @@ const owner = "denoland";
 const repo = "deno";
 const denoDir = `${nixpkgs}/pkgs/development/web/${repo}`;
 const src = `${denoDir}/default.nix`;
-const deps = `${denoDir}/deps.nix`;
+const librusty_v8 = `${denoDir}/librusty_v8.nix`;
 const architectures: Architecture[] = [
   { nix: "x86_64-linux", rust: "x86_64-unknown-linux-gnu" },
   { nix: "aarch64-linux", rust: "aarch64-unknown-linux-gnu" },
   { nix: "x86_64-darwin", rust: "x86_64-apple-darwin" },
+  { nix: "aarch64-darwin", rust: "aarch64-apple-darwin" },
 ];
 
 log("Updating deno");
@@ -41,10 +37,7 @@ if (trimVersion === existingVersion) {
 
 const tasks = [
   updateSrc(src, nixpkgs, version),
-  updateDeps(deps, owner, repo, version, architectures),
+  updateLibrustyV8(librusty_v8, owner, repo, version, architectures),
 ];
 await Promise.all(tasks);
 log("Updating deno complete");
-log("Commiting");
-await commit(repo, existingVersion, trimVersion, [src, deps]);
-log("Done");

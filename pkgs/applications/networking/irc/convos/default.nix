@@ -28,7 +28,7 @@ perlPackages.buildPerlPackage rec {
 
   propagatedBuildInputs = [ openssl ];
 
-  checkInputs = with perlPackages; [ TestDeep TestMore ];
+  checkInputs = with perlPackages; [ TestDeep ];
 
   postPatch = ''
     patchShebangs script/convos

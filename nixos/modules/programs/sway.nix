@@ -90,7 +90,7 @@ in {
         rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
-        with pkgs; [ swaylock swayidle xwayland rxvt-unicode dmenu ];
+        with pkgs; [ swaylock swayidle rxvt-unicode alacritty dmenu ];
       '';
       example = literalExample ''
         with pkgs; [

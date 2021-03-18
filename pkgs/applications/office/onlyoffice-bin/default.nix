@@ -15,7 +15,7 @@
 , gdk-pixbuf
 , glib
 , glibc
-, gnome3
+, gsettings-desktop-schemas
 , gst_all_1
 , gtk2
 , gtk3
@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
     fontconfig
     gdk-pixbuf
     glib
-    gnome3.gsettings_desktop_schemas
+    gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     gtk2
