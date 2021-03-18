@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "A tool designed for parsing and converting SPIR-V to other shader languages";
     homepage = "https://github.com/KhronosGroup/SPIRV-Cross";
     changelog = "https://github.com/KhronosGroup/SPIRV-Cross/releases/tag/${version}";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
   };
