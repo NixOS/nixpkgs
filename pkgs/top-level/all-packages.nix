@@ -7739,6 +7739,8 @@ in
     gperf = gperf_3_0;
   };
 
+  rpm2targz = callPackage ../tools/archivers/rpm2targz { };
+
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
