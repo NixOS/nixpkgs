@@ -1,13 +1,14 @@
 {
   lib, stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gfortran,
   cmake,
   shared ? true
 }:
 let
   inherit (lib) optional;
-  version = "3.9.0";
+  version = "3.9.1-pre";
 in
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,20 @@ stdenv.mkDerivation rec {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${version}";
-    sha256 = "0sxnc97z67i7phdmcnq8f8lmxgw10wdwvr8ami0w3pb179cgrbpb";
+    sha256 = "1ygx9l81h32hrsxqs38c9x392n9bxszzrxg02n4isdx1qi9s9f7b";
   };
+
+  patches = [
+    # https://github.com/Reference-LAPACK/lapack/pull/521
+    (fetchpatch {
+      url = "https://github.com/Reference-LAPACK/lapack/commit/789197e1a50da24ec96276e9ee9254d38cf9d7b0.diff";
+      sha256 = "1z107x543f5wpkw6p4cifryzl67i0fnkhalfl3rbb03y5x56pqrc";
+    })
+    (fetchpatch {
+      url = "https://github.com/Reference-LAPACK/lapack/commit/b4123cbc5d7d5d4230b307e8e70c4356882e5597.diff";
+      sha256 = "0fyr08qj5532zl5hzbai7pd0inbclr720rbyvmz24p2bkk96yg8m";
+    })
+  ];
 
   nativeBuildInputs = [ gfortran cmake ];
 
@@ -35,26 +48,6 @@ stdenv.mkDerivation rec {
   ++ optional shared "-DBUILD_SHARED_LIBS=ON";
 
   doCheck = true;
-
-  # Some CBLAS related tests fail on Darwin:
-  #  14 - CBLAS-xscblat2 (Failed)
-  #  15 - CBLAS-xscblat3 (Failed)
-  #  17 - CBLAS-xdcblat2 (Failed)
-  #  18 - CBLAS-xdcblat3 (Failed)
-  #  20 - CBLAS-xccblat2 (Failed)
-  #  21 - CBLAS-xccblat3 (Failed)
-  #  23 - CBLAS-xzcblat2 (Failed)
-  #  24 - CBLAS-xzcblat3 (Failed)
-  #
-  # Upstream issue to track:
-  # * https://github.com/Reference-LAPACK/lapack/issues/440
-  ctestArgs = lib.optionalString stdenv.isDarwin "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
-
-  checkPhase = ''
-    runHook preCheck
-    ctest ${ctestArgs}
-    runHook postCheck
-  '';
 
   meta = with lib; {
     inherit version;
