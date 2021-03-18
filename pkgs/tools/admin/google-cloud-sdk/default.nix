@@ -81,7 +81,8 @@ in stdenv.mkDerivation rec {
 
     # setup bash completion
     mkdir -p $out/share/bash-completion/completions
-    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud.inc
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud
+    ln -s $out/share/bash-completion/completions/gcloud $out/share/bash-completion/completions/gsutil
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
