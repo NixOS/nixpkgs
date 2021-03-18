@@ -87,6 +87,7 @@ self: super: {
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
   resolv = doJailbreak super.resolv;
+  tdigest = doJailbreak super.tdigest;
   text-short = doJailbreak super.text-short;
 
   # Tests require a Kafka broker running locally
