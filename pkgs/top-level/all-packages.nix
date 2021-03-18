@@ -20168,6 +20168,8 @@ with pkgs;
 
   xed = callPackage ../development/libraries/xed { };
 
+  xedit = callPackage ../applications/editors/xedit { };
+
   xine-lib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
