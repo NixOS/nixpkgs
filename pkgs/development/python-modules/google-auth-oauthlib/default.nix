@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , click
@@ -27,6 +28,8 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_run_local_server" ];
 
   meta = with lib; {
     description = "Google Authentication Library: oauthlib integration";
