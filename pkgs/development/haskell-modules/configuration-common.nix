@@ -72,15 +72,6 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
-  # Backport fix for bash: compgen: command not found
-  # which happens in nix-shell when a non-interactive bash is on PATH
-  # PR to master: https://github.com/pcapriotti/optparse-applicative/pull/408
-  optparse-applicative = appendPatch super.optparse-applicative (pkgs.fetchpatch {
-    name = "optparse-applicative-0.15.1-hercules-ci-compgen.diff";
-    url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
-    sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
-  });
-
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
