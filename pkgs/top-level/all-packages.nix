@@ -8155,6 +8155,8 @@ in
 
   stubby = callPackage ../tools/networking/stubby { };
 
+  sunwait = callPackage ../applications/misc/sunwait { };
+
   surface-control = callPackage ../applications/misc/surface-control { };
 
   syntex = callPackage ../tools/graphics/syntex {};
