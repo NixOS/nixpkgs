@@ -3343,6 +3343,7 @@ broken-packages:
   - asic
   - asil
   - asn
+  - ASN1
   - asn1-codec
   - asn1-data
   - assert
@@ -5388,6 +5389,7 @@ broken-packages:
   - fractals
   - fraction
   - frag
+  - frame-markdown
   - Frames-beam
   - Frames-dsv
   - Frames-map-reduce
@@ -5945,6 +5947,7 @@ broken-packages:
   - hahp
   - haiji
   - hailgun-send
+  - hails-bin
   - hairy
   - hakaru
   - hakismet
@@ -5961,6 +5964,7 @@ broken-packages:
   - hakyll-contrib-links
   - hakyll-dhall
   - hakyll-dir-list
+  - hakyll-elm
   - hakyll-favicon
   - hakyll-filestore
   - hakyll-images
@@ -6188,6 +6192,7 @@ broken-packages:
   - haskellscript
   - HaskellTorrent
   - HaskellTutorials
+  - haskelm
   - haskelzinc
   - haskeme
   - haskey
@@ -10184,6 +10189,7 @@ broken-packages:
   - snap-auth-cli
   - snap-blaze-clay
   - snap-configuration-utilities
+  - snap-elm
   - snap-error-collector
   - snap-extras
   - snap-routes
@@ -10205,6 +10211,7 @@ broken-packages:
   - snaplet-hdbc
   - snaplet-hslogger
   - snaplet-influxdb
+  - snaplet-lss
   - snaplet-mandrill
   - snaplet-mongoDB
   - snaplet-mongodb-minimalistic
