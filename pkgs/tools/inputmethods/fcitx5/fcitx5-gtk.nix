@@ -19,18 +19,20 @@
 , dbus
 , at-spi2-core
 , libXtst
+, fmt
+, glib
 , withGTK2 ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.0.3";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-gtk";
     rev = version;
-    sha256 = "sha256-+BzXbZyzC3fvLqysufblk0zK9fAg5jslVdm/v3jz4B4=";
+    sha256 = "sha256-rP0L7D7VdbNSmwQhnS5tvQT4FS3qpOnuBTQQp82O5fE=";
   };
 
   cmakeFlags = [
@@ -55,7 +57,11 @@ stdenv.mkDerivation rec {
     dbus
     at-spi2-core
     libXtst
+    fmt
+    glib
   ] ++ lib.optional withGTK2 gtk2;
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs = [
     cmake
