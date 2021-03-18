@@ -29884,6 +29884,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  wiki-js = callPackage ../servers/web-apps/wiki-js { };
+
   winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
     callPackage = newScope self;
 
