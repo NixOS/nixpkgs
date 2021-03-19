@@ -33,8 +33,8 @@ rec {
         echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
       '';
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ unzip java ];
+    nativeBuildInputs = [ makeWrapper unzip ];
+    buildInputs = [ java ];
 
     meta = {
       description = "Enterprise-grade build system";

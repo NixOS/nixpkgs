@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zwmhspmqb0a7cm6k6i0s6q3w19ws1g9dx3cp2v3g3vsif6cdh31";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   # The -Xmx1000M comes suggested from their download page:
   # http://www.cs.waikato.ac.nz/ml/weka/downloading.html

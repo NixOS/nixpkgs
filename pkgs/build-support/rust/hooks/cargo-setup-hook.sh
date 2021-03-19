@@ -77,7 +77,9 @@ cargoSetupPostPatchHook() {
     echo "Finished cargoSetupPostPatchHook"
 }
 
-postUnpackHooks+=(cargoSetupPostUnpackHook)
+if [ -z "${dontCargoSetupPostUnpack-}" ]; then
+  postUnpackHooks+=(cargoSetupPostUnpackHook)
+fi
 
 if [ -z ${cargoVendorDir-} ]; then
   postPatchHooks+=(cargoSetupPostPatchHook)

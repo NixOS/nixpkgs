@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub
 , cython
 , libxml2
 , libxslt
 , zlib
+, xcodebuild
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   };
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
-  nativeBuildInputs = [ libxml2.dev libxslt.dev cython ];
+  nativeBuildInputs = [ libxml2.dev libxslt.dev cython ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
   buildInputs = [ libxml2 libxslt zlib ];
 
   # tests are meant to be ran "in-place" in the same directory as src

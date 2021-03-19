@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1n6w0m2603q9cldlz0wyscp75ci561dipc36jqbf3mjmylybv0x3";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libgeotiff libpng proj openssl sqlite
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libjpeg libtiff libgeotiff libpng proj openssl sqlite
     libspatialite poppler hdf4 qhull giflib expat libxml2 proj ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ lib.optional stdenv.isDarwin libiconv

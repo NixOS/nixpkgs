@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
                  (lib.versionAtLeast kernel.version "4.9") )
                [ ./patches/4.9-get_user_pages.patch ];
 
+  nativeBuildInputs = [ unzip ];
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
       xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
       patchelf
-      unzip
       libGLU libGL
       fontconfig
       freetype

@@ -103,6 +103,8 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
 
   cargoBuildType = buildType;
 
+  cargoCheckType = checkType;
+
   patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++ [

@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/gdal";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config unzip ];
 
   buildInputs = [
-    unzip
     libjpeg
     libtiff
     libpng

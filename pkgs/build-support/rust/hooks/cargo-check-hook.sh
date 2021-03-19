@@ -1,4 +1,5 @@
 declare -a checkFlags
+declare -a cargoTestFlags
 
 cargoCheckHook() {
     echo "Executing cargoCheckHook"
@@ -15,7 +16,11 @@ cargoCheckHook() {
         threads=1
     fi
 
-    argstr="--${cargoBuildType} --target @rustTargetPlatformSpec@ --frozen";
+    if [ "${cargoBuildType}" != "debug" ]; then
+        cargoBuildProfileFlag="--${cargoBuildType}"
+    fi
+
+    argstr="${cargoBuildProfileFlag} --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}";
 
     (
         set -x
@@ -36,6 +41,6 @@ cargoCheckHook() {
     runHook postCheck
 }
 
-if [ -z "${checkPhase-}" ]; then
+if [ -z "${dontCargoCheck-}" ] && [ -z "${checkPhase-}" ]; then
   checkPhase=cargoCheckHook
 fi

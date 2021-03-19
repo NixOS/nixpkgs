@@ -4,9 +4,9 @@ stdenv.mkDerivation rec {
   version = "11.0_beta";
   pname = "textadept11";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    gtk2 ncurses glib unzip zip
+    gtk2 ncurses glib zip
   ];
 
   src = fetchFromGitHub {

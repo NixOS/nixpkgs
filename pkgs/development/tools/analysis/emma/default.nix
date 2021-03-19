@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0xxy39s2lvgs56vicjzpcz936l1vjaplliwa0dm7v3iyvw6jn7vj";
   };
 
-  buildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out/lib/jars

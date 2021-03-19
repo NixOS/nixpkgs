@@ -106,6 +106,12 @@ let
 
       ./CVE-2021-3177.patch
 
+      # The workaround is for unittests on Win64, which we don't support.
+      # It does break aarch64-darwin, which we do support. See:
+      # * https://bugs.python.org/issue35523
+      # * https://github.com/python/cpython/commit/e6b247c8e524
+      ../3.7/no-win64-workaround.patch
+
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [

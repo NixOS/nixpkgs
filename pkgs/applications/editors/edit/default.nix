@@ -10,8 +10,17 @@ stdenv.mkDerivation {
     sha256 = "0rsmp7ydmrq3xx5q19566is9a2v2w5yfsphivfc7j4ljp32jlyyy";
   };
 
-  nativeBuildInputs = [ unzip pkg-config cwebbin ];
-  buildInputs = [ ncurses libX11 libXft ];
+  nativeBuildInputs = [
+    unzip
+    pkg-config
+    cwebbin
+  ];
+
+  buildInputs = [
+    ncurses
+    libX11
+    libXft
+  ];
 
   preBuild = ''
     ctangle *.w

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1sdn58fbmd3fj4nzbajq3gcyw71ilgdh45r5p4sa6xmb7np55cfr";
   };
 
-  buildInputs = [rpmextract ncurses5 unzip];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [rpmextract ncurses5];
   libPath =
     lib.makeLibraryPath
        [ stdenv.cc.cc stdenv.cc.libc ncurses5 ];

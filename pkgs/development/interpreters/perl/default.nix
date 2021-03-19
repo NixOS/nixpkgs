@@ -41,7 +41,10 @@ let
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optional crossCompiling ./MakeMaker-cross.patch;
+      ++ optional crossCompiling ./MakeMaker-cross.patch
+      # Backporting https://github.com/Perl/perl5/pull/17946, can be
+      # removed if there's ever a 5.30.x release with it included.
+      ++ optional (versionOlder version "5.32.1") ./aarch64-darwin.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.

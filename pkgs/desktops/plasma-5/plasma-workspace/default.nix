@@ -16,6 +16,8 @@
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras, qqc2-desktop-style,
+
+  pipewire, libdrm
 }:
 
 let inherit (lib) getBin getLib; in
@@ -36,6 +38,8 @@ mkDerivation {
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland
     qtx11extras qqc2-desktop-style
+
+    pipewire libdrm
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
