@@ -767,8 +767,7 @@ rec {
       customisationLayer = symlinkJoin {
         name = "${baseName}-customisation-layer";
         paths = contentsList;
-        inherit extraCommands;
-        inherit fakeRootCommands;
+        inherit extraCommands fakeRootCommands;
         nativeBuildInputs = [ fakeroot ];
         postBuild = ''
           mv $out old_out
