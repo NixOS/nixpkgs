@@ -15,6 +15,24 @@ buildPythonPackage rec {
   # Upstream doesn't contain unit tests, only functional tests which require specific hardware
   doCheck = false;
 
+  pythonImportsCheck = [
+    "digi.xbee.models"
+    "digi.xbee.packets"
+    "digi.xbee.util"
+    "digi.xbee.comm_interface"
+    "digi.xbee.devices"
+    "digi.xbee.exception"
+    "digi.xbee.filesystem"
+    "digi.xbee.firmware"
+    "digi.xbee.io"
+    "digi.xbee.profile"
+    "digi.xbee.reader"
+    "digi.xbee.recovery"
+    "digi.xbee.sender"
+    "digi.xbee.serial"
+    "digi.xbee.xsocket"
+  ];
+
   meta = with lib; {
     description = "Python library to interact with Digi International's XBee radio frequency modules";
     homepage = "https://github.com/digidotcom/xbee-python";
