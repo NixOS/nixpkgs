@@ -6142,6 +6142,8 @@ in
 
   libzmf = callPackage ../development/libraries/libzmf {};
 
+  librespeed-cli = callPackage ../tools/misc/librespeed-cli { };
+
   libreswan = callPackage ../tools/networking/libreswan { };
 
   librest = callPackage ../development/libraries/librest { };
