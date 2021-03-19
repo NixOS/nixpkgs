@@ -4014,7 +4014,6 @@ broken-packages:
   - Chart-tests
   - chart-unit
   - charter
-  - chatter
   - chatty-text
   - chatwork
   - cheapskate-terminal
@@ -5452,7 +5451,6 @@ broken-packages:
   - ftree
   - ftshell
   - full-sessions
-  - fullstop
   - funbot
   - funbot-client
   - funbot-git-hook
