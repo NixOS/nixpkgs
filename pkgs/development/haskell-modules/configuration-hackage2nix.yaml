@@ -77,7 +77,7 @@ default-package-overrides:
   - ghcide < 1.1 # To stay hls 1.0 compatible
   - hls-retrie-plugin < 1.0.0.1 # To stay hls 1.0 compatible
 
-  # Stackage Nightly 2021-03-17
+  # Stackage Nightly 2021-03-19
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -707,6 +707,7 @@ default-package-overrides:
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.2.0
   - download ==0.3.2.7
+  - download-curl ==0.1.4
   - drinkery ==0.4
   - dsp ==0.2.5.1
   - dual ==0.1.1.1
@@ -829,6 +830,7 @@ default-package-overrides:
   - filelock ==0.1.1.5
   - filemanip ==0.3.6.3
   - file-modules ==0.1.2.4
+  - filepath-bytestring ==1.4.2.1.7
   - file-path-th ==0.1.0.0
   - filepattern ==0.1.2
   - fileplow ==0.1.0.0
@@ -1010,6 +1012,7 @@ default-package-overrides:
   - gluturtle ==0.0.58.1
   - gnuplot ==0.5.6.1
   - google-isbn ==1.0.3
+  - gopher-proxy ==0.1.1.2
   - gothic ==0.1.6
   - gpolyline ==0.1.0.1
   - graph-core ==0.3.0.0
@@ -1050,7 +1053,7 @@ default-package-overrides:
   - hashing ==0.1.0.1
   - hashmap ==1.3.3
   - hashtables ==1.2.4.1
-  - haskeline ==0.8.1.1
+  - haskeline ==0.8.1.2
   - haskell-gi ==0.24.7
   - haskell-gi-base ==0.24.5
   - haskell-gi-overloading ==1.0
@@ -1080,7 +1083,7 @@ default-package-overrides:
   - HDBC-session ==0.1.2.0
   - headroom ==0.4.1.0
   - heap ==1.0.4
-  - heaps ==0.3.6.1
+  - heaps ==0.4
   - hebrew-time ==0.1.2
   - hedgehog ==1.0.5
   - hedgehog-corpus ==0.2.0
@@ -1793,7 +1796,7 @@ default-package-overrides:
   - persist ==0.1.1.5
   - persistable-record ==0.6.0.5
   - persistable-types-HDBC-pg ==0.0.3.5
-  - persistent ==2.11.0.2
+  - persistent ==2.11.0.4
   - persistent-documentation ==0.1.0.2
   - persistent-mtl ==0.2.0.0
   - persistent-mysql ==2.10.3.1
@@ -2183,7 +2186,7 @@ default-package-overrides:
   - skylighting-core ==0.10.4.1
   - slack-api ==0.12
   - slack-progressbar ==0.1.0.1
-  - slist ==0.1.1.0
+  - slist ==0.2.0.0
   - slynx ==0.5.0.2
   - smallcheck ==1.2.1
   - smash ==0.1.1.0
@@ -2199,6 +2202,7 @@ default-package-overrides:
   - soap ==0.2.3.6
   - soap-openssl ==0.1.0.2
   - soap-tls ==0.1.1.4
+  - socket ==0.8.3.0
   - socks ==0.6.1
   - some ==1.0.2
   - sop-core ==0.5.0.1
@@ -2207,6 +2211,7 @@ default-package-overrides:
   - sourcemap ==0.1.6
   - sox ==0.2.3.1
   - soxlib ==0.0.3.1
+  - spacecookie ==1.0.0.0
   - sparse-linear-algebra ==0.3.1
   - sparse-tensor ==0.2.1.5
   - spatial-math ==0.5.0.1
@@ -2327,7 +2332,7 @@ default-package-overrides:
   - tardis ==0.4.3.0
   - tasty ==1.4.1
   - tasty-ant-xml ==1.1.8
-  - tasty-bench ==0.2.2
+  - tasty-bench ==0.2.3
   - tasty-dejafu ==2.0.0.7
   - tasty-discover ==4.2.2
   - tasty-expected-failure ==0.12.3
