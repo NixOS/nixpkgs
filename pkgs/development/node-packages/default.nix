@@ -107,7 +107,7 @@ let
     mirakurun = super.mirakurun.override rec {
       nativeBuildInputs = with pkgs; [ makeWrapper ];
       postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l_utils ]);
+        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
       in
       ''
         substituteInPlace $out/lib/node_modules/mirakurun/processes.json \

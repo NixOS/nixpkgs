@@ -231,7 +231,7 @@ let
   };
 
   packagesWithNativeBuildInputs = {
-    arrow = [ pkgs.pkgconfig pkgs.arrow-cpp ];
+    arrow = [ pkgs.pkg-config pkgs.arrow-cpp ];
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     audio = [ pkgs.portaudio ];

@@ -26,6 +26,9 @@ buildPythonPackage rec {
     # pillow-simd
     "test_roundtrip"
     "test_basic"
+  ] ++ lib.optionals (lib.versions.major version == "6") [
+    # RuntimeError: Error setting from dictionary
+    "test_custom_metadata"
   ];
 
   propagatedBuildInputs = [ olefile ];

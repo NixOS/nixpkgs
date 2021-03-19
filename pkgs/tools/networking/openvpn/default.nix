@@ -3,19 +3,16 @@
 , pkg-config
 , makeWrapper
 , runtimeShell
-, iproute ? null
+, iproute
 , lzo
 , openssl
 , pam
 , useSystemd ? stdenv.isLinux
-, systemd ? null
-, util-linux ? null
+, systemd
+, util-linux
 , pkcs11Support ? false
-, pkcs11helper ? null
+, pkcs11helper
 }:
-
-assert useSystemd -> (systemd != null);
-assert pkcs11Support -> (pkcs11helper != null);
 
 with lib;
 let

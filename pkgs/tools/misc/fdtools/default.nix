@@ -23,6 +23,9 @@ in stdenv.mkDerivation {
     sed -e 's|gcc|$CC|' \
       conf-compile/defaults/host_link.sh \
       > conf-compile/host_link.sh
+    sed -e 's|gcc|$CC|' \
+      conf-compile/defaults/host_compile.sh \
+      > conf-compile/host_compile.sh
 
     echo "${skawarePackages.skalibs.lib}/lib/skalibs/sysdeps" \
       > conf-compile/depend_skalibs_sysdeps

@@ -14,7 +14,13 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = [ "..." ];
+  subPackages = [
+    # TODO split every executable into its own package
+    "cmd/loki"
+    "cmd/loki-canary"
+    "cmd/promtail"
+    "cmd/logcli"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];

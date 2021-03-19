@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "teler";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = "teler";
     rev = "v${version}";
-    sha256 = "sha256-0tx/oyHl6s1mj7NyWMZGCJoSuOeB+BMlBrnGY4IN/i4=";
+    sha256 = "sha256-FZG23j7LUwfJ0dSbU4xW0YyCKJxOjVf1uqkuGlrwnqs=";
   };
 
   vendorSha256 = "sha256-KvUnDInUqFW7FypgsppIBQZKNu6HVsEeHtGwdqYtoys=";
