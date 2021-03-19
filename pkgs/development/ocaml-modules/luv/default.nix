@@ -10,6 +10,14 @@ buildDunePackage rec {
     sha256 = "119nv250fsadvrs94nwzk7qvlwr0kvcpkbwcmfkh13byg8nhkn1m";
   };
 
+  postConfigure = ''
+    for f in src/c/vendor/configure/{ltmain.sh,configure}; do
+      substituteInPlace "$f" --replace /usr/bin/file file
+    done
+  '';
+
+  nativeBuildInputs = [ file ];
+  
   propagatedBuildInputs = [ ctypes result ];
 
   meta = with lib; {
