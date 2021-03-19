@@ -182,18 +182,7 @@ in rec {
       # upstream unit.
       for i in ${toString (mapAttrsToList (n: v: v.unit) units)}; do
         fn=$(basename $i/*)
-
-        case $fn in
-          # if file name is a template specialization, use the template's name
-          *@?*.service)
-            # remove @foo.service and replace it with @.service
-            ofn="''${fn%@*.service}@.service"
-            ;;
-          *)
-            ofn="$fn"
-        esac
-
-        if [ -e $out/$ofn ]; then
+        if [ -e $out/$fn ]; then
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
             ln -sfn /dev/null $out/$fn
           else
