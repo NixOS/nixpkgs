@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.3.0";
 
   src = fetchurl {
-    url = "https://github.com/HaxeFoundation/neko/archive/${version}.tar.gz";
+    url = "https://github.com/HaxeFoundation/neko/archive/v${builtins.replaceStrings [ "." ] [ "-" ] version}.tar.gz";
     sha256 = "sha256-hQ5+MXva8k7WUu/v+JwcshOAyhnyDmiilshPa61O6ZU=";
   };
 
