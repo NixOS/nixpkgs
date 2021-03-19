@@ -21,7 +21,6 @@
 buildPythonPackage rec {
   pname = "urllib3";
   version = "1.26.3";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
