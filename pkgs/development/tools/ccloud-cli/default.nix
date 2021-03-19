@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "ccloud-cli";
-  version = "0.202.0";
+  version = "1.25.0";
 
   # To get the latest version:
   # curl -L 'https://s3-us-west-2.amazonaws.com/confluent.cloud?prefix=ccloud-cli/archives/&delimiter=/' | nix run nixpkgs.libxml2 -c xmllint --format -
   src = fetchurl (if stdenv.hostPlatform.isDarwin then {
       url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/archives/${version}/ccloud_v${version}_darwin_amd64.tar.gz";
-      sha256 = "1w7c7fwpjj6f26nmcgm6rkrl4v9zhdpygkh02la77n23lg8wxah5";
+      sha256 = "0306jg36dpccwyy239r2xvw3bvsrnrdc88390g26fhcb0048qmgb";
     } else {
       url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/archives/${version}/ccloud_v${version}_linux_amd64.tar.gz";
-      sha256 = "1xbhv2viw8cbwv03rfq99jddnw5lwy812a8xby348290l323xi89";
+      sha256 = "02sly7cxqlrfd6chamlp05k9ar93mpfrkx5183js0hf595nlki61";
     });
 
   nativeBuildInputs = [ autoPatchelfHook ];
