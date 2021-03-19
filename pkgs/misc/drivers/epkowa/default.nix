@@ -13,7 +13,6 @@
 , rpm
 , cpio
 , getopt
-, patchelf
 , autoPatchelfHook
 , gcc
 }:
@@ -324,17 +323,16 @@ stdenv.mkDerivation rec {
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config libtool makeWrapper ];
   buildInputs = [
     gtk2
     libxml2
-    libtool
     libusb-compat-0_1
     sane-backends
-    makeWrapper
   ];
 
   patches = [
+    # Patch for compatibility with libpng versions greater than 10499
     (fetchpatch {
       urls = [
         "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-2.28.1.3+libpng-1.5.patch?h=b6e4c805d53b49da79a0f64ef16bb82d6d800fcf"
@@ -342,7 +340,9 @@ stdenv.mkDerivation rec {
       ];
       sha256 = "04y70qjd220dpyh771fiq50lha16pms98mfigwjczdfmx6kpj1jd";
     })
+    # Patch iscan to search appropriate folders for firmware files
     ./firmware_location.patch
+    # Patch deprecated use of sscanf code to use a more modern C99 compatible version
     ./sscanf.patch
   ];
   patchFlags = [ "-p0" ];
