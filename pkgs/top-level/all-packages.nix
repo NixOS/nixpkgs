@@ -15505,6 +15505,8 @@ in
 
   libexosip = callPackage ../development/libraries/exosip {};
 
+  libexsid = callPackage ../development/libraries/libexsid { };
+
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
