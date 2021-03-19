@@ -147,7 +147,6 @@ where they are known to differ. But there are ways to customize the argument:
      };
    }
    ```
-
    will result in:
    ```shell
    --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}

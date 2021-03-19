@@ -1381,6 +1381,8 @@ in
 
   hakrawler = callPackage ../tools/security/hakrawler { };
 
+  harvid = callPackage ../tools/video/harvid { };
+
   hime = callPackage ../tools/inputmethods/hime {};
 
   hinit = haskell.lib.justStaticExecutables haskellPackages.hinit;
@@ -1426,6 +1428,8 @@ in
   };
 
   passExtensions = recurseIntoAttrs pass.extensions;
+
+  xjadeo = callPackage ../tools/video/xjadeo { };
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
@@ -6116,6 +6120,8 @@ in
   libngspice = callPackage ../development/libraries/libngspice { };
 
   libnixxml = callPackage ../development/libraries/libnixxml { };
+
+  libplctag = callPackage ../development/libraries/libplctag { };
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
