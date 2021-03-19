@@ -99,6 +99,35 @@ let plugins = {
     };
     meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
   };
+  v600 = stdenv.mkDerivation rec {
+    pname = "iscan-gt-x820-bundle";
+    version = "2.30.4";
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "1vlba7dsgpk35nn3n7is8nwds3yzlk38q43mppjzwsz2d2n7sr33";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-x820-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x013a "$plugin/lib/esci/libesintA1 $plugin/share/esci/esfwA1.bin"
+      '';
+      hw = "Perfection V600 Photo";
+    };
+    meta = common_meta // { description = "iscan esci x820 plugin for " + passthru.hw; };
+  };
   x770 = stdenv.mkDerivation rec {
     pname = "iscan-gt-x770-bundle";
     version = "2.30.4";
