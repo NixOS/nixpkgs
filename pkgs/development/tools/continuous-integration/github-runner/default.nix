@@ -17,7 +17,6 @@
 , openssl
 , stdenv
 , zlib
-, ...
 }:
 let
   pname = "github-actions-runner";
