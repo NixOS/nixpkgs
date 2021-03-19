@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-extlib";
   version = "1.7.8";
 
- src = fetchurl {
+  src = fetchurl {
     url = "https://ygrek.org/p/release/ocaml-extlib/extlib-${version}.tar.gz";
     sha256 = "0npq4hq3zym8nmlyji7l5cqk6drx2rkcx73d60rxqh5g8dla8p4k";
   };
