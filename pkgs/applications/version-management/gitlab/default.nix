@@ -137,6 +137,7 @@ stdenv.mkDerivation {
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
     sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
 
+    mv config/puma.rb.example config/puma.rb
     # Always require lib-files and application.rb through their store
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
