@@ -776,7 +776,7 @@ rec {
           mkdir $out
 
           fakeroot bash -c '
-            set -e
+            source $stdenv/setup
             cd old_out
             eval "$fakeRootCommands"
             tar \
