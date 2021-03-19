@@ -10432,6 +10432,8 @@ in
 
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
 
+  openjfx14 = callPackage ../development/compilers/openjdk/openjfx/14.nix { };
+
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
 
   openjdk8-bootstrap =
@@ -10509,6 +10511,41 @@ in
 
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
+
+  openjdk14 =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk/darwin/14.nix { }
+    else
+      callPackage ../development/compilers/openjdk/14.nix {
+        openjfx = openjfx14;
+        inherit (gnome2) GConf gnome_vfs;
+      };
+  openjdk14_headless =
+    if stdenv.isDarwin then
+      openjdk14
+    else
+      openjdk14.override { headless = true; };
+
+  jdk14 = openjdk14;
+  jdk14_headless = openjdk14_headless;
+
+  openjdk14-bootstrap =
+    if adoptopenjdk-hotspot-bin-13.meta.available then
+      adoptopenjdk-hotspot-bin-13
+    else
+      /* adoptopenjdk not available for i686, so fall back to our old builds of 12 & 13 for bootstrapping */
+      callPackage ../development/compilers/openjdk/13.nix {
+        openjfx = openjfx11; /* need this despite next line :-( */
+        enableJavaFX = false;
+        headless = true;
+        inherit (gnome2) GConf gnome_vfs;
+        openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
+          openjfx = openjfx11; /* need this despite next line :-( */
+          enableJavaFX = false;
+          headless = true;
+          inherit (gnome2) GConf gnome_vfs;
+        };
+      };
 
   /* Latest JDK */
   openjdk15 =
