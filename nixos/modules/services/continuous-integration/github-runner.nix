@@ -94,6 +94,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings = optionals (isStorePath cfg.tokenFile) [
+      ''
+        `services.github-runner.tokenFile` points to the Nix store and, therefore, is world-readable.
+        Consider using a path outside of the Nix store to keep the token private.
+      ''
+    ];
+
     systemd.services.${name} = {
       description = "GitHub Actions runner";
 
