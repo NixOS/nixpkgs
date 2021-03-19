@@ -34,4 +34,6 @@ in
 
 mapAliases ({
   smart_open = smart-open; # added 2021-03-14
+  google_api_python_client = google-api-python-client; # added 2021-03-19
+  googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
 })
