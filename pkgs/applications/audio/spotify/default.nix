@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
+, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa
+, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 }:
 
 let
@@ -34,12 +34,13 @@ let
     freetype
     gdk-pixbuf
     glib
-    gtk2
+    gtk3
     libdrm
     libgcrypt
     libnotify
     libpng
     libpulseaudio
+    libxkbcommon
     mesa
     nss
     pango
