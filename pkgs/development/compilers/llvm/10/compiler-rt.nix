@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     # and finds i386;x86_64;x86_64h. We only build for x86_64, so linking fails
     # when it tries to use libc++ and libc++api for i386.
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
   ];
 
   outputs = [ "out" "dev" ];

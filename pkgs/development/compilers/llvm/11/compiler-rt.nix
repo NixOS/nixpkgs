@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isDarwin) [
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
