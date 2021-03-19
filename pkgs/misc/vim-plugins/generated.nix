@@ -2926,6 +2926,18 @@ let
     meta.homepage = "https://github.com/tjdevries/nlua.nvim/";
   };
 
+  nnn-vim = buildVimPluginFrom2Nix {
+    pname = "nnn-vim";
+    version = "2021-02-28";
+    src = fetchFromGitHub {
+      owner = "mcchrish";
+      repo = "nnn.vim";
+      rev = "edfc91e1189a36a5f0d5438d7f9c575571f759fa";
+      sha256 = "11dzqhd2kp537ig8zcny0j56644mmrgygiw3wvfh1ly9gb9l2r9f";
+    };
+    meta.homepage = "https://github.com/mcchrish/nnn.vim/";
+  };
+
   nord-vim = buildVimPluginFrom2Nix {
     pname = "nord-vim";
     version = "2020-07-06";
