@@ -2,9 +2,10 @@
 , bctoolbox
 , cmake
 , fetchFromGitLab
+, lib
 , libantlr3c
 , mbedtls
-, lib, stdenv
+, stdenv
 , zlib
 }:
 
