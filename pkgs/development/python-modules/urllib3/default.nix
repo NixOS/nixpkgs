@@ -2,11 +2,11 @@
 , stdenv
 , brotli
 , buildPythonPackage
-, certifi
 , cryptography
 , dateutil
 , fetchPypi
 , idna
+, isPy27
 , mock
 , pyopenssl
 , pysocks
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     brotli
-    certifi
+    pysocks
+  ] ++ lib.optionals isPy27 [
     cryptography
     idna
     pyopenssl
-    pysocks
   ];
 
   checkInputs = [
