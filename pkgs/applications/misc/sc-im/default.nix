@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, yacc, ncurses, libxml2, libzip, libxls, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.0";
+  version = "0.8.0";
   pname = "sc-im";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "0xi0n9qzby012y2j7hg4fgcwyly698sfi4i9gkvy0q682jihprbk";
+    sha256 = "sha256-/eG2BdkyfEGoSzPu6jT+Bn1RZTGT1D3etGj1tYchm1M=";
   };
 
   nativeBuildInputs = [ pkg-config ];
