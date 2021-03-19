@@ -33,11 +33,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost libGL qtbase ];
 
   buildPhase = ''
+    runHook preBuild
     make nano_wallet
+    runHook postBuild
   '';
 
   checkPhase = ''
+    runHook preCheck
     ./core_test
+    runHook postCheck
   '';
 
   meta = {
