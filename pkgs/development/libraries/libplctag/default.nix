@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "libplctag";
-    repo = "libpcltag";
+    repo = "libplctag";
     rev = "v${version}";
     sha256 = "0brmzr863chybm5y0q5hld5mhf6kx0bl4dddr7j69adlraak7x6s";
   };
