@@ -128,15 +128,9 @@ in {
       "fip/g12a/ddr3_1d.fw" "fip/g12a/ddr4_1d.fw" "fip/g12a/ddr4_2d.fw"
       "fip/g12a/lpddr3_1d.fw" "fip/g12a/lpddr4_1d.fw" "fip/g12a/lpddr4_2d.fw"
       "fip/g12a/diag_lpddr4.fw" "fip/g12a/piei.fw" "fip/g12a/aml_ddr.fw"
-      "fip/g12a/aml_encrypt_g12a" "sd_fuse/sd_fusing.sh"
+      "sd_fuse/sd_fusing.sh"
     ];
 
-    # Even though Odroid C4 firmware blobs are buildable on aarch64, we can not
-    # use it to produce U-Boot loader binary on aarch64 machines. This is
-    # because we do not have "aml_encrypt_g12a" binary compiled for aarch64.
-    # So that "x86_64-linux" makes more sense here, though we have to keep
-    # "aarch64-linux" in order to make this derivative consumable by ubootOdroidC4
-    # derivative.
-    extraMeta.platforms = [ "aarch64-linux" "x86_64-linux" ];
+    extraMeta.platforms = [ "aarch64-linux" ];
   };
 }
