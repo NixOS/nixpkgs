@@ -23,6 +23,9 @@ let
   srcFolder = if stdenv.hostPlatform.isWindows then windowsSrc
               else if stdenv.isDarwin          then macSrc
                                                else linuxSrc ;
+  javaBinPatch = ''NR==20 { rep = gsub(/^JAVA_BIN=java$/,"JAVA_BIN=${openjdk}/bin/java"); }'';
+  javaPatches = ''NR~/85|54|79/ { rep+=gsub(/java/,"${openjdk}/bin/java"); }''; 
+
 in
 stdenv.mkDerivation rec {
   pname = "grakn";
@@ -35,10 +38,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     graknFile=./${graknDir}/grakn
     # replace the paths of the grakn boot script with the nix paths
-    sed -i "20s#^JAVA_BIN=java\$#JAVA_BIN=${openjdk}/bin/java#" ${graknDir}/grakn
-    sed -i "85s#java#${openjdk}/bin/java#" ${graknDir}/grakn
-    sed -i "54s#java#${openjdk}/bin/java#" ${graknDir}/grakn
-    sed -i "79s#java#${openjdk}/bin/java#" ${graknDir}/grakn
+    awk -i inplace '${javaBinPatch} 1 {print $0} END {exit(rep==1?0:1); }' ${graknDir}/grakn
+    awk -i inplace 'BEGIN {rep = 0;} ${javaPatches} 1 {print $0} END { print rep; exit(rep==3?0:1); }' ${graknDir}/grakn
   '';
   installPhase = ''
     mkdir $out
