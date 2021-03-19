@@ -6439,8 +6439,6 @@ broken-packages:
   - hGelf
   - hgen
   - hgeometric
-  - hgeometry
-  - hgeometry-combinatorial
   - hgeometry-ipe
   - hgeometry-svg
   - hgeos

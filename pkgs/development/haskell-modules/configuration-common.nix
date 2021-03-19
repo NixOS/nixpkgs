@@ -1672,4 +1672,8 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/7163
   pandoc = dontCheck super.pandoc;
 
+  # test suite triggers some kind of linking bug at runtime
+  # https://github.com/noinia/hgeometry/issues/132
+  hgeometry-combinatorial = dontCheck super.hgeometry-combinatorial;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
