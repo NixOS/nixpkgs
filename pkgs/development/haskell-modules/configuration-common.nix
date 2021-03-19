@@ -1400,6 +1400,16 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
 
+  # 2021-03-19: Too restrictive upper bound on optparse-applicative
+  stylish-haskell = doJailbreak super.stylish-haskell;
+
+  # 2021-03-19: https://github.com/facebookincubator/retrie/issues/24
+  retrie = doJailbreak super.retrie;
+
+  # Jailbreak because of restrictive upper bound on base16-bytestring
+  # 2021-03-19: https://github.com/Avi-D-coder/implicit-hie-cradle/pull/8
+  implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
+
   # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
   lsp-test = doDistribute (dontCheck self.lsp-test_0_13_0_0);
 
@@ -1409,7 +1419,8 @@ self: super: {
 
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
-  ghcide = dontCheck super.ghcide;
+  # Jailbreak because of: https://github.com/haskell/haskell-language-server/pull/1595
+  ghcide = doJailbreak (dontCheck super.ghcide);
 
   # 2020-03-09: Tests broken in hackage release
   # fixed on upstream, but not released in hiedb 0.3.0.1

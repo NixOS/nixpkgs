@@ -73,6 +73,9 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
+  - hlint < 3.3 # We don‘t have ghc-lib-parser 9.0.X yet.
+  - ghcide < 1.1 # To stay hls 1.0 compatible
+  - hls-retrie-plugin < 1.0.0.1 # To stay hls 1.0 compatible
 
   # Stackage Nightly 2021-03-17
   - abstract-deque ==0.3
