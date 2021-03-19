@@ -111,8 +111,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Relax the version requirement
     substituteInPlace src/global.json \
-      --replace '3.1.302' \
-                '${dotnetSdk.version}'
+      --replace '3.1.302' '${dotnetSdk.version}'
 
     # Disable specific tests
     substituteInPlace src/dir.proj \
@@ -121,8 +120,7 @@ stdenv.mkDerivation rec {
 
     # Fix FHS path
     substituteInPlace src/Test/L0/Util/IOUtilL0.cs \
-      --replace '/bin/ln' \
-                '${coreutils}/bin/ln'
+      --replace '/bin/ln' '${coreutils}/bin/ln'
   '';
 
   configurePhase = ''
