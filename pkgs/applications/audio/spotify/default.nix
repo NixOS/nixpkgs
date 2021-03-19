@@ -81,8 +81,7 @@ stdenv.mkDerivation {
     sha512 = "5d61a2d5b26be651620ab5d18d3a204d8d7b09dcec8a733ddc176c44cb43e9176c4350933ebe4498b065ba219113f3226c13bea9659da738fe635f41d01db303";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ squashfsTools ];
+  nativeBuildInputs = [ makeWrapper squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;
