@@ -3954,6 +3954,7 @@ in {
 
   llfuse = callPackage ../development/python-modules/llfuse {
     inherit (pkgs) fuse;
+    inherit (pkgs.darwin.apple_sdk.frameworks) DiskArbitration;
   };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
