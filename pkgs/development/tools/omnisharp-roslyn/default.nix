@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cd ..
     cp -r src $out/
-    rm -rf $out/src/.msbuild
+    rm -r $out/src/.msbuild
     cp -r ${msbuild}/lib/mono/msbuild $out/src/.msbuild
 
     chmod -R u+w $out/src
