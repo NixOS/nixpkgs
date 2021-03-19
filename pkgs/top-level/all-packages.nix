@@ -3136,6 +3136,8 @@ in
 
   bash_unit = callPackage ../tools/misc/bash_unit { };
 
+  boltbrowser = callPackage ../tools/misc/boltbrowser { };
+
   bsc = callPackage ../tools/compression/bsc {
     inherit (llvmPackages) openmp;
   };
