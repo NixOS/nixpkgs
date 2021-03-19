@@ -19108,6 +19108,9 @@ in
 
   sogo = callPackage ../servers/web-apps/sogo { };
 
+  spacecookie =
+    haskell.lib.justStaticExecutables haskellPackages.spacecookie;
+
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
