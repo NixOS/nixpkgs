@@ -340,6 +340,8 @@ in {
 
   ajpy = callPackage ../development/python-modules/ajpy { };
 
+  ajsonrpc = callPackage ../development/python-modules/ajsonrpc { };
+
   alabaster = callPackage ../development/python-modules/alabaster { };
 
   alarmdecoder = callPackage ../development/python-modules/alarmdecoder { };

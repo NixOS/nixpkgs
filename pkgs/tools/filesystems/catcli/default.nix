@@ -25,6 +25,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/deadc0de6/catcli";
     license = licenses.gpl3;
     maintainers = with maintainers; [ petersjt014 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

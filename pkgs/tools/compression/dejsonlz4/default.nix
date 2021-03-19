@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     };
 
     buildPhase = ''
-      gcc -Wall -o dejsonlz4 src/dejsonlz4.c src/lz4.c
+      ${stdenv.cc.targetPrefix}cc -o dejsonlz4 src/dejsonlz4.c src/lz4.c
     '';
 
     installPhase = ''
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
       homepage = "https://github.com/avih/dejsonlz4";
       license = licenses.bsd2;
       maintainers = with maintainers; [ mt-caret ];
-      platforms = platforms.linux;
+      platforms = platforms.all;
     };
   }

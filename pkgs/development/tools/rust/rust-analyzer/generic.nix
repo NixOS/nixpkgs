@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, cmake
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake
+, libiconv
 , useMimalloc ? false
 , doCheck ? true
 
@@ -22,8 +23,10 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin
-    [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    libiconv
+  ];
 
   RUST_ANALYZER_REV = rev;
 

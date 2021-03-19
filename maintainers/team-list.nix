@@ -134,6 +134,7 @@ with lib.maintainers; {
       timokau
       omasanori
       raskin
+      collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
   };
