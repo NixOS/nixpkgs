@@ -1243,6 +1243,8 @@ in
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
 
+  dfmt = callPackage ../tools/text/dfmt { };
+
   diskonaut = callPackage ../tools/misc/diskonaut { };
 
   diskus = callPackage ../tools/misc/diskus {
@@ -3987,6 +3989,8 @@ in
   volk = callPackage ../development/libraries/volk { };
 
   vorta = libsForQt5.callPackage ../applications/backup/vorta { };
+
+  vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit { };
 
   utahfs = callPackage ../applications/networking/utahfs { };
 
