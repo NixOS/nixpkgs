@@ -101,6 +101,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DBUILD_FLAT_MESH:BOOL=ON"
     "-DBUILD_QT5=ON"
     "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
     "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
