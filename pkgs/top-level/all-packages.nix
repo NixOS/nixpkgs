@@ -4727,6 +4727,8 @@ in
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
+  github-backup = callPackage ../tools/misc/github-backup { };
+
   gitin = callPackage ../applications/version-management/git-and-tools/gitin { };
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
