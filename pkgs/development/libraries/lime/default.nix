@@ -2,9 +2,10 @@
 , belle-sip
 , cmake
 , fetchFromGitLab
+, lib
 , soci
 , sqlite
-, lib, stdenv
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
