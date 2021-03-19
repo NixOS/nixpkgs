@@ -24010,6 +24010,8 @@ in
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
+  moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt { };
+
   mooSpace = callPackage ../applications/audio/mooSpace { };
 
   mop = callPackage ../applications/misc/mop { };
