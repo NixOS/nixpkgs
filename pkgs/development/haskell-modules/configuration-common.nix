@@ -1669,4 +1669,7 @@ self: super: {
   # test suite doesn't compile anymore due to changed hunit/tasty APIs
   fullstop = dontCheck super.fullstop;
 
+  # https://github.com/jgm/pandoc/issues/7163
+  pandoc = dontCheck super.pandoc;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
