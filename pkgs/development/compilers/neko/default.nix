@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "neko";
-  version = "v2-3-0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/HaxeFoundation/neko/archive/${version}.tar.gz";
