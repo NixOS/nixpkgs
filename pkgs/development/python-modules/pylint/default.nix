@@ -63,8 +63,6 @@ buildPythonPackage rec {
     "test_py3k_jobs_option"
   ];
 
-  disabledTestPaths = lib.optional stdenv.isDarwin "pylint/test/test_functional.py";
-
   meta = with lib; {
     homepage = "https://pylint.pycqa.org/";
     description = "A bug and style checker for Python";
