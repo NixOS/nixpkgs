@@ -5583,6 +5583,8 @@ in {
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
+  pydash = callPackage ../development/python-modules/pydash { };
+
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
