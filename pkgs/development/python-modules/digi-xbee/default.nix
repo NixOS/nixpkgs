@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "digi-xbee";
-  version = "1.3.0";
+  version = "1.4.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2ed798faee0853bf7ae9ca5aa4bdcbab496e3c2d56c9f0719a8e3e0d13270891";
+    sha256 = "664737d1aab453ea40b9745f1ee1e88920acff1cce2e07c42e7f5aa64a16e6aa";
   };
 
   propagatedBuildInputs = [ pyserial srp ];
