@@ -18,5 +18,4 @@ buildKodiBinaryAddon rec {
     license = licenses.gpl2Only;
     maintainers = teams.kodi.members;
   };
-
 }

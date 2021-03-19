@@ -18,5 +18,4 @@ buildKodiBinaryAddon rec {
     platforms = platforms.all;
     maintainers = teams.kodi.members;
   };
-
 }
