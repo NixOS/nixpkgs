@@ -10,7 +10,7 @@ buildDunePackage rec {
     sha256 = "119nv250fsadvrs94nwzk7qvlwr0kvcpkbwcmfkh13byg8nhkn1m";
   };
 
-  propagatedBuildInputs = [ ctypes ];
+  propagatedBuildInputs = [ ctypes result ];
 
   meta = with lib; {
     homepage = "https://github.com/aantron/luv";
