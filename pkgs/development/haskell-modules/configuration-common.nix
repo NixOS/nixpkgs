@@ -216,13 +216,7 @@ self: super: {
   angel = dontCheck super.angel;
   apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
-  aws = appendPatch (dontCheck super.aws)               # needs aws credentials
-        (pkgs.fetchpatch {
-          # https://github.com/aristidb/aws/pull/271
-          # bump a version bound
-          url = https://github.com/aristidb/aws/commit/3639262ccd6761dea76f052692ac3aefbd254723.patch;
-          sha256 = "0nxaspldgayqjnidda8w7wps5gdpr2wz6vynl7vkaw8kzxks9bci";
-        });
+  aws = doJailbreak (dontCheck super.aws);              # needs aws credentials, jailbreak for base16-bytestring
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
   binary-search = dontCheck super.binary-search;
