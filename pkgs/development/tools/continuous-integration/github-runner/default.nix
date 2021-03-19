@@ -169,6 +169,8 @@ stdenv.mkDerivation rec {
   checkInputs = [ git ];
 
   checkPhase = ''
+    runHook preCheck
+
     mkdir -p _layout/externals
     ln -s ${nodejs-12_x} _layout/externals/node12
 
@@ -180,6 +182,8 @@ stdenv.mkDerivation rec {
       -p:RunnerVersion="${version}" \
       -p:GitInfoCommitHash="${src.rev}" \
       src/dir.proj
+
+    runHook postCheck
   '';
 
   installPhase = ''
