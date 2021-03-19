@@ -24,18 +24,17 @@
 , pciutils
 , procps
 , utillinux
-, qttools
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.5.6981.0202";
+  version = "5.5.7938.0228";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "05alb81cn1vbpva5rcfwh58sjbg4f2pils4vcdgw6dvi4pbvs694";
+      sha256 = "KM8o2tgIn0lecOM4gKdTOdk/zsohlFqtNX+ca/S6FGY=";
     };
   };
   dontUnpack = true;
@@ -101,9 +100,13 @@ in stdenv.mkDerivation {
     rm $out/bin/zoom
     # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
     # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
+    # Also clear Qt environment variables to prevent
+    # zoom from tripping over "foreign" Qt ressources.
     makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
       --run "cd $out/opt/zoom" \
-      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]} \
+      --unset QML2_IMPORT_PATH \
+      --unset QT_PLUGIN_PATH \
+      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps utillinux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     # Backwards compatiblity: we used to call it zoom-us
