@@ -4195,6 +4195,12 @@
     githubId = 175537;
     name = "Johannes Lötzsch";
   };
+  jackgerrits = {
+    email = "jack@jackgerrits.com";
+    github = "jackgerrits";
+    githubId = 7558482;
+    name = "Jack Gerrits";
+  };
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
@@ -5547,6 +5553,12 @@
     github = "loewenheim";
     githubId = 7622248;
     name = "Sebastian Zivota";
+  };
+  locallycompact = {
+    email = "dan.firth@homotopic.tech";
+    github = "locallycompact";
+    githubId = 1267527;
+    name = "Daniel Firth";
   };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";
