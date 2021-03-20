@@ -14,6 +14,7 @@
 , libX11
 , libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
 , libXi
+, libXext
 
 , gnome3 # To pass updateScript
 }:
@@ -30,7 +31,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
-  buildInputs = [ libX11 libXtst libXi ];
+  # libXext is a transitive dependency of libXi
+  buildInputs = [ libX11 libXtst libXi libXext ];
   # In atspi-2.pc dbus-1 glib-2.0
   propagatedBuildInputs = [ dbus glib ];
 
