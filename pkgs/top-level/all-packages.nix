@@ -22724,6 +22724,8 @@ in
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix {};
 
+  freeplane = callPackage ../applications/misc/freeplane { };
+
   freepv = callPackage ../applications/graphics/freepv { };
 
   xfontsel = callPackage ../applications/misc/xfontsel { };
