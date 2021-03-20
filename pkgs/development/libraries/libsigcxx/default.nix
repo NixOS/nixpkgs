@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "libsigcxx";
+      versionPolicy = "odd-unstable";
     };
   };
 

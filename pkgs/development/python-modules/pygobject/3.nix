@@ -25,6 +25,7 @@ buildPythonPackage rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}3";
+      versionPolicy = "odd-unstable";
     };
   };
 

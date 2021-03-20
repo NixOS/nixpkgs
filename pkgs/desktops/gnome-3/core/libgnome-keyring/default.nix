@@ -17,13 +17,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib gobject-introspection dbus libgcrypt ];
   nativeBuildInputs = [ pkg-config intltool ];
 
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-      attrPath = "gnome3.${pname}";
-    };
-  };
-
   meta = {
     description = "Framework for managing passwords and other secrets";
     homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";

@@ -99,7 +99,6 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    "-Dpython_libprefix=${python3.libPrefix}"
     "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
@@ -135,7 +134,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  passthru.updateScript = gnome3.updateScript {
+    packageName = pname;
+    versionPolicy = "odd-unstable";
+  };
 
   meta = with lib; {
     description = "An IDE for writing GNOME-based software";

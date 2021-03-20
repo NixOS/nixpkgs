@@ -33,10 +33,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sDALvPDALfWBKhCjy45P/3I7q5LAjJegqQwWfPVDr/A=";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = pname; };
-  };
-
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -79,6 +75,13 @@ stdenv.mkDerivation rec {
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://www.gnome.org/";
