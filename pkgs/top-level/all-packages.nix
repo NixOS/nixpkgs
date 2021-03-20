@@ -29039,6 +29039,8 @@ in
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
+  demjson = with python3Packages; toPythonApplication demjson;
+
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   emu2 = callPackage ../misc/emulators/emu2 { };
