@@ -3,7 +3,7 @@
 , libgcrypt, perl, libgudev, avahi, ppp, kmod }:
 
 stdenv.mkDerivation rec {
-  pname = "network-manager";
+  pname = "networkmanager";
   version = "0.9.8.10";
 
   src = fetchurl {

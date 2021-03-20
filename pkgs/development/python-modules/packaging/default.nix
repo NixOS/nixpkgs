@@ -5,7 +5,7 @@
 , six
 , pytestCheckHook
 , pretend
-, flit-core
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [ pyparsing six ];
@@ -28,10 +28,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pretend
   ];
-
-  checkPhase = ''
-    py.test tests
-  '';
 
   # Prevent circular dependency
   doCheck = false;

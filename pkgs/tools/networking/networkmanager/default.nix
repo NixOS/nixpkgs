@@ -9,12 +9,12 @@
 let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
-  pname = "network-manager";
-  version = "1.26.0";
+  pname = "networkmanager";
+  version = "1.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "0isdqwp58d7r92sqsk7l2vlqwy518n8b7c7z94jk9gc1bdmjf8sj";
+    sha256 = "1yf3k3pcszn904lk6rdya1qhp3yxbzsbhcd9l6yfrhlbc8r15w1r";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -45,6 +45,7 @@ in stdenv.mkDerivation rec {
     "-Ddocs=true"
     "-Dtests=no"
     "-Dqt=false"
+    "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
     # Allow using iwd when configured to do so
     "-Diwd=true"
     "-Dlibaudit=yes-disabled-by-default"
@@ -55,20 +56,13 @@ in stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit iputils kmod openconnect ethtool gnused systemd polkit;
+      inherit iputils kmod openconnect ethtool gnused systemd;
       inherit runtimeShell;
     })
 
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
-
-    # Fix build
-    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/620
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/54e25f23f53af889703dfc50d51a8afeeea8a439.patch";
-      sha256 = "oy/AZhOC15anWeIMYJfDBcITqJ7CiU715he68XvPRxk=";
-    })
   ];
 
   buildInputs = [

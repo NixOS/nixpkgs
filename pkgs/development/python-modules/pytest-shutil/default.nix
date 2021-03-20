@@ -11,9 +11,9 @@ buildPythonPackage rec {
     sha256 = "0q8j0ayzmnvlraml6i977ybdq4xi096djhf30n2m1rvnvrhm45nq";
   };
 
+  buildInputs = [ pytest ];
   checkInputs = [ cmdline pytest ];
   propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
-  nativeBuildInputs = [ pytest ];
 
   checkPhase = ''
     py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}

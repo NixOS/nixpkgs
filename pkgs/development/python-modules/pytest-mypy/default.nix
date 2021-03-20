@@ -18,7 +18,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ pytest mypy filelock ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ mypy filelock ];
 
   # does not contain tests
   doCheck = false;
