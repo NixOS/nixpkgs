@@ -10174,6 +10174,12 @@
     email = "kirill.wedens@gmail.com";
     name = "wedens";
   };
+  weihua = {
+    email = "luwh364@gmail.com";
+    github = "weihua-lu";
+    githubId = 9002575;
+    name = "Weihua Lu";
+  };
   wheelsandmetal = {
     email = "jakob@schmutz.co.uk";
     github = "wheelsandmetal";
