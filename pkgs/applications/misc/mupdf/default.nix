@@ -22,24 +22,23 @@ in stdenv.mkDerivation rec {
     sha256 = "0rljl44y8p8hgaqializlyrgpij1wbnrzyp0ll5kcg7w05nylq48";
   };
 
-  patches =
-    stdenv.lib.optional stdenv.isDarwin ./darwin.patch ++ [
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin.patch ++ [
     (fetchpatch {
-        name = "pdfocr.patch";
-        url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=a507b139adf37d2c742e039815601cdc2aa00a84";
-        sha256 = "1fx6pdgwrbk3bqsx53764d61llfj9s5q8lxqkna7mjnp7mg4krj3";
-      })
+      name = "pdfocr.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=a507b139adf37d2c742e039815601cdc2aa00a84";
+      sha256 = "1fx6pdgwrbk3bqsx53764d61llfj9s5q8lxqkna7mjnp7mg4krj3";
+    })
     (fetchpatch {
-        name = "pdf-layer.patch";
-        url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=b82e9b6d6b46877e5c3763cc3bc641c66fa7eb54";
-        sha256 = "0ma8jq8d9a0mf26qjklgi4gdaflpjik1br1nhafzvjz7ccl56ksm";
-      })
+      name = "pdf-layer.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=b82e9b6d6b46877e5c3763cc3bc641c66fa7eb54";
+      sha256 = "0ma8jq8d9a0mf26qjklgi4gdaflpjik1br1nhafzvjz7ccl56ksm";
+    })
     (fetchpatch {
-        name = "pixmap.patch";
-        url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=32e4e8b4bcbacbf92af7c88337efae21986d9603";
-        sha256 = "1zqkxgwrhcwsdya98pcmpq2815jjmv3fwsp0sba9f5nq5xi6whbj";
-      })
-    ];
+      name = "pixmap.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=32e4e8b4bcbacbf92af7c88337efae21986d9603";
+      sha256 = "1zqkxgwrhcwsdya98pcmpq2815jjmv3fwsp0sba9f5nq5xi6whbj";
+    })
+  ];
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
