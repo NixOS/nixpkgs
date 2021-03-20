@@ -10,7 +10,7 @@
 , readline
 , guiSupport ? false, tcl, tcllib, tk
 , miSupport ? true, json_c
-, nbdSupport ? true, libnbd
+, nbdSupport ? !stdenv.isDarwin, libnbd
 , textStylingSupport ? true
 , dejagnu
 }:
