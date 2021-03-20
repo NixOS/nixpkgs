@@ -6,6 +6,14 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        version = "1.10.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1wbvnqffbgh8grxm07cabdpahlnyfq91pyyaav432cahqi1p59nj";
+        };
+      });
+
       bcrypt = super.bcrypt.overridePythonAttrs (oldAttrs: rec {
         version = "3.1.7";
         src = oldAttrs.src.override {
@@ -62,7 +70,6 @@ in python.pkgs.buildPythonApplication rec {
       --replace "sockjs==0.10.0" "sockjs" \
       --replace "deepdiff==4.3.1" "deepdiff" \
       --replace "voluptuous==0.11.7" "voluptuous" \
-      --replace "astral==1.10.1" "astral" \
       --replace "python-socketio==4.4.0" "python-socketio" \
       --replace "feedparser==5.2.1" "feedparser>=5.2.1" \
       --replace "aiohttp_jinja2==1.2.0" "aiohttp_jinja2>=1.2.0" \

@@ -2531,6 +2531,8 @@ in
 
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
+  hidrd = callPackage ../tools/misc/hidrd { };
+
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   home-manager = callPackage ../tools/package-management/home-manager {};
@@ -8185,6 +8187,8 @@ in
 
   stubby = callPackage ../tools/networking/stubby { };
 
+  sunwait = callPackage ../applications/misc/sunwait { };
+
   surface-control = callPackage ../applications/misc/surface-control { };
 
   syntex = callPackage ../tools/graphics/syntex {};
@@ -11786,6 +11790,8 @@ in
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
 
   tclreadline = callPackage ../development/interpreters/tclreadline { };
+
+  trealla = callPackage ../development/interpreters/trealla { };
 
   wasm = ocamlPackages.wasm;
 
