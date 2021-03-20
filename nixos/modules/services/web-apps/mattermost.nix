@@ -100,7 +100,7 @@ in
           Note that this merging will result in overwriting options which are
           set declaratively.
 
-          If <xref linked="services.mattermost.mutableConfig">mutableConfig</xref>
+          If <xref linkend="services.mattermost.mutableConfig">mutableConfig</xref>
           is set to <literal>true</literal>, then this option has no effect.
         '';
       };
