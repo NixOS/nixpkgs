@@ -122,7 +122,7 @@ But even if one is not cross compiling, the platforms imply whether a dependency
 
 The extension of `PATH` is accomplished by simply adding `dep/bin`, if present. Understandibly, this is only done for dependencies who actually also run ("host") on the new derivation's build platform.
 
-While Nix perfectly manages transitive dependencies, a _propagated_ depdency is one that (forward-)inserts itself into transitive downstream packages as _direct_ dependency. Therefore eventual downstream's setup-hooks and tooling also affect it. It is important to note, that propagated dependencies, since they are "fast-forwarded" to the downstream derviation, a _cross_ dependency might actually end up as a _native_ dependency.
+While Nix perfectly manages transitive dependencies, a _propagated_ depdency is one that (forward-)inserts itself into transitive downstream packages as _direct_ dependency. Therefore eventual downstream's setup-hooks and tooling also affect it. It is important to note for propagated dependencies, since they are "fast-forwarded" to the downstream derviation, that a _cross_ dependency might actually end up as a _native_ dependency.
 
 In order to propagate/flatten a dependency graph of _propagated_ dependencies, we describe their platform-offset to their immediate depending propagated dependency by assigning two integers `h` (host-offset) & `t` (target-offset). We then traverse propagated inputs and fold their offsets as follows:
 
