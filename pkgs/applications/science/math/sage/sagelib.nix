@@ -32,6 +32,7 @@
 , ntl
 , numpy
 , pari
+, pkgconfig # the python module, not the pkg-config alias
 , pkg-config
 , planarity
 , ppl
@@ -85,6 +86,7 @@ buildPythonPackage rec {
     cypari2
     jinja2
     numpy
+    pkgconfig
     boost
     arb
     brial
