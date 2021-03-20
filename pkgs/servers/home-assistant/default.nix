@@ -194,6 +194,7 @@ in with py.pkgs; buildPythonApplication rec {
     "file"
     "filesize"
     "filter"
+    "flunearyou"
     "flux"
     "folder"
     "folder_watcher"
