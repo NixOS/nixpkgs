@@ -27,11 +27,17 @@ mkDerivation rec {
     "-DLUA_SCRIPT=ON"
     "-DPERL_REGEX=ON"
     "-DUSE_ASPELL=ON"
+    "-DUSE_CLI_JSONRPC=ON"
     "-DUSE_MINIUPNP=ON"
     "-DUSE_JS=ON"
     "-DWITH_LUASCRIPTS=ON"
     "-DWITH_SOUNDS=ON"
   ];
+
+  preFixup = ''
+    substituteInPlace $out/bin/eiskaltdcpp-cli-jsonrpc \
+      --replace "/usr/local" "$out"
+  '';
 
   meta = with lib; {
     description = "A cross-platform program that uses the Direct Connect and ADC protocols";
