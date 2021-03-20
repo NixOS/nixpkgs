@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, re2, openssl, protobuf
-, gflags, libnsl
+, gflags, abseil-cpp, libnsl
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  propagatedBuildInputs = [ c-ares re2 zlib ];
+  propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
   buildInputs = [ c-ares.cmake-config openssl protobuf gflags ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
@@ -32,8 +32,10 @@ stdenv.mkDerivation rec {
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"
       "-DgRPC_GFLAGS_PROVIDER=package"
+      "-DgRPC_ABSL_PROVIDER=package"
       "-DBUILD_SHARED_LIBS=ON"
       "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+      "-DCMAKE_CXX_STANDARD=17"
     ];
 
   # CMake creates a build directory by default, this conflicts with the
