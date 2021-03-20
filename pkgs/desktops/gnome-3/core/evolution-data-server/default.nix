@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution-data-server";
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -123,6 +123,7 @@ let
       updateScript = gnome3.updateScript {
         packageName = pname;
         attrPath = "gnome3.${pname}";
+        versionPolicy = "odd-unstable";
       };
 
       mkSessionForWm = { wmName, wmLabel, wmCommand }:

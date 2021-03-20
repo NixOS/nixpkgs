@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = "gtksourceview";
       attrPath = "gtksourceview4";
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -15,12 +15,6 @@ in stdenv.mkDerivation rec {
     ++ (with perlPackages; [ perl XMLParser ]);
   configureFlags = [ "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat" ];
 
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-    };
-  };
-
   meta = with lib; {
     description = "Documentation metadata library based on the proposed Freedesktop.org spec";
     homepage = "https://rarian.freedesktop.org/";

@@ -3,14 +3,21 @@ import math
 import json
 import requests
 import sys
+from libversion import Version
+from typing import Optional
 
 
 def version_to_list(version):
     return list(map(int, version.split(".")))
 
 
-def odd_unstable(version_str, selected):
-    version = version_to_list(version_str)
+def odd_unstable(version: Version, selected):
+    try:
+        version = version_to_list(version.value)
+    except:
+        # Failing to parse as a list of numbers likely means the version contains a string tag like “beta”, therefore it is not a stable release.
+        return selected != "stable"
+
     if len(version) < 2:
         return True
 
@@ -23,28 +30,34 @@ def odd_unstable(version_str, selected):
         return True
 
 
-def no_policy(version, selected):
+def tagged(version: Version, selected):
+    if selected == "stable":
+        return not ("alpha" in version.value or "beta" in version.value or "rc" in version.value)
+    else:
+        return True
+
+
+def no_policy(version: Version, selected):
     return True
 
 
 version_policies = {
     "odd-unstable": odd_unstable,
+    "tagged": tagged,
     "none": no_policy,
 }
 
 
-def make_version_policy(version_predicate, selected, upper_bound):
+def make_version_policy(version_predicate, selected, upper_bound: Optional[Version]):
     if not upper_bound:
-        upper_bound = [math.inf, math.inf]
+        return lambda version: version_predicate(version, selected)
     else:
-        upper_bound = version_to_list(upper_bound)
-
-    return lambda version: version_predicate(version, selected) and version_to_list(version) < upper_bound
+        return lambda version: version_predicate(version, selected) and version < upper_bound
 
 
 parser = argparse.ArgumentParser(description="Find latest version for a GNOME package by crawling their release server.")
 parser.add_argument("package-name", help="Name of the directory in https://ftp.gnome.org/pub/GNOME/sources/ containing the package.")
-parser.add_argument("version-policy", help="Policy determining which versions are considered stable. For most GNOME packages, odd minor versions are unstable but there are exceptions.", choices=version_policies.keys(), nargs="?", default="odd-unstable")
+parser.add_argument("version-policy", help="Policy determining which versions are considered stable. GNOME packages usually denote stability by alpha/beta/rc tag in the version. For older packages, odd minor versions are unstable but there are exceptions.", choices=version_policies.keys(), nargs="?", default="tagged")
 parser.add_argument("requested-release", help="Most of the time, we will want to update to stable version but sometimes it is useful to test.", choices=["stable", "unstable"], nargs="?", default="stable")
 parser.add_argument("--upper-bound", dest="upper-bound", help="Only look for versions older than this one (useful for pinning dependencies).")
 
@@ -55,6 +68,8 @@ if __name__ == "__main__":
     package_name = getattr(args, "package-name")
     requested_release = getattr(args, "requested-release")
     upper_bound = getattr(args, "upper-bound")
+    if upper_bound:
+        upper_bound = Version(upper_bound)
     version_predicate = version_policies[getattr(args, "version-policy")]
     version_policy = make_version_policy(version_predicate, requested_release, upper_bound)
 
@@ -64,11 +79,11 @@ if __name__ == "__main__":
         print("Unknown format of cache.json file.", file=sys.stderr)
         sys.exit(1)
 
-    versions = cache[2][package_name]
-    versions = sorted(filter(version_policy, versions), key=version_to_list)
+    versions = map(Version, cache[2][package_name])
+    versions = sorted(filter(version_policy, versions))
 
     if len(versions) == 0:
         print("No versions matched.", file=sys.stderr)
         sys.exit(1)
 
-    print(versions[-1])
+    print(versions[-1].value)

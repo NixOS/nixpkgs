@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "${pname}3";
+      versionPolicy = "odd-unstable";
     };
   };
 
