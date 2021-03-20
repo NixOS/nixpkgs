@@ -116,13 +116,13 @@ On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
 
-While _derivations_ collect their dependencies by references to store paths of other _derivations_, `mkDerivation`, furthermore deals with _package_ depdencies along four axes: build, host & target platform and wether they are propagated. Details can be found in <xref linkend="chap-cross" />, but, for quick reminder, 
-- the machine you are building on is _build_, 
-- the machine that you are building for _host_, 
-- and the machine that the compiler will produce code for _target_. 
+While _derivations_ collect their dependencies by references to store paths of other _derivations_, `mkDerivation`, furthermore deals with _package_ depdencies along four axes: build, host & target platform and wether they are propagated. Details can be found in <xref linkend="chap-cross" />, but, for quick reminder,
+- the machine you are building on is _build_,
+- the machine that you are building for _host_,
+- and the machine that the compiler will produce code for _target_.
 
 Accordingly:
-- If build, host, and target are all the same, this is called a _native_. 
+- If build, host, and target are all the same, this is called a _native_.
 - If build and host are the same but target is different, this is called a _cross_.
 - If host and target are the same, but build is different, you are using a _cross-compiler_ to build a _native_ for a different system, a _cross-built native_, because target is the machine that the compiler will produce code for, while running on build.
 
