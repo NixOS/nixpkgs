@@ -23,12 +23,20 @@ def odd_unstable(version_str, selected):
         return True
 
 
+def tagged(version_str, selected):
+    if selected == "stable":
+        return not ("alpha" in version_str or "beta" in version_str or "rc" in version_str)
+    else:
+        return True
+
+
 def no_policy(version, selected):
     return True
 
 
 version_policies = {
     "odd-unstable": odd_unstable,
+    "tagged": tagged,
     "none": no_policy,
 }
 
@@ -44,7 +52,7 @@ def make_version_policy(version_predicate, selected, upper_bound):
 
 parser = argparse.ArgumentParser(description="Find latest version for a GNOME package by crawling their release server.")
 parser.add_argument("package-name", help="Name of the directory in https://ftp.gnome.org/pub/GNOME/sources/ containing the package.")
-parser.add_argument("version-policy", help="Policy determining which versions are considered stable. For most GNOME packages, odd minor versions are unstable but there are exceptions.", choices=version_policies.keys(), nargs="?", default="odd-unstable")
+parser.add_argument("version-policy", help="Policy determining which versions are considered stable. GNOME packages usually denote stability by alpha/beta/rc tag in the version. For older packages, odd minor versions are unstable but there are exceptions.", choices=version_policies.keys(), nargs="?", default="tagged")
 parser.add_argument("requested-release", help="Most of the time, we will want to update to stable version but sometimes it is useful to test.", choices=["stable", "unstable"], nargs="?", default="stable")
 parser.add_argument("--upper-bound", dest="upper-bound", help="Only look for versions older than this one (useful for pinning dependencies).")
 

@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = pname;
-      versionPolicy = "none"; # Unpredictable version stability
+      packageName = "gst_all_1.gstreamermm";
+      versionPolicy = "odd-unstable";
     };
   };
 
