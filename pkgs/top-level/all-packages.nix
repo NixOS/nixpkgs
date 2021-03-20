@@ -816,6 +816,10 @@ in
     flavour = "git";
   };
 
+  logseq = callPackage ../applications/misc/logseq {
+    electron = electron_11;
+  };
+
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
