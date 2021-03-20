@@ -54,9 +54,9 @@ stdenv.mkDerivation (mkDerivationArgs // {
       ++ [ "runHook postConfigure" ]
     );
 
-  CRFLAGS = lib.concatStringsSep " " defaultOptions;
+  env.CRFLAGS = lib.concatStringsSep " " defaultOptions;
 
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   buildInputs = args.buildInputs or [ ] ++ [ crystal ]
     ++ lib.optional (format != "crystal") shards;
@@ -66,7 +66,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
   buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
     "runHook preBuild"
   ] ++ lib.optional (format == "make")
-    "make \${buildTargets:-build} $makeFlags"
+    "make \${buildTargets:-build} \"\${makeFlags[@]}\""
   ++ lib.optionals (format == "crystal") (lib.mapAttrsToList
     (bin: attrs: ''
       crystal ${lib.escapeShellArgs ([
@@ -84,7 +84,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
   installPhase = args.installPhase or (lib.concatStringsSep "\n" ([
     "runHook preInstall"
   ] ++ lib.optional (format == "make")
-    "make \${installTargets:-install} $installFlags"
+    "make \${installTargets:-install} \"\${installFlags[@]}\""
   ++ lib.optionals (format == "crystal") (map
     (bin: ''
       install -Dm555 ${lib.escapeShellArgs [ bin "${placeholder "out"}/bin/${bin}" ]}
@@ -111,9 +111,9 @@ stdenv.mkDerivation (mkDerivationArgs // {
   checkPhase = args.checkPhase or (lib.concatStringsSep "\n" ([
     "runHook preCheck"
   ] ++ lib.optional (format == "make")
-    "make \${checkTarget:-test} $checkFlags"
+    "make \${checkTarget:-test} \"\${checkFlags[@]}\""
   ++ lib.optional (format != "make")
-    "crystal \${checkTarget:-spec} $checkFlags"
+    "crystal \${checkTarget:-spec} \"\${checkFlags[@]}\""
   ++ [ "runHook postCheck" ]));
 
   doInstallCheck = args.doInstallCheck or true;
