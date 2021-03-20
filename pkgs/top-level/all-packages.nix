@@ -29917,6 +29917,8 @@ in
 
   wasmer = callPackage ../development/interpreters/wasmer { };
 
+  yabasic = callPackage ../development/interpreters/yabasic { };
+
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
