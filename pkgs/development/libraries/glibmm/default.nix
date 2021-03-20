@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.68.0";
+  version = "2.66.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wfOFcxkdzu2FoFYAiIz0z0aVlB8zlxW9Z9UcJBb083U=";
+    sha256 = "sha256-nh231D0uLU36J3E1TiGmmmvux8RGtxFhnPjHeeE6WB4=";
   };
 
   outputs = [ "out" "dev" ];
