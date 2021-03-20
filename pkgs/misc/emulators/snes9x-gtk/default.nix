@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   preConfigure = "cd gtk";
 
   meta = with lib; {
-    homepage = "http://www.snes9x.com";
+    homepage = "https://www.snes9x.com";
     description = "Super Nintendo Entertainment System (SNES) emulator";
 
     longDescription = ''
