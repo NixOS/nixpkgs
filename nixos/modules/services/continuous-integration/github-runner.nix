@@ -241,8 +241,10 @@ in
         StateDirectoryMode = "0700";
         WorkingDirectory = runnerRoot;
 
-        # By default, use a dynamically allocated user
-        DynamicUser = mkDefault true;
+        # By default, use a dynamically allocated user with a name and group
+        # equal to the service unit name (which is the systemd default for
+        # DynamicUser=true; just set explicitly for the sake of clarity).
+        DynamicUser = true;
         User = name;
         Group = name;
 
