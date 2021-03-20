@@ -9661,6 +9661,24 @@ in
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  adoptopenjdk-bin-16-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk16-linux.nix;
+  adoptopenjdk-bin-16-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk16-darwin.nix;
+
+  adoptopenjdk-hotspot-bin-16 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-16-packages-linux.jdk-hotspot {}
+    else callPackage adoptopenjdk-bin-16-packages-darwin.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-16 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-16-packages-linux.jre-hotspot {}
+    else callPackage adoptopenjdk-bin-16-packages-darwin.jre-hotspot {};
+
+  adoptopenjdk-openj9-bin-16 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-16-packages-linux.jdk-openj9 {}
+    else callPackage adoptopenjdk-bin-16-packages-darwin.jdk-openj9 {};
+
+  adoptopenjdk-jre-openj9-bin-16 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-16-packages-linux.jre-openj9 {}
+    else callPackage adoptopenjdk-bin-16-packages-darwin.jre-openj9 {};
+
   adoptopenjdk-bin-15-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk15-linux.nix;
   adoptopenjdk-bin-15-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk15-darwin.nix;
 
