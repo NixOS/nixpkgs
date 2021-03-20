@@ -274,6 +274,7 @@ in with py.pkgs; buildPythonApplication rec {
     "search"
     "shell_command"
     "shopping_list"
+    "simplisafe"
     "simulated"
     "sensor"
     "smarttub"

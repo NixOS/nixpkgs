@@ -7633,6 +7633,8 @@ in {
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
 
+  simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
+
   simpy = callPackage ../development/python-modules/simpy { };
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };

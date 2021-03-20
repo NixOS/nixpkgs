@@ -741,7 +741,7 @@
     "sighthound" = ps: with ps; [ pillow simplehound ];
     "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
-    "simplisafe" = ps: with ps; [ ]; # missing inputs: simplisafe-python
+    "simplisafe" = ps: with ps; [ simplisafe-python ];
     "simulated" = ps: with ps; [ ];
     "sinch" = ps: with ps; [ ]; # missing inputs: clx-sdk-xms
     "sisyphus" = ps: with ps; [ ]; # missing inputs: sisyphus-control
