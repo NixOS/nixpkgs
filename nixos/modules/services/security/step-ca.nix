@@ -4,6 +4,8 @@ let
   settingsFormat = (pkgs.formats.json { });
 in
 {
+  meta.maintainers = with lib.maintainers; [ mohe2015 ];
+
   options = {
     services.step-ca = {
       enable = lib.mkEnableOption "the smallstep certificate authority server";

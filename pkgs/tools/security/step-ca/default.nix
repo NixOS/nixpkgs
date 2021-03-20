@@ -49,7 +49,7 @@ buildGoModule rec {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [ cmcdragonkai mohe2015 ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
