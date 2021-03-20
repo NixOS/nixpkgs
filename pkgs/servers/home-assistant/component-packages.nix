@@ -563,7 +563,7 @@
     "norway_air" = ps: with ps; [ pymetno ];
     "notify" = ps: with ps; [ ];
     "notify_events" = ps: with ps; [ ]; # missing inputs: notify-events
-    "notion" = ps: with ps; [ ]; # missing inputs: aionotion
+    "notion" = ps: with ps; [ aionotion ];
     "nsw_fuel_station" = ps: with ps; [ ]; # missing inputs: nsw-fuel-api-client
     "nsw_rural_fire_service_feed" = ps: with ps; [ ]; # missing inputs: aio_geojson_nsw_rfs_incidents
     "nuheat" = ps: with ps; [ ]; # missing inputs: nuheat
