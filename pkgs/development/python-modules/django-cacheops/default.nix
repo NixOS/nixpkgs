@@ -5,7 +5,6 @@
 , funcy
 , redis
 , six
-, mock
 }:
 
 buildPythonPackage rec {
