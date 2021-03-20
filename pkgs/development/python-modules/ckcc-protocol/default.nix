@@ -4,7 +4,6 @@
 , ecdsa
 , hidapi
 , fetchPypi
-, pytest
 , pyaes
 , pythonOlder
 }:
