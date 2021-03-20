@@ -1728,6 +1728,11 @@ self: super: {
     sha256 = "0pmx54xd7ah85y9mfi5366wbnwrp918j0wbx8yw8hrdac92qi4gh";
   });
 
+  # list `modbus` in librarySystemDepends, correct to `libmodbus`
+  libmodbus = overrideCabal super.libmodbus (drv: {
+    librarySystemDepends = [ pkgs.libmodbus ];
+  });
+
   # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
   trial-optparse-applicative = assert super.trial-optparse-applicative.version == "0.0.0.0"; doJailbreak super.trial-optparse-applicative;
 

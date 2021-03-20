@@ -7696,7 +7696,6 @@ broken-packages:
   - liblawless
   - liblinear-enumerator
   - libltdl
-  - libmodbus
   - libmolude
   - libnix
   - liboath-hs
