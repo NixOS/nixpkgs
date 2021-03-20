@@ -42,9 +42,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples directory as the files are prefixed with test_.
-  # disabledTestFiles doesn't seem to work here
-  pytestFlagsArray = [ "--ignore examples/" ];
+  disabledTestPaths = [ "examples" ];
+
   pythonImportsCheck = [ "pyflunearyou" ];
 
   meta = with lib; {
