@@ -1420,6 +1420,10 @@ in {
 
   cmdtest = callPackage ../development/python-modules/cmdtest { };
 
+  cmigemo = callPackage ../development/python-modules/cmigemo {
+    inherit (pkgs) cmigemo;
+  };
+
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
 
   cntk = callPackage ../development/python-modules/cntk { };

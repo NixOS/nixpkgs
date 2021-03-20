@@ -4015,6 +4015,12 @@
     githubId = 61913481;
     name = "Mat Marini";
   };
+  illustris = {
+    email = "me@illustris.tech";
+    github = "illustris";
+    githubId = 3948275;
+    name = "Harikrishnan R";
+  };
   ilya-fedin = {
     email = "fedin-ilja2010@ya.ru";
     github = "ilya-fedin";
