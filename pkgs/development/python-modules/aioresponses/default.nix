@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.7.1";
+  version = "0.7.2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f65bba2be1e9a4997ee166bc0161a50be0fef7350ad09e6afdb2adccf74dfefe";
+    sha256 = "16p8mdyfirddrsay62ji7rwcrqmmzxzf2isdbfm9cj5p338rbr42";
   };
 
   nativeBuildInputs = [
