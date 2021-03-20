@@ -4854,6 +4854,8 @@ in
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
+  gnucap = callPackage ../applications/science/electronics/gnucap { };
+
   gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
 
   gnuclad = callPackage ../applications/graphics/gnuclad { };
