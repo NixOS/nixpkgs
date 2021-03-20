@@ -9,7 +9,7 @@
 
 { lib, stdenv
 # This *is* correct, though unusual. as a way of getting krb5-config from the
-# pacakge without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
+# package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
 , fetchpatch
