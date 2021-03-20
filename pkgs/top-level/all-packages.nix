@@ -158,6 +158,8 @@ in
 
   fishnet = callPackage ../servers/fishnet { };
 
+  fission = callPackage ../development/tools/fission { };
+
   authy = callPackage ../applications/misc/authy { };
 
   avro-tools = callPackage ../development/tools/avro-tools { };
@@ -632,6 +634,8 @@ in
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
+
+  _7zz = callPackage ../tools/archivers/7zz { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
@@ -10320,8 +10324,7 @@ in
 
   krank = haskell.lib.justStaticExecutables haskellPackages.krank;
 
-  # We use a version built with an older compiler because of https://github.com/pikajude/stylish-cabal/issues/12.
-  stylish-cabal = haskell.lib.justStaticExecutables haskell.packages.ghc865.stylish-cabal;
+  stylish-cabal = haskell.lib.justStaticExecutables haskellPackages.stylish-cabal;
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
@@ -20863,6 +20866,8 @@ in
 
   julia-mono = callPackage ../data/fonts/julia-mono { };
 
+  juno-theme = callPackage ../data/themes/juno { };
+
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
@@ -21904,6 +21909,8 @@ in
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome2) libgnomeui GConf;
   };
+
+  corrscope = libsForQt5.callPackage ../applications/video/corrscope { };
 
   csa = callPackage ../applications/audio/csa { };
 
