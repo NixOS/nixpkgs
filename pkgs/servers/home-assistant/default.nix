@@ -250,6 +250,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mqtt_statestream"
     "mullvad"
     "notify"
+    "notion"
     "number"
     "ozw"
     "panel_custom"
