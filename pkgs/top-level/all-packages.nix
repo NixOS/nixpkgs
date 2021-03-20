@@ -18229,6 +18229,10 @@ in
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
+  inspircd = callPackage ../servers/irc/inspircd { };
+
+  inspircdMinimal = inspircd.override { extraModules = []; };
+
   imgproxy = callPackage ../servers/imgproxy { };
 
   ircdog = callPackage ../applications/networking/irc/ircdog { };
