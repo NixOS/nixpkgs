@@ -12,8 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ matplotlib pandas ];
 
   meta = with lib; {
-    description =
-      "Matplotlib utilities for the visualization, and visual analysis, of financial data";
+    description = "Matplotlib utilities for the visualization, and visual analysis, of financial data";
     homepage = "https://github.com/matplotlib/mplfinance";
     license = [ licenses.bsd3 ];
     maintainers = [ maintainers.ehmry ];
