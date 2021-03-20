@@ -11,20 +11,19 @@
 , tornado
 , twisted
 , mock
-, trollius
 , gevent
 , six
 , pytz
 , tzlocal
 , funcsigs
-, futures
 , setuptools
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "APScheduler";
   version = "3.7.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     twisted
     mock
     gevent
-  ] ++ lib.optionals (!isPy3k) [ trollius ];
+  ];
 
   propagatedBuildInputs = [
     six
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     tzlocal
     funcsigs
     setuptools
-  ] ++ lib.optional (!isPy3k) futures;
+  ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_submit_job"
