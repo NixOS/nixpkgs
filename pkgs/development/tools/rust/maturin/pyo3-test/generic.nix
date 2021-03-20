@@ -3,7 +3,7 @@
 
 { lib
 , fetchFromGitHub
-, python3Packages
+, python
 , rustPlatform
 
 , nativeBuildInputs
@@ -13,7 +13,7 @@
 , preConfigure ? ""
 }:
 
-python3Packages.buildPythonPackage rec {
+python.pkgs.buildPythonPackage rec {
   pname = "word-count";
   version = "0.13.2";
 
