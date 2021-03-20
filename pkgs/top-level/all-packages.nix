@@ -1413,6 +1413,8 @@ in
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
+  mpdevil = callPackage ../applications/audio/mpdevil { };
+
   pacparser = callPackage ../tools/networking/pacparser { };
 
   pass = callPackage ../tools/security/pass { };
