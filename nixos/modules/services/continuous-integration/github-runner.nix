@@ -37,7 +37,7 @@ in
         The file should contain exactly one line with the token without any newline.
         The token can be used to re-register a runner of the same name but is time-limited.
 
-        Changing this option triggers a new runner registration.
+        Changing this option or the file's content triggers a new runner registration.
       '';
       example = "/run/secrets/github-runner/nixos.token";
     };
