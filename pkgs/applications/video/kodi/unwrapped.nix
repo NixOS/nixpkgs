@@ -128,7 +128,7 @@ in stdenv.mkDerivation {
       ffmpeg flatbuffers fmt fstrcmp rapidjson
       lirc
     ]
-    ++ lib.optional x11Support [
+    ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
       libXinerama libXrandr.dev libXtst libXfixes
     ]
@@ -148,7 +148,7 @@ in stdenv.mkDerivation {
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
     ]
-    ++ lib.optional gbmSupport [
+    ++ lib.optionals gbmSupport [
       libxkbcommon.dev
       mesa.dev
       libinput.dev

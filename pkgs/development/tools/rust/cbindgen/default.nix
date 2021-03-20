@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # Disable tests that require rust unstable features
     # https://github.com/eqrion/cbindgen/issues/338
-    "--skip test_expand"
-    "--skip test_bitfield"
-    "--skip lib_default_uses_debug_build"
-    "--skip lib_explicit_debug_build"
-    "--skip lib_explicit_release_build"
+    "--skip" "test_expand"
+    "--skip" "test_bitfield"
+    "--skip" "lib_default_uses_debug_build"
+    "--skip" "lib_explicit_debug_build"
+    "--skip" "lib_explicit_release_build"
   ];
 
   meta = with lib; {

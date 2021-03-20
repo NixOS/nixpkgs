@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sfml
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   meta = with lib; {
     description = "Lightweight, cross-platform & full-featured shader IDE";

@@ -55,8 +55,8 @@ stdenv.mkDerivation {
     (enableFeature unicode3Support "unicode3")
   ];
 
-  LDFLAGS = [ "-lfontconfig" "-lXrender" "-lpthread" ];
-  CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
+  env.LDFLAGS = "-lfontconfig -lXrender -lpthread";
+  env.CFLAGS = "-I${freetype.dev}/include/freetype2";
 
   preConfigure =
     ''

@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
   makeFlags = [ "PREFIX=$(out)" ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ]
-    ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) ["USE_SYSTEMD=yes"]
+    ++ lib.optionals (stdenv.isLinux && !stdenv.hostPlatform.isMusl) ["USE_SYSTEMD=yes"]
     ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-std=c11" ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-std=c11";
 
   doCheck = false; # needs tcl
 

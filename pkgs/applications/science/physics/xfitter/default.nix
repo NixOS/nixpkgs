@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  env.NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
+  env.NIX_LDFLAGS = "-ltirpc";
 
   meta = with lib; {
     description = "The xFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";

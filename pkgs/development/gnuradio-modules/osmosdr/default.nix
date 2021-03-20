@@ -52,7 +52,7 @@ in mkDerivation {
     libbladeRF
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optional (gnuradio.hasFeature "gr-uhd" gnuradio.features) [
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd" gnuradio.features) [
     uhd
   ];
   cmakeFlags = [

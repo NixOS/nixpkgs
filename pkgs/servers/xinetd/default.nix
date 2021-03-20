@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtirpc ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  env.NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
+  env.NIX_LDFLAGS = "-ltirpc";
 
   meta = {
     description = "Secure replacement for inetd";

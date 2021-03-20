@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-DGDCM_BUILD_SHARED_LIBS=ON"
     "-DGDCM_USE_VTK=ON"
   ]
-  ++ lib.optional enablePython [
+  ++ lib.optionals enablePython [
     "-DGDCM_WRAP_PYTHON:BOOL=ON"
     "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
   ];
@@ -30,11 +30,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ vtk_7 ]
-    ++ lib.optional stdenv.isDarwin [
+    ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.ApplicationServices
       darwin.apple_sdk.frameworks.Cocoa
-    ] ++ lib.optional enablePython [ swig python ];
-  propagatedBuildInputs = [ ];
+    ] ++ lib.optionals enablePython [ swig python ];
 
   meta = with lib; {
     description = "The grassroots cross-platform DICOM implementation";

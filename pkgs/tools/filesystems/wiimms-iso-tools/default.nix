@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     patchShebangs gen-text-file.sh
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
-  INSTALL_PATH = "$out";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.INSTALL_PATH = "$out";
 
   installPhase = ''
     mkdir "$out"
