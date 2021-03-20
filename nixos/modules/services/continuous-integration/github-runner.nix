@@ -127,12 +127,13 @@ in
         ExecStart = "${pkgs.github-runner}/bin/runsvc.sh";
 
         # Does the following, sequentially:
-        # - Transfer ownership of any already existing runner credentials to the
-        #   service user.
-        # - If the configured token changed, unconfigure the previous runner.
+        # - Copy the current and the previous `tokenFile` to the $RUNTIME_DIRECTORY
+        #   and make it accessible to the service user to allow for a content
+        #   comparison.
+        # - If the module configuration or the token has changed, clear the state directory.
         # - Configure the runner.
-        # - Drop privileges to the runner credential files by making them read-only
-        #   for the runner service user.
+        # - Copy the configured `tokenFile` to the $STATE_DIRECTORY and make it
+        #   inaccessible to the service user.
         # - Set up the directory structure by creating the necessary symlinks.
         ExecStartPre =
           let
@@ -172,7 +173,9 @@ in
               # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
               ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
               # Also trigger a registration if the token content changed
-              ${pkgs.diffutils}/bin/diff -q "$RUNTIME_DIRECTORY"/{${currentConfigTokenFilename},${newConfigTokenFilename}} >/dev/null 2>&1 || differs=1
+              ${pkgs.diffutils}/bin/diff -q \
+                "$RUNTIME_DIRECTORY"/{${currentConfigTokenFilename},${newConfigTokenFilename}} \
+                >/dev/null 2>&1 || differs=1
 
               if [[ -n "$differs" ]]; then
                 echo "Config has changed, removing old runner state."
@@ -257,7 +260,6 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
-        PrivateNetwork = false;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
@@ -274,6 +276,8 @@ in
         RestrictSUIDSGID = true;
         UMask = "0066";
 
+        # Needs network access
+        PrivateNetwork = false;
         # Cannot be true due to Node
         MemoryDenyWriteExecute = false;
       };
