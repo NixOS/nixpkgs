@@ -2531,6 +2531,8 @@ in
 
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
+  hidrd = callPackage ../tools/misc/hidrd { };
+
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   home-manager = callPackage ../tools/package-management/home-manager {};
