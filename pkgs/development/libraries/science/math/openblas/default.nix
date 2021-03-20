@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   };
 
   # apply https://github.com/xianyi/OpenBLAS/pull/3060 to fix a crash on arm
-  # remove this when updating from 0.3.14
+  # remove this when updating to 0.3.14 or newer
   patches = [
     (fetchpatch {
       name = "label-get_cpu_ftr-as-volatile.patch";
