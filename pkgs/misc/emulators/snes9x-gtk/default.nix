@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
       includes some real gems that were only ever released in Japan.
     '';
 
-    license = licenses.lgpl2;
+    # see https://github.com/snes9xgit/snes9x/blob/master/LICENSE for exact details
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ qknight ];
     platforms = platforms.linux;
   };
