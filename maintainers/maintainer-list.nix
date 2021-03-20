@@ -10942,4 +10942,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  rassmike = {
+    name = "Mihalis Rasoulis";
+    email = "rassmike@gmail.com";
+    github = "rassmike";
+    githubId = 23300548;
+  };
 }
