@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "The fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Edu4rdSHL/findomain";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }
