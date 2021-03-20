@@ -35,10 +35,10 @@ let
     auto_pause = true;
     only_admins_can_pause_the_game = true;
     autosave_only_on_server = true;
-    admins = [];
     non_blocking_saving = cfg.nonBlockingSaving;
   } // cfg.extraSettings;
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
+  serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
 in
 {
@@ -52,6 +52,16 @@ in
           The port to which the service should bind.
         '';
       };
+
+      admins = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "username" ];
+        description = ''
+          List of player names which will be admin.
+        '';
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -234,6 +244,7 @@ in
           "--start-server=${mkSavePath cfg.saveName}"
           "--server-settings=${serverSettingsFile}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
+          (optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")
         ];
 
         # Sandboxing
