@@ -116,11 +116,12 @@ stdenv.mkDerivation rec {
     sha256 = "14jxh0v3jfbw4mfjx4mcz4dd51lyq7pqvh9k8dg94539ypzjr2lj";
   };
 
-  # remove this when updating from 0.3.13
+  # apply https://github.com/xianyi/OpenBLAS/pull/3060 to fix a crash on arm
+  # remove this when updating from 0.3.14
   patches = [
     (fetchpatch {
       name = "label-get_cpu_ftr-as-volatile.patch";
-      url = "https://github.com/xianyi/OpenBLAS/pull/3060.patch";
+      url = "https://github.com/xianyi/OpenBLAS/commit/6fe0f1fab9d6a7f46d71d37ebb210fbf56924fbc.diff";
       sha256 = "06gwh73k4sas1ap2fi3jvpifbjkys2vhmnbj4mzrsvj279ljsfdk";
     })
   ];
