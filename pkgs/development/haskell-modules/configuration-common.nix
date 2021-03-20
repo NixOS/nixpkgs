@@ -946,7 +946,10 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  niv = generateOptparseApplicativeCompletion "niv" super.niv;
+  niv = generateOptparseApplicativeCompletion "niv" (super.niv.overrideScope (self: super: {
+   # Needs override because of: https://github.com/nmattia/niv/issues/312
+   optparse-applicative = self.optparse-applicative_0_15_1_0;
+  }));
   ormolu = generateOptparseApplicativeCompletion "ormolu" super.ormolu;
   stack = generateOptparseApplicativeCompletion "stack" super.stack;
 

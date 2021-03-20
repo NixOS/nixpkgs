@@ -2753,6 +2753,7 @@ extra-packages:
   - haskell-lsp == 0.23.0.0             # required by hls-plugin-api 0.7.0.0, 2021-02-08
   - haskell-lsp-types == 0.23.0.0       # required by hls-plugin-api 0.7.0.0, 2021-02-08
   - lsp-test == 0.11.0.7                # required by hls-plugin-api 0.7.0.0, 2021-02-08
+  - optparse-applicative < 0.16         # needed for niv-0.2.19
 
 package-maintainers:
   peti:
