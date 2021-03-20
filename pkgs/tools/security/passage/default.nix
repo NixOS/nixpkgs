@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~gpanders";
-    repo = "passage";
+    repo = pname;
     rev = "9bddfe8e03b39ceccfa736e88924d3b4cb59748f";
     sha256 = "1vdl02aqxb66nniwgsafq45b1xb53jqsprs7n0liry4gh639rc81";
   };
