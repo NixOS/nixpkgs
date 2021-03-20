@@ -115,6 +115,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
 
   kpmcore = callPackage ../development/libraries/kpmcore { };
 
+  mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
+
   mauikit = callPackage ../development/libraries/mauikit { };
 
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
