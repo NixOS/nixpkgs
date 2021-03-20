@@ -19,6 +19,7 @@
 , whoosh
 , imagesize
 , requests
+, packaging
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
 , sphinxcontrib-htmlhelp
@@ -58,6 +59,7 @@ buildPythonPackage rec {
     whoosh
     imagesize
     requests
+    packaging
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
     sphinxcontrib-htmlhelp
