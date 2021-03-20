@@ -85,6 +85,26 @@ in
         '';
       };
 
+      secretFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to a json file containing secret config values which should
+          not be written into the Nix store. If it is not null (the default)
+          and <xref linked="services.mattermost.mutableConfig">mutableConfig</xref>
+          is set to <literal>false</literal>, then the mattermost service will
+          join the options declared in this file into its config on startup. See
+          <link xlink:href="https://docs.mattermost.com/administration/config-settings.html"/>
+          for the formatting and available options.
+
+          Note that this merging will result in overwriting options which are
+          set declaratively.
+
+          If <xref linked="services.mattermost.mutableConfig">mutableConfig</xref>
+          is set to <literal>true</literal>, then this option has no effect.
+        '';
+      };
+
       localDatabaseCreate = mkOption {
         type = types.bool;
         default = true;
@@ -180,7 +200,14 @@ in
           ln -sf ${pkgs.mattermost}/{bin,fonts,i18n,templates,client} ${cfg.statePath}
         '' + lib.optionalString (!cfg.mutableConfig) ''
           rm -f ${cfg.statePath}/config/config.json
-          cp ${mattermostConfJSON} ${cfg.statePath}/config/config.json
+        '' + (if cfg.secretFile == null
+              then ''
+                cp ${mattermostConfJSON} ${cfg.statePath}/config/config.json
+              ''
+              else ''
+                ${pkgs.jq}/bin/jq -s ".[1] * .[0]" ${cfg.secretFile} ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
+              '')
+        + ''
           ${pkgs.mattermost}/bin/mattermost config migrate ${cfg.statePath}/config/config.json ${database}
         '' + lib.optionalString cfg.mutableConfig ''
           if ! test -e "${cfg.statePath}/config/.initial-created"; then
