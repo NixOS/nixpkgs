@@ -18,6 +18,12 @@
 , cachetools
 , atomicwrites
 , poetry-core
+, pytestCheckHook
+, faker
+, aioresponses
+, hypothesis
+, pytest-aiohttp
+, pytest-benchmark
 }:
 
 buildPythonPackage rec {
@@ -36,6 +42,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     git
     poetry-core
+    pytestCheckHook
   ];
 
   patches = [ ./update-dependencies.patch ];
@@ -58,7 +65,20 @@ buildPythonPackage rec {
     atomicwrites
   ];
 
-  doCheck = false;
+  checkInputs = [
+    faker
+    aioresponses
+    hypothesis
+    pytest-aiohttp
+    pytest-benchmark
+  ];
+
+  disabledTests = [
+    # touches network
+    "test_connect_wrapper"
+    # time dependent and flaky
+    "test_transfer_monitor_callbacks"
+  ];
 
   meta = with lib; {
     description = "A Python Matrix client library, designed according to sans I/O principles";
