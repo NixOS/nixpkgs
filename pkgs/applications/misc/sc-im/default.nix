@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , pkg-config
 , which
@@ -24,6 +25,20 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "${src.name}/src";
+
+  # make default colors readable on dark background
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/andmarti1424/sc-im/commit/78d2fdaaf2c578691e68fb5bd773803cb967ddba.patch";
+      sha256 = "09716zsqa9qdsj2qpkji8wlzsmp9gl66ggvrg7lmrwwnvli2zn2w";
+    })
+    (fetchpatch {
+      url = "https://github.com/andmarti1424/sc-im/commit/f29d6605c8170febcec0dea7bda9613bee3b7011.patch";
+      sha256 = "1zs1sb23g0k6lig4d0qdzq1wdhcdzl424ch567zyjl191lyhsjyg";
+    })
+  ];
+
+  patchFlags = [ "-p2" ];
 
   nativeBuildInputs = [
     makeWrapper
