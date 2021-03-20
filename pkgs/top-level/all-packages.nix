@@ -11982,6 +11982,8 @@ in
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
+  automaticcomponenttoolkit = callPackage ../development/tools/misc/automaticcomponenttoolkit { };
+
   awf = callPackage ../development/tools/misc/awf { };
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
