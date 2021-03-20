@@ -8,6 +8,9 @@
 }:
 
 { lib, stdenv
+# This *is* correct, though unusual. as a way of getting krb5-config from the
+# pacakge without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
+, pkgs
 , fetchurl
 , fetchpatch
 , zlib
@@ -42,7 +45,10 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ pkg-config ]
-    ++ optional withKerberos kerberos
+    # This is not the same as the kerberos from the inputs! pkgs.kerberos is
+    # needed here to access krb5-config in order to cross compile. See:
+    # https://github.com/NixOS/nixpkgs/pull/107606
+    ++ optional withKerberos pkgs.kerberos
     ++ extraNativeBuildInputs;
   buildInputs = [ zlib openssl libedit ]
     ++ optional withFIDO libfido2
