@@ -55,6 +55,10 @@ mkDerivation rec {
     sqlite
   ];
 
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+  ];
+
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit

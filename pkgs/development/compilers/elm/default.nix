@@ -1,5 +1,5 @@
 { lib, stdenv, pkgs
-, haskell, nodejs
+, haskell, haskellPackages, nodejs
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin
   # Rust dependecies
 , rustPlatform, openssl, pkg-config, Security
@@ -7,7 +7,7 @@
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
-  hsPkgs = haskell.packages.ghc8103.override {
+  hsPkgs = haskellPackages.override {
     overrides = self: super: with haskell.lib; with lib;
       let elmPkgs = rec {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
