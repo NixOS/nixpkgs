@@ -37,7 +37,8 @@ stdenv.mkDerivation {
     ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch
     # fix gnulib tests on 32-bit ARM. Included on gnutls master.
     # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
+    # As of version > 3.7, this is included upstream, and patch fails
+    ++ lib.optional (stdenv.hostPlatform.isAarch32 && lib.versionOlder version "3.7") ./fix-gnulib-tests-arm.patch;
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
