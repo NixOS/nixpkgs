@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "bettercap";
-  version = "2.30";
+  version = "2.30.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ge+fbNEWq+84LypUbNrnNMOxcDJb8rFlP/QUoE7yEds=";
+    sha256 = "sha256-5CAWMW0u/8BUn/8JJBApyHGH+/Tz8hzAmSChoT2gFr8=";
   };
 
   vendorSha256 = "sha256-fApxHxdzEEc+M+U5f0271VgrkXTGkUD75BpDXpVYd5k=";
