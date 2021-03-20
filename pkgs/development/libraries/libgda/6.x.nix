@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "libgda6";
+      versionPolicy = "odd-unstable";
     };
   };
 

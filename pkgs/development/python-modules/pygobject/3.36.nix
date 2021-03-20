@@ -23,13 +23,6 @@ buildPythonPackage rec {
                  ++ lib.optionals stdenv.isDarwin [ which ncurses ];
   propagatedBuildInputs = [ pycairo cairo ];
 
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-      attrPath = "python3.pkgs.${pname}3";
-    };
-  };
-
   meta = with lib; {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";

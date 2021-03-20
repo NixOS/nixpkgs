@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "networkmanager-fortisslvpn";
+      versionPolicy = "odd-unstable";
     };
   };
 

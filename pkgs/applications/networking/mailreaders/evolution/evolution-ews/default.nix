@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
    passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution-ews";
+      versionPolicy = "odd-unstable";
     };
   };
 

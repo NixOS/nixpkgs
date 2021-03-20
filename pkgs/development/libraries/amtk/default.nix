@@ -1,6 +1,8 @@
 { lib, stdenv
 , fetchurl
 , gtk3
+, meson
+, ninja
 , pkg-config
 , gobject-introspection
 , gnome3
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
     dbus
     gobject-introspection
@@ -32,10 +36,13 @@ stdenv.mkDerivation rec {
     export NO_AT_BRIDGE=1
     ${xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      make check
+      meson test --print-errorlogs
   '';
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  passthru.updateScript = gnome3.updateScript {
+    packageName = pname;
+    versionPolicy = "none";
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Amtk";
