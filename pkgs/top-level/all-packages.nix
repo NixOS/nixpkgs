@@ -3142,6 +3142,8 @@ in
 
   bash_unit = callPackage ../tools/misc/bash_unit { };
 
+  boltbrowser = callPackage ../tools/misc/boltbrowser { };
+
   bsc = callPackage ../tools/compression/bsc {
     inherit (llvmPackages) openmp;
   };
@@ -29914,6 +29916,8 @@ in
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
   wasmer = callPackage ../development/interpreters/wasmer { };
+
+  yabasic = callPackage ../development/interpreters/yabasic { };
 
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
