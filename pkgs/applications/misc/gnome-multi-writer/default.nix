@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-multi-writer";
-  version = "3.32.1";
+  version = "3.35.90";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1apdd8yi12zagf82k376a9wmdm27wzwdxpm2wf2pnwkaf786rmdw";
+    sha256 = "07vgzjjdrxcp7h73z13h9agafxb4vmqx5i81bcfyw0ilw9kkdzmp";
   };
 
   nativeBuildInputs = [
