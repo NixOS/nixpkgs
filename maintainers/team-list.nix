@@ -82,6 +82,7 @@ with lib.maintainers; {
       jtojnar
       worldofpeace
       dasj19
+      maxeaubrey
     ];
     scope = "Maintain GNOME desktop environment and platform.";
   };
