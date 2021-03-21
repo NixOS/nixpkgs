@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, copyDesktopItems
 , fetchFromGitHub
 , makeDesktopItem
 , makeWrapper
@@ -14,26 +15,16 @@
 , zlib
 , maven
 }:
-let
-  desktopItem = makeDesktopItem {
-    name = "dbeaver";
-    exec = "dbeaver";
-    icon = "dbeaver";
-    desktopName = "dbeaver";
-    comment = "SQL Integrated Development Environment";
-    genericName = "SQL Integrated Development Environment";
-    categories = "Development;";
-  };
-in
+
 stdenv.mkDerivation rec {
   pname = "dbeaver-ce";
-  version = "21.0.0"; # When updating also update fetchedMavenDeps.sha256
+  version = "21.0.1"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-it0EcPD7TXSknjVkGv22Nq1D4J32OEncQDy4w9CIPNk=";
+    sha256 = "sha256-9l8604STqmdoUjD+EJCp4aDk4juKsPCmFnD/WYpajxo=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -62,6 +53,12 @@ stdenv.mkDerivation rec {
     outputHash = "sha256-xKlFFQXd2U513KZKQa7ttSFNX2gxVr9hNsvyaoN/rEE=";
   };
 
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    maven
+  ];
+
   buildInputs = [
     fontconfig
     freetype
@@ -71,12 +68,19 @@ stdenv.mkDerivation rec {
     libX11
     libXrender
     libXtst
-    makeWrapper
     zlib
   ];
 
-  nativeBuildInputs = [
-    maven
+  desktopItems = [
+    (makeDesktopItem {
+      name = "dbeaver";
+      exec = "dbeaver";
+      icon = "dbeaver";
+      desktopName = "dbeaver";
+      comment = "SQL Integrated Development Environment";
+      genericName = "SQL Integrated Development Environment";
+      categories = "Development;";
+    })
   ];
 
   buildPhase = ''
@@ -89,7 +93,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      productTargetPath = "product/standalone/target/products/org.jkiss.dbeaver.core.product";
+      productTargetPath = "product/community/target/products/org.jkiss.dbeaver.core.product";
 
       platformMap = {
         aarch64-linux = "aarch64";
@@ -128,10 +132,6 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${jdk}/bin \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-
-      # Create desktop item.
-      mkdir -p $out/share/applications
-      cp ${desktopItem}/share/applications/* $out/share/applications
 
       mkdir -p $out/share/pixmaps
       ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
