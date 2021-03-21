@@ -9,6 +9,8 @@
 , python3
 , wrapGAppsHook
 , gtk3
+, libhandy
+, libportal
 , gnome3
 , gnome-autoar
 , glib-networking
@@ -32,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "3.38.2";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19ln84d6s05h6cvx3c500bg5pvkz4k6p6ykmr2201rblq9afp76h";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0h2drh4zfjhhys6zm27h75kk4hr3lc1f7a7pa8p3gbcmg1hh4l3x";
   };
 
   patches = [
@@ -71,6 +73,8 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gtk3
+    libhandy
+    libportal
     libexif
     libnotify
     libseccomp
