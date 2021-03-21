@@ -20,7 +20,7 @@ let
     attr_path="$2"
     version_policy="$3"
     PATH=${lib.makeBinPath [ common-updater-scripts python ]}
-    latest_tag=$(python "${./find-latest-version.py}" "$package_name" "$version_policy" "stable" ${upperBoundFlag})
+    latest_tag=$(python "${./find-latest-version.py}" "$package_name" "$version_policy" "unstable" ${upperBoundFlag})
     update-source-version "$attr_path" "$latest_tag"
   '';
 in [ updateScript packageName attrPath versionPolicy ]
