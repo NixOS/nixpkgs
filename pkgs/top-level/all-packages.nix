@@ -24860,6 +24860,8 @@ in
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  portfolio-filemanager = callPackage ../applications/misc/portfolio-filemanager { };
+
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
   potrace = callPackage ../applications/graphics/potrace {};
