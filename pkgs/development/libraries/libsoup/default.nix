@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "2.72.0";
+  version = "2.99.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11skbyw2pw32178q3h8pi7xqa41b2x4k6q4k9f75zxmh8s23y30p";
+    sha256 = "199bjh7n7h3ijlhnmxgr61sl3258h6rb7vv5zahhmk0miavs2kv6";
   };
 
   postPatch = ''
