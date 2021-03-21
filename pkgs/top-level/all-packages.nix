@@ -6804,7 +6804,9 @@ in
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
 
-  ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
+  ntfs3g = callPackage ../tools/filesystems/ntfs-3g {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
+  };
 
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
