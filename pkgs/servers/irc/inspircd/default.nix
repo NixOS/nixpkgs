@@ -88,6 +88,7 @@ let
         meta = libargon2.meta // {
           # use libargon2 as CC0 since ASL20 is GPLv2-incompatible
           # updating this here is important that meta.license is accurate
+          # libargon2 is licensed under either ASL20 or CC0.
           license = lib.licenses.cc0;
         };
       })
@@ -150,13 +151,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x3paasf4ynx4ddky2nq613vyirbhfnxzkjq148k7154pz3q426s";
   };
 
-  patches = [
-    # Remove at next release, makes --prefix and --system work together
-    (fetchpatch {
-      url = "https://github.com/inspircd/inspircd/commit/b378b5087b41f72a1624ebb58990180e0b0140aa.patch";
-      sha256 = "0c0fmhjbkfh2r1cmjrm5d4whcignwsyi6kwkhmcvqy9mv99pj2ir";
-    })
-  ];
+  outputs = [ "bin" "lib" "man" "doc" "out" ];
 
   nativeBuildInputs = [
     perl
@@ -164,31 +159,35 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = extraInputs;
 
-  preConfigure = ''
+  configurePhase = ''
     patchShebangs configure make/*.pl
+
     # configure is executed twice, once to set the extras
     # to use and once to do the Makefile setup
-    ./configure --enable-extras \
+    ./configure \
+      --enable-extras \
       ${lib.escapeShellArg (lib.concatStringsSep " " extraModules)}
+
+    # this manually sets the flags instead of using configureFlags, because otherwise stdenv passes flags like --bindir, which make configure fail
+    ./configure \
+      --disable-auto-extras \
+      --distribution-label nixpkgs${version} \
+      --uid 0 \
+      --gid 0 \
+      --binary-dir  ${placeholder "bin"}/bin \
+      --config-dir  /etc/inspircd \
+      --data-dir    ${placeholder "lib"}/lib/inspircd \
+      --example-dir ${placeholder "doc"}/share/doc/inspircd \
+      --log-dir     /var/log/inspircd \
+      --manual-dir  ${placeholder "man"}/share/man/man1 \
+      --module-dir  ${placeholder "lib"}/lib/inspircd \
+      --runtime-dir /var/run \
+      --script-dir  ${placeholder "bin"}/share/inspircd \
   '';
 
-  configureFlags = [
-    "--disable-auto-extras"
-    "--distribution-label" "nixpkgs${version}"
-    "--system"
-    "--uid" "0"
-    "--gid" "0"
-    "--prefix" (placeholder "out")
-  ];
-
   postInstall = ''
-    # installs to $out/usr by default unfortunately
-    mv "$out/usr/lib" "$out/lib"
-    mv "$out/usr/sbin" "$out/bin"
-    mv "$out/usr/share" "$out/share"
-    rm -r "$out/usr"
-    rm -r "$out/var" # only empty directories
-    rm -r "$out/etc" # only contains documentation
+    # for some reasons the executables are not executable
+    chmod +x $bin/bin/*
   '';
 
   enableParallelBuilding = true;
