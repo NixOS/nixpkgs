@@ -22,8 +22,7 @@
 , librsvg
 , geoclue2
 , perl
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
+, docbook_xml_dtd_45
 , desktop-file-utils
 , libpulseaudio
 , libical
@@ -46,6 +45,7 @@
 , mutter
 , evolution-data-server
 , gtk3
+, gtk4
 , sassc
 , systemd
 , pipewire
@@ -65,13 +65,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.38.3";
+  version = "40.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-U0W0GMsSqXKVXOXM6u1mYkgAJzNrXFHa6lcwV1tiHO0=";
+    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-vOcfQC36qcXiab9lv0iiI0PYlubPmiw0ZpOS1/v2hHg=";
   };
 
   patches = [
@@ -96,6 +96,18 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
+
+    # Fix copying technical details when extension crashes.
+    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1795
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/1b5d71130e3a48d8f636542f979346add7829544.patch";
+      sha256 = "WXRG/+u/N7KTTG1HutcMvw5HU2XWUmqFExmOXrOkeeA=";
+    })
+    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1796
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f337878286518418dbeab360768fba8e291b15d.patch";
+      sha256 = "xD0iIjlUGDLM5tTNDNtx6ZgxL25EKYgaBEH4JOZh8AM=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -104,9 +116,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     docbook-xsl-nons
-    # Switch to 4.5 in the 40.
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
+    docbook_xml_dtd_45
     gtk-doc
     perl
     wrapGAppsHook
@@ -136,6 +146,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     libical
     gtk3
+    gtk4
     gdm
     geoclue2
     adwaita-icon-theme
@@ -187,7 +198,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # The services need typelibs.
-    for svc in org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
+    for svc in org.gnome.ScreenSaver org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
