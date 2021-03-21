@@ -3210,6 +3210,8 @@ in {
 
   iapws = callPackage ../development/python-modules/iapws { };
 
+  iaqualink = callPackage ../development/python-modules/iaqualink { };
+
   ibis = callPackage ../development/python-modules/ibis { };
 
   ibis-framework = callPackage ../development/python-modules/ibis-framework { };

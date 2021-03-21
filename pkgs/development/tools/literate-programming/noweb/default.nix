@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang }:
+{ lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang, useIcon ? true }:
 
 lib.fix (noweb: stdenv.mkDerivation rec {
   pname = "noweb";
@@ -22,14 +22,14 @@ lib.fix (noweb: stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'strip' '${stdenv.cc.targetPrefix}strip'
   '';
 
-  nativeBuildInputs = [ groff ] ++ lib.optionals (!isNull icon-lang) [ icon-lang ];
+  nativeBuildInputs = [ groff ] ++ lib.optionals useIcon [ icon-lang ];
   buildInputs = [ nawk ];
 
   preBuild = ''
     mkdir -p "$out/lib/noweb"
   '';
 
-  makeFlags = lib.optionals (!isNull icon-lang) [
+  makeFlags = lib.optionals useIcon [
     "LIBSRC=icon"
     "ICONC=icont"
   ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];

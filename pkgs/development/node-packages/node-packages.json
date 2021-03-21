@@ -12,6 +12,7 @@
 , "@webassemblyjs/wast-refmt"
 , "alloy"
 , "asar"
+, "balanceofsatoshis"
 , "bash-language-server"
 , "bower"
 , "bower2nix"

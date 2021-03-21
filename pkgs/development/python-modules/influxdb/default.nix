@@ -43,13 +43,19 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
+      # Relaxes msgpack pinning
       url = "https://github.com/influxdata/influxdb-python/commit/cc41e290f690c4eb67f75c98fa9f027bdb6eb16b.patch";
       sha256 = "1fb9qrq1kp24pixjwvzhdy67z3h0wnj92aj0jw0a25fd0rdxdvg4";
     })
   ];
 
   disabledTests = [
-    # Disable failing test
+    # Tests cause FutureWarning due to use of 'record' instead of 'records' in pandas.
+    #   https://github.com/influxdata/influxdb-python/pull/845
+    # Also type mismatches in assertEqual on DataFrame:
+    #   b'foo[30 chars]_one=1.0,column_two=1.0 0\nfoo,tag_one=red,tag[47 chars]00\n' !=
+    #   b'foo[30 chars]_one="1",column_two=1i 0\nfoo,tag_one=red,tag_[46 chars]00\n'
+    "test_write_points_from_dataframe_with_nan_json"
     "test_write_points_from_dataframe_with_tags_and_nan_json"
   ];
 
