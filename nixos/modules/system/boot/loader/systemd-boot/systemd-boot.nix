@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.boot.loader.systemd-boot;
 
+  a = "b";
+
   efi = config.boot.loader.efi;
 
   systemdBootBuilder = pkgs.substituteAll {
@@ -31,9 +33,10 @@ let
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
-  } ''
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot"
+    {
+      nativeBuildInputs = [ pkgs.mypy ];
+    } ''
     install -m755 ${systemdBootBuilder} $out
     mypy \
       --no-implicit-optional \
@@ -41,10 +44,12 @@ let
       --disallow-untyped-defs \
       $out
   '';
-in {
+in
+{
 
   imports =
-    [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
+    [
+      (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
     ];
 
   options.boot.loader.systemd-boot = {
