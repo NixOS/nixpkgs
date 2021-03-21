@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "3.38.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1x5gd30g87im7fnqj63njlac69zywfd1r0vgsxkjag2hsns7mgvk";
+    url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0mp778rcmh0l9rh8wlz4d0b5sw5fpap0lqp1g6db0ljmypvm1rb4";
   };
 
   doCheck = true;
