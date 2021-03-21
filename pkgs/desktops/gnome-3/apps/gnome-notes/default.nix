@@ -12,10 +12,11 @@
 , gtk3
 , evolution-data-server
 , gnome-online-accounts
+, json-glib
 , libuuid
-, libhandy_0
+, curl
+, libhandy
 , webkitgtk
-, zeitgeist
 , gnome3
 , libxml2
 , gsettings-desktop-schemas
@@ -24,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-notes";
-  version = "3.38.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
-    sha256 = "H/bMCsbGKQe/KgmhchXt0vF7dNrKs6XIminDBJFyvis=";
+    url = "mirror://gnome/sources/bijiben/${lib.versions.major version}/bijiben-${version}.tar.xz";
+    sha256 = "098g247dlwddjvcd56ld3iak3bfb0d159avr9vjrd332a720mymf";
   };
 
   doCheck = true;
@@ -53,19 +54,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
+    json-glib
     libuuid
-    libhandy_0 # doesn't support libhandy-1 yet
+    curl
+    libhandy
     webkitgtk
     tracker
     gnome-online-accounts
-    zeitgeist
     gsettings-desktop-schemas
     evolution-data-server
     gnome3.adwaita-icon-theme
   ];
 
   mesonFlags = [
-    "-Dzeitgeist=true"
     "-Dupdate_mimedb=false"
   ];
 
