@@ -29,7 +29,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "semantik";
-    rev = "semantik-${version}"; 
+    rev = "semantik-${version}";
     sha256 = "0dkg6mbnsbvbis17iz8v59wlhld93nc51abnkbyqvvkyyiqb006c";
   };
 
@@ -58,7 +58,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config wafHook cmake ];
 
-  buildInputs = [ 
+  buildInputs = [
     qtbase
     qtwebengine
     qtsvg
