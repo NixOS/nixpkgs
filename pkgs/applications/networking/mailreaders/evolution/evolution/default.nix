@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.38.4";
+  version = "3.40.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "NB+S0k4rRMJ4mwA38aiU/xZUh9qksAuA+uMTii4Fr9Q=";
+    sha256 = "07n4sbgsh0y9hrn52ymvy45ah65ll55gglgvqqi3h9nhkyy64y9g";
   };
 
   nativeBuildInputs = [
@@ -113,10 +113,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  patches = [
-    ./moduledir_from_env.patch
-  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
