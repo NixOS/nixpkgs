@@ -32,17 +32,23 @@
 , tzdata
 , libgnomekbd
 , gsettings-desktop-schemas
-, gnome-tour
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.38.4";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "001jdzsvc541qracn68r609pr5qwymrh85xrqmvzzc1dbg5w3mlg";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0vw9k4drslbxr9q0160v88zny3xx0rkfqks1lw9f23iq2i3cgq0l";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./0001-fix-paths.patch;
+      inherit tzdata libgnomekbd;
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -76,14 +82,6 @@ stdenv.mkDerivation rec {
     pango
     polkit
     webkitgtk
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./0001-fix-paths.patch;
-      inherit tzdata libgnomekbd;
-      gnome_tour = "${gnome-tour}/bin/gnome-tour";
-    })
   ];
 
   mesonFlags = [
