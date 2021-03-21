@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-  ] ++ stdenv.lib.optional stdenv.isDarwin CoreFoundation;
+  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
 
   propagatedBuildInputs = [
     freetype
