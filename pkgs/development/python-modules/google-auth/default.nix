@@ -13,6 +13,7 @@
 , responses
 , rsa
 , six
+, pyopenssl
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,13 @@ buildPythonPackage rec {
     sha256 = "0bmdqkyv8k8n6s8dss4zpbcq1cdxwicpb42kwybd02ia85mh43hb";
   };
 
-  propagatedBuildInputs = [ pyasn1-modules cachetools rsa six ];
+  propagatedBuildInputs = [
+    cachetools
+    pyasn1-modules
+    rsa
+    six
+    pyopenssl
+  ];
 
   checkInputs = [
     flask

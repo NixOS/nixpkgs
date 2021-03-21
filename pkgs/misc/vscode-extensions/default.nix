@@ -1,4 +1,4 @@
-{ config, lib, callPackage, vscode-utils, nodePackages,llvmPackages_8 }:
+{ config, lib, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -591,6 +591,20 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      redhat.java = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "java";
+          publisher = "redhat";
+          version = "0.76.0";
+          sha256 = "0xb9brki4s00piv4kqgz6idm16nk6x1j6502jljz7y9pif38z32y";
+        };
+        buildInputs = [ jdk ];
+        meta = {
+          license = lib.licenses.epl20;
+          broken = lib.versionAtLeast "11" jdk.version;
         };
       };
 

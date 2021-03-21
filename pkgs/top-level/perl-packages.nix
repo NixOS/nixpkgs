@@ -8682,6 +8682,10 @@ let
       url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.003001.tar.gz";
       sha256 = "1q7im0zj238k5agwi7d1mz26a8r0wrxwfwp1l8n5k777gx3b5xhp";
     };
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/git-autofixup
+    '';
     meta = {
       maintainers = [ maintainers.DamienCassou ];
       description = "Create fixup commits for topic branches";

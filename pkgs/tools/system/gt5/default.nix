@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://gt5.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; all;
   };
 }
