@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
-  version = "3.22.13";
+  version = "3.22.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "05k84bbgrrxchxg08l1jjcz384kpjdmxd24g0wnf731aa9zcnp5k";
+    sha256 = "1rsh41mhcrp3k23lqsnyc5yyfp184ks5p2idkwjyxry547mddyrk";
   };
 
   nativeBuildInputs = [
