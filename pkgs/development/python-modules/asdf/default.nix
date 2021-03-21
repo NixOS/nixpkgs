@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.7.1";
+  version = "2.7.2";
   disabled = isPy27;
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ba2e31cb24b974a10dfae3edee23db2e6bea2d00608604d062366aa3af6e81a";
+    sha256 = "4ba2e31cb24b974a11dfae3edee23db2e6bea2d00608604d062366aa3af6e81a";
   };
 
   checkInputs = [
