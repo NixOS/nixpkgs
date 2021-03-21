@@ -1,16 +1,69 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, vala, glib, gtk3, gnome3, desktop-file-utils
-, clutter, clutter-gtk, gettext, itstool, libxml2, wrapGAppsHook, python3 }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, vala
+, glib
+, gtk3
+, libgnome-games-support
+, gnome3
+, desktop-file-utils
+, clutter
+, clutter-gtk
+, gettext
+, itstool
+, libxml2
+, wrapGAppsHook
+, python3
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "swell-foop";
-  version = "3.34.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1032psxm59nissi268bh3j964m4a0n0ah4dy1pf0ph27j3zvdik1";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "1swvazfc2ydc52njfrxdd0ns2apb2k54dq8vlj81y1vlwcqhgw3p";
   };
+
+  patches = [
+    # Fix launching with desktop file
+    # https://gitlab.gnome.org/GNOME/swell-foop/-/issues/22
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/swell-foop/commit/614239dbe0f82e8de836cc5780e971366e09f035.patch";
+      sha256 = "GyIDJ/dG6A2T5Ls6LjCy9Che5KP3H2LAVOOzH+mlQsM=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    pkg-config
+    wrapGAppsHook
+    python3
+    itstool
+    gettext
+    libxml2
+    desktop-file-utils
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libgnome-games-support
+    gnome3.adwaita-icon-theme
+    clutter
+    clutter-gtk
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -18,14 +71,6 @@ in stdenv.mkDerivation rec {
       attrPath = "gnome3.${pname}";
     };
   };
-
-  nativeBuildInputs = [ meson ninja vala pkg-config wrapGAppsHook python3 itstool gettext libxml2 desktop-file-utils ];
-  buildInputs = [ glib gtk3 gnome3.adwaita-icon-theme clutter clutter-gtk ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Swell%20Foop";
