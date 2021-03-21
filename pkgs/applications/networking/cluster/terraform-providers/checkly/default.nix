@@ -13,9 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "1k4rpin0ijs31hlfcrgyz97yll89ff6lbnkkscyfiw61xcsz6mhm";
 
-  postInstall = "mv $out/bin/terraform-provider-checkly{,_v${version}}";
+  postInstall = ''
+    mv $out/bin/terraform-provider-checkly{,_v${version}}
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/checkly/terraform-provider-checkly";
     description = "Terraform provider for Checkly";
     license = licenses.mit;
