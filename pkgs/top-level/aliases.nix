@@ -942,13 +942,29 @@ mapAliases ({
     yakuake
   ;
   inherit (plasma5Packages)
-    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover
-    kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
-    kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
-    kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-browser-integration
-    plasma-desktop plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
-    plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
-    systemsettings xdg-desktop-portal-kde
+    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth
+    discover
+    kactivitymanagerd
+    kde-cli-tools kde-gtk-config kdeplasma-addons
+    kgamma5
+    kinfocenter
+    kmenuedit
+    kscreen kscreenlocker ksshaskpass ksysguard
+    kwallet-pam kwayland-integration kwin kwrited
+    milou
+    oxygen
+    plasma-browser-integration
+    plasma-desktop
+    plasma-integration
+    plasma-nm
+    plasma-pa
+    plasma-systemmonitor
+    plasma-thunderbolt
+    plasma-vault
+    plasma-workspace plasma-workspace-wallpapers
+    polkit-kde-agent powerdevil
+    sddm-kcm systemsettings
+    xdg-desktop-portal-kde
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
