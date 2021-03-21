@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgudev";
-  version = "234";
+  version = "236";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0drf39qhsdz35kwb18hnfj2ig4yfxhfks66m783zlhnvy2narbhv";
+    sha256 = "094mgjmwgsgqrr1i0vd20ynvlkihvs3vgbmpbrhswjsrdp86j0z5";
   };
 
   nativeBuildInputs = [ pkg-config gobject-introspection ];
