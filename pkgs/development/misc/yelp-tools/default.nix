@@ -6,6 +6,9 @@
 , itstool
 , gnome3
 , pkg-config
+, meson
+, ninja
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    meson
+    ninja
+    python3
+    python3.pkgs.lxml
   ];
 
   buildInputs = [
