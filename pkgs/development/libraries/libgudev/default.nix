@@ -1,10 +1,13 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
+, meson
+, ninja
 , udev
 , glib
 , gobject-introspection
 , gnome3
+, vala
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "094mgjmwgsgqrr1i0vd20ynvlkihvs3vgbmpbrhswjsrdp86j0z5";
   };
 
-  nativeBuildInputs = [ pkg-config gobject-introspection ];
+  nativeBuildInputs = [ pkg-config gobject-introspection meson ninja vala ];
   buildInputs = [ udev glib ];
 
-  # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
-  configureFlags = [ "--disable-umockdev" ];
+  mesonFlags = [
+    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
+    "-Dtests=disabled"
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
