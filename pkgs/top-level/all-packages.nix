@@ -29653,8 +29653,6 @@ in
 
   pykms = callPackage ../tools/networking/pykms { };
 
-  pyload = callPackage ../applications/networking/pyload {};
-
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
