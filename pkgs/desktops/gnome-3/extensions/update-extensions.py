@@ -198,7 +198,10 @@ def fetch_extensions() -> List[Dict[str, Any]]:
                         f"\tThis page only has {responseLength} entries, so it must be the last one."
                     )
                     break
-        except urllib.error.HTTPError:
+        except urllib.error.HTTPError as e:
+             if e.status != 404:
+                 raise
+             break
             # Assume this error is a 404. We hit the last page; we're done.
             break
 
