@@ -23146,6 +23146,8 @@ in
 
   hugo = callPackage ../applications/misc/hugo { };
 
+  go-org = callPackage ../applications/misc/go-org { };
+
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
   hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
