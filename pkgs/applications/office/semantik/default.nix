@@ -5,7 +5,6 @@
 , pkg-config
 , cmake
 , qtbase
-, qttools
 , python3
 , qtwebengine
 , qtsvg
