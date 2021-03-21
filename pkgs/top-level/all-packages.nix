@@ -1808,6 +1808,8 @@ in
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
+
   btrbk = callPackage ../tools/backup/btrbk {
     asciidoc = asciidoc-full;
   };
