@@ -42,19 +42,19 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.38.3";
+  version = "40.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-sjIec9Hj/i6Q5jAfQrugf02UvGR1aivxPXWunW+qIB8=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-enGzEuWmZ8U3SJUYilBqP2tnF2i8s2K2jv3FYnc9GY4=";
   };
 
   patches = [
     # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
     # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    ./drop-inheritable.patch
+    # ./drop-inheritable.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
@@ -71,6 +71,9 @@ let self = stdenv.mkDerivation rec {
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
+    # We are not running tests and building them causes non-deterministic build failure:
+    # https://gitlab.gnome.org/GNOME/mutter/-/issues/1682
+    "-Dtests=false"
   ];
 
   propagatedBuildInputs = [
