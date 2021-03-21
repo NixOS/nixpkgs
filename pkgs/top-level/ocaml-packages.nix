@@ -624,6 +624,8 @@ let
 
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
+    dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
+
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
     metrics-influx = callPackage ../development/ocaml-modules/metrics/influx.nix { };
