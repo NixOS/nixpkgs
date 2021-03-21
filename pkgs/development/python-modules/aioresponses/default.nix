@@ -1,12 +1,12 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pbr
 , aiohttp
-, ddt
 , asynctest
-, pytest
+, buildPythonPackage
+, ddt
+, fetchPypi
+, pbr
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -30,13 +30,16 @@ buildPythonPackage rec {
   checkInputs = [
     asynctest
     ddt
-    pytest
+    pytestCheckHook
   ];
 
-  # Skip a test which makes requests to httpbin.org
-  checkPhase = ''
-    pytest -k "not (test_address_as_instance_of_url_combined_with_pass_through or test_pass_through_with_origin_params)"
-  '';
+  disabledTests = [
+    # Skip a test which makes requests to httpbin.org
+    "test_address_as_instance_of_url_combined_with_pass_through"
+    "test_pass_through_with_origin_params"
+  ];
+
+  pythonImportsCheck = [ "aioresponses" ];
 
   meta = {
     description = "A helper to mock/fake web requests in python aiohttp package";
