@@ -44,11 +44,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04p8fjkz4xp5afp0ld1m09pnv0zkcx51l7hf23amfrjkk0kj2bp7";
+    sha256 = "15nkgd6fq14m6c1w73w7152gssb9jl8w25b7g3b7cibndpz49mdy";
   };
 
   patches = [
