@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -13,6 +14,7 @@
 , gobject-introspection
 , gjs
 , libunistring
+, libhandy
 , gsettings-desktop-schemas
 , adwaita-icon-theme
 , gnome-desktop
@@ -20,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "3.34.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-characters/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mqaxsa7hcmvid3zbzvxpfkp7s01ghiq6kaibmd3169axrr8ahql";
+    url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0z2xa4w921bzpzj6gv88pvbrijcnnwni6jxynwz0ybaravyzaqha";
   };
 
   nativeBuildInputs = [
@@ -46,6 +48,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     libunistring
+    libhandy
     pango
   ];
 
@@ -76,10 +79,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Design/Apps/CharacterMap";
+    homepage = "https://wiki.gnome.org/Apps/Characters";
     description = "Simple utility application to find and insert unusual characters";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
