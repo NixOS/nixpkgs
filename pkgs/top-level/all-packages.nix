@@ -13296,6 +13296,8 @@ in
 
   xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
 
+  xcode-install = callPackage ../development/tools/xcode-install { };
+
   xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
   };
