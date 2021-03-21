@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , gtk3
@@ -15,6 +16,7 @@
 , libsecret
 , gmime3
 , isocodes
+, icu
 , libxml2
 , gettext
 , sqlite
@@ -37,6 +39,7 @@
 , gobject-introspection
 , gspell
 , appstream-glib
+, libstemmer
 , libytnef
 , libhandy
 , gsound
@@ -44,17 +47,12 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.38.1";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04p8fjkz4xp5afp0ld1m09pnv0zkcx51l7hf23amfrjkk0kj2bp7";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "1c2nd35500ng28223y5pszc7fh8g16njj34f6p5xc9594lvj0mik";
   };
-
-  patches = [
-    # Longer timeout for client test.
-    ./Bump-client-test-timeout-to-300s.patch
-  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -84,12 +82,14 @@ stdenv.mkDerivation rec {
     gspell
     gtk3
     isocodes
+    icu
     json-glib
     libgee
     libhandy
     libpeas
     libsecret
     libunwind
+    libstemmer
     libytnef
     sqlite
     webkitgtk
@@ -104,7 +104,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dcontractor=true" # install the contractor file (Pantheon specific)
+    "-Dprofile=release"
+    "-Dcontractor=enabled" # install the contractor file (Pantheon specific)
   ];
 
   # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
@@ -118,21 +119,23 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/yaml_to_json.py
 
     chmod +x desktop/geary-attach
-
-    # Drop test that breaks after webkitgtk 2.32.0 update
-    # https://gitlab.gnome.org/GNOME/geary/-/issues/1180
-    sed -i '/add_test("edit_context_font", edit_context_font);/d' test/js/composer-page-state-test.vala
   '';
 
-  doCheck = true;
+  # Some tests time out.
+  doCheck = false;
 
   checkPhase = ''
+    runHook preCheck
+
     NO_AT_BRIDGE=1 \
     GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules \
+    HOME=$TMPDIR \
     XDG_DATA_DIRS=$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share:${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test -v --no-stdsplit
+
+    runHook postCheck
   '';
 
   preFixup = ''
