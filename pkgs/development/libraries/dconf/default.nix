@@ -19,14 +19,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dconf";
-  version = "0.38.0";
+  version = "0.40.0";
 
   outputs = [ "out" "lib" "dev" ]
     ++ lib.optional (!isCross) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0n2gqkp6d61h7gnnp2xnxp6w5wcl7w9ay58krrf729qd6d0hzxj5";
+    sha256 = "0cs5nayg080y8pb9b7qccm1ni8wkicdmqp1jsgc22110r6j24zyg";
   };
 
   nativeBuildInputs = [
