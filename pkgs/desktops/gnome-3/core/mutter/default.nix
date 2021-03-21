@@ -42,13 +42,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.38.3";
+  version = "40.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-sjIec9Hj/i6Q5jAfQrugf02UvGR1aivxPXWunW+qIB8=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-enGzEuWmZ8U3SJUYilBqP2tnF2i8s2K2jv3FYnc9GY4=";
   };
 
   patches = [
