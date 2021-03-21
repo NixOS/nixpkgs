@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "3.36.1";
+  version = "40.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0l74hc02rvzm4p530y539a67jwb080fqdaazdl8j0fr3xvq0j9yy";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "1rkf4yv43qcahyx7bismdv6z2vh5azdnm1fqfmnzrada9cm8ykna";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gobject-introspection
     python3
+    python3.pkgs.pygobject3
   ];
 
   buildInputs = [
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson/meson_post_install.py
     patchShebangs meson/meson_post_install.py
+    patchShebangs data/gen_locations_variant.py
   '';
 
   passthru = {
