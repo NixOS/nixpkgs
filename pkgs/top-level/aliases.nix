@@ -952,6 +952,7 @@ mapAliases ({
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
+    plasma-applet-virtual-desktop-bar
     kwin-dynamic-workspaces
     kwin-tiling
     krohnkite
