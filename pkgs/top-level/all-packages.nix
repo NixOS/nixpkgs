@@ -24837,6 +24837,8 @@ in
 
   piston-cli = callPackage ../tools/misc/piston-cli { };
 
+  plasmatube = libsForQt5.callPackage ../applications/video/plasmatube { };
+
   plater = libsForQt5.callPackage ../applications/misc/plater { };
 
   plexamp = callPackage ../applications/audio/plexamp { };
