@@ -19,6 +19,7 @@
 , libsecret
 , gnome-desktop
 , libnotify
+, libarchive
 , p11-kit
 , sqlite
 , gcr
@@ -36,17 +37,12 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "3.38.2";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0v8iymg72m83ikxxyhapvz5v8zh8hlr1pw7n215cy3p8q6yg41cb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0i58mfmdkzgamb08p6sp6q9imrqn25a3gcw6fq9v06xdcq7iry6m";
   };
-
-  # Tests need an X display
-  mesonFlags = [
-    "-Dunit_tests=disabled"
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -83,6 +79,7 @@ stdenv.mkDerivation rec {
     libhandy
     libportal
     libnotify
+    libarchive
     libsecret
     libsoup
     libxml2
@@ -90,6 +87,11 @@ stdenv.mkDerivation rec {
     p11-kit
     sqlite
     webkitgtk
+  ];
+
+  # Tests need an X display
+  mesonFlags = [
+    "-Dunit_tests=disabled"
   ];
 
   postPatch = ''
@@ -107,7 +109,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
