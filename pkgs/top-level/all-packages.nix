@@ -29065,6 +29065,8 @@ in
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
+  demjson = with python3Packages; toPythonApplication demjson;
+
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   emu2 = callPackage ../misc/emulators/emu2 { };
@@ -29196,6 +29198,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
+  hjson = with python3Packages; toPythonApplication hjson;
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
@@ -29222,6 +29226,8 @@ in
   };
   libjack2 = jack2.override { prefix = "lib"; };
   jack2Full = jack2; # TODO: move to aliases.nix
+
+  j2cli = with python3Packages; toPythonApplication j2cli;
 
   jstest-gtk = callPackage ../tools/misc/jstest-gtk { };
 
