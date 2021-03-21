@@ -5742,6 +5742,8 @@ in
 
   k6 = callPackage ../development/tools/k6 { };
 
+  l2md = callPackage ../tools/text/l2md { };
+
   lab = callPackage ../applications/version-management/git-and-tools/lab { };
 
   lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
