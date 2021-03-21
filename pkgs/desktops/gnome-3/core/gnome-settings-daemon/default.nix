@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "3.38.1";
+  version = "40.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0r010wzw3dj87mapzvq15zv93i86wg0x0rpii3x2wapq3bcj30g2";
+    url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "08bv32hvsmd8izw0llvldg0c2d71srch4hi8j94jwgm5d4dsrprp";
   };
 
   patches = [
