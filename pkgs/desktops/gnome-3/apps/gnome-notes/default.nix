@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-notes";
-  version = "3.38.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
-    sha256 = "H/bMCsbGKQe/KgmhchXt0vF7dNrKs6XIminDBJFyvis=";
+    url = "mirror://gnome/sources/bijiben/${lib.versions.major version}/bijiben-${version}.tar.xz";
+    sha256 = "098g247dlwddjvcd56ld3iak3bfb0d159avr9vjrd332a720mymf";
   };
 
   doCheck = true;
