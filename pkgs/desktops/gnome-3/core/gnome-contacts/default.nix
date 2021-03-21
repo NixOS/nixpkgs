@@ -17,6 +17,7 @@
 , gnome-online-accounts
 , wrapGAppsHook
 , folks
+, libgdata
 , libxml2
 , gnome3
 , vala
@@ -28,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "3.38.1";
+  version = "40.beta";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hsq0dwxjahcaxnm1m4r1lync9k2fkwzybfmkchrmn95vqcwwvf9";
+    url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0mqij248lxrkzcs0j66yl85y10fcd9vv992fggxixgh6bsaciwl5";
   };
 
   propagatedUserEnvPkgs = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gsettings-desktop-schemas
     folks
+    libgdata # required by some dependency transitively
     gnome-desktop
     libhandy
     libxml2
