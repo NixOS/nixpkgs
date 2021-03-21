@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.14.0";
+  version = "0.15.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1f9b52vmwnq7s51vj26w2618dn2ph5g12ibbkbyk6fvxcgd7iryn";
+    sha256 = "08nirjax4m4g4ljr8ksq16wzmrvzq6myqh5rm0dw6pnijqk7nxzg";
   };
 
   patches = [
