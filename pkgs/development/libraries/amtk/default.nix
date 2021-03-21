@@ -35,7 +35,10 @@ stdenv.mkDerivation rec {
       make check
   '';
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  passthru.updateScript = gnome3.updateScript {
+    packageName = pname;
+    versionPolicy = "none";
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Amtk";

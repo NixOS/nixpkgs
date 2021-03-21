@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "librest";
+      versionPolicy = "odd-unstable";
     };
   };
 

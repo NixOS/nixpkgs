@@ -35,7 +35,10 @@ in stdenv.mkDerivation {
 
   doCheck = true;
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  passthru.updateScript = gnome3.updateScript {
+    packageName = pname;
+    versionPolicy = "odd-unstable";
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";

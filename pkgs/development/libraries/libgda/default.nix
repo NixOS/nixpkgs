@@ -86,6 +86,7 @@ assert postgresSupport -> postgresql != null;
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

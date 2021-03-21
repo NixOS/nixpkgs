@@ -69,6 +69,7 @@ in stdenv.mkDerivation {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "networkmanager-openconnect";
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution";
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -60,6 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gnome3.updateScript {
       packageName = "accerciser";
       attrPath = "gnome3.accerciser";
+      versionPolicy = "odd-unstable";
     };
   };
 

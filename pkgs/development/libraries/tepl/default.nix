@@ -46,7 +46,10 @@ stdenv.mkDerivation rec {
   # correctly installed or GVfs metadata are not supported on this platform. In
   # the latter case, you should configure Tepl with --disable-gvfs-metadata.
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  passthru.updateScript = gnome3.updateScript {
+    packageName = pname;
+    versionPolicy = "odd-unstable";
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";

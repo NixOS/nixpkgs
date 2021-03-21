@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     propagatedUserEnvPackages = [ glib-networking.out ];
     updateScript = gnome3.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -38,6 +38,7 @@ in stdenv.mkDerivation {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "networkmanager-vpnc";
+      versionPolicy = "odd-unstable";
     };
   };
 
