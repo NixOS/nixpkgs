@@ -5,13 +5,13 @@
 
 let
   pname = "gnome-klotski";
-  version = "3.38.1";
+  version = "3.38.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "00rwi6z0068pbq01sq2d389ffcqsh3ylq3i8zkrqvblqid1hvnlv";
+    sha256 = "1qm01hdd5yp8chig62bj10912vclbdvywwczs84sfg4zci2phqwi";
   };
 
   nativeBuildInputs = [
