@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnome3 }:
+{ lib, stdenv, fetchurl, gnome3, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "mobile-broadband-provider-info";
@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${version}/${pname}-${version}.tar.xz";
     sha256 = "1g9x2i4xjm2sagaha07n9psacbylrwfrmfqkp17gjwhpyi6w0zqd";
   };
+
+  nativeBuildInputs = [
+    # fixes configure: error: xsltproc not found
+    libxslt
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
