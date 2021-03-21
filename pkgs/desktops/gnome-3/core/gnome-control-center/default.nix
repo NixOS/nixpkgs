@@ -1,6 +1,7 @@
 { fetchurl
-, fetchFromGitLab
-, lib, stdenv
+, fetchpatch
+, lib
+, stdenv
 , substituteAll
 , accountsservice
 , adwaita-icon-theme
@@ -10,7 +11,7 @@
 , colord
 , colord-gtk
 , cups
-, docbook_xsl
+, docbook-xsl-nons
 , fontconfig
 , gdk-pixbuf
 , gettext
@@ -69,20 +70,32 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "3.38.4";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-SdxjeNTTXBxu1ZIk9WNpFsK2+km7+4tW6xmoTW6QzRk=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-zMmlc2UXOFEJrlpZkGwlgkTdh5t1A61ZhM9BZVyzAvE=";
   };
 
-  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
-  prePatch = (import ../gvc-with-ucm-prePatch.nix {
-    inherit fetchFromGitLab;
-  });
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      gcm = gnome-color-manager;
+      gnome_desktop = gnome-desktop;
+      inherit glibc libgnomekbd tzdata;
+      inherit cups networkmanagerapplet;
+    })
+
+    # Fix startup assertion in power panel.
+    # https://gitlab.gnome.org/GNOME/gnome-control-center/merge_requests/974
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/commit/9acaa10567c94048657c69538e5d7813f82c4224.patch";
+      sha256 = "59GeTPcG2UiVTL4VTS/TP0p0QkAQpm3VgvuAiw64wUU=";
+    })
+  ];
 
   nativeBuildInputs = [
-    docbook_xsl
+    docbook-xsl-nons
     gettext
     libxslt
     meson
@@ -140,16 +153,6 @@ stdenv.mkDerivation rec {
     tracker-miners # for search locations dialog
     udisks2
     upower
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      gcm = gnome-color-manager;
-      gnome_desktop = gnome-desktop;
-      inherit glibc libgnomekbd tzdata;
-      inherit cups networkmanagerapplet;
-    })
   ];
 
   postPatch = ''
