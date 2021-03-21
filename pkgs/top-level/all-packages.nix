@@ -21405,6 +21405,8 @@ in
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
 
+  vollkorn = callPackage ../data/fonts/vollkorn { };
+
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
