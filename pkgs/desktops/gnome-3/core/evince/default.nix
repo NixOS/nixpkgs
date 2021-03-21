@@ -19,6 +19,7 @@
 , djvulibre
 , libspectre
 , libarchive
+, libhandy
 , libsecret
 , wrapGAppsHook
 , librsvg
@@ -43,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "3.38.2";
+  version = "40.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "J9QZ1f7WMF4HRijtz94MtzT//aIF1jysMjORwEkDvZQ=";
+    url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0bfg7prmjk3z8irx1nfkkqph3igg3cy4pwd7pcxjxbshqdin6rks";
   };
 
   postPatch = ''
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     gspell
     gtk3
     libarchive
+    libhandy
     librsvg
     libsecret
     libspectre
