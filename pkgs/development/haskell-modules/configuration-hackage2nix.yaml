@@ -5640,8 +5640,6 @@ broken-packages:
   - gi-gstaudio
   - gi-gstpbutils
   - gi-gsttag
-  - gi-gtk-declarative
-  - gi-gtk-declarative-app-simple
   - gi-gtkosxapplication
   - gi-gtksheet
   - gi-handy

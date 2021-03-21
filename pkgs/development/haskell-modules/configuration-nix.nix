@@ -445,6 +445,7 @@ self: super: builtins.intersectAttrs super {
 
   # requires an X11 display in test suite
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
