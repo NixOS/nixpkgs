@@ -29172,6 +29172,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
+  hjson = with python3Packages; toPythonApplication hjson;
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
