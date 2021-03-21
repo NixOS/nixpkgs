@@ -1,22 +1,45 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
 , dateutil
-, pytz
-, six
-, msgpack
+, fetchFromGitHub
 , fetchpatch
+, mock
+, msgpack
+, nose
+, pandas
+, pytestCheckHook
+, pytz
+, requests
+, requests-mock
+, six
 }:
 
 buildPythonPackage rec {
   pname = "influxdb";
   version = "5.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9bcaafd57ac152b9824ab12ed19f204206ef5df8af68404770554c5b55b475f6";
+  src = fetchFromGitHub {
+    owner = "influxdata";
+    repo = "influxdb-python";
+    rev = "v${version}";
+    sha256 = "1jfkf53jcf8lcq98qc0bw5d1d0yp3558mh8l2dqc9jlsm0smigjs";
   };
+
+  propagatedBuildInputs = [
+    requests
+    dateutil
+    pytz
+    six
+    msgpack
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    requests-mock
+    mock
+    nose
+    pandas
+  ];
 
   patches = [
     (fetchpatch {
@@ -25,14 +48,17 @@ buildPythonPackage rec {
     })
   ];
 
-  # ImportError: No module named tests
-  doCheck = false;
-  propagatedBuildInputs = [ requests dateutil pytz six msgpack ];
+  disabledTests = [
+    # Disable failing test
+    "test_write_points_from_dataframe_with_tags_and_nan_json"
+  ];
+
+  pythonImportsCheck = [ "influxdb" ];
 
   meta = with lib; {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
-
 }
