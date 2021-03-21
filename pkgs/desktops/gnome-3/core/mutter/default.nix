@@ -45,23 +45,30 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.38.3";
+  version = "40.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-sjIec9Hj/i6Q5jAfQrugf02UvGR1aivxPXWunW+qIB8=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-enGzEuWmZ8U3SJUYilBqP2tnF2i8s2K2jv3FYnc9GY4=";
   };
 
   patches = [
     # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
     # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    ./drop-inheritable.patch
+    # ./drop-inheritable.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
+    })
+
+    # Fix non-deterministic build failure:
+    # https://gitlab.gnome.org/GNOME/mutter/-/issues/1682
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/91117bb052ed0d69c8ea4159c1df15c814d90627.patch";
+      sha256 = "ek8hEoPP4S2TGOm6SGGOhUVIp4OT68nz0SQzZrceFUU=";
     })
   ];
 
@@ -155,7 +162,7 @@ let self = stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A window manager for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
