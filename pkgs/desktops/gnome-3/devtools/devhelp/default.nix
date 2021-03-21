@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
-  version = "3.38.1";
+  version = "40.alpha";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13sa25mmlc49kn520hdfbskma65y7smvwmyhfggj0n9s3fazba2d";
+    url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "1lmvhn1ms9br1any5jihk1xvkm39ivj499y7bzavzzq1hp84gnpc";
   };
 
   nativeBuildInputs = [
