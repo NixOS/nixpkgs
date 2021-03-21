@@ -5852,6 +5852,8 @@ in {
 
   pykmtronic = callPackage ../development/python-modules/pykmtronic { };
 
+  pykodi = callPackage ../development/python-modules/pykodi { };
+
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
