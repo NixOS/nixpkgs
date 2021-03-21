@@ -26709,6 +26709,8 @@ in
 
   aeon = callPackage ../applications/blockchains/aeon { };
 
+  balanceofsatoshis = nodePackages.balanceofsatoshis;
+
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
 
