@@ -16,7 +16,7 @@
   {
     "${version}-x86_64-darwin" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "0000000000000000000000000000000000000000000000000000";
+      sha256 = "0h6mpy0kfc842vhg053fyxbjnd8lw1d1shdcsj800048260lxhyd";
     };
     "${version}-x86_64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
@@ -24,11 +24,11 @@
     };
     "${version}-i686-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "0000000000000000000000000000000000000000000000000000";
+      sha256 = "1wngxba71j20gq9vy7n8q0m9rnqs047xm5b03bxk3hhaq6dyzkwn";
     };
     "${version}-aarch64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "0000000000000000000000000000000000000000000000000000";
+      sha256 = "0rqsmzl5g5kgk54qb03kamjm5n5g5pqfl79np37xdzwqbv0zx22b";
     };
   }
 }:
