@@ -13048,6 +13048,8 @@ in
 
   semver-tool = callPackage ../development/tools/misc/semver-tool { };
 
+  semantik = libsForQt5.callPackage ../applications/office/semantik { };
+
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
