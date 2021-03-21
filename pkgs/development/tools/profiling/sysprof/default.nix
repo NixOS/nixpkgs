@@ -5,6 +5,7 @@
 , gettext
 , glib
 , gtk3
+, json-glib
 , itstool
 , libdazzle
 , libxml2
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.38.1";
+  version = "3.40.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1z2i9187f2jx456l7h07wy8m9a0p7pj3xiv1aji3snq7rjb1lkj0";
+    sha256 = "1s7nwkrnvq6sxz6k2744rd9vircvgx2hj2y26nr72a2bilwh7b4n";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,16 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     gnome3.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev (lib.getLib systemd) libdazzle ];
+
+  buildInputs = [
+    glib
+    gtk3
+    json-glib
+    pango
+    polkit
+    systemd
+    libdazzle
+  ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
@@ -66,6 +76,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
