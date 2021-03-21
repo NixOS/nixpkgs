@@ -1,5 +1,6 @@
 { package ? null
 , maintainer ? null
+, predicate ? null
 , path ? null
 , max-workers ? null
 , include-overlays ? false
@@ -69,6 +70,11 @@ let
    */
   packagesWith = packagesWithPath [];
 
+  /* Recursively find all packages in `pkgs` with updateScript matching given predicate.
+   */
+  packagesWithUpdateScriptMatchingPredicate = cond:
+    packagesWith (path: pkg: builtins.hasAttr "updateScript" pkg && cond path pkg);
+
   /* Recursively find all packages in `pkgs` with updateScript by given maintainer.
    */
   packagesWithUpdateScriptAndMaintainer = maintainer':
@@ -79,7 +85,7 @@ let
         else
           builtins.getAttr maintainer' lib.maintainers;
     in
-      packagesWith (path: pkg: builtins.hasAttr "updateScript" pkg &&
+      packagesWithUpdateScriptMatchingPredicate (path: pkg:
                          (if builtins.hasAttr "maintainers" pkg.meta
                            then (if builtins.isList pkg.meta.maintainers
                                    then builtins.elem maintainer pkg.meta.maintainers
@@ -120,6 +126,8 @@ let
   packages =
     if package != null then
       [ (packageByName package pkgs) ]
+    else if predicate != null then
+      packagesWithUpdateScriptMatchingPredicate predicate pkgs
     else if maintainer != null then
       packagesWithUpdateScriptAndMaintainer maintainer pkgs
     else if path != null then
@@ -138,6 +146,10 @@ let
         % nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus
 
     to run update script for specific package, or
+
+        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: builtins.isList pkg.updateScript && builtins.length pkg.updateScript >= 1 && (let script = builtins.head pkg.updateScript; in builtins.isAttrs script && script.name == "gnome-update-script"))'
+
+    to run update script for all packages matching given predicate, or
 
         % nix-shell maintainers/scripts/update.nix --argstr path gnome3
 
