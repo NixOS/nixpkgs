@@ -11,6 +11,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ matplotlib pandas ];
 
+  # tests are only included on GitHub where this version misses a tag
+  # and half of them fail
+  doCheck = false;
+
+  pythonImportsCheck = [ "mplfinance" ];
+
   meta = with lib; {
     description = "Matplotlib utilities for the visualization, and visual analysis, of financial data";
     homepage = "https://github.com/matplotlib/mplfinance";
