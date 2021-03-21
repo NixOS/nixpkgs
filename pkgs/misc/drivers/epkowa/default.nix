@@ -299,14 +299,14 @@ let fwdir = symlinkJoin {
 in
 let iscan-data = stdenv.mkDerivation rec {
   pname = "iscan-data";
-  version = "1.39.1-2";
+  version = "1.39.2-1";
 
   src = fetchurl {
     urls = [
       "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
       "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
     ];
-    sha256 = "04zrvbnxf1k6zinrd13hwnbzscc3qhmwlvx3k2jhjys2lginw7w4";
+    sha256 = "092qhlnjjgz11ifx6mng7mz20i44gc0nlccrbmw18xr5hipbqqka";
   };
 
   buildInputs = [
