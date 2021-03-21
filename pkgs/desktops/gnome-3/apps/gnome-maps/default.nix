@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "3.38.4";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1WQekf/kePsqqcpIliJczxjsLqTZjjV2UXmBin2+RKM=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-7BHcbJ7qJphZJQDa861nPB5PZOvrDT0oI/uGVbtdSkk=";
   };
 
   doCheck = true;
@@ -80,6 +80,11 @@ stdenv.mkDerivation rec {
     substituteInPlace "data/org.gnome.Maps.service.in" \
         --replace "Exec=@pkgdatadir@/org.gnome.Maps" \
                   "Exec=$out/bin/gnome-maps"
+  '';
+
+  preCheck = ''
+    # “time.js” included by “timeTest” and “translationsTest” depends on “org.gnome.desktop.interface” schema.
+    export XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS"
   '';
 
   passthru = {
