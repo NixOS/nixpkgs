@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libdazzle";
-  version = "3.38.0";
+  version = "3.40.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdazzle/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13v7s46cgw135ycx0byn7am4inn33slrhljq0v0wwfwl2y1g52p1";
+    sha256 = "19abrrjsyjhhl1xflnb0likb9wwzz78fa1mk2b064rpscmz9mafv";
   };
 
   nativeBuildInputs = [ ninja meson pkg-config vala gobject-introspection libxml2 gtk-doc docbook_xsl docbook_xml_dtd_43 dbus xvfb_run glib ];
