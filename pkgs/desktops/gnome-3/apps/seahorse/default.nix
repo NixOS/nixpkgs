@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "3.38.1";
+  version = "40.alpha";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-JCsefllx3VcnzNJdUVNxAvW60UPyNmqCQ3vwu9qevO8=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-BMIp5q1PHb8TMtWsR68KX/ejzZabA96h6RIE9foG08U=";
   };
 
   doCheck = true;
