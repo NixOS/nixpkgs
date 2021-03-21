@@ -19404,7 +19404,9 @@ in
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
   };
 
-  osxfuse = callPackage ../os-specific/darwin/osxfuse { };
+  macfuse-stubs = callPackage ../os-specific/darwin/macfuse {
+    inherit (darwin) libtapi;
+  };
 
   osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
 

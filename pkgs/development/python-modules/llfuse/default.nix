@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkg-config, pytest, fuse, attr, which
-, contextlib2, osxfuse
+, contextlib2, macfuse-stubs, DiskArbitration
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   buildInputs =
     lib.optionals stdenv.isLinux [ fuse ]
-    ++ lib.optionals stdenv.isDarwin [ osxfuse ];
+    ++ lib.optionals stdenv.isDarwin [ DiskArbitration macfuse-stubs ];
 
   checkInputs = [ pytest which ] ++
     lib.optionals stdenv.isLinux [ attr ];
