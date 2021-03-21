@@ -820,6 +820,10 @@ in
     flavour = "git";
   };
 
+  logseq = callPackage ../applications/misc/logseq {
+    electron = electron_11;
+  };
+
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
@@ -1412,6 +1416,8 @@ in
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
+
+  mpdevil = callPackage ../applications/audio/mpdevil { };
 
   pacparser = callPackage ../tools/networking/pacparser { };
 
@@ -2279,6 +2285,8 @@ in
   ecasound = callPackage ../applications/audio/ecasound { };
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
+
+  eddy = libsForQt5.callPackage ../applications/graphics/eddy { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
@@ -3934,6 +3942,8 @@ in
 
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
+  lychee = callPackage ../tools/networking/lychee { };
+
   magic-vlsi = callPackage ../applications/science/electronics/magic-vlsi { };
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
@@ -4849,6 +4859,8 @@ in
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
+
+  gnucap = callPackage ../applications/science/electronics/gnucap { };
 
   gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
 
@@ -6157,6 +6169,8 @@ in
 
   libzmf = callPackage ../development/libraries/libzmf {};
 
+  librespeed-cli = callPackage ../tools/misc/librespeed-cli { };
+
   libreswan = callPackage ../tools/networking/libreswan { };
 
   librest = callPackage ../development/libraries/librest { };
@@ -7412,6 +7426,8 @@ in
 
   cntlm = callPackage ../tools/networking/cntlm { };
 
+  past-time = python3Packages.callPackage ../tools/misc/past-time { };
+
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
   pifi = callPackage ../applications/audio/pifi { };
@@ -8634,6 +8650,8 @@ in
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
 
   trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
+
+  trunk = callPackage ../development/tools/trunk { };
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
@@ -22712,6 +22730,8 @@ in
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix {};
 
+  freeplane = callPackage ../applications/misc/freeplane { };
+
   freepv = callPackage ../applications/graphics/freepv { };
 
   xfontsel = callPackage ../applications/misc/xfontsel { };
@@ -24144,6 +24164,7 @@ in
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix {};
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix {};
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix {};
+    thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
@@ -27819,7 +27840,6 @@ in
 
   zeroadPackages = dontRecurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK30;
-    stdenv = gcc9Stdenv;
   });
 
   zeroad = zeroadPackages.zeroad;

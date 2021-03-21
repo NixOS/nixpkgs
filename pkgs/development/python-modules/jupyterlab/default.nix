@@ -4,19 +4,21 @@
 , jupyterlab_server
 , notebook
 , pythonOlder
+, jupyter-packaging
+, nbclassic
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "2.2.9";
+  version = "3.0.11";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3be8f8edea173753dd838c1b6d3bbcb6f5c801121f824a477025c1b6a1d33dc6";
+    sha256 = "sha256-zkz08xFjzlGu0BPAGoV8BdQ6k8Ru1pAWbkhkT255R94=";
   };
 
-  propagatedBuildInputs = [ jupyterlab_server notebook ];
+  propagatedBuildInputs = [ jupyterlab_server notebook jupyter-packaging nbclassic ];
 
   makeWrapperArgs = [
     "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab"

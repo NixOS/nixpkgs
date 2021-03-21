@@ -302,6 +302,8 @@ in {
 
   aionotify = callPackage ../development/python-modules/aionotify { };
 
+  aionotion = callPackage ../development/python-modules/aionotion { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
@@ -1422,6 +1424,10 @@ in {
 
   cmdtest = callPackage ../development/python-modules/cmdtest { };
 
+  cmigemo = callPackage ../development/python-modules/cmigemo {
+    inherit (pkgs) cmigemo;
+  };
+
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
 
   cntk = callPackage ../development/python-modules/cntk { };
@@ -1842,6 +1848,8 @@ in {
   django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
+
+  django-cacheops = callPackage ../development/python-modules/django-cacheops { };
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
 
@@ -3565,6 +3573,8 @@ in {
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
+  jupyter_server = callPackage ../development/python-modules/jupyter_server { };
+
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
@@ -3582,6 +3592,8 @@ in {
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
 
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
+
+  jupyter-packaging = callPackage ../development/python-modules/jupyter-packaging { };
 
   jupyter-repo2docker = callPackage ../development/python-modules/jupyter-repo2docker {
     pkgs-docker = pkgs.docker;
@@ -4365,6 +4377,8 @@ in {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
+  mplfinance = callPackage ../development/python-modules/mplfinance { };
+
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
@@ -4485,6 +4499,8 @@ in {
   natsort = callPackage ../development/python-modules/natsort { };
 
   naturalsort = callPackage ../development/python-modules/naturalsort { };
+
+  nbclassic = callPackage ../development/python-modules/nbclassic { };
 
   nbclient = callPackage ../development/python-modules/nbclient { };
 
@@ -4837,6 +4853,8 @@ in {
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
+
+  packageurl-python = callPackage ../development/python-modules/packageurl-python { };
 
   packaging = if isPy3k
     then callPackage ../development/python-modules/packaging { }
@@ -5586,6 +5604,8 @@ in {
   pydaikin = callPackage ../development/python-modules/pydaikin { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
+
+  pydash = callPackage ../development/python-modules/pydash { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
@@ -7628,6 +7648,8 @@ in {
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
+
+  simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
 
   simpy = callPackage ../development/python-modules/simpy { };
 
