@@ -27840,7 +27840,6 @@ in
 
   zeroadPackages = dontRecurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK30;
-    stdenv = gcc9Stdenv;
   });
 
   zeroad = zeroadPackages.zeroad;
