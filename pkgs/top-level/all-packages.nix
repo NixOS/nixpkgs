@@ -13500,6 +13500,8 @@ in
 
   bctoolbox = callPackage ../development/libraries/bctoolbox { };
 
+  bearssl = callPackage ../development/libraries/bearssl { };
+
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
   belcard = callPackage ../development/libraries/belcard { };
