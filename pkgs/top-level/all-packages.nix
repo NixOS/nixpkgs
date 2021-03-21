@@ -1808,6 +1808,8 @@ in
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
+
   btrbk = callPackage ../tools/backup/btrbk {
     asciidoc = asciidoc-full;
   };
@@ -5739,6 +5741,8 @@ in
   kytea = callPackage ../tools/text/kytea { };
 
   k6 = callPackage ../development/tools/k6 { };
+
+  l2md = callPackage ../tools/text/l2md { };
 
   lab = callPackage ../applications/version-management/git-and-tools/lab { };
 
@@ -13293,6 +13297,8 @@ in
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
+
+  xcode-install = callPackage ../development/tools/xcode-install { };
 
   xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
@@ -24852,6 +24858,8 @@ in
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  portfolio-filemanager = callPackage ../applications/misc/portfolio-filemanager { };
+
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
   potrace = callPackage ../applications/graphics/potrace {};
@@ -29063,6 +29071,8 @@ in
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
+  demjson = with python3Packages; toPythonApplication demjson;
+
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   emu2 = callPackage ../misc/emulators/emu2 { };
@@ -29194,6 +29204,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
+  hjson = with python3Packages; toPythonApplication hjson;
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
@@ -29220,6 +29232,8 @@ in
   };
   libjack2 = jack2.override { prefix = "lib"; };
   jack2Full = jack2; # TODO: move to aliases.nix
+
+  j2cli = with python3Packages; toPythonApplication j2cli;
 
   jstest-gtk = callPackage ../tools/misc/jstest-gtk { };
 
