@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lasem";
-  version = "0.4.4";
+  version = "0.5.1";
 
   outputs = [ "bin" "out" "dev" "man" "doc" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fds3fsx84ylsfvf55zp65y8xqjj5n8gbhcsk02vqglivk7izw4v";
+    sha256 = "0hxlcqngznchv71mqjjq0j9pai83jpr7mfvhxh6qljy99fc1kw2i";
   };
 
   nativeBuildInputs = [ pkg-config intltool gobject-introspection ];
