@@ -213,6 +213,7 @@ in with py.pkgs; buildPythonApplication rec {
     "html5"
     "http"
     "hue"
+    "iaqualink"
     "ifttt"
     "image"
     "image_processing"
