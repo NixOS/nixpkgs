@@ -11978,6 +11978,8 @@ in
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
+  automaticcomponenttoolkit = callPackage ../development/tools/misc/automaticcomponenttoolkit { };
+
   awf = callPackage ../development/tools/misc/awf { };
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
@@ -19402,7 +19404,9 @@ in
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
   };
 
-  osxfuse = callPackage ../os-specific/darwin/osxfuse { };
+  macfuse-stubs = callPackage ../os-specific/darwin/macfuse {
+    inherit (darwin) libtapi;
+  };
 
   osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
 
@@ -19668,6 +19672,8 @@ in
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
 
     tbs = callPackage ../os-specific/linux/tbs { };
+
+    mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { };
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
@@ -29729,8 +29735,6 @@ in
   samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
 
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or {});
-
-  sane-backends-git = callPackage ../applications/graphics/sane/backends/git.nix (config.sane or {});
 
   senv = callPackage ../applications/misc/senv { };
 
