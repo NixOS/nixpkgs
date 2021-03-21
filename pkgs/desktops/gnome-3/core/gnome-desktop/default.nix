@@ -1,28 +1,39 @@
-{ lib, stdenv, fetchurl, substituteAll, pkg-config, libxslt, ninja, gnome3, gtk3, glib
-, gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
-, libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, pkg-config
+, libxslt
+, ninja
+, gnome3
+, gtk3
+, glib
+, gettext
+, libxml2
+, xkeyboard_config
+, libxkbcommon
+, isocodes
+, meson
+, wayland
+, libseccomp
+, systemd
+, bubblewrap
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
-  version = "3.38.4";
+  version = "40.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-P2A+pb/UdyLJLPybiFRGtGJg6gnIz7Y/a92f7+NC5Iw=";
+    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-IKv9P4MeToCStVg5MRZh3HOyvxP8m+9xxKWkR12p7gQ=";
   };
-
-  nativeBuildInputs = [
-    pkg-config meson ninja gettext libxslt libxml2 gobject-introspection
-    gtk-doc docbook_xsl glib
-  ];
-  buildInputs = [
-    bubblewrap xkeyboard_config isocodes wayland
-    gtk3 glib libseccomp systemd
-  ];
-
-  propagatedBuildInputs = [ gsettings-desktop-schemas ];
 
   patches = [
     (substituteAll {
@@ -30,6 +41,35 @@ stdenv.mkDerivation rec {
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
       inherit (builtins) storeDir;
     })
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gettext
+    libxslt
+    libxml2
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    glib
+  ];
+
+  buildInputs = [
+    bubblewrap
+    xkeyboard_config
+    libxkbcommon # for xkbregistry
+    isocodes
+    wayland
+    gtk3
+    glib
+    libseccomp
+    systemd
+  ];
+
+  propagatedBuildInputs = [
+    gsettings-desktop-schemas
   ];
 
   mesonFlags = [
@@ -46,7 +86,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library with common API for various GNOME modules";
-    license = with licenses; [ gpl2 lgpl2 ];
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop";
+    license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };
