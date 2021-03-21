@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage {
-  inherit (pkgs.mxnet) name version src meta;
+  inherit (pkgs.mxnet) name pname version src meta;
 
   buildInputs = [ pkgs.mxnet ];
   propagatedBuildInputs = [ requests numpy graphviz ];
