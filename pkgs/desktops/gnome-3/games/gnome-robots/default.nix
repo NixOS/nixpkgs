@@ -1,26 +1,54 @@
-{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
-, librsvg, gsound, gettext, itstool, libxml2, libgnome-games-support
-, libgee, meson, ninja, python3, desktop-file-utils, adwaita-icon-theme }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gnome3
+, gtk3
+, wrapGAppsHook
+, librsvg
+, gsound
+, gettext
+, itstool
+, libxml2
+, libgnome-games-support
+, libgee
+, meson
+, ninja
+, vala
+, python3
+, desktop-file-utils
+, adwaita-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-robots";
-  version = "3.38.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1qpzpsyj9i5dsfy7anfb2dcm602bjkcgqj86fxvnxy6llx56ks0z";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-robots"; attrPath = "gnome3.gnome-robots"; };
+    url = "mirror://gnome/sources/gnome-robots/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "04fbykj576dq1h6cycgfhh8wd6yxmlsqykvj188sbwahay42zgvg";
   };
 
   nativeBuildInputs = [
-    pkg-config meson ninja python3
-    libxml2 wrapGAppsHook gettext itstool desktop-file-utils
+    pkg-config
+    meson
+    ninja
+    vala
+    python3
+    libxml2
+    wrapGAppsHook
+    gettext
+    itstool
+    desktop-file-utils
   ];
+
   buildInputs = [
-    gtk3 librsvg gsound libgnome-games-support libgee adwaita-icon-theme
+    gtk3
+    librsvg
+    gsound
+    libgnome-games-support
+    libgee
+    adwaita-icon-theme
   ];
 
   postPatch = ''
@@ -28,11 +56,18 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-robots";
+      attrPath = "gnome3.gnome-robots";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Robots";
     description = "Avoid the robots and make them crash into each other";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
