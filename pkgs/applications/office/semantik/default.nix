@@ -22,8 +22,8 @@
 , sonnet
 , kdelibs4support
 }:
-mkDerivation rec {
 
+mkDerivation rec {
   pname = "semantik";
   version = "1.2.5";
 
