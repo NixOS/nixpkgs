@@ -10955,17 +10955,24 @@ let
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
       sha256 = "0dr69rgl4si9i9ww1r4dc7apgb7y6f7ih808w4g0924cvz823s0x";
     };
-    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
+    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PerlMagick PodParser TextUnidecode XMLLibXSLT ];
     preCheck = ''
       rm t/931_epub.t # epub test fails
     '';
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    buildInputs = [ pkgs.makeWrapper ];
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
       patchShebangs bin/
     '' + lib.optionalString stdenv.isDarwin ''
       for file in bin/*; do
         shortenPerlShebang "$file"
+      done
+    '';
+    postInstall = ''
+      for file in latexmlc latexmlmath latexmlpost ; do
+        # add runtime dependencies that cause silent failures when missing
+        wrapProgram $out/bin/$file --prefix PATH : ${lib.makeBinPath [ pkgs.ghostscript pkgs.potrace ]}
       done
     '';
     meta = {
