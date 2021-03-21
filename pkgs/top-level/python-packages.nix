@@ -4373,6 +4373,8 @@ in {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
+  mplfinance = callPackage ../development/python-modules/mplfinance { };
+
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
