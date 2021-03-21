@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , boost
 , cmake
 , ilmbase
@@ -11,25 +10,19 @@
 , openexr
 , robin-map
 , unzip
+, fmt
 }:
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.1.9.0";
+  version = "2.2.12.0";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "Release-${version}";
-    sha256 = "1bbxx3bcc5jlb90ffxbk29gb8227097rdr8vg97vj9axw2mjd5si";
+    sha256 = "16z8lnsqhljbfaarfwx9rc95p0a9wxf4p271j6kxdfknjb88p56i";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/OpenImageIO/oiio/pull/2441/commits/e9bdd69596103edf41b659ad8ab0ca4ce002f6f5.patch";
-      sha256 = "0x1wmjf1jrm19d1izhs1cs3y1if9al1zx48lahkfswyjag3r5dn0";
-    })
-  ];
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
@@ -47,6 +40,7 @@ stdenv.mkDerivation rec {
     opencolorio
     openexr
     robin-map
+    fmt
   ];
 
   cmakeFlags = [
