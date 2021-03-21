@@ -7427,6 +7427,8 @@ in
 
   cntlm = callPackage ../tools/networking/cntlm { };
 
+  past-time = python3Packages.callPackage ../tools/misc/past-time { };
+
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
   pifi = callPackage ../applications/audio/pifi { };
