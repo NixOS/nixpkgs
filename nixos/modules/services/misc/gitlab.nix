@@ -1046,7 +1046,9 @@ in {
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "infinity";
-        Restart = "on-failure";
+        # N.B. puma worker killer will periodically (every 12 hours)
+        # shut itself down. Be sure to restart even on graceful shutdown.
+        Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/puma -C ${cfg.statePath}/config/puma.rb -e production";
       };
