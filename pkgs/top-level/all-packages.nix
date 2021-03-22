@@ -18009,7 +18009,7 @@ in
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   };
 
-  apacheHttpdPackages_2_4 = dontRecurseIntoAttrs (apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4);
+  apacheHttpdPackages_2_4 = recurseIntoAttrs (apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4);
   apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
