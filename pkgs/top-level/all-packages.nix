@@ -4835,6 +4835,8 @@ in
 
   glab = callPackage ../applications/version-management/git-and-tools/glab { };
 
+  glulxe = callPackage ../games/glulxe { };
+    
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
