@@ -1,6 +1,20 @@
-{ stdenv ,fetchFromGitHub ,
-  meson ,ninja ,vala ,pkg-config ,desktop-file-utils ,
-  glib ,gtk3 ,libgee ,libsoup ,json-glib ,sqlite ,webkitgtk ,libmanette ,libXtst ,wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, vala
+, pkg-config
+, desktop-file-utils
+, glib
+, gtk3
+, libgee
+, libsoup
+, json-glib
+, sqlite
+, webkitgtk
+, libmanette
+, libXtst
+, wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
   pname = "GameHub";
@@ -12,13 +26,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QcpqGydNkmAPrPxp/52+D6MS1I7k+CKHxr3/tpCukP8=";
   };
   nativeBuildInputs = [
-    meson ninja vala pkg-config
-    desktop-file-utils wrapGAppsHook
+    meson
+    ninja
+    vala
+    pkg-config
+    desktop-file-utils
+    wrapGAppsHook
 
   ];
   propagatedBuildInputs = [
-    glib gtk3 libgee libsoup
-    json-glib sqlite webkitgtk libmanette libXtst
+    glib
+    gtk3
+    libgee
+    libsoup
+    json-glib
+    sqlite
+    webkitgtk
+    libmanette
+    libXtst
   ];
   meta = with stdenv.lib;{
     description = "All your games in one place";
