@@ -3731,6 +3731,18 @@ let
     meta.homepage = "https://github.com/chrisbra/Recover.vim/";
   };
 
+  registers-nvim = buildVimPluginFrom2Nix {
+    pname = "registers-nvim";
+    version = "2021-03-21";
+    src = fetchFromGitHub {
+      owner = "tversteeg";
+      repo = "registers.nvim";
+      rev = "ba84c085ca868515520310073d922132fd811a24";
+      sha256 = "02qadqyppn7w2ssc7m7zqr5s9iknhj0fbg88w2mdn7s4kcf8jyim";
+    };
+    meta.homepage = "https://github.com/tversteeg/registers.nvim/";
+  };
+
   Rename = buildVimPluginFrom2Nix {
     pname = "Rename";
     version = "2011-08-31";
