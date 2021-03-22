@@ -2377,6 +2377,8 @@ in
 
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
 
+  beauties = callPackage ../servers/web-apps/beauties { };
+
   firecracker = callPackage ../applications/virtualization/firecracker { };
 
   firectl = callPackage ../applications/virtualization/firectl { };
