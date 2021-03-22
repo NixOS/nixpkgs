@@ -40,6 +40,9 @@ lib.makeOverridable
 , nativeBuildInputs ? [] # Handy e.g. if using makeWrapper in `postBuild`.
 , buildInputs ? []
 
+# Other environment variables to set at build time.
+, environment ? {}
+
 , passthru ? {}
 , meta ? {}
 }:
@@ -52,7 +55,7 @@ let
 in
 
 runCommand name
-  rec {
+  (environment // rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild
             nativeBuildInputs buildInputs;
@@ -64,18 +67,18 @@ runCommand name
         # aren't expected to have multiple outputs.
         (if drv.outputUnspecified or false
             && drv.meta.outputsToInstall or null != null
-          then map (outName: drv.${outName}) drv.meta.outputsToInstall
+          then map (outName: drv."${outName}") drv.meta.outputsToInstall
           else [ drv ])
         # Add any extra outputs specified by the caller of `buildEnv`.
         ++ lib.filter (p: p!=null)
-          (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
+          (builtins.map (outName: drv."${outName}" or null) extraOutputsToInstall);
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;
     allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
     passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
-  }
+  })
   ''
     ${buildPackages.perl}/bin/perl -w ${builder}
     eval "$postBuild"
