@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, glibc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, glibc, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "catatonit";
@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
     readelf -d $out/bin/catatonit | grep 'There is no dynamic section in this file.'
   '';
 
+  passthru.tests = { inherit (nixosTests) podman; };
+
   meta = with lib; {
     description = "A container init that is so simple it's effectively brain-dead";
     homepage = "https://github.com/openSUSE/catatonit";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ erosennin ];
+    maintainers = with maintainers; [ erosennin ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }
