@@ -416,6 +416,7 @@ def rewrite_input(
                 }
         with open(deprecated, "w") as f:
             json.dump(deprecations, f, indent=4, sort_keys=True)
+            f.write("\n")
 
     lines = sorted(lines, key=str.casefold)
 
