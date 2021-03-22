@@ -17990,7 +17990,7 @@ in
 
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
 
-    mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
+    mod_evasive = throw "mod_evasive is not supported on Apache httpd 2.4";
 
     mod_perl = callPackage ../servers/http/apache-modules/mod_perl { };
 
