@@ -23822,6 +23822,8 @@ in
     portaudio = null;
   };
 
+  lokinet = callPackage ../applications/networking/p2p/lokinet { };
+
   loxodo = callPackage ../applications/misc/loxodo { };
 
   lsd2dsl = libsForQt5.callPackage ../applications/misc/lsd2dsl { };
@@ -23844,6 +23846,8 @@ in
   jftui = callPackage ../applications/video/jftui { };
 
   lime = callPackage ../development/libraries/lime { };
+
+  loki-mq = callPackage ../development/libraries/loki-mq { };
 
   luakit = callPackage ../applications/networking/browsers/luakit {
     inherit (luajitPackages) luafilesystem;
