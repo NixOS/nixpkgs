@@ -197,6 +197,8 @@ in
     inherit (python3Packages) sphinx;
   };
 
+  catatonit = callPackage ../applications/virtualization/catatonit { };
+
   cen64 = callPackage ../misc/emulators/cen64 { };
 
   cereal = callPackage ../development/libraries/cereal { };
