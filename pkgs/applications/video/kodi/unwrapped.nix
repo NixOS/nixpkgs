@@ -237,6 +237,6 @@ in stdenv.mkDerivation {
       homepage    = "https://kodi.tv/";
       license     = licenses.gpl2Plus;
       platforms   = platforms.linux;
-      maintainers = with maintainers; [ titanous edwtjo peterhoeg sephalon ];
+      maintainers = teams.kodi.members;
     };
 }

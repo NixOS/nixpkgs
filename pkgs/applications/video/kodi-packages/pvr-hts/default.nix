@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     homepage = "https://github.com/kodi-pvr/pvr.hts";
     description = "Kodi's Tvheadend HTSP client addon";
     platforms = platforms.all;
-    maintainers = with maintainers; [ cpages ];
+    license = licenses.gpl2Only;
+    maintainers = teams.kodi.members;
   };
-
 }
