@@ -74,9 +74,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         ${client}.succeed(
             "grep '${msg other}$' ${iiDir}/${server}/#${channel}/out"
         )
-      '') clients ++ [
-        "# trailing comment to please reformatter :)"
-      ];
+      '') clients;
 
       # foldl', but requires a non-empty list instead of a start value
       reduce = f: list:
@@ -88,9 +86,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # run clientScript for all clients so that every list
       # entry is executed by every client before advancing
       # to the next one.
-      ${lib.concatStringsSep "\n"
-        (reduce
-          (a: b: lib.zipListsWith (cs: c: cs + "\n" + c) a b)
-          (builtins.map clientScript clients))}
-    '';
+    '' + lib.concatStrings
+      (reduce
+        (a: b: lib.zipListsWith (cs: c: cs + "\n" + c) a b)
+        (builtins.map clientScript clients));
 })
