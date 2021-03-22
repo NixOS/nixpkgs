@@ -9751,6 +9751,12 @@
     githubId = 27586264;
     name = "Tobias Schmidt";
   };
+  ToxicFrog = {
+    email = "toxicfrog@ancilla.ca";
+    github = "ToxicFrog";
+    githubId = 90456;
+    name = "Rebecca (Bex) Kelly";
+  };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
     github = "travisbhartwell";
