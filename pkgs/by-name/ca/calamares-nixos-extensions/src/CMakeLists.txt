@@ -43,6 +43,9 @@ project(calamares-extensions
 )
 
 find_package(Calamares 3.2.26 REQUIRED)
+if (NOT TARGET Calamares::calamares OR NOT TARGET Calamares::calamaresui)
+    message(FATAL_ERROR "Calamares found with missing CMake targets")
+endif()
 
 find_package(YAMLCPP REQUIRED)  # Needed to untangle some dependencies before Calamares 3.2.36
 
