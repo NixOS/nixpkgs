@@ -2240,7 +2240,7 @@ in
 
   dotenv-linter = callPackage ../development/tools/analysis/dotenv-linter { };
 
-  dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
+  inherit (ocamlPackages) dot-merlin-reader;
 
   dozenal = callPackage ../applications/misc/dozenal { };
 
