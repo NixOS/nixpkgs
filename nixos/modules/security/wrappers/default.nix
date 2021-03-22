@@ -7,47 +7,64 @@ let
 
   programs =
     (lib.mapAttrsToList
-      (n: v: (if v ? program then v else v // {program=n;}))
+      (n: v: (if v ? program then v else v // { program = n; }))
       wrappers);
 
   securityWrapper = pkgs.callPackage ./wrapper.nix {
     inherit parentWrapperDir;
   };
 
+  wrappersDrv = pkgs.runCommandNoCCLocal "ensure-wrappers-exist" { } (lib.concatMapStringsSep "\n"
+    (e: ''
+      # make sure we produce output
+      mkdir -p $out
+
+      if [[ ${e.source} =~ /nix/store ]]; then
+        if [ ! -e "${e.source}" ]; then
+          echo "ERROR: Wrapped binary not found in store: ${e.source}. Aborting!"
+          exit 1
+        fi
+      else
+        echo "Wrapper points to binary outside store, ignoring it: ${e.source}"
+      fi
+    '')
+    (builtins.attrValues wrappers));
+
+
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
     { program
     , capabilities
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
+    , owner ? "nobody"
+    , group ? "nogroup"
     , permissions ? "u+rx,g+x,o+x"
     , ...
     }:
-    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
-    ''
-      cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
-      echo -n "${source}" > $wrapperDir/${program}.real
+      assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
+      ''
+        cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
+        echo -n "${source}" > $wrapperDir/${program}.real
 
-      # Prevent races
-      chmod 0000 $wrapperDir/${program}
-      chown ${owner}.${group} $wrapperDir/${program}
+        # Prevent races
+        chmod 0000 $wrapperDir/${program}
+        chown ${owner}.${group} $wrapperDir/${program}
 
-      # Set desired capabilities on the file plus cap_setpcap so
-      # the wrapper program can elevate the capabilities set on
-      # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $wrapperDir/${program}
+        # Set desired capabilities on the file plus cap_setpcap so
+        # the wrapper program can elevate the capabilities set on
+        # its file into the Ambient set.
+        ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $wrapperDir/${program}
 
-      # Set the executable bit
-      chmod ${permissions} $wrapperDir/${program}
-    '';
+        # Set the executable bit
+        chmod ${permissions} $wrapperDir/${program}
+      '';
 
   ###### Activation script for the setuid wrappers
   mkSetuidProgram =
     { program
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
+    , owner ? "nobody"
+    , group ? "nogroup"
     , setuid ? false
     , setgid ? false
     , permissions ? "u+rx,g+x,o+x"
@@ -66,24 +83,30 @@ let
 
   mkWrappedPrograms =
     builtins.map
-      (s: if (s ? capabilities)
-          then mkSetcapProgram
-                 ({ owner = "root";
-                    group = "root";
-                  } // s)
-          else if
-             (s ? setuid && s.setuid) ||
-             (s ? setgid && s.setgid) ||
-             (s ? permissions)
-          then mkSetuidProgram s
-          else mkSetuidProgram
-                 ({ owner  = "root";
-                    group  = "root";
-                    setuid = true;
-                    setgid = false;
-                    permissions = "u+rx,g+x,o+x";
-                  } // s)
-      ) programs;
+      (s:
+        if (s ? capabilities)
+        then
+          mkSetcapProgram
+            ({
+              owner = "root";
+              group = "root";
+            } // s)
+        else if
+          (s ? setuid && s.setuid) ||
+          (s ? setgid && s.setgid) ||
+          (s ? permissions)
+        then mkSetuidProgram s
+        else
+          mkSetuidProgram
+            ({
+              owner = "root";
+              group = "root";
+              setuid = true;
+              setgid = false;
+              permissions = "u+rx,g+x,o+x";
+            } // s)
+      )
+      programs;
 in
 {
   imports = [
@@ -96,7 +119,7 @@ in
   options = {
     security.wrappers = lib.mkOption {
       type = lib.types.attrs;
-      default = {};
+      default = { };
       example = lib.literalExample
         ''
           { sendmail.source = "/nix/store/.../bin/sendmail";
@@ -138,9 +161,9 @@ in
     };
 
     security.wrapperDir = lib.mkOption {
-      type        = lib.types.path;
-      default     = "/run/wrappers/bin";
-      internal    = true;
+      type = lib.types.path;
+      default = "/run/wrappers/bin";
+      internal = true;
       description = ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
@@ -173,34 +196,37 @@ in
 
     ###### setcap activation script
     system.activationScripts.wrappers =
-      lib.stringAfter [ "specialfs" "users" ]
-        ''
-          # Look in the system path and in the default profile for
-          # programs to be wrapped.
-          WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
+      lib.stringAfter [ "specialfs" "users" ] ''
+        # Pull in the derivation where we check that our wrapped binaries exist
+        # We don't want to do anything with it - we just need to be sure that it's referenced
+        # ${wrappersDrv}
 
-          chmod 755 "${parentWrapperDir}"
+        # Look in the system path and in the default profile for
+        # programs to be wrapped.
+        WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          # We want to place the tmpdirs for the wrappers to the parent dir.
-          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-          chmod a+rx $wrapperDir
+        chmod 755 "${parentWrapperDir}"
 
-          ${lib.concatStringsSep "\n" mkWrappedPrograms}
+        # We want to place the tmpdirs for the wrappers to the parent dir.
+        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+        chmod a+rx $wrapperDir
 
-          if [ -L ${wrapperDir} ]; then
-            # Atomically replace the symlink
-            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-            old=$(readlink -f ${wrapperDir})
-            if [ -e ${wrapperDir}-tmp ]; then
-              rm --force --recursive ${wrapperDir}-tmp
-            fi
-            ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
-            mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
-            rm --force --recursive $old
-          else
-            # For initial setup
-            ln --symbolic $wrapperDir ${wrapperDir}
+        ${lib.concatStringsSep "\n" mkWrappedPrograms}
+
+        if [ -L ${wrapperDir} ]; then
+          # Atomically replace the symlink
+          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+          old=$(readlink -f ${wrapperDir})
+          if [ -e ${wrapperDir}-tmp ]; then
+            rm --force --recursive ${wrapperDir}-tmp
           fi
-        '';
+          ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
+          mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
+          rm --force --recursive $old
+        else
+          # For initial setup
+          ln --symbolic $wrapperDir ${wrapperDir}
+        fi
+      '';
   };
 }
