@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (rec {
   pname = "tracker";
-  version = "3.1.0.rc";
+  version = "3.1.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+9xAnShxXDEGpaylBwv+VDwhwDMWzsgcyKwXlf54Xi8=";
+    sha256 = "sha256-ylXrlXWHR++AKvSzH8CFqNVvufbQA76P0+keMtLkKHU=";
   };
 
   patches = [
@@ -90,6 +90,7 @@ stdenv.mkDerivation (rec {
     patchShebangs utils/data-generators/cc/generate
     patchShebangs tests/functional-tests/test-runner.sh.in
     patchShebangs tests/functional-tests/*.py
+    patchShebangs examples/python/endpoint.py
   '';
 
   preCheck = ''
