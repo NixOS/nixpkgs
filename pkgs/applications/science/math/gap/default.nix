@@ -101,6 +101,9 @@ stdenv.mkDerivation rec {
       excludes = ["tst/testinstall/stringobj.tst"];
       sha256 = "1mz5b4mbw2jdd1ypp5s0dy6pp0jsvwsxr2dm4kbkls20r1r192sc";
     })
+
+    # fixes aarch64 gc crashes: https://github.com/gap-system/gap/pull/3965
+    ./mark-genstackfuncbags-as-noinline.patch
   ];
 
   postPatch = ''
