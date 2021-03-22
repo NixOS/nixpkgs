@@ -12,16 +12,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "fishnet";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gif9wagm9bzq7j3biasqvzp9lfvmxqr5wagqqybmhbn8ipj20a8";
+    sha256 = "sha256-WOrI0OFlPtrLTo0FkxmGJGQIomPfXXkFWqic/TkqrDY=";
   };
 
-  cargoSha256 = "0hqyh0nzfrm7m34kqixrlbc7w8d0k7v6psw8jg6zpwpfcmhqq15j";
+  cargoSha256 = "sha256-FzWDfTppBLwtkog8MjLeQImSbyph6T5wI0/vCVYyaSM=";
 
   preBuild = ''
     rmdir ./assets
