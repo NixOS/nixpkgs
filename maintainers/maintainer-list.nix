@@ -9087,6 +9087,12 @@
     githubId = 65870;
     name = "Сухарик";
   };
+  sumnerevans = {
+    email = "me@sumnerevans.com";
+    github = "sumnerevans";
+    githubId = 16734772;
+    name = "Sumner Evans";
+  };
   superbo = {
     email = "supernbo@gmail.com";
     github = "SuperBo";
