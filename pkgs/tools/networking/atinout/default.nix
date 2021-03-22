@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.9.2-alpha";
 
   env.NIX_CFLAGS_COMPILE = "-Werror=implicit-fallthrough=0";
-  LANG = "C.UTF-8";
+  env.LANG = "C.UTF-8";
   nativeBuildInputs = [ ronn mount ];
 
   src = fetchgit {

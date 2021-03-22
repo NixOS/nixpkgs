@@ -30,22 +30,38 @@ in stdenv.mkDerivation rec {
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  ARROW_JEMALLOC_URL = fetchurl {
-    # From
-    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
-    # ./cpp/thirdparty/versions.txt
-    url =
-      "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
-    sha256 = "1xl7z0vwbn5iycg7amka9jd6hxd8nmfk7nahi4p9w2bnw9f0wcrl";
-  };
+  env = {
+    ARROW_JEMALLOC_URL = toString (fetchurl {
+      # From
+      # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
+      # ./cpp/thirdparty/versions.txt
+      url =
+        "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
+      sha256 = "1xl7z0vwbn5iycg7amka9jd6hxd8nmfk7nahi4p9w2bnw9f0wcrl";
+    });
 
-  ARROW_MIMALLOC_URL = fetchurl {
-    # From
-    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
-    # ./cpp/thirdparty/versions.txt
-    url =
-      "https://github.com/microsoft/mimalloc/archive/v1.6.4.tar.gz";
-    sha256 = "1b8av0974q70alcmaw5cwzbn6n9blnpmj721ik1qwmbbwwd6nqgs";
+    ARROW_MIMALLOC_URL = toString (fetchurl {
+      # From
+      # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
+      # ./cpp/thirdparty/versions.txt
+      url =
+        "https://github.com/microsoft/mimalloc/archive/v1.6.4.tar.gz";
+      sha256 = "1b8av0974q70alcmaw5cwzbn6n9blnpmj721ik1qwmbbwwd6nqgs";
+    });
+
+    ARROW_TEST_DATA =
+      lib.optionalString doInstallCheck "${arrow-testing}/data";
+    PARQUET_TEST_DATA =
+      lib.optionalString doInstallCheck "${parquet-testing}/data";
+    GTEST_FILTER = let
+        # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+        filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+          "TestCompareKernel.PrimitiveRandomTests"
+        ];
+      in 
+      lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
   };
 
   patches = [
@@ -112,19 +128,6 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
-  ARROW_TEST_DATA =
-    if doInstallCheck then "${arrow-testing}/data" else null;
-  PARQUET_TEST_DATA =
-    if doInstallCheck then "${parquet-testing}/data" else null;
-  GTEST_FILTER =
-    if doInstallCheck then let
-      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-      filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
-        "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-        "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-        "TestCompareKernel.PrimitiveRandomTests"
-      ];
-    in "-${builtins.concatStringsSep ":" filteredTests}" else null;
   installCheckInputs = [ perl which ];
   installCheckPhase =
   let

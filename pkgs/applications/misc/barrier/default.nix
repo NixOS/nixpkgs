@@ -23,7 +23,7 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${lib.makeBinPath [ openssl ]}''
+    "--prefix" "PATH" ":" (lib.makeBinPath [ openssl ])
   ];
 
   meta = {

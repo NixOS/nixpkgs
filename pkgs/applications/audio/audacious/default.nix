@@ -40,6 +40,7 @@ mkDerivation rec {
   # derivations, since they really expect to be in the same prefix.
   # This is slighly tricky.
   builder = builtins.toFile "builder.sh" ''
+    source .attrs.sh
     # First build audacious.
     (
       source $stdenv/setup
@@ -47,7 +48,7 @@ mkDerivation rec {
     )
     # Then build the plugins.
     (
-      nativeBuildInputs="$out $nativeBuildInputs" # to find audacious
+      nativeBuildInputs+=("''${outputs[out]}") # to find audacious
       source $stdenv/setup
       rm -rfv audacious-*
       src=$pluginsSrc

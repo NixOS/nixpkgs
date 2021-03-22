@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH"
+    configureFlags+=("--enable-force-shutdown" "--enable-ignore-busy" "--with-path=$PATH")
     export sssldir="${sssd}/lib/sssd/modules"
     export HAVE_SSS_AUTOFS=1
 

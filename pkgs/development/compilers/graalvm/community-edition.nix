@@ -121,7 +121,6 @@ let
            }
 
            mkdir -p $out
-           arr=($srcs)
 
            # The tarball on Linux has the following directory structure:
            #
@@ -132,7 +131,7 @@ let
            #   graalvm-ce-java11-20.3.0/Contents/Home/*
            #
            # We therefor use --strip-components=1 vs 3 depending on the platform.
-           tar xf ''${arr[0]} -C $out --strip-components=${if stdenv.isLinux then "1" else "3"}
+           tar xf ''${srcs[0]} -C $out --strip-components=${if stdenv.isLinux then "1" else "3"}
 
            # Sanity check
            if [ ! -d $out/bin ]; then
@@ -143,10 +142,10 @@ let
               exit 1
            fi
 
-           unpack_jar ''${arr[1]}
-           unpack_jar ''${arr[2]}
-           unpack_jar ''${arr[3]}
-           unpack_jar ''${arr[4]}
+           unpack_jar ''${srcs[1]}
+           unpack_jar ''${srcs[2]}
+           unpack_jar ''${srcs[3]}
+           unpack_jar ''${srcs[4]}
         '';
 
         installPhase = {
