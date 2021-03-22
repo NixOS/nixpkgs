@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchzip, fetchFromGitHub
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, cmake
+, cmake, unzip
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -12,7 +12,7 @@
 , CoreServices, ApplicationServices
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+# assert (!blas.isILP64) && (!lapack.isILP64);
 
 with lib;
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which cmake ];
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which cmake unzip ];
 
   makeFlags =
     let
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
-      "USE_SYSTEM_BLAS=1"
-      "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
+      "USE_SYSTEM_BLAS=0"
+      # "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
 
