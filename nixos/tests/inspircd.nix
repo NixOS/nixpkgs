@@ -88,6 +88,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # to the next one.
     '' + lib.concatStrings
       (reduce
-        (a: b: lib.zipListsWith (cs: c: cs + "\n" + c) a b)
+        (lib.zipListsWith (cs: c: cs + c))
         (builtins.map clientScript clients));
 })
