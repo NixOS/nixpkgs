@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "libclc";
+  pname = "libclc";
   version = "11.0.1";
 
   src = fetchFromGitHub {
