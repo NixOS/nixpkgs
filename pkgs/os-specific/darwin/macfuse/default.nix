@@ -56,4 +56,10 @@ stdenv.mkDerivation rec {
       lgpl2Plus # libfuse
     ];
   };
+
+  passthru.warning = ''
+    macFUSE is required for this package to work on macOS. To install macFUSE,
+    use the installer from the <link xlink:href="https://osxfuse.github.io/">
+    project website</link>.
+  '';
 }
