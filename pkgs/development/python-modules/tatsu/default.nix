@@ -1,31 +1,26 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, mypy, pyyaml, regex
-, dataclasses, typing
-, pytestrunner, pytest-mypy
+, colorama, regex
+, pytestrunner, pytestCheckHook, pytest-mypy
 }:
 
 buildPythonPackage rec {
-  pname = "TatSu";
-  version = "5.5.0";
+  pname = "tatsu";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "neogeny";
-    repo = pname;
+    repo = "TatSu";
     rev = "v${version}";
-    sha256 = "07bmdnwh99p60cgzhlb8s5vwi5v4r5zi8shymxnnarannkc66hzn";
+    sha256 = "sha256-kC2MxMebS4TQEZBgTmYRBWaWSF36rVS3bXIsQgRrF0Y=";
   };
 
   disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ colorama mypy pyyaml regex ]
-    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
-  checkInputs = [ pytest-mypy ];
+  propagatedBuildInputs = [ colorama regex ];
+  checkInputs = [ pytestCheckHook pytest-mypy ];
 
-  checkPhase = ''
-    pytest test/
-  '';
+  pythonImportsCheck = [ "tatsu" ];
 
   meta = with lib; {
     description = "Generates Python parsers from grammars in a variation of EBNF";
