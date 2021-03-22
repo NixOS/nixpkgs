@@ -7149,6 +7149,10 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  remctl = callPackage ../development/python-modules/remctl {
+    inherit (pkgs) remctl;
+  };
+
   remotecv = callPackage ../development/python-modules/remotecv { };
 
   rencode = callPackage ../development/python-modules/rencode { };
