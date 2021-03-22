@@ -77,7 +77,7 @@ default-package-overrides:
   - ghcide < 1.1 # To stay hls 1.0 compatible
   - hls-retrie-plugin < 1.0.0.1 # To stay hls 1.0 compatible
 
-  # Stackage Nightly 2021-03-19
+  # Stackage Nightly 2021-03-21
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -112,6 +112,7 @@ default-package-overrides:
   - alarmclock ==0.7.0.5
   - alerts ==0.1.2.0
   - alex ==3.2.6
+  - alex-meta ==0.3.0.13
   - alg ==0.2.13.1
   - algebraic-graphs ==0.5
   - Allure ==0.9.5.0
@@ -350,6 +351,7 @@ default-package-overrides:
   - blaze-textual ==0.2.1.0
   - bmp ==1.2.6.3
   - BNFC ==2.9.1
+  - BNFC-meta ==0.6.1
   - board-games ==0.3
   - boltzmann-samplers ==0.1.1.0
   - Boolean ==0.2.4
@@ -409,7 +411,7 @@ default-package-overrides:
   - cache ==0.1.3.0
   - cacophony ==0.10.1
   - calendar-recycling ==0.0.0.1
-  - call-stack ==0.2.0
+  - call-stack ==0.3.0
   - can-i-haz ==0.3.1.0
   - ca-province-codes ==1.0.0.0
   - cardano-coin-selection ==1.0.1
@@ -1045,6 +1047,7 @@ default-package-overrides:
   - hapistrano ==0.4.1.2
   - happstack-server ==7.7.0
   - happy ==1.20.0
+  - happy-meta ==0.2.0.11
   - HasBigDecimal ==0.1.1
   - hasbolt ==0.1.4.4
   - hashable ==1.3.0.0
@@ -1160,7 +1163,7 @@ default-package-overrides:
   - hslua-module-path ==0.1.0.1
   - hslua-module-system ==0.2.2.1
   - hslua-module-text ==0.3.0.1
-  - HsOpenSSL ==0.11.5.1
+  - HsOpenSSL ==0.11.6
   - HsOpenSSL-x509-system ==0.1.0.4
   - hsp ==0.10.0
   - hspec ==2.7.8
@@ -1176,6 +1179,7 @@ default-package-overrides:
   - hspec-golden ==0.1.0.3
   - hspec-golden-aeson ==0.7.0.0
   - hspec-hedgehog ==0.0.1.2
+  - hspec-junit-formatter ==1.0.0.0
   - hspec-leancheck ==0.0.4
   - hspec-megaparsec ==2.2.0
   - hspec-meta ==2.7.8
@@ -1201,7 +1205,7 @@ default-package-overrides:
   - html-entity-map ==0.1.0.0
   - htoml ==1.0.0.3
   - http2 ==2.0.6
-  - HTTP ==4000.3.15
+  - HTTP ==4000.3.16
   - http-api-data ==0.4.2
   - http-client ==0.6.4.1
   - http-client-openssl ==0.3.2.0
@@ -1220,7 +1224,7 @@ default-package-overrides:
   - http-streams ==0.8.7.2
   - http-types ==0.12.3
   - human-readable-duration ==0.2.1.4
-  - HUnit ==1.6.1.0
+  - HUnit ==1.6.2.0
   - HUnit-approx ==1.1.1.1
   - hunit-dejafu ==2.0.0.4
   - hvect ==0.4.0.0
@@ -1380,7 +1384,7 @@ default-package-overrides:
   - ki ==0.2.0.1
   - kind-apply ==0.3.2.0
   - kind-generics ==0.4.1.0
-  - kind-generics-th ==0.2.2.1
+  - kind-generics-th ==0.2.2.2
   - kmeans ==0.1.3
   - koofr-client ==1.0.0.3
   - krank ==0.2.2
@@ -1798,7 +1802,7 @@ default-package-overrides:
   - persistable-types-HDBC-pg ==0.0.3.5
   - persistent ==2.11.0.4
   - persistent-documentation ==0.1.0.2
-  - persistent-mtl ==0.2.0.0
+  - persistent-mtl ==0.2.1.0
   - persistent-mysql ==2.10.3.1
   - persistent-pagination ==0.1.1.2
   - persistent-postgresql ==2.11.0.1
@@ -1833,6 +1837,7 @@ default-package-overrides:
   - pipes-wai ==3.2.0
   - pkcs10 ==0.2.0.0
   - pkgtreediff ==0.4
+  - place-cursor-at ==1.0.1
   - placeholders ==0.1
   - plaid ==0.1.0.4
   - plotlyhs ==0.2.1
@@ -1968,7 +1973,7 @@ default-package-overrides:
   - rate-limit ==1.4.2
   - ratel-wai ==1.1.5
   - rattle ==0.2
-  - rattletrap ==11.0.0
+  - rattletrap ==11.0.1
   - Rattus ==0.5
   - rawfilepath ==0.2.4
   - rawstring-qm ==0.2.3.0
@@ -1985,7 +1990,7 @@ default-package-overrides:
   - record-hasfield ==1.0
   - records-sop ==0.1.0.3
   - record-wrangler ==0.1.1.0
-  - recursion-schemes ==5.2.2
+  - recursion-schemes ==5.2.2.1
   - reducers ==3.12.3
   - refact ==0.3.0.2
   - ref-fd ==0.4.0.2
@@ -2107,6 +2112,7 @@ default-package-overrides:
   - semiring-simple ==1.0.0.1
   - semver ==0.4.0.1
   - sendfile ==0.7.11.1
+  - sendgrid-v3 ==0.3.0.0
   - seqalign ==0.2.0.4
   - seqid ==0.6.2
   - seqid-streams ==0.7.2
@@ -2182,8 +2188,8 @@ default-package-overrides:
   - skein ==1.0.9.4
   - skews ==0.1.0.3
   - skip-var ==0.1.1.0
-  - skylighting ==0.10.4.1
-  - skylighting-core ==0.10.4.1
+  - skylighting ==0.10.5
+  - skylighting-core ==0.10.5
   - slack-api ==0.12
   - slack-progressbar ==0.1.0.1
   - slist ==0.2.0.0
@@ -2491,6 +2497,7 @@ default-package-overrides:
   - type-level-numbers ==0.1.1.1
   - type-map ==0.1.6.0
   - type-natural ==1.1.0.0
+  - typenums ==0.1.3
   - type-of-html ==1.6.2.0
   - type-of-html-static ==0.1.0.2
   - type-operators ==0.2.0.0
@@ -2575,7 +2582,7 @@ default-package-overrides:
   - vector-algorithms ==0.8.0.4
   - vector-binary-instances ==0.2.5.1
   - vector-buffer ==0.4.1
-  - vector-builder ==0.3.8
+  - vector-builder ==0.3.8.1
   - vector-bytes-instances ==0.1.1
   - vector-circular ==0.1.3
   - vector-instances ==3.4
@@ -2604,6 +2611,7 @@ default-package-overrides:
   - wai-feature-flags ==0.1.0.1
   - wai-handler-launch ==3.0.3.1
   - wai-logger ==2.3.6
+  - wai-middleware-auth ==0.2.4.1
   - wai-middleware-caching ==0.1.0.2
   - wai-middleware-clacks ==0.1.0.1
   - wai-middleware-static ==0.9.0
