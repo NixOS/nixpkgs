@@ -24,6 +24,18 @@
 # distro can use an unmodified (upstream) Calamares package and a local
 # customisation package in tandem.
 #
+# Besides being an example repository, it is also a collection of modules
+# and branding that is usable in its own right.
+#
+### CONFIGURING
+#
+# By default, all the branding examples and all the modules are built.
+# This can be influenced through:
+#   SKIP_MODULES    : a space or semicolon-separated list of directory names
+#                     under src/modules that should not be built.
+#   USE_*           : fills in SKIP_MODULES for modules called *-<something>
+# In this repository, there is just one "group" to which USE_* applies:
+#   USE_os          : operating-system-specific modules.
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(calamares-extensions
     VERSION 1.1.1
@@ -81,6 +93,8 @@ set(SKIPPED_MODULES "")
 calamares_add_module_subdirectory( modules/filekeeper )  # C++ job
 calamares_add_module_subdirectory( modules/freebsddisk )  # C++ viewmodule
 calamares_add_module_subdirectory( modules/mobile )
+calamares_add_module_subdirectory( modules/os-freebsd )
+calamares_add_module_subdirectory( modules/os-nixos )
 calamares_add_module_subdirectory( modules/slowpython )  # Python job
 
 # If modules cannot be built, they usually call a macro
