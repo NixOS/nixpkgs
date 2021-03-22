@@ -71,6 +71,6 @@ python3Packages.buildPythonApplication rec {
     description = "GTK3 Subsonic/Airsonic client";
     homepage = "https://sublimemusic.app/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ albakham ];
+    maintainers = with maintainers; [ albakham sumnerevans ];
   };
 }
