@@ -17185,8 +17185,6 @@ in
 
   stlink = callPackage ../development/tools/misc/stlink { };
 
-  steghide = callPackage ../tools/security/steghide {};
-
   stegseek = callPackage ../tools/security/stegseek {};
 
   stlport = callPackage ../development/libraries/stlport { };
