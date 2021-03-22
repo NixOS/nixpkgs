@@ -197,6 +197,8 @@ in
     inherit (python3Packages) sphinx;
   };
 
+  catatonit = callPackage ../applications/virtualization/catatonit { };
+
   cen64 = callPackage ../misc/emulators/cen64 { };
 
   cereal = callPackage ../development/libraries/cereal { };
@@ -7915,6 +7917,8 @@ in
   scream-receivers = callPackage ../misc/scream-receivers {
     pulseSupport = config.pulseaudio or false;
   };
+
+  scimark = callPackage ../misc/scimark { };
 
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
