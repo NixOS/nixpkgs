@@ -1,7 +1,7 @@
 { lib, stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr, which, curl, flex, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "4.9.7";
+  version = "4.9.8";
   pname = "nco";
 
   nativeBuildInputs = [ flex which ];
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/nco/nco/archive/${version}.tar.gz";
-    sha256 = "sha256-Q4okOoyodofAsMrSmAhFISeY05Be+i7OX4qy2annQq4=";
+    sha256 = "sha256-fOdmM0I/UGhxacofEBfw9UmOOrMDUXs59ca8uvkQKqw=";
   };
 
   prePatch = ''
