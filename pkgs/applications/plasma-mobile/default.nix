@@ -65,6 +65,7 @@ let
       calindori = callPackage ./calindori.nix {};
       kalk = callPackage ./kalk.nix {};
       kclock = callPackage ./kclock.nix {};
+      krecorder = callPackage ./krecorder.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages
