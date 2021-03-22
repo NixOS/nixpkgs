@@ -1232,6 +1232,16 @@
     };
     version = "2.5.1";
   };
+  json_pure = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "030hmc268wchqsccbjk41hvbyg99krpa72i3q0y3wwqzfh8hi736";
+      type = "gem";
+    };
+    version = "2.5.1";
+  };
   jwt = {
     groups = ["default"];
     platforms = [];
