@@ -66,6 +66,7 @@ let
       kalk = callPackage ./kalk.nix {};
       kclock = callPackage ./kclock.nix {};
       krecorder = callPackage ./krecorder.nix {};
+      plasma-dialer = callPackage ./plasma-dialer.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages
