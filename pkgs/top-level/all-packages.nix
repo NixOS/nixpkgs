@@ -370,6 +370,7 @@ in
   fetchgit = callPackage ../build-support/fetchgit {
     git = buildPackages.gitMinimal;
     cacert = buildPackages.cacert;
+    git-lfs = buildPackages.git-lfs;
   };
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
@@ -4471,6 +4472,8 @@ in
   };
 
   freetds = callPackage ../development/libraries/freetds { };
+
+  freetube = callPackage ../applications/video/freetube { };
 
   freqtweak = callPackage ../applications/audio/freqtweak {
     wxGTK = wxGTK31-gtk2;
@@ -13048,6 +13051,8 @@ in
 
   semver-tool = callPackage ../development/tools/misc/semver-tool { };
 
+  semantik = libsForQt5.callPackage ../applications/office/semantik { };
+
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
@@ -16121,10 +16126,6 @@ in
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
-  mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
-
-  mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
-
   mapnik = callPackage ../development/libraries/mapnik { };
 
   marisa = callPackage ../development/libraries/marisa {};
@@ -18333,7 +18334,7 @@ in
   mod_pkcs12 = pkgs.apacheHttpdPackages.mod_pkcs12;
   mod_timestamp = pkgs.apacheHttpdPackages.mod_timestamp;
 
-  inherit (callPackages ../servers/mpd { })
+  inherit (callPackages ../servers/mpd { stdenv = if stdenv.cc.isClang then llvmPackages_8.stdenv else stdenv; })
     mpd mpd-small mpdWithFeatures;
 
   libmpdclient = callPackage ../servers/mpd/libmpdclient.nix { };
@@ -20918,6 +20919,7 @@ in
   kopia = callPackage ../tools/backup/kopia { };
 
   kora-icon-theme = callPackage ../data/icons/kora-icon-theme {
+    inherit (gnome3) adwaita-icon-theme;
     inherit (libsForQt5.kdeFrameworks) breeze-icons;
   };
 
@@ -22932,6 +22934,8 @@ in
 
   giada = callPackage ../applications/audio/giada {};
 
+  giara = callPackage ../applications/networking/giara { };
+
   gitit = callPackage ../applications/misc/gitit {};
 
   gkrellm = callPackage ../applications/misc/gkrellm {
@@ -23830,6 +23834,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AudioToolbox Foundation VideoToolbox;
     inherit (darwin) libobjc;
   };
+
+  handlr = callPackage ../tools/misc/handlr { };
 
   jftui = callPackage ../applications/video/jftui { };
 
