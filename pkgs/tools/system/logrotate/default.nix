@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
 , mailutils ? null
+, aclSupport ? true, acl
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ popt ];
+  buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
 
   meta = with lib; {
     homepage = "https://fedorahosted.org/releases/l/o/logrotate/";
