@@ -1,6 +1,6 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
@@ -15,6 +15,10 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-KvUnDInUqFW7FypgsppIBQZKNu6HVsEeHtGwdqYtoys=";
+
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X ktbs.dev/teler/common.Version=${version}")
+  '';
 
   # test require internet access
   doCheck = false;

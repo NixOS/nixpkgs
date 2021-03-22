@@ -8,16 +8,16 @@
 , pythonPackages
 }:
 
-pythonPackages.buildPythonPackage {
+pythonPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "426";
+  version = "431";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "1acdc258e5bb2ae22f5eafaf3dac8d9265dba5e2";
-    sha256 = "1snihd433hx36s6d5hsnq4qg0xs6ag4822lwm5fqak64n22ad2qb";
+    rev = "v${version}";
+    sha256 = "0mfql27n725k6ynvhkgzmxxpfbjlzil2fjpy082gz257kb0880zy";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ pythonPackages.buildPythonPackage {
     matplotlib
     qtpy
     pyside2
+    mpv
   ];
 
   checkInputs = with pythonPackages; [ nose httmock ];
