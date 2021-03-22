@@ -70,6 +70,7 @@ let
       koko = callPackage ./koko.nix {};
       krecorder = callPackage ./krecorder.nix {};
       ktrip = callPackage ./ktrip.nix {};
+      kweather = callPackage ./kweather.nix {};
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
       spacebar = callPackage ./spacebar.nix {};
