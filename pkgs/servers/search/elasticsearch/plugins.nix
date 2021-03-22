@@ -4,13 +4,14 @@ let
   esVersion = elasticsearch.version;
 
   esPlugin =
-    a@{ pluginName
-    , installPhase ? ''
+    a@{
+      pluginName,
+      installPhase ? ''
         mkdir -p $out/config
         mkdir -p $out/plugins
-        ln -s ${elasticsearch}/lib $out/lib
+        ln -s ${elasticsearch}/lib ${elasticsearch}/modules $out
         ES_HOME=$out ${elasticsearch}/bin/elasticsearch-plugin install --batch -v file://$src
-        rm $out/lib
+        rm $out/lib $out/modules
       ''
     , ...
     }:
