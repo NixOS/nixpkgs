@@ -88,8 +88,6 @@ stdenv.mkDerivation rec {
     description = "Matrix group messaging app";
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
-    # couldn't read /build/source/build/podcasts-gtk/resources/resources.gresource: No such file or directory (os error 2)
-    broken = true;
     maintainers = with maintainers; [ dtzWill worldofpeace ];
   };
 }

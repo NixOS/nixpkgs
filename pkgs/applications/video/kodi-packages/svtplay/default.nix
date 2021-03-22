@@ -21,6 +21,7 @@ buildKodiAddon rec {
       is the preferred video format by the plugin.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ edwtjo ];
+    license = licenses.gpl3Plus;
+    maintainers = teams.kodi.members;
   };
 }

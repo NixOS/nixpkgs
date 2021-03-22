@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wiire/pixiewps";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.nico202 ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

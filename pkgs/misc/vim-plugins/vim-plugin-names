@@ -45,6 +45,7 @@ cespare/vim-toml
 Chiel92/vim-autoformat
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
+chr4/nginx.vim
 chrisbra/CheckAttach
 chrisbra/csv.vim
 chrisbra/NrrwRgn
@@ -263,6 +264,7 @@ kbenzie/vim-spirv
 kchmck/vim-coffee-script
 KeitaNakamura/neodark.vim
 keith/investigate.vim
+keith/rspec.vim
 keith/swift.vim
 kevinhwang91/nvim-bqf@main
 kevinhwang91/nvim-hlslens@main
@@ -633,6 +635,7 @@ travitch/hasksyn
 tremor-rs/tremor-vim@main
 triglav/vim-visual-increment
 troydm/zoomwintab.vim
+tversteeg/registers.nvim@main
 twerth/ir_black
 twinside/vim-haskellconceal
 Twinside/vim-hoogle

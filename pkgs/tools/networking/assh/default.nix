@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, openssh, makeWrapper }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, openssh
+, makeWrapper
+}:
 
 buildGoModule rec {
   pname = "assh";
@@ -14,6 +19,10 @@ buildGoModule rec {
   vendorSha256 = "sha256-6OAsO7zWAgPfQWD9k+nYH7hnDDUlKIjTB61ivvoubn0=";
 
   doCheck = false;
+
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X moul.io/assh/v2/pkg/version.Version=${version}")
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -374,7 +374,7 @@
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
-    "iaqualink" = ps: with ps; [ ]; # missing inputs: iaqualink
+    "iaqualink" = ps: with ps; [ iaqualink ];
     "icloud" = ps: with ps; [ pyicloud ];
     "idteck_prox" = ps: with ps; [ ]; # missing inputs: rfk101py
     "ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
@@ -563,7 +563,7 @@
     "norway_air" = ps: with ps; [ pymetno ];
     "notify" = ps: with ps; [ ];
     "notify_events" = ps: with ps; [ ]; # missing inputs: notify-events
-    "notion" = ps: with ps; [ ]; # missing inputs: aionotion
+    "notion" = ps: with ps; [ aionotion ];
     "nsw_fuel_station" = ps: with ps; [ ]; # missing inputs: nsw-fuel-api-client
     "nsw_rural_fire_service_feed" = ps: with ps; [ ]; # missing inputs: aio_geojson_nsw_rfs_incidents
     "nuheat" = ps: with ps; [ ]; # missing inputs: nuheat
@@ -741,7 +741,7 @@
     "sighthound" = ps: with ps; [ pillow simplehound ];
     "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
-    "simplisafe" = ps: with ps; [ ]; # missing inputs: simplisafe-python
+    "simplisafe" = ps: with ps; [ simplisafe-python ];
     "simulated" = ps: with ps; [ ];
     "sinch" = ps: with ps; [ ]; # missing inputs: clx-sdk-xms
     "sisyphus" = ps: with ps; [ ]; # missing inputs: sisyphus-control
