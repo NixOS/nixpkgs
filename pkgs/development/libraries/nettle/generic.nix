@@ -16,7 +16,7 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
-  configureFlags = [ "--enable-fat" ]; # runtime selection of HW-accelerated code
+  configureFlags = [ "--enable-fat" ]; # runtime selection of HW-accelerated code; it's default since 3.7
 
   doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
