@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.20";
+  version = "0.21";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
