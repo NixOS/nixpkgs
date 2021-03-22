@@ -345,6 +345,12 @@ let
 
     faraday = callPackage ../development/ocaml-modules/faraday { };
 
+    faraday-async = callPackage ../development/ocaml-modules/faraday/async.nix { };
+
+    faraday-lwt = callPackage ../development/ocaml-modules/faraday/lwt.nix { };
+
+    faraday-lwt-unix = callPackage ../development/ocaml-modules/faraday/lwt-unix.nix { };
+
     farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
     fdkaac = callPackage ../development/ocaml-modules/fdkaac { };

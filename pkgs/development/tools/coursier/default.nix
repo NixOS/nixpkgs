@@ -2,7 +2,7 @@
 , coreutils, git, gnused, nix, nixfmt }:
 
 let
-  version = "2.0.14";
+  version = "2.0.15";
 
   zshCompletion = fetchurl {
     url =
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "sha256-mGVOg+I42O3VYj7RStEOfZajS9RZo9hLWKap6UdjJCE=";
+    sha256 = "sha256-XfTW8GNoPsNXamy0K9Ai3SSzBSyS1dNNCeWsbD8xCQI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
