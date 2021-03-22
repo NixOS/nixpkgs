@@ -1,0 +1,310 @@
+diff --git a/configure b/configure
+index 4fbaf9b7f..fb07abe34 100755
+--- a/configure
++++ b/configure
+@@ -33352,7 +33352,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_BPGDecodeDelegate" && ac_cv_path_BPGDecodeDelegate=" "$BPGDecodeDelegateDefault""
++  test -z "$ac_cv_path_BPGDecodeDelegate" && ac_cv_path_BPGDecodeDelegate="$BPGDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33393,7 +33393,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_BPGEncodeDelegate" && ac_cv_path_BPGEncodeDelegate=" "$BPGEncodeDelegateDefault""
++  test -z "$ac_cv_path_BPGEncodeDelegate" && ac_cv_path_BPGEncodeDelegate="$BPGEncodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33434,7 +33434,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_BlenderDecodeDelegate" && ac_cv_path_BlenderDecodeDelegate=" "$BlenderDecodeDelegateDefault""
++  test -z "$ac_cv_path_BlenderDecodeDelegate" && ac_cv_path_BlenderDecodeDelegate="$BlenderDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33521,7 +33521,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_DNGDecodeDelegate" && ac_cv_path_DNGDecodeDelegate=" "$DNGDecodeDelegateDefault""
++  test -z "$ac_cv_path_DNGDecodeDelegate" && ac_cv_path_DNGDecodeDelegate="$DNGDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33562,7 +33562,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_DOCDecodeDelegate" && ac_cv_path_DOCDecodeDelegate=" "$DOCDecodeDelegateDefault""
++  test -z "$ac_cv_path_DOCDecodeDelegate" && ac_cv_path_DOCDecodeDelegate="$DOCDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33603,7 +33603,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_DVIDecodeDelegate" && ac_cv_path_DVIDecodeDelegate=" "$DVIDecodeDelegateDefault""
++  test -z "$ac_cv_path_DVIDecodeDelegate" && ac_cv_path_DVIDecodeDelegate="$DVIDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33644,7 +33644,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_ConvertDelegate" && ac_cv_path_ConvertDelegate=" "$ConvertDelegateDefault""
++  test -z "$ac_cv_path_ConvertDelegate" && ac_cv_path_ConvertDelegate="$ConvertDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33685,7 +33685,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_DisplayDelegate" && ac_cv_path_DisplayDelegate=" "$DisplayDelegateDefault""
++  test -z "$ac_cv_path_DisplayDelegate" && ac_cv_path_DisplayDelegate="$DisplayDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33726,7 +33726,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_EditorDelegate" && ac_cv_path_EditorDelegate=" "$EditorDelegateDefault""
++  test -z "$ac_cv_path_EditorDelegate" && ac_cv_path_EditorDelegate="$EditorDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33767,7 +33767,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_GVCDecodeDelegate" && ac_cv_path_GVCDecodeDelegate=" "$GVCDecodeDelegateDefault""
++  test -z "$ac_cv_path_GVCDecodeDelegate" && ac_cv_path_GVCDecodeDelegate="$GVCDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33808,7 +33808,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_HPGLDecodeDelegate" && ac_cv_path_HPGLDecodeDelegate=" "$HPGLDecodeDelegateDefault""
++  test -z "$ac_cv_path_HPGLDecodeDelegate" && ac_cv_path_HPGLDecodeDelegate="$HPGLDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33849,7 +33849,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_HTMLDecodeDelegate" && ac_cv_path_HTMLDecodeDelegate=" "$HTMLDecodeDelegateDefault""
++  test -z "$ac_cv_path_HTMLDecodeDelegate" && ac_cv_path_HTMLDecodeDelegate="$HTMLDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33890,7 +33890,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_ILBMDecodeDelegate" && ac_cv_path_ILBMDecodeDelegate=" "$ILBMDecodeDelegateDefault""
++  test -z "$ac_cv_path_ILBMDecodeDelegate" && ac_cv_path_ILBMDecodeDelegate="$ILBMDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33931,7 +33931,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_ILBMEncodeDelegate" && ac_cv_path_ILBMEncodeDelegate=" "$ILBMEncodeDelegateDefault""
++  test -z "$ac_cv_path_ILBMEncodeDelegate" && ac_cv_path_ILBMEncodeDelegate="$ILBMEncodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -33972,7 +33972,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_JXRDecodeDelegate" && ac_cv_path_JXRDecodeDelegate=" "$JXRDecodeDelegateDefault""
++  test -z "$ac_cv_path_JXRDecodeDelegate" && ac_cv_path_JXRDecodeDelegate="$JXRDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34013,7 +34013,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_JXREncodeDelegate" && ac_cv_path_JXREncodeDelegate=" "$JXREncodeDelegateDefault""
++  test -z "$ac_cv_path_JXREncodeDelegate" && ac_cv_path_JXREncodeDelegate="$JXREncodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34054,7 +34054,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_LEPDelegate" && ac_cv_path_LEPDelegate=" "$LEPDelegateDefault""
++  test -z "$ac_cv_path_LEPDelegate" && ac_cv_path_LEPDelegate="$LEPDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34136,7 +34136,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_LPRDelegate" && ac_cv_path_LPRDelegate=" "$LPRDelegateDefault""
++  test -z "$ac_cv_path_LPRDelegate" && ac_cv_path_LPRDelegate="$LPRDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34177,7 +34177,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_LaunchDelegate" && ac_cv_path_LaunchDelegate=" "$LaunchDelegateDefault""
++  test -z "$ac_cv_path_LaunchDelegate" && ac_cv_path_LaunchDelegate="$LaunchDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34218,7 +34218,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_MogrifyDelegate" && ac_cv_path_MogrifyDelegate=" "$MogrifyDelegateDefault""
++  test -z "$ac_cv_path_MogrifyDelegate" && ac_cv_path_MogrifyDelegate="$MogrifyDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34259,7 +34259,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_VIDEODecodeDelegate" && ac_cv_path_VIDEODecodeDelegate=" "$VIDEODecodeDelegateDefault""
++  test -z "$ac_cv_path_VIDEODecodeDelegate" && ac_cv_path_VIDEODecodeDelegate="$VIDEODecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34300,7 +34300,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_VIDEOEncodeDelegate" && ac_cv_path_VIDEOEncodeDelegate=" "$VIDEOEncodeDelegateDefault""
++  test -z "$ac_cv_path_VIDEOEncodeDelegate" && ac_cv_path_VIDEOEncodeDelegate="$VIDEOEncodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34341,7 +34341,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_MrSIDDecodeDelegate" && ac_cv_path_MrSIDDecodeDelegate=" "$MrSIDDecodeDelegateDefault""
++  test -z "$ac_cv_path_MrSIDDecodeDelegate" && ac_cv_path_MrSIDDecodeDelegate="$MrSIDDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34382,7 +34382,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_MVDelegate" && ac_cv_path_MVDelegate=" "$MVDelegateDefault""
++  test -z "$ac_cv_path_MVDelegate" && ac_cv_path_MVDelegate="$MVDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34423,7 +34423,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_PCLDelegate" && ac_cv_path_PCLDelegate=" "$PCLDelegateDefault""
++  test -z "$ac_cv_path_PCLDelegate" && ac_cv_path_PCLDelegate="$PCLDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34510,7 +34510,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_RMDelegate" && ac_cv_path_RMDelegate=" "$RMDelegateDefault""
++  test -z "$ac_cv_path_RMDelegate" && ac_cv_path_RMDelegate="$RMDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34551,7 +34551,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_RSVGDecodeDelegate" && ac_cv_path_RSVGDecodeDelegate=" "$RSVGDecodeDelegateDefault""
++  test -z "$ac_cv_path_RSVGDecodeDelegate" && ac_cv_path_RSVGDecodeDelegate="$RSVGDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34592,7 +34592,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_SVGDecodeDelegate" && ac_cv_path_SVGDecodeDelegate=" "$SVGDecodeDelegateDefault""
++  test -z "$ac_cv_path_SVGDecodeDelegate" && ac_cv_path_SVGDecodeDelegate="$SVGDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34633,7 +34633,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_TextEncodeDelegate" && ac_cv_path_TextEncodeDelegate=" "$TextEncodeDelegateDefault""
++  test -z "$ac_cv_path_TextEncodeDelegate" && ac_cv_path_TextEncodeDelegate="$TextEncodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34674,7 +34674,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_TraceEncodeDelegate" && ac_cv_path_TraceEncodeDelegate=" "$TraceEncodeDelegateDefault""
++  test -z "$ac_cv_path_TraceEncodeDelegate" && ac_cv_path_TraceEncodeDelegate="$TraceEncodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34756,7 +34756,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_WebPDecodeDelegate" && ac_cv_path_WebPDecodeDelegate=" "$WebPDecodeDelegateDefault""
++  test -z "$ac_cv_path_WebPDecodeDelegate" && ac_cv_path_WebPDecodeDelegate="$WebPDecodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34797,7 +34797,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_WebPEncodeDelegate" && ac_cv_path_WebPEncodeDelegate=" "$WebPEncodeDelegateDefault""
++  test -z "$ac_cv_path_WebPEncodeDelegate" && ac_cv_path_WebPEncodeDelegate="$WebPEncodeDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34838,7 +34838,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_WWWDecodeDelegate" && ac_cv_path_WWWDecodeDelegate=" "$WWWDecodeDelegateDelegateDefault""
++  test -z "$ac_cv_path_WWWDecodeDelegate" && ac_cv_path_WWWDecodeDelegate="$WWWDecodeDelegateDelegateDefault"
+   ;;
+ esac
+ fi
+@@ -34879,7 +34879,7 @@ done
+   done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_XPSDelegate" && ac_cv_path_XPSDelegate=" "$XPSDelegateDefault""
++  test -z "$ac_cv_path_XPSDelegate" && ac_cv_path_XPSDelegate="$XPSDelegateDefault"
+   ;;
+ esac
+ fi

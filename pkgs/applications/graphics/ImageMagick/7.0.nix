@@ -16,7 +16,10 @@ let
   cfg = {
     version = "7.0.10-61";
     sha256 = "sha256-c/90N5H9iz5JYmn7/ynHgSOAmO5NTtkxajChZvjfMP8=";
-    patches = [];
+
+    # Extraneous spaces in configure break the content of delegates.xml
+    # See https://github.com/ImageMagick/ImageMagick/issues/3428
+    patches = [ ./remove-extraneous-spaces.patch ];
   };
 in
 
