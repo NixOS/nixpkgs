@@ -31,6 +31,17 @@ setuptoolsShellHook() {
         mkdir -p "$tmp_path/@pythonSitePackages@"
         eval "@pythonInterpreter@ -m pip install -e . --prefix $tmp_path \
           --no-build-isolation >&2"
+
+        # setuptools no longer installs a site.py file since version 49. Using
+        # a sitecustomize.py file is a workaround for making nix-shell
+        # environments work again.
+        # See https://github.com/pypa/setuptools/issues/2612
+        cat >"$tmp_path/@pythonSitePackages@/sitecustomize.py" <<EOF
+import site
+import pathlib
+here = pathlib.Path(__file__).parent
+site.addsitedir(str(here))
+EOF
     fi
 
     runHook postShellHook
