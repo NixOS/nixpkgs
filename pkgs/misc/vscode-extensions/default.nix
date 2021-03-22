@@ -604,7 +604,9 @@ let
         buildInputs = [ jdk ];
         meta = {
           license = lib.licenses.epl20;
-          broken = lib.versionAtLeast "11" jdk.version;
+          # FIXME: jdk.version should also exist on darwin
+          broken = !(jdk ? version) ||
+            lib.versionAtLeast "11" jdk.version;
         };
       };
 
