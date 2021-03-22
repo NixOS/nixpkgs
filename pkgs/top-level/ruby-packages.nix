@@ -235,6 +235,16 @@
     };
     version = "2.1.532";
   };
+  certified = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1706p6p0a8adyvd943af2a3093xakvislgffw3v9dvp7j07dyk5a";
+      type = "gem";
+    };
+    version = "1.0.0";
+  };
   CFPropertyList = {
     groups = ["default"];
     platforms = [];
