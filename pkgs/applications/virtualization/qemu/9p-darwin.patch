@@ -1,0 +1,1059 @@
+From 19032cc9de8c734c6735c3f304327cc05a88dd0c Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@alumni.harvard.edu>
+Date: Sat, 16 Jun 2018 20:56:45 -0400
+Subject: [PATCH 01/11] 9p: linux: Fix a couple Linux assumptions
+
+ - Guard Linux only headers.
+ - Add qemu/statfs.h header to abstract over the which
+   headers are needed for struct statfs
+ - Define `ENOATTR` only if not only defined
+   (it's defined in system headers on Darwin).
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+---
+ fsdev/file-op-9p.h    |  2 +-
+ hw/9pfs/9p-local.c    |  2 ++
+ hw/9pfs/9p.c          |  2 +-
+ include/qemu/statfs.h | 19 +++++++++++++++++++
+ include/qemu/xattr.h  |  4 +++-
+ 5 files changed, 26 insertions(+), 3 deletions(-)
+ create mode 100644 include/qemu/statfs.h
+
+diff --git a/fsdev/file-op-9p.h b/fsdev/file-op-9p.h
+index 42f677c..d9d058b 100644
+--- a/fsdev/file-op-9p.h
++++ b/fsdev/file-op-9p.h
+@@ -16,7 +16,7 @@
+ 
+ #include <dirent.h>
+ #include <utime.h>
+-#include <sys/vfs.h>
++#include "qemu/statfs.h"
+ #include "qemu-fsdev-throttle.h"
+ 
+ #define SM_LOCAL_MODE_BITS    0600
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index af52c1d..452a0d6 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -27,10 +27,12 @@
+ #include "qemu/error-report.h"
+ #include "qemu/option.h"
+ #include <libgen.h>
++#ifdef CONFIG_LINUX
+ #include <linux/fs.h>
+ #ifdef CONFIG_LINUX_MAGIC_H
+ #include <linux/magic.h>
+ #endif
++#endif
+ #include <sys/ioctl.h>
+ 
+ #ifndef XFS_SUPER_MAGIC
+diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
+index 134806d..8932da6 100644
+--- a/hw/9pfs/9p.c
++++ b/hw/9pfs/9p.c
+@@ -27,7 +27,7 @@
+ #include "migration/blocker.h"
+ #include "qemu/xxhash.h"
+ #include <math.h>
+-#include <linux/limits.h>
++#include <limits.h>
+ 
+ int open_fd_hw;
+ int total_open_fd;
+diff --git a/include/qemu/statfs.h b/include/qemu/statfs.h
+new file mode 100644
+index 0000000..dde289f
+--- /dev/null
++++ b/include/qemu/statfs.h
+@@ -0,0 +1,19 @@
++/*
++ * Host statfs header abstraction
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2, or any
++ * later version.  See the COPYING file in the top-level directory.
++ *
++ */
++#ifndef QEMU_STATFS_H
++#define QEMU_STATFS_H
++
++#ifdef CONFIG_LINUX
++# include <sys/vfs.h>
++#endif
++#ifdef CONFIG_DARWIN
++# include <sys/param.h>
++# include <sys/mount.h>
++#endif
++
++#endif
+diff --git a/include/qemu/xattr.h b/include/qemu/xattr.h
+index a83fe8e..f1d0f7b 100644
+--- a/include/qemu/xattr.h
++++ b/include/qemu/xattr.h
+@@ -22,7 +22,9 @@
+ #ifdef CONFIG_LIBATTR
+ #  include <attr/xattr.h>
+ #else
+-#  define ENOATTR ENODATA
++#  if !defined(ENOATTR)
++#    define ENOATTR ENODATA
++#  endif
+ #  include <sys/xattr.h>
+ #endif
+ 
+-- 
+2.30.1 (Apple Git-130)
+
+From 92bbaad998214154caef3c23eafa90484832c02f Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:46 -0400
+Subject: [PATCH 02/11] 9p: Rename 9p-util -> 9p-util-linux
+
+The current file only has the Linux versions of these functions.
+Rename the file accordingly and update the Makefile to only build
+it on Linux. A Darwin version of these will follow later in the
+series.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+Signed-off-by: Michael Roitzsch <reactorcontrol@icloud.com>
+---
+ hw/9pfs/{9p-util.c => 9p-util-linux.c} | 2 +-
+ hw/9pfs/meson.build                    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename hw/9pfs/{9p-util.c => 9p-util-linux.c} (97%)
+
+diff --git a/hw/9pfs/9p-util.c b/hw/9pfs/9p-util-linux.c
+similarity index 97%
+rename from hw/9pfs/9p-util.c
+rename to hw/9pfs/9p-util-linux.c
+index 614b7fc..defa3a4 100644
+--- a/hw/9pfs/9p-util.c
++++ b/hw/9pfs/9p-util-linux.c
+@@ -1,5 +1,5 @@
+ /*
+- * 9p utilities
++ * 9p utilities (Linux Implementation)
+  *
+  * Copyright IBM, Corp. 2017
+  *
+diff --git a/hw/9pfs/meson.build b/hw/9pfs/meson.build
+index 99be5d9..1b28e70 100644
+--- a/hw/9pfs/meson.build
++++ b/hw/9pfs/meson.build
+@@ -4,7 +4,6 @@ fs_ss.add(files(
+   '9p-posix-acl.c',
+   '9p-proxy.c',
+   '9p-synth.c',
+-  '9p-util.c',
+   '9p-xattr-user.c',
+   '9p-xattr.c',
+   '9p.c',
+@@ -14,6 +13,7 @@ fs_ss.add(files(
+   'coth.c',
+   'coxattr.c',
+ ))
++fs_ss.add(when: 'CONFIG_LINUX', if_true: files('9p-util-linux.c'))
+ fs_ss.add(when: 'CONFIG_XEN', if_true: files('xen-9p-backend.c'))
+ softmmu_ss.add_all(when: 'CONFIG_FSDEV_9P', if_true: fs_ss)
+ 
+-- 
+2.30.1 (Apple Git-130)
+
+From 9e041f6a1ebaeb322a32ae606f21f8082bc664e4 Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:47 -0400
+Subject: [PATCH 03/11] 9p: darwin: Handle struct stat(fs) differences
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+---
+ hw/9pfs/9p-proxy.c | 17 ++++++++++++++---
+ hw/9pfs/9p-synth.c |  2 ++
+ hw/9pfs/9p.c       | 16 ++++++++++++++--
+ 3 files changed, 30 insertions(+), 5 deletions(-)
+
+diff --git a/hw/9pfs/9p-proxy.c b/hw/9pfs/9p-proxy.c
+index 4aa4e0a..9db07df 100644
+--- a/hw/9pfs/9p-proxy.c
++++ b/hw/9pfs/9p-proxy.c
+@@ -118,10 +118,15 @@ static void prstatfs_to_statfs(struct statfs *stfs, ProxyStatFS *prstfs)
+     stfs->f_bavail = prstfs->f_bavail;
+     stfs->f_files = prstfs->f_files;
+     stfs->f_ffree = prstfs->f_ffree;
++#ifdef CONFIG_DARWIN
++    stfs->f_fsid.val[0] = prstfs->f_fsid[0] & 0xFFFFFFFFU;
++    stfs->f_fsid.val[1] = prstfs->f_fsid[1] >> 32 & 0xFFFFFFFFU;
++#else
+     stfs->f_fsid.__val[0] = prstfs->f_fsid[0] & 0xFFFFFFFFU;
+     stfs->f_fsid.__val[1] = prstfs->f_fsid[1] >> 32 & 0xFFFFFFFFU;
+     stfs->f_namelen = prstfs->f_namelen;
+     stfs->f_frsize = prstfs->f_frsize;
++#endif
+ }
+ 
+ /* Converts proxy_stat structure to VFS stat structure */
+@@ -138,12 +143,18 @@ static void prstat_to_stat(struct stat *stbuf, ProxyStat *prstat)
+    stbuf->st_size = prstat->st_size;
+    stbuf->st_blksize = prstat->st_blksize;
+    stbuf->st_blocks = prstat->st_blocks;
+-   stbuf->st_atim.tv_sec = prstat->st_atim_sec;
+-   stbuf->st_atim.tv_nsec = prstat->st_atim_nsec;
++   stbuf->st_atime = prstat->st_atim_sec;
+    stbuf->st_mtime = prstat->st_mtim_sec;
+-   stbuf->st_mtim.tv_nsec = prstat->st_mtim_nsec;
+    stbuf->st_ctime = prstat->st_ctim_sec;
++#ifdef CONFIG_DARWIN
++   stbuf->st_atimespec.tv_nsec = prstat->st_atim_nsec;
++   stbuf->st_mtimespec.tv_nsec = prstat->st_mtim_nsec;
++   stbuf->st_ctimespec.tv_nsec = prstat->st_ctim_nsec;
++#else
++   stbuf->st_atim.tv_nsec = prstat->st_atim_nsec;
++   stbuf->st_mtim.tv_nsec = prstat->st_mtim_nsec;
+    stbuf->st_ctim.tv_nsec = prstat->st_ctim_nsec;
++#endif
+ }
+ 
+ /*
+diff --git a/hw/9pfs/9p-synth.c b/hw/9pfs/9p-synth.c
+index 473ef91..6318be8 100644
+--- a/hw/9pfs/9p-synth.c
++++ b/hw/9pfs/9p-synth.c
+@@ -422,7 +422,9 @@ static int synth_statfs(FsContext *s, V9fsPath *fs_path,
+     stbuf->f_bsize = 512;
+     stbuf->f_blocks = 0;
+     stbuf->f_files = synth_node_count;
++#ifndef CONFIG_DARWIN
+     stbuf->f_namelen = NAME_MAX;
++#endif
+     return 0;
+ }
+ 
+diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
+index 8932da6..c40bfd5 100644
+--- a/hw/9pfs/9p.c
++++ b/hw/9pfs/9p.c
+@@ -1288,11 +1288,17 @@ static int stat_to_v9stat_dotl(V9fsPDU *pdu, const struct stat *stbuf,
+     v9lstat->st_blksize = stbuf->st_blksize;
+     v9lstat->st_blocks = stbuf->st_blocks;
+     v9lstat->st_atime_sec = stbuf->st_atime;
+-    v9lstat->st_atime_nsec = stbuf->st_atim.tv_nsec;
+     v9lstat->st_mtime_sec = stbuf->st_mtime;
+-    v9lstat->st_mtime_nsec = stbuf->st_mtim.tv_nsec;
+     v9lstat->st_ctime_sec = stbuf->st_ctime;
++#ifdef CONFIG_DARWIN
++    v9lstat->st_atime_nsec = stbuf->st_atimespec.tv_nsec;
++    v9lstat->st_mtime_nsec = stbuf->st_mtimespec.tv_nsec;
++    v9lstat->st_ctime_nsec = stbuf->st_ctimespec.tv_nsec;
++#else
++    v9lstat->st_atime_nsec = stbuf->st_atim.tv_nsec;
++    v9lstat->st_mtime_nsec = stbuf->st_mtim.tv_nsec;
+     v9lstat->st_ctime_nsec = stbuf->st_ctim.tv_nsec;
++#endif
+     /* Currently we only support BASIC fields in stat */
+     v9lstat->st_result_mask = P9_STATS_BASIC;
+ 
+@@ -3456,9 +3462,15 @@ static int v9fs_fill_statfs(V9fsState *s, V9fsPDU *pdu, struct statfs *stbuf)
+     f_bavail = stbuf->f_bavail / bsize_factor;
+     f_files  = stbuf->f_files;
+     f_ffree  = stbuf->f_ffree;
++#ifdef CONFIG_DARWIN
++    fsid_val = (unsigned int)stbuf->f_fsid.val[0] |
++               (unsigned long long)stbuf->f_fsid.val[1] << 32;
++    f_namelen = MAXNAMLEN;
++#else
+     fsid_val = (unsigned int) stbuf->f_fsid.__val[0] |
+                (unsigned long long)stbuf->f_fsid.__val[1] << 32;
+     f_namelen = stbuf->f_namelen;
++#endif
+ 
+     return pdu_marshal(pdu, offset, "ddqqqqqqd",
+                        f_type, f_bsize, f_blocks, f_bfree,
+-- 
+2.30.1 (Apple Git-130)
+
+From e0391f158fd6f98306ccfc95c9d737860b896c96 Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:48 -0400
+Subject: [PATCH 04/11] 9p: darwin: Handle struct dirent differences
+
+On darwin d_seekoff exists, but is optional and does not seem to
+be commonly used by file systems. Use `telldir` instead to obtain
+the seek offset.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+Signed-off-by: Michael Roitzsch <reactorcontrol@icloud.com>
+---
+ hw/9pfs/9p-synth.c |  2 ++
+ hw/9pfs/9p.c       | 33 +++++++++++++++++++++++++++++++--
+ hw/9pfs/codir.c    |  4 ++++
+ 3 files changed, 37 insertions(+), 2 deletions(-)
+
+diff --git a/hw/9pfs/9p-synth.c b/hw/9pfs/9p-synth.c
+index 6318be8..d538fd4 100644
+--- a/hw/9pfs/9p-synth.c
++++ b/hw/9pfs/9p-synth.c
+@@ -217,7 +217,9 @@ static void synth_direntry(V9fsSynthNode *node,
+ {
+     strcpy(entry->d_name, node->name);
+     entry->d_ino = node->attr->inode;
++#ifndef CONFIG_DARWIN
+     entry->d_off = off + 1;
++#endif
+ }
+ 
+ static struct dirent *synth_get_dentry(V9fsSynthNode *dir,
+diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
+index c40bfd5..3bad4e6 100644
+--- a/hw/9pfs/9p.c
++++ b/hw/9pfs/9p.c
+@@ -2155,6 +2155,25 @@ static int v9fs_xattr_read(V9fsState *s, V9fsPDU *pdu, V9fsFidState *fidp,
+     return offset;
+ }
+ 
++/**
++ * Get the seek offset of a dirent. If not available from the structure itself,
++ * obtain it by calling telldir.
++ */
++static int v9fs_dent_telldir(V9fsPDU *pdu, V9fsFidState *fidp,
++                             struct dirent *dent)
++{
++#ifdef CONFIG_DARWIN
++    /*
++     * Darwin has d_seekoff, which appears to function similarly to d_off.
++     * However, it does not appear to be supported on all file systems,
++     * so use telldir for correctness.
++     */
++    return telldir(fidp->fs.dir.stream);
++#else
++    return dent->d_off;
++#endif
++}
++
+ static int coroutine_fn v9fs_do_readdir_with_stat(V9fsPDU *pdu,
+                                                   V9fsFidState *fidp,
+                                                   uint32_t max_count)
+@@ -2218,7 +2237,11 @@ static int coroutine_fn v9fs_do_readdir_with_stat(V9fsPDU *pdu,
+         count += len;
+         v9fs_stat_free(&v9stat);
+         v9fs_path_free(&path);
+-        saved_dir_pos = dent->d_off;
++        saved_dir_pos = v9fs_dent_telldir(pdu, fidp, dent);
++        if (saved_dir_pos < 0) {
++            err = saved_dir_pos;
++            break;
++        }
+     }
+ 
+     v9fs_readdir_unlock(&fidp->fs.dir);
+@@ -2357,6 +2380,7 @@ static int coroutine_fn v9fs_do_readdir(V9fsPDU *pdu, V9fsFidState *fidp,
+     V9fsString name;
+     int len, err = 0;
+     int32_t count = 0;
++    off_t off;
+     struct dirent *dent;
+     struct stat *st;
+     struct V9fsDirEnt *entries = NULL;
+@@ -2417,12 +2441,17 @@ static int coroutine_fn v9fs_do_readdir(V9fsPDU *pdu, V9fsFidState *fidp,
+             qid.version = 0;
+         }
+ 
++        off = v9fs_dent_telldir(pdu, fidp, dent);
++        if (off < 0) {
++            err = off;
++            break;
++        }
+         v9fs_string_init(&name);
+         v9fs_string_sprintf(&name, "%s", dent->d_name);
+ 
+         /* 11 = 7 + 4 (7 = start offset, 4 = space for storing count) */
+         len = pdu_marshal(pdu, 11 + count, "Qqbs",
+-                          &qid, dent->d_off,
++                          &qid, off,
+                           dent->d_type, &name);
+ 
+         v9fs_string_free(&name);
+diff --git a/hw/9pfs/codir.c b/hw/9pfs/codir.c
+index 1f70a58..3f0e753 100644
+--- a/hw/9pfs/codir.c
++++ b/hw/9pfs/codir.c
+@@ -162,7 +162,11 @@ static int do_readdir_many(V9fsPDU *pdu, V9fsFidState *fidp,
+         }
+ 
+         size += len;
++#ifdef CONFIG_DARWIN
++        saved_dir_pos = telldir(fidp->fs.dir.stream);
++#else
+         saved_dir_pos = dent->d_off;
++#endif
+     }
+ 
+     /* restore (last) saved position */
+-- 
+2.30.1 (Apple Git-130)
+
+From e3013be65bd0d34041bbc1543b0dd058fcee5069 Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:50 -0400
+Subject: [PATCH 05/11] 9p: darwin: Ignore O_{NOATIME, DIRECT}
+
+Darwin doesn't have either of these flags. Darwin does have
+F_NOCACHE, which is similar to O_DIRECT, but has different
+enough semantics that other projects don't generally map
+them automatically. In any case, we don't support O_DIRECT
+on Linux at the moment either.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+Reviewed-by: Greg Kurz <groug@kaod.org>
+Signed-off-by: Michael Roitzsch <reactorcontrol@icloud.com>
+---
+ hw/9pfs/9p-util.h |  2 ++
+ hw/9pfs/9p.c      | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/hw/9pfs/9p-util.h b/hw/9pfs/9p-util.h
+index 546f46d..627baeb 100644
+--- a/hw/9pfs/9p-util.h
++++ b/hw/9pfs/9p-util.h
+@@ -41,6 +41,7 @@ again:
+     fd = openat(dirfd, name, flags | O_NOFOLLOW | O_NOCTTY | O_NONBLOCK,
+                 mode);
+     if (fd == -1) {
++#ifndef CONFIG_DARWIN
+         if (errno == EPERM && (flags & O_NOATIME)) {
+             /*
+              * The client passed O_NOATIME but we lack permissions to honor it.
+@@ -53,6 +54,7 @@ again:
+             flags &= ~O_NOATIME;
+             goto again;
+         }
++#endif
+         return -1;
+     }
+ 
+diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
+index 3bad4e6..c1d8bc9 100644
+--- a/hw/9pfs/9p.c
++++ b/hw/9pfs/9p.c
+@@ -126,11 +126,18 @@ static int dotl_to_open_flags(int flags)
+         { P9_DOTL_NONBLOCK, O_NONBLOCK } ,
+         { P9_DOTL_DSYNC, O_DSYNC },
+         { P9_DOTL_FASYNC, FASYNC },
++#ifndef CONFIG_DARWIN
++        { P9_DOTL_NOATIME, O_NOATIME },
++        /* On Darwin, we could map to F_NOCACHE, which is
++           similar, but doesn't quite have the same
++           semantics. However, we don't support O_DIRECT
++           even on linux at the moment, so we just ignore
++           it here. */
+         { P9_DOTL_DIRECT, O_DIRECT },
++#endif
+         { P9_DOTL_LARGEFILE, O_LARGEFILE },
+         { P9_DOTL_DIRECTORY, O_DIRECTORY },
+         { P9_DOTL_NOFOLLOW, O_NOFOLLOW },
+-        { P9_DOTL_NOATIME, O_NOATIME },
+         { P9_DOTL_SYNC, O_SYNC },
+     };
+ 
+@@ -159,10 +166,12 @@ static int get_dotl_openflags(V9fsState *s, int oflags)
+      */
+     flags = dotl_to_open_flags(oflags);
+     flags &= ~(O_NOCTTY | O_ASYNC | O_CREAT);
++#ifndef CONFIG_DARWIN
+     /*
+      * Ignore direct disk access hint until the server supports it.
+      */
+     flags &= ~O_DIRECT;
++#endif
+     return flags;
+ }
+ 
+-- 
+2.30.1 (Apple Git-130)
+
+From c65566e3a70a51bb39d33fcd94966b21b63501f5 Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:51 -0400
+Subject: [PATCH 06/11] 9p: darwin: Provide a compatibility definition for
+ XATTR_SIZE_MAX
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+---
+ hw/9pfs/9p.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
+index c1d8bc9..0fe5976 100644
+--- a/hw/9pfs/9p.c
++++ b/hw/9pfs/9p.c
+@@ -3878,6 +3878,13 @@ out_nofid:
+     v9fs_string_free(&name);
+ }
+ 
++#if defined(CONFIG_DARWIN) && !defined(XATTR_SIZE_MAX)
++/* Darwin doesn't seem to define a maximum xattr size in its user
++   space header, but looking at the kernel source, HFS supports
++   up to INT32_MAX, so use that as the maximum.
++*/
++#define XATTR_SIZE_MAX INT32_MAX
++#endif
+ static void coroutine_fn v9fs_xattrcreate(void *opaque)
+ {
+     int flags, rflags = 0;
+-- 
+2.30.1 (Apple Git-130)
+
+From edfa6e204ac905fd00e5cba052a6c6f3d36faf4e Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:52 -0400
+Subject: [PATCH 07/11] 9p: darwin: *xattr_nofollow implementations
+
+This implements the darwin equivalent of the functions that were
+moved to 9p-util(-linux) earlier in this series in the new
+9p-util-darwin file.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+Signed-off-by: Michael Roitzsch <reactorcontrol@icloud.com>
+---
+ hw/9pfs/9p-util-darwin.c | 64 ++++++++++++++++++++++++++++++++++++++++
+ hw/9pfs/meson.build      |  1 +
+ 2 files changed, 65 insertions(+)
+ create mode 100644 hw/9pfs/9p-util-darwin.c
+
+diff --git a/hw/9pfs/9p-util-darwin.c b/hw/9pfs/9p-util-darwin.c
+new file mode 100644
+index 0000000..cdb4c9e
+--- /dev/null
++++ b/hw/9pfs/9p-util-darwin.c
+@@ -0,0 +1,64 @@
++/*
++ * 9p utilities (Darwin Implementation)
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2 or later.
++ * See the COPYING file in the top-level directory.
++ */
++
++#include "qemu/osdep.h"
++#include "qemu/xattr.h"
++#include "9p-util.h"
++
++ssize_t fgetxattrat_nofollow(int dirfd, const char *filename, const char *name,
++                             void *value, size_t size)
++{
++    int ret;
++    int fd = openat_file(dirfd, filename,
++                         O_RDONLY | O_PATH_9P_UTIL | O_NOFOLLOW, 0);
++    if (fd == -1) {
++        return -1;
++    }
++    ret = fgetxattr(fd, name, value, size, 0, 0);
++    close_preserve_errno(fd);
++    return ret;
++}
++
++ssize_t flistxattrat_nofollow(int dirfd, const char *filename,
++                              char *list, size_t size)
++{
++    int ret;
++    int fd = openat_file(dirfd, filename,
++                         O_RDONLY | O_PATH_9P_UTIL | O_NOFOLLOW, 0);
++    if (fd == -1) {
++        return -1;
++    }
++    ret = flistxattr(fd, list, size, 0);
++    close_preserve_errno(fd);
++    return ret;
++}
++
++ssize_t fremovexattrat_nofollow(int dirfd, const char *filename,
++                                const char *name)
++{
++    int ret;
++    int fd = openat_file(dirfd, filename, O_PATH_9P_UTIL | O_NOFOLLOW, 0);
++    if (fd == -1) {
++        return -1;
++    }
++    ret = fremovexattr(fd, name, 0);
++    close_preserve_errno(fd);
++    return ret;
++}
++
++int fsetxattrat_nofollow(int dirfd, const char *filename, const char *name,
++                         void *value, size_t size, int flags)
++{
++    int ret;
++    int fd = openat_file(dirfd, filename, O_PATH_9P_UTIL | O_NOFOLLOW, 0);
++    if (fd == -1) {
++        return -1;
++    }
++    ret = fsetxattr(fd, name, value, size, 0, flags);
++    close_preserve_errno(fd);
++    return ret;
++}
+diff --git a/hw/9pfs/meson.build b/hw/9pfs/meson.build
+index 1b28e70..12443b6 100644
+--- a/hw/9pfs/meson.build
++++ b/hw/9pfs/meson.build
+@@ -14,6 +14,7 @@ fs_ss.add(files(
+   'coxattr.c',
+ ))
+ fs_ss.add(when: 'CONFIG_LINUX', if_true: files('9p-util-linux.c'))
++fs_ss.add(when: 'CONFIG_DARWIN', if_true: files('9p-util-darwin.c'))
+ fs_ss.add(when: 'CONFIG_XEN', if_true: files('xen-9p-backend.c'))
+ softmmu_ss.add_all(when: 'CONFIG_FSDEV_9P', if_true: fs_ss)
+ 
+-- 
+2.30.1 (Apple Git-130)
+
+From 9b5abaa7e2710c0d05b4d33af4913f1411435e8d Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:53 -0400
+Subject: [PATCH 08/11] 9p: darwin: Compatibility for f/l*xattr
+
+On darwin `fgetxattr` takes two extra optional arguments,
+and the l* variants are not defined (in favor of an extra
+flag to the regular variants.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+Reviewed-by: Greg Kurz <groug@kaod.org>
+---
+ hw/9pfs/9p-local.c | 12 ++++++++----
+ hw/9pfs/9p-util.h  | 17 +++++++++++++++++
+ 2 files changed, 25 insertions(+), 4 deletions(-)
+
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index 452a0d6..8f7e198 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -776,16 +776,20 @@ static int local_fstat(FsContext *fs_ctx, int fid_type,
+         mode_t tmp_mode;
+         dev_t tmp_dev;
+ 
+-        if (fgetxattr(fd, "user.virtfs.uid", &tmp_uid, sizeof(uid_t)) > 0) {
++        if (qemu_fgetxattr(fd, "user.virtfs.uid",
++                           &tmp_uid, sizeof(uid_t)) > 0) {
+             stbuf->st_uid = le32_to_cpu(tmp_uid);
+         }
+-        if (fgetxattr(fd, "user.virtfs.gid", &tmp_gid, sizeof(gid_t)) > 0) {
++        if (qemu_fgetxattr(fd, "user.virtfs.gid",
++                           &tmp_gid, sizeof(gid_t)) > 0) {
+             stbuf->st_gid = le32_to_cpu(tmp_gid);
+         }
+-        if (fgetxattr(fd, "user.virtfs.mode", &tmp_mode, sizeof(mode_t)) > 0) {
++        if (qemu_fgetxattr(fd, "user.virtfs.mode",
++                           &tmp_mode, sizeof(mode_t)) > 0) {
+             stbuf->st_mode = le32_to_cpu(tmp_mode);
+         }
+-        if (fgetxattr(fd, "user.virtfs.rdev", &tmp_dev, sizeof(dev_t)) > 0) {
++        if (qemu_fgetxattr(fd, "user.virtfs.rdev",
++                           &tmp_dev, sizeof(dev_t)) > 0) {
+             stbuf->st_rdev = le64_to_cpu(tmp_dev);
+         }
+     } else if (fs_ctx->export_flags & V9FS_SM_MAPPED_FILE) {
+diff --git a/hw/9pfs/9p-util.h b/hw/9pfs/9p-util.h
+index 627baeb..38ef8b2 100644
+--- a/hw/9pfs/9p-util.h
++++ b/hw/9pfs/9p-util.h
+@@ -19,6 +19,23 @@
+ #define O_PATH_9P_UTIL 0
+ #endif
+ 
++#ifdef CONFIG_DARWIN
++#define qemu_fgetxattr(...) fgetxattr(__VA_ARGS__, 0, 0)
++#define qemu_lgetxattr(...) getxattr(__VA_ARGS__, 0, XATTR_NOFOLLOW)
++#define qemu_llistxattr(...) listxattr(__VA_ARGS__, XATTR_NOFOLLOW)
++#define qemu_lremovexattr(...) removexattr(__VA_ARGS__, XATTR_NOFOLLOW)
++static inline int qemu_lsetxattr(const char *path, const char *name,
++                                 const void *value, size_t size, int flags) {
++    return setxattr(path, name, value, size, 0, flags | XATTR_NOFOLLOW);
++}
++#else
++#define qemu_fgetxattr fgetxattr
++#define qemu_lgetxattr lgetxattr
++#define qemu_llistxattr llistxattr
++#define qemu_lremovexattr lremovexattr
++#define qemu_lsetxattr lsetxattr
++#endif
++
+ static inline void close_preserve_errno(int fd)
+ {
+     int serrno = errno;
+-- 
+2.30.1 (Apple Git-130)
+
+From 5189fbeea0d239e51b397f4e87a3c07454743bf6 Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:54 -0400
+Subject: [PATCH 09/11] 9p: darwin: Provide a fallback implementation for
+ utimensat
+
+This function is new in Mac OS 10.13. Provide a fallback implementation
+when building against older SDKs. The complication in the definition comes
+having to separately handle the used SDK version and the target OS version.
+
+- If the SDK version is too low (__MAC_10_13 not defined), utimensat is not
+  defined in the header, so we must not try to use it (doing so would error).
+- Otherwise, if the targetted OS version is at least 10.13, we know this
+  function is available, so we can unconditionally call it.
+- Lastly, we check for the availability of the __builtin_available macro to
+  potentially insert a dynamic check for this OS version. However, __builtin_available
+  is only available with sufficiently recent versions of clang and while all
+  Apple clang versions that ship with Xcode versions that support the 10.13
+  SDK support with builtin, we want to allow building with compilers other
+  than Apple clang that may not support this builtin.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+---
+ hw/9pfs/9p-local.c       |  2 +-
+ hw/9pfs/9p-util-darwin.c | 96 ++++++++++++++++++++++++++++++++++++++++
+ hw/9pfs/9p-util-linux.c  |  6 +++
+ hw/9pfs/9p-util.h        |  8 ++++
+ hw/9pfs/9p.c             |  1 +
+ 5 files changed, 112 insertions(+), 1 deletion(-)
+
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index 8f7e198..35abc51 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -1071,7 +1071,7 @@ static int local_utimensat(FsContext *s, V9fsPath *fs_path,
+         goto out;
+     }
+ 
+-    ret = utimensat(dirfd, name, buf, AT_SYMLINK_NOFOLLOW);
++    ret = utimensat_nofollow(dirfd, name, buf);
+     close_preserve_errno(dirfd);
+ out:
+     g_free(dirpath);
+diff --git a/hw/9pfs/9p-util-darwin.c b/hw/9pfs/9p-util-darwin.c
+index cdb4c9e..ac414bc 100644
+--- a/hw/9pfs/9p-util-darwin.c
++++ b/hw/9pfs/9p-util-darwin.c
+@@ -62,3 +62,99 @@ int fsetxattrat_nofollow(int dirfd, const char *filename, const char *name,
+     close_preserve_errno(fd);
+     return ret;
+ }
++
++#ifndef __has_builtin
++#define __has_builtin(x) 0
++#endif
++
++static int update_times_from_stat(int fd, struct timespec times[2],
++                                  int update0, int update1)
++{
++    struct stat buf;
++    int ret = fstat(fd, &buf);
++    if (ret == -1) {
++        return ret;
++    }
++    if (update0) {
++        times[0] = buf.st_atimespec;
++    }
++    if (update1) {
++        times[1] = buf.st_mtimespec;
++    }
++    return 0;
++}
++
++int utimensat_nofollow(int dirfd, const char *filename,
++                       const struct timespec times_in[2])
++{
++    int ret, fd;
++    int special0, special1;
++    struct timeval futimes_buf[2];
++    struct timespec times[2];
++    memcpy(times, times_in, 2 * sizeof(struct timespec));
++
++/* Check whether we have an SDK version that defines utimensat */
++#if defined(__MAC_10_13)
++# if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_13
++#  define UTIMENSAT_AVAILABLE 1
++# elif __has_builtin(__builtin_available)
++#  define UTIMENSAT_AVAILABLE __builtin_available(macos 10.13, *)
++# else
++#  define UTIMENSAT_AVAILABLE 0
++# endif
++    if (UTIMENSAT_AVAILABLE) {
++        return utimensat(dirfd, filename, times, AT_SYMLINK_NOFOLLOW);
++    }
++#endif
++
++    /* utimensat not available. Use futimes. */
++    fd = openat_file(dirfd, filename, O_PATH_9P_UTIL | O_NOFOLLOW, 0);
++    if (fd == -1) {
++        return -1;
++    }
++
++    special0 = times[0].tv_nsec == UTIME_OMIT;
++    special1 = times[1].tv_nsec == UTIME_OMIT;
++    if (special0 || special1) {
++        /* If both are set, nothing to do */
++        if (special0 && special1) {
++            ret = 0;
++            goto done;
++        }
++
++        ret = update_times_from_stat(fd, times, special0, special1);
++        if (ret < 0) {
++            goto done;
++        }
++    }
++
++    special0 = times[0].tv_nsec == UTIME_NOW;
++    special1 = times[1].tv_nsec == UTIME_NOW;
++    if (special0 || special1) {
++        ret = futimes(fd, NULL);
++        if (ret < 0) {
++            goto done;
++        }
++
++        /* If both are set, we are done */
++        if (special0 && special1) {
++            ret = 0;
++            goto done;
++        }
++
++        ret = update_times_from_stat(fd, times, special0, special1);
++        if (ret < 0) {
++            goto done;
++        }
++    }
++
++    futimes_buf[0].tv_sec = times[0].tv_sec;
++    futimes_buf[0].tv_usec = times[0].tv_nsec / 1000;
++    futimes_buf[1].tv_sec = times[1].tv_sec;
++    futimes_buf[1].tv_usec = times[1].tv_nsec / 1000;
++    ret = futimes(fd, futimes_buf);
++
++done:
++    close_preserve_errno(fd);
++    return ret;
++}
+diff --git a/hw/9pfs/9p-util-linux.c b/hw/9pfs/9p-util-linux.c
+index defa3a4..3902378 100644
+--- a/hw/9pfs/9p-util-linux.c
++++ b/hw/9pfs/9p-util-linux.c
+@@ -57,3 +57,9 @@ int fsetxattrat_nofollow(int dirfd, const char *filename, const char *name,
+     g_free(proc_path);
+     return ret;
+ }
++
++int utimensat_nofollow(int dirfd, const char *filename,
++                       const struct timespec times[2])
++{
++    return utimensat(dirfd, filename, times, AT_SYMLINK_NOFOLLOW);
++}
+diff --git a/hw/9pfs/9p-util.h b/hw/9pfs/9p-util.h
+index 38ef8b2..1c477a0 100644
+--- a/hw/9pfs/9p-util.h
++++ b/hw/9pfs/9p-util.h
+@@ -36,6 +36,12 @@ static inline int qemu_lsetxattr(const char *path, const char *name,
+ #define qemu_lsetxattr lsetxattr
+ #endif
+ 
++/* Compatibility with old SDK Versions for Darwin */
++#if defined(CONFIG_DARWIN) && !defined(UTIME_NOW)
++#define UTIME_NOW -1
++#define UTIME_OMIT -2
++#endif
++
+ static inline void close_preserve_errno(int fd)
+ {
+     int serrno = errno;
+@@ -96,5 +102,7 @@ ssize_t flistxattrat_nofollow(int dirfd, const char *filename,
+                               char *list, size_t size);
+ ssize_t fremovexattrat_nofollow(int dirfd, const char *filename,
+                                 const char *name);
++int utimensat_nofollow(int dirfd, const char *filename,
++                       const struct timespec times[2]);
+ 
+ #endif
+diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
+index 0fe5976..d8e2bde 100644
+--- a/hw/9pfs/9p.c
++++ b/hw/9pfs/9p.c
+@@ -22,6 +22,7 @@
+ #include "virtio-9p.h"
+ #include "fsdev/qemu-fsdev.h"
+ #include "9p-xattr.h"
++#include "9p-util.h"
+ #include "coth.h"
+ #include "trace.h"
+ #include "migration/blocker.h"
+-- 
+2.30.1 (Apple Git-130)
+
+From e3b21c7ecaf6cb84e3baef549e133715e51c681e Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:55 -0400
+Subject: [PATCH 10/11] 9p: darwin: Implement compatibility for mknodat
+
+Darwin does not support mknodat. However, to avoid race conditions
+with later setting the permissions, we must avoid using mknod on
+the full path instead. We could try to fchdir, but that would cause
+problems if multiple threads try to call mknodat at the same time.
+However, luckily there is a solution: Darwin as an (unexposed in the
+C library) system call that sets the cwd for the current thread only.
+This should suffice to use mknod safely.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+---
+ hw/9pfs/9p-local.c       |  5 +++--
+ hw/9pfs/9p-util-darwin.c | 31 +++++++++++++++++++++++++++++++
+ hw/9pfs/9p-util-linux.c  |  5 +++++
+ hw/9pfs/9p-util.h        |  2 ++
+ 4 files changed, 41 insertions(+), 2 deletions(-)
+
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index 35abc51..890e25a 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -668,7 +668,7 @@ static int local_mknod(FsContext *fs_ctx, V9fsPath *dir_path,
+ 
+     if (fs_ctx->export_flags & V9FS_SM_MAPPED ||
+         fs_ctx->export_flags & V9FS_SM_MAPPED_FILE) {
+-        err = mknodat(dirfd, name, fs_ctx->fmode | S_IFREG, 0);
++        err = qemu_mknodat(dirfd, name, fs_ctx->fmode | S_IFREG, 0);
+         if (err == -1) {
+             goto out;
+         }
+@@ -683,7 +683,7 @@ static int local_mknod(FsContext *fs_ctx, V9fsPath *dir_path,
+         }
+     } else if (fs_ctx->export_flags & V9FS_SM_PASSTHROUGH ||
+                fs_ctx->export_flags & V9FS_SM_NONE) {
+-        err = mknodat(dirfd, name, credp->fc_mode, credp->fc_rdev);
++        err = qemu_mknodat(dirfd, name, credp->fc_mode, credp->fc_rdev);
+         if (err == -1) {
+             goto out;
+         }
+@@ -696,6 +696,7 @@ static int local_mknod(FsContext *fs_ctx, V9fsPath *dir_path,
+ 
+ err_end:
+     unlinkat_preserve_errno(dirfd, name, 0);
++
+ out:
+     close_preserve_errno(dirfd);
+     return err;
+diff --git a/hw/9pfs/9p-util-darwin.c b/hw/9pfs/9p-util-darwin.c
+index ac414bc..194f068 100644
+--- a/hw/9pfs/9p-util-darwin.c
++++ b/hw/9pfs/9p-util-darwin.c
+@@ -158,3 +158,34 @@ done:
+     close_preserve_errno(fd);
+     return ret;
+ }
++
++#ifndef SYS___pthread_fchdir
++# define SYS___pthread_fchdir 349
++#endif
++
++// This is an undocumented OS X syscall. It would be best to avoid it,
++// but there doesn't seem to be another safe way to implement mknodat.
++// Dear Apple, please implement mknodat before you remove this syscall.
++static int fchdir_thread_local(int fd)
++{
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wdeprecated-declarations"
++    return syscall(SYS___pthread_fchdir, fd);
++#pragma clang diagnostic pop
++}
++
++int qemu_mknodat(int dirfd, const char *filename, mode_t mode, dev_t dev)
++{
++    int preserved_errno, err;
++    if (fchdir_thread_local(dirfd) < 0) {
++        return -1;
++    }
++    err = mknod(filename, mode, dev);
++    preserved_errno = errno;
++    /* Stop using the thread-local cwd */
++    fchdir_thread_local(-1);
++    if (err < 0) {
++        errno = preserved_errno;
++    }
++    return err;
++}
+diff --git a/hw/9pfs/9p-util-linux.c b/hw/9pfs/9p-util-linux.c
+index 3902378..06399c5 100644
+--- a/hw/9pfs/9p-util-linux.c
++++ b/hw/9pfs/9p-util-linux.c
+@@ -63,3 +63,8 @@ int utimensat_nofollow(int dirfd, const char *filename,
+ {
+     return utimensat(dirfd, filename, times, AT_SYMLINK_NOFOLLOW);
+ }
++
++int qemu_mknodat(int dirfd, const char *filename, mode_t mode, dev_t dev)
++{
++    return mknodat(dirfd, filename, mode, dev);
++}
+diff --git a/hw/9pfs/9p-util.h b/hw/9pfs/9p-util.h
+index 1c477a0..cac682d 100644
+--- a/hw/9pfs/9p-util.h
++++ b/hw/9pfs/9p-util.h
+@@ -105,4 +105,6 @@ ssize_t fremovexattrat_nofollow(int dirfd, const char *filename,
+ int utimensat_nofollow(int dirfd, const char *filename,
+                        const struct timespec times[2]);
+ 
++int qemu_mknodat(int dirfd, const char *filename, mode_t mode, dev_t dev);
++
+ #endif
+-- 
+2.30.1 (Apple Git-130)
+
+From 9290a25b4b3d85c857ebd601c12a7cc58fe88d42 Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:57 -0400
+Subject: [PATCH 11/11] 9p: darwin: meson: Allow VirtFS on Darwin
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+Signed-off-by: Michael Roitzsch <reactorcontrol@icloud.com>
+---
+ fsdev/meson.build |  1 +
+ meson.build       | 17 ++++++++++-------
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/fsdev/meson.build b/fsdev/meson.build
+index adf57cc..b632b66 100644
+--- a/fsdev/meson.build
++++ b/fsdev/meson.build
+@@ -7,6 +7,7 @@ fsdev_ss.add(when: ['CONFIG_FSDEV_9P'], if_true: files(
+   'qemu-fsdev.c',
+ ), if_false: files('qemu-fsdev-dummy.c'))
+ softmmu_ss.add_all(when: 'CONFIG_LINUX', if_true: fsdev_ss)
++softmmu_ss.add_all(when: 'CONFIG_DARWIN', if_true: fsdev_ss)
+ 
+ if have_virtfs_proxy_helper
+   executable('virtfs-proxy-helper',
+diff --git a/meson.build b/meson.build
+index c6f4b0c..d086c96 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1060,17 +1060,20 @@ endif
+ # config-host.h #
+ #################
+ 
+-have_virtfs = (targetos == 'linux' and
+-    have_system and
+-    libattr.found() and
+-    libcap_ng.found())
++if targetos == 'linux'
++  have_virtfs = (have_system and
++      libattr.found() and
++      libcap_ng.found())
++elif targetos == 'darwin'
++  have_virtfs = have_system
++endif
+ 
+-have_virtfs_proxy_helper = have_virtfs and have_tools
++have_virtfs_proxy_helper = targetos == 'linux' and have_virtfs and have_tools
+ 
+ if get_option('virtfs').enabled()
+   if not have_virtfs
+-    if targetos != 'linux'
+-      error('virtio-9p (virtfs) requires Linux')
++    if targetos != 'linux' and targetos != 'darwin'
++      error('virtio-9p (virtfs) requires Linux or Darwin')
+     elif not libcap_ng.found() or not libattr.found()
+       error('virtio-9p (virtfs) requires libcap-ng-devel and libattr-devel')
+     elif not have_system
+-- 
+2.30.1 (Apple Git-130)
+
