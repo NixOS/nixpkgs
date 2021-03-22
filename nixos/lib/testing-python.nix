@@ -149,7 +149,11 @@ rec {
 
             echo -n "$testScript" > $out/test-script
             ${lib.optionalString (!skipLint) ''
-              ${python3Packages.black}/bin/black --check --diff $out/test-script
+              # set some large line length limit so we aren't
+              # hindered in string interpolation.
+              ${python3Packages.black}/bin/black \
+                --line-length 2147483647 \
+                --check --diff $out/test-script
             ''}
 
             ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
