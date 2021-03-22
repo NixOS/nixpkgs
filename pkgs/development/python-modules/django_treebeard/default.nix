@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-treebeard";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f50e4eea146f7af6702decf7ef198ac1eee1fb9bb4af2c5dba276c3c48f76623";
+    sha256 = "8085928debdd187e9919afc522ea40069bb9f090fa804c7ae9a324b0f62843c6";
   };
 
   buildInputs = [ pytest ];
