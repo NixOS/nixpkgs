@@ -193,6 +193,7 @@ in with py.pkgs; buildPythonApplication rec {
     "conversation"
     "counter"
     "cover"
+    "deconz"
     "default_config"
     "demo"
     "derivative"
