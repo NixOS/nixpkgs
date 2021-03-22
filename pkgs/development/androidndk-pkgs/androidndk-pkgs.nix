@@ -49,13 +49,17 @@ let
   targetInfo = ndkInfoFun stdenv.targetPlatform;
 
   sdkVer = stdenv.targetPlatform.sdkVer;
-  prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config);
+
+  # targetInfo.triple is what Google thinks the toolchain should be, this is a little
+  # different from what we use. We make it four parts to conform with the existing
+  # standard more properly.
+  targetConfig = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config);
 in
 
 rec {
   # Misc tools
   binaries = stdenv.mkDerivation {
-    pname = "ndk-toolchain";
+    pname = "${targetConfig}-ndk-toolchain";
     inherit (androidndk) version;
     isClang = true; # clang based cc, but bintools ld
     nativeBuildInputs = [ makeWrapper python autoPatchelfHook ];
@@ -80,18 +84,22 @@ rec {
 
       ln -s $out/toolchain/bin $out/bin
       ln -s $out/toolchain/${targetInfo.triple}/bin/* $out/bin/
-      for f in $out/bin/${targetInfo.triple}*; do
-        ln -s $f ''${f/${targetInfo.triple}/${prefix}}
+      for f in $out/bin/${targetInfo.triple}-*; do
+        ln -s $f ''${f/${targetInfo.triple}-/${targetConfig}-}
       done
       for f in `find $out/toolchain -type d -name ${targetInfo.triple}`; do
-        ln -s $f ''${f/${targetInfo.triple}/${prefix}}
+        ln -s $f ''${f/${targetInfo.triple}/${targetConfig}}
       done
-      rm $out/bin/${prefix}-gcc $out/bin/${prefix}-g++ 
 
-      
+      # get rid of gcc and g++, otherwise wrapCCWith will use them instead of clang
+      rm $out/bin/${targetConfig}-gcc $out/bin/${targetConfig}-g++
+
+      # ld doesn't properly include transitive library dependencies. Let's use gold
+      # instead
+      rm $out/bin/${targetConfig}-ld
+      ln -s $out/bin/${targetConfig}-ld.gold $out/bin/${targetConfig}-ld
 
       patchShebangs $out/bin
-
     '';
   };
 
@@ -108,13 +116,10 @@ rec {
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
-      echo "NIX_SUPPORT": $out/nix-support
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
-      echo "-target ${targetInfo.toolchain}" >> $out/nix-support/cc-cflags
       echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
       echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
-      #echo "-I${binaries}/include -I${binaries}/sysroot/include -I${binaries}/sysroot/usr/include -I${binaries}/sysroot/include/c++/v1" >> $out/nix-support/cc-cflags
-      echo "-L${binaries}/lib" >> $out/nix-support/cc-ldflags
+      echo "-fuse-ld=$out/bin/${targetConfig}-ld.gold -L${binaries}/lib" >> $out/nix-support/cc-ldflags
     '';
   };
 
