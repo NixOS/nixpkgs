@@ -19,6 +19,9 @@ in mkDerivation {
 
   patches = [
     ./sddm-ignore-config-mtime.patch
+    # Fix pam rule for autologin https://github.com/sddm/sddm/issues/1265
+    # Apply sed -i '/^auth/ s/include/substack/' services/sddm.pam to sources
+    ./sddm-gentoo-pam-fix.patch
   ];
 
   postPatch =
