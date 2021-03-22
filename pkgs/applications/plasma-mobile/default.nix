@@ -61,6 +61,7 @@ let
         inherit mkDerivation;
       };
     in {
+      alligator = callPackage ./alligator.nix {};
       kalk = callPackage ./kalk.nix {};
       kclock = callPackage ./kclock.nix {};
     };
