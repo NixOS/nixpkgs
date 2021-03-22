@@ -135,6 +135,13 @@ in buildFHSUserEnv rec {
     libbsd
     alsaLib
 
+    # Loop Hero
+    libidn2
+    libpsl
+    nghttp2.lib
+    openssl_1_1
+    rtmpdump
+
     # needed by getcap for vr startup
     libcap
 
@@ -201,7 +208,6 @@ in buildFHSUserEnv rec {
     SDL
     SDL2_image
     glew110
-    openssl
     libidn
     tbb
     wayland
