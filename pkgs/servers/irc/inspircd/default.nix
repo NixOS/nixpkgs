@@ -61,7 +61,7 @@ in
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, nixosTests
 , perl
 , pkg-config
 , libargon2
@@ -191,6 +191,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    nixos-test = nixosTests.inspircd;
+  };
 
   meta = {
     description = "A modular C++ IRC server";
