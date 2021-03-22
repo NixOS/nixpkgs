@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Steganography program that is able to hide data in various kinds of image- and audio-files";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    knownVulnerabilities = [ "CVE-2021-27211" ];
   };
 }
