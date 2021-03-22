@@ -42,7 +42,11 @@ project(calamares-extensions
     LANGUAGES CXX
 )
 
-find_package(Calamares 3.2.26 REQUIRED)
+# On developer's machine, the user package registry breaks
+# consumers by loading the developer's config from a build
+# directory (which doesn't have the rest of the config
+# installed inside it).
+find_package(Calamares 3.2.26 REQUIRED NO_CMAKE_PACKAGE_REGISTRY)
 if (NOT TARGET Calamares::calamares OR NOT TARGET Calamares::calamaresui)
     message(FATAL_ERROR "Calamares found with missing CMake targets")
 endif()
