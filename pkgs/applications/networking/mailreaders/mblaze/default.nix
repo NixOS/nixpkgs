@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     # wrapper breaks this behaviour. The following wrappers preserve it.
 
     mkdir -p $out/wrapped
-    for x in mcom mbnc mfwd mrep
-    do
+    for x in mcom mbnc mfwd mrep; do
       mv $out/bin/$x $out/wrapped
       makeWrapper $out/wrapped/$x $out/bin/$x \
         --argv0 $out/bin/$x \
