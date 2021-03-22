@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "86.0.1";
+    ffversion = "87.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "e613cdcadfd71a01800a72c08c590032605ca8a8a0ba93326ffba93c2819f629fd620c23d00ca1274b203adc20acfe5d7913fee240ff14819fb1377ed08b1214";
+      sha512 = "c1c08be2283e7a162c8be2f2647ec2bb85cab592738dc45e4b4ffb72969229cc0019a30782a4cb27f09a13b088c63841071dd202b3543dfba295140a7d6246a4";
     };
 
     meta = {
