@@ -6227,6 +6227,12 @@
     githubId = 3359345;
     name = "obadz";
   };
+  obsidian-systems-maintenance = {
+    name = "Obsidian Systems Maintenance";
+    email = "maintainer@obsidian.systems";
+    github = "obsidian-systems-maintenance";
+    githubId = 80847921;
+  };
   ocharles = {
     email = "ollie@ocharles.org.uk";
     github = "ocharles";

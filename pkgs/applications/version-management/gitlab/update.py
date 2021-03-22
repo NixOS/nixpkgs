@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix bundler common-updater-scripts nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log vgo2nix yarn2nix
+#! nix-shell -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log yarn2nix
 
 import click
 import click_log
@@ -83,10 +83,10 @@ def _get_data_json():
         return json.load(f)
 
 
-def _call_update_source_version(pkg, version):
-    """calls update-source-version from nixpkgs root dir"""
+def _call_nix_update(pkg, version):
+    """calls nix-update from nixpkgs root dir"""
     nixpkgs_path = pathlib.Path(__file__).parent / '../../../../'
-    return subprocess.check_output(['update-source-version', pkg, version], cwd=nixpkgs_path)
+    return subprocess.check_output(['nix-update', pkg, '--version', version], cwd=nixpkgs_path)
 
 
 @click_log.simple_verbosity_option(logger)
@@ -168,20 +168,10 @@ def update_gitaly():
         with open(gitaly_dir / fn, 'w') as f:
             f.write(repo.get_file(f"ruby/{fn}", f"v{gitaly_server_version}"))
 
-    for fn in ['go.mod', 'go.sum']:
-        with open(gitaly_dir / fn, 'w') as f:
-            f.write(repo.get_file(fn, f"v{gitaly_server_version}"))
-
     subprocess.check_output(['bundle', 'lock'], cwd=gitaly_dir)
     subprocess.check_output(['bundix'], cwd=gitaly_dir)
 
-    os.environ['GOROOT'] = ""
-    subprocess.check_output(['vgo2nix', '--keep-going'], cwd=gitaly_dir)
-
-    for fn in ['go.mod', 'go.sum']:
-        os.unlink(gitaly_dir / fn)
-
-    _call_update_source_version('gitaly', gitaly_server_version)
+    _call_nix_update('gitaly', gitaly_server_version)
 
 
 @cli.command('update-gitlab-shell')
@@ -189,20 +179,10 @@ def update_gitlab_shell():
     """Update gitlab-shell"""
     data = _get_data_json()
     gitlab_shell_version = data['passthru']['GITLAB_SHELL_VERSION']
-    _call_update_source_version('gitlab-shell', gitlab_shell_version)
+    _call_nix_update('gitlab-shell', gitlab_shell_version)
 
     repo = GitLabRepo(repo='gitlab-shell')
     gitlab_shell_dir = pathlib.Path(__file__).parent / 'gitlab-shell'
-
-    for fn in ['go.mod', 'go.sum']:
-        with open(gitlab_shell_dir / fn, 'w') as f:
-            f.write(repo.get_file(fn, f"v{gitlab_shell_version}"))
-
-    os.environ['GOROOT'] = ""
-    subprocess.check_output(['vgo2nix', '--keep-going'], cwd=gitlab_shell_dir)
-
-    for fn in ['go.mod', 'go.sum']:
-        os.unlink(gitlab_shell_dir / fn)
 
 
 @cli.command('update-gitlab-workhorse')
@@ -210,20 +190,10 @@ def update_gitlab_workhorse():
     """Update gitlab-workhorse"""
     data = _get_data_json()
     gitlab_workhorse_version = data['passthru']['GITLAB_WORKHORSE_VERSION']
-    _call_update_source_version('gitlab-workhorse', gitlab_workhorse_version)
+    _call_nix_update('gitlab-workhorse', gitlab_workhorse_version)
 
     repo = GitLabRepo('gitlab-org', 'gitlab-workhorse')
     gitlab_workhorse_dir = pathlib.Path(__file__).parent / 'gitlab-workhorse'
-
-    for fn in ['go.mod', 'go.sum']:
-        with open(gitlab_workhorse_dir / fn, 'w') as f:
-            f.write(repo.get_file(fn, f"v{gitlab_workhorse_version}"))
-
-    os.environ['GOROOT'] = ""
-    subprocess.check_output(['vgo2nix', '--keep-going'], cwd=gitlab_workhorse_dir)
-
-    for fn in ['go.mod', 'go.sum']:
-        os.unlink(gitlab_workhorse_dir / fn)
 
 @cli.command('update-all')
 @click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')

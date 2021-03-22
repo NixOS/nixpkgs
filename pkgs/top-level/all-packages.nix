@@ -2947,7 +2947,9 @@ in
     cudatoolkit_10_1
     cudatoolkit_10_2
     cudatoolkit_11
-    cudatoolkit_11_0;
+    cudatoolkit_11_0
+    cudatoolkit_11_1
+    cudatoolkit_11_2;
 
   cudatoolkit = cudatoolkit_10;
 
@@ -2966,9 +2968,23 @@ in
     cudnn_cudatoolkit_10_1
     cudnn_cudatoolkit_10_2
     cudnn_cudatoolkit_11
-    cudnn_cudatoolkit_11_0;
+    cudnn_cudatoolkit_11_0
+    cudnn_cudatoolkit_11_1
+    cudnn_cudatoolkit_11_2;
 
   cudnn = cudnn_cudatoolkit_10;
+
+  cutensorPackages = callPackages ../development/libraries/science/math/cutensor { };
+  inherit (cutensorPackages)
+    cutensor_cudatoolkit_10
+    cutensor_cudatoolkit_10_1
+    cutensor_cudatoolkit_10_2
+    cutensor_cudatoolkit_11
+    cutensor_cudatoolkit_11_0
+    cutensor_cudatoolkit_11_1
+    cutensor_cudatoolkit_11_2;
+
+  cutensor = cutensor_cudatoolkit_10;
 
   curlFull = curl.override {
     idnSupport = true;
@@ -4568,11 +4584,12 @@ in
   iperf = iperf3;
 
   ipfs = ipfs_0_6;
-  ipfs_latest = ipfs_0_7;
+  ipfs_latest = ipfs_0_8;
   ipfs_0_6 = callPackage ../applications/networking/ipfs/0.6.nix {
     buildGoModule = buildGo114Module;
   };
   ipfs_0_7 = callPackage ../applications/networking/ipfs/0.7.nix { };
+  ipfs_0_8 = callPackage ../applications/networking/ipfs/0.8.nix { };
 
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {

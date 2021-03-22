@@ -39,5 +39,7 @@ with pkgs;
 
   patch-shebangs = callPackage ./patch-shebangs {};
 
+  cuda = callPackage ./cuda { };
+
   writers = callPackage ../build-support/writers/test.nix {};
 }
