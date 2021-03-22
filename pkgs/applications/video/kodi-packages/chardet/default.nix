@@ -17,5 +17,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/Freso/script.module.chardet";
     description = "Universal encoding detector";
     license = licenses.lgpl2Only;
+    maintainers = teams.kodi.members;
   };
 }

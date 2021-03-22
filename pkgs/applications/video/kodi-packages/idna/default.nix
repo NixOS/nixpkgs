@@ -17,5 +17,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/Freso/script.module.idna";
     description = "Internationalized Domain Names for Python";
     license = licenses.bsd3;
+    maintainers = teams.kodi.members;
   };
 }
