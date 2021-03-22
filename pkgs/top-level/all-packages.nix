@@ -7921,6 +7921,8 @@ in
     pulseSupport = config.pulseaudio or false;
   };
 
+  scimark = callPackage ../misc/scimark { };
+
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
