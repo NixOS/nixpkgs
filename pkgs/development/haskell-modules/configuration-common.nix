@@ -1713,4 +1713,8 @@ self: super: {
   # https://github.com/faylang/fay/pull/474
   fay = doJailbreak super.fay;
 
+  # Too strict version bounds on cryptonite.
+  # Issue reported upstream, no bug tracker url yet.
+  darcs = doJailbreak super.darcs;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
