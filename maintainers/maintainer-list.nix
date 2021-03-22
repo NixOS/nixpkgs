@@ -874,6 +874,11 @@
     github = "Atemu";
     githubId = 18599032;
   };
+  atkinschang = {
+    email = "atkinschang@gmail.com";
+    github = "AtkinsChang";
+    name = "Atkins Chang";
+  };
   athas = {
     email = "athas@sigkill.dk";
     github = "athas";
