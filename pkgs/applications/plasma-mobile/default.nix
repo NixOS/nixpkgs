@@ -62,6 +62,7 @@ let
       };
     in {
       alligator = callPackage ./alligator.nix {};
+      calindori = callPackage ./calindori.nix {};
       kalk = callPackage ./kalk.nix {};
       kclock = callPackage ./kclock.nix {};
     };
