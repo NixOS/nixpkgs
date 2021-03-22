@@ -1,17 +1,17 @@
-{ pkgs, lib, stdenv, fetchurl, gnome3, unzip }:
+{ pkgs, lib, stdenv, fetchurl, unzip }:
 
 let
   buildGnomeExtension = {
     # Every gnome extension has a UUID. It's the name of the extension folder once unpacked
     # and can always be found in the metadata.json of every extension.
-    uuid,
-    name,
-    pname,
-    description,
+      uuid
+    , name
+    , pname
+    , description
     # extensions.gnome.org extension URL
-    link,
-    version,
-    sha256,
+    , link
+    , version
+    , sha256
   }:
 
   stdenv.mkDerivation {
