@@ -1456,6 +1456,8 @@ in
 
   browserpass = callPackage ../tools/security/browserpass { };
 
+  one-password-cli = callPackage ../tools/security/one-password-cli { };
+
   passff-host = callPackage ../tools/security/passff-host { };
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
