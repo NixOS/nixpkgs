@@ -20,14 +20,15 @@
     version = "2.5.1";
   };
   kramdown = {
+    dependencies = ["rexml"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1n1c4jmrh5ig8iv1rw81s4mw4xsp4v97hvf8zkigv4hn5h542qjq";
+      sha256 = "0jdbcjv4v7sj888bv3vc6d1dg4ackkh7ywlmn9ln2g9alk7kisar";
       type = "gem";
     };
-    version = "1.17.0";
+    version = "2.3.1";
   };
   kramdown-rfc2629 = {
     dependencies = ["certified" "json_pure" "kramdown"];
@@ -35,9 +36,19 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "16m08q5bgib3i54bb9p3inrxb1xksiybs9zj1rnncq492gcqqv4j";
+      sha256 = "1p1iviq8q9za2hg0vqyrarrc3mqfskgp7spxp37xj0kl3g89vswq";
       type = "gem";
     };
-    version = "1.3.37";
+    version = "1.4.1";
+  };
+  rexml = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1mkvkcw9fhpaizrhca0pdgjcrbns48rlz4g6lavl5gjjq3rk2sq3";
+      type = "gem";
+    };
+    version = "3.2.4";
   };
 }
