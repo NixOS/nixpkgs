@@ -299,6 +299,7 @@ in with py.pkgs; buildPythonApplication rec {
     "sql"
     "ssdp"
     "stream"
+    "subaru"
     "sun"
     "switch"
     "system_health"
