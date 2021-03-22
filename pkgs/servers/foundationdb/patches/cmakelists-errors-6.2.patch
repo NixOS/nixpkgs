@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 002c0b748..d819ca0b4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -77,11 +77,12 @@ message(STATUS "Current git version ${CURRENT_GIT_VERSION}")
+ 
+ if(NOT WIN32)
+   add_custom_target(version_file ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/versions.target)
++# dirty hack for nixos to stop cmake complaining about version mismatch
+   execute_process(
+-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/build/get_version.sh ${CMAKE_CURRENT_SOURCE_DIR}/versions.target
++    COMMAND bash "-c" "cat ${CMAKE_CURRENT_SOURCE_DIR}/versions.target| grep '<Version>' | sed -e 's,^[^>]*>,,' -e 's,<.*,,'"
+     OUTPUT_VARIABLE FDB_VERSION_WNL)
+   execute_process(
+-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/build/get_package_name.sh ${CMAKE_CURRENT_SOURCE_DIR}/versions.target
++    COMMAND bash "-c" "cat ${CMAKE_CURRENT_SOURCE_DIR}/versions.target | grep '<PackageName>' | sed -e 's,^[^>]*>,,' -e 's,<.*,,'"
+     OUTPUT_VARIABLE FDB_PACKAGE_NAME_WNL)
+   string(STRIP "${FDB_VERSION_WNL}" FDB_VERSION_TARGET_FILE)
+   string(STRIP "${FDB_PACKAGE_NAME_WNL}" FDB_PACKAGE_NAME_TARGET_FILE)

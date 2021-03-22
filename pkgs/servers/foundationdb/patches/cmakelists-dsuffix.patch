@@ -1,0 +1,28 @@
+diff --git a/bindings/c/CMakeLists.txt b/bindings/c/CMakeLists.txt
+index 75b0a4e32..392b0ea21 100644
+--- a/bindings/c/CMakeLists.txt
++++ b/bindings/c/CMakeLists.txt
+@@ -131,13 +131,11 @@ fdb_install(
+   FILES foundationdb/fdb_c.h
+   ${CMAKE_CURRENT_BINARY_DIR}/foundationdb/fdb_c_options.g.h
+   ${CMAKE_SOURCE_DIR}/fdbclient/vexillographer/fdb.options
+-  DESTINATION include
+-  DESTINATION_SUFFIX /foundationdb
++  DESTINATION include/foundationdb
+   COMPONENT clients)
+ fdb_install(
+   FILES "${project_config}" "${version_config}"
+-  DESTINATION lib
+-  DESTINATION_SUFFIX "/cmake/${targets_export_name}"
++  DESTINATION "lib/cmake/${targets_export_name}"
+   COMPONENT clients)
+ fdb_configure_and_install(
+   FILE "${PROJECT_SOURCE_DIR}/cmake/foundationdb-client.pc.in"
+@@ -146,6 +144,5 @@ fdb_configure_and_install(
+   COMPONENT clients)
+ fdb_install(
+   EXPORT ${targets_export_name}
+-  DESTINATION lib
+-  DESTINATION_SUFFIX "/cmake/${targets_export_name}"
++  DESTINATION "lib/cmake/${targets_export_name}"
+   COMPONENT clients)

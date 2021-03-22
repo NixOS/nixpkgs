@@ -4513,6 +4513,7 @@ in
     foundationdb52
     foundationdb60
     foundationdb61
+    foundationdb62
   ;
 
   foundationdb = foundationdb61;

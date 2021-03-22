@@ -2524,6 +2524,7 @@ in {
   foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
   foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
   foundationdb61 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb61; };
+  foundationdb62 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb62; };
 
   fountains = callPackage ../development/python-modules/fountains { };
 
