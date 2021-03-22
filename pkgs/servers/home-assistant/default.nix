@@ -293,6 +293,7 @@ in with py.pkgs; buildPythonApplication rec {
     "shopping_list"
     "simplisafe"
     "simulated"
+    "sma"
     "sensor"
     "smarttub"
     "smtp"
