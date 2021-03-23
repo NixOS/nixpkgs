@@ -93,32 +93,36 @@ in {
   clangStdenv = foldl (flip id) super.clangStdenv staticAdapters;
   libcxxStdenv = foldl (flip id) super.libcxxStdenv staticAdapters;
 
-  zlib = super.zlib.override {
-    # Don’t use new stdenv zlib because
-    # it doesn’t like the --disable-shared flag
-    stdenv = super.stdenv;
-  };
-  openssl = super.openssl_1_1.overrideAttrs (o: {
-    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
-    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
-  });
   boost = super.boost.override {
     # Don’t use new stdenv for boost because it doesn’t like the
     # --disable-shared flag
     stdenv = super.stdenv;
   };
+
   curl = super.curl.override {
     brotliSupport = false;
     # disable gss becuase of: undefined reference to `k5_bcmp'
     gssSupport = false;
   };
+
+  ocaml-ng = self.lib.mapAttrs (_: set:
+    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
+  ) super.ocaml-ng;
+
+  openssl = super.openssl_1_1.overrideAttrs (o: {
+    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
+  });
+
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
 
-  ocaml-ng = self.lib.mapAttrs (_: set:
-    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
-  ) super.ocaml-ng;
+  zlib = super.zlib.override {
+    # Don’t use new stdenv zlib because
+    # it doesn’t like the --disable-shared flag
+    stdenv = super.stdenv;
+  };
 }
