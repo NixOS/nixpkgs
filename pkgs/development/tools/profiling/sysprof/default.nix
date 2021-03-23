@@ -5,6 +5,7 @@
 , gettext
 , glib
 , gtk3
+, json-glib
 , itstool
 , libdazzle
 , libxml2
@@ -41,7 +42,16 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     gnome3.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev (lib.getLib systemd) libdazzle ];
+
+  buildInputs = [
+    glib
+    gtk3
+    json-glib
+    pango
+    polkit
+    systemd
+    libdazzle
+  ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
