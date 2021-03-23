@@ -137,6 +137,10 @@ Create a Docker image with many of the store paths being on their own layer to i
 
     *Maximum:* `125`
 
+`layerStrategy` _optional_
+
+: Script to determine how to pack the closure into layers.
+
 `extraCommands` _optional_
 
 : Shell commands to run while building the final layer, without access to most of the layer contents. Changes to this layer are "on top" of all the other layers, so can create additional directories and files.
@@ -177,15 +181,53 @@ pkgs.dockerTools.buildLayeredImage {
 
 ### Adjusting `maxLayers` {#dockerTools-buildLayeredImage-arg-maxLayers}
 
-Increasing the `maxLayers` increases the number of layers which have a chance to be shared between different images.
+Increasing the `maxLayers` increases the number of layers which have a chance to be shared between different images. The value provided is asserted to be >= 2, since nixpkgs uses one layer itself for config.
 
 Modern Docker installations support up to 128 layers, however older versions support as few as 42.
 
 If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However it will be impossible to extend the image further.
 
-The first (`maxLayers-2`) most "popular" paths will have their own individual layers, then layer \#`maxLayers-1` will contain all the remaining "unpopular" paths, and finally layer \#`maxLayers` will contain the Image configuration.
-
 Docker's Layers are not inherently ordered, they are content-addressable and are not explicitly layered until they are composed in to an Image.
+
+### Adjusting `layerStrategy` for layer bin packing {#dockerTools-buildLayeredImage-arg-layerStrategy}
+
+If the application has fewer than `maxLayers` packages in its dependency closure, then `buildLayeredImage` he can always provide an optimal set of layers by just put in one package of each layer. However, if the application has more dependences than available layers, it needs to use a strategy for determining which layers should have which packages.
+
+Since it is hard to provide one strategy that is globally optimal for all types of applications, `buildLayeredImage` exposes the ability to plug in a custom algorithm via `layerStrategy`. This must be a program which will:
+
+1. Read the provided `availableLayers` count from its first argument (this is `maxLayers` minus 1 for the image configuration layer).
+2. Get passed a popularity-weighted topological sort of the dependency graph on stdin.
+3. Produce on stdout a JSON list of lists, where the ith element is a list of the packages to go into the ith layer.
+
+Individual applications can implement their own layer packing strategies, but there are two that ship with nixpkgs itself. These can be passed like so:
+
+```nix
+pkgs.dockerTools.buildImage {
+  name = "hello";
+  ...
+  layerStrategy = pkgs.dockerTools.layeredStrategies.popularityWeightedBottom;
+}
+```
+
+#### `layeredStrategies.popularityWeightedBottom` {#ssec-pkgs-dockerTools-layeredStrategies-popularityWeightedBottom}
+
+This is the default layer strategy if left unspecified. This will populate the first `maxLayers-2` most "popular" paths in their own individual layers, then place all remaining paths together into layer `maxLayers-1`. Layer `maxLayers` will contain the image configuration.
+
+This has the effect of storing core infrastructure packages that are likely to be shared across different applications into base layers, and then putting all the application and all of its remaining dependencies into the last layer.
+
+#### `layeredStrategies.popularityWeightedTop` {#ssec-pkgs-dockerTools-layeredStrategies-popularityWeightedTop}
+
+This container layering strategy will:
+
+- Put the highest `$maxLayers-1` packages in the dependency graph into layers `[2, $maxLayers-1]`, one package per layer.
+- Put every other dependency (the remaining collection of low-level infra deps) into layer 1.
+- Put the image configuration into layer `$maxLayers`.
+
+This has the effect of always putting the final application and its closest dependencies in their own layers, which minimizes layer diffs for iterative uploads of that same application to the container registry and container runtime download.
+
+This strategy is unlikely to share layers across *different* applications, but instead optimizes for iterative version releases of the *same* application, when the application has many dependencies.
+
+In the event that the application has fewer than `$maxLayers` dependencies, this strategy is equivalent to the first one. It differs only in the heuristic for packing multiple packages into one layer.
 
 ## streamLayeredImage {#ssec-pkgs-dockerTools-streamLayeredImage}
 

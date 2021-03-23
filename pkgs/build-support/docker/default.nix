@@ -31,6 +31,7 @@
   writeText,
   writeTextDir,
   writePython3,
+  writeShellScript,
   system,  # Note: This is the cross system we're compiling for
 }:
 
@@ -724,6 +725,8 @@ rec {
     })
   );
 
+  layerStrategies = import ./layer-strategies/default.nix { inherit writePython3 writeShellScript; };
+
   streamLayeredImage = {
     # Image Name
     name,
@@ -740,7 +743,10 @@ rec {
     extraCommands ? "",
     # We pick 100 to ensure there is plenty of room for extension. I
     # believe the actual maximum is 128.
-    maxLayers ? 100
+    maxLayers ? 100,
+    # Arbitrary program which will determine how to pack the closure into
+    # layers. See dockertools manual for details.
+    layerStrategy ? layerStrategies.popularityWeightedBottom
   }:
     assert
       (lib.assertMsg (maxLayers > 1)
@@ -821,25 +827,9 @@ rec {
                          unnecessaryDrvs}
         }
 
-        # Create $maxLayers worth of Docker Layers, one layer per store path
-        # unless there are more paths than $maxLayers. In that case, create
-        # $maxLayers-1 for the most popular layers, and smush the remainaing
-        # store paths in to one final layer.
-        #
-        # The following code is fiddly w.r.t. ensuring every layer is
-        # created, and that no paths are missed. If you change the
-        # following lines, double-check that your code behaves properly
-        # when the number of layers equals:
-        #      maxLayers-1, maxLayers, and maxLayers+1, 0
-        store_layers="$(
-          paths |
-            jq -sR '
-              rtrimstr("\n") | split("\n")
-                | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
-                | map(select(length > 0))
-            ' \
-              --argjson maxLayers "$(( maxLayers - 1 ))" # one layer will be taken up by the customisation layer
-        )"
+        # One layer will be taken up by the customisation layer
+        availableLayers="$((maxLayers - 1))"
+        store_layers=$(paths | ${layerStrategy} "$availableLayers")
 
         cat ${baseJson} | jq '
           . + {

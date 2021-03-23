@@ -283,13 +283,34 @@ rec {
   bulk-layer = pkgs.dockerTools.buildLayeredImage {
     name = "bulk-layer";
     tag = "latest";
-    contents = with pkgs; [
-      coreutils hello
-    ];
+    contents = with pkgs; [ coreutils hello ];
     maxLayers = 2;
   };
 
-  # 18. Create a "layered" image without nix store layers. This is not
+  # 19. Create a layered image with more packages in its transitive closure than
+  # max layers, using the "bottom weighted" (default) layer packing strategy.
+  # This will put 'hello' with other runtime deps that do not fit into final
+  # layer, leaving lower layers for infra pkgs like glibc.
+  bulk-layer-bottom-weighted = pkgs.dockerTools.buildLayeredImage {
+    name = "bulk-layer-bottom-weighted";
+    tag = "latest";
+    contents = with pkgs; [ hello ];
+    layerStrategy = pkgs.dockerTools.layerStrategies.popularityWeightedBottom;
+    maxLayers = 3;
+  };
+
+  # 20. Create a layered image with more packages in its transitive closure than
+  # max layers, using the "top weighted" layer packing strategy. This will put
+  # 'hello' by itself as the final layer.
+  bulk-layer-top-weighted = pkgs.dockerTools.buildLayeredImage {
+    name = "bulk-layer-top-weighted";
+    tag = "latest";
+    contents = with pkgs; [ hello ];
+    layerStrategy = pkgs.dockerTools.layerStrategies.popularityWeightedTop;
+    maxLayers = 3;
+  };
+
+  # 21. Create a "layered" image without nix store layers. This is not
   # recommended, but can be useful for base images in rare cases.
   no-store-paths = pkgs.dockerTools.buildLayeredImage {
     name = "no-store-paths";
