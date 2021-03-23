@@ -80,8 +80,8 @@ let
         # Needed for elm-format
         indents = self.callPackage ./packages/indents.nix {};
         bimap = self.callPackage ./packages/bimap.nix {};
-        avh4-lib = self.callPackage ./packages/avh4-lib.nix {};
-        elm-format-lib = self.callPackage ./packages/elm-format-lib.nix {};
+        avh4-lib = doJailbreak (self.callPackage ./packages/avh4-lib.nix {});
+        elm-format-lib = doJailbreak (self.callPackage ./packages/elm-format-lib.nix {});
         elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix {};
         elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix {};
       };
