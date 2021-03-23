@@ -46,6 +46,7 @@
 , mutter
 , evolution-data-server
 , gtk3
+, gtk4
 , sassc
 , systemd
 , pipewire
@@ -136,6 +137,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     libical
     gtk3
+    gtk4
     gdm
     geoclue2
     adwaita-icon-theme
