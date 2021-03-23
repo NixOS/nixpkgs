@@ -2082,6 +2082,8 @@ in {
   else
     callPackage ../development/python-modules/dulwich/0_19.nix { };
 
+  dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
+
   dyn = callPackage ../development/python-modules/dyn { };
 
   dynd = callPackage ../development/python-modules/dynd { };
