@@ -25,8 +25,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/nix-community/nixops-encrypted-links.git";
-        rev = "0bb9aa50a7294ee9dca10a18ff7d9024234913e1";
-        sha256 = "00wj03wcry83acwljq5v80dyrqaxpqb4j3jsdkfy3d7n5g4aq19l";
+        rev = "e2f196fce15fcfb00d18c055e1ac53aec33b8fb1";
+        sha256 = "12ynqwd5ad6wfyv6sma55wnmrlr8i14kd5d42zqv4zl23h0xnd6m";
       };
     }
   );

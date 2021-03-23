@@ -237,7 +237,7 @@ nixops = "branch master"
 type = "git"
 url = "https://github.com/nix-community/nixops-encrypted-links.git"
 reference = "master"
-resolved_reference = "0bb9aa50a7294ee9dca10a18ff7d9024234913e1"
+resolved_reference = "e2f196fce15fcfb00d18c055e1ac53aec33b8fb1"
 
 [[package]]
 name = "nixops-gcp"
