@@ -55,8 +55,8 @@ assert (versionAtLeast version "4.9");
 
   # Wipe higher-level memory allocations on free() with page_poison=1
   PAGE_POISONING           = yes;
-  PAGE_POISONING_NO_SANITY = yes;
-  PAGE_POISONING_ZERO      = yes;
+  PAGE_POISONING_NO_SANITY = whenOlder "5.11" yes;
+  PAGE_POISONING_ZERO      = whenOlder "5.11" yes;
 
   # Enable the SafeSetId LSM
   SECURITY_SAFESETID = whenAtLeast "5.1" yes;
