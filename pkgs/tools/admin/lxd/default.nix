@@ -18,13 +18,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.11";
+  version = "4.12";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1pcgxpmiiskq770sn25861dj0z8l24nzc1jbzyql7cxn0w5bnw1x";
+    sha256 = "1qgi9ciljq8h3ja9kalfvnxnjymddd5j4agv984137z443mqfnrw";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildGoPackage rec {
       )
     }
 
-    installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
+    installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];

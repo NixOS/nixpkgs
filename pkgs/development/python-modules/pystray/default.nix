@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "pystray";
-  version = "0.16.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pystray";
     rev = "v${version}";
-    sha256 = "0q5yqfm5mzffx9vnp9xcnclgjzgs0b7f50i9xmxn1m1iha1zawh1";
+    sha256 = "sha256-/dU+jwe/3qhypq7e5tawhJKzSryW7EIbmrpP+VLDvHA=";
   };
 
   propagatedBuildInputs = [ pillow xlib six ];

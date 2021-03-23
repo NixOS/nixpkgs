@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.20.0";
+  version = "4.21.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "0yj83vsjh23g7gkmq6svbgc898x3qgygkhvpcbpycvmpwxxqxh1v";
+    sha256 = "1x9qrg6ppqhm5214ymwvn0r34qdz8pqvyxd0sj7rkp06wa757z2i";
   };
 
   # all dependencies are optional, but
@@ -67,9 +67,10 @@ buildPythonPackage rec {
       -k 'not ttcompile_timestamp_calcs and not recalc_timestamp'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "A library to manipulate font files from Python";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

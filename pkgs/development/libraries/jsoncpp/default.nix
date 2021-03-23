@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python, validatePkgConfig, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, validatePkgConfig, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
-  nativeBuildInputs = [ cmake python validatePkgConfig ];
+  nativeBuildInputs = [ cmake python3 validatePkgConfig ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

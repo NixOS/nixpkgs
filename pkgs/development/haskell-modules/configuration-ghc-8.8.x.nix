@@ -52,9 +52,17 @@ self: super: {
   haddock = self.haddock_2_23_1;
   haddock-api = self.haddock-api_2_23_1;
 
-  # These builds need Cabal 3.2.x.
+  # This build needs a newer version of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+
+  # cabal-install needs more recent versions of Cabal and random, but an older
+  # version of base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_4_0_0;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    random = dontCheck super.random_1_2_0;  # break infinite recursion
+    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+  });
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;

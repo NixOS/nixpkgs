@@ -13,7 +13,7 @@ common =
   , bash, coreutils, gzip, gnutar
   , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
-  , jq, libarchive
+  , jq, libarchive, libcpuid
   , lowdown, mdbook
   # Used by tests
   , gmock
@@ -56,6 +56,7 @@ common =
         ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is24 [ libarchive gmock lowdown ]
+        ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -212,27 +213,14 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20201205_a5d85d0";
+    suffix = "pre20210317_8a5203d";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a5d85d07faa94cf3518e98273be4bee3d495f06a";
-      sha256 = "0g9jjhh0vs4hjrff5yx88x6sh7rk87ngvni3gnyxajqia957dipg";
+      rev = "8a5203d3b836497c2c5f157f85008aa8bcb6a1d2";
+      sha256 = "IMzdmoWAX6Lerhslsf7h2814xjJolPnl2bICDixRgdk=";
     };
-
-    patches = [
-      (fetchpatch { # Fix build on gcc10
-        url = "https://github.com/NixOS/nix/commit/d4870462f8f539adeaa6dca476aff6f1f31e1981.patch";
-        sha256 = "mTvLvuxb2QVybRDgntKMq+b6da/s3YgM/ll2rWBeY/Y=";
-      })
-      # Fix the ETag bug. PR merged. Remove when updating to >= 20210125
-      # https://github.com/NixOS/nixpkgs/pull/109309#issuecomment-768331750
-      (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/c5b42c5a42138329c6d02da0d8a53cb59c6077f4.patch";
-        sha256 = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
-      })
-    ];
 
     inherit storeDir stateDir confDir boehmgc;
   });

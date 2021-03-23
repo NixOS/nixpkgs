@@ -41,21 +41,29 @@ buildGoPackage rec {
     popd
   '';
 
-  dontStrip = true;
+  # Reduce closure size for client machines
+  outputs = [ "out" "client" ];
+
+  buildTargets = [ "full" ];
+
+  postInstall = ''
+    install -Dm755 -t $client/bin $out/bin/tsh
+  '';
 
   doInstallCheck = true;
 
   installCheckPhase = ''
     $out/bin/tsh version | grep ${version} > /dev/null
+    $client/bin/tsh version | grep ${version} > /dev/null
     $out/bin/tctl version | grep ${version} > /dev/null
     $out/bin/teleport version | grep ${version} > /dev/null
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A SSH CA management suite";
     homepage = "https://gravitational.com/teleport/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sigma tomberek ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sigma tomberek freezeboy ];
+    platforms = platforms.unix;
   };
 }

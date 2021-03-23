@@ -42,7 +42,8 @@ let
 in stdenv.mkDerivation {
   inherit name version src;
 
-  buildInputs = [ makeWrapper nodejs ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ nodejs ];
 
   dontBuild = true;
 

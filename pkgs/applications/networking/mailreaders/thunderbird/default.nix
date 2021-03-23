@@ -73,13 +73,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.7.1";
+  version = "78.8.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "328p14mgcam4dxx0asbgp4v2v559bwbw7z2kxd5yfwkna040r9ccrkkirma5580z9vkwb0rcjlmai9wrbacxrg8hg65d8vylvnkampy";
+      "08dnjqcdd5bs7wpl5imir0nsmvaqkri67cas1sn7ab4nb1f61lfdz4xg4x5v6f39sm5yxw2cy6rg5fc5lbiqza5bgs00gfg79kgfn2i";
   };
 
   nativeBuildInputs = [
@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     rustc
     which
     yasm
+    unzip
   ] ++ lib.optional gtk3Support wrapGAppsHook;
 
   buildInputs = [
@@ -126,7 +127,6 @@ stdenv.mkDerivation rec {
     pango
     perl
     sqlite
-    unzip
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcursor

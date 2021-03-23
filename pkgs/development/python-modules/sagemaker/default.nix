@@ -1,18 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, attrs, boto3, google-pasta
-, importlib-metadata, numpy, protobuf, protobuf3-to-dict, smdebug-rulesconfig }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, attrs
+, boto3
+, google-pasta
+, importlib-metadata
+, numpy
+, protobuf
+, protobuf3-to-dict
+, smdebug-rulesconfig
+, pandas
+}:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.24.5";
+  version = "2.30.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1j1a058ic00yxnf0cc364fzn82pacih5ffrh5s4dw1q4s3by4cvd";
+    sha256 = "sha256-3BxRDoaKxaXlKYGYQqhQ2DUO3XONvf6dlofE0pbXIho=";
   };
 
-  doCheck = false;
-
-  pythonImportsCheck = [ "sagemaker" ];
+  pythonImportsCheck = [
+    "sagemaker"
+    "sagemaker.lineage.visualizer"
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -23,7 +35,14 @@ buildPythonPackage rec {
     protobuf
     protobuf3-to-dict
     smdebug-rulesconfig
+    pandas
   ];
+
+  doCheck = false;
+
+  postFixup = ''
+    [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
+  '';
 
   meta = with lib; {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";

@@ -1,22 +1,25 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitLab, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "olm";
-  version = "3.2.1";
+  version = "3.2.2";
 
-  src = fetchurl {
-    url = "https://matrix.org/git/olm/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0iacbi9iibhzifh1bk6bi5xin557lvqmbf4ccsb8drj50dbxjiyr";
+  src = fetchFromGitLab {
+    domain = "gitlab.matrix.org";
+    owner = "matrix-org";
+    repo = pname;
+    rev = version;
+    sha256 = "0qji25wiwmkxyfpraxj96c54hyayqmjkvwh0gsy5gb5pz5bp4mcy";
   };
 
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Implements double cryptographic ratchet and Megolm ratchet";
-    license = lib.licenses.asl20;
     homepage = "https://gitlab.matrix.org/matrix-org/olm";
-    platforms = with lib.platforms; darwin ++ linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tilpner oxzi ];
   };
 }

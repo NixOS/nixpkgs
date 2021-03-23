@@ -10,6 +10,7 @@ let
     arch = if stdenv.isDarwin then archDarwin else
            if stdenv.isx86_64 then "x86-64" else
            if stdenv.isi686 then "x86-32" else
+           if stdenv.isAarch64 then "armv8" else
            "unknown";
     version = "12";
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation {
       much stronger than the best human chess grandmasters.
       '';
     maintainers = with maintainers; [ luispedro peti ];
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux"];
     license = licenses.gpl2;
   };
 

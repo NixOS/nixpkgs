@@ -271,8 +271,8 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-
   system = config.nixpkgs.localSystem.system;
+  kernelVersion = config.boot.kernelPackages.kernel.version;
 
   bindMountOpts = { name, ... }: {
 
@@ -320,7 +320,6 @@ let
       };
     };
   };
-
 
   mkBindFlag = d:
                let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
@@ -482,11 +481,16 @@ in
                           networking.useDHCP = false;
                           assertions = [
                             {
-                              assertion =  config.privateNetwork -> stringLength name < 12;
+                              assertion =
+                                (builtins.compareVersions kernelVersion "5.8" <= 0)
+                                -> config.privateNetwork
+                                -> stringLength name <= 11;
                               message = ''
                                 Container name `${name}` is too long: When `privateNetwork` is enabled, container names can
                                 not be longer than 11 characters, because the container's interface name is derived from it.
-                                This might be fixed in the future. See https://github.com/NixOS/nixpkgs/issues/38509
+                                You should either make the container name shorter or upgrade to a more recent kernel that
+                                supports interface altnames (i.e. at least Linux 5.8 - please see https://github.com/NixOS/nixpkgs/issues/38509
+                                for details).
                               '';
                             }
                           ];

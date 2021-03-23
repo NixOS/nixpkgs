@@ -22,7 +22,7 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     cjson
     sipsimple
     twisted
-    google_api_python_client
+    google-api-python-client
   ];
 
   buildInputs = [

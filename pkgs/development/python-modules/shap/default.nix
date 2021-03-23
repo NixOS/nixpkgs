@@ -66,5 +66,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
+    # ModuleNotFoundError: No module named 'sklearn.ensemble.iforest'
+    broken = true;
   };
 }

@@ -3,12 +3,12 @@
 }:
 
 mkDerivation rec {
-  version = "2.3.6";
+  version = "2.3.6.1";
   pname = "lyx";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
-    sha256 = "160whjwwrmxizdakjlkf9xc86bhqfnslw47fixgqq4qhbapcxxkg";
+    sha256 = "sha256-xr7SYzQZiY4Bp8w1AxDX2TS/WRyrcln8JYGqTADq+ng=";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs

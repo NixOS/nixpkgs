@@ -8,14 +8,14 @@
 
 buildDunePackage rec {
   pname = "git";
-  version = "3.3.0";
+  version = "3.3.2";
 
   minimumOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
-    sha256 = "090b67e8f8a02fb52b4d0c7aa445b5ff7353fdb2da00fb37b908f089c6776cd0";
+    sha256 = "01xcjggsb13n6018lp6ic0f6pglfl39qcg126h1k3da19hvpzhrv";
   };
 
   buildInputs = [

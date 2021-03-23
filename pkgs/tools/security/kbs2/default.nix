@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jilsczz22fyqbgz43gl5ilz62gfqsahfk30gayj7q5bx9k35m4w";
+    sha256 = "sha256-PtXTC0VufUR5kle9C5KhCHHEQtQZvTTU1Q/cRMCB1g0=";
   };
 
-  cargoSha256 = "1gvvmfavaq29p40p5mq1phpp2a1nw04dz4975pzm1b6z89p0jlzl";
+  cargoSha256 = "sha256-S2czYglyHRkRN3Dq5reXFOaB1i/oIHXTY8Ile+Twvzo=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ python3 ];

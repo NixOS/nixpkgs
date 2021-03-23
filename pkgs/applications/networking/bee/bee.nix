@@ -1,4 +1,4 @@
-{ version ? "release", stdenv, lib, fetchFromGitHub, buildGoModule, coreutils }:
+{ version ? "release", lib, fetchFromGitHub, buildGoModule, coreutils }:
 
 let
 

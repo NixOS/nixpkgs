@@ -18,8 +18,8 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ makeWrapper util-linux openssl libcap_ng pythonEnv
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ util-linux openssl libcap_ng pythonEnv
                   perl procps which ];
 
   configureFlags = [

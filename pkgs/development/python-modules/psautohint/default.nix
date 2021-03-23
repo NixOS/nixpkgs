@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "psautohint";
-  version = "2.2.0";
+  version = "2.3.0";
 
   disabled = pythonOlder "3.6";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "adobe-type-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gsgfr190xy2rnjf1gf7688xrh13ihgq10s19s4rv5hp6pmg9iaa";
+    sha256 = "1y7mqc2myn1gfzg4h018f8xza0q535shnqg6snnaqynz20i8jcfh";
     fetchSubmodules = true; # data dir for tests
   };
 

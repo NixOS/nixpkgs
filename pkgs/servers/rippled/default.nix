@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkg-config
+{ lib, stdenv, fetchgit, fetchurl, git, cmake, pkg-config
 , openssl,  zlib, boost, grpc, c-ares, abseil-cpp, protobuf3_8, libnsl }:
 
 let

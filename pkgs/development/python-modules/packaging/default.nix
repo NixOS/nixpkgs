@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "packaging";
-  version = "20.7";
+  version = "20.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "Ba87uF0yA3fbKBzyVKsFDhp+vL9UEGhamkB+GKH4EjY=";
+    sha256 = "sha256-eFmBhacAikcNZFJqgFnemqpEkjjygPyetrE7psQQkJM=";
   };
 
   nativeBuildInputs = [

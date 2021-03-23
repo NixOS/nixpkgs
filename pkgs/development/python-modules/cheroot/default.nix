@@ -73,7 +73,7 @@ buildPythonPackage rec {
     "bind_addr_unix"
   ];
 
-  disabledTestFiles = [
+  disabledTestPaths = [
     # avoid attempting to use 3 packages not available on nixpkgs
     # (jaraco.apt, jaraco.context, yg.lockfile)
     "cheroot/test/test_wsgi.py"

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.gebner ];
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   makeFlags = [ "installpath=$(out)/share/tegaki/models/zinnia/" ];
 }

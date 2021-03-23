@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iwa17s8ipj6a2b8zss5csb1k5y9s5js38syvq932rxcinbyjsl4";
   };
 
-  postPatch = ''
+  postPatch = lib.optional (stdenv.hostPlatform.libc == "glibc") ''
     sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
   '';
 

@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     mkdir -p $out/bin $out/public

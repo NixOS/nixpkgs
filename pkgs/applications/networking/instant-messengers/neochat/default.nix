@@ -3,8 +3,6 @@
 , fetchFromGitLab
 , pkg-config
 , cmake
-, qtbase
-, qttools
 , qtquickcontrols2
 , qtmultimedia
 , qtgraphicaleffects
@@ -26,14 +24,14 @@
 
 mkDerivation rec {
   pname = "neochat";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xGqGFJHyoZXHLv/n3UGr/KVbgs5Gc9kKKWIuKMr9DtQ=";
+    sha256 = "sha256-HvLPsU+fxlyPDP7i9OSnZ/C1RjouOQCp+4WCl6FlFJo=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];

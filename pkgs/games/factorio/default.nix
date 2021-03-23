@@ -178,7 +178,8 @@ let
     headless = base;
     demo = base // {
 
-      buildInputs = [ makeWrapper libpulseaudio ];
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = [ libpulseaudio ];
 
       libPath = lib.makeLibraryPath [
         alsaLib

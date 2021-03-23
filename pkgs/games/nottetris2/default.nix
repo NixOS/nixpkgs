@@ -25,8 +25,8 @@ stdenv.mkDerivation {
     sha256 = "17iabh6rr8jim70n96rbhif4xq02g2kppscm8l339yqx6mhb64hs";
   };
 
-  nativeBuildInputs = [ zip ];
-  buildInputs = [ love_0_7 makeWrapper ];
+  nativeBuildInputs = [ zip makeWrapper ];
+  buildInputs = [ love_0_7 ];
 
   phases = [ "unpackPhase" "installPhase" ];
 

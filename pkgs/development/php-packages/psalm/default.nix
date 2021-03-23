@@ -1,18 +1,18 @@
-{ mkDerivation, fetchurl, pkgs, lib, php }:
+{ mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "psalm";
-  version = "4.5.0";
+  version = "4.6.1";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-    sha256 = "sha256-FVgUxeV+N5Hqn5KQmI+KuQnKmvNScz9A+g02WNMxgmA=";
+    sha256 = "sha256-YFeTSIfZ2u1KmpoKV5I7pMMvCk3u5ILktsunvoDnBsg=";
   };
 
   phases = [ "installPhase" ];
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,7 +21,7 @@ mkDerivation {
       --add-flags "$out/libexec/psalm/psalm.phar"
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "A static analysis tool for finding errors in PHP applications";
     license = licenses.mit;
     homepage = "https://github.com/vimeo/psalm";

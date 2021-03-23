@@ -17,7 +17,7 @@
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
-, pipewire_0_2
+, pipewire
 , libva
 , libdrm, wayland, mesa, libxkbcommon # Ozone
 
@@ -140,7 +140,7 @@ let
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
-      pipewire_0_2
+      pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
@@ -250,13 +250,10 @@ let
       symbol_level = 0;
       fieldtrial_testing_like_official_build = true;
 
-      # Google API keys, see:
-      #   http://www.chromium.org/developers/how-tos/api-keys
-      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-      # please get your own set of keys.
+      # Google API key, see: https://www.chromium.org/developers/how-tos/api-keys
+      # Note: The API key is for NixOS/nixpkgs use ONLY.
+      # For your own distribution, please get your own set of keys.
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
-      google_default_client_id = "404761575300.apps.googleusercontent.com";
-      google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -266,6 +263,7 @@ let
       use_pulseaudio = true;
       link_pulseaudio = true;
     } // optionalAttrs (chromiumVersionAtLeast "89") {
+      rtc_pipewire_version = "0.3"; # TODO: Can be removed once ungoogled-chromium is at M90
       # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
       # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
       chrome_pgo_phase = 0;

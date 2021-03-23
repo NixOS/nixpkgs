@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.19.1";
+  version = "4.19.2";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IoTIEvxongM42P6b4LjRVS5Uj8Fo0WX3lbJr9JfCK0c=";
+    sha256 = "sha256-im7hd2idzyKWTSC2CTAU7k+gQZNF0/1RXVUS2ZgLsnk=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper meson ninja installShellFiles ];

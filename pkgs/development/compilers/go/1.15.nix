@@ -11,7 +11,7 @@ let
 
   inherit (lib) optionals optionalString;
 
-  version = "1.15.8";
+  version = "1.15.10";
 
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1hlphkrsvb5nza5ajm24x4nrhyg4b0afs88kk4jd310hg2vhl32l";
+    sha256 = "0rfx20y13cflv68nn8jci1fx34vfdn7qgyavm5hivd0h15pcmny1";
   };
 
   # perl is used for testing go vet
@@ -158,6 +158,13 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch
     ./go_no_vendor_checks.patch
+
+    # support TZ environment variable starting with colon
+    (fetchpatch {
+      name = "tz-support-colon.patch";
+      url = "https://github.com/golang/go/commit/58fe2cd4022c77946ce4b598cf3e30ccc8367143.patch";
+      sha256 = "0vphwiqrm0qykfj3rfayr65qzk22fksg7qkamvaz0lmf6fqvbd2f";
+    })
   ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
     (if stdenv.isAarch32

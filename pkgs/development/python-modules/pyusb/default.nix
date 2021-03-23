@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyusb";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d69ed64bff0e2102da11b3f49567256867853b861178689671a163d30865c298";
+    sha256 = "7d449ad916ce58aff60b89aae0b65ac130f289c24d6a5b7b317742eccffafc38";
   };
 
   nativeBuildInputs = [

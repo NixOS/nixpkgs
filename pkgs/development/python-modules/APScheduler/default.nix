@@ -1,26 +1,29 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
-, pytest
+, setuptools-scm
+, pytestCheckHook
+, pytest-asyncio
+, pytest-tornado
 , pytestcov
 , sqlalchemy
 , tornado
 , twisted
 , mock
-, trollius
 , gevent
 , six
 , pytz
 , tzlocal
 , funcsigs
-, futures
-, isPy3k
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "APScheduler";
   version = "3.7.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,17 +31,18 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
-    pytest
+    pytest-asyncio
+    pytest-tornado
+    pytestCheckHook
     pytestcov
     sqlalchemy
     tornado
     twisted
     mock
-    trollius
     gevent
   ];
 
@@ -47,18 +51,19 @@ buildPythonPackage rec {
     pytz
     tzlocal
     funcsigs
-  ] ++ lib.optional (!isPy3k) futures;
+    setuptools
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_submit_job"
+    "test_max_instances"
+  ];
 
-  # Somehow it cannot find pytestcov
-  doCheck = false;
+  pythonImportsCheck = [ "apscheduler" ];
 
   meta = with lib; {
     description = "A Python library that lets you schedule your Python code to be executed";
-    homepage = "https://pypi.python.org/pypi/APScheduler/";
+    homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
   };
 }

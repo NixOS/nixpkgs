@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
-, perl
 , asciidoc
 , expat
 , fontconfig
@@ -34,21 +34,26 @@
 , libxcb
 , mkfontdir
 , pcre
+, perl
 }:
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner  = "bbidulock";
     repo = pname;
     rev = version;
-    sha256 = "sha256-n9mLD1WrHsO9W1rxopFQENxQEHp/sxuixV3PxLp2vOY=";
+    hash = "sha256-STM8t311lf0xIqs2Onmwg48xgE7V9VZrUfJrUzYRxL4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config perl asciidoc ];
-
+  nativeBuildInputs = [
+    asciidoc
+    cmake
+    perl
+    pkg-config
+  ];
   buildInputs = [
     expat
     fontconfig
@@ -90,6 +95,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://www.ice-wm.org/";
     description = "A simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of IceWM is
@@ -104,8 +110,7 @@ stdenv.mkDerivation rec {
       includes an optional external background wallpaper manager with
       transparency support, a simple session manager and a system tray.
     '';
-    homepage = "https://www.ice-wm.org/";
-    license = licenses.lgpl2;
+    license = licenses.lgpl2Only;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };

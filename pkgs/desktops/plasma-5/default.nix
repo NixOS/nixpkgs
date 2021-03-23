@@ -131,6 +131,7 @@ let
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
       plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault {};
       plasma-workspace = callPackage ./plasma-workspace {};
@@ -143,6 +144,7 @@ let
 
       thirdParty = let inherit (libsForQt5) callPackage; in {
         plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
+        plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };

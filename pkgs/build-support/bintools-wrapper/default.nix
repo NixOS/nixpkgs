@@ -53,7 +53,8 @@ let
   dynamicLinker =
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
-    else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
+    else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then "/system/bin/linker"
+    else if (targetPlatform.libc == "bionic" && targetPlatform.is64bit) then "/system/bin/linker64"
     else if targetPlatform.libc == "nblibc"           then "${libc_lib}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
@@ -303,6 +304,10 @@ stdenv.mkDerivation {
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
         echo "-L${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
       done
+    ''
+
+    + optionalString stdenv.targetPlatform.isDarwin ''
+      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
     + ''

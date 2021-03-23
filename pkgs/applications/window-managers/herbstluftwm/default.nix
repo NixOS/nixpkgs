@@ -1,44 +1,42 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, asciidoc
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, freetype, asciidoc-full
 , xdotool, xorgserver, xsetroot, xterm, runtimeShell
 , nixosTests }:
 
-# Doc generation is disabled by default when cross compiling because asciidoc
-# dependency is broken when cross compiling for now
-
-let
-  cross = stdenv.buildPlatform != stdenv.targetPlatform;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "0r4qaklv97qcq8p0pnz4f2zqg69vfai6c2qi1ydi2kz24xqjf5hy";
+    sha256 = "0avfhr68f6fjnafjdcyxcx7dkg38f2nadmhpj971qyqzfq2f6i38";
   };
 
   outputs = [
     "out"
-    "doc" # share/doc exists with examples even without generated html documentation
-  ] ++ lib.optionals (!cross) [
+    "doc"
     "man"
   ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
-  ] ++ lib.optional cross "-DWITH_DOCUMENTATION=OFF";
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
-  ] ++ lib.optional (!cross) asciidoc;
+  ];
+
+  depsBuildBuild = [
+    asciidoc-full
+  ];
 
   buildInputs = [
     libX11
     libXext
     libXinerama
     libXrandr
+    libXft
+    freetype
   ];
 
   patches = [
@@ -75,6 +73,9 @@ in stdenv.mkDerivation rec {
   '';
 
   pytestFlagsArray = [ "../tests" ];
+  disabledTests = [
+    "test_title_different_letters_are_drawn"
+  ];
 
   passthru = {
     tests.herbstluftwm = nixosTests.herbstluftwm;

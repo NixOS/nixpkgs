@@ -36,13 +36,13 @@ assert withLastfm -> withCD;
 
 mkDerivation rec {
   pname = "pragha";
-  version = "1.3.4";
+  version = "1.3.99.1";
 
   src = fetchFromGitHub {
     owner = "pragha-music-player";
     repo = "pragha";
     rev = "v${version}";
-    sha256 = "sha256:0n8gx8amg5l9g4w7s4agjf8mlmpgjydgzx3vryp9lzzs9xrd5vqh";
+    sha256 = "sha256-C4zh2NHqP4bwKMi5s+3AfEtKqxRlzL66H8OyNonGzxE=";
   };
 
   nativeBuildInputs = [

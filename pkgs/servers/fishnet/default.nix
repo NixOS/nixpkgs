@@ -12,16 +12,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "fishnet";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19dh69b6mqx16195w9d20fah4jl8hhbxm84xq4zwsgl4khmw7zqz";
+    sha256 = "0gif9wagm9bzq7j3biasqvzp9lfvmxqr5wagqqybmhbn8ipj20a8";
   };
 
-  cargoSha256 = "0zl2fnmqncyjd52wkn6dddx9lm9ywpw7swy895yq299z2bbbkv3h";
+  cargoSha256 = "0hqyh0nzfrm7m34kqixrlbc7w8d0k7v6psw8jg6zpwpfcmhqq15j";
 
   preBuild = ''
     rmdir ./assets
@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/niklasf/fishnet";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tu-maurice ];
+    platforms = [ "x86_64-linux" ];
   };
 }

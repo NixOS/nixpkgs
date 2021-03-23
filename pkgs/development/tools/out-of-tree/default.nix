@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "out-of-tree";
   version = "1.4.0";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";

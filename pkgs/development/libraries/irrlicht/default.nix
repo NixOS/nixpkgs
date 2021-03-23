@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  buildInputs = [ unzip libGLU libGL libXrandr libX11 libXxf86vm ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libGLU libGL libXrandr libX11 libXxf86vm ];
 
   meta = {
     homepage = "http://irrlicht.sourceforge.net/";

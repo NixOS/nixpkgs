@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://atztogo.github.io/spglib/";
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

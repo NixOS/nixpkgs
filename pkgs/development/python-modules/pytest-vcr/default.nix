@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
 , pytest
 , vcrpy
 }:

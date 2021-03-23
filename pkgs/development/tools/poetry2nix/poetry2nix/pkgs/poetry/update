@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p curl nix-prefetch-github
+#! nix-shell -i bash -p curl nix-prefetch-github jq
 
 rev=$(curl -s https://api.github.com/repos/python-poetry/poetry/releases/latest | jq -r '.name')
 nix-prefetch-github --rev "$rev" python-poetry poetry > src.json

@@ -1,4 +1,4 @@
-{ buildPythonApplication, lib, fetchFromGitHub, fetchpatch
+{ buildPythonApplication, lib, fetchFromGitHub
 
 # build inputs
 , atk

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "05hjhlp6lk8yjcy59zywpf0r6s0h0b9zxq0lw66dh9x8vxrhaq6s";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ protobuf ncurses zlib makeWrapper openssl bash-completion ]
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
+  buildInputs = [ protobuf ncurses zlib openssl bash-completion ]
     ++ (with perlPackages; [ perl IOTty ])
     ++ lib.optional withUtempter libutempter;
 

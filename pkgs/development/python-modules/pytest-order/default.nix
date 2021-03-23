@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-order";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b7i8z6rywnkb3skyg8bnfqgkjrwvkn64b4q07wfl1q7x65ksd26";
+    sha256 = "9c9e4f1b060414c642e88ad98ca60f1fd37937debd704bd8f4a2ef8e08b9cb6d";
   };
 
   propagatedBuildInputs = [ pytest ];

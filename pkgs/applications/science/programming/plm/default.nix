@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.jar";
   };
 
-  buildInputs = [ makeWrapper jre gcc valgrind ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre gcc valgrind ];
 
   phases = [ "installPhase" ];
 

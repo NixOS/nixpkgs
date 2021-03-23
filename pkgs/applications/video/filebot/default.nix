@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
-    sha256 = "sha256-R1FnHgSziJ7eGL8GrUmheVZxOnUgn9TK6gObSSKe9j0=";
+    sha256 = "sha256-xgdCjo2RLp+EtUTfSiys7PURhnC00R9IOLPtz3427pA=";
   };
 
   unpackPhase = "tar xvf $src";

@@ -10,14 +10,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "liquibase";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Zwh8baMD8jt+yfsK0jpsTEU32rT+IAQGwavVT3rpRsU=";
+    sha256 = "sha256-hOemDLfkjjPXQErKKCIMl8c5EPZe40B1HlNfvg7IZKU=";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   unpackPhase = ''
     tar xfz ${src}

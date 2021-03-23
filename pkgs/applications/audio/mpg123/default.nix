@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpg123-1.26.3";
+  name = "mpg123-1.26.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/${name}.tar.bz2";
-    sha256 = "0vkcfdx0mqq6lmpczsmpa2jsb0s6dryx3i7gvr32i3w9b9w9ij9h";
+    sha256 = "sha256-CBmRVA33pmaykEmthw8pPPoohjs2SIq01Yzqp7WEZFQ=";
   };
 
   outputs = [ "out" "conplay" ];

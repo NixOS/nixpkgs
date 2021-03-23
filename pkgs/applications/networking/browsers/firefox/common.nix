@@ -23,7 +23,7 @@
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
-, ltoSupport ? stdenv.isLinux, overrideCC, buildPackages
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , gssSupport ? true, kerberos
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
@@ -111,6 +111,13 @@ let
                 else stdenv;
 
   nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
+
+  # --enable-release adds -ffunction-sections & LTO that require a big amount of
+  # RAM and the 32-bit memory space cannot handle that linking
+  # We also disable adding "-g" for easier linking
+  releaseFlags = if stdenv.is32bit
+                 then [ "--disable-release" "--disable-debug-symbols" ]
+                 else [ "--enable-release" ];
 in
 
 buildStdenv.mkDerivation ({
@@ -120,8 +127,9 @@ buildStdenv.mkDerivation ({
   inherit src unpackPhase meta;
 
   patches = [
-    ./env_var_for_system_dir.patch
   ] ++
+  lib.optional (lib.versionOlder ffversion "86") ./env_var_for_system_dir-ff85.patch ++
+  lib.optional (lib.versionAtLeast ffversion "86") ./env_var_for_system_dir-ff86.patch ++
   lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
   lib.optional (lib.versionAtLeast ffversion "84") ./no-buildconfig-ffx84.patch ++
   lib.optional (ltoSupport && lib.versionOlder ffversion "84") ./lto-dependentlibs-generation-ffx83.patch ++
@@ -153,7 +161,7 @@ buildStdenv.mkDerivation ({
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     xorg.pixman yasm libGLU libGL
     xorg.xorgproto
-    xorg.libXext unzip makeWrapper
+    xorg.libXext makeWrapper
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
     nasm icu67 libvpx_1_8
@@ -214,6 +222,7 @@ buildStdenv.mkDerivation ({
       rust-cbindgen
       rustc
       which
+      unzip
     ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
@@ -296,9 +305,9 @@ buildStdenv.mkDerivation ({
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else [ "--disable-debug" "--enable-release"
+                    else ([ "--disable-debug"
                            "--enable-optimize"
-                           "--enable-strip" ])
+                           "--enable-strip" ] ++ releaseFlags))
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
 

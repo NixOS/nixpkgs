@@ -277,6 +277,18 @@ in
           '';
       };
 
+    virtualisation.msize =
+      mkOption {
+        default = null;
+        type = types.nullOr types.ints.unsigned;
+        description =
+          ''
+            msize (maximum packet size) option passed to 9p file systems, in
+            bytes. Increasing this should increase performance significantly,
+            at the cost of higher RAM usage.
+          '';
+      };
+
     virtualisation.diskSize =
       mkOption {
         default = 512;
@@ -666,7 +678,7 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
         "/tmp" = mkIf config.boot.tmpOnTmpfs
@@ -679,13 +691,13 @@ in
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" ];
+            options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
         "/tmp/shared" =
           { device = "shared";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" ];
+            options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
       } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)

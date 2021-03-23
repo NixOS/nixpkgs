@@ -7,10 +7,11 @@
 , wrapGAppsHook
 , gtk3
 , gnome3
+, zbar
 , tiffSupport ? true
 , libraw
 , jpgSupport ? true
-, imagemagick
+, graphicsmagick
 , exiftool
 }:
 
@@ -20,24 +21,24 @@ let
   inherit (lib) makeBinPath optional optionals optionalString;
   runtimePath = makeBinPath (
     optional tiffSupport libraw
-    ++ optionals jpgSupport [ imagemagick exiftool ]
+    ++ optionals jpgSupport [ graphicsmagick exiftool ]
   );
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchgit {
     url = "https://git.sr.ht/~martijnbraam/megapixels";
     rev = version;
-    sha256 = "136rv9sx0kgfkpqn5s90j7j4qhb8h04p14g5qhqshb89kmmsmxiw";
+    sha256 = "1y8irwi8lbjs948j90gpic96dx5wjmwacd41hb3d9vzhkyni2dvb";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ]
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme zbar ]
   ++ optional tiffSupport libraw
-  ++ optional jpgSupport imagemagick;
+  ++ optional jpgSupport graphicsmagick;
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(

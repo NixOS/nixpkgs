@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.3.2";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vv4wKf1PcuVR63ZQJd3oixdNvS7VcTmAaKkmL8I4COg=";
+    hash = "sha256-kl1Z2FBo+yqVXUqLaUtet6IycmdcAtfydNTI4MNNrkc=";
   };
 
   propagatedBuildInputs = [

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight Tox client";
     homepage = "https://github.com/uTox/uTox";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

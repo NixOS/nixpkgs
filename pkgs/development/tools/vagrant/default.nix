@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux, fetchpatch
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux
 }:
 
 let

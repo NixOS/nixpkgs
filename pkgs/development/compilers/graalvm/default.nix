@@ -89,7 +89,7 @@ let
   makeMxCache = list:
     stdenv.mkDerivation {
       name = "mx-cache";
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       buildCommand = with lib; ''
         mkdir $out
         ${lib.concatMapStrings

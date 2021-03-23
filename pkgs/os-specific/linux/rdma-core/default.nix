@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
-, pandoc, ethtool, iproute, libnl, udev, python, perl
+, pandoc, ethtool, iproute, libnl, udev, python3, perl
 , makeWrapper
 } :
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkg-config pandoc docutils makeWrapper ];
-  buildInputs = [ libnl ethtool iproute udev python perl ];
+  buildInputs = [ libnl ethtool iproute udev python3 perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"

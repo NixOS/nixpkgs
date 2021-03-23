@@ -7,7 +7,7 @@ let
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
-    maintainers = [ maintainers.petabyteboy ];
+    maintainers = with maintainers; [ petabyteboy felixsinger ];
     platforms = platforms.linux;
   };
 

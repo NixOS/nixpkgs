@@ -1,10 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
-, config
 , pkg-config
 , python3
 , gst-plugins-base
@@ -12,7 +11,7 @@
 , gobject-introspection
 , enableZbar ? false
 , faacSupport ? false
-, faac ? null
+, faac
 , faad2
 , libass
 , libkate
@@ -36,7 +35,6 @@
 , bluez
 , chromaprint
 , curl
-, darwin
 , directfb
 , fdk_aac
 , flite
@@ -81,24 +79,29 @@
 , x265
 , libxml2
 , srt
+, vo-aacenc
+, VideoToolbox
+, AudioToolbox
+, AVFoundation
+, CoreMedia
+, CoreVideo
+, Foundation
+, MediaToolbox
 }:
 
-assert faacSupport -> faac != null;
-
-let
-  inherit (lib) optional optionals;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
   version = "1.18.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "06ildd4rl6cynirv3p00d2ddf5is9svj4i7mkahldzhq24pq5mca";
   };
 
   patches = [
+    # Use pkgconfig to inject the includedirs
     ./fix_pkgconfig_includedir.patch
   ];
 
@@ -110,13 +113,15 @@ in stdenv.mkDerivation rec {
     python3
     gettext
     gobject-introspection
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
 
   buildInputs = [
     gst-plugins-base
     orc
+    # gobject-introspection has to be in both nativeBuildInputs and
+    # buildInputs. The build tries to link against libgirepository-1.0.so
     gobject-introspection
     faad2
     libass
@@ -163,16 +168,17 @@ in stdenv.mkDerivation rec {
     libxml2
     libintl
     srt
-  ] ++ optionals enableZbar [
+    vo-aacenc
+  ] ++ lib.optionals enableZbar [
     zbar
-  ] ++ optionals faacSupport [
+  ] ++ lib.optionals faacSupport [
     faac
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     bluez
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
-  ] ++ optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
     wildmidi
@@ -199,7 +205,7 @@ in stdenv.mkDerivation rec {
     serd
     sord
     sratom
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
     #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
@@ -210,7 +216,7 @@ in stdenv.mkDerivation rec {
     CoreVideo
     Foundation
     MediaToolbox
-  ]);
+  ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
@@ -241,7 +247,6 @@ in stdenv.mkDerivation rec {
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
-    "-Dvoaacenc=disabled" # required `vo-aacenc` library not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
     "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
@@ -249,10 +254,10 @@ in stdenv.mkDerivation rec {
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
   ]
-  ++ optionals (!stdenv.isLinux) [
+  ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ]
-  ++ optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     "-Dbluez=disabled"
     "-Dchromaprint=disabled"
     "-Ddirectfb=disabled"
@@ -269,11 +274,11 @@ in stdenv.mkDerivation rec {
     "-Dladspa=disabled" # requires lrdf
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
-  ] ++ optionals (!gst-plugins-base.glEnabled) [
-    "-Dgl=disabled"]
-  ++ optionals (!gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+    "-Dgl=disabled"
+  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
     "-Dwayland=disabled"
-  ] ++ optionals (!gst-plugins-base.glEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"

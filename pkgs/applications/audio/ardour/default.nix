@@ -16,6 +16,7 @@
 , glibmm
 , graphviz
 , gtkmm2
+, harvid
 , itstool
 , libarchive
 , libjack2
@@ -35,6 +36,7 @@
 , lilv
 , lrdf
 , lv2
+, makeWrapper
 , pango
 , perl
 , pkg-config
@@ -49,6 +51,8 @@
 , taglib
 , vamp-plugin-sdk
 , wafHook
+, xjadeo
+, videoSupport ? false
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
@@ -70,6 +74,7 @@ stdenv.mkDerivation rec {
     doxygen
     graphviz # for dot
     itstool
+    makeWrapper
     perl
     pkg-config
     python3
@@ -121,7 +126,7 @@ stdenv.mkDerivation rec {
     suil
     taglib
     vamp-plugin-sdk
-  ];
+  ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
   wafConfigureFlags = [
     "--cxx11"
@@ -158,6 +163,10 @@ stdenv.mkDerivation rec {
         "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+  '' + lib.optionalString videoSupport ''
+    # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
+    wrapProgram "$out/bin/ardour6" \
+      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 
   LINKFLAGS = "-lpthread";
@@ -174,8 +183,8 @@ stdenv.mkDerivation rec {
       https://community.ardour.org/donate
     '';
     homepage = "https://ardour.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu magnetophon ];
+    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };
 }

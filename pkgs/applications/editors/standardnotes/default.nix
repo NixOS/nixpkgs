@@ -1,5 +1,5 @@
 { lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, runtimeShell, libsecret, gtk3, gsettings-desktop-schemas }:
+, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
   version = "3.5.18";

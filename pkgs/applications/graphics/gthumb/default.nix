@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , gnome3
 , pkg-config
 , meson

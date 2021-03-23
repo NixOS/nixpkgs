@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     description = "Exploit Development and Reverse Engineering with GDB Made Easy";
     homepage = "https://github.com/pwndbg/pwndbg";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];
   };
 }

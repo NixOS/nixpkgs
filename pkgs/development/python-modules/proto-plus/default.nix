@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy3k
 , protobuf
-, googleapis_common_protos
+, googleapis-common-protos
 , pytestCheckHook
 , pytz
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ protobuf ];
 
-  checkInputs = [ pytestCheckHook pytz googleapis_common_protos ];
+  checkInputs = [ pytestCheckHook pytz googleapis-common-protos ];
 
   pythonImportsCheck = [ "proto" ];
 

@@ -18,6 +18,9 @@
   #
 , withSystemd ? false
 , systemd ? null
+  # optionally support DNS-over-HTTPS as a server
+, withDoH ? false
+, libnghttp2
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +34,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  buildInputs = [ openssl nettle expat libevent ] ++ lib.optionals withSystemd [ pkg-config systemd ];
+  buildInputs = [ openssl nettle expat libevent ]
+    ++ lib.optionals withSystemd [ pkg-config systemd ]
+    ++ lib.optionals withDoH [ libnghttp2 ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -47,6 +52,8 @@ stdenv.mkDerivation rec {
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
+  ] ++ lib.optionals withDoH [
+    "--with-libnghttp2=${libnghttp2.dev}"
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];

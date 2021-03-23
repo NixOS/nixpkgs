@@ -3,14 +3,14 @@
 
 let
   pname = "hol4";
-  vnum = "10";
+  vnum = "14";
 in
 
 let
   version = "k.${vnum}";
   longVersion = "kananaskis-${vnum}";
   holsubdir = "hol-${longVersion}";
-  kernelFlag = if experimentalKernel then "-expk" else "-stdknl";
+  kernelFlag = if experimentalKernel then "--expk" else "--stdknl";
 in
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";
-    sha256 = "0x2wxksr305h1lrbklf6p42lp09rbhb4rsh74g0l70sgapyiac9b";
+    sha256 = "6Mc/qsEjzxGqzt6yP6x/1Tmqpwc1UDGlwV1Gl+4pMsY=";
   };
 
   buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf];
@@ -46,8 +46,8 @@ stdenv.mkDerivation {
     cd ${holsubdir}
 
     substituteInPlace tools/Holmake/Holmake_types.sml \
-      --replace "\"/bin/mv\"" "\"mv\"" \
-      --replace "\"/bin/cp\"" "\"cp\""
+      --replace "\"/bin/" "\"" \
+
 
     for f in tools/buildutils.sml help/src-sml/DOT;
     do
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
     poly < tools/smart-configure.sml
 
-    bin/build ${kernelFlag} -symlink
+    bin/build ${kernelFlag}
 
     mkdir -p "$out/bin"
     ln -st $out/bin  $out/src/${holsubdir}/bin/*
@@ -81,8 +81,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://hol.sourceforge.net/";
     license = licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mudri ];
-    platforms = with platforms; linux;
-    broken = true;
   };
 }

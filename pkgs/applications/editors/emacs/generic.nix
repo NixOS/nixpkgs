@@ -63,6 +63,12 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       rm -fr .git
     '')
 
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    ''
+      substituteInPlace src/Makefile.in \
+        --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+    ''
+
     ''
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
@@ -130,7 +136,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets"
-    ++ lib.optional nativeComp "--with-nativecomp"
+    ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
     ;
 

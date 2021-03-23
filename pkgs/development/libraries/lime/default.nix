@@ -2,14 +2,15 @@
 , belle-sip
 , cmake
 , fetchFromGitLab
+, lib
 , soci
 , sqlite
-, lib, stdenv
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "lime";
-  version = "4.4.0";
+  version = "4.4.34";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";

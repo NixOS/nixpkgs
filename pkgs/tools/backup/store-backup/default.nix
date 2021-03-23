@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";

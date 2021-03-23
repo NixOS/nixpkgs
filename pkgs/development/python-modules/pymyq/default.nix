@@ -4,17 +4,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pkce
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymyq";
-  version = "3.0.3";
+  version = "3.0.4";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "arraylabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wrfnbz87ns2ginyvljna0axl35s0xfaiqwzapxm8ira40ax5wrl";
+    sha256 = "sha256-jeoFlLBjD81Bt6E75rk4U1Ach53KGy23QGx+A6X2rpg=";
   };
 
   propagatedBuildInputs = [

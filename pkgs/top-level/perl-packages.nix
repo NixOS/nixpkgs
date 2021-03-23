@@ -1843,8 +1843,8 @@ let
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-LDAP-1.016.tar.gz";
       sha256 = "0cm399vxqqf05cjgs1j5v3sk4qc6nmws5nfhf52qvpbwc4m82mq8";
     };
-    propagatedBuildInputs = [ NetLDAP CatalystPluginAuthentication ClassAccessorFast ];
-    buildInputs = [ TestMore TestMockObject TestException NetLDAPServerTest ];
+    propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessor ];
+    buildInputs = [ TestMockObject TestException NetLDAPServerTest ];
     meta = {
       description= "Authentication from an LDAP Directory";
       license = with lib.licenses; [ artistic1 ];
@@ -8016,6 +8016,7 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.67.tar.gz";
       sha256 = "1hpv4aprgypjxjx1kzbjnf6r29a98rw7mndlinixzk62vyz5sy0j";
     };
+    perlPreHook = "export LD=$CC";
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
     buildInputs = [ TestFatal TestWarnings ];
     meta = {
@@ -8498,10 +8499,10 @@ let
 
   FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.48";
+    version = "0.49";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
-      sha256 = "077jnf5a07x0p30iqcw3kh53xh3dplhb0jyyyq9b4c79ira3ds6r";
+      sha256 = "0cm7cgfjrqs7jazl0f9q6lgkhz6k8qbawin1z36nrwh2ywc94zjb";
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseSublike ];
@@ -8681,6 +8682,10 @@ let
       url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.003001.tar.gz";
       sha256 = "1q7im0zj238k5agwi7d1mz26a8r0wrxwfwp1l8n5k777gx3b5xhp";
     };
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/git-autofixup
+    '';
     meta = {
       maintainers = [ maintainers.DamienCassou ];
       description = "Create fixup commits for topic branches";
@@ -10879,10 +10884,10 @@ let
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "4.10";
+    version = "4.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-4.10.tar.gz";
-      sha256 = "15hgjldd85ada8anz5fdrlnixvwqahnvv3hprcvr9jgj3gvx0lww";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-4.14.tar.gz";
+      sha256 = "16zaaw7p94nz7yclz30b9xph0riy5ailqg5rjkvi1yps2hr9ba7z";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
@@ -10971,19 +10976,11 @@ let
 
   libapreq2 = buildPerlPackage {
     pname = "libapreq2";
-    version = "2.13";
+    version = "2.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISAAC/libapreq2-2.13.tar.gz";
-      sha256 = "5731e6833b32d88e4a5c690e45ddf20fcf969ce3da666c5627d775e92da0cf6e";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/libapreq2-2.16.tar.gz";
+      sha256 = "e04c855a3ea070b8863569fbae02fe828f534ac88755b23e24d3863cc9598349";
     };
-    patches = [
-      (fetchpatch {
-        name = "CVE-2019-12412.patch";
-        url = "https://svn.apache.org/viewvc/httpd/apreq/trunk/library/parser_multipart.c?r1=1866760&r2=1866759&pathrev=1866760&view=patch";
-        sha256 = "08zaw5pb2i4w1y8crhxmlf0d8gzpvi9z49x4nwlkg4j87x7gjvaa";
-        stripLen = 2;
-      })
-    ];
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
     propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
@@ -11256,10 +11253,10 @@ let
 
   LinkEmbedder = buildPerlPackage {
     pname = "LinkEmbedder";
-    version = "1.16";
+    version = "1.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.16.tar.gz";
-      sha256 = "0pm5h5rlfparfvsi3ygj53mwjg8lwhql5mj0macfvsvfnfvnnp6j";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.17.tar.gz";
+      sha256 = "10r1q2xfba59w818li5xaj6jlph9qla7vb99ir1ampq5n8g0s5i6";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -12910,10 +12907,10 @@ let
 
   MinionBackendSQLite = buildPerlModule {
     pname = "Minion-Backend-SQLite";
-    version = "5.0.3";
+    version = "5.0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.3.tar.gz";
-      sha256 = "1ch92846cgr1s1y6nlicjxlq9r4qh1a3fig0jlr7ligzw05mxib4";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.4.tar.gz";
+      sha256 = "0xhcsxm3x5v9azmyy12wiwlbpiisq06hgj3yf9ggqx8fp9jqppb1";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ Minion MojoSQLite ];
@@ -13521,10 +13518,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.71";
+    version = "9.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.71.tar.gz";
-      sha256 = "03bfxzq11v6k47axdwqhp2d3p1z17nwyxj0yww5z3x293p6zsnqm";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.10.tar.gz";
+      sha256 = "0y4ccy85vh7nily2y1c457f687qc8rwi4mnx13619hslkagw4rqw";
     };
     meta = {
       homepage = "https://mojolicious.org";
@@ -13536,10 +13533,10 @@ let
 
   MojoliciousPluginAssetPack = buildPerlPackage {
     pname = "Mojolicious-Plugin-AssetPack";
-    version = "2.10";
+    version = "2.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-AssetPack-2.10.tar.gz";
-      sha256 = "0jfspr0mrb8f9p89d01ri7ci0dazrg341sbyd1khppxxwviip378";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-AssetPack-2.13.tar.gz";
+      sha256 = "1254yy70c7wv3p64pjyxc2h1p9czs65jm6lzl42qmn1x19i8fggj";
     };
     propagatedBuildInputs = [ FileWhich IPCRun3 Mojolicious ];
     meta = {
@@ -13583,10 +13580,10 @@ let
 
   MojoliciousPluginOpenAPI = buildPerlPackage {
     pname = "Mojolicious-Plugin-OpenAPI";
-    version = "3.40";
+    version = "4.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-3.40.tar.gz";
-      sha256 = "0pj2azis2xfqcy04j0734hsfq3v60wympzpvsgfhmj0w66mb238y";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-4.00.tar.gz";
+      sha256 = "1npnbygs12d683m5i6cgvdmw6glvppnv75f4qpp908fdz8lwcb2z";
     };
     propagatedBuildInputs = [ JSONValidator ];
     meta = {
@@ -13679,10 +13676,10 @@ let
 
   MojoSQLite = buildPerlModule {
     pname = "Mojo-SQLite";
-    version = "3.004";
+    version = "3.005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.004.tar.gz";
-      sha256 = "d9ca9c1f3e8183611638e318b88ad3c0f8ab7e65f6ac72e48bffe51aea03b983";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.005.tar.gz";
+      sha256 = "0appzyhr5adzdfxns31lj568hz18bkmxmcv7fpafrx67b98cpza1";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URIdb ];
@@ -13711,6 +13708,23 @@ let
     };
   };
 
+  MojoIOLoopDelay = buildPerlModule {
+    pname = "Mojo-IOLoop-Delay";
+    version = "8.76";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-Delay-8.76.tar.gz";
+      sha256 = "1vd9s1r82wfxh8y1g2ninsyvzkawx7n6ncll8lhdj89p91hw1jwf";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
+      description = "(DISCOURAGED) Promises/A+ and flow-control helpers";
+      license = lib.licenses.artistic2;
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   MojoIOLoopForkCall = buildPerlModule {
     pname = "Mojo-IOLoop-ForkCall";
     version = "0.20";
@@ -13718,10 +13732,17 @@ let
       url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-ForkCall-0.20.tar.gz";
       sha256 = "2b9962244c25a71e4757356fb3e1237cf869e26d1c27215115ba7b057a81f1a6";
     };
-    propagatedBuildInputs = [ IOPipely Mojolicious ];
+    propagatedBuildInputs = [ IOPipely Mojolicious MojoIOLoopDelay ];
+    preBuild = ''
+      # This module needs the deprecated Mojo::IOLoop::Delay
+      substituteInPlace lib/Mojo/IOLoop/ForkCall.pm \
+        --replace "use Mojo::IOLoop;" "use Mojo::IOLoop; use Mojo::IOLoop::Delay;"
+    '';
     meta = {
-      description = "Run blocking functions asynchronously by forking";
+      homepage = "https://github.com/jberger/Mojo-IOLoop-ForkCall";
+      description = "Run blocking functions asynchronously by forking (deprecated)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -13761,10 +13782,10 @@ let
 
   MojoUserAgentCached = buildPerlPackage {
     pname = "Mojo-UserAgent-Cached";
-    version = "1.12";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NI/NICOMEN/Mojo-UserAgent-Cached-1.12.tar.gz";
-      sha256 = "08pa3sz63sq2y3g3lbhy2msbnx0myb2igmmc28cm3kaznryvsgwm";
+      url = "mirror://cpan/authors/id/N/NI/NICOMEN/Mojo-UserAgent-Cached-1.16.tar.gz";
+      sha256 = "17gp1kn97s1wv973w0g92alx13lmcvdan794471sfq2is6s6v1qd";
     };
     buildInputs = [ ModuleInstall ];
     propagatedBuildInputs = [ AlgorithmLCSS CHI DataSerializer DevelStackTrace Mojolicious Readonly StringTruncate ];
@@ -14862,7 +14883,7 @@ let
       url = "mirror://cpan/authors/id/E/ES/ESTRABD/MySQL-Diff-0.60.tar.gz";
       sha256 = "5d7080a4bd5714ff9ef536aa774a7adb3c6f0e760215ca6c39d8a3545344f956";
     };
-    propagatedBuildInputs = [ pkgs.mysql-client FileSlurp StringShellQuote ];
+    propagatedBuildInputs = [ pkgs.mariadb.client FileSlurp StringShellQuote ];
     meta = {
       homepage = "https://github.com/estrabd/mysqldiff";
       description = "Generates a database upgrade instruction set";
@@ -15000,10 +15021,10 @@ let
 
   NetAsyncHTTP = buildPerlModule {
     pname = "Net-Async-HTTP";
-    version = "0.47";
+    version = "0.48";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.47.tar.gz";
-      sha256 = "1lwy1ijrhibi087p3q5zvadhkq0slfrzfhb76cmkx4mpyv5v4l8f";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.48.tar.gz";
+      sha256 = "0gpp46lg7sr5xpsjhqkb022f9v88wy73carsrn5pvbmwjpwxcjwx";
     };
     buildInputs = [ HTTPCookies TestIdentity TestMetricsAny TestRefcount ];
     propagatedBuildInputs = [ Future HTTPMessage IOAsync MetricsAny StructDumb URI ];
@@ -15361,7 +15382,7 @@ let
       url = "mirror://cpan/authors/id/A/AA/AAR/Net-LDAP-Server-0.43.tar.gz";
       sha256 = "0qmh3cri3fpccmwz6bhwp78yskrb3qmalzvqn0a23hqbsfs4qv6x";
     };
-    propagatedBuildInputs = [ NetLDAP ConvertASN1 ];
+    propagatedBuildInputs = [ perlldap ConvertASN1 ];
     meta = {
       description = "LDAP server side protocol handling";
       license = with lib.licenses; [ artistic1 ];
@@ -15388,7 +15409,7 @@ let
       url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-Server-Test-0.22.tar.gz";
       sha256 = "13idip7jky92v4adw60jn2gcc3zf339gsdqlnc9nnvqzbxxp285i";
     };
-    propagatedBuildInputs = [ NetLDAP NetLDAPServer TestMore DataDump NetLDAPSID ];
+    propagatedBuildInputs = [ perlldap NetLDAPServer DataDump NetLDAPSID ];
     meta = {
       description= "test Net::LDAP code";
       license = with lib.licenses; [ artistic1 ];
@@ -15908,10 +15929,10 @@ let
 
   OpenAPIClient = buildPerlPackage rec {
     pname = "OpenAPI-Client";
-    version = "0.25";
+    version = "1.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/OpenAPI-Client-0.25.tar.gz";
-      sha256 = "bc6be443c9c44348899fd595e080abe53760ae7561d63615a2f9b9f0a943336c";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/OpenAPI-Client-1.00.tar.gz";
+      sha256 = "41bcf211c1123fbfb844413aa53f97061410b592591367b61273a206865991f7";
     };
     propagatedBuildInputs = [ MojoliciousPluginOpenAPI ];
     meta = {
@@ -16638,6 +16659,7 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEONT/PerlIO-Layers-0.012.tar.gz";
       sha256 = "1psaq3kwlk7g9rxvgsacfjk2mh6cscqf4xl7ggfkzfrnz91aabal";
     };
+    perlPreHook = "export LD=$CC";
     meta = {
       description = "Querying your filehandle's capabilities";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -16739,19 +16761,23 @@ let
     };
   };
 
-  PerlMagick = buildPerlPackage {
+  PerlMagick = buildPerlPackage rec {
     pname = "PerlMagick";
-    version = "6.89-1";
+    version = "7.0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.89-1.tar.gz";
-      sha256 = "0n9afy1z5bhf9phrbahnkwhgcmijn8jggpbzwrivw1zhliliiy68";
+      url = "mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-${version}.tar.gz";
+      sha256 = "1x05hdb3b6qs36x958b4w46qanvkqm6rpc44rlq4rd2w3gbp4lhx";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
+
+        # Enable HDRI support to match the native ImageMagick 7 defaults
+        # See: https://github.com/ImageMagick/ImageMagick/issues/3402#issuecomment-801195538
+        substituteInPlace Makefile.PL \
+          --replace 'MAGICKCORE_HDRI_ENABLE=0' 'MAGICKCORE_HDRI_ENABLE=1'
       '';
-    doCheck = false;
   };
 
   PerlTidy = buildPerlPackage rec {
@@ -23066,7 +23092,7 @@ let
       sha256 = "582db53a091f8da3670c037733314f2510af5e8ee0ba42a0e391e2f2e3ca7734";
     };
     prePatch = "rm examples.pl";
-    propagatedBuildInputs = [ LWPProtocolhttps ];
+    propagatedBuildInputs = [ LWPProtocolHttps ];
     meta = {
       description = "Accessing Twilio's REST API with Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];

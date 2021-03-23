@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07r0y995fin6cbnqlhmd38fv3pfhhqyw04l7nr38sldrd82gmsqx";
+    sha256 = "639408cac9660b6c7c2324bf1b2461c9c8e338518b9ebb7ebfac833a61d753eb";
   };
 
   propagatedBuildInputs = [ libcst google-api-core proto-plus ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Stackdriver Monitoring API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-monitoring";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

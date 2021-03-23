@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, wrapCCWith }:
+{ lib, fetchFromGitHub, callPackage, wrapCCWith }:
 
 let
   version = "4.0.1";

@@ -29,20 +29,20 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "124.1";
+  version = "126.1";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "1k4k559y8l6wmj9m4980f7xmaaxzx84x86rqc77j4nd3y3x53546";
+    sha256 = "cyg4TofSSFLv8pM3zzvc0FxXMiTm+OIchBJF9PDQrkg=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "08v929sgxy1pclzc00p7l7fak2h9l306447w5k5db3719kacj059";
+    sha256 = "uBIm82mt1etBB/HrNY6XGa7mmBfwd1E3RtqN8Rk5qeY=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -114,7 +114,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "18yfchv55f0fza6gdxd3f6gm0m4wy2a9jkw5wgl84id518jal6la";
+    outputHash = "Mw8LZ1iW6vn4RkBBs8SWHp6mo2Bhj7tMZjLbyuJUqSI=";
   };
 
 in

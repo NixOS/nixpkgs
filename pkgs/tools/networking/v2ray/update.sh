@@ -61,11 +61,11 @@ set +o pipefail
 vendorSha256=$(
     nix-build "$nixpkgs" -A v2ray --no-out-link 2>&1 |
     tee /dev/stderr |
-    sed -nE 's/.*got:\s*sha256:(\w+)$/\1/p'
+    sed -nE 's/.*got:\s*(sha256\S+)$/\1/p'
 )
 [[ "$vendorSha256" ]]
 sed --in-place \
-    -e "s/vendorSha256 = \".*\"/vendorSha256 = \"$vendorSha256\"/" \
+    -e "s#vendorSha256 = \".*\"#vendorSha256 = \"$vendorSha256\"#" \
     "$version_nix"
 
 echo "vendorSha256 updated" >&2

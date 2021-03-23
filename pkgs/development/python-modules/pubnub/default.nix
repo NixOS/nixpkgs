@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , pycryptodomex
 , pytestCheckHook
-, pyyaml
 , pytest-vcr
 , pytest-asyncio
 , requests

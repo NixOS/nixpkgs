@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "PyRMVtransport";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cgtobi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1y412xmdskf13673igzsqsglpdc3d5r6pbm8j85csax0blv7rn1m";
+    sha256 = "1savzndg8l7rrc5dgzgsrdz9hnnjfv6qs5drznqmdw4f2rq84ypa";
   };
 
   nativeBuildInputs = [

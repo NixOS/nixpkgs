@@ -250,12 +250,47 @@ self: super:
     }
   );
 
+  fiona = super.fiona.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.gdal_2 ];
+      nativeBuildInputs = [
+        pkgs.gdal_2 # for gdal-config
+      ];
+    }
+  );
+
+  gdal = super.gdal.overridePythonAttrs (
+    old: {
+      preBuild = (old.preBuild or "") + ''
+        substituteInPlace setup.cfg \
+          --replace "../../apps/gdal-config" '${pkgs.gdal}/bin/gdal-config'
+      '';
+    }
+  );
+
   grandalf = super.grandalf.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
       doCheck = false;
     }
   );
+
+  grpcio = super.grpcio.overridePythonAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.cython pkgs.pkg-config ];
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.c-ares pkgs.openssl pkgs.zlib ];
+
+    outputs = [ "out" "dev" ];
+
+    GRPC_BUILD_WITH_BORING_SSL_ASM = "";
+    GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+    DISABLE_LIBC_COMPATIBILITY = 1;
+  });
+
+  grpcio-tools = super.grpcio-tools.overridePythonAttrs (old: {
+    outputs = [ "out" "dev" ];
+  });
 
   h3 = super.h3.overridePythonAttrs (
     old: {
@@ -268,14 +303,34 @@ self: super:
 
   h5py = super.h5py.overridePythonAttrs (
     old:
-    if old.format != "wheel" then rec {
-      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
-      buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.hdf5 self.pkgconfig self.cython ];
-      configure_flags = "--hdf5=${pkgs.hdf5}";
-      postConfigure = ''
-        ${self.python.executable} setup.py configure ${configure_flags}
-      '';
-    } else old
+    if old.format != "wheel" then
+      (
+        let
+          mpi = pkgs.hdf5.mpi;
+          mpiSupport = pkgs.hdf5.mpiSupport;
+        in
+        {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
+          buildInputs =
+            (old.buildInputs or [ ])
+            ++ [ pkgs.hdf5 self.pkg-config self.cython ]
+            ++ lib.optional mpiSupport mpi
+          ;
+          propagatedBuildInputs =
+            old.propagatedBuildInputs
+            ++ lib.optionals mpiSupport [ self.mpi4py self.openssh ]
+          ;
+          preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
+          HDF5_DIR = "${pkgs.hdf5}";
+          HDF5_MPI = if mpiSupport then "ON" else "OFF";
+          # avoid strict pinning of numpy
+          postPatch = ''
+            substituteInPlace setup.py \
+              --replace "numpy ==" "numpy >="
+          '';
+          pythonImportsCheck = [ "h5py" ];
+        }
+      ) else old
   );
 
   horovod = super.horovod.overridePythonAttrs (
@@ -360,9 +415,13 @@ self: super:
     }
   );
 
-  # disable the removal of pyproject.toml, required because of setuptools_scm
   jaraco-functools = super.jaraco-functools.overridePythonAttrs (
     old: {
+      # required for the extra "toml" dependency in setuptools_scm[toml]
+      buildInputs = (old.buildInputs or [ ]) ++ [
+        self.toml
+      ];
+      # disable the removal of pyproject.toml, required because of setuptools_scm
       dontPreferSetupPy = true;
     }
   );
@@ -378,6 +437,15 @@ self: super:
     }
   );
 
+  jsondiff = super.jsondiff.overridePythonAttrs (
+    old: {
+      preBuild = (old.preBuild or "") + ''
+        substituteInPlace setup.py \
+          --replace "'jsondiff=jsondiff.cli:main_deprecated'," ""
+      '';
+    }
+  );
+
   jsonpickle = super.jsonpickle.overridePythonAttrs (
     old: {
       dontPreferSetupPy = true;
@@ -385,7 +453,7 @@ self: super:
   );
 
   jsonslicer = super.jsonslicer.overridePythonAttrs (old: {
-    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkgconfig ];
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
     buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.yajl ];
   });
 
@@ -558,6 +626,13 @@ self: super:
     buildInputs = oa.buildInputs ++ [ self.pbr ];
   });
 
+  moto = super.moto.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++
+        [ self.sshpubkeys ];
+    }
+  );
+
   mpi4py = super.mpi4py.overridePythonAttrs (
     old:
     let
@@ -586,6 +661,12 @@ self: super:
   multiaddr = super.multiaddr.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
+    }
+  );
+
+  munch = super.munch.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ self.pbr ];
     }
   );
 
@@ -674,6 +755,12 @@ self: super:
     }
   );
 
+  pdal = super.pdal.overridePythonAttrs (
+    old: {
+      PDAL_CONFIG = "${pkgs.pdal}/bin/pdal-config";
+    }
+  );
+
   peewee = super.peewee.overridePythonAttrs (
     old:
     let
@@ -733,9 +820,13 @@ self: super:
     '';
   });
 
-  # disable the removal of pyproject.toml, required because of setuptools_scm
   portend = super.portend.overridePythonAttrs (
     old: {
+      # required for the extra "toml" dependency in setuptools_scm[toml]
+      buildInputs = (old.buildInputs or [ ]) ++ [
+        self.toml
+      ];
+      # disable the removal of pyproject.toml, required because of setuptools_scm
       dontPreferSetupPy = true;
     }
   );
@@ -900,6 +991,13 @@ self: super:
     }
   );
 
+  pygeos = super.pygeos.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.geos ];
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.geos ];
+    }
+  );
+
   pygobject = super.pygobject.overridePythonAttrs (
     old: {
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
@@ -917,6 +1015,16 @@ self: super:
   pyopenssl = super.pyopenssl.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openssl ];
+    }
+  );
+
+  pyproj = super.pyproj.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++
+        [ self.cython ];
+      PROJ_DIR = "${pkgs.proj}";
+      PROJ_LIBDIR = "${pkgs.proj}/lib";
+      PROJ_INCDIR = "${pkgs.proj.dev}/include";
     }
   );
 
@@ -951,6 +1059,8 @@ self: super:
     super.pyqt5.overridePythonAttrs (
       old: {
         format = "other";
+
+        dontWrapQtApps = true;
 
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
           pkgs.pkg-config
@@ -1071,12 +1181,9 @@ self: super:
 
   pytest-runner = super.pytest-runner or super.pytestrunner;
 
-  python-jose = super.python-jose.overridePythonAttrs (
+  pytest-pylint = super.pytest-pylint.overridePythonAttrs (
     old: {
-      postPath = ''
-        substituteInPlace setup.py --replace "'pytest-runner'," ""
-        substituteInPlace setup.py --replace "'pytest-runner'" ""
-      '';
+      buildInputs = [ self.pytest-runner ];
     }
   );
 
@@ -1101,6 +1208,11 @@ self: super:
     '';
   });
 
+  python-jose = super.python-jose.overridePythonAttrs (
+    old: {
+      buildInputs = [ self.pytest-runner ];
+    }
+  );
 
   ffmpeg-python = super.ffmpeg-python.overridePythonAttrs (
     old: {
@@ -1173,6 +1285,15 @@ self: super:
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
   });
 
+  rtree = super.rtree.overridePythonAttrs (old: {
+    propagatedNativeBuildInputs = (old.propagatedNativeBuildInputs or [ ]) ++ [ pkgs.libspatialindex ];
+    postPatch = ''
+      substituteInPlace rtree/finder.py --replace \
+        "find_library('spatialindex_c')" \
+        "'${pkgs.libspatialindex}/lib/libspatialindex_c${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}'"
+    '';
+  });
+
   scipy = super.scipy.overridePythonAttrs (
     old:
     if old.format != "wheel" then {
@@ -1233,9 +1354,13 @@ self: super:
     }
   );
 
-  # disable the removal of pyproject.toml, required because of setuptools_scm
   tempora = super.tempora.overridePythonAttrs (
     old: {
+      # required for the extra "toml" dependency in setuptools_scm[toml]
+      buildInputs = (old.buildInputs or [ ]) ++ [
+        self.toml
+      ];
+      # disable the removal of pyproject.toml, required because of setuptools_scm
       dontPreferSetupPy = true;
     }
   );

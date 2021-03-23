@@ -21,7 +21,6 @@
   runtimeShell,
   shadow,
   skopeo,
-  stdenv,
   storeDir ? builtins.storeDir,
   substituteAll,
   symlinkJoin,
@@ -120,7 +119,7 @@ rec {
     export GOPATH=$(pwd)
     export GOCACHE="$TMPDIR/go-cache"
     mkdir -p src/github.com/docker/docker/pkg
-    ln -sT ${docker.moby.src}/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
+    ln -sT ${docker.moby-src}/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
 
     mkdir -p $out/bin
@@ -448,7 +447,7 @@ rec {
     let
       stream = streamLayeredImage args;
     in
-      runCommand "${name}.tar.gz" {
+      runCommand "${baseNameOf name}.tar.gz" {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
@@ -519,9 +518,9 @@ rec {
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
         nativeBuildInputs = [ jshon pigz coreutils findutils jq moreutils ];
-        # Image name and tag must be lowercase
+        # Image name must be lowercase
         imageName = lib.toLower name;
-        imageTag = if tag == null then "" else lib.toLower tag;
+        imageTag = if tag == null then "" else tag;
         inherit fromImage baseJson;
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
@@ -747,8 +746,10 @@ rec {
       (lib.assertMsg (maxLayers > 1)
       "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
     let
+      baseName = baseNameOf name;
+
       streamScript = writePython3 "stream" {} ./stream_layered_image.py;
-      baseJson = writeText "${name}-base.json" (builtins.toJSON {
+      baseJson = writeText "${baseName}-base.json" (builtins.toJSON {
          inherit config;
          architecture = defaultArch;
          os = "linux";
@@ -760,7 +761,7 @@ rec {
       # things like permissions set on 'extraCommands' are not overriden
       # by Nix. Then we precompute the sha256 for performance.
       customisationLayer = symlinkJoin {
-        name = "${name}-customisation-layer";
+        name = "${baseName}-customisation-layer";
         paths = contentsList;
         inherit extraCommands;
         postBuild = ''
@@ -789,7 +790,7 @@ rec {
       # so they'll be excluded from the created images.
       unnecessaryDrvs = [ baseJson overallClosure ];
 
-      conf = runCommand "${name}-conf.json" {
+      conf = runCommand "${baseName}-conf.json" {
         inherit maxLayers created;
         imageName = lib.toLower name;
         passthru.imageTag =
@@ -842,18 +843,20 @@ rec {
 
         cat ${baseJson} | jq '
           . + {
+            "store_dir": $store_dir,
             "store_layers": $store_layers,
             "customisation_layer", $customisation_layer,
             "repo_tag": $repo_tag,
             "created": $created
           }
-          ' --argjson store_layers "$store_layers" \
+          ' --arg store_dir "${storeDir}" \
+            --argjson store_layers "$store_layers" \
             --arg customisation_layer ${customisationLayer} \
             --arg repo_tag "$imageName:$imageTag" \
             --arg created "$created" |
           tee $out
       '';
-      result = runCommand "stream-${name}" {
+      result = runCommand "stream-${baseName}" {
         inherit (conf) imageName;
         passthru = {
           inherit (conf) imageTag;

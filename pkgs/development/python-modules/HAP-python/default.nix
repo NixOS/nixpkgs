@@ -1,41 +1,63 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, curve25519-donna, ed25519
-, cryptography, ecdsa, zeroconf, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, base36
+, cryptography
+, curve25519-donna
+, ecdsa
+, ed25519
+, fetchFromGitHub
+, h11
+, pyqrcode
+, pytest-asyncio
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, zeroconf
+}:
 
 buildPythonPackage rec {
   pname = "HAP-python";
-  version = "3.1.0";
+  version = "3.4.0";
+  disabled = pythonOlder "3.5";
 
   # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qg38lfjby2xfm09chzc40a7i3b84kgyfs7g4xq8f5m8s39hg6d7";
+    sha256 = "0mkrs3fwiyp4am9fx1dnhd9h7rphfwymr46khw40xavrfb5jmsa7";
   };
 
-  disabled = !isPy3k;
-
   propagatedBuildInputs = [
-    curve25519-donna
-    ed25519
+    base36
     cryptography
+    curve25519-donna
     ecdsa
+    ed25519
+    h11
+    pyqrcode
     zeroconf
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  # Disable tests requiring network access
+  disabledTestPaths = [
+    "tests/test_accessory_driver.py"
+    "tests/test_hap_handler.py"
+    "tests/test_hap_protocol.py"
+  ];
 
   disabledTests = [
-    #disable tests needing network
-    "test_persist"
-    "test_setup_endpoints"
-    "test_auto_add_aid_mac"
-    "test_service_callbacks"
-    "test_send_events"
-    "test_not_standalone_aid"
-    "test_start_stop_async_acc"
-    "test_external_zeroconf"
-    "test_start_stop_sync_acc"
+    "test_persist_and_load"
+    "test_we_can_connect"
+    "test_idle_connection_cleanup"
+    "test_we_can_start_stop"
+    "test_push_event"
   ];
 
   meta = with lib; {

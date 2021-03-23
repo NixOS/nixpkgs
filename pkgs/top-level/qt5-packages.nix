@@ -115,6 +115,12 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
 
   kpmcore = callPackage ../development/libraries/kpmcore { };
 
+  mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
+
+  mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
+
+  mauikit = callPackage ../development/libraries/mauikit { };
+
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
   openbr = callPackage ../development/libraries/openbr { };
@@ -127,7 +133,7 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
 
   plasma-wayland-protocols = callPackage ../development/libraries/plasma-wayland-protocols { };
 
-  polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
+  polkit-qt = callPackage ../development/libraries/polkit-qt-1 { };
 
   poppler = callPackage ../development/libraries/poppler {
     lcms = pkgs.lcms2;

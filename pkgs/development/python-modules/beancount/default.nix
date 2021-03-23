@@ -6,7 +6,7 @@
 , bottle
 , chardet
 , dateutil
-, google_api_python_client
+, google-api-python-client
 , lxml
 , oauth2client
 , ply
@@ -16,14 +16,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.3.3";
+  version = "2.3.4";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0767ap2n9vk9dz40njndfhaprajr75fvzx7igbd1szc6x8wri8nr";
+    sha256 = "sha256-K/CM5qldmAAPTXM5WYXNHeuBwNUu1aduYQusd9gvhsA=";
   };
 
   # Tests require files not included in the PyPI archive.
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     bottle
     chardet
     dateutil
-    google_api_python_client
+    google-api-python-client
     lxml
     oauth2client
     ply

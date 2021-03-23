@@ -90,12 +90,7 @@ rustPlatform.buildRustPackage rec {
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D $releaseDir/alacritty $out/bin/alacritty
-
-  '' + (
+  postInstall = (
     if stdenv.isDarwin then ''
       mkdir $out/Applications
       cp -r extra/osx/Alacritty.app $out/Applications
@@ -126,8 +121,6 @@ rustPlatform.buildRustPackage rec {
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-
-    runHook postInstall
   '';
 
   dontPatchELF = true;

@@ -10,9 +10,6 @@
 , doxygen
 , ncurses
 , libintl
-, numpy
-, pillow
-, six
 , wxGTK
 , wxmac
 , IOKit

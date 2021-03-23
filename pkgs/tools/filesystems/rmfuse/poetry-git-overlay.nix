@@ -5,8 +5,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/rschroll/rmfuse.git";
-        rev = "ac91d477cc32311c88aa7ecd1bebd6503e426ae7";
-        sha256 = "129n00hricsf4jkgj39bq3m5nhvy4d4yg7mcvrcgwb2546wcix0n";
+        rev = "fca03bcdd6dc118f2ba981410ec9dff7f7cb88ec";
+        sha256 = "0i7dvvi2bp3hydjpzvr7vg10bx0wxz87spf7pg455aga8d0qhxgk";
       };
     }
   );

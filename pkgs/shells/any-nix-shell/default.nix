@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "any-nix-shell";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "haslersn";
     repo = "any-nix-shell";
     rev = "v${version}";
-    sha256 = "05xixgsdfv0qk648r74nvazw16dpw49ryz8dax9kwmhqrgkjaqv6";
+    sha256 = "0q27rhjhh7k0qgcdcfm8ly5za6wm4rckh633d0sjz87faffkp90k";
   };
 
   nativeBuildInputs = [ makeWrapper ];

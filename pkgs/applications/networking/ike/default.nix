@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.shrew.net/software";
     description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
     platforms = platforms.unix;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     license = licenses.sleepycat;
   };
 }

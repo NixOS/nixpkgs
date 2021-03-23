@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sas9d9kk92mc2wrwgmm0xxz7ycmh388dwvyxf1hy183yvin1nac";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.lukego maintainers.domenkozar ];
+    maintainers = [ maintainers.lukego ];
   };
 }

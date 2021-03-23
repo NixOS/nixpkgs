@@ -382,7 +382,12 @@ rec {
   async_ssl = janePackage {
     pname = "async_ssl";
     hash = "02ard8x5q5c42d9jdqmyzfx624yjq8cxxmvq3zb82hf6p8cc57ml";
-    meta.description = "An Async-pipe-based interface with OpenSSL";
+    meta = {
+      description = "An Async-pipe-based interface with OpenSSL";
+      # ctypes no longer works with dune 1
+      # dune 2 no longer supports jbuild
+      broken = true;
+    };
     propagatedBuildInputs = [ async ctypes openssl ];
   };
 

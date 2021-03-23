@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
         --replace "/bin/sh" "${bash}/bin/sh" \
         --replace "cat" "${coreutils}/bin/cat" \
         --replace "chattr" "${e2fsprogs}/bin/chattr" \
-        --replace "mv" "${coreutils}/bin/mv" \
+        --replace "mv " "${coreutils}/bin/mv " \
         --replace "pkill" "${procps}/bin/pkill"
     done
 
@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
         --replace "/bin/sh" "${bash}/bin/sh" \
         --replace "/opt/" "$out/opt/" \
         --replace "chattr" "${e2fsprogs}/bin/chattr" \
-        --replace "mv" "${coreutils}/bin/mv"
+        --replace "mv " "${coreutils}/bin/mv "
     done
 
     substituteInPlace $out/lib/systemd/system/appgatedriver.service \
@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
-    homepage = https://www.appgate.com/support/software-defined-perimeter-support;
+    homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ymatsiuk ];

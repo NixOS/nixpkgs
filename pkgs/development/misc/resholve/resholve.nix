@@ -11,12 +11,12 @@
 , doCheck ? true
 }:
 let
-  version = "0.4.2";
+  version = "0.5.1";
   rSrc = fetchFromGitHub {
     owner = "abathur";
     repo = "resholve";
     rev = "v${version}";
-    hash = "sha256-ArUQjqh4LRvFLzHiTIcae0q/VFxFF/X9eOFeRnYmTO0=";
+    hash = "sha256-+9MjvO1H+A3Ol2to5tWqdpNR7osQsYcbkX9avAqyrKw=";
   };
   deps = callPackage ./deps.nix {
     /*
@@ -29,6 +29,9 @@ let
       "${rSrc}/0002-add_MANIFEST_in.patch"
       "${rSrc}/0003-fix_codegen_shebang.patch"
       "${rSrc}/0004-disable-internal-py-yajl-for-nix-built.patch"
+      "${rSrc}/0005_revert_libc_locale.patch"
+      "${rSrc}/0006_disable_failing_libc_tests.patch"
+      "${rSrc}/0007_restore_root_init_py.patch"
     ];
   };
 in

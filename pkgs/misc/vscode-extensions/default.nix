@@ -1,4 +1,4 @@
-{ config, lib, callPackage, vscode-utils, nodePackages,llvmPackages_8 }:
+{ config, lib, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -45,6 +45,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      antfu.icons-carbon = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "icons-carbon";
+          publisher = "antfu";
+          version = "0.2.2";
+          sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 
@@ -189,6 +201,22 @@ let
         };
       };
 
+      dracula-theme.theme-dracula = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "theme-dracula";
+          publisher = "dracula-theme";
+          version = "2.22.3";
+          sha256 = "0wni9sriin54ci8rly2s68lkfx8rj1cys6mgcizvps9sam6377w6";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
+          description = "Dark theme for many editors, shells, and more";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula";
+          homepage = "https://draculatheme.com/";
+          license = licenses.mit;
+        };
+      };
+
       eamodio.gitlens = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitlens";
@@ -215,6 +243,18 @@ let
           homepage = "https://github.com/elm-tooling/elm-language-client-vscode";
           license = licenses.mit;
           maintainers = with maintainers; [ mcwitt ];
+        };
+      };
+
+      emmanuelbeziat.vscode-great-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-great-icons";
+          publisher = "emmanuelbeziat";
+          version = "2.1.64";
+          sha256 = "sha256-qsL1vWiEAYeWkMDNSrr1yzg0QxroEQQeznoDL3Ujy/o=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 
@@ -270,6 +310,18 @@ let
           publisher = "formulahendry";
           version = "0.1.6";
           sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      formulahendry.code-runner = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-runner";
+          publisher = "formulahendry";
+          version = "0.11.2";
+          sha256 = "0qwcxr6m1xwhqmdl4pccjgpikpq1hgi2hgrva5abn8ixa2510hcy";
         };
         meta = {
           license = lib.licenses.mit;
@@ -337,8 +389,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.196";
-          sha256 = "1l4f290018f2p76q6hn2b2injps6wz65as7dm537wrsvsivyg2qz";
+          version = "0.0.206";
+          sha256 = "1xalwk2bndb73p8p2b4w5qz7m1n80xyw67wb5qlq1rrfjchhicyv";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -496,6 +548,8 @@ let
         };
       };
 
+      ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
+
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-kubernetes-tools";
@@ -537,6 +591,20 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      redhat.java = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "java";
+          publisher = "redhat";
+          version = "0.76.0";
+          sha256 = "0xb9brki4s00piv4kqgz6idm16nk6x1j6502jljz7y9pif38z32y";
+        };
+        buildInputs = [ jdk ];
+        meta = {
+          license = lib.licenses.epl20;
+          broken = lib.versionAtLeast jdk.version "11";
         };
       };
 
@@ -589,6 +657,18 @@ let
           publisher = "pkief";
           version = "4.4.0";
           sha256 = "1m9mis59j9xnf1zvh67p5rhayaa9qxjiw9iw847nyl9vsy73w8ya";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      rubbersheep.gi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gi";
+          publisher = "rubbersheep";
+          version = "0.2.11";
+          sha256 = "0j9k6wm959sziky7fh55awspzidxrrxsdbpz1d79s5lr5r19rs6j";
         };
         meta = {
           license = lib.licenses.mit;
@@ -709,6 +789,18 @@ let
           publisher = "Tyriar";
           version = "1.9.0";
           sha256 = "0l4wibsjnlbzbrl1wcj18vnm1q4ygvxmh347jvzziv8f1l790qjl";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      usernamehw.errorlens = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "errorlens";
+          publisher = "usernamehw";
+          version = "3.2.4";
+          sha256 = "0caxmf6v0s5kgp6cp3j1kk7slhspjv5kzhn4sq3miyl5jkrn95kx";
         };
         meta = {
           license = lib.licenses.mit;

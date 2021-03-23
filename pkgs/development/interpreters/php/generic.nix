@@ -5,7 +5,7 @@
 
 let
   generic =
-    { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
+    { callPackage, lib, stdenv, nixosTests, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkg-config, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
     , systemd, system-sendmail, valgrind, xcbuild
@@ -97,7 +97,7 @@ let
                     (enabledExtensions ++ (getDepsRecursively enabledExtensions)));
 
               extNames = map getExtName enabledExtensions;
-              extraInit = writeText "php.ini" ''
+              extraInit = writeText "php-extra-init-${version}.ini" ''
                 ${lib.concatStringsSep "\n"
                   (lib.textClosureList extensionTexts extNames)}
                 ${extraConfig}
@@ -112,7 +112,8 @@ let
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
-                  tests = nixosTests.php;
+                  # Select the right php tests for the php version
+                  tests = nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                   inherit (php-packages) extensions buildPecl;
                   packages = php-packages.tools;
                   meta = php.meta // {
@@ -121,7 +122,7 @@ let
                 };
                 paths = [ php ];
                 postBuild = ''
-                  cp ${extraInit} $out/lib/php.ini
+                  ln -s ${extraInit} $out/lib/php.ini
 
                   wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
 

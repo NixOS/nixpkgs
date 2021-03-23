@@ -112,6 +112,7 @@ let
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
       ./qtwebkit.patch
+      ./qtwebkit-icu68.patch
     ] ++ optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch

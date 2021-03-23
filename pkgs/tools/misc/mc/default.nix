@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xt6txQWV8tmiLcbCmanyizk+NYNG6/bKREqEadwWbCc=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook unzip ];
 
   buildInputs = [
     file
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     openssl
     perl
     slang
-    unzip
     zip
   ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 

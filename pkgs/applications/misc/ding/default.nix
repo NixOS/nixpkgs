@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
   };
 
-  buildInputs = [ aspellEnv fortune gnugrep makeWrapper tk tre ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ aspellEnv fortune gnugrep tk tre ];
 
   patches = [ ./dict.patch ];
 

@@ -52,8 +52,7 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i setup.py -e "/pip>=/c\'pip',"
     substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing' \
-      --replace 'attrs>=19.3.0,<20.3.0' 'attrs'
+      --replace 'typing==3.6.4' 'typing'
   '';
 
   checkPhase = ''

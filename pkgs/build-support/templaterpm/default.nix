@@ -4,7 +4,8 @@ stdenv.mkDerivation {
   pname = "nix-template-rpm";
   version = "0.1";
 
-  buildInputs = [ makeWrapper python toposort rpm ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python toposort rpm ];
 
   phases = [ "installPhase" "fixupPhase" ];
 

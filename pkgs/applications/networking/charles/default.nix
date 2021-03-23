@@ -28,7 +28,7 @@ let
         url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}.tar.gz";
         inherit sha256;
       };
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       installPhase = ''
         makeWrapper ${jdk8.jre}/bin/java $out/bin/charles \

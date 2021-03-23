@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "welkin-r9638/tags/${version}";
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -p $out/{bin,share}

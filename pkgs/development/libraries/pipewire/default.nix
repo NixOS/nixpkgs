@@ -17,6 +17,7 @@
 , udev
 , libva
 , libsndfile
+, SDL2
 , vulkan-headers
 , vulkan-loader
 , ncurses
@@ -38,11 +39,11 @@ let
     fontDirectories = [];
   };
 
-  mesonBool = b: if b then "true" else "false";
+  mesonEnable = b: if b then "enabled" else "disabled";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.21";
+    version = "0.3.24";
 
     outputs = [
       "out"
@@ -60,18 +61,20 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      hash = "sha256:2YJzPTMPIoQQeNja3F53SD4gtpdSlbD/i77hBWiQfuQ=";
+      hash = "sha256:PcY20FTtUtJYAwCscEs+HfkdwDksYPFZIVTVORP1ooI=";
     };
 
     patches = [
       # Break up a dependency cycle between outputs.
-      ./alsa-profiles-use-libdir.patch
-      # Move installed tests into their own output.
-      ./installed-tests-path.patch
+      ./0040-alsa-profiles-use-libdir.patch
       # Change the path of the pipewire-pulse binary in the service definition.
-      ./pipewire-pulse-path.patch
+      ./0050-pipewire-pulse-path.patch
+      # Change the path of the pipewire-media-session binary in the service definition.
+      ./0055-pipewire-media-session-path.patch
+      # Move installed tests into their own output.
+      ./0070-installed-tests-path.patch
       # Add flag to specify configuration directory (different from the installation directory).
-      ./pipewire-config-dir.patch
+      ./0080-pipewire-config-dir.patch
     ];
 
     nativeBuildInputs = [
@@ -93,27 +96,30 @@ let
       vulkan-headers
       vulkan-loader
       valgrind
+      SDL2
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libopenaptx ldacbt sbc fdk_aac ];
 
     mesonFlags = [
-      "-Ddocs=true"
-      "-Dman=false" # we don't have xmltoman
-      "-Dexamples=${mesonBool withMediaSession}" # only needed for `pipewire-media-session`
+      "-Ddocs=enabled"
+      "-Dman=disabled" # we don't have xmltoman
+      "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
-      "-Dinstalled_tests=true"
+      "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
+      "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
-      "-Dgstreamer=${mesonBool gstreamerSupport}"
-      "-Dffmpeg=${mesonBool ffmpegSupport}"
-      "-Dbluez5=${mesonBool bluezSupport}"
-      "-Dbluez5-backend-hsp-native=${mesonBool nativeHspSupport}"
-      "-Dbluez5-backend-hfp-native=${mesonBool nativeHfpSupport}"
-      "-Dbluez5-backend-ofono=${mesonBool ofonoSupport}"
-      "-Dbluez5-backend-hsphfpd=${mesonBool hsphfpdSupport}"
+      "-Dlibcamera=disabled"
+      "-Dgstreamer=${mesonEnable gstreamerSupport}"
+      "-Dffmpeg=${mesonEnable ffmpegSupport}"
+      "-Dbluez5=${mesonEnable bluezSupport}"
+      "-Dbluez5-backend-hsp-native=${mesonEnable nativeHspSupport}"
+      "-Dbluez5-backend-hfp-native=${mesonEnable nativeHfpSupport}"
+      "-Dbluez5-backend-ofono=${mesonEnable ofonoSupport}"
+      "-Dbluez5-backend-hsphfpd=${mesonEnable hsphfpdSupport}"
       "-Dpipewire_config_dir=/etc/pipewire"
     ];
 
@@ -122,10 +128,23 @@ let
     doCheck = true;
 
     postInstall = ''
+      pushd .
+      cd $out
+      mkdir -p $out/nix-support/etc/pipewire
+      for f in etc/pipewire/*.conf; do bin/spa-json-dump "$f" > "$out/nix-support/$f.json"; done
+
+      mkdir -p $mediaSession/nix-support/etc/pipewire/media-session.d
+      for f in etc/pipewire/media-session.d/*.conf; do bin/spa-json-dump "$f" > "$mediaSession/nix-support/$f.json"; done
+      popd
+
+      moveToOutput "etc/pipewire/media-session.d/*.conf" "$mediaSession"
+      moveToOutput "share/systemd/user/pipewire-media-session.*" "$mediaSession"
+      moveToOutput "lib/systemd/user/pipewire-media-session.*" "$mediaSession"
+      moveToOutput "bin/pipewire-media-session" "$mediaSession"
+
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "bin/pipewire-pulse" "$pulse"
-      moveToOutput "bin/pipewire-media-session" "$mediaSession"
     '';
 
     passthru.tests = {
@@ -135,6 +154,17 @@ let
       test-paths = callPackage ./test-paths.nix {
         paths-out = [
           "share/alsa/alsa.conf.d/50-pipewire.conf"
+          "nix-support/etc/pipewire/client.conf.json"
+          "nix-support/etc/pipewire/client-rt.conf.json"
+          "nix-support/etc/pipewire/jack.conf.json"
+          "nix-support/etc/pipewire/pipewire.conf.json"
+          "nix-support/etc/pipewire/pipewire-pulse.conf.json"
+        ];
+        paths-out-media-session = [
+          "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
+          "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
+          "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
+          "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
         ];
         paths-lib = [
           "lib/alsa-lib/libasound_module_pcm_pipewire.so"

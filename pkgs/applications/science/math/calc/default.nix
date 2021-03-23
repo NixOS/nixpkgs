@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "calc";
-  version = "2.12.8.2";
+  version = "2.12.9.0";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/${version}/${pname}-${version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-yKe4PASm7qWH/nYv8BtYbi9m3xPpA0SZ02Hahj8DJC8=";
+    sha256 = "sha256-334WUhPG30U72hwzpHAZRNdmr/uBleOvEhu3rW9d5dM=";
   };
 
   postPatch = ''
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
   '';
 
-  buildInputs = [ util-linux makeWrapper ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ util-linux ]
              ++ lib.optionals enableReadline [ readline ncurses ];
 
   makeFlags = [
@@ -41,7 +42,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C-style arbitrary precision calculator";
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
-    license = licenses.lgpl21Only;
+    # The licensing situation depends on readline (see section 3 of the LGPL)
+    # If linked against readline then GPLv2 otherwise LGPLv2.1
+    license = with licenses; if enableReadline then gpl2Only else lgpl21Only;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
   };

@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     make -j $NIX_BUILD_CORES
     popd
     popd
+  '' + lib.optionalString stdenv.isDarwin ''
+    pushd SourcetrailDB/build/bindings_python
+    cp _sourcetraildb.dylib _sourcetraildb.so
+    popd
   '';
 
   checkPhase = ''
@@ -52,7 +56,7 @@ stdenv.mkDerivation rec {
 
     pushd SourcetrailDB/build/bindings_python
     cp sourcetraildb.py $out/libexec
-    cp _sourcetraildb* $out/libexec/_sourcetraildb.so
+    cp _sourcetraildb.so $out/libexec/_sourcetraildb.so
     popd
 
     wrapPythonProgramsIn "$out/libexec" "$pythonPath"
@@ -64,7 +68,5 @@ stdenv.mkDerivation rec {
     description = "Python indexer for Sourcetrail";
     homepage = "https://github.com/CoatiSoftware/SourcetrailPythonIndexer";
     license = licenses.gpl3;
-    broken = stdenv.isDarwin;
-    # https://github.com/NixOS/nixpkgs/pull/107533#issuecomment-751063675
   };
 }

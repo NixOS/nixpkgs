@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchgit, crystal, makeWrapper, nix-prefetch-git }:
+{ lib, fetchFromGitHub, crystal, makeWrapper, nix-prefetch-git }:
 
 crystal.buildCrystalPackage rec {
   pname = "crystal2nix";

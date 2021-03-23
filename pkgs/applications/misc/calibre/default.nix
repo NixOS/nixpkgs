@@ -26,11 +26,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.11.0";
+  version = "5.13.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-PI+KIMnslhoagv9U6Mcmo9Onfu8clVqASNlDir8JzUw=";
+    sha256 = "sha256-GDFAZxZmkio7e7kVjhYqhNdhXIlUPJF0iMWVl0uWVCM=";
   };
 
   patches = [
@@ -179,7 +179,7 @@ mkDerivation rec {
       free and open source and great for both casual users and computer experts.
     '';
     license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
-    maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
+    maintainers = with maintainers; [ pSub AndersonTorres ];
     platforms = platforms.linux;
   };
 }

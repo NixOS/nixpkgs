@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-data.tar.xz";
-    sha256 = "04x7729hk6zw1xj3n4s4lvaviijsnbjf5rhzvjxlr5fygvg4l6z1";
+    sha256 = "0b53jzl64i49rk3n3c3x0hibwbl7vih2xym8jq5s56klg61qdxa1";
   };
 
   installPhase = ''

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.4.0";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15s21945hg342195ig7nchap5mdnsw931iis92pr7hy8ff0rks3n";
+    sha256 = "a8fa91669c97440049132119019e90d0a9cf09e96352cf43c7c6ca244894bd4e";
   };
 
   postPatch = ''
@@ -19,8 +19,9 @@ buildPythonPackage rec {
       --replace 'attrs<=' 'attrs>=' \
       --replace 'colorama==' 'colorama>=' \
       --replace 'PyYAML==' 'PyYAML>=' \
-      --replace 'marshmallow<' 'marshmallow>='
-  '';
+      --replace 'marshmallow<' 'marshmallow>=' \
+      --replace 'websocket-client==' 'websocket-client>='
+   '';
 
   propagatedBuildInputs = [ attrs boto3 requests gradient_statsd terminaltables
     click-completion click-didyoumean click-help-colors requests_toolbelt

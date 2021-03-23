@@ -114,13 +114,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.4";
+      version = "0.22.6";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-CVi+fcmFMJMv7X4okALlVsxqsuUsirHgQT61IHdrBNE=";
+        sha256 = "sha256-Xu+MxMxR5u++R3lZHe6UQ+mEmRnWbN6173ZX39KS1A8=";
       };
 
       buildInputs = [
@@ -149,8 +149,6 @@ let
 
       doCheck = true;
 
-      enableParallelBuilding = true;
-
       mesonAutoFeatures = "disabled";
 
       outputs = [ "out" "doc" ]
@@ -173,7 +171,7 @@ let
       meta = with lib; {
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
-        license     = licenses.gpl2;
+        license     = licenses.gpl2Only;
         maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
         platforms   = platforms.unix;
 

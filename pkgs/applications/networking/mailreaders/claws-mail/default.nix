@@ -34,6 +34,7 @@
 , enablePluginBsfilter ? true
 , enablePluginClamd ? true
 , enablePluginDillo ? true
+, enablePluginFancy ? useGtk3, libsoup, webkitgtk
 , enablePluginFetchInfo ? true
 , enablePluginLibravatar ? enablePluginRavatar
 , enablePluginLitehtmlViewer ? true, gumbo
@@ -87,6 +88,7 @@ let
     { flags = [ "dbus" ]; enabled = enableDbus; deps = [ dbus dbus-glib ]; }
     { flags = [ "dillo-plugin" ]; enabled = enablePluginDillo; }
     { flags = [ "enchant" ]; enabled = enableEnchant; deps = [ enchant ]; }
+    { flags = [ "fancy-plugin" ]; enabled = enablePluginFancy; deps = [ libsoup webkitgtk ]; }
     { flags = [ "fetchinfo-plugin" ]; enabled = enablePluginFetchInfo; }
     { flags = [ "gnutls" ]; enabled = enableGnuTLS; deps = [ gnutls ]; }
     { flags = [ "ldap" ]; enabled = enableLdap; deps = [ openldap ]; }
@@ -153,7 +155,6 @@ in stdenv.mkDerivation rec {
       "--disable-jpilot"   # Missing jpilot library
 
       "--disable-gdata-plugin" # Complains about missing libgdata, even when provided
-      "--disable-fancy-plugin" # Missing libwebkit-1.0 library
     ] ++
     (map (feature: map (flag: strings.enableFeature feature.enabled flag) feature.flags) features);
 
@@ -172,7 +173,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "The user-friendly, lightweight, and fast email client";
     homepage = "https://www.claws-mail.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 ];
   };

@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
     ++ optionals libiscsiSupport [ libiscsi ]
     ++ optionals smbdSupport [ samba ];
 
-  enableParallelBuilding = true;
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
@@ -101,8 +100,6 @@ stdenv.mkDerivation rec {
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
     })
   ];
-
-  hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
@@ -147,7 +144,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # the .desktop is both invalid and pointless
-    test -e $out/share/applications/qemu.desktop && rm -f $out/share/applications/qemu.desktop
+    rm -f $out/share/applications/qemu.desktop
 
     # copy qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin

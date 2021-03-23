@@ -8,8 +8,9 @@ stdenv.mkDerivation {
     sha256 = "0q1sr6aljkw2jr9b4xxzbc01qvnd5vk3pxrypif9yd8xjw4wqwri";
   };
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-    libX11 xorgproto unzip
+    libX11 xorgproto
   ];
 
   installPhase = ''

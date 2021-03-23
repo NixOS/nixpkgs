@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "5.1.1";
+  version = "5.2.1";
   disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bVoFTaK/Alemtc5I+Z/M9y/FWczvJ+P86R0DMD89/BM=";
+    sha256 = "0d63xga4gjlfl9fzv3i4j605rrx2qgbzam6cl609ny96s8q8h1px";
   };
 
   format = "pyproject";

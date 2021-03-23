@@ -1,4 +1,5 @@
-{lib, stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux, zlib }:
+{ lib, stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups
+, ghostscript, pkgsi686Linux, zlib }:
 
 let
 
@@ -20,7 +21,7 @@ in
 
 stdenv.mkDerivation {
   pname = "canon-cups-ufr2";
-  version = version;
+  inherit version;
   src = src_canon;
 
   phases = [ "unpackPhase" "installPhase" ];

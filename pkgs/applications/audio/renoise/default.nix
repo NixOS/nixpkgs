@@ -14,7 +14,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "renoise";
-  version = "3.2.2";
+  version = "3.3.1";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
               "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
               "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
           ];
-          sha256 = "1v249kmyidx55kppk3sry7yg6hl1a91ixhnwz36h4y134fs7bkrl";
+          sha256 = "05baicks5dx278z2dx6h5n2vabsn64niwqssgys36xy469l9m1h0";
         }
         else
           releasePath
-    else throw "Platform is not supported by Renoise";
+    else throw "Platform is not supported. Use instalation native to your platform https://www.renoise.com/";
 
   buildInputs = [ alsaLib libjack2 libX11 libXcursor libXext libXrandr ];
 
@@ -47,6 +47,16 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     ln -s $out/renoise $out/bin/renoise
+
+    # Desktop item
+    mkdir -p $out/share/applications
+    cp -r Installer/renoise.desktop $out/share/applications/renoise.desktop
+
+    # Desktop item icons
+    mkdir -p $out/share/icons/hicolor/{48x48,64x64,128x128}/apps
+    cp Installer/renoise-48.png $out/share/icons/hicolor/48x48/apps/renoise.png
+    cp Installer/renoise-64.png $out/share/icons/hicolor/64x64/apps/renoise.png
+    cp Installer/renoise-128.png $out/share/icons/hicolor/128x128/apps/renoise.png
   '';
 
   postFixup = ''
@@ -61,6 +71,9 @@ stdenv.mkDerivation rec {
         --set-rpath $out/lib \
         $path
     done
+
+    substituteInPlace $out/share/applications/renoise.desktop \
+      --replace Exec=renoise Exec=$out/bin/renoise
   '';
 
   meta = {

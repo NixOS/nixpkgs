@@ -130,12 +130,13 @@ class ExtractChecksum:
 LayerInfo = namedtuple("LayerInfo", ["size", "checksum", "path", "paths"])
 
 
-def add_layer_dir(tar, paths, mtime):
+def add_layer_dir(tar, paths, store_dir, mtime):
     """
     Appends given store paths to a TarFile object as a new layer.
 
     tar: 'tarfile.TarFile' object for the new layer to be added to.
     paths: List of store paths.
+    store_dir: the root directory of the nix store
     mtime: 'mtime' of the added files and the layer tarball.
            Should be an integer representing a POSIX time.
 
@@ -143,9 +144,9 @@ def add_layer_dir(tar, paths, mtime):
              the layer added.
     """
 
-    invalid_paths = [i for i in paths if not i.startswith("/nix/store/")]
+    invalid_paths = [i for i in paths if not i.startswith(store_dir)]
     assert len(invalid_paths) == 0, \
-        "Expecting absolute store paths, but got: {invalid_paths}"
+        f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
 
     # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
@@ -245,6 +246,7 @@ def main():
       else datetime.fromisoformat(conf["created"])
     )
     mtime = int(created.timestamp())
+    store_dir = conf["store_dir"]
 
     with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
         layers = []
@@ -253,7 +255,7 @@ def main():
               "Creating layer", num,
               "from paths:", store_layer,
               file=sys.stderr)
-            info = add_layer_dir(tar, store_layer, mtime=mtime)
+            info = add_layer_dir(tar, store_layer, store_dir, mtime=mtime)
             layers.append(info)
 
         print("Creating the customisation layer...", file=sys.stderr)

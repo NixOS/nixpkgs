@@ -43,11 +43,11 @@ rec {
     crystal = crystal_0_34;
   };
 
-  shards_0_13 = generic {
-    version = "0.12.0";
-    sha256 = "0dginczw1gc5qlb9k4b6ldxzqz8n97jrrnjvj3mm9wcdbc9j6h3c";
+  shards_0_14 = generic {
+    version = "0.14.1";
+    sha256 = "sha256-/C6whh5RbTBkFWqpn0GqyVe0opbrklm8xPv5MIG99VU=";
     crystal = crystal_0_36;
   };
 
-  shards = shards_0_13;
+  shards = shards_0_14;
 }

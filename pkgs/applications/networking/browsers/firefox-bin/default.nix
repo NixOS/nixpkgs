@@ -33,6 +33,7 @@
 , nspr
 , nss
 , pango
+, pciutils
 , libheimdal
 , libpulseaudio
 , systemd
@@ -92,7 +93,6 @@ stdenv.mkDerivation {
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      (lib.getDev alsaLib)
       atk
       cairo
       curl
@@ -126,9 +126,9 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pciutils
       libheimdal
       libpulseaudio
-      (lib.getDev libpulseaudio)
       systemd
       ffmpeg
     ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [

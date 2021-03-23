@@ -2,29 +2,45 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JeuVrlm6JB8MgSUmgMLQPuPmlKSScSdsVga9jUwLWHM=";
+    sha256 = "sha256-6sV2e/m0qVSRWgdvVZ9VxEL/J57nTcTClxHF5X8/8PQ=";
   };
 
   deleteVendor = true;
-  vendorSha256 = "sha256-ArebHOjP3zvpASVAoaPXpSbrG/jq+Jbx7+EaQ1uHSVY=";
+  vendorSha256 = "sha256-NPE3YHulqllWDGrxQgPmy/KKE7xFPOUorLQNIU8cP50=";
 
   nativeBuildInputs = [ go-bindata ];
 
   # GIT_{COMMIT,DIRTY} filled in blank to prevent trying to run git and ending up blank anyway
   buildPhase = ''
+    runHook preBuild
     make bin GIT_DESCRIBE="v${version}" GIT_COMMIT="" GIT_DIRTY=""
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D waypoint $out/bin/waypoint
+    runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    # `version` tries to write to ~/.config/waypoint
+    export HOME="$TMPDIR"
+
+    $out/bin/waypoint --help
+    $out/bin/waypoint version # | grep "Waypoint v${version}"
+    runHook postInstallCheck
+  '';
+
+  # Binary is static
   dontPatchELF = true;
   dontPatchShebangs = true;
 

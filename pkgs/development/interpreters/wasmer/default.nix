@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   # using the [makefile](https://github.com/wasmerio/wasmer/blob/master/Makefile).
   # Enabling cranelift as this used to be the old default. At least one backend is
   # needed for the run subcommand to work.
-  cargoBuildFlags = [ "--features 'backend-cranelift'" ];
+  cargoBuildFlags = [ "--features" "backend-cranelift" ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 

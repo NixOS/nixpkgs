@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -8,35 +9,41 @@
 , cython
 , dateutil
 , html5lib
+, jinja2
 , lxml
 , numexpr
 , openpyxl
 , pytz
-, sqlalchemy
 , scipy
+, sqlalchemy
 , tables
 , xlrd
 , xlwt
-# Test Inputs
+# Test inputs
 , glibcLocales
 , hypothesis
 , pytestCheckHook
+, pytest-xdist
+, pytest-asyncio
+, XlsxWriter
 # Darwin inputs
 , runtimeShell
-, libcxx ? null
+, libcxx
 }:
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.1.5";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06vhk75hmzgv1sfbjzgnsw9x10h7y6bd6s6z7d6lfnn7wcgc83zi";
+    sha256 = "078b4nncn6778ymmqn80j2q6n7fcs4d6bbaraar5nypgbaw10vyz";
   };
 
   nativeBuildInputs = [ cython ];
+
   buildInputs = lib.optional stdenv.isDarwin libcxx;
+
   propagatedBuildInputs = [
     beautifulsoup4
     bottleneck
@@ -53,9 +60,17 @@ buildPythonPackage rec {
     xlwt
   ];
 
-  checkInputs = [ pytestCheckHook glibcLocales hypothesis ];
+  checkInputs = [
+    glibcLocales
+    hypothesis
+    jinja2
+    pytest-asyncio
+    pytest-xdist
+    pytestCheckHook
+    XlsxWriter
+  ];
 
-  # doesn't work with -Werror,-Wunused-command-line-argument
+  # Doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
@@ -69,52 +84,33 @@ buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
-  # release. https://github.com/pandas-dev/pandas/pull/30862
-  setupPyBuildFlags = lib.optionals (!(isPy38 && stdenv.isDarwin)) [
-    # As suggested by
-    # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
-    "--parallel=$NIX_BUILD_CORES"
-  ];
-
   doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
   pytestFlagsArray = [
     "--skip-slow"
     "--skip-network"
+    "--numprocesses" "0"
   ];
+
   disabledTests = [
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
-    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
-    "test_fallback_plural"
-    "test_ambiguous_flags"
-    "test_ambiguous_compat"
     # Locale-related
     "test_names"
     "test_dt_accessor_datetime_name_accessors"
     "test_datetime_name_accessors"
-    # Can't import from test folder
-    "test_oo_optimizable"
     # Disable IO related tests because IO data is no longer distributed
     "io"
-    # KeyError Timestamp
-    "test_to_excel"
-    # ordering logic has changed
-    "numpy_ufuncs_other"
-    "order_without_freq"
-    # tries to import from pandas.tests post install
+    # Tries to import from pandas.tests post install
     "util_in_top_level"
-    # Fails with 1.0.5
-    "test_constructor_list_frames"
-    "test_constructor_with_embedded_frames"
-    # tries to import compiled C extension locally
+    # Tries to import compiled C extension locally
     "test_missing_required_dependency"
+    # AssertionError with 1.2.3
+    "test_from_coo"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
   ];
 
-  # tests have relative paths, and need to reference compiled C extensions
+  # Tests have relative paths, and need to reference compiled C extensions
   # so change directory where `import .test` is able to be resolved
   preCheck = ''
     cd $out/${python.sitePackages}/pandas
@@ -130,6 +126,8 @@ buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '';
+
+  pythonImportsCheck = [ "pandas" ];
 
   meta = with lib; {
     # https://github.com/pandas-dev/pandas/issues/14866

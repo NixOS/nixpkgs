@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     ln -s $out/share/rigsofrods/{RoR,RoRConfig} $out/bin
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
   buildInputs = [ wxGTK30 freeimage zziplib libGLU libGL boost
-    libuuid openal ogre ois curl gtk2 mygui unzip angelscript
+    libuuid openal ogre ois curl gtk2 mygui angelscript
     ogrepaged mysocketw libxcb ];
 
   meta = with lib; {

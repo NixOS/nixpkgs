@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, wrapGAppsHook
+, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu
 
@@ -60,14 +60,12 @@ in
       '';
     };
 
-    buildInputs = (if stdenv.isDarwin
-      then [ unzip ]
-      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
-        ++ [ libsecret libXScrnSaver ];
+    buildInputs = [ libsecret libXScrnSaver libxshmfence ]
+      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages);
 
     runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
-    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+    nativeBuildInputs = [unzip] ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 
     dontBuild = true;
     dontConfigure = true;

@@ -13,17 +13,20 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.2.0";
+  version = "2.2.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d8edbb1a45e8e1f8e44b1260583107fc23f8bc8da6d18cb331ff61d41258ecf";
+    sha256 = "718887296892f92683f6a51f25a3ae584993b06f7076ce1e1fd482e59a8220a2";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
+  buildInputs = [
+    pytest
+  ];
   checkInputs = [ pytestCheckHook filelock ];
-  propagatedBuildInputs = [ execnet pytest pytest-forked psutil ];
+  propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
   # access file system
   disabledTests = [

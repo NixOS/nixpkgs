@@ -1,4 +1,4 @@
-{ buildPecl, lib, pkgs, php }:
+{ lib, buildPecl, fetchFromGitHub, writeText, libcouchbase, zlib, php }:
 let
   pname = "couchbase";
   version = "2.6.2";
@@ -6,7 +6,7 @@ in
 buildPecl {
   inherit pname version;
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "couchbase";
     repo = "php-couchbase";
     rev = "v${version}";
@@ -16,12 +16,12 @@ buildPecl {
   configureFlags = [ "--with-couchbase" ];
   broken = lib.versionAtLeast php.version "8.0";
 
-  buildInputs = with pkgs; [ libcouchbase zlib ];
+  buildInputs = [ libcouchbase zlib ];
   internalDeps = [] ++ lib.optionals (lib.versionOlder php.version "8.0") [ php.extensions.json ];
   peclDeps = [ php.extensions.igbinary ];
 
   patches = [
-    (pkgs.writeText "php-couchbase.patch" ''
+    (writeText "php-couchbase.patch" ''
       --- a/config.m4
       +++ b/config.m4
       @@ -9,7 +9,7 @@ if test "$PHP_COUCHBASE" != "no"; then
@@ -29,7 +29,7 @@ buildPecl {
          else
            AC_MSG_CHECKING(for libcouchbase in default path)
       -    for i in /usr/local /usr; do
-      +    for i in ${pkgs.libcouchbase}; do
+      +    for i in ${libcouchbase}; do
              if test -r $i/include/libcouchbase/couchbase.h; then
                LIBCOUCHBASE_DIR=$i
                AC_MSG_RESULT(found in $i)

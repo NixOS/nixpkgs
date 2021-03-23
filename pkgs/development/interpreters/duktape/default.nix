@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "19szwxzvl2g65fw95ggvb8h0ma5bd9vvnnccn59hwnc4dida1x4n";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile.sharedlibrary \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+    substituteInPlace Makefile.cmdline \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+  '';
   buildPhase = ''
     make -f Makefile.sharedlibrary
     make -f Makefile.cmdline
@@ -27,6 +35,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://duktape.org/download.html";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -3,13 +3,12 @@
   libksane
 }:
 
-let
-  minorVersion = "2.2";
-in mkDerivation rec {
-  name = "skanlite-2.2.0";
+mkDerivation rec {
+  pname   = "skanlite";
+  version = "2.2.0";
 
   src = fetchurl {
-    url    = "mirror://kde/stable/skanlite/${minorVersion}/${name}.tar.xz";
+    url    = "mirror://kde/stable/skanlite/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "VP7MOZdUe64XIVr3r0aKIl1IPds3vjBTZzOS3N3VhOQ=";
   };
 
@@ -23,8 +22,8 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "KDE simple image scanning application";
-    homepage    = "http://www.kde.org/applications/graphics/skanlite/";
-    license = licenses.gpl2;
+    homepage    = "https://apps.kde.org/skanlite";
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ pshendry ];
     platforms   = platforms.linux;
   };

@@ -31,7 +31,8 @@
 # errors. Suspected is that a newer version than clang
 # is needed than 5.0 but it is not clear.
 , enableCocoa ? false
-, darwin
+, Cocoa
+, OpenGL
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1b05kg46azrxxvq42c71071lfsnc34pw4vynnkczdqi6g0gzn16x";
   };
 
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
     pango
-    darwin.apple_sdk.frameworks.OpenGL
+    OpenGL
   ] ++ lib.optionals enableAlsa [
     alsaLib
   ] ++ lib.optionals enableX11 [
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
-  ] ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optional enableCocoa Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs = [

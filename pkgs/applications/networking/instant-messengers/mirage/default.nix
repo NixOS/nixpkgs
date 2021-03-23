@@ -1,6 +1,6 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub
 , qmake, pkg-config, olm, wrapQtAppsHook
-, qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qttools, qtgraphicaleffects
+, qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qtgraphicaleffects
 , python3Packages, pyotherside, libXScrnSaver
 }:
 

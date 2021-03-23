@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
-  version = "4.4.21";
+  version = "4.4.34";
 
   nativeBuildInputs = [ cmake bcunit ];
   buildInputs = [ mbedtls ];

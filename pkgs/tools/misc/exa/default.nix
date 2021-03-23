@@ -1,43 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkg-config, zlib
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, pkg-config, zlib
 , Security, libiconv, installShellFiles
 }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "exa";
-  version = "0.9.0";
+  version = "unstable-2021-01-14";
 
-  cargoSha256 = "0nl106jlbr8gnnlbi20mrc6zyww7vxgmw6w34ibndxqh9ggxwfvr";
+  cargoSha256 = "1lmjh0grpnx20y6raxnxgjkr92h395r6jk8mm2ypc4cxpxczdqvl";
 
   src = fetchFromGitHub {
     owner = "ogham";
-    repo = "exa";
-    rev = "v${version}";
-    sha256 = "14qlm9zb9v22hxbbi833xaq2b7qsxnmh15s317200vz5f1305hhw";
+    repo = pname;
+    rev = "13b91cced4cab012413b25c9d3e30c63548639d0";
+    sha256 = "18y4v1s102lh3gvgjwdd66qlsr75wpwpcj8zsk5y5r95a405dkfm";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/ogham/exa/pull/584
-      name = "fix-panic-on-broken-symlink-in-git-repository.patch";
-      url = "https://github.com/ogham/exa/pull/584/commits/a7a8e99cf3a15992afb2383435da0231917ffb54.patch";
-      sha256 = "0n5q483sz300jkp0sbb350hdinmkw7s6bmigdyr6ypz3fvygd9hx";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake pkg-config perl installShellFiles ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   outputs = [ "out" "man" ];
 
   postInstall = ''
-    installManPage contrib/man/exa.1
+    pandoc --standalone -f markdown -t man man/exa.1.md > man/exa.1
+    pandoc --standalone -f markdown -t man man/exa_colors.5.md > man/exa_colors.5
+    installManPage man/exa.1 man/exa_colors.5
     installShellCompletion \
-      --name exa contrib/completions.bash \
-      --name exa.fish contrib/completions.fish \
-      --name _exa contrib/completions.zsh
+      --name exa completions/completions.bash \
+      --name exa.fish completions/completions.fish \
+      --name _exa completions/completions.zsh
   '';
 
   # Some tests fail, but Travis ensures a proper build

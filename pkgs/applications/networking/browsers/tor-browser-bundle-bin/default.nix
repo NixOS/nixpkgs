@@ -33,9 +33,6 @@
 
 , gmp
 
-# Pluggable transport dependencies
-, python27
-
 # Wrapper runtime
 , coreutils
 , glibcLocales
@@ -91,19 +88,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.9";
+  version = "10.0.13";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "Dtlfm/memHSxir5XkUGkJICGEM+tPs//ET4PdVM1HPM=";
+      sha256 = "sha256-KxJKS/ymbkAg8LjMFz3BDSupPk5cNB1pFz9fFyRTndk=";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "GZywFEX/5Br+Zu1w6pegoNOTrSIVQNE2LINsa3Vdlxs=";
+      sha256 = "sha256-4glc2qP6AdHtWc8zW+varG30rlAXpeFyKjqDPsmiVfI=";
     };
   };
 in

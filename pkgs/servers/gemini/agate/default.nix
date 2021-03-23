@@ -1,23 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "2.5.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mnatEvojma1+cOVllTAzDVxl5luRGleLE6GNPnQUNWQ=";
+    sha256 = "sha256-EhIBkAPy+sZ629yxJ8GCVhEQx7gQypMFYquGpQJkke0=";
   };
 
-  cargoSha256 = "sha256-B07itUftDj3yVMDc/2VetwYs74fZBa1tmeELbbQ39P0=";
+  cargoSha256 = "sha256-nRrFC/6CgXZR78aJQVw2y2sKUmRpz8Rofo0N4vgeekg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/agate --help
+    $out/bin/agate --version 2>&1 | grep "agate ${version}"
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
-    homepage = "https://proxy.vulpes.one/gemini/gem.limpet.net/agate";
-    changelog = "https://proxy.vulpes.one/gemini/gem.limpet.net/agate";
+    homepage = "https://proxy.vulpes.one/gemini/qwertqwefsday.eu/agate.gmi";
+    changelog = "https://proxy.vulpes.one/gemini/qwertqwefsday.eu/agate.gmi";
     description = "Very simple server for the Gemini hypertext protocol";
     longDescription = ''
       Agate is a server for the Gemini network protocol, built with the Rust
@@ -25,7 +33,7 @@ rustPlatform.buildRustPackage rec {
       static files. It uses async I/O, and should be quite efficient even when
       running on low-end hardware and serving many concurrent requests.
     '';
-    license = licenses.asl20;
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ jk ];
   };
 }

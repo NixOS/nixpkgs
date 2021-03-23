@@ -1,8 +1,8 @@
-{ lib, stdenv, ocaml, findlib, dune, dune_2 }:
+{ lib, stdenv, ocaml, findlib, dune_1, dune_2 }:
 
 { pname, version, buildInputs ? [], enableParallelBuilding ? true, ... }@args:
 
-let Dune = if args.useDune2 or false then dune_2 else dune; in
+let Dune = if args.useDune2 or false then dune_2 else dune_1; in
 
 if args ? minimumOCamlVersion &&
    ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion

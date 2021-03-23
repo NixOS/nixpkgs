@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig,
+{ lib, stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig,
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 stdenv.mkDerivation rec {

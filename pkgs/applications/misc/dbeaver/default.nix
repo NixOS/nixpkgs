@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dbeaver-ce";
-  version = "7.3.5"; # When updating also update fetchedMavenDeps.sha256
+  version = "21.0.0"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-gEE7rndOaXzruWL7TG+QgVkq1+06tIZwyGzU9cFc+oU=";
+    sha256 = "sha256-it0EcPD7TXSknjVkGv22Nq1D4J32OEncQDy4w9CIPNk=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       maven
     ];
 
-    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2";
+    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 -P desktop,all-platforms";
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-jT0Z154rVmafUbb6dqYSl3cUxMuK5MR4HUsprkrgSDw=";
+    outputHash = "sha256-xKlFFQXd2U513KZKQa7ttSFNX2gxVr9hNsvyaoN/rEE=";
   };
 
   buildInputs = [
@@ -80,16 +80,30 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+    runHook preBuild
+
+    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 -P desktop,all-platforms
+
+    runHook postBuild
   '';
 
   installPhase =
     let
       productTargetPath = "product/standalone/target/products/org.jkiss.dbeaver.core.product";
+
+      platformMap = {
+        aarch64-linux = "aarch64";
+        x86_64-darwin = "x86_64";
+        x86_64-linux  = "x86_64";
+      };
+
+      systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw "dbeaver not supported on ${stdenv.hostPlatform.system}");
     in
     if stdenv.isDarwin then ''
+      runHook preInstall
+
       mkdir -p $out/Applications $out/bin
-      cp -r ${productTargetPath}/macosx/cocoa/x86_64/DBeaver.app $out/Applications
+      cp -r ${productTargetPath}/macosx/cocoa/${systemPlatform}/DBeaver.app $out/Applications
 
       sed -i "/^-vm/d; /bin\/java/d" $out/Applications/DBeaver.app/Contents/Eclipse/dbeaver.ini
 
@@ -98,9 +112,13 @@ stdenv.mkDerivation rec {
       wrapProgram $out/Applications/DBeaver.app/Contents/MacOS/dbeaver \
         --prefix JAVA_HOME : ${jdk.home} \
         --prefix PATH : ${jdk}/bin
+
+      runHook postInstall
     '' else ''
+      runHook preInstall
+
       mkdir -p $out/
-      cp -r ${productTargetPath}/linux/gtk/x86_64/dbeaver $out/dbeaver
+      cp -r ${productTargetPath}/linux/gtk/${systemPlatform}/dbeaver $out/dbeaver
 
       # Patch binaries.
       interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
@@ -117,6 +135,8 @@ stdenv.mkDerivation rec {
 
       mkdir -p $out/share/pixmaps
       ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
+
+      runHook postInstall
     '';
 
   meta = with lib; {
@@ -129,7 +149,7 @@ stdenv.mkDerivation rec {
       Teradata, Firebird, Derby, etc.
     '';
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ jojosch ];
   };
 }

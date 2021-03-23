@@ -614,11 +614,16 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 
 
 # Start stage 2.  `switch_root' deletes all files in the ramfs on the
-# current root.  Note that $stage2Init might be an absolute symlink,
-# in which case "-e" won't work because we're not in the chroot yet.
-if [ ! -e "$targetRoot/$stage2Init" ] && [ ! -L "$targetRoot/$stage2Init" ] ; then
-    echo "stage 2 init script ($targetRoot/$stage2Init) not found"
-    fail
+# current root.  The path has to be valid in the chroot not outside.
+if [ ! -e "$targetRoot/$stage2Init" ]; then
+    stage2Check=${stage2Init}
+    while [ "$stage2Check" != "${stage2Check%/*}" ] && [ ! -L "$targetRoot/$stage2Check" ]; do
+        stage2Check=${stage2Check%/*}
+    done
+    if [ ! -L "$targetRoot/$stage2Check" ]; then
+        echo "stage 2 init script ($targetRoot/$stage2Init) not found"
+        fail
+    fi
 fi
 
 mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run

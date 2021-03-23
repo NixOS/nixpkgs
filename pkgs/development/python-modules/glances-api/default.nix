@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "glances-api";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
     rev = version;
-    sha256 = "0rgv77n0lvr7d3vk4qc8svipxafmm6s4lfxrl976hsygrhaqidch";
+    sha256 = "sha256-mbkZZg2fmus4kOXFxHE/UV/nxemFAsoEZu8IUa7SPsg=";
   };
 
   propagatedBuildInputs = [

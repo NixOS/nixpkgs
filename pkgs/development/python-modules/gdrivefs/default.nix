@@ -8,7 +8,7 @@
 , six
 , dateutil
 , fusepy
-, google_api_python_client
+, google-api-python-client
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ gipc greenlet httplib2 six ];
-  propagatedBuildInputs = [ dateutil fusepy google_api_python_client ];
+  propagatedBuildInputs = [ dateutil fusepy google-api-python-client ];
 
   patchPhase = ''
     substituteInPlace gdrivefs/resources/requirements.txt \

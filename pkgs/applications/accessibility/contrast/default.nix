@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitLab
 , cairo
 , dbus
@@ -7,17 +8,17 @@
 , glib
 , gtk3
 , libhandy_0
+, libsass
 , meson
 , ninja
 , pango
 , pkg-config
 , python3
-, rustc
 , rustPlatform
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "contrast";
   version = "0.0.3";
 
@@ -30,7 +31,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0kk3mv7a6y258109xvgicmsi0lw0rcs00gfyivl5hdz7qh47iccy";
   };
 
-  cargoSha256 = "0vi8nv4hkhsgqgz36xacwkk5cxirg6li44nbmk3x7vx7c64hzybq";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-ePkPiWGn79PHrMsSEql5OXZW5uRMdTP+w0/DCcm2KG4=";
+  };
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -39,6 +44,9 @@ rustPlatform.buildRustPackage rec {
     ninja
     pkg-config
     python3
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
     glib # for glib-compile-resources
   ];
@@ -49,18 +57,13 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk3
     libhandy_0
+    libsass
     pango
   ];
 
   postPatch = ''
     patchShebangs build-aux/meson_post_install.py
   '';
-
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
 
   meta = with lib; {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";

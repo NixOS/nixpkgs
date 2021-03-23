@@ -82,6 +82,7 @@ with lib.maintainers; {
       jtojnar
       worldofpeace
       dasj19
+      maxeaubrey
     ];
     scope = "Maintain GNOME desktop environment and platform.";
   };
@@ -94,6 +95,18 @@ with lib.maintainers; {
       ryantm
     ];
     scope = "Maintain Jitsi.";
+  };
+
+  kodi = {
+    members = [
+      aanderse
+      cpages
+      edwtjo
+      minijackson
+      peterhoeg
+      sephalon
+    ];
+    scope = "Maintain Kodi and related packages.";
   };
 
   matrix = {
@@ -134,6 +147,7 @@ with lib.maintainers; {
       timokau
       omasanori
       raskin
+      collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
   };

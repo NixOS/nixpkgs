@@ -1,4 +1,4 @@
-{ mkDerivation, fetchurl, pkgs, lib, php }:
+{ mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "phpcs";
   version = "3.5.8";
@@ -12,7 +12,7 @@ mkDerivation {
   };
 
   phases = [ "installPhase" ];
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,7 +21,7 @@ mkDerivation {
       --add-flags "$out/libexec/phpcs/phpcs.phar"
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "PHP coding standard tool";
     license = licenses.bsd3;
     homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
