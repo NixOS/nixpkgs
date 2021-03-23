@@ -1691,4 +1691,8 @@ self: super: {
   # https://github.com/jswebtools/language-ecmascript-analysis/issues/1
   language-ecmascript-analysis = doJailbreak super.language-ecmascript-analysis;
 
+  # Too strict bounds on optparse-applicative
+  # https://github.com/faylang/fay/pull/474
+  fay = doJailbreak super.fay;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
