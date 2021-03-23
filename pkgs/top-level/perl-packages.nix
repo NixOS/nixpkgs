@@ -10959,8 +10959,7 @@ let
     preCheck = ''
       rm t/931_epub.t # epub test fails
     '';
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
       patchShebangs bin/
