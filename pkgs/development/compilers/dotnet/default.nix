@@ -124,11 +124,11 @@ rec {
   };
 
   sdk_5_0 = buildNetCoreSdk {
-    version = "5.0.100";
+    version = "5.0.200";
     sha512 = {
-      x86_64-linux = "bec37bfb327c45cc01fd843ef93b22b556f753b04724bba501622df124e7e144c303a4d7e931b5dbadbd4f7b39e5adb8f601cb6293e317ad46d8fe7d52aa9a09";
-      aarch64-linux = "5fceac0a9468097d66af25516da597eb4836b294ed1647ba272ade5c8faea2ed977a95d9ce720c44d71607fa3a0cf9de55afe0e66c0c89ab1cc6736945978204";
-      x86_64-darwin = "69ccc7c686ac06f6c658d118f59cf1a0e7284b4570375dd88d3e3043098e311745922301f2650d159624d09c4d39a1f3cbdd5daee0e408eef915de839e3bce8f";
+      x86_64-linux = "0g7zcmkcdwc11h42m6hq8d0w55nnvnsmj3dc16829q55cp7l7kggmjljnd9slx7r7nrsyi7yy8brwh8n4kfi5998pdyb09fzhq5w60d";
+      aarch64-linux = "2zy6nxiw313g2sbmnkg76r64llbk2w2wcsa6frq535zbviw52zf163jvw2687rpiw4szdizf337l3b0qa0396abw5dhq2czqlxjyjv8";
+      x86_64-darwin = "2p0yxplafhi5ks38pq8nyi43kpv4l4npa718rvcvl57qs76j0dqlk1s4wdw7msx8g7xxy1aal47zy9rxvlypmgwx4dnp339cmbd6mf6";
     };
   };
 }
