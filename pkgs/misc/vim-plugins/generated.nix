@@ -1821,6 +1821,18 @@ let
     meta.homepage = "https://github.com/phaazon/hop.nvim/";
   };
 
+  hop-nvim = buildVimPluginFrom2Nix {
+    pname = "hop-nvim";
+    version = "2021-03-18";
+    src = fetchFromGitHub {
+      owner = "phaazon";
+      repo = "hop.nvim";
+      rev = "8d1a199236590a6e6667a45e0084d26aaeb32fb6";
+      sha256 = "1skya8iqkf9bblpdf1vvkl73i9rqm0lqd40114a8ppk8vbqjp53x";
+    };
+    meta.homepage = "https://github.com/phaazon/hop.nvim/";
+  };
+
   i3config-vim = buildVimPluginFrom2Nix {
     pname = "i3config-vim";
     version = "2020-03-28";
