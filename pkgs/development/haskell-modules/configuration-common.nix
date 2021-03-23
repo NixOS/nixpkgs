@@ -1675,4 +1675,8 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/7163
   pandoc = dontCheck super.pandoc;
 
+  # Too strict version bounds on cryptonite.
+  # Issue reported upstream, no bug tracker url yet.
+  darcs = doJailbreak super.darcs;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

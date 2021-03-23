@@ -635,6 +635,7 @@ travitch/hasksyn
 tremor-rs/tremor-vim@main
 triglav/vim-visual-increment
 troydm/zoomwintab.vim
+tversteeg/registers.nvim@main
 twerth/ir_black
 twinside/vim-haskellconceal
 Twinside/vim-hoogle

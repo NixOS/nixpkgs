@@ -36,7 +36,7 @@ let
         src = fetchFromGitHub {
           owner = "flz";
           repo = "iaqualink-py";
-          rev = version;
+          rev = "v${version}";
           sha256 = "16mn6nd9x3hm6j6da99qhwbqs95hh8wx21r1h1m9csl76z77n9lh";
         };
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
@@ -299,6 +299,7 @@ in with py.pkgs; buildPythonApplication rec {
     "sql"
     "ssdp"
     "stream"
+    "subaru"
     "sun"
     "switch"
     "system_health"
