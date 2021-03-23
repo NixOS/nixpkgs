@@ -54,7 +54,7 @@ let self = stdenv.mkDerivation rec {
   patches = [
     # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
     # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    ./drop-inheritable.patch
+    # ./drop-inheritable.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
