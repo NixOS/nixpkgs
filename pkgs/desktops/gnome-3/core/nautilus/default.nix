@@ -9,6 +9,8 @@
 , python3
 , wrapGAppsHook
 , gtk3
+, libhandy
+, libportal
 , gnome3
 , gnome-autoar
 , glib-networking
@@ -71,6 +73,8 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gtk3
+    libhandy
+    libportal
     libexif
     libnotify
     libseccomp
