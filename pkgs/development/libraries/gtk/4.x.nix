@@ -5,9 +5,7 @@
 , pkg-config
 , gettext
 , graphene
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gtk-doc
+, gi-docgen
 , meson
 , ninja
 , python3
@@ -45,7 +43,6 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
 , cups ? null
 , AppKit
 , Cocoa
@@ -68,7 +65,7 @@ stdenv.mkDerivation rec {
   pname = "gtk4";
   version = "4.1.2";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   setupHooks = [
@@ -90,14 +87,8 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     sassc
-  ] ++ setupHooks ++ lib.optionals withGtkDoc [
-    pandoc
-    docbook_xml_dtd_43
-    docbook-xsl-nons
-    gtk-doc
-    # For xmllint
-    libxml2
-  ];
+    gi-docgen
+  ] ++ setupHooks;
 
   buildInputs = [
     libxkbcommon
@@ -151,10 +142,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
-    "-Dtests=false"
-    "-Dtracker3=${lib.boolToString trackerSupport}"
-    "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
+    "-Dgtk_doc=true"
+    "-Dbuild-tests=false"
+    "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
+    "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
   ];
 
   doCheck = false; # needs X11
@@ -173,18 +164,10 @@ stdenv.mkDerivation rec {
       gdk/gen-gdk-gresources-xml.py
       gtk/gen-gtk-gresources-xml.py
       gtk/gentypefuncs.py
-      docs/reference/gtk/gtk-markdown-to-docbook
     )
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
-  '';
-
-  postBuild =  lib.optionalString withGtkDoc ''
-    # Meson not building `custom_target`s passed to `custom_files` argument of `gnome.gtkdoc` function
-    # as part of the `install` target. We have to build the docs manually first.
-    # https://github.com/mesonbuild/meson/issues/2831
-    ninja g{t,d,s}k4-doc
   '';
 
   preInstall = ''
@@ -204,6 +187,11 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk4-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+
+    # So that devhelp can find this.
+    mkdir -p "$devdoc/share/devhelp"
+    mv "$out/share/doc/gtk4/reference" "$devdoc/share/devhelp/books"
+    rmdir -p --ignore-fail-on-non-empty "$out/share/doc/gtk4"
   '';
 
   # Wrap demos
