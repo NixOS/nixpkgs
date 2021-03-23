@@ -29186,6 +29186,8 @@ in
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
+  deepspeech = callPackage ../misc/deepspeech { };
+
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
   demjson = with python3Packages; toPythonApplication demjson;
