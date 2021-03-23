@@ -17,9 +17,7 @@ fetchFromGitHub {
   sha256 = "15vvbbzv6b3jh7lxg77viycdd7yf3y8lxy54vs3rsrsxwncg0pak";
 
   meta = with lib; {
-    description = ''Kreative Square is a fullwidth scalable monospace font
-    designed specifically to support pseudographics, semigraphics, and private
-    use characters.'';
+    description = "Fullwidth scalable monospace font designed specifically to support pseudographics, semigraphics, and private use characters";
     homepage = "https://www.kreativekorp.com/software/fonts/ksquare.shtml";
     license = licenses.ofl;
     platforms = platforms.all;
