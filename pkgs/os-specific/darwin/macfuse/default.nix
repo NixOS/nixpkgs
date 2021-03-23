@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg, libtapi }:
+{ lib, stdenv, fetchurl, cpio, xar, undmg, libtapi, DiskArbitration }:
 
 stdenv.mkDerivation rec {
   pname = "macfuse-stubs";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cpio xar undmg libtapi ];
+  propagatedBuildInputs = [ DiskArbitration ];
 
   postUnpack = ''
     xar -xf 'Install macFUSE.pkg'
@@ -40,6 +41,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://osxfuse.github.io";
     description = "Build time stubs for FUSE on macOS";
+    longDescription = ''
+      macFUSE is required for this package to work on macOS. To install macFUSE,
+      use the installer from the <link xlink:href="https://osxfuse.github.io/">
+      project website</link>.
+    '';
     platforms = platforms.darwin;
     maintainers = with maintainers; [ midchildan ];
 
