@@ -1296,6 +1296,9 @@ genericBuild() {
         eval "${!curPhase:-$curPhase}"
 
         if [ "$curPhase" = unpackPhase ]; then
+            # make sure we can cd into the directory
+            [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
+
             cd "${sourceRoot:-.}"
         fi
     done
