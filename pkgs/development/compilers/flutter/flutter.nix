@@ -41,7 +41,7 @@ let
 
     buildInputs = [ git ];
 
-    inherit src patches;
+    inherit src patches version;
 
     postPatch = ''
       patchShebangs --build ./bin/
