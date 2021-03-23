@@ -7501,8 +7501,6 @@ broken-packages:
   - language-dart
   - language-dickinson
   - language-dockerfile
-  - language-ecmascript
-  - language-ecmascript-analysis
   - language-eiffel
   - language-elm
   - language-fortran

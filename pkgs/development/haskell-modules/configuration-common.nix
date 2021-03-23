@@ -1683,4 +1683,12 @@ self: super: {
   # https://github.com/kowainik/co-log/pull/218
   co-log = doJailbreak super.co-log;
 
+  # Test suite has a too strict bound on base
+  # https://github.com/jswebtools/language-ecmascript/pull/88
+  language-ecmascript = doJailbreak super.language-ecmascript;
+
+  # Too strict bounds on containers
+  # https://github.com/jswebtools/language-ecmascript-analysis/issues/1
+  language-ecmascript-analysis = doJailbreak super.language-ecmascript-analysis;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
