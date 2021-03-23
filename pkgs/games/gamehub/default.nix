@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , meson
 , ninja
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     libmanette
     libXtst
   ];
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "All your games in one place";
     homepage = "https://tkashkin.tk/projects/gamehub/";
     mantainers = with mantainers;[ pasqui23 ];
