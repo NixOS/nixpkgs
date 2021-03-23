@@ -7,11 +7,10 @@
 , pkg-config
 , gettext
 , python3
-, libxml2
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_43
-, gtk-doc
+, gi-docgen
 , glib
 , libtiff
 , libjpeg
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.42.2";
+  version = "2.42.6";
 
   outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05ggmzwvrxq9w4zcvmrnnd6qplsmb4n95lj4q607c7arzlf6mil3";
+    sha256 = "0zz7pmw2z46g7mr1yjxbsdldd5pd03xbjc58inj8rxfqgrdvg9n4";
   };
 
   patches = [
@@ -45,14 +44,15 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     python3
-    libxml2
-    libxslt
-    docbook-xsl-nons
-    docbook_xml_dtd_43
-    gtk-doc
     gobject-introspection
     makeWrapper
     glib
+    gi-docgen
+
+    # for man pages
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_43
   ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [
@@ -75,19 +75,26 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/meson.build --subst-var-by installedtestsprefix "$installedTests"
   '';
 
+  preInstall = ''
+    PATH=$PATH:$out/bin # for install script
+  '';
+
   postInstall =
-    # meson erroneously installs loaders with .dylib extension on Darwin.
-    # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
-    lib.optionalString stdenv.isDarwin ''
+    ''
+      # All except one utility seem to be only useful during building.
+      moveToOutput "bin" "$dev"
+      moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
+
+      # So that devhelp can find this.
+      mkdir -p "$devdoc/share/devhelp"
+      mv "$out/share/doc" "$devdoc/share/devhelp/books"
+    '' + lib.optionalString stdenv.isDarwin ''
+      # meson erroneously installs loaders with .dylib extension on Darwin.
+      # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
       for f in $out/${passthru.moduleDir}/*.dylib; do
           install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
           mv $f ''${f%.dylib}.so
       done
-    ''
-    # All except one utility seem to be only useful during building.
-    + ''
-      moveToOutput "bin" "$dev"
-      moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
     '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
@@ -98,10 +105,6 @@ stdenv.mkDerivation rec {
     for f in $out/bin/* $dev/bin/*; do
         install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
     done
-  '';
-
-  preInstall = ''
-    PATH=$PATH:$out/bin # for install script
   '';
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
