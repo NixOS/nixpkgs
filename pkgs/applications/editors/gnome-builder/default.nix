@@ -99,7 +99,6 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    "-Dpython_libprefix=${python3.libPrefix}"
     "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
