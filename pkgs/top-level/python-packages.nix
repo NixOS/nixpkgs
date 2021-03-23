@@ -906,6 +906,8 @@ in {
 
   base58 = callPackage ../development/python-modules/base58 { };
 
+  baseline = callPackage ../development/python-modules/baseline { };
+
   baselines = callPackage ../development/python-modules/baselines { };
 
   basemap = callPackage ../development/python-modules/basemap { };
