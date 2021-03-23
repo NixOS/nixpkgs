@@ -4,6 +4,7 @@
 , fetchurl
 , perl
 , zlib
+, groff
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
 
   preCheck = ''
