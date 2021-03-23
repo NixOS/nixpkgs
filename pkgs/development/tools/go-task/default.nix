@@ -21,10 +21,6 @@ buildGoModule rec {
     "-ldflags=-s -w -X main.version=${version}"
   ];
 
-  postInstall = ''
-    mv $out/bin/task $out/bin/go-task
-  '';
-
   meta = with lib; {
     homepage = "https://taskfile.dev/";
     description = "A task runner / simpler Make alternative written in Go";
