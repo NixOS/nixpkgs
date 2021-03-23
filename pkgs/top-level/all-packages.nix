@@ -17967,7 +17967,7 @@ in
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_10;
+  linuxPackages_latest = linuxPackages_5_11;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -18028,7 +18028,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_10;
+      linux_latest_for_hardened = pkgs.linux_5_11;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
