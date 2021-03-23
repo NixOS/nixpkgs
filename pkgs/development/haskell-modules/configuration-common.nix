@@ -1679,4 +1679,8 @@ self: super: {
   # https://github.com/noinia/hgeometry/issues/132
   hgeometry-combinatorial = dontCheck super.hgeometry-combinatorial;
 
+  # Too strict version bounds on ansi-terminal
+  # https://github.com/kowainik/co-log/pull/218
+  co-log = doJailbreak super.co-log;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
