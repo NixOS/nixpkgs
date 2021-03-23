@@ -3022,6 +3022,18 @@ let
     meta.homepage = "https://github.com/kevinhwang91/nvim-bqf/";
   };
 
+  nvim-bufferline-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-bufferline-lua";
+    version = "2021-03-22";
+    src = fetchFromGitHub {
+      owner = "akinsho";
+      repo = "nvim-bufferline.lua";
+      rev = "437aa7cacc8eb6b7840e298f55666f4a6dea20e7";
+      sha256 = "15df8l8mx9cbm5mirn511d965nlxh5gj17d0b6rffxjlzc5ciai3";
+    };
+    meta.homepage = "https://github.com/akinsho/nvim-bufferline.lua/";
+  };
+
   nvim-cm-racer = buildVimPluginFrom2Nix {
     pname = "nvim-cm-racer";
     version = "2017-07-27";
