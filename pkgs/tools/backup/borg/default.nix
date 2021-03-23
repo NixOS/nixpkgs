@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
+{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh, nixosTests }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
@@ -60,6 +60,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # 64 failures, needs pytest-benchmark
   doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) borgbackup;
+  };
 
   meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";
