@@ -107,6 +107,11 @@ in {
     # --disable-shared flag
     stdenv = super.stdenv;
   };
+  curl = super.curl.override {
+    brotliSupport = false;
+    # disable gss becuase of: undefined reference to `k5_bcmp'
+    gssSupport = false;
+  };
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
