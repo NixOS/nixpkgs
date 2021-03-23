@@ -34,6 +34,10 @@ mkDerivation rec {
     "-DWITH_SOUNDS=ON"
   ];
 
+  postInstall = ''
+    ln -s $out/bin/$pname-qt $out/bin/$pname
+  '';
+
   preFixup = ''
     substituteInPlace $out/bin/eiskaltdcpp-cli-jsonrpc \
       --replace "/usr/local" "$out"
