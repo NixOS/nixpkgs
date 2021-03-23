@@ -28,6 +28,7 @@
 , harfbuzz
 , libpthreadstubs
 , pcre
+, libmanette
 , nettle
 , libtasn1
 , p11-kit
@@ -123,6 +124,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxml2
     libxslt
+    libmanette
     nettle
     openjpeg
     p11-kit
