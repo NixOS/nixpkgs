@@ -3277,6 +3277,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  incapsula-cracker-py3 = callPackage ../development/python-modules/incapsula-cracker-py3 { };
+
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
