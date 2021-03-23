@@ -5612,6 +5612,8 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
+  pydeconz = callPackage ../development/python-modules/pydeconz { };
+
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
   pydexcom = callPackage ../development/python-modules/pydexcom { };
