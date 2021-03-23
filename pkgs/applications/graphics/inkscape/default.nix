@@ -5,6 +5,7 @@
 , cmake
 , double-conversion
 , fetchurl
+, fetchpatch
 , gettext
 , gdl
 , ghostscript
@@ -70,6 +71,13 @@ stdenv.mkDerivation rec {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
+    })
+
+    # Fix build with glib 2.68
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/2790
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/eb24388f1730918edd9565d9e5d09340ec0b3b08.patch";
+      sha256 = "d2FHRWcOzi0Vsr6t0MuLu3rWpvhFKuuvoXd4/NKUSJI=";
     })
   ];
 
