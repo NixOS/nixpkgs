@@ -19,6 +19,7 @@
 , libsecret
 , gnome-desktop
 , libnotify
+, libarchive
 , p11-kit
 , sqlite
 , gcr
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
     libhandy
     libportal
     libnotify
+    libarchive
     libsecret
     libsoup
     libxml2
