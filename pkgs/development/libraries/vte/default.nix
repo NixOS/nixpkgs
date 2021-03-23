@@ -11,6 +11,7 @@
 , gtk3
 , gobject-introspection
 , vala
+, python3
 , libxml2
 , gnutls
 , gperf
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    python3
   ];
 
   buildInputs = [
@@ -74,6 +76,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
+    patchShebangs src/parser-seq.py
+    patchShebangs src/modes.py
   '';
 
   passthru = {
