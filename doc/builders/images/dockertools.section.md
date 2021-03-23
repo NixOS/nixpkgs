@@ -143,7 +143,7 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `fakeRootCommands` _optional_
 
-: Shell commands to run while creating the archive for the final layer in a fakeroot environment. Unlike `extraCommands`, you can run chown to change the owners of the files in the archive, without actually persisting the change to the filesystem. By default all files in the archive will be owned by root.
+: Shell commands to run while creating the archive for the final layer in a fakeroot environment. Unlike `extraCommands`, you can run `chown` to change the owners of the files in the archive, changing fakeroot's state instead of the real filesystem. The latter would require privileges that the build user does not have. Static binaries do not interact with the fakeroot environment. By default all files in the archive will be owned by root.
 
 ### Behavior of `contents` in the final image {#dockerTools-buildLayeredImage-arg-contents}
 
