@@ -8082,6 +8082,8 @@ in
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
+  sipvicious = python3Packages.callPackage ../tools/security/sipvicious { };
+
   siril = callPackage ../applications/science/astronomy/siril { };
 
   sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
