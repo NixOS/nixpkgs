@@ -65,6 +65,13 @@ in stdenv.mkDerivation rec {
     wayland
   ];
 
+  postFixup = ''
+    # Doubled prefix in pc file after postbuild hook replaces includedir prefix variable with dev output path
+    substituteInPlace $dev/lib/pkgconfig/wayland-eglstream.pc \
+      --replace "=$dev/$dev" "=$dev" \
+      --replace "Requires:" "Requires.private:"
+  '';
+
   meta = with lib; {
     description = "The EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";
