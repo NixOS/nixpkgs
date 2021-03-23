@@ -1,11 +1,9 @@
 { lib, fetchFromGitHub }:
 
-let
+fetchFromGitHub {
   pname = "kreative-square-fonts";
   # Upstream does not provide a version.
   version = "unstable-2021-01-29";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
   owner = "kreativekorp";
   repo = "open-relay";
