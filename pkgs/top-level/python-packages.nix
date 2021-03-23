@@ -22,7 +22,10 @@ let
 
   namePrefix = python.libPrefix + "-";
 
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+  bootstrapped-pip = if isPy3k then
+    callPackage ../development/python-modules/bootstrapped-pip { }
+  else
+    callPackage ../development/python-modules/bootstrapped-pip/2.nix { };
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
@@ -5122,7 +5125,10 @@ in {
 
   pint = callPackage ../development/python-modules/pint { };
 
-  pip = callPackage ../development/python-modules/pip { };
+  pip = if isPy3k then
+    callPackage ../development/python-modules/pip { }
+  else
+    callPackage ../development/python-modules/pip/20.nix { };
 
   pipdate = callPackage ../development/python-modules/pipdate { };
 
