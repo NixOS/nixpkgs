@@ -1,6 +1,7 @@
 { lib, stdenv
 , gettext
 , fetchurl
+, fetchpatch
 , wrapGAppsHook
 , gnome-video-effects
 , libcanberra-gtk3
@@ -18,7 +19,6 @@
 , docbook_xsl
 , appstream-glib
 , libxslt
-, yelp-tools
 , gnome-common
 , gtk-doc
 , adwaita-icon-theme
@@ -42,6 +42,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/cheese/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
   };
+
+  patches = [
+    # Fix build with latest Vala or GLib
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/cheese/commit/7cf6268e54620bbbe5e6e61800c50fb0cb4bea57.patch";
+      sha256 = "WJgGNrpZLTahe7Sxr8HdTl+4Mf4VcmJb6DdiInlDcT4=";
+    })
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -68,7 +76,6 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook
-    yelp-tools
   ];
 
   buildInputs = [
