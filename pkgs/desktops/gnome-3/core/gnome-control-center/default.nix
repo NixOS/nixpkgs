@@ -1,5 +1,4 @@
 { fetchurl
-, fetchFromGitLab
 , lib, stdenv
 , substituteAll
 , accountsservice
@@ -76,10 +75,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zMmlc2UXOFEJrlpZkGwlgkTdh5t1A61ZhM9BZVyzAvE=";
   };
 
-  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
-  prePatch = (import ../gvc-with-ucm-prePatch.nix {
-    inherit fetchFromGitLab;
-  });
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      gcm = gnome-color-manager;
+      gnome_desktop = gnome-desktop;
+      inherit glibc libgnomekbd tzdata;
+      inherit cups networkmanagerapplet;
+    })
+  ];
 
   nativeBuildInputs = [
     docbook_xsl
@@ -140,16 +144,6 @@ stdenv.mkDerivation rec {
     tracker-miners # for search locations dialog
     udisks2
     upower
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      gcm = gnome-color-manager;
-      gnome_desktop = gnome-desktop;
-      inherit glibc libgnomekbd tzdata;
-      inherit cups networkmanagerapplet;
-    })
   ];
 
   postPatch = ''
