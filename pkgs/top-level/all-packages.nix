@@ -11856,6 +11856,8 @@ in
 
   gImageReader = callPackage ../applications/misc/gImageReader { };
 
+  guile-bytestructures = callPackage ../development/guile-modules/guile-bytestructures { };
+
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
@@ -11866,7 +11868,13 @@ in
     inherit (gnome2) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
   };
 
+  guile-gcrypt = callPackage ../development/guile-modules/guile-gcrypt { };
+
+  guile-git = callPackage ../development/guile-modules/guile-git { };
+
   guile-lib = callPackage ../development/guile-modules/guile-lib { };
+
+  guile-json = callPackage ../development/guile-modules/guile-json { };
 
   guile-ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
@@ -11877,6 +11885,10 @@ in
   guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
 
   guile-sdl2 = callPackage ../development/guile-modules/guile-sdl2 { };
+
+  guile-sqlite3 = callPackage ../development/guile-modules/guile-sqlite3 { };
+
+  guile-ssh = callPackage ../development/guile-modules/guile-ssh { };
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb {
     guile = guile_2_0;
