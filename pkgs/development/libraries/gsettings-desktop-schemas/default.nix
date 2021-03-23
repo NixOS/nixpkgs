@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "40.rc";
+  version = "40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0pfy6gs0dvgscrrrqwg6n7479y0slwflhgnndv222g2d5kbq8vfv";
+    sha256 = "11an29br55dp0b26kfqlrfxj19glfrmhcdpds2n1w9n04gq3pf7i";
   };
 
   nativeBuildInputs = [
