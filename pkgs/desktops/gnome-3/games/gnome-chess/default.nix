@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "40.alpha";
+  version = "40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "18jnh7ch8n7hkjqnam53i26lv648gian4zl2r10y4c14sagij12i";
+    sha256 = "0c4nfyi3frl94vjsfp3r07k7g7ffwf8dg5qyq1580mxmks0gigr5";
   };
 
   nativeBuildInputs = [ meson ninja vala pkg-config gettext itstool libxml2 python3 wrapGAppsHook gobject-introspection ];
