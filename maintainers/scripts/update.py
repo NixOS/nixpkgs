@@ -40,7 +40,7 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
         worktree, _branch = temp_dir
 
         # Ensure the worktree is clean before update.
-        await check_subprocess('git', 'reset', '--hard', 'HEAD', cwd=worktree)
+        await check_subprocess('git', 'reset', '--hard', '--quiet', 'HEAD', cwd=worktree)
 
         # Update scripts can use $(dirname $0) to get their location but we want to run
         # their clones in the git worktree, not in the main nixpkgs repo.
