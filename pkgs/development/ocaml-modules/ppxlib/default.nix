@@ -19,11 +19,13 @@ let param = {
   "0.15.0" = {
     sha256 = "1p037kqj5858xrhh0dps6vbf4fnijla6z9fjz5zigvnqp4i2xkrn";
     min_version = "4.07";
+    max_version = "4.12";
     useOMP2 = false;
   };
   "0.18.0" = {
     sha256 = "1ciy6va2gjrpjs02kha83pzh0x1gkmfsfsdgabbs1v14a8qgfibm";
     min_version = "4.07";
+    max_version = "4.12";
   };
   "0.22.0" = {
     sha256 = "0kf7lgcwygf6zlx7rwddqpqvasa6v7xiq0bqal8vxlib6lpg074q";
