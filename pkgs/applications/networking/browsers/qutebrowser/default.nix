@@ -60,6 +60,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     # scripts and userscripts libs
     tldextract beautifulsoup4
     pyreadability pykeepass stem
+    pynacl
     # extensive ad blocking
     adblock
   ]
