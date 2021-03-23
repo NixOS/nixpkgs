@@ -95,18 +95,18 @@ calamares_add_branding_subdirectory( branding/kaos_branding NAME kaos )
 #
 # Add one of more modules, either C++ or Python.
 #
-set(SKIPPED_MODULES "")
+set(LIST_SKIPPED_MODULES "")
 
-calamares_add_module_subdirectory( modules/filekeeper )  # C++ job
-calamares_add_module_subdirectory( modules/freebsddisk )  # C++ viewmodule
-calamares_add_module_subdirectory( modules/mobile )
-calamares_add_module_subdirectory( modules/os-freebsd )
-calamares_add_module_subdirectory( modules/os-nixos )
-calamares_add_module_subdirectory( modules/slowpython )  # Python job
+calamares_add_module_subdirectory( modules/filekeeper LIST_SKIPPED_MODULES )  # C++ job
+calamares_add_module_subdirectory( modules/freebsddisk LIST_SKIPPED_MODULES )  # C++ viewmodule
+calamares_add_module_subdirectory( modules/mobile LIST_SKIPPED_MODULES )
+calamares_add_module_subdirectory( modules/os-freebsd LIST_SKIPPED_MODULES )
+calamares_add_module_subdirectory( modules/os-nixos LIST_SKIPPED_MODULES )
+calamares_add_module_subdirectory( modules/slowpython LIST_SKIPPED_MODULES )  # Python job
 
 # If modules cannot be built, they usually call a macro
 # which builds a list of explanations; show that list.
-calamares_explain_skipped_modules( ${SKIPPED_MODULES} )
+calamares_explain_skipped_modules( ${LIST_SKIPPED_MODULES} )
 
 ### RELEASE SUPPORT
 #
