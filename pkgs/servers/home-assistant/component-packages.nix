@@ -151,7 +151,7 @@
     "datadog" = ps: with ps; [ datadog ];
     "ddwrt" = ps: with ps; [ ];
     "debugpy" = ps: with ps; [ debugpy ];
-    "deconz" = ps: with ps; [ ]; # missing inputs: pydeconz
+    "deconz" = ps: with ps; [ pydeconz ];
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
     "default_config" = ps: with ps; [ pynacl aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa netdisco pillow scapy sqlalchemy zeroconf ];
