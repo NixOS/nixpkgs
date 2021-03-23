@@ -17236,8 +17236,6 @@ in
 
   stlink = callPackage ../development/tools/misc/stlink { };
 
-  steghide = callPackage ../tools/security/steghide {};
-
   stegseek = callPackage ../tools/security/stegseek {};
 
   stlport = callPackage ../development/libraries/stlport { };
@@ -24085,6 +24083,8 @@ in
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
+
+  moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt { };
 
   mooSpace = callPackage ../applications/audio/mooSpace { };
 
