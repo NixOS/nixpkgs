@@ -2189,6 +2189,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  digitemp = callPackage ../tools/misc/digitemp { };
+
   dijo = callPackage ../tools/misc/dijo {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -18248,6 +18250,10 @@ in
     theme-snow = callPackage ../servers/icingaweb2/theme-snow { };
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
+
+  inspircd = callPackage ../servers/irc/inspircd { };
+
+  inspircdMinimal = inspircd.override { extraModules = []; };
 
   imgproxy = callPackage ../servers/imgproxy { };
 

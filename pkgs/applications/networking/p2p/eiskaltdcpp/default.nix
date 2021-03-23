@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, bzip2, libX11
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libX11
 , mkDerivation, qtbase, qttools, qtmultimedia, qtscript
 , libiconv, pcre-cpp, libidn, lua5, miniupnpc, aspell, gettext, perl }:
 
@@ -14,30 +14,32 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ qtbase qttools qtmultimedia qtscript boost bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext
+  buildInputs = [ qtbase qttools qtmultimedia qtscript bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext
     (perl.withPackages (p: with p; [
       GetoptLong
-      RpcXML
       TermShellUI
     ])) ]
     ++ lib.optional stdenv.isDarwin libiconv;
 
   cmakeFlags = [
-    "-DUSE_ASPELL=ON"
-    "-DFREE_SPACE_BAR_C=ON"
-    "-DUSE_MINIUPNP=ON"
-    "-DLOCAL_MINIUPNP=ON"
     "-DDBUS_NOTIFY=ON"
-    "-DUSE_JS=ON"
-    "-DPERL_REGEX=ON"
-    "-DUSE_CLI_XMLRPC=ON"
-    "-DWITH_SOUNDS=ON"
+    "-DFREE_SPACE_BAR_C=ON"
     "-DLUA_SCRIPT=ON"
+    "-DPERL_REGEX=ON"
+    "-DUSE_ASPELL=ON"
+    "-DUSE_CLI_JSONRPC=ON"
+    "-DUSE_MINIUPNP=ON"
+    "-DUSE_JS=ON"
     "-DWITH_LUASCRIPTS=ON"
+    "-DWITH_SOUNDS=ON"
   ];
 
+  postInstall = ''
+    ln -s $out/bin/$pname-qt $out/bin/$pname
+  '';
+
   preFixup = ''
-    substituteInPlace $out/bin/eiskaltdcpp-cli-xmlrpc \
+    substituteInPlace $out/bin/eiskaltdcpp-cli-jsonrpc \
       --replace "/usr/local" "$out"
   '';
 

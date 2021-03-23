@@ -511,10 +511,12 @@
   },
   "kubernetes-alpha": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/kubernetes-alpha",
     "repo": "terraform-provider-kubernetes-alpha",
-    "rev": "nightly20200608",
-    "sha256": "1g171sppf3kq5qlp6g0qqdm0x8lnpizgw8bxjlhp9b6cl4kym70m",
-    "version": "nightly20200608"
+    "rev": "v0.3.2",
+    "sha256": "0lgh42fvfwvj6cw8i7800k016ay4babqiz38q0y7apq4s7vs62sb",
+    "vendorSha256": null,
+    "version": "0.3.2"
   },
   "launchdarkly": {
     "owner": "terraform-providers",
