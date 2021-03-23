@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.42.2";
+  version = "2.42.4";
 
   outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05ggmzwvrxq9w4zcvmrnnd6qplsmb4n95lj4q607c7arzlf6mil3";
+    sha256 = "0k9f9177qxaryaxprwrhqnv5p2gdq4a8i6y05gm98qa8izc5v77y";
   };
 
   patches = [
