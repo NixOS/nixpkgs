@@ -3,6 +3,7 @@ aca/completion-tabnine
 ackyshake/Spacegray.vim@main
 airblade/vim-gitgutter
 airblade/vim-rooter
+akinsho/nvim-bufferline.lua
 aklt/plantuml-syntax
 altercation/vim-colors-solarized
 alvan/vim-closetag
