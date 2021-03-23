@@ -1115,9 +1115,10 @@ in
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
     # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname =
-      optionalString (cfg.hostName != "") ''
-        hostname "${cfg.hostName}"
+    system.activationScripts.hostname = let
+        effectiveHostname = config.boot.kernel.sysctl."kernel.hostname" or cfg.hostName;
+      in optionalString (effectiveHostname != "") ''
+        hostname "${effectiveHostname}"
       '';
     system.activationScripts.domain =
       optionalString (cfg.domain != null) ''
