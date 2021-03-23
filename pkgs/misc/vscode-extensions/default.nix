@@ -604,7 +604,7 @@ let
         buildInputs = [ jdk ];
         meta = {
           license = lib.licenses.epl20;
-          broken = lib.versionAtLeast jdk.version "11";
+          broken = lib.versionOlder jdk.version "11";
         };
       };
 
