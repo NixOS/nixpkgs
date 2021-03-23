@@ -1,5 +1,10 @@
-{ stdenvNoCC, fetchFromGitHub, python3, lib
-, flags ? {} ,allowList ? ""}:
+{ stdenvNoCC
+, fetchFromGitHub
+, python3
+, lib
+, flags ? {}
+, allowList ? ""
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "StevenBlack-hosts";
@@ -8,27 +13,33 @@ stdenvNoCC.mkDerivation rec {
     owner = "StevenBlack";
     repo = "hosts";
     rev = version;
-    sha256 ="01 rijzfmvwfcirz94h74bx15maqdn9m01g7q197nvzxmr1fk60yd";
+    sha256 = "01rijzfmvwfcirz94h74bx15maqdn9m01g7q197nvzxmr1fk60yd";
   };
 
   inherit allowList;
-  passAsFile = ["allowList"];
+  passAsFile = [ "allowList" ];
   buildPhase =
     let
-      py = python3.withPackages (ps: with ps;[
-        lxml beautifulsoup4
-      ]);
-    in ''
-      ln -s $allowListPath whitelist
-      ${py}/bin/python updateHostsFile.py \
-        ${lib.cli.toGNUCommandLineShell
-          {} (flags // {
-            auto = true;
-            noupdate = true;
-            out = ".";
-          })
+      py = python3.withPackages (
+        ps: with ps;[
+          lxml
+          beautifulsoup4
+        ]
+      );
+    in
+      ''
+        ln -s $allowListPath whitelist
+        ${py}/bin/python updateHostsFile.py \
+          ${lib.cli.toGNUCommandLineShell
+        {} (
+        flags // {
+          auto = true;
+          noupdate = true;
+          out = ".";
         }
-    '';
+      )
+      }
+      '';
 
   installPhase = ''
     odir=$out/share/StevenBlack-hosts
