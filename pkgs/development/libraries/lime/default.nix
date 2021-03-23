@@ -2,14 +2,15 @@
 , belle-sip
 , cmake
 , fetchFromGitLab
+, lib
 , soci
 , sqlite
-, lib, stdenv
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "lime";
-  version = "4.4.21";
+  version = "4.4.34";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3whr2KSAULRe3McgOtJlA3NEPF8NO6YHp+4vqeMPT5I=";
+    sha256 = "14jg1zisjbzflw3scfqdbwy48wq3cp93l867vigb8l40lkc6n26z";
   };
 
   buildInputs = [ bctoolbox soci belle-sip sqlite ];
