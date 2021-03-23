@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gobject-introspection
     python3
+    python3.pkgs.pygobject3
   ];
 
   buildInputs = [
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson/meson_post_install.py
     patchShebangs meson/meson_post_install.py
+    patchShebangs data/gen_locations_variant.py
   '';
 
   passthru = {
