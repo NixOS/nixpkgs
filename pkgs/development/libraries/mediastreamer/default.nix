@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  version = "4.4.32";
+  version = "4.4.35";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kaNQuhxsUx74hBhfpB76NuNTT+8h74nfiv1re43tHps=";
+    sha256 = "18qmg678m087k7qsaxwfcv2p875z2kpy91pqryiv955km40drl0g";
   };
 
   patches = [
