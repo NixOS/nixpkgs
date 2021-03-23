@@ -10,11 +10,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
+    libb2 lz4 zstd openssl
   ] ++ lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3.pkgs; [
     cython llfuse
