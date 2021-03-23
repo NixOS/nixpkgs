@@ -25,14 +25,19 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.6.2";
+  version = "3.6.3";
   # https://github.com/aio-libs/aiohttp/issues/4525 python3.8 failures
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09pkw6f1790prnrq0k8cqgnf1qy57ll8lpmc6kld09q7zw4vi6i5";
+    sha256 = "698cd7bc3c7d1b82bb728bae835724a486a8c376647aec336aa21a60113c3645";
   };
+
+  patches = [
+    # Backport of https://github.com/aio-libs/aiohttp/commit/2545222a3853e31ace15d87ae0e2effb7da0c96b
+    ./CVE-2021-21330.patch
+  ];
 
   checkInputs = [
     pytestrunner pytestCheckHook gunicorn async_generator pytest_xdist

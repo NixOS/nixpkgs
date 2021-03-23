@@ -34,8 +34,8 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # yarl 1.4+ only requires Python 3.6+
-    sed -iE "s/yarl==1.3.0//" requirements.txt
+    substituteInPlace requirements.txt --replace \
+      "aiohttp==3.6.2" "aiohttp>=3.6.2"
   '';
 
   propagatedBuildInputs = with python.pkgs; [
