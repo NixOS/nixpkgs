@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
     export BORG_LIBB2_PREFIX="${libb2}"
-    export BORG_LIBZSTD_PREFIX="${zstd}"
+    export BORG_LIBZSTD_PREFIX="${zstd.dev}"
   '';
 
   makeWrapperArgs = [
