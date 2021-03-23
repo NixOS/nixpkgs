@@ -1,5 +1,12 @@
-{ lib, buildGoPackage, fetchurl, makeWrapper
-, git, bash, gzip, openssh, pam
+{ lib
+, buildGoPackage
+, fetchurl
+, makeWrapper
+, git
+, bash
+, gzip
+, openssh
+, pam
 , sqliteSupport ? true
 , pamSupport ? true
 , nixosTests
@@ -37,16 +44,18 @@ buildGoPackage rec {
 
   buildInputs = optional pamSupport pam;
 
-  preBuild = let
-    tags = optional pamSupport "pam"
+  preBuild =
+    let
+      tags = optional pamSupport "pam"
         ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
-    tagsString = concatStringsSep " " tags;
-  in ''
-    export buildFlagsArray=(
-      -tags="${tagsString}"
-      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
-    )
-  '';
+      tagsString = concatStringsSep " " tags;
+    in
+    ''
+      export buildFlagsArray=(
+        -tags="${tagsString}"
+        -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+      )
+    '';
 
   outputs = [ "out" "data" ];
 
