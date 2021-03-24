@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, git, coreutils }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, git, coreutils }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-secrets";
   version = "1.3.0";
 

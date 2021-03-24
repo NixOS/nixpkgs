@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "jetty";
   version = "9.4.41.v20210516";
   src = fetchurl {

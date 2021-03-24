@@ -1,8 +1,8 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnome-shell-extension-noannoyance";
   version = "unstable-2021-01-17";
 

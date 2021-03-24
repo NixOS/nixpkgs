@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, ruby, makeWrapper, replace }:
+{ stdenvNoCC, lib, fetchFromGitHub, ruby, makeWrapper, replace }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "discourse-mail-receiver";
   version = "4.0.7";
 

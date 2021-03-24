@@ -1,10 +1,10 @@
-{ lib, stdenv, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
+{ lib, stdenvNoCC, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
 
 let
 
   common = { pname, sha256, suffix ? "" }: let
     legacySuffix = if suffix == "-nons" then "" else "-ns";
-    self = stdenv.mkDerivation rec {
+    self = stdenvNoCC.mkDerivation rec {
       inherit pname;
       version = "1.79.2";
 

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, git }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, git }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-standup";
   version = "2.3.2";
 

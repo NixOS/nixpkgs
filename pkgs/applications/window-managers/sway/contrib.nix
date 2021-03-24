@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenvNoCC
 
 , fetchurl
 , coreutils
@@ -16,7 +16,7 @@
 
 {
 
-grimshot = stdenv.mkDerivation rec {
+grimshot = stdenvNoCC.mkDerivation rec {
   pname = "grimshot";
   version = sway-unwrapped.version;
 

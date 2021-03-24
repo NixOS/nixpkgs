@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, rofi, mpc_cli, perl,
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, rofi, mpc_cli, perl,
 util-linux, python3Packages, libnotify }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "clerk-2016-10-14";
 
   src = fetchFromGitHub {

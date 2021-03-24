@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mustache-spec";
   version = "1.0.2";
 

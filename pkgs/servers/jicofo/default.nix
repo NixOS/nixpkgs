@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, jre_headless, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, dpkg, jre_headless, nixosTests }:
 
 let
   pname = "jicofo";
@@ -8,7 +8,7 @@ let
     sha256 = "1w5nz2p6scd7w0ac93vhxlk5i8in5160c0icwl27m4x4km9xf6al";
   };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit pname version src;
 
   dontBuild = true;

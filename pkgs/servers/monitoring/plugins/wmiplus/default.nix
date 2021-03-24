@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, txt2man
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, perlPackages, txt2man
 , monitoring-plugins
 , wmic-bin ? null }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "check-wmiplus";
   version = "1.65";
 

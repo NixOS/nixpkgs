@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   version = "7.0.1";
   pname = "clearlooks-phenix";
 

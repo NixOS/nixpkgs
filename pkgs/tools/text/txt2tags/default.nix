@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, python }:
+{ lib, stdenvNoCC, fetchurl, python }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   version = "2.6";
   pname = "txt2tags";
 

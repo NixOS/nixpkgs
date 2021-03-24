@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, flex, bison, systemd
+{ stdenv, stdenvNoCC, lib, fetchFromGitHub, cmake, flex, bison, systemd
 , boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib
 # Databases
 , withMysql ? true, withPostgresql ? false
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  vim = stdenv.mkDerivation {
+  vim = stdenvNoCC.mkDerivation {
     pname = "vim-icinga2";
     inherit version src;
 

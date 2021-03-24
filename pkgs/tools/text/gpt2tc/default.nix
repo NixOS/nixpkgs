@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, python3 }:
+{ lib, stdenvNoCC, fetchurl, autoPatchelfHook, python3 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gpt2tc";
   version = "2021-04-24";
 

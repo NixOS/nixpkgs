@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fzf }:
+{ lib, stdenvNoCC, fetchFromGitHub, fzf }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "fzf-zsh-unstable";
   version = "2019-09-09";
 

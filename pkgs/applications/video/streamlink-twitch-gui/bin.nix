@@ -3,7 +3,7 @@
 , lib
 , makeDesktopItem
 , makeWrapper
-, stdenv
+, stdenvNoCC
 , wrapGAppsHook
 , at-spi2-core
 , atk
@@ -29,14 +29,14 @@ let
   basename = "streamlink-twitch-gui";
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim ];
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux"
+    if stdenvNoCC.hostPlatform.system == "x86_64-linux"
     then
       "linux64"
     else
       "linux32";
 
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "${basename}-bin";
   version = "1.11.0";
 

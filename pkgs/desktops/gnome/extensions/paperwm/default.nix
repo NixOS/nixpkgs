@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnome-shell-extension-paperwm";
   version = "38.1";
 

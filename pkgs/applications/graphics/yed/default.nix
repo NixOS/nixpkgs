@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchzip, makeWrapper, unzip, jre, wrapGAppsHook }:
+{ lib, stdenvNoCC, fetchzip, makeWrapper, unzip, jre, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "yEd";
   version = "3.21.1";
 

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, gnome }:
+{ lib, stdenvNoCC, fetchFromGitHub, gnome }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnome-shell-extension-appindicator";
   version = "37";
 

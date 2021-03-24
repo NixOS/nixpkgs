@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, pythonPackages }:
+{ lib, stdenvNoCC, fetchurl, pythonPackages }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-filter-repo";
   version = "2.29.0";
 

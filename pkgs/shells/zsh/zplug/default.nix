@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "zplug";
   version = "2.4.2";
 

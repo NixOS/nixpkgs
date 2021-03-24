@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub}:
+{ lib, stdenvNoCC, fetchFromGitHub}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "zsh-bd";
   version = "2018-07-04";
 
