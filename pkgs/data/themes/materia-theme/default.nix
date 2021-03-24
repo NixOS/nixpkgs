@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenvNoCC
 , fetchFromGitHub
 , meson
 , ninja
@@ -9,7 +9,7 @@
 , librsvg
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "materia-theme";
   version = "20200916";
 

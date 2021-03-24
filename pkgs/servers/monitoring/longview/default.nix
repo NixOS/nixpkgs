@@ -1,6 +1,6 @@
-{lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, glibc }:
+{lib, stdenvNoCC, fetchFromGitHub, perl, perlPackages, makeWrapper, glibc }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   version = "1.1.5";
   pname = "longview";
 

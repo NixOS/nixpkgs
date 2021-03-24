@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper
 , shntool, cuetools
 , flac, faac, mp4v2, wavpack, mac
 , imagemagick, libiconv, enca, lame, pythonPackages, vorbis-tools
@@ -17,7 +17,7 @@ let
       ]}
   '';
 
-in stdenv.mkDerivation rec {
+in stdenvNoCC.mkDerivation rec {
   pname = "split2flac";
   version = "122";
 

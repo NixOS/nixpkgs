@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, python2Packages }:
+{ lib, stdenvNoCC, fetchFromGitHub, python2Packages }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "cdetheme";
   version = "1.3";
 

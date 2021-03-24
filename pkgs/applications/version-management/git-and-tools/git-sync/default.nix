@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gnugrep, gnused, makeWrapper, git
+{ lib, stdenvNoCC, fetchFromGitHub, coreutils, gnugrep, gnused, makeWrapper, git
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-sync";
   version = "20151024";
 

@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenvNoCC
 , fetchurl
 , makeWrapper
 , dpkg
@@ -9,7 +9,7 @@
 , noto-fonts
 , nerdfonts }:
 let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
-in stdenv.mkDerivation rec {
+in stdenvNoCC.mkDerivation rec {
   pname = "koreader";
   version = "2021.03";
 

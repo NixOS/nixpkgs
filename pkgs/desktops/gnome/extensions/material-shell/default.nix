@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, gnome }:
+{ stdenvNoCC, lib, fetchFromGitHub, gnome }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnome-shell-extension-material-shell";
   version = "12";
 

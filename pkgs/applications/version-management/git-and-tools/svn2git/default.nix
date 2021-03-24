@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, ruby, makeWrapper, git }:
+{ lib, stdenvNoCC, fetchurl, ruby, makeWrapper, git }:
 
 let
   version = "2.4.0";
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "svn2git";
   inherit version;
 
