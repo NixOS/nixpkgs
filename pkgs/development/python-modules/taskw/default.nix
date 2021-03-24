@@ -11,12 +11,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.0";
+  version = "1.3.0";
   pname = "taskw";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fadd8afc12df026c3c2d39b633c55d3337f7dca95602fce2239455a048bc85fe";
+    sha256 = "7673d80b3d5bace5b35eb71f5035e313a92daab6e437694128d8ce7dcdaf66fb";
   };
 
   patches = [ ./use-template-for-taskwarrior-install-path.patch ];
