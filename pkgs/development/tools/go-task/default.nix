@@ -22,7 +22,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mv $out/bin/task $out/bin/go-task
+    ln -s $out/bin/task $out/bin/go-task
   '';
 
   meta = with lib; {

@@ -6,10 +6,9 @@
 , requests
 , six
 , semver
-, pytest
+, pytestCheckHook
 , pytestcov
 , pytestrunner
-, sphinx
 , openapi-spec-validator
 }:
 
@@ -35,18 +34,28 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytestcov
     openapi-spec-validator
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "tests_require = dev_require," "tests_require = None,"
+      --replace "tests_require = dev_require," "tests_require = None," \
+      --replace "chardet~=4.0" "" \
+      --replace "semver~=2.13" ""
+    substituteInPlace setup.cfg \
+      --replace "--cov-fail-under=90" ""
   '';
 
-  # many tests require network connection
-  doCheck = false;
+  # Disable tests that require network
+  disabledTestPaths = [
+    "tests/test_convert.py"
+  ];
+  disabledTests = [
+    "test_fetch_url_http"
+  ];
+  pythonImportsCheck = [ "prance" ];
 
   meta = with lib; {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
