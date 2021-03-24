@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pynanoleaf";
-  version = "0.0.7";
+  version = "0.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d212f35eac9d94248858ec63ca63545ea7fce1cdda11ae5878f4d4d74f055d0";
+    sha256 = "0622c982c7b2ee420878de7e08a2a7ad30766d228c3446de30bc068b62d12dc8";
   };
 
   disabled = !isPy3k;
