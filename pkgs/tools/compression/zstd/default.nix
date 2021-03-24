@@ -7,22 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "018zgigp5xlrb4mgshgrvns0cfbhhcg89cifbjj4rv6s3n9riphw";
+    sha256 = "ZIzT951WTC3W9BJ0r793BYdJsEAql6yr5vqRUr3tVKE=";
   };
 
   nativeBuildInputs = [ cmake ]
    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
-
-  patches = [
-    ./playtests-darwin.patch
-  ];
 
   postPatch = lib.optionalString (!static) ''
     substituteInPlace build/cmake/CMakeLists.txt \
