@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "sacn";
-  version = "1.4.6";
+  version = "1.6.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "015wa9nhqgd0kb60bw19g86ga25s9mpvsbqkahi3kw6df6j0wzss";
+    sha256 = "2fea82a1dd83b0a67dc0be68a53b1fef1c44b12f3f018e47ac736bd15b36c068";
   };
 
   # no tests
