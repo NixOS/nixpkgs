@@ -253,7 +253,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
 
       def check_connection(node, domain, retries=3):
-          assert retries >= 0
+          assert retries >= 0, f"Failed to connect to https://{domain}"
 
           result = node.succeed(
               "openssl s_client -brief -verify 2 -CAfile /tmp/ca.crt"
@@ -262,12 +262,12 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
           for line in result.lower().split("\n"):
               if "verification" in line and "error" in line:
-                  time.sleep(1)
+                  time.sleep(3)
                   return check_connection(node, domain, retries - 1)
 
 
       def check_connection_key_bits(node, domain, bits, retries=3):
-          assert retries >= 0
+          assert retries >= 0, f"Did not find expected number of bits ({bits}) in key"
 
           result = node.succeed(
               "openssl s_client -CAfile /tmp/ca.crt"
@@ -277,12 +277,12 @@ in import ./make-test-python.nix ({ lib, ... }: {
           print("Key type:", result)
 
           if bits not in result:
-              time.sleep(1)
+              time.sleep(3)
               return check_connection_key_bits(node, domain, bits, retries - 1)
 
 
       def check_stapling(node, domain, retries=3):
-          assert retries >= 0
+          assert retries >= 0, "OCSP Stapling check failed"
 
           # Pebble doesn't provide a full OCSP responder, so just check the URL
           result = node.succeed(
@@ -293,8 +293,21 @@ in import ./make-test-python.nix ({ lib, ... }: {
           print("OCSP Responder URL:", result)
 
           if "${caDomain}:4002" not in result.lower():
-              time.sleep(1)
+              time.sleep(3)
               return check_stapling(node, domain, retries - 1)
+
+
+      def download_ca_certs(node, retries=5):
+          assert retries >= 0, "Failed to connect to pebble to download root CA certs"
+
+          exit_code, _ = node.execute("curl https://${caDomain}:15000/roots/0 > /tmp/ca.crt")
+          exit_code_2, _ = node.execute(
+              "curl https://${caDomain}:15000/intermediate-keys/0 >> /tmp/ca.crt"
+          )
+
+          if exit_code + exit_code_2 > 0:
+              time.sleep(3)
+              return download_ca_certs(node, retries - 1)
 
 
       client.start()
@@ -313,14 +326,28 @@ in import ./make-test-python.nix ({ lib, ... }: {
       acme.wait_for_unit("network-online.target")
       acme.wait_for_unit("pebble.service")
 
-      client.succeed("curl https://${caDomain}:15000/roots/0 > /tmp/ca.crt")
-      client.succeed("curl https://${caDomain}:15000/intermediate-keys/0 >> /tmp/ca.crt")
+      download_ca_certs(client)
 
       with subtest("Can request certificate with HTTPS-01 challenge"):
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_fullchain(webserver, "a.example.test")
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
+
+      with subtest("Certificates and accounts have safe + valid permissions"):
+          group = "${nodes.webserver.config.security.acme.certs."a.example.test".group}"
+          webserver.succeed(
+              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+          )
+          webserver.succeed(
+              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/.lego/a.example.test/**/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+          )
+          webserver.succeed(
+              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test | tee /dev/stderr | grep '750 acme {group}' | wc -l) -eq 1"
+          )
+          webserver.succeed(
+              f"test $(find /var/lib/acme/accounts -type f -exec stat -L -c \"%a %U %G\" {{}} \\; | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
+          )
 
       with subtest("Can generate valid selfsigned certs"):
           webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
@@ -375,8 +402,15 @@ in import ./make-test-python.nix ({ lib, ... }: {
           assert keyhash_old == keyhash_new
 
       with subtest("Can request certificates for vhost + aliases (apache-httpd)"):
-          switch_to(webserver, "httpd-aliases")
-          webserver.wait_for_unit("acme-finished-c.example.test.target")
+          try:
+              switch_to(webserver, "httpd-aliases")
+              webserver.wait_for_unit("acme-finished-c.example.test.target")
+          except Exception as err:
+              _, output = webserver.execute(
+                  "cat /var/log/httpd/*.log && ls -al /var/lib/acme/acme-challenge"
+              )
+              print(output)
+              raise err
           check_issuer(webserver, "c.example.test", "pebble")
           check_connection(client, "c.example.test")
           check_connection(client, "d.example.test")

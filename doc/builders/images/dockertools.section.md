@@ -111,6 +111,12 @@ Create a Docker image with many of the store paths being on their own layer to i
 
     *Default:* the output path's hash
 
+`fromImage` _optional_
+
+: The repository tarball containing the base image. It must be a valid Docker image, such as one exported by `docker save`.
+
+    *Default:* `null`, which can be seen as equivalent to `FROM scratch` of a `Dockerfile`.
+
 `contents` _optional_
 
 : Top level paths in the container. Either a single derivation, or a list of derivations.
