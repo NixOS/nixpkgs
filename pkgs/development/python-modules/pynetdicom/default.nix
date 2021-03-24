@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zjpscxdhlcv99py7jx5r6dw32nzbcr49isrzkdr6g3zwyxwzbfm";
+    sha256 = "09v0bp9zgwbs4zwcncvfccrna5rnihkhs3l4qy0f1lq8gnzjg365";
   };
 
   propagatedBuildInputs = [
