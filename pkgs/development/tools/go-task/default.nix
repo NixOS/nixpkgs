@@ -20,6 +20,10 @@ buildGoModule rec {
   buildFlagsArray = [
     "-ldflags=-s -w -X main.version=${version}"
   ];
+  
+  postInstall = ''
+    ln -s $out/bin/task $out/bin/go-task
+  '';  
 
   meta = with lib; {
     homepage = "https://taskfile.dev/";
