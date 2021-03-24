@@ -17,7 +17,7 @@ in
         services.redis.unixSocket = redisSocket;
 
         # Allow access to the unix socket for the "redis" group.
-        services.redis.settings.unixsocketperm = "770";
+        services.redis.unixSocketPerm = 770;
 
         users.users."member" = {
           createHome = false;
