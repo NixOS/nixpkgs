@@ -14,6 +14,7 @@
 , gtk3
 , gusb
 , packagekit
+, libhandy
 , libwebp
 , libxml2
 , sane-backends
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     gusb
     gtk3
+    libhandy
     libwebp
     packagekit
     sane-backends
