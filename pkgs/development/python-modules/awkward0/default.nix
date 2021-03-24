@@ -26,6 +26,8 @@ buildPythonPackage rec {
   # Can't find a fixture
   disabledTests = [ "test_import_pandas" ];
 
+  pythonImportsCheck = [ "awkward0" ];
+
   meta = with lib; {
     description = "Manipulate jagged, chunky, and/or bitmasked arrays as easily as Numpy";
     homepage = "https://github.com/scikit-hep/awkward-array";
