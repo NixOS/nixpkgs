@@ -1,5 +1,12 @@
-{ lib, buildGoPackage, fetchurl, makeWrapper
-, git, bash, gzip, openssh, pam
+{ lib
+, buildGoPackage
+, fetchurl
+, makeWrapper
+, git
+, bash
+, gzip
+, openssh
+, pam
 , sqliteSupport ? true
 , pamSupport ? true
 , nixosTests
@@ -9,11 +16,12 @@ with lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.13.5";
+  version = "1.13.6";
 
+  # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "08c5gp4qp65mnq4ggzfmyc7n3zcp0js86fz4nj5p249zs9vn1ypd";
+    sha256 = "1f0fsqcmmqygv0r796ddr2fjhh333i9nr0cqk9x2b2kbs1z264vf";
   };
 
   unpackPhase = ''
@@ -36,16 +44,18 @@ buildGoPackage rec {
 
   buildInputs = optional pamSupport pam;
 
-  preBuild = let
-    tags = optional pamSupport "pam"
+  preBuild =
+    let
+      tags = optional pamSupport "pam"
         ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
-    tagsString = concatStringsSep " " tags;
-  in ''
-    export buildFlagsArray=(
-      -tags="${tagsString}"
-      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
-    )
-  '';
+      tagsString = concatStringsSep " " tags;
+    in
+    ''
+      export buildFlagsArray=(
+        -tags="${tagsString}"
+        -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+      )
+    '';
 
   outputs = [ "out" "data" ];
 
