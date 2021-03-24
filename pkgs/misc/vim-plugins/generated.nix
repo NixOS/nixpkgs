@@ -3046,6 +3046,18 @@ let
     meta.homepage = "https://github.com/roxma/nvim-cm-racer/";
   };
 
+  nvim-colorizer-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-colorizer-lua";
+    version = "2020-06-11";
+    src = fetchFromGitHub {
+      owner = "norcalli";
+      repo = "nvim-colorizer.lua";
+      rev = "36c610a9717cc9ec426a07c8e6bf3b3abcb139d6";
+      sha256 = "0gvqdfkqf6k9q46r0vcc3nqa6w45gsvp8j4kya1bvi24vhifg2p9";
+    };
+    meta.homepage = "https://github.com/norcalli/nvim-colorizer.lua/";
+  };
+
   nvim-compe = buildVimPluginFrom2Nix {
     pname = "nvim-compe";
     version = "2021-03-23";

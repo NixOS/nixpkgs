@@ -6156,6 +6156,8 @@ in {
 
   pyrad = callPackage ../development/python-modules/pyrad { };
 
+  pyradios = callPackage ../development/python-modules/pyradios { };
+
   py-radix = callPackage ../development/python-modules/py-radix { };
 
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
