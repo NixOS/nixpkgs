@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "79ffb45cf9f4b101a807595bcb3e72e0396202e0b1d25d689134b48c4216a81a";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   # error: invalid command 'test'
   doCheck = false;
