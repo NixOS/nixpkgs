@@ -244,8 +244,9 @@ let
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
+      DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = yes;
-      DRM_GMA3600            = yes;
+      DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
       DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
@@ -288,21 +289,31 @@ let
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
-      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
+      SND_SOC_SOF_APOLLOLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_CANNONLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_CANNONLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COFFEELAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_COFFEELAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COMETLAKE             = whenAtLeast "5.12" module;
       SND_SOC_SOF_COMETLAKE_H_SUPPORT   = whenOlder "5.8" yes;
-      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
-      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
-      SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = whenOlder "5.12" yes;
+      SND_SOC_SOF_ELKHARTLAKE           = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = whenOlder "5.12" yes;
+      SND_SOC_SOF_GEMINILAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_GEMINILAKE_SUPPORT    = whenOlder "5.12" yes;
       SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
       SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
       SND_SOC_SOF_HDA_LINK              = yes;
-      SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
+      SND_SOC_SOF_ICELAKE               = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ICELAKE_SUPPORT       = whenOlder "5.12" yes;
       SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
-      SND_SOC_SOF_JASPERLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_MERRIFIELD_SUPPORT    = yes;
-      SND_SOC_SOF_TIGERLAKE_SUPPORT     = yes;
+      SND_SOC_SOF_JASPERLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_JASPERLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_MERRIFIELD            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_MERRIFIELD_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_TIGERLAKE             = whenAtLeast "5.12" module;
+      SND_SOC_SOF_TIGERLAKE_SUPPORT     = whenOlder "5.12" yes;
     };
 
     usb-serial = {
