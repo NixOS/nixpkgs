@@ -1138,6 +1138,8 @@ in
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
+  bit = callPackage ../applications/version-management/git-and-tools/bit { };
+
   bitwarden = callPackage ../tools/security/bitwarden { };
 
   inherit (nodePackages) bitwarden-cli;
@@ -8773,6 +8775,8 @@ in
   txtw = callPackage ../tools/misc/txtw { };
 
   tydra = callPackage ../tools/misc/tydra { };
+
+  tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
 
@@ -19878,7 +19882,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_10;
+      linux_latest_for_hardened = pkgs.linux_5_11;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
@@ -25291,6 +25295,8 @@ in
   slmenu = callPackage ../applications/misc/slmenu {};
 
   slop = callPackage ../tools/misc/slop {};
+
+  slowhttptest = callPackage ../tools/security/slowhttptest { };
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 

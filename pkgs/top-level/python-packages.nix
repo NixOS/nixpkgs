@@ -4716,8 +4716,6 @@ in {
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
-  numtraits = callPackage ../development/python-modules/numtraits { };
-
   nunavut = callPackage ../development/python-modules/nunavut { };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
@@ -7877,7 +7875,7 @@ in {
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
-  sphinx-autobuild = callPackage ../development/python-modules/sphinx-argparse { };
+  sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
