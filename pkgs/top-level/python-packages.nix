@@ -4712,8 +4712,6 @@ in {
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
-  numtraits = callPackage ../development/python-modules/numtraits { };
-
   nunavut = callPackage ../development/python-modules/nunavut { };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
