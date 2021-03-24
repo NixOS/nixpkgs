@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.11.2";
+  version = "0.12.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc5c35dbc81242237feb7a8e1f7d9c5e9dd9bb0910f6ec55f50dcc379082864f";
+    sha256 = "2c95c3b8ee00211a5aa4ef5e46006d25bf35009a66e406b7ea9b25b327fb9516";
   };
 
   checkInputs = [ pytest dask ];
