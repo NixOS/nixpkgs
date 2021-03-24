@@ -28,8 +28,9 @@ let
     '';
   in {
 
-    llvm = callPackage ./llvm.nix { };
-    llvm-polly = callPackage ./llvm.nix { enablePolly = true; };
+    llvm = callPackage ./llvm { };
+
+    llvm-polly = callPackage ./llvm { enablePolly = true; };
 
     clang-unwrapped = callPackage ./clang {
       inherit (tools) lld;
@@ -75,9 +76,9 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld.nix {};
+    lld = callPackage ./lld {};
 
-    lldb = callPackage ./lldb.nix {};
+    lldb = callPackage ./lldb {};
 
     # Below, is the LLVM bootstrapping logic. It handles building a
     # fully LLVM toolchain from scratch. No GCC toolchain should be
@@ -159,7 +160,7 @@ let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt = callPackage ./compiler-rt.nix {
+    compiler-rt = callPackage ./compiler-rt {
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt
                else stdenv;
@@ -174,7 +175,7 @@ let
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
 
-    libcxxabi = callPackage ./libc++abi.nix ({} //
+    libcxxabi = callPackage ./libc++abi ({} //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
         libunwind = libraries.libunwind;
