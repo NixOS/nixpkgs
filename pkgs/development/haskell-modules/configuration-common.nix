@@ -1419,6 +1419,19 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/1536
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
+  # 2021-03-24: hlint 3.3 is for ghc 9 compat, but hls only supports ghc 8.10
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    hlint = super.hlint_3_2_7;
+  };
+
+  # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
+  hlint = super.hlint.overrideScope (self: super: {
+    ghc-lib-parser = overrideCabal self.ghc-lib-parser_9_0_1_20210207 {
+      doHaddock = false;
+    };
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
+  });
+
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
   # Jailbreak because of: https://github.com/haskell/haskell-language-server/pull/1595
