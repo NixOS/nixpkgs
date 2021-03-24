@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8";
+    sha256 = "e59fd8e750e588358f1b8885e5a4751203a0516e0ee6d34811089ac294c8806f";
   };
 
   checkInputs = [ unittest2 ];
