@@ -1161,6 +1161,8 @@ in
 
   bonfire = callPackage ../tools/misc/bonfire { };
 
+  botamusique = callPackage ../tools/audio/botamusique { };
+
   boulder = callPackage ../tools/admin/boulder { };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };

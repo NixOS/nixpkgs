@@ -419,6 +419,7 @@ nishigori/increment-activator
 nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
+norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 npxbr/glow.nvim
