@@ -8779,6 +8779,8 @@ in
 
   tydra = callPackage ../tools/misc/tydra { };
 
+  tz = callPackage ../tools/misc/tz { };
+
   u9fs = callPackage ../servers/u9fs { };
 
   ua = callPackage ../tools/networking/ua { };
