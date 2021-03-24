@@ -46,6 +46,8 @@ let self = rec {
 
   # addon packages
 
+  a4ksubtitles = callPackage ../applications/video/kodi-packages/a4ksubtitles { };
+
   controllers = {
     default = callPackage ../applications/video/kodi-packages/controllers { controller = "default"; };
 

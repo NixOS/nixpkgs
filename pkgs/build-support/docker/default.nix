@@ -729,6 +729,8 @@ rec {
     name,
     # Image tag, the Nix's output hash will be used if null
     tag ? null,
+    # Parent image, to append to.
+    fromImage ? null,
     # Files to put on the image (a nix store path or list of paths).
     contents ? [],
     # Docker config; e.g. what command to run on the container.
@@ -791,7 +793,7 @@ rec {
       unnecessaryDrvs = [ baseJson overallClosure ];
 
       conf = runCommand "${baseName}-conf.json" {
-        inherit maxLayers created;
+        inherit fromImage maxLayers created;
         imageName = lib.toLower name;
         passthru.imageTag =
           if tag != null
@@ -821,6 +823,27 @@ rec {
                          unnecessaryDrvs}
         }
 
+        # Compute the number of layers that are already used by a potential
+        # 'fromImage' as well as the customization layer. Ensure that there is
+        # still at least one layer available to store the image contents.
+        usedLayers=0
+
+        # subtract number of base image layers
+        if [[ -n "$fromImage" ]]; then
+          (( usedLayers += $(tar -xOf "$fromImage" manifest.json | jq '.[0].Layers | length') ))
+        fi
+
+        # one layer will be taken up by the customisation layer
+        (( usedLayers += 1 ))
+
+        if ! (( $usedLayers < $maxLayers )); then
+          echo >&2 "Error: usedLayers $usedLayers layers to store 'fromImage' and" \
+                    "'extraCommands', but only maxLayers=$maxLayers were" \
+                    "allowed. At least 1 layer is required to store contents."
+          exit 1
+        fi
+        availableLayers=$(( maxLayers - usedLayers ))
+
         # Create $maxLayers worth of Docker Layers, one layer per store path
         # unless there are more paths than $maxLayers. In that case, create
         # $maxLayers-1 for the most popular layers, and smush the remainaing
@@ -838,18 +861,20 @@ rec {
                 | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
                 | map(select(length > 0))
             ' \
-              --argjson maxLayers "$(( maxLayers - 1 ))" # one layer will be taken up by the customisation layer
+              --argjson maxLayers "$availableLayers"
         )"
 
         cat ${baseJson} | jq '
           . + {
             "store_dir": $store_dir,
+            "from_image": $from_image,
             "store_layers": $store_layers,
             "customisation_layer", $customisation_layer,
             "repo_tag": $repo_tag,
             "created": $created
           }
           ' --arg store_dir "${storeDir}" \
+            --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
             --argjson store_layers "$store_layers" \
             --arg customisation_layer ${customisationLayer} \
             --arg repo_tag "$imageName:$imageTag" \
