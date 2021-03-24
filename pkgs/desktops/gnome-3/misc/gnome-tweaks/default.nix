@@ -10,7 +10,7 @@
 , gsettings-desktop-schemas
 , gtk3
 , itstool
-, libhandy_0
+, libhandy
 , libnotify
 , libsoup
 , libxml2
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     gnome3.mutter
     gsettings-desktop-schemas
     gtk3
-    libhandy_0
+    libhandy
     libnotify
     libsoup
   ];
@@ -72,10 +72,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/action/show/Apps/GnomeTweakTool";
+    homepage = "https://wiki.gnome.org/Apps/Tweaks";
     description = "A tool to customize advanced GNOME 3 options";
     maintainers = teams.gnome.members;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
