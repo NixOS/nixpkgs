@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "2.0.2";
+  version = "3.0.0";
 
   src = fetchgit {
     url = "https://aomedia.googlesource.com/aom";
     rev	= "v${version}";
-    sha256 = "0f3i983s9yvh9zc6mpy1ck5sjcg9l09lpw9v4md3mv8gbih9f0z0";
+    sha256 = "178rq1d7i9q4lg40bipkyhdrk18j9wi5k5avpa5bls0zm7g5ifsx";
   };
 
   patches = [ ./outputs.patch ];
