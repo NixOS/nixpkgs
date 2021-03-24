@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "fasteners";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a176da6b70df9bb88498e1a18a9e4a8579ed5b9141207762368a1017bf8f5ef";
+    sha256 = "c995d8c26b017c5d6a6de9ad29a0f9cdd57de61ae1113d28fac26622b06a0933";
   };
 
   propagatedBuildInputs = [ six monotonic ];
