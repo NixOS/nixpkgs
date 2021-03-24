@@ -19,6 +19,7 @@
 , djvulibre
 , libspectre
 , libarchive
+, libhandy
 , libsecret
 , wrapGAppsHook
 , librsvg
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     gspell
     gtk3
     libarchive
+    libhandy
     librsvg
     libsecret
     libspectre
