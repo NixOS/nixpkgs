@@ -1,5 +1,6 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , six, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel_yaml
+, lz4, cloudpickle
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,12 @@ buildPythonPackage rec {
     sha256 = "0dnj815qdxrn0q6bpwsmkca2jy02gjy6d3amqg4y6gha1kc1mymv";
   };
 
-  checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel_yaml ];
+  # not an explicit dependency, but it's imported by an entrypoint
+  propagatedBuildInputs = [
+    lz4
+  ];
+
+  checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel_yaml cloudpickle ];
 
   disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
