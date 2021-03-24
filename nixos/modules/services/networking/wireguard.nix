@@ -238,7 +238,7 @@ let
         wantedBy = [ "wireguard-${name}.service" ];
         requiredBy = [ "wireguard-${name}.service" ];
         before = [ "wireguard-${name}.service" ];
-        path = with pkgs; [ wireguard ];
+        path = with pkgs; [ wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
