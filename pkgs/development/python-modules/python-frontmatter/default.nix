@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "python-frontmatter";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "eyeseast";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1iki3rcbg7zs93m3mgqzncybqgdcch25qpwy84iz96qq8pipfs6g";
+    sha256 = "0flyh2pb0z4lq66dmmsgyakvg11yhkp4dk7qnzanl34z7ikp97bx";
   };
 
   propagatedBuildInputs = with python3Packages; [
