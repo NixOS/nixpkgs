@@ -1,11 +1,12 @@
 { stdenv, fetchurl, apacheHttpd, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mod_perl-2.0.10";
+  pname = "mod_perl";
+  version = "2.0.11";
 
   src = fetchurl {
-    url = "mirror://apache/perl/${name}.tar.gz";
-    sha256 = "0r1bhzwl5gr0202r6448943hjxsickzn55kdmb7dzad39vnq7kyi";
+    url = "mirror://apache/perl/${pname}-${version}.tar.gz";
+    sha256 = "0x3gq4nz96y202cymgrf56n8spm7bffkd1p74dh9q3zrrlc9wana";
   };
 
   buildInputs = [ apacheHttpd perl ];
