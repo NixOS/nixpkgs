@@ -708,8 +708,13 @@ self: super: {
   diagrams-postscript = doJailbreak super.diagrams-postscript;
   diagrams-svg = doJailbreak super.diagrams-svg;
   diagrams-contrib = doJailbreak super.diagrams-contrib;
-  # https://github.com/diagrams/diagrams-lib/issues/288
-  diagrams-lib = doJailbreak (overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; }));
+  # apply patch from master to add compat with optparse-applicative >= 0.16
+  diagrams-lib = doJailbreak (appendPatch super.diagrams-lib
+    (pkgs.fetchpatch {
+      url = "https://github.com/diagrams/diagrams-lib/commit/4b9842c3e3d653be69af19778970337775e2404d.patch";
+      sha256 = "0xqvzh3ip9i0nv8xnh41afxki64r259pxq8ir1a4v99ggnldpjaa";
+      includes = [ "*/CmdLine.hs" ];
+    }));
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
