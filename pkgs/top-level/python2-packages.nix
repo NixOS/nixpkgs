@@ -32,6 +32,8 @@ with self; with super; {
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
 
+  flit-core = disabled super.flit-core;
+
   fontforge = disabled super.fontforge;
 
   gaia = disabledIf (isPyPy || isPy3k) (toPythonModule (pkgs.gaia.override {
