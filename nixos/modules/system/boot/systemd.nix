@@ -70,7 +70,10 @@ let
 
       # Journal.
       "systemd-journald.socket"
+      "systemd-journald@.socket"
+      "systemd-journald-varlink@.socket"
       "systemd-journald.service"
+      "systemd-journald@.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
       ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
@@ -1178,6 +1181,8 @@ in
     systemd.services."user-runtime-dir@".restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;
+    systemd.services."systemd-journald@".restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
+    systemd.services."systemd-journald@".stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
