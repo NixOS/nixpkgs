@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron }:
+{ stdenvNoCC, lib, fetchurl, appimageTools, makeWrapper, electron }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "freetube";
   version = "0.15.1";
 

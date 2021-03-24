@@ -1,6 +1,6 @@
-{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins }:
+{ fetchurl, lib, stdenvNoCC, buildEnv, roundcube, roundcubePlugins }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "roundcube";
   version = "1.5.2";
 

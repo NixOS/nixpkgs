@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchzip
+{ lib, stdenvNoCC, fetchzip
 , jre, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "epubcheck";
   version = "4.2.6";
 

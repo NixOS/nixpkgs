@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, glib, gnome }:
+{ lib, stdenvNoCC, fetchFromGitHub, glib, gnome }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnome-shell-extension-pidgin-im-integration";
   version = "32";
 

@@ -1,6 +1,6 @@
-{lib, stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
+{lib, stdenvNoCC, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "diff-so-fancy";
   version = "1.4.3";
 

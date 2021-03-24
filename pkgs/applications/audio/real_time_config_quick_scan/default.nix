@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, perlPackages, makeWrapper }:
+{ lib, stdenvNoCC, fetchFromGitHub, perlPackages, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "realTimeConfigQuickScan";
   version = "unstable-2020-07-23";
 

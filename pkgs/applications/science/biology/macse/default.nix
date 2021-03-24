@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenvNoCC, fetchurl, jre, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "macse";
   version = "2.03";
 

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, git, gnupg, installShellFiles }:
+{ lib, stdenvNoCC, fetchFromGitHub, git, gnupg, installShellFiles }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "yadm";
   version = "3.1.1";
 

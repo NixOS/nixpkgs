@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, python3 }:
+{ lib, stdenvNoCC, fetchurl, autoPatchelfHook, python3 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gpt2tc";
   version = "2021-04-24";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D -m755 -t $out/lib libnc${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -D -m755 -t $out/lib libnc${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
     addAutoPatchelfSearchPath $out/lib
     install -D -m755 -t $out/bin gpt2tc
     install -T -m755 download_model.sh $out/bin/gpt2-download-model

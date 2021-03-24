@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenvNoCC
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -6,7 +6,7 @@
 , librsvg
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "skeu";
   version = "0.5.1";
 

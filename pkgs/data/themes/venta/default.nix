@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -7,7 +7,7 @@
 , librsvg
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "venta";
   version = "0.7.1";
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
+{ stdenvNoCC, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
 
 # Dynamic libraries
 , alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
@@ -9,7 +9,7 @@
 , systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "drawio";
   version = "16.1.2";
 

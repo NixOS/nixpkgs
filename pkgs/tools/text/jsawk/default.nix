@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, spidermonkey_78 }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, spidermonkey_78 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "jsawk";
   version = "1.5-pre";
   src = fetchFromGitHub {

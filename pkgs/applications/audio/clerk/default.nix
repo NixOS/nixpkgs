@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , makeWrapper
 , rofi
@@ -10,7 +10,7 @@
 , libnotify
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "clerk";
   version = "unstable-2016-10-14";
 

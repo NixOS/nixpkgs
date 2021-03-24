@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, python3, makeWrapper }:
+{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper }:
 
 let
   pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 ]);
-in stdenv.mkDerivation rec {
+in stdenvNoCC.mkDerivation rec {
   pname = "sickgear";
   version = "0.25.11";
 

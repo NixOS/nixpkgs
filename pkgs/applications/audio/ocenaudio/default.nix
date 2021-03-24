@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchurl
 , autoPatchelfHook
@@ -9,7 +9,7 @@
 , bzip2
 , libpulseaudio }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "ocenaudio";
   version = "3.11.2";
 

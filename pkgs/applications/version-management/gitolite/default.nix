@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl, perlPackages }:
+{ stdenvNoCC, fetchFromGitHub, git, lib, makeWrapper, nettools, perl, perlPackages }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gitolite";
   version = "3.6.12";
 

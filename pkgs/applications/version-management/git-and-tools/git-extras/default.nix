@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, unixtools, which }:
+{ lib, stdenvNoCC, fetchFromGitHub, unixtools, which }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-extras";
   version = "6.3.0";
 

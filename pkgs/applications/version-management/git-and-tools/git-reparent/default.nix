@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, git, gnused }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, git, gnused }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-reparent";
   version = "unstable-2017-09-03";
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
+{ lib, stdenvNoCC, fetchurl, makeWrapper, makeDesktopItem
 , alsa-lib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , libSM, libICE, libXext, factorio-utils
 , releaseType
@@ -64,7 +64,7 @@ let
   versions = importJSON ./versions.json;
   binDists = makeBinDists versions;
 
-  actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
+  actual = binDists.${stdenvNoCC.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenvNoCC.hostPlatform.system} are not available for download.");
 
   makeBinDists = versions:
     let f = path: name: value:
@@ -242,4 +242,4 @@ let
     };
   };
 
-in stdenv.mkDerivation (releases.${releaseType})
+in stdenvNoCC.mkDerivation (releases.${releaseType})

@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
+{ stdenvNoCC, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "xmind";
   version = "8-update8";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = let
-    targetDir = if stdenv.hostPlatform.system == "i686-linux"
+    targetDir = if stdenvNoCC.hostPlatform.system == "i686-linux"
       then "XMind_i386"
       else "XMind_amd64";
   in ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     cp "${desktopItem}/share/applications/XMind.desktop" $out/share/applications/XMind.desktop
     cp ${srcIcon} $out/share/icons/hicolor/scalable/apps/xmind.png
 
-    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
+    patchelf --set-interpreter $(cat ${stdenvNoCC.cc}/nix-support/dynamic-linker) \
       $out/libexec/XMind
 
     wrapProgram $out/libexec/XMind \

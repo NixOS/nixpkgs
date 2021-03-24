@@ -1,6 +1,6 @@
-{lib, stdenv, fetchFromGitHub}:
+{lib, stdenvNoCC, fetchFromGitHub}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-radar";
   version = "0.6";
 

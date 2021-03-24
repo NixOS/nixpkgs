@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, unzip, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, unzip, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "grocy";
   version = "3.1.3";
 

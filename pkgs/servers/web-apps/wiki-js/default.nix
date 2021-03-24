@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, lib, nixosTests }:
+{ stdenvNoCC, fetchurl, lib, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "wiki-js";
   version = "2.5.268";
 

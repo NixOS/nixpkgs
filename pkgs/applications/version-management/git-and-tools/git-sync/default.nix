@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, git, gnugrep, gnused, makeWrapper, inotify-tools }:
+{ lib, stdenvNoCC, fetchFromGitHub, coreutils, git, gnugrep, gnused, makeWrapper, inotify-tools }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-sync";
   version = "unstable-2021-07-14";
 

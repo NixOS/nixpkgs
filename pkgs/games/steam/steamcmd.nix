@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, steam-run, bash, coreutils
+{ lib, stdenvNoCC, fetchurl, steam-run, bash, coreutils
 , steamRoot ? "~/.local/share/Steam"
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "steamcmd";
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
 

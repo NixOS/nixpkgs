@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, git }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, git }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-test";
   version = "1.0.4";
 
