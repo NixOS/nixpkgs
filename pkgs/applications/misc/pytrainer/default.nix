@@ -1,80 +1,76 @@
 { lib
-, fetchFromGitHub
-, perl
 , python3
-, sqlite
-, gpsbabel
+, fetchFromGitHub
+, gdk-pixbuf
 , gnome3
-, gobject-introspection
-, wrapGAppsHook
-, gtk3
-, xvfb_run
-, webkitgtk
+, gpsbabel
 , glib-networking
 , glibcLocales
+, gobject-introspection
+, gtk3
+, perl
+, sqlite
 , tzdata
-, substituteAll
+, webkitgtk
+, wrapGAppsHook
+, xvfb_run
 }:
 
 let
-  # Pytrainer needs a matplotlib with GTK backend.
-  matplotlibGtk = python3.pkgs.matplotlib.override {
-    enableGtk3 = true;
+  python = python3.override {
+    packageOverrides = (self: super: {
+      matplotlib = super.matplotlib.override {
+        enableGtk3 = true;
+      };
+    });
   };
-
-in
-
-python3.pkgs.buildPythonApplication rec {
+in python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "0m2sy3f5pyc4wv1ns31r7vlafqkzp0a2jasaskwrkl6273agbbk9";
+    sha256 = "sha256-i3QC6ct7tS8B0QQjtVqPcd03LLIxo6djQe4YX35syzk=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      perl = "${perl}/bin/perl";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace ./setup.py \
-      --replace "'mysqlclient'," ""
-  '';
-
-  propagatedBuildInputs = with python3.pkgs; [
-    dateutil
-    lxml
-    matplotlibGtk
-    pygobject3
-    sqlalchemy
+  propagatedBuildInputs = with python.pkgs; [
     sqlalchemy_migrate
-    psycopg2
-    requests
-    certifi
+    python-dateutil
+    matplotlib
+    lxml
     setuptools
+    requests
+    gdal
   ];
 
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook
-    xvfb_run
   ];
 
   buildInputs = [
-    gpsbabel
     sqlite
     gtk3
     webkitgtk
     glib-networking
-    glibcLocales
     gnome3.adwaita-icon-theme
+    gdk-pixbuf
   ];
+
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ perl gpsbabel ])
+  ];
+
+  checkInputs = [
+    glibcLocales
+    perl
+    xvfb_run
+  ] ++ (with python.pkgs; [
+    mysqlclient
+    psycopg2
+  ]);
 
   checkPhase = ''
     env HOME=$TEMPDIR TZDIR=${tzdata}/share/zoneinfo \
@@ -85,9 +81,9 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/pytrainer/pytrainer/wiki";
+    homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
-    maintainers = [ maintainers.rycee ];
+    maintainers = with maintainers; [ rycee dotlambda ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
