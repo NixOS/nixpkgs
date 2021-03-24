@@ -11,8 +11,9 @@
 , packagekit
 , ostree
 , glib
-, appstream-glib
+, appstream
 , libsoup
+, libhandy
 , polkit
 , isocodes
 , gspell
@@ -76,8 +77,9 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     packagekit
-    appstream-glib
+    appstream
     libsoup
+    libhandy
     gsettings-desktop-schemas
     gnome-desktop
     gspell
@@ -94,7 +96,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dubuntu_reviews=false"
     "-Dgudev=false"
     # FIXME: package malcontent parental controls
     "-Dmalcontent=false"
