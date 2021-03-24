@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "brotli";
-  version = "1.0.7";
+  version = "1.0.9";
 
   # PyPI doesn't contain tests so let's use GitHub
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1811b55wdfg4kbsjcgh1kc938g118jpvif97ilgrmbls25dfpvvw";
+    sha256 = "0xyp85h12sknl4pxg1x8lgx8simzhdv73h4a8c1m7gyslsny386g";
   };
 
   dontConfigure = true;
