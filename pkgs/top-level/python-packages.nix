@@ -7590,7 +7590,10 @@ in {
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
   setuptools-scm = self.setuptools_scm; # added 2021-01-04
-  setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+  setuptools_scm = if isPy3k then
+    callPackage ../development/python-modules/setuptools_scm { }
+  else
+    callPackage ../development/python-modules/setuptools_scm/2.nix { };
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 
