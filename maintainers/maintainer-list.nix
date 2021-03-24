@@ -9469,6 +9469,12 @@
     githubId = 378734;
     name = "TG ⊗ Θ";
   };
+  tgunnoe = {
+    email = "t@gvno.net";
+    github = "tgunnoe";
+    githubId = 7254833;
+    name = "Taylor Gunnoe";
+  };
   th0rgal = {
     email = "thomas.marchand@tuta.io";
     github = "Th0rgal";
