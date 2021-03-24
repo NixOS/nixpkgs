@@ -3565,6 +3565,8 @@ in {
 
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
 
+  jupyter-server-proxy = callPackage ../development/python-modules/jupyter-server-proxy { };
+
   jupyter_client = if isPy3k then
     callPackage ../development/python-modules/jupyter_client { }
   else
@@ -7624,6 +7626,8 @@ in {
   sigtools = callPackage ../development/python-modules/sigtools { };
 
   simanneal = callPackage ../development/python-modules/simanneal { };
+
+  simpervisor = callPackage ../development/python-modules/simpervisor { };
 
   simpleai = callPackage ../development/python-modules/simpleai { };
 
