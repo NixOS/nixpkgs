@@ -25294,6 +25294,8 @@ in
 
   slop = callPackage ../tools/misc/slop {};
 
+  slowhttptest = callPackage ../tools/security/slowhttptest { };
+
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
   sniproxy = callPackage ../applications/networking/sniproxy { };
