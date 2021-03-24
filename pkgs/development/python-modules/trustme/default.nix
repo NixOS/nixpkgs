@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy3k
 , cryptography
-, futures
+, futures ? null
 , pytest
 , pyopenssl
 , service-identity

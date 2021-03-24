@@ -8,7 +8,7 @@
 , testtools
 , isPy3k
 , nose
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
