@@ -2,6 +2,7 @@
 , substituteAll
 , pkg-config
 , fetchurl
+, fetchpatch
 , python3Packages
 , gettext
 , itstool
@@ -50,6 +51,13 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       utillinux = util-linux;
+    })
+
+    # Fix build with Glib 2.68
+    # https://github.com/brailcom/speechd/pull/462
+    (fetchpatch {
+      url = "https://github.com/brailcom/speechd/commit/a2faab416e42cbdf3d73f98578a89eb7a235e25a.patch";
+      sha256 = "8Q7tUdKKBBtgXZZnj59OcJOkrCNeBR9gkBjhKlpW0hQ=";
     })
   ];
 
