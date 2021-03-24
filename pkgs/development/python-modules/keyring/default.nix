@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
 , dbus-python
 , entrypoints
 , importlib-metadata
@@ -26,9 +26,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints ]
-  ++ lib.optional stdenv.isLinux secretstorage
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [ dbus-python entrypoints importlib-metadata ]
+  ++ lib.optional stdenv.isLinux secretstorage;
 
   # checks try to access a darwin path on linux
   doCheck = false;
