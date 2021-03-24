@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter-packaging";
-  version = "0.7.12";
+  version = "0.8.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sUAyV3GIGn33t/LRSZe2GQY/51rnVrkCWFLkNGAAu7g=";
+    sha256 = "276c9f884286695f6ab57a017f4bb9dd4df4f5e232b783050d2aa55b6b9ed650";
   };
 
   propagatedBuildInputs = [ packaging ];
