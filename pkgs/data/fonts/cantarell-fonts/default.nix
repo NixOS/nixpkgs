@@ -1,14 +1,12 @@
 { lib, stdenv, fetchurl, meson, ninja, gettext, appstream-glib, gnome3 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "cantarell-fonts";
   version = "0.301";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "10sycxscs9kzl451mhygyj2qj8qlny8pamskb86np7izq05dnd9x";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "3d35db0ac03f9e6b0d5a53577591b714238985f4cfc31a0aa17f26cd74675e83";
   };
 
   nativeBuildInputs = [ meson ninja gettext appstream-glib ];
@@ -21,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "12ps2gjv1lmzbmkv16vgjmaahl3ayadpniyrx0z31sqn443r57hq";
+  outputHash = "1sczskw2kv3qy39i9mzw2lkl94a90bjgv5ln9acy5kh4gb2zmy7z";
 
   passthru = {
     updateScript = gnome3.updateScript {
