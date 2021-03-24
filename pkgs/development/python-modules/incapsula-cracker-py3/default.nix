@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+  pythonImportsCheck = [ "incapsula" ];
+
   meta = with lib; {
     description = "Bypass sites guarded with Incapsula";
     homepage = "https://github.com/ziplokk1/incapsula-cracker-py3";
