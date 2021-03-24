@@ -108,6 +108,8 @@ let self = rec {
 
   inputstream-ffmpegdirect = callPackage ../applications/video/kodi-packages/inputstream-ffmpegdirect { };
 
+  inputstream-rtmp = callPackage ../applications/video/kodi-packages/inputstream-rtmp { };
+
   inputstreamhelper = callPackage ../applications/video/kodi-packages/inputstreamhelper { };
 
   kodi-six = callPackage ../applications/video/kodi-packages/kodi-six { };
