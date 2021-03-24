@@ -12,14 +12,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.52.0";
+  version = "0.53.0";
   pname = "numba";
   # uses f-strings, python 3.9 is not yet supported
   disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44661c5bd85e3d3619be0a40eedee34e397e9ccb3d4c458b70e10bf95d1ce933";
+    sha256 = "55c11d7edbba2ba715f2b56f5294cad55cfd87bff98e2627c3047c2d5cc52d16";
   };
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
