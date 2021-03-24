@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "play-with-mpv";
-  version = "2020-05-18";
+  version = "unstable-2020-05-18";
 
   src = fetchFromGitHub {
       owner = "thann";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ git ];
   propagatedBuildInputs = [ youtube-dl ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py --replace \
     '"https://github.com/thann/install_freedesktop/tarball/master#egg=install_freedesktop-0.2.0"' \
     '"file://${install_freedesktop}#egg=install_freedesktop-0.2.0"'
