@@ -1,5 +1,6 @@
-{ lib, stdenv
-, docbook_xsl
+{ stdenv
+, lib
+, docbook-xsl-nons
 , fetchurl
 , fetchpatch
 , glib
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   pname = "umockdev";
   version = "0.15.4";
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
@@ -35,14 +36,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
-
-  buildInputs = [ glib systemd libgudev ];
-
   nativeBuildInputs = [
-    docbook_xsl
+    docbook-xsl-nons
     gobject-introspection
     gtk-doc
     meson
@@ -51,20 +46,27 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  checkInputs = [ python3 which usbutils ];
+  buildInputs = [
+    glib
+    systemd
+    libgudev
+  ];
 
-  enableParallelBuilding = true;
+  checkInputs = [
+    python3
+    which
+    usbutils
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
 
   doCheck = true;
 
-  postInstall = ''
-    mkdir -p $doc/share/doc/umockdev/
-    mv docs/reference $doc/share/doc/umockdev/
-  '';
-
   meta = with lib; {
     description = "Mock hardware devices for creating unit tests";
-    license = licenses.lgpl2;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];
     platforms = with platforms; linux;
   };
