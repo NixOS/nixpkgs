@@ -91,4 +91,6 @@ assert (versionAtLeast version "4.9");
   CC_STACKPROTECTOR_REGULAR = whenOlder "4.18" no;
   CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
 
+  # Detect out-of-bound reads/writes and use-after-free
+  KFENCE = whenAtLeast "5.12" yes;
 }
