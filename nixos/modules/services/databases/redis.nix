@@ -283,11 +283,18 @@ in
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/redis-server /run/redis/redis.conf";
-        RuntimeDirectory = "redis";
-        StateDirectory = "redis";
         Type = "notify";
+        # User and group
         User = "redis";
         Group = "redis";
+        # Runtime directory and mode
+        RuntimeDirectory = "redis";
+        RuntimeDirectoryMode = "0750";
+        # State directory and mode
+        StateDirectory = "redis";
+        StateDirectoryMode = "0700";
+        # Access write directories
+        UMask = "0077";
       };
     };
   };
