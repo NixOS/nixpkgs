@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   version = "0.8.0";
   pname = "javaproperties";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jwodder";
