@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , six
+, setuptools-scm
+, toml
 }:
 
 buildPythonPackage rec {
@@ -12,6 +14,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "58b46ce1cc4d43af0aac3ac9a047bdb0f44e05f0b2fa2eec755863331700c865";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    toml
+  ];
 
   propagatedBuildInputs = [ six ];
 
