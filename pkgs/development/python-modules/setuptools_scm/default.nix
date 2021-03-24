@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "setuptools_scm";
-  version = "4.1.2";
+  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a8994582e716ec690f33fec70cca0f85bd23ec974e3f783233e4879090a7faa8";
+    sha256 = "d1925a69cb07e9b29416a275b9fadb009a23c148ace905b2fb220649a6c18e92";
   };
 
   propagatedBuildInputs = [ toml ];
