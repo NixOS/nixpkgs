@@ -4403,6 +4403,8 @@ in
 
   flamegraph = callPackage ../development/tools/flamegraph { };
 
+  flawfinder = callPackage ../development/tools/flawfinder { };
+
   flips = callPackage ../tools/compression/flips { };
 
   fmbt = callPackage ../development/tools/fmbt {
