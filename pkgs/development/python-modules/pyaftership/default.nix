@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyaftership";
-  version = "0.1.2";
+  version = "21.1.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "057dwzacc0lmsq00ipfbnxkq4rc2by8glmza6s8i6dzi1cc68v98";
+    sha256 = "28b62c323d06492399b60d8135a58d6feaa1d60837eddc14e57ea2b69d356c0a";
   };
 
   propagatedBuildInputs = [ aiohttp async-timeout ];
