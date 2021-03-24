@@ -8,6 +8,8 @@ with self; with super; {
 
   appleseed = toPythonModule (pkgs.appleseed.override { inherit (self) python; });
 
+  arrow = callPackage ../development/python-modules/arrow/2.nix { };
+
   astroid = callPackage ../development/python-modules/astroid/1.6.nix { };
 
   browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy { };
