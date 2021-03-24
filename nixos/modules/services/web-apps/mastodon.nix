@@ -28,6 +28,7 @@ let
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
+  // (if cfg.redis.enableUnixSocket then { REDIS_URL = "unix:///run/redis/redis.sock"; } else {})
   // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
   // cfg.extraConfig;
 
@@ -257,6 +258,12 @@ in {
           description = "Redis port.";
           type = lib.types.port;
           default = 6379;
+        };
+
+        enableUnixSocket = lib.mkOption {
+          description = "Use Unix socket";
+          type = lib.types.bool;
+          default = true;
         };
       };
 
@@ -555,9 +562,15 @@ in {
     services.postfix = lib.mkIf (cfg.smtp.createLocally && cfg.smtp.host == "127.0.0.1") {
       enable = true;
     };
-    services.redis = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
-      enable = true;
-    };
+    services.redis = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") (lib.mkMerge [
+      ({
+        enable = true;
+      })
+      (lib.mkIf cfg.redis.enableUnixSocket {
+        unixSocket = "/run/redis/redis.sock";
+        unixSocketPerm = 770;
+      })
+    ]);
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = [
@@ -578,6 +591,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package mastodonEnv ])
+      (lib.mkIf cfg.redis.enableUnixSocket {${config.services.mastodon.user}.extraGroups = [ "redis" ];})
     ];
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
