@@ -8,13 +8,13 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.1";
   pname = "h5py";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e2516f190652beedcb8c7acfa1c6fa92d99b42331cbef5e5c7ec2d65b0fc3c2";
+    sha256 = "89474be911bfcdb34cbf0d98b8ec48b578c27a89fdb1ae4ee7513f1ef8d9249e";
   };
 
   # avoid strict pinning of numpy
