@@ -506,10 +506,25 @@ in
           pkgs.maliit-framework
           pkgs.maliit-keyboard
         ]
-        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) [
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
           # Additional software made for Plasma Mobile.
-          pkgs.angelfish
-        ]
+          alligator
+          angelfish
+          audiotube
+          calindori
+          kalk
+          kasts
+          kclock
+          keysmith
+          koko
+          krecorder
+          ktrip
+          kweather
+          plasma-dialer
+          plasma-phonebook
+          plasma-settings
+          spacebar
+        ])
       ;
 
       # The following services are needed or the UI is broken.
