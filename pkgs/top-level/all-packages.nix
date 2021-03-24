@@ -19286,7 +19286,7 @@ in
   fusePackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/fuse {
     util-linux = util-linuxMinimal;
   });
-  fuse = lowPrio fusePackages.fuse_2;
+  fuse = lowPrio (if stdenv.isDarwin then macfuse-stubs else fusePackages.fuse_2);
   fuse3 = fusePackages.fuse_3;
   fuse-common = hiPrio fusePackages.fuse_3.common;
 
@@ -19425,6 +19425,7 @@ in
 
   macfuse-stubs = callPackage ../os-specific/darwin/macfuse {
     inherit (darwin) libtapi;
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
   };
 
   osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
