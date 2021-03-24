@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.7.0";
+  version = "1.8.0";
   pname = "pykwalify";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cnfzkg1b01f825ikpw2fhjclf9c8akxjfrbd1vc22x1lg2kk2vy";
+    sha256 = "796b2ad3ed4cb99b88308b533fb2f559c30fa6efb4fa9fda11347f483d245884";
   };
 
   propagatedBuildInputs = [
