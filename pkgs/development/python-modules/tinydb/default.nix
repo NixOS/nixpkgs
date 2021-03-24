@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tinydb";
-  version = "4.1.1";
+  version = "4.4.0";
   disabled = pythonOlder "3.5";
   format = "pyproject";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "msiemens";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09cwdmpj91c6q7jympip1lrcd3idbm9cqblgvmrh0v1vy1iv2ki7";
+    sha256 = "1z5gnffizgbyhh20jy63bkkjh20ih8d62kcfhiaqa6rvnnffqmnw";
   };
 
   nativeBuildInputs = [ poetry ];
