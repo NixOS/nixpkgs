@@ -7299,7 +7299,6 @@ broken-packages:
   - json-builder
   - JSON-Combinator
   - JSON-Combinator-Examples
-  - json-directory
   - json-encoder
   - json-enumerator
   - json-extra
