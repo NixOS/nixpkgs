@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
           curl sqlite libmediainfo ]}
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.sonarr;
+  passthru = {
+    updateScript = "./update.sh";
+    tests.smoke-test = nixosTests.sonarr;
   };
 
   meta = {
