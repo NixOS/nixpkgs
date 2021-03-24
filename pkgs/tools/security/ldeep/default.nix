@@ -10,11 +10,11 @@
 
 buildPythonApplication rec {
   pname = "ldeep";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n38idkn9hy31m5xkrc36dmw364d137c7phssvj76gr2gqsrqjy3";
+    sha256 = "sha256-/7mcmAj69NmuiK+xlQijAk39sMLDX8kHatmSI6XYbwE=";
   };
 
   propagatedBuildInputs = [
