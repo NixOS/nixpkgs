@@ -18,10 +18,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  # see https://github.com/python-greenlet/greenlet/issues/85
-  preCheck = ''
-    rm tests/test_leaks.py
-  '';
+  # No tests in archive
+  doCheck = false;
 
   meta = {
     homepage = "https://pypi.python.org/pypi/greenlet";
