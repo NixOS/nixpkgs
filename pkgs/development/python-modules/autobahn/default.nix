@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k,
-  six, txaio, twisted, zope_interface, cffi, trollius, futures,
+  six, txaio, twisted, zope_interface, cffi,
+  trollius ? null, futures ? null,
   mock, pytest, cryptography, pynacl
 }:
 buildPythonPackage rec {

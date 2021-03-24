@@ -5,9 +5,9 @@
 , isPy3k
 , numpy
 , imagecodecs-lite
-, enum34
-, futures
-, pathlib
+, enum34 ? null
+, futures ? null
+, pathlib ? null
 , pytest
 }:
 

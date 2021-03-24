@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
-, pbr, six, futures, monotonic, typing, setuptools_scm
+, pbr, six, futures ? null, monotonic ? null, typing ? null, setuptools_scm
 , pytest, sphinx, tornado, typeguard
 }:
 

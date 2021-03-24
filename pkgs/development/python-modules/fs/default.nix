@@ -5,7 +5,7 @@
 , six
 , appdirs
 , scandir
-, backports_os
+, backports_os ? null
 , typing
 , pytz
 , enum34

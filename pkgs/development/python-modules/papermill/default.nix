@@ -14,7 +14,7 @@
 , requests
 , entrypoints
 , tenacity
-, futures
+, futures ? null
 , black
 , backports_tempfile
 , isPy27

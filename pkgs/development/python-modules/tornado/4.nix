@@ -6,7 +6,7 @@
 , backports_ssl_match_hostname
 , certifi
 , singledispatch
-, futures
+, futures ? null
 , isPy27
 }:
 

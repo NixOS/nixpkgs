@@ -9,7 +9,7 @@
 , wheel
 , unittest2
 , botocore
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
