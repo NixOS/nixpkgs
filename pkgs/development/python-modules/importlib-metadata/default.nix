@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools-scm
+, typing-extensions
 , toml
 , zipp
 }:
@@ -20,7 +21,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ toml zipp ];
+  propagatedBuildInputs = [
+    toml
+    zipp
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;
