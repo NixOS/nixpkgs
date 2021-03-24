@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -34,10 +33,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-calendar/-/merge_requests/84
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-calendar/-/merge_requests/84.patch";
-      sha256 = "czG3uIHl3tBnjDUvCOPm8IRp2o7yZYCb0/jWtv3uzIY=";
-    })
+    # A refactor has caused the PR patch to drift enough to need rebasing
+    ./gtk_image_reset_crash.patch
   ];
 
   passthru = {
