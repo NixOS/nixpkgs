@@ -28504,6 +28504,8 @@ in
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
+  crypto-org-wallet = callPackage ../applications/blockchains/crypto-org-wallet.nix { };
+
   caprice32 = callPackage ../misc/emulators/caprice32 { };
 
   cubicle = callPackage ../applications/science/logic/cubicle {
