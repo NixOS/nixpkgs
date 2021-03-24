@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.9.7";
+  version = "0.11.1";
   # Version 10 attempts to download models from the web during build-time
   # https://github.com/holoviz/panel/issues/1819
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2e86d82bdd5e7664bf49558eedad62b664d5403ec9e422e5ddfcf69e3bd77318";
+    sha256 = "ce531e5c0c8a8ae74d523762aeb1666650caebbe1867aba16129d29791e921f9";
   };
 
   propagatedBuildInputs = [
