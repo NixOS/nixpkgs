@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "manhole";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d4ab98198481ed54a5b95c0439f41131f56d7d3755eedaedce5a45ca7ff4aa42";
+    sha256 = "224985bf1dd032f2dc0ca4107f727835b6f50e1df6d78781d6c9f4cae8b585e2";
   };
 
   # test_help expects architecture-dependent Linux signal numbers.
