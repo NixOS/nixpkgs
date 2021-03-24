@@ -165,6 +165,8 @@ with self; with super; {
 
   pylint = callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pyroma = callPackage ../development/python-modules/pyroma/2.nix { };
+
   pytest = pytest_4;
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock/2.nix { };
