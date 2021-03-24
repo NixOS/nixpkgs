@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Secure multithreaded packet sniffer";
     homepage = "https://github.com/kpcyrd/sniffglue";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xrelkd ];
     platforms = platforms.linux;
   };
