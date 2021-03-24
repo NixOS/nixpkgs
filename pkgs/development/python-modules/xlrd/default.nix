@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "xlrd";
-  version = "1.2.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "546eb36cee8db40c3eaa46c351e67ffee6eeb5fa2650b71bc4c758a29a1b29b2";
+    sha256 = "f72f148f54442c6b056bf931dbc34f986fd0c3b0b6b5a58d013c9aef274d0c88";
   };
 
   checkInputs = [ pytest ];
