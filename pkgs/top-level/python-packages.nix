@@ -6574,7 +6574,10 @@ in {
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-runner = self.pytestrunner; # added 2021-01-04
-  pytestrunner = callPackage ../development/python-modules/pytestrunner { };
+  pytestrunner = if isPy3k then
+    callPackage ../development/python-modules/pytestrunner { }
+  else
+    callPackage ../development/python-modules/pytestrunner/2.nix { };
 
   pytest-sanic = callPackage ../development/python-modules/pytest-sanic {
     sanic = self.sanic.override { doCheck = false; };
