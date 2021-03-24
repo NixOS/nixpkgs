@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "smart_open";
-  version = "4.1.2";
+  version = "4.2.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4bbb6233364fc1173cc0af6b7a56ed76fce32509514f1978a995a5835f3177f1";
+    sha256 = "d9f5a0f173ccb9bbae528db5a3804f57145815774f77ef755b9b0f3b4b2a9dcb";
   };
 
   # moto>=1.0.0 is backwards-incompatible and some tests fail with it,
