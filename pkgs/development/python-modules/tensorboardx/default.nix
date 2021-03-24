@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
     rev = "v${version}";
-    sha256 = "0qqalq0fhbx0wnd8wdwhyhkkv2brvj9qbk3373vk3wjxbribf5c7";
+    sha256 = "1palz91y0b39pcmwg6wdmqfal38hai99dd6r88i3imqxdbmjghih";
   };
 
   checkInputs = [
