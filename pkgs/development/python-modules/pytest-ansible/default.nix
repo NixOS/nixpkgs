@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "2.1.1";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
     rev = "v${version}";
-    sha256 = "0v97sqk3q2vkmwnjlnncz8ss8086x9jg3cz0g2nzlngs4ql1gdb0";
+    sha256 = "0vh2f34qxs8qfv15hf1q7li2iqjiydjsb4c86i2ma1b7vhi73j57";
   };
 
   patchPhase = ''
