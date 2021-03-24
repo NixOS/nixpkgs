@@ -3,25 +3,21 @@
 , pytest
 , pytestcov
 , pytest-flake8
+, pytest-mypy
+, redis
 }:
 
 buildPythonPackage rec {
-  version = "1.7.0";
+  version = "2.2.1";
   pname = "portalocker";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p32v16va780mjjdbyp3v702aqg5s618khlila7bdyynis1n84q9";
+    sha256 = "sha256-5fb/svNg6a72FafChBQ9KpO7ZAxi6ORacD5gg/xaoRQ=";
   };
 
-  patches = [
-    # remove pytest-flakes from test dependencies
-    # merged into master, remove > 1.7.0 release
-    (fetchpatch {
-      url = "https://github.com/WoLpH/portalocker/commit/42e4c0a16bbc987c7e33b5cbc7676a63a164ceb5.patch";
-      sha256 = "01mlr41nhh7mh3qhqy5fhp3br4nps745iy4ns9fjcnm5xhabg5rr";
-      excludes = [ "pytest.ini" ];
-    })
+  propagatedBuildInputs = [
+    redis
   ];
 
   checkInputs = [
@@ -29,6 +25,7 @@ buildPythonPackage rec {
     pytest
     pytestcov
     pytest-flake8
+    pytest-mypy
   ];
 
   meta = with lib; {
