@@ -3241,7 +3241,10 @@ in {
 
   identify = callPackage ../development/python-modules/identify { };
 
-  idna = callPackage ../development/python-modules/idna { };
+  idna = if isPy3k then
+    callPackage ../development/python-modules/idna { }
+  else
+    callPackage ../development/python-modules/idna/2.nix { };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
 
