@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , vala
 , gobject-introspection
@@ -44,6 +45,15 @@ stdenv.mkDerivation rec {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-HRENhXfVTMo7NCOTFb03xXzLJ91DVWVQdKLSs/2JeQA=";
   };
+
+  patches = [
+    # Fix build with GLib 2.68
+    # https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/93
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gegl/-/commit/130cd583530dc41adfdec76d6662302f833e6033.patch";
+      sha256 = "iZiNpOZqVvDObPeQFQo8fOEw24hSny4ryW0/3/RdChk=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
