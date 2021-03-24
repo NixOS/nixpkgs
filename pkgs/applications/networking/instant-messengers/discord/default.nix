@@ -7,10 +7,10 @@ in {
     pname = "discord";
     binaryName = "Discord";
     desktopName = "Discord";
-    version = "0.0.13";
+    version = "0.0.14";
     src = fetchurl {
       url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-      sha256 = "0d5z6cbj9dg3hjw84pyg75f8dwdvi2mqxb9ic8dfqzk064ssiv7y";
+      sha256 = "c2651aef4b2c078a3d0975b82fd391571decaa636e52343bb4f116da1c4804e7";
     };
   };
   ptb = callPackage ./base.nix rec {
