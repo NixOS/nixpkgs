@@ -12,10 +12,11 @@
 , gtk3
 , evolution-data-server
 , gnome-online-accounts
+, json-glib
 , libuuid
-, libhandy_0
+, curl
+, libhandy
 , webkitgtk
-, zeitgeist
 , gnome3
 , libxml2
 , gsettings-desktop-schemas
@@ -53,19 +54,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
+    json-glib
     libuuid
-    libhandy_0 # doesn't support libhandy-1 yet
+    curl
+    libhandy
     webkitgtk
     tracker
     gnome-online-accounts
-    zeitgeist
     gsettings-desktop-schemas
     evolution-data-server
     gnome3.adwaita-icon-theme
   ];
 
   mesonFlags = [
-    "-Dzeitgeist=true"
     "-Dupdate_mimedb=false"
   ];
 
