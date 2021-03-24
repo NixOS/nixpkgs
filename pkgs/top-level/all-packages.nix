@@ -4791,6 +4791,8 @@ in
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
+  github-backup = callPackage ../tools/misc/github-backup { };
+
   gitin = callPackage ../applications/version-management/git-and-tools/gitin { };
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
@@ -8084,6 +8086,8 @@ in
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
 
   sipsak = callPackage ../tools/networking/sipsak { };
+
+  sipvicious = python3Packages.callPackage ../tools/security/sipvicious { };
 
   siril = callPackage ../applications/science/astronomy/siril { };
 
@@ -11802,11 +11806,6 @@ in
   sparkleshare = callPackage ../applications/version-management/sparkleshare { };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
-  spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
-    inherit (darwin) libobjc;
-  } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  }));
   spidermonkey_68 = callPackage ../development/interpreters/spidermonkey/68.nix { };
   spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix { };
 
@@ -29654,8 +29653,6 @@ in
   protocol = python3Packages.callPackage ../applications/networking/protocol { };
 
   pykms = callPackage ../tools/networking/pykms { };
-
-  pyload = callPackage ../applications/networking/pyload {};
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 

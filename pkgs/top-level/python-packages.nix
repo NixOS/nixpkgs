@@ -373,6 +373,8 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib { };
 
+  android-backup = callPackage ../development/python-modules/android-backup { };
+
   androidtv = callPackage ../development/python-modules/androidtv { };
 
   androguard = callPackage ../development/python-modules/androguard { };

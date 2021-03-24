@@ -1,46 +1,70 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, appdirs
+, poetry
 , click
-, construct
-, croniter
 , cryptography
-, importlib-metadata
-, pytest
-, pytest-mock
+, construct
 , zeroconf
 , attrs
 , pytz
+, appdirs
 , tqdm
 , netifaces
+, android-backup
+, importlib-metadata
+, croniter
+, defusedxml
+, pytestCheckHook
+, pytest-mock
+, pyyaml
 }:
 
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.4";
+  version = "0.5.5.1";
+
+  disabled = pythonOlder "3.6";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a6fd3bb2cc2f75cdfe5673f36a5a418144d08add6e53b384cb146e99f27bd39";
+    sha256 = "sha256-3IBObrytkn6rLUT+wMlwzreqQ4AfCgxiMTJm2Iwm+5E=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace  "zeroconf>=0.25.1,<0.26.0" "zeroconf"
-    substituteInPlace setup.py \
-      --replace  "pytz>=2019.3,<2020.0" "pytz"
-    substituteInPlace setup.py \
-      --replace  "cryptography>=2.9,<3.0" "cryptography"
-    '';
-
-  checkInputs = [ pytest pytest-mock];
-  propagatedBuildInputs = [ appdirs click construct croniter cryptography importlib-metadata zeroconf attrs pytz tqdm netifaces ];
-
-  checkPhase = ''
-    pytest
+    substituteInPlace pyproject.toml \
+      --replace 'croniter = "^0"' 'croniter = "*"' \
+      --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
   '';
+
+  nativeBuildInputs = [
+    poetry
+  ];
+
+  propagatedBuildInputs = [
+    click
+    cryptography
+    construct
+    zeroconf
+    attrs
+    pytz
+    appdirs
+    tqdm
+    netifaces
+    android-backup
+    croniter
+    defusedxml
+  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+    pyyaml
+  ];
 
   meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";
