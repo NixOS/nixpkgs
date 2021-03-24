@@ -102,7 +102,7 @@ let
 
 in {
 
-  inherit pkgs;
+  inherit pkgs stdenv;
 
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
