@@ -140,8 +140,13 @@ common =
       doInstallCheck = true; # not cross
 
       # socket path becomes too long otherwise
-      preInstallCheck = lib.optional stdenv.isDarwin ''
+      preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
+      '' +
+      # tests/ca/substitute.sh is flakey for some reason, so we skip it
+      # for now. https://github.com/NixOS/nix/issues/4667
+      lib.optionalString is24 ''
+        echo "exit 99" > tests/ca/substitute.sh
       '';
 
       separateDebugInfo = stdenv.isLinux;
