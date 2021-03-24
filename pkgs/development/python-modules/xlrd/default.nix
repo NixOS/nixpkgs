@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,11 +13,12 @@ buildPythonPackage rec {
     sha256 = "f72f148f54442c6b056bf931dbc34f986fd0c3b0b6b5a58d013c9aef274d0c88";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    py.test -k "not test_tilde_path_expansion"
-  '';
+  # No tests in archive
+  doCheck = false;
 
   meta = with lib; {
     homepage = "http://www.python-excel.org/";
