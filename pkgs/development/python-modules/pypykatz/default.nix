@@ -1,7 +1,8 @@
 { lib
+, aiosmb
 , aiowinreg
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , minidump
 , minikerberos
 , msldap
@@ -10,16 +11,15 @@
 
 buildPythonPackage rec {
   pname = "pypykatz";
-  version = "0.4.3";
+  version = "0.4.7";
 
-  src = fetchFromGitHub {
-    owner = "skelsec";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-ows6zJyygdAwgKNKKCURWX+kl42f3CN23/xZrLjkfrw=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0il5sj47wyf9gn76alm8v1l63rqw2vsd27v6f7q1dpn0wq209syi";
   };
 
   propagatedBuildInputs = [
+    aiosmb
     aiowinreg
     minikerberos
     msldap
