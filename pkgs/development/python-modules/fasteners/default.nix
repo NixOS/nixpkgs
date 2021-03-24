@@ -3,6 +3,8 @@
 , fetchPypi
 , six
 , monotonic
+, diskcache
+, more-itertools
 , testtools
 , isPy3k
 , nose
@@ -18,9 +20,19 @@ buildPythonPackage rec {
     sha256 = "c995d8c26b017c5d6a6de9ad29a0f9cdd57de61ae1113d28fac26622b06a0933";
   };
 
-  propagatedBuildInputs = [ six monotonic ];
+  propagatedBuildInputs = [
+    six
+    monotonic
+  ];
 
-  checkInputs = [ testtools nose ] ++ lib.optionals (!isPy3k) [ futures ];
+  checkInputs = [
+    diskcache
+    more-itertools
+    testtools
+    nose
+  ] ++ lib.optionals (!isPy3k) [
+    futures
+  ];
 
   checkPhase = ''
     nosetests
