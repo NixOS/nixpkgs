@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, go-bindata, nixosTests }:
+{ stdenv, buildGoModule, fetchFromGitHub, go-bindata, nixosTests, fetchpatch }:
 
 buildGoModule rec {
   pname = "traefik";
@@ -12,6 +12,14 @@ buildGoModule rec {
   };
 
   vendorSha256 = "0kz7y64k07vlybzfjg6709fdy7krqlv1gkk01nvhs84sk8bnrcvn";
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-27375.patch";
+      url = "https://github.com/traefik/traefik/commit/bae28c5f5717ea3a80423f107fefe6948c14b7cd.patch";
+      sha256 = "0gbygblzc6l0rywznbl6in2h5mjk5d0x0aq6pqgag2vrjbyk9kfi";
+    })
+  ];
 
   doCheck = false;
 
