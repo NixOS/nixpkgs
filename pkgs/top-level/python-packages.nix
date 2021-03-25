@@ -3277,6 +3277,8 @@ in {
 
   imgsize = callPackage ../development/python-modules/imgsize { };
 
+  iminuit = callPackage ../development/python-modules/iminuit { };
+
   immutables = callPackage ../development/python-modules/immutables { };
 
   impacket = callPackage ../development/python-modules/impacket { };
