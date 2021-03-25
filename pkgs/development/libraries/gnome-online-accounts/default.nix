@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
     "-Dgtk_doc=true"
-    "-Dlastfm=true"
     "-Dman=true"
     "-Dmedia_server=true"
   ];
