@@ -5,7 +5,7 @@
 # Python deps
 , logutils
 , Mako
-, singledispatch
+, singledispatch ? null
 , six
 , webtest
 # Test Inputs

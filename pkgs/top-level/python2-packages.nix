@@ -545,6 +545,8 @@ with self; with super; {
 
   simpleparse = callPackage ../development/python-modules/simpleparse { };
 
+  singledispatch = callPackage ../development/python-modules/singledispatch { };
+
   sipsimple = callPackage ../development/python-modules/sipsimple { };
 
   slowaes = callPackage ../development/python-modules/slowaes { };

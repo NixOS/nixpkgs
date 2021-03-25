@@ -7145,8 +7145,6 @@ in {
 
   simpy = callPackage ../development/python-modules/simpy { };
 
-  singledispatch = callPackage ../development/python-modules/singledispatch { };
-
   signify = callPackage ../development/python-modules/signify { };
 
   sip = callPackage ../development/python-modules/sip { };

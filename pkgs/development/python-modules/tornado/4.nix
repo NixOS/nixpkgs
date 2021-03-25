@@ -2,10 +2,10 @@
 , python
 , buildPythonPackage
 , fetchPypi
-, backports_abc
-, backports_ssl_match_hostname
-, certifi
-, singledispatch
+, backports_abc ? null
+, backports_ssl_match_hostname ? null
+, certifi ? null
+, singledispatch ? null
 , futures ? null
 , isPy27
 }:
