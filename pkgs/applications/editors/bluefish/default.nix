@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnome3.adwaita-icon-theme gtk libxml2
     enchant gucharmap python3 ];
 
-  strictDeps = true;
-
   meta = with lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";
     homepage = "http://bluefish.openoffice.nl/";
