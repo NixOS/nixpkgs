@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
 , jdk, perl, python
 }:
 
 let
-  version = "12.1";
+  version = "12.3";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    sha512 = "ad4bb5b191c784ed144b0b4831a8b95e0707c362917833c279d3f6fad11d7b3fb1f004f30121a941b694fc2ce323974b15072aa31cb5449111bc5d33d0d77103";
+    sha512 = "2fy696qrfbdkzmq4cwd6l7v6rsc0bf9akh61w3azc544bq3vxl3v6s31hvg3ba0nsh0jv3nbdrk6jp1l4hwgcg9zg7kf2012a1vv2nk";
   };
 
   buildCommand = ''
@@ -27,12 +27,14 @@ stdenv.mkDerivation {
     unzip $src
     patchShebangs .
 
+    rm netbeans/bin/*.exe
+
     # Copy to installation directory and create a wrapper capable of starting
     # it.
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jdk which ]} \
+      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
       --prefix JAVA_HOME : ${jdk.home} \
       --add-flags "--jdkhome ${jdk.home}"
 
@@ -54,13 +56,14 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  buildInputs = [ makeWrapper perl python unzip libicns imagemagick ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ perl python libicns imagemagick ];
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sander rszibele asbachb ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sander rszibele asbachb ];
+    platforms = lib.platforms.unix;
   };
 }

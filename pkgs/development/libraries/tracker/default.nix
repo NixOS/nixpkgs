@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , asciidoc
 , gobject-introspection
 , python3
@@ -12,7 +13,7 @@
 , docbook_xml_dtd_45
 , libxml2
 , glib
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , vala
 , sqlite
 , libxslt
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1rhcs75axga7p7hl37h6jzb2az89jddlcwc7ykrnb2khyhka78rr";
   };
 
@@ -43,24 +44,31 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit asciidoc;
     })
+
+    # Fix consistency error with sqlite 3.34
+    # https://gitlab.gnome.org/GNOME/tracker/merge_requests/353
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker/commit/040e22d005985a19a0dc435a7631f91700804ce4.patch";
+      sha256 = "5OZj17XY8ZnXfMMim25HvGfFKUlsVlVHOUjZKfBKHcs=";
+    })
   ];
 
   nativeBuildInputs = [
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     asciidoc
     gettext
     libxslt
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
     python3 # for data-generators
     systemd # used for checks to install systemd user service
-    dbus # used for checks and pkgconfig to install dbus service/s
+    dbus # used for checks and pkg-config to install dbus service/s
   ];
 
   buildInputs = [
@@ -125,7 +133,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;

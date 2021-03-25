@@ -10,16 +10,8 @@ let
       (n: v: (if v ? program then v else v // {program=n;}))
       wrappers);
 
-  securityWrapper = pkgs.stdenv.mkDerivation {
-    name            = "security-wrapper";
-    phases          = [ "installPhase" "fixupPhase" ];
-    buildInputs     = [ pkgs.libcap pkgs.libcap_ng pkgs.linuxHeaders ];
-    hardeningEnable = [ "pie" ];
-    installPhase = ''
-      mkdir -p $out/bin
-      $CC -Wall -O2 -DWRAPPER_DIR=\"${parentWrapperDir}\" \
-          -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper
-    '';
+  securityWrapper = pkgs.callPackage ./wrapper.nix {
+    inherit parentWrapperDir;
   };
 
   ###### Activation script for the setcap wrappers
@@ -163,8 +155,8 @@ in
       # These are mount related wrappers that require the +s permission.
       fusermount.source = "${pkgs.fuse}/bin/fusermount";
       fusermount3.source = "${pkgs.fuse3}/bin/fusermount3";
-      mount.source = "${lib.getBin pkgs.utillinux}/bin/mount";
-      umount.source = "${lib.getBin pkgs.utillinux}/bin/umount";
+      mount.source = "${lib.getBin pkgs.util-linux}/bin/mount";
+      umount.source = "${lib.getBin pkgs.util-linux}/bin/umount";
     };
 
     boot.specialFileSystems.${parentWrapperDir} = {

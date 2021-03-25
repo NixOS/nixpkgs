@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg_3, gettext, glew
+{ config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
@@ -7,36 +7,43 @@
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
+, spaceNavSupport ? false, libspnav
 , makeWrapper
-, pugixml, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
-, embree
+, pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, embree, gmp
 }:
 
 with lib;
+let
+  python = python3Packages.python;
+  optix = fetchzip {
+    url = "https://developer.download.nvidia.com/redist/optix/v7.0/OptiX-7.0.0-include.zip";
+    sha256 = "1b3ccd3197anya2bj3psxdrvrpfgiwva5zfv2xmyrl73nb2dvfr7";
+  };
 
-let python = python3Packages.python; in
-
+in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.90.1";
+  version = "2.91.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "169xcmm1zkvab14qdxggqc758xdkqs7r7imwi6yx2fl2djacr3g7";
+    sha256 = "0x396lgmk0dq9115yrc36s8zwxzmjr490sr5n2y6w27y17yllyjm";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = [ cmake makeWrapper ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
-    [ boost ffmpeg_3 gettext glew ilmbase
+    [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
       opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
-      makeWrapper
       embree
+      gmp
+      pugixml
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -46,11 +53,12 @@ stdenv.mkDerivation rec {
       openvdb
     ]
     else [
-      pugixml SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
+      llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
-    ++ optional colladaSupport opencollada;
+    ++ optional colladaSupport opencollada
+    ++ optional spaceNavSupport libspnav;
 
   postPatch = ''
     # allow usage of dynamically linked embree
@@ -60,7 +68,9 @@ stdenv.mkDerivation rec {
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
-                  '${python}'
+                  '${python}' \
+        --replace '${"$"}{LIBDIR}/openmp' \
+                  '${llvmPackages.openmp}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace 'set(PYTHON_VERSION 3.7)' \
                   'set(PYTHON_VERSION ${python.pythonVersion})' \
@@ -71,15 +81,7 @@ stdenv.mkDerivation rec {
         --replace '${"$"}{LIBDIR}/opencollada' \
                   '${opencollada}' \
         --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                  '${python3Packages.numpy}/${python.sitePackages}/numpy' \
-        --replace 'set(OPENJPEG_INCLUDE_DIRS ' \
-                  'set(OPENJPEG_INCLUDE_DIRS "'$(echo ${openjpeg.dev}/include/openjpeg-*)'") #' \
-        --replace 'set(OPENJPEG_LIBRARIES ' \
-                  'set(OPENJPEG_LIBRARIES "${openjpeg}/lib/libopenjp2.dylib") #' \
-        --replace 'set(OPENIMAGEIO ' \
-                  'set(OPENIMAGEIO "${openimageio2.out}") #' \
-        --replace 'set(OPENEXR_INCLUDE_DIRS ' \
-                  'set(OPENEXR_INCLUDE_DIRS "${openexr.dev}/include/OpenEXR") #'
+                  '${python3Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '');
@@ -116,15 +118,17 @@ stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON";
+    ++ optional cudaSupport [
+      "-DWITH_CYCLES_CUDA_BINARIES=ON"
+      "-DWITH_CYCLES_DEVICE_OPTIX=ON"
+      "-DOPTIX_ROOT_DIR=${optix}"
+    ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
   NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
-
-  enableParallelBuilding = true;
 
   blenderExecutable =
     placeholder "out" + (if stdenv.isDarwin then "/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
@@ -144,12 +148,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
-    license = licenses.gpl2Plus;
+    # OptiX, enabled with cudaSupport, is non-free.
+    license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ goibhniu veprbl ];
   };

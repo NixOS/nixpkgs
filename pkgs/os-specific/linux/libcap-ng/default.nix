@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, swig ? null, python2 ? null, python3 ? null }:
+{ lib, stdenv, fetchurl, swig ? null, python2 ? null, python3 ? null }:
 
 assert python2 != null || python3 != null -> swig != null;
 
@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
   pname = "libcap-ng";
   # When updating make sure to test that the version with
   # all of the python bindings still works
-  version = "0.7.11";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "${meta.homepage}/${pname}-${version}.tar.gz";
-    sha256 = "1s8akhnnazk0b5c6z5i3x54rjb26p8pz2wdl1m21ml3231qmr0c5";
+    sha256 = "1sasp1n154aqy9fz0knlb966svm7xg1zjhg1vr4q839bgjvq7h2j";
   };
 
   nativeBuildInputs = [ swig ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     (if python3 != null then "--with-python3" else "--without-python3")
   ];
 
-  meta = let inherit (stdenv.lib) platforms licenses; in {
+  meta = let inherit (lib) platforms licenses; in {
     description = "Library for working with POSIX capabilities";
     homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
     platforms = platforms.linux;

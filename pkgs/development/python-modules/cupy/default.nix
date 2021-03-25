@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage
+{ lib, buildPythonPackage
 , fetchPypi, isPy3k, linuxPackages
 , fastrlock, numpy, six, wheel, pytest, mock, setuptools
-, cudatoolkit, cudnn, nccl
+, cudatoolkit, cudnn, cutensor, nccl
 }:
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "8.1.0";
+  version = "8.4.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4dfa4a0cd0a752d980347c816cab2169f0938c1d37275311810396dcf3c27912";
+    sha256 = "58d19af6b2e83388d4f0f6ca4226bae4b947920d2ca4951c2eddc8bc78abf66b";
   };
 
   checkInputs = [
@@ -26,6 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cudatoolkit
     cudnn
+    cutensor
     linuxPackages.nvidia_x11
     nccl
     fastrlock
@@ -40,7 +41,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     license = licenses.mit;

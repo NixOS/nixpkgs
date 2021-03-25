@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, libidn, kerberos }:
+{ fetchurl, lib, stdenv, libidn, kerberos }:
 
 stdenv.mkDerivation rec {
-  name = "gsasl-1.8.0";
+  name = "gsasl-1.10.0";
 
   src = fetchurl {
     url = "mirror://gnu/gsasl/${name}.tar.gz";
-    sha256 = "1rci64cxvcfr8xcjpqc4inpfq7aw4snnsbf5xz7d30nhvv8n40ii";
+    sha256 = "sha256-hby9juYJWt54cCY6KOvLiDL1Qepzk5dUlJJgFcB1aNM=";
   };
 
   buildInputs = [ libidn kerberos ];
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
        '';
 
     homepage = "https://www.gnu.org/software/gsasl/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ shlevy ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with lib.maintainers; [ shlevy ];
+    platforms = lib.platforms.all;
   };
 }

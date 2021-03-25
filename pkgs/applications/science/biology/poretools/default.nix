@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ lib, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonPackage rec {
   pname = "poretools";
@@ -15,8 +15,8 @@ pythonPackages.buildPythonPackage rec {
 
   meta = {
     description = "a toolkit for working with nanopore sequencing data from Oxford Nanopore";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://poretools.readthedocs.io/en/latest/";
-    maintainers = [stdenv.lib.maintainers.rybern];
+    maintainers = [lib.maintainers.rybern];
   };
 }

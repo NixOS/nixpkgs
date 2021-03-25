@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "linkchecker";
-  version = "unstable-2020-08-15";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "0086c28b3a419faa60562f2713346996062c03c2";
-    sha256 = "0am5id8vqlqn1gb9jri0vjgiq5ffgrjq8yzdk1zc98gn2n0397wl";
+    rev = "v" + version;
+    sha256 = "sha256-gcaamRxGn124LZ8rU+WzjRookU3akDO0ZyzI7/S6kFA=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -38,7 +38,7 @@ buildPythonApplication rec {
   checkPhase = ''
     ${lib.optionalString stdenv.isDarwin ''
       # network tests fails on darwin
-      rm tests/test_network.py
+      rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
     ''}
       pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
         -k 'not TestLoginUrl and not test_timeit2'

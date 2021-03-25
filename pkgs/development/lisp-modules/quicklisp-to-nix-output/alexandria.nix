@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''alexandria'';
-  version = ''20200925-git'';
+  baseName = "alexandria";
+  version = "20200925-git";
 
-  description = ''Alexandria is a collection of portable public domain utilities.'';
+  description = "Alexandria is a collection of portable public domain utilities.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/alexandria/2020-09-25/alexandria-20200925-git.tgz'';
-    sha256 = ''1cpvnzfs807ah07hrk8kplim6ryzqs4r35ym03cpky5xdl8c89fl'';
+    url = "http://beta.quicklisp.org/archive/alexandria/2020-09-25/alexandria-20200925-git.tgz";
+    sha256 = "1cpvnzfs807ah07hrk8kplim6ryzqs4r35ym03cpky5xdl8c89fl";
   };
 
   packageName = "alexandria";

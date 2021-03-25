@@ -13,18 +13,13 @@
 
 buildPythonPackage rec {
   pname = "smart_open";
-  version = "3.0.0";
+  version = "4.1.2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f4e85b71df5a3618f5447d0b417b7a3576308c839690a24a70338b8993684c3";
+    sha256 = "4bbb6233364fc1173cc0af6b7a56ed76fce32509514f1978a995a5835f3177f1";
   };
-
-  # nixpkgs version of moto is >=1.2.0, remove version pin to fix build
-  postPatch = ''
-    substituteInPlace ./setup.py --replace "moto==0.4.31" "moto"
-  '';
 
   # moto>=1.0.0 is backwards-incompatible and some tests fail with it,
   # so disable tests for now

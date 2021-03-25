@@ -1,18 +1,19 @@
 { lib
 , python3
-, stdenv
+
 , writeTextDir
 , substituteAll
 , fetchpatch
+, installShellFiles
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.56.0";
+  version = "0.57.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "04vj250bwrzq7c0z1r96b0z0vgirvn0m367wm3ygqmfdy67x6799";
+    sha256 = "19n8alcpzv6npgp27iqljkmvdmr7s2c7zm8y997j1nlvpa1cgqbj";
   };
 
   patches = [
@@ -62,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
-  # checkInputs = [ ninja pkgconfig ];
+  # checkInputs = [ ninja pkg-config ];
   # checkPhase = "python ./run_project_tests.py";
 
   postFixup = ''
@@ -75,6 +76,13 @@ python3.pkgs.buildPythonApplication rec {
 
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh data/shell-completions/zsh/_meson
+    installShellCompletion --bash data/shell-completions/bash/meson
   '';
 
   meta = with lib; {

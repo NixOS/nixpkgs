@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
+{ lib, stdenv, fetchurl, ncurses, pkg-config, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
@@ -26,11 +26,9 @@ stdenv.mkDerivation rec {
     sha256 = "0f2wzdw2a3ac581322b2y79rlj3c9f33ddrq9allj97r1si6v5xk";
   };
 
-  patches = [ ./clean-env.patch ];
-
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf automake ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
 
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext jansson
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
@@ -57,6 +55,11 @@ stdenv.mkDerivation rec {
     # Fix sandbox impurities.
     substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
     substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
+
+
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    substituteInPlace src/Makefile.in \
+      --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
   '';
 
   configureFlags = [
@@ -87,7 +90,7 @@ stdenv.mkDerivation rec {
   #   lisp/net/tramp-tests.log
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The extensible, customizable text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;

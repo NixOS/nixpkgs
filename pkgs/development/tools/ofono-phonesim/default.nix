@@ -1,8 +1,8 @@
-{ stdenv
+{ lib
 , mkDerivation
 , fetchgit
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , qtbase
 }:
 
@@ -18,7 +18,7 @@ mkDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -30,7 +30,7 @@ mkDerivation {
     "UIC=${qtbase.dev}/bin/uic"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Phone Simulator for modem testing";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;

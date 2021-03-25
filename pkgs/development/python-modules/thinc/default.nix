@@ -23,29 +23,31 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.4.2";
+  version = "7.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "772f1a27b9b31e51003d1d2a7476cc49cc81044dd87088112237f93bd2091f0b";
+    sha256 = "5743fde41706252ec6ce4737c68d3505f7e1cc3d4431174a17149838d594f8cb";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Accelerate CoreFoundation CoreGraphics CoreVideo
+  buildInputs = [ cython ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Accelerate
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
   ]);
 
   propagatedBuildInputs = [
-   blis
-   catalogue
-   cymem
-   cython
-   murmurhash
-   numpy
-   plac
-   preshed
-   srsly
-   tqdm
-   wasabi
+    blis
+    catalogue
+    cymem
+    murmurhash
+    numpy
+    plac
+    preshed
+    srsly
+    tqdm
+    wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
@@ -60,7 +62,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "blis>=0.4.0,<0.5.0" "blis>=0.4.0,<1.0" \
+      --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
       --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
       --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
       --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
@@ -72,10 +74,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thinc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Practical Machine Learning for NLP in Python";
     homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu danieldk sdll ];
-    };
+    maintainers = with maintainers; [ aborsu sdll ];
+  };
 }

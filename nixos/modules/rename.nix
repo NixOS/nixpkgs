@@ -32,6 +32,7 @@ with lib;
     (mkRemovedOptionModule ["services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
+    (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
@@ -69,6 +70,13 @@ with lib;
     '')
 
     (mkRemovedOptionModule [ "services" "seeks" ] "")
+    (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
+
+    (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
+        The hidepid module was removed, since the underlying machinery
+        is broken when using cgroups-v2.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
  /*
  This derivation is impure: it relies on an Xcode toolchain being installed
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
      (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A replacement for Terminal and the successor to iTerm";
     homepage = "https://www.iterm2.com/";
     license = licenses.gpl2;

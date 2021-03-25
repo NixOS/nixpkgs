@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
 
 stdenv.mkDerivation rec {
   pname = "slade";
@@ -11,12 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0mdn59jm6ab4cdh99bgvadif3wdlqmk5mq635gg7krq35njgw6f6";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig zip ];
+  nativeBuildInputs = [ cmake pkg-config zip ];
   buildInputs = [ wxGTK gtk2 sfml fluidsynth curl freeimage ftgl glew ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
     license = licenses.gpl2;

@@ -9,11 +9,11 @@ let
   });
 in buildPythonPackage rec {
   pname = "scipy";
-  version = "1.5.4";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a453d5e5689de62e5d38edf40af3f17560bfd63c9c5bd228c18c1f99afa155b";
+    sha256 = "048vd4c843xaq45yk3kn491gvqnvhp2i9rxhg671ddlh923fpz64";
   };
 
   checkInputs = [ nose pytest ];
@@ -37,8 +37,6 @@ in buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  enableParallelBuilding = true;
-
   checkPhase = ''
     runHook preCheck
     pushd dist
@@ -55,9 +53,10 @@ in buildPythonPackage rec {
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
-  meta = {
-    description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
+  meta = with lib; {
+    description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     homepage = "https://www.scipy.org/";
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.fridh ];
   };
 }

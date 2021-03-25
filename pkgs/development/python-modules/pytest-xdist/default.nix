@@ -1,33 +1,44 @@
-{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest
-, setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, setuptools_scm
+, pytestCheckHook
+, filelock
+, execnet
+, pytest
+, pytest-forked
+, psutil
+}:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "1.34.0";
+  version = "2.2.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vh4ps32lp5ignch5adbl3pgchvigdfmrl6qpmhxih54wa1qw3il";
+    sha256 = "718887296892f92683f6a51f25a3ae584993b06f7076ce1e1fd482e59a8220a2";
   };
 
-  nativeBuildInputs = [ setuptools_scm pytest ];
-  checkInputs = [ pytest filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil six ];
+  nativeBuildInputs = [ setuptools_scm ];
+  buildInputs = [
+    pytest
+  ];
+  checkInputs = [ pytestCheckHook filelock ];
+  propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
-  # Encountered a memory leak
-  # https://github.com/pytest-dev/pytest-xdist/issues/462
-  doCheck = !isPy3k;
+  # access file system
+  disabledTests = [
+    "test_distribution_rsyncdirs_example"
+    "test_rsync_popen_with_path"
+    "test_popen_rsync_subdir"
+    "test_rsync_report"
+    "test_init_rsync_roots"
+    "test_rsyncignore"
+  ];
 
-  checkPhase = ''
-    # Excluded tests access file system
-    py.test testing -k "not test_distribution_rsyncdirs_example \
-                    and not test_rsync_popen_with_path \
-                    and not test_popen_rsync_subdir \
-                    and not test_init_rsync_roots \
-                    and not test_rsyncignore"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;

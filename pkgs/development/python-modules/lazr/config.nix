@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "lazr.config";
-  version = "2.2.2";
+  version = "2.2.3";
 
   propagatedBuildInputs = [ lazr_delegates ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdb9a70dac4a76ca1ff3528d9eafe5414c6c69c1b92e7e84d3477ae85f6bb787";
+    sha256 = "b74a73f8b63e6dc6732fc1f3d88e2f236596ddf089ef6e1794ece060e8cfabe1";
   };
 }

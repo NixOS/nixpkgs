@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "docker-tools";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lnl7 ];
   };
 
@@ -117,7 +117,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         )
         docker.wait_until_succeeds("curl -f http://localhost:8000/")
         docker.succeed(
-            "docker rm --force nginx", "docker rmi '${examples.nginx.imageName}'",
+            "docker rm --force nginx",
+            "docker rmi '${examples.nginx.imageName}'",
         )
 
     with subtest("A pulled image can be used as base image"):
@@ -160,10 +161,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm ${examples.layered-image.imageName} cat extraCommands",
         )
 
-    with subtest("Ensure building an image on top of a layered Docker images work"):
+    with subtest("Ensure images built on top of layered Docker images work"):
         docker.succeed(
             "docker load --input='${examples.layered-on-top}'",
             "docker run --rm ${examples.layered-on-top.imageName}",
+        )
+
+    with subtest("Ensure layered images built on top of layered Docker images work"):
+        docker.succeed(
+            "docker load --input='${examples.layered-on-top-layered}'",
+            "docker run --rm ${examples.layered-on-top-layered.imageName}",
         )
 
 
@@ -204,6 +211,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert "FROM_CHILD=true" in env, "envvars from the child should be preserved"
         assert "LAST_LAYER=child" in env, "envvars from the child should take priority"
 
+    with subtest("Ensure environment variables of layered images are correctly inherited"):
+        docker.succeed(
+            "docker load --input='${examples.environmentVariablesLayered}'"
+        )
+        out = docker.succeed("docker run --rm ${examples.environmentVariablesLayered.imageName} env")
+        env = out.splitlines()
+        assert "FROM_PARENT=true" in env, "envvars from the parent should be preserved"
+        assert "FROM_CHILD=true" in env, "envvars from the child should be preserved"
+        assert "LAST_LAYER=child" in env, "envvars from the child should take priority"
+
     with subtest("Ensure image with only 2 layers can be loaded"):
         docker.succeed(
             "docker load --input='${examples.two-layered-image}'"
@@ -217,6 +234,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             # Ensure the two output paths (ls and hello) are in the layer
             "docker run bulk-layer ls /bin/hello",
         )
+
+    with subtest(
+        "Ensure the bulk layer with a base image respects the number of maxLayers"
+    ):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.layered-bulk-layer}'",
+            # Ensure the image runs correctly
+            "docker run layered-bulk-layer ls /bin/hello",
+        )
+
+        # Ensure the image has the correct number of layers
+        assert len(set_of_layers("layered-bulk-layer")) == 4
 
     with subtest("Ensure correct behavior when no store is needed"):
         # This check tests that buildLayeredImage can build images that don't need a store.
@@ -244,7 +273,30 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
                 + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
             ).strip()
-            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64v8"}"
+            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
+        )
+
+    with subtest("buildLayeredImage doesn't dereference /nix/store symlink layers"):
+        docker.succeed(
+            "docker load --input='${examples.layeredStoreSymlink}'",
+            "docker run --rm ${examples.layeredStoreSymlink.imageName} bash -c 'test -L ${examples.layeredStoreSymlink.passthru.symlink}'",
+            "docker rmi ${examples.layeredStoreSymlink.imageName}",
+        )
+
+    with subtest("buildImage supports registry/ prefix in image name"):
+        docker.succeed(
+            "docker load --input='${examples.prefixedImage}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}' | grep -F '${examples.prefixedImage.imageName}'"
+        )
+
+    with subtest("buildLayeredImage supports registry/ prefix in image name"):
+        docker.succeed(
+            "docker load --input='${examples.prefixedLayeredImage}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}' | grep -F '${examples.prefixedLayeredImage.imageName}'"
         )
   '';
 })

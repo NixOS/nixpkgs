@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "krfb";
+  pname = "krfb";
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = with lib.maintainers; [ jerith666 ];

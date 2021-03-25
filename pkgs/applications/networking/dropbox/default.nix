@@ -7,7 +7,7 @@ assert lib.elem stdenv.hostPlatform.system platforms;
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version = "83.4.152";
+  version = "111.3.447";
 
   arch = {
     x86_64-linux = "x86_64";

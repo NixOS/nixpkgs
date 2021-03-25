@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper
-, pkgconfig, openssl, fuse, libxml2
+{ lib, stdenv, fetchurl, makeWrapper
+, pkg-config, openssl, fuse, libxml2
 , cabextract ? null
 , cdrkit ? null
 , mtools ? null
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.13.2";
   pname = "wimlib";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ openssl fuse libxml2 ntfs3g ];
 
   src = fetchurl {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = let
-    path = stdenv.lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
+    path = lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
   in ''
     for prog in $out/bin/*; do
       wrapProgram $prog --prefix PATH : ${path}
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wimlib.net";
     description = "A library and program to extract, create, and modify WIM files";
     platforms = platforms.unix;

@@ -1,18 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.6";
+  version = "1.4.1";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "06adhz8gsnns6q98yzjm64xs04qp2fhm9bv0wxny68rkw0bh95a0";
+    sha256 = "14ln4la52x38pf8syr7i5v4vd65ya4zij8zj5kgihah03cih0qcd";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake ];
 
@@ -24,7 +22,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_UNITY_PLUGIN=1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
     license = licenses.asl20;

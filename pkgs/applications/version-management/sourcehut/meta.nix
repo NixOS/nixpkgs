@@ -1,5 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , buildGoModule
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
 , sshpubkeys, weasyprint }:
@@ -48,7 +47,9 @@ in buildPythonPackage rec {
     cp ${buildAPI "${src}/api"}/bin/api $out/bin/metasrht-api
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
     license = licenses.agpl3;

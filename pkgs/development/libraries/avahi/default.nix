@@ -1,8 +1,10 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libdaemon, dbus, perlPackages
-, expat, gettext, intltool, glib, libiconv, writeShellScriptBin
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libdaemon, dbus, perlPackages
+, expat, gettext, intltool, glib, libiconv, writeShellScriptBin, libevent
 , gtk3Support ? false, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
+, qt5 ? null
+, qt5Support ? false
 , withLibdnssdCompat ? false
 , python ? null
 , withPython ? false }:
@@ -11,16 +13,16 @@ assert qt4Support -> qt4 != null;
 
 let
   # despite the configure script claiming it supports $PKG_CONFIG, it doesnt respect it
-  pkgconfig-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
+  pkg-config-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
 in
 
 stdenv.mkDerivation rec {
-  name = "avahi${stdenv.lib.optionalString withLibdnssdCompat "-compat"}-${version}";
-  version = "0.7";
+  name = "avahi${lib.optionalString withLibdnssdCompat "-compat"}-${version}";
+  version = "0.8";
 
   src = fetchurl {
     url = "https://github.com/lathiat/avahi/releases/download/v${version}/avahi-${version}.tar.gz";
-    sha256 = "0128n7jlshw4bpx0vg8lwj8qwdisjxi7mvniwfafgnkzzrfrpaap";
+    sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
   prePatch = ''
@@ -30,39 +32,36 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-mkdir-localstatedir.patch
-    (fetchpatch {
-      name ="CVE-2017-6519-CVE-2018-100084.patch";
-      url = "https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch";
-      sha256 = "06n7b7kz6xcc35c7xjfc1kj3k2llyjgi09nhy0ci32l1bhacjw0q";
-    })
   ];
 
-  buildInputs = [ libdaemon dbus glib expat libiconv ]
+  buildInputs = [ libdaemon dbus glib expat libiconv libevent ]
     ++ (with perlPackages; [ perl XMLParser ])
-    ++ (stdenv.lib.optional gtk3Support gtk3)
-    ++ (stdenv.lib.optional qt4Support qt4);
+    ++ (lib.optional gtk3Support gtk3)
+    ++ (lib.optional qt4Support qt4)
+    ++ (lib.optional qt5Support qt5);
 
   propagatedBuildInputs =
-    stdenv.lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
+    lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
 
-  nativeBuildInputs = [ pkgconfig pkgconfig-helper gettext intltool glib ];
+  nativeBuildInputs = [ pkg-config pkg-config-helper gettext intltool glib ];
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
       "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-      (stdenv.lib.enableFeature gtk3Support "gtk3")
+      (lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
-      (stdenv.lib.enableFeature withPython "python")
+      "--${if qt5Support then "enable" else "disable"}-qt5"
+      (lib.enableFeature withPython "python")
       "--localstatedir=/var" "--with-distro=none"
       # A systemd unit is provided by the avahi-daemon NixOS module
       "--with-systemdsystemunitdir=no" ]
-    ++ stdenv.lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"
+    ++ lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"
     # autoipd won't build on darwin
-    ++ stdenv.lib.optional stdenv.isDarwin "--disable-autoipd";
+    ++ lib.optional stdenv.isDarwin "--disable-autoipd";
 
   NIX_CFLAGS_COMPILE = "-DAVAHI_SERVICE_DIR=\"/etc/avahi/services\"";
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i '20 i\
     #define __APPLE_USE_RFC_2292' \
     avahi-core/socket.c
@@ -70,7 +69,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     # Maintain compat for mdnsresponder and howl
-    stdenv.lib.optionalString withLibdnssdCompat ''
+    lib.optionalString withLibdnssdCompat ''
       ln -s avahi-compat-libdns_sd/dns_sd.h "$out/include/dns_sd.h"
     '';
   /*  # these don't exist (anymore?)
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
     ln -s avahi-compat-howl.pc $out/lib/pkgconfig/howl.pc
   */
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "mDNS/DNS-SD implementation";
     homepage    = "http://avahi.org";
     license     = licenses.lgpl2Plus;

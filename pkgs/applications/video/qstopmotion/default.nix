@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , qtbase
@@ -12,7 +12,7 @@
 , ninja
 , libxml2
 , gettext
-, pkgconfig
+, pkg-config
 , libgphoto2
 , gphoto2
 , v4l-utils
@@ -24,11 +24,11 @@
 
 mkDerivation rec {
   pname = "qstopmotion";
-  version = "2.4.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/Version_${builtins.replaceStrings ["."] ["_"] version}/${pname}-${version}-Source.tar.gz";
-    sha256 = "03r6jxyq0bak2vsy2b78nk27m7fm96hnl8cx11l3l17704j4iglh";
+    sha256 = "sha256-jyBUyadkSuQKXOrr5XZ1jy6of1Qw8S2HPxuOrPc7RnE=";
   };
 
   buildInputs = [
@@ -46,7 +46,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     extra-cmake-modules
     ninja
@@ -64,7 +64,7 @@ mkDerivation rec {
     grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.qstopmotion.org";
     description = "Create stopmotion animation with a (web)camera";
     longDescription = ''
@@ -74,9 +74,9 @@ mkDerivation rec {
       animation to different video formats such as mpeg or avi.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ maintainers.leenaars ];
     broken = stdenv.isAarch64;
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

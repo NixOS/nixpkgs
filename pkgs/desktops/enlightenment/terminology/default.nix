@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, efl, pcre, mesa }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl, pcre, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1fxqjf7g30ix4qxi6366rrax27s3maxq43z2vakwnhz4mp49m9h4";
+    sha256 = "0v74858yvrrfy0l2pq7yn6izvqhpkb9gw2jpd3a3khjwv8kw6frz";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -25,11 +26,15 @@ stdenv.mkDerivation rec {
     "-D edje-cc=${efl}/bin/edje_cc"
   ];
 
+  postPatch = ''
+    patchShebangs data/colorschemes/*.py
+  '';
+
   meta = {
     description = "Powerful terminal emulator based on EFL";
     homepage = "https://www.enlightenment.org/about-terminology";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

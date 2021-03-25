@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     cp bash_unit $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bash unit testing enterprise edition framework for professionals";
     maintainers = with maintainers; [ pamplemousse ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.gpl3Plus;
   };
 }

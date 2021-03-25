@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , curl
 , jansson
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "CFLAGS=-O3" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pooler/cpuminer";
     description = "CPU miner for Litecoin and Bitcoin";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
 , openssl }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   doCheck = false; # seems to hang, not sure
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiny script to issue and renew TLS certs from Let's Encrypt";
     homepage = "https://github.com/diafygi/acme-tiny";
     license = licenses.mit;

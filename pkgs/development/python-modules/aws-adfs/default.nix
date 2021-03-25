@@ -26,6 +26,8 @@ buildPythonPackage rec {
   checkInputs = [ glibcLocales pytest pytestrunner pytestcov mock ];
   propagatedBuildInputs = [ botocore lxml requests requests-kerberos click configparser fido2 ];
 
+  pythonImportsCheck = [ "aws_adfs" ];
+
   meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";

@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, rustPlatform
-, openssl, zeromq, czmq, pkgconfig, cmake, zlib }:
+, openssl, zeromq, czmq, pkg-config, cmake, zlib }:
 
 with rustPlatform;
 
@@ -18,7 +18,7 @@ buildRustPackage rec {
 
   buildInputs = [ openssl zeromq czmq zlib ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   # Needed for tests
   USER = "$(whoami)";

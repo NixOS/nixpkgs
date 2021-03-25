@@ -1,32 +1,27 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
+  pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "11.1.5";
+  version = "11.2.0";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "0i8p28hd5wgiay4lgmd9fid5ickwygy6w3xpfzzy8v9z04xc5bg7";
+    sha256 = "125y3zdhj353dmmjmssdaib2zp1jg5aiqmvpgkrzhnh5nx2icfv6";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [ fuse glib icu libdnet libmspack libtirpc openssl pam procps rpcsvc-proto xercesc ]
       ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
-
-  patches = [
-    ./recognize_nixos.patch
-    ./find_gdk_pixbuf_xlib.patch #See https://github.com/vmware/open-vm-tools/pull/438
-  ];
 
   postPatch = ''
      # Build bugfix for 10.1.0, stolen from Arch PKGBUILD
@@ -67,7 +62,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/vmware/open-vm-tools";
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''

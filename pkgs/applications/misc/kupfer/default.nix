@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchurl
 , intltool
 , python3Packages
@@ -44,7 +44,7 @@ buildPythonApplication rec {
 
   doCheck = false; # no tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;

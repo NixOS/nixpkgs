@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "fsatrace";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ln -s $out/$installDir/fsatrace $out/bin/fsatrace
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jacereda/fsatrace";
     description = "filesystem access tracer";
     license = licenses.isc;

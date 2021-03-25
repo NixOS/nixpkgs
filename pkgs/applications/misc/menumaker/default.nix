@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "menumaker";
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
 
   format = "other";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Heuristics-driven menu generator for several window managers";
     homepage = "http://menumaker.sourceforge.net";
     license = licenses.bsd2;

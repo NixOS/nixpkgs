@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
+{ lib, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
 , koji, rpmfluff }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   doCheck = false; # needs /var/lib/rpm database to run tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for dealing with rpm packaging";
     homepage = "https://pagure.io/fedpkg";
     license = licenses.gpl2Plus;

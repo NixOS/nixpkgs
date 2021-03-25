@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, libpcap }:
+{ lib, stdenv, fetchFromGitHub, openssl, libpcap }:
 
 stdenv.mkDerivation {
   pname = "ssldump";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "An SSLv3/TLS network protocol analyzer";
     homepage = "http://ssldump.sourceforge.net";
     license = "BSD-style";
-    maintainers = with stdenv.lib.maintainers; [ aycanirican ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aycanirican ];
+    platforms = lib.platforms.linux;
   };
 }

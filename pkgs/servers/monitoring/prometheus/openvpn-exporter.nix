@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "openvpn_exporter-unstable";
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   goDeps = ./openvpn-exporter-deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for OpenVPN";
     license = licenses.asl20;

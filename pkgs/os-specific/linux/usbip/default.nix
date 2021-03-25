@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/torvalds/linux/tree/master/tools/usb/usbip";
     description = "allows to pass USB device from server to client over the network";
     license = licenses.gpl2;

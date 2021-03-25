@@ -106,7 +106,12 @@ in rec {
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || (stdenv.noCC or false);
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = if stdenv.hostPlatform.isMusl
+                              # Musl-based platforms will keep "pie", other platforms will not.
+      defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
+                                # Except when:
+                                #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+                                #    - static armv7l, where compilation fails.
+                                !((stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) && stdenv.hostPlatform.isStatic)
                               then supportedHardeningFlags
                               else lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
@@ -251,6 +256,7 @@ in rec {
                lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"]
           ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
           ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
+          ++ lib.optional (stdenv.hostPlatform.isDarwin) "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
           ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
           ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
@@ -276,10 +282,10 @@ in rec {
           in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
         } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
           enableParallelChecking = attrs.enableParallelChecking or true;
-        } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
+        } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
-        } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? platform.gcc.arch) {
-          requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
+        } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
+          requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive
@@ -328,8 +334,9 @@ in rec {
         # Fill `meta.position` to identify the source location of the package.
         // lib.optionalAttrs (pos != null) {
           position = pos.file + ":" + toString pos.line;
-        # Expose the result of the checks for everyone to see.
         } // {
+          # Expose the result of the checks for everyone to see.
+          inherit (validity) unfree broken unsupported insecure;
           available = validity.valid
                    && (if config.checkMetaRecursively or false
                        then lib.all (d: d.meta.available or true) references

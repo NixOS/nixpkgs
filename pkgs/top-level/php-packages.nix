@@ -1,12 +1,12 @@
-{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, phpPackage, autoconf, pkg-config, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu64, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
 , freetype, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit
-, readline, rsync, fetchpatch
+, readline, rsync, fetchpatch, valgrind
 }:
 
-let
+lib.makeScope pkgs.newScope (self: with self; {
   buildPecl = import ../build-support/build-pecl.nix {
     php = php.unwrapped;
     inherit lib;
@@ -21,20 +21,15 @@ let
 
   pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
 
-  callPackage = pkgs.newScope {
-    inherit mkDerivation php buildPecl pcre';
-  };
-in
-{
-  inherit buildPecl;
+  php = phpPackage;
 
   # This is a set of interactive tools based on PHP.
-  packages = {
+  tools = {
     box = callPackage ../development/php-packages/box { };
 
     composer = callPackage ../development/php-packages/composer { };
 
-    composer2 = callPackage ../development/php-packages/composer/2.0.nix { };
+    composer1 = callPackage ../development/php-packages/composer/1.x.nix { };
 
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
@@ -83,7 +78,15 @@ in
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
-    oci8 = callPackage ../development/php-packages/oci8 { };
+    oci8 = callPackage ../development/php-packages/oci8 ({
+      version = "2.2.0";
+      sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
+    } // lib.optionalAttrs (lib.versionAtLeast php.version "8.0") {
+      version = "3.0.1";
+      sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
+    });
+
+    pdlib = callPackage ../development/php-packages/pdlib { };
 
     pcov = callPackage ../development/php-packages/pcov { };
 
@@ -131,7 +134,11 @@ in
 
     redis = callPackage ../development/php-packages/redis { };
 
+    smbclient = callPackage ../development/php-packages/smbclient { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
+
+    swoole = callPackage ../development/php-packages/swoole { };
 
     v8 = buildPecl {
       version = "0.2.2";
@@ -173,7 +180,7 @@ in
         "--with-zmq=${pkgs.zeromq}"
       ];
 
-      nativeBuildInputs = [ pkgs.pkgconfig ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
 
       meta.maintainers = lib.teams.php.members;
       meta.broken = lib.versionAtLeast php.version "7.3";
@@ -203,7 +210,7 @@ in
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php.unwrapped autoconf pkgconfig re2c ];
+      nativeBuildInputs = [ php.unwrapped autoconf pkg-config re2c ];
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
@@ -263,7 +270,7 @@ in
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-dom" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "enchant";
         buildInputs = [ enchant1 ];
         configureFlags = [ "--with-enchant=${enchant1}" ];
@@ -307,7 +314,7 @@ in
           })
         ];
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
-        configureFlags = "--with-gettext=${gettext}"; }
+        configureFlags = [ "--with-gettext=${gettext}" ]; }
       { name = "gmp";
         buildInputs = [ gmp ];
         configureFlags = [ "--with-gmp=${gmp.dev}" ]; }
@@ -326,12 +333,14 @@ in
       # interbase (7.3, 7.2)
       { name = "intl";
         buildInputs = [ icu64 ];
-        patches = lib.optional (lib.versionOlder php.version "7.4") (fetchpatch {
-          url = "https://github.com/php/php-src/commit/93a9b56c90c334896e977721bfb3f38b1721cec6.patch";
-          sha256 = "055l40lpyhb0rbjn6y23qkzdhvpp7inbnn6x13cpn4inmhjqfpg4";
-        });
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
+          (fetchpatch {
+            url = "https://github.com/php/php-src/commit/93a9b56c90c334896e977721bfb3f38b1721cec6.patch";
+            sha256 = "055l40lpyhb0rbjn6y23qkzdhvpp7inbnn6x13cpn4inmhjqfpg4";
+          })
+        ];
       }
-      { name = "json"; }
+      { name = "json"; enable = lib.versionOlder php.version "8.0"; }
       { name = "ldap";
         buildInputs = [ openldap cyrus_sasl ];
         configureFlags = [
@@ -339,9 +348,13 @@ in
           "LDAP_DIR=${openldap.dev}"
           "LDAP_INCDIR=${openldap.dev}/include"
           "LDAP_LIBDIR=${openldap.out}/lib"
-        ] ++ lib.optional stdenv.isLinux "--with-ldap-sasl=${cyrus_sasl.dev}";
+        ] ++ lib.optionals stdenv.isLinux [
+          "--with-ldap-sasl=${cyrus_sasl.dev}"
+        ];
         doCheck = false; }
-      { name = "mbstring"; buildInputs = [ oniguruma ]; doCheck = false; }
+      { name = "mbstring"; buildInputs = [ oniguruma ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
+          pcre'
+        ]; doCheck = false; }
       { name = "mysqli";
         internalDeps = [ php.extensions.mysqlnd ];
         configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ];
@@ -367,7 +380,7 @@ in
                +----------------------------------------------------------------------+
                | Copyright (c) The PHP Group                                          |
           '')
-        ] ++ lib.optional (lib.versionOlder php.version "7.4.8") [
+        ] ++ lib.optionals (lib.versionOlder php.version "7.4.8") [
           (pkgs.writeText "mysqlnd_fix_compression.patch" ''
             --- a/ext/mysqlnd/mysqlnd.h
             +++ b/ext/mysqlnd/mysqlnd.h
@@ -388,11 +401,10 @@ in
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
       { name = "opcache";
-        buildInputs = [ pcre' ];
-        # HAVE_OPCACHE_FILE_CACHE is defined in config.h, which is
-        # included from ZendAccelerator.h, but ZendAccelerator.h is
-        # included after the ifdef...
-        patches = lib.optional (lib.versionOlder php.version "7.4") [
+        buildInputs = [ pcre' ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
+          valgrind.dev
+        ];
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
             --- a/ext/opcache/zend_file_cache.c
             +++ b/ext/opcache/zend_file_cache.c
@@ -409,7 +421,9 @@ in
              #include "zend_accelerator_util_funcs.h"
           '') ];
         zendExtension = true;
-        doCheck = !(lib.versionOlder php.version "7.4"); }
+        doCheck = !(lib.versionOlder php.version "7.4");
+        # Tests launch the builtin webserver.
+        __darwinAllowLocalNetworking = true; }
       { name = "openssl";
         buildInputs = [ openssl ];
         configureFlags = [ "--with-openssl" ];
@@ -456,13 +470,13 @@ in
         doCheck = false;
       }
       # recode (7.3, 7.2)
-      { name = "session"; }
+      { name = "session"; doCheck = !(lib.versionAtLeast php.version "8.0"); }
       { name = "shmop"; }
       { name = "simplexml";
         buildInputs = [ libxml2 pcre' ];
         configureFlags = [ "--enable-simplexml" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "snmp";
         buildInputs = [ net-snmp openssl ];
         configureFlags = [ "--with-snmp" ];
@@ -473,7 +487,7 @@ in
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-soap" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
         doCheck = false; }
       { name = "sockets"; doCheck = false; }
       { name = "sodium"; buildInputs = [ libsodium ]; }
@@ -493,33 +507,37 @@ in
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-xml" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
         doCheck = false; }
       { name = "xmlreader";
         buildInputs = [ libxml2 ];
-        configureFlags = [ "--enable-xmlreader CFLAGS=-I../.." ]
+        internalDeps = [ php.extensions.dom ];
+        NIX_CFLAGS_COMPILE = [ "-I../.." "-DHAVE_DOM" ];
+        configureFlags = [ "--enable-xmlreader" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xmlrpc";
         buildInputs = [ libxml2 libiconv ];
+        # xmlrpc was unbundled in 8.0 https://php.watch/versions/8.0/xmlrpc
+        enable = lib.versionOlder php.version "8.0";
         configureFlags = [ "--with-xmlrpc" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xmlwriter";
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-xmlwriter" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xsl";
         buildInputs = [ libxslt libxml2 ];
-        doCheck = !(lib.versionOlder php.version "7.4");
+        doCheck = lib.versionOlder php.version "8.0";
         configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
       { name = "zend_test"; }
       { name = "zip";
         buildInputs = [ libzip pcre' ];
         configureFlags = [ "--with-zip" ]
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
-          ++ lib.optional (lib.versionOlder php.version "7.3") [ "--with-libzip" ];
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
+          ++ lib.optionals (lib.versionOlder php.version "7.3") [ "--with-libzip" ];
         doCheck = false; }
       { name = "zlib";
         buildInputs = [ zlib ];
@@ -528,7 +546,7 @@ in
           ../development/interpreters/php/zlib-darwin-tests.patch
         ];
         configureFlags = [ "--with-zlib" ]
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]; }
+          ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]; }
     ];
 
     # Convert the list of attrs:
@@ -546,4 +564,4 @@ in
 
     # Produce the final attribute set of all extensions defined.
   in builtins.listToAttrs namedExtensions);
-}
+})

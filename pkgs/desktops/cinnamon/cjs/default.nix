@@ -1,8 +1,8 @@
 { dbus-glib
 , fetchFromGitHub
 , gobject-introspection
-, pkgconfig
-, stdenv
+, pkg-config
+, lib, stdenv
 , wrapGAppsHook
 , python3
 , cairo
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson # ADDING cmake breaks the build, ignore meson warning
     ninja
-    pkgconfig
+    pkg-config
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     "-Dprofiler=disabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cjs";
     description = "JavaScript bindings for Cinnamon";
 

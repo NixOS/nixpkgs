@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python2Packages, librsync, gnused }:
+{lib, fetchurl, python2Packages, librsync, gnused }:
 
 python2Packages.buildPythonApplication {
   name = "rdiff-backup-1.3.3";
@@ -17,7 +17,7 @@ python2Packages.buildPythonApplication {
   meta = {
     description = "Backup system trying to combine best a mirror and an incremental backup system";
     homepage = "http://rdiff-backup.nongnu.org/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

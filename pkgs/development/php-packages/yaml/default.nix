@@ -1,14 +1,14 @@
-{ buildPecl, lib, pkgs }:
+{ buildPecl, lib, pkg-config, libyaml }:
 
 buildPecl {
   pname = "yaml";
 
-  version = "2.1.0";
-  sha256 = "0rmn2irzny24ivzc09ss46s2s48i0zy2cww7ikphljqbfx6zdjss";
+  version = "2.2.1";
+  sha256 = "sha256-4XrQTnUuJf0Jm93S350m3+8YPI0AxBebydei4cl9eBk=";
 
-  configureFlags = [ "--with-yaml=${pkgs.libyaml}" ];
+  configureFlags = [ "--with-yaml=${libyaml}" ];
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta.maintainers = lib.teams.php.members;
 }

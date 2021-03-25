@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix, nixfmt
-, writeScript, nixosTests, jq, cacert, curl }:
+{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix
+, nixfmt, writeScript, nixosTests, jq, cacert, curl }:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.249.3";
+  version = "2.277.1";
 
   src = fetchurl {
     url = "http://mirrors.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "00lpqkkz7k0m2czz1sg54gb90sljc14i5a2kpikrkiw8aqfz3s4d";
+    sha256 = "0lficvngxzl7q088n3ssnnhjicd0xxr0k3n0inz7pvjj27dl35rr";
   };
 
   buildCommand = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           cacert
           common-updater-scripts
           coreutils
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extendable open source continuous integration server";
     homepage = "https://jenkins-ci.org";
     license = licenses.mit;

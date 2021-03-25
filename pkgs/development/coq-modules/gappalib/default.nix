@@ -1,30 +1,24 @@
-{ stdenv, fetchurl, which, coq, flocq }:
+{ which, lib, mkCoqDerivation, autoconf, coq, flocq, version ? null }:
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-gappalib-1.4.4";
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/38338/gappalib-coq-1.4.4.tar.gz";
-    sha256 = "1ds9qp3ml07w5ali0rsczlwgdx4xcgasgbcnpi2lssgj1xpxgfpn";
-  };
+with lib; mkCoqDerivation {
+  pname = "gappalib";
+  repo = "coq";
+  owner = "gappa";
+  domain = "gitlab.inria.fr";
+  inherit version;
+  defaultVersion = if versions.isGe "8.8" coq.coq-version then "1.4.5" else null;
+  release."1.4.5".sha256 = "081hib1d9wfm29kis390qsqch8v6fs3q71g2rgbbzx5y5cf48n9k";
+  release."1.4.4".sha256 = "114q2hgw64j6kqa9mg3qcp1nlf0ia46z2xadq81fnkxqm856ml7l";
+  releaseRev = v: "gappalib-coq-${v}";
 
-  nativeBuildInputs = [ which ];
-  buildInputs = [ coq coq.ocamlPackages.ocaml ];
+  nativeBuildInputs = [ which autoconf ];
+  mlPlugin = true;
   propagatedBuildInputs = [ flocq ];
-
-  configurePhase = "./configure --libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Gappa";
-  buildPhase = "./remake";
-  installPhase = "./remake install";
+  useMelquiondRemake.logpath = "Gappa";
 
   meta = {
     description = "Coq support library for Gappa";
-    license = stdenv.lib.licenses.lgpl21;
-    homepage = "http://gappa.gforge.inria.fr/";
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (coq.meta) platforms;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
   };
-
-  passthru = {
-    compatibleCoqVersions = stdenv.lib.flip builtins.elem [ "8.8" "8.9" "8.10" "8.11" "8.12" ];
-  };
-
 }

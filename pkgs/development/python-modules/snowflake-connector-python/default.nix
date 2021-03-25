@@ -25,13 +25,19 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.3.6";
+  version = "2.3.10";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a4ebf25989fc13d6f70dc3e2064721c54834e493a7964a1d67be61d40e75f50";
+    sha256 = "ad62bfd31e677d39984449d9c68e233da2776b80894a988a2421aad412e4c44f";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pyOpenSSL>=16.2.0,<20.0.0'," "'pyOpenSSL'," \
+      --replace 'pytz<2021.0' 'pytz'
+  '';
 
   propagatedBuildInputs = [
     azure-storage-blob
@@ -54,14 +60,6 @@ buildPythonPackage rec {
     pyasn1-modules
     urllib3
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'boto3>=1.4.4,<1.15'," "'boto3~=1.15'," \
-      --replace "'cryptography>=2.5.0,<3.0.0'," "'cryptography'," \
-      --replace "'idna<2.10'," "'idna'," \
-      --replace "'requests<2.24.0'," "'requests',"
-  '';
 
   # tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   # https://opendev.org/openstack/mox3/src/branch/master/test-requirements.txt
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mock object framework for Python";
     homepage = "https://docs.openstack.org/mox3/latest/";
     license = licenses.asl20;

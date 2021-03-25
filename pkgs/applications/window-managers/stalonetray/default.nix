@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xorgproto }:
+{ lib, stdenv, fetchurl, libX11, xorgproto }:
 
 stdenv.mkDerivation rec {
   pname = "stalonetray";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stand alone tray";
     homepage = "http://stalonetray.sourceforge.net";
     license = licenses.gpl2;

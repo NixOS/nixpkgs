@@ -1,22 +1,22 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcsclite, qtsvg, qttools, qtwebsockets
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, pcsclite, qtsvg, qttools, qtwebsockets
 , qtquickcontrols2, qtgraphicaleffects }:
 
 mkDerivation rec {
   pname = "AusweisApp2";
-  version = "1.20.2";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
     rev = version;
-    sha256 = "1vibk3wmn54qr2mwz537hrr959y0r1zabp0gsijhzj2mk68g9pnb";
+    sha256 = "00isb8xcbm419nvxx2ri0n8x5d403733h2whjqjcd3hmpx3x4q1h";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ qtsvg qttools qtwebsockets qtquickcontrols2 qtgraphicaleffects pcsclite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authentication software for the German ID card";
     downloadPage = "https://github.com/Governikus/AusweisApp2/releases";
     homepage = "https://www.ausweisapp.bund.de/ausweisapp2/";

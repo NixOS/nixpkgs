@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "kubeprompt";
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kubernetes prompt";
     homepage = "https://github.com/jlesquembre/kubeprompt";
     license = licenses.epl20;

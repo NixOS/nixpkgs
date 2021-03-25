@@ -3,6 +3,7 @@
 , fetchPypi
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , python
 , isPy3k
@@ -10,17 +11,18 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-commerce";
-  version = "1.0.1";
+  version = "6.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1hw4crkgb72ps85m2kz9kf8p2wg9qmaagk3z5nydva9g6bnq93n4";
+    sha256 = "6f5447395503b2318f451d24f8021ee08db1cac44f1c3337ea690700419626b6";
   };
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 

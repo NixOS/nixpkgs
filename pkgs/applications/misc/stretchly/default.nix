@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     categories = "Utility;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A break time reminder app";
     longDescription = ''
       stretchly is a cross-platform electron app that reminds you to take

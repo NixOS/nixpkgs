@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libconfuse, gettext }:
+{ lib, stdenv, fetchurl, pkg-config, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "genimage";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0y4h8x8lqxam8m90rdfq8cg5137kvilxr3d1qzddpx7nxpvmmwv9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libconfuse gettext ];
 
   postInstall = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp -v README "$docdir"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.pengutronix.de/cgit/genimage";
     description = "Generate filesystem images from directory trees";
     license = licenses.gpl2Plus;

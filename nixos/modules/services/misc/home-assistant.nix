@@ -183,8 +183,14 @@ in {
     };
 
     package = mkOption {
-      default = pkgs.home-assistant;
-      defaultText = "pkgs.home-assistant";
+      default = pkgs.home-assistant.overrideAttrs (oldAttrs: {
+        doInstallCheck = false;
+      });
+      defaultText = literalExample ''
+        pkgs.home-assistant.overrideAttrs (oldAttrs: {
+          doInstallCheck = false;
+        })
+      '';
       type = types.package;
       example = literalExample ''
         pkgs.home-assistant.override {
@@ -192,7 +198,7 @@ in {
         }
       '';
       description = ''
-        Home Assistant package to use.
+        Home Assistant package to use. By default the tests are disabled, as they take a considerable amout of time to complete.
         Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
         If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
         to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
@@ -245,7 +251,11 @@ in {
         Group = "hass";
         Restart = "on-failure";
         ProtectSystem = "strict";
-        ReadWritePaths = "${cfg.configDir}";
+        ReadWritePaths = let
+          cfgPath = [ "config" "homeassistant" "allowlist_external_dirs" ];
+          value = attrByPath cfgPath [] cfg;
+          allowPaths = if isList value then value else singleton value;
+        in [ "${cfg.configDir}" ] ++ allowPaths;
         KillSignal = "SIGINT";
         PrivateTmp = true;
         RemoveIPC = true;

@@ -32,6 +32,7 @@ buildPythonPackage rec {
     description = "Python library for driving the Pimoroni BME680 Breakout";
     homepage = "https://github.com/pimoroni/bme680-python";
     license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mic92 ];
   };
 }

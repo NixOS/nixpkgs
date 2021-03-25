@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, AppKit, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, AppKit, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "0.7.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "out-of-cheese-error";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1whmvzpqm8x1q45mzrp4p40nj251drcryj9z4qjxgjlfsd5d1fxq";
+    sha256 = "sha256-OqJceRO1RFOLgNi3SbTKLw62tSfJSO7T2/u0RTX89AM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin  [ AppKit Security ];
+  buildInputs = lib.optionals stdenv.isDarwin  [ AppKit Security ];
 
-  cargoSha256 = "0adhgp6blwx7s1hlwqzzsgkzc43q9avxx8a9ykvvv2s1w7m9ql78";
-  checkFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--skip=copy" ];
-  cargoParallelTestThreads = false;
+  cargoSha256 = "sha256-jTZso61Lyt6jprBxBAhvchgOsgM9y1qBleTxUx1jCnE=";
+  checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=copy" ];
+  dontUseCargoParallelTests = true;
 
   postInstall = ''
     $out/bin/the-way config default tmp.toml
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal code snippets manager";
     homepage = "https://github.com/out-of-cheese-error/the-way";
     license = with licenses; [ mit ];

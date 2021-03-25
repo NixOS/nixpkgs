@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, fetchpatch }:
+{ lib, fetchurl, python3Packages, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   name = "iotop-0.6";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to find out the processes doing the most IO";
     homepage = "http://guichaz.free.fr/iotop";
     license = licenses.gpl2;

@@ -4,9 +4,11 @@
 
 let
   apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
+
+  impure-cmds = callPackage ../os-specific/darwin/impure-cmds { };
 in
 
-(apple-source-releases // {
+(impure-cmds // apple-source-releases // {
 
   callPackage = newScope (darwin.apple_sdk.frameworks // darwin);
 
@@ -21,7 +23,7 @@ in
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
     inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages_7) llvm;
+    inherit (pkgs.llvmPackages_7) llvm clang-unwrapped;
   };
 
   binutils = pkgs.wrapBintoolsWith {

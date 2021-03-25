@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2020.11";
+  version = "2021.02.1";
 
   src = fetchurl {
     url    = "https://www.rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
-    sha256 = "107sskgf0p6npm3vjpv5wrqgfa007af6bxxiv1wgiyzx7maqdw5n";
+    sha256 = "1xwqx4357bw7h5pdmwxm5wxh8wjvrcdk4rvr3wyrhg1wzy5qvsn8";
   };
 
   buildInputs = [ icu zlib gmp perl ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # Some tests fail on Darwin
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Raku implementation on top of Moar virtual machine";
     homepage    = "https://www.rakudo.org";
     license     = licenses.artistic2;

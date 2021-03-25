@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "e17gtk";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An Enlightenment-like GTK theme with sharp corners";
     homepage = "https://github.com/tsujan/E17gtk";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

@@ -1,27 +1,28 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.4-k3s1" }:
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "3.2.1";
-  k3sVersion = "1.18.9-k3s1";
+  version = "4.3.0";
 
-  excludedPackages = ''tools'';
+  excludedPackages = "tools";
 
   src = fetchFromGitHub {
-    owner  = "rancher";
-    repo   = "k3d";
-    rev    = "v${version}";
-    sha256 = "1910vir9yc3xvb23260xljnfpznyhnk4gddy752rrndz7rk1b5c3";
+    owner = "rancher";
+    repo = "k3d";
+    rev = "v${version}";
+    sha256 = "sha256-ybEYKr0rQY8Qg74V1mXqShq5Z2d/Adf0bSSbEMIyo3I=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -w -s
-      -X github.com/rancher/k3d/v3/version.Version=v${version}
-      -X github.com/rancher/k3d/v3/version.K3sVersion=v${k3sVersion}
-  '';
+  vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  preBuild = let t = "github.com/rancher/k3d/v4/version"; in
+    ''
+      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.K3sVersion=v${k3sVersion}")
+    '';
+
+  doCheck = false;
 
   postInstall = ''
     installShellCompletion --cmd k3d \
@@ -30,15 +31,18 @@ buildGoModule rec {
       --zsh <($out/bin/k3d completion zsh)
   '';
 
-  vendorSha256 = null;
-
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rancher/k3d";
-    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
+    changelog = "https://github.com/rancher/k3d/blob/v${version}/CHANGELOG.md";
+    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container - k3d";
+    longDescription = ''
+      k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
+
+      k3d creates containerized k3s clusters. This means, that you can spin up a
+      multi-node k3s cluster on a single machine using docker.
+    '';
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
+    platforms = platforms.linux;
   };
 }

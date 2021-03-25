@@ -1,4 +1,4 @@
-{ lib, stdenv, haskellPackages, cabal-install }:
+{ lib, haskellPackages, cabal-install }:
 
 (haskellPackages.shellFor {
   packages = p: [ p.database-id-class p.constraints ];

@@ -1,6 +1,6 @@
-{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, cacert, utillinux
+{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
+, perl, gmp, autoconf, automake, libidn, p11-kit, libiconv
+, unbound, dns-root-data, gettext, cacert, util-linux
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -34,10 +34,13 @@ stdenv.mkDerivation {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
+    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch
+    # fix gnulib tests on 32-bit ARM. Included on gnutls master.
+    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
+    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   # Skip some tests:
-  #  - pkgconfig: building against the result won't work before installing (3.5.11)
+  #  - pkg-config: building against the result won't work before installing (3.5.11)
   #  - fastopen: no idea; it broke between 3.6.2 and 3.6.3 (3437fdde6 in particular)
   #  - trust-store: default trust store path (/etc/ssl/...) is missing in sandbox (3.5.11)
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
@@ -68,14 +71,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp autogen libunistring unbound gettext libiconv ]
+  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp libunistring unbound gettext libiconv ]
     ++ lib.optional (isDarwin && withSecurity) Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ]
+  nativeBuildInputs = [ perl pkg-config ]
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
-    ++ lib.optionals doCheck [ which nettools utillinux ];
+    ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ];
 
@@ -84,7 +87,7 @@ stdenv.mkDerivation {
   #   Error setting the x509 trust file: Error while reading file.
   checkInputs = [ cacert ];
 
-  # Fixup broken libtool and pkgconfig files
+  # Fixup broken libtool and pkg-config files
   preFixup = lib.optionalString (!isDarwin) ''
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \

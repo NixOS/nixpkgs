@@ -1,5 +1,5 @@
 { pkgName, version, pkgSha256 }:
-{ stdenv, fetchurl, cmake, pkgconfig, buildInputs, drvParams ? {} }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? {} }:
 let name = "${pkgName}-${version}";
 in stdenv.mkDerivation ({
   inherit name buildInputs;
@@ -7,7 +7,7 @@ in stdenv.mkDerivation ({
     url = "mirror://sourceforge/cdemu/${name}.tar.bz2";
     sha256 = pkgSha256;
   };
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   setSourceRoot = ''
     mkdir build
     cd build
@@ -16,7 +16,7 @@ in stdenv.mkDerivation ({
   configurePhase = ''
     cmake ../${name} -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_RPATH=ON
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A suite of tools for emulating optical drives and discs";
     longDescription = ''
       CDEmu consists of:
@@ -32,6 +32,6 @@ in stdenv.mkDerivation ({
     homepage = "http://cdemu.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ bendlas ];
+    maintainers = with lib.maintainers; [ bendlas ];
   };
 } // drvParams)

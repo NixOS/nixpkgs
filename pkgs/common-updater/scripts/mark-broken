@@ -3,7 +3,7 @@
 # This script is meant to be used to mark failing hydra builds as broken in the meta attrs
 # To use the script, you should pass the list of failing attrs as arguments to the script.
 #
-# Example: `cat failing-attrs | xargs ./pkgs/common-update/scripts/mark-broken`
+# Example: `cat failing-attrs | xargs ./pkgs/common-updater/scripts/mark-broken`
 #
 # Generating a list of failing attrs: (this should be improved at a later date)
 #   - Go to the most recent hydra evaluation with all builds completed

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , cmake
 , python3
@@ -22,10 +22,10 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
+  shortVersion = with lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
 in stdenv.mkDerivation (rec {
@@ -154,17 +154,15 @@ in stdenv.mkDerivation (rec {
 
   checkTarget = "check-all";
 
-  enableParallelBuilding = true;
-
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = "https://llvm.org/";
-    license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill ];
+    platforms   = lib.platforms.all;
   };
-} // stdenv.lib.optionalAttrs enableManpages {
+} // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
 
   buildPhase = ''

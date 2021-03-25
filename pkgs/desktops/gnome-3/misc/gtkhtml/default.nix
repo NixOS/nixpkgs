@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool
+{ lib, stdenv, fetchurl, pkg-config, gtk3, intltool
 , gnome3, enchant, isocodes, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtkhtml/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtkhtml/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "ca3b6424fb2c7ac5d9cb8fdafb69318fa2e825c9cf6ed17d1e38d9b29e5606c3";
   };
 
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "gtkhtml"; attrPath = "gnome3.gtkhtml"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 intltool gnome3.adwaita-icon-theme
                   gsettings-desktop-schemas ];
 
   propagatedBuildInputs = [ enchant isocodes ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

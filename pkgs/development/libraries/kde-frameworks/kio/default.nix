@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchpatch,
   extra-cmake-modules, kdoctools, qttools,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
@@ -24,5 +24,5 @@ mkDerivation {
   patches = [
     ./samba-search-path.patch
     ./kio-debug-module-loader.patch
-  ];
+ ];
 }

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.20.11.23";
+  version = "0.20.12.26";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "1fjkmpnbpzxniypql68cpwc2rrnih8b34p8pzabrf55f49wcmcph";
+    sha256 = "15iivl9xln1bw1zr2x5zvqyb6aj7mc8hfqi6dniq6xkp5m046ib7";
   };
 
   propagatedBuildInputs = [ python3Packages.psutil ];
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   ];
   checkPhase = "nosetests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];

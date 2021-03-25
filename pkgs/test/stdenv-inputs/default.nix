@@ -1,4 +1,4 @@
-{ stdenv }:
+{ lib, stdenv }:
 
 let
   foo = stdenv.mkDerivation {
@@ -12,7 +12,7 @@ let
       chmod +x $out/bin/foo
       cp ${./foo.c} $out/include/foo.h
       $CC -shared \
-        ${stdenv.lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/libfoo.dylib"} \
+        ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/libfoo.dylib"} \
         -o $out/lib/libfoo${stdenv.hostPlatform.extensions.sharedLibrary} \
         ${./foo.c}
     '';
@@ -30,7 +30,7 @@ let
       chmod +x $out/bin/bar
       cp ${./bar.c} $dev/include/bar.h
       $CC -shared \
-        ${stdenv.lib.optionalString stdenv.isDarwin "-Wl,-install_name,$dev/lib/libbar.dylib"} \
+        ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$dev/lib/libbar.dylib"} \
         -o $dev/lib/libbar${stdenv.hostPlatform.extensions.sharedLibrary} \
         ${./bar.c}
     '';
@@ -64,5 +64,5 @@ stdenv.mkDerivation {
     touch $out
   '';
 
-  meta.platforms = stdenv.lib.platforms.all;
+  meta.platforms = lib.platforms.all;
 }

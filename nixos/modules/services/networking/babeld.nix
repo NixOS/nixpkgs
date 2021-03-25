@@ -69,6 +69,7 @@ in
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Options that will be copied to babeld.conf.
           See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for details.

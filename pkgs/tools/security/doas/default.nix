@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , bison
 , pam
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doas";
-  version = "6.6.1";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${version}";
-    sha256 = "07kkc5729p654jrgfsc8zyhiwicgmq38yacmwfvay2b3gmy728zn";
+    sha256 = "sha256-F0FVVspGDZmzxy4nsb/wsEoCw4eHscymea7tIKrWzD0=";
   };
 
   # otherwise confuses ./configure
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i '/\(chown\|chmod\)/d' bsd.prog.mk
+    sed -i '/\(chown\|chmod\)/d' GNUmakefile
   '';
 
   buildInputs = [ bison pam ];

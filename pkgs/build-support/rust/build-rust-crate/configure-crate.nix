@@ -135,8 +135,8 @@ in ''
   export CARGO_MANIFEST_DIR=$(pwd)
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
-  export TARGET="${rust.toRustTarget stdenv.hostPlatform}"
-  export HOST="${rust.toRustTarget stdenv.buildPlatform}"
+  export TARGET="${rust.toRustTargetSpec stdenv.hostPlatform}"
+  export HOST="${rust.toRustTargetSpec stdenv.buildPlatform}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
   export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
@@ -144,7 +144,7 @@ in ''
   export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
-  export NUM_JOBS=1
+  export NUM_JOBS=$NIX_BUILD_CORES
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
 

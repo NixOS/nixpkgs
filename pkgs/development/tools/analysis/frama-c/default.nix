@@ -7,7 +7,7 @@
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
-    apron
+    apron.dev
     biniou
     camlzip
     easy-format
@@ -24,12 +24,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "21.1";
-  slang   = "Scandium";
+  version = "22.0";
+  slang   = "Titanium";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "0qq0d08dzr0dmdjysiimdqmwlzgnn932vp5kf8lfn3nl45ai09dy";
+    sha256 = "1mq1fijka95ydrla486yr4w6wdl9l7vmp512s1q00b0p6lmfwmkh";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = "http://frama-c.com/";
-    license     = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = stdenv.lib.platforms.unix;
+    license     = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];
+    platforms   = lib.platforms.unix;
   };
 }

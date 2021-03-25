@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames }:
 
 mkDerivation {
-  name = "killbots";
+  pname = "killbots";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.killbots";
     description = "A game where you avoid robots";

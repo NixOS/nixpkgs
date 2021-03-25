@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , python3, git, gnupg, less
 }:
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "2.9";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "1ii6vjgs5nd2hhp475mqa48165garc7ac2w9fyspajaanc7zhnik";
+    sha256 = "sha256-D6gh14XOZ6Fjypfhg9l5ozPhyf6u6M0Wc8HdagdPM/Q=";
   };
 
   patches = [ ./import-ssl-module.patch ];
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ git gnupg less ]}"
+      "${lib.makeBinPath [ git gnupg less ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Android's repo management tool";
     longDescription = ''
       Repo is a Python script based on Git that helps manage many Git
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://android.googlesource.com/tools/repo";
     license = licenses.asl20;
-    maintainers = [ maintainers.primeos ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

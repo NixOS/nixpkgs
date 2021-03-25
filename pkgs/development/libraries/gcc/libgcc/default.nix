@@ -1,4 +1,4 @@
-{ stdenvNoLibs, buildPackages
+{ lib, stdenvNoLibs, buildPackages
 , gcc, glibc
 , libiberty
 }:
@@ -128,7 +128,7 @@ stdenvNoLibs.mkDerivation rec {
     "--disable-vtable-verify"
 
     "--with-system-zlib"
-  ] ++ stdenvNoLibs.lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
+  ] ++ lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
        "--with-glibc-version=${glibc.version}";
 
   configurePlatforms = [ "build" "host" ];

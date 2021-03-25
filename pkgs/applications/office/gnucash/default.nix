@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
+{ fetchurl, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
@@ -25,14 +25,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.2";
+  version = "4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "020k1mm909dcgs52ls4v7xx3yn8gqazi9awyr81l6y7pkq1spn2n";
+    sha256 = "sha256-2R4NEmtGHXHeG8GyDZzxQnBDU97AfT5lmdE4QidZ5no=";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
+  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest ];
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
   # TODO: The following tests FAILED:
@@ -82,8 +82,6 @@ stdenv.mkDerivation rec {
   '';
   doCheck = false;
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Personal and small-business financial-accounting application";
 
@@ -98,11 +96,11 @@ stdenv.mkDerivation rec {
       accounting principles to ensure balanced books and accurate reports.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "http://www.gnucash.org/";
 
-    maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti lib.maintainers.domenkozar ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

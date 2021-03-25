@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libck, darwin }:
+{ lib, stdenv, fetchFromGitHub, libck, darwin }:
 
 let
   version = "0.21";
@@ -15,7 +15,7 @@ let
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    nativeBuildInputs = lib.optionals stdenv.isDarwin [ darwin.cctools ];
 
     buildInputs = [ libck ];
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bootstrap ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
 
   buildInputs = [ libck ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://justinethier.github.io/cyclone/";
     description = "A brand-new compiler that allows practical application development using R7RS Scheme";
     license = licenses.mit;

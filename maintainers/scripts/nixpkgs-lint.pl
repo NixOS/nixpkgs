@@ -35,7 +35,7 @@ GetOptions("package|p=s" => \$filter,
     ) or exit 1;
 
 # Evaluate Nixpkgs into an XML representation.
-my $xml = `nix-env -f '$path' -qa '$filter' --xml --meta --drv-path`;
+my $xml = `nix-env -f '$path' --arg overlays '[]' -qa '$filter' --xml --meta --drv-path`;
 die "$0: evaluation of ‘$path’ failed\n" if $? != 0;
 
 my $info = XMLin($xml, KeyAttr => { 'item' => '+attrPath', 'meta' => 'name' }, ForceArray => 1, SuppressEmpty => '' ) or die "cannot parse XML output";

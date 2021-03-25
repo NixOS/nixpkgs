@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, notmuch }:
+{ lib, python3Packages, notmuch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "afew";
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/afewmail/afew";
     description = "An initial tagging script for notmuch mail";
     license = licenses.isc;

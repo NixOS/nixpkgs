@@ -4,16 +4,23 @@
 , setuptools
 , pyopenssl
 , cryptography
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.4.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c37ff4b93606e6a452b72cdb992da5e0544be12912fac01b31ddbdd61f6d5bd0";
+    sha256 = "d265414fa16d7a8b7a1d1833b4ebb19a22bd0deae5d44413cf9040fd8491d85a";
   };
+
+  postPatch = ''
+    # remove coverage flags
+    sed -i '/addopts/d' pytest.ini
+  '';
 
   propagatedBuildInputs = [
     pyopenssl
@@ -22,8 +29,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  # too many unpackaged check requirements
-  doCheck = false;
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "JOSE protocol implementation in Python";

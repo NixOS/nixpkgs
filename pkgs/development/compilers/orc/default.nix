@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, meson, ninja
+{ lib, stdenv, fetchurl, meson, ninja
 , gtk-doc ? null, file, docbook_xsl
 , buildDevDoc ? gtk-doc != null
 }: let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "orc";
   version = "0.4.32";
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     # The source code implementing the Marsenne Twister algorithm is licensed

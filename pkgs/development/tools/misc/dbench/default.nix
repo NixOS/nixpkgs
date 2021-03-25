@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, popt, zlib, rpcsvc-proto, libtirpc }:
+{ lib, stdenv, fetchgit, autoconf, popt, zlib, rpcsvc-proto, libtirpc }:
 
 stdenv.mkDerivation {
   name = "dbench-2013-01-01";
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     ln -s dbench/doc/dbench/loadfiles $out/share/loadfiles
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Filesystem benchmark tool based on load patterns";
     homepage = "https://dbench.samba.org/";
     license = licenses.gpl3;

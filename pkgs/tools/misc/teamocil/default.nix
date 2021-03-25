@@ -13,7 +13,7 @@ bundlerEnv {
     license         = licenses.mit;
     platforms       = platforms.all;
     maintainers     = with maintainers; [
-      zachcoyle 
+      zachcoyle
       nicknovitski
     ];
   };

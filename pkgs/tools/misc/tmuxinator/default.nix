@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "2.0.1";
-  source.sha256 = "03q1q6majci0l6kzw6kv7r395jycrl862mlqmyydxcd29y8wm3m2";
+  version = "2.0.2";
+  source.sha256 = "0wwrgx1syi3zrwn52pblh7qivyxp3cvq0rywp6n0s2bkk0xz903z";
 
   erubis = buildRubyGem rec {
     inherit ruby;

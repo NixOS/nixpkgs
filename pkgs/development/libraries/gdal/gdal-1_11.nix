@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
+{ lib, stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql57, libgeotiff, python, pythonPackages, proj, geos, openssl
 , libpng }:
 
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hphxzvy23v3vqxx1y22hhhg4cypihrb8555y12nb4mrhzlw7zfl";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libgeotiff libpng python pythonPackages.numpy proj openssl ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libjpeg libtiff libgeotiff libpng python pythonPackages.numpy proj openssl ];
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,
@@ -59,8 +60,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

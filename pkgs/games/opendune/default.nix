@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig
+{ stdenv, lib, fetchFromGitHub, pkg-config
 , alsaLib, libpulseaudio, SDL2, SDL2_image, SDL2_mixer }:
 
 # - set the opendune configuration at ~/.config/opendune/opendune.ini:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--with-pulse=${lib.getLib libpulseaudio}/lib/libpulse.so"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ alsaLib libpulseaudio SDL2 SDL2_image SDL2_mixer ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dune, Reinvented";
     homepage = "https://github.com/OpenDUNE/OpenDUNE";
     license = licenses.gpl2;

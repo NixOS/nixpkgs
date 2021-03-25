@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchzip, python3Packages, makeWrapper }:
 
 with python3Packages;
 
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
         sha256 = "0s8sqyc72lnc7dxd4cl559gyfx83x71jjpsld3i3nbp3mwwamczp";
       };
 
-  buildInputs = [ python makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google App Engine SDK for Go";
     version = version;
     homepage = "https://cloud.google.com/appengine/docs/go/";

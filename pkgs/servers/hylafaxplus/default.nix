@@ -15,7 +15,7 @@
 , libtiff
 , psmisc
 , sharutils
-, utillinux
+, util-linux
 , zlib
 ## optional packages (using `null` disables some functionality)
 , jbigkit ? null
@@ -76,17 +76,17 @@ stdenv.mkDerivation {
     libtiff
     psmisc  # for `fuser` command
     sharutils  # for `uuencode` command
-    utillinux  # for `agetty` command
+    util-linux  # for `agetty` command
     zlib
     jbigkit  # optional
     lcms2  # optional
     openldap  # optional
     pam  # optional
   ];
-  postPatch = ''. ${postPatch}'';
+  postPatch = ". ${postPatch}";
   dontAddPrefix = true;
-  postInstall = ''. ${postInstall}'';
-  postInstallCheck = ''. ${./post-install-check.sh}'';
+  postInstall = ". ${postInstall}";
+  postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";

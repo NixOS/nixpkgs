@@ -1,6 +1,6 @@
-{stdenv, fetchurl, pkgs, clwrapper}:
+{lib, stdenv, fetchurl, pkgs, clwrapper}:
 let quicklisp-to-nix-packages = rec {
-  inherit stdenv fetchurl clwrapper pkgs quicklisp-to-nix-packages;
+  inherit lib stdenv fetchurl clwrapper pkgs quicklisp-to-nix-packages;
 
   callPackage = pkgs.lib.callPackageWith quicklisp-to-nix-packages;
   buildLispPackage = callPackage ./define-package.nix;
@@ -2848,6 +2848,13 @@ let quicklisp-to-nix-packages = rec {
            "fiasco" = quicklisp-to-nix-packages."fiasco";
        }));
 
+  "clfswm" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clfswm" or (x: {}))
+       (import ./quicklisp-to-nix-output/clfswm.nix {
+         inherit fetchurl;
+           "clx" = quicklisp-to-nix-packages."clx";
+       }));
 
   "cl-who" = buildLispPackage
     ((f: x: (x // (f x)))

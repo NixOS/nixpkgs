@@ -4,7 +4,7 @@ let
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
       , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
-      , pkgconfig, libxml2, tzdata
+      , pkg-config, libxml2, tzdata
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
@@ -13,7 +13,10 @@ let
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, sha256, psqlSchema
+      , version, sha256, psqlSchema,
+
+      # for tests
+      nixosTests, thisAttr
     }:
   let
     atLeast = lib.versionAtLeast version;
@@ -32,14 +35,16 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl libxml2 makeWrapper ]
+      [ zlib readline openssl libxml2 ]
       ++ lib.optionals icuEnabled [ icu ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
+    nativeBuildInputs = [ makeWrapper ] ++ lib.optionals icuEnabled [ pkg-config ];
 
     enableParallelBuilding = !stdenv.isDarwin;
+
+    separateDebugInfo = true;
 
     buildFlags = [ "world" ];
 
@@ -54,6 +59,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
@@ -65,7 +71,6 @@ let
         ./patches/specify_pkglibdir_at_runtime.patch
         ./patches/findstring.patch
       ]
-      ++ lib.optional (atLeast "10") ./patches/stabilize-timetz-dst.patch
       ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
 
     installTargets = [ "install-world" ];
@@ -140,13 +145,15 @@ let
                        postgresql = this;
                      }
                      this.pkgs;
+
+      tests.postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
     };
 
     meta = with lib; {
       homepage    = "https://www.postgresql.org";
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin marsam ];
+      maintainers = with maintainers; [ thoughtpolice danbst globin marsam ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
@@ -161,6 +168,7 @@ let
         postgresql.man   # in case user installs this into environment
     ];
     buildInputs = [ makeWrapper ];
+
 
     # We include /bin to ensure the $out/bin directory is created, which is
     # needed because we'll be removing the files from that directory in postBuild
@@ -184,51 +192,56 @@ let
 in self: {
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.23";
+    version = "9.5.25";
     psqlSchema = "9.5";
-    sha256 = "0rl31jc3kg2wq6hazyd297gnmx3cibjvivllbsivii2m6dzgl573";
+    sha256 = "00yny0sskxrqk4ji2phgv3iqxd1aiy6rh660k73s4s1pn9gcaa3n";
     this = self.postgresql_9_5;
+    thisAttr = "postgresql_9_5";
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.19";
+    version = "9.6.21";
     psqlSchema = "9.6";
-    sha256 = "1c2wnl5bbpjs1s1rpzvlnzsqlpb0p823zw7s38nhpgnxrja3myb1";
+    sha256 = "0d0ngpadf1i7c0i2psaxcbmiwx8334ibcsn283n9fp4853pyl3wk";
     this = self.postgresql_9_6;
+    thisAttr = "postgresql_9_6";
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.14";
+    version = "10.16";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0fxj30jvwq5pqpbj97vhlxgmn2ah59a78s9jyjr7vxyqj7sdh71q";
+    sha256 = "1cvv8qw0gkkczqhiwx6ns7w88dwkvdz4cvb2d4ff14363f5p2p53";
     this = self.postgresql_10;
+    thisAttr = "postgresql_10";
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.9";
+    version = "11.11";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "0db6pfphc5rp12abnkvv2l9pbl7bdyf3hhiwj8ghjwh35skqlq9m";
+    sha256 = "0v0qk298nxmpzpgsxcsxma328hdkyzd7fwjs0zsn6zavl5zpnq20";
     this = self.postgresql_11;
+    thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.4";
+    version = "12.6";
     psqlSchema = "12";
-    sha256 = "1k06wryy8p4s1fim9qafcjlak3f58l0wqaqnrccr9x9j5jz3zsdy";
+    sha256 = "028asz92mi3706zabfs8w9z03mzyx62d1l71qy9zdwfabj6xjzfz";
     this = self.postgresql_12;
+    thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.0";
+    version = "13.2";
     psqlSchema = "13";
-    sha256 = "15i2b7m9a9430idqdgvrcyx66cpxz0v2d81nfqcm8ss3inz51rw0";
+    sha256 = "1z5d847jnajcfr3wa6jn52a8xjhamvwzmz18xlm5nvxqip8grmsz";
     this = self.postgresql_13;
+    thisAttr = "postgresql_13";
     inherit self;
   };
-
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, installShellFiles }:
+{ lib, stdenv, fetchurl, pythonPackages, installShellFiles }:
 
 stdenv.mkDerivation rec {
   version = "2.4.1";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     installManPage weather.1 weatherrc.5
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fungi.yuggoth.org/weather";
     description = "Quick access to current weather conditions and forecasts";
     license = licenses.isc;

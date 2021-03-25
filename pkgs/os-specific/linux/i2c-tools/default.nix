@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, read-edid }:
+{ lib, stdenv, fetchurl, perl, read-edid }:
 
 stdenv.mkDerivation rec {
   pname = "i2c-tools";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/include # Installs include/linux/i2c-dev.h that conflics with kernel headers
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of I2C tools for Linux";
     homepage = "https://i2c.wiki.kernel.org/index.php/I2C_Tools";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ buildPythonPackage, isPy3k, stdenv, fetchPypi, six, pytest }:
+{ buildPythonPackage, isPy3k, lib, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "pybase64";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/pybase64";
     description = "Fast Base64 encoding/decoding";
     license = licenses.bsd2;

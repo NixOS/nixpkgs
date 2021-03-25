@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''hunchentoot'';
-  version = ''v1.3.0'';
+  baseName = "hunchentoot";
+  version = "v1.3.0";
 
   parasites = [ "hunchentoot-test" ];
 
@@ -13,8 +13,8 @@ rec {
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."cl-who" args."drakma" args."flexi-streams" args."md5" args."rfc2388" args."split-sequence" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hunchentoot/2020-06-10/hunchentoot-v1.3.0.tgz'';
-    sha256 = ''08znpi5lq2dhgv6mhvabk3w4ggrg31dbv4k6gmshr18xd2lq43i8'';
+    url = "http://beta.quicklisp.org/archive/hunchentoot/2020-06-10/hunchentoot-v1.3.0.tgz";
+    sha256 = "08znpi5lq2dhgv6mhvabk3w4ggrg31dbv4k6gmshr18xd2lq43i8";
   };
 
   packageName = "hunchentoot";

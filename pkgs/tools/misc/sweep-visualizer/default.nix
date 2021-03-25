@@ -49,7 +49,7 @@
       wrapProgram "$out/bin/sweep_visualizer" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://support.scanse.io/hc/en-us/articles/115006008948-Visualizer-Overview";
       description = "A minimal desktop application for interfacing with the Sweep device";
       license = licenses.unfree;

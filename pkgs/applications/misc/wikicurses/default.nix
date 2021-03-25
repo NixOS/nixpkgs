@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   version = "1.4";
@@ -26,9 +26,9 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "A simple curses interface for MediaWiki sites such as Wikipedia";
     homepage = "https://github.com/ids1024/wikicurses/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ pSub ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 
 }

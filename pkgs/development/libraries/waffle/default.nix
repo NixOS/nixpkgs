@@ -1,15 +1,22 @@
 { stdenv
 , fetchFromGitLab
 , lib
-, cmake
+, meson
+, ninja
 , libGL
-, libglvnd
+, libglvnd ? null
 , makeWrapper
 , pkg-config
-, wayland
-, libxcb
-, libX11
+, python3
+, x11Support ? true, libxcb ? null, libX11 ? null
+, waylandSupport ? true, wayland ? null
+, useGbm ? true, mesa ? null, libudev ? null
 }:
+
+assert x11Support -> (libxcb != null && libX11 != null);
+assert waylandSupport -> wayland != null;
+assert useGbm -> (mesa != null && libudev != null);
+assert with stdenv.hostPlatform; isUnix && !isDarwin -> libglvnd != null;
 
 stdenv.mkDerivation rec {
   pname = "waffle";
@@ -25,23 +32,29 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libGL
+  ] ++ lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin) [
     libglvnd
+  ] ++ lib.optionals x11Support [
     libX11
     libxcb
+  ] ++ lib.optionals waylandSupport [
     wayland
+  ] ++ lib.optionals useGbm [
+    mesa
+    libudev
   ];
 
   nativeBuildInputs = [
-    cmake
+    meson
+    ninja
     makeWrapper
     pkg-config
+    python3
   ];
-
-  cmakeFlags = [ "-Dplatforms=x11,wayland" ];
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libGL libglvnd ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libglvnd ]}
   '';
 
   meta = with lib; {

@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.4";
+  version = "1.2.1";
   pname = "iptraf-ng";
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/releases/i/p/iptraf-ng/${pname}-${version}.tar.gz";
-    sha256 = "02gb8z9h2s6s1ybyikywz7jgb1mafdx88hijfasv3khcgkq0q53r";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1f91w1bjaayr6ld95z2q55ny983bb0m05k1jrw2bcddvcihaiqb1";
   };
 
   buildInputs = [ ncurses ];
 
-  configurePhase = ''
-    ./configure --prefix=$out/usr --sysconfdir=$out/etc \
-                --localstatedir=$out/var --sbindir=$out/bin
-  '';
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "prefix=/usr"
+    "sbindir=/bin"
+  ];
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "A console-based network monitoring utility (fork of iptraf)";
     longDescription = ''
       IPTraf-ng is a console-based network monitoring utility. IPTraf-ng
@@ -38,9 +41,9 @@ stdenv.mkDerivation rec {
       of the Linux kernel, so it can be used on a wide variety of supported
       network cards.
     '';
-    homepage = "https://fedorahosted.org/iptraf-ng/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    homepage = "https://github.com/iptraf-ng/iptraf-ng";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ devhell ];
   };
 }

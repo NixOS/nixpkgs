@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-pop_os";
-  version = "0.9";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "1fpzsch9rpq7dmg01ny7jc2vd6dks0fqxxp2rb9jcs0vx5d2fdc6";
+    sha256 = "1nwfyy3jnfsdlqgj7ig9gbawazdm76g02b0hrfsll17j5498d59y";
   };
 
   buildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Marwaita GTK theme with Pop_os Linux style";
     homepage = "https://www.pling.com/p/1377894/";
     license = licenses.gpl3Only;

@@ -2,13 +2,13 @@
 
 let
   pname = "plexamp";
-  version = "3.3.1";
+  version = "3.4.4";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
     name="${pname}-${version}.AppImage";
-    sha256 = "6/asP8VR+rJ52lKKds46gSw1or9suUEmyR75pjdWHIQ=";
+    sha256 = "1iz6qi12ljafb49l73rba5rwi5sdbd8ck5h2r6jiy260lgr2iiyk";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -32,8 +32,9 @@ in appimageTools.wrapType2 {
   meta = with lib; {
     description = "A beautiful Plex music player for audiophiles, curators, and hipsters";
     homepage = "https://plexamp.com/";
+    changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/26";
     license = licenses.unfree;
-    maintainers = with maintainers; [ killercup ];
+    maintainers = with maintainers; [ killercup synthetica ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, tetex }:
+{ lib, stdenv, fetchFromGitLab, tetex }:
 
 stdenv.mkDerivation {
   pname = "mmixware";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "MMIX simulator and assembler";
     homepage     = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
     maintainers  = with maintainers; [ siraben ];

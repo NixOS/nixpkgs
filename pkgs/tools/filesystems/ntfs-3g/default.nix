@@ -1,5 +1,5 @@
-{stdenv, fetchurl, utillinux, libuuid
-, crypto ? false, libgcrypt, gnutls, pkgconfig}:
+{lib, stdenv, fetchurl, util-linux, libuuid
+, crypto ? false, libgcrypt, gnutls, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  buildInputs = [ libuuid ] ++ stdenv.lib.optionals crypto [ gnutls libgcrypt ];
-  nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
+  buildInputs = [ libuuid ] ++ lib.optionals crypto [ gnutls libgcrypt ];
+  nativeBuildInputs = lib.optional crypto pkg-config;
 
   src = fetchurl {
     url = "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.in --replace /sbin '@sbindir@'
     substituteInPlace ntfsprogs/Makefile.in --replace /sbin '@sbindir@'
     substituteInPlace libfuse-lite/mount_util.c \
-      --replace /bin/mount ${utillinux}/bin/mount \
-      --replace /bin/umount ${utillinux}/bin/umount
+      --replace /bin/mount ${util-linux}/bin/mount \
+      --replace /bin/umount ${util-linux}/bin/umount
   '';
 
   configureFlags = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.tuxera.com/community/open-source-ntfs-3g/";
     description = "FUSE-based NTFS driver with full write support";
     maintainers = with maintainers; [ dezgeg ];

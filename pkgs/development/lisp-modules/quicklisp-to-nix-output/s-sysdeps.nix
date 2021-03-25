@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''s-sysdeps'';
-  version = ''20200427-git'';
+  baseName = "s-sysdeps";
+  version = "20200427-git";
 
-  description = ''An abstraction layer over platform dependent functionality'';
+  description = "An abstraction layer over platform dependent functionality";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."split-sequence" args."usocket" args."usocket-server" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/s-sysdeps/2020-04-27/s-sysdeps-20200427-git.tgz'';
-    sha256 = ''04dhi0mibqz4i1jly9i6lrd9lf93i25k2f0hba1sqis3x6sm38zy'';
+    url = "http://beta.quicklisp.org/archive/s-sysdeps/2020-04-27/s-sysdeps-20200427-git.tgz";
+    sha256 = "04dhi0mibqz4i1jly9i6lrd9lf93i25k2f0hba1sqis3x6sm38zy";
   };
 
   packageName = "s-sysdeps";

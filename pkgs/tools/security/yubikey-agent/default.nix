@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pinentry_mac, pkgconfig, darwin }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pinentry_mac, pkg-config, darwin }:
 
 buildGoModule rec {
   pname = "yubikey-agent";
@@ -15,7 +15,7 @@ buildGoModule rec {
     lib.optional stdenv.isLinux (lib.getDev pcsclite)
     ++ lib.optional stdenv.isDarwin (darwin.apple_sdk.frameworks.PCSC);
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   # pull in go-piv/piv-go#75
   # once go-piv/piv-go#75 is merged and released, we should

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "HeapDict";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   doCheck = !isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a heap with decrease-key and increase-key operations.";
     homepage = "http://stutzbachenterprises.com";
     license = licenses.bsd3;

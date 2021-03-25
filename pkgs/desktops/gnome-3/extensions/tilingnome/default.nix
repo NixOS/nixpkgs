@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   uuid = "tilingnome@rliang.github.com";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiling window management for GNOME Shell";
     license = licenses.gpl2;
     maintainers = with maintainers; [ benley ];

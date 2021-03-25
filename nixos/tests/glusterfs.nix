@@ -3,7 +3,7 @@ import ./make-test-python.nix ({pkgs, lib, ...}:
 let
   client = { pkgs, ... } : {
     environment.systemPackages = [ pkgs.glusterfs ];
-    fileSystems = pkgs.lib.mkVMOverride
+    virtualisation.fileSystems =
       { "/gluster" =
           { device = "server1:/gv0";
             fsType = "glusterfs";
@@ -22,7 +22,7 @@ let
 
     virtualisation.emptyDiskImages = [ 1024 ];
 
-    fileSystems = pkgs.lib.mkVMOverride
+    virtualisation.fileSystems =
       { "/data" =
           { device = "/dev/disk/by-label/data";
             fsType = "ext4";

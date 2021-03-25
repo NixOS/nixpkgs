@@ -19,11 +19,14 @@ buildPythonPackage rec {
     snowflake-connector-python
   ];
 
+  # Pypi does not include tests
+  doCheck = false;
   pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
   meta = with lib; {
     description = "Snowflake SQLAlchemy Dialect";
     homepage = "https://www.snowflake.net/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

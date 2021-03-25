@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, pytest, coveralls }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname = "googletrans";
@@ -11,17 +11,10 @@ buildPythonPackage rec {
     sha256 = "0wzzinn0k9rfv9z1gmfk9l4kljyd4n6kizsjw4wjxv91kfhj92hz";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
-
-  checkInputs = [ pytest coveralls ];
+  propagatedBuildInputs = [ requests ];
 
   # majority of tests just try to ping Google's Translate API endpoint
   doCheck = false;
-  checkPhase = ''
-    pytest
-  '';
 
   pythonImportsCheck = [ "googletrans" ];
 

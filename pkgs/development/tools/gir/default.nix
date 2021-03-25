@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gir";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "048qhlc4f5khxi7dnakgqkhgww44r6h3mlx2fm7y2wqivr3rj8p1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to generate rust bindings and user API for glib-based libraries";
     homepage = "https://github.com/gtk-rs/gir/";
     license = with licenses; [ mit ];

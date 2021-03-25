@@ -76,8 +76,8 @@ let
       def assemble_qemu_flags():
           flags = "-cpu max"
           ${if system == "x86_64-linux"
-            then ''flags += " -m 768"''
-            else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
+            then ''flags += " -m 1024"''
+            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
           }
           return flags
 
@@ -270,7 +270,7 @@ let
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-      meta = with pkgs.stdenv.lib.maintainers; {
+      meta = with pkgs.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
@@ -284,7 +284,9 @@ let
             extraInstallerConfig
           ];
 
+          # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
+          virtualisation.cores = 8;
           virtualisation.memorySize = 1536;
 
           # Use a small /dev/vdb as the root disk for the
@@ -323,10 +325,13 @@ let
             curl
           ]
           ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-          ++ optionals (bootLoader == "grub" && grubVersion == 2) [
-            pkgs.grub2
-            pkgs.grub2_efi
-          ];
+          ++ optionals (bootLoader == "grub" && grubVersion == 2) (let
+            zfsSupport = lib.any (x: x == "zfs")
+              (extraInstallerConfig.boot.supportedFilesystems or []);
+          in [
+            (pkgs.grub2.override { inherit zfsSupport; })
+            (pkgs.grub2_efi.override { inherit zfsSupport; })
+          ]);
 
           nix.binaryCaches = mkForce [ ];
           nix.extraOptions = ''
@@ -396,9 +401,9 @@ let
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-          + " mkpart ESP fat32 1M 50MiB"  # /boot
+          + " mkpart ESP fat32 1M 100MiB"  # /boot
           + " set 1 boot on"
-          + " mkpart primary linux-swap 50MiB 1024MiB"
+          + " mkpart primary linux-swap 100MiB 1024MiB"
           + " mkpart primary ext2 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , libpulseaudio
 , libnotify
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = [
     # LC_TIME != C results in locale.Error: unsupported locale setting
     "--set" "LC_TIME" "C"
-    "--suffix" "LD_LIBRARY_PATH" ":" "${stdenv.lib.makeLibraryPath [ libpulseaudio ]}"
+    "--suffix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ libpulseaudio ]}"
   ];
 
   postPatch = ''
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   # no tests in tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/enkore/i3pystatus";
     description = "A complete replacement for i3status";
     longDescription = ''

@@ -3,7 +3,7 @@
 }:
 
 mkDerivation {
-  name = "kmplot";
+  pname = "kmplot";
   meta = {
     license = with lib.licenses; [ gpl2Plus fdl12 ];
     maintainers = [ lib.maintainers.orivej ];

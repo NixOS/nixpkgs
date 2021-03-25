@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, wrapGAppsHook, gettext
+{ lib, fetchFromGitHub, wrapGAppsHook, gettext
 , python3Packages, gnome3, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
   inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
 in buildPythonApplication rec {
   pname = "sonata";
-  version = "1.7b1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
     rev = "v${version}";
-    sha256 = "1npbxlrg6k154qybfd250nq2p96kxdsdkj9wwnp93gljnii3g8wh";
+    sha256 = "0rl8w7s2asff626clzfvyz987l2k4ml5dg417mqp9v8a962q0v2x";
   };
 
   disabled = !isPy3k;
@@ -74,8 +74,8 @@ in buildPythonApplication rec {
        - Available in 24 languages
     '';
     homepage = "https://www.nongnu.org/sonata/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.rvl ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rvl ];
   };
 }

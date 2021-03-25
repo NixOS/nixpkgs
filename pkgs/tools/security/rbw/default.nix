@@ -2,11 +2,11 @@
 , stdenv
 , rustPlatform
 , fetchCrate
-, pinentry
 , openssl
-, pkgconfig
+, pkg-config
 , makeWrapper
 , Security
+, libiconv
 
 # rbw-fzf
 , withFzf ? false, fzf, perl
@@ -20,27 +20,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "0.5.0";
+  version = "1.1.2";
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "0p37kwkp153mkns4bh7k7gnksk6c31214wlw3faf42daav32mmgw";
+    sha256 = "1xihjx4f8kgyablxsy8vgn4w6i92p2xm5ncacdk39npa5g8wadlx";
   };
 
-  cargoSha256 = "1vkgh0995xx0hr96mnzmdgd15gs6da7ynywqcjgcw5kr48bf1063";
+  cargoSha256 = "0fvs06wd05a90dggi7n46d5gl9flnciqzg9j3ijmz3z5bb6aky1b";
+
+  cargoPatches = [ ./bump-security-framework-crate.patch ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  postPatch = ''
-    substituteInPlace src/pinentry.rs \
-      --replace 'Command::new("pinentry")' 'Command::new("${pinentry}/${pinentry.binaryPath or "bin/pinentry"}")'
-  '' + lib.optionalString withFzf ''
+  postPatch = lib.optionalString withFzf ''
     patchShebangs bin/rbw-fzf
     substituteInPlace bin/rbw-fzf \
         --replace fzf ${fzf}/bin/fzf \
@@ -72,6 +71,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Unofficial command line client for Bitwarden";
     homepage = "https://crates.io/crates/rbw";
+    changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ albakham luc65r marsam ];
   };

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # Furthermore, some tests fail due to being in a chroot
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Explicitly typed attributes for Python";
     homepage = "https://pypi.python.org/pypi/traits";
     license = "BSD";

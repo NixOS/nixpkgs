@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cmake }:
+{ lib, stdenv, fetchurl, unzip, cmake }:
 
 stdenv.mkDerivation {
   name = "metis-5.1.0";
@@ -9,12 +9,12 @@ stdenv.mkDerivation {
   };
 
   cmakeFlags = [ "-DGKLIB_PATH=../GKlib" ];
-  buildInputs = [ unzip cmake ];
+  nativeBuildInputs = [ unzip cmake ];
 
   meta = {
     description = "Serial graph partitioning and fill-reducing matrix ordering";
     homepage = "http://glaros.dtc.umn.edu/gkhome/metis/metis/overview";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
 }

@@ -20,7 +20,7 @@
 
 buildPythonApplication rec {
   pname = "aws-google-auth";
-  version = "0.0.36";
+  version = "0.0.37";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   # https://github.com/cevoaustralia/aws-google-auth/issues/120
@@ -28,7 +28,7 @@ buildPythonApplication rec {
     owner = "cevoaustralia";
     repo = "aws-google-auth";
     rev = version;
-    sha256 = "099r020v33sij2b3816cjp4fpy35c886l559szfxqx6kgy19y9z7";
+    sha256 = "1bh733n4m5rsslpbjvhdigx6768nrvacybkakrm9704d2md9vkqd";
   };
 
   propagatedBuildInputs = [

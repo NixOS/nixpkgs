@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code Intelligence for Vala & Genie";
     homepage = "https://github.com/benwaffle/vala-language-server";
     license = licenses.lgpl21Plus;

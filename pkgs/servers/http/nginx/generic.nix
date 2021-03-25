@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nixosTests
 , substituteAll, gd, geoip, perl
 , withDebug ? false
@@ -22,7 +22,7 @@
 , meta ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
 
@@ -149,6 +149,6 @@ stdenv.mkDerivation {
     homepage    = "http://nginx.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ];
+    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
   };
 }

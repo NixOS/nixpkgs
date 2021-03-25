@@ -11,8 +11,8 @@
   breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets,
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
-  kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, libcap, libdrm, mesa
+  kscreenlocker, kservice, kwayland, kwayland-server, kwidgetsaddons, kwindowsystem, kxmlgui,
+  plasma-framework, libcap, libdrm, mesa, pipewire
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -30,18 +30,14 @@ mkDerivation {
     breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
-    kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
-    libcap libdrm mesa
+    kwayland kwayland-server kwidgetsaddons kwindowsystem kxmlgui plasma-framework
+    libcap libdrm mesa pipewire
   ];
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "dev" "out" ];
   patches = [
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
-    (fetchpatch { # included in >= 5.18.6
-      name = "EGL_TEXTURE_Y_XUXV_WL.diff";
-      url = "https://github.com/KDE/kwin/commit/2c76cc478.diff";
-      sha256 = "1ywaky05h5j1x758q3yhp3ap45ispffghyxynqz5lybl5n6yyxhy";
-    })
+    ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
   ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''

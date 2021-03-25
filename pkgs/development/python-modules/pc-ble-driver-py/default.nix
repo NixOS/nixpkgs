@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, git, swig, boost, udev, pc-ble-driver, pythonOlder
-, buildPythonPackage, enum34, wrapt, future, setuptools, scikit-build }:
+{ lib, fetchFromGitHub, cmake, git, swig, boost, udev, pc-ble-driver, pythonOlder
+, buildPythonPackage, enum34, wrapt, future, setuptools, scikit-build, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
   version = "0.14.2";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth Low Energy nRF5 SoftDevice serialization";
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver-py";
     license = licenses.unfreeRedistributable;

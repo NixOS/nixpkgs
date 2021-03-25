@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.17.1";
+  version = "0.18.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "401cb441dd61bb1a03b10c8a3a884642409e22a2a19e03bbfc4891e0ddbc7268";
+    sha256 = "37cd9a9213278538ad09b5b9f9134266e7c226ab1fede1d500e29e0a8fbb9ea6";
   };
 
   propagatedBuildInputs = [

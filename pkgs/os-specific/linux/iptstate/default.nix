@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libnetfilter_conntrack, ncurses }:
+{ lib, stdenv, fetchurl, libnetfilter_conntrack, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "iptstate";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnetfilter_conntrack ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Conntrack top like tool";
     homepage = "https://github.com/jaymzh/iptstate";
     platforms = platforms.linux;

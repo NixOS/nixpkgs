@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libtool }:
+{ lib, stdenv, fetchurl, fetchpatch, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "libtomcrypt";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.libtom.net/LibTomCrypt/";
     description = "A fairly comprehensive, modular and portable cryptographic toolkit";
     license = with licenses; [ publicDomain wtfpl ];

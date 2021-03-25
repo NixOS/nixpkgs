@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , getopt
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./fix-unexport-env-test.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Portable version of NetBSD 'make'";
     homepage    = "http://www.crufty.net/help/sjg/bmake.html";
     license     = licenses.bsd3;

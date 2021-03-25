@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "dlx-2012.07.08";
@@ -8,9 +8,9 @@ stdenv.mkDerivation {
     sha256 = "0q5hildq2xcig7yrqi26n7fqlanyssjirm7swy2a9icfxpppfpkn";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
-  makeFlags = [ "LINK=gcc" "CFLAGS=-O2" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "LINK=${stdenv.cc.targetPrefix}cc" "CFLAGS=-O2" ];
 
   hardeningDisable = [ "format" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

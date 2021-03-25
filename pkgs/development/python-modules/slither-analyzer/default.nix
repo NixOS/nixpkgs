@@ -1,10 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
-, crytic-compile, prettytable, setuptools, solc
+{ lib, stdenv, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
+, crytic-compile, prettytable, setuptools
+# solc is currently broken on Darwin, default to false
+, solc, withSolc ? !stdenv.isDarwin
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.6.13";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.6";
 
@@ -13,13 +15,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b0fe48f07971f4104e2b66d70a7924a550b477405b8feed9c0d4db14bb2c87c";
+    sha256 = "10r479xidgxvas4wb0z6injp59jrn7rfq8d7bxlcalc2dy4mawr0";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ crytic-compile prettytable setuptools ];
 
-  postFixup = ''
+  postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
   '';
@@ -32,7 +34,7 @@ buildPythonPackage rec {
       contract details, and provides an API to easily write custom analyses.
     '';
     homepage = "https://github.com/trailofbits/slither";
-    license = licenses.agpl3;
-    maintainers = [ maintainers.asymmetric ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ asymmetric arturcygan ];
   };
 }

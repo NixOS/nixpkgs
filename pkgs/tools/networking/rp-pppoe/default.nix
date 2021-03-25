@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ppp } :
+{ lib, stdenv, fetchurl, ppp } :
 let
   version = "3.12";
 in
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sed -i Makefile -e 's@PPPOESERVER_PPPD_OPTIONS=@&$(out)@'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Roaring Penguin Point-to-Point over Ethernet tool";
     platforms = platforms.linux;
     homepage = "https://www.roaringpenguin.com/products/pppoe";

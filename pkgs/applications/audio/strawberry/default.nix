@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , alsaLib
 , boost
 , chromaprint
@@ -23,7 +23,7 @@
 , libselinux ? null
 , libsepol ? null
 , p11-kit ? null
-, utillinux ? null
+, util-linux ? null
 , qtbase
 , qtx11extras
 , qttools
@@ -35,13 +35,13 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.8.4";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "145djlfvbkx2b1wqipk51mz82dhm27vmh9x00lkn24q1xz1y6h5n";
+    sha256 = "sha256-1aXHMvjLK5WiE0mut/a3ynuMfNHgPbUzAZdmaVJBDXQ=";
   };
 
   buildInputs = [
@@ -67,7 +67,7 @@ mkDerivation rec {
     libselinux
     libsepol
     p11-kit
-    utillinux
+    util-linux
   ]
   ++ lib.optionals withGstreamer (with gst_all_1; [
     gstreamer
@@ -77,7 +77,7 @@ mkDerivation rec {
   ])
   ++ lib.optional withVlc libvlc;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
+  nativeBuildInputs = [ cmake ninja pkg-config qttools ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_TAGLIB=ON"

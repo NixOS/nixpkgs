@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "6.14.2";
+  version = "6.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14d9907390f5f9c7189b3d511b64f34f1072d07cc13b604a57e1bb79029376e3";
+    sha256 = "409f77cfbdad822d12a8ce5c4aa8fb4d0bb38073f4a5444fede3702716a2cec2";
   };
 
   checkInputs = [ pytest mock sybil zope_component twisted ];

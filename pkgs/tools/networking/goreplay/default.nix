@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, libpcap }:
+{ lib, buildGoPackage, fetchFromGitHub, libpcap }:
 
 buildGoPackage rec {
   pname = "goreplay";
@@ -18,9 +18,9 @@ buildGoPackage rec {
 
   meta = {
     homepage = "https://github.com/buger/goreplay";
-    license = stdenv.lib.licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     description = "Open-source tool for capturing and replaying live HTTP traffic";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

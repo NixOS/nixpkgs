@@ -9,7 +9,7 @@ in
   symlinkJoin {
     name = "kakoune-${kakoune.version}";
 
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     paths = [ kakoune ] ++ requestedPlugins;
 

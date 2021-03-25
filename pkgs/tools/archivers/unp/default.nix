@@ -10,7 +10,8 @@ let
 in stdenv.mkDerivation {
   pname = "unp";
   version = "2.0-pre7";
-  buildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   src = fetchurl {
     # url = "http://http.debian.net/debian/pool/main/u/unp/unp_2.0~pre7+nmu1.tar.bz2";
@@ -34,7 +35,7 @@ in stdenv.mkDerivation {
     --prefix PATH : ${lib.makeBinPath runtime_bins}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line tool for unpacking archives easily";
     homepage = "https://packages.qa.debian.org/u/unp.html";
     license = with licenses; [ gpl2 ];

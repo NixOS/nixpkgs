@@ -3,6 +3,7 @@
 , fetchPypi
 , uamqp
 , azure-common
+, azure-core
 , msrestazure
 , futures
 , isPy3k
@@ -10,17 +11,18 @@
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "0.50.3";
+  version = "7.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "2b1e60c81fcf5b6a5bb3ceddb27f24543f479912e39a4706a390a16d8c0a71f4";
+    sha256 = "c5b3681ce4d7a44c223ddddfdec4c8d2eadede3b11b598ac09c4dbf4b729e89b";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     uamqp
     azure-common
+    azure-core
     msrestazure
   ] ++ lib.optionals (!isPy3k) [
     futures

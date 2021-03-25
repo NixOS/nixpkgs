@@ -12,9 +12,9 @@
 , makeWrapper
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
-, stdenv
+, lib, stdenv
 , systemd
 , wrapGAppsHook
 , xapps
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_412
     python3
-    pkgconfig
+    pkg-config
     libxslt
     xmlto
   ];
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "The Cinnamon session manager";
     license = licenses.gpl2;

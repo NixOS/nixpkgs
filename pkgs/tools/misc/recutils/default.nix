@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, emacs, curl, check, bc }:
+{ fetchurl, lib, stdenv, emacs, curl, check, bc }:
 
 stdenv.mkDerivation rec {
   name = "recutils-1.8";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/recutils/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "solr";
-  meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
+  meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
   machine =
     { config, pkgs, ... }:

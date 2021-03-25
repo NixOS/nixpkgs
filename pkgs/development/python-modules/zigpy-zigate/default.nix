@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.7.2";
+  version = "0.7.4";
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";
-    rev = "v${version}";
-    sha256 = "0ycrsmp3n3awiyj0gbq6xnaa2s9mpc5l7mlmfc00rfnx7rr2z4ha";
+    rev = version;
+    sha256 = "0xl8qgljvmypi602f52m89iv9pcrzsdal3jw619vrcavp40rc04d";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     pyserial
     pyserial-asyncio
     pyusb

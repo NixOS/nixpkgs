@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -19,12 +19,11 @@
 , nukeReferences
 # For the Python package set
 , packageOverrides ? (self: super: {})
-, buildPackages
 , pkgsBuildBuild
+, pkgsBuildHost
 , pkgsBuildTarget
 , pkgsHostHost
 , pkgsTargetTarget
-, pythonForBuild ? buildPackages.${pythonAttr}
 , sourceVersion
 , sha256
 , passthruFun
@@ -36,7 +35,7 @@
 , rebuildBytecode ? true
 , stripBytecode ? false
 , includeSiteCustomize ? true
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 # Not using optimizations on Darwin
 # configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
 , enableOptimizations ? (!stdenv.isDarwin)
@@ -55,10 +54,11 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-with stdenv.lib;
+with lib;
 
 let
-
+  buildPackages = pkgsBuildHost;
+  inherit (passthru) pythonForBuild;
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -67,11 +67,12 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit hasDistutilsCxxPatch pythonForBuild;
-    pythonPackagesBuildBuild = pkgsBuildBuild.${pythonAttr};
-    pythonPackagesBuildTarget = pkgsBuildTarget.${pythonAttr};
-    pythonPackagesHostHost = pkgsHostHost.${pythonAttr};
-    pythonPackagesTargetTarget = pkgsTargetTarget.${pythonAttr} or {};
+    inherit hasDistutilsCxxPatch;
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
@@ -95,11 +96,59 @@ let
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  inherit pythonForBuild;
-
   pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
   else pythonForBuild.interpreter;
+
+  # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
+  # module that is imported by the sysconfig and distutils.sysconfig modules.
+  # The sysconfigdata module is generated at build time and contains settings
+  # required for building Python extension modules, such as include paths and
+  # other compiler flags. By default, the sysconfigdata module is loaded from
+  # the currently running interpreter (ie. the build platform interpreter), but
+  # when cross-compiling we want to load it from the host platform interpreter.
+  # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
+  # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
+  # platform suffix on extension modules. The correct values for these variables
+  # are not documented, and must be derived from the configure script (see links
+  # below).
+  sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
+    # The configure script uses "arm" as the CPU name for all 32-bit ARM
+    # variants when cross-compiling, but native builds include the version
+    # suffix, so we do the same.
+    pythonHostPlatform = "${parsed.kernel.name}-${parsed.cpu.name}";
+
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
+    multiarchCpu =
+      if isAarch32 then
+        if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
+      else if isx86_32 then "i386"
+      else parsed.cpu.name;
+    pythonAbiName =
+      # python's build doesn't differentiate between musl and glibc in its
+      # abi detection, our wrapper should match.
+      if stdenv.hostPlatform.isMusl then
+        replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
+        else parsed.abi.name;
+    multiarch =
+      if isDarwin then "darwin"
+      else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
+
+    abiFlags = optionalString (isPy36 || isPy37) "m";
+
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
+    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
+  in ''
+    sysconfigdataHook() {
+      if [ "$1" = '${placeholder "out"}' ]; then
+        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
+        export _PYTHON_SYSCONFIGDATA_NAME='${pythonSysconfigdataName}'
+      fi
+    }
+
+    addEnvHooks "$hostOffset" sysconfigdataHook
+  '';
 
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
@@ -136,6 +185,11 @@ in with passthru; stdenv.mkDerivation {
     # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
     # See: https://bugs.python.org/issue11122
     ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
+    # The workaround is for unittests on Win64, which we don't support.
+    # It does break aarch64-darwin, which we do support. See:
+    # * https://bugs.python.org/issue35523
+    # * https://github.com/python/cpython/commit/e6b247c8e524
+    ./3.7/no-win64-workaround.patch
   ] ++ optionals (isPy37 || isPy38 || isPy39) [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
@@ -166,6 +220,16 @@ in with passthru; stdenv.mkDerivation {
   ] ++ [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
+    # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
+    (
+      if isPy36 then
+        ./3.6/fix-finding-headers-when-cross-compiling.patch
+      else
+        ./3.7/fix-finding-headers-when-cross-compiling.patch
+    )
+  ] ++ optionals (isPy36) [
+    # Backport a fix for ctypes.util.find_library.
+    ./3.6/find_library.patch
   ];
 
   postPatch = ''
@@ -279,6 +343,10 @@ in with passthru; stdenv.mkDerivation {
     find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
     find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
 
+    # Make the sysconfigdata module accessible on PYTHONPATH
+    # This allows build Python to import host Python's sysconfigdata
+    mkdir -p "$out/${sitePackages}"
+    ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -306,16 +374,24 @@ in with passthru; stdenv.mkDerivation {
     find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
   '';
 
-  preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
-    export PATH=${stdenv.lib.makeBinPath [ "$out" bash ]}:$PATH
+    export PATH=${lib.makeBinPath [ "$out" bash ]}:$PATH
+  '';
+
+  # Add CPython specific setup-hook that configures distutils.sysconfig to
+  # always load sysconfigdata from host Python.
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    cat << "EOF" >> "$out/nix-support/setup-hook"
+    ${sysconfigdataHook}
+    EOF
   '';
 
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    stdenv.lib.optionals (openssl != null && !static) [ openssl.dev ]
-    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    lib.optionals (openssl != null && !static) [ openssl.dev ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "vega_datasets";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db8883dab72b6f414e1fafdbf1e8db7543bba6ed77912a4e0c197d74fcfa1c20";
+    sha256 = "9dbe9834208e8ec32ab44970df315de9102861e4cda13d8e143aab7a80d93fc0";
   };
 
   propagatedBuildInputs = [ pandas ];

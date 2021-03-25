@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
 , alsaLib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
 , SDL2, SDL2_mixer }:
 
 let
   version = "20200907";
-  rev = "9527";
+  rev = "9257";
   revExtra = "93f62bbad";
 
   desktopItem = makeDesktopItem {
@@ -23,15 +23,14 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_20200907-9257-93f62bbad.tar.xz"; # Good
-    # url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
+    url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
     sha256 = "972630059be61ef9564a241b84ef2ee4f69fc85c19ee36ce46052ff2f1ce3bf9";
   };
 
   buildInputs = [ alsaLib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
+  nativeBuildInputs = [ makeWrapper pkg-config ]
+    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''
     substituteInPlace source/build/src/glbuild.cpp \
@@ -67,7 +66,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     homepage = "http://eduke32.com";
     license = licenses.gpl2Plus;

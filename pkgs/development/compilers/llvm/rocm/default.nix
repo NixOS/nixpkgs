@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, callPackage, wrapCCWith }:
+{ lib, fetchFromGitHub, callPackage, wrapCCWith }:
 
 let
-  version = "3.9.0";
+  version = "4.0.1";
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "llvm-project";
     rev = "rocm-${version}";
-    sha256 = "01ljx6mhix3z2pgddgn0ymhrsbigs1nqlz3kkwkr6p2igprrly9f";
+    hash = "sha256-5mQ8tN7A045JCF7tHKgAZAbyVmXOd6Wf0CVUiPA80YM=";
   };
 in rec {
   clang = wrapCCWith rec {
@@ -17,7 +17,6 @@ in rec {
       mkdir "$rsrc"
       ln -s "${cc}/lib/clang/$clang_version/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-      echo "--gcc-toolchain=${stdenv.cc.cc}" >> $out/nix-support/cc-cflags
       echo "-Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
       rm $out/nix-support/add-hardening.sh
       touch $out/nix-support/add-hardening.sh

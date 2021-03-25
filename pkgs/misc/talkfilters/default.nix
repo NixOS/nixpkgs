@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   pname = "talkfilters";
@@ -18,9 +18,9 @@ stdenv.mkDerivation {
   meta = {
     description = "Converts English text into text that mimics a stereotyped or humorous dialect";
     homepage = "http://www.hyperrealm.com/talkfilters/talkfilters.html";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ikervagyok ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ikervagyok ];
+    platforms = with lib.platforms; unix;
   };
 }
 

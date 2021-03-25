@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , pyopenssl
 , pkgs
@@ -33,7 +33,7 @@ buildPythonPackage {
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integrates an Android device into a desktop";
     homepage = "https://github.com/screenfreeze/deskcon-desktop";
     license = licenses.gpl3;

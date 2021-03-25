@@ -9,6 +9,7 @@ hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
+fetchLFS=
 builder=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
@@ -72,6 +73,7 @@ for arg; do
             --quiet) QUIET=true;;
             --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
+            --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
@@ -103,7 +105,7 @@ fi
 
 init_remote(){
     local url=$1
-    clean_git init
+    clean_git init --initial-branch=master
     clean_git remote add origin "$url"
     ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
@@ -147,7 +149,19 @@ checkout_hash(){
     fi
 
     clean_git fetch -t ${builder:+--progress} origin || return 1
-    clean_git checkout -b "$branchName" "$hash" || return 1
+
+    local object_type=$(git cat-file -t "$hash")
+    if [[ "$object_type" == "commit" ]]; then
+        clean_git checkout -b "$branchName" "$hash" || return 1
+    elif [[ "$object_type" == "tree" ]]; then
+        clean_git config user.email "nix-prefetch-git@localhost"
+        clean_git config user.name "nix-prefetch-git"
+        local commit_id=$(git commit-tree "$hash" -m "Commit created from tree hash $hash")
+        clean_git checkout -b "$branchName" "$commit_id" || return 1
+    else
+        echo "Unrecognized git object type: $object_type"
+        return 1
+    fi
 }
 
 # Fetch only a branch/tag and checkout it.
@@ -282,6 +296,11 @@ clone_user_rev() {
     local dir="$1"
     local url="$2"
     local rev="${3:-HEAD}"
+
+    if [ -n "$fetchLFS" ]; then
+        HOME=$TMPDIR
+        git lfs install
+    fi
 
     # Perform the checkout.
     case "$rev" in

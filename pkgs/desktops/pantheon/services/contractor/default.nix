@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
 , meson
 , python3
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , glib
 , libgee
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     dbus
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A desktop-wide extension service used by elementary OS";
     homepage = "https://github.com/elementary/contractor";
     license = licenses.gpl3Plus;

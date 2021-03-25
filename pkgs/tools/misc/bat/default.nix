@@ -1,4 +1,5 @@
-{ stdenv
+{ lib, stdenv
+, nixosTests
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -11,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "118pqws32j2hx13vjda5wz1kfjfnb4h76wlj90q768na8b522kn0";
+    sha256 = "113i11sgna82i4c4zk66qmbypmnmzh0lzp4kkgqnxxcdvyj00rb8";
   };
 
-  cargoSha256 = "1r1gxpb0qsbl4245sqw3gsi33pigsj16z4cxii3fmsnq0y77yd5r";
+  cargoSha256 = "12z7y303fmga91daf2w356qiqdqa7b8dz6nrrpnjdf0slyz0w3x4";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
@@ -35,12 +36,17 @@ rustPlatform.buildRustPackage rec {
   # expected with certain flag combinations.
   postFixup = ''
     wrapProgram "$out/bin/bat" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
+      --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
-  meta = with stdenv.lib; {
+  checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
+
+  passthru.tests = { inherit (nixosTests) bat; };
+
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
+    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir lilyball zowoq ];
   };

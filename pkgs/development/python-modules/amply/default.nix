@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , setuptools_scm
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amply" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/willu47/amply";
     description = ''
       Allows you to load and manipulate AMPL/GLPK data as Python data structures

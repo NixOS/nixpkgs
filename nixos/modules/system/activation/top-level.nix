@@ -97,10 +97,11 @@ let
     allowSubstitutes = false;
     buildCommand = systemBuilder;
 
-    inherit (pkgs) utillinux coreutils;
+    inherit (pkgs) coreutils;
     systemd = config.systemd.package;
     shell = "${pkgs.bash}/bin/sh";
     su = "${pkgs.shadow.su}/bin/su";
+    utillinux = pkgs.util-linux;
 
     kernelParams = config.boot.kernelParams;
     installBootLoader =
@@ -189,7 +190,7 @@ in
 
     system.boot.loader.kernelFile = mkOption {
       internal = true;
-      default = pkgs.stdenv.hostPlatform.platform.kernelTarget;
+      default = pkgs.stdenv.hostPlatform.linux-kernel.target;
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.

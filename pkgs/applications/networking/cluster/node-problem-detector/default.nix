@@ -1,14 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub, systemd }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, systemd }:
 
 buildGoModule rec {
   pname = "node-problem-detector";
-  version = "0.8.3";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sga5l8bvqgm0j71yj3l1ykqvchxa7cg8pkfvjsrqlikgrfb54f3";
+    sha256 = "sha256-GyWvwgLtE8N+HLmGKUOjv5HXl2sdnecjh5y6VCOs+/0=";
   };
 
   vendorSha256 = null;
@@ -20,23 +20,23 @@ buildGoModule rec {
   # Linux-only feature. See 'ENABLE_JOURNALD' upstream:
   # https://github.com/kubernetes/node-problem-detector/blob/master/Makefile
   subPackages = [ "cmd/nodeproblemdetector" ] ++
-    stdenv.lib.optionals stdenv.isLinux [ "cmd/logcounter" ];
+    lib.optionals stdenv.isLinux [ "cmd/logcounter" ];
 
   preBuild = ''
     export CGO_ENABLED=${if stdenv.isLinux then "1" else "0"}
   '';
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd ];
+  buildInputs = lib.optionals stdenv.isLinux [ systemd ];
 
   buildFlags = "-mod vendor" +
-    stdenv.lib.optionalString stdenv.isLinux " -tags journald";
+    lib.optionalString stdenv.isLinux " -tags journald";
 
   buildFlagsArray = [
     "-ldflags="
     "-X k8s.io/${pname}/pkg/version.version=v${version}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
     changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";

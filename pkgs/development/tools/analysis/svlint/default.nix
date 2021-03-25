@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svlint";
-  version = "0.4.7";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "svlint";
     rev = "v${version}";
-    sha256 = "0gn68achvhyxljvhw5rwraxjcgdwrl1bwbsn596ka15nrk4lwb34";
+    sha256 = "sha256-p002oWwTQxesWLgLq8oKKzuZKXUdO4C1TZ7lR/Mh1PA=";
   };
 
-  cargoSha256 = "0v94zsh4jhzjnqbkgwn8rjbs72i5cw2nmkwn7xhdbbwxh17a88x4";
+  cargoSha256 = "sha256-M0hng1JcR5Q829bVOaTASl0Eq6fFm8mUFsS5zx1JX94=";
 
   meta = with lib; {
     description = "SystemVerilog linter";

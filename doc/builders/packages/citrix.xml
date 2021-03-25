@@ -17,9 +17,11 @@
 
  <section xml:id="sec-citrix-selfservice">
   <title>Citrix Selfservice</title>
+
   <para>
    The <link xlink:href="https://support.citrix.com/article/CTX200337">selfservice</link> is an application managing Citrix desktops and applications. Please note that this feature only works with at least <package>citrix_workspace_20_06_0</package> and later versions.
   </para>
+
   <para>
    In order to set this up, you first have to <link xlink:href="https://its.uiowa.edu/support/article/102186">download the <literal>.cr</literal> file from the Netscaler Gateway</link>. After that you can configure the <command>selfservice</command> like this:
 <screen>

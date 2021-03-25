@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchpatch, fetchFromGitHub, glib, glib-networking, libgtop, gnome3 }:
+{ lib, stdenv, substituteAll, fetchpatch, fetchFromGitHub, glib, glib-networking, libgtop, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-system-monitor";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   uuid = "system-monitor@paradoxxx.zero.gmail.com";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display system informations in gnome shell status bar";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tiramiseb ];

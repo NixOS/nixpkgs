@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 # Although we copy in the udev rules here, you probably just want to use logitech-udev-rules instead of
 # adding this to services.udev.packages on NixOS
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for working with Logitech Unifying receivers and devices";
     homepage = "https://lekensteyn.nl/logitech-unifying.html";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "lsscsi-0.31";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile.in --replace /usr "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

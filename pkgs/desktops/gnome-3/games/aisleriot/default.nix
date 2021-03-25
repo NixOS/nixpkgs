@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , pkg-config
 , gnome3
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Aisleriot";
     description = "A collection of patience games written in guile scheme";
     maintainers = teams.gnome.members;

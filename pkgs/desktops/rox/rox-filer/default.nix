@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, gtk, libSM, shared-mime-info }:
 
 let
   version = "2.11";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     sha256 = "a929bd32ee18ef7a2ed48b971574574592c42e34ae09f36604bf663d7c101ba8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 gtk shared-mime-info libSM ];
   NIX_LDFLAGS = "-ldl -lm";
 
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
     ln -sv application-{msword,rtf}.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, lightweight, gtk2 file manager";
     homepage = "http://rox.sourceforge.net/desktop";
     license = with licenses; [ gpl2 lgpl2 ];

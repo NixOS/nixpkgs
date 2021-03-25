@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, findutils, git }:
+{ lib, stdenv, fetchFromGitHub, coreutils, findutils, git }:
 
 stdenv.mkDerivation rec {
   pname = "gibo";
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/simonwhitaker/gibo";
-    license = stdenv.lib.licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     description = "A shell script for easily accessing gitignore boilerplates";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

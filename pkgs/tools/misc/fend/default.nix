@@ -2,16 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "0.1.9";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11cvpg7j2rvqri16cr3gb6dpm7dzgs3vywhdc91aa531f87qj16c";
+    sha256 = "sha256-zKjYUkkm15YRF0YFJKi2A6twvmHuEyxdWcNs37r2dJg=";
   };
 
-  cargoSha256 = "0q9gkvbay6rnb0nd14z71h3506yzn9610zc6g8wbpgmw6cpwvbg9";
+  cargoSha256 = "sha256-e95DRhD22zvizUJOM2It45Bx05iK3KtaMgFPkMbR7iI=";
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    [[ "$($out/bin/fend "1 km to m")" = "1000 m" ]]
+  '';
 
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";

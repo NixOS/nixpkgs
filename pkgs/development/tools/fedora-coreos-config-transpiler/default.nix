@@ -4,13 +4,13 @@ with lib;
 
 buildGoModule rec {
   pname = "fcct";
-  version = "0.6.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "fcct";
     rev = "v${version}";
-    sha256 = "18hmnip1s0smp58q500p8dfbrmi4i3nsyq22ri5cs53wbvz3ih1l";
+    sha256 = "0gxaj2fy889fl5vhb4s89rhih9a65aqjsz2yffhi5z4fa2im8szv";
   };
 
   vendorSha256 = null;

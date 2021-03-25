@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "spice-protocol";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     ln -sv ../share/pkgconfig $out/lib/pkgconfig
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Protocol headers for the SPICE protocol";
     homepage = "https://www.spice-space.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bluescreen303 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

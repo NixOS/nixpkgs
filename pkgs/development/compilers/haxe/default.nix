@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, coreutils, ocamlPackages, zlib, pcre, neko }:
+{ lib, stdenv, fetchgit, coreutils, ocamlPackages, zlib, pcre, neko }:
 
 let inherit (ocamlPackages) ocaml camlp4; in
 
@@ -74,7 +74,7 @@ let
         popd > /dev/null
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
         license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt

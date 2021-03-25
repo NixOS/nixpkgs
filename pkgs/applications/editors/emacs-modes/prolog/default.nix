@@ -1,11 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "prolog-mode-1.25";
+  pname = "prolog-mode";
+  version = "1.28";
 
   src = fetchurl {
     url = "http://bruda.ca/_media/emacs/prolog.el";
-    sha256 = "0hfd2dr3xc5qxgvc08nkb2l5a05hfldahdc6ymi9vd8798cc46yh";
+    sha256 = "oCMzks4xuor8Il8Ll8PXh1zIvMl5qN0RCFJ9yKiHOHU=";
   };
 
   buildCommand = ''
@@ -16,9 +17,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://bruda.ca/emacs/prolog_mode_for_emacs/";
     description = "Prolog mode for Emacs";
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    # Has wrong sha256
-    broken = true;
+    license = lib.licenses.gpl2Plus;
   };
 }

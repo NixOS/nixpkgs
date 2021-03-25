@@ -9,7 +9,7 @@
 
 { stdenv, lib, fetchFromGitHub,
   # Main build tools
-  pkgconfig, autoconf, automake, libtool, m4, lzma, python3,
+  pkg-config, autoconf, automake, libtool, m4, lzma, python3,
   numactl,
   # Processing, video codecs, containers
   ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
@@ -93,7 +93,7 @@ _EOF
   '');
 
   nativeBuildInputs = [
-    pkgconfig autoconf automake libtool m4 python3
+    pkg-config autoconf automake libtool m4 python3
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
@@ -131,7 +131,7 @@ _EOF
     cd build
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://handbrake.fr/";
     description = "A tool for converting video files and ripping DVDs";
     longDescription = ''

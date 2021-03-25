@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 let
   pname = "yrd";
@@ -17,7 +17,7 @@ in pythonPackages.buildPythonApplication {
 
   propagatedBuildInputs = with pythonPackages; [ argh ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cjdns swiss army knife";
     maintainers = with maintainers; [ akru ];
     platforms = platforms.linux;

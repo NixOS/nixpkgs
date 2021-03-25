@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "unifi-poller";
@@ -21,7 +21,7 @@ buildGoModule rec {
       -X github.com/prometheus/common/version.Version=${version}-0
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";
     homepage = "https://github.com/unifi-poller/unifi-poller";
     license = licenses.mit;

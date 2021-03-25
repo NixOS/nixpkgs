@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.9.4e";
+  version = "0.0.9.5-beta2";
 
   src = fetchFromGitHub {
     owner = "QMatrixClient";
     repo = "Quaternion";
     rev = version;
-    sha256 = "0hqhg7l6wpkdbzrdjvrbqymmahziri07ba0hvbii7dd2p0h248fv";
+    sha256 = "sha256-K4SMB5kL0YO2OIeNUu4hWqU4E4n4vZDRRsJVYmCZqvM=";
   };
 
   buildInputs = [

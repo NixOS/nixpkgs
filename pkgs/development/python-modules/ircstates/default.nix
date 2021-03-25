@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ircstates";
-  version = "0.11.5";
+  version = "0.11.7";
   disabled = pythonOlder "3.6";  # f-strings
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1b1py1q02wbp4fmkjvchvazklfqibqd6pb28gdq7dg1bwwwd7vda";
+    sha256 = "00dyd6mry10na98x1gs92xnfpjf1wd9zpblx1wcx8ggv5rqvgqrm";
   };
 
   propagatedBuildInputs = [

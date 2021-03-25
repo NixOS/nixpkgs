@@ -39,18 +39,18 @@
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.17.0";
-  buildNumber = "11";
+  version = "2.19.0";
+  buildNumber = "61";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
-    sha256 = "1h5jbnp5bwy6bpma9a1ia08v7bpz09fm66jsip470k1r7vjjwa68";
+    sha256 = "163p67dqry256d454qzk4k4b692kz8s9fcvaxd6gi7zvnsd48ikr";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
+    lib.makeLibraryPath
       [
         libnotify
         libuuid
@@ -116,11 +116,11 @@ stdenv.mkDerivation rec {
     patchShebangs "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

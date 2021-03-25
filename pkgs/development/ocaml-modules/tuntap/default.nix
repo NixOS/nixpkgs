@@ -6,6 +6,8 @@ buildDunePackage rec {
   pname = "tuntap";
   version = "2.0.0";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.04.2";
 
   src = fetchurl {

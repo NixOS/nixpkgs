@@ -19,7 +19,8 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = !stdenv.targetPlatform.isRiscV;
+    useMusl = with stdenv.targetPlatform; !isRiscV &&
+                (system == "powerpc64-linux" -> parsed.abi.name != "elfv1");
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -46,6 +47,12 @@ in with pkgs; rec {
 
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools";
+
+      meta = {
+        # Increase priority to unblock nixpkgs-unstable
+        # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+        schedulingPriority = 200;
+      };
 
       nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ];
 
@@ -199,6 +206,12 @@ in with pkgs; rec {
   dist = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
+    meta = {
+      # Increase priority to unblock nixpkgs-unstable
+      # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+      schedulingPriority = 200;
+    };
+
     buildCommand = ''
       mkdir -p $out/nix-support
       echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
@@ -246,7 +259,7 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
+      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"

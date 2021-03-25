@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "webhook";
-  version = "2.7.0";
+  version = "2.8.0";
 
   goPackagePath = "github.com/adnanh/webhook";
   excludedPackages = [ "test" ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "adnanh";
     repo = "webhook";
     rev = version;
-    sha256 = "1spiqjy0z84z96arf57bn6hyvfsd6l8w6nv874mbis6vagifikci";
+    sha256 = "0n03xkgwpzans0cymmzb0iiks8mi2c76xxdak780dk0jbv6qgp5i";
   };
 
   meta = with lib; {

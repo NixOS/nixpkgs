@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , click
@@ -7,21 +8,26 @@
 , uvloop
 , websockets
 , wsproto
-, pytest
+, pytestCheckHook
+, pytest-mock
+, pyyaml
 , requests
+, trustme
+, typing-extensions
 , isPy27
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.11.5";
+  version = "0.13.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0cf0vw6kzxwlkvk5gw85wv3kg1kdil0wkq3s7rmxpvrk6gjk8jvq";
+    sha256 = "04zgmp9z46k72ay6cz7plga6d3w3a6x41anabm7ramp7jdqf6na9";
   };
 
   propagatedBuildInputs = [
@@ -31,19 +37,31 @@ buildPythonPackage rec {
     uvloop
     websockets
     wsproto
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11==0.8.*" "h11" \
-      --replace "httptools==0.0.13" "httptools"
-  '';
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+    pyyaml
+    requests
+    trustme
+  ];
 
-  checkInputs = [ pytest requests ];
-  # watchgod required the watchgod package, which isn't available in nixpkgs
-  checkPhase = ''
-    pytest --ignore=tests/supervisors/test_watchgodreload.py
-  '';
+  doCheck = !stdenv.isDarwin;
+
+  __darwinAllowLocalNetworking = true;
+
+  pytestFlagsArray = [
+    # watchgod required the watchgod package, which isn't available in nixpkgs
+    "--ignore=tests/supervisors/test_reload.py"
+  ];
+
+  disabledTests = [
+    "test_supported_upgrade_request"
+    "test_invalid_upgrade"
+  ];
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";

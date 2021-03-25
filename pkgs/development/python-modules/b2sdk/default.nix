@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, isPy27, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm, isPy27, pytestCheckHook
 , requests, arrow, logfury, tqdm }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.1.4";
+  version = "1.2.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g527qdda105r5g9yjh4lxzlmz34m2bdz8dydqqy09igdsmiyi9j";
+    sha256 = "8e46ff9d47a9b90d8b9beab1969fcf4920300b02e20e6bf0745be04e09e8a6ff";
   };
 
   pythonImportsCheck = [ "b2sdk" ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # requires unpackaged dependencies like liccheck
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze).";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     license = licenses.mit;

@@ -65,8 +65,9 @@ stdenv.mkDerivation rec {
   CCACHE_DISABLE="1";
   CCACHE_DIR=".ccache";
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = with lib; [
-      blas lapack bzip2 cmake colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
+      blas lapack bzip2 colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
       protobuf nlopt snappy swig (libarchive.dev) libxml2 lapack glpk
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
@@ -87,9 +88,7 @@ stdenv.mkDerivation rec {
     (flag "OpenCV" opencvSupport)
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
     license = licenses.gpl3;

@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k,
+{ lib, buildPythonPackage, fetchPypi, isPy3k,
   numpy, django_colorful, pillow, psycopg2,
   pyparsing, django, celery, boto3, importlib-metadata
 }:
-if stdenv.lib.versionOlder django.version "2.0"
+if lib.versionOlder django.version "2.0"
 then throw "django-raster requires Django >= 2.0. Consider overiding the python package set to use django_2."
 else
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy django_colorful pillow psycopg2
                             pyparsing django celery boto3 importlib-metadata ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Basic raster data integration for Django";
     homepage = "https://github.com/geodesign/django-raster";
     license = licenses.mit;

@@ -67,6 +67,8 @@ rec {
 
           LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
         '';
+
+      passthru = driver.passthru;
     };
 
 
@@ -76,6 +78,7 @@ rec {
     , name ? "unnamed"
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
+    , passthru ? {}
     , ...
     } @ t:
     let
@@ -137,7 +140,7 @@ rec {
             testScript = testScript';
             preferLocalBuild = true;
             testName = name;
-            passthru = {
+            passthru = passthru // {
               inherit nodes;
             };
           }

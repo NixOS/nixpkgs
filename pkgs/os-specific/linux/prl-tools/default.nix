@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, p7zip
-, gawk, utillinux, xorg, glib, dbus-glib, zlib
+, gawk, util-linux, xorg, glib, dbus-glib, zlib
 , kernel ? null, libsOnly ? false
 , undmg, fetchurl
 }:
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   kernelVersion = if libsOnly then "" else lib.getName kernel.name;
   kernelDir = if libsOnly then "" else "${kernel.dev}/lib/modules/${kernelVersion}";
-  scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${utillinux}/bin" "${gawk}/bin" ]);
+  scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${util-linux}/bin" "${gawk}/bin" ]);
 
   buildPhase = ''
     if test -z "$libsOnly"; then
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   libPath = with xorg;
-            stdenv.lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
+            lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
             ++ lib.optionals (!libsOnly) [ libXi glib dbus-glib zlib ]);
 
 
@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
     platforms = [ "i686-linux" "x86_64-linux" ];

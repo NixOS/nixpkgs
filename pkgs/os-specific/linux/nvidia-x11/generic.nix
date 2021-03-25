@@ -16,7 +16,7 @@
 , broken ? false
 }@args:
 
-{ stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
+{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
 , kernel ? null, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -25,9 +25,11 @@
 , # don't include the bundled 32-bit libraries on 64-bit platforms,
   # even if it’s in downloaded binary
   disable32Bit ? false
+  # 32 bit libs only version of this package
+, lib32 ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
@@ -93,9 +95,11 @@ let
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
+    } // optionalAttrs (!i686bundled) {
+      inherit lib32;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.nvidia.com/object/unix.html";
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , clang
@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-device-libs";
-  version = "3.9.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-Device-Libs";
     rev = "rocm-${version}";
-    sha256 = "1nil0nhlkszslgvqhim5vmcp3flfafydviq0zk7db8i6z17kq090";
+    hash = "sha256-IAE8T/gmotXO/ADH3bxTjrpxWd2lRoj3o/rrSaEFNNo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DCLANG=${clang}/bin/clang"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of AMD-specific device-side language runtime libraries";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-Device-Libs";
     license = licenses.ncsa;

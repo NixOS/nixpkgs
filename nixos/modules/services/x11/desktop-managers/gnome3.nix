@@ -19,7 +19,7 @@ let
 
   defaultFavoriteAppsOverride = ''
     [org.gnome.shell]
-    favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
   nixos-gsettings-desktop-schemas = let
@@ -118,6 +118,7 @@ in
 
       sessionPath = mkOption {
         default = [];
+        type = types.listOf types.package;
         example = literalExample "[ pkgs.gnome3.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
@@ -196,12 +197,11 @@ in
   config = mkMerge [
     (mkIf (cfg.enable || flashbackEnabled) {
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = ''
+      system.nixos-generate-config.desktopConfiguration = [''
         # Enable the GNOME 3 Desktop Environment.
-        services.xserver.enable = true;
         services.xserver.displayManager.gdm.enable = true;
         services.xserver.desktopManager.gnome3.enable = true;
-      '';
+      ''];
 
       services.gnome3.core-os-services.enable = true;
       services.gnome3.core-shell.enable = true;
@@ -409,9 +409,7 @@ in
         baobab
         cheese
         eog
-        /* Not in good standing on nixos:
-         * https://github.com/NixOS/nixpkgs/issues/98819
-        /* epiphany */
+        epiphany
         gedit
         gnome-calculator
         gnome-calendar

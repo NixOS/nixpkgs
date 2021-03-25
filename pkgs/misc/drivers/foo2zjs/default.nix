@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, foomatic-filters, bc, unzip, ghostscript, systemd, vim, time }:
+{ lib, stdenv, fetchurl, foomatic-filters, bc, unzip, ghostscript, systemd, vim, time }:
 
 stdenv.mkDerivation rec {
   name = "foo2zjs-20180519";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rmw4jmxn2lqp124mapvnic0ma8ipyvisx2vj848mvad5g5w9x3z";
   };
 
-  buildInputs = [ foomatic-filters bc unzip ghostscript systemd vim ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ foomatic-filters bc ghostscript systemd vim ];
 
   patches = [ ./no-hardcode-fw.diff ];
 
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     cp -v getweb arm2hpdl "$out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ZjStream printer drivers";
     maintainers = with maintainers;
     [

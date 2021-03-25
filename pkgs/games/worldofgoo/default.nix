@@ -1,4 +1,4 @@
-{ stdenv, requireFile, unzip, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
+{ lib, stdenv, requireFile, unzip, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
 
 let
   arch = if stdenv.system == "x86_64-linux"
@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
     sha256 = "175e4b0499a765f1564942da4bd65029f8aae1de8231749c56bec672187d53ee";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   sourceRoot = pname;
   phases = [ "unpackPhase installPhase" ];
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
     libogg libvorbis ];
 
   unpackPhase = ''
-    # The game is distributed as a shell script, with a tar of mojosetup, and a 
+    # The game is distributed as a shell script, with a tar of mojosetup, and a
     # zip archive attached to the end. Therefore a simple unzip does the job.
     # However, to avoid unzip errors, we need to strip those out first.
     tail -c +421887 ${src} > ${src}.zip
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath $out/bin/WorldOfGoo.bin.${arch}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A physics based puzzle game";
     longDescription = ''
       World of Goo is a physics based puzzle / construction game. The millions of Goo

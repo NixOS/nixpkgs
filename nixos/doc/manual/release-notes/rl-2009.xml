@@ -6,7 +6,9 @@
  <title>Release 20.09 (“Nightingale”, 2020.10/27)</title>
 
   <para>
-   Support is planned until the end of April 2021, handing over to 21.03.
+   Support is planned until the end of June 2021, handing over to 21.05.
+   (Plans <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md#core-changes">
+   have shifted</link> by two months since release of 20.09.)
   </para>
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1343,6 +1345,20 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       It was chosen to do this as it has a usability breaking issue (see issue <link xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>)
       that makes it unsuitable to be a default app.
     </para>
+    <note>
+      <para>
+        Issue <link
+        xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>
+        is now fixed and <package>gnome3.epiphany</package> is once
+        again installed by default.
+      </para>
+    </note>
+   </listitem>
+   <listitem>
+     <para>
+       If you want to manage the configuration of <package>wpa_supplicant</package> outside of NixOS you must ensure that none of <xref linkend="opt-networking.wireless.networks" />, <xref linkend="opt-networking.wireless.extraConfig" /> or <xref linkend="opt-networking.wireless.userControlled.enable" /> is being used or <literal>true</literal>.
+       Using any of those options will cause <package>wpa_supplicant</package> to be started with a NixOS generated configuration file instead of your own.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -1524,7 +1540,7 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    <listitem>
     <para>
      Specifying <link linkend="opt-services.dovecot2.mailboxes">mailboxes</link> in the <package>dovecot2</package> module
-     as a list is deprecated and will break eval in 21.03. Instead, an attribute-set should be specified where the <literal>name</literal>
+     as a list is deprecated and will break eval in 21.05. Instead, an attribute-set should be specified where the <literal>name</literal>
      should be the key of the attribute.
     </para>
     <para>

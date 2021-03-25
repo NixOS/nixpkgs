@@ -8,26 +8,26 @@
 , shapely
 , ndjson
 , backoff
-, google_api_core
+, google-api-core
+, backports-datetime-fromisoformat
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "2.4.6";
+  version = "2.4.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2be6c03dafce0a786cfab5d120196efccaf300cab5aee4d2fdad644b7bee1aef";
+    sha256 = "e5a631a94ac2059648a884bebf39f7ca1e689baef4a2497f9aa5ec598e24deb7";
   };
 
   propagatedBuildInputs = [
     jinja2 requests pillow rasterio shapely ndjson backoff
-    google_api_core
+    google-api-core backports-datetime-fromisoformat
   ];
 
   # Test cases are not running on pypi or GitHub
   doCheck = false;
-
   pythonImportsCheck = [ "labelbox" ];
 
   meta = with lib; {

@@ -504,8 +504,7 @@ in {
       report_stats = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-        '';
+        description = "";
       };
       servers = mkOption {
         type = types.attrsOf (types.attrsOf types.str);
@@ -713,7 +712,7 @@ in {
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
-        ExecReload = "${pkgs.utillinux}/bin/kill -HUP $MAINPID";
+        ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };
     };

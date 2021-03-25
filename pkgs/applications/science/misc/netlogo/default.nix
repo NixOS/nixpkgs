@@ -1,4 +1,4 @@
-{ jre, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
+{ jre, lib, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
 
 let
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-agent programmable modeling environment";
     longDescription = ''
       NetLogo is a multi-agent programmable modeling environment. It is used by

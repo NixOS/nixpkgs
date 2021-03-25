@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyvcf
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "acebinf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ACEnglish/acebinf";
     description = "Collection of simple utilities used when building bioinformatics tools";
     license = licenses.unlicense;

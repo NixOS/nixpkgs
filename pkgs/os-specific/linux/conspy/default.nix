@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, ncurses}:
+{lib, stdenv, fetchurl, autoconf, automake, ncurses}:
 let
   s = # Generated upstream information
   rec {
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Linux text console viewer";
-    license = stdenv.lib.licenses.epl10 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.epl10 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

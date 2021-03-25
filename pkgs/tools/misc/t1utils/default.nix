@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "t1utils-1.41";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "09rlc837dr69hyiiicha3il37mchsvz84qw8hnvb60lrh9zdsppw";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of simple Type 1 font manipulation programs";
     longDescription = ''
       t1utils is a collection of simple type-1 font manipulation programs.

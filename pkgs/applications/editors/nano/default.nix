@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
+{ lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
 , common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
 , gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
 
-with stdenv.lib;
+with lib;
 
 let
   nixSyntaxHighlight = fetchFromGitHub {
@@ -16,11 +16,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "5.3";
+  version = "5.6.1";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "0lj3fcfzprmv9raydx8yq25lw81bs6g40rhd0fv9d6idcb7wphf5";
+    sha256 = "02cbxqizbdlfwnz8dpq4fbzmdi4yk6fv0cragvpa0748w1cp03bn";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -30,8 +30,8 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--sysconfdir=/etc"
-    (stdenv.lib.enableFeature enableNls "nls")
-    (stdenv.lib.enableFeature enableTiny "tiny")
+    (lib.enableFeature enableNls "nls")
+    (lib.enableFeature enableTiny "tiny")
   ];
 
   postInstall = ''
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           git
           nixfmt

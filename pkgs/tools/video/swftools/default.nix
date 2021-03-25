@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, freetype, libjpeg, libungif, zlib }:
+{ lib, stdenv, fetchurl, freetype, libjpeg, libungif, zlib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "swftools";
   version = "0.9.2";
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.swftools.org/about.html";
     license = licenses.gpl2;
     maintainers = [ maintainers.koral ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

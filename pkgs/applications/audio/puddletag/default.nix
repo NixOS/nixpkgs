@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook, chromaprint }:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook, chromaprint }:
 
 python3Packages.buildPythonApplication rec {
   pname = "puddletag";
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   dontStrip = true; # we are not generating any binaries
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An audio tag editor similar to the Windows program, Mp3tag";
     homepage = "https://docs.puddletag.net";
     license = licenses.gpl3;

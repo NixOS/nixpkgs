@@ -1,9 +1,10 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchurl
 , meson
 , ninja
-, stdenv
-, pkgconfig
+
+, pkg-config
 , python3
 , pygobject3
 , gobject-introspection
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     gobject-introspection
     gst-plugins-base
@@ -51,11 +52,9 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gstreamer.freedesktop.org";
-
     description = "Python bindings for GStreamer";
-
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
   };
 }

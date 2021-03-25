@@ -449,5 +449,16 @@ import ./make-test-python.nix {
     '';
 }
 </programlisting>
+  This will produce a Nix warning at evaluation time. To fully disable the
+  linter, wrap the test script in comment directives to disable the Black linter
+  directly (again, don't commit this within the Nixpkgs repository):
+<programlisting>
+  testScript =
+    ''
+      # fmt: off
+      <replaceable>Python code…</replaceable>
+      # fmt: on
+    '';
+</programlisting>
  </para>
 </section>

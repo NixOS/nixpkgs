@@ -23,6 +23,7 @@ let
 
       dontConfigure = true;
       dontBuild = true;
+      dontUsePythonRecompileBytecode = true;
 
       passthru = {
         inherit (drv.passthru) withPlugins;

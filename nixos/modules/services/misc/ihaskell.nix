@@ -21,6 +21,7 @@ in
       };
 
       extraPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = self: [];
         example = literalExample ''
           haskellPackages: [

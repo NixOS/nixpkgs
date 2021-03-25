@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, pkgconfig, ncurses, boehmgc, perl, help2man }:
+{ fetchurl, lib, stdenv, glib, libgee, pkg-config, ncurses, boehmgc, perl, help2man, vala }:
 
 stdenv.mkDerivation rec {
-  name = "zile-2.4.14";
+  name = "zile-2.6.0.90";
 
   src = fetchurl {
     url = "mirror://gnu/zile/${name}.tar.gz";
-    sha256 = "0x3byaddms8l3g7igx6njycqsq98wgapysdb5c7lhcnajlkp8y3s";
+    sha256 = "1bhdwnasmqhy0hi3fqmpzr8xkw5zlqjpmf1cj42h4cg3fnamp6r3";
   };
 
-  buildInputs = [ ncurses boehmgc ];
-  nativeBuildInputs = [ perl pkgconfig ]
+  buildInputs = [ glib libgee ncurses boehmgc vala ];
+  nativeBuildInputs = [ perl pkg-config ]
     # `help2man' wants to run Zile, which won't work when the
     # newly-produced binary can't be run at build-time.
-    ++ stdenv.lib.optional
+    ++ lib.optional
          (stdenv.hostPlatform == stdenv.buildPlatform)
          help2man;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
   gl_cv_func_fstatat_zero_flag="yes";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight Emacs clone";
 
     longDescription = ''

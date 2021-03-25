@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, gnum4, pam, fscrypt-experimental }:
+{ lib, buildGoModule, fetchFromGitHub, gnum4, pam, fscrypt-experimental }:
 
 # Don't use this for anything important yet!
 
@@ -34,7 +34,7 @@ buildGoModule rec {
     make install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A high-level tool for the management of Linux filesystem encryption";
     longDescription = ''

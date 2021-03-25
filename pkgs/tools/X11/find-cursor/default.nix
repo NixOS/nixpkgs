@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXdamage, libXrender, libXcomposite, libXext, installShellFiles, git }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXdamage, libXrender, libXcomposite, libXext, installShellFiles, git }:
 
 stdenv.mkDerivation rec {
   pname = "find-cursor";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/share/man/man1";
   installFlags = "PREFIX=${placeholder "out"}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple XLib program to highlight the cursor position";
     homepage = "https://github.com/arp242/find-cursor";
     license = licenses.mit;

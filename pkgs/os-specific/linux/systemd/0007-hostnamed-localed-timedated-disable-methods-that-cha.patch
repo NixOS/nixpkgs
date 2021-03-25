@@ -1,4 +1,4 @@
-From 539f3af04963a6826d2b2d0ba2095af99a7a6294 Mon Sep 17 00:00:00 2001
+From a1454e8edb7a1a87093808dc7db540232147df3d Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
 Subject: [PATCH 07/18] hostnamed, localed, timedated: disable methods that
@@ -11,10 +11,10 @@ Subject: [PATCH 07/18] hostnamed, localed, timedated: disable methods that
  3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index 7f6607a527..b5a9388916 100644
+index a1794bdab1..77134731e1 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
-@@ -626,6 +626,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+@@ -643,6 +643,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
          if (r < 0)
                  return r;
  
@@ -24,7 +24,7 @@ index 7f6607a527..b5a9388916 100644
          name = empty_to_null(name);
  
          context_read_etc_hostname(c);
-@@ -685,6 +688,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+@@ -702,6 +705,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
          if (r < 0)
                  return r;
  
@@ -35,7 +35,7 @@ index 7f6607a527..b5a9388916 100644
  
          context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index 715ce5cac7..014f7dcf6c 100644
+index 736dacdee9..53e0ee935e 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
 @@ -317,6 +317,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
@@ -69,7 +69,7 @@ index 715ce5cac7..014f7dcf6c 100644
          model = empty_to_null(model);
          variant = empty_to_null(variant);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index c467b85477..3e78b2f575 100644
+index 8bfcfd5cdc..a0ee03f134 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -646,6 +646,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
@@ -93,7 +93,7 @@ index c467b85477..3e78b2f575 100644
          if (lrtc == c->local_rtc)
                  return sd_bus_reply_method_return(m, NULL);
  
-@@ -917,6 +924,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+@@ -905,6 +912,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
          if (r < 0)
                  return r;
  
@@ -104,5 +104,5 @@ index c467b85477..3e78b2f575 100644
          if (r < 0)
                  return r;
 -- 
-2.28.0
+2.29.2
 

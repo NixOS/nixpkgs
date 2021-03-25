@@ -1,6 +1,6 @@
 { elk6Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , makeWrapper
 , fetchurl
 , nodejs-10_x
@@ -8,7 +8,7 @@
 , which
 }:
 
-with stdenv.lib;
+with lib;
 let
   nodejs = nodejs-10_x;
   inherit (builtins) elemAt;
@@ -42,14 +42,14 @@ in stdenv.mkDerivation rec {
     ./disable-nodejs-version-check.patch
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/libexec/kibana $out/bin
     mv * $out/libexec/kibana/
     rm -r $out/libexec/kibana/node
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ nodejs coreutils which ]}"
+      --prefix PATH : "${lib.makeBinPath [ nodejs coreutils which ]}"
     sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
   '';
 

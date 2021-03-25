@@ -1,4 +1,4 @@
-{ stdenv, cmake, llvmPackages, irony }:
+{ lib, stdenv, cmake, llvmPackages, irony }:
 
 stdenv.mkDerivation {
   pname = "irony-server";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     "-DCMAKE_PREFIX_PATH=${llvmPackages.clang-unwrapped}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The server part of irony";
     homepage = "https://melpa.org/#/irony";
     maintainers = [ maintainers.deepfire ];

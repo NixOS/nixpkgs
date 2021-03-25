@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, icu, libuuid, tzdata }:
+{ lib, stdenv, fetchurl, icu, libuuid, tzdata }:
 
 stdenv.mkDerivation rec {
   pname = "opencflite";
@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cross platform port of the macOS CoreFoundation";
     homepage = "https://sourceforge.net/projects/opencflite/";
-    license = stdenv.lib.licenses.apsl20;
+    license = lib.licenses.apsl20;
   };
 }

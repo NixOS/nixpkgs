@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, buildEnv }:
+{ lib, stdenv, fetchurl, libevent, buildEnv }:
 let
   # failed to find a better way to make it work
   libevent-comb = buildEnv {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libevent ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://monkey.org/~marius/nylon";
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
     license = licenses.bsdOriginal;

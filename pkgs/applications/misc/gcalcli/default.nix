@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     dateutil gflags httplib2 parsedatetime six vobject
-    google_api_python_client oauth2client uritemplate
+    google-api-python-client oauth2client uritemplate
     libnotify
   ] ++ lib.optional (!isPy3k) futures;
 

@@ -1,28 +1,29 @@
 { stdenv, lib, fetchFromGitHub, writeScript, desktop-file-utils
-, pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus-glib, ffmpeg_3, file, fontconfig, freetype
+, pkg-config, autoconf213, alsaLib, bzip2, cairo
+, dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
 , gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
 , libnotify, libstartup_notification, wrapGAppsHook
 , libGLU, libGL, perl, python2, libpulseaudio
 , unzip, xorg, wget, which, yasm, zip, zlib
 
-, withGTK3 ? false, gtk3
+, withGTK3 ? true, gtk3
 }:
 
 let
 
-  libPath = lib.makeLibraryPath [ ffmpeg_3 libpulseaudio ];
+  libPath = lib.makeLibraryPath [ ffmpeg libpulseaudio ];
   gtkVersion = if withGTK3 then "3" else "2";
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.14.2";
+  version = "29.1.0";
 
   src = fetchFromGitHub {
+    githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "1qz2sqc8rcg5z5kncabgmpl6v4i6wrs9dlgmna69255qrmsshwgm";
+    sha256 = "02blhk3v7gpnicd7s5l5fpqvdvj2279g3rq8xyhcd4sw6qnms8m6";
     fetchSubmodules = true;
   };
 
@@ -42,14 +43,14 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    desktop-file-utils file gnum4 perl pkgconfig python2 wget which wrapGAppsHook
+    desktop-file-utils file gnum4 perl pkg-config python2 wget which wrapGAppsHook unzip
   ];
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus-glib ffmpeg_3 fontconfig freetype
+    alsaLib bzip2 cairo dbus dbus-glib ffmpeg fontconfig freetype
     gnome2.GConf gtk2 hunspell libevent libjpeg libnotify
     libstartup_notification libGLU libGL
-    libpulseaudio unzip yasm zip zlib
+    libpulseaudio yasm zip zlib
   ]
   ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
@@ -60,7 +61,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configurePhase = ''
-    export MOZCONFIG=$(pwd)/mozconfig
+    export MOZCONFIG=$PWD/mozconfig
     export MOZ_NOSPAM=1
 
     # Keep this similar to the official .mozconfig file,
@@ -113,18 +114,21 @@ in stdenv.mkDerivation rec {
     '
   '';
 
-  buildPhase = "$src/mach build";
+  buildPhase = "./mach build";
 
   installPhase = ''
-    $src/mach install
+    ./mach install
 
+    # Fix missing icon due to wrong WMClass
+    substituteInPlace ./palemoon/branding/official/palemoon.desktop \
+      --replace 'StartupWMClass="pale moon"' 'StartupWMClass=Pale moon'
     desktop-file-install --dir=$out/share/applications \
-      $src/palemoon/branding/official/palemoon.desktop
+      ./palemoon/branding/official/palemoon.desktop
 
     for iconname in default{16,22,24,32,48,256} mozicon128; do
       n=''${iconname//[^0-9]/}
       size=$n"x"$n
-      install -Dm644 $src/palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
+      install -Dm644 ./palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
     done
   '';
 

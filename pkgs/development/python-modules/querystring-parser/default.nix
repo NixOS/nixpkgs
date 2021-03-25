@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, isPy27
+{ lib, buildPythonPackage, fetchPypi, python, isPy27
 , six
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # one test fails due to https://github.com/bernii/querystring-parser/issues/35
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bernii/querystring-parser";
     description = "QueryString parser for Python/Django that correctly handles nested dictionaries";
     license = licenses.mit;

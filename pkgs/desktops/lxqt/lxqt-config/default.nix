@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , lxqt-build-tools
 , qtbase
 , qtx11extras
@@ -18,18 +18,18 @@
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1nqkc716rl4c0rad4vqlqadm6lljrhwpdflaa5k9lrdiingr0s7s";
+    sha256 = "1ppkkz7rg5ddlyk1ikh2s3g7nbb0wnpl0lldg9j68l76d61sfm8z";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
@@ -58,9 +58,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Tools to configure LXQt and the underlying operating system";
     homepage = "https://github.com/lxqt/lxqt-config";
-    license = licenses.lgpl21;
+    description = "Tools to configure LXQt and the underlying operating system";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

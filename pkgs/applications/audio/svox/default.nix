@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, popt }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, popt }:
 
 stdenv.mkDerivation {
   pname = "svox";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-to-speech engine";
     homepage = "https://android.googlesource.com/platform/external/svox";
     platforms = platforms.linux;

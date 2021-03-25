@@ -2,7 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , llvmPackages
 , expat
@@ -16,22 +16,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "silicon";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "silicon";
     rev = "v${version}";
-    sha256 = "1ga632c86l30n6wjj8rc3gz43v93mb7kcl9f8vhig16ycgiw8v09";
+    sha256 = "sha256-ci0gq4rOQHBmFPvhXZseIlwnqAWd06/qg/i/luhV79s=";
   };
 
-  cargoSha256 = "0bgm29v9vmd1xcdazg1psrx6hb1z3zfzr1c4iy8j1r28csbmm6kq";
+  cargoSha256 = "sha256-1sekLS+jhMeFJcW7pH/X8t28//xA+L54u81uKOo1kHE=";
 
   buildInputs = [ llvmPackages.libclang expat freetype ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreText Security ];
 
-  nativeBuildInputs = [ cmake pkgconfig ]
+  nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";

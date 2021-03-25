@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zsh }:
+{ lib, stdenv, fetchFromGitHub, zsh }:
 
 # To make use of this derivation, use the `programs.zsh.enableSyntaxHighlighting` option
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fish shell like syntax highlighting for Zsh";
     homepage = "https://github.com/zsh-users/zsh-syntax-highlighting";
     license = licenses.bsd3;

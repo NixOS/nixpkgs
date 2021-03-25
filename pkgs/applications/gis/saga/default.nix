@@ -32,11 +32,11 @@
 
 mkDerivation rec {
   pname = "saga";
-  version = "7.8.1";
+  version = "7.9.0";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/saga-gis/files/SAGA%20-%20${lib.versions.major version}/SAGA%20-%20${version}/saga-${version}.tar.gz";
-    sha256 = "qwjuimeoadwf254bwJ7h2vSKaELkcaJdFrGj1WtvnbM=";
+    url = "mirror://sourceforge/saga-gis/SAGA%20-%20${lib.versions.major version}/SAGA%20-%20${version}/saga-${version}.tar.gz";
+    sha256 = "sha256-ob23JbQnBxNO1QA8zUhLjgo5YBR90pwm8JT62bsPBdg=";
   };
 
   nativeBuildInputs = [

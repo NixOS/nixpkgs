@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ffmpeg, libui }:
+{ lib, stdenv, fetchFromGitHub, ffmpeg, libui }:
 
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "14i2lq68q990hnm2kkfamlsi67bcml85zl8yjsyxc5h8ncc2f3dp";
   };
 
-  
+
   buildInputs = [ ffmpeg libui ];
 
   postBuild = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
     homepage = "https://github.com/anthwlock/untrunc";
     license = licenses.gpl2;

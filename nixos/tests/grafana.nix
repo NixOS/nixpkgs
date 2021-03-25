@@ -17,6 +17,10 @@ let
   };
 
   extraNodeConfs = {
+    declarativePlugins = {
+      services.grafana.declarativePlugins = [ pkgs.grafanaPlugins.grafana-clock-panel ];
+    };
+
     postgresql = {
       services.grafana.database = {
         host = "127.0.0.1:5432";
@@ -52,7 +56,7 @@ let
     nameValuePair dbName (mkMerge [
     baseGrafanaConf
     (extraNodeConfs.${dbName} or {})
-  ])) [ "sqlite" "postgresql" "mysql" ]);
+  ])) [ "sqlite" "declarativePlugins" "postgresql" "mysql" ]);
 
 in {
   name = "grafana";
@@ -65,6 +69,14 @@ in {
 
   testScript = ''
     start_all()
+
+    with subtest("Declarative plugins installed"):
+        declarativePlugins.wait_for_unit("grafana.service")
+        declarativePlugins.wait_for_open_port(3000)
+        declarativePlugins.succeed(
+            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/plugins | grep -q grafana-clock-panel"
+        )
+        declarativePlugins.shutdown()
 
     with subtest("Successful API query as admin user with sqlite db"):
         sqlite.wait_for_unit("grafana.service")

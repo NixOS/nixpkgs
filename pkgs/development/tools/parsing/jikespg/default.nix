@@ -1,25 +1,28 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "jikespg-1.3";
+  pname = "jikespg";
+  version = "1.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/jikes/${name}.tar.gz";
+    url = "mirror://sourceforge/jikes/${pname}-${version}.tar.gz";
     sha256 = "083ibfxaiw1abxmv1crccx1g6sixkbyhxn2hsrlf6fwii08s6rgw";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
+  '';
+
   sourceRoot = "jikespg/src";
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp jikespg $out/bin
-    '';
+  installPhase = ''
+    install -Dm755 -t $out/bin jikespg
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://jikes.sourceforge.net/";
     description = "The Jikes Parser Generator";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.ipl10;
     maintainers = with maintainers; [ pSub ];
   };

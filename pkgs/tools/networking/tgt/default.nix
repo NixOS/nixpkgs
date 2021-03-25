@@ -1,16 +1,16 @@
 { stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
-, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, utillinux
+, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.79";
+  version = "1.0.80";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18bp7fcpv7879q3ppdxlqj7ayqmlh5zwrkz8gch6rq9lkmmrklrf";
+    sha256 = "sha256-5qBqCHbkL6yw/iT2AtSumw8V0bV74TEyYMRgcPHW2lg=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
     homepage = "http://stgt.sourceforge.net/";
     license = licenses.gpl2;

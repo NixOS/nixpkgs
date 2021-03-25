@@ -5,7 +5,7 @@ pythonPackages.buildPythonApplication rec {
   version = "2.8";
 
   src = fetchurl {
-    url = "http://excess.org/speedometer/speedometer-${version}.tar.gz";
+    url = "https://excess.org/speedometer/speedometer-${version}.tar.gz";
     sha256 = "060bikv3gwr203jbdmvawsfhc0yq0bg1m42dk8czx1nqvwvgv6fm";
   };
 
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Measure and display the rate of data across a network connection or data being stored in a file";
-    homepage = "http://excess.org/speedometer/";
+    homepage = "https://excess.org/speedometer/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ Baughn ];

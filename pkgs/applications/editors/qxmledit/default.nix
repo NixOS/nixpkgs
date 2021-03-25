@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub,
   qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml, qtquick1, libGLU }:
 
 stdenv.mkDerivation rec {
   name = "qxmledit-${version}" ;
   version = "0.9.15" ;
-  src = fetchFromGitHub ( stdenv.lib.importJSON ./qxmledit.json ) ;
+  src = fetchFromGitHub ( lib.importJSON ./qxmledit.json ) ;
   nativeBuildInputs = [ qmake ] ;
   buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml qtquick1 libGLU ] ;
   qmakeFlags = [ "CONFIG+=release" ] ;
@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
     export QXMLEDIT_INST_DOC_DIR="$doc"
   '';
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "Simple XML editor based on qt libraries" ;
     homepage = "https://sourceforge.net/projects/qxmledit";
     license = licenses.lgpl2;

@@ -1,13 +1,18 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, pydsdl }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, pydsdl
+}:
 
  buildPythonPackage rec {
   pname = "nunavut";
-  version = "0.3.9";
+  version = "1.0.2";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f2f42f058afd30456e47b6b92a6b7b15100f6bca0a29108ace95bd5147a8e86";
+    sha256 = "c6fe0a1b92c44bb64b2427f944fee663fe1aaf3d4d4080d04ad9c212b40a8763";
   };
 
   propagatedBuildInputs = [
@@ -19,7 +24,10 @@
     export HOME=$TMPDIR
   '';
 
-  # repo doesn't contain tests, ensure imports aren't broken
+  # No tests in pypy package and no git tags yet for release versions, see
+  # https://github.com/UAVCAN/nunavut/issues/182
+  doCheck = false;
+
   pythonImportsCheck = [
     "nunavut"
   ];

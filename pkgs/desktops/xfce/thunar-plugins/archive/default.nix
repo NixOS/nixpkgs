@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , mkXfceDerivation
 , gtk3
 , thunar
@@ -31,7 +31,7 @@ mkXfceDerivation {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thunar plugin providing file context menus for archives";
   };
 }

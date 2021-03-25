@@ -2,6 +2,7 @@
 , belle-sip
 , cmake
 , fetchFromGitLab
+, lib
 , soci
 , sqlite
 , stdenv
@@ -9,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lime";
-  version = "4.4.0";
+  version = "4.4.34";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "End-to-end encryption library for instant messaging";
     homepage = "http://www.linphone.org/technical-corner/lime";
     license = licenses.gpl3;

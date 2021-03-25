@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , lxqt-build-tools
 , json-glib
 , libfm-qt
@@ -14,18 +14,18 @@
 
 mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    sha256 = "1cip2dbvxbdlx1axz5sn4mwigwvfxb1q14byn09crv71adyfprw5";
+    sha256 = "0f4nj598w6qhcrhbab15cpfmrda02jcflxhb15vyv7gnplalkya6";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
@@ -42,9 +42,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Archive tool for the LXQt desktop environment";
     homepage = "https://github.com/lxqt/lxqt-archiver/";
-    license = licenses.gpl2;
+    description = "Archive tool for the LXQt desktop environment";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ jchw ];
   };

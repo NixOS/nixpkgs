@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, findutils, glib }:
+{ lib, stdenv, fetchFromGitHub, findutils, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-workspace-matrix";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Arrange workspaces in a two dimensional grid with workspace thumbnails";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno ];

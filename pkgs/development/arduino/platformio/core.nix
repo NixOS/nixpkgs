@@ -1,9 +1,10 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, fetchpatch
-, bottle, click, colorama, semantic-version
+{ stdenv, lib, buildPythonApplication, bottle
+, click, click-completion, colorama, semantic-version
 , lockfile, pyserial, requests
 , tabulate, pyelftools, marshmallow
 , pytest, tox, jsondiff
 , git, spdx-license-list-data
+, version, src
 }:
 
 let
@@ -75,19 +76,11 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "5.0.2";
-
-  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
-  src = fetchFromGitHub {
-    owner = "platformio";
-    repo = "platformio-core";
-    rev = "v${version}";
-    sha256 = "1hbw8nbllyj0xyx1rz2chx9vyqf9949dcdx4v9hnfbsjwwpcfi0a";
-  };
+  inherit version src;
 
   propagatedBuildInputs =  [
-    bottle click colorama git lockfile
-    pyserial requests semantic-version
+    bottle click click-completion colorama git
+    lockfile pyserial requests semantic-version
     tabulate pyelftools marshmallow
   ];
 
@@ -114,7 +107,7 @@ in buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
     homepage = "http://platformio.org";

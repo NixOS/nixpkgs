@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , rustPlatform
 , fetchCrate
 }:
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "109ij5h31bhn44l0wywgpnnlfjgyairxr5l19s6bz47sbka0xyxk";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create asciinema videos from a text file";
     homepage = "https://github.com/garbas/asciinema-scenario/";
     maintainers = with maintainers; [ garbas ];

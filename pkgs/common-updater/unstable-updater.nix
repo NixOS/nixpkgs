@@ -1,5 +1,4 @@
-{ stdenv
-, writeShellScript
+{ writeShellScript
 , coreutils
 , git
 , nix

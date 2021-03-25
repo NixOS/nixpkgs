@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub
+{lib, stdenv, fetchFromGitHub
 , autoconf, automake, mandoc }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://software.internet2.edu/owamp/";
-    description = ''A tool for performing one-way active measurements'';
+    description = "A tool for performing one-way active measurements";
     platforms = platforms.linux;
     maintainers = [maintainers.teto];
     license = licenses.asl20;

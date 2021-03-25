@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , Security
@@ -17,9 +17,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "18bspi59vfnqijxgipmv2h6h5iy7qynpk1ph46yhjsnndjlxxcba";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility that makes sweeping changes to large, shared code bases";
     homepage = "https://github.com/facebookincubator/fastmod";
     license = licenses.asl20;

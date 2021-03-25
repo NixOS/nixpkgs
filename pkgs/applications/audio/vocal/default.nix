@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , cmake
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , pantheon
 , gtk3
 , glib
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The podcast client for the modern free desktop";
     longDescription = ''
       Vocal is a powerful, fast, and intuitive application that helps users find new podcasts, manage their libraries, and enjoy the best that indepedent audio and video publishing has to offer. Vocal features full support for both episode downloading and streaming, native system integration, iTunes store search and top 100 charts (with international results support), iTunes link parsing, OPML importing and exporting, and so much more. Plus, it has great smart features like automatically keeping your library clean from old files, and the ability to set custom skip intervals.

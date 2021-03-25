@@ -15,15 +15,22 @@ buildDunePackage rec {
     sha256 = "114gq48cpj2mvycypa9lfyqqb26wa2gkdfwkcqhnx7m6sdwv9a38";
   };
 
+  patches = [
   # The following patch adds support for core.v0.13
-  patches = [(fetchpatch {
+  (fetchpatch {
     url = "https://github.com/pveber/bistro/commit/0931db43a146ad7829dff5120161a775f732a878.patch";
     sha256 = "06y0sxbbab1mssc1xfjjv12lpv4rny5iqv9qkdqyzrvzpl1bdvnd";
-  })];
+  })
+  # The following patch adds support for core.v0.14
+  (fetchpatch {
+    url = "https://github.com/pveber/bistro/commit/afbdcb2af7777ef7711c7f3c45dff605350a27b2.patch";
+    sha256 = "0ix6lx9qjnn3vqp0164c6l5an8b4rq69h2mxrg89piyk2g1yv0zg";
+  })
+  ];
 
   propagatedBuildInputs = [ base64 bos core lwt_react ocamlgraph rresult tyxml ];
 
-  minimumOCamlVersion = "4.07";
+  minimumOCamlVersion = "4.08";
 
   meta = {
     inherit (src.meta) homepage;

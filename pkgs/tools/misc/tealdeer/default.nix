@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   # and i can't disable just this one
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];

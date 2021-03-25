@@ -17,6 +17,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Compatibility library for OCaml’s Uchar module";
     inherit (ocaml.meta) platforms license;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

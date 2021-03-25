@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bison, flex, cmake, libpcap }:
+{ lib, stdenv, fetchFromGitHub, bison, flex, cmake, libpcap }:
 stdenv.mkDerivation rec {
   pname = "packetdrill";
   version = "unstable-2020-08-22";
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Quick, precise tests for entire TCP/UDP/IPv4/IPv6 network stacks";
     homepage = "https://github.com/google/packetdrill";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ dmjio cleverca22 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dmjio cleverca22 ];
   };
 }

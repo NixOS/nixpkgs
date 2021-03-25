@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
+{ lib, stdenv, fetchurl, m4
+, cxx ? true
+, withStatic ? stdenv.hostPlatform.isStatic
+}:
 
-let inherit (stdenv.lib) optional; in
+let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
   name = "gmp-5.1.3";
@@ -22,13 +25,13 @@ let self = stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-pic"
-    (stdenv.lib.enableFeature cxx "cxx")
+    (lib.enableFeature cxx "cxx")
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
     # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    (stdenv.lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
+    (lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
     # The config.guess in GMP tries to runtime-detect various
     # ARM optimization flags via /proc/cpuinfo (and is also
     # broken on multicore CPUs). Avoid this impurity.
@@ -43,7 +46,7 @@ let self = stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;

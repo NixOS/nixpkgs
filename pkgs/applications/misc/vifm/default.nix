@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper
-, pkgconfig
+, pkg-config
 , ncurses, libX11
-, utillinux, file, which, groff
+, util-linux, file, which, groff
 
   # adds support for handling removable media (vifm-media). Linux only!
 , mediaSupport ? false, python3 ? null, udisks2 ? null, lib ? null
@@ -17,8 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0rqyd424y0g5b5basw2ybb60r9gar4f40d1xgzr3c2dsy4jpwvyh";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ ncurses libX11 utillinux file which groff ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ ncurses libX11 util-linux file which groff ];
 
   postFixup = let
     path = lib.makeBinPath
@@ -31,8 +31,8 @@ in stdenv.mkDerivation rec {
     ${if mediaSupport then wrapVifmMedia else ""}
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}'';
+  meta = with lib; {
+    description = "A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;

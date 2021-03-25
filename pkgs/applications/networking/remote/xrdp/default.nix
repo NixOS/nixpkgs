@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
 
 let
   xorgxrdp = stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ let
       sha256 = "1bhp5x47hajhinvglmc4vxxnpjvfjm6369njb3ghqfr7c5xypvzr";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];
+    nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
 
     buildInputs = [ xorg.xorgserver ];
 
@@ -45,7 +45,7 @@ let
       sha256 = "0ynj6pml4f38y8571ryhifza57wfqg4frdrjcwzw3fmryiznfm1z";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];
+    nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
 
     buildInputs = [ openssl systemd pam fuse libjpeg libopus xorg.libX11 xorg.libXfixes xorg.libXrandr ];
 
@@ -94,7 +94,7 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;

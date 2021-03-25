@@ -193,7 +193,7 @@ let
                 };
                 sourceRoot = ".";
                 # We need unzip to build this package
-                buildInputs = [ pkgs.unzip ];
+                nativeBuildInputs = [ pkgs.unzip ];
                 # Installing simply means copying all files to the output directory
                 installPhase = "mkdir -p $out; cp -R * $out/";
               };
@@ -220,7 +220,7 @@ let
                   sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
                 };
                 # We need unzip to build this package
-                buildInputs = [ pkgs.unzip ];
+                nativeBuildInputs = [ pkgs.unzip ];
                 # Installing simply means copying all files to the output directory
                 installPhase = "mkdir -p $out; cp -R * $out/";
               };
@@ -329,14 +329,14 @@ in
           extraConfig = "internal;";
         };
 
-        locations."~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+        locations."~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
           extraConfig = "expires 365d;";
         };
 
         locations."/" = {
           priority = 1;
           index = "doku.php";
-          extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
+          extraConfig = "try_files $uri $uri/ @dokuwiki;";
         };
 
         locations."@dokuwiki" = {
@@ -349,7 +349,7 @@ in
           '';
         };
 
-        locations."~ \.php$" = {
+        locations."~ \\.php$" = {
           extraConfig = ''
               try_files $uri $uri/ /doku.php;
               include ${pkgs.nginx}/conf/fastcgi_params;

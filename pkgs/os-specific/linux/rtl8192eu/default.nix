@@ -34,8 +34,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Realtek rtl8192eu driver";
     homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ troydm ];
   };
 }

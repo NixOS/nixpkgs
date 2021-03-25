@@ -8,13 +8,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "inkcut";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zn5i69f3kimcwdd2qkqd3hd1hq76a6i5wxxfb91ih2hj04vdbmx";
+    sha256 = "0px0xdv6kyzkkpmvryrdfavv1qy2xrqdxkpmhvx1gj649xcabv32";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -48,6 +48,15 @@ buildPythonApplication rec {
 
   dontWrapQtApps = true;
   makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+
+  postInstall = ''
+    mkdir -p $out/share/inkscape/extensions
+
+    cp plugins/inkscape/* $out/share/inkscape/extensions
+
+    sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_cut.py
+    sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_open.py
+  '';
 
   meta = with lib; {
     homepage = "https://www.codelv.com/projects/inkcut/";

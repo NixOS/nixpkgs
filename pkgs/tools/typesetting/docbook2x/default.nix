@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, texinfo, perlPackages
+{ fetchurl, lib, stdenv, texinfo, perlPackages
 , groff, libxml2, libxslt, gnused, libiconv, opensp
 , docbook_xml_dtd_43
 , makeWrapper }:
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   # writes its output to stdout instead of creating a file.
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
-  buildInputs = [ texinfo groff libxml2 libxslt makeWrapper opensp libiconv ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ texinfo groff libxml2 libxslt opensp libiconv ]
     ++ (with perlPackages; [ perl XMLSAX XMLParser XMLNamespaceSupport ]);
 
   postConfigure = ''
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
       "${gnused}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     longDescription = ''
       docbook2X is a software package that converts DocBook documents
       into the traditional Unix man page format and the GNU Texinfo

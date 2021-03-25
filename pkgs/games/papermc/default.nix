@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, bash, jre }:
+{ lib, stdenv, fetchurl, bash, jre }:
 let
-  mcVersion = "1.16.2";
-  buildNum = "141";
+  mcVersion = "1.16.5";
+  buildNum = "488";
   jar = fetchurl {
-    url = "https://papermc.io/api/v1/paper/${mcVersion}/${buildNum}/download";
-    sha256 = "1qhhnaysw9r73fpvj9qcmjah722a6a4s6g4cblna56n1hpz4lw1s";
+     url = "https://papermc.io/api/v1/paper/${mcVersion}/${buildNum}/download";
+     sha256 = "07zgq6pfgwd9a9daqv1dab0q8cwgidsn6sszn7bpr37y457a4ka8";
   };
 in stdenv.mkDerivation {
   pname = "papermc";
@@ -29,8 +29,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "High-performance Minecraft Server";
     homepage    = "https://papermc.io/";
-    license     = stdenv.lib.licenses.gpl3Only;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ aaronjanse ];
+    license     = lib.licenses.gpl3Only;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aaronjanse neonfuz ];
   };
 }

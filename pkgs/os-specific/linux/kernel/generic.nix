@@ -6,6 +6,7 @@
 , gmp ? null
 , libmpc ? null
 , mpfr ? null
+, lib
 , stdenv
 
 , # The kernel source tarball.
@@ -41,7 +42,7 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.platform.name != "pc" ||
+, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc" ||
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 
@@ -50,10 +51,10 @@
 , isLibre    ? false
 , isHardened ? false
 
-# easy overrides to stdenv.hostPlatform.platform members
-, autoModules ? stdenv.hostPlatform.platform.kernelAutoModules
-, preferBuiltin ? stdenv.hostPlatform.platform.kernelPreferBuiltin or false
-, kernelArch ? stdenv.hostPlatform.platform.kernelArch
+# easy overrides to stdenv.hostPlatform.linux-kernel members
+, autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
+, preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
+, kernelArch ? stdenv.hostPlatform.linuxArch
 
 , ...
 }:
@@ -66,9 +67,6 @@
 assert stdenv.isLinux;
 
 let
-
-  lib = stdenv.lib;
-
   # Combine the `features' attribute sets of all the kernel patches.
   kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
     iwlwifi = true;
@@ -81,7 +79,7 @@ let
   } // features) kernelPatches;
 
   commonStructuredConfig = import ./common-config.nix {
-    inherit stdenv version ;
+    inherit lib stdenv version;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
@@ -89,7 +87,7 @@ let
   intermediateNixConfig = configfile.moduleStructuredConfig.intermediateNixConfig
     # extra config in legacy string format
     + extraConfig
-    + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
+    + stdenv.hostPlatform.linux-kernel.extraConfig or "";
 
   structuredConfigFromPatches =
         map ({extraStructuredConfig ? {}, ...}: {settings=extraStructuredConfig;}) kernelPatches;
@@ -113,13 +111,13 @@ let
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
-      ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
+      ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ];
 
-    platformName = stdenv.hostPlatform.platform.name;
+    platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
-    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.platform.kernelBaseConfig;
+    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
     # e.g. "bzImage"
-    kernelTarget = stdenv.hostPlatform.platform.kernelTarget;
+    kernelTarget = stdenv.hostPlatform.linux-kernel.target;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -173,7 +171,7 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix {}) {
-    inherit version modDirVersion src kernelPatches randstructSeed stdenv extraMeta configfile;
+    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };

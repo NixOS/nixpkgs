@@ -1,37 +1,38 @@
-{ stdenv, fetchurl, oniguruma }:
+{ lib, stdenv, nixosTests, fetchurl, oniguruma }:
 
 stdenv.mkDerivation rec {
   pname = "jq";
-  version="1.6";
+  version = "1.6";
 
   src = fetchurl {
-    url="https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    sha256="0wmapfskhzfwranf6515nzmm84r7kwljgfs7dg6bjgxakbicis2x";
+    url =
+      "https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
+    sha256 = "0wmapfskhzfwranf6515nzmm84r7kwljgfs7dg6bjgxakbicis2x";
   };
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
 
   buildInputs = [ oniguruma ];
 
-  configureFlags =
-    [
+  configureFlags = [
     "--bindir=\${bin}/bin"
     "--sbindir=\${bin}/bin"
     "--datadir=\${doc}/share"
     "--mandir=\${man}/share/man"
-    ]
-    # jq is linked to libjq:
-    ++ stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+  ]
+  # jq is linked to libjq:
+    ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
   doInstallCheck = true;
   installCheckTarget = "check";
 
   postInstallCheck = ''
     $bin/bin/jq --help >/dev/null
+    $bin/bin/jq -r '.values[1]' <<< '{"values":["hello","world"]}' | grep '^world$' > /dev/null
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A lightweight and flexible command-line JSON processor'';
+  meta = with lib; {
+    description = "A lightweight and flexible command-line JSON processor";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin globin ];
     platforms = with platforms; linux ++ darwin;

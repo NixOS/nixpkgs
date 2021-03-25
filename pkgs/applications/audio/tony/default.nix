@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wrapQtAppsHook
+{ lib, stdenv, fetchurl, pkg-config, wrapQtAppsHook
 , alsaLib, boost, bzip2, fftw, fftwFloat, libX11, libfishsound, libid3tag
 , libjack2, liblo, libmad, libogg, liboggz, libpulseaudio, libsamplerate
 , libsndfile, lrdf, opusfile, qtbase, qtsvg, rubberband, serd, sord
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "03g2bmlj08lmgvh54dyd635xccjn730g4wwlhpvsw04bffz8b7fp";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapQtAppsHook ];
 
   buildInputs = [
     alsaLib boost bzip2 fftw fftwFloat libX11 libfishsound libid3tag
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pitch and note annotation of unaccompanied melody";
     homepage = "https://www.sonicvisualiser.org/tony/";
     license = licenses.gpl2Plus;

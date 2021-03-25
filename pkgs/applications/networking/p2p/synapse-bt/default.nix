@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, CoreServices, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, CoreServices, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "synapse-bt";
@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0lhhdzq4sadnp2pnbq309d1mb7ggbf24k5ivlchrjhllbim1wmdz";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   cargoBuildFlags = [ "--all" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flexible and fast BitTorrent daemon";
     homepage = "https://synapse-bt.org/";
     license = licenses.isc;

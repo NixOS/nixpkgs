@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools_scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { python3 = python; };
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   sourceRoot = "apache-arrow-${version}/python";
 
-  nativeBuildInputs = [ cmake cython pkgconfig setuptools_scm ];
+  nativeBuildInputs = [ cmake cython pkg-config setuptools_scm ];
   propagatedBuildInputs = [ numpy six ];
   checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
 
@@ -33,6 +33,13 @@ buildPythonPackage rec {
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
   '';
+
+  # Deselect a single test because pyarrow prints a 2-line error message where
+  # only a single line is expected. The additional line of output comes from
+  # the glog library which is an optional dependency of arrow-cpp that is
+  # enabled in nixpkgs.
+  # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
+  pytestFlagsArray = [ "--deselect=pyarrow/tests/test_memory.py::test_env_var" ];
 
   dontUseSetuptoolsCheck = true;
   preCheck = ''

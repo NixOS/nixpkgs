@@ -2,17 +2,17 @@
 , fetchPypi
 , numpy
 , scikitimage
-, stdenv
+, lib
 , opencv3
 }:
 
 buildPythonPackage rec {
   pname = "imagecorruptions";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14j8x6axnyrn6y7bsjyh4yqm7af68mqpxy7gg2xh3d577d852zgm";
+    sha256 = "044e173f24d5934899bdbf3596bfbec917e8083e507eed583ab217abebbe084d";
   };
 
   postPatch = ''
@@ -26,7 +26,10 @@ buildPythonPackage rec {
     opencv3
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+  pythonImportsCheck = [ "imagecorruptions" ];
+
+  meta = with lib; {
     homepage = "https://github.com/bethgelab/imagecorruptions";
     description = "This package provides a set of image corruptions";
     license = licenses.asl20;

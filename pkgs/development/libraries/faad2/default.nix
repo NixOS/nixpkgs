@@ -1,8 +1,8 @@
-{stdenv, fetchFromGitHub, autoreconfHook
+{lib, stdenv, fetchFromGitHub, autoreconfHook
 , drmSupport ? false # Digital Radio Mondiale
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "faad2";
   version = "2.10.0";

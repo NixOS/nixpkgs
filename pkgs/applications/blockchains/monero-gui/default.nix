@@ -1,23 +1,21 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem
+{ lib, stdenv, wrapQtAppsHook, makeDesktopItem
 , fetchFromGitHub
-, fetchpatch
-, cmake, qttools, pkgconfig
+, cmake, qttools, pkg-config
 , qtbase, qtdeclarative, qtgraphicaleffects
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
+, qtmacextras
 , monero, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
 , randomx, zeromq, libgcrypt, libgpgerror
-, hidapi, rapidjson
+, hidapi, rapidjson, quirc
 , trezorSupport ? true
-,   libusb1  ? null
-,   protobuf ? null
-,   python3  ? null
+,   libusb1
+,   protobuf
+,   python3
 }:
 
-with stdenv.lib;
-
-assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
+with lib;
 
 let
   arch = if stdenv.isx86_64  then "x86-64"
@@ -28,17 +26,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.1.4";
+  version = "0.17.1.9";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1ixjfdlvwr2an2s9jaql240bk7jpq5hhm5c4hww0bicyy3fp12ng";
+    sha256 = "0143mmxk0jfb5pmjlx6v0knvf8v49kmkpjxlp6rw8lwnlf71xadn";
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig wrapQtAppsHook
+    cmake pkg-config wrapQtAppsHook
     (getDev qttools)
   ];
 
@@ -49,8 +47,9 @@ stdenv.mkDerivation rec {
     monero miniupnpc unbound readline
     randomx libgcrypt libgpgerror
     boost libunwind libsodium pcsclite
-    zeromq hidapi rapidjson
-  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ];
+    zeromq hidapi rapidjson quirc
+  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
+    ++ optionals stdenv.isDarwin [ qtmacextras ];
 
   postUnpack = ''
     # copy monero sources here
@@ -59,14 +58,7 @@ stdenv.mkDerivation rec {
     chmod -R +w source/monero
   '';
 
-  patches = [
-    ./move-log-file.patch
-    # fix build failure due to invalid use of CMAKE_PREFIX_PATH
-    (fetchpatch {
-      url = "https://github.com/monero-project/monero-gui/commit/ef2be82c21b0934522ad8e110805b66f5948da1f.patch";
-      sha256 = "1rhazk2xwa5dv1cmkrkq8yr08qxslg4k929cvlliabrx20kbr5z5";
-    })
-  ];
+  patches = [ ./move-log-file.patch ];
 
   postPatch = ''
     # set monero-gui version
@@ -81,6 +73,10 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory(monero)' \
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)'
+
+    # use nixpkgs quirc
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory(external)' ""
   '';
 
   cmakeFlags = [ "-DARCH=${arch}" ];
@@ -113,7 +109,6 @@ stdenv.mkDerivation rec {
     homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
-    badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

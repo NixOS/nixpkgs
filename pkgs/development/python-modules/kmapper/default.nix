@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "kmapper";
-  version = "1.2.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0879294680c5d01a928847b818a3c4e07eded3f602f96e510858e68e74fa3783";
+    sha256 = "3bb09d016ae0dc3308c2901f0775139a26e7f689afacea564a74e5627de35cd7";
   };
 
   propagatedBuildInputs = [

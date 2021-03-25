@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, utillinux, coreutils}:
+{ lib, stdenv, fetchurl, util-linux, coreutils}:
 
 stdenv.mkDerivation rec {
   version = "6.42";
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     # $HOME detection fails (and is unnecessary)
     sed -i '/^HOME/d' $out/bin/profile-sync-daemon
     substituteInPlace $out/bin/psd-overlay-helper \
-      --replace "PATH=/usr/bin:/bin" "PATH=${utillinux.bin}/bin:${coreutils}/bin" \
+      --replace "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
       --replace "sudo " "/run/wrappers/bin/sudo "
   '';
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Syncs browser profile dirs to RAM";
     longDescription = ''
       Profile-sync-daemon (psd) is a tiny pseudo-daemon designed to manage your

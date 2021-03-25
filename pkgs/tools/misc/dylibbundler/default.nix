@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "dylibbundler";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small command-line program that aims to make bundling .dylibs as easy as possible";
     homepage    = "https://github.com/auriamg/macdylibbundler";
     license     = licenses.mit;

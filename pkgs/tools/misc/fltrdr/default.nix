@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , icu, openssl
@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ icu openssl ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://octobanana.com/software/fltrdr";
     description = "A TUI text reader for the terminal";
 
@@ -40,4 +38,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.matthiasbeyer ];
   };
 }
-

@@ -1,4 +1,4 @@
-# Cataclysm: Dark Days Ahead
+# Cataclysm: Dark Days Ahead {#cataclysm-dark-days-ahead}
 
 ## How to install Cataclysm DDA
 

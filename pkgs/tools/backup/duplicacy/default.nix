@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "duplicacy";
-  version = "2.3.0";
+  version = "2.7.2";
 
   goPackagePath = "github.com/gilbertchen/duplicacy";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "gilbertchen";
     repo = "duplicacy";
     rev = "v${version}";
-    sha256 = "12swp3kbwkmwn3g2mp964m60kabmz0ip7kkhvhiqq7k74nxzj312";
+    sha256 = "0j37sqicj7rl982czqsl3ipxw7k8k4smcr63s0yklxwz7ch3353c";
   };
   goDeps = ./deps.nix;
   buildPhase = ''

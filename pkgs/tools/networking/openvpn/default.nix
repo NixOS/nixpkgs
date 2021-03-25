@@ -1,23 +1,20 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , makeWrapper
 , runtimeShell
-, iproute ? null
+, iproute
 , lzo
 , openssl
 , pam
 , useSystemd ? stdenv.isLinux
-, systemd ? null
-, utillinux ? null
+, systemd
+, util-linux
 , pkcs11Support ? false
-, pkcs11helper ? null
+, pkcs11helper
 }:
 
-assert useSystemd -> (systemd != null);
-assert pkcs11Support -> (pkcs11helper != null);
-
-with stdenv.lib;
+with lib;
 let
   # Check if the script needs to have other binaries wrapped when changing this.
   update-resolved = fetchurl {
@@ -63,12 +60,12 @@ let
         '' + optionalString useSystemd ''
           install -Dm555 ${update-resolved} $out/libexec/update-systemd-resolved
           wrapProgram $out/libexec/update-systemd-resolved \
-            --prefix PATH : ${makeBinPath [ runtimeShell iproute systemd utillinux ]}
+            --prefix PATH : ${makeBinPath [ runtimeShell iproute systemd util-linux ]}
         '';
 
         enableParallelBuilding = true;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "A robust and highly flexible tunneling application";
           downloadPage = "https://openvpn.net/community-downloads/";
           homepage = "https://openvpn.net/";

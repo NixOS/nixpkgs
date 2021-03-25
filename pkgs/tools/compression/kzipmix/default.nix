@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "kzipmix-20091108";
@@ -11,15 +11,15 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp kzip zipmix $out/bin
-    
+
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/kzip
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/zipmix
   '';
 
   meta = {
     description = "A tool that aggressively optimizes the sizes of Zip archives";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     homepage = "http://advsys.net/ken/utils.htm";
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    maintainers = [ lib.maintainers.sander ];
   };
 }

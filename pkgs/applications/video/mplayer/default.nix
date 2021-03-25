@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg_3
+{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg_3
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
@@ -84,7 +84,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = lib.licenses.unfree;
   } else null;
 
   crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig yasm ];
-  buildInputs = with stdenv.lib;
+  nativeBuildInputs = [ pkg-config yasm ];
+  buildInputs = with lib;
     [ freetype ffmpeg_3 ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     ;
 
   configurePlatforms = [ ];
-  configureFlags = with stdenv.lib; [
+  configureFlags = with lib; [
     "--enable-freetype"
     (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
     (if x11Support then "--enable-x11 --enable-gl" else "--disable-x11 --disable-gl")
@@ -199,19 +199,19 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  NIX_LDFLAGS = with stdenv.lib; toString (
+  NIX_LDFLAGS = with lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
     ++ [ "-lfreetype" ]
   );
 
-  installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
+  installTargets = [ "install" ] ++ lib.optional x11Support "install-gui";
 
   enableParallelBuilding = true;
 
   # Provide a reasonable standard font when not using fontconfig. Maybe we should symlink here.
-  postInstall = stdenv.lib.optionalString (!fontconfigSupport)
+  postInstall = lib.optionalString (!fontconfigSupport)
     ''
       mkdir -p $out/share/mplayer
       cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
@@ -224,7 +224,7 @@ stdenv.mkDerivation rec {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = [ lib.maintainers.eelco ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

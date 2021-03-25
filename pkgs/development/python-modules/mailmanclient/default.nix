@@ -1,18 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
 
 buildPythonPackage rec {
   pname = "mailmanclient";
-  version = "3.3.1";
+  version = "3.3.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pjgzpvhdb6ql8asb20xr8d01m646zpghmcp9fmscks0n1k4di4g";
+    sha256 = "4082ac0c66d7f7bee15751fe2564098b971177c0013e66d0c8ceee1ebdcb5592";
   };
 
   propagatedBuildInputs = [ six httplib2 requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "REST client for driving Mailman 3";
     license = licenses.lgpl3;

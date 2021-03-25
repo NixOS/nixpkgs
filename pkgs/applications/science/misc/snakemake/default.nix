@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://snakemake.readthedocs.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";

@@ -25,7 +25,7 @@
 #
 # Use this package at your own risk.
 
-{stdenv, fetchurl, pythonPackages }:
+{lib, stdenv, fetchurl, pythonPackages }:
 
 let
 
@@ -48,7 +48,7 @@ let
     # details.
     postInstall = "$out/bin/twistd --help > /dev/null";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://twistedmatrix.com/";
       description = "Twisted, an event-driven networking engine written in Python";
       longDescription = ''
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
 
     passthru.twisted = twisted_13;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/desaster/kippo";
       description = "SSH Honeypot";
       longDescription = ''

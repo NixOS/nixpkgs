@@ -1,28 +1,26 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
+{ lib, stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
 , libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl, libpng
 , sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat, libiconv, libxml2
 , autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl, pkg-config }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  # broken with poppler 20.08, however, can't fetch patches cleanly
-  version = "3.1.2.post2020-08-26";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "9a8df672204a8b3b33c36e09a32f747e21166fe9";
-    sha256 = "1n25jma4x1l7slwxk702q77r84vxr90fyn4c3zpkr07q1b8wqql9";
+    rev = "a33784291d19015217ea2604988e53d448e14a07";
+    sha256 = "sha256-ynCju3chDfYtyrGmUE0n3kkaH2Mpm+/DDHHxCahjhSQ=";
   };
 
   sourceRoot = "source/gdal";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config unzip ];
 
   buildInputs = [
-    unzip
     libjpeg
     libtiff
     libpng
@@ -39,8 +37,8 @@ stdenv.mkDerivation rec {
     libxml2
     postgresql
   ] ++ (with pythonPackages; [ python numpy wrapPython ])
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv
-    ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
+    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   configureFlags = [
     "--with-expat=${expat.dev}"
@@ -87,8 +85,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

@@ -11,7 +11,7 @@
   glib,
   pango,
   fontconfig,
-  stdenv,
+  lib, stdenv,
   pytest,
   pytestrunner,
   pytest-isort,
@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "50";
+  version = "52";
   disabled = !isPy3k;
 
   # excluded test needs the Ahem font
@@ -59,10 +59,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "WeasyPrint";
-    sha256 = "0invs96zvmcr6wh5klj52jrcnr9qg150v9wpmbhcsf3vv1d1hbcw";
+    sha256 = "0rwf43111ws74m8b1alkkxzz57g0np3vmd8as74adwnxslfcg4gs";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
     license = licenses.bsd3;

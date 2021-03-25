@@ -153,7 +153,7 @@ let
       };
 
       shell = mkOption {
-        type = types.either types.shellPackage types.path;
+        type = types.nullOr (types.either types.shellPackage types.path);
         default = pkgs.shadow;
         defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";
@@ -198,10 +198,8 @@ let
         type = types.bool;
         default = false;
         description = ''
-          If true, the home directory will be created automatically. If this
-          option is true and the home directory already exists but is not
-          owned by the user, directory owner and group will be changed to
-          match the user.
+          Whether to create the home directory and ensure ownership as well as
+          permissions to match the user.
         '';
       };
 
@@ -366,7 +364,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = ''Count of subordinate user ids'';
+        description = "Count of subordinate user ids";
       };
     };
   };
@@ -383,7 +381,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = ''Count of subordinate group ids'';
+        description = "Count of subordinate group ids";
       };
     };
   };
@@ -570,7 +568,7 @@ in {
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = (mapAttrs' (name: { packages, ... }: {
+    environment.etc = (mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";

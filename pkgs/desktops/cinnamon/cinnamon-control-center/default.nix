@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , glib
 , gettext
@@ -8,18 +8,11 @@
 , intltool
 , gtk3
 , libnotify
-, gnome-menus
 , libxml2
-, systemd
-, upower
 , gnome-online-accounts
 , cinnamon-settings-daemon
 , colord
 , polkit
-, ibus
-, libpulseaudio
-, isocodes
-, kerberos
 , libxkbfile
 , cinnamon-menus
 , dbus-glib
@@ -27,7 +20,6 @@
 , libxklavier
 , networkmanager
 , libwacom
-, gnome3
 , libtool
 , wrapGAppsHook
 , tzdata
@@ -102,7 +94,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     wrapGAppsHook
     gettext
@@ -110,7 +102,7 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "A collection of configuration plugins used in cinnamon-settings";
     license = licenses.gpl2;

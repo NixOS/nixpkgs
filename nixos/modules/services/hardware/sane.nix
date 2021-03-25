@@ -4,9 +4,7 @@ with lib;
 
 let
 
-  pkg = if config.hardware.sane.snapshot
-    then pkgs.sane-backends-git
-    else pkgs.sane-backends;
+  pkg = pkgs.sane-backends;
 
   sanedConf = pkgs.writeTextFile {
     name = "saned.conf";
@@ -148,7 +146,7 @@ in
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
           Accept = true;
-          MaxConnections = 1;
+          MaxConnections = 64;
         };
       };
 

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , perl
 , python3
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-cblas"
     "--blas-int-size=${blasIntSize}"
-  ] ++ stdenv.lib.optionals withOpenMP [ "--enable-threading=openmp" ]
+  ] ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
     ++ [ withArchitecture ];
 
   postPatch = ''
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BLAS-compatible library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib }:
+{ lib, stdenv, fetchFromGitHub, alsaLib }:
 
 stdenv.mkDerivation rec {
    version = "0.2";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
    meta = {
      description = "Small command-line utilities";
      homepage = "https://github.com/baskerville/sutils";
-     maintainers = [ stdenv.lib.maintainers.meisternu ];
+     maintainers = [ lib.maintainers.meisternu ];
      license = "Custom";
-     platforms = stdenv.lib.platforms.linux;
+     platforms = lib.platforms.linux;
    };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
+{ lib, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
 , blockdiag, setuptools
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # tests fail
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;

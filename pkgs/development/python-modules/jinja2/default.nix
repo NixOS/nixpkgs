@@ -1,19 +1,19 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPy3k
 , fetchPypi
 , pytest
 , markupsafe
-, setuptools 
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "2.11.2";
+  version = "2.11.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0";
+    sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
   };
 
   checkInputs = [ pytest ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest -v tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://jinja.pocoo.org/";
     description = "Stand-alone template engine";
     license = licenses.bsd3;

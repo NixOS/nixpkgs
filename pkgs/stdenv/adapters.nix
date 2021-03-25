@@ -110,7 +110,7 @@ rec {
   */
   replaceMaintainersField = stdenv: pkgs: maintainers: stdenv //
     { mkDerivation = args:
-        stdenv.lib.recursiveUpdate
+        pkgs.lib.recursiveUpdate
           (stdenv.mkDerivation args)
           { meta.maintainers = maintainers; };
     };

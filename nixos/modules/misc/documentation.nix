@@ -98,7 +98,7 @@ in
 
           See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
-        # which is at ../../../doc/multiple-output.xml
+        # which is at ../../../doc/multiple-output.chapter.md
       };
 
       man.enable = mkOption {
@@ -217,7 +217,7 @@ in
           manualCache = pkgs.runCommandLocal "man-cache" { }
           ''
             echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
-            ${pkgs.man-db}/bin/mandb -C man.conf -psc
+            ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
           '';
         in
         ''
@@ -261,7 +261,7 @@ in
         ++ optionals cfg.doc.enable ([ manual.manualHTML nixos-help ]
            ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
 
-      services.mingetty.helpLine = mkIf cfg.doc.enable (
+      services.getty.helpLine = mkIf cfg.doc.enable (
           "\nRun 'nixos-help' for the NixOS manual."
       );
     })

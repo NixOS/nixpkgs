@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
+{ lib, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
 , pythonPackages, qt5, sphinx, xvfb_run }:
 
 buildPythonApplication rec {
@@ -29,7 +29,7 @@ buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The FLExible Network Tester";
     homepage = "https://flent.org";
     license = licenses.gpl3;

@@ -1,7 +1,7 @@
-{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3
+{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
-# use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
-, utillinuxMinimal ? null
+# use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
+, util-linuxMinimal ? null
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
@@ -11,9 +11,9 @@
 , darwin, fetchpatch
 }:
 
-with stdenv.lib;
+with lib;
 
-assert stdenv.isLinux -> utillinuxMinimal != null;
+assert stdenv.isLinux -> util-linuxMinimal != null;
 
 # TODO:
 # * Make it build without python
@@ -29,7 +29,7 @@ assert stdenv.isLinux -> utillinuxMinimal != null;
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
-  # Some packages don't get "Cflags" from pkgconfig correctly
+  # Some packages don't get "Cflags" from pkg-config correctly
   # and then fail to build when directly including like <glib/...>.
   # This is intended to be run in postInstall of any package
   # which has $out/include/ containing just some disjunct directories.
@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.66.2";
+  version = "2.66.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1i0pd8y6xz64qlzfj73wxyqp0x7x9j6mwf4gj6ggil4d9vnhnfgc";
+    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "l9+GcOMvn9T3OSsJgOZh3WJQEgFdWDUNoeWOND9K+YQ=";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -92,15 +92,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libelf setupHook pcre
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+    gtk-doc
   ] ++ optionals stdenv.isLinux [
     libselinux
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]);
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
+    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -110,7 +113,7 @@ stdenv.mkDerivation rec {
     # Instead we just copy them over from the native output.
     "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
-    "-Ddevbindir=${placeholder ''dev''}/bin"
+    "-Ddevbindir=${placeholder "dev"}/bin"
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -119,6 +122,8 @@ stdenv.mkDerivation rec {
     # we're using plain
     "-DG_DISABLE_CAST_CHECKS"
   ];
+
+  hardeningDisable = [ "pie" ];
 
   postPatch = ''
     chmod +x gio/tests/gengiotypefuncs.py
@@ -144,7 +149,7 @@ stdenv.mkDerivation rec {
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
-  checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
+  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -182,7 +187,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "glib"; };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library of programming buildings blocks";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;

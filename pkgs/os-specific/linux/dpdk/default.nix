@@ -1,7 +1,7 @@
 { stdenv, lib
 , kernel
 , fetchurl
-, pkgconfig, meson, ninja
+, pkg-config, meson, ninja
 , libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap
 , doxygen, python3
 , shared ? false }:
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     doxygen
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     python3.pkgs.sphinx
   ];
@@ -70,6 +70,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://dpdk.org/";
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  platforms.linux;
-    maintainers = with maintainers; [ domenkozar magenbluten orivej ];
+    maintainers = with maintainers; [ magenbluten orivej ];
   };
 }

@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , gnome3
+, dconf
 , wxGTK30
 , wxGTK31
 , makeWrapper
@@ -15,19 +16,15 @@
 , stable ? true
 , oceSupport ? false
 , withOCE ? false
-, opencascade
 , withOCCT ? false
 , withOCC ? true
-, opencascade-occt
 , ngspiceSupport ? false
 , withNgspice ? true
 , libngspice
 , scriptingSupport ? false
 , withScripting ? true
-, swig
 , python3
 , debug ? false
-, valgrind
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
@@ -70,13 +67,13 @@
 # }
 
 assert withNgspice -> libngspice != null;
-assert stdenv.lib.assertMsg (!ngspiceSupport)
+assert lib.assertMsg (!ngspiceSupport)
   "`nspiceSupport` was renamed to `withNgspice` for the sake of consistency with other kicad nix arguments.";
-assert stdenv.lib.assertMsg (!oceSupport)
+assert lib.assertMsg (!oceSupport)
   "`oceSupport` was renamed to `withOCE` for the sake of consistency with other kicad nix arguments.";
-assert stdenv.lib.assertMsg (!scriptingSupport)
+assert lib.assertMsg (!scriptingSupport)
   "`scriptingSupport` was renamed to `withScripting` for the sake of consistency with other kicad nix arguments.";
-assert stdenv.lib.assertMsg (!withOCCT)
+assert lib.assertMsg (!withOCCT)
   "`withOCCT` was renamed to `withOCC` for the sake of consistency with upstream cmake options.";
 let
   baseName = if (stable) then "kicad" else "kicad-unstable";
@@ -151,7 +148,7 @@ let
   python = python3;
   wxPython = python.pkgs.wxPython_4_0;
 
-  inherit (stdenv.lib) concatStringsSep flatten optionalString optionals;
+  inherit (lib) concatStringsSep flatten optionalString optionals;
 in
 stdenv.mkDerivation rec {
 
@@ -190,12 +187,12 @@ stdenv.mkDerivation rec {
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
+    "--prefix XDG_DATA_DIRS : ${gnome3.adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
     # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
-    "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
+    "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
 
     "--set-default KISYSMOD ${footprints}/share/kicad/modules"
     "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
@@ -251,11 +248,11 @@ stdenv.mkDerivation rec {
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = stdenv.lib.licenses.agpl3;
+    license = lib.licenses.agpl3;
     # berce seems inactive...
-    maintainers = with stdenv.lib.maintainers; [ evils kiwi berce ];
+    maintainers = with lib.maintainers; [ evils kiwi berce ];
     # kicad is cross platform
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     # despite that, nipkgs' wxGTK for darwin is "wxmac"
     # and wxPython_4_0 does not account for this
     # adjusting this package to downgrade to python2Packages.wxPython (wxPython 3),

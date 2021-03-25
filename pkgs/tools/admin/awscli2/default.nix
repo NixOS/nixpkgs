@@ -1,20 +1,14 @@
-{ lib
-, python3
-, groff
-, less
-, fetchFromGitHub
-}:
+{ lib, python3, groff, less, fetchFromGitHub }:
 let
   py = python3.override {
     packageOverrides = self: super: {
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev71";
+        version = "2.0.0dev97";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "f8b31e2a01a8797f8331c6af2c93a26ff82b2b4b";
-          hash = "sha256-25WV64RPXpGlq9mZYxUVKUdUjU+e1UnuVTLf9Z9I8Tc=
-";
+          rev = "f240d284994b521b0bd099161bc0ab5786caf700";
+          sha256 = "sha256-Ot3w/4OcQ+pXq6bJnQqV5uvG50/uIOa1pwMWqor5NXM=";
         };
       });
       prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
@@ -30,13 +24,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.1.3"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.1.29"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-7klM8jLNptaMyOjKkrsldUdw10vABgIc+Fs3Kj/z0V0=";
+    sha256 = "sha256-6SVDJeyPJQX4XIH8RYRzJG2LFDHxIrW/b1a0JZ5kIFY=";
   };
 
   postPatch = ''
@@ -73,7 +67,7 @@ with py.pkgs; buildPythonApplication rec {
     ${python3.interpreter} scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
 
     mkdir -p $out/share/bash-completion/completions
-    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
+    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/aws
 
     mkdir -p $out/share/zsh/site-functions
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, pkgconfig, qtbase, qttools, alsaLib, libjack2 }:
+{ mkDerivation, lib, fetchurl, pkg-config, qtbase, qttools, alsaLib, libjack2 }:
 
 mkDerivation rec {
   version = "0.6.3";
@@ -13,7 +13,7 @@ mkDerivation rec {
 
   buildInputs = [  qtbase qttools alsaLib libjack2 ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "A MIDI network gateway application that sends and receives MIDI data (ALSA Sequencer and/or JACK MIDI) over the network";

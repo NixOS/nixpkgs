@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , pytest
 , Wand
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   doCheck = !isPyPy;  # failures due to sqla version mismatch
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dahlia/sqlalchemy-imageattach";
     description = "SQLAlchemy extension for attaching images to entity objects";
     license = licenses.mit;

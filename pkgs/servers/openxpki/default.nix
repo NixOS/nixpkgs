@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, openssl, perlPackages, gettext, python3Packages
+{ lib, fetchgit, perl, openssl, perlPackages, gettext, python3Packages
 # TODO: Remove extra dependencies once it is clear that they are NOT needed somewhere.
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 
@@ -23,18 +23,18 @@ perlPackages.buildPerlPackage {
       ProcProcessTable ProcSafeExec RegexpCommon SOAPLite Switch SysSigAction TemplateToolkit
       TestPod TestPodCoverage TextCSV_XS Workflow XMLFilterXInclude XMLParser
       XMLSAX XMLSAXWriter XMLSimple XMLValidatorSchema ]
-    ++ stdenv.lib.optionals extraDependencies1
+    ++ lib.optionals extraDependencies1
     [ # dependencies from parsing through core/server
       ClassAccessor PathTools DataDumper DateTime DateTimeFormatStrptime DBI
       Encode ExceptionClass FilePath FileTemp Filter GetoptLong HTMLParser
       ScalarListUtils MathBigInt Memoize libnet RTClientREST
       Storable ]
-    ++ stdenv.lib.optionals extraDependencies2
+    ++ lib.optionals extraDependencies2
     [ # dependencies taken from Debian
       MooseXTypesPathClass DataStreamBulk MooseXStrictConstructor GitPurePerl
       ConfigGitLike DevelStackTrace TreeDAGNode ClassObservable ClassFactory TimeDate ConfigAny
       CGIFast ClassISA YAML YAMLLibYAML AuthenSASL TextCSV FileFindRulePerl IODigest ]
-    ++ stdenv.lib.optionals extraDependencies3
+    ++ lib.optionals extraDependencies3
     [ # dependencies taken from https://metacpan.org/pod/release/ALECH/Bundle-OpenXPKI-0.06/lib/Bundle/OpenXPKI.pm
       AttributeParamsValidate BC CGI CPAN CacheCache ClassClassgenclassgen
       ClassContainer ClassDataInheritable ClassSingleton ConvertASN1 DBDSQLite DBIxHTMLViewLATEST
@@ -75,9 +75,9 @@ perlPackages.buildPerlPackage {
   meta = {
     homepage = "http://www.openxpki.org";
     description = "Enterprise-grade PKI/Trustcenter software";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tstrobel ];
+    platforms = with lib.platforms; linux;
     broken = true;  # broken with openssl 1.1 (v2.x might fix this)
   };
 }

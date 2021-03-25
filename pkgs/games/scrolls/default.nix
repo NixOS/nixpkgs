@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gcc
+{ lib, stdenv, fetchurl, gcc
 , libGLU, libX11, libXext, libXcursor, libpulseaudio
 }:
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
     platforms = [ "x86_64-linux" ];
 
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     sha256 = "ead1fd14988aa07041fedfa7f845c756cd5077a5a402d85bfb749cb669ececec";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     gcc
     libGLU
     libX11

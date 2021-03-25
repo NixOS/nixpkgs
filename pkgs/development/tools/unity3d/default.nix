@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   version = "${ver}x${build}";
 
   src = fetchurl {
-  	url = "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
+    url = "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
     sha1 = "083imikkrgha5w9sihjvv1m74naxm5yv";
   };
 
@@ -129,7 +129,7 @@ in stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://unity3d.com/";
     description = "Game development tool";
     longDescription = ''

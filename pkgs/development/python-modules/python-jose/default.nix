@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , future, six, ecdsa, rsa
 , pycrypto, pytestcov, pytestrunner, cryptography
 , pytestCheckHook
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future six ecdsa rsa ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mpdavis/python-jose";
     description = "A JOSE implementation in Python";
     license = licenses.mit;

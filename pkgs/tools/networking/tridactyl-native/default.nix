@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3
 }:
@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
   pname = "tridactyl-native";
   # this is actually the version of tridactyl itself; the native messenger will
   # probably not change with every tridactyl version
-  version = "1.20.2";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "tridactyl";
     repo = "tridactyl";
     rev = version;
-    sha256 = "0yz1vbqa3sppkjmny5ipnspsdi5gnix7wb6hzvdkm9h1rj2kb8ci";
+    sha256 = "sha256-BjjRB9VadQ/MSwNK2QLbcTDoRs6Ua+5MONHtmfq4xz0=";
   };
   sourceRoot = "source/native";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/share/tridactyl"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tridactyl native messaging host application";
     homepage = "https://github.com/tridactyl/tridactyl";
     license = licenses.asl20;

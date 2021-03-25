@@ -84,6 +84,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;  # Dashboard broken, other build failures.
     description = "A hyperparameter optimization framework";
     homepage = "https://optuna.org/";
     license = licenses.mit;

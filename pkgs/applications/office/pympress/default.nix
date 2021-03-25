@@ -1,13 +1,10 @@
 { lib
 , python3Packages
 , wrapGAppsHook
-, xvfb_run
 , gtk3
 , gobject-introspection
 , libcanberra-gtk3
-, dbus
 , poppler_gi
-, python3
  }:
 
 python3Packages.buildPythonApplication rec {

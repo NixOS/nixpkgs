@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, jdk, CoreServices, Foundation }:
+{ lib, stdenv, fetchFromGitHub, zlib, jdk, CoreServices, Foundation }:
 
 stdenv.mkDerivation rec {
   pname = "avian";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib jdk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       building self-contained applications.
     '';
     homepage = "https://readytalk.github.io/avian/";
-    license = stdenv.lib.licenses.isc;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.earldouglas ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.earldouglas ];
   };
 }

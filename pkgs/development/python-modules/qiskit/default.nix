@@ -15,15 +15,15 @@
 buildPythonPackage rec {
   pname = "qiskit";
   # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
-  version = "0.20.0";
+  version = "0.24.0";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "Qiskit";
+    owner = "qiskit";
     repo = "qiskit";
     rev = version;
-    sha256 = "1r23pjnql49gczf4k4m6ir5rr95gqdxjrks60p8a93d243mxx3c9";
+    sha256 = "1b78q75bi666v0yj33bkjlc40d2172dsq5yp1s2kkisjfa8qmh7h";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook ];
-  dontUseSetuptoolsCheck = true;
 
   pythonImportsCheck = [
     "qiskit"
@@ -43,6 +42,7 @@ buildPythonPackage rec {
     "qiskit.circuit"
     "qiskit.ignis"
     "qiskit.providers.aer"
+    "qiskit.providers.ibmq"
   ];
 
   meta = with lib; {

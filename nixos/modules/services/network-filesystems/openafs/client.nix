@@ -244,7 +244,7 @@ in
       # postStop, then we get a hang + kernel oops, because AFS can't be
       # stopped simply by sending signals to processes.
       preStop = ''
-        ${pkgs.utillinux}/bin/umount ${cfg.mountPoint}
+        ${pkgs.util-linux}/bin/umount ${cfg.mountPoint}
         ${openafsBin}/sbin/afsd -shutdown
         ${pkgs.kmod}/sbin/rmmod libafs
       '';

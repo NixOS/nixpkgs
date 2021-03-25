@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , fetchurl
 , python3
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glade";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glade/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfgs2dpjd8dnnjkfc4xdy8yjjavlzimqzyfr1pq1m1h96z506hp";
+    url = "mirror://gnome/sources/glade/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1dxsiz9ahqkxg2a1dw9sbd8jg59y5pdz4c1gvnbmql48gmj8gz4q";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Glade";
     description = "User interface designer for GTK applications";
     maintainers = teams.gnome.members;

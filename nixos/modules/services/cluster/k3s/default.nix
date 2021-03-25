@@ -47,6 +47,7 @@ in
 
     extraFlags = mkOption {
       description = "Extra flags to pass to the k3s command.";
+      type = types.str;
       default = "";
       example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
     };
@@ -75,6 +76,10 @@ in
     virtualisation.docker = mkIf cfg.docker {
       enable = mkDefault true;
     };
+
+    # TODO: disable this once k3s supports cgroupsv2, either by docker
+    # supporting it, or their bundled containerd
+    systemd.enableUnifiedCgroupHierarchy = false;
 
     systemd.services.k3s = {
       description = "k3s service";

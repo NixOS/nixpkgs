@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchzip, ocaml, findlib, tcl, tk }:
+{ stdenv, lib, fetchurl, fetchzip, ocaml, findlib, tcl, tk }:
 
-let OCamlVersionAtLeast = stdenv.lib.versionAtLeast ocaml.version; in
+let OCamlVersionAtLeast = lib.versionAtLeast ocaml.version; in
 
 if !OCamlVersionAtLeast "4.04"
 then throw "labltk is not available for OCaml ${ocaml.version}"
@@ -56,6 +56,10 @@ let param =
     version = "8.06.9";
     sha256 = "1k42k3bjkf22gk39lwwzqzfhgjyhxnclslldrzpg5qy1829pbnc0";
   };
+  "4.12" = mkNewParam {
+    version = "8.06.10";
+    sha256 = "06cck7wijq4zdshzhxm6jyl8k3j0zglj2axsyfk6q1sq754zyf4a";
+  };
 }.${builtins.substring 0 4 ocaml.version};
 in
 
@@ -80,8 +84,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "OCaml interface to Tcl/Tk, including OCaml library explorer OCamlBrowser";
     homepage = "http://labltk.forge.ocamlcore.org/";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

@@ -14,7 +14,7 @@
 , libxml2
 , mkDerivation
 , pixman
-, pkgconfig
+, pkg-config
 , podofo
 , poppler
 , poppler_data
@@ -22,7 +22,7 @@
 , qtbase
 , qtimageformats
 , qttools
-, stdenv
+, lib
 }:
 
 let
@@ -43,11 +43,16 @@ mkDerivation rec {
     sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    (fetchpatch {  # fix build with podofo 0.9.7
+      url = "https://github.com/scribusproject/scribus/commit/c6182ef92820b422d61c904e40e9fed865458eb5.patch";
+      sha256 = "0vp275xfbd4xnj5s55cgzsihgihby5mmjlbmrc7sa6jbrsm8aa2c";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -72,7 +77,7 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [
       erictapen
       kiwi

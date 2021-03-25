@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''utilities_dot_print-items'';
-  version = ''20190813-git'';
+  baseName = "utilities_dot_print-items";
+  version = "20190813-git";
 
   parasites = [ "utilities.print-items/test" ];
 
-  description = ''A protocol for flexible and composable printing.'';
+  description = "A protocol for flexible and composable printing.";
 
   deps = [ args."alexandria" args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/utilities.print-items/2019-08-13/utilities.print-items-20190813-git.tgz'';
-    sha256 = ''12l4kzz621qfcg8p5qzyxp4n4hh9wdlpiziykwb4c80g32rdwkc2'';
+    url = "http://beta.quicklisp.org/archive/utilities.print-items/2019-08-13/utilities.print-items-20190813-git.tgz";
+    sha256 = "12l4kzz621qfcg8p5qzyxp4n4hh9wdlpiziykwb4c80g32rdwkc2";
   };
 
   packageName = "utilities.print-items";

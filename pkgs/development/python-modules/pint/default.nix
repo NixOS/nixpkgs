@@ -25,7 +25,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   nativeBuildInputs = [ setuptools_scm ];
-  
+
   propagatedBuildInputs = [ packaging ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 

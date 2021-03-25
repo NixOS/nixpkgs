@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
+{ lib, stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-devel-docs";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-devel-docs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07849yhpc4l4jscskpsbjwsp5qs8f0jz3rmh3p1nj13vxmvgm5j5";
+    url = "mirror://gnome/sources/gnome-devel-docs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1h6481hbz1c5p69r6h96hbgf560lhp1jibszscgw0s2yikdh6q8n";
   };
 
   passthru = {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool itstool libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/GNOME/gnome-devel-docs";
     description = "Developer documentation for GNOME";
     maintainers = teams.gnome.members;

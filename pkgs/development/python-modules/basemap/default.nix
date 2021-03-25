@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   # TODO : do the post install checks (`cd examples && ${python.interpreter} run_all.py`)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://matplotlib.org/basemap/";
     description = "Plot data on map projections with matplotlib";
     longDescription = ''

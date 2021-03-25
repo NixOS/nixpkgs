@@ -1,4 +1,5 @@
-{ attrs
+{ lib
+, attrs
 , buildPythonPackage
 , defusedxml
 , fetchPypi
@@ -6,28 +7,28 @@
 , isPy3k
 , lxml
 , pillow
+, psutil
 , pybind11
-, pytest
+, pytest-cov
 , pytest-helpers-namespace
 , pytest-timeout
-, pytest_xdist
-, pytestrunner
+, pytest-xdist
+, pytestCheckHook
+, python-dateutil
 , python-xmp-toolkit
-, python3
 , qpdf
+, setuptools-scm
 , setuptools-scm-git-archive
-, setuptools_scm
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "1.18.0";
+  version = "2.8.0";
   disabled = ! isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d0840a5c16b535f9b6e56fb4421a43f88760e6cabcf7fd44bdd0436107b61dc";
+    sha256 = "74ff96fddd21cd4c0830eb549137ea9eccbdbff8cef4f684322b9afb8e42ccb5";
   };
 
   buildInputs = [
@@ -37,36 +38,35 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm-git-archive
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
     attrs
     hypothesis
-    pillow
-    pytest
     pytest-helpers-namespace
     pytest-timeout
-    pytest_xdist
-    pytestrunner
+    pytest-xdist
+    psutil
+    pytest-cov
+    pytestCheckHook
+    python-dateutil
     python-xmp-toolkit
   ];
 
-  propagatedBuildInputs = [ defusedxml lxml ];
-
-  postPatch = ''
-    sed -i \
-      -e 's/^pytest .*/pytest/g' \
-      -e 's/^attrs .*/attrs/g' \
-      -e 's/^hypothesis .*/hypothesis/g' \
-      requirements/test.txt
-  '';
+  propagatedBuildInputs = [
+    defusedxml
+    lxml
+    pillow
+  ];
 
   preBuild = ''
     HOME=$TMPDIR
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "pikepdf" ];
+
+  meta = with lib; {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;

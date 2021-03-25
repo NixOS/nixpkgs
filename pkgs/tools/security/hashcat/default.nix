@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 , opencl-headers
@@ -26,11 +26,17 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_XXHASH=1"
   ];
 
+  preFixup = ''
+    for f in $out/share/hashcat/OpenCL/*.cl; do
+      sed "s|#include \"\(.*\)\"|#include \"$out/share/hashcat/OpenCL/\1\"|g" -i "$f"
+    done
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast password cracker";
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;

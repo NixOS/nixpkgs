@@ -57,8 +57,8 @@ let
         substituteInPlace $i \
           --replace \"/sbin/modprobe \"${pkgs.kmod}/bin/modprobe \
           --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
-          --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
-          --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount \
+          --replace \"/sbin/blkid \"${pkgs.util-linux}/sbin/blkid \
+          --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
           --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
       done
@@ -202,10 +202,24 @@ in
         '';
       };
 
+      initrdRules = mkOption {
+        default = "";
+        example = ''
+          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
+        '';
+        type = types.lines;
+        description = ''
+          <command>udev</command> rules to include in the initrd
+          <emphasis>only</emphasis>. They'll be written into file
+          <filename>99-local.rules</filename>. Thus they are read and applied
+          after the essential initrd rules.
+        '';
+      };
+
       extraRules = mkOption {
         default = "";
         example = ''
-          KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
+          ENV{ID_VENDOR_ID}=="046d", ENV{ID_MODEL_ID}=="0825", ENV{PULSE_IGNORE}="1"
         '';
         type = types.lines;
         description = ''
@@ -280,9 +294,16 @@ in
 
     services.udev.packages = [ extraUdevRules extraHwdbFile ];
 
-    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
+    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.util-linux udev ];
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
+
+    boot.initrd.extraUdevRulesCommands = optionalString (cfg.initrdRules != "")
+      ''
+        cat <<'EOF' > $out/99-local.rules
+        ${cfg.initrdRules}
+        EOF
+      '';
 
     environment.etc =
       {

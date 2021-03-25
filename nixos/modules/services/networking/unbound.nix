@@ -195,7 +195,7 @@ in
         RuntimeDirectory = "unbound";
         ConfigurationDirectory = "unbound";
         StateDirectory = "unbound";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" "AF_UNIX" ];
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [

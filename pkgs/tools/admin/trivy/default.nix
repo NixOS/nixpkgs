@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d9lb1wzvxywg88fy85bicixd8wipvbhnwfckwl3p8shh0s9sr22";
+    sha256 = "sha256-E/tPjVc+XLDCFYzloAipwWjB4I86kAe/6NVoJSCrY2M=";
   };
 
-  vendorSha256 = "0sashi3x3hccqm27dg6hjlvpgvx42jdxpgzigzm81md58zhk509x";
+  vendorSha256 = "sha256-YoQF0Eug747LhsR3V0IplwXgm0ndDqK1pUVjguOhjOU=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -32,6 +32,7 @@ buildGoModule rec {
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
     homepage = src.meta.homepage;
+    changelog = "${src.meta.homepage}/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
   };

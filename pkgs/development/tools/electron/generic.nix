@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , libXScrnSaver
 , makeWrapper
 , fetchurl
@@ -13,13 +13,15 @@
 , libdrm
 , mesa
 , libxkbcommon
+, libappindicator-gtk3
+, libxshmfence
 }:
 
 version: hashes:
 let
   name = "electron-${version}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
@@ -30,6 +32,11 @@ let
 
   fetcher = vers: tag: hash: fetchurl {
     url = "https://github.com/electron/electron/releases/download/v${vers}/electron-v${vers}-${tag}.zip";
+    sha256 = hash;
+  };
+
+  headersFetcher = vers: hash: fetchurl {
+    url = "https://atom.io/download/electron/v${vers}/node-v${vers}-headers.tar.gz";
     sha256 = hash;
   };
 
@@ -47,12 +54,14 @@ let
   common = platform: {
     inherit name version meta;
     src = fetcher version (get tags platform) (get hashes platform);
+    passthru.headers = headersFetcher version hashes.headers;
   };
 
-  electronLibPath = with stdenv.lib; makeLibraryPath (
-    [ libuuid at-spi2-atk at-spi2-core ]
+  electronLibPath = with lib; makeLibraryPath (
+    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
     ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
     ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
+    ++ optionals (! versionOlder version "12.0.0") [ libxshmfence ]
   );
 
   linux = {
@@ -82,13 +91,13 @@ let
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
+        --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
         "''${gappsWrapperArgs[@]}"
     '';
   };
 
   darwin = {
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
 
     buildCommand = ''
       mkdir -p $out/Applications

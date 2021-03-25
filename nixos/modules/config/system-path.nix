@@ -37,7 +37,7 @@ let
       pkgs.procps
       pkgs.su
       pkgs.time
-      pkgs.utillinux
+      pkgs.util-linux
       pkgs.which
       pkgs.zstd
     ];
@@ -144,6 +144,7 @@ in
         "/share/kservicetypes5"
         "/share/kxmlgui5"
         "/share/systemd"
+        "/share/thumbnailers"
       ];
 
     system.path = pkgs.buildEnv {

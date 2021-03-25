@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "reattach-to-user-namespace";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp reattach-to-user-namespace $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A wrapper that provides access to the Mac OS X pasteboard service";
     license = licenses.bsd2;
     maintainers = with maintainers; [ lnl7 ];

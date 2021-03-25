@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "mirage-flow-combinators";
 
-  inherit (mirage-flow) version src;
+  inherit (mirage-flow) version useDune2 src;
 
   propagatedBuildInputs = [ ocaml_lwt logs cstruct mirage-clock mirage-flow ];
 

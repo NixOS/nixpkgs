@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_ttf, spice-protocol
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_ttf, spice-protocol
 , fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
 , libXi, libXext, wayland, libffi, libGLU, expat, libbfd
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     SDL2 SDL2_ttf spice-protocol fontconfig libX11 freefont_ttf nettle
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/client";
   NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM

@@ -17,7 +17,7 @@ let
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         for prog in bower2nix fetch-bower; do
-          wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
+          wrapProgram "$out/bin/$prog" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.git pkgs.nix ]}
         done
       '';
     };
@@ -59,10 +59,18 @@ let
       buildInputs = [ pkgs.phantomjs2 ];
     };
 
+    flood = super.flood.override {
+      buildInputs = [ self.node-pre-gyp ];
+    };
+
     expo-cli = super."expo-cli".override (attrs: {
       # The traveling-fastlane-darwin optional dependency aborts build on Linux.
       dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
     });
+
+    "@electron-forge/cli" = super."@electron-forge/cli".override {
+      buildInputs = [ self.node-pre-gyp self.rimraf ];
+    };
 
     git-ssb = super.git-ssb.override {
       buildInputs = [ self.node-gyp-build ];
@@ -73,6 +81,13 @@ let
       buildInputs = [ self.node-gyp-build pkgs.unbound ];
     };
 
+    ijavascript = super.ijavascript.override (oldAttrs: {
+      preRebuild = ''
+        export NPM_CONFIG_ZMQ_EXTERNAL=true
+      '';
+      buildInputs = oldAttrs.buildInputs ++ [ self.node-gyp-build pkgs.zeromq ];
+    });
+
     insect = super.insect.override (drv: {
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
@@ -80,7 +95,7 @@ let
     makam =  super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
-        wrapProgram "$out/bin/makam" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nodejs ]}
+        wrapProgram "$out/bin/makam" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nodejs ]}
         ${
           if stdenv.isLinux
             then "patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
@@ -92,7 +107,7 @@ let
     mirakurun = super.mirakurun.override rec {
       nativeBuildInputs = with pkgs; [ makeWrapper ];
       postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l_utils ]);
+        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
       in
       ''
         substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
@@ -127,7 +142,7 @@ let
     node2nix = super.node2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
-        wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
+        wrapProgram "$out/bin/node2nix" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
       '';
     };
 
@@ -157,7 +172,7 @@ let
       '';
 
       postInstall = let
-        pnpmLibPath = stdenv.lib.makeBinPath [
+        pnpmLibPath = pkgs.lib.makeBinPath [
           nodejs.passthru.python
           nodejs
         ];
@@ -174,7 +189,7 @@ let
 
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall =  ''
-        wrapProgram "$out/bin/pulp" --suffix PATH : ${stdenv.lib.makeBinPath [
+        wrapProgram "$out/bin/pulp" --suffix PATH : ${pkgs.lib.makeBinPath [
           pkgs.purescript
         ]}
       '';
@@ -182,6 +197,10 @@ let
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
+      meta.broken = since "10";
+    };
+
+    stf = super.stf.override {
       meta.broken = since "10";
     };
 
@@ -201,12 +220,16 @@ let
       '';
     });
 
-    stf = super.stf.override {
-      meta.broken = since "10";
+    typescript-language-server = super.typescript-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/typescript-language-server" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
+      '';
     };
 
     vega-cli = super.vega-cli.override {
-      nativeBuildInputs = [ pkgs.pkgconfig ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
       buildInputs = with pkgs; [
         super.node-pre-gyp
         pixman
@@ -252,6 +275,14 @@ let
       buildInputs = [ self.node-pre-gyp ];
       postInstall = ''
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+      '';
+    };
+
+    yaml-language-server = super.yaml-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/yaml-language-server" \
+        --prefix NODE_PATH : ${self.prettier}/lib/node_modules
       '';
     };
   };

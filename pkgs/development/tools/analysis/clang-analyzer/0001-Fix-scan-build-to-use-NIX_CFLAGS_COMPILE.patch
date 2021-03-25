@@ -1,22 +1,24 @@
-From 6ab08bc1c889e4fb9a39432b1a654eaa19ee65eb Mon Sep 17 00:00:00 2001
-From: Austin Seipp <aseipp@pobox.com>
-Date: Fri, 2 May 2014 12:28:23 -0500
-Subject: [PATCH] Fix scan-build to use NIX_CFLAGS_COMPILE
+From 40239d92957f1969652cdd41d6d2749c41ac4338 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Fri, 31 Jul 2020 09:22:03 +0100
+Subject: [PATCH] [PATCH] Fix scan-build to use NIX_CFLAGS_COMPILE
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Austin Seipp <aseipp@pobox.com>
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
 ---
- tools/scan-build/ccc-analyzer | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/scan-build/libexec/ccc-analyzer | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/scan-build/ccc-analyzer b/tools/scan-build/ccc-analyzer
-index b463ec0..9d39dd0 100755
---- a/tools/scan-build/ccc-analyzer
-+++ b/tools/scan-build/ccc-analyzer
-@@ -207,6 +207,15 @@ sub Analyze {
-       push @Args, "-Xclang", "-analyzer-viz-egraph-ubigraph";
+diff --git a/tools/scan-build/libexec/ccc-analyzer b/tools/scan-build/libexec/ccc-analyzer
+index 800f38b5..0fb50fb3 100755
+--- a/tools/scan-build/libexec/ccc-analyzer
++++ b/tools/scan-build/libexec/ccc-analyzer
+@@ -246,6 +246,14 @@ sub Analyze {
+       push @Args, "-target", $AnalyzerTarget;
      }
  
-+
 +    # Add Nix flags to analysis
 +    if (defined $ENV{'NIX_CFLAGS_COMPILE'}) {
 +      my @nixArgs = split(/\s+/, $ENV{'NIX_CFLAGS_COMPILE'});
@@ -25,9 +27,9 @@ index b463ec0..9d39dd0 100755
 +      }
 +    }
 +
-     my $AnalysisArgs = GetCCArgs("--analyze", \@Args);
+     my $AnalysisArgs = GetCCArgs($HtmlDir, "--analyze", \@Args);
      @CmdArgs = @$AnalysisArgs;
    }
 -- 
-1.8.3.2
+2.27.0
 

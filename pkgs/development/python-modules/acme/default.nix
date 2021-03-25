@@ -1,6 +1,5 @@
 { buildPythonPackage
 , certbot
-, pytest
 , cryptography
 , pyasn1
 , pyopenssl
@@ -25,7 +24,9 @@ buildPythonPackage rec {
     werkzeug mock ndg-httpsclient josepy
   ];
 
-  checkInputs = [ pytest ];
+  # does not contain any tests
+  doCheck = false;
+  pythonImportsCheck = [ "acme" ];
 
   sourceRoot = "source/${pname}";
 

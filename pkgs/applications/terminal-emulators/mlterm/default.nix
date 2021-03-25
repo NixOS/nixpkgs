@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, autoconf, makeDesktopItem
+{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hh196kz2n3asv8r8r2bdk5b2w93zq7rw4880ciiq1554h0ib7fj";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config autoconf wrapGAppsHook ];
   buildInputs = [
     libX11
     gdk-pixbuf.dev

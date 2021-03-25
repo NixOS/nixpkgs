@@ -1,11 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts dotnet-sdk_3
+#!nix-shell -i bash -p curl jq common-updater-scripts dotnet-sdk_5
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 deps_file="$(realpath "./deps.nix")"
 
-new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases" | jq -r '.[0].name')"
+new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases?per_page=1" | jq -r '.[0].name')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 if [[ "$new_version" == "$old_version" ]]; then
   echo "Up to date"
@@ -36,7 +36,7 @@ cat >./nuget_tmp.config <<EOF
 </configuration>
 EOF
 
-dotnet restore osu.Desktop --configfile ./nuget_tmp.config
+dotnet restore osu.Desktop --configfile ./nuget_tmp.config --runtime linux-x64
 
 echo "{ fetchNuGet }: [" >"$deps_file"
 while read pkg_spec; do

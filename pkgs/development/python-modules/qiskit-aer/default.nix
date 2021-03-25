@@ -2,35 +2,41 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+  # C Inputs
+, blas
+, catch2
 , cmake
-, cvxpy
 , cython
+, fmt
 , muparserx
 , ninja
 , nlohmann_json
+, spdlog
+  # Python Inputs
+, cvxpy
 , numpy
-, openblas
 , pybind11
 , scikit-build
-, spdlog
   # Check Inputs
-, qiskit-terra
 , pytestCheckHook
-, python
+, ddt
+, fixtures
+, pytest-timeout
+, qiskit-terra
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.6.1";
+  version = "0.7.6";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    sha256 = "1fnv11diis0as8zcc57mamz0gbjd6vj7nw3arxzvwa77ja803sr4";
+    sha256 = "0595as4rxjrd5dqx54ywz3rjsjk0z7r41bq0z9r8y1h7zgvvlrmn";
   };
 
   nativeBuildInputs = [
@@ -40,10 +46,12 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    openblas
-    spdlog
-    nlohmann_json
+    blas
+    catch2
+    fmt
     muparserx
+    nlohmann_json
+    spdlog
   ];
 
   propagatedBuildInputs = [
@@ -53,17 +61,16 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  patches = [
-    # TODO: remove in favor of qiskit-aer PR #877 patch once accepted/stable
-    ./remove-conan-install.patch
-  ];
+  postPatch = ''
+    substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'," ""
+  '';
+
+  # Disable using conan for build
+  preBuild = ''
+    export DISABLE_CONAN=1
+  '';
 
   dontUseCmakeConfigure = true;
-
-  cmakeFlags = [
-    "-DBUILD_TESTS=True"
-    "-DAER_THRUST_BACKEND=OMP"
-  ];
 
   # *** Testing ***
 
@@ -72,11 +79,22 @@ buildPythonPackage rec {
     "qiskit.providers.aer.backends.qasm_simulator"
     "qiskit.providers.aer.backends.controller_wrappers" # Checks C++ files built correctly. Only exists if built & moved to output
   ];
-  checkInputs = [
-    qiskit-terra
-    pytestCheckHook
+  # Slow tests
+  disabledTests = [
+    "test_paulis_1_and_2_qubits"
+    "test_3d_oscillator"
   ];
-  dontUseSetuptoolsCheck = true;  # Otherwise runs tests twice
+  checkInputs = [
+    pytestCheckHook
+    ddt
+    fixtures
+    pytest-timeout
+    qiskit-terra
+  ];
+  pytestFlagsArray = [
+    "--timeout=30"
+    "--durations=10"
+  ];
 
   preCheck = ''
     # Tests include a compiled "circuit" which is auto-built in $HOME
@@ -87,9 +105,7 @@ buildPythonPackage rec {
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME
   '';
-  postCheck = ''
-    popd
-  '';
+  postCheck = "popd";
 
   meta = with lib; {
     description = "High performance simulators for Qiskit";

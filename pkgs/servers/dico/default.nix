@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libtool, gettext, zlib, readline, gsasl
+{ fetchurl, lib, stdenv, libtool, gettext, zlib, readline, gsasl
 , guile, python, pcre, libffi, groff }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage    = "https://www.gnu.org/software/dico/";
     license     = licenses.gpl3Plus;

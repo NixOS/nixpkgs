@@ -1,4 +1,4 @@
-{ pkgs }:
+{ lib, pkgs }:
 
 with pkgs;
 
@@ -15,7 +15,7 @@ rec {
     } // args);
 
   antBuild = args: import ./ant-build.nix (
-    { inherit pkgs;
+    { inherit lib pkgs;
     } // args);
 
   mvnBuild = args: import ./maven-build.nix (
@@ -23,7 +23,7 @@ rec {
     } // args);
 
   nixBuild = args: import ./nix-build.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   coverageAnalysis = args: nixBuild (
@@ -46,7 +46,7 @@ rec {
     } // args);
 
   debBuild = args: import ./debian-build.nix (
-    { inherit stdenv vmTools checkinstall;
+    { inherit lib stdenv vmTools checkinstall;
     } // args);
 
   aggregate =
@@ -94,7 +94,7 @@ rec {
 
       phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
-      patchPhase = stdenv.lib.optionalString isNixOS ''
+      patchPhase = lib.optionalString isNixOS ''
         touch .update-on-nixos-rebuild
       '';
 

@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , substituteAll
 , plymouth
 , pam
-, pkgconfig
+, pkg-config
 , autoconf
 , automake
 , libtool
@@ -31,7 +31,7 @@
 , yelp-tools
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     libtool
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -101,6 +101,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  dontWrapQtApps = true;
+
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
@@ -140,6 +142,6 @@ stdenv.mkDerivation rec {
     description = "A cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ocharles worldofpeace ];
+    maintainers = with maintainers; [ worldofpeace ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, cython, networkx, joblib, nose, pyyaml }:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, cython, networkx, joblib, nose, pyyaml }:
 
 buildPythonPackage rec {
   pname = "pomegranate";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
     homepage = "https://github.com/jmschrei/pomegranate";
     license = licenses.mit;

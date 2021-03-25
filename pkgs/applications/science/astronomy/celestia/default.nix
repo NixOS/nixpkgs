@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
-, lua, libGLU, libGL, pkgconfig, perl, autoreconfHook
+{ lib, stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
+, lua, libGLU, libGL, pkg-config, perl, autoreconfHook
 }:
 
 let
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     sha256 = "1i1lvhbgllsh2z8i6jj4mvrjak4a7r69psvk7syw03s4p7670mfk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu libGLU libGL lua
     perl autoreconfHook ];
 
@@ -67,9 +67,9 @@ stdenv.mkDerivation {
   meta = {
     description = "Free space simulation";
     homepage = "https://celestia.space/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

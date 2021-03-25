@@ -10,7 +10,7 @@
 }:
 
 mkDerivation {
-  name = "kbreakout";
+  pname = "kbreakout";
   meta.license = with lib.licenses; [ lgpl21 gpl3 ];
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [

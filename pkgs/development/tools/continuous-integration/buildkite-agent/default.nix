@@ -1,19 +1,17 @@
-{ fetchFromGitHub, stdenv, buildGoModule,
+{ fetchFromGitHub, lib, buildGoModule,
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
 buildGoModule rec {
   name = "buildkite-agent-${version}";
-  version = "3.25.0";
-
-  goPackagePath = "github.com/buildkite/agent";
+  version = "3.28.1";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "VxAGi2NpXpc3U+GNIvGJSkdHGODrX2s8oY+dQ8QXIHQ=";
+    sha256 = "sha256-5YOXYOAh/0fOagcqdK2IEwm5XDCxyfTeTzwBGtsQRCs=";
   };
 
-  vendorSha256 = "X1K6uKiMFXTDT1PcedGQ8HLGox8ePP7Cz0Ihf4m9ts8=";
+  vendorSha256 = "sha256-3UXZxeiL0WO4X/3/hW8ubL1TormGbn9X/k0PX+/cLuM=";
 
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
@@ -29,10 +27,10 @@ buildGoModule rec {
 
     # These are runtime dependencies
     wrapProgram $out/bin/buildkite-agent \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
+      --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Build runner for buildkite.com";
     longDescription = ''
       The buildkite-agent is a small, reliable, and cross-platform build runner

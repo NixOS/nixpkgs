@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, dpkg
+{ lib, stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
 , gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
-, at-spi2-atk, libuuid, at-spi2-core }:
+, at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon }:
 
 let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.66.0.74";
+  version = "8.69.0.77";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     alsaLib
     atk
     at-spi2-atk
@@ -40,8 +40,11 @@ let
     pango
     stdenv.cc.cc
     systemd
-    libv4l
 
+    libv4l
+    libdrm
+    mesa
+    libxkbcommon
     xorg.libxkbfile
     xorg.libX11
     xorg.libXcomposite
@@ -65,7 +68,7 @@ let
           "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
           "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
         ];
-        sha256 = "11bpzr3j6fa5x62xrx2q2sr1wxjrn0a37053j4prxjcvdrc5in8f";
+        sha256 = "PaqlPp+BRS0cH7XI4x1/5HqYti63rQThmTtPaghIQH0=";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
@@ -108,13 +111,17 @@ in stdenv.mkDerivation {
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
       --replace /usr/bin/ $out/bin/
+    substituteInPlace $out/share/applications/skypeforlinux-share.desktop \
+      --replace /usr/bin/ $out/bin/
+    substituteInPlace $out/share/kservices5/ServiceMenus/skypeforlinux.desktop \
+      --replace /usr/bin/ $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux client for skype";
     homepage = "https://www.skype.com";
     license = licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ panaeon jraygauthier ];
+    maintainers = with lib.maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];
   };
 }

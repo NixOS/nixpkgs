@@ -1,11 +1,14 @@
+# NOTE: Make sure to (re-)format this file on changes with `nixpkgs-fmt`!
+
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , buildPackages
 , ninja
 , meson
 , m4
-, pkgconfig
+, pkg-config
 , coreutils
 , gperf
 , getent
@@ -18,7 +21,7 @@
 
   # Mandatory dependencies
 , libcap
-, utillinux
+, util-linux
 , kbd
 , kmod
 
@@ -57,11 +60,12 @@
 
 , withAnalyze ? true
 , withApparmor ? true
-, withCoredump ? true
 , withCompression ? true  # adds bzip2, lz4 and xz
+, withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
+, withHomed ? false
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? true
@@ -70,16 +74,18 @@
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? true
+, withOomd ? false
 , withPCRE2 ? true
 , withPolkit ? true
+, withPortabled ? false
 , withRemote ? true
 , withResolved ? true
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
 , withUserDb ? true
-, withHomed ? false, p11-kit, libfido2
-# , withPortabled ? false TODO
+, libfido2
+, p11-kit
 
   # name argument
 , pname ? "systemd"
@@ -94,7 +100,7 @@
 assert withResolved -> (libgcrypt != null && libgpgerror != null);
 assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
-  && gnutar != null && gnupg != null && withCompression );
+  && gnutar != null && gnupg != null && withCompression);
 
 assert withEfi -> (gnu-efi != null);
 assert withRemote -> lib.getDev curl != null;
@@ -104,11 +110,10 @@ assert withHomed -> withCryptsetup;
 
 assert withCryptsetup ->
 (cryptsetup != null);
-
 let
   wantCurl = withRemote || withImportd;
 
-  version = "246.6";
+  version = "247.3";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -119,12 +124,13 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "1yhj2jlighqqpw1xk9q52f3pncjn47ipi224k35d6syb94q2b988";
+    sha256 = "0zn0b74iwz3vxabqsk4yydwpgky3c5z4dl83wxbs1qi5d2dnbqa7";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
   # systemd worktree, rebase to the more recent systemd version, and export the
   # patches again via `git format-patch v${version}`.
+  # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
@@ -137,14 +143,14 @@ stdenv.mkDerivation {
     ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-Install-default-configuration-into-out-share-factory.patch
-    ./0013-inherit-systemd-environment-when-calling-generators.patch
-    ./0014-add-rootprefix-to-lookup-dir-paths.patch
-    ./0015-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0019-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0012-inherit-systemd-environment-when-calling-generators.patch
+    ./0013-add-rootprefix-to-lookup-dir-paths.patch
+    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0019-Revert-pkg-config-prefix-is-not-really-configurable-.patch
   ];
 
   postPatch = ''
@@ -156,13 +162,101 @@ stdenv.mkDerivation {
       --replace \
       "find_program('objcopy'" \
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '' + (
+    let
+      # The folllowing dlopen patches ensure that all the features that are
+      # implemented via dlopen(3) are available (or explicitly deactivated) by
+      # pointing dlopen to the absolute store path instead of relying on the
+      # linkers runtime lookup code.
+      #
+      # All of the dlopen calls have to be handled. When new ones are introduced
+      # by upstream (or one of our patches) they must be explicitly declared,
+      # otherwise the build will fail.
+      #
+      # As of systemd version 247 we've seen a few errors like `libpcre2.… not
+      # found` when using e.g. --grep with journalctl. Those errors should
+      # become less unexpected now.
+      #
+      # There are generally two classes of dlopen(3) calls. Those that we want to
+      # support and those that should be deactivated / unsupported. This change
+      # enforces that we handle all dlopen calls explicitly. Meaning: There is
+      # not a single dlopen call in the source code tree that we did not
+      # explicitly handle.
+      #
+      # In order to do this we introduced a list of attributes that maps from
+      # shared object name to the package that contains them. The package can be
+      # null meaning the reference should be nuked and the shared object will
+      # never be loadable during runtime (because it points at an invalid store
+      # path location).
+      #
+      # To get a list of dynamically loaded libraries issue something like
+      # `grep -ri 'dlopen("lib' $src` and update the below list.
+      dlopenLibs = [
+        # We did never provide support for libxkbcommon & qrencode
+        { name = "libxkbcommon.so.0"; pkg = null; }
+        { name = "libqrencode.so.4"; pkg = null; }
+
+        # We did not provide libpwquality before so it is safe to disable it for
+        # now.
+        { name = "libpwquality.so.1"; pkg = null; }
+
+        # Only include cryptsetup if it is enabled. We might not be able to
+        # provide it during "bootstrap" in e.g. the minimal systemd build as
+        # cryptsetup has udev (aka systemd) in it's dependencies.
+        { name = "libcryptsetup.so.12"; pkg = if withCryptsetup then cryptsetup else null; }
+
+        # We are using libidn2 so we only provide that and ignore the others.
+        # Systemd does this decision during configure time and uses ifdef's to
+        # enable specific branches. We can safely ignore (nuke) the libidn "v1"
+        # libraries.
+        { name = "libidn2.so.0"; pkg = libidn2; }
+        { name = "libidn.so.12"; pkg = null; }
+        { name = "libidn.so.11"; pkg = null; }
+
+        # journalctl --grep requires libpcre so lets provide it
+        { name = "libpcre2-8.so.0"; pkg = pcre2; }
+      ];
+
+      patchDlOpen = dl:
+        let
+          library = "${lib.makeLibraryPath [ dl.pkg ]}/${dl.name}";
+        in
+        if dl.pkg == null then ''
+          # remove the dependency on the library by replacing it with an invalid path
+          for file in $(grep -lr 'dlopen("${dl.name}"' src); do
+            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
+            substituteInPlace "$file" --replace 'dlopen("${dl.name}"' 'dlopen("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
+          done
+        '' else ''
+          # ensure that the library we provide actually exists
+          if ! [ -e ${library} ]; then
+            echo 'The shared library `${library}` does not exist but was given as subtitute for `${dl.name}`'
+            exit 1
+          fi
+          # make the path to the dependency explicit
+          for file in $(grep -lr 'dlopen("${dl.name}"' src); do
+            echo "patching dlopen(\"${dl.name}\", …) in $file to ${library}…"
+            substituteInPlace "$file" --replace 'dlopen("${dl.name}"' 'dlopen("${library}"'
+          done
+        '';
+    in
+    # patch all the dlopen calls to contain absolute paths to the libraries
+    lib.concatMapStringsSep "\n" patchDlOpen dlopenLibs
+  )
+  # finally ensure that there are no left-over dlopen calls that we didn't handle
+  + ''
+    if grep -qr 'dlopen("[^/]' src; then
+      echo "Found unhandled dlopen calls: "
+      grep -r 'dlopen("[^/]' src
+      exit 1
+    fi
   '';
 
   outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
     [
-      pkgconfig
+      pkg-config
       gperf
       ninja
       meson
@@ -196,20 +290,20 @@ stdenv.mkDerivation {
       pam
     ]
 
-    ++ lib.optional  withApparmor libapparmor
-    ++ lib.optional  wantCurl (lib.getDev curl)
+    ++ lib.optional withApparmor libapparmor
+    ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz ]
-    ++ lib.optional  withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional  withEfi gnu-efi
-    ++ lib.optional  withKexectools kexectools
-    ++ lib.optional  withLibseccomp libseccomp
-    ++ lib.optional  withNetworkd iptables
-    ++ lib.optional  withPCRE2 pcre2
-    ++ lib.optional  withResolved libgpgerror
-    ++ lib.optional  withSelinux libselinux
-    ++ lib.optional  withRemote libmicrohttpd
+    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+    ++ lib.optional withEfi gnu-efi
+    ++ lib.optional withKexectools kexectools
+    ++ lib.optional withLibseccomp libseccomp
+    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPCRE2 pcre2
+    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withSelinux libselinux
+    ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit libfido2 ]
-    ;
+  ;
 
   #dontAddPrefix = true;
 
@@ -232,15 +326,16 @@ stdenv.mkDerivation {
     "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
-    "-Dhomed=${stdenv.lib.boolToString withHomed}"
+    "-Dhomed=${lib.boolToString withHomed}"
     "-Dlogind=${lib.boolToString withLogind}"
     "-Dlocaled=${lib.boolToString withLocaled}"
     "-Dhostnamed=${lib.boolToString withHostnamed}"
     "-Dmachined=${lib.boolToString withMachined}"
     "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Doomd=${lib.boolToString withOomd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
     "-Dcryptsetup=${lib.boolToString withCryptsetup}"
-    "-Dportabled=false"
+    "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
     "-Dsysusers=false"
@@ -258,6 +353,7 @@ stdenv.mkDerivation {
     "-Dldconfig=false"
     "-Dsmack=true"
     "-Db_pie=true"
+    "-Dinstall-sysconfdir=false"
     /*
     As of now, systemd doesn't allow runtime configuration of these values. So
     the settings in /etc/login.defs have no effect on it. Many people think this
@@ -277,13 +373,13 @@ stdenv.mkDerivation {
 
     "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
-    "-Dsulogin-path=${utillinux}/bin/sulogin"
-    "-Dmount-path=${utillinux}/bin/mount"
-    "-Dumount-path=${utillinux}/bin/umount"
+    "-Dsulogin-path=${util-linux}/bin/sulogin"
+    "-Dmount-path=${util-linux}/bin/mount"
+    "-Dumount-path=${util-linux}/bin/umount"
     "-Dcreate-log-dirs=false"
-    # Upstream uses cgroupsv2 by default. To support docker and other
-    # container managers we still need v1.
-    "-Ddefault-hierarchy=hybrid"
+
+    # Use cgroupsv2. This is already the upstream default, but better be explicit.
+    "-Ddefault-hierarchy=unified"
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
     "-Dman=true"
@@ -326,18 +422,18 @@ stdenv.mkDerivation {
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
-        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
-        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/mkswap ${lib.getBin util-linux}/sbin/mkswap \
+        --replace /sbin/swapon ${lib.getBin util-linux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin util-linux}/sbin/swapoff \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin util-linux}/sbin/sulogin \
         --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for dir in tools src/resolve test src/test; do
+    for dir in tools src/resolve test src/test src/shared; do
       patchShebangs $dir
     done
 

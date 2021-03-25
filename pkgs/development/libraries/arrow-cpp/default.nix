@@ -1,31 +1,32 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames
 , autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
-, perl, python3, rapidjson, snappy, thrift, utf8proc, which, zlib, zstd
-, enableShared ? true }:
+, perl, python3, rapidjson, re2, snappy, thrift, utf8proc, which, zlib, zstd
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "860376d4e586a3ac34ec93089889da624ead6c2a";
-    sha256 = "16k3lz4ji4y3qcjhr765q14jwwlac8iqscwndwd8ll3zr0vy69b0";
+    rev = "d6c4deb22c4b4e9e3247a2f291046e3c671ad235";
+    sha256 = "0cwhnqijam632zp07j98i8ym967wz6kd35fim1msv88x2rhqky1i";
   };
 
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "d914f9d289488c7db1759d7a88a4a1b8f062c7dd";
-    sha256 = "0xj3ynck2wv6l70xnmvs13bz1jycqjrl5k4lwhhwgag338048als";
+    rev = "e31fe1a02c9e9f271e4bfb8002d403c52f1ef8eb";
+    sha256 = "02f51dvx8w5mw0bx3hn70hkn55mn1m65kzdps1ifvga9hghpy0sh";
   };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "1ghzqw0rx4rxa2d7i76y3szisv0bd9cl7vzadbc41cvvhk6440xy";
+    sha256 = "0yp2b02wrc3s50zd56fmpz4nhhbihp0zw329v4zizaipwlxwrhkk";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
@@ -66,6 +67,7 @@ in stdenv.mkDerivation rec {
     gtest
     lz4
     rapidjson
+    re2
     snappy
     thrift
     utf8proc
@@ -114,6 +116,15 @@ in stdenv.mkDerivation rec {
     if doInstallCheck then "${arrow-testing}/data" else null;
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
+  GTEST_FILTER =
+    if doInstallCheck then let
+      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+      filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+        "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+        "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+        "TestCompareKernel.PrimitiveRandomTests"
+      ];
+    in "-${builtins.concatStringsSep ":" filteredTests}" else null;
   installCheckInputs = [ perl which ];
   installCheckPhase =
   let

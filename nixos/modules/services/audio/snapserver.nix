@@ -48,8 +48,8 @@ let
     ++ [ "--stream.port ${toString cfg.port}" ]
     ++ optionalNull cfg.sampleFormat "--stream.sampleformat ${cfg.sampleFormat}"
     ++ optionalNull cfg.codec "--stream.codec ${cfg.codec}"
-    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${cfg.streamBuffer}"
-    ++ optionalNull cfg.buffer "--stream.buffer ${cfg.buffer}"
+    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${toString cfg.streamBuffer}"
+    ++ optionalNull cfg.buffer "--stream.buffer ${toString cfg.buffer}"
     ++ optional cfg.sendToMuted "--stream.send_to_muted"
     # tcp json rpc
     ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
@@ -198,13 +198,14 @@ in {
         type = with types; attrsOf (submodule {
           options = {
             location = mkOption {
-              type = types.path;
+              type = types.oneOf [ types.path types.str ];
               description = ''
-                The location of the pipe.
+                The location of the pipe, file, Librespot/Airplay/process binary, or a TCP address.
+                Use an empty string for alsa.
               '';
             };
             type = mkOption {
-              type = types.enum [ "pipe" "file" "process" "spotify" "airplay" ];
+              type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" ];
               default = "pipe";
               description = ''
                 The type of input stream.
@@ -219,13 +220,21 @@ in {
               example = literalExample ''
                 # for type == "pipe":
                 {
-                  mode = "listen";
+                  mode = "create";
                 };
                 # for type == "process":
                 {
                   params = "--param1 --param2";
                   logStderr = "true";
                 };
+                # for type == "tcp":
+                {
+                  mode = "client";
+                }
+                # for type == "alsa":
+                {
+                  device = "hw:0,0";
+                }
               '';
             };
             inherit sampleFormat;
@@ -255,6 +264,11 @@ in {
 
   config = mkIf cfg.enable {
 
+    # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
+    warnings = filter (w: w != "") (mapAttrsToList (k: v: if v.type == "spotify" then ''
+      services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
+    '' else "") cfg.streams);
+
     systemd.services.snapserver = {
       after = [ "network.target" ];
       description = "Snapserver";
@@ -272,7 +286,7 @@ in {
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
         ProtectKernelModules = true;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
         RestrictNamespaces = true;
         RuntimeDirectory = name;
         StateDirectory = name;

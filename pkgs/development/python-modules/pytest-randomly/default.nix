@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.4.1";
+  version = "3.5.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s9cx692cdchfrjqx7fgf9wnm3fdac211a4hjq1cx9qqnbpdpl2z";
+    sha256 = "440cec143fd9b0adeb072006c71e0294402a2bc2ccd08079c2341087ba4cf2d1";
   };
 
   propagatedBuildInputs = [ numpy factory_boy faker ];

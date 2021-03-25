@@ -1,9 +1,7 @@
-{ stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
+{ lib, stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
+, python, pkg-config, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
 , libpcap, CoreAudioKit, ForceFeedback
 , installShellFiles }:
-
-with stdenv;
 
 let
   majorVersion = "0";
@@ -46,7 +44,7 @@ in mkDerivation {
     ++ lib.optional stdenv.isLinux alsaLib
     ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ]
     ;
-  nativeBuildInputs = [ python pkgconfig which makeWrapper installShellFiles ];
+  nativeBuildInputs = [ python pkg-config which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
@@ -61,7 +59,7 @@ in mkDerivation {
   '';
 
   installPhase = ''
-    make -f dist.mak PTR64=${stdenv.lib.optionalString stdenv.is64bit "1"}
+    make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
     mkdir -p ${dest}
     mv build/release/*/Release/mame/* ${dest}
 

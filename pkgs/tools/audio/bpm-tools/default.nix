@@ -1,16 +1,16 @@
-{
-  stdenv,
-  fetchurl,
-  gnuplot,
-  sox,
-  flac,
-  id3v2,
-  vorbis-tools,
-  makeWrapper
+{ stdenv
+, lib
+, fetchurl
+, gnuplot
+, sox
+, flac
+, id3v2
+, vorbis-tools
+, makeWrapper
 }:
 
 let
-  path = stdenv.lib.makeBinPath [ gnuplot sox flac id3v2 vorbis-tools ];
+  path = lib.makeBinPath [ gnuplot sox flac id3v2 vorbis-tools ];
 in
 stdenv.mkDerivation rec {
   pname = "bpm-tools";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bpm-graph --prefix PATH : "${path}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.pogo.org.uk/~mark/bpm-tools/";
     description = "Automatically calculate BPM (tempo) of music files";
     license = licenses.gpl2;

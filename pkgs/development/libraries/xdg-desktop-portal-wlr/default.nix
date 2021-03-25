@@ -1,22 +1,26 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, wayland-protocols
-, pipewire, wayland, elogind, systemd, libdrm }:
+{ lib, stdenv, fetchFromGitHub
+, meson, ninja, pkg-config, wayland-protocols
+, pipewire, wayland, systemd, libdrm }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12k92h9dmn1fyn8nzxk69cyv0gnb7g9gj7a66mw5dcl5zqnl07nc";
+    sha256 = "1vjz0y3ib1xw25z8hl679l2p6g4zcg7b8fcd502bhmnqgwgdcsfx";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig wayland-protocols ];
-  buildInputs = [ pipewire wayland elogind systemd libdrm ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
+  buildInputs = [ pipewire wayland systemd libdrm ];
 
-  meta = with stdenv.lib; {
+  mesonFlags = [
+    "-Dsd-bus-provider=libsystemd"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/emersion/xdg-desktop-portal-wlr";
     description = "xdg-desktop-portal backend for wlroots";
     maintainers = with maintainers; [ minijackson ];

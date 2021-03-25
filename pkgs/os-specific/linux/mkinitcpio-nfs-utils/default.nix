@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mkinitcpio-nfs-utils-0.3";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/usr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://archlinux.org/";
     description = "ipconfig and nfsmount tools for root on NFS, ported from klibc";
     license = licenses.gpl2;

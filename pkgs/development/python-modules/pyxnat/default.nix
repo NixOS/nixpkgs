@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , nose
 , lxml
 , requests
@@ -9,15 +9,23 @@
 
 buildPythonPackage rec {
   pname = "pyxnat";
-  version = "1.3";
-  disabled = isPy27;
+  version = "1.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "113d13cs5ab7wy4vmyqyh8isjhlgfvan7y2g8n25vcpn3j4j00h0";
+    sha256 = "22524120d744b50d25ef6bfc7052637e4ead9e2afac92563231ec89848f5adf5";
   };
 
   propagatedBuildInputs = [ lxml requests ];
+
+  # future is not used, and pathlib is installed part of python38+
+  # w/o an external package
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "pathlib>=1.0" "" \
+      --replace "future>=0.16" ""
+  '';
 
   checkInputs = [ nose ];
   checkPhase = "nosetests pyxnat/tests";

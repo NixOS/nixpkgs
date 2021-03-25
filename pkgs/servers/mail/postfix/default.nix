@@ -12,7 +12,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient.dev}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.5.8";
+  version = "3.5.9";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0vs50z5p5xcrdbbkb0dnbx1sk5fx8d2z97sw2p2iip1yrwl2cn12";
+    sha256 = "0avn00drmk9c9mjynfvcmir72ss9s3mckdhjm3mmnhas2sixbkji";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ./relative-symlinks.patch
   ];
 
-  postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -e 's!bin/postconf!${buildPackages.postfix}/bin/postconf!' -i postfix-install
   '' + ''
     sed -e '/^PATH=/d' -i postfix-install

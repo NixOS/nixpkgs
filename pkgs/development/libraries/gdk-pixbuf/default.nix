@@ -20,31 +20,23 @@
 , gobject-introspection
 , doCheck ? false
 , makeWrapper
-, fetchpatch
 , lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.40.0";
+  version = "2.42.2";
 
   outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1rnlx9yfw970maxi2x6niaxmih5la11q1ilr7gzshz2kk585k0hm";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "05ggmzwvrxq9w4zcvmrnnd6qplsmb4n95lj4q607c7arzlf6mil3";
   };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-
-    # Temporary until the fix is released.
-    (fetchpatch {
-      name = "tests-circular-table.patch";
-      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/merge_requests/59.diff";
-      sha256 = "0kaflac3mrh6031hwxk7j9fhli775hc503818h8zfl6b28zyn93f";
-    })
   ];
 
   nativeBuildInputs = [
@@ -61,7 +53,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     makeWrapper
     glib
-  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [
     glib
@@ -71,9 +63,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddocs=true"
-    "-Dx11=false" # use gdk-pixbuf-xlib
-    "-Dgir=${lib.boolToString (gobject-introspection != null)}"
+    "-Dgtk_doc=true"
+    "-Dintrospection=${if gobject-introspection != null then "enabled" else "disabled"}"
     "-Dgio_sniffing=false"
   ];
 
@@ -87,7 +78,7 @@ stdenv.mkDerivation rec {
   postInstall =
     # meson erroneously installs loaders with .dylib extension on Darwin.
     # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
-    stdenv.lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.isDarwin ''
       for f in $out/${passthru.moduleDir}/*.dylib; do
           install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
           mv $f ''${f%.dylib}.so
@@ -97,13 +88,13 @@ stdenv.mkDerivation rec {
     + ''
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
-    '' + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
 
   # The fixDarwinDylibNames hook doesn't patch binaries.
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.isDarwin ''
     for f in $out/bin/* $dev/bin/*; do
         install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
     done
@@ -118,6 +109,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  separateDebugInfo = stdenv.isLinux;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
@@ -131,11 +124,11 @@ stdenv.mkDerivation rec {
     moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.unix;
   };
 }

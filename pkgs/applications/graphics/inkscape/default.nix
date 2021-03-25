@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , boehmgc
 , boost
 , cairo
@@ -7,6 +7,7 @@
 , fetchurl
 , gettext
 , gdl
+, ghostscript
 , glib
 , glib-networking
 , glibmm
@@ -50,11 +51,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "1hjp5nnyx2m3miji6q4lcb6zgbi498v641dc7apkqqvayknrb4ng";
+    sha256 = "sha256-2j4jBRGgjL8h6GcQ0WFFhZT+qHhn6RV7Z+0BoE6ieYo=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -74,6 +75,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs share/extensions
+    substituteInPlace share/extensions/eps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.py \
+      --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
   '';
@@ -122,20 +129,20 @@ stdenv.mkDerivation rec {
     potrace
     python3Env
     zlib
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     gtkspell3
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     cairo
     gtk-mac-integration
   ];
 
   # Make sure PyXML modules can be found at run-time.
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vector graphics editor";
     homepage = "https://www.inkscape.org";
     license = licenses.gpl3Plus;

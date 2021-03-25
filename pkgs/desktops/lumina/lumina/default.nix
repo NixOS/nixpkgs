@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , mkDerivation
 , fetchFromGitHub
 , fluxbox
@@ -70,7 +70,7 @@ mkDerivation rec {
 
     # Add full path of bsdtar to lumina-archiver
     substituteInPlace src-qt5/desktop-utils/lumina-archiver/TarBackend.cpp \
-      --replace '"bsdtar"' '"${stdenv.lib.getBin libarchive}/bin/bsdtar"'
+      --replace '"bsdtar"' '"${lib.getBin libarchive}/bin/bsdtar"'
 
     # Fix desktop files
     for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
@@ -81,12 +81,12 @@ mkDerivation rec {
   qmakeFlags = [
     "LINUX_DISTRO=NixOS"
     "CONFIG+=WITH_I18N"
-    "LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
+    "LRELEASE=${lib.getDev qttools}/bin/lrelease"
   ];
 
   passthru.providedSessions = [ "Lumina-DE" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight, portable desktop environment";
     longDescription = ''
       The Lumina Desktop Environment is a lightweight system interface

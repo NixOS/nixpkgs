@@ -1,15 +1,17 @@
 {
   mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, shared-mime-info,
-  boost, kcompletion, kconfigwidgets, kcrash, kdbusaddons, kdesignerplugin,
-  ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mysql, qttools,
+  extra-cmake-modules, shared-mime-info, qtbase, accounts-qt,
+  boost, kaccounts-integration, kcompletion, kconfigwidgets, kcrash, kdbusaddons,
+  kdesignerplugin, ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mysql, qttools,
+  signond, lzma,
 }:
 
 mkDerivation {
-  name = "akonadi";
+  pname = "akonadi";
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
+    broken = lib.versionOlder qtbase.version "5.13";
   };
   patches = [
     ./0001-akonadi-paths.patch
@@ -18,8 +20,8 @@ mkDerivation {
   ];
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
-    kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin ki18n
-    kiconthemes kio kwindowsystem qttools
+    kaccounts-integration kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin
+    ki18n kiconthemes kio kwindowsystem lzma accounts-qt qttools signond
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
   outputs = [ "out" "dev" ];

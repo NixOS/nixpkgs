@@ -11,17 +11,17 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.15.2";
+  version = "1.16.0";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1wnmgn0q4n2vp2cdwsc36acsy7c7w5vyxdglii3432mr5drrgcsx";
+    sha256 = "0pvwzkdcpjqdf7lh1k3xv1la5v60lhjixzykapl7f2xh71fbm144";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
 
   propagatedBuildInputs = with python.pkgs; [
-    voluptuous pyyaml paho-mqtt colorlog
+    voluptuous pyyaml paho-mqtt colorlog colorama
     tornado protobuf tzlocal pyserial ifaddr
     protobuf click
   ];
@@ -49,6 +49,6 @@ in python.pkgs.buildPythonApplication rec {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda globin ];
+    maintainers = with maintainers; [ dotlambda globin elseym ];
   };
 }

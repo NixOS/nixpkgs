@@ -16,10 +16,11 @@ buildPythonPackage rec {
     sha256 = "06136f03d5b361718b8d0d234042f7b2f203910d8568f63df2f866b547b3d4b9";
   };
 
+  propagatedBuildInputs = [ pytest colorama docopt watchdog ];
+
   # No Tests
   doCheck = false;
-
-  propagatedBuildInputs = [ pytest colorama docopt watchdog ];
+  pythonImportsCheck = [ "pytest_watch" ];
 
   meta = with lib; {
     homepage = "https://github.com/joeyespo/pytest-watch";
@@ -28,4 +29,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ dmvianna ];
   };
 }
-

@@ -18,7 +18,7 @@ in rec {
   bzip2_ = bzip2.override (args: { linkStatic = true; });
 
   # Avoid messing with libkrb5 and libnghttp2.
-  curl_ = curl.override (args: { gssSupport = false; http2Support = false; });
+  curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
 
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
@@ -152,7 +152,7 @@ in rec {
     allowedReferences = [];
 
     meta = {
-      maintainers = [ stdenv.lib.maintainers.copumpkin ];
+      maintainers = [ lib.maintainers.copumpkin ];
     };
   };
 
@@ -179,9 +179,6 @@ in rec {
 
   unpack = stdenv.mkDerivation (bootstrapFiles // {
     name = "unpack";
-
-    reexportedLibrariesFile =
-      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
 
     # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
     # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the

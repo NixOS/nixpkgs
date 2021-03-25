@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, gtk2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "colorpicker";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin colorpicker
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Click on a pixel on your screen and print its color value in RGB";
     homepage = "https://github.com/Ancurio/colorpicker";
     maintainers = with maintainers; [ jb55 ];

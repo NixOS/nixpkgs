@@ -1,4 +1,20 @@
-{ stdenv, clang-tools, grpc, curl, cmake, pkgconfig, fetchFromGitHub, doxygen, protobuf, crc32c, c-ares, fetchurl, openssl, zlib }:
+{ lib
+, stdenv
+, clang-tools
+, grpc
+, curl
+, cmake
+, pkg-config
+, fetchFromGitHub
+, doxygen
+, protobuf
+, crc32c
+, c-ares
+, fetchurl
+, openssl
+, zlib
+, libnsl
+}:
 let
   googleapis = fetchFromGitHub {
     owner = "googleapis";
@@ -16,7 +32,7 @@ let
       sha256 = "02zkcq2wl831ayd9qy009xvfx7q80pgycx7mzz9vknwd0nn6dd0n";
     };
 
-    nativeBuildInputs = [ cmake pkgconfig ];
+    nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = [ c-ares c-ares.cmake-config grpc openssl protobuf zlib ];
 
     postPatch = ''
@@ -39,8 +55,8 @@ in stdenv.mkDerivation rec {
     sha256 = "15wci4m8h6py7fqfziq8mp5m6pxp2h1cbh5rp2k90mk5js4jb9pa";
   };
 
-  buildInputs = [ curl crc32c c-ares c-ares.cmake-config googleapis-cpp-cmakefiles grpc protobuf ];
-  nativeBuildInputs = [ clang-tools cmake pkgconfig doxygen ];
+  buildInputs = [ curl crc32c c-ares c-ares.cmake-config googleapis-cpp-cmakefiles grpc protobuf libnsl ];
+  nativeBuildInputs = [ clang-tools cmake pkg-config doxygen ];
 
   outputs = [ "out" "dev" ];
 
@@ -53,11 +69,10 @@ in stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS:BOOL=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = with licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
-    maintainers = with maintainers; [ andir ];
-    broken = true; # Broken on Hydra since 2020-05-19
+    maintainers = with maintainers; [ ];
   };
 }

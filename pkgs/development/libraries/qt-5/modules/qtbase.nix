@@ -2,7 +2,7 @@
   stdenv, lib,
   src, patches, version, qtCompatVersion,
 
-  coreutils, bison, flex, gdb, gperf, lndir, perl, pkgconfig, python3,
+  coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3,
   which,
   # darwin support
   darwin, libiconv,
@@ -22,6 +22,7 @@
   libGL,
   buildExamples ? false,
   buildTests ? false,
+  debug ? false,
   developerBuild ? false,
   decryptSslTraffic ? false
 }:
@@ -33,12 +34,14 @@ let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName =
     if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
+  debugSymbols = debug || developerBuild;
 in
 
 stdenv.mkDerivation {
 
   name = "qtbase-${version}";
   inherit qtCompatVersion src version;
+  debug = debugSymbols;
 
   propagatedBuildInputs =
     [
@@ -87,7 +90,7 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig which ];
+    [ bison flex gperf lndir perl pkg-config which ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -241,6 +244,7 @@ stdenv.mkDerivation {
       "-I" "${icu.dev}/include"
       "-pch"
     ]
+    ++ lib.optional debugSymbols "-debug"
     ++ lib.optionals (compareVersion "5.11.0" < 0)
     [
       "-qml-debug"
@@ -356,8 +360,6 @@ stdenv.mkDerivation {
         ]
     );
 
-  enableParallelBuilding = true;
-
   postInstall =
     # Move selected outputs.
     ''
@@ -398,6 +400,8 @@ stdenv.mkDerivation {
       sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
           -e "/^host_bins=/ c host_bins=$dev/bin"
     '';
+
+  dontStrip = debugSymbols;
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 

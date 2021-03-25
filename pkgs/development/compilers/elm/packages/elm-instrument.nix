@@ -2,7 +2,7 @@
 , bytestring, Cabal, cmark, containers, directory, elm-format
 , fetchgit, filepath, free, HUnit, indents, json, mtl
 , optparse-applicative, parsec, process, QuickCheck, quickcheck-io
-, split, stdenv, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
+, split, lib, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
 , text
 }:
 mkDerivation {
@@ -30,5 +30,5 @@ mkDerivation {
   ];
   homepage = "https://elm-lang.org";
   description = "Instrumentation library for Elm";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }
