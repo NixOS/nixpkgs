@@ -23643,6 +23643,8 @@ in
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
+  kube-score = callPackage ../applications/networking/cluster/kube-score { };
+
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
