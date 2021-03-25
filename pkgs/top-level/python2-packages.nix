@@ -66,7 +66,7 @@ with self; with super; {
 
   construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
 
-  convertdata = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
+  convertdate = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
 
   cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
 
