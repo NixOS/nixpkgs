@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
-  version = "5.10.0";
+  version = "5.10.1";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-hRdd5ZrcVBU7tn1juvrLdbenULzu6OsXefG0oLjjFIg=";
+    sha256 = "sha256-5doytVxemqaXWXiqDSQUEAe71xmY0pOLASj/NJNyM5g=";
   };
 
   postPatch = ''
