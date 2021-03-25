@@ -11216,7 +11216,9 @@ in
     jdk = oraclejdk;
   };
 
-  sqlx-cli = callPackage ../development/tools/rust/sqlx-cli { };
+  sqlx-cli = callPackage ../development/tools/rust/sqlx-cli {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation Security;
+  };
 
   squeak = callPackage ../development/compilers/squeak { };
 
