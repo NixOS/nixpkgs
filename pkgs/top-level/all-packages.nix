@@ -6865,6 +6865,8 @@ in
 
   nzbhydra2 = callPackage ../servers/nzbhydra2 { };
 
+  oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
+
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
 
   oatpp = callPackage ../development/libraries/oatpp { };
