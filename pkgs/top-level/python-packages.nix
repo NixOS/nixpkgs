@@ -6159,8 +6159,8 @@ in {
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
 
-  pytest-xdist = self.pytest_xdist; # added 2021-01-04
-  pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
+  pytest_xdist = self.pytest-xdist; # added 2021-01-04
+  pytest-xdist = callPackage ../development/python-modules/pytest-xdist { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 

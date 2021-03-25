@@ -456,13 +456,14 @@ with self; with super; {
 
   pytestrunner = callPackage ../development/python-modules/pytestrunner/2.nix { };
 
+  pytest_xdist = self.pytest-xdist; # added 2021-01-04
+  pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
+
   python-otr = callPackage ../development/python-modules/python-otr { };
 
   python_statsd = callPackage ../development/python-modules/python_statsd { };
 
   python-sybase = callPackage ../development/python-modules/sybase { };
-
-  python_xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
 
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
 
