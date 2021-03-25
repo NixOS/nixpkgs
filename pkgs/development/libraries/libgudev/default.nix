@@ -21,8 +21,18 @@ stdenv.mkDerivation rec {
     sha256 = "094mgjmwgsgqrr1i0vd20ynvlkihvs3vgbmpbrhswjsrdp86j0z5";
   };
 
-  nativeBuildInputs = [ pkg-config gobject-introspection meson ninja vala ];
-  buildInputs = [ udev glib ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    meson
+    ninja
+    vala
+  ];
+
+  buildInputs = [
+    udev
+    glib
+  ];
 
   mesonFlags = [
     # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
