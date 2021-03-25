@@ -32,7 +32,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.0.0";
+  version = "21.0.1";
   branch  = versions.major version;
 in
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "110d5r9bl9nxl2680730yd273vz3v2fzjd2xvkwprmx8wsc4w876";
+    sha256 = "1fqj2xhhd1ary0pfg31jq6fqcnd6qgyrw1445nmz554k8n2ck7rp";
   };
 
   prePatch = "patchShebangs .";
@@ -115,7 +115,7 @@ stdenv.mkDerivation {
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
     "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${boolToString enableOSMesa}" # used by wine
-    "-Dmicrosoft-clc=disabled" # TODO: Auto-feature that requires cmake and llvmPackages.clang
+    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
   ];
