@@ -16,6 +16,7 @@
 , libxml2
 , dbus
 , gdk-pixbuf
+, harfbuzz
 , makeWrapper
 , which
 , xvfb_run
@@ -25,7 +26,7 @@
 let
   testDeps = [
     gobject-introspection # for Gio and cairo typelibs
-    gtk3 atk pango.out gdk-pixbuf
+    gtk3 atk pango.out gdk-pixbuf harfbuzz
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
