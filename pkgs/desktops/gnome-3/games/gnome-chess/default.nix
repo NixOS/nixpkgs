@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, wrapGAppsHook, gobject-introspection
-, gettext, itstool, libxml2, python3, gnome3, glib, gtk3, librsvg }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, vala
+, pkg-config
+, wrapGAppsHook4
+, gobject-introspection
+, gettext
+, itstool
+, libxml2
+, python3
+, gnome3
+, glib
+, gtk4
+, librsvg
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
@@ -10,12 +26,32 @@ stdenv.mkDerivation rec {
     sha256 = "0c4nfyi3frl94vjsfp3r07k7g7ffwf8dg5qyq1580mxmks0gigr5";
   };
 
-  nativeBuildInputs = [ meson ninja vala pkg-config gettext itstool libxml2 python3 wrapGAppsHook gobject-introspection ];
-  buildInputs = [ glib gtk3 librsvg gnome3.adwaita-icon-theme ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    pkg-config
+    gettext
+    itstool
+    libxml2
+    python3
+    wrapGAppsHook4
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    glib
+    gtk4
+    librsvg
+    gnome3.adwaita-icon-theme
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+
+    # https://gitlab.gnome.org/GNOME/gnome-chess/-/merge_requests/31
+    substituteInPlace meson_post_install.py --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {
