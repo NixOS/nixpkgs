@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
-, libaio, python, zlib
+, libaio, python3, zlib
 , withGnuplot ? false, gnuplot ? null }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/Si0McndJ6Xp3ifDr+BStv89LmZyAgof95QkHGT8MGQ=";
   };
 
-  buildInputs = [ python zlib ]
+  buildInputs = [ python3 zlib ]
     ++ lib.optional (!stdenv.isDarwin) libaio;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
