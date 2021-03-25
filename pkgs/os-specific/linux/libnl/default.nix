@@ -1,5 +1,5 @@
 { stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkg-config
-, pythonSupport ? false, swig ? null, python}:
+, pythonSupport ? false, swig ? null, python ? null}:
 
 stdenv.mkDerivation rec {
   pname = "libnl";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postBuild = lib.optionalString (pythonSupport) ''
       cd python
-      ${python}/bin/python setup.py install --prefix=../pythonlib
+      ${python.interpreter} setup.py install --prefix=../pythonlib
       cd -
   '';
 
