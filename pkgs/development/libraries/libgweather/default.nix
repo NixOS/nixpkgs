@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "40.beta";
+  version = "40.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "060560dx2y4nhw1f2jwmbif0068hs5ix1khjffyrmv22dm75gfs4";
+    sha256 = "1rkf4yv43qcahyx7bismdv6z2vh5azdnm1fqfmnzrada9cm8ykna";
   };
 
   nativeBuildInputs = [
