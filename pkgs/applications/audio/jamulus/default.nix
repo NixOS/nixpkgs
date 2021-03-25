@@ -20,7 +20,7 @@ mkDerivation rec {
     description = "Enables musicians to perform real-time jam sessions over the internet";
     longDescription = "You also need to enable JACK and should enable several real-time optimizations. See project website for details";
     homepage = "https://github.com/corrados/jamulus/wiki";
-    license = lib.licenses.gpl2Plus; # readme says gpl2; .cpp and .h source files also say "... or (at your option) any later"
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.seb314 ];
   };
