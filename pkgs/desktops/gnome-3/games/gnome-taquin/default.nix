@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
-, librsvg, gsound, gettext, itstool, libxml2
-, meson, ninja, vala, python3, desktop-file-utils
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, gnome3
+, gtk3
+, wrapGAppsHook
+, librsvg
+, gsound
+, gettext
+, itstool
+, libxml2
+, meson
+, ninja
+, vala
+, python3
+, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -12,24 +27,49 @@ stdenv.mkDerivation rec {
     sha256 = "0kw131q0ad0rbsp6qifjc8fjlhvjxyihil8a76kj8ya9mn7kvnwn";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-taquin"; attrPath = "gnome3.gnome-taquin"; };
-  };
+  patches = [
+    # Fix build with recent Vala.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-taquin/-/commit/99dea5e7863e112f33f16e59898c56a4f1a547b3.patch";
+      sha256 = "U7djuMhb1XJaKAPyogQjaunOkbBK24r25YD7BgH05P4=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-taquin/-/commit/66be44dc20d114e449fc33156e3939fd05dfbb16.patch";
+      sha256 = "RN41RCLHlJyXTARSH9qjsmpYi1UFeMRssoYxRsbngDQ=";
+    })
+  ];
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook meson ninja python3
-    gettext itstool libxml2 vala desktop-file-utils
+    pkg-config
+    wrapGAppsHook
+    meson
+    ninja
+    python3
+    gettext
+    itstool
+    libxml2
+    vala
+    desktop-file-utils
   ];
   buildInputs = [
-    gtk3 librsvg gsound
+    gtk3
+    librsvg
+    gsound
     gnome3.adwaita-icon-theme
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-taquin";
+      attrPath = "gnome3.gnome-taquin";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Taquin";
     description = "Move tiles so that they reach their places";
     maintainers = teams.gnome.members;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
