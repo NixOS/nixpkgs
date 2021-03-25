@@ -75,7 +75,6 @@ in stdenv.mkDerivation rec {
   patches = [ ./cflags-prune.diff ] ++ lib.optional ftNixSupport ./ft-nix-support.patch;
 
   configureFlags = [
-    "--enable-gui=${guiSupport}"
     "--with-features=${features}"
     "--disable-xsmp"              # XSMP session management
     "--disable-xsmp_interact"     # XSMP interaction
@@ -95,6 +94,7 @@ in stdenv.mkDerivation rec {
     "--disable-carbon_check"
     "--disable-gtktest"
   ]
+    ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
   ++ lib.optional stdenv.isDarwin
      (if darwinSupport then "--enable-darwin" else "--disable-darwin")
   ++ lib.optionals luaSupport [
@@ -127,8 +127,22 @@ in stdenv.mkDerivation rec {
   ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
-  buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
-    libXmu glib libICE ]
+  buildInputs = [
+    ncurses
+    glib
+  ]
+    # All X related dependencies
+    ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
+      libSM
+      libICE
+      libX11
+      libXext
+      libXpm
+      libXt
+      libXaw
+      libXau
+      libXmu
+    ]
     ++ lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ lib.optional (guiSupport == "gtk3") gtk3-x11
     ++ lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
