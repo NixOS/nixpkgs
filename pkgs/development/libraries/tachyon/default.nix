@@ -13,10 +13,10 @@ assert stdenv.isDarwin -> Carbon != null;
 
 stdenv.mkDerivation rec {
   pname = "tachyon";
-  version = "0.99b2";
+  version = "0.99b6";
   src = fetchurl {
     url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
-    sha256 = "04m0bniszyg7ryknj8laj3rl5sspacw5nr45x59j2swcsxmdvn1v";
+    sha256 = "15wv2748ngk2iid798a774sjxhhijq7kjm32yl897x54fsfazp7l";
   };
   buildInputs = lib.optionals stdenv.isDarwin [
     Carbon
