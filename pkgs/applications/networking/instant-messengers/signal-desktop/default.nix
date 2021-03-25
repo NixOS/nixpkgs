@@ -58,7 +58,9 @@ in stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gnome2.GConf
-    gtk3
+    # Tracker3 breaks SQLCipher in signal-desktop, turning encrypted DB into plaintext ones.
+    # See https://github.com/NixOS/nixpkgs/issues/108772#issuecomment-806337688
+    (gtk3.override { trackerSupport = false; })
     libX11
     libXScrnSaver
     libXcomposite
