@@ -68,7 +68,7 @@ preFixup = ''
 
 Fortunately, there is [`wrapGAppsHook`]{#ssec-gnome-hooks-wrapgappshook}. It works in conjunction with other setup hooks that populate environment variables, and it will then wrap all executables in `bin` and `libexec` directories using said variables.
 
-For convenience, it also adds `dconf.lib` for a GIO module implementing a GSettings backend using `dconf`, `gtk3` for GSettings schemas, and `librsvg` for GdkPixbuf loader to the closure. In case you are packaging a program without a graphical interface, you might want to use [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook}, which runs the same script as `wrapGAppsHook` but does not bring `gtk3` and `librsvg` into the closure.
+For convenience, it also adds `dconf.lib` for a GIO module implementing a GSettings backend using `dconf`, `gtk3` for GSettings schemas, and `librsvg` for GdkPixbuf loader to the closure. There is also [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4}, which replaces GTK 3 with GTK 4. And in case you are packaging a program without a graphical interface, you might want to use [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook}, which runs the same script as `wrapGAppsHook` but does not bring `gtk3` and `librsvg` into the closure.
 
 - `wrapGAppsHook` itself will add the package’s `share` directory to `XDG_DATA_DIRS`.
 

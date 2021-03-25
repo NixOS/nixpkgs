@@ -633,6 +633,8 @@ in
 
   wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook { };
 
+  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
+
   wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
 
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
