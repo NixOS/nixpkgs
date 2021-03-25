@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, which, autoreconfHook, pkg-config, vala, python, libsearpc, libzdb, libuuid, libevent, sqlite, openssl}:
+{lib, stdenv, fetchurl, which, autoreconfHook, pkg-config, vala, python3, libsearpc, libzdb, libuuid, libevent, sqlite, openssl}:
 
 stdenv.mkDerivation rec {
   version = "6.1.8";
@@ -10,10 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "0qlpnrz30ldrqnvbj59d54qdghxpxc5lsq6kf3dw2b93jnzkcmmm";
   };
 
-  nativeBuildInputs = [ pkg-config which autoreconfHook vala python ];
+  nativeBuildInputs = [ pkg-config which autoreconfHook vala python3 libsearpc ];
   propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];
 
   configureFlags = [ "--enable-server" ];
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/haiwen/ccnet";

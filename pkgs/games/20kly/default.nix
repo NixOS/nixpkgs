@@ -1,12 +1,12 @@
 { lib
 , fetchurl
-, python }:
+, python2 }:
 
-python.pkgs.buildPythonApplication rec {
+python2.pkgs.buildPythonApplication rec {
   pname = "20kly";
   version = "1.4";
   format = "other";
-  disabled = !(python.isPy2 or false);
+  disabled = !(python2.isPy2 or false);
 
   src = fetchurl {
     url = "http://jwhitham.org.uk/20kly/lightyears-${version}.tar.bz2";
@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
         "LIGHTYEARS_DIR = \"$out/share\""
   '';
 
-  propagatedBuildInputs = with python.pkgs; [ pygame ];
+  propagatedBuildInputs = with python2.pkgs; [ pygame ];
 
   buildPhase = "python -O -m compileall .";
 

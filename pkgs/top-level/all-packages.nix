@@ -1609,7 +1609,7 @@ in
 
   b3sum = callPackage ../tools/security/b3sum {};
 
-  backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
+  backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
 
   bandwhich = callPackage ../tools/networking/bandwhich {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -3136,9 +3136,7 @@ in
     librsync = librsync_0_9;
   };
 
-  bud = callPackage ../tools/networking/bud {
-    inherit (pythonPackages) gyp;
-  };
+  bud = callPackage ../tools/networking/bud { };
 
   bump2version = python37Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
 
@@ -3264,6 +3262,7 @@ in
   clementine = libsForQt514.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
+    protobuf = protobuf3_14;
   };
 
   clementineUnfree = clementine.unfree;
@@ -3388,9 +3387,7 @@ in
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
-  libkkc-data = callPackage ../data/misc/libkkc-data {
-    inherit (pythonPackages) marisa;
-  };
+  libkkc-data = callPackage ../data/misc/libkkc-data { };
 
   libkkc = callPackage ../tools/inputmethods/libkkc { };
 
@@ -4156,9 +4153,7 @@ in
 
   epsxe = callPackage ../misc/emulators/epsxe { };
 
-  escrotum = callPackage ../tools/graphics/escrotum {
-    inherit (pythonPackages) buildPythonApplication pygtk numpy;
-  };
+  escrotum = callPackage ../tools/graphics/escrotum { };
 
   etcher = callPackage ../tools/misc/etcher { };
 
@@ -12548,7 +12543,7 @@ in
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  fedpkg = pythonPackages.callPackage ../development/tools/fedpkg { };
+  fedpkg = callPackage ../development/tools/fedpkg { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
@@ -21145,6 +21140,8 @@ in
   };
 
   papis = with python3Packages; toPythonApplication papis;
+
+  paperlike-go = callPackage ../tools/misc/paperlike-go { };
 
   paps = callPackage ../tools/misc/paps { };
 

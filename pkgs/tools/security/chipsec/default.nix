@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, pythonPackages, nasm, libelf
+{ stdenv, lib, fetchFromGitHub, python2Packages, nasm, libelf
 , kernel ? null, withDriver ? false }:
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "chipsec";
   version = "1.5.1";
 
