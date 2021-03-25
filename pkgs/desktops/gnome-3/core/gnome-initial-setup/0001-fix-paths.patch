@@ -5,29 +5,10 @@ Date: Sun, 20 Sep 2020 14:46:59 -0400
 Subject: [PATCH] fix paths
 
 ---
- data/gnome-welcome-tour                               | 4 ++--
  gnome-initial-setup/pages/keyboard/cc-input-chooser.c | 6 +++---
  gnome-initial-setup/pages/timezone/tz.h               | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/data/gnome-welcome-tour b/data/gnome-welcome-tour
-index 51c9b59..68ab0c4 100755
---- a/data/gnome-welcome-tour
-+++ b/data/gnome-welcome-tour
-@@ -3,11 +3,11 @@
- cfgdir=${XDG_CONFIG_DIR:-$HOME/.config}
- 
- # Don't do anything if gnome-tour isn't installed
--gnome_tour_path=$(which gnome-tour 2>/dev/null)
-+gnome_tour_path="@gnome_tour@"
- if test -z "${gnome_tour_path}"; then
-     rm -f $cfgdir/run-welcome-tour
-     exit
- fi
- 
--gnome-tour
-+@gnome_tour@
- rm -f $cfgdir/run-welcome-tour
 diff --git a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
 index 196abf6..613d0e5 100644
 --- a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
