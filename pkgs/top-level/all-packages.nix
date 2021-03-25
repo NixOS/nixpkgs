@@ -8529,6 +8529,8 @@ in
 
   texworks = libsForQt5.callPackage ../applications/editors/texworks { };
 
+  tex-match = callPackage ../tools/typesetting/tex/tex-match { };
+
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
