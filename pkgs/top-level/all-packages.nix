@@ -3264,6 +3264,7 @@ in
   clementine = libsForQt514.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
+    protobuf = protobuf3_14;
   };
 
   clementineUnfree = clementine.unfree;
