@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnet-sdk, writeText }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnet-sdk, writeText, roslyn }:
 
 let
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     stage1/mono-msbuild/msbuild mono/build/install.proj /p:MonoInstallPrefix="$out" /p:Configuration=Release-MONO
 
-    ln -s ${mono}/lib/mono/msbuild/Current/bin/Roslyn $out/lib/mono/msbuild/Current/bin/Roslyn
+    ln -s ${roslyn}/lib/dotnet/microsoft.net.compilers.toolset/*/tasks/net472 $out/lib/mono/msbuild/Current/bin/Roslyn
 
     makeWrapper ${mono}/bin/mono $out/bin/msbuild \
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
