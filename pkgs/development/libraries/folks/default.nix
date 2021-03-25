@@ -17,6 +17,7 @@
 , dbus
 , libgee
 , evolution-data-server
+, libgdata
 , libsecret
 , db
 , python3
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     db
     dbus-glib
     evolution-data-server
+    libgdata # required for some backends transitively
     libsecret
     libsoup
     libxml2
