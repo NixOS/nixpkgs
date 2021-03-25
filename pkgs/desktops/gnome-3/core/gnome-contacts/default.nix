@@ -17,6 +17,7 @@
 , gnome-online-accounts
 , wrapGAppsHook
 , folks
+, libgdata
 , libxml2
 , gnome3
 , vala
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gsettings-desktop-schemas
     folks
+    libgdata # required by some dependency transitively
     gnome-desktop
     libhandy
     libxml2
