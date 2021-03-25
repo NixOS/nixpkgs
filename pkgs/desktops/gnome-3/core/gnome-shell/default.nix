@@ -22,8 +22,7 @@
 , librsvg
 , geoclue2
 , perl
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
+, docbook_xml_dtd_45
 , desktop-file-utils
 , libpulseaudio
 , libical
@@ -105,9 +104,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     docbook-xsl-nons
-    # Switch to 4.5 in the 40.
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
+    docbook_xml_dtd_45
     gtk-doc
     perl
     wrapGAppsHook
