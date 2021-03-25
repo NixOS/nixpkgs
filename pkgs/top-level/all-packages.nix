@@ -10751,6 +10751,8 @@ in
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
+  roslyn = callPackage ../development/compilers/roslyn { mono = mono6; };
+
   msbuild = callPackage ../development/tools/build-managers/msbuild { mono = mono6; };
 
   mosml = callPackage ../development/compilers/mosml { };
