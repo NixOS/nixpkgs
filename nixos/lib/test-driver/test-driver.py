@@ -900,6 +900,7 @@ def run_tests() -> None:
                 traceback.print_exc()
                 sys.exit(1)
     else:
+        # Don't use locals(); see https://github.com/NixOS/nixpkgs/pull/111486.
         ptpython.repl.embed(globals())
 
     # TODO: Collect coverage data
