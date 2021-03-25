@@ -1,8 +1,10 @@
 { fetchurl, lib, stdenv, libtool, makeWrapper
-, coreutils, ctags, ncurses, pythonPackages, sqlite, universal-ctags
+, coreutils, ctags, ncurses, python3Packages, sqlite, universal-ctags
 }:
 
-stdenv.mkDerivation rec {
+let
+  pygments = python3Packages.pygments;
+in stdenv.mkDerivation rec {
   pname = "global";
   version = "6.6.5";
 
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  propagatedBuildInputs = [ pythonPackages.pygments ];
+  propagatedBuildInputs = [ pygments ];
 
   configureFlags = [
     "--with-ltdl-include=${libtool}/include"
@@ -34,9 +36,9 @@ stdenv.mkDerivation rec {
     cp -v *.el "$out/share/emacs/site-lisp"
 
     wrapProgram $out/bin/gtags \
-      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
+      --prefix PYTHONPATH : "$(toPythonPath ${pygments})"
     wrapProgram $out/bin/global \
-      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
+      --prefix PYTHONPATH : "$(toPythonPath ${pygments})"
   '';
 
   meta = with lib; {
