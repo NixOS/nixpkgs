@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p sqlx-cli" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = (lib.optional stdenv.isLinux openssl) ++ lib.optionals stdenv.isDarwin [ SystemConfiguration CoreFoundation Security ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration CoreFoundation Security ];
 
   meta = with lib; {
     description =
