@@ -44,11 +44,6 @@ stdenv.mkDerivation rec {
     sha256 = "0i58mfmdkzgamb08p6sp6q9imrqn25a3gcw6fq9v06xdcq7iry6m";
   };
 
-  # Tests need an X display
-  mesonFlags = [
-    "-Dunit_tests=disabled"
-  ];
-
   nativeBuildInputs = [
     desktop-file-utils
     gettext
@@ -94,6 +89,11 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
+  # Tests need an X display
+  mesonFlags = [
+    "-Dunit_tests=disabled"
+  ];
+
   postPatch = ''
     chmod +x post_install.py # patchShebangs requires executable file
     patchShebangs post_install.py
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
