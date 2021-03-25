@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.3.4";
+  version = "20.3.5";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1120kf280hg4h0a2505vxf6rdw8r2ydl3cg4iwkmpx0zxj3sj8fw";
+    sha256 = "1klifqyr54q8ar8sncykgqllil98q1ma4i6g9j2c18yzcggp56lh";
   };
 
   prePatch = "patchShebangs .";
