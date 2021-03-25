@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
-, isPy27, isPyPy, python, pycares, typing
+, isPy27, isPyPy, python, pycares, typing ? null
 , trollius ? null
 }:
 

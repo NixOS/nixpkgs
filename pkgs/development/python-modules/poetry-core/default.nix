@@ -7,7 +7,7 @@
 , pytest-mock
 , pytestCheckHook
 , tomlkit
-, typing
+, typing ? null
 , virtualenv
 }:
 

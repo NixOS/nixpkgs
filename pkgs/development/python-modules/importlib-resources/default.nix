@@ -4,8 +4,8 @@
 , setuptools_scm
 , toml
 , importlib-metadata
-, typing
-, singledispatch
+, typing ? null
+, singledispatch ? null
 , pythonOlder
 , python
 }:

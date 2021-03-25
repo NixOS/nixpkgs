@@ -599,6 +599,8 @@ with self; with super; {
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
+  typing = callPackage ../development/python-modules/typing { };
+
   ujson = callPackage ../development/python-modules/ujson/2.nix { };
 
   umemcache = callPackage ../development/python-modules/umemcache { };

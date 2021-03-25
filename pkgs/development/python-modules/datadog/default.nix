@@ -4,7 +4,7 @@
 , pythonOlder
 , decorator
 , requests
-, typing
+, typing ? null
 , configparser
 , click
 , freezegun

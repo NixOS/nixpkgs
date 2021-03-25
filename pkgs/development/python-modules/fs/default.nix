@@ -4,9 +4,9 @@
 , fetchPypi
 , six
 , appdirs
-, scandir
+, scandir ? null
 , backports_os ? null
-, typing
+, typing ? null
 , pytz
 , enum34
 , pyftpdlib

@@ -1,5 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto,
-  pycryptodome }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
+, pycryptodome
+, eth-utils
+}:
 
 buildPythonPackage rec {
   pname = "eth-hash";
@@ -12,7 +14,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ pysha3 pycrypto pycryptodome ];
+  propagatedBuildInputs = [
+    eth-utils
+    pysha3
+    pycrypto
+    pycryptodome
+  ];
 
   # setuptools-markdown uses pypandoc which is broken at the moment
   preConfigure = ''

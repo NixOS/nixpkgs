@@ -15,7 +15,7 @@
 , pyyaml
 , setuptools
 , six
-, typing
+, typing ? null
 , watchdog
 , wheel
 }:
