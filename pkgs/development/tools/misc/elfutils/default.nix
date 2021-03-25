@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isMusl autoreconfHook
     ++ lib.optional (enableDebuginfod || stdenv.hostPlatform.isMusl) pkg-config;
   buildInputs = [ zlib bzip2 xz ]
-    ++ lib.optional stdenv.hostPlatform.isMusl [
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
     argp-standalone
     musl-fts
     musl-obstack
