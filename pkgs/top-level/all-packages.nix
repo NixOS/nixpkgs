@@ -3137,9 +3137,7 @@ in
     librsync = librsync_0_9;
   };
 
-  bud = callPackage ../tools/networking/bud {
-    inherit (pythonPackages) gyp;
-  };
+  bud = callPackage ../tools/networking/bud { };
 
   bump2version = python37Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
 
