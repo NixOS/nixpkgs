@@ -34,6 +34,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Km9YRwFI0qFrrDh9oSUl0GHlmEto/B/40GjRDU8XFqs=";
   };
 
+  patches = [
+    # VTE needs a small patch to work with musl:
+    # https://gitlab.gnome.org/GNOME/vte/issues/72
+    # Taken from https://git.alpinelinux.org/aports/tree/community/vte3
+    (fetchpatch {
+      name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
+      sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+  ];
+
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -62,17 +73,6 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  patches =
-    # VTE needs a small patch to work with musl:
-    # https://gitlab.gnome.org/GNOME/vte/issues/72
-    lib.optional
-      stdenv.hostPlatform.isMusl
-      (fetchpatch {
-            name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
-            url = "https://gitlab.gnome.org/GNOME/vte/uploads/c334f767f5d605e0f30ecaa2a0e4d226/0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
-            sha256 = "1ii9db9i5l3fy2alxz7bjfsgjs3lappnlx339dvxbi2141zknf5r";
-      });
-
   postPatch = ''
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = licenses.lgpl2;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ astsmtl antono lethalman ] ++ teams.gnome.members;
     platforms = platforms.unix;
   };
