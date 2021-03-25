@@ -24,15 +24,13 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.5.1";
-
+  version = "0.5.5.2";
   disabled = pythonOlder "3.6";
-
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3IBObrytkn6rLUT+wMlwzreqQ4AfCgxiMTJm2Iwm+5E=";
+    sha256 = "sha256-lk7egCyj+vSsaXmxuWxlQuom8n3JEs/RIWwCuwTOXeI=";
   };
 
   postPatch = ''
@@ -66,10 +64,12 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  pythonImportsCheck = [ "miio" ];
+
   meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ flyfloh ];
   };
 }
