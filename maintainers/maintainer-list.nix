@@ -8267,6 +8267,12 @@
       fingerprint = "1401 1B63 393D 16C1 AA9C  C521 8526 B757 4A53 6236";
     }];
   };
+  rowanG077 = {
+    email = "goemansrowan@gmail.com";
+    github = "rowanG077";
+    githubId = 7439756;
+    name = "Rowan Goemans";
+  };
   royneary = {
     email = "christian@ulrich.earth";
     github = "royneary";
