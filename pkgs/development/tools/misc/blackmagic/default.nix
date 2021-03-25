@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub
 , gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkg-config
-, python, pythonPackages
+, python3
 }:
 
 with lib;
@@ -21,14 +21,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gcc-arm-embedded pkg-config
+    python3
   ];
 
   buildInputs = [
     libftdi1
     libusb-compat-0_1
-    python
-    pythonPackages.intelhex
   ];
+
+  strictDeps = true;
 
   postPatch = ''
     # Prevent calling out to `git' to generate a version number:

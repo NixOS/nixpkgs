@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, pkg-config, imagemagick, wafHook }:
+{ lib, stdenv, fetchFromGitHub, python2, pkg-config, imagemagick, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "blockhash";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0m7ikppl42iicgmwsb7baajmag7v0p1ab06xckifvrr0zm21bq9p";
   };
 
-  nativeBuildInputs = [ python pkg-config wafHook ];
+  nativeBuildInputs = [ python2 pkg-config wafHook ];
   buildInputs = [ imagemagick ];
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "http://blockhash.io/";
