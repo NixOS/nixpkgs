@@ -2942,7 +2942,7 @@
     name = "Adam Copp";
   };
   ethancedwards8 = {
-    email = "ethancarteredwards@gmail.com";
+    email = "ethan@ethancedwards.com";
     github = "ethancedwards8";
     githubId = 60861925;
     name = "Ethan Carter Edwards";
