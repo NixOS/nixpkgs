@@ -1,13 +1,13 @@
 diff --git a/ytfzf b/ytfzf
-index 5238682..c5c3a1a 100755
+index f7871c7..179c836 100755
 --- a/ytfzf
 +++ b/ytfzf
-@@ -757,23 +757,8 @@ clear_history () {
+@@ -829,23 +829,8 @@ send_notify () {
  }
  
  update_ytfzf () {
--	branch="$1"
--	updatefile="/tmp/ytfzf-update"
+-	local branch="$1"
+-	local updatefile="/tmp/ytfzf-update"
 -	curl -L "https://raw.githubusercontent.com/pystardust/ytfzf/$branch/ytfzf" -o "$updatefile"
 -
 -	if sed -n '1p' < "$updatefile" | grep -q '#!/bin/sh' ; then
@@ -27,4 +27,4 @@ index 5238682..c5c3a1a 100755
 +	exit 1
  }
  
- 
+ scrape_subscriptions () {
