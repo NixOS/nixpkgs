@@ -21143,6 +21143,8 @@ in
 
   papis = with python3Packages; toPythonApplication papis;
 
+  paperlike-go = callPackage ../tools/misc/paperlike-go { };
+
   paps = callPackage ../tools/misc/paps { };
 
   pecita = callPackage ../data/fonts/pecita {};
