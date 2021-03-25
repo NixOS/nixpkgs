@@ -113,10 +113,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  patches = [
-    ./moduledir_from_env.patch
-  ];
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution";
