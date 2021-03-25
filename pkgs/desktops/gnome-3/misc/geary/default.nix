@@ -37,6 +37,7 @@
 , gobject-introspection
 , gspell
 , appstream-glib
+, libstemmer
 , libytnef
 , libhandy
 , gsound
@@ -90,6 +91,7 @@ stdenv.mkDerivation rec {
     libpeas
     libsecret
     libunwind
+    libstemmer
     libytnef
     sqlite
     webkitgtk
@@ -104,7 +106,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dcontractor=true" # install the contractor file (Pantheon specific)
+    "-Dprofile=release"
+    "-Dcontractor=enabled" # install the contractor file (Pantheon specific)
   ];
 
   # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
