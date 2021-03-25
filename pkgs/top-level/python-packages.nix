@@ -7767,6 +7767,8 @@ in {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  solaredge = callPackage ../development/python-modules/solaredge { };
+
   solax = callPackage ../development/python-modules/solax { };
 
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
