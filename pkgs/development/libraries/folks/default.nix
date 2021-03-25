@@ -1,7 +1,6 @@
 { fetchurl
 , lib, stdenv
 , pkg-config
-, fetchpatch
 , meson
 , ninja
 , glib
@@ -42,15 +41,6 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "08nirjax4m4g4ljr8ksq16wzmrvzq6myqh5rm0dw6pnijqk7nxzg";
   };
-
-  patches = [
-    # Fix tests with e-d-s linked with libphonenumber support
-    # https://gitlab.gnome.org/GNOME/folks/merge_requests/40
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/folks/commit/6d443480a137f6a6ff345b21bf3cb31066eefbcd.patch";
-      sha256 = "D/Y2g12TT0qrcH+iJ2umu4Hmp0EJ3Hoedh0H3aWI+HY=";
-    })
-  ];
 
   mesonFlags = [
     "-Ddocs=true"
