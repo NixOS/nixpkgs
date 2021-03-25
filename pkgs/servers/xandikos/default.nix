@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , python3Packages
+, nixosTests
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,6 +24,8 @@ python3Packages.buildPythonApplication rec {
     multidict
     prometheus_client
   ];
+
+  passthru.tests.xandikos = nixosTests.xandikos;
 
   meta = with lib; {
     description = "Lightweight CalDAV/CardDAV server";
