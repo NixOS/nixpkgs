@@ -14757,6 +14757,8 @@ in
 
   ghcid = haskellPackages.ghcid.bin;
 
+  graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
+
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/git2 {
