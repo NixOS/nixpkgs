@@ -1,6 +1,26 @@
-{ lib, stdenv, gettext, fetchurl, pkg-config, gtkmm3, libxml2
-, bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
-, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk-pixbuf, libgtop, systemd }:
+{ lib
+, stdenv
+, gettext
+, fetchurl
+, pkg-config
+, gtkmm3
+, libxml2
+, bash
+, gtk3
+, libhandy
+, glib
+, wrapGAppsHook
+, meson
+, ninja
+, python3
+, gsettings-desktop-schemas
+, itstool
+, gnome3
+, librsvg
+, gdk-pixbuf
+, libgtop
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
@@ -11,15 +31,32 @@ stdenv.mkDerivation rec {
     sha256 = "0mp778rcmh0l9rh8wlz4d0b5sw5fpap0lqp1g6db0ljmypvm1rb4";
   };
 
-  doCheck = true;
-
   nativeBuildInputs = [
-    pkg-config gettext itstool wrapGAppsHook meson ninja python3
+    pkg-config
+    gettext
+    itstool
+    wrapGAppsHook
+    meson
+    ninja
+    python3
   ];
+
   buildInputs = [
-    bash gtk3 glib libxml2 gtkmm3 libgtop gdk-pixbuf gnome3.adwaita-icon-theme librsvg
-    gsettings-desktop-schemas systemd
+    bash
+    gtk3
+    libhandy
+    glib
+    libxml2
+    gtkmm3
+    libgtop
+    gdk-pixbuf
+    gnome3.adwaita-icon-theme
+    librsvg
+    gsettings-desktop-schemas
+    systemd
   ];
+
+  doCheck = true;
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
