@@ -22781,7 +22781,7 @@ in
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  gtimelog = pythonPackages.gtimelog;
+  gtimelog = with python3Packages; toPythonApplication gtimelog;
 
   inherit (gnome3) gucharmap;
 
