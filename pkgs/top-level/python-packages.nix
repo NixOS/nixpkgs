@@ -325,6 +325,8 @@ in {
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
 
+  aiosmb = callPackage ../development/python-modules/aiosmb { };
+
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
@@ -3979,7 +3981,6 @@ in {
 
   llfuse = callPackage ../development/python-modules/llfuse {
     inherit (pkgs) fuse;
-    inherit (pkgs.darwin.apple_sdk.frameworks) DiskArbitration;
   };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
@@ -7781,6 +7782,8 @@ in {
   soco = callPackage ../development/python-modules/soco { };
 
   softlayer = callPackage ../development/python-modules/softlayer { };
+
+  solaredge = callPackage ../development/python-modules/solaredge { };
 
   solax = callPackage ../development/python-modules/solax { };
 
