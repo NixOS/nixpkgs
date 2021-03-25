@@ -26,6 +26,20 @@ stdenv.mkDerivation rec {
     sha256 = "097dw1l92l73xah9l56ka5mi3dvx48ffpiv33ni5i5rqw0ng7fc4";
   };
 
+  patches = [
+    # Fix build with recent Vala.
+    # https://gitlab.gnome.org/GNOME/dconf-editor/-/merge_requests/15
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/iagno/-/commit/e8a0aeec350ea80349582142c0e8e3cd3f1bce38.patch";
+      sha256 = "OO1x0Yx56UFzHTBsPAMYAjnJHlnTjdO1Vk7q6XU8wKQ=";
+    })
+    # https://gitlab.gnome.org/GNOME/dconf-editor/-/merge_requests/13
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/iagno/-/commit/508c0f94e5f182e50ff61be6e04f72574dee97cb.patch";
+      sha256 = "U7djuMhb1XJaKAPyogQjaunOkbBK24r25YD7BgH05P4=";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
