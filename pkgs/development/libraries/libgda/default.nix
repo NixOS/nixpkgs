@@ -29,11 +29,11 @@ assert postgresSupport -> postgresql != null;
 
 (if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
   pname = "libgda";
-  version = "6.0.0";
+  version = "5.2.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0w564z7krgjk19r39mi5qn4kggpdg9ggbyn9pb4aavb61r14npwr";
+    sha256 = "1j1l4dwjgw6w4d1v4bl5a4kwyj7bcih8mj700ywm7xakh1xxyv3g";
   };
 
   patches = [
