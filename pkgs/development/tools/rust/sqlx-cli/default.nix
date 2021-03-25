@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, SystemConfiguration. CoreFoundation, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, SystemConfiguration, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
@@ -17,8 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p sqlx-cli" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
-    [ SystemConfiguration CoreFoundation Security ]);
+  buildInputs = (lib.optional stdenv.isLinux openssl) ++ lib.optionals stdenv.isDarwin [ SystemConfiguration CoreFoundation Security ];
 
   meta = with lib; {
     description =
