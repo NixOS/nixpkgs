@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mzdhhpa7kwkc51l344g6vgqwaxkjdf03s7zasqh0bn3jpn75h4i";
+    sha256 = "kcBy7JXDLgCxVv/oAVyTsyuO3zaPkEFDYZPPoy6E7Vc=";
   };
 
   configureFlags = [ "--disable-component" ];
