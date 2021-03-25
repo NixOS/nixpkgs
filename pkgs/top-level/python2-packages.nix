@@ -511,6 +511,8 @@ with self; with super; {
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 
+  scandir = callPackage ../development/python-modules/scandir { };
+
   scikitlearn = callPackage ../development/python-modules/scikitlearn/0.20.nix {
     inherit (pkgs) gfortran glibcLocales;
   };

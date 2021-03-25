@@ -6931,8 +6931,6 @@ in {
 
   scales = callPackage ../development/python-modules/scales { };
 
-  scandir = callPackage ../development/python-modules/scandir { };
-
   scapy = callPackage ../development/python-modules/scapy { };
 
   schedule = callPackage ../development/python-modules/schedule { };
