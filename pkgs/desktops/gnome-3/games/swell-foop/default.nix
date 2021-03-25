@@ -1,16 +1,59 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, vala, glib, gtk3, gnome3, desktop-file-utils
-, clutter, clutter-gtk, gettext, itstool, libxml2, wrapGAppsHook, python3 }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, vala
+, glib
+, gtk3
+, libgnome-games-support
+, gnome3
+, desktop-file-utils
+, clutter
+, clutter-gtk
+, gettext
+, itstool
+, libxml2
+, wrapGAppsHook
+, python3
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "swell-foop";
   version = "40.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "1swvazfc2ydc52njfrxdd0ns2apb2k54dq8vlj81y1vlwcqhgw3p";
   };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    pkg-config
+    wrapGAppsHook
+    python3
+    itstool
+    gettext
+    libxml2
+    desktop-file-utils
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libgnome-games-support
+    gnome3.adwaita-icon-theme
+    clutter
+    clutter-gtk
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -18,14 +61,6 @@ in stdenv.mkDerivation rec {
       attrPath = "gnome3.${pname}";
     };
   };
-
-  nativeBuildInputs = [ meson ninja vala pkg-config wrapGAppsHook python3 itstool gettext libxml2 desktop-file-utils ];
-  buildInputs = [ glib gtk3 gnome3.adwaita-icon-theme clutter clutter-gtk ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Swell%20Foop";
