@@ -2836,6 +2836,7 @@ in
 
   procs = callPackage ../tools/admin/procs {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin) libiconv;
   };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
