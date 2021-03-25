@@ -82,6 +82,11 @@ stdenv.mkDerivation rec {
                   "Exec=$out/bin/gnome-maps"
   '';
 
+  preCheck = ''
+    # “time.js” included by “timeTest” and “translationsTest” depends on “org.gnome.desktop.interface” schema.
+    export XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS"
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
