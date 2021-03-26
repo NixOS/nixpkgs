@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, curl, pythonPackages, glibcLocales }:
+{ lib, fetchFromGitHub, curl, python3Packages, glibcLocales }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "httpstat";
   version = "1.3.1";
   src = fetchFromGitHub {
