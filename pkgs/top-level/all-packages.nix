@@ -15358,7 +15358,9 @@ in
 
   libgxps = callPackage ../development/libraries/libgxps { };
 
-  libiio = callPackage ../development/libraries/libiio { };
+  libiio = callPackage ../development/libraries/libiio {
+    python = python3;
+  };
 
   libinjection = callPackage ../development/libraries/libinjection { };
 
