@@ -1,7 +1,7 @@
 { lib, fetchPypi, buildPythonPackage
 , configobj, six, traitsui
 , pytestCheckHook, tables, pandas
-, pythonOlder, importlib-resources
+, importlib-resources
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,6 @@ buildPythonPackage rec {
     configobj
     six
     traitsui
-  ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
 
