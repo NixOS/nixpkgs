@@ -16,17 +16,18 @@
 , adwaita-icon-theme
 , libgweather
 , gucharmap
+, tracker
 , polkit
 , gnome3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-applets";
-  version = "3.38.0";
+  version = "3.40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04qrzycwm7pz556agl08xw3d0r1mmr4ja9n9jfijjxs9inrhp5yc";
+    sha256 = "1k6mdkg16ia29fyg8ikf4dfs51gnrmg0f8xwpvd3192lhfsbsh19";
   };
 
   nativeBuildInputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
     libgweather
     gucharmap
-    # tracker # Tracker 3 not supported.
+    tracker
     polkit
     wirelesstools
     linuxPackages.cpupower
