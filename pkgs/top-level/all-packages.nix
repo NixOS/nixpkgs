@@ -27452,9 +27452,7 @@ in
 
   icbm3d = callPackage ../games/icbm3d { };
 
-  ingen = callPackage ../applications/audio/ingen {
-    inherit (pythonPackages) rdflib;
-  };
+  ingen = callPackage ../applications/audio/ingen { };
 
   ideogram = callPackage ../applications/graphics/ideogram { };
 
