@@ -185,7 +185,7 @@ let
 
     openmp = callPackage ./openmp.nix {};
 
-    libunwind = callPackage ./libunwind.nix ({} //
+    libunwind = callPackage ./libunwind ({} //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
