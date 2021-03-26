@@ -1,51 +1,72 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, dbus, libgcrypt, pam, python2, glib, libxslt
-, gettext, gcr, libcap_ng, libselinux, p11-kit, openssh, wrapGAppsHook
-, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, dbus
+, libgcrypt
+, pam
+, python2
+, glib
+, libxslt
+, gettext
+, gcr
+, libcap_ng
+, libselinux
+, p11-kit
+, openssh
+, wrapGAppsHook
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "3.36.0";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11sgffrrpss5cmv3b717pqlbhgq17l1xd33fsvqgsw8simxbar52";
-  };
-
-  patches = [
-    # version 3.36.0 is incompatible with libncap_ng >= 0.8.1. remove patch after update.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/commit/ebc7bc9efacc17049e54da8d96a4a29943621113.diff";
-      sha256 = "07bx7zmdswqsa3dj37m729g35n1prhylkw7ya8a7h64i10la12cs";
-    })
-  ];
+  version = "40.0";
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [
-    glib libgcrypt pam openssh libcap_ng libselinux
-    gcr p11-kit
-  ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0cdrlcw814zayhvlaxqs1sm9bqlfijlp22dzzd0g5zg2isq4vlm3";
+  };
 
   nativeBuildInputs = [
-    pkg-config gettext libxslt docbook_xsl docbook_xml_dtd_43 wrapGAppsHook
+    pkg-config
+    gettext
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    wrapGAppsHook
   ];
+
+  buildInputs = [
+    glib
+    libgcrypt
+    pam
+    openssh
+    libcap_ng
+    libselinux
+    gcr
+    p11-kit
+  ];
+
+  # In 3.20.1, tests do not support Python 3
+  checkInputs = [ dbus python2 ];
 
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
   ];
 
-  postPatch = ''
-    patchShebangs build
-  '';
-
   # Tends to fail non-deterministically.
   # - https://github.com/NixOS/nixpkgs/issues/55293
   # - https://github.com/NixOS/nixpkgs/issues/51121
   doCheck = false;
 
-  # In 3.20.1, tests do not support Python 3
-  checkInputs = [ dbus python2 ];
+  postPatch = ''
+    patchShebangs build
+  '';
 
   checkPhase = ''
     export HOME=$(mktemp -d)
