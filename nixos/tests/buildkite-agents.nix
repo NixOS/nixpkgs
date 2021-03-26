@@ -1,6 +1,8 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
-{
+let
+  envFile = pkgs.writeText "environment" "FOO=bar";
+in {
   name = "buildkite-agent";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ flokli ];
@@ -15,6 +17,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
       two = {
         tokenPath = (pkgs.writeText "my-token" "1234");
       };
+      concurrent = {
+        tokenPath = (pkgs.writeText "my-token" "9123");
+        extraServiceConfig.EnvironmentFile = "${envFile}";
+        count = 8;
+      };
     };
   };
 
@@ -27,5 +34,16 @@ import ./make-test-python.nix ({ pkgs, ... }:
     machine.wait_for_file("/var/lib/buildkite-agent-one/.ssh/id_rsa")
 
     machine.wait_for_file("/var/lib/buildkite-agent-two/buildkite-agent.cfg")
+
+    machine.wait_for_file("/var/lib/buildkite-agent-concurrent/buildkite-agent.cfg")
+
+    # Make sure all 8 concurrent agent units exist and have the environment file set
+    for n in range(1, 8):
+        i = machine.get_unit_info("buildkite-agent-concurrent-{}".format(n))
+        assert (
+            "${envFile}"
+            in i["EnvironmentFiles"]
+        )
+        assert i["LoadState"] == "loaded"
   '';
 })
