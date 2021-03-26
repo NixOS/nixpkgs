@@ -4381,6 +4381,18 @@ let
     meta.homepage = "https://github.com/jacoborus/tender.vim/";
   };
 
+  termwrapper-nvim = buildVimPluginFrom2Nix {
+    pname = "termwrapper-nvim";
+    version = "2020-12-23";
+    src = fetchFromGitHub {
+      owner = "oberblastmeister";
+      repo = "termwrapper.nvim";
+      rev = "beb5d2d8a4b6c8fee10cfe5e0dfda158bb0cb33a";
+      sha256 = "05vr38w4qx42hy9injnji7qjkzm7pkysbkr8mlzalwb0i2giy51a";
+    };
+    meta.homepage = "https://github.com/oberblastmeister/termwrapper.nvim/";
+  };
+
   tern_for_vim = buildVimPluginFrom2Nix {
     pname = "tern_for_vim";
     version = "2019-01-23";
