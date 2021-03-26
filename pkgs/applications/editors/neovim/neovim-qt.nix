@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
+{ lib, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
 , msgpack, neovim, pythonPackages, qtbase }:
 
 mkDerivation rec {

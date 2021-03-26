@@ -1938,8 +1938,6 @@ in
 
   cbor-diag = callPackage ../development/tools/cbor-diag { };
 
-  ccnet = callPackage ../tools/networking/ccnet { };
-
   cassowary = callPackage ../tools/networking/cassowary { };
 
   croc = callPackage ../tools/networking/croc { };
@@ -10906,9 +10904,8 @@ in
 
   muon = callPackage ../development/compilers/muon { };
 
-  nim = callPackage ../development/compilers/nim { };
-  nim-unwrapped = nim.unwrapped;
-  nimble-unwrapped = nim.nimble-unwrapped;
+  inherit (callPackages ../development/compilers/nim { })
+    nim-unwrapped nimble-unwrapped nim;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
@@ -21466,6 +21463,8 @@ in
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
 
+  vollkorn = callPackage ../data/fonts/vollkorn { };
+
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
@@ -23690,6 +23689,8 @@ in
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
+
+  kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 

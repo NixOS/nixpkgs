@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 49e599f499bd466af4d47d2d60a4dc80e158a52d
-  ref: refs/tags/6.0.36
+  revision: eae71004c4a1720d9af1513ca750cfe116d99a7b
+  ref: refs/tags/6.0.37
   specs:
-    metasploit-framework (6.0.36)
+    metasploit-framework (6.0.37)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -30,9 +30,9 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.37)
+      metasploit-payloads (= 2.0.39)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.6)
+      metasploit_payloads-mettle (= 1.0.7)
       mqtt
       msgpack
       nessus_rest
@@ -123,22 +123,22 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.1)
-    aws-partitions (1.434.0)
+    aws-partitions (1.435.0)
     aws-sdk-core (3.113.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.229.0)
+    aws-sdk-ec2 (1.230.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.50.0)
+    aws-sdk-iam (1.51.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.43.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.92.0)
+    aws-sdk-s3 (1.93.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -212,7 +212,7 @@ GEM
       activemodel (~> 5.2.2)
       activesupport (~> 5.2.2)
       railties (~> 5.2.2)
-    metasploit-payloads (2.0.37)
+    metasploit-payloads (2.0.39)
     metasploit_data_models (4.1.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -223,7 +223,7 @@ GEM
       railties (~> 5.2.2)
       recog (~> 2.0)
       webrick
-    metasploit_payloads-mettle (1.0.6)
+    metasploit_payloads-mettle (1.0.7)
     method_source (1.0.0)
     mini_portile2 (2.5.0)
     minitest (5.14.4)
@@ -323,7 +323,7 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.26)
+    rex-socket (0.1.29)
       rex-core
     rex-sslscan (0.1.6)
       rex-core
