@@ -29661,6 +29661,8 @@ in
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 
+  pwncat = python3Packages.callPackage ../tools/security/pwncat { };
+
   pwntools = with python3Packages; toPythonApplication pwntools;
 
   uae = callPackage ../misc/emulators/uae { };
