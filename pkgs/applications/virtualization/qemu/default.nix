@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    ./do-not-create-local-statedir.patch
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -119,6 +120,7 @@ stdenv.mkDerivation rec {
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
+      "--localstatedir=/var"
       "--sysconfdir=/etc"
     ]
     ++ optional numaSupport "--enable-numa"

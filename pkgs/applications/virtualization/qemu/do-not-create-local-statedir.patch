@@ -1,0 +1,11 @@
+diff -Naur a/qga/meson.build b/qga/meson.build
+--- a/qga/meson.build
++++ b/qga/meson.build
+@@ -82,7 +82,6 @@
+     endif
+   endif
+ else
+-   install_subdir('run', install_dir: get_option('localstatedir'))
+ endif
+ 
+ alias_target('qemu-ga', all_qga)
