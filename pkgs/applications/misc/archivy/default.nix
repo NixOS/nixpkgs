@@ -5,11 +5,11 @@
 
 buildPythonApplication rec {
   pname = "archivy";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yUXsTPb5oJYZA9MlHz7eLowRjD/ltq5VLTHeOMqcL/M=";
+    sha256 = "3b92ad441d703a0e620bb04e2393e970598a8cf68d864d89c8097348bbec58ab";
   };
 
   # Relax some dependencies
