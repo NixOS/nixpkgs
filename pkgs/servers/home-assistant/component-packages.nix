@@ -151,7 +151,7 @@
     "datadog" = ps: with ps; [ datadog ];
     "ddwrt" = ps: with ps; [ ];
     "debugpy" = ps: with ps; [ debugpy ];
-    "deconz" = ps: with ps; [ ]; # missing inputs: pydeconz
+    "deconz" = ps: with ps; [ pydeconz ];
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
     "default_config" = ps: with ps; [ pynacl aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa netdisco pillow scapy sqlalchemy zeroconf ];
@@ -192,7 +192,7 @@
     "dublin_bus_transport" = ps: with ps; [ ];
     "duckdns" = ps: with ps; [ ];
     "dunehd" = ps: with ps; [ ]; # missing inputs: pdunehd
-    "dwd_weather_warnings" = ps: with ps; [ ]; # missing inputs: dwdwfsapi
+    "dwd_weather_warnings" = ps: with ps; [ dwdwfsapi ];
     "dweet" = ps: with ps; [ ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [ ]; # missing inputs: dynalite_devices
     "dyson" = ps: with ps; [ aiohttp-cors libpurecool zeroconf ];
@@ -236,7 +236,7 @@
     "etherscan" = ps: with ps; [ ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [ ]; # missing inputs: lakeside
     "everlights" = ps: with ps; [ pyeverlights ];
-    "evohome" = ps: with ps; [ ]; # missing inputs: evohome-async
+    "evohome" = ps: with ps; [ evohome-async ];
     "ezviz" = ps: with ps; [ ]; # missing inputs: pyezviz
     "faa_delays" = ps: with ps; [ faadelays ];
     "facebook" = ps: with ps; [ ];
@@ -374,7 +374,7 @@
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
-    "iaqualink" = ps: with ps; [ ]; # missing inputs: iaqualink
+    "iaqualink" = ps: with ps; [ iaqualink ];
     "icloud" = ps: with ps; [ pyicloud ];
     "idteck_prox" = ps: with ps; [ ]; # missing inputs: rfk101py
     "ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
@@ -385,7 +385,7 @@
     "image_processing" = ps: with ps; [ aiohttp-cors ];
     "imap" = ps: with ps; [ aioimaplib ];
     "imap_email_content" = ps: with ps; [ ];
-    "incomfort" = ps: with ps; [ ]; # missing inputs: incomfort-client
+    "incomfort" = ps: with ps; [ incomfort-client ];
     "influxdb" = ps: with ps; [ influxdb-client influxdb ];
     "input_boolean" = ps: with ps; [ ];
     "input_datetime" = ps: with ps; [ ];
@@ -424,7 +424,7 @@
     "kiwi" = ps: with ps; [ ]; # missing inputs: kiwiki-client
     "kmtronic" = ps: with ps; [ pykmtronic ];
     "knx" = ps: with ps; [ xknx ];
-    "kodi" = ps: with ps; [ ]; # missing inputs: pykodi
+    "kodi" = ps: with ps; [ pykodi ];
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
@@ -563,7 +563,7 @@
     "norway_air" = ps: with ps; [ pymetno ];
     "notify" = ps: with ps; [ ];
     "notify_events" = ps: with ps; [ ]; # missing inputs: notify-events
-    "notion" = ps: with ps; [ ]; # missing inputs: aionotion
+    "notion" = ps: with ps; [ aionotion ];
     "nsw_fuel_station" = ps: with ps; [ ]; # missing inputs: nsw-fuel-api-client
     "nsw_rural_fire_service_feed" = ps: with ps; [ ]; # missing inputs: aio_geojson_nsw_rfs_incidents
     "nuheat" = ps: with ps; [ ]; # missing inputs: nuheat
@@ -741,7 +741,7 @@
     "sighthound" = ps: with ps; [ pillow simplehound ];
     "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
-    "simplisafe" = ps: with ps; [ ]; # missing inputs: simplisafe-python
+    "simplisafe" = ps: with ps; [ simplisafe-python ];
     "simulated" = ps: with ps; [ ];
     "sinch" = ps: with ps; [ ]; # missing inputs: clx-sdk-xms
     "sisyphus" = ps: with ps; [ ]; # missing inputs: sisyphus-control
@@ -766,7 +766,7 @@
     "snmp" = ps: with ps; [ pysnmp ];
     "sochain" = ps: with ps; [ ]; # missing inputs: python-sochain-api
     "socialblade" = ps: with ps; [ ]; # missing inputs: socialbladeclient
-    "solaredge" = ps: with ps; [ stringcase ]; # missing inputs: solaredge
+    "solaredge" = ps: with ps; [ solaredge stringcase ];
     "solaredge_local" = ps: with ps; [ ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [ ]; # missing inputs: sunwatcher
     "solax" = ps: with ps; [ solax ];

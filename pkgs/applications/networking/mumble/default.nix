@@ -6,7 +6,7 @@
 , speechdSupport ? false, speechd
 , pulseSupport ? false, libpulseaudio
 , iceSupport ? false, zeroc-ice
-, grpcSupport ? false, grpc, c-ares, abseil-cpp, which
+, grpcSupport ? false, grpc, which
 , nixosTests
 }:
 
@@ -115,7 +115,7 @@ let
 
     buildInputs = [ libcap ]
       ++ lib.optional iceSupport zeroc-ice
-      ++ lib.optionals grpcSupport [ grpc c-ares abseil-cpp which ];
+      ++ lib.optionals grpcSupport [ grpc which ];
 
     installPhase = ''
       # bin stuff

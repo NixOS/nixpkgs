@@ -1,6 +1,4 @@
-{ lib, fetchurl, ocamlPackages }:
-
-with ocamlPackages;
+{ lib, fetchurl, yojson, csexp, result, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "dot-merlin-reader";

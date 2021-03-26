@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "net-tools";
-  version = "1.60_p20180626073013";
+  version = "2.10";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "0mzsjjmz5kn676w2glmxwwd8bj0xy9dhhn21aplb435b767045q4";
+    sha256 = "sha256-smJDWlJB6Jv6UcPKvVEzdTlS96e3uT8y4Iy52W9YDWk=";
   };
 
   preBuild =

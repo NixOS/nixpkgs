@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkg-config, pytest, fuse, attr, which
-, contextlib2, osxfuse
+, contextlib2
 }:
 
 buildPythonPackage rec {
@@ -21,9 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    lib.optionals stdenv.isLinux [ fuse ]
-    ++ lib.optionals stdenv.isDarwin [ osxfuse ];
+  buildInputs = [ fuse ];
 
   checkInputs = [ pytest which ] ++
     lib.optionals stdenv.isLinux [ attr ];

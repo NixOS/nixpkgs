@@ -3,18 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "prime-server";
-  version = "0.6.7";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kevinkreiser";
     repo = "prime_server";
     rev = version;
-    sha256 = "027w3cqfnciyy2x78hfclpb77askn773fab37mzwf6r3mcc7vyl5";
+    sha256 = "0izmmvi3pvidhlrgfpg4ccblrw6fil3ddxg5cfxsz4qbh399x83w";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ curl zeromq czmq libsodium ];
+
+  # https://github.com/kevinkreiser/prime_server/issues/95
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-variable" ];
 
   meta = with lib; {
     description = "Non-blocking (web)server API for distributed computing and SOA based on zeromq";

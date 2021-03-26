@@ -1,27 +1,29 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
 , pytestCheckHook
+, pytest-asyncio
+, pytest-tornado
 , pytestcov
 , sqlalchemy
 , tornado
 , twisted
 , mock
-, trollius
 , gevent
 , six
 , pytz
 , tzlocal
 , funcsigs
-, futures
 , setuptools
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "APScheduler";
   version = "3.7.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,13 +35,14 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytest-asyncio
+    pytest-tornado
     pytestCheckHook
     pytestcov
     sqlalchemy
     tornado
     twisted
     mock
-    trollius
     gevent
   ];
 
@@ -49,7 +52,12 @@ buildPythonPackage rec {
     tzlocal
     funcsigs
     setuptools
-  ] ++ lib.optional (!isPy3k) futures;
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_submit_job"
+    "test_max_instances"
+  ];
 
   pythonImportsCheck = [ "apscheduler" ];
 

@@ -9,21 +9,12 @@ let
                            && pkgs.stdenv.isx86_64
                            && pkgs.pkgsi686Linux.pipewire != null;
 
-  prioritizeNativeProtocol = {
-    "context.modules" = {
-      "libpipewire-module-protocol-native" = {
-        _priority = -100;
-        _content = null;
-      };
-    };
-  };
-
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
   defaults = {
     alsa-monitor = (builtins.fromJSON (builtins.readFile ./alsa-monitor.conf.json));
     bluez-monitor = (builtins.fromJSON (builtins.readFile ./bluez-monitor.conf.json));
-    media-session = recursiveUpdate (builtins.fromJSON (builtins.readFile ./media-session.conf.json)) prioritizeNativeProtocol;
+    media-session = (builtins.fromJSON (builtins.readFile ./media-session.conf.json));
     v4l2-monitor = (builtins.fromJSON (builtins.readFile ./v4l2-monitor.conf.json));
   };
   # Helpers for generating the pipewire JSON config file

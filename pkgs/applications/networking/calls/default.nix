@@ -3,7 +3,6 @@
 , fetchFromGitLab
 , meson
 , ninja
-, cmake
 , pkg-config
 , libhandy
 , modemmanager
@@ -13,35 +12,46 @@
 , feedbackd
 , callaudiod
 , evolution-data-server
+, glib
 , folks
 , desktop-file-utils
+, appstream-glib
 , libpeas
 , dbus
 , vala
 , wrapGAppsHook
 , xvfb_run
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qmjdhnr95dawccw1ss8hc3lk0cypj86xg2amjq7avzn86ryd76l";
+    sha256 = "0igap5ynq269xqaky6fqhdg2dpsvxa008z953ywa4s5b5g5dk3dd";
   };
+
+  outputs = [ "out" "devdoc" ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     desktop-file-utils
+    appstream-glib
     vala
-    cmake
     wrapGAppsHook
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
   ];
 
   buildInputs = [
@@ -62,10 +72,10 @@ stdenv.mkDerivation rec {
     xvfb_run
   ];
 
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   mesonFlags = [
-    # docs fail to build
-    # https://source.puri.sm/Librem5/calls/issues/99
-    "-Dgtk_doc=false"
+    "-Dgtk_doc=true"
   ];
 
   doCheck = true;
@@ -73,6 +83,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
     NO_AT_BRIDGE=1 \
+    XDG_DATA_DIRS=${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test --print-errorlogs

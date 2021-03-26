@@ -79,11 +79,11 @@
 /pkgs/development/tools/poetry2nix @adisbladis
 
 # Haskell
-/pkgs/development/compilers/ghc                       @cdepillabout
-/pkgs/development/haskell-modules		      @cdepillabout
-/pkgs/development/haskell-modules/default.nix	      @cdepillabout
-/pkgs/development/haskell-modules/generic-builder.nix @cdepillabout
-/pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout
+/pkgs/development/compilers/ghc                       @cdepillabout @sternenseemann
+/pkgs/development/haskell-modules		      @cdepillabout @sternenseemann
+/pkgs/development/haskell-modules/default.nix	      @cdepillabout @sternenseemann
+/pkgs/development/haskell-modules/generic-builder.nix @cdepillabout @sternenseemann
+/pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout @sternenseemann
 
 # Perl
 /pkgs/development/interpreters/perl @volth @stigtsp

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     ./jsfalse_to_null.patch
   ];
 
-  buildInputs = [ autoconf makedepend perl python unzip zip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ autoconf makedepend perl python zip ];
 
   # It works without MOZ_FIX_LINK_PATHS, circumventing an impurity
   # issue.  Maybe we could kick js/ (spidermonkey) completely and

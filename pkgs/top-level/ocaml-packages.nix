@@ -238,6 +238,8 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    decompress-1-2 = callPackage ../development/ocaml-modules/decompress/1.2.nix { };
+
     diet =  callPackage ../development/ocaml-modules/diet { };
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
@@ -315,7 +317,15 @@ let
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
-    elpi = callPackage ../development/ocaml-modules/elpi { };
+    elpi = callPackage ../development/ocaml-modules/elpi (
+      let ppxlib_0_15 = if lib.versionAtLeast ppxlib.version "0.15"
+        then ppxlib.override { version = "0.15.0"; }
+        else ppxlib; in
+      {
+        ppx_deriving = ppx_deriving.override { ppxlib = ppxlib_0_15; };
+        ppxlib = ppxlib_0_15;
+      }
+    );
 
     encore = callPackage ../development/ocaml-modules/encore { };
 
@@ -342,6 +352,12 @@ let
     faillib = callPackage ../development/ocaml-modules/faillib { };
 
     faraday = callPackage ../development/ocaml-modules/faraday { };
+
+    faraday-async = callPackage ../development/ocaml-modules/faraday/async.nix { };
+
+    faraday-lwt = callPackage ../development/ocaml-modules/faraday/lwt.nix { };
+
+    faraday-lwt-unix = callPackage ../development/ocaml-modules/faraday/lwt-unix.nix { };
 
     farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
@@ -399,7 +415,9 @@ let
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
-    imagelib = callPackage ../development/ocaml-modules/imagelib { };
+    imagelib = callPackage ../development/ocaml-modules/imagelib {
+      decompress = decompress-1-2;
+    };
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
@@ -572,6 +590,10 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
+    luv = callPackage ../development/ocaml-modules/luv {
+      inherit (pkgs) file;
+    };
+
     lwt = callPackage ../development/ocaml-modules/lwt {
       ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
     };
@@ -615,6 +637,8 @@ let
     merlin = callPackage ../development/tools/ocaml/merlin { };
 
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
+
+    dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
 
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
@@ -761,6 +785,8 @@ let
 
     ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
+    ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
+
     ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
     gettext-stub = callPackage ../development/ocaml-modules/ocaml-gettext/stub.nix { };
@@ -773,6 +799,8 @@ let
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
+    jsonrpc = callPackage ../development/ocaml-modules/ocaml-lsp/jsonrpc.nix { };
+    lsp = callPackage ../development/ocaml-modules/ocaml-lsp/lsp.nix { };
     ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
     ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
@@ -921,7 +949,9 @@ let
 
     ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
 
-    ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
+    ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix {
+      ppxlib = ppxlib.override { version = "0.22.0"; };
+    };
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
@@ -1011,13 +1041,23 @@ let
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
 
-    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
+    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc {
+      ppxlib = ppxlib.override { version = "0.15.0"; };
+   };
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
 
     ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec {};
 
-    ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
+    ppx_import = callPackage ../development/ocaml-modules/ppx_import (
+      let ppxlib_0_15 = if lib.versionAtLeast ppxlib.version "0.15"
+        then ppxlib.override { version = "0.15.0"; }
+        else ppxlib; in
+      {
+        ppx_deriving = ppx_deriving.override { ppxlib = ppxlib_0_15; };
+        ppxlib = ppxlib_0_15;
+      }
+    );
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix {
     };
@@ -1388,7 +1428,10 @@ let
 
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
-    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
+    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse {
+      # needs Base64 module
+      ocaml_extlib = ocaml_extlib.override { minimal = false; };
+    };
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
 

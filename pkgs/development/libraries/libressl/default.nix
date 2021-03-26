@@ -64,7 +64,12 @@ let
 
 in {
   libressl_3_1 = generic {
-    version = "3.1.4";
-    sha256 = "1dnbbnr43jashxivnafmh9gnn57c7ayva788ba03z633k6f18k21";
+    version = "3.1.5";
+    sha256 = "1504a1sf43frw43j14pij0q1f48rm5q86ggrlxxhw708qp7ds4rc";
+  };
+
+  libressl_3_2 = generic {
+    version = "3.2.5";
+    sha256 = "1zkwrs3b19s1ybz4q9hrb7pqsbsi8vxcs44qanfy11fkc7ynb2kr";
   };
 }

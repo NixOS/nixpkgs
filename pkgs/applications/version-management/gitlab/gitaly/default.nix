@@ -33,17 +33,17 @@ let
       };
   };
 in buildGoModule rec {
-  version = "13.8.5";
+  version = "13.9.4";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-hKIjKltPPmz50Ru7elpHdeoyGAqgp+txR3fKleqY7hM=";
+    sha256 = "sha256-6ocP4SMafvLI2jfvcB8jk1AemAI/TiBQ1iaVxK7I54A=";
   };
 
-  vendorSha256 = "sha256-oVw6vXI3CyOn4l02PkYx3HVpZfzQPi3yBuf9tRvoWoM=";
+  vendorSha256 = "10ssx0dvbzg70vr2sgnhzijnjxfw6533wdjxwakj62rpfayklp51";
 
   passthru = {
     inherit rubyEnv;

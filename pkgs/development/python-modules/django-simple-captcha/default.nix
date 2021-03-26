@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "django-simple-captcha";
-  version = "0.5.13";
+  version = "0.5.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e43ba3b61daf690ac0319157837bb57e31df8bddbdc9a59ef42ef1a99e21fa2";
+    sha256 = "84b5c188e6ae50e9ecec5e5d734c5bc4d2a50fbbca7f59d2c12da9a3bbee5051";
     extension = "zip";
   };
 

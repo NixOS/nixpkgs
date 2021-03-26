@@ -12,7 +12,8 @@
  <xi:include href="emacs.section.xml" />
  <xi:include href="firefox.section.xml" />
  <xi:include href="fish.section.xml" />
- <xi:include href="ibus.xml" />
+ <xi:include href="fuse.section.xml" />
+ <xi:include href="ibus.section.xml" />
  <xi:include href="kakoune.section.xml" />
  <xi:include href="linux.section.xml" />
  <xi:include href="locales.section.xml" />

@@ -18,45 +18,15 @@ let
     ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
 
-  prioritizeNativeProtocol = {
-    "context.modules" = {
-      # Most other modules depend on this, so put it first
-      "libpipewire-module-protocol-native" = {
-        _priority = -100;
-        _content = null;
-      };
-    };
-  };
-
-  fixDaemonModulePriorities = {
-    "context.modules" = {
-      # Most other modules depend on thism so put it first
-      "libpipewire-module-protocol-native" = {
-        _priority = -100;
-        _content = null;
-      };
-      # Needs to be before libpipewire-module-access
-      "libpipewire-module-portal" = {
-        _priority = -50;
-        _content = {
-          flags = [
-            "ifexists"
-            "nofail"
-          ];
-        };
-      };
-    };
-  };
-
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
   defaults = {
-    client = recursiveUpdate (builtins.fromJSON (builtins.readFile ./client.conf.json)) prioritizeNativeProtocol;
-    client-rt = recursiveUpdate (builtins.fromJSON (builtins.readFile ./client-rt.conf.json)) prioritizeNativeProtocol;
-    jack = recursiveUpdate (builtins.fromJSON (builtins.readFile ./jack.conf.json)) prioritizeNativeProtocol;
+    client = builtins.fromJSON (builtins.readFile ./client.conf.json);
+    client-rt = builtins.fromJSON (builtins.readFile ./client-rt.conf.json);
+    jack = builtins.fromJSON (builtins.readFile ./jack.conf.json);
     # Remove session manager invocation from the upstream generated file, it points to the wrong path
-    pipewire = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire.conf.json)) fixDaemonModulePriorities;
-    pipewire-pulse = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json)) prioritizeNativeProtocol;
+    pipewire = builtins.fromJSON (builtins.readFile ./pipewire.conf.json);
+    pipewire-pulse = builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json);
   };
 
   # Helpers for generating the pipewire JSON config file

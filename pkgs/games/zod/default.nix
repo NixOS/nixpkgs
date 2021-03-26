@@ -24,8 +24,8 @@ stdenv.mkDerivation {
     sourceRoot=`pwd`/src
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer libmysqlclient ];
+  nativeBuildInputs = [ makeWrapper unrar unzip ];
+  buildInputs = [ SDL SDL_image SDL_ttf SDL_mixer libmysqlclient ];
 
   NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
 

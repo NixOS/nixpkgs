@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, SystemConfiguration, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p sqlx-cli" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration CoreFoundation Security ];
 
   meta = with lib; {
     description =

@@ -37,14 +37,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/thestk/rtmidi/pull/230/commits/7a32e23e3f6cb43c0d2d58443ce205d438e76f44.patch";
       sha256 = "06im8mb05wah6bnkadw2gpkhmilxb8p84pxqr50b205cchpq304w";
     })
+    (fetchpatch {
+      name = "RtMidi-Adjust-public-header-installs-to-match-autotools.patch";
+      url = "https://github.com/thestk/rtmidi/pull/230/commits/892fe5492f0e787484fa4a37027b08c265ce001f.patch";
+      sha256 = "0ca9m42xa3gmycimzvzvl67wa266xq9pfp1b4v555rh2fp52kbcj";
+    })
   ];
 
   postPatch = ''
     substituteInPlace rtmidi.pc.in \
       --replace 'Requires:' 'Requires.private:'
-    substituteInPlace CMakeLists.txt \
-      --replace 'PUBLIC_HEADER RtMidi.h' 'PUBLIC_HEADER "RtMidi.h;rtmidi_c.h"' \
-      --replace 'PUBLIC_HEADER DESTINATION $''\{CMAKE_INSTALL_INCLUDEDIR}' 'PUBLIC_HEADER DESTINATION $''\{CMAKE_INSTALL_INCLUDEDIR}/rtmidi'
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

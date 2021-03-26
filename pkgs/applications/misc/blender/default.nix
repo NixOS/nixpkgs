@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = [ cmake makeWrapper ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
-      makeWrapper
       embree
       gmp
+      pugixml
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       openvdb
     ]
     else [
-      pugixml llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
+      llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit

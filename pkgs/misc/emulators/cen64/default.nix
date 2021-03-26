@@ -2,21 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "cen64";
-  version = "unstable-2020-02-20";
+  version = "unstable-2021-03-12";
 
   src = fetchFromGitHub {
     owner = "n64dev";
     repo = "cen64";
-    rev = "6f9f5784bf0a720522c4ecb0915e20229c126aed";
-    sha256 = "08q0a3b2ilb95zlz4cw681gwz45n2wrb2gp2z414cf0bhn90vz0s";
+    rev = "1b31ca9b3c3bb783391ab9773bd26c50db2056a8";
+    sha256 = "0x1fz3z4ffl5xssiyxnmbhpjlf0k0fxsqn4f2ikrn17742dx4c0z";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGL libiconv openal libX11 ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv cen64 $out/bin
+    runHook preInstall
+    install -D {,$out/bin/}${pname}
+    runHook postInstall
   '';
 
   meta = with lib; {

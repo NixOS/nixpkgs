@@ -60,5 +60,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom qknight domenkozar sorki ];
     platforms = platforms.linux;
+    # error: 'snprintf' was not declared in this scope
+    broken = true;
   };
 }

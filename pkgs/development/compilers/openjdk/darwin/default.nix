@@ -7,15 +7,17 @@ let
   };
 
   jdk = stdenv.mkDerivation rec {
-    name = "zulu15.28.51-ca-jdk15.0.1";
+    pname = "zulu15.28.51-ca-jdk";
+    version = "15.0.1";
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/${name}-macosx_x64.tar.gz";
+      url = "https://cdn.azul.com/zulu/bin/${pname}${version}-macosx_x64.tar.gz";
       sha256 = "0h738pbnwcn7pjp0qyryzazqj5nw5sy2f8l0ycl39crm9ia6akvh";
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
-    buildInputs = [ unzip freetype ];
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ freetype ];
 
     installPhase = ''
       mkdir -p $out

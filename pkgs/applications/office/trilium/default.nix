@@ -1,4 +1,4 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
@@ -14,21 +14,21 @@ let
   meta = with lib; {
     inherit description;
     homepage = "https://github.com/zadam/trilium";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ emmanuelrosa dtzWill ];
+    maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.43.4";
+  version = "0.46.6";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "0kjysam5alsmnj93fcqq1ivawnra42gn7dch99rrfmvbkxp7hhr8";
+    sha256 = "0nxlph23gkxrn10gnm0ncsy54fzcmbqcrrk492ygfgw8a8pl4ah1";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "128mvmp15mjpb5ipkmr0yn7ahby26shbix3f8q094f4zpxjp83zx";
+    sha256 = "0z9wg84sdbpk8zhljydm05z7cqqv2ly9s921cli7rs8hcpl175cz";
   };
 
 in {
@@ -58,6 +58,7 @@ in {
     buildInputs = atomEnv.packages ++ [ gtk3 ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
       mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
@@ -67,6 +68,7 @@ in {
 
       ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
       cp ${desktopItem}/share/applications/* $out/share/applications
+      runHook postInstall
     '';
 
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
@@ -91,16 +93,20 @@ in {
 
     buildInputs = [
       stdenv.cc.cc.lib
-      zlib
-      libxkbfile
     ];
 
-    patches = [ ./0001-Use-console-logger-instead-of-rolling-files.patch ] ;
+    patches = [
+      # patch logger to use console instead of rolling files
+      ./0001-Use-console-logger-instead-of-rolling-files.patch
+    ];
+
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium-server
 
       cp -r ./* $out/share/trilium-server
+      runHook postInstall
     '';
 
     postFixup = ''

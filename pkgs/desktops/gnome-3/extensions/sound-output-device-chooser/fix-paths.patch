@@ -2,20 +2,20 @@ diff --git a/sound-output-device-chooser@kgshank.net/convenience.js b/sound-outp
 index 54ad06f..0860531 100644
 --- a/sound-output-device-chooser@kgshank.net/convenience.js
 +++ b/sound-output-device-chooser@kgshank.net/convenience.js
-@@ -129,7 +129,7 @@ function refreshCards() {
-     if(_settings.get_boolean(Prefs.NEW_PROFILE_ID))    {
+@@ -142,7 +142,7 @@ function refreshCards() {
+     if (newProfLogic) {
          _log("New logic");
-         let pyLocation =  Me.dir.get_child('utils/pa_helper.py').get_path();
--        let pythonExec = 'python';
+         let pyLocation = Me.dir.get_child("utils/pa_helper.py").get_path();
+-        let pythonExec = ["python", "python3", "python2"].find(cmd => isCmdFound(cmd));
 +        let pythonExec = '@python@';
-         let pyVer = 3;
-         while(!isCmdFound(pythonExec) && pyVer >=2){
-             _log(pythonExec + " is not found. Try next");
+         if (!pythonExec) {
+             _log("ERROR: Python not found. fallback to default mode");
+             _settings.set_boolean(Prefs.NEW_PROFILE_ID, false);
 diff --git a/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py b/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
 index c4d2484..262608d 100644
 --- a/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
 +++ b/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
-@@ -86,7 +86,7 @@ else:
+@@ -82,7 +82,7 @@ else:
  
  _libraries = {}
  

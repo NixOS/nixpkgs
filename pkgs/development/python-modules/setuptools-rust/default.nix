@@ -1,4 +1,5 @@
-{ lib
+{ callPackage
+, lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "setuptools_rust" ];
+
+  passthru.tests.pyo3 = callPackage ./pyo3-test {};
 
   meta = with lib; {
     description = "Setuptools plugin for Rust support";

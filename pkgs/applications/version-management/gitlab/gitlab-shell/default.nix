@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "gitlab-shell";
-  version = "13.15.1";
+  version = "13.17.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";

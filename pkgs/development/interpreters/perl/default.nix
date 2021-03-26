@@ -41,7 +41,10 @@ let
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optional crossCompiling ./MakeMaker-cross.patch;
+      ++ optional crossCompiling ./MakeMaker-cross.patch
+      # Backporting https://github.com/Perl/perl5/pull/17946, can be
+      # removed if there's ever a 5.30.x release with it included.
+      ++ optional (versionOlder version "5.32.1") ./aarch64-darwin.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -168,11 +171,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "1.3.5"; # Jan 24, 2021
+    crossVersion = "e53999d0c340769792ba18d749751b0df3d1d177"; # Mar 21, 2021
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1sa2f8s1hc604g5y98w6m6y5q43s9jiyrpnp4b34zkfx1qs3w6l4";
+      sha256 = "14vcpwjhq667yh0cs7ism70df8l7068vn4a0ww59hdjyj7yc84i6";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -208,7 +211,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.6";
-    sha256 = "1fx6b2q7wzd0xwy7qkmkvd5bdm09d3zfnynrb6afl9ghd8ww56fv";
+    version = "5.33.8";
+    sha256 = "1zr6sdsfcmk86n3f8j65x07xkv29v0pi8bwc986ahmjx7x92xzgl";
   };
 }

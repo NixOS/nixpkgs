@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "smbnetfs";
-  version = "0.6.2";
+  version = "0.6.3";
   src = fetchurl {
     url = "mirror://sourceforge/project/smbnetfs/smbnetfs/SMBNetFS-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "19x9978k90w9a65lrpsphk7swsq8zkws9jc27q4zbndrm0r2snr0";
+    sha256 = "sha256-6sN7l2n76cP0uvPrZMYaa1mtTyqgXf3culoaxK301WA=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf ];

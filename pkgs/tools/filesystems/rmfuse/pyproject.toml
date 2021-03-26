@@ -6,7 +6,7 @@ authors = []
 
 [tool.poetry.dependencies]
 python = "^3.8"
-rmfuse = {git = "https://github.com/rschroll/rmfuse.git"}
+rmfuse = {git = "https://github.com/rschroll/rmfuse.git", extras = ["pyfuse3"]}
 
 [tool.poetry.dev-dependencies]
 

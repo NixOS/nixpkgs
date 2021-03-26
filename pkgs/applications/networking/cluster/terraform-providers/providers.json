@@ -511,10 +511,12 @@
   },
   "kubernetes-alpha": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/kubernetes-alpha",
     "repo": "terraform-provider-kubernetes-alpha",
-    "rev": "nightly20200608",
-    "sha256": "1g171sppf3kq5qlp6g0qqdm0x8lnpizgw8bxjlhp9b6cl4kym70m",
-    "version": "nightly20200608"
+    "rev": "v0.3.2",
+    "sha256": "0lgh42fvfwvj6cw8i7800k016ay4babqiz38q0y7apq4s7vs62sb",
+    "vendorSha256": null,
+    "version": "0.3.2"
   },
   "launchdarkly": {
     "owner": "terraform-providers",
@@ -1084,10 +1086,11 @@
     "version": "2.3.0"
   },
   "yandex": {
-    "owner": "terraform-providers",
+    "owner": "yandex-cloud",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.40.0",
-    "sha256": "0dymhdrdm00m9xn4xka3zbvjqnckhl06vz5zm6rqivkmw8m2q0mz",
-    "version": "0.40.0"
+    "rev": "v0.54.0",
+    "sha256": "0q9m7520zl7q1liri6x849xjp221wbc9l2w6dj19mmgfwspqv02l",
+    "vendorSha256": "0rzldsb8gyhvnsd26wg9byqngzzj64pi86v2hb4i63rlfmnn77xi",
+    "version": "0.54.0"
   }
 }

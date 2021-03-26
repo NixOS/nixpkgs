@@ -127,8 +127,9 @@ buildStdenv.mkDerivation ({
   inherit src unpackPhase meta;
 
   patches = [
-    ./env_var_for_system_dir.patch
   ] ++
+  lib.optional (lib.versionOlder ffversion "86") ./env_var_for_system_dir-ff85.patch ++
+  lib.optional (lib.versionAtLeast ffversion "86") ./env_var_for_system_dir-ff86.patch ++
   lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
   lib.optional (lib.versionAtLeast ffversion "84") ./no-buildconfig-ffx84.patch ++
   lib.optional (ltoSupport && lib.versionOlder ffversion "84") ./lto-dependentlibs-generation-ffx83.patch ++
@@ -160,7 +161,7 @@ buildStdenv.mkDerivation ({
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     xorg.pixman yasm libGLU libGL
     xorg.xorgproto
-    xorg.libXext unzip makeWrapper
+    xorg.libXext makeWrapper
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
     nasm icu67 libvpx_1_8
@@ -221,6 +222,7 @@ buildStdenv.mkDerivation ({
       rust-cbindgen
       rustc
       which
+      unzip
     ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]

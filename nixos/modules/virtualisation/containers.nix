@@ -118,8 +118,9 @@ in
       [network]
       cni_plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
 
-      ${lib.optionalString (cfg.ociSeccompBpfHook.enable == true) ''
       [engine]
+      init_path = "${pkgs.catatonit}/bin/catatonit"
+      ${lib.optionalString (cfg.ociSeccompBpfHook.enable) ''
       hooks_dir = [
         "${config.boot.kernelPackages.oci-seccomp-bpf-hook}",
       ]

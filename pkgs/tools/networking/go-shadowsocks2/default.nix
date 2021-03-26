@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-shadowsocks2";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "go-shadowsocks2";
     rev = "v${version}";
-    sha256 = "1wzy3ml4ld83iawcl6p313bskzs6zjhz8vlg8kpwgn71cnbv4pvi";
+    sha256 = "sha256-ouJGrVribymak4SWaLbGhlp41iuw07VdxCypoBr1hWA=";
   };
 
-  vendorSha256 = "0iyak8af708h3rdrslndladbcjrix35j3rlhpsb8ljchqp09lksg";
+  vendorSha256 = "sha256-RrHksWET5kicbdQ5HRDWhNxx4rTi2zaVeaPoLdg4uQw=";
 
   meta = with lib; {
     description = "Fresh implementation of Shadowsocks in Go";

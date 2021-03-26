@@ -65,9 +65,9 @@ let
       sha256 = sha256Hash;
     };
 
+    nativeBuildInputs = [ unzip ];
     buildInputs = [
       makeWrapper
-      unzip
     ];
     installPhase = ''
       cp -r . $out

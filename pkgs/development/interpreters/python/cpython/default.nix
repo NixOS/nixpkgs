@@ -185,6 +185,11 @@ in with passthru; stdenv.mkDerivation {
     # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
     # See: https://bugs.python.org/issue11122
     ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
+    # The workaround is for unittests on Win64, which we don't support.
+    # It does break aarch64-darwin, which we do support. See:
+    # * https://bugs.python.org/issue35523
+    # * https://github.com/python/cpython/commit/e6b247c8e524
+    ./3.7/no-win64-workaround.patch
   ] ++ optionals (isPy37 || isPy38 || isPy39) [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch

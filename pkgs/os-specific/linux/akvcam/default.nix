@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "akvcam";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "webcamoid";
     repo = "akvcam";
     rev = version;
-    sha256 = "ULEhfF+uC/NcVUGAtmP1+BnrcgRgftNS97nLp81avQ8=";
+    sha256 = "0r5xg7pz0wl6pq5029rpzm9fn978vq0md31xjkp2amny7rrgxw72";
   };
 
   nativeBuildInputs = [ qmake ];

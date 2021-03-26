@@ -21,19 +21,21 @@
 }:
 
 let
-  version = "1.6.4";
+  version = "1.7.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
   # and avoid unnecessary rebuilds as it can take relatively long
   # to generate
+  #
+  # For every bump, make sure that the hash is still accurate.
   stimulusGenerator = stdenv.mkDerivation {
     pname = "foot-generate-alt-random-writes";
     inherit version;
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "0pnc5nvqrbgx5618ylrkrs9fyxjh4jcsbryfk6vlnk8x4wyyaibz";
+      sha256 = "019bdiqfi3wx2lwrv3nhq83knc1r3lmqd5zgisa33wwshm2kyv7p";
     };
 
     dontUnpack = true;
@@ -87,7 +89,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0awv53l3039s1rnkhdkzc0gwawlnd1m8cl4qhaijhxzzq68w0dfb";
+    sha256 = "0w07fw7y31g891335ji3fm783r4dsk5py82qp0zx6z3rfr07paby";
   };
 
   nativeBuildInputs = [

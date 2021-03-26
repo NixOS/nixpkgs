@@ -334,7 +334,7 @@ Above, we were mostly just focused on use cases and what to do to get started
 creating working Python environments in nix.
 
 Now that you know the basics to be up and running, it is time to take a step
-back and take a deeper look at at how Python packages are packaged on Nix. Then,
+back and take a deeper look at how Python packages are packaged on Nix. Then,
 we will look at how you can use development mode with your code.
 
 #### Python library packages in Nixpkgs
@@ -638,7 +638,7 @@ are disabled.
 
 #### Using pythonImportsCheck
 
-Although unit tests are highly prefered to valid correctness of a package. Not
+Although unit tests are highly prefered to validate correctness of a package, not
 all packages have test suites that can be ran easily, and some have none at all.
 To help ensure the package still works, `pythonImportsCheck` can attempt to import
 the listed modules.
@@ -918,7 +918,7 @@ because their behaviour is different:
 
 * `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables
   as well as the items listed in `setup_requires`.
-* `buildInputs ? []`: Build and/or run-time dependencies that need to be be
+* `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
 * `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These
@@ -1551,13 +1551,11 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 ### Contributing guidelines
 
-Following rules are desired to be respected:
+The following rules are desired to be respected:
 
 * Python libraries are called from `python-packages.nix` and packaged with
   `buildPythonPackage`. The expression of a library should be in
   `pkgs/development/python-modules/<name>/default.nix`.
-* Libraries in `pkgs/top-level/python-packages.nix` are sorted
-  alphanumerically to avoid merge conflicts and ease locating attributes.
 * Python applications live outside of `python-packages.nix` and are packaged
   with `buildPythonApplication`.
 * Make sure libraries build for all Python interpreters.
@@ -1567,8 +1565,11 @@ Following rules are desired to be respected:
   case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python
   libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
-* Attribute names in `python-packages.nix` should be normalized according to
-  [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This
-  means that characters should be converted to lowercase and `.` and `_` should
-  be replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz )
-* Attribute names in `python-packages.nix` should be sorted alphanumerically.
+* Attribute names in `python-packages.nix` as well as `pname`s should match the
+  library's name on PyPI, but be normalized according to [PEP
+  0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
+  that characters should be converted to lowercase and `.` and `_` should be
+  replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
+  If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Attribute names in `python-packages.nix` should be sorted alphanumerically to
+  avoid merge conflicts and ease locating attributes.

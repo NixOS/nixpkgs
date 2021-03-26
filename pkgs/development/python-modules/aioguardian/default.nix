@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "1.0.4";
+  version = "1.0.7";
   disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1cbxcsxh9c8r2zx3lsjdns26sm2qmlwnqgah2sfzbgp1lay23vvq";
+    sha256 = "sha256-KMhq86hcqoYloS/6VHsl+3KVEZBbN97ABrZlmEr32Z8=";
   };
 
   format = "pyproject";
