@@ -18,7 +18,7 @@
 , gdk-pixbuf
 , gsettings-desktop-schemas
 , adwaita-icon-theme
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_42
 , desktop-file-utils
 , python3
@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-books";
-  version = "3.34.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "153vknqisjn5f105avzm933fsc3v0pjzzbwxlqxf8vjjksh1cmya";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0c41l8m2di8h39bmk2fnhpwglwp6qhljmwqqbihzp4ay9976zrc5";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     libxslt
     desktop-file-utils
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_42
     wrapGAppsHook
     python3
@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = true; # Tracker 3 not supported and it cannot start Tracker 2.
     homepage = "https://wiki.gnome.org/Apps/Books";
     description = "An e-book manager application for GNOME";
     maintainers = teams.gnome.members;
