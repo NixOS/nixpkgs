@@ -60,7 +60,7 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.31.91";
+  version = "2.32.0";
 
   outputs = [ "out" "dev" ];
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0k43mm626bx30pklfs9kqybszdv8dg7ljdgnadgf5wdzvwl0p9i9";
+    sha256 = "1w3b0w8izp0i070grhv19j631sdcd0mcqnjnax13k8mdx7dg8zcx";
   };
 
   patches = optionals stdenv.isLinux [
