@@ -10268,6 +10268,12 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
+  xfnw = {
+    email = "xfnw+nixos@riseup.net";
+    github = "xfnw";
+    githubId = 66233223;
+    name = "Owen";
+  };
   xfix = {
     email = "konrad@borowski.pw";
     github = "xfix";
