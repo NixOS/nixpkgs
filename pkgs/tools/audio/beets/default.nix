@@ -73,7 +73,7 @@ let
   };
 
   pluginsWithoutDeps = [
-    "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
+    "bareasc" "bench" "bpd" "bpm" "bucket" "duplicates" "edit" "embedart"
     "export" "filefilter" "fish" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
     "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs"
     "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "parentwork" "permissions" "play"
@@ -105,13 +105,13 @@ in pythonPackages.buildPythonApplication rec {
   # unstable does not require bs1770gain[2].
   # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
   # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-03-08";
+  version = "unstable-2021-03-24";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "debd382837ef1d30574c2234710d536bb299f979";
-    sha256 = "sha256-I6ejW3f72fdzWoz7g4n8pDYz2NiHGrorLegUQhQOSiI=";
+    rev = "854b4ab48324afe8884fcd11fa47bd6258d2f4f7";
+    sha256 = "sha256-y5EWVNF4bd9fNvU6VkucMpenyFZuqdPkrqQDgG9ZPJY=";
   };
 
   propagatedBuildInputs = [
