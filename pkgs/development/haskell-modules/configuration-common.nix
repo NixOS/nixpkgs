@@ -1426,7 +1426,7 @@ self: super: {
 
   # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
   hlint = super.hlint.overrideScope (self: super: {
-    ghc-lib-parser = overrideCabal self.ghc-lib-parser_9_0_1_20210207 {
+    ghc-lib-parser = overrideCabal self.ghc-lib-parser_9_0_1_20210324 {
       doHaddock = false;
     };
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
