@@ -5,7 +5,7 @@ let
 in
 fetchzip {
   name = "${pname}-${version}";
-  url = "http://vollkorn-typeface.com/download/vollkorn-4-105.zip";
+  url = "http://vollkorn-typeface.com/download/vollkorn-${builtins.replaceStrings ["."] ["-"] version}.zip";
   sha256 = "0srff2nqs7353mqcpmvaq156lamfh621py4h1771n0l9ix2c8mss";
   stripRoot = false;
 
