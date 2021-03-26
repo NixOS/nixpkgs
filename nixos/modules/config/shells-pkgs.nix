@@ -10,15 +10,15 @@ let
 
   sh_phaseModule = sh: phase:
     let
-      phase_sh = phase + "_" + sh;
-      getPlugin = attrset.attrByPath [ phase_sh ] null;
+      outputName = phase + "_" + sh;
+      getPlugin = attrset.attrByPath [ outputName ] null;
       plugins = builtins.filter (p: null != (getPlugin p)) cfg;
     in
       {
         options = {
           environment.shellPkgs = mkOption {
             type = lsMod {
-              options = nameValuePair phase_sh (
+              options = nameValuePair outputName (
                 mkOption {
                   type = with types; nullOr path;
                   default = null;
@@ -31,7 +31,7 @@ let
           };
           programs."${sh}".shellPkgs = mkOption {
             type = lsMod {
-              options = nameValuePair phase_sh (
+              options = nameValuePair outputName (
                 mkOption {
                   type = with types; nullOr path;
                   default = null;
@@ -46,16 +46,16 @@ let
 
         config.programs."${sh}" = mkMerge [
           {
-            shellPkgs = filter (p: p?"${phase_sh}") config.environment.shellPkgs;
+            shellPkgs = filter (p: null != p."${outputName}") config.environment.shellPkgs;
           }
         ] ++ (
           map
-            (p: nameValuePair phase "source ${p."${phase_sh}"}")
+            (p: nameValuePair phase "source ${p."${outputName}"}")
             config.programs."${sh}".shellPkgs
         );
       };
   shModule = sh: let
-    phases_sh = map (phase: phase + "_" + sh) phases;
+    outputNames = map (phase: phase + "_" + sh) phases;
   in
     {
       imports = map (sh_phaseModule sh) phases;
@@ -70,12 +70,12 @@ let
       config.assertions = map (
         p: {
           assertion =
-            (lists.intersect phases_sh (attrFields config.programs."${sh}".shellPkgs)) != [];
+            (lists.intersect outputNames (filter (f: null != (p."${f}"or null)) (attrFields p))) != [];
           message = ''
-            ${toString p} must have at least one of ${strings.concatStringSep " , " phases_sh} attribute
+            ${toString p} must have at least one of ${strings.concatStringSep " , " outputNames} outputs.
           '';
         }
-      );
+      ) config.programs."${sh}".shellPkgs;
     };
 
 in
