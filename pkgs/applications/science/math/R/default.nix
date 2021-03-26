@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       --with-readline
       --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
       --with-cairo
+      --without-x
       --with-libpng
       --with-jpeglib
       --with-libtiff
