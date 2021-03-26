@@ -201,6 +201,20 @@ let
         };
       };
 
+      dotjoshjohnson.xml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "xml";
+          publisher = "dotjoshjohnson";
+          version = "2.5.1";
+          sha256 = "1v4x6yhzny1f8f4jzm4g7vqmqg5bqchyx4n25mkgvw2xp6yls037";
+        };
+        meta = {
+          description = "XML Tools";
+          homepage = "https://github.com/DotJoshJohnson/vscode-xml";
+          license = lib.licenses.mit;
+        };
+      };
+
       dracula-theme.theme-dracula = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "theme-dracula";
