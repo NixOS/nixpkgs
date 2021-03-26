@@ -33,6 +33,7 @@ let
     "avr-none"
     "i686-none" "x86_64-none"
     "powerpc-none"
+    "mips-none"
     "msp430-none"
     "riscv64-none" "riscv32-none"
     "vc4-none"

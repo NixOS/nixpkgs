@@ -162,6 +162,11 @@ rec {
     libc = "newlib";
   };
 
+  mips-embedded = {
+    config = "mips-none-elf";
+    libc = "newlib";
+  };
+
   ppc-embedded = {
     config = "powerpc-none-eabi";
     libc = "newlib";
