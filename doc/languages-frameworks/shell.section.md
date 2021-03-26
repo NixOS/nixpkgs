@@ -8,4 +8,6 @@ Those need to have extra outputs called `${shell}_${phase}` where:
 * * `loginShellInit` if the code is meant to be included in the login shell initialization.
 * * `promptInit` if the codeis needed to initialize the shell prompt.
 
+Then you need to put the script to be sourced in such output (not a subdirectory).
+
 Then, nixos users can add those packages to their shell initialization by adding them to `environment.shellPkgs` option.
