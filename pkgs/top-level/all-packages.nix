@@ -23689,6 +23689,8 @@ in
 
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
 
+  kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
+
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor { };
