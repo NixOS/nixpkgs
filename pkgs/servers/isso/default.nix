@@ -23,7 +23,7 @@ with python3Packages; buildPythonApplication rec {
     flask-caching
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     cffi
   ];
 
