@@ -69,9 +69,7 @@ with pkgs;
               recursivePthLoader
             ;
           };
-        in lib.makeScopeWithSplicing
-          pkgs.splicePackages
-          pkgs.newScope
+        in pkgs.makeScopeWithSplicing
           otherSplices
           keep
           (lib.extends overrides pythonPackagesFun))
