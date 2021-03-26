@@ -19461,6 +19461,8 @@ in
 
   power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
 
+  powercap = callPackage ../os-specific/linux/powercap { };
+
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
