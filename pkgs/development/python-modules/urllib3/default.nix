@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , brotli
 , buildPythonPackage
 , certifi
