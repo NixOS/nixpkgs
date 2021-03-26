@@ -38,6 +38,7 @@ mkDerivation {
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
+    ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
   ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
