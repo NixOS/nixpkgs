@@ -135,6 +135,7 @@
 , "json-refs"
 , "json-server"
 , "jsonlint"
+, "kaput-cli"
 , "karma"
 , "lcov-result-merger"
 , "leetcode-cli"

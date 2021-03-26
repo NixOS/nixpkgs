@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config, python, gtest
+, cmake, pkg-config, python3, gtest
 , boost, cryptopp, curl, fuse, openssl
 }:
 
@@ -44,9 +44,11 @@ stdenv.mkDerivation rec {
       --replace "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
   '';
 
-  nativeBuildInputs = [ cmake gtest pkg-config python ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
-  buildInputs = [ boost cryptopp curl fuse openssl ];
+  strictDeps = true;
+
+  buildInputs = [ boost cryptopp curl fuse openssl gtest ];
 
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"

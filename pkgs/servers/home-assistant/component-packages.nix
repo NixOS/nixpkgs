@@ -424,7 +424,7 @@
     "kiwi" = ps: with ps; [ ]; # missing inputs: kiwiki-client
     "kmtronic" = ps: with ps; [ pykmtronic ];
     "knx" = ps: with ps; [ xknx ];
-    "kodi" = ps: with ps; [ ]; # missing inputs: pykodi
+    "kodi" = ps: with ps; [ pykodi ];
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb

@@ -4,6 +4,7 @@ ackyshake/Spacegray.vim@main
 airblade/vim-gitgutter
 airblade/vim-rooter
 akinsho/nvim-bufferline.lua
+akinsho/nvim-toggleterm.lua
 aklt/plantuml-syntax
 altercation/vim-colors-solarized
 alvan/vim-closetag

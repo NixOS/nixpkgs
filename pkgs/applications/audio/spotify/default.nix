@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
+, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa
+, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 }:
 
 let
@@ -10,14 +10,14 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.1.46.916.g416cacf1";
+  version = "1.1.55.494.gca75f788";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "43";
+  rev = "45";
 
   deps = [
     alsaLib
@@ -34,12 +34,13 @@ let
     freetype
     gdk-pixbuf
     glib
-    gtk2
+    gtk3
     libdrm
     libgcrypt
     libnotify
     libpng
     libpulseaudio
+    libxkbcommon
     mesa
     nss
     pango
@@ -78,11 +79,10 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "5b3d5d1f52a554c8e775b8aed16ef84e96bf3b61a2b53266e10d3c47e341899310af13cc8513b04424fc14532e36543a6fae677f80a036e3f51c75166d8d53d1";
+    sha512 = "5d61a2d5b26be651620ab5d18d3a204d8d7b09dcec8a733ddc176c44cb43e9176c4350933ebe4498b065ba219113f3226c13bea9659da738fe635f41d01db303";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ squashfsTools ];
+  nativeBuildInputs = [ makeWrapper squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;
