@@ -22,6 +22,23 @@ let
         description = lib.mdDoc "Whether to enable this buildkite agent";
       };
 
+      count = lib.mkOption {
+        default = 1;
+        type = lib.types.int;
+        description = "How many instances of this agent to start";
+      };
+
+      extraServiceConfig = lib.mkOption {
+        default = {};
+        type = lib.types.attrs;
+        description = "Attributes recursively merged into each unit's serviceConfig";
+        example = lib.literalExample ''
+          {
+            EnvironmentFile = "/run/secrets/buildkite/environment";
+          }
+        '';
+      };
+
       package = lib.mkOption {
         default = pkgs.buildkite-agent;
         defaultText = lib.literalExpression "pkgs.buildkite-agent";
@@ -159,16 +176,17 @@ in
     "buildkite-agent-${name}" = { };
   });
 
-  config.systemd.services = mapAgents (name: cfg: {
-    "buildkite-agent-${name}" = {
-      description = "Buildkite Agent";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = cfg.runtimePackages ++ [ cfg.package pkgs.coreutils ];
-      environment = config.networking.proxy.envVars // {
-        HOME = cfg.dataDir;
-        NIX_REMOTE = "daemon";
-      };
+  config.systemd.services = mapAgents (name: cfg:
+    lib.mkMerge ((lib.flip map) (lib.range 1 cfg.count) (n: {
+      "buildkite-agent-${name}-${toString n}" =
+        { description = "Buildkite Agent";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          path = cfg.runtimePackages ++ [ cfg.package pkgs.coreutils ];
+          environment = config.networking.proxy.envVars // {
+            HOME = cfg.dataDir;
+            NIX_REMOTE = "daemon";
+          };
 
       ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
       ##     don't end up in the Nix store.
@@ -196,18 +214,18 @@ in
           EOF
         '';
 
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
-        User = "buildkite-agent-${name}";
-        RestartSec = 5;
-        Restart = "on-failure";
-        TimeoutSec = 10;
-        # set a long timeout to give buildkite-agent a chance to finish current builds
-        TimeoutStopSec = "2 min";
-        KillMode = "mixed";
-      };
-    };
-  });
+          serviceConfig =
+            { ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
+              User = "buildkite-agent-${name}";
+              RestartSec = 5;
+              Restart = "on-failure";
+              TimeoutSec = 10;
+              # set a long timeout to give buildkite-agent a chance to finish current builds
+              TimeoutStopSec = "2 min";
+              KillMode = "mixed";
+            } // cfg.extraServiceConfig;
+        };
+    })));
 
   config.assertions = mapAgents (name: cfg: [{
     assertion = cfg.hooksPath != hooksDir cfg.hooks -> cfg.hooks == { };
