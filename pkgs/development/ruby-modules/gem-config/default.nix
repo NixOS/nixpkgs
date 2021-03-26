@@ -378,7 +378,7 @@ in
       export HOME=$TMPDIR
     '';
   };
-  
+
   mimemagic = attrs: {
     FREEDESKTOP_MIME_TYPES_PATH="${shared-mime-info}";
   };
