@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
 
   patches = [
+    # Fixes https://github.com/NixOS/nixpkgs/issues/117663
     (fetchpatch {
       name = "disconnect-fix.patch";
       url = "https://github.com/bluez/bluez/commit/28ddec8d6b829e002fa268c07b71e4c564ba9e16.patch";
