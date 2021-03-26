@@ -221,6 +221,21 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert "FROM_CHILD=true" in env, "envvars from the child should be preserved"
         assert "LAST_LAYER=child" in env, "envvars from the child should take priority"
 
+    with subtest(
+        "Ensure inherited environment variables of layered images are correctly resolved"
+    ):
+        # Read environment variables as stored in image config
+        config = docker.succeed(
+            "tar -xOf ${examples.environmentVariablesLayered} manifest.json | ${pkgs.jq}/bin/jq -r .[].Config"
+        ).strip()
+        out = docker.succeed(
+            f"tar -xOf ${examples.environmentVariablesLayered} {config} | ${pkgs.jq}/bin/jq -r '.config.Env | .[]'"
+        )
+        env = out.splitlines()
+        assert (
+            sum(entry.startswith("LAST_LAYER") for entry in env) == 1
+        ), "envvars overridden by child should be unique"
+
     with subtest("Ensure image with only 2 layers can be loaded"):
         docker.succeed(
             "docker load --input='${examples.two-layered-image}'"
