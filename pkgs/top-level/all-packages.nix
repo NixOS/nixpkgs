@@ -3362,6 +3362,8 @@ in
 
   usbview = callPackage ../tools/misc/usbview { };
 
+  uwuify = callPackage ../tools/misc/uwuify { };
+
   anthy = callPackage ../tools/inputmethods/anthy { };
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
