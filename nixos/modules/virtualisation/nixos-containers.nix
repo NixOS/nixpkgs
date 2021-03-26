@@ -572,13 +572,15 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Whether to give the container its own private virtual
-                Ethernet interface.  The interface is called
-                <literal>eth0</literal>, and is hooked up to the interface
+                Whether to disconnect networking of the container from the host.
+                If this option is not set, then the container shares the network
+                interfaces of the host, and can bind to any port on any
+                interface. If this and any of hostAddress, localAddress,
+                hostAddress6, or localAddress6 are set, a virtual Ethernet
+                interface is created called <literal>eth0</literal>, and is
+                hooked up to the interface
                 <literal>ve-<replaceable>container-name</replaceable></literal>
-                on the host.  If this option is not set, then the
-                container shares the network interfaces of the host,
-                and can bind to any port on any interface.
+                on the host.
               '';
             };
 
