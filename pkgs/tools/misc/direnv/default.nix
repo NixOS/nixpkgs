@@ -30,7 +30,7 @@ buildGoModule rec {
         ${lib.concatMapStrings
     (
         sh: ''
-          $out/bin/direnv hook ${sh} > $${sh}_interactiveShellInit
+          $out/bin/direnv hook ${sh} > ''$${sh}_interactiveShellInit
         ''
       )
     shells}
