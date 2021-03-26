@@ -1048,6 +1048,8 @@ in
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
+  aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
+
   aws-env = callPackage ../tools/admin/aws-env { };
 
   aws-google-auth = python3Packages.callPackage ../tools/admin/aws-google-auth { };
@@ -3360,6 +3362,8 @@ in
 
   usbview = callPackage ../tools/misc/usbview { };
 
+  uwuify = callPackage ../tools/misc/uwuify { };
+
   anthy = callPackage ../tools/inputmethods/anthy { };
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
@@ -4407,6 +4411,8 @@ in
   flac123 = callPackage ../applications/audio/flac123 { };
 
   flamegraph = callPackage ../development/tools/flamegraph { };
+
+  flawfinder = callPackage ../development/tools/flawfinder { };
 
   flips = callPackage ../tools/compression/flips { };
 
@@ -21722,6 +21728,8 @@ in
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
+  banking = callPackage ../applications/office/banking { };
+
   baresip = callPackage ../applications/networking/instant-messengers/baresip { };
 
   barrier = libsForQt5.callPackage ../applications/misc/barrier {};
@@ -29701,6 +29709,8 @@ in
   pykms = callPackage ../tools/networking/pykms { };
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
+
+  pwncat = python3Packages.callPackage ../tools/security/pwncat { };
 
   pwntools = with python3Packages; toPythonApplication pwntools;
 

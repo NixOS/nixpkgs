@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tools for managing firmware updates for system76 devices";
     homepage = "https://github.com/pop-os/system76-firmware";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.shlevy ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ shlevy ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
