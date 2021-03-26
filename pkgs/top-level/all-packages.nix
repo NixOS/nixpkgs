@@ -168,6 +168,8 @@ in
 
   breakpad = callPackage ../development/misc/breakpad { };
 
+  buf = callPackage ../development/tools/buf { };
+
   # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
@@ -2382,6 +2384,8 @@ in
   fileshare = callPackage ../servers/fileshare {};
 
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
+
+  fioctl = callPackage ../tools/admin/fioctl { };
 
   firecracker = callPackage ../applications/virtualization/firecracker { };
 
@@ -6857,6 +6861,8 @@ in
 
   nzbhydra2 = callPackage ../servers/nzbhydra2 { };
 
+  oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
+
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
 
   oatpp = callPackage ../development/libraries/oatpp { };
@@ -10394,10 +10400,13 @@ in
       graphviz = graphviz-nox;
     });
 
-  inherit (callPackage ../development/compilers/haxe {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
-  }) haxe_3_2 haxe_3_4;
-  haxe = haxe_3_4;
+  inherit (callPackage ../development/compilers/haxe { })
+    haxe_4_2
+    haxe_3_4
+    haxe_3_2
+    ;
+
+  haxe = haxe_4_2;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
@@ -11208,7 +11217,9 @@ in
     jdk = oraclejdk;
   };
 
-  sqlx-cli = callPackage ../development/tools/rust/sqlx-cli { };
+  sqlx-cli = callPackage ../development/tools/rust/sqlx-cli {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation Security;
+  };
 
   squeak = callPackage ../development/compilers/squeak { };
 
@@ -23638,6 +23649,8 @@ in
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
+  kube-score = callPackage ../applications/networking/cluster/kube-score { };
+
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
@@ -28439,9 +28452,13 @@ in
 
   dcmtk = callPackage ../applications/science/medicine/dcmtk { };
 
+  xmedcon = callPackage ../applications/science/medicine/xmedcon { };
+
   ### SCIENCE/PHYSICS
 
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
+
+  professor = callPackage ../applications/science/physics/professor { };
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
 
@@ -30475,7 +30492,6 @@ in
 
   zettlr = callPackage ../applications/misc/zettlr {
     texlive = texlive.combined.scheme-medium;
-    inherit (haskellPackages) pandoc-citeproc;
   };
 
   unifi-poller = callPackage ../servers/monitoring/unifi-poller {};

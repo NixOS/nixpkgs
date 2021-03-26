@@ -2942,7 +2942,7 @@
     name = "Adam Copp";
   };
   ethancedwards8 = {
-    email = "ethancarteredwards@gmail.com";
+    email = "ethan@ethancedwards.com";
     github = "ethancedwards8";
     githubId = 60861925;
     name = "Ethan Carter Edwards";
@@ -6905,6 +6905,12 @@
     githubId = 16385648;
     name = "Niko Pavlinek";
   };
+  nixinator = {
+    email = "33lockdown33@protonmail.com";
+    github = "nixinator";
+    githubId = 66913205;
+    name = "Rick Sanchez";
+  };
   nixy = {
     email = "nixy@nixy.moe";
     github = "nixy";
@@ -10805,6 +10811,12 @@
     github = "masaeedu";
     githubId = 3674056;
     name = "Asad Saeeduddin";
+  };
+  matthewcroughan = {
+    email = "matt@croughan.sh";
+    github = "matthewcroughan";
+    githubId = 26458780;
+    name = "Matthew Croughan";
   };
   ngerstle = {
     name = "Nicholas Gerstle";
