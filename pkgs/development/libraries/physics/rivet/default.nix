@@ -12,6 +12,18 @@ stdenv.mkDerivation rec {
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
 
+    # fix compilation errors (fails depending on number of cores filesystem ordering?)
+    # https://gitlab.com/hepcedar/rivet/-/merge_requests/220
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/rivet/commit/3203bf12a4bef81f880789eb9cde7ff489ae5115.diff";
+      sha256 = "0zn5yxlv6dk4vcqgz0syzb9mp4qc9smpmgshcqimcvii7qcp20mc";
+    })
+    # https://gitlab.com/hepcedar/rivet/-/merge_requests/223
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/rivet/commit/476f267c46b126fa163a92aa6cbcb7806c4624c3.diff";
+      sha256 = "0dhkraddzp06v5z0d2wf0c8vsd50hl5pqsjgsrb8x14d0vwi8rnc";
+    })
+
     # fix for new python and fix transparency gs 9.52
     # gs 9.52 opacity fix
     (fetchpatch {
