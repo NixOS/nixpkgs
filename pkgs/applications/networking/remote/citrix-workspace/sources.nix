@@ -11,7 +11,7 @@ let
   # Attribute-set with all actively supported versions of the Citrix workspace app
   # for Linux.
   #
-  # The latest versions can be found at https://www.citrix.com/de-de/downloads/workspace-app/linux/
+  # The latest versions can be found at https://www.citrix.com/downloads/workspace-app/linux/
   supportedVersions = lib.mapAttrs mkVersionInfo {
     "20.04.0" = {
       major     = "20";
