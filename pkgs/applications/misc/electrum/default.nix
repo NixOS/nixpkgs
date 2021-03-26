@@ -150,6 +150,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://electrum.org/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry joachifm np prusnak ];
+    maintainers = with maintainers; [ joachifm np prusnak ];
   };
 }

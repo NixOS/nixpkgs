@@ -49,7 +49,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "4.4.21";
+  version = "4.4.35";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vs65lBRTYYhx2F90n32qnf0CvcPJUIXc16hmggTF/JI=";
+    sha256 = "1sysr8wnf1kvq87h2ymr5qk9qcjapayvlmcmzcx3zxk8vhqp83d8";
   };
 
   # Do not build static libraries

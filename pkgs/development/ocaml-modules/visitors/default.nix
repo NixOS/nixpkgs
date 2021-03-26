@@ -2,18 +2,18 @@
 
 buildDunePackage rec {
   pname = "visitors";
-  version = "20210127";
+  version = "20210316";
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.07";
+  minimumOCamlVersion = "4.08";
 
   src = fetchFromGitLab {
     owner = "fpottier";
     repo = pname;
     rev = version;
     domain = "gitlab.inria.fr";
-    sha256 = "0b73h7d4yv04a0b5x2i222jknbcgf9vvxzfjxzy2jwanxz9d873z";
+    sha256 = "12d45ncy3g9mpcs6n58aq6yzs5qz662msgcr7ccms9jhiq44m8f7";
   };
 
   propagatedBuildInputs = [ ppxlib ppx_deriving result ];

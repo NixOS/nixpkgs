@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bzrtp";
-  version = "4.4.9";
+  version = "4.4.34";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";

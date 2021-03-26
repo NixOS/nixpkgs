@@ -3,6 +3,8 @@ aca/completion-tabnine
 ackyshake/Spacegray.vim@main
 airblade/vim-gitgutter
 airblade/vim-rooter
+akinsho/nvim-bufferline.lua
+akinsho/nvim-toggleterm.lua
 aklt/plantuml-syntax
 altercation/vim-colors-solarized
 alvan/vim-closetag
@@ -418,6 +420,7 @@ nishigori/increment-activator
 nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
+norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 npxbr/glow.nvim

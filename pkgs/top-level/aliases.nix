@@ -92,6 +92,7 @@ mapAliases ({
   cargo-tree = throw "cargo-tree has been removed, use the builtin `cargo tree` command instead."; # added 2020-08-20
   casperjs = throw "casperjs has been removed, it was abandoned by upstream and broken.";
   catfish = xfce.catfish; # added 2019-12-22
+  ccnet = throw "ccnet has been removed because seafile does not depend on it anymore"; # added 2021-03-25
   cgmanager = throw "cgmanager was deprecated by lxc and therefore removed from nixpkgs."; # added 2020-06-05
   checkbashism = checkbashisms; # added 2016-08-16
   chronos = throw "chronos has been removed from nixpkgs, as it was unmaintained"; # added 2020-08-15
@@ -564,6 +565,7 @@ mapAliases ({
   procps-ng = procps; # added 2018-06-08
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
+  pyload = throw "pyload has been removed from nixpkgs, as it was unmaintained."; # added 2021-03-21
   pyo3-pack = maturin;
   pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10
   pulseaudioLight = pulseaudio; # added 2018-04-25
@@ -694,6 +696,7 @@ mapAliases ({
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
+  spidermonkey_38 = throw "spidermonkey_38 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21
   spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_78 instead."; # added 2019-10-16
   spidermonkey_60 = throw "spidermonkey_60 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21
   spring-boot = spring-boot-cli; # added 2020-04-24

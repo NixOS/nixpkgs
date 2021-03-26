@@ -720,8 +720,8 @@ environment.systemPackages = [
     </para>
 
     <para>
-     Aditionally to the much stricter runtime environmet the
-     <literal>/dev/urandom</literal> mount lines we previously had in the code (that would
+     Additionally to the much stricter runtime environment the
+     <literal>/dev/urandom</literal> mount lines we previously had in the code (that
      randomly failed during the stop-phase) have been removed as systemd will take care of those for us.
     </para>
 
@@ -809,7 +809,7 @@ environment.systemPackages = [
    <listitem>
     <para>
      Platforms, like <varname>stdenv.hostPlatform</varname>, no longer have a <varname>platform</varname> attribute.
-     It has been (mostly) flattoned away:
+     It has been (mostly) flattened away:
     </para>
     <itemizedlist>
      <listitem><para><varname>platform.gcc</varname> is now <varname>gcc</varname></para></listitem>

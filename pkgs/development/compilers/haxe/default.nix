@@ -1,20 +1,44 @@
-{ lib, stdenv, fetchgit, coreutils, ocamlPackages, zlib, pcre, neko }:
-
-let inherit (ocamlPackages) ocaml camlp4; in
+{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls }:
 
 let
-  generic = { version, sha256, prePatch }:
+  ocamlDependencies = version:
+    if lib.versionAtLeast version "4.0"
+    then with ocaml-ng.ocamlPackages; [
+      ocaml
+      findlib
+      sedlex_2
+      xml-light
+      ptmap
+      camlp5
+      sha
+      dune_2
+      luv
+      ocaml_extlib
+    ] else with ocaml-ng.ocamlPackages_4_05; [
+      ocaml
+      camlp4
+    ];
+
+  defaultPatch = ''
+    substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
+      --replace '"neko"' '"${neko}/bin/neko"'
+  '';
+
+  generic = { sha256, version, prePatch ? defaultPatch }:
     stdenv.mkDerivation {
       pname = "haxe";
       inherit version;
 
-      buildInputs = [ocaml zlib pcre neko camlp4];
+      buildInputs = [ zlib pcre neko ]
+        ++ lib.optional (lib.versionAtLeast version "4.1") [ mbedtls ]
+        ++ ocamlDependencies version;
 
-      src = fetchgit {
-        url = "https://github.com/HaxeFoundation/haxe.git";
-        inherit sha256;
+      src = fetchFromGitHub {
+        owner = "HaxeFoundation";
+        repo = "haxe";
+        rev = version;
         fetchSubmodules = true;
-        rev = "refs/tags/${version}";
+        inherit sha256;
       };
 
       inherit prePatch;
@@ -77,8 +101,8 @@ let
       meta = with lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
-        license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt
-        maintainers = [ maintainers.marcweber ];
+        license = with licenses; [ gpl2Plus mit ]; # based on upstream opam file
+        maintainers = [ maintainers.marcweber maintainers.locallycompact ];
         platforms = platforms.linux ++ platforms.darwin;
       };
     };
@@ -89,15 +113,20 @@ in {
     sha256 = "1x9ay5a2llq46fww3k07jxx8h1vfpyxb522snc6702a050ki5vz3";
     prePatch = ''
       sed -i -e 's|"/usr/lib/haxe/std/";|"'"$out/lib/haxe/std/"'";\n&|g' main.ml
-      sed -i -e 's|"neko"|"${neko}/bin/neko"|g' extra/haxelib_src/src/tools/haxelib/Main.hx
+      substituteInPlace extra/haxelib_src/src/tools/haxelib/Main.hx \
+        --replace '"neko"' '"${neko}/bin/neko"'
     '';
   };
   haxe_3_4 = generic {
     version = "3.4.6";
     sha256 = "1myc4b8fwp0f9vky17wv45n34a583f5sjvajsc93f5gm1wanp4if";
     prePatch = ''
+      ${defaultPatch}
       sed -i -re 's!(let +prefix_path += +).*( +in)!\1"'"$out/"'"\2!' src/main.ml
-      sed -i -e 's|"neko"|"${neko}/bin/neko"|g' extra/haxelib_src/src/haxelib/client/Main.hx
     '';
+  };
+  haxe_4_2 = generic {
+    version = "4.2.1";
+    sha256 = "sha256-0j6M21dh8DB1gC/bPYNJrVuDbJyqQbP+61ItO5RBUcA=";
   };
 }

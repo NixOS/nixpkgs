@@ -1,20 +1,21 @@
-{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
+{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh, nixosTests }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.15";
+  version = "1.1.16";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1g62sdzcw3zx4ccky125ciwnzx6z9kwyvskvp7ijmqxqk3nrxjs9";
+    sha256 = "0l1dqfwrd9l34rg30cmzmq5bs6yha6kg4vy313jq611jsqj94mmw";
   };
 
   nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
+    libb2 lz4 zstd openssl
   ] ++ lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3.pkgs; [
     cython llfuse
@@ -24,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
     export BORG_LIBB2_PREFIX="${libb2}"
-    export BORG_LIBZSTD_PREFIX="${zstd}"
+    export BORG_LIBZSTD_PREFIX="${zstd.dev}"
   '';
 
   makeWrapperArgs = [
@@ -60,6 +61,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # 64 failures, needs pytest-benchmark
   doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) borgbackup;
+  };
 
   meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";

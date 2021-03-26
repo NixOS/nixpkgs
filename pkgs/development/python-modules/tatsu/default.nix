@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.6.0";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
     rev = "v${version}";
-    sha256 = "sha256-kC2MxMebS4TQEZBgTmYRBWaWSF36rVS3bXIsQgRrF0Y=";
+    sha256 = "149ra1lwax5m1svlv4dwjfqw00lc5vwyfj6zw2v0ammmfm1b94x9";
   };
 
   disabled = pythonOlder "3.8";

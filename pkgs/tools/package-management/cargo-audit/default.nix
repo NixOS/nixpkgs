@@ -15,6 +15,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl libiconv ] ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [ pkg-config ];
 
+  # enables `cargo audit fix`
+  cargoBuildFlags = [ "--features fix" ];
+
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;
 

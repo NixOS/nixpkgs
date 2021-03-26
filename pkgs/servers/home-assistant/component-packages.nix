@@ -151,7 +151,7 @@
     "datadog" = ps: with ps; [ datadog ];
     "ddwrt" = ps: with ps; [ ];
     "debugpy" = ps: with ps; [ debugpy ];
-    "deconz" = ps: with ps; [ ]; # missing inputs: pydeconz
+    "deconz" = ps: with ps; [ pydeconz ];
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
     "default_config" = ps: with ps; [ pynacl aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa netdisco pillow scapy sqlalchemy zeroconf ];
@@ -192,7 +192,7 @@
     "dublin_bus_transport" = ps: with ps; [ ];
     "duckdns" = ps: with ps; [ ];
     "dunehd" = ps: with ps; [ ]; # missing inputs: pdunehd
-    "dwd_weather_warnings" = ps: with ps; [ ]; # missing inputs: dwdwfsapi
+    "dwd_weather_warnings" = ps: with ps; [ dwdwfsapi ];
     "dweet" = ps: with ps; [ ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [ ]; # missing inputs: dynalite_devices
     "dyson" = ps: with ps; [ aiohttp-cors libpurecool zeroconf ];
@@ -424,7 +424,7 @@
     "kiwi" = ps: with ps; [ ]; # missing inputs: kiwiki-client
     "kmtronic" = ps: with ps; [ pykmtronic ];
     "knx" = ps: with ps; [ xknx ];
-    "kodi" = ps: with ps; [ ]; # missing inputs: pykodi
+    "kodi" = ps: with ps; [ pykodi ];
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
@@ -766,7 +766,7 @@
     "snmp" = ps: with ps; [ pysnmp ];
     "sochain" = ps: with ps; [ ]; # missing inputs: python-sochain-api
     "socialblade" = ps: with ps; [ ]; # missing inputs: socialbladeclient
-    "solaredge" = ps: with ps; [ stringcase ]; # missing inputs: solaredge
+    "solaredge" = ps: with ps; [ solaredge stringcase ];
     "solaredge_local" = ps: with ps; [ ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [ ]; # missing inputs: sunwatcher
     "solax" = ps: with ps; [ solax ];
