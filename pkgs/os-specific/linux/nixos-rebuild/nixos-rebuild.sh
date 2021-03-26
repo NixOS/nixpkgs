@@ -262,7 +262,7 @@ fi
 # Use /etc/nixos/flake.nix if it exists. It can be a symlink to the
 # actual flake.
 # Also make sure we're using a new version of nix (not version 2.1, 2.2 or 2.3)
-if [[ -z $(nix --version | grep -o '2\.[1-3]') && -z $flake && -e /etc/nixos/flake.nix ]]; then
+if [[ -z $(nix --version | grep -o '2\.[1-3]\.') && -z $flake && -e /etc/nixos/flake.nix ]]; then
     flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
 fi
 
