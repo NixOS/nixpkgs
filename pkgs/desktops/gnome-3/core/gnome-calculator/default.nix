@@ -67,6 +67,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
+  preCheck = ''
+    # Currency conversion test tries to store currency data in $HOME/.cache.
+    export HOME=$TMPDIR
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gnome-calculator";
