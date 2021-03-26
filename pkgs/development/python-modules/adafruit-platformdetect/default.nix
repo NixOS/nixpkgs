@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Adafruit-PlatformDetect";
+  pname = "adafruit-platformdetect";
   version = "3.4.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Adafruit-PlatformDetect"
+    inherit version;
     sha256 = "31275dcf949c8b00598aaf2b0da65d970a0cba28e7cb45691d5f354b8e82fe85";
   };
 
