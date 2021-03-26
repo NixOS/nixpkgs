@@ -1,4 +1,4 @@
-{ lib, stdenv, skawarePackages
+{ lib, skawarePackages
 
 # Whether to build the TLS/SSL tools and what library to use
 # acceptable values: "bearssl", "libressl", false

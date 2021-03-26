@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "umurmur";
-  version = "0.2.19";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "umurmur";
     repo = "umurmur";
     rev = version;
-    sha256 = "sha256-86wveYlM493RIuU8aKac6XTOMPv0JxlZL4qH2N2AqRU=";
+    sha256 = "sha256-jp5+NbGmT90ksffvpLYIX2q5cPeVidDCYMPvLHCiP68=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
