@@ -21892,6 +21892,8 @@ in
 
   catfs = callPackage ../os-specific/linux/catfs { };
 
+  catgirl = callPackage ../applications/networking/irc/catgirl { };
+
   catimg = callPackage ../tools/misc/catimg { };
 
   catt = callPackage ../applications/video/catt { };
