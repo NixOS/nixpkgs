@@ -25786,8 +25786,6 @@ in
   obs-studio-plugins = callPackage ../applications/video/obs-studio/plugins {};
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
-  obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
-
   obsidian = callPackage ../applications/misc/obsidian { };
 
   octoprint = callPackage ../applications/misc/octoprint { };
