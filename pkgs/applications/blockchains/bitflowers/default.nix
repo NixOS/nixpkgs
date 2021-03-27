@@ -1,25 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, bitcoin
-, libtool
-, libglvnd
-, miniupnpc
-, db
-, qt4
-, gl117
-, zmqpp
-, qtbase
-, qtmultimedia
+{ lib
+, stdenv
 , qmake
-, qtcreator
-, qttools
-, boost
-, libdbusmenu
-, qrencode
-, protobuf
-, protobufc
+, fetchFromGitHub
 , wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -37,45 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
-    qt4
-    qtbase
-    bitcoin
-    gl117
-    libdbusmenu
-    qtmultimedia
-    db
-    qrencode
-    qtcreator
-    qttools
     wrapQtAppsHook
-    libtool
-    libglvnd
-    zmqpp
-    protobuf
-    miniupnpc
-    protobufc
   ];
 
-  buildInputs = [
-    wrapQtAppsHook
-    qt4
-    qttools
-    libdbusmenu
-    qrencode
-    qtbase
-    bitcoin
-    qtmultimedia
-
-    zmqpp
-    protobuf
-    protobufc
-    db
-    libtool
-    boost
-    miniupnpc
-    gl117
-    libglvnd
-  ];
+  # buildInputs = [
+  # ];
   meta = with lib; {
     homepage = "https://bit-flowers.com/";
     longDescription = ''
