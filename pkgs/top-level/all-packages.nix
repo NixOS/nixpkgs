@@ -7679,6 +7679,8 @@ in
 
   retext = libsForQt5.callPackage ../applications/editors/retext { };
 
+  rekor-cli = callPackage ../tools/security/rekor { };
+
   richgo = callPackage ../development/tools/richgo {  };
 
   rs = callPackage ../tools/text/rs { };
