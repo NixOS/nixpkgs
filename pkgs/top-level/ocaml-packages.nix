@@ -634,7 +634,10 @@ let
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
-    merlin = callPackage ../development/tools/ocaml/merlin { };
+    merlin =
+      if lib.versionAtLeast ocaml.version "4.11"
+      then callPackage ../development/tools/ocaml/merlin/4.x.nix { }
+      else callPackage ../development/tools/ocaml/merlin { };
 
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
