@@ -7100,6 +7100,8 @@ in {
 
   random2 = callPackage ../development/python-modules/random2 { };
 
+  rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
+
   rarfile = callPackage ../development/python-modules/rarfile {
     inherit (pkgs) libarchive;
   };
