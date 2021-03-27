@@ -8327,6 +8327,12 @@
     githubId = 4958190;
     name = "Rushmore Mushambi";
   };
+  russell = {
+    email = "russell.sim@gmail.com";
+    github = "russell";
+    githubId = 2660;
+    name = "Russell Sim";
+  };
   ruuda = {
     email = "dev+nix@veniogames.com";
     github = "ruuda";
