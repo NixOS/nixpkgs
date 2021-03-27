@@ -192,6 +192,20 @@ let
       mkdir -p $out/Library/Frameworks/
       cp -r ${darwin-stubs}/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework \
         $out/Library/Frameworks
+
+      cd $out/Library/Frameworks/${name}.framework
+
+      versions=(./Versions/*)
+      if [ "''${#versions[@]}" != 1 ]; then
+        echo "Unable to determine current version of framework ${name}"
+        exit 1
+      fi
+      current=$(basename ''${versions[0]})
+
+      chmod u+w -R .
+      ln -s "$current" Versions/Current
+      ln -s Versions/Current/* .
+
       # NOTE there's no re-export checking here, this is probably wrong
     '';
   };
