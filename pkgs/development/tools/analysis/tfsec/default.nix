@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "tfsec";
-  version = "0.39.10";
+  version = "0.39.14";
 
   src = fetchFromGitHub {
     owner = "tfsec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T2soogk5KcNSeluNyJ4b2GjLkvauvvznaLSMQVgVZgI=";
+    sha256 = "sha256-Peq51XN8EEvHWdSL3ngBx74t7V4RUrZa4RpGnvZ0Ml8=";
   };
 
   goPackagePath = "github.com/tfsec/tfsec";
