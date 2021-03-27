@@ -3,9 +3,10 @@ with lib;
 let
   cfg = config.services.github-runner;
   svcName = "github-runner";
+  systemdUser = "${svcName}-${cfg.name}";
   systemdDir = "${svcName}/${cfg.name}";
-  systemdUser = "${svcName}-${cfg.user}";
-  runnerRoot = "/run/${systemdDir}"; # RuntimeDirectory=
+  # %t: Runtime directory root (usually /run); see systemd.unit(5)
+  runtimeDir = "%t/${systemdDir}";
 in
 {
   options.services.github-runner = {
@@ -111,8 +112,8 @@ in
       after = [ "network.target" ];
 
       environment = {
-        HOME = runnerRoot;
-        RUNNER_ROOT = runnerRoot;
+        HOME = runtimeDir;
+        RUNNER_ROOT = runtimeDir;
       };
 
       path = (with pkgs; [
@@ -241,7 +242,7 @@ in
         # Home of persistent runner data, e.g., credentials
         StateDirectory = [ systemdDir ];
         StateDirectoryMode = "0700";
-        WorkingDirectory = runnerRoot;
+        WorkingDirectory = runtimeDir;
 
         # By default, use a dynamically allocated user
         DynamicUser = true;
