@@ -8269,6 +8269,8 @@ in
 
   splot = haskell.lib.justStaticExecutables haskellPackages.splot;
 
+  spotdl = callPackage ../tools/audio/spotdl { };
+
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   squashfs-tools-ng = callPackage ../tools/filesystems/squashfs-tools-ng { };
