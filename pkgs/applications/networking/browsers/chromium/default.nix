@@ -1,5 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_11, ed, gnugrep, coreutils, xdg_utils
+, llvmPackages_11, llvmPackages_12, ed, gnugrep, coreutils, xdg_utils
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
 , pipewire
@@ -41,6 +41,8 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "90") {
+      llvmPackages = llvmPackages_12;
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
