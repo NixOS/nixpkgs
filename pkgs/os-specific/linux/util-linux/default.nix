@@ -1,22 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
-  version = "2.36.1";
+  version = "2.36.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vbyydl1b13lx73di4bhc4br9ih24hcqv7bky0kyrn1c2x1c5yh9";
+    sha256 = "0psc0asjp1rmfx1j7468zfnk9nphlphybw2n8dcl74v8v2lnnlgp";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-    # Remove patch below in 2.36.2, see https://github.com/karelzak/util-linux/issues/1193
-    (fetchpatch {
-      url = "https://github.com/karelzak/util-linux/commit/52f730e47869ce630fafb24fd46f755dc7ffc691.patch";
-      sha256 = "1fz3p9127lfvmrdj1j1s8jds0jjz2dzkvmia66555ihv7hcfajbg";
-    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" ];
@@ -71,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "A set of system utilities for Linux";
+    changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
     license = licenses.gpl2; # also contains parts under more permissive licenses
     platforms = platforms.linux;
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
