@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pynmea2";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w9g5qh573276404f04b46684ydlakv30ds0x0r4kcl370ljmfsg";
+    sha256 = "0x5xrk51dpzsvky1ncikadm80a44a82j3mjjykmhmx7jddc5qh9d";
   };
 
   checkInputs = [ pytestCheckHook ];
