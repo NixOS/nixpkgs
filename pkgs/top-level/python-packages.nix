@@ -6889,6 +6889,8 @@ in {
 
   pytricia = callPackage ../development/python-modules/pytricia { };
 
+  pytube = callPackage ../development/python-modules/pytube { };
+
   pytun = callPackage ../development/python-modules/pytun { };
 
   pytz = callPackage ../development/python-modules/pytz { };
