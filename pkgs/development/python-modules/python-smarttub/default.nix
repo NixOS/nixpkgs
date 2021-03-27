@@ -11,6 +11,17 @@
 , pythonOlder
 }:
 
+let
+  # https://github.com/mdz/python-smarttub/issues/10
+  pyjwt' = pyjwt.overridePythonAttrs (oldAttrs: rec {
+    version = "1.7.1";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
+    };
+  });
+in
+
 buildPythonPackage rec {
   pname = "python-smarttub";
   version = "0.0.19";
@@ -26,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     inflection
-    pyjwt
+    pyjwt'
     python-dateutil
   ];
 
