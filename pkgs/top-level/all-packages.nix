@@ -21124,6 +21124,8 @@ in
 
   mustache-go = callPackage ../development/tools/mustache-go { };
 
+  mustache-hpp = callPackage ../development/libraries/mustache-hpp { };
+
   myrica = callPackage ../data/fonts/myrica { };
 
   nafees = callPackage ../data/fonts/nafees { };
