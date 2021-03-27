@@ -1,34 +1,35 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch
+{ lib, fetchPypi, buildPythonPackage
 , configobj, six, traitsui
-, nose, tables, pandas
+, pytestCheckHook, tables, pandas
+, pythonOlder, importlib-resources
 }:
 
 buildPythonPackage rec {
   pname = "apptools";
-  version = "4.5.0";
+  version = "5.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10h52ibhr2aw076pivqxiajr9rpcr1mancg6xlpxzckcm3if02i6";
+    sha256 = "12x5lcs1cllpybz7f0i1lcwvmqsaa5n818wb2165lj049wqxx4yh";
   };
 
-  # PyTables issue; should be merged in next post-4.5.0 release (#117)
-  patches = [ (fetchpatch {
-      url = "https://github.com/enthought/apptools/commit/3734289d1a0ebd8513fa67f75288add31ed0113c.patch";
-      sha256 = "001012q1ib5cbib3nq1alh9ckzj588bfrywr8brkd1f6y1pgvngk";
-    })
+  propagatedBuildInputs = [
+    configobj
+    six
+    traitsui
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
-
-  propagatedBuildInputs = [ configobj six traitsui ];
 
   checkInputs = [
-    nose
     tables
     pandas
+    pytestCheckHook
   ];
 
-  doCheck = true;
-  checkPhase = "HOME=$TMP nosetests";
+  preCheck = ''
+    export HOME=$TMP
+  '';
 
   meta = with lib; {
     description = "Set of packages that Enthought has found useful in creating a number of applications.";
