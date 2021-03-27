@@ -2,8 +2,10 @@
 with lib;
 let
   cfg = config.services.github-runner;
-  name = "github-runner";
-  runnerRoot = "/run/${name}"; # RuntimeDirectory=
+  svcName = "github-runner";
+  systemdDir = "${svcName}/${cfg.name}";
+  systemdUser = "${svcName}-${cfg.user}";
+  runnerRoot = "/run/${systemdDir}"; # RuntimeDirectory=
 in
 {
   options.services.github-runner = {
@@ -101,7 +103,7 @@ in
       ''
     ];
 
-    systemd.services.${name} = {
+    systemd.services.${svcName} = {
       description = "GitHub Actions runner";
 
       wantedBy = [ "multi-user.target" ];
@@ -139,7 +141,7 @@ in
           let
             currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
             runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" ] cfg;
-            newConfigPath = builtins.toFile "${name}-config.json" (builtins.toJSON runnerRegistrationConfig);
+            newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
             currentConfigTokenFilename = ".current-token";
             newConfigTokenFilename = ".new-token";
             runnerCredFiles = [
@@ -233,20 +235,18 @@ in
           ];
 
         # Contains _diag
-        LogsDirectory = name;
+        LogsDirectory = [ systemdDir ];
         # Default RUNNER_ROOT which contains ephemeral Runner data
-        RuntimeDirectory = name;
+        RuntimeDirectory = [ systemdDir ];
         # Home of persistent runner data, e.g., credentials
-        StateDirectory = name;
+        StateDirectory = [ systemdDir ];
         StateDirectoryMode = "0700";
         WorkingDirectory = runnerRoot;
 
-        # By default, use a dynamically allocated user with a name and group
-        # equal to the service unit name (which is the systemd default for
-        # DynamicUser=true; just set explicitly for the sake of clarity).
+        # By default, use a dynamically allocated user
         DynamicUser = true;
-        User = name;
-        Group = name;
+        User = systemdUser;
+        Group = User;
 
         KillMode = "process";
         KillSignal = "SIGTERM";
