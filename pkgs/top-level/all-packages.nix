@@ -21890,6 +21890,8 @@ in
 
   catfs = callPackage ../os-specific/linux/catfs { };
 
+  catgirl = callPackage ../applications/networking/irc/catgirl { };
+
   catimg = callPackage ../tools/misc/catimg { };
 
   catt = callPackage ../applications/video/catt { };
@@ -26739,7 +26741,9 @@ in
     autoconf = buildPackages.autoconf269;
   };
 
-  zgrviewer = callPackage ../applications/graphics/zgrviewer {};
+  zgrab2 = callPackage ../tools/security/zgrab2 { };
+
+  zgrviewer = callPackage ../applications/graphics/zgrviewer { };
 
   zgv = callPackage ../applications/graphics/zgv {
    # Enable the below line for terminal display. Note
