@@ -1,5 +1,5 @@
 {
-  lib, stdenv, buildPackages, fetchurl, fetchpatch,
+  lib, stdenv, buildPackages, fetchurl,
   runCommand,
   autoconf, automake, libtool,
   enablePython ? false, python ? null,
@@ -8,11 +8,12 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.8.5"; # at the next release, remove the patches below!
+  pname = "audit";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "https://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "1dzcwb2q78q7x41shcachn7f4aksxbxd470yk38zh03fch1l2p8f";
+    url = "https://people.redhat.com/sgrubb/audit/${pname}-${version}.tar.gz";
+    sha256 = "19am244hfgiwn1dvyy5jx7qk0bl3c4sffb1wg84g6hzxv1844k4r";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
@@ -33,37 +34,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # TODO: Remove the musl patches when
-  #         https://github.com/linux-audit/audit-userspace/pull/25
-  #       is available with the next release.
-  patches = [ ./patches/weak-symbols.patch ]
-  ++ lib.optional stdenv.hostPlatform.isMusl [
-    (
-      let patch = fetchpatch {
-            url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
-            name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
-            sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
-          };
-      in
-        runCommand "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict" {} ''
-          cp ${patch} $out
-          substituteInPlace $out --replace \
-              '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
-              '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
-        ''
-    )
+  patches = [
+    ./fix-duplicate-interpret.patch
   ];
 
   prePatch = ''
     sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
-  ''
-  # According to https://stackoverflow.com/questions/13089166
-  # --whole-archive linker flag is required to be sure that linker
-  # correctly chooses strong version of symbol regardless of order of
-  # object files at command line.
-  + lib.optionalString stdenv.targetPlatform.isStatic ''
-    export LDFLAGS=-Wl,--whole-archive
   '';
+
   meta = {
     description = "Audit Library";
     homepage = "https://people.redhat.com/sgrubb/audit/";

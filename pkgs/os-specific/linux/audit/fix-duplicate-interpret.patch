@@ -1,0 +1,39 @@
+diff --git a/auparse/interpret.c b/auparse/interpret.c
+index 7dbb9e7..3360a69 100644
+--- a/auparse/interpret.c
++++ b/auparse/interpret.c
+@@ -2856,7 +2856,7 @@ int lookup_type(const char *name)
+  * This is the main entry point for the auparse library. Call chain is:
+  * auparse_interpret_field -> nvlist_interp_cur_val -> interpret
+  */
+-const char *interpret(const rnode *r, auparse_esc_t escape_mode)
++const char *parse_interpret(const rnode *r, auparse_esc_t escape_mode)
+ {
+ 	const nvlist *nv = &r->nv;
+ 	int type;
+diff --git a/auparse/interpret.h b/auparse/interpret.h
+index 2f59d9b..f406293 100644
+--- a/auparse/interpret.h
++++ b/auparse/interpret.h
+@@ -35,7 +35,7 @@ void init_interpretation_list(void);
+ int load_interpretation_list(const char *buf);
+ void free_interpretation_list(void);
+ int lookup_type(const char *name);
+-const char *interpret(const rnode *r, auparse_esc_t escape_mode);
++const char *parse_interpret(const rnode *r, auparse_esc_t escape_mode);
+ void lookup_destroy_uid_list(void);
+ void aulookup_destroy_gid_list(void);
+ char *au_unescape(char *buf);
+diff --git a/auparse/nvlist.c b/auparse/nvlist.c
+index 0062847..d0e42d1 100644
+--- a/auparse/nvlist.c
++++ b/auparse/nvlist.c
+@@ -140,7 +140,7 @@ const char *nvlist_interp_cur_val(const rnode *r, auparse_esc_t escape_mode)
+ 	const nvlist *l = &r->nv;
+ 	if (l->cur->interp_val)
+ 		return l->cur->interp_val;
+-	return interpret(r, escape_mode);
++	return parse_interpret(r, escape_mode);
+ }
+ 
+ void nvlist_clear(nvlist* l)
