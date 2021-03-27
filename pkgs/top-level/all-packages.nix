@@ -1237,6 +1237,8 @@ in
 
   corsmisc = callPackage ../tools/security/corsmisc { };
 
+  cosign = callPackage ../tools/security/cosign { };
+
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
