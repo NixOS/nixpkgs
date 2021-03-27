@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildPythonApplication, fuse
 , appdirs, colorama, dateutil, requests, requests_toolbelt
-, fusepy, sqlalchemy }:
+, fusepy, sqlalchemy, setuptools }:
 
 buildPythonApplication rec {
   pname = "acd_cli";
@@ -16,7 +16,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ appdirs colorama dateutil fusepy requests
-                            requests_toolbelt sqlalchemy ];
+                            requests_toolbelt setuptools sqlalchemy ];
 
   makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${fuse}/lib/libfuse.so" ];
 
@@ -34,7 +34,6 @@ buildPythonApplication rec {
     description = "A command line interface and FUSE filesystem for Amazon Cloud Drive";
     homepage = "https://github.com/yadayada/acd_cli";
     license = licenses.gpl2;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ edwtjo ];
   };
 }
