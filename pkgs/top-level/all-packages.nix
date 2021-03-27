@@ -19103,6 +19103,8 @@ in
 
   alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
 
+  alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
+
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
