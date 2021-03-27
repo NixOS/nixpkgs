@@ -18,12 +18,20 @@ buildGoModule rec {
   buildInputs = [ libsecret ];
 
   buildPhase = ''
+    runHook preBuild
+
     patchShebangs ./utils/
     make BUILD_TIME= build-nogui
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 proton-bridge $out/bin/protonmail-bridge
+
+    runHook postInstall
   '';
 
   meta = with lib; {
