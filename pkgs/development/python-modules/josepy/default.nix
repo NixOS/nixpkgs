@@ -1,9 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage
-# buildInputs
-, six
-, setuptools
-, pyopenssl
+{ lib
+, fetchPypi
+, buildPythonPackage
 , cryptography
+, pyopenssl
+, setuptools
 , mock
 , pytestCheckHook
 }:
@@ -20,12 +20,12 @@ buildPythonPackage rec {
   postPatch = ''
     # remove coverage flags
     sed -i '/addopts/d' pytest.ini
+    sed -i '/flake8-ignore/d' pytest.ini
   '';
 
   propagatedBuildInputs = [
     pyopenssl
     cryptography
-    six
     setuptools
   ];
 
