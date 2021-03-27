@@ -7679,7 +7679,9 @@ in
 
   retext = libsForQt5.callPackage ../applications/editors/retext { };
 
-  rekor-cli = callPackage ../tools/security/rekor { };
+  inherit (callPackage ../tools/security/rekor { })
+    rekor-cli
+    rekor-server;
 
   richgo = callPackage ../development/tools/richgo {  };
 
