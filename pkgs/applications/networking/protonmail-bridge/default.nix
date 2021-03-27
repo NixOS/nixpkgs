@@ -2,27 +2,28 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "1.5.0";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "br-${version}";
-    sha256 = "lHqwKlFwz9iO7LJMGFTGCauw12z/BKnQte2sVoVkOaY=";
+    sha256 = "0p2315smxc5knxzr9413w62z65647znh9j9vyb6w5x4dqfp7vhz9";
   };
 
-  vendorSha256 = "eP+7fqBctX9XLCoHVJDI/qaa5tocgg3F5nfUM6dzNRg=";
+  vendorSha256 = "04aa7syp5hhpqxdpqlsmmbwywnbrh4ia0diym2935jbrqccnvm1k";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsecret ];
 
   buildPhase = ''
+    patchShebangs ./utils/
     make BUILD_TIME= build-nogui
   '';
 
   installPhase = ''
-    install -Dm555 Desktop-Bridge $out/bin/protonmail-bridge
+    install -Dm555 proton-bridge $out/bin/protonmail-bridge
   '';
 
   meta = with lib; {
