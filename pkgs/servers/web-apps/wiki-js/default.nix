@@ -9,9 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lEHelZTFZxcds7t3TCMcd9b3rKdml54A0/V7gcQIyPA=";
   };
 
-  buildCommand = ''
+  sourceRoot = ".";
+
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
+
     mkdir $out
-    tar xzvf $src -C $out
+    cp -r . $out
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) wiki-js; };
