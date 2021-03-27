@@ -1134,6 +1134,8 @@ in
 
   barman = python3Packages.callPackage ../tools/misc/barman { };
 
+  bashate = python3Packages.callPackage ../development/tools/bashate { };
+
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
   bashcards = callPackage ../tools/misc/bashcards { };
