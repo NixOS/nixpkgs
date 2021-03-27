@@ -1303,6 +1303,10 @@ in {
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
 
+  cjkwrap = callPackage ../development/python-modules/cjkwrap { };
+
+  cjson = callPackage ../development/python-modules/cjson { };
+
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
   class-registry = callPackage ../development/python-modules/class-registry { };
