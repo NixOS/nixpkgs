@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchurl
-, bisect_ppx, ppx_cstruct, pkg-config
+, bisect_ppx, ppx_cstruct
 , rresult, cstruct, cstruct-lwt, mirage-net, mirage-clock
 , mirage-random, mirage-stack, mirage-protocols, mirage-time
 , ipaddr, macaddr, macaddr-cstruct, mirage-profile, fmt
@@ -11,23 +11,18 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "6.1.0";
+  version = "6.0.0";
 
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "e81c98a6e80e05f9fa4e5fbee50e6c247f6011254c7b1d9a0e58bae318c1f0c8";
+    sha256 = "0wbrs8jz1vw3zdrqmqcwawxh4yhc2gy30rw7gz4w116cblkvnb8s";
   };
-
-  patches = [
-    ./no-opam-pkg-config-path.patch
-  ];
 
   nativeBuildInputs = [
     bisect_ppx
     ppx_cstruct
-    pkg-config
   ];
 
   propagatedBuildInputs = [

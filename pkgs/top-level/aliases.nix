@@ -100,6 +100,16 @@ mapAliases ({
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   cifs_utils = cifs-utils; # added 2016-08
   ckb = ckb-next; # added 2018-10-21
+
+  # these are for convenience, not for backward compat and shouldn't expire
+  clang5Stdenv = lowPrio llvmPackages_5.stdenv;
+  clang6Stdenv = lowPrio llvmPackages_6.stdenv;
+  clang7Stdenv = lowPrio llvmPackages_7.stdenv;
+  clang8Stdenv = lowPrio llvmPackages_8.stdenv;
+  clang9Stdenv = lowPrio llvmPackages_9.stdenv;
+  clang10Stdenv = lowPrio llvmPackages_10.stdenv;
+  clang11Stdenv = lowPrio llvmPackages_11.stdenv;
+
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
