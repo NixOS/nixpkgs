@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "tj";
     repo = "git-extras";
     rev = version;
-    sha256 = "12ff9rhgqd71xm72r385hx0h8g75hz0ag0adzqcwfa54k0lhrrrz";
+    sha256 = "sha256-ACuTb1DGft2/32Ezg23jhpl9yua5kUTZ2kKL8KHU+BU=";
   };
 
   nativeBuildInputs = [ unixtools.column which ];
