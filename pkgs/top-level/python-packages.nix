@@ -4020,7 +4020,11 @@ in {
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
-  mistune = callPackage ../development/python-modules/mistune { };
+  inherit (import ../development/python-modules/mistune self)
+    mistune
+    mistune_0_8
+    mistune_2_0
+  ;
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
 
