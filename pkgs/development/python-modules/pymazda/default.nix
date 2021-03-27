@@ -2,7 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchPypi
-, pycryptodome
+, cryptography
 , pythonOlder
 }:
 
@@ -16,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "174c58e6e78081af3105524074ae26e62be683389e495ab85a30e2adbf7ba365";
   };
 
-  propagatedBuildInputs = [ aiohttp pycryptodome ];
+  propagatedBuildInputs = [
+    aiohttp
+    cryptography
+  ];
 
   # Project has no tests
   doCheck = false;
