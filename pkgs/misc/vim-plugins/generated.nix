@@ -3346,6 +3346,18 @@ let
     meta.homepage = "https://github.com/kyazdani42/nvim-web-devicons/";
   };
 
+  nvim-whichkey-setup-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-whichkey-setup-lua";
+    version = "2021-03-26";
+    src = fetchFromGitHub {
+      owner = "AckslD";
+      repo = "nvim-whichkey-setup.lua";
+      rev = "59aa0a4287adf6c2c9faabf912cdc005230e7c98";
+      sha256 = "093yjj28ak1ifbkn1s69wx8ldinj4v2bpf82fhqziw6d58ghwang";
+    };
+    meta.homepage = "https://github.com/AckslD/nvim-whichkey-setup.lua/";
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2020-04-08";
