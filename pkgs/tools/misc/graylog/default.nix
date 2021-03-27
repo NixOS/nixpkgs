@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+  makeWrapperArgs = [ "--set-default" "JAVA_HOME" "${jre_headless}" ];
 
   passthru.tests = { inherit (nixosTests) graylog; };
 
