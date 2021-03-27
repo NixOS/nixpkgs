@@ -38,7 +38,7 @@ buildGoModule rec {
     homepage = "https://github.com/ProtonMail/proton-bridge";
     changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
     downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lightdiscord ];
     description = "Use your ProtonMail account with your local e-mail client";
     longDescription = ''
