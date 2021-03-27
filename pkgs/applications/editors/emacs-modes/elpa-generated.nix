@@ -223,10 +223,10 @@
       elpaBuild {
         pname = "auctex";
         ename = "auctex";
-        version = "13.0.4";
+        version = "13.0.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-13.0.4.tar";
-          sha256 = "1362dqb8mcaddda9849gqsj6rzlfq18xprddb74j02884xl7hq65";
+          url = "https://elpa.gnu.org/packages/auctex-13.0.5.tar";
+          sha256 = "072wwsqfl8n2gi2inbp0s8k1ydr6fh1zyvc3rgynwzibjjniy319";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -2203,10 +2203,10 @@
       elpaBuild {
         pname = "modus-operandi-theme";
         ename = "modus-operandi-theme";
-        version = "0.13.1";
+        version = "0.13.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/modus-operandi-theme-0.13.1.tar";
-          sha256 = "08l9qmhvxiscxn4mfb80x57mk4gfm5r0fs2l9c8i3gfzd4i3h091";
+          url = "https://elpa.gnu.org/packages/modus-operandi-theme-0.13.2.tar";
+          sha256 = "1sw18ijp9rhaf8y8x8z5rmxy23pxd3gaicgmp2zndcfmm54gwsic";
         };
         packageRequires = [ emacs modus-themes ];
         meta = {
@@ -2237,10 +2237,10 @@
       elpaBuild {
         pname = "modus-vivendi-theme";
         ename = "modus-vivendi-theme";
-        version = "0.13.1";
+        version = "0.13.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/modus-vivendi-theme-0.13.1.tar";
-          sha256 = "0xz304zcc872c2zwnlm8ky0m18smf7bffiyj21ygghgclr7kgma1";
+          url = "https://elpa.gnu.org/packages/modus-vivendi-theme-0.13.2.tar";
+          sha256 = "1qn3kzxwf81zc7gprd9wblhb8b8akdkxwajpgk036y8i4cmvmspn";
         };
         packageRequires = [ emacs modus-themes ];
         meta = {
@@ -3252,10 +3252,10 @@
       elpaBuild {
         pname = "setup";
         ename = "setup";
-        version = "0.1.1";
+        version = "0.1.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/setup-0.1.1.tar";
-          sha256 = "0z34m06lxw6xd6bxacm1h5cijamsksk4daf6fbzhd7kqmw3gbgqg";
+          url = "https://elpa.gnu.org/packages/setup-0.1.2.tar";
+          sha256 = "1q29phch4fvmvc255kgvzsnzdqp6kaip7ybpxprd0kkdjs3jrsqv";
         };
         packageRequires = [ emacs ];
         meta = {
