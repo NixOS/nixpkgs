@@ -7615,6 +7615,12 @@
       fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A";
     }];
   };
+  polendri = {
+    email = "paul@ijj.li";
+    github = "polendri";
+    githubId = 1829032;
+    name = "Paul Hendry";
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";
@@ -7722,12 +7728,6 @@
     github = "psanford";
     githubId = 33375;
     name = "Peter Sanford";
-  };
-  pshendry = {
-    email = "paul@pshendry.com";
-    github = "pshendry";
-    githubId = 1829032;
-    name = "Paul Hendry";
   };
   psibi = {
     email = "sibi@psibi.in";
