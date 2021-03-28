@@ -46,7 +46,6 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-
   # 5.0.3 crashes. Test carefully before updating.
   # https://github.com/wwmm/pulseeffects/issues/927
   version = "5.0.2";
