@@ -926,6 +926,16 @@
     githubId = 75235;
     name = "Michael Walker";
   };
+  bartuka = {
+    email = "wand@hey.com";
+    github = "wandersoncferreira";
+    githubId = 17708295;
+    name = "Wanderson Ferreira";
+    keys = [{
+      longkeyid = "rsa4096/0x56840A614DBE37AE";
+      fingerprint = "A3E1 C409 B705 50B3 BF41  492B 5684 0A61 4DBE 37AE";
+    }];
+  };
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
     github = "basvandijk";
