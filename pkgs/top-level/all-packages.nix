@@ -2050,6 +2050,8 @@ in
 
   swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
+  swaycwd = callPackage ../tools/wayland/swaycwd { };
+
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wev = callPackage ../tools/wayland/wev { };
