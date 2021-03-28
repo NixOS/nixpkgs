@@ -67,8 +67,8 @@ let
 
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#performance-optimized-pgo
   pgoCflags = {
-    "clang" = "-O3 -Wno-ignored-optimization-argument -Wno-profile-instr-out-of-date -Wno-profile-instr-unprofiled";
-    "gcc" = "-O3 -Wno-missing-profile";
+    "clang" = "-O3 -Wno-ignored-optimization-argument";
+    "gcc" = "-O3";
   }."${compilerName}";
 
   # ar with lto support
@@ -130,6 +130,10 @@ stdenv.mkDerivation rec {
   preBuild = lib.optionalString doPgo ''
     meson configure -Db_pgo=generate
     ninja
+    # make sure there is _some_ profiling data on all binaries
+    ./footclient --version
+    ./foot --version
+    # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
   '' + lib.optionalString (doPgo && stdenv.cc.cc.pname == "clang") ''
