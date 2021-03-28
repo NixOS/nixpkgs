@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 , ncurses, neovim, procps
 , pandoc, lua51Packages, util-linux
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ lua51Packages.busted util-linux neovim ];
   checkPhase = ''script -c "busted --lpath './?.lua' test"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax

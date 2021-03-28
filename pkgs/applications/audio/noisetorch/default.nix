@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, rnnoise-plugin }:
+{ lib, buildGoModule, fetchFromGitHub, rnnoise-plugin }:
 
 buildGoModule rec {
   pname = "NoiseTorch";
@@ -36,7 +36,7 @@ buildGoModule rec {
     cp assets/noisetorch.desktop $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual microphone device with noise supression for PulseAudio";
     homepage = "https://github.com/lawl/NoiseTorch";
     license = licenses.gpl3Plus;

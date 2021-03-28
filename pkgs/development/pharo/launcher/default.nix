@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
+{ lib, stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   version = "2017.02.28";
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   # because upstream tarball has no top-level directory.
   sourceRoot = ".";
 
-  buildInputs = [ bash pharo unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ bash pharo ];
 
   installPhase = ''
     mkdir -p $prefix/share/pharo-launcher
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
      test "$?" == 124 && echo "ok")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Launcher for Pharo distributions";
     homepage = "https://pharo.org";
     longDescription = ''

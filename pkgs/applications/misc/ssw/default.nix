@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, gtk3 }:
+{ lib, stdenv, fetchurl, pkg-config, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "ssw";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/ssw/";
     license = licenses.gpl3;
     description = "GNU Spread Sheet Widget";

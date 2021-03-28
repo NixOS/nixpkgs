@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , fetchurl
-, makeWrapper
 , linkFarmFromDrvs
 , dotnet-netcore
 , dotnet-sdk
@@ -15,30 +14,34 @@
 , libevdev
 , libnotify
 , udev
+, copyDesktopItems
 , makeDesktopItem
+, makeWrapper
+, nixosTests
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "OpenTabletDriver";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "InfinityGhost";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "048y7gjlk2yw4vh62px1d9w0va6ap1a0cndcpbirlyj9q6b8jxax";
+    sha256 = "1if2mkj193yzf5si9pwaynrm6wkhqy7ihk4k1lklzcryk5675w36";
   };
 
   debPkg = fetchurl {
     url = "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
-    sha256 = "13gg0dhvjy88h9lhcrp30fjiwgb9dzjsgk1k760pi1ki71a5vz2r";
+    sha256 = "16a1rr0yxra1dhwysbbfgsxpigh2jhjlsl7r28dgp8qcxncck7wg";
   };
 
   nativeBuildInputs = [
     dotnet-sdk
     dotnetPackages.Nuget
     dpkg
+    copyDesktopItems
     makeWrapper
     wrapGAppsHook
   ];
@@ -62,6 +65,8 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
     export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
@@ -76,20 +81,25 @@ stdenv.mkDerivation rec {
     for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
         dotnet restore --source "$PWD/nixos" $project
     done
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
         dotnet build $project \
             --no-restore \
             --configuration Release \
             --framework net5
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/lib/OpenTabletDriver/
-    cp -r ./OpenTabletDriver/Configurations/ $out/lib/OpenTabletDriver/
+    runHook preInstall
 
     for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
       dotnet publish $project \
@@ -119,11 +129,19 @@ stdenv.mkDerivation rec {
         --set DOTNET_ROOT "${dotnet-netcore}" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
-    mkdir -p $out/share/{applications,pixmaps}
+    mkdir -p $out/lib/OpenTabletDriver
+    cp -rv ./OpenTabletDriver/Configurations $out/lib/OpenTabletDriver
+    install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
-    cp -r $src/OpenTabletDriver.UX/Assets/* $out/share/pixmaps
+    # TODO: Ideally this should be build from OpenTabletDriver/OpenTabletDriver-udev instead
+    dpkg-deb --fsys-tarfile ${debPkg} | tar xf - ./usr/lib/udev/rules.d/99-opentabletdriver.rules
+    install -Dm644 ./usr/lib/udev/rules.d/99-opentabletdriver.rules -t $out/lib/udev/rules.d
 
-    cp -r ${makeDesktopItem {
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
       desktopName = "OpenTabletDriver";
       name = "OpenTabletDriver";
       exec = "otd-gui";
@@ -131,16 +149,18 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       type = "Application";
       categories = "Utility;";
-    }}/share/applications/* $out/share/applications
-
-    # TODO: Ideally this should be build from OpenTabletDriver/OpenTabletDriver-udev instead
-    dpkg-deb --fsys-tarfile ${debPkg} | tar xf - ./usr/lib/udev/rules.d/30-opentabletdriver.rules
-    mkdir -p $out/lib/udev/rules.d
-    cp ./usr/lib/udev/rules.d/* $out/lib/udev/rules.d
-  '';
+    })
+  ];
 
   dontWrapGApps = true;
   dontStrip = true;
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      otd-runs = nixosTests.opentabletdriver;
+    };
+  };
 
   meta = with lib; {
     description = "Open source, cross-platform, user-mode tablet driver";

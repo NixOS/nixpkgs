@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, alsaLib, espeak, glibc, gpsd
-, hamlib, perl, python, udev }:
+{ lib, stdenv, fetchFromGitHub, cmake, alsaLib, espeak, glibc, gpsd
+, hamlib, perl, python3, udev }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "direwolf";
@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   buildInputs = [
-    espeak gpsd hamlib perl python
+    espeak gpsd hamlib perl python3
   ] ++ (optionals stdenv.isLinux [alsaLib udev]);
 
   patches = [

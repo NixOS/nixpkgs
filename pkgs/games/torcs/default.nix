@@ -1,4 +1,4 @@
-{ fetchpatch, fetchurl, stdenv, libGLU, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
+{ fetchpatch, fetchurl, lib, stdenv, libGLU, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
 libpng, zlib, makeWrapper }:
 
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Car racing game";
     homepage = "http://torcs.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
   };
 }

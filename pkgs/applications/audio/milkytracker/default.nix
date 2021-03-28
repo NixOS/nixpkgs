@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, makeWrapper
 , SDL2, alsaLib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "025fj34gq2kmkpwcswcyx7wdxb89vm944dh685zi4bxx0hz16vvk";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [ SDL2 alsaLib libjack2 lhasa perl rtmidi zlib zziplib ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/resources/milkytracker.appdata $out/share/appdata/milkytracker.appdata.xml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music tracker application, similar to Fasttracker II";
     homepage = "http://milkytracker.org";
     license = licenses.gpl3Plus;

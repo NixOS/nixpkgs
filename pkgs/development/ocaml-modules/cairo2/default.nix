@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, buildDunePackage, ocaml
-, pkgconfig, cairo
+, pkg-config, cairo
 }:
 
 buildDunePackage rec {
@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "1ik4qf4b9443sliq2z7x9acd40rmzvyzjh3bh98wvjklxbb84a9i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo ];
 
   doCheck = !(stdenv.isDarwin

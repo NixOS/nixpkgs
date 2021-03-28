@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, beets, pythonPackages, glibcLocales }:
+{ lib, fetchFromGitHub, beets, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication {
   name = "beets-copyartifacts";
@@ -28,6 +28,6 @@ pythonPackages.buildPythonApplication {
   meta = {
     description = "Beets plugin to move non-music files during the import process";
     homepage = "https://github.com/sbarakat/beets-copyartifacts";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
   };
 }

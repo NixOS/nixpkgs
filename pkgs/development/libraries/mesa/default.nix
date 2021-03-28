@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, buildPackages
-, pkgconfig, intltool, ninja, meson
+, pkg-config, intltool, ninja, meson
 , file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, python3Packages
@@ -26,12 +26,12 @@
   - libOSMesa is in $osmesa (~4 MB)
 */
 
-with stdenv.lib;
+with lib;
 
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.3.1";
+  version = "20.3.4";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "03vqm9kqrcpijg6bxldj0bg360z8d7c767n3b16jdc1apd4inxdg";
+    sha256 = "1120kf280hg4h0a2505vxf6rdw8r2ydl3cg4iwkmpx0zxj3sj8fw";
   };
 
   prePatch = "patchShebangs .";
@@ -65,13 +65,10 @@ stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    # Fix for pre macOS SDK 10.13
-    # TODO(r-burns) can be applied unconditionally, at the cost of a mass linux rebuild
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/f4403f70fe5bf2ec41af5546122f0d78caffa984.patch";
-      sha256 = "03j2aj255m7ms848nkb41vj3s3yb72zb5rz3w3fzp5l9wzzargw5";
-    })
+  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
+    # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
+    ./aarch64-darwin.patch
   ];
 
   postPatch = ''
@@ -130,10 +127,10 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optional withValgrind valgrind-light;
 
-  depsBuildBuild = [ pkgconfig ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    pkgconfig meson ninja
+    pkg-config meson ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
@@ -208,7 +205,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-fno-common";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
 
   passthru = {
     inherit libdrm;

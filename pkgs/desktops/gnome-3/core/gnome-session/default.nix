@@ -1,6 +1,7 @@
-{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk3, gsettings-desktop-schemas
+{ fetchurl, lib, stdenv, substituteAll, meson, ninja, pkg-config, gnome3, glib, gtk3, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
-, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl }:
+, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl
+, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
   outputs = ["out" "sessions"];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-session/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-session/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rrxjk3vbqy3cdgnl7rw71dvcyrvhwq3m6s53dnkyjxsrnr0xk3v";
   };
 
@@ -21,12 +22,18 @@ stdenv.mkDerivation rec {
       grep = "${gnugrep}/bin/grep";
       bash = "${bash}/bin/bash";
     })
+    # Fixes 2 minute delay at poweroff.
+    # https://gitlab.gnome.org/GNOME/gnome-session/issues/74
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-session/-/commit/9de6e40f12e8878f524f8d429d85724c156a0517.diff";
+      sha256 = "19vrjdf7d6dfl7sqxvbc5h5lcgk1krgzg5rkssrdzd1h4ma6y8fz";
+    })
   ];
 
   mesonFlags = [ "-Dsystemd=true" "-Dsystemd_session=default" ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext makeWrapper
+    meson ninja pkg-config gettext makeWrapper
     xmlto libxslt docbook_xsl docbook_xml_dtd_412 python3
     dbus # for DTD
   ];
@@ -80,7 +87,7 @@ stdenv.mkDerivation rec {
     providedSessions = [ "gnome" "gnome-xorg" ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME session manager";
     homepage = "https://wiki.gnome.org/Projects/SessionManagement";
     license = licenses.gpl2Plus;

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, glib, readline
-, bison, flex, pkgconfig, autoreconfHook, libxslt, makeWrapper
+, bison, flex, pkg-config, autoreconfHook, libxslt, makeWrapper
 , txt2man, which
 # withUi currently doesn't work. It compiles but fails to run.
 , withUi ? false, gtk2, gnome2
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-scrollkeeper" ];
 
   nativeBuildInputs = [
-    pkgconfig bison flex autoreconfHook txt2man which
+    pkg-config bison flex autoreconfHook txt2man which
   ] ++ lib.optional withUi libxslt;
 
   buildInputs = [ glib readline ] ++ lib.optionals withUi uiDeps;

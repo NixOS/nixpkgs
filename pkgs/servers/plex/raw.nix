@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , dpkg
 , writeScript
@@ -12,16 +12,16 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.21.1.3795-ee64ab56f";
+  version = "1.22.0.4163-d8c4875dd";
   pname = "plexmediaserver";
 
   # Fetch the source
   src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    sha256 = "1k4ayb5jygi9g78703r1z4y4m0mp66m6jc72zj4zqk4xckzvjf4f";
+    sha256 = "16lwcimgnpxcyxbk4qwkqz5mzmizqfzihwqb41awc38qlfbjzh5g";
   } else fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    sha256 = "0qfc5k9sgi465pgrhv8nbm5p7s4wdpaljj54m2i7hfydva8ws8ci";
+    sha256 = "0wvqrn7mycrx0rn4zkp6cr2mr59nfqh63czm0awsfpqc6hqggz8y";
   };
 
   outputs = [ "out" "basedb" ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/lib"
     cp -dr --no-preserve='ownership' usr/lib/plexmediaserver $out/lib/
 
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     # to the '/db' file; we create this path in the FHS userenv (see the "plex"
     # package).
     ln -fs /db $f
+    runHook postInstall
   '';
 
   # We're running in a FHS userenv; don't patch anything
@@ -59,12 +61,12 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "${pname}-updater" ''
     #!${stdenv.shell}
     set -eu -o pipefail
-    PATH=${stdenv.lib.makeBinPath [curl jq common-updater-scripts]}:$PATH
+    PATH=${lib.makeBinPath [curl jq common-updater-scripts]}:$PATH
 
     plexApiJson=$(curl -sS https://plex.tv/api/downloads/5.json)
     latestVersion="$(echo $plexApiJson | jq .computer.Linux.version | tr -d '"\n')"
 
-    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+    for platform in ${lib.concatStringsSep " " meta.platforms}; do
       arch=$(echo $platform | cut -d '-' -f1)
       dlUrl="$(echo $plexApiJson | jq --arg arch "$arch" -c '.computer.Linux.releases[] | select(.distro == "debian") | select(.build | contains($arch)) .url' | tr -d '"\n')"
 
@@ -77,13 +79,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://plex.tv/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [
       badmutex
-      colemickens
       forkk
       lnl7
       pjones

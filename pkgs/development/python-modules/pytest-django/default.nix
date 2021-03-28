@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # Complicated. Requires Django setup.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "py.test plugin for testing of Django applications";
     homepage = "https://pytest-django.readthedocs.org/en/latest/";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://reicast.com/";
     description = "A multi-platform Sega Dreamcast emulator";
     license = with licenses; [ bsd3 gpl2Only lgpl2Only ];

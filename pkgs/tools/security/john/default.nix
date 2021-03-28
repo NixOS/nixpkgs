@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
+{ lib, stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
 , gcc, python3Packages, perl, perlPackages, makeWrapper
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "john";

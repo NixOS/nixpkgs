@@ -1,9 +1,8 @@
-{ stdenv
+{ lib
 , python3
 , fetchFromGitHub
 , nixFlakes
 , git
-, lib
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix" "PATH" ":" (lib.makeBinPath [ nixFlakes git ])
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = licenses.mit;

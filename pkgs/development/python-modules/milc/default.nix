@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , appdirs
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ./hello | grep "Hello, World"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An Opinionated Batteries-Included Python 3 CLI Framework";
     homepage = "https://milc.clueboard.co";
     license = licenses.mit;

@@ -1,22 +1,23 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ipfs-cluster";
-  version = "0.13.0";
-  rev = "v${version}";
+  version = "0.13.1";
 
-  vendorSha256 = "00fkyxxi4iz16v0j33270x8qrspqpsv9j6csnikjy0klyb038pfq";
+  vendorSha256 = "0ls6d5ijl8bbh48w0i30mwd4a4na93iw9xqpbw23lnb8pvskaggh";
 
-  doCheck = false;
+  patches = [
+      ./test.patch
+  ];
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipfs-cluster";
-    inherit rev;
-    sha256 = "0jf3ngxqkgss5f1kifp5lp3kllb21jxc475ysl01ma8l3smqdvya";
+    rev = "v${version}";
+    sha256 = "0kmsa7cnk88wrplsjysrpg6n0gd0risnhw0kh33jqx0fcg12b7h8";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = "https://cluster.ipfs.io/";
     license = licenses.mit;

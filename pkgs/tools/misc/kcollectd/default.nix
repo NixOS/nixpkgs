@@ -18,12 +18,12 @@
 
 mkDerivation rec {
   pname = "kcollectd";
-  version = "0.11.99.0";
+  version = "0.12.0";
   src = fetchFromGitLab {
     owner = "aerusso";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0h4ymvzihzbmyv3z0bp28g94wxc6c7lgi3my0xbka3advxr811gn";
+    sha256 = "sha256-Ihd4Ps4t9+sNB3joO3vTxDR/25t7Ecl6yvHQ15QiUdY=";
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , isPyPy
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ liblo cython ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://das.nasophon.de/pyliblo/";
     description = "Python wrapper for the liblo OSC library";
     license = licenses.lgpl21;

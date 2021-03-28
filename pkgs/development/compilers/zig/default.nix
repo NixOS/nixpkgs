@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib, substituteAll }:
 
 llvmPackages.stdenv.mkDerivation rec {
   version = "0.7.1";
@@ -32,7 +32,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     homepage = "https://ziglang.org/";

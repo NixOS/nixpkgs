@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre, buildPackages }:
+{ lib, stdenv, fetchurl, ncurses, pcre, buildPackages }:
 
 let
   version = "5.8";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
-  checkFlags = map (T: "TESTNUM=${T}") (stdenv.lib.stringToCharacters "ABCDEVW");
+  checkFlags = map (T: "TESTNUM=${T}") (lib.stringToCharacters "ABCDEVW");
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
@@ -65,7 +65,7 @@ EOF
     ${if stdenv.hostPlatform == stdenv.buildPlatform then ''
       $out/bin/zsh -c "zcompile $out/etc/zprofile"
     '' else ''
-      ${stdenv.lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
+      ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
     ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
   '';
@@ -83,8 +83,8 @@ EOF
     '';
     license = "MIT-like";
     homepage = "https://www.zsh.org/";
-    maintainers = with stdenv.lib.maintainers; [ pSub ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
   };
 
   passthru = {

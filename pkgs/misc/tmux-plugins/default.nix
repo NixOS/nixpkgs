@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , pkgs
-, reattach-to-user-namespace
 , stdenv
 }:
 
@@ -10,10 +9,10 @@ let
 
   addRtp = path: rtpFilePath: attrs: derivation:
     derivation // { rtp = "${derivation}/${path}/${rtpFilePath}"; } // {
-      overrideAttrs = f: mkDerivation (attrs // f attrs);
+      overrideAttrs = f: mkTmuxPlugin (attrs // f attrs);
     };
 
-  mkDerivation = a@{
+  mkTmuxPlugin = a@{
     pluginName,
     rtpFilePath ? (builtins.replaceStrings ["-"] ["_"] pluginName) + ".tmux",
     namePrefix ? "tmuxplugin-",
@@ -50,10 +49,11 @@ let
     }));
 
 in rec {
+  inherit mkTmuxPlugin;
 
-  inherit mkDerivation;
+  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 
-  battery = mkDerivation {
+  battery = mkTmuxPlugin {
     pluginName = "battery";
     version = "unstable-2019-07-04";
     src = fetchFromGitHub {
@@ -64,7 +64,7 @@ in rec {
     };
   };
 
-  continuum = mkDerivation {
+  continuum = mkTmuxPlugin {
     pluginName = "continuum";
     version = "unstable-2020-10-16";
     src = fetchFromGitHub {
@@ -88,13 +88,13 @@ in rec {
         computer or server restarts, if the machine is on, tmux will be there how
         you left it off the last time it was used.
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
-  copycat = mkDerivation {
+  copycat = mkTmuxPlugin {
     pluginName = "copycat";
     version = "unstable-2020-01-09";
     src = fetchFromGitHub {
@@ -105,7 +105,7 @@ in rec {
     };
   };
 
-  cpu = mkDerivation {
+  cpu = mkTmuxPlugin {
     pluginName = "cpu";
     version = "unstable-2020-07-25";
     src = fetchFromGitHub {
@@ -116,7 +116,7 @@ in rec {
     };
   };
 
-  ctrlw = mkDerivation rec {
+  ctrlw = mkTmuxPlugin rec {
     pluginName = "ctrlw";
     version = "0.1.1";
     src = fetchFromGitHub {
@@ -127,16 +127,16 @@ in rec {
     };
   };
 
-  dracula = mkDerivation rec {
+  dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "unstable-2020-12-28";
+    version = "unstable-2021-02-18";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      rev = "6757a5329948f00addd66b02ea94f61dd94456f5";
-      sha256 = "0wwwzg3bwcrbr2nmf84prz7k4i79yq0960vs6zjp0x8nqn2fvziy";
+      rev = "8d1a7fa41b773d4f7b53dfff2d9fc5166d34f104";
+      sha256 = "DG+oKbTkYO4hwoOlOqW5IuCLdVEttlvLM2en4DUHyMY=";
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
       description = "A feature packed Dracula theme for tmux!";
       license = licenses.mit;
@@ -145,7 +145,7 @@ in rec {
     };
   };
 
-  fingers = mkDerivation rec {
+  fingers = mkTmuxPlugin rec {
     pluginName = "fingers";
     rtpFilePath = "tmux-fingers.tmux";
     version = "1.0.1";
@@ -159,7 +159,7 @@ in rec {
     dependencies = [ pkgs.gawk ];
   };
 
-  fpp = mkDerivation {
+  fpp = mkTmuxPlugin {
     pluginName = "fpp";
     version = "unstable-2016-03-08";
     src = fetchFromGitHub {
@@ -174,7 +174,7 @@ in rec {
     dependencies = [ pkgs.fpp ];
   };
 
-  fzf-tmux-url = mkDerivation {
+  fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
     version = "unstable-2019-12-02";
@@ -186,7 +186,7 @@ in rec {
     };
   };
 
-  gruvbox = mkDerivation {
+  gruvbox = mkTmuxPlugin {
     pluginName = "gruvbox";
     rtpFilePath = "gruvbox-tpm.tmux";
     version = "unstable-2019-05-05";
@@ -198,7 +198,7 @@ in rec {
     };
   };
 
-  jump = mkDerivation {
+  jump = mkTmuxPlugin {
     pluginName = "jump";
     version = "2020-06-26";
     rtpFilePath = "tmux-jump.tmux";
@@ -213,7 +213,7 @@ in rec {
     '';
     dependencies = [ pkgs.ruby ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/schasse/tmux-jump";
       description = "Vimium/Easymotion like navigation for tmux";
       license = licenses.gpl3;
@@ -222,7 +222,7 @@ in rec {
     };
   };
 
-  logging = mkDerivation {
+  logging = mkTmuxPlugin {
     pluginName = "logging";
     version = "unstable-2019-04-19";
     src = fetchFromGitHub {
@@ -233,7 +233,7 @@ in rec {
     };
   };
 
-  net-speed = mkDerivation {
+  net-speed = mkTmuxPlugin {
     pluginName = "net-speed";
     version = "unstable-2018-12-02";
     src = fetchFromGitHub {
@@ -244,7 +244,7 @@ in rec {
     };
   };
 
-  nord = mkDerivation rec {
+  nord = mkTmuxPlugin rec {
     pluginName = "nord";
     version = "0.3.0";
     src = pkgs.fetchFromGitHub {
@@ -255,7 +255,7 @@ in rec {
     };
   };
 
-  maildir-counter = mkDerivation {
+  maildir-counter = mkTmuxPlugin {
     pluginName = "maildir-counter";
     version = "unstable-2016-11-25";
     src = fetchFromGitHub {
@@ -266,7 +266,7 @@ in rec {
     };
   };
 
-  online-status = mkDerivation {
+  online-status = mkTmuxPlugin {
     pluginName = "online-status";
     version = "unstable-2018-11-30";
     src = fetchFromGitHub {
@@ -277,7 +277,7 @@ in rec {
     };
   };
 
-  open = mkDerivation {
+  open = mkTmuxPlugin {
     pluginName = "open";
     version = "unstable-2019-12-02";
     src = fetchFromGitHub {
@@ -288,8 +288,9 @@ in rec {
     };
   };
 
-  onedark-theme = mkDerivation {
+  onedark-theme = mkTmuxPlugin {
     pluginName = "onedark-theme";
+    rtpFilePath = "tmux-onedark-theme.tmux";
     version = "unstable-2020-06-07";
     src = fetchFromGitHub {
       owner = "odedlaz";
@@ -299,7 +300,7 @@ in rec {
     };
   };
 
-  pain-control = mkDerivation {
+  pain-control = mkTmuxPlugin {
     pluginName = "pain-control";
     version = "unstable-2020-02-18";
     src = fetchFromGitHub {
@@ -310,7 +311,7 @@ in rec {
     };
   };
 
-  plumb = mkDerivation rec {
+  plumb = mkTmuxPlugin rec {
     pluginName = "plumb";
     version = "0.1.1";
     src = fetchFromGitHub {
@@ -324,7 +325,19 @@ in rec {
     '';
   };
 
-  prefix-highlight = mkDerivation {
+  power-theme = mkTmuxPlugin {
+    pluginName = "power";
+    rtpFilePath = "tmux-power.tmux";
+    version = "unstable-2020-11-18";
+    src = pkgs.fetchFromGitHub {
+      owner = "wfxr";
+      repo = "tmux-power";
+      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
+      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+    };
+  };
+
+  prefix-highlight = mkTmuxPlugin {
     pluginName = "prefix-highlight";
     version = "unstable-2020-03-26";
     src = fetchFromGitHub {
@@ -335,7 +348,7 @@ in rec {
     };
   };
 
-  resurrect = mkDerivation {
+  resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
     version = "unstable-2020-09-18";
     src = fetchFromGitHub {
@@ -366,13 +379,13 @@ in rec {
           * restoring vim and neovim sessions
           * restoring pane contents
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
-  sensible = mkDerivation {
+  sensible = mkTmuxPlugin {
     pluginName = "sensible";
     version = "unstable-2017-09-05";
     src = fetchFromGitHub {
@@ -381,12 +394,12 @@ in rec {
       rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
       sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
     };
-    postInstall = lib.optionalString pkgs.stdenv.isDarwin ''
-      sed -e 's:reattach-to-user-namespace:${reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
     '';
   };
 
-  sessionist = mkDerivation {
+  sessionist = mkTmuxPlugin {
     pluginName = "sessionist";
     version = "unstable-2017-12-03";
     src = fetchFromGitHub {
@@ -397,7 +410,7 @@ in rec {
     };
   };
 
-  sidebar = mkDerivation {
+  sidebar = mkTmuxPlugin {
     pluginName = "sidebar";
     version = "unstable-2018-11-30";
     src = fetchFromGitHub {
@@ -408,7 +421,7 @@ in rec {
     };
   };
 
-  sysstat = mkDerivation {
+  sysstat = mkTmuxPlugin {
     pluginName = "sysstat";
     version = "unstable-2017-12-12";
     src = fetchFromGitHub {
@@ -419,7 +432,7 @@ in rec {
     };
   };
 
-  tilish = mkDerivation {
+  tilish = mkTmuxPlugin {
     pluginName = "tilish";
     version = "2020-08-12";
     src = fetchFromGitHub {
@@ -429,7 +442,7 @@ in rec {
       sha256 = "1x58h3bg9d69j40fh8rcjpxvg0i6j04pj8p3jk57l3cghxis5j05";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/jabirali/tmux-tilish";
       description = "Plugin which makes tmux work and feel like i3wm";
       license = licenses.mit;
@@ -438,7 +451,7 @@ in rec {
     };
   };
 
-  tmux-colors-solarized = mkDerivation {
+  tmux-colors-solarized = mkTmuxPlugin {
     pluginName = "tmuxcolors";
     version = "unstable-2019-07-14";
     src = fetchFromGitHub {
@@ -449,13 +462,14 @@ in rec {
     };
   };
 
-  tmux-fzf = mkDerivation {
+  tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
-    version = "unstable-2020-11-23";
+    rtpFilePath = "main.tmux";
+    version = "unstable-2020-12-07";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "312685b2a7747b61f1f4a96bd807819f1450479d";
+      rev = "5efeb91086040a3becf5372fb38258acd0579954";
       sha256 = "1z0zmsf8asxs9wbwvkiyd81h93wb2ikl8nxxc26sdpi6l333q5s9";
     };
     postInstall = ''
@@ -478,13 +492,13 @@ in rec {
         * User menu.
         * Popup window support.
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ kyleondy ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ kyleondy ];
     };
   };
 
-  urlview = mkDerivation {
+  urlview = mkTmuxPlugin {
     pluginName = "urlview";
     version = "unstable-2016-01-06";
     src = fetchFromGitHub {
@@ -499,7 +513,7 @@ in rec {
     dependencies = [ pkgs.urlview ];
   };
 
-  vim-tmux-focus-events = mkDerivation {
+  vim-tmux-focus-events = mkTmuxPlugin {
     pluginName = "vim-tmux-focus-events";
     version = "unstable-2020-10-05";
     src = fetchFromGitHub {
@@ -509,7 +523,7 @@ in rec {
       sha256 = "130l73v18md95djkc4s9d0fr018f8f183sjcgy7dgldwdaxlqdi1";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/tmux-plugins/vim-tmux-focus-events";
       description = "Makes FocusGained and FocusLost autocommand events work in vim when using tmux";
       license = licenses.mit;
@@ -518,7 +532,7 @@ in rec {
     };
   };
 
-  vim-tmux-navigator = mkDerivation {
+  vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
     version = "unstable-2019-12-10";
@@ -530,7 +544,7 @@ in rec {
     };
   };
 
-  yank = mkDerivation {
+  yank = mkTmuxPlugin {
     pluginName = "yank";
     version = "unstable-2019-12-02";
     src = fetchFromGitHub {
@@ -540,5 +554,4 @@ in rec {
       sha256 = "1zg9k8yk1iw01vl8m44w4sv20lln4l0lq9dafc09lxmgxm9dllj4";
     };
   };
-
 }

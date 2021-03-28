@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, beets, pythonPackages }:
+{ lib, fetchFromGitHub, beets, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "beets-extrafiles";
@@ -25,6 +25,6 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/Holzhaus/beets-extrafiles";
     description = "A plugin for beets that copies additional files and directories during the import process";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
   };
 }

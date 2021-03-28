@@ -51,7 +51,7 @@ let
         runHook postInstall
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.scummvm.org";
         license = licenses.free; # refer to the readme for exact wording
         maintainers = with maintainers; [ peterhoeg ];

@@ -39,5 +39,5 @@ buildPythonPackage rec {
     homepage = "http://wrf-python.rtfd.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mhaselsteiner ];
-	};
+  };
 }

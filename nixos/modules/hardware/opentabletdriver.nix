@@ -5,6 +5,8 @@ let
   cfg = config.hardware.opentabletdriver;
 in
 {
+  meta.maintainers = with lib.maintainers; [ thiagokokada ];
+
   options = {
     hardware.opentabletdriver = {
       enable = mkOption {
@@ -24,6 +26,15 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.opentabletdriver;
+        defaultText = "pkgs.opentabletdriver";
+        description = ''
+          OpenTabletDriver derivation to use.
+        '';
+      };
+
       daemon = {
         enable = mkOption {
           default = true;
@@ -37,9 +48,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ opentabletdriver ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.udev.packages = with pkgs; [ opentabletdriver ];
+    services.udev.packages = [ cfg.package ];
 
     boot.blacklistedKernelModules = cfg.blacklistedKernelModules;
 
@@ -50,7 +61,7 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${opentabletdriver}/bin/otd-daemon -c ${opentabletdriver}/lib/OpenTabletDriver/Configurations";
+        ExecStart = "${cfg.package}/bin/otd-daemon -c ${cfg.package}/lib/OpenTabletDriver/Configurations";
         Restart = "on-failure";
       };
     };

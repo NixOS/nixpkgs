@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "docopts";
@@ -21,7 +21,7 @@ buildGoPackage rec {
     install -D -m 755 ./go/src/$goPackagePath/docopts.sh $out/bin/docopts.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/docopt/${pname}";
     description = "docopt CLI tool for shell scripting";
     license = licenses.mit;

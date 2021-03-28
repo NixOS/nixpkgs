@@ -23,17 +23,17 @@
 , libv4l
 , libvpx
 , ortp
-, pkgconfig
+, pkg-config
 , python
 , SDL
 , speex
 , srtp
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  version = "4.4.13";
+  version = "4.4.35";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "0w84v1ajhyysr41qaj7x4njwdak84cc10lq33hl8lq68a52fc2vw";
+    sha256 = "18qmg678m087k7qsaxwfcv2p875z2kpy91pqryiv955km40drl0g";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     cmake
     doxygen
     intltool
-    pkgconfig
+    pkg-config
     python
   ];
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   ];
   NIX_LDFLAGS = "-lXext";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl3;

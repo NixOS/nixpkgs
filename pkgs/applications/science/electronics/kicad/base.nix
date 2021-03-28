@@ -1,5 +1,5 @@
-{ stdenv
-, fetchFromGitLab
+{ lib
+, stdenv
 , cmake
 , libGLU
 , libGL
@@ -13,14 +13,12 @@
 , curl
 , openssl
 , boost
-, pkgconfig
+, pkg-config
 , doxygen
 , pcre
 , libpthreadstubs
 , libXdmcp
-, fetchpatch
 , lndir
-, callPackage
 
 , stable
 , baseName
@@ -43,11 +41,11 @@
 , gtk3
 }:
 
-assert stdenv.lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
-assert stdenv.lib.asserts.assertMsg (!(withOCC && withOCE))
+assert lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
+assert lib.asserts.assertMsg (!(withOCC && withOCE))
   "Only one of OCC and OCE may be enabled";
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
@@ -94,7 +92,7 @@ stdenv.mkDerivation rec {
     ]
   ;
 
-  nativeBuildInputs = [ cmake doxygen pkgconfig lndir ];
+  nativeBuildInputs = [ cmake doxygen pkg-config lndir ];
 
   buildInputs = [
     libGLU
@@ -140,7 +138,7 @@ stdenv.mkDerivation rec {
       the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad-pcb.org/";
-    license = stdenv.lib.licenses.agpl3;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.agpl3;
+    platforms = lib.platforms.all;
   };
 }

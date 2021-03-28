@@ -7,7 +7,7 @@ in
 
 {
   name = "mysql-replication";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
   };
 

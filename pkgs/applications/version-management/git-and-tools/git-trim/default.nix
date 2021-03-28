@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-trim";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
     install -Dm644 -t $out/share/man/man1/ docs/git-trim.1
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   # fails with sandbox
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically trims your branches whose tracking remote refs are merged or gone";
     homepage = "https://github.com/foriequal0/git-trim";
     license = licenses.mit;

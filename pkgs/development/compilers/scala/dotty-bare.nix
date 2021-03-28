@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, ncurses }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
   version = "0.26.0-RC1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;
-  buildInputs = [ makeWrapper ] ;
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
         done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Research platform for new language concepts and compiler technologies for Scala";
     longDescription = ''
        Dotty is a platform to try out new language concepts and compiler technologies for Scala.

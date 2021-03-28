@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , fltk
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         src/core/{conf,init,midiMapConf,patch}.cpp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, instead, qmake4Hook, zlib }:
+{ lib, stdenv, fetchFromGitHub, instead, qmake4Hook, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "instead-launcher";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://instead.syscall.ru/wiki/en/instead-launcher";
     description = "Install and play games from INSTEAD repository";
     license = licenses.gpl2;

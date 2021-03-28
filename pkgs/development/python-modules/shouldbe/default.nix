@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , pythonAtLeast
 , fetchPypi
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
   propagatedBuildInputs = [ forbiddenfruit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Assertion Helpers inspired by Shouldly";
     homepage =  "https://pypi.python.org/pypi/shouldbe/";
     license = licenses.mit;

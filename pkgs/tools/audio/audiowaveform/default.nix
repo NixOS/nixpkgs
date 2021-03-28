@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gtest, boost, gd, libsndfile, libmad, libid3tag }:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, boost, gd, libsndfile, libmad, libid3tag }:
 
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # One test is failing, see PR #101947
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ program to generate waveform data and render waveform images from audio files";
     longDescription = ''
       audiowaveform is a C++ command-line application that generates waveform data from either MP3, WAV, FLAC, or Ogg Vorbis format audio files.

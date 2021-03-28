@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libusb1 }:
+{ lib, stdenv, fetchFromGitHub, libusb1 }:
 
 stdenv.mkDerivation {
   pname = "rpiboot";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cp -r msd $out/share/rpiboot
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/raspberrypi/usbboot";
     description = "Utility to boot a Raspberry Pi CM/CM3/Zero over USB";
     license = licenses.asl20;

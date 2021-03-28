@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner, six, regex}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, six, regex}:
 
 buildPythonPackage rec {
   pname = "rebulk";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest pytestrunner ];
   propagatedBuildInputs = [ six regex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Toilal/rebulk/";
     license = licenses.mit;
     description = "Advanced string matching from simple patterns";

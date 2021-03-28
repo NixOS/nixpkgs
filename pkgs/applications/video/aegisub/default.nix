@@ -1,4 +1,5 @@
-{ config
+{ lib
+, config
 , stdenv
 , fetchurl
 , fetchpatch
@@ -45,7 +46,7 @@ assert alsaSupport -> (alsaLib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation
  rec {
   pname = "aegisub";
@@ -81,7 +82,7 @@ stdenv.mkDerivation
     intltool
   ];
 
-  buildInputs = with stdenv.lib; [
+  buildInputs = with lib; [
     libX11
     wxGTK
     fontconfig

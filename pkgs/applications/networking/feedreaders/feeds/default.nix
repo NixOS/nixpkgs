@@ -1,6 +1,6 @@
 { lib
 , callPackage
-, stdenv
+
 , fetchFromGitLab
 
 , appstream

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk_engines, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "vimix-gtk-themes";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{AUTHORS,LICENSE}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flat Material Design theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/vimix-gtk-themes";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , unzip
 , copyDesktopItems
@@ -8,7 +8,7 @@
 , isStereo ? false
 }:
 
-with stdenv.lib;
+with lib;
 let
   pname = "goattracker" + optionalString isStereo "-stereo";
   desktopItem = makeDesktopItem {

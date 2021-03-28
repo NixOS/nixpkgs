@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages
+{ lib, fetchFromGitHub, python3Packages
 , hackrf, rtl-sdr, airspy, limesuite, libiio
 , qt5
 , USRPSupport ? false, uhd }:

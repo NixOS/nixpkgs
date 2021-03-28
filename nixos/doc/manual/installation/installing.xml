@@ -374,7 +374,7 @@
         You may want to look at the options starting with
         <option><link linkend="opt-boot.loader.efi.canTouchEfiVariables">boot.loader.efi</link></option>
         and
-        <option><link linkend="opt-boot.loader.systemd-boot.enable">boot.loader.systemd</link></option>
+        <option><link linkend="opt-boot.loader.systemd-boot.enable">boot.loader.systemd-boot</link></option>
         as well.
        </para>
       </listitem>

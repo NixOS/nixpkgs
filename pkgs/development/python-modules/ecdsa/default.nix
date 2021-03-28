@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # Only needed for tests
   checkInputs = [ pkgs.openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
     license = licenses.mit;

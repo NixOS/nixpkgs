@@ -5,7 +5,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "nexus";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ironpinguin ma27 ];
   };
 

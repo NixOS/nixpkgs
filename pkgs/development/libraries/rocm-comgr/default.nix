@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, clang, device-libs, lld, llvm }:
+{ lib, stdenv, fetchFromGitHub, cmake, clang, device-libs, lld, llvm }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${version}";
-    hash = "sha256-JMzXg1Hw0iWcTnKu/NgW7rD8iagp724F01GaJbrJj9M=";
+    hash = "sha256-LbQqyJxRqb6vpXiYSkRlF1FeqXJJXktPafGmYDDK02U=";
   };
 
   sourceRoot = "source/lib/comgr";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
         -i CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "APIs for compiling and inspecting AMDGPU code objects";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
     license = licenses.ncsa;

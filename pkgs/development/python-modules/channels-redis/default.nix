@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , aioredis
 , asgiref
 , buildPythonPackage
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "channels_redis" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/django/channels_redis/";
     description = "Redis-backed ASGI channel layer implementation";
     license = licenses.bsd3;

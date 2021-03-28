@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, libftdi1
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, libftdi1
 , python3, pypy3
 
 # PyPy yields large improvements in build time and runtime performance, and
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vxhqs2fampglg3xlfwb35229iv96kvlwp1gyxrdrmlpznhkqdrk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ passthru.pythonPkg libftdi1 ];
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       creating bitstream files.
     '';
     homepage    = "http://www.clifford.at/icestorm/";
-    license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = lib.platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub } :
+{ lib, stdenv, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
   pname = "fbcat";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -d $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://jwilk.net/software/fbcat";
     description = "Framebuffer screenshot tool";
     license = licenses.gpl2Plus;

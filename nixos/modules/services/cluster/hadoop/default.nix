@@ -7,6 +7,7 @@ with lib;
   options.services.hadoop = {
     coreSite = mkOption {
       default = {};
+      type = types.attrsOf types.anything;
       example = literalExample ''
         {
           "fs.defaultFS" = "hdfs://localhost";
@@ -17,6 +18,7 @@ with lib;
 
     hdfsSite = mkOption {
       default = {};
+      type = types.attrsOf types.anything;
       example = literalExample ''
         {
           "dfs.nameservices" = "namenode1";
@@ -27,6 +29,7 @@ with lib;
 
     mapredSite = mkOption {
       default = {};
+      type = types.attrsOf types.anything;
       example = literalExample ''
         {
           "mapreduce.map.cpu.vcores" = "1";
@@ -37,6 +40,7 @@ with lib;
 
     yarnSite = mkOption {
       default = {};
+      type = types.attrsOf types.anything;
       example = literalExample ''
         {
           "yarn.resourcemanager.ha.id" = "resourcemanager1";
@@ -50,8 +54,7 @@ with lib;
       default = pkgs.hadoop;
       defaultText = "pkgs.hadoop";
       example = literalExample "pkgs.hadoop";
-      description = ''
-      '';
+      description = "";
     };
   };
 

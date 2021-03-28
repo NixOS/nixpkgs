@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "bat";
-  meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ nequissimus ]; };
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
   machine = { pkgs, ... }: { environment.systemPackages = [ pkgs.bat ]; };
 

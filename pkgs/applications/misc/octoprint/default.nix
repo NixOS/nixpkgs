@@ -3,6 +3,7 @@
 , lib
 , fetchFromGitHub
 , python3
+, nix-update-script
   # To include additional plugins, pass them here as an overlay.
 , packageOverrides ? self: super: {}
 }:
@@ -89,13 +90,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.5.1";
+              version = "1.5.3";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "04x58cjivslsrld341ip11c50d50p2q01090nsyji0j255v986j9";
+                sha256 = "sha256-ZL/P/YIHynPmP8ssZZUKZDJscBsSsCq3UtOHrTVLpec=";
               };
 
               propagatedBuildInputs = with super; [
@@ -143,7 +144,9 @@ let
 
               postPatch = let
                 ignoreVersionConstraints = [
+                  "emoji"
                   "sentry-sdk"
+                  "watchdog"
                 ];
               in
                 ''
@@ -170,9 +173,12 @@ let
                 "test_set_external_modification"
               ];
 
-              passthru.python = self.python;
+              passthru = {
+                python = self.python;
+                updateScript = nix-update-script { attrPath = "octoprint"; };
+              };
 
-              meta = with stdenv.lib; {
+              meta = with lib; {
                 homepage = "https://octoprint.org/";
                 description = "The snappy web interface for your 3D printer";
                 license = licenses.agpl3;

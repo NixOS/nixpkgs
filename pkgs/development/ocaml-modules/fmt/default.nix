@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.05"
+if !lib.versionAtLeast ocaml.version "4.05"
 then throw "fmt is not available for OCaml ${ocaml.version}"
 else
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://erratique.ch/software/fmt";
     license = licenses.isc;
     description = "OCaml Format pretty-printer combinators";

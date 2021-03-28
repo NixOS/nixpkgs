@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "betterdiscordctl";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -Dm644 README.md $out/share/doc/betterdiscordctl/README.md
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bb010g/betterdiscordctl";
     description = "A utility for managing BetterDiscord on Linux";
     license = licenses.mit;

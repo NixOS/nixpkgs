@@ -3,7 +3,7 @@ let
   inherit (builtins) elemAt match;
   operators =
     let
-      matchWildCard = s: match "([^\*])(\.[\*])" s;
+      matchWildCard = s: match "([^*])(\\.[*])" s;
       mkComparison = ret: version: v: builtins.compareVersions version v == ret;
       mkIdxComparison = idx: version: v:
         let
@@ -52,8 +52,8 @@ let
       #
     };
   re = {
-    operators = "([=><!~\^]+)";
-    version = "([0-9\.\*x]+)";
+    operators = "([=><!~^]+)";
+    version = "([0-9.*x]+)";
   };
   parseConstraint = constraint:
     let

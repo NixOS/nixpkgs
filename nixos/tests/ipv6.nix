@@ -3,7 +3,7 @@
 
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "ipv6";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];
   };
 

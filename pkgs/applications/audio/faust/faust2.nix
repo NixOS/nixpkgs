@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , fetchFromGitHub
 , makeWrapper
-, pkgconfig
+, pkg-config
 , cmake
 , llvm
 , emscripten
@@ -16,7 +16,7 @@
 , which
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 
@@ -30,7 +30,7 @@ let
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
@@ -45,7 +45,7 @@ let
 
     inherit src;
 
-    nativeBuildInputs = [ makeWrapper pkgconfig cmake vim which ];
+    nativeBuildInputs = [ makeWrapper pkg-config cmake vim which ];
     buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
 
 
@@ -168,12 +168,11 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ pkg-config makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
-      libPath = stdenv.lib.makeLibraryPath propagatedBuildInputs;
+      libPath = lib.makeLibraryPath propagatedBuildInputs;
 
       postFixup = ''
 
@@ -209,7 +208,7 @@ let
 
     in stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       postFixup = ''
         for script in "$out"/bin/*; do

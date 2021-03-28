@@ -63,12 +63,11 @@ let
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
   source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
-
-  name = "thunderbird-bin-${version}";
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  pname = "thunderbird-bin";
+  inherit version;
 
   src = fetchurl {
     url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
@@ -169,7 +168,8 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
+    inherit writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
+    name = "thunderbird-bin-${version}";
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

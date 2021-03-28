@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
 
 let version = "1.0.1"; in
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   meta = {
     description = "An OCaml non-blocking streaming codec to decode and encode the JSON data format";
     homepage = "https://erratique.ch/software/jsonm";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vbgl ];
     platforms = ocaml.meta.platforms or [];
   };
 }

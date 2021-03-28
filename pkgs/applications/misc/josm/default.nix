@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm }:
+{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm }:
 let
   pname = "josm";
-  version = "17329";
+  version = "17580";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      sha256 = "0hra146akadqz9acj1xa2vzrmipfzf8li7sgsmk169xr991y653k";
+      sha256 = "05y1g48llnpbyv0r8dn3kyhcfqylsg4fbp540xn1n7sk3h17gwsw";
     };
     macosx = fetchurl {
-      url = "https://josm.openstreetmap.de/download/macosx/josm-macosx-${version}.zip";
-      sha256 = "0i09jnfqbcirmic9vayrp78lnyk4mfh7ax3v3cs8kyqhk930pscf";
+      url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java16.zip";
+      sha256 = "0aqkr6951zbi7a6zawvpsh51i0c4nyz2xkj52gg8n4vxli5pp3y1";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      sha256 = "0ybjca6dhnbwl3xqwrc91c444fzs1zrlnz7qr3l79s1vll9r4qd1";
+      sha256 = "04mxrirlyjy8i5s6y8w84kxv3wjlhhdfmlaxxlxd25viim73g3zv";
     };
   };
 in
@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
 
   installPhase =
     if stdenv.isDarwin then ''
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
         --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extensible editor for OpenStreetMap";
     homepage = "https://josm.openstreetmap.de/";
     changelog = "https://josm.openstreetmap.de/wiki/Changelog";

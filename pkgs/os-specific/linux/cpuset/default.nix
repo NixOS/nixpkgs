@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , fetchpatch
 , pythonPackages
@@ -35,7 +35,7 @@ pythonPackages.buildPythonApplication rec {
     make
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python application that forms a wrapper around the standard Linux filesystem calls to make using the cpusets facilities in the Linux kernel easier";
     homepage    = "https://github.com/lpechacek/cpuset";
     license     = licenses.gpl2;

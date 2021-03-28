@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Scrobbler";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "mopidy_scrobbler" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-scrobbler";
     description = "Mopidy extension for scrobbling played tracks to Last.fm.";
     license = licenses.asl20;

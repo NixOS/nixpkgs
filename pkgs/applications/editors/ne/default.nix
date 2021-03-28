@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, texinfo, texlive, perl, ghostscript }:
+{ lib, stdenv, fetchFromGitHub, ncurses, texinfo, texlive, perl, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "ne";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The nice editor";
     homepage = "http://ne.di.unimi.it/";
     longDescription = ''

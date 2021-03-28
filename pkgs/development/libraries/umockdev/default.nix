@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , docbook_xsl
 , fetchurl
 , glib
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     mv docs/reference $doc/share/doc/umockdev/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ flokli ];

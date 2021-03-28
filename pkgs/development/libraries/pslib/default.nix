@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, zlib, libpng, libjpeg, libungif, libtiff
+{ lib, stdenv, fetchurl, cmake, pkg-config, zlib, libpng, libjpeg, libungif, libtiff
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0m191ckqj1kj2yvxiilqw26x4vrn7pnlc2vy636yphjxr02q8bk4";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ zlib libpng libjpeg libungif libtiff ];
 
   doCheck = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     cp -r ../doc/. $doc/share/doc/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C-library for generating multi page PostScript documents";
     homepage = "http://pslib.sourceforge.net/";
     changelog =

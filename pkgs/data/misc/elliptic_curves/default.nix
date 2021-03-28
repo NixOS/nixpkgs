@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, python
+, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     export SAGE_SHARE="$out/share"
     export PYTHONPATH=$PWD
 
-    ${python.interpreter} ${spkg-install}
+    ${python2.interpreter} ${spkg-install}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Databases of elliptic curves";
     longDescription = ''
       Includes two databases:

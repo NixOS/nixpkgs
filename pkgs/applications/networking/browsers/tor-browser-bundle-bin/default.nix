@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeDesktopItem
 
@@ -33,9 +33,6 @@
 
 , gmp
 
-# Pluggable transport dependencies
-, python27
-
 # Wrapper runtime
 , coreutils
 , glibcLocales
@@ -57,7 +54,7 @@
 , extraPrefs ? ""
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   libPath = makeLibraryPath libPkgs;
@@ -91,19 +88,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.7";
+  version = "10.0.14";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "1phqsdf9lav0s111chlgyh4xiq2rm5zcxbx676i9711lkmc5l053";
+      sha256 = "1qgwzfdvix5gkqwapb4mki79mlfjzdlw68cq6q1qks0v138x528w";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "1nkppwdcjbrx8nh3d6qvvkgd5by6ja5ckjgpbkhavyy2pqlxyqk8";
+      sha256 = "1f13jsk8k8b725h4wr40kfnln8fq7lfl4r992xj4rf98gcydws56";
     };
   };
 in
@@ -390,7 +387,7 @@ stdenv.mkDerivation rec {
       $out/bin/tor-browser --version >/dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = ''
       Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of

@@ -1,4 +1,4 @@
-{ stdenv, lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
+{ lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
 , fetchFromGitHub, makeWrapper
 }:
 
@@ -24,7 +24,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   buildTools = [];
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [
     CGI
     DataStructureUtil
     FileCopyRecursive
@@ -73,10 +74,10 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.fusioninventory.org";
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ maintainers.phile314 ];
   };
 }

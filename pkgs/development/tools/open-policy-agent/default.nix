@@ -2,23 +2,30 @@
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.25.2";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    sha256 = "0y4jd1dpq7cy9nfacpf5jbh705gmky44j78q32kq5v566lzrsvvp";
+    sha256 = "sha256-IiPUmLgkD50LxOT+ZEf/UZJ0192GYOy9xk8U94Q0BWc=";
   };
 
   vendorSha256 = null;
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-X github.com/open-policy-agent/opa/version.Version=${version}"
-  ];
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X github.com/open-policy-agent/opa/version.Version=${version}")
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/opa --help
+    $out/bin/opa version | grep "Version: ${version}"
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "General-purpose policy engine";
@@ -30,6 +37,6 @@ buildGoModule rec {
     '';
     homepage = "https://www.openpolicyagent.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lewo ];
+    maintainers = with maintainers; [ lewo jk ];
   };
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "hydra-check";
-  version = "1.1.1";
+  version = "1.2.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = "hydra-check";
+    repo = pname;
     rev = version;
-    sha256 = "1dmsscsib8ckp496gsfqxmq8d35zs71n99xmziq9iprvy7n5clq2";
+    sha256 = "EegoQ8qTrFGFYbCDsbAOE4Afg9haLjYdC0Cux/yvSk8=";
   };
 
   propagatedBuildInputs = [

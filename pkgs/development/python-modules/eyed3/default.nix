@@ -1,11 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , python
 , isPyPy
 , six
-, lib
 , filetype
 , deprecation
 , dataclasses
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python module and command line program for processing ID3 tags";
     homepage    = "https://eyed3.nicfit.net/";
     license     = licenses.gpl2;

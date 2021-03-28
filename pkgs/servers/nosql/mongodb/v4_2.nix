@@ -13,5 +13,5 @@ in buildMongoDB {
   sha256 = "13yvhi1258skdni00bh6ph609whqsmhiimhyqy1gs2liwdvh5278";
   patches =
     [ ./forget-build-dependencies-4-2.patch ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ./asio-no-experimental-string-view-4-2.patch ];
+    ++ lib.optionals stdenv.isDarwin [ ./asio-no-experimental-string-view-4-2.patch ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, platform-tools, makeWrapper
+{ lib, stdenv, fetchFromGitHub, python3, platform-tools, makeWrapper
 , socat, go-mtpfs, adbfs-rootless
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = let
-    dependencies = stdenv.lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
+    dependencies = lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
   in ''
     runHook preInstall
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
     homepage = "https://github.com/google/adb-sync";
     license = licenses.asl20;

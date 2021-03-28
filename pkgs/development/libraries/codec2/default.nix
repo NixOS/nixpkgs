@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "codec2";
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";
     homepage = "http://www.rowetel.com/blog/?page_id=452";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
   };

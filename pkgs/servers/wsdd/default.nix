@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   patches = [
-    (fetchpatch {	
+    (fetchpatch {
       # https://github.com/christgau/wsdd/issues/72
-      name = "fix_send_messages_using_correct_socket.patch";	
-      url = "https://github.com/christgau/wsdd/commit/1ed74fe73a9fe2e2720859e2822116d65e4ffa5b.patch";	
-      sha256 = "1n9bqvh20nhnvnc5pxvzf9kk8nky6rmbmfryg65lfmr1hmg676zg";	
+      name = "fix_send_messages_using_correct_socket.patch";
+      url = "https://github.com/christgau/wsdd/commit/1ed74fe73a9fe2e2720859e2822116d65e4ffa5b.patch";
+      sha256 = "1n9bqvh20nhnvnc5pxvzf9kk8nky6rmbmfryg65lfmr1hmg676zg";
     })
   ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     tests.samba-wsdd = nixosTests.samba-wsdd;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/christgau/wsdd";
     description = "A Web Service Discovery (WSD) host daemon for SMB/Samba";
     maintainers = with maintainers; [ izorkin ];

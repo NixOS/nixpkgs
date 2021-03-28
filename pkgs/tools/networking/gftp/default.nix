@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, readline, ncurses, gettext, openssl, pkgconfig }:
+{ lib, stdenv, fetchurl, gtk2, readline, ncurses, gettext, openssl, pkg-config }:
 
 stdenv.mkDerivation {
   name = "gftp-2.0.19";
@@ -12,13 +12,13 @@ stdenv.mkDerivation {
     sed -i -e '/<stropts.h>/d' lib/pty.c
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 readline ncurses gettext openssl ];
 
   meta = {
     description = "GTK-based FTP client";
     homepage = "http://www.gftp.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

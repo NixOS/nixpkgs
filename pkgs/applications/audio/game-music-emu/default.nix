@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   version = "0.6.3";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "07857vdkak306d9s5g6fhmjyxk7vijzjhkmqb15s7ihfxx9lx8xb";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";
     description = "A collection of video game music file emulators";
     license = licenses.lgpl21Plus;

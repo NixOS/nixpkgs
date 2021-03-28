@@ -1,5 +1,0 @@
---- a/rtaudio.pc.in
-+++ b/rtaudio.pc.in
-@@ -9 +9 @@ Version: @PACKAGE_VERSION@
--Requires: @req@ 
-+Requires.private: @req@ 

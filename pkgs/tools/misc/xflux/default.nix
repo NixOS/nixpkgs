@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
+{lib, stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
 stdenv.mkDerivation {
   name = "xflux-2013-09-01";
   src = fetchurl {
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     sha256 = "cc50158fabaeee58c331f006cc1c08fd2940a126e99d37b76c8e878ef20c2021";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     gcc.cc
     libXxf86vm
     libXext
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
       when the sun rises.
     '';
     homepage = "https://justgetflux.com/";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.paholg ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.paholg ];
   };
 }

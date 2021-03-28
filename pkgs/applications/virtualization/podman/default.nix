@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
@@ -16,14 +16,18 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "2.2.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "166ch73pqx76ppfkhfg3zqxr71jf5pk5asl5bb5rwhyzf7f057q5";
+    sha256 = "sha256-+z28Z0KvaJa32+eTGFsNX8g/WVd3BohKoBnNPU/kpWM=";
   };
+
+  patches = [
+    ./remove-unconfigured-runtime-warn.patch
+  ];
 
   vendorSha256 = null;
 
@@ -33,7 +37,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
     gpgme
     libapparmor
@@ -51,20 +55,25 @@ buildGoModule rec {
     make docs
   '';
 
-  installPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
     mv bin/{podman-remote,podman}
   '' + ''
     install -Dm555 bin/podman $out/bin/podman
-    installShellCompletion --bash completions/bash/podman
-    installShellCompletion --zsh completions/zsh/_podman
+    installShellCompletion --bash completions/bash/*
+    installShellCompletion --fish completions/fish/*
+    installShellCompletion --zsh completions/zsh/*
     MANDIR=$man/share/man make install.man-nobuild
+  '' + lib.optionalString stdenv.isLinux ''
+    install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
+    install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
   '';
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
+    changelog = "https://github.com/containers/podman/blob/v${version}/changelog.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;

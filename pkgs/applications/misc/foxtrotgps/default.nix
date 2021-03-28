@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick, pkg-config
+{ lib, stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick, pkg-config
 , curl, gnome2, gpsd, gtk2, wrapGAppsHook
 , intltool, libexif, python3Packages, sqlite }:
 
@@ -6,8 +6,8 @@ let
   srcs = {
     foxtrot = fetchbzr {
       url = "lp:foxtrotgps";
-      rev = "326";
-      sha256 = "191pgcy5rng8djy22a5z9s8gssc73f9p5hm4ig52ra189cb48d8k";
+      rev = "329";
+      sha256 = "0fwgnsrah63h1xdgm5xdi5ancrz89shdp5sdzw1qc1m7i9a03rid";
     };
     screenshots = fetchbzr {
       url = "lp:foxtrotgps/screenshots";
@@ -17,23 +17,21 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "foxtrotgps";
-  version = "1.2.2+326";
+  version = "1.2.2+329";
 
   # Pull directly from bzr because gpsd API version 9 is not supported on latest release
   src = srcs.foxtrot;
 
-  patches = [
-    ./gps-status-fix.patch
+  nativeBuildInputs = [
+    pkg-config autoreconfHook texinfo help2man
+    imagemagick wrapGAppsHook intltool
   ];
-
-  nativeBuildInputs = [ pkg-config autoreconfHook texinfo help2man imagemagick wrapGAppsHook ];
 
   buildInputs = [
     curl.dev
     gnome2.libglade.dev
     gpsd
     gtk2.dev
-    intltool
     libexif
     sqlite.dev
     (python3Packages.python.withPackages (pythonPackages: with python3Packages;
@@ -49,7 +47,7 @@ in stdenv.mkDerivation rec {
   intltoolize --automake --copy --force
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPS/GIS application optimized for small screens";
     longDescription = ''
       An easy to use, free & open-source GPS/GIS application that works well on
@@ -58,7 +56,7 @@ in stdenv.mkDerivation rec {
       innovation.
     '';
     homepage = "https://www.foxtrotgps.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wucke13 ];
   };

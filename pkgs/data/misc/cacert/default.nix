@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nss, python3
+{ lib, stdenv, fetchurl, nss, python3
 , blacklist ? []
 
 # Used for tests only
@@ -7,7 +7,7 @@
 , openssl
 }:
 
-with stdenv.lib;
+with lib;
 
 let
 

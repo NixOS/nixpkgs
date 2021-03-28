@@ -1,10 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, boost, nixosTests
+{ lib, stdenv, fetchurl, pkg-config, boost, nixosTests
 , openssl, systemd, lua, luajit, protobuf
 , enableProtoBuf ? false
 }:
-assert enableProtoBuf -> protobuf != null;
-
-with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "pdns-recursor";
@@ -15,11 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1kzmliim2pwh04y3y6bpai9fm0qmdicrmff09fv5h5wahi4pzfdh";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost openssl systemd
     lua luajit
-  ] ++ optional enableProtoBuf protobuf;
+  ] ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [
     "--enable-reproducible"
@@ -32,7 +29,7 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.pdns-recursor;
   };
 
-  meta = {
+  meta = with lib; {
     description = "A recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;

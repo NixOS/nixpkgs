@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , gtk3
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "0.8.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "12f5gnq92ffnd5zaj04df7jrnsdz1zn4zcgpbf5p9qnd21i2y529";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       --replace /usr/share/xml/iso-codes ${isocodes}/share/xml/iso-codes
   '';
 
-  enginesPath = stdenv.lib.makeBinPath ([
+  enginesPath = lib.makeBinPath ([
     tesseract4
   ] ++ extraOcrEngines);
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${enginesPath}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/OCRFeeder";
     description = "Complete Optical Character Recognition and Document Analysis and Recognition program";
     maintainers = with maintainers; [ doronbehar ];

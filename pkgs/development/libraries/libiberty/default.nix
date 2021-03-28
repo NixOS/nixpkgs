@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ lib, stdenv, buildPackages
 , staticBuild ? stdenv.hostPlatform.isStatic
 }:
 
@@ -15,13 +15,13 @@ stdenv.mkDerivation {
   postUnpack = "sourceRoot=\${sourceRoot}/libiberty";
 
   configureFlags = [ "--enable-install-libiberty" ]
-    ++ stdenv.lib.optional (!staticBuild) "--enable-shared";
+    ++ lib.optional (!staticBuild) "--enable-shared";
 
-  postInstall = stdenv.lib.optionalString (!staticBuild) ''
+  postInstall = lib.optionalString (!staticBuild) ''
     cp pic/libiberty.a $out/lib*/libiberty.a
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gcc.gnu.org/";
     license = licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";

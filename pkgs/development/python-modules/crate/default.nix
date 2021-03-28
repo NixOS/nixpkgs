@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , urllib3
@@ -6,6 +6,7 @@
 , isPy3k
 , sqlalchemy
 , pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -28,7 +29,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with stdenv.lib; {
+  disabledTestPaths = lib.optionals stdenv.isDarwin [ "src/crate/client/test_http.py" ];
+
+  meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
     description = "A Python client library for CrateDB";
     license = licenses.asl20;

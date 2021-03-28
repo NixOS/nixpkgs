@@ -1,4 +1,4 @@
-{ stdenv, pkgs, python3, fetchpatch, glibcLocales }:
+{ lib, stdenv, pkgs, python3, fetchpatch, glibcLocales }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
@@ -62,7 +62,7 @@ with python3.pkgs; buildPythonApplication rec {
       and not test_birthdays_no_year"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://lostpackets.de/khal/";
     description = "CLI calendar application";
     license = licenses.mit;

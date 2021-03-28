@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, ncurses, pcre }:
+{ lib, stdenv, fetchurl, autoconf, ncurses, pcre }:
 
 stdenv.mkDerivation rec {
   name = "ccze-0.2.1-2";
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf ncurses pcre ];
 
-  preConfigure = '' autoheader && autoconf '';
+  preConfigure = "autoheader && autoconf ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, modular log colorizer";
     longDescription = ''
       Fast log colorizer written in C, intended to be a drop-in replacement

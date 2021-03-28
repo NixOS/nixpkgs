@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , ansible
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     HOME=$TMPDIR pytest tests/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jlaska/pytest-ansible";
     description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
     license = licenses.mit;

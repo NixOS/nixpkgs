@@ -41,12 +41,14 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = "cgminer";
         description = "User account under which cgminer runs";
       };
 
       pools = mkOption {
         default = [];  # Run benchmark
+        type = types.listOf (types.attrsOf types.str);
         description = "List of pools where to mine";
         example = [{
           url = "http://p2pool.org:9332";
@@ -57,6 +59,7 @@ in
 
       hardware = mkOption {
         default = []; # Run without options
+        type = types.listOf (types.attrsOf (types.either types.str types.int));
         description= "List of config options for every GPU";
         example = [
         {
@@ -83,6 +86,7 @@ in
 
       config = mkOption {
         default = {};
+        type = (types.either types.bool types.int);
         description = "Additional config";
         example = {
           auto-fan = true;
@@ -120,7 +124,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        LD_LIBRARY_PATH = ''/run/opengl-driver/lib:/run/opengl-driver-32/lib'';
+        LD_LIBRARY_PATH = "/run/opengl-driver/lib:/run/opengl-driver-32/lib";
         DISPLAY = ":${toString config.services.xserver.display}";
         GPU_MAX_ALLOC_PERCENT = "100";
         GPU_USE_SYNC_OBJECTS = "1";

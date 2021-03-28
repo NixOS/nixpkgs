@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytestCheckHook, case, psutil, fetchpatch }:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, pytestCheckHook, case, psutil, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "billiard";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook case psutil ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/celery/billiard";
     description = "Python multiprocessing fork with improvements and bugfixes";
     license = licenses.bsd3;

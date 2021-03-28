@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib }:
+{ fetchurl, lib, stdenv, zlib }:
 
 let version = "0.98"; in
   stdenv.mkDerivation {
@@ -25,8 +25,8 @@ let version = "0.98"; in
 
       homepage = "https://savannah.nongnu.org/projects/fastjar/";
 
-      license = stdenv.lib.licenses.gpl2Plus;
-      platforms = stdenv.lib.platforms.linux;
+      license = lib.licenses.gpl2Plus;
+      platforms = lib.platforms.linux;
       maintainers = [ ];
     };
   }

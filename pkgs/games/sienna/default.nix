@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "sienna";
@@ -13,7 +13,7 @@ let
     name = "sienna";
     exec = pname;
     icon = icon;
-    comment = "Fast-paced one button platformer"; 
+    comment = "Fast-paced one button platformer";
     desktopName = "Sienna";
     genericName = "sienna";
     categories = "Game;";
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast-paced one button platformer";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

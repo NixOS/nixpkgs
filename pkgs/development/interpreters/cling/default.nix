@@ -1,5 +1,5 @@
-{ stdenv
-, python
+{ lib, stdenv
+, python3
 , libffi
 , git
 , cmake
@@ -38,8 +38,10 @@ let
       chmod -R a+w ./tools/cling
     '';
 
-    nativeBuildInputs = [ python git cmake ];
+    nativeBuildInputs = [ python3 git cmake ];
     buildInputs = [ libffi llvmPackages_5.llvm zlib ];
+
+    strictDeps = true;
 
     cmakeFlags = [
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
@@ -50,7 +52,7 @@ let
       "-DCLING_INCLUDE_TESTS=ON"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "The Interactive C++ Interpreter";
       homepage = "https://root.cern/cling/";
       license = with licenses; [ lgpl21 ncsa ];
@@ -73,7 +75,7 @@ let
   flags = [
     "-nostdinc"
     "-nostdinc++"
-    "-isystem" "${stdenv.lib.getDev stdenv.cc.libc}/include"
+    "-isystem" "${lib.getDev stdenv.cc.libc}/include"
     "-I" "${unwrapped}/include"
     "-I" "${unwrapped}/lib/clang/5.0.2/include"
   ];

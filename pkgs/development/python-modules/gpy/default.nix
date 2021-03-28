@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "GPy"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gaussian process framework in Python";
     homepage = "https://sheffieldml.github.io/GPy";
     license = licenses.bsd3;

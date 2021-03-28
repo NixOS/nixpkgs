@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , writeText
@@ -8,7 +8,7 @@
 , vulkan-headers
 , vulkan-loader
 , glslang
-, pkgconfig
+, pkg-config
 , xlibsWrapper
 , libxcb
 , libXrandr
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     python3
   ];
@@ -80,18 +80,11 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${localGlslang}"
     "-DSPIRV_HEADERS_INSTALL_DIR=${localSpirvHeaders}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
   ];
-
-  # Help vulkan-loader find the validation layers
-  setupHook = writeText "setup-hook" ''
-    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
-  '';
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
@@ -99,7 +92,7 @@ stdenv.mkDerivation rec {
     sed "s|\([[:space:]]*set(INSTALL_DEFINES \''${INSTALL_DEFINES} -DRELATIVE_LAYER_BINARY=\"\)\(\$<TARGET_FILE_NAME:\''${TARGET_NAME}>\")\)|\1$out/lib/\2|" -i layers/CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official Khronos Vulkan validation layers";
     homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
     platforms   = platforms.linux;

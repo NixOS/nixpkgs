@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , cherrypy
@@ -24,7 +24,7 @@ buildPythonPackage {
   # can wrongly fail the check phase.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client side encrypted pastebin";
     homepage = "https://0bin.net/";
     license = licenses.wtfpl;

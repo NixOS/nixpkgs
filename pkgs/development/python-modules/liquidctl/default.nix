@@ -27,6 +27,10 @@ buildPythonPackage rec {
     smbus-cffi
   ];
 
+  # does not contain tests
+  doCheck = false;
+  pythonImportsCheck = [ "liquidctl" ];
+
   meta = with lib; {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
     homepage    = "https://github.com/liquidctl/liquidctl";

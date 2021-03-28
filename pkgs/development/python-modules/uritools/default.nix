@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, isPy27 }:
 
 buildPythonPackage rec {
   pname = "uritools";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "405917a31ce58a57c8ccd0e4ea290f38baf2f4823819c3688f5331f1aee4ccb0";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     license = licenses.mit;
     maintainers = [ maintainers.rvolosatovs ];

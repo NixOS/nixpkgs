@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, fftw, installShellFiles }:
 
 stdenv.mkDerivation {
   pname = "sonic-unstable";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0ah54nizb6iwcx277w104wsfnx05vrp4sh56d2pfxhf8xghg54m6";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "CC=cc" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation {
 
   postInstall = ''
     installManPage sonic.1
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -id $out/lib/libsonic.so.0.3.0 $out/lib/libsonic.so.0.3.0
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple library to speed up or slow down speech";
     homepage = "https://github.com/waywardgeek/sonic";
     license = licenses.asl20;

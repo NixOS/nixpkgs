@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , fetchFromGitLab
 , fetchpatch
 , python3
@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-lcJE+bMK2S2GObHMy/Fu12WGb3T1HrWjsNyZPz4/f4E=";
+    sha256 = "1phgp8fs0dlj74kbkqlvfniwc32daz47b3pvsxlfxqzyrp77xrfm";
   };
 
   nativeBuildInputs = [
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
-  ] ++ stdenv.lib.optional (!doCheck) python3;
+    pkg-config
+  ] ++ lib.optional (!doCheck) python3;
 
   buildInputs = [
     glib
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thunderbolt 3 device management daemon";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;

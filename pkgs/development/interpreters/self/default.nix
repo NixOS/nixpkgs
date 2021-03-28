@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXext, makeWrapper, ncurses, cmake }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXext, makeWrapper, ncurses, cmake }:
 
 stdenv.mkDerivation rec {
   # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       --set SELF_ROOT "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A prototype-based dynamic object-oriented programming language, environment, and virtual machine";
     homepage = "https://selflanguage.org/";
     license = licenses.bsd3;

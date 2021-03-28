@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte, wrapGAppsHook
+{ lib, stdenv, fetchurl, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
 , libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkgconfig wrapGAppsHook
+    automake autoconf intltool pkg-config wrapGAppsHook
     libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
   ];
 
@@ -43,8 +43,8 @@ stdenv.mkDerivation {
       unnecessary dependencies.
     '';
     homepage = "https://wiki.lxde.org/en/LXTerminal";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.velovix ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.velovix ];
+    platforms = lib.platforms.linux;
   };
 }

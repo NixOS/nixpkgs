@@ -14,8 +14,8 @@ let
       ClusterName=${cfg.clusterName}
       StateSaveLocation=${cfg.stateSaveLocation}
       SlurmUser=${cfg.user}
-      ${optionalString (cfg.controlMachine != null) ''controlMachine=${cfg.controlMachine}''}
-      ${optionalString (cfg.controlAddr != null) ''controlAddr=${cfg.controlAddr}''}
+      ${optionalString (cfg.controlMachine != null) "controlMachine=${cfg.controlMachine}"}
+      ${optionalString (cfg.controlAddr != null) "controlAddr=${cfg.controlAddr}"}
       ${toString (map (x: "NodeName=${x}\n") cfg.nodeName)}
       ${toString (map (x: "PartitionName=${x}\n") cfg.partitionName)}
       PlugStackConfig=${plugStackConfig}/plugstack.conf
@@ -25,7 +25,7 @@ let
 
   plugStackConfig = pkgs.writeTextDir "plugstack.conf"
     ''
-      ${optionalString cfg.enableSrunX11 ''optional ${pkgs.slurm-spank-x11}/lib/x11.so''}
+      ${optionalString cfg.enableSrunX11 "optional ${pkgs.slurm-spank-x11}/lib/x11.so"}
       ${cfg.extraPlugstackConfig}
     '';
 
@@ -274,6 +274,15 @@ in
         '';
       };
 
+      etcSlurm = mkOption {
+        type = types.path;
+        internal = true;
+        default = etcSlurm;
+        description = ''
+          Path to directory with slurm config files. This option is set by default from the
+          Slurm module and is meant to make the Slurm config file available to other modules.
+        '';
+      };
 
     };
 
@@ -308,7 +317,7 @@ in
           #!/bin/sh
           if [ -z "$SLURM_CONF" ]
           then
-            SLURM_CONF="${etcSlurm}/slurm.conf" "$EXE" "\$@"
+            SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
           else
             "$EXE" "\$0"
           fi

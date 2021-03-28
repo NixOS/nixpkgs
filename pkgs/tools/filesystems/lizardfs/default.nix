@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -12,7 +13,7 @@
 , docbook_xml_dtd_412
 , docbook_xsl
 , boost
-, pkgconfig
+, pkg-config
 , judy
 , pam
 , spdlog
@@ -32,18 +33,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rgaFhJvmA1RVDL4+vQLMC0GrdlgUlvJeZ5/JJ67C20Q=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [
     db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
     zlib boost judy pam spdlog fmt python3 systemdMinimal
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://lizardfs.com";
     description = "A highly reliable, scalable and efficient distributed file system";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rushmorem shamilton ];
+    # 'fprintf' was not declared in this scope
+    broken = true;
   };
 }

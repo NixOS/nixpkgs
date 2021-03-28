@@ -8,7 +8,7 @@ with pkgs.lib;
 let
   makeKafkaTest = name: kafkaPackage: (import ./make-test-python.nix ({
     inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];
     };
 
@@ -30,11 +30,6 @@ let
           '';
           package = kafkaPackage;
           zookeeper = "zookeeper1:2181";
-          # These are the default options, but UseCompressedOops doesn't work with 32bit JVM
-          jvmOptions = [
-            "-server" "-Xmx1G" "-Xms1G" "-XX:+UseParNewGC" "-XX:+UseConcMarkSweepGC" "-XX:+CMSClassUnloadingEnabled"
-            "-XX:+CMSScavengeBeforeRemark" "-XX:+DisableExplicitGC" "-Djava.awt.headless=true" "-Djava.net.preferIPv4Stack=true"
-          ] ++ optionals (! pkgs.stdenv.isi686 ) [ "-XX:+UseCompressedOops" ];
         };
 
         networking.firewall.allowedTCPPorts = [ 9092 ];
@@ -82,4 +77,5 @@ let
 in with pkgs; {
   kafka_2_4  = makeKafkaTest "kafka_2_4"  apacheKafka_2_4;
   kafka_2_5  = makeKafkaTest "kafka_2_5"  apacheKafka_2_5;
+  kafka_2_6  = makeKafkaTest "kafka_2_6"  apacheKafka_2_6;
 }

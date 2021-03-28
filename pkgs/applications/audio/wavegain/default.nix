@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "wavegain-1.3.1";
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   meta = {
     description = "ReplayGain for wave files";
     homepage = "https://github.com/MestreLion/wavegain";
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.robbinch ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.robbinch ];
   };
 }

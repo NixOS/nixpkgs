@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "vpcs";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''(
     cd src
-    ./mk.sh ${stdenv.buildPlatform.platform.kernelArch}
+    ./mk.sh ${stdenv.buildPlatform.linuxArch}
   )'';
 
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple virtual PC simulator";
     longDescription = ''
       The VPCS (Virtual PC Simulator) can simulate up to 9 PCs. You can

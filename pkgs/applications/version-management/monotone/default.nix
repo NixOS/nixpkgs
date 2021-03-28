@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, boost, zlib, botan, libidn
-, lua, pcre, sqlite, perl, pkgconfig, expect
+{ lib, stdenv, fetchurl, boost, zlib, botan, libidn
+, lua, pcre, sqlite, perl, pkg-config, expect
 , bzip2, gmp, openssl
 }:
 
 let
   version = "1.1";
-  perlVersion = stdenv.lib.getVersion perl;
+  perlVersion = lib.getVersion perl;
 in
 
 assert perlVersion != "";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./monotone-1.1-Adapt-to-changes-in-pcre-8.42.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost zlib botan libidn lua pcre sqlite expect
     openssl gmp bzip2 ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = true; # some tests fail (and they take VERY long)
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free distributed version control system";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

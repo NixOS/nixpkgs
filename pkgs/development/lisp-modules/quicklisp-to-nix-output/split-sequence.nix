@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''split-sequence'';
-  version = ''v2.0.0'';
+  baseName = "split-sequence";
+  version = "v2.0.0";
 
   parasites = [ "split-sequence/tests" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/split-sequence/2019-05-21/split-sequence-v2.0.0.tgz'';
-    sha256 = ''09cmmswzl1kahvlzgqv8lqm9qcnz5iqg8f26fw3mm9rb3dcp7aba'';
+    url = "http://beta.quicklisp.org/archive/split-sequence/2019-05-21/split-sequence-v2.0.0.tgz";
+    sha256 = "09cmmswzl1kahvlzgqv8lqm9qcnz5iqg8f26fw3mm9rb3dcp7aba";
   };
 
   packageName = "split-sequence";

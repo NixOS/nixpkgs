@@ -59,6 +59,12 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    # These tests depend on the current date, for example because of issues like this.
+    # This makes it possible for them to succeed on hydra and then begin to fail without
+    # any code changes.
+    # https://github.com/aws-cloudformation/cfn-python-lint/issues/1705
+    # See also: https://github.com/NixOS/nixpkgs/issues/108076
+    "TestQuickStartTemplates"
     # requires git directory
     "test_update_docs"
   ];

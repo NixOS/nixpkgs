@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "onesixtyone";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -D onesixtyone $out/bin/onesixtyone
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast SNMP Scanner";
     homepage = "https://github.com/trailofbits/onesixtyone";
     license = licenses.gpl2Plus;

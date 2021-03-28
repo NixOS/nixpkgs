@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "hr";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/LuRsT/hr";
     description = "A horizontal bar for your terminal";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , aiohttp, jsonrpc-base, pep8
 , pytestCheckHook
 , pytest-asyncio
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook pytest-asyncio ];
   pytestFlagsArray = [ "tests.py" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A JSON-RPC websocket client library for asyncio";
     homepage = "https://github.com/armills/jsonrpc-websocket";
     license = licenses.bsd3;

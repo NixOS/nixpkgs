@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchurl
 , nix-update-script
 , python3Packages
@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
   '';
 
   passthru = {
@@ -110,7 +110,7 @@ python3Packages.buildPythonApplication rec {
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;

@@ -148,8 +148,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   meta = {
     inherit version platforms;
     homepage = "https://www.winehq.org/";
-    license = with stdenv.lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; [ lgpl21Plus ];
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = with stdenv.lib.maintainers; [ avnik raskin bendlas ];
+    maintainers = with lib.maintainers; [ avnik raskin bendlas ];
   };
 })

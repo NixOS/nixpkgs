@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 # native deps.
-, runCommand, pkgconfig, meson, ninja, makeWrapper
+, runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
 , systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
@@ -12,16 +12,16 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals optionalString;
+inherit (lib) optional optionals optionalString;
 lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.2.1";
+  version = "5.3.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "aa37b744c400f437acba7a54aebcbdbe722ece743d342cbc39f2dd8087f05826";
+    sha256 = "fb6cb2c03f4fffbdd8a0098127383d03b14cf7d6abf3a0cd229fb13ff68ee33e";
   };
 
   outputs = [ "out" "dev" ];
@@ -43,14 +43,15 @@ unwrapped = stdenv.mkDerivation rec {
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
     echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
-    sed '/^[[:blank:]]*test_dstaddr,$/d' -i tests/config/doh2.test.lua
+    sed '/^[[:blank:]]*test_dstaddr,$/d' -i \
+      tests/config/doh2.test.lua modules/http/http_doh.test.lua
   '';
 
   preConfigure = ''
     patchShebangs scripts/
   '';
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
@@ -84,7 +85,7 @@ unwrapped = stdenv.mkDerivation rec {
     meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = "https://knot-resolver.cz";
     license = licenses.gpl3Plus;

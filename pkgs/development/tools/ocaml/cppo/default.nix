@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, ocamlbuild
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, ocamlbuild
 , buildDunePackage
 }:
 
 let
   pname = "cppo";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The C preprocessor for OCaml";
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.
@@ -17,7 +17,7 @@ let
 
 in
 
-if stdenv.lib.versionAtLeast ocaml.version "4.02" then
+if lib.versionAtLeast ocaml.version "4.02" then
 
 buildDunePackage rec {
   inherit pname;

@@ -1,5 +1,5 @@
 /*
-   Copyright: (C)2015-2017 Laurent Bercot.  http://skarnet.org/
+   Copyright: (C)2015-2020 Laurent Bercot.  http://skarnet.org/
    ISC license. See http://opensource.org/licenses/ISC
 
    Build-time requirements: skalibs.  http://skarnet.org/software/skalibs/
@@ -53,20 +53,24 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+
 #include <skalibs/uint64.h>
 #include <skalibs/types.h>
 #include <skalibs/bytestr.h>
 #include <skalibs/sgetopt.h>
 #include <skalibs/strerr2.h>
-#include <skalibs/env.h>
 #include <skalibs/allreadwrite.h>
 #include <skalibs/tai.h>
 #include <skalibs/iopause.h>
 #include <skalibs/djbunix.h>
-#include <skalibs/webipc.h>
+//#include <skalibs/webipc.h>
+// svanderburg: This header no longer exists, but socket.h provides the functions this module needs
+#include <skalibs/socket.h>
+#include <skalibs/exec.h>
 
 #define USAGE "sdnotify-wrapper [ -d fd ] [ -f ] [ -t timeout ] [ -k ] prog..."
 #define dieusage() strerr_dieusage(100, USAGE)
@@ -123,9 +127,9 @@ static inline int run_child (int fd, unsigned int timeout, pid_t pid, char const
   return 0 ;
 }
 
-int main (int argc, char const *const *argv, char const *const *envp)
+int main (int argc, char const *const *argv)
 {
-  char const *s = env_get2(envp, VAR) ;
+  char const *s = getenv(VAR) ;
   unsigned int fd = 1 ;
   unsigned int timeout = 0 ;
   int df = 1, keep = 0 ;
@@ -134,7 +138,7 @@ int main (int argc, char const *const *argv, char const *const *envp)
     subgetopt_t l = SUBGETOPT_ZERO ;
     for (;;)
     {
-      register int opt = subgetopt_r(argc, argv, "d:ft:k", &l) ;
+      int opt = subgetopt_r(argc, argv, "d:ft:k", &l) ;
       if (opt == -1) break ;
       switch (opt)
       {
@@ -149,7 +153,7 @@ int main (int argc, char const *const *argv, char const *const *envp)
   }
   if (!argc) dieusage() ;
 
-  if (!s) xpathexec_run(argv[0], argv, envp) ;
+  if (!s) xexec(argv) ;
   else
   {
     pid_t parent = getpid() ;
@@ -166,7 +170,7 @@ int main (int argc, char const *const *argv, char const *const *envp)
     }
     close(p[0]) ;
     if (fd_move((int)fd, p[1]) < 0) strerr_diefu1sys(111, "move descriptor") ;
-    if (keep) xpathexec_run(argv[0], argv, envp) ;
-    else xpathexec_r(argv, envp, env_len(envp), VAR, sizeof(VAR)) ;
+    if (keep) xexec(argv) ;
+    else xmexec_m(argv, VAR, sizeof(VAR)) ;
   }
 }

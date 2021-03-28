@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono6 }:
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono6 }:
 
 let
   pname = "mission-planner";
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ArduPilot ground station";
     longDescription = ''
       Full-featured ground station application for the ArduPilot open source

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , boost, python3, eigen
 , icestorm, trellis
 , llvmPackages
@@ -12,7 +12,7 @@
 let
   boostPython = boost.override { python = python3; enablePython = true; };
 in
-with stdenv; mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextpnr";
   version = "2021.01.02";
 
@@ -43,7 +43,6 @@ with stdenv; mkDerivation rec {
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
-  enableParallelBuilding = true;
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
       "-DARCH=generic;ice40;ecp5"

@@ -1,25 +1,36 @@
-{ stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, fixDarwinDylibNames, which }:
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "0.7.5";
+  version = "0.8.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "1wfbrydbk0f0blhg5my3m5gw8bspwh3rdg4w4mcalnrwpypzd4zrggc4aj3zm72c5jikx6pnjb2k9w1s075k84f6q8p8chlzb3s4qd2";
+    sha512 = "17q1jd2vih26yjjc4f9kg0qihrym8h0ydnli6z8p3h4rdwm4kfnvckrpkwminz5wl0k5z6d65dk7q4pynyfynp31d6s7q4yzkkqy6kc";
   };
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ which ]
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   configurePhase = ''
+    runHook preConfigure
     ./configure PREFIX=''${!outputDev} \
                 BINDIR=''${!outputBin}/bin \
-                MANDIR=''${!outputBin}/share/man
+                LIBDIR=''${!outputLib}/lib \
+                MANDIR=''${!outputMan}/share/man
+    runHook postConfigure
   '';
 
-  meta = with stdenv.lib; {
+  # Fix lib extension so that fixDarwinDylibNames detects it
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mv $lib/lib/liblowdown.{so,dylib}
+  '';
+
+  patches = lib.optional (!stdenv.hostPlatform.isStatic) ./shared.patch;
+
+  meta = with lib; {
     homepage = "https://kristaps.bsd.lv/lowdown/";
     description = "Simple markdown translator";
     license = licenses.isc;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 
@@ -7,20 +7,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpg123-1.26.3";
+  name = "mpg123-1.26.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/${name}.tar.bz2";
-    sha256 = "0vkcfdx0mqq6lmpczsmpa2jsb0s6dryx3i7gvr32i3w9b9w9ij9h";
+    sha256 = "sha256-CBmRVA33pmaykEmthw8pPPoohjs2SIq01Yzqp7WEZFQ=";
   };
 
   outputs = [ "out" "conplay" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+  buildInputs = [ perl ] ++ lib.optional (!stdenv.isDarwin) alsaLib;
 
-  configureFlags = stdenv.lib.optional
+  configureFlags = lib.optional
     (stdenv.hostPlatform ? mpg123)
     "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
 
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "http://mpg123.org";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.ftrvxmtrx ];
+    platforms = lib.platforms.unix;
   };
 }

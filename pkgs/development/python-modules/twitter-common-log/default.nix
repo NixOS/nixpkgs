@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , twitter-common-options
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ twitter-common-options twitter-common-dirutil ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Twitter's common logging library";
     homepage    = "https://twitter.github.io/commons/";
     license     = licenses.asl20;

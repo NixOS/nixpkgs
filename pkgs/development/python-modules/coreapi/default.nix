@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib,
   fetchFromGitHub,
   buildPythonPackage,
   django,
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library for Core API";
     homepage = "https://github.com/core-api/python-client";
     license = licenses.bsd3;

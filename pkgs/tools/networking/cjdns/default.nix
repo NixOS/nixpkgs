@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nodejs, which, python27, util-linux, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, nodejs, which, python27, util-linux, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "cjdns";
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which python27 nodejs ] ++
     # for flock
-    stdenv.lib.optional stdenv.isLinux util-linux;
+    lib.optional stdenv.isLinux util-linux;
 
   CFLAGS = "-O2 -Wno-error=stringop-truncation";
   buildPhase =
-    stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
+    lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.basic = nixosTests.cjdns;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = licenses.gpl3Plus;

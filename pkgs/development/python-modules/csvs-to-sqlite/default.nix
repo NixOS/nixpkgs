@@ -2,13 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
-, pytestrunner
 , click
 , dateparser
 , pandas
 , py-lru-cache
 , six
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -23,11 +22,6 @@ buildPythonPackage rec {
     sha256 = "0p99cg76d3s7jxvigh5ad04dzhmr6g62qzzh4i6h7x9aiyvdhvk4";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace pandas~=0.25.0 pandas
-  '';
-
   propagatedBuildInputs = [
     click
     dateparser
@@ -37,12 +31,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "Convert CSV files into a SQLite database";

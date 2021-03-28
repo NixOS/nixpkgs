@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
 , gettext
 , python3
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , gobject-introspection
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0pa6h3md688752l7cjggncnxv13c07nj584gbz9asdblljk3r9x1";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Maps";
     description = "A map application for GNOME 3";
     maintainers = teams.gnome.members;

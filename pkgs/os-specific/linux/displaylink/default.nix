@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     maintainers = with maintainers; [ nshalman abbradar peterhoeg eyjhb ];
     platforms = [ "x86_64-linux" "i686-linux" ];

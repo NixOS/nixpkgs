@@ -1,9 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
+, substituteAll
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gettext
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 , gtk-doc
 , meson
@@ -48,33 +50,42 @@
 
 assert cupsSupport -> cups != null;
 
-with stdenv.lib;
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-3.0";
+    gtk_binary_version = "3.0.0";
+  };
+
+in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
   version = "3.24.24";
 
-  outputs = [ "out" "dev" ] ++ optional withGtkDoc "devdoc";
+  outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
 
   setupHooks = [
-    ./hooks/gtk3-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
     sha256 = "12ipk1d376bai9v820qzhxba93kkh5abi6mhyqr4hwjvqmkl77fc";
   };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
+
     (fetchpatch {
       name = "Xft-setting-fallback-compute-DPI-properly.patch";
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
@@ -82,14 +93,75 @@ stdenv.mkDerivation rec {
     ./patches/3.0-darwin-x11.patch
   ];
 
-  separateDebugInfo = stdenv.isLinux;
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+    python3
+    sassc
+  ] ++ setupHooks ++ lib.optionals withGtkDoc [
+    docbook_xml_dtd_43
+    docbook-xsl-nons
+    gtk-doc
+    # For xmllint
+    libxml2
+  ];
+
+  buildInputs = [
+    libxkbcommon
+    epoxy
+    json-glib
+    isocodes
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+  ] ++ lib.optionals trackerSupport [
+    tracker
+  ];
+  #TODO: colord?
+
+  propagatedBuildInputs = with xorg; [
+    at-spi2-atk
+    atk
+    cairo
+    expat
+    fribidi
+    gdk-pixbuf
+    glib
+    gsettings-desktop-schemas
+    libICE
+    libSM
+    libXcomposite
+    libXcursor
+    libXi
+    libXrandr
+    libXrender
+    pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    # explicitly propagated, always needed
+    Cocoa
+  ] ++ lib.optionals waylandSupport [
+    mesa
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals xineramaSupport [
+    libXinerama
+  ] ++ lib.optionals cupsSupport [
+    cups
+  ];
 
   mesonFlags = [
-    "-Dgtk_doc=${boolToString withGtkDoc}"
+    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
     "-Dtests=false"
-    "-Dtracker3=${boolToString trackerSupport}"
-    "-Dbroadway_backend=${boolToString broadwaySupport}"
+    "-Dtracker3=${lib.boolToString trackerSupport}"
+    "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
   ];
+
+  doCheck = false; # needs X11
+
+  separateDebugInfo = stdenv.isLinux;
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
@@ -111,61 +183,7 @@ stdenv.mkDerivation rec {
     patchShebangs ''${files[@]}
   '';
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    makeWrapper
-    meson
-    ninja
-    pkgconfig
-    python3
-    sassc
-  ] ++ setupHooks ++ optionals withGtkDoc [
-    docbook_xml_dtd_43
-    docbook_xsl
-    gtk-doc
-    # For xmllint
-    libxml2
-  ];
-
-  buildInputs = [
-    libxkbcommon
-    epoxy
-    json-glib
-    isocodes
-  ]
-  ++ optional stdenv.isDarwin AppKit
-  ++ optional trackerSupport tracker
-  ;
-
-  propagatedBuildInputs = with xorg; [
-    at-spi2-atk
-    atk
-    cairo
-    expat
-    fribidi
-    gdk-pixbuf
-    glib
-    gsettings-desktop-schemas
-    libICE
-    libSM
-    libXcomposite
-    libXcursor
-    libXi
-    libXrandr
-    libXrender
-    pango
-  ]
-  ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
-  ++ optionals waylandSupport [ mesa wayland wayland-protocols ]
-  ++ optional xineramaSupport libXinerama
-  ++ optional cupsSupport cups
-  ;
-  #TODO: colord?
-
-  doCheck = false; # needs X11
-
-  postInstall = optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
@@ -178,7 +196,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Wrap demos
-  postFixup =  optionalString (!stdenv.isDarwin) ''
+  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
     demos=(gtk3-demo gtk3-demo-application gtk3-icon-browser gtk3-widget-factory)
 
     for program in ''${demos[@]}; do
@@ -194,7 +212,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
@@ -208,7 +226,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin vcunat lethalman worldofpeace ];
+    maintainers = with maintainers; [ raskin lethalman worldofpeace ];
     platforms = platforms.all;
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libtiff, libxml2, SDL, xorgproto, libX11
+{ lib, stdenv, fetchurl, zlib, libtiff, libxml2, SDL, xorgproto, libX11
 , libXi, libXmu, libXext, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --replace '#define PACKAGE ""' '#define PACKAGE "stardust"'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Space flight simulator";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

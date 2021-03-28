@@ -2,12 +2,12 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
   let inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   in {
     name = "locate";
-    meta.maintainers = with pkgs.stdenv.lib.maintainers; [ chkno ];
+    meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
     nodes = rec {
       a = {
         environment.systemPackages = with pkgs; [ sshfs ];
-        fileSystems = lib.mkVMOverride {
+        virtualisation.fileSystems = {
           "/ssh" = {
             device = "alice@b:/";
             fsType = "fuse.sshfs";

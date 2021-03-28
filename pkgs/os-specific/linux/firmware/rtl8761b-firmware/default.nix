@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "rtl8761b-firmware";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
       $out/lib/firmware/rtl_bt/rtl8761b_config.bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware for Realtek RTL8761b";
     license = licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ edibopp ];

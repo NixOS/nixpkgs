@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, fetchurl, oniguruma }:
+{ lib, stdenv, nixosTests, fetchurl, oniguruma }:
 
 stdenv.mkDerivation rec {
   pname = "jq";
@@ -21,18 +21,17 @@ stdenv.mkDerivation rec {
     "--mandir=\${man}/share/man"
   ]
   # jq is linked to libjq:
-    ++ stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+    ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
   doInstallCheck = true;
   installCheckTarget = "check";
 
   postInstallCheck = ''
     $bin/bin/jq --help >/dev/null
+    $bin/bin/jq -r '.values[1]' <<< '{"values":["hello","world"]}' | grep '^world$' > /dev/null
   '';
 
-  passthru.tests = { inherit (nixosTests) jq; };
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight and flexible command-line JSON processor";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin globin ];

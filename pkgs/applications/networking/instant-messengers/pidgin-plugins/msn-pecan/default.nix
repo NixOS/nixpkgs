@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pidgin} :
+{ lib, stdenv, fetchurl, pidgin} :
 
 stdenv.mkDerivation {
   name = "pidgin-msn-pecan-0.1.4";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Alternative MSN protocol plug-in for Pidgin IM";
     homepage = "https://github.com/felipec/msn-pecan";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 
   makeFlags = [

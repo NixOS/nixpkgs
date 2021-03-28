@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, cmake, ftgl, gl2ps, glew, gsl, llvm_5
 , libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre
-, pkgconfig, python, xxHash, zlib, zstd
+, pkg-config, python, xxHash, zlib, zstd
 , libAfterImage, giflib, libjpeg, libtiff, libpng
 , Cocoa, OpenGL, noSplash ? false }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mqvj42nax0bmz8h83jjlwjm3xxjy1n0n10inc8csip9ly28fs64";
   };
 
-  nativeBuildInputs = [ makeWrapper cmake pkgconfig ];
+  nativeBuildInputs = [ makeWrapper cmake pkg-config ];
   buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 lzma gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
     patchShebangs build/unix/
-  '' + stdenv.lib.optionalString noSplash ''
+  '' + lib.optionalString noSplash ''
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '';
 
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include"
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
+  ++ lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
     "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
 
@@ -79,8 +79,6 @@ stdenv.mkDerivation rec {
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
   ];
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;

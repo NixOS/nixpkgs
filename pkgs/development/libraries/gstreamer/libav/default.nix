@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , gettext
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.18.2";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "0jbzams9ggk3sq9ywv4gsl9rghyn203l2582m6l5c1sz9ka9m5in";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
-    pkgconfig
+    pkg-config
     python3
   ];
 

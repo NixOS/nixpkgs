@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nasm }:
+{ lib, stdenv, fetchFromGitHub, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "openh264";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A codec library which supports H.264 encoding and decoding";
     homepage = "https://www.openh264.org";
     license = licenses.bsd2;

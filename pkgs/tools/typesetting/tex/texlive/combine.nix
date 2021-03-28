@@ -2,10 +2,12 @@ params: with params;
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
-, extraName ? "combined", ...
+, extraName ? "combined"
+, extraVersion ? ""
+, ...
 }:
 let
-  pkgSet = removeAttrs args [ "pkgFilter" "extraName" ] // {
+  pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
       (bin.core.out // { pname = "core"; tlType = "bin"; })
@@ -27,7 +29,7 @@ let
       [ "de-macro" "pythontex" "dviasm" "texliveonfly" ];
     pkgNeedsRuby = pkg: pkg.tlType == "run" && pkg.pname == "match-parens";
     extraInputs =
-      lib.optional (lib.any pkgNeedsPython splitBin.wrong) python
+      lib.optional (lib.any pkgNeedsPython splitBin.wrong) python3
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
@@ -37,7 +39,7 @@ let
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
 in (buildEnv {
-  name = "texlive-${extraName}-${bin.texliveYear}";
+  name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
   extraPrefix = "/share/texmf";
 
@@ -49,6 +51,9 @@ in (buildEnv {
   ];
 
   buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
+
+  # This is set primarily to help find-tarballs.nix to do its job
+  passthru.packages = pkgList.all;
 
   postBuild = ''
     cd "$out"

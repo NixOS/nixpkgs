@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "metno"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to communicate with the met.no api";
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     license = licenses.mit;

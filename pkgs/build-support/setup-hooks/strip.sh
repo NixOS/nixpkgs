@@ -51,7 +51,7 @@ stripDirs() {
 
     if [ -n "${dirs}" ]; then
         header "stripping (with command $cmd and flags $stripFlags) in$dirs"
-        find $dirs -type f -exec $cmd $commonStripFlags $stripFlags '{}' \; #
+        find $dirs -type f -exec $cmd $commonStripFlags $stripFlags '{}' \; 2>/dev/null
         stopNest
     fi
 }

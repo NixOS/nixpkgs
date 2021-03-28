@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ant, jdk, junit }:
+{ lib, stdenv, fetchurl, ant, jdk, junit }:
 
 stdenv.mkDerivation rec {
   name = "junixsocket-1.3";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   ANT_ARGS =
     # Note that our OpenJDK on Darwin is currently 32-bit, so we have to build a 32-bit dylib.
     (if stdenv.is64bit then [ "-Dskip32=true" ] else [ "-Dskip64=true" ])
-    ++ [ "-Dgcc=cc" "-Dant.build.javac.source=1.6" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-DisMac=true";
+    ++ [ "-Dgcc=${stdenv.cc.targetPrefix}cc" "-Dant.build.javac.source=1.6" ]
+    ++ lib.optional stdenv.isDarwin "-DisMac=true";
 
   installPhase =
     ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A Java/JNI library for using Unix Domain Sockets from Java";
     homepage = "https://github.com/kohlschutter/junixsocket";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

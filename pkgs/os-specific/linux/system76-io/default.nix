@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 let
   version = "1.0.1";
   sha256 = "0qkgkkjy1isv6ws6hrcal75dxjz98rpnvqbm7agdcc6yv0c17wwh";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     install -D system76-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-io.ko
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" ];

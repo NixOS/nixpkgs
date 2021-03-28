@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitLab, perl, icmake, util-linux }:
+{ lib, stdenv, fetchFromGitLab, perl, icmake, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "yodl";
-  version = "4.02.02";
+  version = "4.03.02";
 
   nativeBuildInputs = [ icmake ];
 
   buildInputs = [ perl ];
 
   src = fetchFromGitLab {
-    sha256 = "1kf4h99p9i35fgas8z5wdy2qpd7gqfd645b5z7mfssjzsfdrv745";
+    sha256 = "sha256-ZxiF9He0JgqhbnQS2pE7Y85sED8avbdwGuVmFN8/XgE=";
     rev = version;
     repo = "yodl";
     owner = "fbb-git";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ./build install man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package that implements a pre-document language and tools to process it";
     homepage = "https://fbb-git.gitlab.io/yodl/";
     license = licenses.gpl3;

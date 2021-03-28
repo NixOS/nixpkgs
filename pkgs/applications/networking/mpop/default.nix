@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, gsasl, libidn, Security }:
+{ lib, stdenv, fetchurl, pkg-config, gnutls, gsasl, libidn, Security }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "mpop";
-  version = "1.4.11";
+  version = "1.4.13";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "1gcxvhin5y0q47svqbf90r5aip0cgywm8sq6m84ygda7km8xylwv";
+    sha256 = "sha256-s0mEZsZbZQrdGm55IJsnuoY3VnOkXJalknvtaFoyfcE=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gnutls gsasl libidn ]
     ++ optional stdenv.isDarwin Security;
 

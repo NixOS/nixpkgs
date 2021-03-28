@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchzip, mono }:
+{ lib, stdenv, buildEnv, fetchzip, mono }:
 
 let
   version = "0.12.0";
@@ -15,8 +15,8 @@ let
     meta = {
       description = "KeePass plugin to allow other programs to access SSH keys stored in a KeePass database for authentication";
       homepage    = "http://lechnology.com/software/keeagent";
-      platforms   = with stdenv.lib.platforms; linux;
-      license     = stdenv.lib.licenses.gpl2;
+      platforms   = with lib.platforms; linux;
+      license     = lib.licenses.gpl2;
       maintainers = [ ];
     };
 

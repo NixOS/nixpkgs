@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : rec {
   name = "misc";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];
   };
 
@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
       environment.variables.EDITOR = mkOverride 0 "emacs";
       documentation.nixos.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
-      fileSystems = mkVMOverride { "/tmp2" =
+      virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
           options = [ "mode=1777" "noauto" ];
         };

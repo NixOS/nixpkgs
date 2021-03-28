@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-prevalence'';
-  version = ''20200715-git'';
+  baseName = "cl-prevalence";
+  version = "20200715-git";
 
-  description = ''Common Lisp Prevalence Package'';
+  description = "Common Lisp Prevalence Package";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."s-sysdeps" args."s-xml" args."split-sequence" args."usocket" args."usocket-server" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-prevalence/2020-07-15/cl-prevalence-20200715-git.tgz'';
-    sha256 = ''1m2wrqnly9i35kjk2wydwywjmwkbh3a3f4ds7wl63q8kpn8g0ibd'';
+    url = "http://beta.quicklisp.org/archive/cl-prevalence/2020-07-15/cl-prevalence-20200715-git.tgz";
+    sha256 = "1m2wrqnly9i35kjk2wydwywjmwkbh3a3f4ds7wl63q8kpn8g0ibd";
   };
 
   packageName = "cl-prevalence";

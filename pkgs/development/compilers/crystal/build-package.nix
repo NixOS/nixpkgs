@@ -1,4 +1,4 @@
-{ stdenv, lib, crystal, shards, git, pkgconfig, which, linkFarm, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, crystal, shards, git, pkg-config, which, linkFarm, fetchFromGitHub, installShellFiles }:
 
 {
   # Some projects do not include a lock file, so you can pass one
@@ -61,12 +61,12 @@ stdenv.mkDerivation (mkDerivationArgs // {
   buildInputs = args.buildInputs or [ ] ++ [ crystal ]
     ++ lib.optional (format != "crystal") shards;
 
-  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ git installShellFiles pkgconfig which ];
+  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ git installShellFiles pkg-config which ];
 
   buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
     "runHook preBuild"
   ] ++ lib.optional (format == "make")
-    ''make ''${buildTargets:-build} $makeFlags''
+    "make \${buildTargets:-build} $makeFlags"
   ++ lib.optionals (format == "crystal") (lib.mapAttrsToList
     (bin: attrs: ''
       crystal ${lib.escapeShellArgs ([
@@ -84,14 +84,14 @@ stdenv.mkDerivation (mkDerivationArgs // {
   installPhase = args.installPhase or (lib.concatStringsSep "\n" ([
     "runHook preInstall"
   ] ++ lib.optional (format == "make")
-    ''make ''${installTargets:-install} $installFlags''
+    "make \${installTargets:-install} $installFlags"
   ++ lib.optionals (format == "crystal") (map
     (bin: ''
       install -Dm555 ${lib.escapeShellArgs [ bin "${placeholder "out"}/bin/${bin}" ]}
     '')
     (lib.attrNames crystalBinaries))
   ++ lib.optional (format == "shards")
-    ''install -Dm555 bin/* -t $out/bin''
+    "install -Dm555 bin/* -t $out/bin"
   ++ [
     ''
       for f in README* *.md LICENSE; do
@@ -111,9 +111,9 @@ stdenv.mkDerivation (mkDerivationArgs // {
   checkPhase = args.checkPhase or (lib.concatStringsSep "\n" ([
     "runHook preCheck"
   ] ++ lib.optional (format == "make")
-    ''make ''${checkTarget:-test} $checkFlags''
+    "make \${checkTarget:-test} $checkFlags"
   ++ lib.optional (format != "make")
-    ''crystal ''${checkTarget:-spec} $checkFlags''
+    "crystal \${checkTarget:-spec} $checkFlags"
   ++ [ "runHook postCheck" ]));
 
   doInstallCheck = args.doInstallCheck or true;

@@ -1,10 +1,8 @@
 { mkDerivation
-, stdenv
+, lib
 , fetchFromGitLab
 , pkg-config
 , cmake
-, qtbase
-, qttools
 , qtquickcontrols2
 , qtmultimedia
 , qtgraphicaleffects
@@ -26,14 +24,14 @@
 
 mkDerivation rec {
   pname = "neochat";
-  version = "1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r9n83kvc5v215lzmzh6hyc5q9i3w6znbf508qk0mdwdzxz4zry9";
+    sha256 = "sha256-HvLPsU+fxlyPDP7i9OSnZ/C1RjouOQCp+4WCl6FlFJo=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
@@ -57,7 +55,7 @@ mkDerivation rec {
     libpulseaudio
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for matrix, the decentralized communication protocol.";
     homepage = "https://apps.kde.org/en/neochat";
     license = licenses.gpl3Only;

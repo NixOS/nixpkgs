@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper
 , libsndfile, jack2Full
 , libGLU, libGL, lv2, cairo
 , ladspaH, php }:
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1apw8zh3a3il4smkjji6bih4vbsymj0hjs10fgkrd4nazqkjvgyd";
   };
 
-  nativeBuildInputs = [ pkgconfig php makeWrapper ];
+  nativeBuildInputs = [ pkg-config php makeWrapper ];
   buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "ETC_PATH=$(out)/etc"
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "release" ];
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Collection of open-source audio plugins";
       longDescription = ''
         Compatible with follwing formats:

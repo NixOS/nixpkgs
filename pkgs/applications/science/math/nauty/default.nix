@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   checkTarget = "checks";
   meta = with lib; {
     inherit version;
-    description = ''Programs for computing automorphism groups of graphs and digraphs'';
+    description = "Programs for computing automorphism groups of graphs and digraphs";
     license = licenses.asl20;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

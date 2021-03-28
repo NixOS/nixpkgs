@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildEnv
+{ lib, stdenv, fetchFromGitHub, buildEnv
 , asio, boost, check, openssl, scons
 }:
 
@@ -10,13 +10,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.5";
+  version = "26.4.7";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    sha256 = "10sir0hxxglw9jsjrclfgrqm8n5zng6rwj2fgff141x9n9l55w7l";
+    sha256 = "0h7s670pcasq8wzprhyxqfca2cghi62b8xz2kikb2a86wd453qil";
     fetchSubmodules = true;
   };
 
@@ -47,10 +47,9 @@ in stdenv.mkDerivation rec {
     install -m 444 "scripts/packages/freebsd/LICENSE" "$out/$GALERA_LICENSE_DIR"
     install -m 444 "LICENSE"                          "$out/$GALERA_LICENSE_DIR/GPLv2"
     install -m 444 "asio/LICENSE_1_0.txt"             "$out/$GALERA_LICENSE_DIR/LICENSE.asio"
-    install -m 444 "www.evanjones.ca/LICENSE"         "$out/$GALERA_LICENSE_DIR/LICENSE.crc32c"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Galera 3 wsrep provider library";
     homepage = "https://galeracluster.com/";
     license = licenses.lgpl2;

@@ -21,7 +21,7 @@
 #     before = [ "sleep.target" ];
 #   };
 
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 stdenv.mkDerivation rec {
   pname = "zenstates";
   version = "0.0.1";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build $out/bin/zenstates
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux utility for Ryzen processors and motherboards";
     homepage = "https://github.com/r4m0n/ZenStates-Linux";
     license = licenses.mit;

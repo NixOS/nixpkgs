@@ -2,7 +2,7 @@
 , ipaddr, cstruct, lwt, rresult, logs, lru
 , tcpip, ethernet, stdlib-shims
 , alcotest, mirage-clock-unix
-, ppx_deriving
+, ppxlib, ppx_deriving
 }:
 
 buildDunePackage rec {
@@ -19,8 +19,8 @@ buildDunePackage rec {
     sha256 = "0cy95j184hi8fm1h6z6x1brjfrmbq3zjy2mqz99m8ys9vwkb63ma";
   };
 
-  nativeBuildInputs = [
-    ppx_deriving
+  buildInputs = [
+    ppxlib
   ];
 
   propagatedBuildInputs = [
@@ -33,6 +33,7 @@ buildDunePackage rec {
     tcpip
     ethernet
     stdlib-shims
+    ppx_deriving
   ];
 
   doCheck = true;

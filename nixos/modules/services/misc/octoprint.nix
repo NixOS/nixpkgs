@@ -66,6 +66,7 @@ in
       };
 
       plugins = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = plugins: [];
         defaultText = "plugins: []";
         example = literalExample "plugins: with plugins; [ themeify stlviewer ]";

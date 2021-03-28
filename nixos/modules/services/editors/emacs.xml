@@ -156,7 +156,7 @@ $ ./result/bin/emacs
 
 let
   myEmacs = pkgs.emacs; <co xml:id="ex-emacsNix-2" />
-  emacsWithPackages = (pkgs.emacsPackagesGen myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
+  emacsWithPackages = (pkgs.emacsPackagesFor myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
 in
   emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [ <co xml:id="ex-emacsNix-4" />
     magit          # ; Integrate git &lt;C-x g&gt;
@@ -254,10 +254,10 @@ in
     <example xml:id="module-services-emacs-querying-packages">
      <title>Querying Emacs packages</title>
 <programlisting><![CDATA[
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.elpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaStablePackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.orgPackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.elpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaStablePackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 ]]></programlisting>
     </example>
    </para>

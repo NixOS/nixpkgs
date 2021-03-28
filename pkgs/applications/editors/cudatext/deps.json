@@ -1,43 +1,43 @@
 {
   "EncConv": {
     "owner": "Alexey-T",
-    "rev": "2020.06.15",
-    "sha256": "07dpvq3ppfq3b70i1smkf7vwdlzq8qnxs3fk94hi9h1z36bz2rw3"
+    "rev": "2021.01.01",
+    "sha256": "18fp7yz2rl80a6xw7v4bgc4092l74fb6p6z4yf312r7gw7b8naq6"
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2020.09.05",
-    "sha256": "022yx5vic4hnc9lz53wvr4h7hf0h71801dzlilj55x5mf8p59072"
+    "rev": "2021.02.13",
+    "sha256": "1p2r2q1al6rcsdbbg8ilm4xn6w48bj348khxdmpak7vfwx9741h8"
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2020.11.02",
-    "sha256": "0shihlm1hg74m04qyrj2iic2ik0x7qggihmnylvvdry3y79d07fy"
+    "rev": "2021.03.05",
+    "sha256": "1p2pzha5dd4p23j2bv6jxphj596dlb5v8ixjzg4x2zglz2hir6yz"
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "6560bc35a2cf31399be8713ac189216afabf9f01",
-    "sha256": "1bjnd6pcd9ddkvl7ma05z7f8svq609kljwc7gvbszc76hdb8d54x"
+    "rev": "2021.03.16",
+    "sha256": "1sq9j2zaif019gl6nf391lyp8k9s38f5s6ci7k3z5v90hkz1dcql"
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2459ea2a2e50050f7e6ee59a17a52aae05ca4433",
-    "sha256": "155cwcmr9f23j4x13pidvb3vcgglawkxxpizjw90ajwhmg831acr"
+    "rev": "2021.03.08",
+    "sha256": "0xvnvx4qzp6nxi912i4zlnal91k6vbcsyfbz05ib73sz68xqd5qv"
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2020.10.04",
-    "sha256": "0ypbaca3y5biw2207yh3x5p28gm8g51qf7glm5622w3cgbrf9mdq"
+    "rev": "2021.03.16",
+    "sha256": "159s1rpl829bmaa4bllqhjm8z0vji1ncsd6hw2s8z8hz28n905k8"
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2020.10.04",
-    "sha256": "0z66cm9pgdi7whqaim6hva4aa08zrr1881n1fal7lnz6wlla824k"
+    "rev": "2021.03.16",
+    "sha256": "1a4mxcwjm9naxh4piqm5y93w2xd5rgl0vcn108wy1pkr221agg2q"
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2020.10.23",
-    "sha256": "1lljldqnixlh0j05fh594gccwzkgcxa50byq8wr9ld5ik5sf8khn"
+    "rev": "2021.02.18",
+    "sha256": "0fy6bmpdcl2aa8pb7zban6midkfwdj99x14hdghrv7cp8l4gcsg5"
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
@@ -46,8 +46,8 @@
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",
-    "rev": "2020.08.10",
-    "sha256": "1gzs2psyfhb9si1qyacxzfjb3dz2v255hv7y4jlkbxdxv0kckqr6"
+    "rev": "2021.02.01",
+    "sha256": "051jnrhfpl9n5pgrssf68lj732zxhvjbvna4746ngmdyxvw6dqfd"
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",

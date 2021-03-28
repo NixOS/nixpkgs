@@ -36,7 +36,7 @@
 , openldap
 , ortp
 , pango
-, pkgconfig
+, pkg-config
 , python
 , qtbase
 , qtgraphicaleffects
@@ -45,7 +45,7 @@
 , readline
 , speex
 , sqlite
-, stdenv
+
 , udev
 , zlib
 }:
@@ -125,7 +125,7 @@ mkDerivation rec {
     graphviz
     intltool
     makeWrapper
-    pkgconfig
+    pkg-config
   ];
 
   cmakeFlags = [

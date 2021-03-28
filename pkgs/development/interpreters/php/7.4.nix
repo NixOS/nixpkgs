@@ -4,8 +4,8 @@ let
   generic = (import ./generic.nix) _args;
 
   base = callPackage generic (_args // {
-    version = "7.4.13";
-    sha256 = "1nhzldjp8jfd1hivfyn5wydim5daibz0vkfxgys2xj8igs2kk8qm";
+    version = "7.4.16";
+    sha256 = "0gnfb4vaj71fiap0q9lk6vs1xs7l6sha60isw6aaw3zxgh00ywc5";
   });
 
 in base.withExtensions ({ all, ... }: with all; ([

@@ -1,5 +1,5 @@
 # this package was called gimp-print in the past
-{ stdenv, lib, fetchurl, makeWrapper, pkgconfig
+{ stdenv, lib, fetchurl, makeWrapper, pkg-config
 , ijs, zlib
 , gimp2Support ? false, gimp
 , cupsSupport ? true, cups, libusb-compat-0_1, perl
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s0b14hjwvbxksq7af5v8z9g2rfqv9jdmxd9d81m57f5mh6rad0p";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs =
     [ ijs zlib ]
     ++ lib.optionals gimp2Support [ gimp.gtk gimp ]
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # Testing is very, very long.
   # doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ghostscript and cups printer drivers";
     homepage = "https://sourceforge.net/projects/gimp-print/";
     license = licenses.gpl2;

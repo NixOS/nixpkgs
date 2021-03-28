@@ -1,4 +1,4 @@
-{ stdenv , darwin , fetchurl , blas , gfortran , lapack , python }:
+{ lib, stdenv , darwin , fetchurl , blas , gfortran , lapack , python }:
 
 stdenv.mkDerivation rec {
   pname = "petsc";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace configure \
       --replace /bin/sh /usr/bin/python
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
       --replace /usr/bin/install_name_tool ${darwin.cctools}/bin/install_name_tool
   '';
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Library of linear algebra algorithms for solving partial differential
       equations

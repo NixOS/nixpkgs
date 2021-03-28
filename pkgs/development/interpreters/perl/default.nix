@@ -39,15 +39,12 @@ let
         (if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
          else ./no-sys-dirs-5.31.patch)
       ]
-      ++ optional (versionOlder version "5.29.6")
-        # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
-        (fetchurl {
-          url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
-          sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
-        })
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optional crossCompiling ./MakeMaker-cross.patch;
+      ++ optional crossCompiling ./MakeMaker-cross.patch
+      # Backporting https://github.com/Perl/perl5/pull/17946, can be
+      # removed if there's ever a 5.30.x release with it included.
+      ++ optional (versionOlder version "5.32.1") ./aarch64-darwin.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -174,11 +171,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "b4447944a0aeff9590dc023d64f8ddf3de7669fb"; # Dec 22, 2020
+    crossVersion = "e53999d0c340769792ba18d749751b0df3d1d177"; # Mar 21, 2021
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1cignplkb29kcvkfwshakyij71w8srlfqbnb9pla98vya6r82rnb";
+      sha256 = "14vcpwjhq667yh0cs7ism70df8l7068vn4a0ww59hdjyj7yc84i6";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -206,15 +203,15 @@ in {
   perl532 = common {
     perl = pkgs.perl532;
     buildPerl = buildPackages.perl532;
-    version = "5.32.0";
-    sha256 = "1d6001cjnpxfv79000bx00vmv2nvdz7wrnyas451j908y7hirszg";
+    version = "5.32.1";
+    sha256 = "0b7brakq9xs4vavhg391as50nbhzryc7fy5i65r81bnq3j897dh3";
   };
 
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.5";
-    sha256 = "04iprc8qz6vpbgzqgwja5rc3csvmgq1rnnnl382l39hy69fsdqpr";
+    version = "5.33.8";
+    sha256 = "1zr6sdsfcmk86n3f8j65x07xkv29v0pi8bwc986ahmjx7x92xzgl";
   };
 }

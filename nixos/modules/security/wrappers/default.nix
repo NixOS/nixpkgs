@@ -10,16 +10,8 @@ let
       (n: v: (if v ? program then v else v // {program=n;}))
       wrappers);
 
-  securityWrapper = pkgs.stdenv.mkDerivation {
-    name            = "security-wrapper";
-    phases          = [ "installPhase" "fixupPhase" ];
-    buildInputs     = [ pkgs.libcap pkgs.libcap_ng pkgs.linuxHeaders ];
-    hardeningEnable = [ "pie" ];
-    installPhase = ''
-      mkdir -p $out/bin
-      $CC -Wall -O2 -DWRAPPER_DIR=\"${parentWrapperDir}\" \
-          -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper
-    '';
+  securityWrapper = pkgs.callPackage ./wrapper.nix {
+    inherit parentWrapperDir;
   };
 
   ###### Activation script for the setcap wrappers

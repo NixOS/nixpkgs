@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , lesstif
 , libX11, libXext, libXmu, libXinerama }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -m644 yeahwm.1.gz ${placeholder "out"}/share/man/man1/
   '';
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "An X window manager based on evilwm and aewm";
     longDescription = ''
       YeahWM is a h* window manager for X based on evilwm and aewm.

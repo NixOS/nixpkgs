@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 stdenv.mkDerivation {
   pname = "raspberrypi-armstubs";
@@ -27,10 +27,10 @@ stdenv.mkDerivation {
     "LD8=${stdenv.cc.targetPrefix}ld"
     "OBJCOPY8=${stdenv.cc.targetPrefix}objcopy"
     "OBJDUMP8=${stdenv.cc.targetPrefix}objdump"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "LD=${stdenv.cc.targetPrefix}ld"
-    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-    "OBJDUMP=${stdenv.cc.targetPrefix}objdump"
+    "CC7=${stdenv.cc.targetPrefix}cc"
+    "LD7=${stdenv.cc.targetPrefix}ld"
+    "OBJCOPY7=${stdenv.cc.targetPrefix}objcopy"
+    "OBJDUMP7=${stdenv.cc.targetPrefix}objdump"
   ]
   ++ optionals (stdenv.isAarch64) [ "armstub8.bin" "armstub8-gic.bin" ]
   ++ optionals (stdenv.isAarch32) [ "armstub7.bin" "armstub8-32.bin" "armstub8-32-gic.bin" ]
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     cp -v *.bin $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware related ARM stubs for the Raspberry Pi";
     homepage = https://github.com/raspberrypi/tools;
     license = licenses.bsd3;

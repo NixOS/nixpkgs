@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchurl, unzip, jre, makeDesktopItem, copyDesktopItems }:
 
 let
   desktopItem = makeDesktopItem {
@@ -18,8 +18,7 @@ stdenv.mkDerivation {
     sha256 = "0d5mzkwsbh9s9b1vyvpaawqc09b0q41l2a7pmwf7386b1fsx6d58";
   };
 
-  nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ copyDesktopItems unzip ];
   inherit jre;
 
   installPhase = ''
@@ -44,7 +43,7 @@ stdenv.mkDerivation {
 
   desktopItems = [ desktopItem ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.jgoodies.com/freeware/jdiskreport/";
     description = "A graphical utility to visualize disk usage";
     license = licenses.unfreeRedistributable; #TODO freedist, libs under BSD-3

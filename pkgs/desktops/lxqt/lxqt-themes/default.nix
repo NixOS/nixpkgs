@@ -25,9 +25,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Themes, graphics and icons for LXQt";
     homepage = "https://github.com/lxqt/lxqt-themes";
-    license = licenses.lgpl21;
+    description = "Themes, graphics and icons for LXQt";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , fetchpatch
 # Python bits:
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       py.test -xm "not assumption"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
     homepage = "https://github.com/joeyespo/grip";
     license = licenses.mit;

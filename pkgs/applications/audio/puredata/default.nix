@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
+{ lib, stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
 , alsaLib, libjack2, tk, fftw
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation  rec {
     wrapProgram $out/bin/pd --prefix PATH : ${tk}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''A real-time graphical programming environment for
                     audio, video, and graphical processing'';
     homepage = "http://puredata.info";

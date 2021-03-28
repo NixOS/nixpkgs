@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , twisted
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ twisted ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/txamqp/txamqp";
     description = "Library for communicating with AMQP peers and brokers using Twisted";
     license = licenses.asl20;

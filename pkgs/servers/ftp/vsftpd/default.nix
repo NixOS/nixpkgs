@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcap, openssl, pam }:
+{ lib, stdenv, fetchurl, libcap, openssl, pam }:
 
 stdenv.mkDerivation rec {
   name = "vsftpd-3.0.3";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very secure FTP daemon";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];

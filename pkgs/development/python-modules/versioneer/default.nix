@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, isPy27 }:
 
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # pip.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Version-string management for VCS-controlled trees";
     homepage = "https://github.com/warner/python-versioneer";
     license = licenses.publicDomain;

@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
+  lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
@@ -27,7 +27,7 @@ top-level attribute to `top-level/all-packages.nix`.
   debug ? false,
 }:
 
-with stdenv.lib;
+with lib;
 
 let
 
@@ -89,15 +89,6 @@ let
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
       })
 
-      # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
-      (fetchpatch {
-        name = "qtwebengine-bison-3.7-build.patch";
-        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
-        sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/";
-      })
-
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-darwin-fix-failed-static-assertion.patch
     ];
@@ -108,6 +99,7 @@ let
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
       ./qtwebkit.patch
+      ./qtwebkit-icu68.patch
 
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
@@ -119,12 +111,12 @@ let
     import ../qtModule.nix
     {
       inherit perl;
-      inherit (stdenv) lib;
+      inherit lib;
       # Use a variant of mkDerivation that does not include wrapQtApplications
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        { inherit lib; inherit debug; wrapQtAppsHook = null; }
         stdenvActual.mkDerivation;
     }
     { inherit self srcs patches; };
@@ -136,7 +128,7 @@ let
 
       mkDerivationWith =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
@@ -145,7 +137,7 @@ let
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
-        inherit developerBuild decryptSslTraffic;
+        inherit debug developerBuild decryptSslTraffic;
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
@@ -197,6 +189,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
+          inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;

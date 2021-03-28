@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "875527251c1fed99fcb90597c6abb7daa4bc0ed88e080b4c36f897b704668450";
+    sha256 = "c5b3681ce4d7a44c223ddddfdec4c8d2eadede3b11b598ac09c4dbf4b729e89b";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     uamqp
     azure-common
     azure-core

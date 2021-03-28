@@ -4,7 +4,7 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, python, ruby, perl
+, makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -25,7 +25,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python ruby perl;
+      stdenv python3 ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
@@ -88,6 +88,12 @@ let
         ++ combinePkgs (attrs.deps or {});
     };
 
+  snapshot = {
+    year = "2021";
+    month = "01";
+    day = "09";
+  };
+
   # create a derivation that contains an unpacked upstream TL package
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
@@ -110,7 +116,7 @@ let
         #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        https://texlive.info/tlnet-archive/2020/10/09/tlnet/archive
+        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -174,6 +180,7 @@ in
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
+            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )
         { inherit (tl)

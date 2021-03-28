@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig, writeText
+{ lib, fetchurl, callPackage, substituteAll, python3, pkg-config, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
 , ffmpeg, x264, libvpx, libwebp, x265
@@ -30,11 +30,11 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.0.2";
+  version = "4.0.6";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "1cs39jzi59hkl421xmhi549ndmdfzkg0ap45f4nlsn9zr9zwmp3x";
+    sha256 = "nGcvbZFGYd2nQ75LL4YN+xcWb7UsViA3OAqpcrTwieg=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ in buildPythonApplication rec {
     substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
   '';
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = with xorg; [
     libX11 xorgproto libXrender libXi
     libXtst libXfixes libXcomposite libXdamage
@@ -97,7 +97,7 @@ in buildPythonApplication rec {
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
+      --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
     )
   '';
 
@@ -110,7 +110,10 @@ in buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
-  passthru = { inherit xf86videodummy; };
+  passthru = {
+    inherit xf86videodummy;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     homepage = "http://xpra.org/";

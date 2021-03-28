@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qmake }:
+{ mkDerivation, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake }:
 
 mkDerivation rec {
   pname = "accounts-qt";
@@ -12,7 +12,7 @@ mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib libaccounts-glib ];
-  nativeBuildInputs = [ doxygen pkgconfig qmake ];
+  nativeBuildInputs = [ doxygen pkg-config qmake ];
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';

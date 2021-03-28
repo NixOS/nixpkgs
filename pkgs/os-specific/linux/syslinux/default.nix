@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
+{ lib, stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "syslinux";
@@ -63,8 +63,8 @@ stdenv.mkDerivation {
     touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
-  nativeBuildInputs = [ nasm perl python3 ];
-  buildInputs = [ libuuid makeWrapper ];
+  nativeBuildInputs = [ nasm perl python3 makeWrapper ];
+  buildInputs = [ libuuid ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     "PERL=perl"
     "HEXDATE=0x00000000"
   ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
+    ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     rm -rf $out/share/syslinux/com32
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2;

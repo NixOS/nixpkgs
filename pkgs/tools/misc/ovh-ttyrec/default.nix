@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zstd }:
+{ lib, stdenv, fetchFromGitHub, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "ovh-ttyrec";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp docs/*.1 $out/man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ovh/ovh-ttyrec/";
     description = "Terminal interaction recorder and player";
     license = licenses.bsd3;

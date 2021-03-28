@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , cookiecutter, networkx , pandas, tornado, tqdm
 , pytest }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cookiecutter networkx pandas tornado tqdm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/projectmesa/mesa";
     description = "An agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;

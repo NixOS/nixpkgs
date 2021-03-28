@@ -10,14 +10,14 @@
 # hardware problems with a new one.
 
 # Configuration
-{ stdenv, version
+{ lib, stdenv, version
 
 , features ? { grsecurity = false; xen_dom0 = false; }
 }:
 
-with stdenv.lib;
-with stdenv.lib.kernel;
-with (stdenv.lib.kernel.whenHelpers version);
+with lib;
+with lib.kernel;
+with (lib.kernel.whenHelpers version);
 
 let
 
@@ -174,6 +174,8 @@ let
                                               (whenAtLeast "4.17" yes) ];
       NF_TABLES_NETDEV            = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
+      NFT_REJECT_NETDEV           = whenAtLeast "5.11" module;
+
       # IP: Netfilter Configuration
       NF_TABLES_IPV4              = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
@@ -191,11 +193,17 @@ let
       NET_DROP_MONITOR = yes;
 
       # needed for ss
-      INET_DIAG         = module;
-      INET_TCP_DIAG     = module;
-      INET_UDP_DIAG     = module;
-      INET_RAW_DIAG     = whenAtLeast "4.14" module;
-      INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
+      # Use a lower priority to allow these options to be overridden in hardened/config.nix
+      INET_DIAG         = mkDefault module;
+      INET_TCP_DIAG     = mkDefault module;
+      INET_UDP_DIAG     = mkDefault module;
+      INET_RAW_DIAG     = whenAtLeast "4.14" (mkDefault module);
+      INET_DIAG_DESTROY = whenAtLeast "4.9" (mkDefault yes);
+
+      # enable multipath-tcp
+      MPTCP           = whenAtLeast "5.6" yes;
+      MPTCP_IPV6      = whenAtLeast "5.6" yes;
+      INET_MPTCP_DIAG = whenAtLeast "5.9" (mkDefault module);
     };
 
     wireless = {
@@ -236,8 +244,9 @@ let
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
+      DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = yes;
-      DRM_GMA3600            = yes;
+      DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
       DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
@@ -247,6 +256,15 @@ let
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
       # Allow device firmware updates
       DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
+      # amdgpu display core (DC) support
+      DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
+      DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
+      DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
+      DRM_AMD_DC_DCN2_1 = whenBetween "5.4" "5.6" yes;
+      DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
+      DRM_AMD_DC_DCN = whenAtLeast "5.11" yes;
+      DRM_AMD_DC_HDCP = whenAtLeast "5.5" yes;
+      DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
@@ -271,21 +289,31 @@ let
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
-      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
+      SND_SOC_SOF_APOLLOLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_CANNONLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_CANNONLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COFFEELAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_COFFEELAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COMETLAKE             = whenAtLeast "5.12" module;
       SND_SOC_SOF_COMETLAKE_H_SUPPORT   = whenOlder "5.8" yes;
-      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
-      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
-      SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = whenOlder "5.12" yes;
+      SND_SOC_SOF_ELKHARTLAKE           = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = whenOlder "5.12" yes;
+      SND_SOC_SOF_GEMINILAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_GEMINILAKE_SUPPORT    = whenOlder "5.12" yes;
       SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
       SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
       SND_SOC_SOF_HDA_LINK              = yes;
-      SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
+      SND_SOC_SOF_ICELAKE               = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ICELAKE_SUPPORT       = whenOlder "5.12" yes;
       SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
-      SND_SOC_SOF_JASPERLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_MERRIFIELD_SUPPORT    = yes;
-      SND_SOC_SOF_TIGERLAKE_SUPPORT     = yes;
+      SND_SOC_SOF_JASPERLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_JASPERLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_MERRIFIELD            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_MERRIFIELD_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_TIGERLAKE             = whenAtLeast "5.12" module;
+      SND_SOC_SOF_TIGERLAKE_SUPPORT     = whenOlder "5.12" yes;
     };
 
     usb-serial = {
@@ -353,6 +381,7 @@ let
       F2FS_FS             = module;
       F2FS_FS_SECURITY    = option yes;
       F2FS_FS_ENCRYPTION  = option yes;
+      F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
       NFSD_PNFS              = whenBetween "4.0" "4.6" yes;
@@ -399,6 +428,8 @@ let
       NLS_ISO8859_1    = module; # VFAT default for the iocharset= mount option
 
       DEVTMPFS = yes;
+
+      UNICODE = whenAtLeast "5.2" yes; # Casefolding support for filesystems
     };
 
     security = {
@@ -416,7 +447,12 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
-      SECURITY_LOCKDOWN_LSM            = whenAtLeast "5.4" yes;
+      RANDOM_TRUST_CPU                 = whenAtLeast "4.19" yes; # allow RDRAND to seed the RNG
+
+      MODULE_SIG            = no; # r13y, generates a random key during build and bakes it in
+      # Depends on MODULE_SIG and only really helps when you sign your modules
+      # and enforce signatures which we don't do by default.
+      SECURITY_LOCKDOWN_LSM = option no;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
@@ -626,7 +662,12 @@ let
       XZ_DEC_TEST              = option no;
     };
 
-    criu = optionalAttrs (features.criu or false) ({
+    criu = if (versionAtLeast version "4.19") then {
+      # Unconditionally enabled, because it is required for CRIU and
+      # it provides the kcmp() system call that Mesa depends on.
+      CHECKPOINT_RESTORE  = yes;
+    } else optionalAttrs (features.criu or false) ({
+      # For older kernels, CHECKPOINT_RESTORE is hidden behind EXPERT.
       EXPERT              = yes;
       CHECKPOINT_RESTORE  = yes;
     } // optionalAttrs (features.criu_revert_expert or true) {
@@ -654,7 +695,10 @@ let
 
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
-      KERNEL_XZ          = yes;
+
+      # use zstd for kernel compression if newer than 5.9, else xz.
+      KERNEL_XZ          = whenOlder "5.9" yes;
+      KERNEL_ZSTD        = whenAtLeast "5.9" yes;
 
       SYSVIPC            = yes;  # System-V IPC
 
@@ -738,6 +782,8 @@ let
 
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
+
+      NVME_MULTIPATH = whenAtLeast "4.15" yes;
 
       PSI = whenAtLeast "4.20" yes;
 

@@ -7,6 +7,11 @@ let
   numCerts = length (builtins.attrNames cfg.certs);
   _24hSecs = 60 * 60 * 24;
 
+  # Used to make unique paths for each cert/account config set
+  mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
+  mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
+  accountDirRoot = "/var/lib/acme/.lego/accounts/";
+
   # There are many services required to make cert renewals work.
   # They all follow a common structure:
   #   - They inherit this commonServiceConfig
@@ -19,7 +24,7 @@ let
       Type = "oneshot";
       User = "acme";
       Group = mkDefault "acme";
-      UMask = 0027;
+      UMask = 0022;
       StateDirectoryMode = 750;
       ProtectSystem = "full";
       PrivateTmp = true;
@@ -54,23 +59,35 @@ let
     '';
   };
 
-  # Previously, all certs were owned by whatever user was configured in
-  # config.security.acme.certs.<cert>.user. Now everything is owned by and
-  # run by the acme user.
-  userMigrationService = {
-    description = "Fix owner and group of all ACME certificates";
-
-    script = with builtins; concatStringsSep "\n" (mapAttrsToList (cert: data: ''
-      for fixpath in /var/lib/acme/${escapeShellArg cert} /var/lib/acme/.lego/${escapeShellArg cert}; do
+  # Ensures that directories which are shared across all certs
+  # exist and have the correct user and group, since group
+  # is configurable on a per-cert basis.
+  userMigrationService = let
+    script = with builtins; ''
+      chown -R acme .lego/accounts
+    '' + (concatStringsSep "\n" (mapAttrsToList (cert: data: ''
+      for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
           chmod -R u=rwX,g=rX,o= "$fixpath"
           chown -R acme:${data.group} "$fixpath"
         fi
       done
-    '') certConfigs);
+    '') certConfigs));
+  in {
+    description = "Fix owner and group of all ACME certificates";
 
-    # We don't want this to run every time a renewal happens
-    serviceConfig.RemainAfterExit = true;
+    serviceConfig = commonServiceConfig // {
+      # We don't want this to run every time a renewal happens
+      RemainAfterExit = true;
+
+      # These StateDirectory entries negate the need for tmpfiles
+      StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
+      StateDirectoryMode = 755;
+      WorkingDirectory = "/var/lib/acme";
+
+      # Run the start script as root
+      ExecStart = "+" + (pkgs.writeShellScript "acme-fixperms" script);
+    };
   };
 
   certToConfig = cert: data: let
@@ -101,11 +118,10 @@ let
       ${toString acmeServer} ${toString data.dnsProvider}
       ${toString data.ocspMustStaple} ${data.keyType}
     '';
-    mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
     certDir = mkHash hashData;
     domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
-    othersHash = mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
-    accountDir = "/var/lib/acme/.lego/accounts/" + othersHash;
+    accountHash = (mkAccountHash acmeServer data);
+    accountDir = accountDirRoot + accountHash;
 
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
@@ -142,9 +158,8 @@ let
     );
 
   in {
-    inherit accountDir selfsignedDeps;
+    inherit accountHash cert selfsignedDeps;
 
-    webroot = data.webroot;
     group = data.group;
 
     renewTimer = {
@@ -184,7 +199,10 @@ let
 
         StateDirectory = "acme/${cert}";
 
-        BindPaths = "/var/lib/acme/.minica:/tmp/ca /var/lib/acme/${cert}:/tmp/${keyName}";
+        BindPaths = [
+          "/var/lib/acme/.minica:/tmp/ca"
+          "/var/lib/acme/${cert}:/tmp/${keyName}"
+        ];
       };
 
       # Working directory will be /tmp
@@ -217,21 +235,27 @@ let
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
       wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
 
-      path = with pkgs; [ lego coreutils diffutils ];
+      path = with pkgs; [ lego coreutils diffutils openssl ];
 
       serviceConfig = commonServiceConfig // {
         Group = data.group;
 
-        # AccountDir dir will be created by tmpfiles to ensure correct permissions
-        # And to avoid deletion during systemctl clean
-        # acme/.lego/${cert} is listed so that it is deleted during systemctl clean
-        StateDirectory = "acme/${cert} acme/.lego/${cert} acme/.lego/${cert}/${certDir}";
+        # Keep in mind that these directories will be deleted if the user runs
+        # systemctl clean --what=state
+        # acme/.lego/${cert} is listed for this reason.
+        StateDirectory = [
+          "acme/${cert}"
+          "acme/.lego/${cert}"
+          "acme/.lego/${cert}/${certDir}"
+          "acme/.lego/accounts/${accountHash}"
+        ];
 
         # Needs to be space separated, but can't use a multiline string because that'll include newlines
-        BindPaths =
-          "${accountDir}:/tmp/accounts " +
-          "/var/lib/acme/${cert}:/tmp/out " +
-          "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates ";
+        BindPaths = [
+          "${accountDir}:/tmp/accounts"
+          "/var/lib/acme/${cert}:/tmp/out"
+          "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
+        ];
 
         # Only try loading the credentialsFile if the dns challenge is enabled
         EnvironmentFile = mkIf useDns data.credentialsFile;
@@ -248,19 +272,64 @@ let
 
       # Working directory will be /tmp
       script = ''
-        set -euo pipefail
+        set -euxo pipefail
+
+        # This reimplements the expiration date check, but without querying
+        # the acme server first. By doing this offline, we avoid errors
+        # when the network or DNS are unavailable, which can happen during
+        # nixos-rebuild switch.
+        is_expiration_skippable() {
+          pem=$1
+
+          # This function relies on set -e to exit early if any of the
+          # conditions or programs fail.
+
+          [[ -e $pem ]]
+
+          expiration_line="$(
+            set -euxo pipefail
+            openssl x509 -noout -enddate <$pem \
+                  | grep notAfter \
+                  | sed -e 's/^notAfter=//'
+          )"
+          [[ -n "$expiration_line" ]]
+
+          expiration_date="$(date -d "$expiration_line" +%s)"
+          now="$(date +%s)"
+          expiration_s=$[expiration_date - now]
+          expiration_days=$[expiration_s / (3600 * 24)]   # rounds down
+
+          [[ $expiration_days -gt ${toString cfg.validMinDays} ]]
+        }
+
+        ${optionalString (data.webroot != null) ''
+          # Ensure the webroot exists. Fixing group is required in case configuration was changed between runs.
+          # Lego will fail if the webroot does not exist at all.
+          (
+            mkdir -p '${data.webroot}/.well-known/acme-challenge' \
+            && chgrp '${data.group}' ${data.webroot}/.well-known/acme-challenge
+          ) || (
+            echo 'Please ensure ${data.webroot}/.well-known/acme-challenge exists and is writable by acme:${data.group}' \
+            && exit 1
+          )
+        ''}
 
         echo '${domainHash}' > domainhash.txt
 
         # Check if we can renew
-        # Certificates and account credentials must exist
-        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a "$(ls -1 accounts)" ]; then
+        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
 
           # When domains are updated, there's no need to do a full
           # Lego run, but it's likely renew won't work if days is too low.
           if [ -e certificates/domainhash.txt ] && cmp -s domainhash.txt certificates/domainhash.txt; then
-            lego ${renewOpts} --days ${toString cfg.validMinDays}
+            if is_expiration_skippable out/full.pem; then
+              echo 1>&2 "nixos-acme: skipping renewal because expiration isn't within the coming ${toString cfg.validMinDays} days"
+            else
+              echo 1>&2 "nixos-acme: renewing now, because certificate expires within the configured ${toString cfg.validMinDays} days"
+              lego ${renewOpts} --days ${toString cfg.validMinDays}
+            fi
           else
+            echo 1>&2 "certificate domain(s) have changed; will renew now"
             # Any number > 90 works, but this one is over 9000 ;-)
             lego ${renewOpts} --days 9001
           fi
@@ -317,7 +386,7 @@ let
       webroot = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/acme/acme-challenges";
+        example = "/var/lib/acme/acme-challenge";
         description = ''
           Where the webroot of the HTTP vhost is located.
           <filename>.well-known/acme-challenge/</filename> directory
@@ -550,12 +619,12 @@ in {
         example = literalExample ''
           {
             "example.com" = {
-              webroot = "/var/www/challenges/";
+              webroot = "/var/lib/acme/acme-challenge/";
               email = "foo@example.com";
               extraDomainNames = [ "www.example.com" "foo.example.com" ];
             };
             "bar.example.com" = {
-              webroot = "/var/www/challenges/";
+              webroot = "/var/lib/acme/acme-challenge/";
               email = "bar@example.com";
             };
           }
@@ -664,21 +733,33 @@ in {
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
 
-      # .lego and .lego/accounts specified to fix any incorrect permissions
-      systemd.tmpfiles.rules = [
-        "d /var/lib/acme/.lego - acme acme"
-        "d /var/lib/acme/.lego/accounts - acme acme"
-      ] ++ (unique (concatMap (conf: [
-          "d ${conf.accountDir} - acme acme"
-        ] ++ (optional (conf.webroot != null) "d ${conf.webroot}/.well-known/acme-challenge - acme ${conf.group}")
-      ) (attrValues certConfigs)));
+      systemd.targets = let
+        # Create some targets which can be depended on to be "active" after cert renewals
+        finishedTargets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
+          wantedBy = [ "default.target" ];
+          requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+          after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+        }) certConfigs;
 
-      # Create some targets which can be depended on to be "active" after cert renewals
-      systemd.targets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
-        wantedBy = [ "default.target" ];
-        requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
-        after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
-      }) certConfigs;
+        # Create targets to limit the number of simultaneous account creations
+        # How it works:
+        # - Pick a "leader" cert service, which will be in charge of creating the account,
+        #   and run first (requires + after)
+        # - Make all other cert services sharing the same account wait for the leader to
+        #   finish before starting (requiredBy + before).
+        # Using a target here is fine - account creation is a one time event. Even if
+        # systemd clean --what=state is used to delete the account, so long as the user
+        # then runs one of the cert services, there won't be any issues.
+        accountTargets = mapAttrs' (hash: confs: let
+          leader = "acme-${(builtins.head confs).cert}.service";
+          dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
+        in nameValuePair "acme-account-${hash}" {
+          requiredBy = dependantServices;
+          before = dependantServices;
+          requires = [ leader ];
+          after = [ leader ];
+        }) (groupBy (conf: conf.accountHash) (attrValues certConfigs));
+      in finishedTargets // accountTargets;
     })
   ];
 

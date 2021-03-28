@@ -2,33 +2,31 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, pandas
 , pytestrunner
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "awkward0";
-  version = "0.15.1";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward-0.x";
     rev = version;
-    sha256 = "17zrw25h6g5m4ik1c5piqb7q2bxrshfm4hm3lzfz4s8gi0xjm5gz";
+    sha256 = "039pxzgll2yz8xpr6bw788ymvgvqgna5kgl9m6d9mzi4yhbjsjpx";
   };
 
   nativeBuildInputs = [ pytestrunner ];
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pandas pytestCheckHook ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    # Almost all tests in this file fail
-    rm tests/test_persist.py
-    py.test
-  '';
+  # Can't find a fixture
+  disabledTests = [ "test_import_pandas" ];
+
+  pythonImportsCheck = [ "awkward0" ];
 
   meta = with lib; {
     description = "Manipulate jagged, chunky, and/or bitmasked arrays as easily as Numpy";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "bibclean";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prettyprint and syntax check BibTeX and Scribe bibliography data base files";
     homepage = "http://ftp.math.utah.edu/pub/bibclean";
     license = licenses.gpl2;

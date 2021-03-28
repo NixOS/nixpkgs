@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkgconfig
-, openssl,  zlib, boost, grpc, c-ares, abseil-cpp, protobuf3_8, libnsl }:
+{ lib, stdenv, fetchgit, fetchurl, git, cmake, pkg-config
+, openssl, boost, grpc, abseil-cpp, protobuf3_8, libnsl }:
 
 let
   sqlite3 = fetchurl rec {
@@ -129,8 +129,8 @@ in stdenv.mkDerivation rec {
   hardeningDisable = ["format"];
   cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
 
-  nativeBuildInputs = [ pkgconfig cmake git ];
-  buildInputs = [ openssl openssl.dev boostSharedStatic zlib grpc c-ares c-ares.cmake-config abseil-cpp protobuf3_8 libnsl ];
+  nativeBuildInputs = [ pkg-config cmake git ];
+  buildInputs = [ openssl openssl.dev boostSharedStatic grpc abseil-cpp protobuf3_8 libnsl ];
 
   preConfigure = ''
     export HOME=$PWD
@@ -157,10 +157,10 @@ in stdenv.mkDerivation rec {
     ./rippled --unittest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ripple P2P payment network reference server";
     homepage = "https://github.com/ripple/rippled";
-    maintainers = with maintainers; [ ehmry offline RaghavSood ];
+    maintainers = with maintainers; [ offline RaghavSood ];
     license = licenses.isc;
     platforms = [ "x86_64-linux" ];
   };

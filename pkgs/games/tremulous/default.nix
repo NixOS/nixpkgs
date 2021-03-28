@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libGLU, libGL, libX11, SDL, openal, runtimeShell }:
+{ lib, stdenv, fetchurl, unzip, libGLU, libGL, libX11, SDL, openal, runtimeShell }:
 stdenv.mkDerivation rec {
   pname = "tremulous";
   version = "1.1.0";
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     url = "http://releases.mercenariesguild.net/tremded/mg_tremded_source_1.01.tar.gz";
     sha256 = "1njrqlhzjvy9myddzkagszwdcf3m4h08wip888w2rmbshs6kz6ql";
   };
-  buildInputs = [ unzip libGLU libGL libX11 SDL openal ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libGLU libGL libX11 SDL openal ];
   unpackPhase = ''
     unzip $src1
     cd tremulous
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     done
   '';
   dontPatchELF = true;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A game that blends a team based FPS with elements of an RTS";
     longDescription = ''
       Tremulous is a free, open source game that blends a team based FPS with

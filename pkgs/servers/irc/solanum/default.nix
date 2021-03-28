@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var/lib/solanum"
     "--with-rundir=/run/solanum"
     "--with-logdir=/var/log/solanum"
-  ] ++ stdenv.lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.isLinux) [
     "--enable-sctp=${lksctp-tools.out}/lib"
   ];
 
@@ -50,7 +50,9 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "An IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
     license = licenses.gpl2Only;

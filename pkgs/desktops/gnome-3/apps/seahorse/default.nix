@@ -1,11 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , vala
 , meson
 , ninja
 , libpwquality
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , wrapGAppsHook
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-x0XdHebhog8ZorB6Q4uO98yiNaaqc0ENt/E3sCHpsqI=";
   };
 
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     itstool
     wrapGAppsHook
@@ -75,7 +74,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
     maintainers = teams.gnome.members;

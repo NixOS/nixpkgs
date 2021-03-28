@@ -1,21 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , biopython
 , docopt
 , flametree
 , numpy
 , proglog
+, pytestCheckHook
 , python-codon-tables
- }:
+, primer3
+, genome-collector
+, matplotlib
+}:
 
 buildPythonPackage rec {
   pname = "dnachisel";
-  version = "3.2.5";
+  version = "3.2.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "35301c5eda0baca5902403504e0b5a22eb65da92c2bbd23199d95c4a6bf0ef37";
+  src = fetchFromGitHub {
+    owner = "Edinburgh-Genome-Foundry";
+    repo = "DnaChisel";
+    rev = "v${version}";
+    sha256 = "0m88biw7sycjwsmncdybj9n3yf4n9cyvifv9zv7irm8ha3scchji";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +33,24 @@ buildPythonPackage rec {
     python-codon-tables
   ];
 
-  # no tests in tarball
-  doCheck = false;
+  checkInputs = [
+    primer3
+    genome-collector
+    matplotlib
+    pytestCheckHook
+  ];
 
+  # Disable tests which requires network access
+  disabledTests = [
+    "test_circular_sequence_optimize_with_report"
+    "test_constraints_reports"
+    "test_optimize_with_report"
+    "test_optimize_with_report_no_solution"
+    "test_avoid_blast_matches_with_list"
+    "test_avoid_phage_blast_matches"
+    "test_avoid_matches_with_list"
+    "test_avoid_matches_with_phage"
+   ];
   pythonImportsCheck = [ "dnachisel" ];
 
   meta = with lib; {

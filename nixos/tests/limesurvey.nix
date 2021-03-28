@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "limesurvey";
-  meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
+  meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
   machine = { ... }: {
     services.limesurvey = {

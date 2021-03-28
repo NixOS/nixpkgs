@@ -27,7 +27,7 @@ let
   makeBitwardenTest = backend: makeTest {
     name = "bitwarden_rs-${backend}";
     meta = {
-      maintainers = with pkgs.stdenv.lib.maintainers; [ jjjollyjim ];
+      maintainers = with pkgs.lib.maintainers; [ jjjollyjim ];
     };
 
     nodes = {

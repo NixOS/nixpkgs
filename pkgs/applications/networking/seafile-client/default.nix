@@ -1,19 +1,19 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools
 , seafile-shared, jansson, libsearpc
 , withShibboleth ? true, qtwebengine }:
 
 mkDerivation rec {
   pname = "seafile-client";
-  version = "7.0.10";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
-    rev = "v${version}";
-    sha256 = "082v1qbysrqb7m0lk56fpx8n403fjxbvbj0svm4mkjl6mzs2cv22";
+    rev = "b4b944921c7efef13a93d693c45c997943899dec";
+    sha256 = "2vV+6ZXjVg81JVLfWeD0UK+RdmpBxBU2Ozx790WFSyw=";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ qtbase qttools seafile-shared jansson libsearpc ]
     ++ lib.optional withShibboleth qtwebengine;
 

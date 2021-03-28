@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , pcre
 , qtbase
 , glib
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     setupHook
   ];
 
@@ -44,9 +44,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Various packaging tools and scripts for LXQt applications";
     homepage = "https://github.com/lxqt/lxqt-build-tools";
-    license = licenses.lgpl21;
+    description = "Various packaging tools and scripts for LXQt applications";
+    license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

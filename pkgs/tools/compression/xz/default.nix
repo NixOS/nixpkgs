@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
-  configureFlags = stdenv.lib.optional enableStatic "--disable-shared";
+  configureFlags = lib.optional enableStatic "--disable-shared";
 
   doCheck = true;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/share/doc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tukaani.org/xz/";
     description = "A general-purpose data compression software, successor of LZMA";
 

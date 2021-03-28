@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext, python3}:
+{lib, stdenv, fetchurl, gettext, python3}:
 
 stdenv.mkDerivation rec {
   pname = "iso-codes";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
     license = licenses.lgpl21;

@@ -1,18 +1,18 @@
-{ stdenv, python27Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-python27Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "printrun";
-  version = "1.6.0";
+  version = "2.0.0rc5";
 
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
     rev = "${pname}-${version}";
-    sha256 = "0nhcx1bi1hals0a6d6994y0kcwsfqx3hplwbmn9136hgrplg0l2l";
+    sha256 = "179x8lwrw2h7cxnkq7izny6qcb4nhjnd8zx893i77zfhzsa6kx81";
   };
 
-  propagatedBuildInputs = with python27Packages; [
-    wxPython30 pyserial dbus-python psutil numpy pyopengl pyglet cython
+  propagatedBuildInputs = with python3Packages; [
+    appdirs cython dbus-python numpy six wxPython_4_0 psutil pyglet pyopengl pyserial
   ];
 
   doCheck = false;
@@ -29,7 +29,7 @@ python27Packages.buildPythonApplication rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
     homepage = "https://github.com/kliment/Printrun";
     license = licenses.gpl3;

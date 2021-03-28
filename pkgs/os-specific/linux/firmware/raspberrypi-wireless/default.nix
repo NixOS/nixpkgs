@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   outputHashAlgo = "sha256";
   outputHash = "17k9y499kjc4zv7ivnsfrgfibwj0ldr3sqdgia4dackbr70jfg2h";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
     homepage = "https://github.com/RPi-Distro/firmware-nonfree";
     license = licenses.unfreeRedistributableFirmware;

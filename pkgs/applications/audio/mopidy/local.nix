@@ -5,11 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Local";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "14f78sb3wkg83dg3xcqlq77dh059zzcwry5l9ilyhnmvmyrkhqx0";
+    sha256 = "18w39mxpv8p17whd6zfw5653d21q138f8xd6ili6ks2g2dbm25i9";
   };
 
   propagatedBuildInputs = [

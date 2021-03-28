@@ -6,7 +6,7 @@
 , pybind11
 , setuptools_scm
 , pytestrunner
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,18 +31,10 @@ buildPythonPackage rec {
     pytestrunner
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  propagatedBuildInputs = [ numpy pandas ];
 
-  propagatedBuildInputs = [
-    numpy
-    pandas
-  ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "duckdb" ];
 
   meta = with lib; {
     description = "DuckDB is an embeddable SQL OLAP Database Management System";

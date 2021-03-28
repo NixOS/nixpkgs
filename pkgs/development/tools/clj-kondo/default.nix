@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "clj-kondo";
-  version = "2020.11.07";
+  version = "2021.02.13";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://raw.githubusercontent.com/borkdude/${pname}/v${version}/reflection.json";
-    sha256 = "0mwclqjh38alkddr5r7bfqn5lplx06h9gladi89kp06qdxc1hp7a";
+    sha256 = "ea5c18586fd8803b138a4dd197a0019d5e5a2c76ebe4925b9b54a10125a68c57";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "1xqryfcn82bp8wasqnllfgvhl5w9zm63yw8c2kgxz18dayhq4i31";
+    sha256 = "sha256-Rq7W5sP9nRB0TGRUSQIyC3U568uExmcM/gd+1HjAqac=";
   };
 
   dontUnpack = true;
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     native-image  \
       -jar ${src} \
       -H:Name=clj-kondo \
+      ${lib.optionalString stdenv.isDarwin ''-H:-CheckToolchain''} \
       -H:+ReportExceptionStackTraces \
       -J-Dclojure.spec.skip-macros=true \
       -J-Dclojure.compiler.direct-linking=true \

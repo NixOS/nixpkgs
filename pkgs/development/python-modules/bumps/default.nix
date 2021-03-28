@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six}:
+{ lib, buildPythonPackage, fetchPypi, six}:
 
 buildPythonPackage rec {
   pname = "bumps";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "9f92c05effd8175763799d19ca55592e89b053318f611148a6725159aea41d67";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.reflectometry.org/danse/software.html";
     description = "Data fitting with bayesian uncertainty analysis";
     maintainers = with maintainers; [ rprospero ];

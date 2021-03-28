@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage    = "http://mpmath.org/";
+  meta = with lib; {
+    homepage    = "https://mpmath.org/";
     description = "A pure-Python library for multiprecision floating arithmetic";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab
+{ lib, stdenv, fetchFromGitLab
 , cmake
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.dkrz.de/k202009/libaec";
     description = "Adaptive Entropy Coding library";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , unstableGitUpdater
 , buildGoModule
 , fetchFromGitHub
@@ -19,7 +19,7 @@ buildGoModule {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line utility for creating image macro style memes";
     homepage = "https://github.com/nomad-software/meme";
     license = licenses.mit;

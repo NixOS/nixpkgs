@@ -98,7 +98,7 @@ in
 
           See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
-        # which is at ../../../doc/multiple-output.xml
+        # which is at ../../../doc/multiple-output.chapter.md
       };
 
       man.enable = mkOption {
@@ -261,7 +261,7 @@ in
         ++ optionals cfg.doc.enable ([ manual.manualHTML nixos-help ]
            ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
 
-      services.mingetty.helpLine = mkIf cfg.doc.enable (
+      services.getty.helpLine = mkIf cfg.doc.enable (
           "\nRun 'nixos-help' for the NixOS manual."
       );
     })

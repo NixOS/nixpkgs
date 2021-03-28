@@ -33,6 +33,7 @@ function does all this.
 
 import io
 import os
+import re
 import sys
 import json
 import hashlib
@@ -83,7 +84,11 @@ def archive_paths_to(obj, paths, mtime):
 
         for path in paths:
             path = pathlib.Path(path)
-            files = itertools.chain([path], path.rglob("*"))
+            if path.is_symlink():
+                files = [path]
+            else:
+                files = itertools.chain([path], path.rglob("*"))
+
             for filename in sorted(files):
                 ti = append_root(tar.gettarinfo(filename))
 
@@ -122,16 +127,94 @@ class ExtractChecksum:
         return (self._digest.hexdigest(), self._size)
 
 
+FromImage = namedtuple("FromImage", ["tar", "manifest_json", "image_json"])
 # Some metadata for a layer
 LayerInfo = namedtuple("LayerInfo", ["size", "checksum", "path", "paths"])
 
 
-def add_layer_dir(tar, paths, mtime):
+def load_from_image(from_image_str):
+    """
+    Loads the given base image, if any.
+
+    from_image_str: Path to the base image archive.
+
+    Returns: A 'FromImage' object with references to the loaded base image,
+             or 'None' if no base image was provided.
+    """
+    if from_image_str is None:
+        return None
+
+    base_tar = tarfile.open(from_image_str)
+
+    manifest_json_tarinfo = base_tar.getmember("manifest.json")
+    with base_tar.extractfile(manifest_json_tarinfo) as f:
+        manifest_json = json.load(f)
+
+    image_json_tarinfo = base_tar.getmember(manifest_json[0]["Config"])
+    with base_tar.extractfile(image_json_tarinfo) as f:
+        image_json = json.load(f)
+
+    return FromImage(base_tar, manifest_json, image_json)
+
+
+def add_base_layers(tar, from_image):
+    """
+    Adds the layers from the given base image to the final image.
+
+    tar: 'tarfile.TarFile' object for new layers to be added to.
+    from_image: 'FromImage' object with references to the loaded base image.
+    """
+    if from_image is None:
+        print("No 'fromImage' provided", file=sys.stderr)
+        return []
+
+    layers = from_image.manifest_json[0]["Layers"]
+    checksums = from_image.image_json["rootfs"]["diff_ids"]
+    layers_checksums = zip(layers, checksums)
+
+    for num, (layer, checksum) in enumerate(layers_checksums, start=1):
+        layer_tarinfo = from_image.tar.getmember(layer)
+        checksum = re.sub(r"^sha256:", "", checksum)
+
+        tar.addfile(layer_tarinfo, from_image.tar.extractfile(layer_tarinfo))
+        path = layer_tarinfo.path
+        size = layer_tarinfo.size
+
+        print("Adding base layer", num, "from", path, file=sys.stderr)
+        yield LayerInfo(size=size, checksum=checksum, path=path, paths=[path])
+
+    from_image.tar.close()
+
+
+def overlay_base_config(from_image, final_config):
+    """
+    Overlays the final image 'config' JSON on top of selected defaults from the
+    base image 'config' JSON.
+
+    from_image: 'FromImage' object with references to the loaded base image.
+    final_config: 'dict' object of the final image 'config' JSON.
+    """
+    if from_image is None:
+        return final_config
+
+    base_config = from_image.image_json["config"]
+
+    # Preserve environment from base image
+    final_env = base_config.get("Env", []) + final_config.get("Env", [])
+    if final_env:
+        # Resolve duplicates (last one wins) and format back as list
+        resolved_env = {entry.split("=", 1)[0]: entry for entry in final_env}
+        final_config["Env"] = list(resolved_env.values())
+    return final_config
+
+
+def add_layer_dir(tar, paths, store_dir, mtime):
     """
     Appends given store paths to a TarFile object as a new layer.
 
     tar: 'tarfile.TarFile' object for the new layer to be added to.
     paths: List of store paths.
+    store_dir: the root directory of the nix store
     mtime: 'mtime' of the added files and the layer tarball.
            Should be an integer representing a POSIX time.
 
@@ -139,9 +222,9 @@ def add_layer_dir(tar, paths, mtime):
              the layer added.
     """
 
-    invalid_paths = [i for i in paths if not i.startswith("/nix/store/")]
+    invalid_paths = [i for i in paths if not i.startswith(store_dir)]
     assert len(invalid_paths) == 0, \
-        "Expecting absolute store paths, but got: {invalid_paths}"
+        f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
 
     # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
@@ -241,18 +324,23 @@ def main():
       else datetime.fromisoformat(conf["created"])
     )
     mtime = int(created.timestamp())
+    store_dir = conf["store_dir"]
+
+    from_image = load_from_image(conf["from_image"])
 
     with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
         layers = []
-        for num, store_layer in enumerate(conf["store_layers"]):
-            print(
-              "Creating layer", num,
-              "from paths:", store_layer,
-              file=sys.stderr)
-            info = add_layer_dir(tar, store_layer, mtime=mtime)
+        layers.extend(add_base_layers(tar, from_image))
+
+        start = len(layers) + 1
+        for num, store_layer in enumerate(conf["store_layers"], start=start):
+            print("Creating layer", num, "from paths:", store_layer,
+                  file=sys.stderr)
+            info = add_layer_dir(tar, store_layer, store_dir, mtime=mtime)
             layers.append(info)
 
-        print("Creating the customisation layer...", file=sys.stderr)
+        print("Creating layer", len(layers) + 1, "with customisation...",
+              file=sys.stderr)
         layers.append(
           add_customisation_layer(
             tar,
@@ -267,7 +355,7 @@ def main():
             "created": datetime.isoformat(created),
             "architecture": conf["architecture"],
             "os": "linux",
-            "config": conf["config"],
+            "config": overlay_base_config(from_image, conf["config"]),
             "rootfs": {
                 "diff_ids": [f"sha256:{layer.checksum}" for layer in layers],
                 "type": "layers",

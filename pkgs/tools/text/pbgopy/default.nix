@@ -1,19 +1,19 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pbgopy";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nakabonne";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0impgx9w9lk93b7p1vhjnbslr04655fn6csx7hj04kffzhyb3p1q";
+    sha256 = "sha256-P/MFDFMsqSTVErTM9izJJSMIbiOcbQ9Ya10/w6NRcYw=";
   };
 
-  vendorSha256 = "09hn92bi2rmixpsgckbi8f70widls40fwqqm7y7rqglyjqi7rdmw";
+  vendorSha256 = "sha256-S2X74My6wyDZOsEYTDilCFaYgV2vQzU0jOAY9cEkJ6A=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Copy and paste between devices";
     homepage = "https://github.com/nakabonne/pbgopy";
     license = licenses.mit;

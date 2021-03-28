@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , execnet
 , glob2
 , Mako
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     PATH=$PATH:$out/bin pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BDD library for the py.test runner";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
+{ lib, stdenv, fetchurl, pkg-config, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
 , buildEnv, config, runtimeShell
 }:
 
@@ -6,7 +6,7 @@ let
   # Choose your "paksets" of objects, images, text, music, etc.
   paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
 
-  result = with stdenv.lib; withPaks (
+  result = with lib; withPaks (
     if paksets == "*" then attrValues pakSpec # taking all
       else map (name: pakSpec.${name}) (splitString " " paksets)
   );
@@ -24,7 +24,7 @@ let
 
 
   # As of 2015/03, many packsets still didn't have a release for version 120.
-  pakSpec = stdenv.lib.mapAttrs
+  pakSpec = lib.mapAttrs
     (pakName: attrs: mkPak (attrs // {inherit pakName;}))
   {
     pak64 = {
@@ -115,8 +115,8 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
+    nativeBuildInputs = [ pkg-config unzip ];
+    buildInputs = [ zlib libpng bzip2 SDL SDL_mixer ];
 
     configurePhase = let
       # Configuration as per the readme.txt and config.template
@@ -152,7 +152,7 @@ let
       mv build/default/sim $out/bin/simutrans
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A simulation game in which the player strives to run a successful transport system";
       longDescription = ''
         Simutrans is a cross-platform simulation game in which the

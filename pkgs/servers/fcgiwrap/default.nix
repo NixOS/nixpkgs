@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkgconfig }:
+{ lib, stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcgiwrap";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
   configureFlags = [ "--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ systemd fcgi ];
 
   # systemd 230 no longer has libsystemd-daemon as a separate entity from libsystemd
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace libsystemd-daemon libsystemd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nginx.localdomain.pl/wiki/FcgiWrap";
     description = "Simple server for running CGI applications over FastCGI";
     maintainers = with maintainers; [ lethalman ];

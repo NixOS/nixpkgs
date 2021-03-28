@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, util-linux, libcap, libtirpc, libevent
+{ stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
 , python3, buildPackages, nixosTests, rpcsvc-proto
 , enablePython ? true
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # put it in the "lib" output, and the headers in "dev"
   outputs = [ "out" "dev" "lib" "man" ];
 
-  nativeBuildInputs = [ pkgconfig buildPackages.stdenv.cc rpcsvc-proto ];
+  nativeBuildInputs = [ pkg-config buildPackages.stdenv.cc rpcsvc-proto ];
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     nfs4-kerberos = nixosTests.nfs4.kerberos;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''

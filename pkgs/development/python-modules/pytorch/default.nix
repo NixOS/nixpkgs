@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null, magma ? null,
+  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
   mklDnnSupport ? true, useSystemNccl ? true,
-  openMPISupport ? false, openmpi ? null,
+  MPISupport ? false, mpi,
   buildDocs ? false,
   cudaArchList ? null,
 
@@ -29,16 +29,12 @@
 
   isPy3k, pythonOlder }:
 
-assert !openMPISupport || openmpi != null;
-
 # assert that everything needed for cuda is present and that the correct cuda versions are used
-assert !cudaSupport || cudatoolkit != null;
-assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
                         in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
-assert !(openMPISupport && cudaSupport) || openmpi.cudatoolkit == cudatoolkit;
+assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
 assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
@@ -76,27 +72,35 @@ let
   # (allowing FBGEMM to be built in pytorch-1.1), and may future proof this
   # derivation.
   brokenArchs = [ "3.0" ]; # this variable is only used as documentation.
-  cuda9ArchList = [
-    "3.5"
-    "5.0"
-    "5.2"
-    "6.0"
-    "6.1"
-    "7.0"
-    "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
-               # which leads me to believe this is the final cuda-9-compatible architecture.
-  ];
-  cuda10ArchList = cuda9ArchList ++ [
-    "7.5"
-    "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
-  ];
+
+  cudaCapabilities = rec {
+    cuda9 = [
+      "3.5"
+      "5.0"
+      "5.2"
+      "6.0"
+      "6.1"
+      "7.0"
+      "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
+                 # which leads me to believe this is the final cuda-9-compatible architecture.
+    ];
+
+    cuda10 = cuda9 ++ [
+      "7.5"
+      "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
+    ];
+
+    cuda11 = cuda10 ++ [
+      "8.0"
+      "8.0+PTX"  # < CUDA toolkit 11.0
+      "8.6"
+      "8.6+PTX"  # < CUDA toolkit 11.1
+    ];
+  };
   final_cudaArchList =
     if !cudaSupport || cudaArchList != null
     then cudaArchList
-    else
-      if lib.versions.major cudatoolkit.version == "9"
-      then cuda9ArchList
-      else cuda10ArchList; # the assert above removes any ambiguity here.
+    else cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
 
   # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
   # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
@@ -112,7 +116,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.7.1";
+  version = "1.8.0";
 
   disabled = !isPy3k;
 
@@ -127,7 +131,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-udpbSL8xnzf20A1pYYNlYjdp8ME8AVaAkMMiw53K6CU=";
+    sha256 = "sha256-qdZUtlxHZjCYoGfTdp5Bq3MtfXolWZrvib0kuzF3uIc=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -224,7 +228,7 @@ in buildPythonPackage rec {
     typing-extensions
     # the following are required for tensorboard support
     pillow six future tensorflow-tensorboard protobuf
-  ] ++ lib.optionals openMPISupport [ openmpi ]
+  ] ++ lib.optionals MPISupport [ mpi ]
     ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   checkInputs = [ hypothesis ninja psutil ];
@@ -267,7 +271,7 @@ in buildPythonPackage rec {
     cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     for f in $(ls $lib/lib/*.dylib); do
         install_name_tool -id $lib/lib/$(basename $f) $f || true
     done
@@ -291,12 +295,13 @@ in buildPythonPackage rec {
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
-
-  meta = {
+  meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
-    license     = lib.licenses.bsd3;
-    platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    license     = licenses.bsd3;
+    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    maintainers = with maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    # error: use of undeclared identifier 'noU'; did you mean 'no'?
+    broken = stdenv.isDarwin;
   };
 }

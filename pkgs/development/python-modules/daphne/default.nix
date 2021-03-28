@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
 , asgiref, autobahn, twisted, pytestrunner
 , hypothesis, pytest, pytest-asyncio, service-identity, pyopenssl
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Django ASGI (HTTP/WebSocket) server";
     license = licenses.bsd3;
     homepage = "https://github.com/django/daphne";

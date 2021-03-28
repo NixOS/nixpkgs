@@ -1,6 +1,6 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem
+{ lib, stdenv, wrapQtAppsHook, makeDesktopItem
 , fetchFromGitHub
-, cmake, qttools, pkgconfig
+, cmake, qttools, pkg-config
 , qtbase, qtdeclarative, qtgraphicaleffects
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
@@ -8,16 +8,14 @@
 , monero, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
 , randomx, zeromq, libgcrypt, libgpgerror
-, hidapi, rapidjson
+, hidapi, rapidjson, quirc
 , trezorSupport ? true
-,   libusb1  ? null
-,   protobuf ? null
-,   python3  ? null
+,   libusb1
+,   protobuf
+,   python3
 }:
 
-with stdenv.lib;
-
-assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
+with lib;
 
 let
   arch = if stdenv.isx86_64  then "x86-64"
@@ -28,17 +26,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.1.8";
+  version = "0.17.1.9";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "13cjrfdkr7c2ff8j2rg8hvhlc00af38vcs67wlx2109i2baq4pp3";
+    sha256 = "0143mmxk0jfb5pmjlx6v0knvf8v49kmkpjxlp6rw8lwnlf71xadn";
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig wrapQtAppsHook
+    cmake pkg-config wrapQtAppsHook
     (getDev qttools)
   ];
 
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
     monero miniupnpc unbound readline
     randomx libgcrypt libgpgerror
     boost libunwind libsodium pcsclite
-    zeromq hidapi rapidjson
+    zeromq hidapi rapidjson quirc
   ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
     ++ optionals stdenv.isDarwin [ qtmacextras ];
 
@@ -75,6 +73,10 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory(monero)' \
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)'
+
+    # use nixpkgs quirc
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory(external)' ""
   '';
 
   cmakeFlags = [ "-DARCH=${arch}" ];

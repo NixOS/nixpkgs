@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
 , pytestCheckHook, requests
 , pytest-timeout
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ itsdangerous ];
   checkInputs = [ pytestCheckHook requests hypothesis pytest-timeout ];
 
-  disabledTests = stdenv.lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.isDarwin [
     "test_get_machine_id"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "A WSGI utility library for Python";
     license = licenses.bsd3;

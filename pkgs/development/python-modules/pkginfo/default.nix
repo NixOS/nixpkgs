@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pkginfo";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   doCheck = false; # I don't know why, but with doCheck = true it fails.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/pkginfo";
     license = licenses.mit;
     description = "Query metadatdata from sdists / bdists / installed packages";

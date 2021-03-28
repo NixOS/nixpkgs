@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, fuse, openssl, asciidoc
+{ fetchurl, lib, stdenv, pkg-config, fuse, openssl, asciidoc
 , docbook_xml_dtd_45, docbook_xsl , libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig fuse openssl
+    [ pkg-config fuse openssl
       asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
     ];
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://httpfs.sourceforge.net/";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

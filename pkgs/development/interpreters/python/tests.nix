@@ -1,3 +1,10 @@
+# Tests for the Python interpreters, package sets and environments.
+#
+# Each Python interpreter has a `passthru.tests` which is the attribute set
+# returned by this function. For example, for Python 3 the tests are run with
+#
+# $ nix-build -A python3.tests
+#
 { stdenv
 , python
 , runCommand
@@ -7,6 +14,8 @@
 }:
 
 let
+  # Test whether the interpreter behaves in the different types of environments
+  # we aim to support.
   environmentTests = let
     envs = let
       inherit python;
@@ -83,6 +92,7 @@ let
 
   in lib.mapAttrs testfun envs;
 
+  # Integration tests involving the package set.
   # All PyPy package builds are broken at the moment
   integrationTests = lib.optionalAttrs (python.pythonAtLeast "3.7"  && (!python.isPyPy)) rec {
     # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
@@ -91,6 +101,24 @@ let
     };
   };
 
+  # Tests to ensure overriding works as expected.
+  overrideTests = let
+    extension = self: super: {
+      foobar = super.numpy;
+    };
+  in {
+    test-packageOverrides = let
+      myPython = let
+        self = python.override {
+          packageOverrides = extension;
+          inherit self;
+        };
+      in self;
+    in assert myPython.pkgs.foobar == myPython.pkgs.numpy; myPython.withPackages(ps: with ps; [ foobar ]);
+    # overrideScope is broken currently
+    # test-overrideScope = let
+    #  myPackages = python.pkgs.overrideScope extension;
+    # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
+  };
 
-
-in stdenv.lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests)
+in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests)

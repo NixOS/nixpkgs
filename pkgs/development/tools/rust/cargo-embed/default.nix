@@ -1,4 +1,4 @@
-{ stdenv, lib
+{ lib
 , rustPlatform, fetchFromGitHub
 , libusb1, pkg-config, rustfmt }:
 

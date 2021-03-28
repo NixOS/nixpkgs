@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
         --prefix PATH ":" "${procps}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://repo.or.cz/w/llpp.git";
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub enzime ];
+    maintainers = with maintainers; [ pSub ];
     license = licenses.gpl3;
   };
 }

@@ -1,4 +1,4 @@
-{ buildEnv, stdenv, callPackage, makeWrapper, makeDesktopItem }:
+{ buildEnv, lib, callPackage, makeWrapper, makeDesktopItem }:
 
 let
   description = "Action-adventure game, starring a certain quixotic frog";
@@ -33,7 +33,7 @@ in buildEnv {
       --run "cd $out/share/frogatto"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = true;
     homepage = "https://frogatto.com";
     description = description;

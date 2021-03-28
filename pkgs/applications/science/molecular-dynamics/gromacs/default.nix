@@ -1,12 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , hwloc
 , fftw
-, openmpi
 , perl
 , singlePrec ? true
 , mpiEnabled ? false
+, mpi
 , cpuAcceleration ? null
 }:
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fftw perl hwloc ]
-  ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
+  ++ (lib.optionals mpiEnabled [ mpi ]);
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.gromacs.org";
     license = licenses.gpl2;
     description = "Molecular dynamics software package";

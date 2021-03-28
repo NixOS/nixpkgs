@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -18,13 +18,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ]
-                          ++ stdenv.lib.optional (!isPy3k) ipaddress;
+                          ++ lib.optional (!isPy3k) ipaddress;
 
   # ImportError: No module named test_elasticsearch_dsl
   # Tests require a local instance of elasticsearch
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High level Python client for Elasticsearch";
     longDescription = ''
       Elasticsearch DSL is a high-level library whose aim is to help with

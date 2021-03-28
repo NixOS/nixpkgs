@@ -1,23 +1,45 @@
-{ lib, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
+, openssl, gmp, zlib, fetchFromGitHub, rustPlatform }:
+
+let
+  libPath = lib.makeLibraryPath [ gmp ];
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "kha";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0ycw1r364g5gwh8796dpv1israpg7zqwx8mcvnacv2lqj5iijmby";
+    sha256 = "1sl69ygdwhf80sx6m76x5gp1kwsw0rr1lv814cgzm8hvyr6g0jqa";
   };
 
-  cargoSha256 = "0hcaiy046d2gnkp6sfpnkkprb3nd94i9q8dgqxxpwrc1j157x6z9";
+  cargoSha256 = "1f881maf8jizd5ip7pc1ncbiq7lpggp0byma13pvqk7gisnqyr4r";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
+  OPENSSL_NO_VENDOR = 1;
   buildInputs = [ curl zlib openssl ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
+
+  patches = lib.optionals stdenv.isLinux [
+    # Run patchelf on the downloaded binaries.
+    # This necessary because Lean 4 now dynamically links to GMP.
+    (runCommand "0001-dynamically-patchelf-binaries.patch" {
+        CC = stdenv.cc;
+        patchelf = patchelf;
+        libPath = "$ORIGIN/../lib:${libPath}";
+      } ''
+     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+       --subst-var patchelf \
+       --subst-var dynamicLinker \
+       --subst-var libPath
+    '')
+  ];
 
   postInstall = ''
     pushd $out/bin
@@ -26,6 +48,8 @@ rustPlatform.buildRustPackage rec {
       ln -s elan $link
     done
     popd
+
+    wrapProgram $out/bin/elan --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .elan
     export HOME=$(mktemp -d)

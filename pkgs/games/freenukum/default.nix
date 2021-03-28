@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitLab
 , makeDesktopItem
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clone of the original Duke Nukum 1 Jump'n Run game";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ _0x4A6F ];

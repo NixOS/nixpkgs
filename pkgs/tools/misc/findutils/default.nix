@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , coreutils
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches = [ ./no-install-statedir.patch ]
     # fix gnulib tests on 32-bit ARM. Included on findutils master.
     # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
-    ++ stdenv.lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
+    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
           * xargs - build and execute command lines from standard input.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

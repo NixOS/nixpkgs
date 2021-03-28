@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-window-is-ready-remover";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Shell extension removing window is ready notification";
     homepage = "https://github.com/nunofarruca/WindowIsReady_Remover";
     license = licenses.asl20;

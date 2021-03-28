@@ -4,7 +4,6 @@
 , groff
 , less
 }:
-
 let
   py = python3.override {
     packageOverrides = self: super: {
@@ -26,17 +25,20 @@ let
     };
   };
 
-in with py.pkgs; buildPythonApplication rec {
+in
+with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.207"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.19.34"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-E6emaaPxIgYk5Zwh3oBHUrbye43/mGjzvVeMx/Re33w=";
+    sha256 = "sha256-RJ+ibZmOxH4r+pGI/rrkRES89u0IRUU3sSE5OFSJ2qw=";
   };
 
+  # https://github.com/aws/aws-cli/issues/4837
   postPatch = ''
-    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
+    substituteInPlace setup.py \
+      --replace "docutils>=0.10,<0.16" "docutils>=0.10"
   '';
 
   # No tests included

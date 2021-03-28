@@ -367,7 +367,7 @@ in {
 
       mailman-web-setup = {
         description = "Prepare mailman-web files and database";
-        before = [ "uwsgi.service" "mailman-uwsgi.service" ];
+        before = [ "mailman-uwsgi.service" ];
         requiredBy = [ "mailman-uwsgi.service" ];
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         script = ''

@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''named-readtables'';
-  version = ''20200925-git'';
+  baseName = "named-readtables";
+  version = "20200925-git";
 
   parasites = [ "named-readtables/test" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/named-readtables/2020-09-25/named-readtables-20200925-git.tgz'';
-    sha256 = ''0klbvv2syv8a8agacxdjrmmhibvhgfbxxwv6k4hx0ifk6n5iazxl'';
+    url = "http://beta.quicklisp.org/archive/named-readtables/2020-09-25/named-readtables-20200925-git.tgz";
+    sha256 = "0klbvv2syv8a8agacxdjrmmhibvhgfbxxwv6k4hx0ifk6n5iazxl";
   };
 
   packageName = "named-readtables";

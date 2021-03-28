@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, maven, jdk }:
+{ lib, stdenv, fetchFromGitHub, maven, jdk }:
 
 let
   version = "1.2020.14";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     cp "target/plantuml.war" "$out/webapps/plantuml.war"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A web application to generate UML diagrams on-the-fly.";
     homepage = "https://plantuml.com/";
     license = licenses.gpl3;

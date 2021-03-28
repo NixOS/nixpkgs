@@ -40,7 +40,7 @@ in rec {
       sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
     '';
 
-    postBuild = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    postBuild = lib.optionalString (!stdenv.isDarwin) ''
       ( cd src; make $makeFlags "''${makeFlagsArray[@]}" liblua.so )
     '';
   };

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, makeWrapper,
-  pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
+{ lib, stdenv, fetchurl, makeWrapper,
+  pkg-config, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
   bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
   docs ? false, xmlto, libselinux, ldns
   }:
 
 let
-  binPath = stdenv.lib.makeBinPath [
+  binPath = lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
   ];
 in
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     "-DNSS_PKCS11_2_0_COMPAT=1"
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
                   libcap_ng curl nspr nss python ldns ]
-                ++ stdenv.lib.optional docs xmlto
-                ++ stdenv.lib.optional stdenv.isLinux libselinux;
+                ++ lib.optional docs xmlto
+                ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.freebsd;

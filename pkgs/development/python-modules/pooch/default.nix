@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "integration"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A friend to fetch your data files.";
     homepage = "https://github.com/fatiando/pooch";
     license = licenses.bsd3;

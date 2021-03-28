@@ -7,11 +7,11 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3002.2";
+  version = "3002.6";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "vW0pYhzo4JlBJ3fNOWrzVHSqESuwmZtdqAQ4fYcpAHU=";
+    sha256 = "/8R4VpNj4dF7ajoMQh6q6cB5u+q8THcloiLQ+/kDoKU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -39,8 +39,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://saltstack.com/";
-    changelog = "https://docs.saltstack.com/en/latest/topics/releases/${version}.html";
+    homepage = "https://saltproject.io/";
+    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
     maintainers = with maintainers; [ Flakebi ];
     license = licenses.asl20;

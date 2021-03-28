@@ -1,25 +1,25 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib
 }:
 
 buildGoModule rec {
   pname = "gospider";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "jaeles-project";
     repo = pname;
     rev = version;
-    sha256 = "03gl8y2047iwa6bhmayyds3li21wy3sw1x4hpp9zgqgi95039q86";
+    sha256 = "sha256-yfW94sQzT1u6O0s1sqpeANlukC5y8fNvHNL2c77+dxU=";
   };
 
-  vendorSha256 = "0dc4ddi26i38c5rvy9zbal27a7qvn17h64w1yhbig4iyb79b18ym";
+  vendorSha256 = "sha256-1aOw0lk+khcX9IETA0+wGx91BFXrJ79zYWhEI2JrhDU=";
 
   # tests require internet access and API keys
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast web spider written in Go";
     longDescription = ''
       GoSpider is a fast web crawler that parses sitemap.xml and robots.txt file.

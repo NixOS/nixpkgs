@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   version = "2020-12-17";
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/woof
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.home.unix-ag.org/simon/woof.html";
     description = "Web Offer One File - Command-line utility to easily exchange files over a local network";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

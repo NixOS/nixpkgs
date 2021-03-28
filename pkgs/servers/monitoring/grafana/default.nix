@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "7.3.6";
+  version = "7.4.5";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -10,25 +10,25 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "10hm5bz2q9mccrjx1x77xckqvn2x9m7cl2dn60gvrl8m7q3afscp";
+    sha256 = "10pnwd4d19ry7w2x46acc3j8gjn73b45fzc579gz1hc8hx2b3s0s";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "1fl4ng39qkc01nv49cfzm19sv3yzzshl22ylkwlsb41rmaifbd1f";
+    sha256 = "1x9jx3ww37cn6r6cn6gqlavmllxydks23vm8w4934bv8zppj1zwz";
   };
 
-  vendorSha256 = "0p4wwacvka5lgzwhlwnn6iiwi9x67zgqf0l4vblpfckvvb3ar41h";
+  vendorSha256 = "0ig0f9pa3l0nj2fs8yz8h42y1j07xi9imk7kzmla6vav6s889grc";
 
   postPatch = ''
     substituteInPlace pkg/cmd/grafana-server/main.go \
       --replace 'var version = "5.0.0"'  'var version = "${version}"'
   '';
 
-  # fixes build failure with go 1.15:
   # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
+  # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/dashboard-schemas
   preBuild = ''
-    rm -rf scripts/go
+    rm -r dashboard-schemas scripts/go
   '';
 
   postInstall = ''

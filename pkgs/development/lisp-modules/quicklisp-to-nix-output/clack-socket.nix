@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clack-socket'';
-  version = ''clack-20191007-git'';
+  baseName = "clack-socket";
+  version = "clack-20191007-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2019-10-07/clack-20191007-git.tgz'';
-    sha256 = ''004drm82mhxmcsa00lbmq2l89g4fzwn6j2drfwdazrpi27z0ry5w'';
+    url = "http://beta.quicklisp.org/archive/clack/2019-10-07/clack-20191007-git.tgz";
+    sha256 = "004drm82mhxmcsa00lbmq2l89g4fzwn6j2drfwdazrpi27z0ry5w";
   };
 
   packageName = "clack-socket";

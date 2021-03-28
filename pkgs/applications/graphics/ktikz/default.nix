@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, pkgconfig, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, pkg-config, wrapQtAppsHook
 , poppler, gnuplot
 , qmake, qtbase, qttools
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.12";
   pname = "qtikz";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Editor for the TikZ language";
     homepage = "https://github.com/fhackenberger/ktikz";
     license = licenses.gpl2;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig qttools qmake wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config qttools qmake wrapQtAppsHook ];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
 
   buildInputs = [ qtbase poppler ];

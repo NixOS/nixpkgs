@@ -2,7 +2,7 @@
   jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
   util-linux, dmidecode, libuuid, newt,
   lua, speex,
-  srtp, wget, curl, iksemel, pkgconfig
+  srtp, wget, curl, iksemel, pkg-config
 }:
 
 let
@@ -14,7 +14,7 @@ let
                     dmidecode libuuid newt
                     lua speex
                     srtp wget curl iksemel ];
-    nativeBuildInputs = [ util-linux pkgconfig ];
+    nativeBuildInputs = [ util-linux pkg-config ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
@@ -71,7 +71,7 @@ let
       ${lib.optionalString (lib.versionAtLeast version "17.0.0") "make install-headers"}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Software implementation of a telephone private branch exchange (PBX)";
       homepage = "https://www.asterisk.org/";
       license = licenses.gpl2;

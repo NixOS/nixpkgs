@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, tbb, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, tbb, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tbb zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
     license = licenses.gpl3;
     homepage = "http://bowtie-bio.sf.net/bowtie2";

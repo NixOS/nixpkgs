@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mkdir -p $out/bin $out/share/mu
     cp -r lib $out/share/mu
-    gcc -O3 -o $out/bin/mu-unwrapped bootstrap/mu64.c
+    ${stdenv.cc.targetPrefix}cc -o $out/bin/mu-unwrapped bootstrap/mu64.c
   '';
 
   installPhase = ''
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nickmqb/muon";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
   };
 }

@@ -6,7 +6,7 @@ let
   mqttPassword = "secret";
 in {
   name = "home-assistant";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 
@@ -24,6 +24,8 @@ in {
     services.home-assistant = {
       inherit configDir;
       enable = true;
+      # includes the package with all tests enabled
+      package = pkgs.home-assistant;
       config = {
         homeassistant = {
           name = "Home";

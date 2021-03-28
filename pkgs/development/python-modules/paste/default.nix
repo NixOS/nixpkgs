@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     py.test -k "not test_cgiapp and not test_proxy"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "http://pythonpaste.org/";
     license = licenses.mit;

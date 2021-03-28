@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , makeWrapper
 , python
 , fuse
-, pkgconfig
+, pkg-config
 , libpcap
 , zlib
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dap9dqwwx8adma6arxg015riqc86cmjv2m44hk0kz7s24h79ipq";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs =
     [ fuse libpcap zlib python ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://moosefs.com";
     description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
     platforms = platforms.linux;

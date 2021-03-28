@@ -1,7 +1,7 @@
-{ stdenv, runCommand, fetchurl
+{ lib, stdenv, runCommand, fetchurl
 , fetchpatch
 , ensureNewerSourcesHook
-, cmake, pkgconfig
+, cmake, pkg-config
 , which, git
 , boost, python3Packages
 , libxml2, zlib, lz4
@@ -9,10 +9,11 @@
 , babeltrace, gperf
 , gtest
 , cunit, snappy
-, rocksdb, makeWrapper
+, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
 , rdkafka
+, nixosTests
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -36,7 +37,6 @@
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
-with stdenv; with stdenv.lib;
 let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
@@ -76,12 +76,12 @@ let
     none = [ ];
   };
 
-  getMeta = description: {
+  getMeta = description: with lib; {
      homepage = "https://ceph.com/";
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
-     platforms = [ "x86_64-linux" ];
+     platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
   ceph-common = python3Packages.buildPythonPackage rec{
@@ -122,10 +122,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.7";
+  version = "15.2.8";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "082lpx1rsifjh636zypxy6ccs6nfkcm9azxp5ghvr5mvx9chmyrj";
+    sha256 = "1nmrras3g2zapcd06qr5m7y4zkymnr0r53jkpicjw2g4q7wfmib4";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -139,7 +139,7 @@ in rec {
 
     nativeBuildInputs = [
       cmake
-      pkgconfig which git python3Packages.wrapPython makeWrapper
+      pkg-config which git python3Packages.wrapPython makeWrapper
       python3Packages.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
     ];
@@ -147,12 +147,12 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
-    ] ++ optionals stdenv.isLinux [
+      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+    ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
-    ] ++ optionals hasRadosgw [
+    ] ++ lib.optionals hasRadosgw [
       optFcgi optExpat optCurl optFuse optLibedit
     ];
 
@@ -172,12 +172,10 @@ in rec {
 
     cmakeFlags = [
       "-DWITH_PYTHON3=ON"
-      "-DWITH_SYSTEM_ROCKSDB=OFF"
+      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-
       "-DWITH_SYSTEM_BOOST=ON"
-      "-DWITH_SYSTEM_ROCKSDB=ON"
       "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
@@ -195,8 +193,6 @@ in rec {
       test -f $out/bin/ceph-volume
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "out" "lib" "dev" "doc" "man" ];
 
     doCheck = false; # uses pip to install things from the internet
@@ -204,6 +200,7 @@ in rec {
     meta = getMeta "Distributed storage system";
 
     passthru.version = version;
+    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {

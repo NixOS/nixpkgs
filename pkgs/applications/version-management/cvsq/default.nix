@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 , cvs
@@ -28,20 +28,20 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/cvsq --replace "/bin/sh" "${stdenv.shell}"
     substituteInPlace $out/bin/lcvs --replace "/bin/sh" "${stdenv.shell}"
-    wrapProgram $out/bin/cvsq --prefix PATH : ${stdenv.lib.makeBinPath
+    wrapProgram $out/bin/cvsq --prefix PATH : ${lib.makeBinPath
       [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-branch --prefix PATH : ${stdenv.lib.makeBinPath
+    wrapProgram $out/bin/cvsq-branch --prefix PATH : ${lib.makeBinPath
       [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-merge --prefix PATH : ${stdenv.lib.makeBinPath
+    wrapProgram $out/bin/cvsq-merge --prefix PATH : ${lib.makeBinPath
       [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-switch --prefix PATH : ${stdenv.lib.makeBinPath
+    wrapProgram $out/bin/cvsq-switch --prefix PATH : ${lib.makeBinPath
       [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/lcvs --prefix PATH : ${stdenv.lib.makeBinPath
+    wrapProgram $out/bin/lcvs --prefix PATH : ${lib.makeBinPath
       [ cvs nettools findutils rsync coreutils diffutils ]}
   '';
 
   meta = {
-    description = ''A collection of tools to work locally with CVS'';
+    description = "A collection of tools to work locally with CVS";
     longDescription = ''
       cvsq is a collection of tools to work locally with CVS.
 
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
       be used for commits (that's what cvsq is for).
     '';
     homepage = "https://www.linta.de/~aehlig/cvsq/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ clkamp ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ clkamp ];
+    platforms = lib.platforms.all;
   };
 }

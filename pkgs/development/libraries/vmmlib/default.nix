@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, lapack
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, lapack
 , Accelerate, CoreGraphics, CoreVideo
 }:
 
@@ -17,17 +17,15 @@ stdenv.mkDerivation rec {
     ./disable-cpack.patch   #disable the need of cpack/rpm
   ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ boost lapack ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
-
-  enableParallelBuilding = true;
+    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
 
   doCheck = !stdenv.isDarwin;
 
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A vector and matrix math library implemented using C++ templates";
 
     longDescription = ''vmmlib is a vector and matrix math library implemented

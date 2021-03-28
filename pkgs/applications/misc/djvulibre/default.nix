@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , libjpeg
 , libtiff
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ./CVE-2019-15145.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
     homepage = "http://djvu.sourceforge.net";
     license = licenses.gpl2;

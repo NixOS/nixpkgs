@@ -1,21 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, saneBackends
+, sane-backends
 }:
 
 buildPythonPackage rec {
   pname = "sane";
-  version = "2.8.2";
+  version = "2.9.1";
 
   src = fetchPypi {
     inherit version;
     pname = "python-sane";
-    sha256 = "0sri01h9sld6w7vgfhwp29n5w19g6idz01ba2giwnkd99k1y2iqg";
+    sha256 = "JAmOuDxujhsBEm5q16WwR5wHsBPF0iBQm1VYkv5JJd4=";
   };
 
   buildInputs = [
-    saneBackends
+    sane-backends
   ];
 
   meta = with lib; {

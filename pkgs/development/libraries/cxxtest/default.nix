@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub }:
+{ lib, buildPythonApplication, fetchFromGitHub }:
 
 buildPythonApplication rec {
   pname = "cxxtest";
@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
   dontWrapPythonPrograms = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cxxtest.com";
     description = "Unit testing framework for C++";
     platforms = platforms.unix;

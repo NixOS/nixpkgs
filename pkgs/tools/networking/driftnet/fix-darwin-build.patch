@@ -1,0 +1,61 @@
+diff --git a/src/compat/compat.h b/src/compat/compat.h
+index 6add422..ea80406 100644
+--- a/src/compat/compat.h
++++ b/src/compat/compat.h
+@@ -17,7 +17,7 @@
+     #include <config.h>
+ #endif
+ 
+-#ifdef __FreeBSD__
++#if defined(__FreeBSD__) || defined(__APPLE__)
+     #include <sys/types.h>
+ #endif
+ 
+diff --git a/src/network/layer2.c b/src/network/layer2.c
+index 763f0ac..2497b72 100644
+--- a/src/network/layer2.c
++++ b/src/network/layer2.c
+@@ -14,7 +14,7 @@
+ 
+ #include <string.h>
+ 
+-#ifdef __FreeBSD__
++#if defined(__FreeBSD__) || defined(__APPLE__)
+ #include <netinet/in_systm.h>
+ #include <netinet/in.h>
+ #else
+@@ -29,7 +29,7 @@
+ /*
+  * Freebsd and Cygwin doesn't define 'ethhdr'
+  */
+-#if defined(__FreeBSD__) || defined(__CYGWIN__)
++#if defined(__FreeBSD__) || defined(__CYGWIN__) || defined(__APPLE__)
+ 
+ #define ETH_ALEN	6			/* Octets in one ethernet addr	 */
+ #define ETH_P_IP	0x0800		/* Internet Protocol packet	*/
+diff --git a/src/network/layer3.c b/src/network/layer3.c
+index 7864126..aae2041 100644
+--- a/src/network/layer3.c
++++ b/src/network/layer3.c
+@@ -15,7 +15,7 @@
+ #include <string.h>
+ #include <assert.h>
+ 
+-#ifdef __FreeBSD__
++#if defined(__FreeBSD__) || defined(__APPLE__)
+ #include <netinet/in_systm.h>
+ #include <netinet/in.h>
+ #include <sys/socket.h>
+diff --git a/src/pid.c b/src/pid.c
+index 621834e..94e7dcc 100644
+--- a/src/pid.c
++++ b/src/pid.c
+@@ -14,7 +14,7 @@
+ 
+ #include "compat/compat.h"
+ 
+-#ifdef __FreeBSD__
++#if defined(__FreeBSD__) || defined(__APPLE__)
+ #include <sys/stat.h>
+ #endif
+ #include <fcntl.h>

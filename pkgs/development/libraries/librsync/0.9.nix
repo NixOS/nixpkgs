@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "librsync-0.9.7";
@@ -11,16 +11,16 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    (stdenv.lib.enableFeature stdenv.isCygwin    "static")
-    (stdenv.lib.enableFeature (!stdenv.isCygwin) "shared")
+    (lib.enableFeature stdenv.isCygwin    "static")
+    (lib.enableFeature (!stdenv.isCygwin) "shared")
   ];
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
     homepage = "http://librsync.sourceforge.net/";
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     description = "Implementation of the rsync remote-delta algorithm";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

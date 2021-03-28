@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, isPy3k
 , jaraco_functools
 , jaraco_text
 , more-itertools
@@ -33,7 +37,8 @@ buildPythonPackage rec {
     # install_requires
     jaraco_functools
 
-    more-itertools six
+    more-itertools
+    six
   ];
 
   checkInputs = [
@@ -49,10 +54,6 @@ buildPythonPackage rec {
     trustme
   ];
 
-  # avoid attempting to use 3 packages not available on nixpkgs
-  # (jaraco.apt, jaraco.context, yg.lockfile)
-  pytestFlagsArray = [ "--ignore=cheroot/test/test_wsgi.py" ];
-
   # Disable doctest plugin because times out
   # Disable xdist (-n arg) because it's incompatible with testmon
   # Deselect test_bind_addr_unix on darwin because times out
@@ -64,12 +65,18 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  disabledTests= [
+  disabledTests = [
     "tls" # touches network
     "peercreds_unix_sock" # test urls no longer allowed
   ] ++ lib.optionals stdenv.isDarwin [
     "http_over_https_error"
     "bind_addr_unix"
+  ];
+
+  disabledTestPaths = [
+    # avoid attempting to use 3 packages not available on nixpkgs
+    # (jaraco.apt, jaraco.context, yg.lockfile)
+    "cheroot/test/test_wsgi.py"
   ];
 
   # Some of the tests use localhost networking.

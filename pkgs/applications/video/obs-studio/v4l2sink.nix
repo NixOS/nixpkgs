@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase obs-studio ];
 
+  dontWrapQtApps = true;
+
   patches = [
     # Fixes the segfault when stopping the plugin
     (fetchpatch {

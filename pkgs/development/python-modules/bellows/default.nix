@@ -1,34 +1,49 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, click, click-log, pure-pcapy3
-, pyserial, pyserial-asyncio, voluptuous, zigpy
-, asynctest, pytest, pytest-asyncio }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, click-log
+, pure-pcapy3
+, pyserial-asyncio
+, voluptuous
+, zigpy
+, asynctest
+, pytestCheckHook
+, pytest-asyncio
+}:
 
-let
+buildPythonPackage rec {
   pname = "bellows";
-  version = "0.21.0";
+  version = "0.22.0";
 
-in buildPythonPackage rec {
-  inherit pname version;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "fd2ac40c1f3550580dc561ae58d7d15cfa12e6a7cc5d35ee80e7a1cb6a4cda4f";
+  src = fetchFromGitHub {
+    owner = "zigpy";
+    repo = "bellows";
+    rev = version;
+    sha256 = "0il2cwnrcvgxx9jkj1xr2caqyza3kqjys3fpmcx7avy04xbf5dbv";
   };
-
-  propagatedBuildInputs = [
-    click click-log pure-pcapy3 pyserial pyserial-asyncio voluptuous zigpy
-  ];
-
-  checkInputs = [
-    asynctest pytest pytest-asyncio
-  ];
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "click-log==0.2.0" "click-log>=0.2.0"
+      --replace "click-log==0.2.1" "click-log>=0.2.1"
   '';
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    click
+    click-log
+    pure-pcapy3
+    pyserial-asyncio
+    voluptuous
+    zigpy
+  ];
+
+  checkInputs = [
+    asynctest
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  meta = with lib; {
     description = "A Python 3 project to implement EZSP for EmberZNet devices";
     homepage = "https://github.com/zigpy/bellows";
     license = licenses.gpl3Plus;

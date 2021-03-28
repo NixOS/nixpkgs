@@ -2,6 +2,7 @@
 , bctoolbox
 , cmake
 , fetchFromGitLab
+, lib
 , libantlr3c
 , mbedtls
 , stdenv
@@ -10,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "4.4.21";
+  version = "4.4.34";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "0ylv1jsqnfhw23i6p3lfqqzw48lwii8zwkq3y34q0hhnngn26iiw";
+    sha256 = "1kknnlczq7dpqaj1dwxvy092dzrqjy11ndkv90rqwmdryigkjk6z";
   };
 
   nativeBuildInputs = [ antlr3_4 cmake ];
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
     license = licenses.gpl3Plus;

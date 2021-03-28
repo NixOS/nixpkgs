@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_event
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   doCheck = false; # Circular deps.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Zope.Interface";
     homepage = "https://zope.org/Products/ZopeInterface";
     license = licenses.zpl20;

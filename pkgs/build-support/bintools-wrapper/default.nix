@@ -6,6 +6,7 @@
 # compiler and the linker just "work".
 
 { name ? ""
+, lib
 , stdenvNoCC
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
@@ -15,7 +16,7 @@
 , useMacosReexportHack ? false
 }:
 
-with stdenvNoCC.lib;
+with lib;
 
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
@@ -31,11 +32,11 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
+  targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
                                         (targetPlatform.config + "-");
 
-  bintoolsVersion = stdenv.lib.getVersion bintools;
-  bintoolsName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName bintools);
+  bintoolsVersion = lib.getVersion bintools;
+  bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
@@ -52,17 +53,20 @@ let
   dynamicLinker =
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
-    else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
+    else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then "/system/bin/linker"
+    else if (targetPlatform.libc == "bionic" && targetPlatform.is64bit) then "/system/bin/linker64"
     else if targetPlatform.libc == "nblibc"           then "${libc_lib}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
+    else if targetPlatform.system == "powerpc64le-linux" then "${libc_lib}/lib/ld64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
     else if (with targetPlatform; isAarch32 && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
-    else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
+    else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
+    else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
 
   expand-response-params =
@@ -190,7 +194,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isRiscV then "lriscv"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
-       else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
+       else targetPlatform.bfdEmulation or (fmt + sep + arch);
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
@@ -237,19 +241,14 @@ stdenv.mkDerivation {
       if [ -n "''${dynamicLinker-}" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
-    '' + (if targetPlatform.isDarwin then ''
-        printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
-      '' else ''
-        if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
-          echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
-        fi
-      ''
-      # The dynamic linker is passed in `ldflagsBefore' to allow
-      # explicit overrides of the dynamic linker by callers to ld
-      # (the *last* value counts, so ours should come first).
-      + ''
-        echo -dynamic-linker "$dynamicLinker" >> $out/nix-support/libc-ldflags-before
-    '') + ''
+        ${if targetPlatform.isDarwin then ''
+          printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
+        '' else ''
+          if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
+            echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+          fi
+          touch $out/nix-support/ld-set-dynamic-linker
+        ''}
       fi
     '')
 
@@ -307,6 +306,10 @@ stdenv.mkDerivation {
       done
     ''
 
+    + optionalString stdenv.targetPlatform.isDarwin ''
+      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
+    ''
+
     + ''
       for flags in "$out/nix-support"/*flags*; do
         substituteInPlace "$flags" --replace $'\n' ' '
@@ -331,10 +334,10 @@ stdenv.mkDerivation {
     let bintools_ = if bintools != null then bintools else {}; in
     (if bintools_ ? meta then removeAttrs bintools.meta ["priority"] else {}) //
     { description =
-        stdenv.lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
+        lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
       priority = 10;
   } // optionalAttrs useMacosReexportHack {
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

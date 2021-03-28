@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, isPy27, click, redis }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy27, click, redis }:
 
 buildPythonPackage rec {
   pname = "rq";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click redis ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, lightweight library for creating background jobs, and processing them";
     homepage = "https://github.com/nvie/rq/";
     maintainers = with maintainers; [ mrmebelman ];

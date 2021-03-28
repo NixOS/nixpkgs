@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , krb5, xfsprogs, jemalloc, dbus, libcap
 , ntirpc, liburcu, bison, flex, nfs-utils
 } :
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "3.4";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    sha256 = "1qi617ppjjl38mqpbxiqhpxanq9qgqshb87cajs30rqkv9nj811k";
+    sha256 = "sha256-N0qVlnMshsEcWEpPhtR+zXwFKXlik1XnEuZdFMjpZTE=";
   };
 
   patches = [ ./sysstatedir.patch ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     nfs-utils
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NFS server that runs in user space";
     homepage = "https://github.com/nfs-ganesha/nfs-ganesha/wiki";
     maintainers = [ maintainers.markuskowa ];

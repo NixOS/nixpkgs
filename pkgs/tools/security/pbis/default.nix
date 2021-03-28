@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, perl, flex, bison, curl,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, perl, flex, bison, curl,
   pam, popt, libiconv, libuuid, openssl_1_0_2, cyrus_sasl, sqlite, tdb, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     if [ $CC = gcc ]; then
             NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=format-overflow -Wno-error=address-of-packed-member"
     fi
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${stdenv.lib.getDev libxml2}/include/libxml2 -Wno-error=array-bounds -Wno-error=pointer-sign -Wno-error=deprecated-declarations -Wno-error=unused-variable"
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libxml2}/include/libxml2 -Wno-error=array-bounds -Wno-error=pointer-sign -Wno-error=deprecated-declarations -Wno-error=unused-variable"
   '';
-  configureScript = ''../configure'';
+  configureScript = "../configure";
   configureFlags = [
     "CFLAGS=-O"
     "--docdir=${placeholder "prefix"}/share/doc"
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
   outputs = [ "out" "sys" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BeyondTrust AD Bridge Open simplifies the process of joining non-Microsoft hosts to Active Directory domains";
     homepage = "https://github.com/BeyondTrust/pbis-open";
     license = with licenses; [ gpl2 lgpl21 ];

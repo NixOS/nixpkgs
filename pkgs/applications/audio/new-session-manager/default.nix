@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja, liblo, libjack2, fltk }:
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, liblo, libjack2, fltk }:
 
 stdenv.mkDerivation rec {
   pname = "new-session-manager";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "linuxaudio";
     repo = "new-session-manager";
     rev = "v${version}";
-    sha256 = "PqOv4tx3NLxL2+GWIUVgL72EQYMyDPIMrAkyby3TZ+0=";
+    sha256 = "sha256-YP5AHoFP8P1o0Y2jAipRcNPxPRuM7COs5tBMm6Eojoc=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linuxaudio.github.io/new-session-manager/";
     description = "A session manager designed for audio applications.";
     maintainers = [ maintainers._6AA4FD ];

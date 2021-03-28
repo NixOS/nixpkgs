@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python binding of ptrace library";
     homepage = "https://github.com/vstinner/python-ptrace";
     license = licenses.gpl2;

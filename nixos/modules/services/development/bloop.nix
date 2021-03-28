@@ -44,7 +44,7 @@ in {
       };
       serviceConfig = {
         Type        = "simple";
-        ExecStart   = ''${pkgs.bloop}/bin/bloop server'';
+        ExecStart   = "${pkgs.bloop}/bin/bloop server";
         Restart     = "always";
       };
     };

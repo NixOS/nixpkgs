@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ lib, stdenv, buildPackages
 , autoreconfHook, bison, binutils-unwrapped
 , libiberty, libbfd
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library from binutils for manipulating machine code";
     homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;

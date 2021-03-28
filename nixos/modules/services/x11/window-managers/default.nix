@@ -13,6 +13,7 @@ in
     ./berry.nix
     ./bspwm.nix
     ./cwm.nix
+    ./clfswm.nix
     ./dwm.nix
     ./evilwm.nix
     ./exwm.nix

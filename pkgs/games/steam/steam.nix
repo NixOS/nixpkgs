@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, runtimeShell, traceDeps ? false, bash }:
+{ lib, stdenv, fetchurl, runtimeShell, traceDeps ? false, bash }:
 
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
-  version = "1.0.0.68";
+  version = "1.0.0.69";
 
 in stdenv.mkDerivation {
   pname = "steam-original";
@@ -10,14 +10,14 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
-    sha256 = "sha256-ZeiCYjxnH0Ath5bB20QHmE8R3wU4/3RiAw2NUhrrKNM=";
+    sha256 = "sha256-b5g4AUprE/lTunJs59IDlGu5O/1dB0kBvCFq0Eqyx2c=";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   postInstall = ''
     rm $out/bin/steamdeps
-    ${stdenv.lib.optionalString traceDeps ''
+    ${lib.optionalString traceDeps ''
       cat > $out/bin/steamdeps <<EOF
       #!${runtimeShell}
       echo \$1 >> ${traceLog}
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A digital distribution platform";
     homepage = "http://store.steampowered.com/";
     license = licenses.unfreeRedistributable;

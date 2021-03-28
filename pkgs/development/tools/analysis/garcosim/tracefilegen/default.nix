@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -ar $src/Documentation/html $out/share/doc/${name}/.
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically generate all types of basic memory management operations and write into trace files";
     homepage = "https://github.com/GarCoSim";
     maintainers = [ maintainers.cmcdragonkai ];

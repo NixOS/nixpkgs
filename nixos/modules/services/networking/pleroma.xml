@@ -1,0 +1,132 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-pleroma">
+ <title>Pleroma</title>
+ <para><link xlink:href="https://pleroma.social/">Pleroma</link> is a lightweight activity pub server.</para>
+ <section xml:id="module-services-pleroma-getting-started">
+   <title>Quick Start</title>
+   <para>To get quickly started, you can use this sample NixOS configuration and adapt it to your use case.</para>
+   <para><programlisting>
+    {
+      security.acme = {
+        email = "root@tld";
+        acceptTerms = true;
+        certs = {
+          "social.tld.com" = {
+            webroot = "/var/www/social.tld.com";
+            email = "root@tld";
+            group = "nginx";
+          };
+        };
+      };
+      services = {
+        pleroma = {
+          enable = true;
+          secretConfigFile = "/var/lib/pleroma/secrets.exs";
+          configs = [
+          ''
+            import Config
+
+            config :pleroma, Pleroma.Web.Endpoint,
+            url: [host: "social.tld.com", scheme: "https", port: 443],
+            http: [ip: {127, 0, 0, 1}, port: 4000]
+
+            config :pleroma, :instance,
+            name: "NixOS test pleroma server",
+            email: "pleroma@social.tld.com",
+            notify_email: "pleroma@social.tld.com",
+            limit: 5000,
+            registrations_open: true
+
+            config :pleroma, :media_proxy,
+            enabled: false,
+            redirect_on_failure: true
+            #base_url: "https://cache.pleroma.social"
+
+            config :pleroma, Pleroma.Repo,
+            adapter: Ecto.Adapters.Postgres,
+            username: "pleroma",
+            password: "${test-db-passwd}",
+            database: "pleroma",
+            hostname: "localhost",
+            pool_size: 10,
+            prepare: :named,
+            parameters: [
+                plan_cache_mode: "force_custom_plan"
+            ]
+
+            config :pleroma, :database, rum_enabled: false
+            config :pleroma, :instance, static_dir: "/var/lib/pleroma/static"
+            config :pleroma, Pleroma.Uploaders.Local, uploads: "/var/lib/pleroma/uploads"
+            config :pleroma, configurable_from_database: false
+          ''
+          ];
+        };
+        postgresql = {
+          enable = true;
+          package = pkgs.postgresql_12;
+        };
+        nginx = {
+          enable = true;
+          addSSL = true;
+          sslCertificate = "/var/lib/acme/social.tld.com/fullchain.pem";
+          sslCertificateKey = "/var/lib/acme/social.tld.com/key.pem";
+          root = "/var/www/social.tld.com";
+          # ACME endpoint
+          locations."/.well-known/acme-challenge" = {
+              root = "/var/www/social.tld.com/";
+          };
+          virtualHosts."social.tld.com" = {
+            addSSL = true;
+            locations."/" = {
+              proxyPass = "http://127.0.0.1:4000";
+              extraConfig = ''
+                add_header 'Access-Control-Allow-Origin' '*' always;
+                add_header 'Access-Control-Allow-Methods' 'POST, PUT, DELETE, GET, PATCH, OPTIONS' always;
+                add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Idempotency-Key' always;
+                add_header 'Access-Control-Expose-Headers' 'Link, X-RateLimit-Reset, X-RateLimit-Limit, X-RateLimit-Remaining, X-Request-Id' always;
+                if ($request_method = OPTIONS) {
+                    return 204;
+                }
+                add_header X-XSS-Protection "1; mode=block";
+                add_header X-Permitted-Cross-Domain-Policies none;
+                add_header X-Frame-Options DENY;
+                add_header X-Content-Type-Options nosniff;
+                add_header Referrer-Policy same-origin;
+                add_header X-Download-Options noopen;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+                proxy_set_header Host $host;
+                client_max_body_size 16m;
+              '';
+            };
+          };
+        };
+      };
+    };
+   </programlisting></para>
+   <para>Note that you'll need to seed your database and upload your pleroma secrets to the path pointed by <literal>config.pleroma.secretConfigFile</literal>. You can find more informations about how to do that in the <link linkend="module-services-pleroma-generate-config">next</link> section.</para>
+ </section>
+ <section xml:id="module-services-pleroma-generate-config">
+   <title>Generating the Pleroma Config and Seed the Database</title>
+
+   <para>Before using this service, you'll need to generate your
+server configuration and its associated database seed. The
+<literal>pleroma_ctl</literal> CLI utility can help you with that. You
+can start with <literal>pleroma_ctl instance gen --output config.exs
+--output-psql setup.psql</literal>, this will prompt you some
+questions and will generate both your config file and database initial
+migration. </para>
+<para>For more details about this configuration format, please have a look at the <link xlink:href="https://docs-develop.pleroma.social/backend/configuration/cheatsheet/">upstream documentation</link>.</para>
+<para>To seed your database, you can use the <literal>setup.psql</literal> file you just generated by running
+<programlisting>
+    sudo -u postgres psql -f setup.psql
+</programlisting></para>
+   <para>In regard of the pleroma service configuration you also just generated, you'll need to split it in two parts. The "public" part, which do not contain any secrets and thus can be safely stored in the Nix store and its "private" counterpart containing some secrets (database password, endpoint secret key, salts, etc.).</para>
+
+   <para>The public part will live in your NixOS machine configuration in the <link linkend="opt-services.pleroma.configs">services.pleroma.configs</link> option. However, it's up to you to upload the secret pleroma configuration to the path pointed by <link linkend="opt-services.pleroma.secretConfigFile">services.pleroma.secretConfigFile</link>. You can do that manually or rely on a third party tool such as <link xlink:href="https://github.com/DBCDK/morph">Morph</link> or <link xlink:href="https://github.com/NixOS/nixops">NixOps</link>.</para>
+ </section>
+</chapter>

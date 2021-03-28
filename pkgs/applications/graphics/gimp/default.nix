@@ -1,9 +1,10 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , substituteAll
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , intltool
 , babl
 , gegl
@@ -72,11 +73,17 @@ in stdenv.mkDerivation rec {
     # Use absolute paths instead of relying on PATH
     # to make sure plug-ins are loaded by the correct interpreter.
     ./hardcode-plugin-interpreters.patch
+
+    # Fix crash without dot.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/f83fd22c4b8701ffc4ce14383e5e22756a4bce04.patch";
+      sha256 = "POuvBhOSStO7hBGp4HgNx5F9pElFRoqN3W+i3u4zOnk=";
+    })
   ];
 
   nativeBuildInputs = [
     autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
-    pkgconfig
+    pkg-config
     intltool
     gettext
     makeWrapper

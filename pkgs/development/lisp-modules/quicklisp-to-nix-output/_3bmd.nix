@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''_3bmd'';
-  version = ''20200925-git'';
+  baseName = "_3bmd";
+  version = "20200925-git";
 
-  description = ''markdown processor in CL using esrap parser.'';
+  description = "markdown processor in CL using esrap parser.";
 
   deps = [ args."alexandria" args."esrap" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/3bmd/2020-09-25/3bmd-20200925-git.tgz'';
-    sha256 = ''0sk4b0xma4vv6ssiskbz7h5bw8v8glm34mbv3llqywb50b9ks4fw'';
+    url = "http://beta.quicklisp.org/archive/3bmd/2020-09-25/3bmd-20200925-git.tgz";
+    sha256 = "0sk4b0xma4vv6ssiskbz7h5bw8v8glm34mbv3llqywb50b9ks4fw";
   };
 
   packageName = "3bmd";

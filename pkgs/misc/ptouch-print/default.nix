@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
 , gd
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libusb1
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line tool to print labels on Brother P-Touch printers on Linux";
     license = licenses.gpl3Plus;
     homepage = "https://mockmoon-cybernetics.ch/computer/p-touch2430pc/";

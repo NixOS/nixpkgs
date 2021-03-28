@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, nginx }:
+{ lib, fetchFromGitHub, python3Packages, nginx }:
 
 python3Packages.buildPythonApplication rec {
   pname = "devpi-server";
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     pytest-flake8
     webtest
-  ] ++ stdenv.lib.optionals isPy27 [ mock ];
+  ] ++ lib.optionals isPy27 [ mock ];
 
   # root_passwd_hash tries to write to store
   # TestMirrorIndexThings tries to write to /var through ngnix
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     "TestMirrorIndexThings"
   ];
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     license = licenses.mit;

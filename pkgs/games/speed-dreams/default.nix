@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, libGLU, libGL, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
+{ fetchurl, lib, stdenv, libGLU, libGL, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, expat,
-libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis, runtimeShell, curl }:
+libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkg-config, libvorbis, runtimeShell, curl }:
 
 let
   version = "2.2.2-r6553";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ libpng libGLU libGL freeglut libX11 plib openal freealut libXrandr xorgproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm zlib bash expat
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Car racing game - TORCS fork with more experimental approach";
     homepage = "http://speed-dreams.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [raskin];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
   };
 }

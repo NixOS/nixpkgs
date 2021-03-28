@@ -9,7 +9,7 @@ fftwFloat,
 glew,
 hackrf,
 lib,
-libav,
+ffmpeg,
 libiio,
 libopus,
 libpulseaudio,
@@ -19,7 +19,7 @@ libbladeRF,
 mkDerivation,
 ocl-icd,
 opencv3,
-pkgconfig,
+pkg-config,
 qtbase,
 qtmultimedia,
 qtserialport,
@@ -42,9 +42,9 @@ mkDerivation rec {
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    glew opencv3 libusb1 boost libopus limesuite libav libiio libpulseaudio
+    glew opencv3 libusb1 boost libopus limesuite ffmpeg libiio libpulseaudio
     qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf
     fftwFloat codec2 cm256cc serialdv qtserialport
     libbladeRF uhd soapysdr-with-plugins

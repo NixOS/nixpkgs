@@ -10,6 +10,7 @@
 , six
 , testresources
 , wadllib
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,8 @@ buildPythonPackage rec {
     wadllib
   ];
 
+  checkInputs = [ pytestCheckHook ];
+
   preCheck = ''
     export HOME=$TMPDIR
   '';
@@ -41,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     maintainers = [ maintainers.marsam ];
   };
 }

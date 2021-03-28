@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''parser_dot_common-rules'';
-  version = ''20200715-git'';
+  baseName = "parser_dot_common-rules";
+  version = "20200715-git";
 
   parasites = [ "parser.common-rules/test" ];
 
-  description = ''Provides common parsing rules that are useful in many grammars.'';
+  description = "Provides common parsing rules that are useful in many grammars.";
 
   deps = [ args."alexandria" args."anaphora" args."esrap" args."fiveam" args."let-plus" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/parser.common-rules/2020-07-15/parser.common-rules-20200715-git.tgz'';
-    sha256 = ''17nw0shhb8079b26ldwpfxggkzs6ysfqm4s4nr1rfhba9mkvxdxy'';
+    url = "http://beta.quicklisp.org/archive/parser.common-rules/2020-07-15/parser.common-rules-20200715-git.tgz";
+    sha256 = "17nw0shhb8079b26ldwpfxggkzs6ysfqm4s4nr1rfhba9mkvxdxy";
   };
 
   packageName = "parser.common-rules";

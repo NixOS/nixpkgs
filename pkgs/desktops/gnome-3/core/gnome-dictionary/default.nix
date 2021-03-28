@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, desktop-file-utils, appstream-glib, libxslt
+{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkg-config, desktop-file-utils, appstream-glib, libxslt
 , libxml2, gettext, itstool, wrapGAppsHook, docbook_xsl, docbook_xml_dtd_43
 , gnome3, gtk3, glib, gsettings-desktop-schemas }:
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.26.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-dictionary/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-dictionary/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "16b8bc248dcf68987826d5e39234b1bb7fd24a2607fcdbf4258fde88f012f300";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja pkgconfig wrapGAppsHook libxml2 gettext itstool
+    meson ninja pkg-config wrapGAppsHook libxml2 gettext itstool
     desktop-file-utils appstream-glib libxslt docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [ gtk3 glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Dictionary";
     description = "Dictionary is the GNOME application to look up definitions";
     maintainers = teams.gnome.members;

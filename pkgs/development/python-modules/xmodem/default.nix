@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, which, lrzsz }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, which, lrzsz }:
 
 buildPythonPackage rec {
   pname = "xmodem";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure python implementation of the XMODEM protocol";
     maintainers = with maintainers; [ emantor ];
     homepage = "https://github.com/tehmaze/xmodem";

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-scriptName=update-source-versions # do not use the .wrapped name
+scriptName=update-source-version # do not use the .wrapped name
 
 die() {
     echo "$scriptName: error: $1" >&2

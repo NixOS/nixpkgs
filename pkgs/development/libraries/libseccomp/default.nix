@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, util-linux, gperf }:
+{ lib, stdenv, fetchurl, getopt, util-linux, gperf }:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     tar -zcf $pythonsrc --mtime="@$SOURCE_DATE_EPOCH" --sort=name --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
     homepage = "https://github.com/seccomp/libseccomp";
     license = licenses.lgpl21;

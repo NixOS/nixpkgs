@@ -6,7 +6,7 @@
 , ruby
 , aubio
 , cmake
-, pkgconfig
+, pkg-config
 , boost
 , bash
 , jack2Full
@@ -35,7 +35,7 @@ mkDerivation rec {
   buildInputs = [
     bash
     cmake
-    pkgconfig
+    pkg-config
     qtbase
     qwt
     ruby

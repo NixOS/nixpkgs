@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, ncurses}:
+{lib, stdenv, fetchurl, pkg-config, glib, ncurses}:
 stdenv.mkDerivation rec {
   name = "libpseudo-1.2.0";
 
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libpseudo.sourceforge.net/";
     description = "Simple, thread-safe messaging between threads";
     license = licenses.gpl2Plus;

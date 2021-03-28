@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, openssl
+{ lib, stdenv, fetchFromGitHub, cmake, openssl
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "srt";
   version = "1.4.2";

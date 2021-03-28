@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages }:
+{ lib, pythonPackages }:
 
 with pythonPackages;
 
@@ -19,7 +19,7 @@ in buildPythonApplication rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pythonhosted.org/pyditz/";
     description = "Drop-in replacement for the Ditz distributed issue tracker";
     maintainers = [ maintainers.ilikeavocadoes ];

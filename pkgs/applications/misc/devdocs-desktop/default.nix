@@ -1,4 +1,4 @@
-{ stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
+{ lib, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
 
 let
   version = "0.7.1";
@@ -29,7 +29,7 @@ in appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-featured desktop app for DevDocs.io";
     longDescription = ''
       DevDocs.io combines multiple API documentations in a fast, organized, and searchable interface. This is an unofficial desktop app for it.

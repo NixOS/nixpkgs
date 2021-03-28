@@ -1,16 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, attrs, protobuf, zeroconf }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, attrs, protobuf, zeroconf }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "2.6.3";
+  version = "2.6.6";
 
   disabled = !isPy3k;
 
-  src = fetchFromGitHub {
-    owner = "esphome";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1lbjxqdx63fc7qxx7xwq4b9dafmdafj7p1ggs48hyhbqfwkrv9p7";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-LdBUtU5rNoixh7DPIFkHxLMvBeI6MZH57sO0IjuOQAw=";
   };
 
   propagatedBuildInputs = [ attrs protobuf zeroconf ];

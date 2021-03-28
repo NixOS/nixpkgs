@@ -1,6 +1,6 @@
 { boost, cmake, fetchFromGitHub, ffmpeg, qtbase, qtx11extras,
   qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper,
-  mkDerivation, ninja, openmpi, python3, stdenv, tbb, libGLU, libGL }:
+  mkDerivation, ninja, mpi, python3, lib, tbb, libGLU, libGL }:
 
 mkDerivation rec {
   pname = "paraview";
@@ -65,7 +65,7 @@ mkDerivation rec {
   buildInputs = [
     libGLU libGL
     libXt
-    openmpi
+    mpi
     tbb
     boost
     ffmpeg
@@ -81,7 +81,7 @@ mkDerivation rec {
     (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.paraview.org/";
     description = "3D Data analysis and visualization application";
     license = licenses.free;

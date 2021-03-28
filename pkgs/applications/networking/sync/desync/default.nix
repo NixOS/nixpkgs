@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "desync";
@@ -16,7 +16,7 @@ buildGoModule rec {
   # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Content-addressed binary distribution system";
     longDescription = "An alternate implementation of the casync protocol and storage mechanism with a focus on production-readiness";
     homepage = "https://github.com/folbricht/desync";

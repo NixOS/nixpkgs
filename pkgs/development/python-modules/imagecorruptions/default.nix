@@ -2,7 +2,7 @@
 , fetchPypi
 , numpy
 , scikitimage
-, stdenv
+, lib
 , opencv3
 }:
 
@@ -26,7 +26,10 @@ buildPythonPackage rec {
     opencv3
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+  pythonImportsCheck = [ "imagecorruptions" ];
+
+  meta = with lib; {
     homepage = "https://github.com/bethgelab/imagecorruptions";
     description = "This package provides a set of image corruptions";
     license = licenses.asl20;

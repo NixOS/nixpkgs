@@ -1,4 +1,4 @@
-{ stdenv, appimageTools, lib, fetchurl, makeDesktopItem }:
+{ appimageTools, lib, fetchurl, makeDesktopItem }:
 let
   name = "lunar-client";
   version = "2.4.0";

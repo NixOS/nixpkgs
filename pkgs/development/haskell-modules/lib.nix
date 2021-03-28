@@ -160,7 +160,7 @@ rec {
   addTestToolDepends = drv: xs: overrideCabal drv (drv: { testToolDepends = (drv.testToolDepends or []) ++ xs; });
 
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
-  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
+  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkg-configDepends = (drv.pkg-configDepends or []) ++ xs; });
 
   addSetupDepend = drv: x: addSetupDepends drv [x];
   addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });

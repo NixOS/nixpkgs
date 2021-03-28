@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pcre, pkgconfig, libsepol
+{ lib, stdenv, fetchurl, pcre, pkg-config, libsepol
 , enablePython ? true, swig ? null, python3 ? null
 , fts
 }:
 
 assert enablePython -> swig != null && python3 != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "libselinux";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cr4p0qkr4qd5z1x677vwhz6mlz55kxyijwi2dmrvbhxcw7v78if";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ optionals enablePython [ swig python3 ];
+  nativeBuildInputs = [ pkg-config ] ++ optionals enablePython [ swig python3 ];
   buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "SBINDIR=$(bin)/sbin"
     "SHLIBDIR=$(out)/lib"
 
-    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
   preInstall = ''

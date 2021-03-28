@@ -1,8 +1,7 @@
-{ stdenv
-, lib
+{ lib
 , fetchgit
 , rustPlatform
-, pkgconfig
+, pkg-config
 , openssl
 , dbus
 , sqlite
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
 
-  nativeBuildInputs = [ pkgconfig gzip makeWrapper ];
+  nativeBuildInputs = [ pkg-config gzip makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
@@ -49,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/meli --set LD_LIBRARY_PATH ${notmuch}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;

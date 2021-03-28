@@ -1,4 +1,4 @@
-{ stdenv, fetchCrate, rustPlatform, installShellFiles
+{ lib, stdenv, fetchCrate, rustPlatform, installShellFiles
 , Security
 }:
 
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "12qdllhydd29xh20l5gir6qpj4a1nkzp8ics344rcwj8wsj7g5zw";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     installManPage doc/hyperfine.1
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/hyperfine-*/out/_hyperfine
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line benchmarking tool";
     homepage    = "https://github.com/sharkdp/hyperfine";
     license     = with licenses; [ asl20 /* or */ mit ];

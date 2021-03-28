@@ -1,25 +1,19 @@
-{ stdenv, fetchFromGitHub, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "inih";
-  version = "r52";
+  version = "r53";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = pname;
     rev = version;
-    sha256 = "0lsvm34zabvi1xlximybzvgc58zb90mm3b9babwxlqs05jy871m4";
+    sha256 = "0dqf5j2sw4hq68rqvxbrsf44ygfzx9ypiyzipk4cvp9aimbvsbc6";
   };
 
   nativeBuildInputs = [ meson ninja ];
 
-  mesonFlags = [
-    "-Ddefault_library=shared"
-    "-Ddistro_install=true"
-    "-Dwith_INIReader=true"
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple .INI file parser in C, good for embedded systems";
     homepage = "https://github.com/benhoyt/inih";
     changelog = "https://github.com/benhoyt/inih/releases/tag/${version}";

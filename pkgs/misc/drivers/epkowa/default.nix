@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , makeWrapper
 , symlinkJoin
-, pkgconfig
+, pkg-config
 , libtool
 , gtk2
 , libxml2
@@ -13,14 +13,13 @@
 , rpm
 , cpio
 , getopt
-, patchelf
 , autoPatchelfHook
 , gcc
 }:
 let common_meta = {
   homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
-  license = with stdenv.lib.licenses; epson;
-  platforms = with stdenv.lib.platforms; linux;
+  license = with lib.licenses; epson;
+  platforms = with lib.platforms; linux;
 };
 in
 ############################
@@ -98,6 +97,35 @@ let plugins = {
       hw = "Perfection V37/V370";
     };
     meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
+  };
+  v600 = stdenv.mkDerivation rec {
+    pname = "iscan-gt-x820-bundle";
+    version = "2.30.4";
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "1vlba7dsgpk35nn3n7is8nwds3yzlk38q43mppjzwsz2d2n7sr33";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-x820-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x013a "$plugin/lib/esci/libesintA1 $plugin/share/esci/esfwA1.bin"
+      '';
+      hw = "Perfection V600 Photo";
+    };
+    meta = common_meta // { description = "iscan esci x820 plugin for " + passthru.hw; };
   };
   x770 = stdenv.mkDerivation rec {
     pname = "iscan-gt-x770-bundle";
@@ -261,19 +289,19 @@ let plugins = {
 in
 let fwdir = symlinkJoin {
   name = "esci-firmware-dir";
-  paths = stdenv.lib.mapAttrsToList (name: value: value + /share/esci) plugins;
+  paths = lib.mapAttrsToList (name: value: value + /share/esci) plugins;
 };
 in
 let iscan-data = stdenv.mkDerivation rec {
   pname = "iscan-data";
-  version = "1.39.1-2";
+  version = "1.39.2-1";
 
   src = fetchurl {
     urls = [
       "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
       "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
     ];
-    sha256 = "04zrvbnxf1k6zinrd13hwnbzscc3qhmwlvx3k2jhjys2lginw7w4";
+    sha256 = "092qhlnjjgz11ifx6mng7mz20i44gc0nlccrbmw18xr5hipbqqka";
   };
 
   buildInputs = [
@@ -295,17 +323,16 @@ stdenv.mkDerivation rec {
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config libtool makeWrapper ];
   buildInputs = [
     gtk2
     libxml2
-    libtool
     libusb-compat-0_1
     sane-backends
-    makeWrapper
   ];
 
   patches = [
+    # Patch for compatibility with libpng versions greater than 10499
     (fetchpatch {
       urls = [
         "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-2.28.1.3+libpng-1.5.patch?h=b6e4c805d53b49da79a0f64ef16bb82d6d800fcf"
@@ -313,7 +340,9 @@ stdenv.mkDerivation rec {
       ];
       sha256 = "04y70qjd220dpyh771fiq50lha16pms98mfigwjczdfmx6kpj1jd";
     })
+    # Patch iscan to search appropriate folders for firmware files
     ./firmware_location.patch
+    # Patch deprecated use of sscanf code to use a more modern C99 compatible version
     ./sscanf.patch
   ];
   patchFlags = [ "-p0" ];
@@ -337,7 +366,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
     registry=$out/bin/iscan-registry;
   '' +
-  stdenv.lib.concatStrings (stdenv.lib.mapAttrsToList
+  lib.concatStrings (lib.mapAttrsToList
     (name: value: ''
       plugin=${value};
       ${value.passthru.registrationCommand}
@@ -349,7 +378,7 @@ stdenv.mkDerivation rec {
       Includes gui-less iscan (aka. Image Scan! for Linux).
       Supported hardware: at least :
     '' +
-    stdenv.lib.concatStringsSep ", " (stdenv.lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
-    maintainers = with stdenv.lib.maintainers; [ symphorien dominikh ];
+    lib.concatStringsSep ", " (lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
+    maintainers = with lib.maintainers; [ symphorien dominikh ];
   };
 }

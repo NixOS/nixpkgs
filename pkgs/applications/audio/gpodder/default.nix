@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, intltool
+{ lib, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
 , gobject-introspection
 }:
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     ./disable-autoupdate.patch
   ];
 
-  postPatch = with stdenv.lib; ''
+  postPatch = with lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)

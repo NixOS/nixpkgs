@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cffi'';
-  version = ''cffi_0.23.0'';
+  baseName = "cffi";
+  version = "cffi_0.23.0";
 
   parasites = [ "cffi/c2ffi" "cffi/c2ffi-generator" ];
 
-  description = ''The Common Foreign Function Interface'';
+  description = "The Common Foreign Function Interface";
 
   deps = [ args."alexandria" args."babel" args."cl-json" args."cl-ppcre" args."trivial-features" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cffi/2020-07-15/cffi_0.23.0.tgz'';
-    sha256 = ''1szpbg5m5fjq7bpkblflpnwmgz3ncsvp1y43g3jzwlk7yfxrwxck'';
+    url = "http://beta.quicklisp.org/archive/cffi/2020-07-15/cffi_0.23.0.tgz";
+    sha256 = "1szpbg5m5fjq7bpkblflpnwmgz3ncsvp1y43g3jzwlk7yfxrwxck";
   };
 
   packageName = "cffi";

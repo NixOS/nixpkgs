@@ -1,0 +1,40 @@
+diff --git a/src/elan-dist/src/component/package.rs b/src/elan-dist/src/component/package.rs
+index fd9fe74..0fefa39 100644
+--- a/src/elan-dist/src/component/package.rs
++++ b/src/elan-dist/src/component/package.rs
+@@ -50,11 +50,35 @@ fn unpack_without_first_dir<R: Read>(archive: &mut tar::Archive<R>, path: &Path)
+         };
+ 
+         try!(entry.unpack(&full_path).chain_err(|| ErrorKind::ExtractingPackage));
++        nix_patchelf_if_needed(&full_path);
+     }
+ 
+     Ok(())
+ }
+ 
++fn nix_patchelf_if_needed(dest_path: &Path) {
++    let (is_bin, is_lib) = if let Some(p) = dest_path.parent() {
++        (p.ends_with("bin"), p.ends_with("lib"))
++    } else {
++        (false, false)
++    };
++
++    if is_bin {
++        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++            .arg("--set-interpreter")
++            .arg("@dynamicLinker@")
++            .arg(dest_path)
++            .output();
++    }
++    else if is_lib {
++        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++            .arg("--set-rpath")
++            .arg("@libPath@")
++            .arg(dest_path)
++            .output();
++    }
++}
++
+ #[derive(Debug)]
+ pub struct ZipPackage<'a>(temp::Dir<'a>);
+ 

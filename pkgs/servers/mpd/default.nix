@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
 # Inputs
 , curl, libmms, libnfs, liburing, samba
 # Archive support
@@ -15,7 +15,7 @@
 # Services
 , yajl
 # Client support
-, mpd_clientlib
+, libmpdclient
 # Tag support
 , libid3tag
 , nixosTests
@@ -28,7 +28,6 @@
 }:
 
 let
-  lib = stdenv.lib;
   concatAttrVals = nameList: set: lib.concatMap (x: set.${x} or []) nameList;
 
   featureDependencies = {
@@ -71,7 +70,7 @@ let
     soundcloud    = [ curl yajl ];
     tidal         = [ curl yajl ];
     # Client support
-    libmpdclient  = [ mpd_clientlib ];
+    libmpdclient  = [ libmpdclient ];
     # Tag support
     id3tag        = [ libid3tag ];
     # Misc
@@ -115,13 +114,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.3";
+      version = "0.22.6";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "0323zxmgyrkbklnqm8i6napz8pva50cw14mzr9bvmyg64x404jgj";
+        sha256 = "sha256-Xu+MxMxR5u++R3lZHe6UQ+mEmRnWbN6173ZX39KS1A8=";
       };
 
       buildInputs = [
@@ -150,8 +149,6 @@ let
 
       doCheck = true;
 
-      enableParallelBuilding = true;
-
       mesonAutoFeatures = "disabled";
 
       outputs = [ "out" "doc" ]
@@ -171,10 +168,10 @@ let
 
       passthru.tests.nixos = nixosTests.mpd;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
-        license     = licenses.gpl2;
+        license     = licenses.gpl2Only;
         maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
         platforms   = platforms.unix;
 

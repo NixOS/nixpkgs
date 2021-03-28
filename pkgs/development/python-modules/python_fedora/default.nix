@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
+{ lib, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
 , six, munch, urllib3, beautifulsoup4, openidc-client, lockfile }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     six munch urllib3 beautifulsoup4 openidc-client ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Fedora Module";
     homepage = "https://github.com/fedora-infra/python-fedora";
     license = licenses.lgpl2;

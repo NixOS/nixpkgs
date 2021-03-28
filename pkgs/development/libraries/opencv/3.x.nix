@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, unzip, zlib, pcre, hdf5
+, cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf
 , config
 
@@ -18,7 +18,7 @@
 
 , enableUnfree    ? false
 , enableIpp       ? false
-, enablePython    ? false, pythonPackages
+, enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
 , enableVtk       ? false, vtk
@@ -35,6 +35,8 @@
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+
+assert enablePython -> pythonPackages != null;
 
 let
   version = "3.4.8";
@@ -206,7 +208,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -245,8 +247,6 @@ stdenv.mkDerivation {
     "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];
 
-  enableParallelBuilding = true;
-
   postBuild = lib.optionalString enableDocs ''
     make doxygen
   '';
@@ -271,7 +271,7 @@ stdenv.mkDerivation {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;

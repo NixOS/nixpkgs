@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "retroarch";
   version = lib.getVersion retroarch;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     mkdir -p $out/lib

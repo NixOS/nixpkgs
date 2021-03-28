@@ -2,33 +2,43 @@
 }:
 
 buildGoModule rec {
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "O/3079a67j1i9pgf18SBx0iJcQPVmb0H+K/PzQVBCDQ=";
+    sha256 = "sha256-mEu9z3lhHSE0NMXXViX4OBbIiNba7/RPr+AFmIM77g4=";
   };
 
   vendorSha256 = null;
 
-  subPackages = [ "..." ];
+  subPackages = [
+    # TODO split every executable into its own package
+    "cmd/loki"
+    "cmd/loki-canary"
+    "cmd/promtail"
+    "cmd/logcli"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];
+  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
 
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
   passthru.tests = { inherit (nixosTests) loki; };
 
+  buildFlagsArray = let t = "github.com/grafana/loki/pkg/build"; in ''
+    -ldflags=-s -w -X ${t}.Version=${version} -X ${t}.BuildUser=nix@nixpkgs -X ${t}.BuildDate=unknown -X ${t}.Branch=unknown -X ${t}.Revision=unknown
+  '';
+
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Like Prometheus, but for logs";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/loki/";

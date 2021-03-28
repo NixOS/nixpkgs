@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{lib, fetchzip}:
 
 let
   version = "3.5";
@@ -13,7 +13,7 @@ in fetchzip {
 
   sha256="0l78vhmbsyfmrva5wc76pskhxqryyg8q5xddpj9g5wqsddy525dq";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/indestructible-type/Jost";
     description = "A sans serif font by Indestructible Type";
     license = licenses.ofl;

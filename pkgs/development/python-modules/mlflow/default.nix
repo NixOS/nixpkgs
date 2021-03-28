@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , alembic
 , click
 , cloudpickle
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     gunicorn
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mlflow/mlflow";
     description = "Open source platform for the machine learning lifecycle";
     license = licenses.asl20;

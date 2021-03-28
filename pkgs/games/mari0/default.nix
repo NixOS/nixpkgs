@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zip, love_11, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, zip, love_11, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "mari0";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crossover between Super Mario Bros. and Portal";
     platforms = platforms.linux;
     license = licenses.mit;

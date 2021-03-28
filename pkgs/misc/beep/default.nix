@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 # this package is working only as root
 # in order to work as a non privileged user you would need to suid the bin
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=\${out}" "prefix="];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The advanced PC speaker beeper";
     homepage = "https://github.com/spkr-beep/beep";
     license = licenses.gpl2Only;

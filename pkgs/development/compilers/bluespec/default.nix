@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoconf
@@ -11,7 +11,7 @@
 , perl
 , flex
 , bison
-, pkgconfig
+, pkg-config
 , itktcl
 , incrtcl
 , tcl
@@ -27,13 +27,13 @@ let
   ghcWithPackages = ghc.withPackages (g: (with g; [old-time regex-compat syb split ]));
 in stdenv.mkDerivation rec {
   pname = "bluespec";
-  version = "unstable-2020.11.04";
+  version = "unstable-2021.02.14";
 
   src = fetchFromGitHub {
       owner  = "B-Lang-org";
       repo   = "bsc";
-      rev    = "103357f32cf63f2ca2b16ebc8e2c675ec5562464";
-      sha256 = "0iikzx0fxky0fmc31lyxfldy1wixr2mayzcn24b8d76wd4ix1vk3";
+      rev    = "c085ecd807d85f31d102d8bec71f5c28dc96b31d";
+      sha256 = "0c86gwhrarw78cr9c9slb9vij6kcwx3x281kbqji96qqzs0dfb32";
     };
 
   enableParallelBuilding = true;
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     perl
     flex
     bison
-    pkgconfig
+    pkg-config
     ghcWithPackages
   ];
 
@@ -97,10 +97,10 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Toolchain for the Bluespec Hardware Definition Language";
     homepage    = "https://github.com/B-Lang-org/bsc";
-    license     = stdenv.lib.licenses.bsd3;
+    license     = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     # darwin fails at https://github.com/B-Lang-org/bsc/pull/35#issuecomment-583731562
     # aarch64 fails, as GHC fails with "ghc: could not execute: opt"
-    maintainers = with stdenv.lib.maintainers; [ jcumming thoughtpolice ];
+    maintainers = with lib.maintainers; [ jcumming thoughtpolice ];
   };
 }

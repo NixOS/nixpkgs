@@ -190,7 +190,7 @@ in
 
     system.boot.loader.kernelFile = mkOption {
       internal = true;
-      default = pkgs.stdenv.hostPlatform.platform.kernelTarget;
+      default = pkgs.stdenv.hostPlatform.linux-kernel.target;
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.

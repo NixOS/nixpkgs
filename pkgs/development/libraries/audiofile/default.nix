@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   name = "audiofile-0.3.6";
 
   buildInputs =
-    stdenv.lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.isLinux [
       alsaLib
-    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.isDarwin [
       CoreServices AudioUnit
     ];
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing audio files in various formats";
     homepage    = "http://www.68k.org/~michael/audiofile/";
     license     = licenses.lgpl21Plus;

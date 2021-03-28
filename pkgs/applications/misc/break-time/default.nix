@@ -5,7 +5,7 @@
 , pkg-config
 , python3
 , rustPlatform
-, stdenv
+, lib
 , wrapGAppsHook
 }:
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Break timer that forces you to take a break";
     homepage    = "https://github.com/cdepillabout/break-time";
     license     = with licenses; [ mit ];

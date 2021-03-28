@@ -1,4 +1,5 @@
 {
+  lib,
   clangStdenv,
   fetchFromGitHub,
   opencl-headers,
@@ -69,7 +70,7 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/ethminer --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ethereum miner with OpenCL, CUDA and stratum support";
     homepage = "https://github.com/ethereum-mining/ethminer";
     platforms = [ "x86_64-linux" ];

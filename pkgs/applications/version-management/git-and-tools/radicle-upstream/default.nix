@@ -1,13 +1,13 @@
-{ stdenv, appimageTools, gsettings-desktop-schemas, gtk3, autoPatchelfHook, zlib, fetchurl }:
+{ lib, stdenv, appimageTools, gsettings-desktop-schemas, gtk3, autoPatchelfHook, zlib, fetchurl }:
 
 let
   pname = "radicle-upstream";
-  version = "0.1.5";
+  version = "0.1.11";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://releases.radicle.xyz/radicle-upstream-${version}.AppImage";
-    sha256 =  "1q5p6bvzi5awxd9a3xvvdhy26bz0dx8drb1z0zzqdvqqcxxyydq7";
+    sha256 =  "1j0xc9ns3andycbrrzkn6ql6739b1dimzlxq17wwpmqhni9nh673";
   };
 
   contents = appimageTools.extractType2 { inherit name src; };
@@ -54,7 +54,7 @@ appimageTools.wrapType2 {
       $out/share/icons/hicolor/512x512/apps/${pname}.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A decentralized app for code collaboration";
     homepage = "https://radicle.xyz/";
     license = licenses.gpl3Plus;

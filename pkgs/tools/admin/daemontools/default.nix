@@ -1,4 +1,4 @@
-{ fetchurl, bash, glibc, stdenv }:
+{ fetchurl, bash, glibc, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "daemontools-0.76";
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    license = stdenv.lib.licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     homepage = "https://cr.yp.to/daemontools.html";
     description = "A collection of tools for managing UNIX services";
 
-    maintainers = with stdenv.lib.maintainers; [ kevincox ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kevincox ];
+    platforms = lib.platforms.unix;
   };
 }

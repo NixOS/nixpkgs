@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat
+{ lib, stdenv, makeWrapper, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat
 , fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, gtk2
 , at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
@@ -6,7 +6,7 @@
 , libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
 
 let
-  runtimeLibs = stdenv.lib.makeLibraryPath [
+  runtimeLibs = lib.makeLibraryPath [
     curl
     glibc
     libudev0-shim
@@ -16,12 +16,12 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2020.5.2";
+  version = "2021.1.1";
 
   src = fetchurl {
     url =
       "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "03j76a0dj3ak5h6malwxqf7cdc2ycwgyr6993bhiq75yhxhblhc4";
+    sha256 = "sha256-GPOeLSbKiaJR5ppzyJMllzM+2gSddZN7+P5ttkocuDg=";
   };
 
   nativeBuildInputs =
@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/insomnia" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://insomnia.rest/";
     description = "The most intuitive cross-platform REST API Client";
     license = licenses.mit;

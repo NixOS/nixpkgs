@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libmd";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.hadrons.org/software/${pname}/";
     changelog = "https://archive.hadrons.org/software/libmd/libmd-${version}.announce";
     # Git: https://git.hadrons.org/cgit/libmd.git

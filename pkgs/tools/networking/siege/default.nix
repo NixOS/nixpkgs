@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib }:
+{ lib, stdenv, fetchurl, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "siege-4.0.7";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y3dnl1ziw0c0d4nw30aj0sdmjvarn4xfxgfkswffwnkm8z5p9xz";
   };
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   buildInputs = [ openssl zlib ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--with-zlib=${zlib.dev}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP load tester";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

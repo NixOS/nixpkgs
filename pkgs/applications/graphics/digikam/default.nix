@@ -109,13 +109,12 @@ mkDerivation rec {
     threadweaver
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
+    "-DENABLE_APPSTYLES=on"
   ];
 
   dontWrapGApps = true;

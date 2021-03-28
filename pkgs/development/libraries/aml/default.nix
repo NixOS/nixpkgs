@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja }:
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "aml";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson pkg-config ninja ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Another main loop";
     inherit (src.meta) homepage;
     license = licenses.isc;

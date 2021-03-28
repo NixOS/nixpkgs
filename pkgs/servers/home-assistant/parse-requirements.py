@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ mypy attrs ])
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ mypy attrs packaging rich ])
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -26,11 +26,14 @@ import tempfile
 from io import BytesIO
 from typing import Dict, Optional, Set, Any
 from urllib.request import urlopen
+from packaging import version as Version
+from rich.console import Console
+from rich.table import Table
 
 COMPONENT_PREFIX = "homeassistant.components"
 PKG_SET = "python3Packages"
 
-# If some requirements are matched by multiple python packages,
+# If some requirements are matched by multiple Python packages,
 # the following can be used to choose one of them
 PKG_PREFERENCES = {
     # Use python3Packages.youtube-dl-light instead of python3Packages.youtube-dl
@@ -39,6 +42,7 @@ PKG_PREFERENCES = {
     "tensorflow-bin_2": "tensorflow",
     "tensorflowWithoutCuda": "tensorflow",
     "tensorflow-build_2": "tensorflow",
+    "whois": "python-whois",
 }
 
 
@@ -141,12 +145,20 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         return None
 
 
+def get_pkg_version(package: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
+    pkg = packages.get(f"{PKG_SET}.{package}", None)
+    if not pkg:
+        return None
+    return pkg["version"]
+
+
 def main() -> None:
     packages = dump_packages()
     version = get_version()
     print("Generating component-packages.nix for version {}".format(version))
     components = parse_components(version=version)
     build_inputs = {}
+    outdated = {}
     for component in sorted(components.keys()):
         attr_paths = []
         missing_reqs = []
@@ -155,12 +167,19 @@ def main() -> None:
             # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
             # Therefore, if there's a "#" in the line, only take the part after it
             req = req[req.find("#") + 1 :]
-            name = req.split("==")[0]
+            name, required_version = req.split("==", maxsplit=1)
             attr_path = name_to_attr_path(name, packages)
+            if our_version := get_pkg_version(name, packages):
+                if Version.parse(our_version) < Version.parse(required_version):
+                    outdated[name] = {
+                      'wanted': required_version,
+                      'current': our_version
+                    }
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
                 attr_paths.append(attr_path[len(PKG_SET + ".") :])
-            else:
+            # home-assistant-frontend is always in propagatedBuildInputs
+            elif name != 'home-assistant-frontend':
                 missing_reqs.append(name)
         else:
             build_inputs[component] = (attr_paths, missing_reqs)
@@ -186,6 +205,17 @@ def main() -> None:
             f.write("\n")
         f.write("  };\n")
         f.write("}\n")
+
+    if outdated:
+        table = Table(title="Outdated dependencies")
+        table.add_column("Package")
+        table.add_column("Current")
+        table.add_column("Wanted")
+        for package, version in sorted(outdated.items()):
+            table.add_row(package, version['current'], version['wanted'])
+
+        console = Console()
+        console.print(table)
 
 
 if __name__ == "__main__":

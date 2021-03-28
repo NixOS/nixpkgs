@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "zsh-you-should-use";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     install -D you-should-use.plugin.zsh $out/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
     license = licenses.gpl3;
     description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";

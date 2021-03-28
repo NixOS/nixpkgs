@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk-engine-murrine }:
+{ lib, stdenv, fetchurl, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "nordic";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{LICENSE,README.md}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dark Gtk theme created using the awesome Nord color pallete";
     homepage = "https://github.com/EliverLara/Nordic";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi,
   asgiref, django, daphne
 }:
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ asgiref django daphne ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Brings event-driven capabilities to Django with a channel system";
     license = licenses.bsd3;
     homepage = "https://github.com/django/channels";

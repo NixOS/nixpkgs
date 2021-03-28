@@ -1,12 +1,12 @@
 { bctoolbox
 , cmake
 , fetchFromGitLab
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "ortp";
-  version = "4.4.9";
+  version = "4.4.34";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "0igiw863gnf9f626v0igg1pj3fv4anvlvlk6xx3bk2zdi52a9kcc";
+    sha256 = "1r1kvjzyfvkf66in4p51wi87balzg3sw3aq6r4xr609mz86spi5m";
   };
 
   # Do not build static libraries
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bctoolbox ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Real-Time Transport Protocol (RFC3550) stack";
     homepage = "https://linphone.org/technical-corner/ortp";
     license = licenses.gpl3Plus;

@@ -28,6 +28,7 @@ cc1=0
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
 cppInclude=1
 cInclude=1
+setDynamicLinker=1
 
 expandResponseParams "$@"
 declare -i n=0
@@ -58,6 +59,8 @@ while (( "$n" < "$nParams" )); do
         cppInclude=0
     elif [ "$p" = -nostdinc++ ]; then
         cppInclude=0
+    elif [[ "$p" = -static || "$p" = -static-pie ]]; then
+        setDynamicLinker=0
     elif [[ "$p" != -?* ]]; then
         # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
@@ -152,6 +155,9 @@ if [ "$dontLink" != 1 ]; then
     for i in $NIX_LDFLAGS_BEFORE_@suffixSalt@; do
         extraBefore+=("-Wl,$i")
     done
+    if [[ "$setDynamicLinker" = 1 && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
+        extraBefore+=("-Wl,-dynamic-linker=$NIX_DYNAMIC_LINKER_@suffixSalt@")
+    fi
     for i in $NIX_LDFLAGS_@suffixSalt@; do
         if [ "${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
@@ -192,7 +198,15 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-exec @prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+
+if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    exec @prog@ @<(printf "%q\n" \
+       ${extraBefore+"${extraBefore[@]}"} \
+       ${params+"${params[@]}"} \
+       ${extraAfter+"${extraAfter[@]}"})
+else
+    exec @prog@ \
+       ${extraBefore+"${extraBefore[@]}"} \
+       ${params+"${params[@]}"} \
+       ${extraAfter+"${extraAfter[@]}"}
+fi

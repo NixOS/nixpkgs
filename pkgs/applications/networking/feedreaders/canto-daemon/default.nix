@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, }:
+{ lib, fetchFromGitHub, python3Packages, }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.8";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "canto_next" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon for the canto Atom/RSS feed reader";
     longDescription = ''
       Canto is an Atom/RSS feed reader for the console that is meant to be

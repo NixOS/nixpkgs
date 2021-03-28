@@ -1,4 +1,4 @@
-{ stdenv, requireFile, SDL, libpulseaudio, alsaLib, runtimeShell }:
+{ lib, stdenv, requireFile, SDL, libpulseaudio, alsaLib, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "vessel-12082012";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   phases = "installPhase";
   ld_preload = ./isatty.c;
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]
-    + ":" + stdenv.lib.makeLibraryPath [ SDL libpulseaudio alsaLib ] ;
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]
+    + ":" + lib.makeLibraryPath [ SDL libpulseaudio alsaLib ] ;
 
   installPhase = ''
     mkdir -p $out/libexec/strangeloop/vessel/
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/Vessel
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fluid physics based puzzle game";
     longDescription = ''
       Living liquid machines have overrun this world of unstoppable progress,

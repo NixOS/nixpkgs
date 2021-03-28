@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests gevent ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Asynchronous HTTP requests";
     homepage = "https://github.com/kennethreitz/grequests";
     license = with licenses; [ bsd2 ];

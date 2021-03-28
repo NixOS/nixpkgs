@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, fetchzip, fetchFromGitHub
+{ lib, stdenv, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, cmake
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -14,13 +13,13 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-with stdenv.lib;
+with lib;
 
 let
   majorVersion = "1";
   minorVersion = "5";
-  maintenanceVersion = "3";
-  src_sha256 = "sha256:0jds8lrhk4hfdv7dg5p2ibzin9ivga7wrx7zwcmz6dqp3x792n1i";
+  maintenanceVersion = "4";
+  src_sha256 = "1ba1v7hakgj95xvhyff0zcp0574qv6vailjl48wl1f8w5k54lsw2";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
@@ -28,10 +27,10 @@ stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
 
-   src = fetchzip {
-     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-     sha256 = src_sha256;
-   };
+  src = fetchzip {
+    url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
+    sha256 = src_sha256;
+  };
 
   patches = [
     ./use-system-utf8proc-julia-1.3.patch
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
     arpack fftw fftwSinglePrec libgit2 libunwind mpfr
     pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
+  ] ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which cmake ];
 
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
     let
       arch = head (splitString "-" stdenv.system);
       march = {
-        x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64";
+        x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
         i686 = "pentium4";
         aarch64 = "armv8-a";
       }.${arch}
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
-      "USE_SYSTEM_BLAS=1"
+      (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
       "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
@@ -118,8 +117,6 @@ stdenv.mkDerivation rec {
     arpack fftw fftwSinglePrec libgit2 mpfr blas openlibm
     openspecfun pcre2 lapack
   ];
-
-  enableParallelBuilding = true;
 
   # Julia's tests require read/write access to $HOME
   preCheck = ''
@@ -152,8 +149,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ raskin rob garrison ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     broken = stdenv.isi686;
   };

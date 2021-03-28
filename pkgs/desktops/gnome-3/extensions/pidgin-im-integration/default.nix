@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, glib, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pidgin-im-integration";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   uuid = "pidgin@muffinmad";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/muffinmad/pidgin-im-gnome-shell-extension";
     description = "Make Pidgin IM conversations appear in the Gnome Shell message tray";
     license = licenses.gpl2;

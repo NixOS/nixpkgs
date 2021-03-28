@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , python
 , buildPythonPackage
 , fetchPypi
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "progressbar" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://progressbar-2.readthedocs.io/en/latest/";
     description = "Text progressbar library for python";
     license = licenses.bsd3;

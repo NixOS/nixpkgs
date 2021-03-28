@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib }:
+{ lib, stdenv, fetchurl, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "ircd-hybrid-8.2.35";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An IPv6-capable IRC server";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     homepage = "https://www.ircd-hybrid.org/";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
 , withCC ? true, opencc
@@ -21,28 +21,28 @@ mkDerivation rec {
 
   patches = [
     ./0001-dont-check-for-updates.patch
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     ./0001-dont-use-maclibs.patch
   ];
 
   postPatch = ''
     substituteInPlace goldendict.pro \
-      --replace "hunspell-1.6.1" "hunspell-${stdenv.lib.versions.majorMinor hunspell.version}"
+      --replace "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}"
   '';
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ qtx11extras libXtst ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ bzip2 libiconv ]
-    ++ stdenv.lib.optional withCC opencc
-    ++ stdenv.lib.optional withEpwing libeb
-    ++ stdenv.lib.optional withExtraTiff libtiff
-    ++ stdenv.lib.optionals withFFmpeg [ libao ffmpeg_3 ]
-    ++ stdenv.lib.optional withZim zstd;
+  ] ++ lib.optionals stdenv.isLinux [ qtx11extras libXtst ]
+    ++ lib.optionals stdenv.isDarwin [ bzip2 libiconv ]
+    ++ lib.optional withCC opencc
+    ++ lib.optional withEpwing libeb
+    ++ lib.optional withExtraTiff libtiff
+    ++ lib.optionals withFFmpeg [ libao ffmpeg_3 ]
+    ++ lib.optional withZim zstd;
 
-  qmakeFlags = with stdenv.lib; [
+  qmakeFlags = with lib; [
     "goldendict.pro"
     (optional withCC "CONFIG+=chinese_conversion_support")
     (optional (!withCC) "CONFIG+=no_chinese_conversion_support")
@@ -53,13 +53,13 @@ mkDerivation rec {
     (optional withZim "CONFIG+=zim_support")
   ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GoldenDict.app $out/Applications
     wrapQtApp $out/Applications/GoldenDict.app/Contents/MacOS/GoldenDict
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://goldendict.org/";
     description = "A feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;

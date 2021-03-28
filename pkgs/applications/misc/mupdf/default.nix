@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, freetype, harfbuzz, openjpeg
 , jbig2dec, libjpeg , darwin
 , gumbo
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
@@ -22,24 +22,28 @@ in stdenv.mkDerivation rec {
     sha256 = "0rljl44y8p8hgaqializlyrgpij1wbnrzyp0ll5kcg7w05nylq48";
   };
 
-  patches =
-    stdenv.lib.optional stdenv.isDarwin ./darwin.patch ++ [
+  patches = lib.optional stdenv.isDarwin ./darwin.patch ++ [
     (fetchpatch {
-        name = "pdfocr.patch";
-        url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=a507b139adf37d2c742e039815601cdc2aa00a84";
-        sha256 = "1fx6pdgwrbk3bqsx53764d61llfj9s5q8lxqkna7mjnp7mg4krj3";
-      })
+      name = "pdfocr.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=a507b139adf37d2c742e039815601cdc2aa00a84";
+      sha256 = "1fx6pdgwrbk3bqsx53764d61llfj9s5q8lxqkna7mjnp7mg4krj3";
+    })
     (fetchpatch {
-        name = "pdf-layer.patch";
-        url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=b82e9b6d6b46877e5c3763cc3bc641c66fa7eb54";
-        sha256 = "0ma8jq8d9a0mf26qjklgi4gdaflpjik1br1nhafzvjz7ccl56ksm";
-      })
+      name = "pdf-layer.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=b82e9b6d6b46877e5c3763cc3bc641c66fa7eb54";
+      sha256 = "0ma8jq8d9a0mf26qjklgi4gdaflpjik1br1nhafzvjz7ccl56ksm";
+    })
     (fetchpatch {
-        name = "pixmap.patch";
-        url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=32e4e8b4bcbacbf92af7c88337efae21986d9603";
-        sha256 = "1zqkxgwrhcwsdya98pcmpq2815jjmv3fwsp0sba9f5nq5xi6whbj";
-      })
-    ];
+      name = "pixmap.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=32e4e8b4bcbacbf92af7c88337efae21986d9603";
+      sha256 = "1zqkxgwrhcwsdya98pcmpq2815jjmv3fwsp0sba9f5nq5xi6whbj";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3407.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=cee7cefc610d42fd383b3c80c12cbc675443176a";
+      sha256 = "18g9jsj90jnqibaff8pqi70a7x8ygc3sh4jl4xnvlv8vr7fxxbh6";
+    })
+  ];
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
@@ -49,7 +53,7 @@ in stdenv.mkDerivation rec {
   buildFlags = [ "shared" ];
 
   makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU gumbo ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
@@ -97,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mupdf.com";
     repositories.git = "git://git.ghostscript.com/mupdf.git";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";

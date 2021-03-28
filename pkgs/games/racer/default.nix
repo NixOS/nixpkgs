@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, allegro, libjpeg, makeWrapper }:
+{ fetchurl, lib, stdenv, allegro, libjpeg, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "racer-1.1";
@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   } else
     throw "System not supported";
 
-
-  buildInputs = [ allegro libjpeg makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ allegro libjpeg ];
 
   prePatch = ''
     sed -i s,/usr/local,$out, Makefile src/HGFX.cpp src/STDH.cpp
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Car racing game";
     homepage = "http://hippo.nipax.cz/download.en.php";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

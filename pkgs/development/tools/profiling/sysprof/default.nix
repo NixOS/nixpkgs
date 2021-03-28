@@ -10,7 +10,7 @@
 , libxml2
 , meson, ninja
 , pango
-, pkgconfig
+, pkg-config
 , polkit
 , shared-mime-info
 , systemd
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1z2i9187f2jx456l7h07wy8m9a0p7pj3xiv1aji3snq7rjb1lkj0";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     shared-mime-info
     wrapGAppsHook
     gnome3.adwaita-icon-theme
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System-wide profiler for Linux";
     homepage = "https://wiki.gnome.org/Apps/Sysprof";
     longDescription = ''

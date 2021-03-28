@@ -364,7 +364,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = ''Count of subordinate user ids'';
+        description = "Count of subordinate user ids";
       };
     };
   };
@@ -381,7 +381,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = ''Count of subordinate group ids'';
+        description = "Count of subordinate group ids";
       };
     };
   };
@@ -568,7 +568,7 @@ in {
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = (mapAttrs' (name: { packages, ... }: {
+    environment.etc = (mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";

@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 , gnome3
 , gnome-icon-theme
 , hicolor-icon-theme
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-x-icons";
     description = "Mint/metal theme based on mintified versions of Clearlooks Revamp, Elementary and Faenza";
     license = licenses.gpl3Plus; # from debian/copyright

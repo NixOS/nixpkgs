@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "copyright-update";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL=install" "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jaalto/project--copyright-update";
     description = "Updates the copyright information in a set of files";
     license = licenses.gpl2Plus;

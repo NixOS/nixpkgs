@@ -1,4 +1,4 @@
-{ appimageTools, buildFHSUserEnv, extraPkgs ? pkgs: [] }:
+{ appimageTools, buildFHSUserEnv, extraPkgs ? pkgs: [], appimage-run-tests ? null }:
 
 let
   fhsArgs = appimageTools.defaultFhsEnvArgs;
@@ -8,4 +8,6 @@ in buildFHSUserEnv (fhsArgs // {
   targetPkgs = pkgs: [ appimageTools.appimage-exec ]
     ++ fhsArgs.targetPkgs pkgs ++ extraPkgs pkgs;
   runScript = "appimage-exec.sh";
+
+  passthru.tests.appimage-run = appimage-run-tests;
 })

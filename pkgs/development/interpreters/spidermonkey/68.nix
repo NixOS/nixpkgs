@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, python3, zip, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, python3, zip, buildPackages
 , which, readline, zlib, icu, cargo, rustc, llvmPackages }:
 
-with stdenv.lib;
+with lib;
 
 let
   python3Env = buildPackages.python3.withPackages (p: [p.six]);
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf213
-    pkgconfig
+    pkg-config
     perl
     which
     python2
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
-, libvpx, check, libconfig, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
+, libvpx, check, libconfig, pkg-config }:
 
 stdenv.mkDerivation {
   name = "tox-core-new-20160727";
@@ -30,14 +30,14 @@ stdenv.mkDerivation {
   ];
 
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
     autoreconfHook libsodium ncurses check libconfig
-  ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
+  ] ++ lib.optionals (!stdenv.isAarch32) [
     libopus
   ];
 
-  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isAarch32) [ libvpx ];
+  propagatedBuildInputs = lib.optionals (!stdenv.isAarch32) [ libvpx ];
 
   # Some tests fail randomly due to timeout. This kind of problem is well known
   # by upstream: https://github.com/irungentoo/toxcore/issues/{950,1054}
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   # NOTE: run the tests locally on your machine before upgrading this package!
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

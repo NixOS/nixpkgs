@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fltk13, ghostscript }:
+{ lib, stdenv, fetchurl, fltk13, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "flpsed";
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # replace the execvp call to ghostscript
-    sed -e '/exec_gs/ {n; s|"gs"|"${stdenv.lib.getBin ghostscript}/bin/gs"|}' \
+    sed -e '/exec_gs/ {n; s|"gs"|"${lib.getBin ghostscript}/bin/gs"|}' \
         -i src/GsWidget.cxx
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WYSIWYG PostScript annotator";
     homepage = "https://flpsed.org/flpsed.html";
     license = licenses.gpl3;

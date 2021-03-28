@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "yj";
@@ -15,8 +15,8 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
 
-  meta = with stdenv.lib; {
-    description = ''Convert YAML <=> TOML <=> JSON <=> HCL'';
+  meta = with lib; {
+    description = "Convert YAML <=> TOML <=> JSON <=> HCL";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ];
     homepage = "https://github.com/sclevine/yj";

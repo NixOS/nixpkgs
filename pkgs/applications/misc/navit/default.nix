@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk2, fontconfig, freetype, imlib2
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, fontconfig, freetype, imlib2
 , SDL_image, libGLU, libGL, libXmu, freeglut, pcre, dbus, dbus-glib, glib
 , librsvg, freeimage, libxslt, cairo, gdk-pixbuf, pango
 , atk, patchelf, fetchurl, bzip2, python, gettext, quesoglc
@@ -15,7 +15,7 @@
 
 assert speechdSupport -> speechd != null;
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "navit";
   version = "0.5.3";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       qtbase qtlocation qtdeclarative qtsvg
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig cmake patchelf bzip2 ];
+  nativeBuildInputs = [ makeWrapper pkg-config cmake patchelf bzip2 ];
 
   # we dont want blank screen by defaut
   postInstall = ''
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   # TODO: fix upstream?
-  libPath = stdenv.lib.makeLibraryPath ([ stdenv.cc.libc ] ++ buildInputs );
+  libPath = lib.makeLibraryPath ([ stdenv.cc.libc ] ++ buildInputs );
   postFixup =
   ''
     find "$out/lib" -type f -name "*.so" -exec patchelf --set-rpath $libPath {} \;

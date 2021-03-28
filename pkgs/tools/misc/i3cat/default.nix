@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   pname = "i3cat";
-  version = "20150321-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20150321-${lib.strings.substring 0 7 rev}";
   rev = "b9ba886a7c769994ccd8d4627978ef4b51fcf576";
 
   goPackagePath = "github.com/vincent-petithory/i3cat";

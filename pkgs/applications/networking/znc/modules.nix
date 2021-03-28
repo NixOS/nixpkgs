@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, znc }:
+{ lib, stdenv, fetchFromGitHub, znc }:
 
 let
   zncDerivation = a@{
@@ -11,7 +11,7 @@ let
 
     buildInputs = znc.buildInputs;
 
-    meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
+    meta = a.meta // { platforms = lib.platforms.unix; };
     passthru.module_name = module_name;
   });
 
@@ -29,7 +29,7 @@ in {
       sha256 = "1k7ifpqqzzf2j7w795q4mx1nvmics2higzjqr3mid3lp43sqg5s6";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Request backlog for IRC channels.";
       homepage = "https://github.com/fruitiex/znc-backlog/";
       license = licenses.asl20;
@@ -49,7 +49,7 @@ in {
       sha256 = "1jaspnrbv3pzsnbysqygc8s8g3q07zx5nlrdpgwv9j8aryg0pcnh";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = licenses.asl20;
@@ -69,7 +69,7 @@ in {
       sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ZNC clientaway module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
@@ -93,7 +93,7 @@ in {
     meta = {
       description = "ZNC FiSH module";
       homepage = "https://github.com/dctrwatson/znc-fish";
-      maintainers = [ stdenv.lib.maintainers.offline ];
+      maintainers = [ lib.maintainers.offline ];
     };
   };
 
@@ -109,7 +109,7 @@ in {
       sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ZNC ignore module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
@@ -119,21 +119,21 @@ in {
 
   palaver = zncDerivation rec {
     name = "znc-palaver-${version}";
-    version = "2018-09-18";
+    version = "2020-07-18";
     module_name = "palaver";
 
     src = fetchFromGitHub {
       owner = "cocodelabs";
       repo = "znc-palaver";
-      rev = "c70e8112686f917d39197d582db36c3ea37a4cb6";
-      sha256 = "1gjr8yqgpkpcc18rf0zfgil3rcd1ihqk0q9f8rwbfvs5381h3c58";
+      rev = "825cb6814d64006ca0f85fec23fa0a8a3a2d14ca";
+      sha256 = "zXWPIxhO5Z2L6f+Hf3vIpEh6V4kjUONWAaKexKLECc8=";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
       license = licenses.mit;
-      maintainers = with maintainers; [ kiwi ];
+      maintainers = with maintainers; [ kiwi szlend ];
     };
   };
 
@@ -149,7 +149,7 @@ in {
       sha256 = "0mgfajljy035051b2sx70i8xrb51zw9q2z64kf85zw1lynihzyh4";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = licenses.asl20;
@@ -190,8 +190,8 @@ in {
     meta = {
       description = "Push notification service module for ZNC";
       homepage = "https://github.com/jreese/znc-push";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ offline schneefux ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ offline schneefux ];
     };
   };
 

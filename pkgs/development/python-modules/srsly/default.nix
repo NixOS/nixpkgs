@@ -1,9 +1,9 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , cython
+, catalogue
 , mock
 , numpy
 , pathlib
@@ -13,16 +13,18 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.3.2";
+  version = "2.4.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f78eaef8d982e98921ce026d4205e652a9333137259f0b621f5c7b579e746e9d";
+    sha256 = "e29730be53015970e4a59050e8e9f9be44d762108a617df56c9dfc981b515ab7";
   };
 
   nativeBuildInputs = [ cython ];
+
+  propagatedBuildInputs = [ catalogue ];
 
   checkInputs = [
     mock
@@ -37,10 +39,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srsly" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern high-performance serialization utilities for Python";
     homepage = "https://github.com/explosion/srsly";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
   };
 }

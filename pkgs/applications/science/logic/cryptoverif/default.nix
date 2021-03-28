@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml }:
+{ lib, stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
   pname = "cryptoverif";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
     homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
-    license     = stdenv.lib.licenses.cecill-b;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.cecill-b;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

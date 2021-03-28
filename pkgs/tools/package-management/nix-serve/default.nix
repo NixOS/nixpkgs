@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub,
   bzip2, nix, perl, perlPackages,
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   rev = "e4675e38ab54942e351c7686e40fabec822120b9";

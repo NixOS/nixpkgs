@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , mkDerivation
 , fetchurl
 , libxml2
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client application for operating Czech government-provided Databox infomation system";
     homepage = "https://www.datovka.cz/";
     license = licenses.lgpl3;

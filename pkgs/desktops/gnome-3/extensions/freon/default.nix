@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib }:
+{ lib, stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-freon";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Shell extension for displaying CPU, GPU, disk temperatures, voltage and fan RPM in the top panel";
     license = licenses.gpl2;
     maintainers = with maintainers; [ justinas ];

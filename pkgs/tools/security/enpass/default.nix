@@ -51,7 +51,7 @@ let
       url = "${baseUrl}/${data.path}";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A well known password manager";
       homepage = "https://www.enpass.io/";
       license = licenses.unfree;
@@ -59,7 +59,8 @@ let
       maintainers = with maintainers; [ ewok ];
     };
 
-    buildInputs = [makeWrapper dpkg];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [dpkg];
     phases = [ "unpackPhase" "installPhase" ];
 
     unpackPhase = "dpkg -X $src .";
@@ -79,7 +80,9 @@ let
       # lsof must be in PATH for proper operation
       wrapProgram $out/bin/Enpass \
         --set LD_LIBRARY_PATH "${libPath}" \
-        --prefix PATH : ${lsof}/bin
+        --prefix PATH : ${lsof}/bin \
+        --unset QML2_IMPORT_PATH \
+        --unset QT_PLUGIN_PATH
     '';
   };
   updater = {

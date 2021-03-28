@@ -1,4 +1,4 @@
-{ lib, fetchurl, python, buildPythonPackage, pkgconfig, pygobject2, glib, pygtk, gnome2 }:
+{ lib, fetchurl, python, buildPythonPackage, pkg-config, pygobject2, glib, pygtk, gnome2 }:
 
 buildPythonPackage rec {
   pname = "pygtksourceview";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   patches = [ ./codegendir.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ python pygobject2 glib pygtk gnome2.gtksourceview ];
 
   meta = {

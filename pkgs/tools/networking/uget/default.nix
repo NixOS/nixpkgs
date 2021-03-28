@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify,
+{ lib, stdenv, fetchurl, pkg-config, intltool, openssl, curl, libnotify,
   libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2 ? null
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     wrapGAppsHook
   ];
@@ -23,17 +23,17 @@ stdenv.mkDerivation rec {
     libnotify
     libappindicator-gtk3
     gtk3
-    (stdenv.lib.getLib dconf)
+    (lib.getLib dconf)
   ]
   ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
-  ++ (stdenv.lib.optional (aria2 != null) aria2);
+  ++ (lib.optional (aria2 != null) aria2);
 
   enableParallelBuilding = true;
 
-  preFixup = stdenv.lib.optionalString (aria2 != null)
+  preFixup = lib.optionalString (aria2 != null)
                ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Download manager using GTK and libcurl";
     longDescription = ''
       uGet is a VERY Powerful download manager application with a large

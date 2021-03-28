@@ -8,9 +8,9 @@ let
   # Convert systemd-style address specification to kresd config line(s).
   # On Nix level we don't attempt to precisely validate the address specifications.
   mkListen = kind: addr: let
-    al_v4 = builtins.match "([0-9.]\+):([0-9]\+)" addr;
-    al_v6 = builtins.match "\\[(.\+)]:([0-9]\+)" addr;
-    al_portOnly = builtins.match "()([0-9]\+)" addr;
+    al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
+    al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
+    al_portOnly = builtins.match "()([0-9]+)" addr;
     al = findFirst (a: a != null)
       (throw "services.kresd.*: incorrect address specification '${addr}'")
       [ al_v4 al_v6 al_portOnly ];
@@ -140,7 +140,7 @@ in {
 
     # Try cleaning up the previously default location of cache file.
     # Note that /var/cache/* should always be safe to remove.
-    # TODO: remove later, probably between 20.09 and 21.03
+    # TODO: remove later, probably between 20.09 and 21.05
     systemd.tmpfiles.rules = [ "R /var/cache/kresd" ];
   };
 }

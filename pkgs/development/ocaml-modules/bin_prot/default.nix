@@ -1,6 +1,6 @@
-{ stdenv, buildOcaml, fetchurl, ocaml, type_conv }:
+{ lib, buildOcaml, fetchurl, ocaml, type_conv }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "bin_prot-112.24.00 is not available for OCaml ${ocaml.version}"
 else
 
@@ -19,7 +19,7 @@ buildOcaml rec {
 
   hasSharedObjects = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/janestreet/bin_prot";
     description = "Binary protocol generator ";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pari
@@ -14,7 +14,7 @@ assert withFlint -> flint != null;
 
 stdenv.mkDerivation rec {
   pname = "eclib";
-  version = "20190909"; # upgrade might break the sage interface
+  version = "20210223"; # upgrade might break the sage interface
   # sage tests to run:
   # src/sage/interfaces/mwrank.py
   # src/sage/libs/eclib
@@ -23,22 +23,22 @@ stdenv.mkDerivation rec {
     owner = "JohnCremona";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y1vdi4120gdw56gg2dn3wh625yr9wpyk3wpbsd25w4lv83qq5da";
+    sha256 = "sha256-xnSw5cdg4PLa0GT/blCYDz/IG5aj+HG2NHSlyCiH9g0=";
   };
   buildInputs = [
     pari
     ntl
     gmp
-  ] ++ stdenv.lib.optionals withFlint [
+  ] ++ lib.optionals withFlint [
     flint
   ];
   nativeBuildInputs = [
     autoreconfHook
   ];
   doCheck = true;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
-    description = ''Elliptic curve tools'';
+    description = "Elliptic curve tools";
     homepage = "https://github.com/JohnCremona/eclib";
     license = licenses.gpl2Plus;
     maintainers = teams.sage.members;

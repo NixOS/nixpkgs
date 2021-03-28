@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitLab, cmake, gfortran, perl
+{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
 , openblas, hdf5-cpp, python3, texlive
-, armadillo, openmpi, globalarrays, openssh
+, armadillo, mpi, globalarrays, openssh
 , makeWrapper, fetchpatch
 } :
 
@@ -33,12 +33,10 @@ in stdenv.mkDerivation {
     hdf5-cpp
     python
     armadillo
-    openmpi
+    mpi
     globalarrays
     openssh
   ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DOPENMP=ON"
@@ -67,11 +65,11 @@ in stdenv.mkDerivation {
     wrapProgram $out/bin/pymolcas --set MOLCAS $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced quantum chemistry software package";
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = [ "x86_64-linux" ];
   };
 }

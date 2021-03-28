@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "gmm";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mhygfpsdyr0d4h3sn6g7nxn149yrlqv7r2h34yqkrpv1q4daqvi";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic C++ template library for sparse, dense and skyline matrices";
     homepage = "http://getfem.org/gmm.html";
     license = licenses.lgpl21Plus;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , pandas, shapely, fiona, descartes, pyproj
 , pytestCheckHook, Rtree, fetchpatch }:
 
@@ -29,10 +29,6 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook Rtree ];
-  disabledTests = [ "web" ];
-  pytestFlagsArray = [ "geopandas" ];
-
   propagatedBuildInputs = [
     pandas
     shapely
@@ -41,7 +37,12 @@ buildPythonPackage rec {
     pyproj
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ pytestCheckHook Rtree ];
+  disabledTests = [ "web" ];
+  pytestFlagsArray = [ "geopandas" ];
+
+  meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
     license = licenses.bsd3;

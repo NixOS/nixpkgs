@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "quicktemplate";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/valyala/quicktemplate";
     description = "Fast, powerful, yet easy to use template engine for Go";
     license = licenses.mit;

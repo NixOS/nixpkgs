@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "libungif-4.1.4";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library and utilities for processing GIFs";
     platforms = platforms.unix;
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , pkg-config
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtest doxygen graphviz lcov ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/properties-cpp";
     description = "A very simple convenience library for handling properties and signals in C++11";
     license = licenses.lgpl3Only;

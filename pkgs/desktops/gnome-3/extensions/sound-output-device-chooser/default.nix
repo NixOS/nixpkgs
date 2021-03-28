@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchFromGitHub
 , libpulseaudio
@@ -7,16 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-sound-output-device-chooser";
-  version = "32";
+  version = "35";
 
   src = fetchFromGitHub {
     owner = "kgshank";
     repo = "gse-sound-output-device-chooser";
     rev = version;
-    sha256 = "1s83scr80qv5xmlfsy6dnsj96lwg2rr4pbsw9inld3ylblgvi35l";
+    sha256 = "sha256-Yl5ut6kJAkAAdCBiNFpwDgshXCLMmFH3/zhnFGpyKqs=";
   };
 
   patches = [
+    # Fix paths to libpulse and python
     (substituteAll {
       src = ./fix-paths.patch;
       libpulse = "${libpulseaudio}/lib/libpulse.so";
@@ -34,9 +35,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Shell extension adding audio device chooser to panel";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     homepage = "https://github.com/kgshank/gse-sound-output-device-chooser";
   };

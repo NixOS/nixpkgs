@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "webmetro";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0xifc3jwj0c6ynx0gzm5zlnfcq023fjpjmdg9x0vs1fh3b42pdsy";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple relay server for broadcasting a WebM stream";
     longDescription = ''
     Webmetro is a simple relay server for broadcasting a WebM stream

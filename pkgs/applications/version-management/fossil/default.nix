@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , installShellFiles
 , tcl
 , libiconv
@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.13";
+  version = "2.14";
 
   src = fetchurl {
     urls =
@@ -23,18 +23,18 @@ stdenv.mkDerivation rec {
         "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
     name = "${pname}-${version}.tar.gz";
-    sha256 = "1xbk7bb7340x2vvn22ykii54v721fwk8vgr3xvjkvv8ff7hd6cyr";
+    sha256 = "sha256-uNDJIBlt2K4pFS+nRI5ROh+nxYiHG3heP7/Ae0KgX7k=";
   };
 
   nativeBuildInputs = [ installShellFiles tcl ];
 
   buildInputs = [ zlib openssl readline sqlite which ed ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   configureFlags = [ "--disable-internal-sqlite" ]
-    ++ stdenv.lib.optional withJson "--json";
+    ++ lib.optional withJson "--json";
 
   preCheck = ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple, high-reliability, distributed software configuration management";
     longDescription = ''
       Fossil is a software configuration management system.  Fossil is

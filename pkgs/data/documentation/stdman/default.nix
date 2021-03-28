@@ -1,4 +1,4 @@
-{ stdenv, curl, fetchFromGitHub }:
+{ lib, stdenv, curl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "stdman";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Formatted C++17 stdlib man pages (cppreference)";
     longDescription = "stdman is a tool that parses archived HTML
       files from cppreference and generates groff-formatted manual

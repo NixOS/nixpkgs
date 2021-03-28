@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libarchive, python, file, which }:
+{ lib, stdenv, fetchurl, libarchive, python, file, which }:
 
 stdenv.mkDerivation rec {
   pname = "remarkable-toolchain";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ENVCLEANED=1 $src -y -d $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolchain for cross-compiling to reMarkable tablets";
     homepage = "https://remarkable.engineering/";
     license = licenses.gpl2;

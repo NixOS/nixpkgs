@@ -1,15 +1,15 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, future, sqlalchemy,
+  python, twisted, jinja2, zope_interface, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, nixosTests }:
+  parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
 
 let
   withPlugins = plugins: buildPythonPackage {
     name = "${package.name}-with-plugins";
     phases = [ "installPhase" "fixupPhase" ];
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
     installPhase = ''
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.9.2";
+    version = "3.0.2";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "019xfxjnyfi69d5sm3alvib24g8giqlvc102p8hqg8mfm7hc9z2v";
+      sha256 = "0iywcvq1sx9z5f37pw7g9qqm19fr3bymzawb0i2afm737hxr2xfp";
     };
 
     propagatedBuildInputs = [
@@ -67,6 +67,9 @@ let
       git
       openssh
       glibcLocales
+      # optional dependency that was accidentally made required for tests
+      # https://github.com/buildbot/buildbot/pull/5857
+      ldap3
     ];
 
     patches = [

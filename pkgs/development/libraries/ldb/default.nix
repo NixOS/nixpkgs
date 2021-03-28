@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python3
 , pkg-config
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   stripDebugList = [ "bin" "lib" "modules" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A LDAP-like embedded database";
     homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;

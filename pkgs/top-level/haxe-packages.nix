@@ -1,10 +1,10 @@
-{ stdenv, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
+{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
 
 let
   self = haxePackages;
   haxePackages = with self; {
 
-    withCommas = stdenv.lib.replaceChars ["."] [","];
+    withCommas = lib.replaceChars ["."] [","];
 
     # simulate "haxelib dev $libname ."
     simulateHaxelibDev = libname: ''
@@ -53,8 +53,8 @@ let
 
         meta = {
           homepage = "http://lib.haxe.org/p/${libname}";
-          license = stdenv.lib.licenses.bsd2;
-          platforms = stdenv.lib.platforms.all;
+          license = lib.licenses.bsd2;
+          platforms = lib.platforms.all;
           description = throw "please write meta.description";
         } // attrs.meta;
       });
@@ -67,7 +67,7 @@ let
         for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
           chmod +w "$f"
           patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)   "$f" || true
-          patchelf --set-rpath ${ stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
+          patchelf --set-rpath ${ lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
         done
       '';
       meta.description = "Runtime support library for the Haxe C++ backend";
@@ -110,8 +110,8 @@ let
       installPhase = installLibHaxe { inherit libname version; };
       meta = {
         homepage = "http://lib.haxe.org/p/${libname}";
-        license = stdenv.lib.licenses.bsd2;
-        platforms = stdenv.lib.platforms.all;
+        license = lib.licenses.bsd2;
+        platforms = lib.platforms.all;
         description = "Extern definitions for node.js 6.9";
       };
     };

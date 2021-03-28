@@ -11,7 +11,7 @@
   glib,
   pango,
   fontconfig,
-  stdenv,
+  lib, stdenv,
   pytest,
   pytestrunner,
   pytest-isort,
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     sha256 = "0rwf43111ws74m8b1alkkxzz57g0np3vmd8as74adwnxslfcg4gs";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
     license = licenses.bsd3;

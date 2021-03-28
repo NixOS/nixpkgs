@@ -7,7 +7,7 @@ index d116619..a1366ce 100644
 +	cmake_policy(SET CMP0048 NEW)
 +endif (POLICY CMP0048)
 +
- project(move-transition VERSION 2.0.2)
+ project(move-transition VERSION 2.3.0)
  set(PROJECT_FULL_NAME "Move Transition")
  
 +include(FindLibobs.cmake)
@@ -17,9 +17,9 @@ index d116619..a1366ce 100644
 +	"${LIBOBS_INCLUDE_DIR}/../plugins/obs-transitions"
 +	"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api")
 +
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
+
  set(move-transition_HEADERS
- 	move-transition.h
- 	easing.h)
 @@ -34,4 +45,10 @@ target_link_libraries(move-transition
  	libobs)
  

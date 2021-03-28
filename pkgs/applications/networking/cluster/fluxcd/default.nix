@@ -1,25 +1,43 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
+
+let
+  version = "0.10.0";
+
+  manifests = fetchzip {
+    url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
+    sha256 = "Der1Ud27eIV450KkxDTF2frmeKEHKsg6vJgdXE+3548=";
+    stripRoot = false;
+  };
+in
 
 buildGoModule rec {
+  inherit version;
+
   pname = "fluxcd";
-  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "125im8br7x8djd6zagvikpc02k55pxbd97rjj3g2frj9plbryh8n";
+    sha256 = "iJ6UyHbF4+RvfNoOuHt6X2R6XhpBe+t76deldwY5P2c=";
   };
 
-  vendorSha256 = "0f818a0z71nl061db93iqb87njx66vbrra1zh92warbx8djdsr7k";
+  vendorSha256 = "Z0keCr+KZ593c6a/56lYJwOgXu5hrUSn6N3NFf2LDUM=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  doCheck = false;
 
   subPackages = [ "cmd/flux" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];
+
+  postUnpack = ''
+    cp -r ${manifests} source/cmd/flux/manifests
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/flux --version | grep ${version} > /dev/null
+  '';
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -28,7 +46,7 @@ buildGoModule rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
       Flux is a tool for keeping Kubernetes clusters in sync

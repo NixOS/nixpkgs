@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi, pytest, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   doCheck = false; # This package has nothing to test or import.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "pytest plugin for unittest subTest() support and subtests fixture";
     homepage = "https://github.com/pytest-dev/pytest-subtests";
     license = licenses.mit;

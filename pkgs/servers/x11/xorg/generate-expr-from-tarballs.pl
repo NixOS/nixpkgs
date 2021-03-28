@@ -292,7 +292,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
-    unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
+    unshift @arguments, "stdenv", "pkg-config", "fetchurl";
     my $argumentsStr = join ", ", @arguments;
 
     my $extraAttrsStr = "";
@@ -309,9 +309,9 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
+    nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
-    meta.platforms = stdenv.lib.platforms.unix;
+    meta.platforms = lib.platforms.unix;
   }) {};
 
 EOF

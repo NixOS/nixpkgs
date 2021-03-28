@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
 
 buildPythonPackage rec {
   pname = "Flask-Testing";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask ];
 
-  checkInputs = [ blinker ] ++ stdenv.lib.optionals (!isPy3k) [ twill ];
+  checkInputs = [ blinker ] ++ lib.optionals (!isPy3k) [ twill ];
 
   # twill integration is outdated in Python 2, hence it the tests fails.
   # Some of the tests use localhost networking on darwin.
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_testing" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flask unittest integration.";
     homepage = "https://pythonhosted.org/Flask-Testing/";
     license = licenses.bsd3;

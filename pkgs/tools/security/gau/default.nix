@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "17ag2wvaxv2dyx3yx3fvlf36ww4a44660pn4gvpbrwacsan9as5s";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to fetch known URLs";
     longDescription = ''
       getallurls (gau) fetches known URLs from various sources for any

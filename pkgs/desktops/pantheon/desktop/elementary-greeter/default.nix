@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;

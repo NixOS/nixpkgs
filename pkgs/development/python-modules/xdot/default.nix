@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb_run, stdenv
+{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb_run
 , wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gtk3, numpy }:
 
 buildPythonPackage rec {
@@ -20,7 +20,8 @@ buildPythonPackage rec {
   '';
 
   # https://github.com/NixOS/nixpkgs/pull/107872#issuecomment-752175866
-  doCheck = stdenv.isLinux;
+  # cannot import name '_gi' from partially initialized module 'gi' (most likely due to a circular import)
+  doCheck = false;
 
   meta = with lib; {
     description = "An interactive viewer for graphs written in Graphviz's dot";

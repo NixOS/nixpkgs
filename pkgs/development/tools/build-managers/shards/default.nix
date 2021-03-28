@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , crystal_0_34
-, crystal_0_35
+, crystal_0_36
 }:
 let
   generic =
@@ -26,7 +26,7 @@ let
       # tries to execute git which fails spectacularly
       doCheck = false;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Dependency manager for the Crystal language";
         license = licenses.asl20;
         maintainers = with maintainers; [ peterhoeg ];
@@ -36,17 +36,18 @@ let
 
 in
 rec {
+  # needed for anything that requires the old v1 shards format
   shards_0_11 = generic {
     version = "0.11.1";
     sha256 = "05qnhc23xbmicdl4fwyxfpcvd8jq4inzh6v7jsjjw4n76vzb1f71";
     crystal = crystal_0_34;
   };
 
-  shards_0_12 = generic {
-    version = "0.12.0";
-    sha256 = "0dginczw1gc5qlb9k4b6ldxzqz8n97jrrnjvj3mm9wcdbc9j6h3c";
-    crystal = crystal_0_35;
+  shards_0_14 = generic {
+    version = "0.14.1";
+    sha256 = "sha256-/C6whh5RbTBkFWqpn0GqyVe0opbrklm8xPv5MIG99VU=";
+    crystal = crystal_0_36;
   };
 
-  shards = shards_0_12;
+  shards = shards_0_14;
 }

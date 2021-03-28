@@ -7,10 +7,11 @@
   , patches ? [ ]
 }:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
-, Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
+, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , jansson, harfbuzz
+, dontRecurseIntoAttrs ,emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin
@@ -18,6 +19,7 @@
 , withGTK2 ? false, gtk2-x11 ? null
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
+, withMotif ? false, motif ? null
 , withCsrc ? true
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
@@ -26,6 +28,7 @@
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
+  else if withMotif then "motif"
   else "lucid")
 }:
 
@@ -40,9 +43,7 @@ assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
-let
-
-in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
+let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 } // lib.optionalAttrs stdenv.isDarwin {
@@ -61,6 +62,12 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     (lib.optionalString srcRepo ''
       rm -fr .git
     '')
+
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    ''
+      substituteInPlace src/Makefile.in \
+        --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+    ''
 
     ''
     substituteInPlace lisp/international/mule-cmds.el \
@@ -93,7 +100,7 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ""
   ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ]
+  nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
@@ -108,6 +115,7 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
+    ++ lib.optional (withX && withMotif) motif
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
     ++ lib.optionals nativeComp [ libgccjit ]
@@ -128,7 +136,7 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets"
-    ++ lib.optional nativeComp "--with-nativecomp"
+    ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
     ;
 
@@ -157,6 +165,14 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   '' + lib.optionalString (nativeComp && withNS) ''
     ln -snf $out/lib/emacs/*/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
   '' + lib.optionalString nativeComp ''
+    echo "Generating native-compiled trampolines..."
+    # precompile trampolines in parallel, but avoid spawning one process per trampoline.
+    # 1000 is a rough lower bound on the number of trampolines compiled.
+    $out/bin/emacs --batch --eval "(mapatoms (lambda (s) \
+      (when (subr-primitive-p (symbol-function s)) (print s))))" \
+      | xargs -n $((1000/NIX_BUILD_CORES + 1)) -P $NIX_BUILD_CORES \
+        $out/bin/emacs --batch -l comp --eval "(while argv \
+          (comp-trampoline-compile (intern (pop argv))))"
     mkdir -p $out/share/emacs/native-lisp
     $out/bin/emacs --batch \
       --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
@@ -175,9 +191,10 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   passthru = {
     inherit nativeComp;
+    pkgs = dontRecurseIntoAttrs (emacsPackagesFor emacs);
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The extensible, customizable GNU text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
@@ -201,4 +218,5 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       separately.
     '';
   };
-})
+});
+in emacs

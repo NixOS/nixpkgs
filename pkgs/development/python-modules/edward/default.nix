@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
 , Keras, numpy, scipy, six, tensorflow }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ Keras numpy scipy six tensorflow ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Probabilistic programming language using Tensorflow";
     homepage = "https://github.com/blei-lab/edward";
     license = licenses.asl20;

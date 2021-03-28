@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, greenlet }:
+{ lib, fetchPypi, buildPythonPackage, greenlet }:
 
 buildPythonPackage rec {
   pname = "meinheld";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance asynchronous Python WSGI Web Server";
     homepage = "https://meinheld.org/";
     license = licenses.bsd3;

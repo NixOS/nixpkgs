@@ -144,6 +144,7 @@ in
         "/share/kservicetypes5"
         "/share/kxmlgui5"
         "/share/systemd"
+        "/share/thumbnailers"
       ];
 
     system.path = pkgs.buildEnv {

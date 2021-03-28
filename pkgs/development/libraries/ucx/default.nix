@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, doxygen
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
 , numactl, rdma-core, libbfd, libiberty, perl, zlib
 }:
 
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unified Communication X library";
     homepage = "http://www.openucx.org";
     license = licenses.bsd3;

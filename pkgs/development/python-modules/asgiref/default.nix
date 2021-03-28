@@ -5,6 +5,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, lib
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,11 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  meta = with stdenv.lib; {
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_multiprocessing"
+  ];
+
+  meta = with lib; {
     description = "Reference ASGI adapters and channel layers";
     license = licenses.bsd3;
     homepage = "https://github.com/django/asgiref";

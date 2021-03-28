@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake,
+{ lib, stdenv, fetchurl, cmake,
   gfortran, blas, lapack}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qzlb7cd608q62kyppd0a8c65l03vrwqql6gsm465rky23b6dyr8";
   };
 
-  buildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [ cmake gfortran ];
 
   propagatedBuildInputs = [ blas ];
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/";
     license = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/License.txt";
     description = "A library for the solution of large, sparse, nonsymmetric systems of linear equations";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

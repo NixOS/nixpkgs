@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , addOpenGLRunpath
 , clang-unwrapped
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-runtime";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-8hNb0Yo9ApedOG7xrUr5rwiA/YsqDTcyr6dBRg8lXro=";
+    hash = "sha256-Jxg3n203tV0L+UrmeQEuzX0TKpFu5An2cnuEA/F/SNY=";
   };
 
   sourceRoot = "source/src";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/hsa
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/RadeonOpenCompute/ROCR-Runtime";
     license = with licenses; [ ncsa ];

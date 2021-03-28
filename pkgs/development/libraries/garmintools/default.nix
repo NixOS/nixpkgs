@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
 stdenv.mkDerivation {
   name = "garmintools-0.10";
   src = fetchurl {
@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Provides the ability to communicate with the Garmin Forerunner 305 via the USB interface";
     homepage = "https://code.google.com/archive/p/garmintools/"; # community clone at https://github.com/ianmartin/garmintools
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

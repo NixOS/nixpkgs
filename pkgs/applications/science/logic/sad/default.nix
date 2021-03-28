@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, haskell, spass }:
+{ lib, stdenv, fetchurl, haskell, spass }:
 
 stdenv.mkDerivation {
   name = "system-for-automated-deduction-2.3.25";
@@ -31,10 +31,10 @@ stdenv.mkDerivation {
       The system for automated deduction is intended for automated processing of formal mathematical texts
       written in a special language called ForTheL (FORmal THEory Language) or in a traditional first-order language
       '';
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.schmitthenner ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.schmitthenner ];
     homepage = "http://nevidal.org/sad.en.html";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     broken = true;  # ghc-8.4.4 is gone from Nixpkgs
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchsvn
 , pkg-config
 , which
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libao zlib curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Atari ST and Amiga music player";
     homepage = "http://sc68.atari.org/project.html";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "xerces-c";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://xerces.apache.org/xerces-c/";
     description = "Validating XML parser written in a portable subset of C++";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -2,12 +2,12 @@
 , cmake
 , fetchFromGitLab
 , sqlite
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "bzrtp";
-  version = "4.4.9";
+  version = "4.4.34";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An opensource implementation of ZRTP keys exchange protocol";
     homepage = "https://gitlab.linphone.org/BC/public/bzrtp";
     license = licenses.gpl3Plus;

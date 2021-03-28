@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , pytest, pytest-metadata, setuptools_scm }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ pytest pytest-metadata ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin for generating HTML reports";
     homepage = "https://github.com/pytest-dev/pytest-html";
     license = licenses.mpl20;

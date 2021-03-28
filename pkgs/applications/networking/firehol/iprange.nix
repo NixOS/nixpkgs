@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "iprange";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rymw4ydn09dng34q4g5111706fyppzs2gd5br76frgvfj4x2f71";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "manage IP ranges";
     homepage = "https://github.com/firehol/iprange";
     license = licenses.gpl2;

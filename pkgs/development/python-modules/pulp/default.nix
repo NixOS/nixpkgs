@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , pyparsing
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pulp" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/coin-or/pulp";
     description = "PuLP is an LP modeler written in python";
     maintainers = with maintainers; [ teto ];

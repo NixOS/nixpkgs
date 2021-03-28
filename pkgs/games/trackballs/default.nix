@@ -1,6 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2, SDL2_ttf, gettext, zlib, SDL2_mixer, SDL2_image, guile, libGLU, libGL }:
-
-with stdenv.lib;
+{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_ttf, gettext, zlib, SDL2_mixer, SDL2_image, guile, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "trackballs";
@@ -8,17 +6,19 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "trackballs";
-    repo = "trackballs";
+    repo = pname;
     rev = "v${version}";
     sha256 = "G+KfQgqk+iI+Beb/ZRul2ArCBcvwYQ/ftEWzdrtwb18=";
   };
 
-  buildInputs = [ cmake zlib SDL2 SDL2_ttf SDL2_mixer SDL2_image guile gettext libGLU libGL ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib SDL2 SDL2_ttf SDL2_mixer SDL2_image guile gettext libGLU libGL ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://trackballs.github.io/";
     description = "3D Marble Madness clone";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = platforms.linux;
+    # Music is licensed under Ethymonics Free Music License.
+    license = licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , redis
@@ -24,10 +24,10 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ redis ]
-  ++ stdenv.lib.optional withDjango django_redis;
+  ++ lib.optional withDjango django_redis;
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ionelmc/python-redis-lock";
     license = licenses.bsd2;
     description = "Lock context manager implemented via redis SETNX/BLPOP";

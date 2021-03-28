@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, pkgconfig
+, pkg-config
 , docSupport ? true
 , doxygen ? null
 , graphviz ? null
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "04vdrrkh5y9x9rrmj6gdp242ah70b4sslwqfby8wp2riis4hr9z0";
   };
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optionals docSupport [ doxygen graphviz ];
 
   installTargets = [ "install" ]

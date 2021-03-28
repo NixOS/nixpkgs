@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "zookeeper";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha512 = "caff5111bb6876b7124760bc006e6fa2523efa54b99321a3c9cd8192ea0d5596abc7d70a054b1aac9b20a411407dae7611c7aba870c23bff28eb1643ba499199";
   };
 
-  buildInputs = [ makeWrapper jre ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   phases = ["unpackPhase" "installPhase"];
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     chmod -x $out/bin/zkEnv.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     license = licenses.asl20;

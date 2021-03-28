@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper
 , coqPackages, ocamlPackages, coq2html
 , tools ? stdenv.cc
 , version ? "3.8"
@@ -8,7 +8,7 @@ let
   ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir ];
   ccomp-platform = if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux";
   inherit (coqPackages) coq flocq;
-  inherit (stdenv.lib) optional optionalString;
+  inherit (lib) optional optionalString;
 in
 
 let param = {
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "doc" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Formally verified C compiler";
     homepage    = "https://compcert.org";
     license     = licenses.inria-compcert;

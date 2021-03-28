@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
-  buildInputs = [ makeWrapper ];
-  nativeBuildInputs = [ xsel clipnotify ];
+  nativeBuildInputs = [ makeWrapper xsel clipnotify ];
 
   postFixup = ''
     sed -i "$out/bin/clipctl" -e 's,clipmenud\$,\.clipmenud-wrapped\$,'
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
       --set PATH "${lib.makeBinPath [ clipnotify coreutils gawk util-linux xdotool xsel ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clipboard management using dmenu";
     inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];

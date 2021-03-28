@@ -1,19 +1,19 @@
-{ buildGoModule, fetchFromGitHub, stdenv, docker }:
+{ buildGoModule, fetchFromGitHub, lib, docker }:
 
 buildGoModule rec {
   pname = "docker-ls";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "docker-ls";
     rev = "v${version}";
-    sha256 = "sha256-VyVrCBdIZAQ+p0leD6i4sMxD4p6nEXG9Si+nJGdUQPM=";
+    sha256 = "sha256-4+REt0NH4S367qFsyJncVedUrC4t1zw5o0CLTiQfIz8=";
   };
 
   vendorSha256 = "sha256-UulcjQOLEIP++eoYQTEIbCJW51jyE312dMxB8+AKcdU=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for browsing and manipulating docker registries";
     longDescription = ''
       Docker-ls is a set of CLI tools for browsing and manipulating docker registries.

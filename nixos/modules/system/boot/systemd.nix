@@ -175,8 +175,10 @@ let
       "timers.target.wants"
     ];
 
-  upstreamUserUnits =
-    [ "basic.target"
+    upstreamUserUnits = [
+      "app.slice"
+      "background.slice"
+      "basic.target"
       "bluetooth.target"
       "default.target"
       "exit.target"
@@ -184,6 +186,7 @@ let
       "graphical-session.target"
       "paths.target"
       "printer.target"
+      "session.slice"
       "shutdown.target"
       "smartcard.target"
       "sockets.target"
@@ -193,6 +196,7 @@ let
       "systemd-tmpfiles-clean.timer"
       "systemd-tmpfiles-setup.service"
       "timers.target"
+      "xdg-desktop-autostart.target"
     ];
 
   makeJobScript = name: text:
@@ -263,7 +267,7 @@ let
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre =
-              makeJobScript "${name}-pre-start" config.preStart;
+              [ (makeJobScript "${name}-pre-start" config.preStart) ];
           })
         (mkIf (config.script != "")
           { serviceConfig.ExecStart =
@@ -271,7 +275,7 @@ let
           })
         (mkIf (config.postStart != "")
           { serviceConfig.ExecStartPost =
-              makeJobScript "${name}-post-start" config.postStart;
+              [ (makeJobScript "${name}-post-start" config.postStart) ];
           })
         (mkIf (config.reload != "")
           { serviceConfig.ExecReload =

@@ -1,26 +1,26 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib
 }:
 
 buildGoModule rec {
   pname = "ffuf";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jb2x0ybcb9zkqm7flpmr0hd3171xvnn6kxmfcgds4x8l9fbmxnr";
+    sha256 = "sha256-XSdFLfSYDdKI7BYo9emYanvZeSFGxiNLYxuw5QKAyRc=";
   };
 
-  vendorSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+  vendorSha256 = "sha256-szT08rIozAuliOmge5RFX4NeVrJ2pCVyfotrHuvc0UU=";
 
   # tests don't pass due to an issue with the memory addresses
   # https://github.com/ffuf/ffuf/issues/367
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast web fuzzer written in Go";
     longDescription = ''
       FFUF, or “Fuzz Faster you Fool” is an open source web fuzzing tool,

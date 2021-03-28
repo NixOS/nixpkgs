@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , gettext
 , libxml2
@@ -28,20 +28,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.40.0";
+  version = "0.40.1";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xrbdsgm78h3g4qcvq2p8k70q31x9xdbb35bixz36q6h9s1wqznn";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "QkDXd1mcjNCeZ9pEzLOV0KbceEedgJzWIZgixbVooy0=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     gettext
     libxml2
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://wiki.gnome.org/Projects/Rygel";
     license = licenses.lgpl21Plus;

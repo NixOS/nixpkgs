@@ -1,6 +1,8 @@
-{ stdenv, lib, fetchgit, flex, bison, pkgconfig, which
-, pythonSupport ? false, python, swig
+{ stdenv, lib, fetchgit, flex, bison, pkg-config, which
+, pythonSupport ? false, python ? null, swig
 }:
+
+assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "dtc";
@@ -12,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0li992wwd7kgy71bikanqky49y4hq3p3vx35p2hvyxy1k0wfy7i8";
   };
 
-  nativeBuildInputs = [ flex bison pkgconfig which ] ++ lib.optionals pythonSupport [ python swig ];
+  nativeBuildInputs = [ flex bison pkg-config which ] ++ lib.optionals pythonSupport [ python swig ];
 
   postPatch = ''
     patchShebangs pylibfdt/

@@ -1,28 +1,28 @@
-{ stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
-
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
 let
-  myPatchElf = file: with stdenv.lib; ''
+  myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
       ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
 
-  udevRules = callPackage ./udev_rules_type1.nix {};
+  udevRules = callPackage ./udev_rules_type1.nix { };
 
-in stdenv.mkDerivation rec {
-  name = "brscan4-0.4.8-1";
-  src = 
-    if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "http://download.brother.com/welcome/dlf006646/${name}.i386.deb";
-        sha256 = "15hrf1gpm36lniqi6yf47dvdqjinm644xb752c6rcv8n06wb79ag";
-      }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
-        sha256 = "0pyprjl0capg403yp6pp07gd6msx9kn7bzjcdswdbn28fyxrk5l4";
-      }
-    else throw "${name} is not supported on ${stdenv.hostPlatform.system} (only i686-linux and x86_64 linux are supported)";
+in
+stdenv.mkDerivation rec {
+  pname = "brscan4";
+  version = "0.4.9-1";
+  src = {
+    "i686-linux" = fetchurl {
+      url = "http://download.brother.com/welcome/dlf006646/${pname}-${version}.i386.deb";
+      sha256 = "0pkg9aqvnkpjnb9cgzf7lxw2g4jqrf2w98irkv22r0gfsfs3nwma";
+    };
+    "x86_64-linux" = fetchurl {
+
+      url = "https://download.brother.com/welcome/dlf006645/${pname}-${version}.amd64.deb";
+      sha256 = "0kakkl8rmsi2yr3f8vd1kk8vsl9g2ijhqil1cvvbwrhwgi0b7ai7";
+    };
+  }."${stdenv.hostPlatform.system}";
 
   unpackPhase = ''
     ar x $src
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  installPhase = with stdenv.lib; ''
+  installPhase = with lib; ''
     PATH_TO_BRSCAN4="opt/brother/scanner/brscan4"
     mkdir -p $out/$PATH_TO_BRSCAN4
     cp -rp $PATH_TO_BRSCAN4/* $out/$PATH_TO_BRSCAN4
@@ -87,8 +87,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Brother brscan4 sane backend driver";
     homepage = "http://www.brother.com";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

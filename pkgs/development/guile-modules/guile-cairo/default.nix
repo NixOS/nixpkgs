@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, guile, guile-lib, cairo, expat }:
+{ lib, stdenv, fetchurl, pkg-config, guile, guile-lib, cairo, expat }:
 
 stdenv.mkDerivation rec {
   pname = "guile-cairo";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yx0844p61ljd4d3d63qrawiygiw6ks02fwv2cqx7nav5kfd8ck2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ guile cairo expat ];
   enableParallelBuilding = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # Cannot find unit-test module from guile-lib
   checkInputs = [ guile-lib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cairo bindings for GNU Guile";
     longDescription = ''
       Guile-Cairo wraps the Cairo graphics library for Guile Scheme.

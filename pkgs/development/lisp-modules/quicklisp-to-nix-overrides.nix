@@ -81,7 +81,7 @@ in
       postInstall = ((x.overrides y).postInstall or "") + ''
         export NIX_LISP_ASDF_PATHS="$NIX_LISP_ASDF_PATHS
 $out/lib/common-lisp/query-fs"
-	export HOME=$PWD
+        export HOME=$PWD
         export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system query-fs \
                     '(function query-fs:run-fs-with-cmdline-args)' '$linkedSystems'"
         "$out/bin/query-fs-lisp-launcher.sh"
@@ -225,10 +225,20 @@ $out/lib/common-lisp/query-fs"
       x.deps;
   };
   cl-cffi-gtk-glib = addNativeLibs [pkgs.glib];
-  cl-cffi-gtk-gdk-pixbuf = addNativeLibs [pkgs.gdk_pixbuf];
+  cl-cffi-gtk-gdk-pixbuf = addNativeLibs [pkgs.gdk-pixbuf];
   cl-cffi-gtk-cairo = addNativeLibs [pkgs.cairo];
   cl-cffi-gtk-pango = addNativeLibs [pkgs.pango];
   cl-cffi-gtk-gdk = addNativeLibs [pkgs.gtk3];
   cl-cffi-gtk-gtk3 = addNativeLibs [pkgs.gtk3];
   cl-webkit2 = addNativeLibs [pkgs.webkitgtk];
+  clfswm = x: {
+    overrides = y: (x.overrides y) // {
+      postInstall = ''
+        export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system clfswm '(function clfswm:main)'"
+        "$out/bin/clfswm-lisp-launcher.sh"
+
+        cp "$out/lib/common-lisp/clfswm/clfswm" "$out/bin"
+      '';
+    };
+  };
 }

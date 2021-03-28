@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "hyperframe";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP/2 framing layer for Python";
     homepage = "http://hyper.rtfd.org/";
     license = licenses.mit;

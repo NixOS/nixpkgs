@@ -1,5 +1,5 @@
 {
-stdenv
+lib, stdenv
 , makeWrapper
 , makeDesktopItem
 , fetchurl
@@ -28,7 +28,7 @@ let
         url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}.tar.gz";
         inherit sha256;
       };
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       installPhase = ''
         makeWrapper ${jdk8.jre}/bin/java $out/bin/charles \
@@ -45,12 +45,12 @@ let
         cp -r icon $out/share/icons/hicolor
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Web Debugging Proxy";
         homepage = "https://www.charlesproxy.com/";
         maintainers = [ maintainers.kalbasit ];
-        license = stdenv.lib.licenses.unfree;
-        platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     };
 

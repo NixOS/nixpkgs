@@ -2,45 +2,59 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.1.5";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "115cak87kpfjckqgn8ws09z1w8x8l9bch9xrm29k4r0zi71xparn";
+    sha256 = "sha256-6sV2e/m0qVSRWgdvVZ9VxEL/J57nTcTClxHF5X8/8PQ=";
   };
 
   deleteVendor = true;
-  vendorSha256 = "1xdari6841jp6lpjwydv19v3wafj17hmnwsa2b55iw6dysm4yxdr";
-
-  subPackages = ["."];
+  vendorSha256 = "sha256-NPE3YHulqllWDGrxQgPmy/KKE7xFPOUorLQNIU8cP50=";
 
   nativeBuildInputs = [ go-bindata ];
 
+  # GIT_{COMMIT,DIRTY} filled in blank to prevent trying to run git and ending up blank anyway
   buildPhase = ''
-    CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o ./internal/assets/ceb/ceb ./cmd/waypoint-entrypoint
-    cd internal/assets
-    go-bindata -pkg assets -o prod.go -tags assetsembedded ./ceb
-    cd ../../
-    CGO_ENABLED=0 go build -ldflags '-s -w -X github.com/hashicorp/waypoint/version.GitDescribe=v${version}' -tags assetsembedded -o ./waypoint ./cmd/waypoint
-    CGO_ENABLED=0 go build -ldflags '-s -w' -tags assetsembedded -o ./waypoint-entrypoint ./cmd/waypoint-entrypoint
+    runHook preBuild
+    make bin GIT_DESCRIBE="v${version}" GIT_COMMIT="" GIT_DIRTY=""
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv waypoint{,-entrypoint} $out/bin/
+    runHook preInstall
+    install -D waypoint $out/bin/waypoint
+    runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    # `version` tries to write to ~/.config/waypoint
+    export HOME="$TMPDIR"
+
+    $out/bin/waypoint --help
+    $out/bin/waypoint version # | grep "Waypoint v${version}"
+    runHook postInstallCheck
+  '';
+
+  # Binary is static
+  dontPatchELF = true;
+  dontPatchShebangs = true;
+
   meta = with lib; {
+    homepage = "https://waypointproject.io";
+    changelog = "https://github.com/hashicorp/waypoint/blob/v${version}/CHANGELOG.md";
     description = "A tool to build, deploy, and release any application on any platform";
     longDescription = ''
-      Waypoint allows developers to define their application build, deploy, and release lifecycle as code, reducing the
-      time to deliver deployments through a consistent and repeatable workflow.
+      Waypoint allows developers to define their application build, deploy, and
+      release lifecycle as code, reducing the time to deliver deployments
+      through a consistent and repeatable workflow.
     '';
-    homepage = "https://waypointproject.io";
-    platforms = platforms.linux;
     license = licenses.mpl20;
     maintainers = with maintainers; [ winpat jk ];
+    platforms = platforms.linux;
   };
 }

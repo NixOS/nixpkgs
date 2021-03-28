@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, build-tools }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, build-tools }:
 
 stdenv.mkDerivation rec {
   pname = "apktool";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${builtins.head build-tools}/libexec/android-sdk/build-tools/28.0.3"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for reverse engineering Android apk files";
     homepage    = "https://ibotpeaches.github.io/Apktool/";
     license     = licenses.asl20;

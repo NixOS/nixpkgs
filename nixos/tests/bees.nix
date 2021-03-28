@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux2 /dev/vdc
     '';
     virtualisation.emptyDiskImages = [ 4096 4096 ];
-    fileSystems = lib.mkVMOverride {
+    virtualisation.fileSystems = {
       "/aux1" = { # filesystem configured to be deduplicated
         device = "/dev/disk/by-label/aux1";
         fsType = "btrfs";

@@ -105,7 +105,7 @@ in
 
     stateDir = mkOption {
       type = types.path;
-      default = ''/var/railcar'';
+      default = "/var/railcar";
       description = "Railcar persistent state directory";
     };
 

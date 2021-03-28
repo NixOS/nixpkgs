@@ -1,25 +1,18 @@
- {stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper }:
+ {lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "lcov-1.14";
+  pname = "lcov";
+  version = "1.15";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ltp/${name}.tar.gz";
-    sha256 = "06h7ixyznf6vz1qvksjgy5f3q2nw9akf6zx59npf0h3l32cmd68l";
+  src = fetchFromGitHub {
+    owner = "linux-test-project";
+    repo = "lcov";
+    rev = "v${version}";
+    sha256 = "1kvc7fkp45w48f0bxwbxvxkicnjrrydki0hllg294n1wrp80zzyk";
   };
 
-  patches =
-    [ (fetchpatch {
-        url = "https://github.com/linux-test-project/lcov/commit/ebfeb3e179e450c69c3532f98cd5ea1fbf6ccba7.patch";
-        sha256 = "0dalkqbjb6a4vp1lcsxd39dpn5fzdf7ihsjbiviq285s15nxdj1j";
-      })
-      (fetchpatch {
-        url = "https://github.com/linux-test-project/lcov/commit/75fbae1cfc5027f818a0bb865bf6f96fab3202da.patch";
-        sha256 = "0v1hn0511dxqbf50ppwasc6vmg0m6rns7ydbdy2rdbn0j7gxw30x";
-      })
-    ];
-
-  buildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   preBuild = ''
     patchShebangs bin/
@@ -28,9 +21,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/lcov --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.PerlIOgzip perlPackages.JSON ]}
+    wrapProgram $out/bin/genpng --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.GD ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code coverage tool that enhances GNU gcov";
 
     longDescription =
@@ -43,7 +37,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = "http://ltp.sourceforge.net/coverage/lcov.php";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.all;

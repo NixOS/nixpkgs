@@ -1,4 +1,4 @@
-{ stdenv, libffi, openssl, python3Packages }:
+{ lib, libffi, openssl, python3Packages }:
 let
   inherit (python3Packages) fetchPypi buildPythonApplication vcrpy mock hiro;
 in
@@ -23,7 +23,7 @@ in
       jira  keyrings-alt
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A command line interface to Jira";
       homepage = "https://github.com/alisaifee/jira-cli";
       maintainers = with maintainers; [ nyarly ];

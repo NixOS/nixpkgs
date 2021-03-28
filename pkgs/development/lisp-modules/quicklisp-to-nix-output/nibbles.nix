@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''nibbles'';
-  version = ''20200925-git'';
+  baseName = "nibbles";
+  version = "20200925-git";
 
   parasites = [ "nibbles/tests" ];
 
-  description = ''A library for accessing octet-addressed blocks of data in big- and little-endian orders'';
+  description = "A library for accessing octet-addressed blocks of data in big- and little-endian orders";
 
   deps = [ args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/nibbles/2020-09-25/nibbles-20200925-git.tgz'';
-    sha256 = ''14k9hg8kmzwcb9b5aiwqhimc0zmcs3xp8q29sck8zklf8ziqaqb4'';
+    url = "http://beta.quicklisp.org/archive/nibbles/2020-09-25/nibbles-20200925-git.tgz";
+    sha256 = "14k9hg8kmzwcb9b5aiwqhimc0zmcs3xp8q29sck8zklf8ziqaqb4";
   };
 
   packageName = "nibbles";

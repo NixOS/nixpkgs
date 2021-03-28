@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
+{ stdenv, lib, fetchFromGitHub, pkg-config, automake, autoconf
 , zlib, boost, openssl, libtool, python, libiconv, ncurses
 }:
 
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
   buildInputs = [ boostPython openssl zlib python libiconv ncurses ];
   preConfigure = "./autotool.sh";
 
@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
     "--with-boost-libdir=${boostPython.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;

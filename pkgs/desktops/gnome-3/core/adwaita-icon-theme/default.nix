@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnome3
+{ lib, stdenv, fetchurl, pkg-config, intltool, gnome3
 , iconnamingutils, gtk3, gdk-pixbuf, librsvg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/adwaita-icon-theme/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/adwaita-icon-theme/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15xgz9wzk07442x3s3052as95g0223z4pp9qlsgcs323yama30v6";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gdk-pixbuf librsvg ];
 
-  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk3 ];
+  nativeBuildInputs = [ pkg-config intltool iconnamingutils gtk3 ];
 
   dontDropIconThemeCache = true;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = with platforms; linux ++ darwin;
     maintainers = teams.gnome.members;
   };

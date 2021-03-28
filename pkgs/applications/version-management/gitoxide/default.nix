@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
@@ -15,12 +15,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  # Needed to get openssl-sys to use pkgconfig.
+  # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command-line application for interacting with git repositories";
     homepage = "https://github.com/Byron/gitoxide";
     license = with licenses; [ mit /* or */ asl20 ];

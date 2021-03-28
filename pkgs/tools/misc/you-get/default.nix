@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi }:
+{ lib, buildPythonApplication, fetchPypi }:
 
 buildPythonApplication rec {
   pname = "you-get";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "5a6cc0d661fe0cd4210bf467d6c89afd8611609e402690254722c1415736da92";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiny command line utility to download media contents from the web";
     homepage = "https://you-get.org";
     license = licenses.mit;

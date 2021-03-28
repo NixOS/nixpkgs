@@ -2,15 +2,17 @@
 
 buildDunePackage rec {
   pname = "npy";
-  version = "unstable-2019-04-02";
+  version = "0.0.9";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
     repo   = "${pname}-ocaml";
-    rev    = "c051086bfea6bee58208098bcf1c2f725a80a1fb";
-    sha256 = "06mgrnm7xiw2lhqvbdv2zmd65sqfdnjd7j4qmcswanmplm17yhvb";
+    rev    = version;
+    sha256 = "1fryglkm20h6kdqjl55b7065b34bdg3g3p6j0jv33zvd1m5888m1";
   };
 
   propagatedBuildInputs = [ camlzip ];

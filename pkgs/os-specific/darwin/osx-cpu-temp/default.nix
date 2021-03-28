@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , IOKit
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp osx-cpu-temp $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Outputs current CPU temperature for OSX.";
     homepage = "https://github.com/lavoiesl/osx-cpu-temp";
     license = licenses.gpl2;

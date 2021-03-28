@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "vulkan-headers";
   version = "1.2.162.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "057c49w1138l02v9gqsk1z8wdz0iilp96jblnldycwm9jc1a1ipq";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vulkan Header files and API registry";
     homepage    = "https://www.lunarg.com";
     platforms   = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , ecdsa
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ ecdsa ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure python implementation of SSL and TLS.";
     homepage = "https://pypi.python.org/pypi/tlslite-ng";
     license = licenses.lgpl2;

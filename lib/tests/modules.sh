@@ -169,7 +169,7 @@ checkConfigOutput "foo" config.submodule.foo ./declare-submoduleWith-special.nix
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError 'value is a boolean while a set was expected' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "You're trying to declare a value of type \`bool'\nrather than an attribute-set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop
@@ -261,6 +261,13 @@ checkConfigOutput '{ }' config.value.mkmerge ./types-anything/mk-mods.nix
 checkConfigOutput true config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput 1 config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
+
+## types.functionTo
+checkConfigOutput "input is input" config.result ./functionTo/trivial.nix
+checkConfigOutput "a b" config.result ./functionTo/merging-list.nix
+checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
+checkConfigOutput "b a" config.result ./functionTo/list-order.nix
+checkConfigOutput "a c" config.result ./functionTo/merging-attrs.nix
 
 cat <<EOF
 ====== module tests ======

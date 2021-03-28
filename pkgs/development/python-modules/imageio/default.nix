@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy27
 , pathlib
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     inherit pname version;
   };
 
-  checkInputs = [ pytest psutil ] ++ stdenv.lib.optionals isPy3k [
+  checkInputs = [ pytest psutil ] ++ lib.optionals isPy3k [
     imageio-ffmpeg ffmpeg_3
     ];
   propagatedBuildInputs = [ numpy pillow ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     substituteInPlace tests/test_ffmpeg.py --replace 'test_get_exe_installed' 'get_exe_installed'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "http://imageio.github.io/";
     license = licenses.bsd2;

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
     description = "A small footprint implementation of the SSH 2 protocol";
     license = licenses.mit;

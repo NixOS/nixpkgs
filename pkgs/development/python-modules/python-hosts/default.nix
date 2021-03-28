@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyyaml, pytest, pytestcov }:
+{ lib, buildPythonPackage, fetchPypi, pyyaml, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "python-hosts";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     pytest tests/test_utils.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for managing a hosts file. It enables adding and removing entries, or importing them from a file or URL";
     homepage = "https://github.com/jonhadfield/python-hosts";
     license = licenses.mit;

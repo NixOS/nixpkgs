@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , rustPlatform
-, pkgconfig
+, pkg-config
 , extra-cmake-modules
 , libX11
 , libXi
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     extra-cmake-modules
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   # Some tests require networking
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;

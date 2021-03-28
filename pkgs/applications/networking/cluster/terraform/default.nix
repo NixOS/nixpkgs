@@ -38,7 +38,7 @@ let
 
       subPackages = [ "." ];
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description =
           "Tool for building, changing, and versioning infrastructure";
         homepage = "https://www.terraform.io/";
@@ -117,7 +117,7 @@ let
         else
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
-            buildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeWrapper ];
 
             buildCommand = pluginDir + ''
               mkdir -p $out/bin/
@@ -137,8 +137,8 @@ let
   ];
 in rec {
   terraform_0_12 = pluggable (generic {
-    version = "0.12.29";
-    sha256 = "18i7vkvnvfybwzhww8d84cyh93xfbwswcnwfrgvcny1qwm8rsaj8";
+    version = "0.12.30";
+    sha256 = "0mv2nsy2ygb1kgkw98xckihcdqxpzhdmks5p2gi2l7wb7lx51yz2";
     patches = [
         ./provider-path.patch
         (fetchpatch {
@@ -150,16 +150,16 @@ in rec {
   });
 
   terraform_0_13 = pluggable (generic {
-    version = "0.13.5";
-    sha256 = "1fnydzm5h65pdy2gkq403sllx05cvpldkdzdpcy124ywljb4x9d8";
+    version = "0.13.6";
+    sha256 = "04vas8i894ssfhncdvljdvmvj2qzfrcs20zcv71l1wmnnv9ibs6l";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
 
   terraform_0_14 = pluggable (generic {
-    version = "0.14.3";
-    sha256 = "0w2j1phjv989bspbyvkhr25bdz1zjch3zggwk2lgjyk77mdw5h20";
-    vendorSha256 = "03dg703pw3h98vfvi2mnd2lw0mv6hlhvmc1l7ngrqdyv54cmihnp";
+    version = "0.14.9";
+    sha256 = "0r9d28mbj7h9prr39gm5kd49l7sm8l1ab9rwrkpyhwgr119zf35b";
+    vendorSha256 = "1d93aqkjdrvabkvix6h1qaxpjzv7w1wa7xa44czdnjs2lapx4smm";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

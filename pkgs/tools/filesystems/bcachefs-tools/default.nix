@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
+{ lib, stdenv, fetchFromGitHub, pkg-config, attr, libuuid, libscrypt, libsodium, keyutils
 , liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages
 , fuseSupport ? false, fuse3 ? null }:
 
@@ -22,24 +22,24 @@ stdenv.mkDerivation {
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
     zstd lz4 python3Packages.pytest udev valgrind
-  ] ++ stdenv.lib.optional fuseSupport fuse3;
+  ] ++ lib.optional fuseSupport fuse3;
 
   doCheck = false; # needs bcachefs module loaded on builder
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
   checkInputs = [ valgrind ];
 
-  preCheck = stdenv.lib.optionalString fuseSupport ''
+  preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
     license = licenses.gpl2;

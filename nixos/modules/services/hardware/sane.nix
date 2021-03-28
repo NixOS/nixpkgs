@@ -4,9 +4,7 @@ with lib;
 
 let
 
-  pkg = if config.hardware.sane.snapshot
-    then pkgs.sane-backends-git
-    else pkgs.sane-backends;
+  pkg = pkgs.sane-backends;
 
   sanedConf = pkgs.writeTextFile {
     name = "saned.conf";

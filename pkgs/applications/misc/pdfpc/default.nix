@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, vala, gtk3, libgee, fetchpatch
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, vala, gtk3, libgee
 , poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, librsvg, pcre, gobject-introspection, wrapGAppsHook
 , webkitgtk, discount, json-glib }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig vala
+    cmake pkg-config vala
     # For setup hook
     gobject-introspection
     wrapGAppsHook
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  cmakeFlags = stdenv.lib.optional stdenv.isDarwin "-DMOVIES=OFF";
+  cmakeFlags = lib.optional stdenv.isDarwin "-DMOVIES=OFF";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A presenter console with multi-monitor support for PDF files";
     homepage = "https://pdfpc.github.io/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;
   };

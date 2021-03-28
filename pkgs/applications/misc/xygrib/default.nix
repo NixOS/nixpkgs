@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg } :
+{ lib, stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg }:
 
 stdenv.mkDerivation rec {
   version = "1.2.6.1";
@@ -13,26 +13,29 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ bzip2 qtbase libnova proj openjpeg libpng ];
-  cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-2.3" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
+  cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}" ]
+    ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
-  postInstall = if stdenv.isDarwin then ''
-    mkdir -p "$out/Applications" "$out/XyGrib/XyGrib.app/Contents/Resources"
-    cp "../data/img/xyGrib.icns" "$out/XyGrib/XyGrib.app/Contents/Resources/xyGrib.icns"
-    mv $out/XyGrib/XyGrib.app $out/Applications
-    wrapQtApp "$out/Applications/XyGrib.app/Contents/MacOS/XyGrib"
-  '' else ''
-    wrapQtApp $out/XyGrib/XyGrib
-    mkdir -p $out/bin
-    ln -s $out/XyGrib/XyGrib $out/bin/xygrib
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      mkdir -p "$out/Applications" "$out/XyGrib/XyGrib.app/Contents/Resources"
+      cp "../data/img/xyGrib.icns" "$out/XyGrib/XyGrib.app/Contents/Resources/xyGrib.icns"
+      mv $out/XyGrib/XyGrib.app $out/Applications
+      wrapQtApp "$out/Applications/XyGrib.app/Contents/MacOS/XyGrib"
+    '' else ''
+      wrapQtApp $out/XyGrib/XyGrib
+      mkdir -p $out/bin
+      ln -s $out/XyGrib/XyGrib $out/bin/xygrib
+    '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://opengribs.org";
     description = "Weather Forecast Visualization";
-    longDescription = ''XyGrib is a leading opensource weather visualization package.
-                        It interacts with OpenGribs's Grib server providing a choice
-                        of global and large area atmospheric and wave models.'';
+    longDescription = ''
+      XyGrib is a leading opensource weather visualization package.
+      It interacts with OpenGribs's Grib server providing a choice
+      of global and large area atmospheric and wave models.
+    '';
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ j03 SuperSandro2000 ];

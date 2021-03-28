@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "0j2cqvskzxbyfrvsv4gm4qwfjm0digizcg157z5iignnknddajax";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and multi-purpose DNS toolkit";
     longDescription = ''
       dnsx is a fast and multi-purpose DNS toolkit allow to run multiple

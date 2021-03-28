@@ -1,12 +1,11 @@
-{ stdenv
-, rustPlatform
+{ lib
 , fetchFromGitHub
 , fetchurl
-, pipInstallHook
+, buildPythonPackage
+, rustPlatform
 , setuptools-rust
-, wheel
 , numpy
-, python
+, datasets
 , pytestCheckHook
 , requests
 }:
@@ -48,33 +47,37 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in rustPlatform.buildRustPackage rec {
+in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.9.4";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    hash = "sha256-JXoH9yfhMIFg5qDY5zrF6iWb7XKugjMfk1NxSizfaWg=";
+    hash = "sha256-N/dKjQwHKmJnB76q8ISQ3cjuW0Z4GqGavnFFx/w9JRQ=";
   };
 
-  cargoSha256 = "sha256-u9qitrOxJSABs0VjwHUZgmw7VTQXNbp6l8fKKE/RQ7M=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src sourceRoot;
+    name = "${pname}-${version}";
+    hash = "sha256-3ICSjtiRfLOj+PXu6mcuDoAtod5uXAcabYWTLxEgI18=";
+  };
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [
-    pipInstallHook
-    setuptools-rust
-    wheel
-  ];
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
 
   propagatedBuildInputs = [
     numpy
-    python
   ];
 
   installCheckInputs = [
+    datasets
     pytestCheckHook
     requests
   ];
@@ -97,15 +100,16 @@ in rustPlatform.buildRustPackage rec {
       ln -s ${openaiMerges} openai-gpt-merges.txt )
   '';
 
-  buildPhase = ''
-    ${python.interpreter} setup.py bdist_wheel
+  preCheck = ''
+    HOME=$TMPDIR
   '';
 
-  installPhase = ''
-    pipInstallPhase
-  '';
+  disabledTests = [
+    # Downloads data using the datasets module.
+    "TestTrainFromIterators"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/tokenizers";
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     license = licenses.asl20;

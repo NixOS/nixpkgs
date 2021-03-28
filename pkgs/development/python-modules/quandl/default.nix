@@ -46,6 +46,8 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  pythonImportsCheck = [ "quandl" ];
+
   meta = with lib; {
     description = "Quandl Python client library";
     homepage = "https://github.com/quandl/quandl-python";

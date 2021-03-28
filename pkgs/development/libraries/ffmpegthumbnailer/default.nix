@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, ffmpeg_3, cmake, libpng, pkg-config, libjpeg
+{ fetchFromGitHub, lib, stdenv, ffmpeg_3, cmake, libpng, pkg-config, libjpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ffmpeg_3 libpng libjpeg ];
   cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
 
-  meta = with stdenv.lib;  {
+  meta = with lib;  {
     homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
     description = "A lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video

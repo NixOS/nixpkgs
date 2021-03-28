@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , patchelf
 , requireFile
@@ -28,7 +28,7 @@
 let
   l10n =
     import ./l10ns.nix {
-      lib = stdenv.lib;
+      lib = lib;
       inherit requireFile lang;
     };
 in
@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
     libSM
   ]);
 
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath = lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
         echo "patching $f executable <<"
         patchelf --shrink-rpath "$f"
         patchelf \
-	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
           "$f" \
           && patchelf --shrink-rpath "$f" \
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
   '';
 
   dontBuild = true;
-  
+
   # This is primarily an IO bound build; there's little benefit to building remotely.
   preferLocalBuild = true;
 
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wolfram Mathematica computational software system";
     homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;

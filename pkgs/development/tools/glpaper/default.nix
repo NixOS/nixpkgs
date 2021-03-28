@@ -1,14 +1,16 @@
-{ stdenv, fetchhg, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
+{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
 , libX11, libGL }:
 
-stdenv.mkDerivation {
-  name = "glpaper";
-  version = "unstable-2020-03-30";
+stdenv.mkDerivation rec {
+  pname = "glpaper";
+  version = "unstable-2020-10-11";
 
-  src = fetchhg {
-    url = "https://hg.sr.ht/~scoopta/glpaper";
-    rev = "a95db77088dfb5636a87f3743fc9b5eca70c1ae2";
-    sha256 = "04y12910wvhy4aqx2sa63dy9l6nbs7b77yqpdhc96x2b3mgzgjfs";
+  src = fetchFromSourcehut {
+    owner = "~scoopta";
+    repo = pname;
+    vc = "hg";
+    rev = "9e7ec7cd270af330039c395345c7d23c04682267";
+    sha256 = "sha256-yBHRg6eg+PK/ixuM0MBty3RJY9qcemr3Dt+8SAitqnk=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -18,7 +20,7 @@ stdenv.mkDerivation {
     libGL
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Wallpaper program for wlroots based Wayland compositors such as sway that allows you to render glsl shaders as your wallpaper";
     homepage = "https://hg.sr.ht/~scoopta/glpaper";

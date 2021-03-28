@@ -7,6 +7,7 @@
 , appstream
 , appstream-glib
 , wrapGAppsHook
+, desktop-file-utils
 , gobject-introspection
 , gtksourceview4
 , gspell
@@ -17,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    sha256 = "1c7jrq20m53y2k8lmh37zldgc3bndldxipx4xq0lz3qq2fv1gg07";
+    sha256 = "1rcx2c07jg1ij81pnvg3px49hfbjmkagn68d3gp79z3gcajbp2av";
   };
 
   format = "other";
@@ -35,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     appstream # for appstreamcli
     appstream-glib
     wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -49,7 +51,13 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
     pyxdg
+    pdfminer
+    pycairo
   ];
+
+  checkPhase = ''
+    meson test --print-errorlogs
+  '';
 
   meta = with lib; {
     description = "LaTeX editor written in Python with Gtk";

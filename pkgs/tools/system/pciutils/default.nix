@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, zlib, kmod, which
+{ lib, stdenv, fetchurl, pkg-config, zlib, kmod, which
+, hwdata
 , static ? stdenv.hostPlatform.isStatic
-, darwin ? null
+, IOKit
 }:
 
 stdenv.mkDerivation rec {
@@ -11,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ss0rnfsx8gvqjxaji4mvbhf9xyih4cadmgadbwwv8mnx1xvjh4x";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib kmod which ] ++
-    stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+    lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   preConfigure = if stdenv.cc.isGNU then null else ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
@@ -30,10 +31,17 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-lib" ];
 
-  # Get rid of update-pciids as it won't work.
-  postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";
+  postInstall = ''
+    # Remove update-pciids as it won't work on nixos
+    rm $out/sbin/update-pciids $out/man/man8/update-pciids.8
 
-  meta = with stdenv.lib; {
+    # use database from hwdata instead
+    # (we don't create a symbolic link because we do not want to pull in the
+    # full closure of hwdata)
+    cp --reflink=auto ${hwdata}/share/hwdata/pci.ids $out/share/pci.ids
+  '';
+
+  meta = with lib; {
     homepage = "http://mj.ucw.cz/pciutils.html";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;

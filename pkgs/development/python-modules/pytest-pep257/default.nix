@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pep257 }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pep257 }:
 
 buildPythonPackage rec {
   pname = "pytest-pep257";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
   propagatedBuildInputs = [ pep257 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/anderslime/pytest-pep257";
     description = "py.test plugin for PEP257";
     license = licenses.mit;

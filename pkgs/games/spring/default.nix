@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
+{ lib, stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
 , asciidoc, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null, systemd, libunwind, which, minizip
@@ -44,21 +44,23 @@ stdenv.mkDerivation rec {
   buildInputs = [ lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
     xorg.libX11 xorg.libXcursor libGLU libGL glew curl
     systemd libunwind which minizip ]
-    ++ stdenv.lib.optional withAI jdk
-    ++ stdenv.lib.optional withAI python;
+    ++ lib.optional withAI jdk
+    ++ lib.optional withAI python;
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://springrts.com/";
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom qknight domenkozar sorki ];
     platforms = platforms.linux;
+    # error: 'snprintf' was not declared in this scope
+    broken = true;
   };
 }

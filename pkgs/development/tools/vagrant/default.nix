@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux, fetchpatch
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux
 }:
 
 let
@@ -34,7 +34,7 @@ let
       for gem in "$out"/lib/ruby/gems/*/gems/*; do
         cp -a "$gem/" "$gem.new"
         rm "$gem"
-        # needed on macOS, otherwise the mv yields permission denied 
+        # needed on macOS, otherwise the mv yields permission denied
         chmod +w "$gem.new"
         mv "$gem.new" "$gem"
       done

@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-unicode'';
-  version = ''20190521-git'';
+  baseName = "cl-unicode";
+  version = "20190521-git";
 
   parasites = [ "cl-unicode/base" "cl-unicode/build" "cl-unicode/test" ];
 
-  description = ''Portable Unicode Library'';
+  description = "Portable Unicode Library";
 
   deps = [ args."cl-ppcre" args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-unicode/2019-05-21/cl-unicode-20190521-git.tgz'';
-    sha256 = ''0p20yrqbn3fwsnrxvh2cv0m86mh3mz9vj15m7siw1kjkbzq0vngc'';
+    url = "http://beta.quicklisp.org/archive/cl-unicode/2019-05-21/cl-unicode-20190521-git.tgz";
+    sha256 = "0p20yrqbn3fwsnrxvh2cv0m86mh3mz9vj15m7siw1kjkbzq0vngc";
   };
 
   packageName = "cl-unicode";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytest-flakes, tox }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-flakes, tox }:
 buildPythonPackage rec {
   pname = "pytest-quickcheck";
   version = "0.8.6";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
   propagatedBuildInputs = [ pytest-flakes tox ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.asl20;
     homepage = "https://pypi.python.org/pypi/pytest-quickcheck";
     description = "pytest plugin to generate random data inspired by QuickCheck";

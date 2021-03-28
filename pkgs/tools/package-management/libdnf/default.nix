@@ -1,18 +1,18 @@
-{ gcc9Stdenv, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, pcre, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm }:
+{ gcc9Stdenv, lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
+, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm }:
 
 gcc9Stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.55.2";
+  version = "0.60.0";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = version;
-    sha256 = "0hiydwfa90nsrqk5ffa6ks1g73wnsgjgq7z7gwq9jj76a7gpfbfq";
+    sha256 = "sha256-cZlUhzmfplj2XEpWWwPfT/fiH2cj3lIc44UVrFHcl3s=";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -56,7 +56,7 @@ gcc9Stdenv.mkDerivation rec {
     "-DWITH_ZCHUNK=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Package management library.";
     homepage = "https://github.com/rpm-software-management/libdnf";
     license = licenses.gpl2Plus;

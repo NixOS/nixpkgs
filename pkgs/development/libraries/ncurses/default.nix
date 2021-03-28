@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 
 , abiVersion ? "6"
 , mouseSupport ? false
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     buildPackages.ncurses
   ];

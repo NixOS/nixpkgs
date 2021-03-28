@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "3.4.1";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
-    rev = version;
+    rev = "v${version}";
     repo = "yq";
-    sha256 = "09kcqa15assjhp3kdffa3yhc2vykinzgscjzg996qa85kjircy9b";
+    sha256 = "sha256-+qSGdskv8qUZRl7wYKn8WsgAcD8DYw1BwZnVKK6g/sI=";
   };
 
-  vendorSha256 = "0l5bhbp8dfq04hb4xcpx96ksfwx4xvk0pj5ma00rk3z913ikygcd";
+  vendorSha256 = "sha256-vpvIl1lfaziuoHs+oDEIztufH1somphiBAn6qTaQaZw=";
 
   doCheck = false;
 
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $out/bin/yq shell-completion --variation $shell > yq.$shell
+      $out/bin/yq shell-completion $shell > yq.$shell
       installShellCompletion yq.$shell
     done
   '';

@@ -3,7 +3,7 @@
 , libbsd, libjack2, libpng, ffmpeg_3
 , libxkbcommon
 , makeWrapper, pixman, autoPatchelfHook
-, xdg_utils, zenity, zlib }:
+, xdg-utils, zenity, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   binPath = lib.makeBinPath [
-    xdg_utils zenity ffmpeg_3
+    xdg-utils zenity ffmpeg_3
   ];
 
   installPhase = ''
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for

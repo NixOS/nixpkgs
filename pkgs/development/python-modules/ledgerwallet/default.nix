@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , cryptography
@@ -25,14 +25,14 @@ buildPythonPackage rec {
     sha256 = "0fb93h2wxm9as9rsywlgz2ng4wrlbjphn6mgbhj6nls2i86rrdxk";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
   propagatedBuildInputs = [
     cryptography click construct ecdsa hidapi intelhex pillow protobuf requests tabulate
   ];
 
   pythonImportsCheck = [ "ledgerwallet" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
     description = "A library to control Ledger devices";
     license = licenses.mit;

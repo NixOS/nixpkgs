@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , cached-property, frozendict, pystache, pyyaml, pytest, pytestrunner
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kerrickstaley/genanki";
     description = "Generate Anki decks programmatically";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "sweet";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Light and dark colorful Gtk3.20+ theme";
     homepage = "https://github.com/EliverLara/Sweet";
     license = licenses.gpl3Only;

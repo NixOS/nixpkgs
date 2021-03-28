@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, lib
 , python
 , serpent
 , dill
@@ -48,7 +47,7 @@ buildPythonPackage rec {
   # otherwise the tests hang the build
   __darwinAllowLocalNetworking = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro4";
     license = licenses.mit;

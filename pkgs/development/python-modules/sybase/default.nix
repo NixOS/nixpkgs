@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , isPy3k
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   SYBASE = freetds;
   setupPyBuildFlags = [ "-DHAVE_FREETDS" "-UWANT_BULKCOPY" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Sybase module provides a Python interface to the Sybase relational database system";
     homepage    = "http://python-sybase.sourceforge.net";
     license     = licenses.bsd3;

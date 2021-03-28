@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, poco, openssl, SDL2, SDL2_mixer }:
+{ lib, stdenv, fetchFromGitHub, poco, openssl, SDL2, SDL2_mixer }:
 
 let
   craftos2-lua = fetchFromGitHub {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     DESTDIR=$out/bin make install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of the CraftOS-PC API written in C++ using SDL";
     homepage = "https://www.craftos-pc.cc";
     license = licenses.mit;

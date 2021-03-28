@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.7.8";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    sha256 = "207fbf813b6da018a5b848e5dc1194b5996daab39adbd873b2cecb0565c105ce";
+    sha256 = "BtzYcHN87qH7s3GiBrsDfmuy9v2xdhCeSShu8+T9T3E=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
     cp -ar ./usr/share $out
 
     substituteInPlace $out/share/mailspring/resources/app.asar.unpacked/mailsync \
-      --replace realpath ${coreutils}/bin/realpath \
       --replace dirname ${coreutils}/bin/dirname
 
     ln -s $out/share/mailspring/mailspring $out/bin/mailspring
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
     longDescription = ''
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.

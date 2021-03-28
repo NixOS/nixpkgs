@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , flask
 , flask-limiter
 , markupsafe
@@ -26,7 +25,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kennethreitz/httpbin";
     description = "HTTP Request & Response Service";
     license = licenses.mit;

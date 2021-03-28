@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       ./set-hostname.patch
     ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl makeWrapper ];
 
-  buildInputs = [ makeWrapper openldap ];
+  buildInputs = [ openldap ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
-    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+    ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
 
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
 
 let
   env = bundlerEnv {
@@ -8,16 +8,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.0.12";
+  version = "6.0.37";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "1kh5alvw68lxnm1wcwbka983b5ww7bqvbkih831mrf6sfmv4wkxs";
+    sha256 = "sha256-q6/1GW02C1z5nQwAKXU7xbVVviwXwS+XS7ZfNjJryiA=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontPatchELF = true; # stay away from exploit executables
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
   passthru.updateScript = ./update.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Metasploit Framework - a collection of exploits";
     homepage = "https://github.com/rapid7/metasploit-framework/wiki";
     platforms = platforms.unix;

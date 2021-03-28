@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , darcsver
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "name=PKG" "name=PKG, version='${version}'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Setuptools plugin for the Darcs version control system";
     homepage = "http://allmydata.org/trac/setuptools_darcs";
     license = licenses.bsd0;

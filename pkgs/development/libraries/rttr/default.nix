@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja }:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "rttr";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_PACKAGE=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ Reflection Library";
     homepage = "https://www.rttr.org";
     license = licenses.mit;

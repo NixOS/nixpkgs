@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-webkit2'';
-  version = ''cl-webkit-20201016-git'';
+  baseName = "cl-webkit2";
+  version = "cl-webkit-20201016-git";
 
-  description = ''An FFI binding to WebKit2GTK+'';
+  description = "An FFI binding to WebKit2GTK+";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-cffi-gtk" args."cl-cffi-gtk-cairo" args."cl-cffi-gtk-gdk" args."cl-cffi-gtk-gdk-pixbuf" args."cl-cffi-gtk-gio" args."cl-cffi-gtk-glib" args."cl-cffi-gtk-gobject" args."cl-cffi-gtk-pango" args."closer-mop" args."iterate" args."trivial-features" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-webkit/2020-10-16/cl-webkit-20201016-git.tgz'';
-    sha256 = ''15xykhjz3j7ad3m853x1hriv3mz6zsgaqdnlc3wk664ka0f7k0vh'';
+    url = "http://beta.quicklisp.org/archive/cl-webkit/2020-10-16/cl-webkit-20201016-git.tgz";
+    sha256 = "15xykhjz3j7ad3m853x1hriv3mz6zsgaqdnlc3wk664ka0f7k0vh";
   };
 
   packageName = "cl-webkit2";

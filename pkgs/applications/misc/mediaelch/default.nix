@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , mkDerivation
 , fetchFromGitHub
 , qmake
@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.2";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "0y26vfgrdym461lzmm5x3z5ai9ky09vlk3cy4sq6hwlj7mzcz0k7";
+    sha256 = "1134vw7hr0mpqcsxjq4bqmg5760dngz17bzj97ypfc5cvzcxjh43";
     fetchSubmodules = true;
   };
 
@@ -31,7 +31,7 @@ mkDerivation rec {
     substituteInPlace MediaElch.pro --replace "/usr" "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
     license = licenses.lgpl3Only;

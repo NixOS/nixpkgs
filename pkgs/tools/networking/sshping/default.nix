@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, libssh}:
+{lib, stdenv, fetchFromGitHub, libssh}:
 
 stdenv.mkDerivation rec {
   pname = "sshping";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       install -Dm755 bin/sshping $out/bin/sshping
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/spook/sshping";
     description = "Measure character-echo latency and bandwidth for an interactive ssh session";
     license = licenses.mit;

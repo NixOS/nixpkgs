@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, lv2, fftw, cmake, libXpm
+{ lib, stdenv, fetchFromGitHub, pkg-config, lv2, fftw, cmake, libXpm
 , libXft, libjack2, libsamplerate, libsndfile }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libXft libXpm lv2 fftw libjack2 libsamplerate libsndfile ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rakarrak effects ported to LV2";
     homepage = "https://github.com/ssj71/rkrlv2";
     license = licenses.gpl2Only;
