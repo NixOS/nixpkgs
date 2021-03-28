@@ -88,11 +88,6 @@ stdenv.mkDerivation rec {
   ;
 
   patches = [
-    # Julia recompiles a precompiled file if the mtime stored *in* the
-    # .ji file differs from the mtime of the .ji file.  This
-    # doesn't work in Nix because Nix changes the mtime of files in
-    # the Nix store to 1. So patch Julia to accept mtimes of 1.
-    ./allow_nix_mtime.patch
     ./diagonal-test.patch
     ./use-system-utf8proc-julia-1.0.patch
   ];
