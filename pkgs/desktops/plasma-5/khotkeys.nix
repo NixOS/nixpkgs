@@ -14,5 +14,4 @@ mkDerivation {
     plasma-framework plasma-workspace qtx11extras
   ];
   outputs = [ "bin" "dev" "out" ];
-  meta.broken = lib.versionOlder qtbase.version "5.14";
 }
