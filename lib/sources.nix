@@ -121,6 +121,9 @@ let
     When used in the `stdenv` `src` parameter, the whole source will be copied
     and the build script will `cd` into the path that corresponds to `base`.
 
+    The result will match the first argument with respect to the name and
+    original location of the subpath (see `sources.pointAt`).
+
     Type:
       extend : SourceLike -> [SourceLike] -> Source
   */
@@ -149,7 +152,7 @@ let
       fromSourceAttributes {
         origSrc = root;
         filter = path: type: sourcesIncludingPath path != [];
-        name = "source";
+        name = baseAttrs.name;
         subpath = absolutePathComponentsBetween root baseAttrs.origSrc ++ baseAttrs.subpath;
       };
 
