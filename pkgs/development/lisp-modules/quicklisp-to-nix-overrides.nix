@@ -76,7 +76,7 @@ in
       preConfigure = ((x.overrides y).preConfigure or "") + ''
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.libmysqlclient}/include/mysql"
         export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.libmysqlclient}/lib/mysql"
-      '';};}) 
+      '';};})
     (ifLispIn ["ecl" "clisp"] (x: {
        deps = pkgs.lib.filter (x: x.outPath != quicklisp-to-nix-packages.uffi.outPath)
          (x.deps ++ (with quicklisp-to-nix-packages; [cffi-uffi-compat]));
