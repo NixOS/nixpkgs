@@ -93,8 +93,8 @@ let
   #             The function will be combined with the && operator such
   #             that src.filter is called lazily.
   #             The entire store path is filtered, including the files that are
-  #             accessible via relative path from the subpath pointed to by
-  #             `pointAt` or `union`.
+  #             accessible via relative path from the subpath focused on by
+  #             `focusAt` or `union`.
   #             For implementing a filter, see
   #             https://nixos.org/nix/manual/#builtin-filterSource
   #
@@ -122,7 +122,7 @@ let
     and the build script will `cd` into the path that corresponds to `base`.
 
     The result will match the first argument with respect to the name and
-    original location of the subpath (see `sources.pointAt`).
+    original location of the subpath (see `sources.focusAt`).
 
     Type:
       extend : SourceLike -> [SourceLike] -> Source
@@ -173,7 +173,7 @@ let
     copied and the build script will `cd` into the path that corresponds to `path`.
 
     Type:
-      pointAt :: Path -> Source -> Source
+      focusAt :: Path -> Source -> Source
 
     Example:
       # suppose we have files ./foo.json and ./bar/default.json
@@ -182,7 +182,7 @@ let
       => "/nix/store/pjn...-source/bar/default.json"
       #  ^ exists
 
-      "${sources.pointAt ./bar src}/../foo.json"
+      "${sources.focusAt ./bar src}/../foo.json"
       => "/nix/store/pjn...-source/bar/../foo.json"
       #  ^ exists; notice the store hash is the same
 
@@ -191,21 +191,21 @@ let
       => "/nix/store/ls9...-source/../foo.json"
       #  ^ does not exist (resolves to /nix/store/foo.json)
   */
-  pointAt = path: srcRaw:
+  focusAt = path: srcRaw:
     assert typeOf path == "path";
     let
       orig = toSourceAttributes srcRaw;
       valid =
         if ! pathHasPrefix orig.origSrc path
-        then throw "sources.pointAt: new path is must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
+        then throw "sources.focusAt: new path is must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
         else if ! pathExists path
         then
           # We could provide a function that allows this, but it seems to be a
           # bad idea unless we encounter a _good_ use case.
-          throw "sources.pointAt: new path ${toString path} does not exist on the filesystem and would point to a file that doesn't exist in the store. This is usually a mistake."
+          throw "sources.focusAt: new path ${toString path} does not exist on the filesystem and would point to a file that doesn't exist in the store. This is usually a mistake."
         else if ! orig.filter path (pathType path)
         then
-          throw "sources.pointAt: new path ${toString path} is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call."
+          throw "sources.focusAt: new path ${toString path} is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call."
         else x: x;
     in
       valid (fromSourceAttributes (orig // {
@@ -229,8 +229,8 @@ let
       => "/nix/store/ls9...-source/default.json"
       #  ^ exists, hash is not sensitive to foo.json
 
-      # contrast with pointAt
-      "${sources.pointAt ./bar src}/../foo.json"
+      # contrast with focusAt
+      "${sources.focusAt ./bar src}/../foo.json"
       => "/nix/store/pjn...-source/bar/../foo.json"
       #  ^ exists, hash is sensitive to both file hashes
   */
@@ -493,7 +493,7 @@ in {
     cutAt
     empty
     extend
-    pointAt
+    focusAt
     reparent
     setName
     trace

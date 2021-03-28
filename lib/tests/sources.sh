@@ -177,7 +177,7 @@ EOF
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-    pointAt ./. (
+    focusAt ./. (
       extend
         (cleanSource ./src)
         [ ./README.md ]
@@ -190,11 +190,11 @@ dir="$(
 ./src
 ./src/bar.c
 EOF
-) || die "sources.pointAt can change to parent directory"
+) || die "sources.focusAt can change to parent directory"
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-    pointAt ./src (
+    focusAt ./src (
       extend
         ./README.md
         [ (cleanSource ./src) ]
@@ -207,20 +207,20 @@ dir="$(
 ../src
 ../src/bar.c
 EOF
-) || die "sources.pointAt can change to subdirectory"
+) || die "sources.focusAt can change to subdirectory"
 
 
 (
   (
     nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
-      pointAt ./src (
+      focusAt ./src (
         extend
           ./README.md
           [ ./foo.bar ]
       )
       }")' || true
   ) 2>&1 | grep 'is not actually included in the source. Potential causes include an incorrect path, incorrect filter function or a forgotten sources.extend call.' >/dev/null
-) || die "sources.pointAt does not cause accidental inclusion"
+) || die "sources.focusAt does not cause accidental inclusion"
 
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
