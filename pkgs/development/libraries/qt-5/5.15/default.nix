@@ -59,14 +59,29 @@ let
         rev = "a059e7404a6db799f4da0ad696e65ae9c854b4b0";
       in
       {
-        version = "${branchName}-${lib.substring 0 8 rev}";
+        version = "${branchName}-${lib.substring 0 7 rev}";
 
         src = fetchgit {
           url = "https://github.com/qt/qtwebengine.git";
-          sha256 = "19l1i4sk3pvnwbvz5s97jchqawfz8k1xmjza29bgvkp1zz96r0jx";
+          sha256 = "1vdgxfbmx4z4qrm2g61dl64gqn3fv5f83jwpp7h1gyfx5z2qvfmv";
           inherit rev branchName;
           fetchSubmodules = true;
           leaveDotGit = true;
+          name = "qtwebengine-${substring 0 7 rev}.tar.gz";
+          postFetch = ''
+            # remove submodule .git directory
+            rm -rf $out/src/3rdparty/.git
+
+            # compress to not exceed the 2GB output limit
+            mv $out source
+            # try to make a deterministic tarball
+            tar -I 'gzip -n' \
+              --sort name \
+              --mtime 1970-01-01 \
+              --owner=root --group=root \
+              --numeric-owner --mode=go=rX,u+rw,a-s \
+              -cf $out source
+          '';
         };
       };
   };
