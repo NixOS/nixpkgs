@@ -94,6 +94,12 @@ in
                   used as django's SECRET_KEY.
                 '';
               };
+              static_root = mkOption {
+                type = types.str;
+                default = "${cfg.dataDir}/static";
+                defaultText = "\${config.services.etebase-server.dataDir}/static";
+                description = "The directory for static files.";
+              };
               media_root = mkOption {
                 type = types.str;
                 default = "${cfg.dataDir}/media";
@@ -180,13 +186,14 @@ in
       };
       environment = {
         PYTHONPATH = "${pythonEnv}/${pkgs.python3.sitePackages}";
-        ETEBASE_EASY_CONFIG_PATH = "${configIni}";
+        ETEBASE_EASY_CONFIG_PATH = configIni;
       };
       preStart = ''
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
         if [[ $(cat "$versionFile" 2>/dev/null) != ${pkgs.etebase-server} ]]; then
           ${pythonEnv}/bin/etebase-server migrate
+          ${pythonEnv}/bin/etebase-server collectstatic
           echo ${pkgs.etebase-server} > "$versionFile"
         fi
       '';
