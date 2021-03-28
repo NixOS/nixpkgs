@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"
-    tar xf "${src}" -C "$TBB_IN_STORE" --strip-components=2
+    tar xf "$src" -C "$TBB_IN_STORE" --strip-components=2
     pushd "$TBB_IN_STORE"
 
     # Set ELF interpreter
