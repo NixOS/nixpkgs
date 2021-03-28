@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
   ;
 
   patches = [
-    ./diagonal-test.patch
     ./use-system-utf8proc-julia-1.0.patch
   ];
 
