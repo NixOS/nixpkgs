@@ -6880,6 +6880,10 @@ in
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
+  opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix { };
+
+  opensnitch-ui = libsForQt5.callPackage ../tools/networking/opensnitch/ui.nix { };
+
   obexfs = callPackage ../tools/bluetooth/obexfs { };
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
