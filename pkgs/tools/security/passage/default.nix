@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "passage is a password store utilizing the age encryption library";
     homepage = "https://sr.ht/~gpanders/passage";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ rassmike ];
   };
 }
