@@ -16,6 +16,7 @@ let
     attrByPath
     boolToString
     concatMapStrings
+    concatStringsSep
     filter
     getAttr
     head
@@ -233,6 +234,30 @@ let
       srcAttrs = toSourceAttributes srcRaw;
     in srcAttrs.origSrc + "${concatMapStrings (x: "/${x}") srcAttrs.subpath}";
 
+  /*
+    Returns the part of the path of `"${src}"` that is inside the store path
+    that is created for it.
+    This returns the empty string when `src` does not include any files or
+    directories outside of itself.
+
+    Type: sourceLike -> Path
+
+    Example:
+
+      getSubpath
+        (extend
+          (cleanSource ./css)
+          [ ../common.mk ]
+        )
+      == "resources/css"
+      #   ^ assuming the directory containing
+      # this expression is named `resources`.
+   */
+  getSubpath = srcRaw:
+    let
+      srcAttrs = toSourceAttributes srcRaw;
+    in
+      lib.concatStringsSep "/" srcAttrs.subpath;
   /*
     Produces a source that starts at `path` and only contains nodes that are in `src`.
 
@@ -522,6 +547,7 @@ in {
 
     # getters
     getOriginalFocusPath
+    getSubpath
     ;
 
   /*

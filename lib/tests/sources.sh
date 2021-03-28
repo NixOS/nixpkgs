@@ -217,6 +217,30 @@ bool="$(
 )"
 [[ true == "$bool" ]] || die "getOriginalFocusPath example 2"
 
+string="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${boolToString (
+    getSubpath (
+      (extend
+        (cleanSource ./src)
+        [ ./README.md ]
+      )
+    ) == "src"
+  )}")'
+)"
+[[ true == "$string" ]] || die "getSubpath example 1"
+
+string="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${boolToString (
+    getSubpath (
+      (extend
+        ./README.md
+        [ (cleanSource ./src) ]
+      )
+    ) == "README.md"
+  )}")'
+)"
+[[ true == "$string" ]] || die "getSubpath example 2"
+
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
     focusAt ./src (
