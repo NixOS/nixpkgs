@@ -1,4 +1,12 @@
-{ lib, fetchFromSourcehut, rustPlatform, installShellFiles, asciidoctor, python3, xorg, passAlias ? false }:
+{ lib
+, rustPlatform
+, fetchFromSourcehut
+, installShellFiles
+, asciidoctor
+, python3
+, xorg
+, passAlias ? false
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "passage";
