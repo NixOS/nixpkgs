@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''jpl-util'';
-  version = ''cl-20151031-git'';
+  baseName = "jpl-util";
+  version = "cl-20151031-git";
 
-  description = ''Sundry utilities for J.P. Larocque.'';
+  description = "Sundry utilities for J.P. Larocque.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-jpl-util/2015-10-31/cl-jpl-util-20151031-git.tgz'';
-    sha256 = ''1a3sfamgrqgsf0ql3fkbpmjbs837v1b3nxqxp4mkisp6yxanmhzx'';
+    url = "http://beta.quicklisp.org/archive/cl-jpl-util/2015-10-31/cl-jpl-util-20151031-git.tgz";
+    sha256 = "1a3sfamgrqgsf0ql3fkbpmjbs837v1b3nxqxp4mkisp6yxanmhzx";
   };
 
   packageName = "jpl-util";

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-dbi'';
-  version = ''20210228-git'';
+  baseName = "cl-dbi";
+  version = "20210228-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."closer-mop" args."dbi" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2021-02-28/cl-dbi-20210228-git.tgz'';
-    sha256 = ''0yfs7k6samv6q0n1bvscvcck7qg3c4g03qn7i81619q7g2f98jdk'';
+    url = "http://beta.quicklisp.org/archive/cl-dbi/2021-02-28/cl-dbi-20210228-git.tgz";
+    sha256 = "0yfs7k6samv6q0n1bvscvcck7qg3c4g03qn7i81619q7g2f98jdk";
   };
 
   packageName = "cl-dbi";

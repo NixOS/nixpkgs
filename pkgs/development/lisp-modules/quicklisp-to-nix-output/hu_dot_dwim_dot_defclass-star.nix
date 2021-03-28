@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''hu_dot_dwim_dot_defclass-star'';
-  version = ''stable-git'';
+  baseName = "hu_dot_dwim_dot_defclass-star";
+  version = "stable-git";
 
-  description = ''Simplify class like definitions with defclass* and friends.'';
+  description = "Simplify class like definitions with defclass* and friends.";
 
   deps = [ args."hu_dot_dwim_dot_asdf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-02-28/hu.dwim.defclass-star-stable-git.tgz'';
-    sha256 = ''1zj4c9pz7y69gclyd7kzf6d6s1r0am49czgvp2axbv7w50j5caf9'';
+    url = "http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-02-28/hu.dwim.defclass-star-stable-git.tgz";
+    sha256 = "1zj4c9pz7y69gclyd7kzf6d6s1r0am49czgvp2axbv7w50j5caf9";
   };
 
   packageName = "hu.dwim.defclass-star";

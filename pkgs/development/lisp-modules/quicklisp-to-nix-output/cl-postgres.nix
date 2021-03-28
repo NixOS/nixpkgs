@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-postgres'';
-  version = ''postmodern-20210124-git'';
+  baseName = "cl-postgres";
+  version = "postmodern-20210124-git";
 
   parasites = [ "cl-postgres/simple-date-tests" "cl-postgres/tests" ];
 
-  description = ''Low-level client library for PostgreSQL'';
+  description = "Low-level client library for PostgreSQL";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-ppcre" args."fiveam" args."ironclad" args."md5" args."simple-date" args."simple-date_slash_postgres-glue" args."split-sequence" args."uax-15" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2021-01-24/postmodern-20210124-git.tgz'';
-    sha256 = ''1fl103fga5iq2gf1p15xvbrmmjrcv2bbi3lz1zv32j6smy5aymhc'';
+    url = "http://beta.quicklisp.org/archive/postmodern/2021-01-24/postmodern-20210124-git.tgz";
+    sha256 = "1fl103fga5iq2gf1p15xvbrmmjrcv2bbi3lz1zv32j6smy5aymhc";
   };
 
   packageName = "cl-postgres";

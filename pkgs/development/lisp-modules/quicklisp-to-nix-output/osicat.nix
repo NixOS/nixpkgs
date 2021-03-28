@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''osicat'';
-  version = ''20210228-git'';
+  baseName = "osicat";
+  version = "20210228-git";
 
   parasites = [ "osicat/tests" ];
 
-  description = ''A lightweight operating system interface'';
+  description = "A lightweight operating system interface";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."rt" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/osicat/2021-02-28/osicat-20210228-git.tgz'';
-    sha256 = ''0g9frahjr2i6fvwd3bzvcz9icx4n4mnwcmsz6gvg5s6wmq5ny6wb'';
+    url = "http://beta.quicklisp.org/archive/osicat/2021-02-28/osicat-20210228-git.tgz";
+    sha256 = "0g9frahjr2i6fvwd3bzvcz9icx4n4mnwcmsz6gvg5s6wmq5ny6wb";
   };
 
   packageName = "osicat";

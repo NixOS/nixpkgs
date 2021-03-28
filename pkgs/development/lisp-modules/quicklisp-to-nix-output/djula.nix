@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''djula'';
-  version = ''20210124-git'';
+  baseName = "djula";
+  version = "20210124-git";
 
-  description = ''An implementation of Django templates for Common Lisp.'';
+  description = "An implementation of Django templates for Common Lisp.";
 
   deps = [ args."access" args."alexandria" args."anaphora" args."arnesi" args."babel" args."cl-annot" args."cl-interpol" args."cl-locale" args."cl-ppcre" args."cl-slice" args."cl-syntax" args."cl-syntax-annot" args."cl-unicode" args."closer-mop" args."collectors" args."flexi-streams" args."gettext" args."iterate" args."let-plus" args."local-time" args."named-readtables" args."parser-combinators" args."split-sequence" args."symbol-munger" args."trivial-backtrace" args."trivial-features" args."trivial-gray-streams" args."trivial-types" args."yacc" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/djula/2021-01-24/djula-20210124-git.tgz'';
-    sha256 = ''0hkyp5himz73r2l3vbwkwsd1as4f75ih6wh7v1wbabpbjwh2j2vx'';
+    url = "http://beta.quicklisp.org/archive/djula/2021-01-24/djula-20210124-git.tgz";
+    sha256 = "0hkyp5himz73r2l3vbwkwsd1as4f75ih6wh7v1wbabpbjwh2j2vx";
   };
 
   packageName = "djula";

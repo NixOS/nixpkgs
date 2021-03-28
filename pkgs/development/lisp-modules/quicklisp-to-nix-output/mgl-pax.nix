@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''mgl-pax'';
-  version = ''20210228-git'';
+  baseName = "mgl-pax";
+  version = "20210228-git";
 
   parasites = [ "mgl-pax/test" ];
 
-  description = ''Exploratory programming tool and documentation
-  generator.'';
+  description = "Exploratory programming tool and documentation
+  generator.";
 
   deps = [ args."_3bmd" args."_3bmd-ext-code-blocks" args."alexandria" args."babel" args."bordeaux-threads" args."cl-fad" args."colorize" args."esrap" args."html-encode" args."ironclad" args."named-readtables" args."pythonic-string-reader" args."split-sequence" args."swank" args."trivial-features" args."trivial-with-current-source-form" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/mgl-pax/2021-02-28/mgl-pax-20210228-git.tgz'';
-    sha256 = ''1dyhbnd69lb6ih89pvg8nn6pwsg25v5xjsfk1i5l1fdib14612cw'';
+    url = "http://beta.quicklisp.org/archive/mgl-pax/2021-02-28/mgl-pax-20210228-git.tgz";
+    sha256 = "1dyhbnd69lb6ih89pvg8nn6pwsg25v5xjsfk1i5l1fdib14612cw";
   };
 
   packageName = "mgl-pax";

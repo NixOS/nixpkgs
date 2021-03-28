@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''str'';
-  version = ''cl-20210124-git'';
+  baseName = "str";
+  version = "cl-20210124-git";
 
-  description = ''Modern, consistent and terse Common Lisp string manipulation library.'';
+  description = "Modern, consistent and terse Common Lisp string manipulation library.";
 
   deps = [ args."cl-change-case" args."cl-ppcre" args."cl-ppcre-unicode" args."cl-unicode" args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-str/2021-01-24/cl-str-20210124-git.tgz'';
-    sha256 = ''07y24mx8gmhwz6px63llgsz15aqicqa4m8gd5zwxy708xggv73jc'';
+    url = "http://beta.quicklisp.org/archive/cl-str/2021-01-24/cl-str-20210124-git.tgz";
+    sha256 = "07y24mx8gmhwz6px63llgsz15aqicqa4m8gd5zwxy708xggv73jc";
   };
 
   packageName = "str";

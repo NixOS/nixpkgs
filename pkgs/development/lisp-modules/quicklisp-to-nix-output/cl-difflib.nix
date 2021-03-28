@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-difflib'';
-  version = ''20130128-git'';
+  baseName = "cl-difflib";
+  version = "20130128-git";
 
-  description = ''A Lisp library for computing differences between sequences.'';
+  description = "A Lisp library for computing differences between sequences.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-difflib/2013-01-28/cl-difflib-20130128-git.tgz'';
-    sha256 = ''1bgb0nmm93x90c7v1q1ah1v5dfm2anhkim7nh88sg7kg50y4ksm6'';
+    url = "http://beta.quicklisp.org/archive/cl-difflib/2013-01-28/cl-difflib-20130128-git.tgz";
+    sha256 = "1bgb0nmm93x90c7v1q1ah1v5dfm2anhkim7nh88sg7kg50y4ksm6";
   };
 
   packageName = "cl-difflib";

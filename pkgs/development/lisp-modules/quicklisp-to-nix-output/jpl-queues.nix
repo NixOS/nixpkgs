@@ -1,16 +1,17 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''jpl-queues'';
-  version = ''0.1'';
+  baseName = "jpl-queues";
+  version = "0.1";
 
-  description = ''A few different kinds of queues, with optional
-multithreading synchronization.'';
+  description = "A few different kinds of queues, with optional
+multithreading synchronization.";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."jpl-util" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/jpl-queues/2010-10-06/jpl-queues-0.1.tgz'';
-    sha256 = ''1wvvv7j117h9a42qaj1g4fh4mji28xqs7s60rn6d11gk9jl76h96'';
+    url = "http://beta.quicklisp.org/archive/jpl-queues/2010-10-06/jpl-queues-0.1.tgz";
+    sha256 = "1wvvv7j117h9a42qaj1g4fh4mji28xqs7s60rn6d11gk9jl76h96";
   };
 
   packageName = "jpl-queues";

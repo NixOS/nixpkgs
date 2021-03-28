@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-custom-hash-table'';
-  version = ''20201220-git'';
+  baseName = "cl-custom-hash-table";
+  version = "20201220-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-custom-hash-table/2020-12-20/cl-custom-hash-table-20201220-git.tgz'';
-    sha256 = ''1id16p7vdcgxzvrgk8h6fqi284hgd8cilbnbgsbrbd70n7nj8jg3'';
+    url = "http://beta.quicklisp.org/archive/cl-custom-hash-table/2020-12-20/cl-custom-hash-table-20201220-git.tgz";
+    sha256 = "1id16p7vdcgxzvrgk8h6fqi284hgd8cilbnbgsbrbd70n7nj8jg3";
   };
 
   packageName = "cl-custom-hash-table";

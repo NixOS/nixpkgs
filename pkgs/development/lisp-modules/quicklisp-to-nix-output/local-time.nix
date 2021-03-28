@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''local-time'';
-  version = ''20210124-git'';
+  baseName = "local-time";
+  version = "20210124-git";
 
   parasites = [ "local-time/test" ];
 
-  description = ''A library for manipulating dates and times, based on a paper by Erik Naggum'';
+  description = "A library for manipulating dates and times, based on a paper by Erik Naggum";
 
   deps = [ args."hu_dot_dwim_dot_stefil" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/local-time/2021-01-24/local-time-20210124-git.tgz'';
-    sha256 = ''0bz5z0rd8gfd22bpqkalaijxlrk806zc010cvgd4qjapbrxzjg3s'';
+    url = "http://beta.quicklisp.org/archive/local-time/2021-01-24/local-time-20210124-git.tgz";
+    sha256 = "0bz5z0rd8gfd22bpqkalaijxlrk806zc010cvgd4qjapbrxzjg3s";
   };
 
   packageName = "local-time";

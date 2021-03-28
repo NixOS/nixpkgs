@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''quri'';
-  version = ''20210228-git'';
+  baseName = "quri";
+  version = "20210228-git";
 
-  description = ''Yet another URI library for Common Lisp'';
+  description = "Yet another URI library for Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."cl-utilities" args."split-sequence" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/quri/2021-02-28/quri-20210228-git.tgz'';
-    sha256 = ''03hq6x715kv37c089b73f6j8b0f4ywhxr37wbw9any2jcgrswx0g'';
+    url = "http://beta.quicklisp.org/archive/quri/2021-02-28/quri-20210228-git.tgz";
+    sha256 = "03hq6x715kv37c089b73f6j8b0f4ywhxr37wbw9any2jcgrswx0g";
   };
 
   packageName = "quri";

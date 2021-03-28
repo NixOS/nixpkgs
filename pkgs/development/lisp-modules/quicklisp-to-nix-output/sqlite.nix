@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''sqlite'';
-  version = ''cl-20190813-git'';
+  baseName = "sqlite";
+  version = "cl-20190813-git";
 
-  description = ''CL-SQLITE package is an interface to the SQLite embedded relational database engine.'';
+  description = "CL-SQLITE package is an interface to the SQLite embedded relational database engine.";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."iterate" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-sqlite/2019-08-13/cl-sqlite-20190813-git.tgz'';
-    sha256 = ''07zla2h7i7ggmzsyj33f12vpxvcbbvq6x022c2dy13flx8a83rmk'';
+    url = "http://beta.quicklisp.org/archive/cl-sqlite/2019-08-13/cl-sqlite-20190813-git.tgz";
+    sha256 = "07zla2h7i7ggmzsyj33f12vpxvcbbvq6x022c2dy13flx8a83rmk";
   };
 
   packageName = "sqlite";
