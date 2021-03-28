@@ -11195,9 +11195,11 @@ in
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
+  sbcl_2_0_8 = callPackage ../development/compilers/sbcl/2.0.8.nix {};
   sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.0.9.nix {};
   sbcl_2_1_1 = callPackage ../development/compilers/sbcl/2.1.1.nix {};
-  sbcl = callPackage ../development/compilers/sbcl {};
+  sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.1.2.nix {};
+  sbcl = sbcl_2_1_2;
 
   scala_2_10 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.10"; jre = jdk8; };
   scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
