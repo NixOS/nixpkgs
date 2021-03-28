@@ -1,29 +1,40 @@
-{ stdenv, lib, fetchFromGitHub, python2Packages, nasm, libelf
-, kernel ? null, withDriver ? false }:
-python2Packages.buildPythonApplication rec {
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel ? null
+, libelf
+, nasm
+, python3
+, withDriver ? false
+}:
+
+python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.5.1";
+  version = "1.5.10";
+  disabled = !stdenv.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    sha256 = "1rxr9i08a22m15slvlkrhnki30jixi2ds096kmmc2nqzfr9yibmb";
+    sha256 = "sha256-3ZFLBn0HtQo4/6pFNPinA9hHnkbW/Y1AxXgwzrAvNMk=";
   };
 
-  disabled = !stdenv.isLinux;
+  KERNEL_SRC_DIR = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   nativeBuildInputs = [
-    nasm libelf
+    libelf
+    nasm
+  ];
+
+  checkInputs = [
+    python3.pkgs.distro
+    python3.pkgs.pytestCheckHook
   ];
 
   setupPyBuildFlags = lib.optional (!withDriver) "--skip-driver";
 
-  checkPhase = "python setup.py build "
-             + lib.optionalString (!withDriver) "--skip-driver "
-             + "test";
-
-  KERNEL_SRC_DIR = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  pythonImportsCheck = [ "chipsec" ];
 
   meta = with lib; {
     description = "Platform Security Assessment Framework";
@@ -34,7 +45,7 @@ python2Packages.buildPythonApplication rec {
       interfaces, and forensic capabilities. It can be run on Windows, Linux,
       Mac OS X and UEFI shell.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
     maintainers = with maintainers; [ johnazoidberg ];
     platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
