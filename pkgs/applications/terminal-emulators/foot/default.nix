@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
-  '' + lib.optionalString (doPgo && stdenv.cc.cc.pname == "clang") ''
+  '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
 
