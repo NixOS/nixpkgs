@@ -242,7 +242,7 @@ in
           "default.action"
         ] ++ optional cfg.inspectHttps (toString inspectAction);
     } // (optionalAttrs cfg.enableTor {
-      forward-socks5 = "127.0.0.1:9063 .";
+      forward-socks5 = "/ 127.0.0.1:9063 .";
       toggle = true;
       enable-remote-toggle = false;
       enable-edit-actions = false;
