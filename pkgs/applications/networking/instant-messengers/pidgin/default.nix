@@ -29,11 +29,13 @@ let unwrapped = stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
-  buildInputs = [
+  buildInputs = let
+    python-with-dbus = python.withPackages (pp: with pp; [ dbus-python ]);
+  in [
     aspell startupnotification
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     libxml2 nss nspr
-    libXScrnSaver ncurses python
+    libXScrnSaver ncurses python-with-dbus
     avahi dbus dbus-glib intltool libidn
     libICE libXext libSM cyrus_sasl
   ]
@@ -70,6 +72,15 @@ let unwrapped = stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/pidgin \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+  '';
+
+  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  # In particular, this detects missing python imports in some of the tools.
+  postInstallCheck = ''
+    for f in "''${!outputBin}"/bin/{purple-remote,pidgin}; do
+      echo "Testing: $f --help"
+      "$f" --help
+    done
   '';
 
   meta = with stdenv.lib; {
