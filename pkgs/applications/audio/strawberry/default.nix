@@ -67,7 +67,6 @@ mkDerivation rec {
     libselinux
     libsepol
     p11-kit
-    util-linux
   ]
   ++ lib.optionals withGstreamer (with gst_all_1; [
     gstreamer
@@ -77,7 +76,7 @@ mkDerivation rec {
   ])
   ++ lib.optional withVlc libvlc;
 
-  nativeBuildInputs = [ cmake ninja pkg-config qttools ];
+  nativeBuildInputs = [ cmake ninja pkg-config qttools util-linux ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_TAGLIB=ON"
@@ -91,7 +90,7 @@ mkDerivation rec {
     description = "Music player and music collection organizer";
     homepage = "https://www.strawberrymusicplayer.org/";
     changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
     platforms = platforms.linux;
