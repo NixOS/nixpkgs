@@ -9,7 +9,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kguiaddons ki18n qtbase qttools ];
   propagatedBuildInputs = [ kauth kcodecs kconfig kwidgetsaddons ];
-  patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
+  patches = [ ./0001-QDirIterator-follow-symlinks.patch ];
   outputs = [ "out" "dev" ];
   outputBin = "dev";
   postInstall = ''
