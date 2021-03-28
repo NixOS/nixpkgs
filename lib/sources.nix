@@ -189,6 +189,7 @@ let
       #  ^ does not exist (resolves to /nix/store/foo.json)
   */
   pointAt = path: srcRaw:
+    assert typeOf path == "path";
     let
       orig = toSourceAttributes srcRaw;
       valid =
@@ -235,6 +236,7 @@ let
     path:
     # A sourcelike that determines which nodes will be included, starting at `path`
     srcRaw:
+    assert typeOf path == "path";
     let
       orig = toSourceAttributes srcRaw;
       valid =
