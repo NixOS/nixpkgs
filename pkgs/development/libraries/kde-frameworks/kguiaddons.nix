@@ -14,6 +14,5 @@ mkDerivation {
 
   meta = with lib; {
     maintainers = [ maintainers.ttuegel ];
-    broken = versionOlder qtbase.version "5.14.0";
   };
 }

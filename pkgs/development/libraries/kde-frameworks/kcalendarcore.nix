@@ -2,7 +2,8 @@
   mkDerivation,
   lib,
   extra-cmake-modules,
-  libical
+  libical,
+  qtbase
 }:
 
 mkDerivation {

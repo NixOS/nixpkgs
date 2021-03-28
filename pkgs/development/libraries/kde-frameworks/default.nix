@@ -28,6 +28,8 @@ existing packages here and modify it as necessary.
 
 let
 
+  minQtVersion = "5.14";
+
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
@@ -79,6 +81,7 @@ let
               ];
               maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               platforms = lib.platforms.linux;
+              broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
             } // (args.meta or {});
 
           in mkDerivation (args // {
