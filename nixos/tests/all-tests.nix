@@ -426,6 +426,7 @@ in
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   vscodium = handleTest ./vscodium.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
+  wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
   wordpress = handleTest ./wordpress.nix {};
   xandikos = handleTest ./xandikos.nix {};
