@@ -18,6 +18,10 @@
 , pkg-config
 , allowPgo ? true
 , python3  # for PGO
+# for clang stdenv check
+, foot
+, llvmPackages
+, llvmPackages_latest
 }:
 
 let
@@ -139,6 +143,16 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
+
+  passthru.tests = {
+    clang-default-compilation = foot.override {
+      inherit (llvmPackages) stdenv;
+    };
+
+    clang-latest-compilation = foot.override {
+      inherit (llvmPackages_latest) stdenv;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
