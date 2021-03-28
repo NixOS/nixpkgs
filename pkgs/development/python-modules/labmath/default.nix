@@ -20,6 +20,5 @@ buildPythonPackage rec {
     description = "Module for basic math in the general vicinity of computational number theory";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms = platforms.all;
   };
 }
