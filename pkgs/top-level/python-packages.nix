@@ -6653,6 +6653,8 @@ in {
 
   python-dotenv = callPackage ../development/python-modules/python-dotenv { };
 
+  python-dynamodb-lock = callPackage ../development/python-modules/python-dynamodb-lock { };
+
   python-editor = callPackage ../development/python-modules/python-editor { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
