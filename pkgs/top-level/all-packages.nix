@@ -28422,7 +28422,9 @@ in
 
   osi = callPackage ../development/libraries/science/math/osi { };
 
-  or-tools = callPackage ../development/libraries/science/math/or-tools { };
+  or-tools = callPackage ../development/libraries/science/math/or-tools {
+    abseil-cpp = abseil-cpp.override { static = true; };
+  };
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
 
