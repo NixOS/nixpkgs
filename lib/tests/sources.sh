@@ -192,6 +192,31 @@ dir="$(
 EOF
 ) || die "sources.focusAt can change to parent directory"
 
+bool="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${boolToString (
+     getOriginalFocusPath (
+      focusAt ./. (
+        extend
+          (cleanSource ./src)
+          [ ./README.md ]
+      )
+    ) == ./.
+  )}")'
+)"
+[[ true == "$bool" ]] || die "getOriginalFocusPath example 1"
+
+bool="$(
+  nix eval --raw '(with import <nixpkgs/lib>; with sources; "${boolToString (
+    getOriginalFocusPath (
+      (extend
+        (cleanSource ./src)
+        [ ./README.md ]
+      )
+    ) == ./src
+  )}")'
+)"
+[[ true == "$bool" ]] || die "getOriginalFocusPath example 2"
+
 dir="$(
   nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
     focusAt ./src (

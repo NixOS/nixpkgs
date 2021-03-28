@@ -213,6 +213,27 @@ let
        }));
 
   /*
+    Returns the original path that is copied and returned by `"${src}"`.
+    This may be a subpath of a store path, for example when `src` was created
+    with `focusAt` or `extend`.
+
+    Type: sourceLike -> Path
+
+    Example:
+
+      getOriginalFocusPath
+        (extend
+          (cleanSource ./src)
+          [ ./README.md ]
+        )
+      == ./src
+   */
+  getOriginalFocusPath = srcRaw:
+    let
+      srcAttrs = toSourceAttributes srcRaw;
+    in srcAttrs.origSrc + "${concatMapStrings (x: "/${x}") srcAttrs.subpath}";
+
+  /*
     Produces a source that starts at `path` and only contains nodes that are in `src`.
 
     Type:
@@ -490,6 +511,7 @@ in {
   # part of the interface meant to be referenced as source.* or localized
   # let inherit.
   inherit
+    # combinators
     cutAt
     empty
     extend
@@ -497,6 +519,9 @@ in {
     reparent
     setName
     trace
+
+    # getters
+    getOriginalFocusPath
     ;
 
   /*
