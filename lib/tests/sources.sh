@@ -251,4 +251,13 @@ dir="$(nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
 }")')"
 echo $dir | grep -- -anna >/dev/null || die "setName"
 
+{
+  (
+    nix eval --raw '(with import <nixpkgs/lib>; with sources; "${
+      extend ./. [ ./does-not-exist ]
+    }")' || true
+  ) 2>&1 | grep 'error: Path does not exist while attempting to construct a source.' >/dev/null
+} || die "non-existing paths are an error, even when used lazily in, say, extend's list argument."
+echo $dir | grep -- -anna >/dev/null || die "setName"
+
 echo >&2 tests ok

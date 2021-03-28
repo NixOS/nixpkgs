@@ -10,6 +10,7 @@ let
     split
     storeDir
     tryEval
+    typeOf
     ;
   inherit (lib)
     attrByPath
@@ -418,16 +419,33 @@ let
   # (Existing ones being: paths, strings, sources and x//{outPath})
   # So instead of exposing internals, we build a library of combinator functions.
   toSourceAttributes = src:
-    let
-      isFiltered = src ? _isLibCleanSourceWith;
-    in
-    {
-      # The original path
-      origSrc = if isFiltered then src.origSrc else src;
-      filter = if isFiltered then src.filter else _: _: true;
-      name = if isFiltered then src.name else "source";
-      subpath = if isFiltered then src.subpath else [];
-    };
+    if src ? _isLibCleanSourceWith
+    then {
+      inherit (src) origSrc filter name subpath;
+    }
+    else if typeOf src == "path" then
+      if builtins.pathExists src
+      then {
+        origSrc = src;
+        filter = _: _: true;
+        name = "source";
+        subpath = [];
+      }
+      else throw ''
+        Path does not exist while attempting to construct a source.
+        path: ${toString src}''
+    else if typeOf src == "string" then
+      if pathHasContext src then
+        throw ''
+          Path may require a build while attempting to construct a source.
+          Using a build output like this is usually a bad idea because it blocks
+          the evaluation process for the duration of the build. It's often better
+          to filter built "sources" in a derivation than in an expression.
+          path string: ${src}''
+      else
+        toSourceAttributes (/. + src)
+    else
+      throw "A value of type ${typeOf src} can not be automatically converted to a source.";
 
   # (private) fromSourceAttributes : SourceAttrs -> Source
   #
