@@ -10985,11 +10985,6 @@ in
     libgit2 = libgit2_0_27;
   };
 
-  julia_13 = callPackage ../development/compilers/julia/1.3.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
   julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
