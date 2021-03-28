@@ -21343,7 +21343,6 @@ in
 
   maligned = callPackage ../development/tools/maligned { };
 
-  inter-ui = callPackage ../data/fonts/inter-ui { };
   inter = callPackage ../data/fonts/inter { };
 
   scientifica = callPackage ../data/fonts/scientifica { };
@@ -26873,6 +26872,8 @@ in
   lnd = callPackage ../applications/blockchains/lnd.nix { };
 
   lndconnect = callPackage ../applications/blockchains/lndconnect { };
+
+  lndmanage = callPackage ../applications/blockchains/lndmanage.nix { };
 
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
