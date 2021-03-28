@@ -67,6 +67,11 @@ stdenv.mkDerivation rec {
         --prefix PATH : "$program_PATH:${which}/bin" \
         --set PYTHONNOUSERSITE true
     done
+
+    # Hardcode --with-appname argument to `carla` since python wrapper is being wrapped again by QT wrapper.
+    # This resolves issues with NSM
+    # see https://github.com/jackaudio/new-session-manager/issues/73
+    sed -i 's/--with-appname="$0"/--with-appname="carla"/g' $out/bin/.carla-wrapped
   '';
 
   meta = with lib; {
