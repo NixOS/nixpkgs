@@ -76,7 +76,12 @@ mkDerivation rec {
   ])
   ++ lib.optional withVlc libvlc;
 
-  nativeBuildInputs = [ cmake ninja pkg-config qttools util-linux ];
+  nativeBuildInputs = [
+    cmake ninja pkg-config qttools
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    util-linux
+  ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_TAGLIB=ON"
