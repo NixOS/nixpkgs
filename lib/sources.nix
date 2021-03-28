@@ -126,12 +126,12 @@ let
   */
   extend =
     # Source-like object that serves as the starting point. The path `"${extend base extras}"` points to the same file as `"${base}"`
-    base:
+    baseRaw:
     # List of sources that will also be included in the store path.
-    extras:
+    extrasRaw:
     let
-      baseAttrs = toSourceAttributes base;
-      extrasAttrs = map toSourceAttributes extras;
+      baseAttrs = toSourceAttributes baseRaw;
+      extrasAttrs = map toSourceAttributes extrasRaw;
       root = lib.foldl' (a: b: commonPath a b.origSrc) baseAttrs.origSrc extrasAttrs;
       sourcesIncludingPath =
         memoizePathFunction
@@ -150,7 +150,7 @@ let
         origSrc = root;
         filter = path: type: sourcesIncludingPath path != [];
         name = "source";
-        subpath = absolutePathComponentsBetween root base.origSrc ++ base.subpath;
+        subpath = absolutePathComponentsBetween root baseAttrs.origSrc ++ baseAttrs.subpath;
       };
 
   /*
@@ -188,9 +188,9 @@ let
       => "/nix/store/ls9...-source/../foo.json"
       #  ^ does not exist (resolves to /nix/store/foo.json)
   */
-  pointAt = path: src:
+  pointAt = path: srcRaw:
     let
-      orig = toSourceAttributes src;
+      orig = toSourceAttributes srcRaw;
       valid =
         if ! pathHasPrefix orig.origSrc path
         then throw "sources.pointAt: new path is must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
@@ -233,10 +233,10 @@ let
   cutAt =
     # The path that will form the new root of the source
     path:
-    # A source that determines which nodes will be included, starting at `path`
-    src:
+    # A sourcelike that determines which nodes will be included, starting at `path`
+    srcRaw:
     let
-      orig = toSourceAttributes src;
+      orig = toSourceAttributes srcRaw;
       valid =
         if ! pathHasPrefix orig.origSrc path
         then throw "sources.cutAt: new source root must be a subpath (or self) of the original source directory. But ${toString path} is not a subpath (or self) of ${toString orig.origSrc}"
