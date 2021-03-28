@@ -13,6 +13,7 @@ calispel
 caveman
 cffi
 cffi-grovel
+cffi-uffi-compat
 chanl
 chipz
 chunga
@@ -64,7 +65,9 @@ cl-protobufs
 cl-qprint
 cl-reexport
 cl-slice
+cl-speedy-queue
 cl-smtp
+cl-syslog
 clsql
 clsql-postgresql
 clsql-postgresql-socket
