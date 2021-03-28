@@ -446,6 +446,10 @@ let
           path string: ${src}''
       else
         toSourceAttributes (/. + src)
+    else if src ? outPath && typeOf src.outPath == "path" then
+      # Sometimes, path-like attrsets are constructed to augment a path with
+      # a bit of metadata.
+      toSourceAttributes src.outPath
     else
       throw "A value of type ${typeOf src} can not be automatically converted to a source.";
 
