@@ -74,6 +74,15 @@ let unwrapped = stdenv.mkDerivation rec {
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
+  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  # In particular, this detects missing python imports in some of the tools.
+  postInstallCheck = ''
+    for f in "''${!outputBin}"/bin/{purple-remote,pidgin}; do
+      echo "Testing: $f --help"
+      "$f" --help
+    done
+  '';
+
   meta = with lib; {
     description = "Multi-protocol instant messaging client";
     homepage = "http://pidgin.im";
