@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/opt
     cp -r ext lib $out/opt/
     install -D bin/gremlin.sh $out/opt/bin/gremlin-console
     makeWrapper $out/opt/bin/gremlin-console $out/bin/gremlin-console \
       --prefix PATH ":" "${openjdk}/bin/" \
       --set CLASSPATH "$out/opt/lib/"
+    runHook postInstall
   '';
 
   meta = with lib; {
