@@ -4627,6 +4627,8 @@ in {
 
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
+  nodepy-runtime = callPackage ../development/python-modules/nodepy-runtime { };
+
   node-semver = callPackage ../development/python-modules/node-semver { };
 
   noise = callPackage ../development/python-modules/noise { };
