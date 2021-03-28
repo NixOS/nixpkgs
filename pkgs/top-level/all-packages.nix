@@ -26872,6 +26872,8 @@ in
 
   lndconnect = callPackage ../applications/blockchains/lndconnect { };
 
+  lndmanage = callPackage ../applications/blockchains/lndmanage.nix { };
+
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
     boost = boost17x;
