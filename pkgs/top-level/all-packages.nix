@@ -10989,9 +10989,9 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
-  julia = julia_15;
   julia-lts = julia_10;
   julia-stable = julia_15;
+  julia = julia-lts;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
