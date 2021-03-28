@@ -6176,6 +6176,12 @@
     github = "meutraa";
     githubId = 68550871;
   };
+  mephistophiles = {
+    email = "mussitantesmortem@gmail.com";
+    name = "Maxim Zhukov";
+    github = "Mephistophiles";
+    githubId = 4850908;
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
