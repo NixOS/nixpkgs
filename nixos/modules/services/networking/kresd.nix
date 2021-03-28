@@ -137,10 +137,5 @@ in {
     };
     # We don't mind running stop phase from wrong version.  It seems less racy.
     systemd.services."kresd@".stopIfChanged = false;
-
-    # Try cleaning up the previously default location of cache file.
-    # Note that /var/cache/* should always be safe to remove.
-    # TODO: remove later, probably between 20.09 and 21.05
-    systemd.tmpfiles.rules = [ "R /var/cache/kresd" ];
   };
 }
