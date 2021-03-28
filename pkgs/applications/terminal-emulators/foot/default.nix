@@ -25,7 +25,7 @@
 }:
 
 let
-  version = "1.7.0";
+  version = "1.7.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0w07fw7y31g891335ji3fm783r4dsk5py82qp0zx6z3rfr07paby";
+    sha256 = "1x6nyhlp0zynnbdjx87c4ybfx6fyr0r53vypkfima56dwbfh98ka";
   };
 
   nativeBuildInputs = [
