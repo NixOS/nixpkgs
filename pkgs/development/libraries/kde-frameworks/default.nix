@@ -161,7 +161,7 @@ let
       kiconthemes = callPackage ./kiconthemes {};
       kinit = callPackage ./kinit {};
       kio = callPackage ./kio {};
-      knewstuff = callPackage ./knewstuff.nix {};
+      knewstuff = callPackage ./knewstuff {};
       knotifyconfig = callPackage ./knotifyconfig.nix {};
       kparts = callPackage ./kparts.nix {};
       kpeople = callPackage ./kpeople.nix {};

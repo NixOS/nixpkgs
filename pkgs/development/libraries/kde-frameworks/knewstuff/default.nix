@@ -16,4 +16,7 @@ mkDerivation {
     ktextwidgets kwidgetsaddons qtbase qtdeclarative kirigami2
   ];
   propagatedBuildInputs = [ attica kservice kxmlgui ];
+  patches = [
+    ./0001-Delay-resolving-knsrcdir.patch
+  ];
 }
