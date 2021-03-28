@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  CXXFLAGS = "-std=c++11";
   configureFlags = "--enable-liblilv --with-extra-cppflags=-Dnullptr=0";
 
   postPatch = ''
