@@ -26906,6 +26906,8 @@ in
 
   ethabi = callPackage ../applications/blockchains/ethabi.nix { };
 
+  pycoin = with python3Packages; toPythonApplication pycoin;
+
   stellar-core = callPackage ../applications/blockchains/stellar-core.nix { };
 
   sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
