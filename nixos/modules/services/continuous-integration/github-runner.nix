@@ -46,14 +46,14 @@ in
     };
 
     name = mkOption {
-      type = types.nullOr types.str;
+      type = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
       description = ''
         Name of the runner to configure. Defaults to the hostname.
 
         Changing this option triggers a new runner registration.
       '';
       example = "nixos";
-      default = null;
+      default = config.networking.hostName;
     };
 
     runnerGroup = mkOption {
@@ -200,7 +200,7 @@ in
                   --url '${cfg.url}' \
                   --token "$token" \
                   --labels '${concatStringsSep "," cfg.extraLabels}' \
-                  ${optionalString (cfg.name != null) "--name '${cfg.name}'"} \
+                  --name '${cfg.name}' \
                   ${optionalString cfg.replace "--replace"} \
                   ${optionalString (cfg.runnerGroup != null) "--runnergroup '${cfg.runnerGroup}'"}
 
