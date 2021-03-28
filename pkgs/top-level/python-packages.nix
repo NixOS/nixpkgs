@@ -6631,6 +6631,8 @@ in {
 
   python-binance = callPackage ../development/python-modules/python-binance { };
 
+  python-box = callPackage ../development/python-modules/python-box { };
+
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
   python-crontab = callPackage ../development/python-modules/python-crontab { };
