@@ -1,7 +1,7 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , docker
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
@@ -19,7 +19,11 @@ buildGoModule rec {
 
   propagatedBuildInputs = [ docker ];
 
-  # tests require a running Docker instance
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X github.com/anchore/grype/internal/version.version=${version}")
+  '';
+
+  # Tests require a running Docker instance
   doCheck = false;
 
   meta = with lib; {

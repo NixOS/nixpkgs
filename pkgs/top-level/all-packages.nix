@@ -1237,6 +1237,8 @@ in
 
   corsmisc = callPackage ../tools/security/corsmisc { };
 
+  cosign = callPackage ../tools/security/cosign { };
+
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
@@ -30073,6 +30075,8 @@ in
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
   };
+
+  wiki-js = callPackage ../servers/web-apps/wiki-js { };
 
   winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
     callPackage = newScope self;
