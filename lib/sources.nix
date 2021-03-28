@@ -104,14 +104,26 @@ let
       inherit src;
     };
 
-  # Get all files ending with the specified suffices from the given
-  # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir
-  # [".xml" ".c"]'.
-  sourceFilesBySuffices = path: exts:
+  /*
+    Get all files ending with the specified suffices from the given
+    source directory or its descendants, omitting files that do not match
+    any suffix. The result of the example below will include files like
+    `./dir/module.c` and `./dir/subdir/doc.xml` if present.
+
+    Type: sourceLike -> [String] -> Source
+
+    Example:
+      sourceFilesBySuffices ./. [ ".xml" ".c" ]
+  */
+  sourceFilesBySuffices =
+    # Path or source containing the files to be returned
+    src:
+    # A list of file suffix strings
+    exts:
     let filter = name: type:
       let base = baseNameOf (toString name);
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
-    in cleanSourceWith { inherit filter; src = path; };
+    in cleanSourceWith { inherit filter src; };
 
   pathIsGitRepo = path: (tryEval (commitIdFromGitRepo path)).success;
 
