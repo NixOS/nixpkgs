@@ -4,9 +4,14 @@ let
   cfg = config.services.github-runner;
   svcName = "github-runner";
   systemdUser = "${svcName}-${cfg.name}";
+
   systemdDir = "${svcName}/${cfg.name}";
   # %t: Runtime directory root (usually /run); see systemd.unit(5)
   runtimeDir = "%t/${systemdDir}";
+  # %S: State directory root (usually /var/lib); see systemd.unit(5)
+  stateDir = "%S/${systemdDir}";
+  # %L: Log directory root (usually /var/log); see systemd.unit(5)
+  logsDir = "%L/${systemdDir}";
 in
 {
   options.services.github-runner = {
@@ -140,6 +145,22 @@ in
         # - Set up the directory structure by creating the necessary symlinks.
         ExecStartPre =
           let
+            # Wrapper script which expects the full path of the state, runtime and logs
+            # directory as arguments. Overrides the respective systemd variables to provide
+            # unambiguous directory names. This becomes relevant, for example, if the
+            # caller overrides any of the StateDirectory=, RuntimeDirectory= or LogDirectory=
+            # to contain more than one directory. This causes systemd to set the respective
+            # environment variables with the path of all of the given directories, separated
+            # by a colon.
+            writeScript = name: lines: pkgs.writeShellScript name ''
+              set -euo pipefail
+
+              STATE_DIRECTORY="$1"
+              RUNTIME_DIRECTORY="$2"
+              LOGS_DIRECTORY="$3"
+
+              ${lines}
+            '';
             currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
             runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" ] cfg;
             newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
@@ -150,8 +171,7 @@ in
               ".credentials_rsaparams"
               ".runner"
             ];
-            ownCreds = pkgs.writeShellScript "own-github-runner-credentials.sh" ''
-              set -euo pipefail
+            ownCreds = writeScript "own-github-runner-credentials.sh" ''
               # Copy current and new token file to runtime dir and make it accessible to the service user
               cp "${cfg.tokenFile}" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
               chmod 600 "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
@@ -163,15 +183,12 @@ in
                 chown ${User}:${Group} "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
               fi
             '';
-            disownCreds = pkgs.writeShellScript "disown-github-runner-credentials.sh" ''
-              set -euo pipefail
+            disownCreds = writeScript "disown-github-runner-credentials.sh" ''
               # Make the token inaccessible to the runner service user
               chmod 600 "$STATE_DIRECTORY/${currentConfigTokenFilename}"
               chown root:root "$STATE_DIRECTORY/${currentConfigTokenFilename}"
             '';
-            unconfigureRunner = pkgs.writeShellScript "unconfigure-github-runner.sh" ''
-              set -euo pipefail
-
+            unconfigureRunner = writeScript "unconfigure-github-runner.sh" ''
               differs=
               # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
               ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
@@ -187,9 +204,7 @@ in
                 find "$STATE_DIRECTORY/" -mindepth 1 -delete
               fi
             '';
-            configureRunner = pkgs.writeShellScript "configure-github-runner.sh" ''
-              set -euo pipefail
-
+            configureRunner = writeScript "configure-github-runner.sh" ''
               empty=$(ls -A "$STATE_DIRECTORY")
               if [[ -z "$empty" ]]; then
                 echo "Configuring GitHub Actions Runner"
@@ -217,9 +232,7 @@ in
                 ln -s '${newConfigPath}' "${currentConfigPath}"
               fi
             '';
-            setupRuntimeDir = pkgs.writeShellScript "setup-github-runner.sh" ''
-              set -euo pipefail
-
+            setupRuntimeDir = writeScript "setup-github-runner.sh" ''
               # Link _diag dir
               ln -s "$LOGS_DIRECTORY" "$RUNTIME_DIRECTORY/_diag"
 
@@ -227,7 +240,7 @@ in
               ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$RUNTIME_DIRECTORY/"
             '';
           in
-          [
+          map (x: ''${x} "${stateDir}" "${runtimeDir}" "${logsDir}"'') [
             "+${ownCreds}" # runs as root
             unconfigureRunner
             configureRunner
