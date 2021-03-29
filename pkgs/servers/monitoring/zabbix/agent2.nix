@@ -10,7 +10,7 @@ import ./versions.nix ({ version, sha256 }:
       inherit sha256;
     };
 
-    vendorSha256 = "1kb3lc9jjv0cpzq93k1b9y496i95fcnwhb03j0gwlyqmgsa6yn81";
+    vendorSha256 = "1ral3xg58x0lf5vl839nlabf443yzqnbrlzm0q127mvv412f5ajc";
 
     nativeBuildInputs = [ autoreconfHook pkg-config];
     buildInputs = [ libiconv openssl pcre zlib ];
