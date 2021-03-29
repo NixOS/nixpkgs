@@ -19,10 +19,13 @@ python3Packages.buildPythonApplication rec {
     pbkdf2
     pyyaml
     requests
+    setuptools
     tqdm
     urllib3
     zeroconf
   ];
+
+  pythonImportsCheck = [ "dptrp1" ];
 
   meta = with lib; {
     homepage = "https://github.com/janten/dpt-rp1-py";
