@@ -263,6 +263,8 @@ in
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
 
+  protoc-gen-twirp_swagger = callPackage ../development/tools/protoc-gen-twirp_swagger { };
+
   ptags = callPackage ../development/tools/misc/ptags { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
