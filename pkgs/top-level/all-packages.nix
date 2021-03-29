@@ -13344,6 +13344,8 @@ in
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
+  whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
+
   whatstyle = callPackage ../development/tools/misc/whatstyle {
     inherit (llvmPackages) clang-unwrapped;
   };
