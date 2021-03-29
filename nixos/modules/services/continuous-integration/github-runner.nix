@@ -172,7 +172,7 @@ in
             ];
             ownConfigTokens = writeScript "own-config-tokens" ''
               # Copy current and new token file to runtime dir and make it accessible to the service user
-              cp "${cfg.tokenFile}" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
+              cp ${escapeShellArg cfg.tokenFile} "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
               chmod 600 "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
               chown "$USER" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
 
@@ -211,12 +211,12 @@ in
                 RUNNER_ROOT="$STATE_DIRECTORY" ${pkgs.github-runner}/bin/config.sh \
                   --unattended \
                   --work "$RUNTIME_DIRECTORY" \
-                  --url '${cfg.url}' \
+                  --url ${escapeShellArg cfg.url} \
                   --token "$token" \
-                  --labels '${concatStringsSep "," cfg.extraLabels}' \
-                  --name '${cfg.name}' \
+                  --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)} \
+                  --name ${escapeShellArg cfg.name} \
                   ${optionalString cfg.replace "--replace"} \
-                  ${optionalString (cfg.runnerGroup != null) "--runnergroup '${cfg.runnerGroup}'"}
+                  ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
 
                 # Move the automatically created _diag dir to the logs dir
                 mkdir -p  "$STATE_DIRECTORY/_diag"
@@ -239,7 +239,7 @@ in
               ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$RUNTIME_DIRECTORY/"
             '';
           in
-          map (x: ''${x} "${stateDir}" "${runtimeDir}" "${logsDir}"'') [
+          map (x: "${x} ${escapeShellArgs [stateDir runtimeDir logsDir]}") [
             "+${ownConfigTokens}" # runs as root
             unconfigureRunner
             configureRunner
