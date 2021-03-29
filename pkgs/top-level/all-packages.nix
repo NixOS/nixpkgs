@@ -26748,6 +26748,8 @@ in
 
   zathura = callPackage ../applications/misc/zathura { };
 
+  zdns = callPackage ../tools/security/zdns { };
+
   zerobin = callPackage ../applications/networking/zerobin { };
 
   zeroc-ice = callPackage ../development/libraries/zeroc-ice {
