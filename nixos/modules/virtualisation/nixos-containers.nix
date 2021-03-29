@@ -504,7 +504,7 @@ in
 
             path = mkOption {
               type = types.path;
-              example = "/nix/var/nix/profiles/containers/webserver";
+              example = "/nix/var/nix/profiles/per-container/webserver";
               description = ''
                 As an alternative to specifying
                 <option>config</option>, you can specify the path to
