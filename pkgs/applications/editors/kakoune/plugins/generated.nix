@@ -17,12 +17,12 @@ let
 
   auto-pairs-kak = buildKakounePluginFrom2Nix {
     pname = "auto-pairs-kak";
-    version = "2020-10-04";
+    version = "2021-03-28";
     src = fetchFromGitHub {
       owner = "alexherbo2";
       repo = "auto-pairs.kak";
-      rev = "fd735ec149ef0d9ca5f628a95b1e52858b5afbdc";
-      sha256 = "07795kv9njlnp6mckwv141ny2ns6wyf5r0dfjaxh9ngd105zgif1";
+      rev = "526779a26a5cf5f48e7c4f5c5fecca274968a737";
+      sha256 = "0gkhvwxyh8pdfydrj7zkfidk0drrbhvdi1fq3pkzllna3vz8q181";
     };
     meta.homepage = "https://github.com/alexherbo2/auto-pairs.kak/";
   };
@@ -41,12 +41,12 @@ let
 
   fzf-kak = buildKakounePluginFrom2Nix {
     pname = "fzf-kak";
-    version = "2021-03-15";
+    version = "2021-03-19";
     src = fetchFromGitHub {
       owner = "andreyorst";
       repo = "fzf.kak";
-      rev = "4e6c9a857511fccdbbc835a1c9acb205b6486a4c";
-      sha256 = "0syhhdlsm7vg6hcd2n2acag9g562z49rbb5smh5p2gnplhmp93i0";
+      rev = "435cc240f3732770b19cc7dce9bdf65e22d6ed6a";
+      sha256 = "0ahcz7z5i8bngjnkd6yr782wah873yxgm8xrwa9g8gkddvj3q6rw";
     };
     meta.homepage = "https://github.com/andreyorst/fzf.kak/";
   };
