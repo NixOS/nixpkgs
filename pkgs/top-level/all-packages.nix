@@ -259,6 +259,8 @@ in
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
 
+  protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
+
   ptags = callPackage ../development/tools/misc/ptags { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
