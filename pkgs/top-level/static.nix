@@ -100,6 +100,7 @@ in {
   };
 
   curl = super.curl.override {
+    # brotli doesn't build static (Mar. 2021)
     brotliSupport = false;
     # disable gss becuase of: undefined reference to `k5_bcmp'
     gssSupport = false;
