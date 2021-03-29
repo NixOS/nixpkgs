@@ -37,7 +37,7 @@ in
     };
 
     tokenFile = mkOption {
-      type = types.str;
+      type = types.path;
       description = ''
         The full path to a file which contains the runner registration token.
         The file should contain exactly one line with the token without any newline.
