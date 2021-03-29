@@ -1,12 +1,12 @@
 diff --git a/ext/opencv/meson.build b/ext/opencv/meson.build
-index f38b55d..05b142e 100644
+index 2e1380313..05b142edc 100644
 --- a/ext/opencv/meson.build
 +++ b/ext/opencv/meson.build
 @@ -65,7 +65,7 @@ if opencv_found
      endif
    endforeach
  else
--  opencv_dep = dependency('opencv4', version : ['>= 4.0.0', '< 4.2.0'], required : false)
+-  opencv_dep = dependency('opencv4', version : ['>= 4.0.0', '< 4.3.0'], required : false)
 +  opencv_dep = dependency('opencv4', version : ['>= 4.0.0', '< 4.4.0'], required : false)
    opencv_found = opencv_dep.found()
    if opencv_found
