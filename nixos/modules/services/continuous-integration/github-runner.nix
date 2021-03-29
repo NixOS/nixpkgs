@@ -3,8 +3,6 @@ with lib;
 let
   cfg = config.services.github-runner;
   svcName = "github-runner";
-  systemdUser = "${svcName}-${cfg.name}";
-
   systemdDir = "${svcName}/${cfg.name}";
   # %t: Runtime directory root (usually /run); see systemd.unit(5)
   runtimeDir = "%t/${systemdDir}";
@@ -152,7 +150,7 @@ in
             # to contain more than one directory. This causes systemd to set the respective
             # environment variables with the path of all of the given directories, separated
             # by a colon.
-            writeScript = name: lines: pkgs.writeShellScript "${systemdUser}-${name}.sh" ''
+            writeScript = name: lines: pkgs.writeShellScript "${svcName}-${name}.sh" ''
               set -euo pipefail
 
               STATE_DIRECTORY="$1"
@@ -175,12 +173,12 @@ in
               # Copy current and new token file to runtime dir and make it accessible to the service user
               cp "${cfg.tokenFile}" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
               chmod 600 "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
-              chown ${User}:${Group} "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
+              chown "$USER" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
 
               if [[ -e "$STATE_DIRECTORY/${currentConfigTokenFilename}" ]]; then
                 cp "$STATE_DIRECTORY/${currentConfigTokenFilename}" "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
                 chmod 600 "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
-                chown ${User}:${Group} "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
+                chown "$USER" "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
               fi
             '';
             disownConfigTokens = writeScript "disown-config-tokens" ''
@@ -259,8 +257,6 @@ in
 
         # By default, use a dynamically allocated user
         DynamicUser = true;
-        User = systemdUser;
-        Group = User;
 
         KillMode = "process";
         KillSignal = "SIGTERM";
