@@ -4,6 +4,7 @@
 , certifi
 , cryptography
 , dateutil
+, fetchpatch
 , fetchPypi
 , idna
 , mock
@@ -25,6 +26,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "19188f96923873c92ccb987120ec4acaa12f0461fa9ce5d3d0772bc965a39e08";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-28363.patch";
+      url = "https://github.com/urllib3/urllib3/commit/8d65ea1ecf6e2cdc27d42124e587c1b83a3118b0.patch";
+      sha256 = "1lqhrd11p03iv14bp89rh67ynf000swmwsfvr3jpfdycdqr3ka9q";
+    })
+  ];
 
   propagatedBuildInputs = [
     brotli

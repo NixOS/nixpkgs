@@ -19,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.3";
+  version = "1.26.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de3eedaad74a2683334e282005cd8d7f22f4d55fa690a2a1020a416cb0a47e73";
+    sha256 = "0dw9w9bs3hmr5dp3r3h43jyzzb1g1046ag7lj8pqf58i4kvj3c77";
   };
 
   propagatedBuildInputs = [
