@@ -6417,16 +6417,22 @@ in {
 
   pytest_5 = callPackage
     ../development/python-modules/pytest/5.nix {
-      # hypothesis tests require pytest that causes dependency cycle
+      # hypothesis & pygments tests require pytest that causes dependency cycle
       hypothesis = self.hypothesis.override {
+        doCheck = false;
+      };
+      pygments = self.pygments.override {
         doCheck = false;
       };
     };
 
   pytest_6 =
     callPackage ../development/python-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
+      # hypothesis & pygments tests require pytest that causes dependency cycle
       hypothesis = self.hypothesis.override {
+        doCheck = false;
+      };
+      pygments = self.pygments.override {
         doCheck = false;
       };
     };
