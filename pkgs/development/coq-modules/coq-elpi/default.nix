@@ -12,10 +12,11 @@ in mkCoqDerivation {
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
-    { case = "8.13"; out = "1.9.4"; }
+    { case = "8.13"; out = "1.9.5"; }
     { case = "8.12"; out = "1.8.0"; }
     { case = "8.11"; out = "1.6.1_8.11"; }
   ] null;
+  release."1.9.5".sha256      = "0gjdwmb6bvb5gh0a6ra48bz5fb3pr5kpxijb7a8mfydvar5i9qr6";
   release."1.9.4".sha256      = "0nii7238mya74f9g6147qmpg6gv6ic9b54x5v85nb6q60d9jh0jq";
   release."1.9.3".sha256      = "198irm800fx3n8n56vx1c6f626cizp1d7jfkrc6ba4iqhb62ma0z";
   release."1.9.2".sha256      = "1rr2fr8vjkc0is7vh1461aidz2iwkigdkp6bqss4hhv0c3ijnn07";
