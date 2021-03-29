@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, patchelf, openssl, libunwind, zlib, krb5, icu }:
+{ lib, stdenv, fetchurl, makeWrapper, patchelf, openssl, libunwind, zlib, krb5, icu, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -53,6 +53,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
+    tests.smoke-test = nixosTests.ombi;
   };
 
   meta = with lib; {
