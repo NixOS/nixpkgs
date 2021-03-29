@@ -6001,6 +6001,8 @@ in
 
   m2r = python3Packages.callPackage ../tools/text/m2r { };
 
+  md2gemini = with python3.pkgs; toPythonApplication md2gemini;
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };

@@ -3949,6 +3949,8 @@ in {
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
+  md2gemini = callPackage ../development/python-modules/md2gemini { };
+
   MDP = callPackage ../development/python-modules/mdp { };
 
   measurement = callPackage ../development/python-modules/measurement { };
