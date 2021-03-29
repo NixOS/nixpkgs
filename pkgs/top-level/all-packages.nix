@@ -20587,6 +20587,8 @@ in
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
+  vendir = callPackage ../development/tools/vendir { };
+
   vndr = callPackage ../development/tools/vndr { };
 
   windows = callPackages ../os-specific/windows {};
@@ -26904,6 +26906,8 @@ in
 
   ethabi = callPackage ../applications/blockchains/ethabi.nix { };
 
+  pycoin = with python3Packages; toPythonApplication pycoin;
+
   stellar-core = callPackage ../applications/blockchains/stellar-core.nix { };
 
   sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
@@ -29652,6 +29656,18 @@ in
   nut = callPackage ../applications/misc/nut { };
 
   solfege = python3Packages.callPackage ../misc/solfege { };
+
+  disnix = callPackage ../tools/package-management/disnix { };
+
+  dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {
+    inherit (pythonPackages) supervisor;
+  });
+
+  dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
+
+  disnixos = callPackage ../tools/package-management/disnix/disnixos { };
+
+  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 

@@ -86,6 +86,7 @@ mkDerivation rec {
     with python3Packages; [
       apsw
       beautifulsoup4
+      cchardet
       css-parser
       cssselect
       dateutil
