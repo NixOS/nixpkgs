@@ -142,6 +142,9 @@ let
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
+      IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
+      IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
+      IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
       NET_SCHED                   = yes;
