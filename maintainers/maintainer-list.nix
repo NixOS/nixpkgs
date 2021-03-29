@@ -5384,6 +5384,12 @@
     githubId = 4158274;
     name = "Michiel Leenaars";
   };
+  legendofmiracles = {
+    email = "legendofmiracles@protonmail.com";
+    github = "legendofmiracles";
+    githubId = 30902201;
+    name = "legendofmiracles";
+  };
   lejonet = {
     email = "daniel@kuehn.se";
     github = "lejonet";

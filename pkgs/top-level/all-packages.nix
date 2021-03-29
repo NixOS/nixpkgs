@@ -2471,6 +2471,8 @@ in
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
 
+  giph = callPackage ../applications/video/giph/default.nix {};
+
   gh-ost = callPackage ../tools/misc/gh-ost { };
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
