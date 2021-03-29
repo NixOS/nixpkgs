@@ -88,7 +88,7 @@ in
         enable = true;
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${pkgs.pythonPackages.zerobin}/bin/zerobin ${cfg.listenAddress} ${toString cfg.listenPort} false ${cfg.user} ${cfg.group} ${zerobin_config}";
+        serviceConfig.ExecStart = "${pkgs.zerobin}/bin/zerobin ${cfg.listenAddress} ${toString cfg.listenPort} false ${cfg.user} ${cfg.group} ${zerobin_config}";
         serviceConfig.PrivateTmp="yes";
         serviceConfig.User = cfg.user;
         serviceConfig.Group = cfg.group;

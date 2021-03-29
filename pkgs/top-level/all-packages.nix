@@ -26244,10 +26244,10 @@ in
 
   wayfireApplications = wayfireApplications-unwrapped.withPlugins (plugins: [ plugins.wf-shell ]);
   inherit (wayfireApplications) wayfire wcm;
-  wayfireApplications-unwrapped = callPackage ../applications/window-managers/wayfire/applications.nix { };
-  wayfirePlugins = callPackage ../applications/window-managers/wayfire/plugins.nix {
+  wayfireApplications-unwrapped = recurseIntoAttrs (callPackage ../applications/window-managers/wayfire/applications.nix { });
+  wayfirePlugins = recurseIntoAttrs (callPackage ../applications/window-managers/wayfire/plugins.nix {
     inherit (wayfireApplications-unwrapped) wayfire;
-  };
+  });
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
@@ -26744,6 +26744,8 @@ in
   };
 
   zathura = callPackage ../applications/misc/zathura { };
+
+  zerobin = callPackage ../applications/networking/zerobin { };
 
   zeroc-ice = callPackage ../development/libraries/zeroc-ice {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -27530,6 +27532,11 @@ in
 
   performous = callPackage ../games/performous {
     boost = boost166;
+  };
+
+  pinball = callPackage ../games/pinball {
+    autoreconfHook = with buildPackages;
+      autoreconfHook.override { automake = automake115x; };
   };
 
   pingus = callPackage ../games/pingus {};

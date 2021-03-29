@@ -1505,11 +1505,12 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   nixpkgs.config.packageOverrides = super: {
     python = super.python.override {
       packageOverrides = python-self: python-super: {
-        zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
-          src = super.fetchgit {
-            url = "https://github.com/sametmax/0bin";
-            rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
-            sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
+        twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+          src = super.fetchPipy {
+            pname = "twisted";
+            version = "19.10.0";
+            sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+            extension = "tar.bz2";
           };
         });
       };
@@ -1517,9 +1518,11 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-`pythonPackages.zerobin` is now globally overridden. All packages and also the
-`zerobin` NixOS service use the new definition. Note that `python-super` refers
-to the old package set and `python-self` to the new, overridden version.
+`pythonPackages.twisted` is now globally overridden.
+All packages and also all NixOS services that reference `twisted`
+(such as `services.buildbot-worker`) now use the new definition.
+Note that `python-super` refers to the old package set and `python-self`
+to the new, overridden version.
 
 To modify only a Python package set instead of a whole Python derivation, use
 this snippet:
@@ -1527,7 +1530,7 @@ this snippet:
 ```nix
   myPythonPackages = pythonPackages.override {
     overrides = self: super: {
-      zerobin = ...;
+      twisted = ...;
     };
   }
 ```
@@ -1540,11 +1543,12 @@ Use the following overlay template:
 self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
-      zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
-        src = super.fetchgit {
-          url = "https://github.com/sametmax/0bin";
-          rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
-          sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
+      twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+        src = super.fetchPypi {
+          pname = "twisted";
+          version = "19.10.0";
+          sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+          extension = "tar.bz2";
         };
       });
     };
