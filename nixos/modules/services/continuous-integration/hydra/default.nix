@@ -281,11 +281,10 @@ in
       keep-derivations = true
 
 
-      ${optionalString (versionOlder (getVersion config.nix.package.out) "2.4pre") ''
-        # The default (`true') slows Nix down a lot since the build farm
-        # has so many GC roots.
-        gc-check-reachability = false
-      ''}
+    '' + optionalString (versionOlder (getVersion config.nix.package.out) "2.4pre") ''
+      # The default (`true') slows Nix down a lot since the build farm
+      # has so many GC roots.
+      gc-check-reachability = false
     '';
 
     systemd.services.hydra-init =
