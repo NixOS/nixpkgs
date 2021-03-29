@@ -49,7 +49,8 @@ in
     };
 
     name = mkOption {
-      type = types.str;
+      # Same pattern as for `networking.hostName`
+      type = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
       description = ''
         Name of the runner to configure. Defaults to the hostname.
 
