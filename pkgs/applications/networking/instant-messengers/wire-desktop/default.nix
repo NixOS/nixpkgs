@@ -22,12 +22,12 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.23.4046";
+    x86_64-darwin = "3.24.4059";
     x86_64-linux = "3.24.2939";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "19k8102chh4yphk89kiz83yarawnzdnsq0hbsqpjdhbmarqjcd9s";
+    x86_64-darwin = "1zjv3d8jp0wldrzl02q9kir7q3y5bcb6hsfli6wip8bmaq78dksy";
     x86_64-linux = "1k9n58pr5fnqv9vacay5vrbs4pvq2p36c0dpg9rjdcnb2fwaqg5p";
   }.${system} or throwSystem;
 
