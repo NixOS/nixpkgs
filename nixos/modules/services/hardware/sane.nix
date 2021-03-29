@@ -153,6 +153,7 @@ in
       users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
+        extraGroups = [ "lp" ] ++ (optionals config.services.avahi.enable [ "avahi" ]);
       };
     })
   ];
