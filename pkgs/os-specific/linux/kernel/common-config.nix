@@ -204,6 +204,9 @@ let
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
       INET_MPTCP_DIAG = whenAtLeast "5.9" (mkDefault module);
+
+      # enable driver for aQuantia AQC107/AQC108, a common 10G NIC chipset
+      AQTION = whenAtLeast "4.11" module;
     };
 
     wireless = {
