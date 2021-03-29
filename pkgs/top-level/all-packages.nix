@@ -28142,6 +28142,8 @@ in
 
   bayescan = callPackage ../applications/science/biology/bayescan { };
 
+  bedops = callPackage ../applications/science/biology/bedops { };
+
   bedtools = callPackage ../applications/science/biology/bedtools { };
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
