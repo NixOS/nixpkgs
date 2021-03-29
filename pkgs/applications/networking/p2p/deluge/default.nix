@@ -62,7 +62,7 @@ pythonPackages.buildPythonPackage rec {
   checkInputs = with pythonPackages; [
     pytestCheckHook
     pytest-twisted
-    pytestcov
+    pytest-cov
     mock
     mccabe
     pylint
