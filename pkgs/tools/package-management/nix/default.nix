@@ -142,11 +142,6 @@ common =
       # socket path becomes too long otherwise
       preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
-      '' +
-      # tests/ca/substitute.sh is flakey for some reason, so we skip it
-      # for now. https://github.com/NixOS/nix/issues/4667
-      lib.optionalString is24 ''
-        echo "exit 99" > tests/ca/substitute.sh
       '';
 
       separateDebugInfo = stdenv.isLinux;
@@ -219,13 +214,13 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20210317_8a5203d";
+    suffix = "pre20210326_dd77f71";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "8a5203d3b836497c2c5f157f85008aa8bcb6a1d2";
-      sha256 = "IMzdmoWAX6Lerhslsf7h2814xjJolPnl2bICDixRgdk=";
+      rev = "dd77f71afe6733e9790dd001125c423cb648b7ce";
+      sha256 = "rVHzrsCtdiWjyLuHnDplG2mx+7dw5VyzZ9ReXxuCvHY=";
     };
 
     inherit storeDir stateDir confDir boehmgc;
