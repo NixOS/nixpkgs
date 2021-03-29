@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     cp lib/udev/rules.d/60-libfprint-2-tod1-goodix.rules "$out/usr/lib/udev/rules.d/"
   '';
 
+  passthru.driverPath = "/usr/lib/libfprint-2/tod-1";
+
   meta = with lib; {
     description = "Goodix driver module for libfprint-2-tod Touch OEM Driver";
     homepage = "https://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-goodix/+git/libfprint-2-tod1-goodix/";
