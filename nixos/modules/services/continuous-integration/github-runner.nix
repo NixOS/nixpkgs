@@ -152,7 +152,7 @@ in
             # to contain more than one directory. This causes systemd to set the respective
             # environment variables with the path of all of the given directories, separated
             # by a colon.
-            writeScript = name: lines: pkgs.writeShellScript name ''
+            writeScript = name: lines: pkgs.writeShellScript "${systemdUser}-${name}.sh" ''
               set -euo pipefail
 
               STATE_DIRECTORY="$1"
@@ -171,7 +171,7 @@ in
               ".credentials_rsaparams"
               ".runner"
             ];
-            ownCreds = writeScript "own-github-runner-credentials.sh" ''
+            ownConfigTokens = writeScript "own-config-tokens" ''
               # Copy current and new token file to runtime dir and make it accessible to the service user
               cp "${cfg.tokenFile}" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
               chmod 600 "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
@@ -183,12 +183,12 @@ in
                 chown ${User}:${Group} "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
               fi
             '';
-            disownCreds = writeScript "disown-github-runner-credentials.sh" ''
+            disownConfigTokens = writeScript "disown-config-tokens" ''
               # Make the token inaccessible to the runner service user
               chmod 600 "$STATE_DIRECTORY/${currentConfigTokenFilename}"
               chown root:root "$STATE_DIRECTORY/${currentConfigTokenFilename}"
             '';
-            unconfigureRunner = writeScript "unconfigure-github-runner.sh" ''
+            unconfigureRunner = writeScript "unconfigure" ''
               differs=
               # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
               ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
@@ -204,7 +204,7 @@ in
                 find "$STATE_DIRECTORY/" -mindepth 1 -delete
               fi
             '';
-            configureRunner = writeScript "configure-github-runner.sh" ''
+            configureRunner = writeScript "configure" ''
               empty=$(ls -A "$STATE_DIRECTORY")
               if [[ -z "$empty" ]]; then
                 echo "Configuring GitHub Actions Runner"
@@ -232,7 +232,7 @@ in
                 ln -s '${newConfigPath}' "${currentConfigPath}"
               fi
             '';
-            setupRuntimeDir = writeScript "setup-github-runner.sh" ''
+            setupRuntimeDir = writeScript "setup-runtime-dirs" ''
               # Link _diag dir
               ln -s "$LOGS_DIRECTORY" "$RUNTIME_DIRECTORY/_diag"
 
@@ -241,10 +241,10 @@ in
             '';
           in
           map (x: ''${x} "${stateDir}" "${runtimeDir}" "${logsDir}"'') [
-            "+${ownCreds}" # runs as root
+            "+${ownConfigTokens}" # runs as root
             unconfigureRunner
             configureRunner
-            "+${disownCreds}" # runs as root
+            "+${disownConfigTokens}" # runs as root
             setupRuntimeDir
           ];
 
