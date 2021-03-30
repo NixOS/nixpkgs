@@ -299,6 +299,7 @@ in with py.pkgs; buildPythonApplication rec {
     "smarttub"
     "smtp"
     "solaredge"
+    "sonos"
     "sql"
     "ssdp"
     "stream"
