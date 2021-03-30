@@ -16780,10 +16780,8 @@ in
 
     # XXX: mariadb doesn't built on fbsd as of nov 2015
     libmysqlclient = if (!stdenv.isFreeBSD) then libmysqlclient else null;
-
     inherit (pkgs.darwin) libobjc;
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
-
     inherit (pkgs.llvmPackages) libcxx;
   };
 
