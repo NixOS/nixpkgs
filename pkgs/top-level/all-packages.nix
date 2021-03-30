@@ -3869,6 +3869,9 @@ in
   };
 
   drone = callPackage ../development/tools/continuous-integration/drone { };
+  drone-oss = callPackage ../development/tools/continuous-integration/drone {
+    enableUnfree = false;
+  };
 
   drone-cli = callPackage ../development/tools/continuous-integration/drone-cli { };
 
