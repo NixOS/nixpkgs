@@ -367,6 +367,32 @@ in {
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
+
+    extraOptions = mkOption {
+      type = with types; attrsOf anything;
+      default = {};
+      description = ''
+        Extra options which should be appended to nextcloud's config.php file.
+      '';
+      example = {
+        redis = {
+          host = "/run/redis/redis.sock";
+          port = 0;
+          dbindex = 0;
+          password = "secret";
+          timeout = 1.5;
+        };
+      };
+    };
+
+    secretFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
+        form as the `extraOptions` option), for example '{"redis":{"password":"secret","timeout"=2}}'.
+      '';
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -457,6 +483,19 @@ in {
                 return trim(file_get_contents($file));
               }
             ''}
+            ${optionalString (cfg.secretFile != null) ''
+              function nix_read_secrets() {
+                $file = "${cfg.secretFile}";
+                if (!file_exists($file)) {
+                  throw new \RuntimeException(sprintf(
+                    "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!",
+                    $file
+                  ));
+                }
+
+                return json_decode(file_get_contents($file));
+              }
+            ''}
             $CONFIG = [
               'apps_paths' => [
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
@@ -480,6 +519,11 @@ in {
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
             ];
+
+            $EXTRACONFIG = json_decode('${builtins.toJSON cfg.extraOptions}', true);
+
+            array_push($CONFIG, $EXTRACONFIG);
+            ${optionalString (cfg.secretFile != null) "array_push($CONFIG, nix_read_secrets());"}
           '';
           occInstallCmd = let
             dbpass = if c.dbpassFile != null
