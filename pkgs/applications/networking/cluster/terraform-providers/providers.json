@@ -359,10 +359,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google",
     "repo": "terraform-provider-google",
-    "rev": "v3.47.0",
-    "sha256": "05xb0q56y9088qbyaf3vzjm9im1s2azxffhjffjpzi0i79k0g2p0",
-    "vendorSha256": "1h83p7ncv7b4ci7qdig7hb81zk9458fq9aqqbkryawf1w7wbaq2a",
-    "version": "3.47.0"
+    "rev": "v3.62.0",
+    "sha256": "0x0qp8nk88667hvlpgxrdjsgirw8iwv85gn3k9xb37a3lw7xs4qz",
+    "vendorSha256": "0w6aavj1c4blpvsy00vz4dcj8rnxx6a586b16lqp6s1flqmlqrbi",
+    "version": "3.62.0"
   },
   "google-beta": {
     "owner": "hashicorp",

@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux

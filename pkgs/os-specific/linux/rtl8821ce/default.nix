@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hhm samuelgrf ];
+    maintainers = with maintainers; [ hhm ];
   };
 }
