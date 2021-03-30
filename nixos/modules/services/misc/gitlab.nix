@@ -116,7 +116,11 @@ let
       omniauth.enabled = false;
       shared.path = "${cfg.statePath}/shared";
       gitaly.client_path = "${cfg.packages.gitaly}/bin";
-      backup.path = "${cfg.backupPath}";
+      backup = {
+        path = cfg.backup.path;
+        keep_time = cfg.backup.keepTime;
+        upload = cfg.backup.uploadOptions;
+      };
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
         hooks_path = "${cfg.statePath}/shell/hooks";
@@ -207,6 +211,7 @@ in {
 
   imports = [
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
+    (mkRenamedOptionModule [ "services" "gitlab" "backupPath" ] [ "services" "gitlab" "backup" "path" ])
     (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
   ];
 
@@ -260,7 +265,7 @@ in {
         type = types.str;
         default = "/var/gitlab/state";
         description = ''
-          Gitlab state directory. Configuration, repositories and
+          GitLab state directory. Configuration, repositories and
           logs, among other things, are stored here.
 
           The directory will be created automatically if it doesn't
@@ -270,17 +275,108 @@ in {
         '';
       };
 
-      backupPath = mkOption {
+      backup.startAt = mkOption {
+        type = with types; either str (listOf str);
+        default = [];
+        example = "03:00";
+        description = ''
+          The time(s) to run automatic backup of GitLab
+          state. Specified in systemd's time format; see
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
+        '';
+      };
+
+      backup.path = mkOption {
         type = types.str;
         default = cfg.statePath + "/backup";
-        description = "Gitlab path for backups.";
+        description = "GitLab path for backups.";
+      };
+
+      backup.keepTime = mkOption {
+        type = types.int;
+        default = 0;
+        example = 48;
+        apply = x: x * 60 * 60;
+        description = ''
+          How long to keep the backups around, in
+          hours. <literal>0</literal> means <quote>keep
+          forever</quote>.
+        '';
+      };
+
+      backup.skip = mkOption {
+        type = with types;
+          let value = enum [
+                "db"
+                "uploads"
+                "builds"
+                "artifacts"
+                "lfs"
+                "registry"
+                "pages"
+                "repositories"
+                "tar"
+              ];
+          in
+            either value (listOf value);
+        default = [];
+        example = [ "artifacts" "lfs" ];
+        apply = x: if isString x then x else concatStringsSep "," x;
+        description = ''
+          Directories to exclude from the backup. The example excludes
+          CI artifacts and LFS objects from the backups. The
+          <literal>tar</literal> option skips the creation of a tar
+          file.
+
+          Refer to <link xlink:href="https://docs.gitlab.com/ee/raketasks/backup_restore.html#excluding-specific-directories-from-the-backup"/>
+          for more information.
+        '';
+      };
+
+      backup.uploadOptions = mkOption {
+        type = types.attrs;
+        default = {};
+        example = literalExample ''
+          {
+            # Fog storage connection settings, see http://fog.io/storage/
+            connection = {
+              provider = "AWS";
+              region = "eu-north-1";
+              aws_access_key_id = "AKIAXXXXXXXXXXXXXXXX";
+              aws_secret_access_key = { _secret = config.deployment.keys.aws_access_key.path; };
+            };
+
+            # The remote 'directory' to store your backups in.
+            # For S3, this would be the bucket name.
+            remote_directory = "my-gitlab-backups";
+
+            # Use multipart uploads when file size reaches 100MB, see
+            # http://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html
+            multipart_chunk_size = 104857600;
+
+            # Turns on AWS Server-Side Encryption with Amazon S3-Managed Keys for backups, this is optional
+            encryption = "AES256";
+
+            # Specifies Amazon S3 storage class to use for backups, this is optional
+            storage_class = "STANDARD";
+          };
+        '';
+        description = ''
+          GitLab automatic upload specification. Tells GitLab to
+          upload the backup to a remote location when done.
+
+          Attributes specified here are added under
+          <literal>production -> backup -> upload</literal> in
+          <filename>config/gitlab.yml</filename>.
+        '';
       };
 
       databaseHost = mkOption {
         type = types.str;
         default = "";
         description = ''
-          Gitlab database hostname. An empty string means <quote>use
+          GitLab database hostname. An empty string means <quote>use
           local unix socket connection</quote>.
         '';
       };
@@ -289,7 +385,7 @@ in {
         type = with types; nullOr path;
         default = null;
         description = ''
-          File containing the Gitlab database user password.
+          File containing the GitLab database user password.
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
@@ -310,13 +406,13 @@ in {
       databaseName = mkOption {
         type = types.str;
         default = "gitlab";
-        description = "Gitlab database name.";
+        description = "GitLab database name.";
       };
 
       databaseUsername = mkOption {
         type = types.str;
         default = "gitlab";
-        description = "Gitlab database user.";
+        description = "GitLab database user.";
       };
 
       databasePool = mkOption {
@@ -360,14 +456,14 @@ in {
       host = mkOption {
         type = types.str;
         default = config.networking.hostName;
-        description = "Gitlab host name. Used e.g. for copy-paste URLs.";
+        description = "GitLab host name. Used e.g. for copy-paste URLs.";
       };
 
       port = mkOption {
         type = types.int;
         default = 8080;
         description = ''
-          Gitlab server port for copy-paste URLs, e.g. 80 or 443 if you're
+          GitLab server port for copy-paste URLs, e.g. 80 or 443 if you're
           service over https.
         '';
       };
@@ -420,26 +516,26 @@ in {
         address = mkOption {
           type = types.str;
           default = "localhost";
-          description = "Address of the SMTP server for Gitlab.";
+          description = "Address of the SMTP server for GitLab.";
         };
 
         port = mkOption {
           type = types.int;
           default = 25;
-          description = "Port of the SMTP server for Gitlab.";
+          description = "Port of the SMTP server for GitLab.";
         };
 
         username = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = "Username of the SMTP server for Gitlab.";
+          description = "Username of the SMTP server for GitLab.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           description = ''
-            File containing the password of the SMTP server for Gitlab.
+            File containing the password of the SMTP server for GitLab.
 
             This should be a string, not a nix path, since nix paths
             are copied into the world-readable nix store.
@@ -720,7 +816,7 @@ in {
       "d /run/gitlab 0755 ${cfg.user} ${cfg.group} -"
       "d ${gitlabEnv.HOME} 0750 ${cfg.user} ${cfg.group} -"
       "z ${gitlabEnv.HOME}/.ssh/authorized_keys 0600 ${cfg.user} ${cfg.group} -"
-      "d ${cfg.backupPath} 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.backup.path} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/builds 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/config 0750 ${cfg.user} ${cfg.group} -"
@@ -1051,6 +1147,23 @@ in {
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/puma -C ${cfg.statePath}/config/puma.rb -e production";
       };
 
+    };
+
+    systemd.services.gitlab-backup = {
+      after = [ "gitlab.service" ];
+      bindsTo = [ "gitlab.service" ];
+      startAt = cfg.backup.startAt;
+      environment = {
+        RAILS_ENV = "production";
+        CRON = "1";
+      } // optionalAttrs (stringLength cfg.backup.skip > 0) {
+        SKIP = cfg.backup.skip;
+      };
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${gitlab-rake}/bin/gitlab-rake gitlab:backup:create";
+      };
     };
 
   };
