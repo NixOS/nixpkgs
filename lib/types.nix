@@ -258,12 +258,12 @@ rec {
         u16 = unsign 16 65536;
         # the biggest int Nix accepts is 2^63 - 1 (9223372036854775808)
         # the smallest int Nix accepts is -2^63 (-9223372036854775807)
-        # u32 = unsign 32 4294967296;
+        u32 = unsign 32 4294967296;
         # u64 = unsign 64 18446744073709551616;
 
         s8 = sign 8 256;
         s16 = sign 16 65536;
-        # s32 = sign 32 4294967296;
+        s32 = sign 32 4294967296;
       };
 
     # Alias of u16 for a port number
