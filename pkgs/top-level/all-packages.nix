@@ -23631,6 +23631,8 @@ in
 
   k3s = callPackage ../applications/networking/cluster/k3s {};
 
+  kconf = callPackage ../applications/networking/cluster/kconf { };
+
   kail = callPackage ../tools/networking/kail {  };
 
   kanboard = callPackage ../applications/misc/kanboard { };
