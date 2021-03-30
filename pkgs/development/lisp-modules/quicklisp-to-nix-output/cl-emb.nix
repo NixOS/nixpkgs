@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-emb'';
-  version = ''20190521-git'';
+  baseName = "cl-emb";
+  version = "20190521-git";
 
-  description = ''A templating system for Common Lisp'';
+  description = "A templating system for Common Lisp";
 
   deps = [ args."cl-ppcre" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-emb/2019-05-21/cl-emb-20190521-git.tgz'';
-    sha256 = ''1d6bi2mx1kw7an3maxjp4ldrhkwfdb58va9whxblz2xjlbykdv8d'';
+    url = "http://beta.quicklisp.org/archive/cl-emb/2019-05-21/cl-emb-20190521-git.tgz";
+    sha256 = "1d6bi2mx1kw7an3maxjp4ldrhkwfdb58va9whxblz2xjlbykdv8d";
   };
 
   packageName = "cl-emb";

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''colorize'';
-  version = ''20180228-git'';
+  baseName = "colorize";
+  version = "20180228-git";
 
-  description = ''A Syntax highlighting library'';
+  description = "A Syntax highlighting library";
 
   deps = [ args."alexandria" args."html-encode" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/colorize/2018-02-28/colorize-20180228-git.tgz'';
-    sha256 = ''1g0xbryavsf17zy9iy0sbqsb4lyva04h93sbaj3iwv12w50fwz2h'';
+    url = "http://beta.quicklisp.org/archive/colorize/2018-02-28/colorize-20180228-git.tgz";
+    sha256 = "1g0xbryavsf17zy9iy0sbqsb4lyva04h93sbaj3iwv12w50fwz2h";
   };
 
   packageName = "colorize";

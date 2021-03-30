@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''serapeum'';
-  version = ''20210228-git'';
+  baseName = "serapeum";
+  version = "20210228-git";
 
-  description = ''Utilities beyond Alexandria.'';
+  description = "Utilities beyond Alexandria.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."closer-mop" args."fare-quasiquote" args."fare-quasiquote-extras" args."fare-quasiquote-optima" args."fare-quasiquote-readtable" args."fare-utils" args."global-vars" args."introspect-environment" args."iterate" args."lisp-namespace" args."named-readtables" args."parse-declarations-1_dot_0" args."parse-number" args."split-sequence" args."string-case" args."trivia" args."trivia_dot_balland2006" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_quasiquote" args."trivia_dot_trivial" args."trivial-cltl2" args."trivial-features" args."trivial-file-size" args."trivial-garbage" args."trivial-macroexpand-all" args."type-i" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/serapeum/2021-02-28/serapeum-20210228-git.tgz'';
-    sha256 = ''1dici8bmvrx5h74disrlvwns8f8jl746i4cyzyclswhv208x2m3x'';
+    url = "http://beta.quicklisp.org/archive/serapeum/2021-02-28/serapeum-20210228-git.tgz";
+    sha256 = "1dici8bmvrx5h74disrlvwns8f8jl746i4cyzyclswhv208x2m3x";
   };
 
   packageName = "serapeum";

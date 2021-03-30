@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-pdf'';
-  version = ''20210228-git'';
+  baseName = "cl-pdf";
+  version = "20210228-git";
 
-  description = ''Common Lisp PDF Generation Library'';
+  description = "Common Lisp PDF Generation Library";
 
   deps = [ args."iterate" args."uiop" args."zpb-ttf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-pdf/2021-02-28/cl-pdf-20210228-git.tgz'';
-    sha256 = ''1m1nq91p49gfc9iccja2wbhglrv0mgzhqvliss7jr0j6icv66x3y'';
+    url = "http://beta.quicklisp.org/archive/cl-pdf/2021-02-28/cl-pdf-20210228-git.tgz";
+    sha256 = "1m1nq91p49gfc9iccja2wbhglrv0mgzhqvliss7jr0j6icv66x3y";
   };
 
   packageName = "cl-pdf";

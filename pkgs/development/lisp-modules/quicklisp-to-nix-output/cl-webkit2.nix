@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-webkit2'';
-  version = ''cl-webkit-20210228-git'';
+  baseName = "cl-webkit2";
+  version = "cl-webkit-20210228-git";
 
-  description = ''An FFI binding to WebKit2GTK+'';
+  description = "An FFI binding to WebKit2GTK+";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-cffi-gtk" args."cl-cffi-gtk-cairo" args."cl-cffi-gtk-gdk" args."cl-cffi-gtk-gdk-pixbuf" args."cl-cffi-gtk-gio" args."cl-cffi-gtk-glib" args."cl-cffi-gtk-gobject" args."cl-cffi-gtk-pango" args."closer-mop" args."iterate" args."trivial-features" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-webkit/2021-02-28/cl-webkit-20210228-git.tgz'';
-    sha256 = ''1r6i64g37palar4hij6c5m240xbn2dwzwaashv015nhjwmra1ms1'';
+    url = "http://beta.quicklisp.org/archive/cl-webkit/2021-02-28/cl-webkit-20210228-git.tgz";
+    sha256 = "1r6i64g37palar4hij6c5m240xbn2dwzwaashv015nhjwmra1ms1";
   };
 
   packageName = "cl-webkit2";

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''zpb-ttf'';
-  version = ''release-1.0.4'';
+  baseName = "zpb-ttf";
+  version = "release-1.0.4";
 
-  description = ''Access TrueType font metrics and outlines from Common Lisp'';
+  description = "Access TrueType font metrics and outlines from Common Lisp";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/zpb-ttf/2021-01-24/zpb-ttf-release-1.0.4.tgz'';
-    sha256 = ''186jzhmklby2pkmwv3zxw09qh8023f7w5ng2ql46l6abx146s3ll'';
+    url = "http://beta.quicklisp.org/archive/zpb-ttf/2021-01-24/zpb-ttf-release-1.0.4.tgz";
+    sha256 = "186jzhmklby2pkmwv3zxw09qh8023f7w5ng2ql46l6abx146s3ll";
   };
 
   packageName = "zpb-ttf";

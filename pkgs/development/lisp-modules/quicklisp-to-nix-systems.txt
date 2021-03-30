@@ -11,6 +11,7 @@ blackbird
 bordeaux-threads
 calispel
 caveman
+cl-custom-hash-table
 cffi
 cffi-grovel
 cffi-uffi-compat

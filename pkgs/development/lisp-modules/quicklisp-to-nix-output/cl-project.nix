@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-project'';
-  version = ''20200715-git'';
+  baseName = "cl-project";
+  version = "20200715-git";
 
-  description = ''Generate a skeleton for modern project'';
+  description = "Generate a skeleton for modern project";
 
   deps = [ args."alexandria" args."anaphora" args."cl-ansi-text" args."cl-colors" args."cl-colors2" args."cl-emb" args."cl-ppcre" args."let-plus" args."local-time" args."prove" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-project/2020-07-15/cl-project-20200715-git.tgz'';
-    sha256 = ''044rx97wc839a8q2wv271s07bnsasl6x5fx4gr5pvy34jbrhp306'';
+    url = "http://beta.quicklisp.org/archive/cl-project/2020-07-15/cl-project-20200715-git.tgz";
+    sha256 = "044rx97wc839a8q2wv271s07bnsasl6x5fx4gr5pvy34jbrhp306";
   };
 
   packageName = "cl-project";

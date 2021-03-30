@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''iterate'';
-  version = ''20210228-git'';
+  baseName = "iterate";
+  version = "20210228-git";
 
   parasites = [ "iterate/tests" ];
 
-  description = ''Jonathan Amsterdam's iterator/gatherer/accumulator facility'';
+  description = "Jonathan Amsterdam's iterator/gatherer/accumulator facility";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iterate/2021-02-28/iterate-20210228-git.tgz'';
-    sha256 = ''1bd6m1lxmd6an75z7j61sms4v54bfxmg1n1w7zd7fm2kb15vai46'';
+    url = "http://beta.quicklisp.org/archive/iterate/2021-02-28/iterate-20210228-git.tgz";
+    sha256 = "1bd6m1lxmd6an75z7j61sms4v54bfxmg1n1w7zd7fm2kb15vai46";
   };
 
   packageName = "iterate";

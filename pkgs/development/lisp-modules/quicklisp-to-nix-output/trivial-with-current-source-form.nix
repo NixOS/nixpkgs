@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-with-current-source-form'';
-  version = ''20200427-git'';
+  baseName = "trivial-with-current-source-form";
+  version = "20200427-git";
 
-  description = ''Helps macro writers produce better errors for macro users'';
+  description = "Helps macro writers produce better errors for macro users";
 
   deps = [ args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-with-current-source-form/2020-04-27/trivial-with-current-source-form-20200427-git.tgz'';
-    sha256 = ''05zkj42f071zhg7swfyklg44k0zc893c9li9virkigzmvhids84f'';
+    url = "http://beta.quicklisp.org/archive/trivial-with-current-source-form/2020-04-27/trivial-with-current-source-form-20200427-git.tgz";
+    sha256 = "05zkj42f071zhg7swfyklg44k0zc893c9li9virkigzmvhids84f";
   };
 
   packageName = "trivial-with-current-source-form";

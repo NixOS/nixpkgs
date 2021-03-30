@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-async'';
-  version = ''20210228-git'';
+  baseName = "cl-async";
+  version = "20210228-git";
 
   parasites = [ "cl-async-base" "cl-async-util" ];
 
-  description = ''Asynchronous operations for Common Lisp.'';
+  description = "Asynchronous operations for Common Lisp.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."uiop" args."vom" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz'';
-    sha256 = ''08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4'';
+    url = "http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz";
+    sha256 = "08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4";
   };
 
   packageName = "cl-async";

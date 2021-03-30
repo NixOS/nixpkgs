@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-postgres_plus_local-time'';
-  version = ''local-time-20210124-git'';
+  baseName = "cl-postgres_plus_local-time";
+  version = "local-time-20210124-git";
 
-  description = ''Integration between cl-postgres and local-time'';
+  description = "Integration between cl-postgres and local-time";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-postgres" args."cl-ppcre" args."ironclad" args."local-time" args."md5" args."split-sequence" args."uax-15" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/local-time/2021-01-24/local-time-20210124-git.tgz'';
-    sha256 = ''0bz5z0rd8gfd22bpqkalaijxlrk806zc010cvgd4qjapbrxzjg3s'';
+    url = "http://beta.quicklisp.org/archive/local-time/2021-01-24/local-time-20210124-git.tgz";
+    sha256 = "0bz5z0rd8gfd22bpqkalaijxlrk806zc010cvgd4qjapbrxzjg3s";
   };
 
   packageName = "cl-postgres+local-time";
