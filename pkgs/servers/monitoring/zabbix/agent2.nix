@@ -10,9 +10,11 @@ import ./versions.nix ({ version, sha256 }:
       inherit sha256;
     };
 
+    modRoot = "src/go";
+
     vendorSha256 = "1ral3xg58x0lf5vl839nlabf443yzqnbrlzm0q127mvv412f5ajc";
 
-    nativeBuildInputs = [ autoreconfHook pkg-config];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ libiconv openssl pcre zlib ];
 
     inherit (buildGoModule.go) GOOS GOARCH;
@@ -37,10 +39,9 @@ import ./versions.nix ({ version, sha256 }:
     '';
 
     # zabbix build process is complex to get right in nix...
-    # we need to manipulate a number of things for their build
-    # system to properly work
+    # use automake to build the go project ensuring proper access to the go vendor directory
     buildPhase = ''
-      cp -r vendor src/go/vendor
+      cd ../..
       make
     '';
 
@@ -48,13 +49,6 @@ import ./versions.nix ({ version, sha256 }:
       install -Dm0644 src/go/conf/zabbix_agent2.conf $out/etc/zabbix_agent2.conf
       install -Dm0755 src/go/bin/zabbix_agent2 $out/bin/zabbix_agent2
     '';
-
-    # run `go mod vendor` from the correct directory
-    overrideModAttrs = (_oldAttrs : {
-      preConfigure = ''
-        cd src/go
-        '';
-    });
 
     meta = with lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
