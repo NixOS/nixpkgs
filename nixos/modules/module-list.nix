@@ -710,6 +710,7 @@
   ./services/networking/miniupnpd.nix
   ./services/networking/mosquitto.nix
   ./services/networking/monero.nix
+  ./services/networking/moodle-dl.nix
   ./services/networking/morty.nix
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
