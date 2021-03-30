@@ -6,11 +6,15 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 deps_file="$(realpath "./deps.nix")"
 
 nix-prefetch-git https://github.com/ryujinx/ryujinx --quiet > repo_info
-new_hash="$(cat repo_info | jq -r ".sha256")"
-new_rev="$(cat repo_info | jq -r ".rev")"
+new_hash="$(jq -r ".sha256" < repo_info)"
+new_rev="$(jq -r ".rev" < repo_info)"
 rm repo_info
 
-new_version="$(curl -s https://ci.appveyor.com/api/projects/gdkchan/ryujinx/branch/master | grep -Po '"version":.*?[^\\]",' | sed  's/"version":"\(.*\)",/\1/')"
+new_version="$(
+    curl -s https://ci.appveyor.com/api/projects/gdkchan/ryujinx/branch/master \
+        | grep -Po '"version":.*?[^\\]",' \
+        | sed  's/"version":"\(.*\)",/\1/'
+    )"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
 if [[ "$new_version" == "$old_version" ]]; then
