@@ -16,9 +16,10 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-qmuua7HXnwuy24CSqHKALqNDmXBvSIXYTVu3kaGVoeU=";
 
-  preBuild = ''
-    mv v2/* .
-  '';
+  modRoot = "./v2";
+  subPackages = [
+    "cmd/nuclei/"
+  ];
 
   # Test files are not part of the release tarball
   doCheck = false;

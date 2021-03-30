@@ -2399,6 +2399,8 @@ in
 
   firestarter = callPackage ../applications/misc/firestarter { };
 
+  frangipanni = callPackage ../tools/text/frangipanni { };
+
   fselect = callPackage ../tools/misc/fselect { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -10734,6 +10736,8 @@ in
   knightos-scas = callPackage ../development/tools/knightos/scas { };
 
   knightos-z80e = callPackage ../development/tools/knightos/z80e { };
+
+  koka = haskellPackages.callPackage ../development/compilers/koka { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
@@ -26745,6 +26749,8 @@ in
   };
 
   zathura = callPackage ../applications/misc/zathura { };
+
+  zdns = callPackage ../tools/security/zdns { };
 
   zerobin = callPackage ../applications/networking/zerobin { };
 

@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkg-config, llvm_6, libxslt,
+  mcpp, epoxy, openssl, pkg-config, llvm, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -433,7 +433,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa llvm ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
