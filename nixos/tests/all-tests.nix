@@ -38,7 +38,6 @@ in
   bind = handleTest ./bind.nix {};
   bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
-  bitwarden = handleTest ./bitwarden.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};
   boot = handleTestOn ["x86_64-linux"] ./boot.nix {}; # syslinux is unsupported on aarch64
   boot-stage1 = handleTest ./boot-stage1.nix {};
