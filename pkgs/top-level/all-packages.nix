@@ -23739,6 +23739,8 @@ in
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
+  pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
+
   popeye = callPackage ../applications/networking/cluster/popeye { };
 
   kube-capacity = callPackage ../applications/networking/cluster/kube-capacity { };
