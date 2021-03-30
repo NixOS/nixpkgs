@@ -6390,6 +6390,8 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
+  pytenable = callPackage ../development/python-modules/pytenable { };
+
   pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
