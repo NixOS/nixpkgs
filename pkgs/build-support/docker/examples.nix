@@ -497,4 +497,23 @@ rec {
       chown 1000 ./home/jane
     '';
   };
+
+  # tarball consisting of both bash and redis images
+  mergedBashAndRedis = pkgs.dockerTools.mergeImages [
+    bash
+    redis
+  ];
+
+  # tarball consisting of bash (without tag) and redis images
+  mergedBashNoTagAndRedis = pkgs.dockerTools.mergeImages [
+    bashNoTag
+    redis
+  ];
+
+  # tarball consisting of bash and layered image with different owner of the
+  # /home/jane directory
+  mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
+    bash
+    layeredImageWithFakeRootCommands
+  ];
 }
