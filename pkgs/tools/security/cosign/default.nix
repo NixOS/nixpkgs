@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rgq29vi0h378j0bqs53gjgp246rqxfpk6rwskzrmawgry0zr8pk";
+    sha256 = "1zwb2q62ngb2zh1hasvq7r7pmrjlpgfhs5raibbhkxbk5kayvmii";
   };
 
-  vendorSha256 = "0pcp3wdvwq06ajdfbgadyq0ipfj65n276hj88p5v6wqfn821ahd6";
+  vendorSha256 = "0nwbjaps4z5fhiknbj9pybxb6kgwb1vf2qhy0mzpycprf04q6g0v";
 
   subPackages = [ "cmd/cosign" ];
 
