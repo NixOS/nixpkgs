@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-qprint'';
-  version = ''20150804-git'';
+  baseName = "cl-qprint";
+  version = "20150804-git";
 
-  description = ''Encode and decode quoted-printable encoded strings.'';
+  description = "Encode and decode quoted-printable encoded strings.";
 
   deps = [ args."flexi-streams" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-qprint/2015-08-04/cl-qprint-20150804-git.tgz'';
-    sha256 = ''042nq9airkc4yaqzpmly5iszmkbwfn38wsgi9k361ldf1y54lq28'';
+    url = "http://beta.quicklisp.org/archive/cl-qprint/2015-08-04/cl-qprint-20150804-git.tgz";
+    sha256 = "042nq9airkc4yaqzpmly5iszmkbwfn38wsgi9k361ldf1y54lq28";
   };
 
   packageName = "cl-qprint";

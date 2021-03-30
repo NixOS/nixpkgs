@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''s-sysdeps'';
-  version = ''20210228-git'';
+  baseName = "s-sysdeps";
+  version = "20210228-git";
 
-  description = ''An abstraction layer over platform dependent functionality'';
+  description = "An abstraction layer over platform dependent functionality";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."split-sequence" args."usocket" args."usocket-server" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/s-sysdeps/2021-02-28/s-sysdeps-20210228-git.tgz'';
-    sha256 = ''0pybgicif1qavvix9183g4ahjrgcax3qf2ab523cas8l79lr1xkw'';
+    url = "http://beta.quicklisp.org/archive/s-sysdeps/2021-02-28/s-sysdeps-20210228-git.tgz";
+    sha256 = "0pybgicif1qavvix9183g4ahjrgcax3qf2ab523cas8l79lr1xkw";
   };
 
   packageName = "s-sysdeps";

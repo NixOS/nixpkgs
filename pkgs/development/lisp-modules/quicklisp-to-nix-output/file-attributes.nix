@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''file-attributes'';
-  version = ''20200925-git'';
+  baseName = "file-attributes";
+  version = "20200925-git";
 
-  description = ''Access to file attributes (uid, gid, atime, mtime, mod)'';
+  description = "Access to file attributes (uid, gid, atime, mtime, mod)";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."documentation-utils" args."trivial-features" args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/file-attributes/2020-09-25/file-attributes-20200925-git.tgz'';
-    sha256 = ''0wq3gs36zwl8dzknj3c794l60vg1zpf0siwhd7ad9pn81v3mdan7'';
+    url = "http://beta.quicklisp.org/archive/file-attributes/2020-09-25/file-attributes-20200925-git.tgz";
+    sha256 = "0wq3gs36zwl8dzknj3c794l60vg1zpf0siwhd7ad9pn81v3mdan7";
   };
 
   packageName = "file-attributes";

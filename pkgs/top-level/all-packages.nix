@@ -1771,7 +1771,7 @@ in
 
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
 
-  borgbackup = callPackage ../tools/backup/borg { };
+  borgbackup = callPackage ../tools/backup/borgbackup { };
 
   borgmatic = callPackage ../tools/backup/borgmatic { };
 
@@ -4471,6 +4471,10 @@ in
 
   fprintd = callPackage ../tools/security/fprintd { };
 
+  fprintd-tod = callPackage ../tools/security/fprintd {
+    libfprint = libfprint-tod;
+  };
+
   ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
@@ -5843,13 +5847,23 @@ in
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
-  logstash6 = callPackage ../tools/misc/logstash/6.x.nix { };
+  logstash6 = callPackage ../tools/misc/logstash/6.x.nix {
+    # https://www.elastic.co/support/matrix#logstash-and-jvm
+    jre = jdk11_headless;
+  };
   logstash6-oss = callPackage ../tools/misc/logstash/6.x.nix {
     enableUnfree = false;
+    # https://www.elastic.co/support/matrix#logstash-and-jvm
+    jre = jdk11_headless;
   };
-  logstash7 = callPackage ../tools/misc/logstash/7.x.nix { };
+  logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
+    # https://www.elastic.co/support/matrix#logstash-and-jvm
+    jre = jdk11_headless;
+  };
   logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
     enableUnfree = false;
+    # https://www.elastic.co/support/matrix#logstash-and-jvm
+    jre = jdk11_headless;
   };
   logstash = logstash6;
 
@@ -15235,6 +15249,10 @@ in
 
   libfprint = callPackage ../development/libraries/libfprint { };
 
+  libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
+
+  libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
+
   libfpx = callPackage ../development/libraries/libfpx { };
 
   libgadu = callPackage ../development/libraries/libgadu { };
@@ -19785,7 +19803,8 @@ in
 
     rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
 
-    rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
+    rtw88 = callPackage ../os-specific/linux/rtw88 { };
+    rtlwifi_new = rtw88;
 
     openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
     openafs_1_9 = callPackage ../servers/openafs/1.9/module.nix { };
@@ -20367,7 +20386,7 @@ in
 
   rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
 
-  rtlwifi_new-firmware = callPackage ../os-specific/linux/firmware/rtlwifi_new-firmware { };
+  rtw88-firmware = callPackage ../os-specific/linux/firmware/rtw88-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
@@ -23621,6 +23640,8 @@ in
 
   k3s = callPackage ../applications/networking/cluster/k3s {};
 
+  kconf = callPackage ../applications/networking/cluster/kconf { };
+
   kail = callPackage ../tools/networking/kail {  };
 
   kanboard = callPackage ../applications/misc/kanboard { };
@@ -23736,6 +23757,8 @@ in
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
+
+  pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
 
@@ -29980,6 +30003,8 @@ in
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers {}
   );
+
+  terraforming = callPackage ../applications/networking/cluster/terraforming { };
 
   terraform-compliance = python3Packages.callPackage ../applications/networking/cluster/terraform-compliance {};
 

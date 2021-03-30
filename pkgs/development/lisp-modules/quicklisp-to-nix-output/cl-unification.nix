@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-unification'';
-  version = ''20200925-git'';
+  baseName = "cl-unification";
+  version = "20200925-git";
 
-  description = ''The CL-UNIFICATION system.
+  description = "The CL-UNIFICATION system.
 
-The system contains the definitions for the 'unification' machinery.'';
+The system contains the definitions for the 'unification' machinery.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-unification/2020-09-25/cl-unification-20200925-git.tgz'';
-    sha256 = ''05i1bmbabfgym9v28cbl37yr0r1m4a4k4a844z6wlq6qf45vzais'';
+    url = "http://beta.quicklisp.org/archive/cl-unification/2020-09-25/cl-unification-20200925-git.tgz";
+    sha256 = "05i1bmbabfgym9v28cbl37yr0r1m4a4k4a844z6wlq6qf45vzais";
   };
 
   packageName = "cl-unification";

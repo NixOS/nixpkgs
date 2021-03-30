@@ -340,6 +340,10 @@ self: super: {
     dependencies = [ self.fzfWrapper ];
   });
 
+  onehalf = super.onehalf.overrideAttrs (old: {
+    configurePhase = "cd vim";
+  });
+
   skim-vim = super.skim-vim.overrideAttrs (old: {
     dependencies = [ self.skim ];
   });

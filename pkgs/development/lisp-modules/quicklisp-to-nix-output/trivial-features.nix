@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-features'';
-  version = ''20210228-git'';
+  baseName = "trivial-features";
+  version = "20210228-git";
 
-  description = ''Ensures consistent *FEATURES* across multiple CLs.'';
+  description = "Ensures consistent *FEATURES* across multiple CLs.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-features/2021-02-28/trivial-features-20210228-git.tgz'';
-    sha256 = ''1najk88r8nlpbxm8mjfj8b22f9chr9h2hxg9wqz87kkmhg4rfwwj'';
+    url = "http://beta.quicklisp.org/archive/trivial-features/2021-02-28/trivial-features-20210228-git.tgz";
+    sha256 = "1najk88r8nlpbxm8mjfj8b22f9chr9h2hxg9wqz87kkmhg4rfwwj";
   };
 
   packageName = "trivial-features";

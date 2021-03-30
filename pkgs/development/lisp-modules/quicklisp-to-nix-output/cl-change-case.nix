@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-change-case'';
-  version = ''20210228-git'';
+  baseName = "cl-change-case";
+  version = "20210228-git";
 
   parasites = [ "cl-change-case/test" ];
 
-  description = ''Convert strings between camelCase, param-case, PascalCase and more'';
+  description = "Convert strings between camelCase, param-case, PascalCase and more";
 
   deps = [ args."cl-ppcre" args."cl-ppcre-unicode" args."cl-unicode" args."fiveam" args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-change-case/2021-02-28/cl-change-case-20210228-git.tgz'';
-    sha256 = ''15x8zxwa3pxs02fh0qxmbvz6vi59x6ha09p5hs4rgd6axs0k4pmi'';
+    url = "http://beta.quicklisp.org/archive/cl-change-case/2021-02-28/cl-change-case-20210228-git.tgz";
+    sha256 = "15x8zxwa3pxs02fh0qxmbvz6vi59x6ha09p5hs4rgd6axs0k4pmi";
   };
 
   packageName = "cl-change-case";

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-prevalence'';
-  version = ''20210228-git'';
+  baseName = "cl-prevalence";
+  version = "20210228-git";
 
-  description = ''Common Lisp Prevalence Package'';
+  description = "Common Lisp Prevalence Package";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."s-sysdeps" args."s-xml" args."split-sequence" args."usocket" args."usocket-server" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-prevalence/2021-02-28/cl-prevalence-20210228-git.tgz'';
-    sha256 = ''0irx60xa7ivlnjg1qzhl7x5sgdjqk53nrx0nji29q639h71czfpl'';
+    url = "http://beta.quicklisp.org/archive/cl-prevalence/2021-02-28/cl-prevalence-20210228-git.tgz";
+    sha256 = "0irx60xa7ivlnjg1qzhl7x5sgdjqk53nrx0nji29q639h71czfpl";
   };
 
   packageName = "cl-prevalence";

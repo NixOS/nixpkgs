@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''static-vectors'';
-  version = ''v1.8.6'';
+  baseName = "static-vectors";
+  version = "v1.8.6";
 
   parasites = [ "static-vectors/test" ];
 
-  description = ''Create vectors allocated in static memory.'';
+  description = "Create vectors allocated in static memory.";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/static-vectors/2020-06-10/static-vectors-v1.8.6.tgz'';
-    sha256 = ''0s549cxd8a8ix6jl4dfxj2nh01nl9f4hgnlmb88w7iixanxn58mc'';
+    url = "http://beta.quicklisp.org/archive/static-vectors/2020-06-10/static-vectors-v1.8.6.tgz";
+    sha256 = "0s549cxd8a8ix6jl4dfxj2nh01nl9f4hgnlmb88w7iixanxn58mc";
   };
 
   packageName = "static-vectors";

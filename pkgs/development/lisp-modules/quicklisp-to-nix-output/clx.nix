@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clx'';
-  version = ''20200715-git'';
+  baseName = "clx";
+  version = "20200715-git";
 
   parasites = [ "clx/test" ];
 
-  description = ''An implementation of the X Window System protocol in Lisp.'';
+  description = "An implementation of the X Window System protocol in Lisp.";
 
   deps = [ args."fiasco" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clx/2020-07-15/clx-20200715-git.tgz'';
-    sha256 = ''1fvx6m3imvkkd0z5a3jmm2v6mkrndwsidhykrs229rqx343zg8ra'';
+    url = "http://beta.quicklisp.org/archive/clx/2020-07-15/clx-20200715-git.tgz";
+    sha256 = "1fvx6m3imvkkd0z5a3jmm2v6mkrndwsidhykrs229rqx343zg8ra";
   };
 
   packageName = "clx";

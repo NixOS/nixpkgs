@@ -465,8 +465,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.208";
-          sha256 = "1yjz7i3f2f9a3i797vwa9vnxsh9lyxqr4k0ixx8v55h628kvafr9";
+          version = "0.0.209";
+          sha256 = "1i0wq8zwax4kmy69hh0hclx9a47ycm3qp3gspjq8xpmcq3nmbfaq";
         };
         meta = with lib; {
           license = licenses.mit;
