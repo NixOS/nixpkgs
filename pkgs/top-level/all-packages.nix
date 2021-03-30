@@ -10604,6 +10604,7 @@ in
 
   inherit (callPackage ../development/compilers/haxe { })
     haxe_4_2
+    haxe_4_1
     haxe_3_4
     haxe_3_2
     ;
