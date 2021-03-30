@@ -682,6 +682,34 @@ rec {
     in
     result;
 
+  # Merge the tarballs of two images built with buildImage into a single
+  # tarball that contains both images. Running `docker load` on the resulting
+  # tarball with load both images into the docker daemon.
+  mergeImages = a: b: runCommand "merge-docker-images"
+    {
+      nativeBuildInputs = [ pigz jq ];
+    } ''
+    mkdir a b image
+    # Extract images
+    tar -I pigz -xf ${a} -C a
+    tar -I pigz -xf ${b} -C b
+    # Make writable (to enable mv)
+    chmod -R +w a b
+    # Merge repositories objects (image:tag -> hash)
+    jq -s add a/repositories b/repositories > repositories
+    # Merge docker images manifests ([image])
+    jq -s add a/manifest.json b/manifest.json > manifest.json
+    # Move layers to output directory
+    mv --no-clobber a/* image/
+    mv --no-clobber b/* image/
+    # Move merged repositories object and manifest list to output directory
+    mv repositories image/repositories
+    mv manifest.json image/manifest.json
+    # Create tarball and gzip
+    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nT > $out
+  '';
+
+
   # Provide a /etc/passwd and /etc/group that contain root and nobody.
   # Useful when packaging binaries that insist on using nss to look up
   # username/groups (like nginx).
