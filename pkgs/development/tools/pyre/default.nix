@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, ocamlPackages, writeScript
-, dune, python3, rsync, buck, watchman, sqlite }:
+{ lib, stdenv, fetchFromGitHub, ocamlPackages, writeScript
+, dune_1, python3, rsync, buck, watchman, sqlite }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
@@ -39,7 +39,7 @@ let
     ppx_deriving_yojson
     ocamlbuild
     ppxlib
-    dune
+    dune_1
     ounit
     base64
     sqlite.dev
@@ -71,7 +71,7 @@ let
     install -D ./_build/default/main.exe $out/bin/pyre.bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A performant type-checker for Python 3";
     homepage = https://pyre-check.org;
     license = licenses.mit;
