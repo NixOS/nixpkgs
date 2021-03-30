@@ -10717,8 +10717,12 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
+  julia_16 = callPackage ../development/compilers/julia/1.6.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
   julia_1 = julia_10;
-  julia = julia_15;
+  julia = julia_16;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
