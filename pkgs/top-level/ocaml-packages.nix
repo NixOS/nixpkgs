@@ -309,7 +309,9 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-    eigen = callPackage ../development/ocaml-modules/eigen { };
+    eigen = callPackage ../development/ocaml-modules/eigen {
+      inherit (pkgs.llvmPackages) libcxx;
+    };
 
     either = callPackage ../development/ocaml-modules/either { };
 

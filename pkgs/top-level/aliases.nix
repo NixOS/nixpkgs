@@ -988,5 +988,11 @@ mapAliases ({
   inherit (libsForQt5)
     sddm
   ;
+  inherit (llvmPackages_latest)
+    lld
+    lldb
+    libcxx
+    libcxxabi
+  ;
 
 })

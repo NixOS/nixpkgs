@@ -2,7 +2,7 @@
 , file, atk, alsaLib, cairo, fontconfig, gdk-pixbuf, glib, gnome3, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
-, libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
+, libjpeg, libredirect, tzdata, cacert, systemd, llvmPackages, e2fsprogs, symlinkJoin
 , libpulseaudio, pcsclite
 
 , homepage, version, prefix, hash
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
     gtk_engines
     heimdal
     krb5
-    libcxx
-    libcxxabi
+    llvmPackages.libcxx
+    llvmPackages.libcxxabi
     libjpeg
     libpng12
     libsoup

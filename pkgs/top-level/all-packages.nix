@@ -1362,7 +1362,9 @@ in
 
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
-  gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
+  gitter = callPackage  ../applications/networking/instant-messengers/gitter {
+    inherit (pkgs.llvmPackages) libcxx;
+  };
 
   gjs = callPackage ../development/libraries/gjs { };
 
@@ -2536,7 +2538,9 @@ in
 
   grim = callPackage ../tools/graphics/grim { };
 
-  gringo = callPackage ../tools/misc/gringo { };
+  gringo = callPackage ../tools/misc/gringo {
+    inherit (pkgs.llvmPackages) libcxx;
+  };
 
   grobi = callPackage ../tools/X11/grobi { };
 
@@ -9260,7 +9264,9 @@ in
 
   uptimed = callPackage ../tools/system/uptimed { };
 
-  upwork = callPackage ../applications/misc/upwork { };
+  upwork = callPackage ../applications/misc/upwork {
+    inherit (llvmPackages) libcxx;
+  };
 
   urjtag = callPackage ../tools/misc/urjtag { };
 
@@ -9887,10 +9893,11 @@ in
 
   chez-matchable = callPackage ../development/chez-modules/chez-matchable { };
 
+  # TODO: Move to pkgs/top-level/aliases.nix and switch to llvmPackages_latest:
   clang = llvmPackages.clang;
   clang-manpages = llvmPackages.clang-manpages;
 
-  clang-sierraHack = clang.override {
+  clang-sierraHack = llvmPackages.clang.override {
     name = "clang-wrapper-with-reexport-hack";
     bintools = darwin.binutils.override {
       useMacosReexportHack = true;
@@ -10767,7 +10774,6 @@ in
       Cocoa AudioToolbox OpenGL Foundation ForceFeedback;
   };
 
-  lld = llvmPackages.lld;
   lld_5 = llvmPackages_5.lld;
   lld_6 = llvmPackages_6.lld;
   lld_7 = llvmPackages_7.lld;
@@ -10776,7 +10782,6 @@ in
   lld_10 = llvmPackages_10.lld;
   lld_11 = llvmPackages_11.lld;
 
-  lldb = llvmPackages_latest.lldb;
   lldb_5 = llvmPackages_5.lldb;
   lldb_6 = llvmPackages_6.lldb;
   lldb_7 = llvmPackages_7.lldb;
@@ -10785,6 +10790,7 @@ in
   lldb_10 = llvmPackages_10.lldb;
   lldb_11 = llvmPackages_11.lldb;
 
+  # TODO: Move to pkgs/top-level/aliases.nix and switch to llvmPackages_latest:
   llvm = llvmPackages.llvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
@@ -11815,7 +11821,9 @@ in
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
 
   buildRubyGem = callPackage ../development/ruby-modules/gem { };
-  defaultGemConfig = callPackage ../development/ruby-modules/gem-config { };
+  defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
+    inherit (llvmPackages) libcxx;
+  };
   bundix = callPackage ../development/ruby-modules/bundix { };
   bundler = callPackage ../development/ruby-modules/bundler { };
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
@@ -12124,6 +12132,7 @@ in
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     bazel_self = bazel_3;
+    inherit (llvmPackages) libcxx;
   };
 
   bazel_4 = callPackage ../development/tools/build-managers/bazel/bazel_4 {
@@ -12134,6 +12143,7 @@ in
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     bazel_self = bazel_4;
+    inherit (llvmPackages) libcxx;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
@@ -12392,9 +12402,6 @@ in
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     inherit (llvmPackages_11) llvm clang-unwrapped;
   };
-
-  libcxx = llvmPackages.libcxx;
-  libcxxabi = llvmPackages.libcxxabi;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
@@ -16776,6 +16783,8 @@ in
 
     inherit (pkgs.darwin) libobjc;
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
+
+    inherit (pkgs.llvmPackages) libcxx;
   };
 
   qmake48Hook = makeSetupHook
@@ -17999,6 +18008,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
     inherit (darwin) libobjc;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    inherit (llvmPackages) libcxx;
   };
 
   rWrapper = callPackage ../development/r-modules/wrapper.nix {

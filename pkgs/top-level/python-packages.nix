@@ -1708,7 +1708,9 @@ in {
 
   datashape = callPackage ../development/python-modules/datashape { };
 
-  datatable = callPackage ../development/python-modules/datatable { };
+  datatable = callPackage ../development/python-modules/datatable {
+    inherit (pkgs.llvmPackages) libcxx;
+  };
 
   dateparser = if isPy27 then
     callPackage ../development/python-modules/dateparser/0.x.nix { }
@@ -3681,7 +3683,9 @@ in {
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
 
   kiwisolver = if isPy3k then
-    callPackage ../development/python-modules/kiwisolver { }
+    callPackage ../development/python-modules/kiwisolver {
+      inherit (llvmPackages) libcxx;
+    }
   else
     callPackage ../development/python-modules/kiwisolver/1_1.nix { };
 
@@ -4700,7 +4704,9 @@ in {
 
   num2words = callPackage ../development/python-modules/num2words { };
 
-  numba = callPackage ../development/python-modules/numba { };
+  numba = callPackage ../development/python-modules/numba {
+    inherit (pkgs.llvmPackages) libcxx;
+  };
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
@@ -4886,7 +4892,9 @@ in {
   pamqp = callPackage ../development/python-modules/pamqp { };
 
   pandas = if isPy3k then
-    callPackage ../development/python-modules/pandas { }
+    callPackage ../development/python-modules/pandas {
+      inherit (pkgs.llvmPackages) libcxx;
+    }
   else
     callPackage ../development/python-modules/pandas/2.nix { };
 
@@ -5356,6 +5364,7 @@ in {
     # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
     doCheck = !isPy3k;
     inherit (pkgs) protobuf;
+    inherit (pkgs.llvmPackages) libcxx;
   };
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
@@ -5434,7 +5443,9 @@ in {
 
   py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
 
-  py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
+  py3exiv2 = callPackage ../development/python-modules/py3exiv2 {
+    inherit (pkgs.llvmPackages) libcxx;
+  };
 
   py3status = callPackage ../development/python-modules/py3status { };
 

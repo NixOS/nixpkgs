@@ -51,6 +51,7 @@ in
 
   maloader = callPackage ../os-specific/darwin/maloader {
     inherit (darwin) opencflite;
+    inherit (pkgs.llvmPackages) libcxx;
   };
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
