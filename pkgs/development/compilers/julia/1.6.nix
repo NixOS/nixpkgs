@@ -2,7 +2,7 @@
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python3, cmake
 # libjulia dependencies
-, libunwind, readline, utf8proc, zlib, gmp
+, libunwind, utf8proc, gmp
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, libgit2, libnghttp2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Even though we set "USE_SYSTEM_UTF8PROC=1", a patch is still necessary to
+    # use the nixpkgs version of utf8proc.
     ./use-system-utf8proc-julia-1.3.patch
 
     # Julia recompiles a precompiled file if the mtime stored *in* the
