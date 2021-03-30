@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-base64'';
-  version = ''20201016-git'';
+  baseName = "cl-base64";
+  version = "20201016-git";
 
   parasites = [ "cl-base64/test" ];
 
-  description = ''Base64 encoding and decoding with URI support.'';
+  description = "Base64 encoding and decoding with URI support.";
 
   deps = [ args."kmrcl" args."ptester" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-base64/2020-10-16/cl-base64-20201016-git.tgz'';
-    sha256 = ''1wd2sgvfrivrbzlhs1vgj762jqz7sk171ssli6gl1kfwbnphzx9z'';
+    url = "http://beta.quicklisp.org/archive/cl-base64/2020-10-16/cl-base64-20201016-git.tgz";
+    sha256 = "1wd2sgvfrivrbzlhs1vgj762jqz7sk171ssli6gl1kfwbnphzx9z";
   };
 
   packageName = "cl-base64";

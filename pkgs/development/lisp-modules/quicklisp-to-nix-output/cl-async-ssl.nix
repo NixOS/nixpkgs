@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-async-ssl'';
-  version = ''cl-async-20210228-git'';
+  baseName = "cl-async-ssl";
+  version = "cl-async-20210228-git";
 
-  description = ''SSL Wrapper around cl-async socket implementation.'';
+  description = "SSL Wrapper around cl-async socket implementation.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-async" args."cl-async-base" args."cl-async-util" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."vom" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz'';
-    sha256 = ''08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4'';
+    url = "http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz";
+    sha256 = "08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4";
   };
 
   packageName = "cl-async-ssl";

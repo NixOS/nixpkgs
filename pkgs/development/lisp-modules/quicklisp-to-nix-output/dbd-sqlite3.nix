@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''dbd-sqlite3'';
-  version = ''cl-dbi-20210228-git'';
+  baseName = "dbd-sqlite3";
+  version = "cl-dbi-20210228-git";
 
-  description = ''Database driver for SQLite3.'';
+  description = "Database driver for SQLite3.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."closer-mop" args."dbi" args."iterate" args."split-sequence" args."sqlite" args."trivial-features" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2021-02-28/cl-dbi-20210228-git.tgz'';
-    sha256 = ''0yfs7k6samv6q0n1bvscvcck7qg3c4g03qn7i81619q7g2f98jdk'';
+    url = "http://beta.quicklisp.org/archive/cl-dbi/2021-02-28/cl-dbi-20210228-git.tgz";
+    sha256 = "0yfs7k6samv6q0n1bvscvcck7qg3c4g03qn7i81619q7g2f98jdk";
   };
 
   packageName = "dbd-sqlite3";

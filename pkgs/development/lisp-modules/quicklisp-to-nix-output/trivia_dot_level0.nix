@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivia_dot_level0'';
-  version = ''trivia-20210228-git'';
+  baseName = "trivia_dot_level0";
+  version = "trivia-20210228-git";
 
-  description = ''Bootstrapping Pattern Matching Library for implementing Trivia'';
+  description = "Bootstrapping Pattern Matching Library for implementing Trivia";
 
   deps = [ args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivia/2021-02-28/trivia-20210228-git.tgz'';
-    sha256 = ''0qqyspq2mryl87wgrm43sj7d2wqb1pckk7fjvnmmyrf5kz5p4pc6'';
+    url = "http://beta.quicklisp.org/archive/trivia/2021-02-28/trivia-20210228-git.tgz";
+    sha256 = "0qqyspq2mryl87wgrm43sj7d2wqb1pckk7fjvnmmyrf5kz5p4pc6";
   };
 
   packageName = "trivia.level0";

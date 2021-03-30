@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "4.3.0";
+  version = "4.4.0";
 
   excludedPackages = "tools";
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "rancher";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-ybEYKr0rQY8Qg74V1mXqShq5Z2d/Adf0bSSbEMIyo3I=";
+    sha256 = "sha256-+9VtFHZ4ZZiX04u5YvPoQaelH9Q9oKMrbFHFFiNUxBA=";
   };
 
   vendorSha256 = null;
@@ -29,6 +29,14 @@ buildGoModule rec {
       --bash <($out/bin/k3d completion bash) \
       --fish <($out/bin/k3d completion fish) \
       --zsh <($out/bin/k3d completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/k3d --help
+    $out/bin/k3d version | grep "k3d version v${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

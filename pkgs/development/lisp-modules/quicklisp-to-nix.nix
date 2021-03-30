@@ -3967,6 +3967,14 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-custom-hash-table" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-custom-hash-table" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-custom-hash-table.nix {
+         inherit fetchurl;
+       }));
+
+
   "caveman" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."caveman" or (x: {}))

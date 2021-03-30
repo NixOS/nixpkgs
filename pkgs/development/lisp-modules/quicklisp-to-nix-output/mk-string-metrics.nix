@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''mk-string-metrics'';
-  version = ''20180131-git'';
+  baseName = "mk-string-metrics";
+  version = "20180131-git";
 
-  description = ''efficient implementations of various string metric algorithms'';
+  description = "efficient implementations of various string metric algorithms";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/mk-string-metrics/2018-01-31/mk-string-metrics-20180131-git.tgz'';
-    sha256 = ''10xb9n6568nh019nq3phijbc7l6hkv69yllfiqvc1zzsprxpkwc4'';
+    url = "http://beta.quicklisp.org/archive/mk-string-metrics/2018-01-31/mk-string-metrics-20180131-git.tgz";
+    sha256 = "10xb9n6568nh019nq3phijbc7l6hkv69yllfiqvc1zzsprxpkwc4";
   };
 
   packageName = "mk-string-metrics";

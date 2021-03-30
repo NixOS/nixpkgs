@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clsql-postgresql'';
-  version = ''clsql-20210228-git'';
+  baseName = "clsql-postgresql";
+  version = "clsql-20210228-git";
 
-  description = ''Common Lisp PostgreSQL API Driver'';
+  description = "Common Lisp PostgreSQL API Driver";
 
   deps = [ args."clsql" args."clsql-uffi" args."uffi" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz'';
-    sha256 = ''0g7racshjy47xbfijymddjwnphp0c93z2lnlgi330g257s9l7vd4'';
+    url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
+    sha256 = "0g7racshjy47xbfijymddjwnphp0c93z2lnlgi330g257s9l7vd4";
   };
 
   packageName = "clsql-postgresql";

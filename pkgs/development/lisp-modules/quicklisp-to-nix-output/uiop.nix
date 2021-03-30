@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''uiop'';
-  version = ''3.3.4'';
+  baseName = "uiop";
+  version = "3.3.4";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/uiop/2020-02-18/uiop-3.3.4.tgz'';
-    sha256 = ''0n0fp55ivwi6gzhaywdkngnk2snpp9nn3mz5rq3pnrwldi9q7aav'';
+    url = "http://beta.quicklisp.org/archive/uiop/2020-02-18/uiop-3.3.4.tgz";
+    sha256 = "0n0fp55ivwi6gzhaywdkngnk2snpp9nn3mz5rq3pnrwldi9q7aav";
   };
 
   packageName = "uiop";

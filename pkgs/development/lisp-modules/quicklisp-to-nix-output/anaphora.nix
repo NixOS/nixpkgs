@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''anaphora'';
-  version = ''20210124-git'';
+  baseName = "anaphora";
+  version = "20210124-git";
 
   parasites = [ "anaphora/test" ];
 
-  description = ''The Anaphoric Macro Package from Hell'';
+  description = "The Anaphoric Macro Package from Hell";
 
   deps = [ args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/anaphora/2021-01-24/anaphora-20210124-git.tgz'';
-    sha256 = ''0b4xwrnv007sfcqkxkarrbf99v3md8h199z1z69r4vx7r5pq2i4v'';
+    url = "http://beta.quicklisp.org/archive/anaphora/2021-01-24/anaphora-20210124-git.tgz";
+    sha256 = "0b4xwrnv007sfcqkxkarrbf99v3md8h199z1z69r4vx7r5pq2i4v";
   };
 
   packageName = "anaphora";

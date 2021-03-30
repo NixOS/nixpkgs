@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''access'';
-  version = ''20210124-git'';
+  baseName = "access";
+  version = "20210124-git";
 
   parasites = [ "access-test" ];
 
-  description = ''A library providing functions that unify data-structure access for Common Lisp:
-      access and (setf access)'';
+  description = "A library providing functions that unify data-structure access for Common Lisp:
+      access and (setf access)";
 
   deps = [ args."alexandria" args."anaphora" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/access/2021-01-24/access-20210124-git.tgz'';
-    sha256 = ''1n4j15v1ikspchcbb0bn15kk3lh78f6bxk56cs4arimm8bisyqlq'';
+    url = "http://beta.quicklisp.org/archive/access/2021-01-24/access-20210124-git.tgz";
+    sha256 = "1n4j15v1ikspchcbb0bn15kk3lh78f6bxk56cs4arimm8bisyqlq";
   };
 
   packageName = "access";

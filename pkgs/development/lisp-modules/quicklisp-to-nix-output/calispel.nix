@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''calispel'';
-  version = ''20170830-git'';
+  baseName = "calispel";
+  version = "20170830-git";
 
   parasites = [ "calispel-test" ];
 
-  description = ''Thread-safe message-passing channels, in the style of
-the occam programming language.'';
+  description = "Thread-safe message-passing channels, in the style of
+the occam programming language.";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."eager-future2" args."jpl-queues" args."jpl-util" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/calispel/2017-08-30/calispel-20170830-git.tgz'';
-    sha256 = ''0qwmzmyh63jlw5bdv4wf458n1dz9k77gd5b4ix1kd6xrzx247k7i'';
+    url = "http://beta.quicklisp.org/archive/calispel/2017-08-30/calispel-20170830-git.tgz";
+    sha256 = "0qwmzmyh63jlw5bdv4wf458n1dz9k77gd5b4ix1kd6xrzx247k7i";
   };
 
   packageName = "calispel";

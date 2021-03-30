@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-interpol'';
-  version = ''20201220-git'';
+  baseName = "cl-interpol";
+  version = "20201220-git";
 
   parasites = [ "cl-interpol-test" ];
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-interpol/2020-12-20/cl-interpol-20201220-git.tgz'';
-    sha256 = ''1q3zxsbl5br08lv481jsqmq8r9yayp44x6icixcxx5sdz6fbcd3d'';
+    url = "http://beta.quicklisp.org/archive/cl-interpol/2020-12-20/cl-interpol-20201220-git.tgz";
+    sha256 = "1q3zxsbl5br08lv481jsqmq8r9yayp44x6icixcxx5sdz6fbcd3d";
   };
 
   packageName = "cl-interpol";

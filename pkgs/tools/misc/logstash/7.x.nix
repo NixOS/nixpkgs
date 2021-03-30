@@ -3,12 +3,13 @@
 , lib, stdenv
 , fetchurl
 , makeWrapper
+, nixosTests
 , jre
 }:
 
 with lib;
 
-stdenv.mkDerivation rec {
+let this = stdenv.mkDerivation rec {
   version = elk7Version;
   name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
 
@@ -52,4 +53,12 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
-}
+  passthru.tests =
+    optionalAttrs (!enableUnfree) (
+      assert this.drvPath == nixosTests.elk.ELK-7.elkPackages.logstash.drvPath;
+      {
+        elk = nixosTests.elk.ELK-7;
+      }
+    );
+};
+in this

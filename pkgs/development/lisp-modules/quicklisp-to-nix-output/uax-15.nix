@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''uax-15'';
-  version = ''20210228-git'';
+  baseName = "uax-15";
+  version = "20210228-git";
 
   parasites = [ "uax-15/tests" ];
 
-  description = ''Common lisp implementation of Unicode normalization functions :nfc, :nfd, :nfkc and :nfkd (Uax-15)'';
+  description = "Common lisp implementation of Unicode normalization functions :nfc, :nfd, :nfkc and :nfkd (Uax-15)";
 
   deps = [ args."cl-ppcre" args."fiveam" args."split-sequence" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/uax-15/2021-02-28/uax-15-20210228-git.tgz'';
-    sha256 = ''1vf590djzyika6200zqw4mbqrajcmv7g5swydimnvk7xqzpa8ksp'';
+    url = "http://beta.quicklisp.org/archive/uax-15/2021-02-28/uax-15-20210228-git.tgz";
+    sha256 = "1vf590djzyika6200zqw4mbqrajcmv7g5swydimnvk7xqzpa8ksp";
   };
 
   packageName = "uax-15";

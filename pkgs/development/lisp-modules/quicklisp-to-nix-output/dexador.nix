@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''dexador'';
-  version = ''20210228-git'';
+  baseName = "dexador";
+  version = "20210228-git";
 
-  description = ''Yet another HTTP client for Common Lisp'';
+  description = "Yet another HTTP client for Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-cookie" args."cl-ppcre" args."cl-reexport" args."cl-utilities" args."fast-http" args."fast-io" args."flexi-streams" args."local-time" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."usocket" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/dexador/2021-02-28/dexador-20210228-git.tgz'';
-    sha256 = ''0glzvi7nbr58izpwr8xzxvlcc78zmgwqaik374rmcy6w89q5ksw7'';
+    url = "http://beta.quicklisp.org/archive/dexador/2021-02-28/dexador-20210228-git.tgz";
+    sha256 = "0glzvi7nbr58izpwr8xzxvlcc78zmgwqaik374rmcy6w89q5ksw7";
   };
 
   packageName = "dexador";

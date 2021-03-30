@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-fad'';
-  version = ''20210124-git'';
+  baseName = "cl-fad";
+  version = "20210124-git";
 
   parasites = [ "cl-fad-test" ];
 
-  description = ''Portable pathname library'';
+  description = "Portable pathname library";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-ppcre" args."unit-test" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-fad/2021-01-24/cl-fad-20210124-git.tgz'';
-    sha256 = ''17vkvkwg4wpyny5x2nsazgpip5nxxahsjngaxjyrj5z15d4lkrm0'';
+    url = "http://beta.quicklisp.org/archive/cl-fad/2021-01-24/cl-fad-20210124-git.tgz";
+    sha256 = "17vkvkwg4wpyny5x2nsazgpip5nxxahsjngaxjyrj5z15d4lkrm0";
   };
 
   packageName = "cl-fad";
