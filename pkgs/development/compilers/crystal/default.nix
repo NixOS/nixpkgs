@@ -270,7 +270,13 @@ rec {
     binary = crystal_0_35;
   };
 
-  crystal = crystal_0_36;
+  crystal_1_0 = generic {
+    version = "1.0.0";
+    sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
+    binary = crystal_0_36;
+  };
+
+  crystal = crystal_1_0;
 
   crystal2nix = callPackage ./crystal2nix.nix { };
 }
