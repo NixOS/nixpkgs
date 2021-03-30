@@ -4473,6 +4473,10 @@ in
 
   fprintd = callPackage ../tools/security/fprintd { };
 
+  fprintd-tod = callPackage ../tools/security/fprintd {
+    libfprint = libfprint-tod;
+  };
+
   ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
@@ -15236,6 +15240,10 @@ in
   };
 
   libfprint = callPackage ../development/libraries/libfprint { };
+
+  libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
+
+  libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
 
   libfpx = callPackage ../development/libraries/libfpx { };
 
