@@ -5460,6 +5460,8 @@ in
 
   infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
 
+  innernet = callPackage ../tools/networking/innernet { };
+
   innoextract = callPackage ../tools/archivers/innoextract { };
 
   input-utils = callPackage ../os-specific/linux/input-utils { };
