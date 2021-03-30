@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
 
-  buildInputs = [blas lapack libunwind utf8proc]
-                ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
+  buildInputs = [ blas lapack libunwind utf8proc ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
 
-  nativeBuildInputs = [cmake curl gfortran m4 makeWrapper patchelf perl python3 which];
+  nativeBuildInputs = [ cmake curl gfortran m4 makeWrapper patchelf perl python3 which ];
 
   makeFlags =
     let
