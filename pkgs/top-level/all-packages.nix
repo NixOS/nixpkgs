@@ -1372,6 +1372,8 @@ in
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
+  gmni = callPackage ../applications/networking/browsers/gmni { };
+
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
   gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
