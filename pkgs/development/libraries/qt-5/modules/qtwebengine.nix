@@ -17,6 +17,7 @@
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
 , ffmpeg_3 ? null
 , lib, stdenv, fetchpatch
+, version ? null
 , qtCompatVersion
 }:
 
@@ -230,6 +231,9 @@ qtModule {
     [Paths]
     Prefix = ..
     EOF
+  '' + lib.optionalString (lib.versions.majorMinor qtCompatVersion == "5.15") ''
+    # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
+    sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
 
   meta = with lib; {
