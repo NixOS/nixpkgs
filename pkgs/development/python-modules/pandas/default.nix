@@ -110,6 +110,12 @@ buildPythonPackage rec {
     "test_clipboard"
   ];
 
+  disabledTestPaths = [
+    # some test in this file either crashes python or hangs for hours
+    "tests/io/pytables/test_pytables_missing.py"
+    "tests/io/pytables/test_store.py"
+  ];
+
   # Tests have relative paths, and need to reference compiled C extensions
   # so change directory where `import .test` is able to be resolved
   preCheck = ''
