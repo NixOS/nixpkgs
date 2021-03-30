@@ -78,8 +78,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake ninja pkg-config qttools
-  ]
-  ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     util-linux
   ];
 
