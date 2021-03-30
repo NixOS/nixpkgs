@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
+    ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 
     # GLib contains many binaries used for different purposes;
