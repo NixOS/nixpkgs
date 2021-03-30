@@ -126,6 +126,10 @@ in {
       sed -i -re 's!(let +prefix_path += +).*( +in)!\1"'"$out/"'"\2!' src/main.ml
     '';
   };
+  haxe_4_0 = generic {
+    version = "4.0.5";
+    sha256 = "0f534pchdx0m057ixnk07ab4s518ica958pvpd0vfjsrxg5yjkqa";
+  };
   haxe_4_1 = generic {
     version = "4.1.5";
     sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
