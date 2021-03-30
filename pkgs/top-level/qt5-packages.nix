@@ -122,6 +122,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
     inherit (pkgs.darwin.apple_sdk.frameworks) AGL;
   };
 
+  libqofono = callPackage ../development/libraries/libqofono { };
+
   libqtav = callPackage ../development/libraries/libqtav { };
 
   kpmcore = callPackage ../development/libraries/kpmcore { };
