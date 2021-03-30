@@ -1611,9 +1611,6 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  # Overly strict version bounds: https://github.com/Profpatsch/yarn-lock/issues/8
-  yarn-lock = doJailbreak super.yarn-lock;
-
   # Dependency to regex-tdfa-text can be removed for later regex-tdfa versions.
   # Fix protolude compilation error by applying patch from pull-request.
   # Override can be removed for the next release > 0.8.0.
