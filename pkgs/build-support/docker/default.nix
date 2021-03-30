@@ -692,15 +692,24 @@ rec {
     } ''
     mkdir image inputs
     # Extract images
+    repos=()
+    manifests=()
     for item in $images; do
-      mkdir inputs/$(basename $item)
-      tar -I pigz -xf $item -C inputs/$(basename $item)
+      name=$(basename $item)
+      mkdir inputs/$name
+      tar -I pigz -xf $item -C inputs/$name
+      if [ -f inputs/$name/repositories ]; then
+        repos+=(inputs/$name/repositories)
+      fi
+      if [ -f inputs/$name/manifest.json ]; then
+        manifests+=(inputs/$name/manifest.json)
+      fi
     done
     # Copy all layers from input images to output image directory
     cp -R --no-clobber inputs/*/* image/
     # Merge repositories objects and manifests
-    jq -s add inputs/*/repositories > repositories
-    jq -s add inputs/*/manifest.json > manifest.json
+    jq -s add "''${repos[@]}" > repositories
+    jq -s add "''${manifests[@]}" > manifest.json
     # Replace output image repositories and manifest with merged versions
     mv repositories image/repositories
     mv manifest.json image/manifest.json
