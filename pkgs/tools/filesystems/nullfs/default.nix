@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Virtual black hole file system that behaves like /dev/null";
     longDescription = ''
+      configuration.nix:
+      {
+        boot.extraModulePackages = [ pkgs.nullfs ];
+      }
+
       usage:
       modprobe nullfs
       mkdir /tmp/nullfs
