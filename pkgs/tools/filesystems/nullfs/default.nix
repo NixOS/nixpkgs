@@ -19,11 +19,13 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildPhase = ''
+  preBuild = ''
     # workaround for 'permission denied' with M="$src"
     mkdir "$out"
     cp -r "$src" "$out/build"
     chmod +w "$out/build"
+  '';
+  buildPhase = ''
     make -C "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" M="$out/build" modules
   '';
   installPhase = ''
