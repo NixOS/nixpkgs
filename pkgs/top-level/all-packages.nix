@@ -30006,6 +30006,8 @@ in
     callPackage ../applications/networking/cluster/terraform-providers {}
   );
 
+  terraforming = callPackage ../applications/networking/cluster/terraforming { };
+
   terraform-compliance = python3Packages.callPackage ../applications/networking/cluster/terraform-compliance {};
 
   terraform-docs = callPackage ../applications/networking/cluster/terraform-docs {};
