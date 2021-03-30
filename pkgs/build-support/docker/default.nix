@@ -682,27 +682,26 @@ rec {
     in
     result;
 
-  # Merge the tarballs of two images built with buildImage into a single
-  # tarball that contains both images. Running `docker load` on the resulting
-  # tarball with load both images into the docker daemon.
-  mergeImages = a: b: runCommand "merge-docker-images"
+  # Merge the tarballs of images built with buildImage into a single
+  # tarball that contains all images. Running `docker load` on the resulting
+  # tarball will load the images into the docker daemon.
+  mergeImages = images: runCommand "merge-docker-images"
     {
+      inherit images;
       nativeBuildInputs = [ pigz jq ];
     } ''
-    mkdir a b image
+    mkdir image inputs
     # Extract images
-    tar -I pigz -xf ${a} -C a
-    tar -I pigz -xf ${b} -C b
-    # Make writable (to enable mv)
-    chmod -R +w a b
-    # Merge repositories objects (image:tag -> hash)
-    jq -s add a/repositories b/repositories > repositories
-    # Merge docker images manifests ([image])
-    jq -s add a/manifest.json b/manifest.json > manifest.json
-    # Move layers to output directory
-    mv --no-clobber a/* image/
-    mv --no-clobber b/* image/
-    # Move merged repositories object and manifest list to output directory
+    for item in $images; do
+      mkdir inputs/$(basename $item)
+      tar -I pigz -xf $item -C inputs/$(basename $item)
+    done
+    # Copy all layers from input images to output image directory
+    cp -R --no-clobber inputs/*/* image/
+    # Merge repositories objects and manifests
+    jq -s add inputs/*/repositories > repositories
+    jq -s add inputs/*/manifest.json > manifest.json
+    # Replace output image repositories and manifest with merged versions
     mv repositories image/repositories
     mv manifest.json image/manifest.json
     # Create tarball and gzip
