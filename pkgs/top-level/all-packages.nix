@@ -1374,6 +1374,8 @@ in
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
+  gmnisrv = callPackage ../servers/gemini/gmnisrv { };
+
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
   gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
