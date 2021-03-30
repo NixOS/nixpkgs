@@ -1,0 +1,11 @@
+diff --git a/freestanding/Makefile b/freestanding/Makefile
+index 74fcb59..f732082 100644
+--- a/freestanding/Makefile
++++ b/freestanding/Makefile
+@@ -1,4 +1,6 @@
++ifneq (, $(shell command -v opam))
+ PKG_CONFIG_PATH := $(shell opam config var prefix)/lib/pkgconfig
++endif
+ 
+ EXISTS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --exists ocaml-freestanding; echo $$?)
+ 
