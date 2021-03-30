@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "input-fonts";
-  version = "2019-11-25"; # date of the download and checksum
+  version = "2021-03-30"; # date of the download and checksum
 
   src = requireFile {
     name = "Input-Font.zip";
-    url = "https://input.fontbureau.com/download/";
-    sha256 = "10rax2a7vzidcs7kyfg5lv5bwp9i7kvjpdcsd10p0517syijkp3b";
+    url = "https://input.djr.com/download/";
+    sha256 = "0g7b0iwbbfcmmp4pqq9cgw50p3k12kqqaq1fnqlxg30mx9xjj5wn";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "15sdhqqqd4jgk80fw7ncx49avi9cxbdgyrvnrfya0066x4q4r6lv";
+  outputHash = "jKljb+EaQd6CXzdXa3iJEeMHk7n6pDJ/aDlIOLmnSSk=";
 
   meta = with lib; {
     description = "Fonts for Code, from Font Bureau";
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       generous spacing, large punctuation, and easily distinguishable
       characters — but without the limitations of a fixed width.
     '';
-    homepage = "https://input.fontbureau.com";
+    homepage = "https://input.djr.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ romildo ];
     platforms = platforms.all;
