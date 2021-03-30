@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     odir=$out/share/StevenBlack-hosts
     mkdir -p $odir
-    cp {.,$odir}/hosts
+    cp ./hosts $odir/hosts
   '';
 
   meta = with lib;{
