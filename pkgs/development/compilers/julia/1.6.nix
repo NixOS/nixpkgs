@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ blas lapack libunwind utf8proc ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
+    ++ optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
 
   nativeBuildInputs = [ cmake curl gfortran m4 makeWrapper patchelf perl python3 which ];
 
@@ -156,8 +156,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raskin rob garrison ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     broken = stdenv.isi686;
   };
