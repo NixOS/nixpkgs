@@ -6,6 +6,7 @@ with lib; mkCoqDerivation {
   repo = "Coq-Equations";
   inherit version;
   defaultVersion = switch coq.coq-version [
+    { case = "8.13"; out = "1.2.4+coq8.13"; }
     { case = "8.12"; out = "1.2.3+coq8.12"; }
     { case = "8.11"; out = "1.2.3+coq8.11"; }
     { case = "8.10"; out = "1.2.1+coq8.10-2"; }
@@ -36,6 +37,8 @@ with lib; mkCoqDerivation {
     release."1.2.3+coq8.12".version   = "1.2.3";
     release."1.2.3+coq8.12".rev       = "v1.2.3-8.12";
     release."1.2.3+coq8.12".sha256    = "1y0jkvzyz5ssv5vby41p1i8zs7nsdc8g3pzyq73ih9jz8h252643";
+    release."1.2.4+coq8.13".rev       = "v1.2.4-8.13";
+    release."1.2.4+coq8.13".sha256    = "0j3syp3fzb9n8xg3jadgryzcaaf6vi1n320fv7naadyzb2hn42al";
 
   mlPlugin = true;
   preBuild = "coq_makefile -f _CoqProject -o Makefile";
