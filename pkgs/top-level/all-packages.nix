@@ -26515,6 +26515,8 @@ in
 
   xcape = callPackage ../tools/X11/xcape { };
 
+  xcat = callPackage ../tools/security/xcat { };
+
   xchainkeys = callPackage ../tools/X11/xchainkeys { };
 
   xchm = callPackage ../applications/misc/xchm { };
