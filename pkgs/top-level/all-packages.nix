@@ -14083,7 +14083,7 @@ in
 
   fstrm = callPackage ../development/libraries/fstrm { };
 
-  cfitsio = callPackage ../development/libraries/cfitsio { };
+  cfitsio = callPackage ../development/libraries/science/astronomy/cfitsio { };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
@@ -14781,9 +14781,9 @@ in
   indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
 
-  indilib = callPackage ../development/libraries/indilib { };
-  indi-3rdparty = callPackage ../development/libraries/indilib/indi-3rdparty.nix { };
-  indi-full = callPackage ../development/libraries/indilib/indi-full.nix { };
+  indilib = callPackage ../development/libraries/science/astronomy/indilib { };
+  indi-3rdparty = callPackage ../development/libraries/science/astronomy/indilib/indi-3rdparty.nix { };
+  indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
 
   inih = callPackage ../development/libraries/inih { };
 
@@ -15742,7 +15742,7 @@ in
 
   libnih = callPackage ../development/libraries/libnih { };
 
-  libnova = callPackage ../development/libraries/libnova { };
+  libnova = callPackage ../development/libraries/science/astronomy/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
 
@@ -17617,7 +17617,7 @@ in
 
   waylandpp = callPackage ../development/libraries/waylandpp { };
 
-  wcslib = callPackage ../development/libraries/wcslib { };
+  wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
@@ -29045,7 +29045,7 @@ in
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
-  stellarsolver = libsForQt5.callPackage ../development/libraries/stellarsolver { };
+  stellarsolver = libsForQt5.callPackage ../development/libraries/science/astronomy/stellarsolver { };
 
   astrolabe-generator = callPackage ../applications/science/astronomy/astrolabe-generator { };
 
