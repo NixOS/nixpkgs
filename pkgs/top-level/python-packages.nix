@@ -9002,6 +9002,8 @@ in {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
+  yaswfp = callPackage ../development/python-modules/yaswfp { };
+
   yattag = callPackage ../development/python-modules/yattag { };
 
   ydiff = callPackage ../development/python-modules/ydiff { };
