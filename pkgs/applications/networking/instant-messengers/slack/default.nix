@@ -26,6 +26,7 @@
 , libuuid
 , libxcb
 , libxkbcommon
+, libxshmfence
 , mesa
 , nspr
 , nss
@@ -117,6 +118,7 @@ let
       xorg.libXi
       xorg.libXrandr
       xorg.libXrender
+      xorg.libxshmfence
       xorg.libXtst
       xorg.libxkbfile
     ] + ":${stdenv.cc.cc.lib}/lib64";
