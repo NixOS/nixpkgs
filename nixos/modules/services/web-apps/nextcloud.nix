@@ -6,6 +6,8 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
+  jsonFormat = pkgs.formats.json {};
+
   phpPackage = pkgs.php74.buildEnv {
     extensions = { enabled, all }:
       (with all;
@@ -369,7 +371,7 @@ in {
     };
 
     extraOptions = mkOption {
-      type = with types; attrsOf anything;
+      type = jsonFormat.type;
       default = {};
       description = ''
         Extra options which should be appended to nextcloud's config.php file.
@@ -390,7 +392,8 @@ in {
       default = null;
       description = ''
         Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
-        form as the `extraOptions` option), for example '{"redis":{"password":"secret","timeout"=2}}'.
+        form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
+        '{"redis":{"password":"secret","timeout"=2}}'.
       '';
     };
   };
