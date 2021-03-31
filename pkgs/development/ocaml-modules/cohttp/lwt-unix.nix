@@ -1,19 +1,26 @@
 { lib, buildDunePackage, cohttp-lwt
-, conduit-lwt-unix, ppx_sexp_conv
-, cmdliner, fmt, magic-mime
+, conduit-lwt-unix, conduit-lwt, ppx_sexp_conv
+, cmdliner, fmt, logs, magic-mime
+, ounit
+, cacert
 }:
-
-if !lib.versionAtLeast cohttp-lwt.version "0.99"
-then cohttp-lwt
-else
 
 buildDunePackage {
   pname = "cohttp-lwt-unix";
-  inherit (cohttp-lwt) version src meta;
+  inherit (cohttp-lwt) version src;
 
   useDune2 = true;
 
   buildInputs = [ cmdliner ppx_sexp_conv ];
 
-  propagatedBuildInputs = [ cohttp-lwt conduit-lwt-unix fmt magic-mime ];
+  propagatedBuildInputs = [
+    cohttp-lwt conduit-lwt conduit-lwt-unix fmt logs magic-mime
+  ];
+
+  doCheck = true;
+  checkInputs = [ ounit cacert ];
+
+  meta = cohttp-lwt.meta // {
+    description = "CoHTTP implementation for Unix and Windows using Lwt";
+  };
 }
