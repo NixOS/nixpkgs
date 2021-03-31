@@ -275,6 +275,8 @@ in
 
   creddump = callPackage ../tools/security/creddump {};
 
+  credslayer = callPackage ../tools/security/credslayer { };
+
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
 
   devour = callPackage ../tools/X11/devour {};
