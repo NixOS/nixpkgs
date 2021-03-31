@@ -25656,6 +25656,8 @@ in
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
+  svkbd = callPackage ../applications/accessibility/svkbd { };
+
   swaglyrics = callPackage ../tools/misc/swaglyrics { };
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
