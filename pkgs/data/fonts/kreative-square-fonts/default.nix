@@ -3,6 +3,7 @@
 let
   pname = "kreative-square-fonts";
   version = "unstable-2021-01-29";
+in
 fetchFromGitHub {
   name = "${pname}-${version}";
 
