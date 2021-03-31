@@ -19848,6 +19848,8 @@ in
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
+    isgx = callPackage ../os-specific/linux/isgx { };
+
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
