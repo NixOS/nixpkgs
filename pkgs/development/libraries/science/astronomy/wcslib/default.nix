@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wcslib";
-  version = "7.3.1";
-
-  buildInputs = [ flex ];
+  version = "7.5";
 
   src = fetchurl {
     url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${pname}-${version}.tar.bz2";
-    sha256 ="0p0bp3jll9v2094a8908vk82m7j7qkjqzkngm1r9qj1v6l6j5z6c";
+    sha256 = "1536gmcpm6pckn9xrb6j8s4pm1vryjhzvhfaj9wx3jwxcpbdy0dw";
   };
+
+  buildInputs = [ flex ];
 
   prePatch = ''
     substituteInPlace GNUmakefile --replace 2775 0775
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.atnf.csiro.au/people/mcalabre/WCS/";
-    description = "World Coordinate System Library for Astronomy";
+    description = "World Coordinate System library for astronomy";
     longDescription = ''
       Library for world coordinate systems for spherical geometries
       and their conversion to image coordinate systems. This is the
