@@ -7485,6 +7485,12 @@
     githubId = 627831;
     name = "Hoang Xuan Phu";
   };
+  piegames = {
+    name = "piegames";
+    email = "nix@piegames.de";
+    github = "piegamesde";
+    githubId = 14054505;
+  };
   pierrechevalier83 = {
     email = "pierrechevalier83@gmail.com";
     github = "pierrechevalier83";
