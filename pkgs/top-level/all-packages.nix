@@ -2728,6 +2728,8 @@ in
 
   monsoon = callPackage ../tools/security/monsoon {};
 
+  moodle-dl = callPackage ../tools/networking/moodle-dl { };
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
   };
