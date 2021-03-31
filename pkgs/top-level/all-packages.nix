@@ -10408,6 +10408,7 @@ in
 
   gleam = callPackage ../development/compilers/gleam {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin) libiconv;
   };
 
   gtk-server = callPackage ../development/interpreters/gtk-server {};
