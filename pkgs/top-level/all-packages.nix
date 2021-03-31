@@ -259,6 +259,16 @@ in
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
 
+  protoc-gen-go = callPackage ../development/tools/protoc-gen-go { };
+
+  protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
+
+  protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
+
+  protoc-gen-twirp_swagger = callPackage ../development/tools/protoc-gen-twirp_swagger { };
+
+  protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
+
   ptags = callPackage ../development/tools/misc/ptags { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
