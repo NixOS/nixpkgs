@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash
+, systemtap, bash, libbpf
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -10,9 +10,11 @@ python.pkgs.buildPythonApplication rec {
 
   disabled = !stdenv.isLinux;
 
-  src = fetchurl {
-    url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "sha256-TEH8Gmp+8ghLQ8UsGy5hBCMLqfMeApWEFr8THYSOdOQ=";
+  src = fetchFromGitHub {
+    owner = "iovisor";
+    repo = "bcc";
+    rev = "v${version}";
+    sha256 = "sha256:0k807vzznlb2icczw64ph6q28605kvghya2kd4h3c7jmap6gq1qg";
   };
   format = "other";
 
@@ -20,6 +22,7 @@ python.pkgs.buildPythonApplication rec {
     llvm clang-unwrapped kernel
     elfutils luajit netperf iperf
     systemtap.stapBuild flex bash
+    libbpf
   ];
 
   patches = [
@@ -38,6 +41,7 @@ python.pkgs.buildPythonApplication rec {
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
+    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
   postPatch = ''
