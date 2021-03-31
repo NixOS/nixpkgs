@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rbsec";
     repo = "sslscan";
-    rev = "${version}";
+    rev = version;
     sha256 = "0594svwz4pya0syibar0ahmi5zdjbwd5kg6hrlhfpmmslrsyli6m";
   };
 
