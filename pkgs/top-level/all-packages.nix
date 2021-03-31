@@ -21920,6 +21920,8 @@ in
 
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
+  calibre-web = callPackage ../servers/calibre-web { };
+
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     # Must use the same Qt version as Calligra itself:
     poppler = libsForQt5.poppler_0_61;
