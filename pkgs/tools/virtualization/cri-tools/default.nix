@@ -22,16 +22,20 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
+    runHook preBuild
     make binaries VERSION=${version}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     make install BINDIR=$out/bin
 
     for shell in bash fish zsh; do
       $out/bin/crictl completion $shell > crictl.$shell
       installShellCompletion crictl.$shell
     done
+    runHook postInstall
   '';
 
   meta = with lib; {
