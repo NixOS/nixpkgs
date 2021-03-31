@@ -1,7 +1,10 @@
 { lib, fetchFromGitHub }:
 
-fetchFromGitHub {
+let
   pname = "kreative-square-fonts";
+  version = "unstable-2021-01-29";
+fetchFromGitHub {
+  name = "${pname}-${version}";
 
   owner = "kreativekorp";
   repo = "open-relay";
