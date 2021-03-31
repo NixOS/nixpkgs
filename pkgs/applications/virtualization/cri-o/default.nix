@@ -41,10 +41,13 @@ buildGoModule rec {
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
+    runHook preBuild
     make binaries docs BUILDTAGS="$BUILDTAGS"
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/* -t $out/bin
 
     for shell in bash fish zsh; do
@@ -52,6 +55,7 @@ buildGoModule rec {
     done
 
     installManPage docs/*.[1-9]
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) cri-o; };

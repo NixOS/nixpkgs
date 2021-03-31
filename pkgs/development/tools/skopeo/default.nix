@@ -35,17 +35,22 @@ buildGoModule rec {
   ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
     make bin/skopeo docs
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/skopeo -t $out/bin
     installManPage docs/*.[1-9]
     installShellCompletion --bash completions/bash/skopeo
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
+  '' + ''
+    runHook postInstall
   '';
 
   meta = with lib; {

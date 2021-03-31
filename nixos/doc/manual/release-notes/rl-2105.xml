@@ -636,6 +636,15 @@ environment.systemPackages = [
      </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <option>environment.defaultPackages</option> now includes the nano package.
+     If <package>pkgs.nano</package> is not added to the list,
+     make sure another editor is installed and the <literal>EDITOR</literal>
+     environment variable is set to it.
+     Environment variables can be set using <option>environment.variables</option>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
