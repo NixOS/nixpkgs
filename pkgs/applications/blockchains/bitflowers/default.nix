@@ -2,6 +2,10 @@
 , stdenv
 , qmake
 , fetchFromGitHub
+, leveldb
+, binutils-unwrapped
+, boost
+, db
 , wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +24,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     qmake
     wrapQtAppsHook
+    boost
+    binutils-unwrapped
   ];
 
-  # buildInputs = [
-  # ];
+  buildInputs = [
+    leveldb
+    db
+    boost
+  ];
+
+  buildPhase = ''
+    patchShebangs share/genbuild.sh
+    make clean
+    make
+  '';
+
   meta = with lib; {
     homepage = "https://bit-flowers.com/";
     longDescription = ''
