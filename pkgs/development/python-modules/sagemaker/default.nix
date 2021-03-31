@@ -10,6 +10,7 @@
 , protobuf3-to-dict
 , smdebug-rulesconfig
 , pandas
+, packaging
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     google-pasta
     importlib-metadata
     numpy
+    packaging
     protobuf
     protobuf3-to-dict
     smdebug-rulesconfig
