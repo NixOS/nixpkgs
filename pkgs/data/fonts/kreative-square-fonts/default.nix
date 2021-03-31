@@ -2,8 +2,6 @@
 
 fetchFromGitHub {
   pname = "kreative-square-fonts";
-  # Upstream does not provide a version.
-  version = "unstable-2021-01-29";
 
   owner = "kreativekorp";
   repo = "open-relay";
