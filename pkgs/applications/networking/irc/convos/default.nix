@@ -6,13 +6,13 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "6.06";
+  version = "6.11";
 
   src = fetchFromGitHub {
     owner = "convos-chat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b3c8hj9cjmpzy9k949vdv1y3v7b94nh0mq15rcv3ax0sj3gd0qr";
+    sha256 = "19nzm7f3glvj34nj9pvnp0h9xx6baq58c11ddkqfmq7w3sci49hi";
   };
 
   nativeBuildInputs = [ makeWrapper ]
