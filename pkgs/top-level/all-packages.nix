@@ -23702,6 +23702,10 @@ in
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
+  kuttl = callPackage ../applications/networking/cluster/kuttl {
+    buildGoModule = buildGo115Module;
+  };
+
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor { };
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
