@@ -1496,6 +1496,8 @@ in
 
   pebble = callPackage ../tools/admin/pebble { };
 
+  play-with-mpv = callPackage ../tools/video/play-with-mpv { };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   skhd = callPackage ../os-specific/darwin/skhd {
@@ -17781,6 +17783,8 @@ in
 
   zlib = callPackage ../development/libraries/zlib { };
 
+  zlib-ng = callPackage ../development/libraries/zlib-ng { };
+
   libdynd = callPackage ../development/libraries/libdynd { };
 
   zlog = callPackage ../development/libraries/zlog { };
@@ -18534,6 +18538,8 @@ in
     gperf = gperf_3_0;
   };
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
+
+  pomerium = callPackage ../servers/http/pomerium { };
 
   postgrey = callPackage ../servers/mail/postgrey { };
 
@@ -19889,7 +19895,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_5_4;
+  linuxPackages = linuxPackages_5_10;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -23363,6 +23369,8 @@ in
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
+
+  i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
 
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
 
@@ -28623,6 +28631,8 @@ in
   coq2html = callPackage ../applications/science/logic/coq2html { };
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
+
+  crypto-org-wallet = callPackage ../applications/blockchains/crypto-org-wallet.nix { };
 
   caprice32 = callPackage ../misc/emulators/caprice32 { };
 
