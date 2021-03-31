@@ -7,8 +7,9 @@
 #### Overview
 
 Several versions of the Python interpreter are available on Nix, as well as a
-high amount of packages. The attribute `python` refers to the default
-interpreter, which is currently CPython 2.7. It is also possible to refer to
+high amount of packages. The attribute `python3` refers to the default
+interpreter, which is currently CPython 3.8. The attribute `python` refers to
+CPython 2.7 for backwards-compatibility. It is also possible to refer to
 specific versions, e.g. `python38` refers to CPython 3.8, and `pypy` refers to
 the default PyPy interpreter.
 
@@ -762,10 +763,10 @@ and in this case the `python38` interpreter is automatically used.
 Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
 respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
-`python38`. The default interpreter, `python`, maps to `python2`. The PyPy
-interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
-`pypy3`, with aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`.
-The Nix expressions for the interpreters can be found in
+`python39`. The attribute `python` maps to `python2`. The PyPy interpreters
+compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
+aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`. The Nix
+expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
 
 All packages depending on any Python interpreter get appended
@@ -787,6 +788,23 @@ Each interpreter has the following attributes:
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, e.g. `python3.8`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
+
+### Optimizations
+
+The Python interpreters are by default not build with optimizations enabled, because
+the builds are in that case not reproducible. To enable optimizations, override the
+interpreter of interest, e.g using
+
+```
+let
+  pkgs = import ./. {};
+  mypython = pkgs.python3.override {
+    enableOptimizations = true;
+    reproducibleBuild = false;
+    self = mypython;
+  };
+in mypython
+```
 
 ### Building packages and applications
 

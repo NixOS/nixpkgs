@@ -21,10 +21,12 @@ buildPythonPackage rec {
     sed -i "s/'setuptools-markdown'//g" setup.py
   '';
 
+  buildInputs = [ pytest ];
+
   # requires pandoc < 2.0
   # buildInputs = [ setuptools-markdown ];
   checkInputs =  [ mock ];
-  propagatedBuildInputs = [ ansible pytest ];
+  propagatedBuildInputs = [ ansible ];
 
   # tests not included with release, even on github
   doCheck = false;

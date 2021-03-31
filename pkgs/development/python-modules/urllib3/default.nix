@@ -1,11 +1,11 @@
 { lib
 , brotli
 , buildPythonPackage
-, certifi
 , cryptography
 , dateutil
 , fetchPypi
 , idna
+, isPy27
 , mock
 , pyopenssl
 , pysocks
@@ -20,7 +20,6 @@
 buildPythonPackage rec {
   pname = "urllib3";
   version = "1.26.3";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,11 +28,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     brotli
-    certifi
+    pysocks
+  ] ++ lib.optionals isPy27 [
     cryptography
     idna
     pyopenssl
-    pysocks
   ];
 
   checkInputs = [

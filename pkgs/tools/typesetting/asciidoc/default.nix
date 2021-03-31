@@ -136,6 +136,7 @@ let
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odt-backend-0.1.zip";
     sha256 = "1zaa97h9sx6ncxcdkl1x3ggydi7f8kjgvrnpjnkjiizi45k350kw";
   };
+
   odpBackendSrc = fetchurl {
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odp-backend-0.1.zip";
     sha256 = "08ya4bskygzqkfqwjllpg31qc5k08xp2k78z9b2480g8y57bfy10";
@@ -159,7 +160,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3 unzip autoreconfHook ];
 
   # install filters early, so their shebangs are patched too
-  patchPhase = with lib; ''
+  postPatch = with lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
   '' + optionalString _enableDitaaFilter ''

@@ -69,6 +69,12 @@
    </listitem>
    <listitem>
     <para>
+     Python optimizations were disabled again. Builds with optimizations enabled
+     are not reproducible. Optimizations can now be enabled with an option.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <link xlink:href="https://kodi.tv/">Kodi</link> has been updated to version 19.0 "Matrix". See
      the <link xlink:href="https://kodi.tv/article/kodi-190-matrix-release">announcement</link> for
      further details.
@@ -577,6 +583,11 @@ self: super:
    <listitem>
     <para>
      <xref linkend="opt-services.xserver.videoDrivers" /> no longer uses the deprecated <literal>cirrus</literal> and <literal>vesa</literal> device dependent X drivers by default. It also enables both <literal>amdgpu</literal> and <literal>nouveau</literal> drivers by default now.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>kindlegen</literal> package is gone, because it is no longer supported or hosted by Amazon. Sadly, its replacement, Kindle Previewer, has no Linux support. However, there are other ways to generate MOBI files. See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/96439">the discussion</link> for more info.
     </para>
    </listitem>
    <listitem>
