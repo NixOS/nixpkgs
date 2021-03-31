@@ -6396,6 +6396,8 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
+  pytenable = callPackage ../development/python-modules/pytenable { };
+
   pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
@@ -6638,6 +6640,8 @@ in {
   python-bidi = callPackage ../development/python-modules/python-bidi { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
+
+  python-box = callPackage ../development/python-modules/python-box { };
 
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
@@ -7212,6 +7216,8 @@ in {
 
   requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
 
+  requests-pkcs12 = callPackage ../development/python-modules/requests-pkcs12 { };
+
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
@@ -7225,6 +7231,8 @@ in {
   responses = callPackage ../development/python-modules/responses { };
 
   respx = callPackage ../development/python-modules/respx { };
+
+  restfly = callPackage ../development/python-modules/restfly { };
 
   restrictedpython = callPackage ../development/python-modules/restrictedpython { };
 
