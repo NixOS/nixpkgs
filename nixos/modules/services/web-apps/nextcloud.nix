@@ -520,10 +520,10 @@ in {
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
             ];
 
-            $EXTRACONFIG = json_decode('${builtins.toJSON cfg.extraOptions}', true);
+            $EXTRACONFIG = json_decode(file_get_contents("${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}"), true);
 
-            array_push($CONFIG, $EXTRACONFIG);
-            ${optionalString (cfg.secretFile != null) "array_push($CONFIG, nix_read_secrets());"}
+            $CONFIG = array_merge($CONFIG, $EXTRACONFIG);
+            ${optionalString (cfg.secretFile != null) "$CONFIG = array_merge($CONFIG, nix_read_secrets());"}
           '';
           occInstallCmd = let
             dbpass = if c.dbpassFile != null
