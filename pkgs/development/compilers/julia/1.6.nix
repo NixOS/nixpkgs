@@ -19,7 +19,6 @@ let
   majorVersion = "1";
   minorVersion = "6";
   maintenanceVersion = "0";
-  src_sha256 = "14qhd0vp2y9c6126niz37vkz3n7skd6h565fai3khhd0li63vka6";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    sha256 = src_sha256;
+    sha256 = "14qhd0vp2y9c6126niz37vkz3n7skd6h565fai3khhd0li63vka6";
   };
 
   patches = [
