@@ -17,6 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ result ];
   checkInputs = [ alcotest cohttp-lwt-unix ];
   # test dependencies are only available for >= 4.08
+  # https://github.com/mirage/ca-certs/issues/16
   doCheck = lib.versionAtLeast ocaml.version "4.08"
     # Some test fails in macOS sandbox
     # > Fatal error: exception Unix.Unix_error(Unix.EPERM, "bind", "")
