@@ -26242,6 +26242,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  wapiti = callPackage ../tools/security/wapiti { };
+
   way-cooler = throw ("way-cooler is abandoned by its author: " +
     "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html");
 
