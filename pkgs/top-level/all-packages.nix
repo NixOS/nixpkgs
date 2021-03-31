@@ -8364,12 +8364,7 @@ in
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
-  sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl_1_0_2.override {
-      enableSSL2 = true;
-      enableSSL3 = true;
-    };
-  };
+  sslscan = callPackage ../tools/security/sslscan { };
 
   sslmate = callPackage ../development/tools/sslmate { };
 
@@ -12872,7 +12867,7 @@ in
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
 
-  go-md2man = callPackage ../development/tools/misc/md2man {};
+  go-md2man = callPackage ../development/tools/misc/go-md2man {};
 
   mage = callPackage ../development/tools/build-managers/mage { };
 
