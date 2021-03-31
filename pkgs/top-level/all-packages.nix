@@ -28055,10 +28055,49 @@ in
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
-  inherit (callPackage ../desktops/gnome-3/extensions { })
-    gnomeExtensions
-    gnome36Extensions
-    gnome38Extensions;
+  gnomeExtensions = recurseIntoAttrs {
+    appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
+    arcmenu = callPackage ../desktops/gnome-3/extensions/arcmenu { };
+    caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
+    clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
+    clock-override = callPackage ../desktops/gnome-3/extensions/clock-override { };
+    dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
+    dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
+    draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
+    drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
+    dynamic-panel-transparency = callPackage ../desktops/gnome-3/extensions/dynamic-panel-transparency { };
+    easyScreenCast = callPackage ../desktops/gnome-3/extensions/EasyScreenCast { };
+    emoji-selector = callPackage ../desktops/gnome-3/extensions/emoji-selector { };
+    freon = callPackage ../desktops/gnome-3/extensions/freon { };
+    fuzzy-app-search = callPackage ../desktops/gnome-3/extensions/fuzzy-app-search { };
+    gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
+    icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
+    impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
+    material-shell = callPackage ../desktops/gnome-3/extensions/material-shell { };
+    mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
+    night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
+    no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
+    noannoyance = callPackage ../desktops/gnome-3/extensions/noannoyance { };
+    paperwm = callPackage ../desktops/gnome-3/extensions/paperwm { };
+    pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
+    remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
+    sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
+    system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor { };
+    taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
+    tilingnome = callPackage ../desktops/gnome-3/extensions/tilingnome { };
+    timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
+    topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
+    unite = callPackage ../desktops/gnome-3/extensions/unite { };
+    window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
+    window-is-ready-remover = callPackage ../desktops/gnome-3/extensions/window-is-ready-remover { };
+    workspace-matrix = callPackage ../desktops/gnome-3/extensions/workspace-matrix { };
+
+    nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
+    mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
+  } // lib.optionalAttrs (config.allowAliases or false) {
+    unite-shell = gnomeExtensions.unite; # added 2021-01-19
+    arc-menu = gnomeExtensions.arcmenu; # added 2021-02-14
+  };
 
   gnome-connections = callPackage ../desktops/gnome-3/apps/gnome-connections { };
 
