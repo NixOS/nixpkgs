@@ -1,10 +1,10 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "go-md2man";
   version = "2.0.0";
 
-  goPackagePath = "github.com/cpuguy83/go-md2man";
+  vendorSha256 = null;
 
   src = fetchFromGitHub {
     rev = "v${version}";
