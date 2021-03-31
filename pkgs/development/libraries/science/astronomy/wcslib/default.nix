@@ -1,8 +1,8 @@
-{ fetchurl,  lib, stdenv, flex }:
+{ lib, stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
-  version = "7.3.1";
   pname = "wcslib";
+  version = "7.3.1";
 
   buildInputs = [ flex ];
 
@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "World Coordinate System Library for Astronomy";
+  meta = with lib; {
     homepage = "https://www.atnf.csiro.au/people/mcalabre/WCS/";
-
-    longDescription = ''Library for world coordinate systems for
-    spherical geometries and their conversion to image coordinate
-    systems. This is the standard library for this purpose in
-    astronomy.'';
-
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.unix;
+    description = "World Coordinate System Library for Astronomy";
+    longDescription = ''
+      Library for world coordinate systems for spherical geometries
+      and their conversion to image coordinate systems. This is the
+      standard library for this purpose in astronomy.
+    '';
+    maintainers = with maintainers; [ hjones2199 ];
+    license = licenses.lgpl3Plus;
+    platforms = platforms.unix;
   };
 }
