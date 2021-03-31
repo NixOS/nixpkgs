@@ -10884,10 +10884,10 @@ let
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "4.14";
+    version = "4.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-4.14.tar.gz";
-      sha256 = "16zaaw7p94nz7yclz30b9xph0riy5ailqg5rjkvi1yps2hr9ba7z";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-4.16.tar.gz";
+      sha256 = "0mhdczx2pxzi4lrrzkxl2a3r0s2b79ffsrar6g2l01idfpri6gi2";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
