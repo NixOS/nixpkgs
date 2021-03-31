@@ -8956,6 +8956,8 @@ in {
 
   xnd = callPackage ../development/python-modules/xnd { };
 
+  xpath-expressions = callPackage ../development/python-modules/xpath-expressions { };
+
   xpybutil = callPackage ../development/python-modules/xpybutil { };
 
   xstatic-bootbox = callPackage ../development/python-modules/xstatic-bootbox { };
