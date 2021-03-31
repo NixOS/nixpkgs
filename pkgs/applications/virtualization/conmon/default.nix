@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "bin/conmon" ];
 
   installPhase = ''
+    runHook preInstall
     install -D bin/conmon -t $out/bin
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) cri-o podman; };
