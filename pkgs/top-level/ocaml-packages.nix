@@ -82,6 +82,8 @@ let
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
 
+    ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
+
     carton = callPackage ../development/ocaml-modules/carton { };
 
     carton-git = callPackage ../development/ocaml-modules/carton/git.nix { };
