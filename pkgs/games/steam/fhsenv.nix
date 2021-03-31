@@ -106,6 +106,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
     libdrm
+    libxkbcommon # paradox launcher
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
@@ -205,7 +206,6 @@ in buildFHSUserEnv rec {
     libidn
     tbb
     wayland
-    libxkbcommon
 
     # Other things from runtime
     flac
