@@ -6,7 +6,7 @@ let
     p.setuptools
     p.pyaml
     p.pykeepass
-    p.filemagic
+    p.magic
     p.cryptography
     p.secretstorage
   ]);
