@@ -2656,6 +2656,8 @@ in
 
   numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
 
+  num-utils = callPackage ../tools/text/num-utils { };
+
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
   ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
