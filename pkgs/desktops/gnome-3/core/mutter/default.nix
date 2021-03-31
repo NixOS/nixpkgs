@@ -71,6 +71,9 @@ let self = stdenv.mkDerivation rec {
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
+    # We are not running tests and building them causes non-deterministic build failure:
+    # https://gitlab.gnome.org/GNOME/mutter/-/issues/1682
+    "-Dtests=false"
   ];
 
   propagatedBuildInputs = [
