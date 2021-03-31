@@ -36,7 +36,8 @@ in stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
     wrapProgram $out/lib/password-store/extensions/import.bash \
       --prefix PATH : "${pythonEnv}/bin" \
-      --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
+      --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}" \
+      --run "export PREFIX"
   '';
 
   meta = with lib; {
