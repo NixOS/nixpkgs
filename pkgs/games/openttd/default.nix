@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, pkg-config, which, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
+{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
 , writeScriptBin, makeWrapper, runtimeShell
@@ -29,14 +29,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "1.10.3";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    sha256 = "0fxmfz1mm95a2x0rnzfff9wb8q57w0cvsdd0z7agdcbyakph25n1";
+    sha256 = "sha256-XmUYTgc2i6Gvpi27PjWrrubE2mcw/0vJ60RH1TNjx6g=";
   };
 
-  nativeBuildInputs = [ pkg-config which makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ SDL2 libpng xz zlib freetype fontconfig libxdg_basedir ]
     ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
@@ -46,11 +46,7 @@ stdenv.mkDerivation rec {
     "--without-liblzo2"
   ];
 
-  makeFlags = [ "INSTALL_PERSONAL_DIR=" ];
-
   postInstall = ''
-    mv $out/games/ $out/bin
-
     ${lib.optionalString withOpenGFX ''
       cp ${opengfx}/* $out/share/games/openttd/baseset
     ''}
