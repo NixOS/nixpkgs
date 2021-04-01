@@ -207,6 +207,18 @@ let
     meta.homepage = "https://github.com/alexherbo2/sleuth.kak/";
   };
 
+  smarttab-kak = buildKakounePluginFrom2Nix {
+    pname = "smarttab-kak";
+    version = "2021-02-24";
+    src = fetchFromGitHub {
+      owner = "andreyorst";
+      repo = "smarttab.kak";
+      rev = "1dd3f33c4f65da5c13aee5d44b2e77399595830f";
+      sha256 = "0g49k47ggppng95nwanv2rqmcfsjsgy3z1764wrl5b49h9wifhg2";
+    };
+    meta.homepage = "https://github.com/andreyorst/smarttab.kak/";
+  };
+
   tabs-kak = buildKakounePluginFrom2Nix {
     pname = "tabs-kak";
     version = "2021-02-16";
