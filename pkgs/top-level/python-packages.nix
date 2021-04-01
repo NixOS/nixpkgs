@@ -390,6 +390,8 @@ in {
 
   ansible = callPackage ../development/python-modules/ansible { };
 
+  ansible_2_9 = callPackage ../development/python-modules/ansible/2.9.nix { };
+
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
   ansible-lint = callPackage ../development/python-modules/ansible-lint { };

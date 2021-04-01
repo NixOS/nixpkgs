@@ -18,9 +18,9 @@ rec {
     };
   }));
 
-  ansible_2_9 = python3Packages.toPythonApplication python3Packages.ansible;
+  ansible_2_9 = python3Packages.toPythonApplication python3Packages.ansible_2_9;
 
-  ansible_2_8 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
+  ansible_2_8 = python3Packages.toPythonApplication (python3Packages.ansible_2_9.overridePythonAttrs (old: rec {
     pname = "ansible";
     version = "2.8.14";
 
