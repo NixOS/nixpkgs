@@ -28,5 +28,6 @@ occivink/kakoune-find
 occivink/kakoune-gdb
 occivink/kakoune-phantom-selection
 occivink/kakoune-snippets
+occivink/kakoune-sudo-write
 occivink/kakoune-vertical-selection
 ul/kak-tree

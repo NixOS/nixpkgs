@@ -220,6 +220,18 @@ let
     meta.homepage = "https://github.com/occivink/kakoune-snippets/";
   };
 
+  kakoune-sudo-write = buildKakounePluginFrom2Nix {
+    pname = "kakoune-sudo-write";
+    version = "2020-07-07";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-sudo-write";
+      rev = "abe6bd6d6e111957d7e84e790e682955b8b319c6";
+      sha256 = "05b6hxsqvh3kmi7f139rihx0i9fn2j5fjz7yzy1g4flm8lb0h129";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-sudo-write/";
+  };
+
   kakoune-surround = buildKakounePluginFrom2Nix {
     pname = "kakoune-surround";
     version = "2018-09-17";
