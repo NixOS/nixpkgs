@@ -6,4 +6,5 @@ buildEnv {
     indilib
   ]
   ++ extraDrivers;
+  inherit (indilib) meta;
 }

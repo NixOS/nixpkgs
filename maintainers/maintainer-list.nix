@@ -2349,6 +2349,12 @@
     githubId = 15774340;
     name = "Thomas Depierre";
   };
+  diegolelis = {
+    email = "diego.o.lelis@gmail.com";
+    github = "diegolelis";
+    githubId = 8404455;
+    name = "Diego Lelis";
+  };
   dipinhora = {
     email = "dipinhora+github@gmail.com";
     github = "dipinhora";
@@ -7478,6 +7484,12 @@
     github = "phunehehe";
     githubId = 627831;
     name = "Hoang Xuan Phu";
+  };
+  piegames = {
+    name = "piegames";
+    email = "nix@piegames.de";
+    github = "piegamesde";
+    githubId = 14054505;
   };
   pierrechevalier83 = {
     email = "pierrechevalier83@gmail.com";

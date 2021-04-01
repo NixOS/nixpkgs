@@ -49,6 +49,7 @@ in
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
   cage = handleTest ./cage.nix {};
   cagebreak = handleTest ./cagebreak.nix {};
+  calibre-web = handleTest ./calibre-web.nix {};
   cassandra_2_1 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_1; };
   cassandra_2_2 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_2; };
   cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
@@ -226,6 +227,7 @@ in
   mariadb-galera-mariabackup = handleTest ./mysql/mariadb-galera-mariabackup.nix {};
   mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
   matomo = handleTest ./matomo.nix {};
+  matrix-appservice-irc = handleTest ./matrix-appservice-irc.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
