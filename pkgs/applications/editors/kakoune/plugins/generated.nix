@@ -147,6 +147,18 @@ let
     meta.homepage = "https://github.com/Delapouite/kakoune-registers/";
   };
 
+  kakoune-snippets = buildKakounePluginFrom2Nix {
+    pname = "kakoune-snippets";
+    version = "2019-07-02";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-snippets";
+      rev = "94931c20fa009e2a1cb2f115d8885c257582851c";
+      sha256 = "1ia2c2zpid691h2r703d3q4pyshl2l63xniw93s7s50kabcldibc";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-snippets/";
+  };
+
   kakoune-surround = buildKakounePluginFrom2Nix {
     pname = "kakoune-surround";
     version = "2018-09-17";
