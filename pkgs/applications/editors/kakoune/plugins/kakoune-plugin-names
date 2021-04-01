@@ -11,6 +11,7 @@ Delapouite/kakoune-buffers
 Delapouite/kakoune-colors
 Delapouite/kakoune-palette
 Delapouite/kakoune-registers
+Delapouite/kakoune-text-objects
 enricozb/tabs.kak@main
 greenfork/active-window.kak
 gustavo-hms/luar
