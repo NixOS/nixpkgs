@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://roy.marples.name/git/dhcpcd/patch/?id=114870290a8d3d696bc4049c32eef3eed03d6070";
-      sha256 = "sha256-h1gg1QDi0pL0Qj+ld8Rb2trbsFmBI3XPxfX+/T5d0nA=";
+      name = "?id=114870290a8d3d696bc4049c32eef3eed03d6070";
+      url = "https://roy.marples.name/git/dhcpcd/commitdiff_plain/114870290a8d3d696bc4049c32eef3eed03d6070";
+      sha256 = "0kzpwjh2gzvl5lvlnw6lis610p67nassk3apns68ga2pyxlky8qb";
     })
   ];
 
