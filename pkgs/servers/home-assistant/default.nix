@@ -176,6 +176,7 @@ in with py.pkgs; buildPythonApplication rec {
   # services. Before adding new components to this list make sure we have all
   # its dependencies packaged and listed in ./component-packages.nix.
   componentTests = [
+    "accuweather"
     "alert"
     "api"
     "auth"
