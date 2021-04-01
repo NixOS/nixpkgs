@@ -12,6 +12,7 @@
 , jmespath
 , dopy
 , ncclient
+, installShellFiles
 , windowsSupport ? false
 , pywinrm
 }:
@@ -27,31 +28,31 @@ buildPythonPackage rec {
     sha256 = "0c794k0cyl54807sh9in0l942ah6g6wlz5kf3qvy5lhd581zlgyb";
   };
 
-  prePatch = ''
+  postPatch = ''
     # ansible-connection is wrapped, so make sure it's not passed
     # through the python interpreter.
     sed -i "s/\[python, /[/" lib/ansible/executor/task_executor.py
   '';
 
-  postInstall = ''
-    for m in docs/man/man1/*; do
-      install -vD $m -t $out/share/man/man1
-    done
-  '';
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [
     pycrypto paramiko jinja2 pyyaml httplib2
     six netaddr dnspython jmespath dopy ncclient
   ] ++ lib.optional windowsSupport pywinrm;
 
-  # dificult to test
+  # difficult to test
   doCheck = false;
 
+  postInstall = ''
+    installManPage docs/man/man*/*
+  '';
+
   meta = with lib; {
-    homepage = "http://www.ansible.com";
+    homepage = "https://www.ansible.com";
     description = "Radically simple IT automation";
-    license = [ licenses.gpl3 ] ;
+    license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ joamaki costrouc hexa ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
