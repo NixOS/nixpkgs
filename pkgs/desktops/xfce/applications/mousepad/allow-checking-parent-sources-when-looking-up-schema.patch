@@ -1,0 +1,25 @@
+From 3b06d6129033ddaa8dc455a6a572077fd63a3816 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Mon, 1 Mar 2021 17:03:07 -0300
+Subject: [PATCH] Allow checking parent sources when looking up schema
+
+---
+ mousepad/mousepad-settings-store.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mousepad/mousepad-settings-store.c b/mousepad/mousepad-settings-store.c
+index e5a848b..de989bd 100644
+--- a/mousepad/mousepad-settings-store.c
++++ b/mousepad/mousepad-settings-store.c
+@@ -181,7 +181,7 @@ mousepad_settings_store_add_settings (MousepadSettingsStore *self,
+   const gchar      *prefix;
+ 
+   /* loop through keys in schema and store mapping of their setting name to GSettings */
+-  schema = g_settings_schema_source_lookup (source, schema_id, FALSE);
++  schema = g_settings_schema_source_lookup (source, schema_id, TRUE);
+   keys = g_settings_schema_list_keys (schema);
+   prefix = schema_id + MOUSEPAD_ID_LEN + 1;
+   for (key = keys; key && *key; key++)
+-- 
+2.30.0
+

@@ -1,30 +1,30 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, python2, bash, vala_0_46
+{ lib, stdenv, pkg-config, fetchFromGitHub, python3, bash, vala_0_48
 , dockbarx, gtk2, xfce, pythonPackages, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-dockbarx-plugin";
   version = "${ver}-${rev}";
-  ver = "0.5";
-  rev = "a2dcb66";
+  ver = "0.6";
+  rev = "5213876";
 
   src = fetchFromGitHub {
-    owner = "TiZ-EX1";
+    owner = "xuzhen";
     repo = "xfce4-dockbarx-plugin";
     rev = rev;
-    sha256 = "1f75iwlshnif60x0qqdqw5ffng2m4f4zp0ijkrbjz83wm73nsxfx";
+    sha256 = "0s8bljn4ga2hj480j0jwkc0npp8szbmirmcsys791gk32iq4dasn";
   };
 
   pythonPath = [ dockbarx ];
 
   nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ python2 vala_0_46 gtk2 pythonPackages.wrapPython ]
+  buildInputs = [ python3 vala_0_48 gtk2 pythonPackages.wrapPython ]
     ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
     ++ pythonPath;
 
   postPatch = ''
     substituteInPlace wscript           --replace /usr/share/            "\''${PREFIX}/share/"
     substituteInPlace src/dockbarx.vala --replace /usr/share/            $out/share/
-    substituteInPlace src/dockbarx.vala --replace '/usr/bin/env python2' ${bash}/bin/bash
+    substituteInPlace src/dockbarx.vala --replace '/usr/bin/env python3' ${bash}/bin/bash
   '';
 
   postFixup = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/TiZ-EX1/xfce4-dockbarx-plugin";
+    homepage = "https://github.com/xuzhen/xfce4-dockbarx-plugin";
     description = "A plugins to embed DockbarX into xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;

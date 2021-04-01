@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.xfce.org/";
     description = "Themes for Xfce";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.volth ];
   };
