@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "libc++abi";
   inherit version;
 
-  src = fetch "libcxxabi" "1vdc6zld5rlbrbpxf0fxs0m6k1cabpi82ksiwgj1pmhx8l140n0q";
+  src = fetch "libcxxabi" "02qp6ndagq7n48p53z93d1rrx0v0v4rsahd4vkv5frid0vm4ah9h";
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
