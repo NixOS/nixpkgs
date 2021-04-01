@@ -323,6 +323,7 @@ in with py.pkgs; buildPythonApplication rec {
     "upnp"
     "uptime"
     "vacuum"
+    "verisure"
     "weather"
     "webhook"
     "websocket_api"
