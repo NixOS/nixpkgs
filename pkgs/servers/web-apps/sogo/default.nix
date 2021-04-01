@@ -2,13 +2,13 @@
 , openssl_1_1, openldap, sope, libmemcached, curl, libsodium, libzip, pkg-config }:
 with lib; gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.0.1";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    sha256 = "145hdlwnqds5zmpxbh4yainsbv5vy99ji93d6pl7xkbqwncfi80i";
+    sha256 = "085fzbc1f8bbffahz1mxgb0ggxm6if5bz50waagnvf04nfwnw6wh";
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
