@@ -533,7 +533,7 @@ let
       KVM_VFIO                          = yes;
       KSM = yes;
       VIRT_DRIVERS = yes;
-      # We nneed 64 GB (PAE) support for Xen guest support
+      # We need 64 GB (PAE) support for Xen guest support
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
