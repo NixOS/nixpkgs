@@ -975,6 +975,7 @@ mapAliases ({
     plasma-vault
     plasma-workspace plasma-workspace-wallpapers
     polkit-kde-agent powerdevil
+    qqc2-breeze-style
     sddm-kcm systemsettings
     xdg-desktop-portal-kde
   ;
