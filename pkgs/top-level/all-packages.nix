@@ -21038,6 +21038,8 @@ in
 
   koreader = callPackage ../applications/misc/koreader {};
 
+  kreative-square-fonts = callPackage ../data/fonts/kreative-square-fonts { };
+
   lato = callPackage ../data/fonts/lato {};
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
