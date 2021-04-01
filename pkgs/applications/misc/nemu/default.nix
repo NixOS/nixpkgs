@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     ncurses
     qemu
     sqlite
-  ] ++ (lib.optional withNetworkMap graphviz)
-    ++ (lib.optional withDbus dbus);
+  ] ++ lib.optional withNetworkMap graphviz
+    ++ lib.optional withDbus dbus;
 
   cmakeFlags = lib.optional debugBuild "-DNM_DEBUG=ON"
     ++ lib.optional ovfSupport "-DNM_WITH_OVF_SUPPORT=ON"
