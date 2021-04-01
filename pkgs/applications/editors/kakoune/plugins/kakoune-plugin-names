@@ -23,6 +23,7 @@ kakounedotcom/prelude.kak
 listentolist/kakoune-rainbow
 mayjs/openscad.kak
 occivink/kakoune-buffer-switcher
+occivink/kakoune-find
 occivink/kakoune-gdb
 occivink/kakoune-phantom-selection
 occivink/kakoune-snippets

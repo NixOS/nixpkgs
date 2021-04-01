@@ -124,6 +124,18 @@ let
     meta.homepage = "https://github.com/kakoune-editor/kakoune-extra-filetypes/";
   };
 
+  kakoune-find = buildKakounePluginFrom2Nix {
+    pname = "kakoune-find";
+    version = "2021-03-30";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-find";
+      rev = "cd6efb6da4ab7460ff8d87e27a4bf134b4632244";
+      sha256 = "0y0bz65wmv9yswp63367w3fziy5k9ckzxy1m9bm1vn523a8ipc1f";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-find/";
+  };
+
   kakoune-gdb = buildKakounePluginFrom2Nix {
     pname = "kakoune-gdb";
     version = "2021-03-03";
