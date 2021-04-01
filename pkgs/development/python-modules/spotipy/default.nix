@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.16.1";
+  version = "2.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f50xczv8kgly6wz6zrvqzwdj6nvhdlgx8wnrhmbipjrb6qacr25";
+    sha256 = "sha256-KcYMi5naHEufDXIhabwx5iS4wH1xhrjq3ZwC6NLULL8=";
   };
 
   propagatedBuildInputs = [ requests six ];
