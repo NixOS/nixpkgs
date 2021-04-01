@@ -7539,7 +7539,6 @@ broken-packages:
   - latex-svg-image
   - latex-svg-pandoc
   - LATS
-  - lattices
   - launchdarkly-server-sdk
   - launchpad-control
   - lawless-concurrent-machines
