@@ -35,7 +35,7 @@
 , scipy
 , shiboken2
 , soqt
-, spaceNavSupport ? true
+, spaceNavSupport ? false
 , swig
 , vtk
 , wrapQtAppsHook
