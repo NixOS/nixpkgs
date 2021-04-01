@@ -1,13 +1,13 @@
 { buildGoModule, lib, fetchFromGitHub, installShellFiles }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "6.3.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "99designs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bmqmT/gkdgczrDfZdI+FySX5CuesJXWKS0JatzaubIw=";
+    sha256 = "sha256-yNmjoCq9fYzt/lZQlVgxQvxKWCh5Lxd4NSX7c+gE/As=";
   };
 
   vendorSha256 = "sha256-Lb5iiuT/Fd3RMt98AafIi9I0FHJaSpJ8pH7r4yZiiiw=";
