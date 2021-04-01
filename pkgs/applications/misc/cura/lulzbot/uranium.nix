@@ -1,5 +1,5 @@
-{ lib, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
-, pyqt5, numpy, scipy, shapely, libarcusLulzbot, doxygen, gettext, pythonOlder }:
+{ lib, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python36, cmake
+, pyqt5, numpy, scipy_1_4, shapely, libarcusLulzbot, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage {
   version = "3.6.21";
@@ -15,8 +15,8 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.5.0";
 
-  buildInputs = [ python gettext ];
-  propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcusLulzbot ];
+  buildInputs = [ python36 gettext ];
+  propagatedBuildInputs = [ pyqt5 numpy scipy_1_4 shapely libarcusLulzbot ];
   nativeBuildInputs = [ cmake doxygen ];
 
   postPatch = ''

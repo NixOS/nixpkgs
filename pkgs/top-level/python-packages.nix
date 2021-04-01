@@ -4716,7 +4716,7 @@ in {
 
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
-  numpy = if pythonOlder "3.5" then
+  numpy = if pythonOlder "3.7" then
     callPackage ../development/python-modules/numpy/1.16.nix { }
   else
     callPackage ../development/python-modules/numpy { };

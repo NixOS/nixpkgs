@@ -1,4 +1,4 @@
-{ lib, mkDerivation, wrapQtAppsHook, callPackage, fetchgit, cmake, jq, python3, qtbase, qtquickcontrols2 }:
+{ lib, mkDerivation, wrapQtAppsHook, callPackage, fetchgit, cmake, jq, python36, qtbase, qtquickcontrols2 }:
 
 let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
@@ -10,19 +10,19 @@ let
   };
 
   libarcusLulzbot = callPackage ./libarcus.nix {
-    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
+    inherit (python36.pkgs) buildPythonPackage sip pythonOlder;
   };
   libsavitarLulzbot = callPackage ./libsavitar.nix {
-    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
+    inherit (python36.pkgs) buildPythonPackage sip pythonOlder;
   };
 
-  inherit (python3.pkgs) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+  inherit (python36.pkgs) buildPythonPackage pyqt5 numpy scipy_1_4 shapely pythonOlder;
   curaengine = callPackage ./curaengine.nix {
     inherit libarcusLulzbot;
   };
   uraniumLulzbot = callPackage ./uranium.nix {
     inherit callPackage libarcusLulzbot;
-    inherit (python3.pkgs) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+    inherit (python36.pkgs) buildPythonPackage pyqt5 numpy scipy_1_4 shapely pythonOlder;
   };
 in
 mkDerivation rec {
@@ -37,8 +37,8 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtquickcontrols2 ];
   # numpy-stl temporarily disabled due to https://code.alephobjects.com/T8415
-  propagatedBuildInputs = with python3.pkgs; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
-  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
+  propagatedBuildInputs = with python36.pkgs; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
+  nativeBuildInputs = [ cmake python36.pkgs.wrapPython ];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${uraniumLulzbot.src}"
