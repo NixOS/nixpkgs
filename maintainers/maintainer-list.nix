@@ -10392,6 +10392,12 @@
     githubId = 1322287;
     name = "William O'Hanley";
   };
+  woky = {
+    email = "pampu.andrei@pm.me";
+    github = "andreisergiu98";
+    githubId = 11740700;
+    name = "Andrei Pampu";
+  };
   wolfangaukang = {
     email = "liquid.query960@4wrd.cc";
     github = "wolfangaukang";
