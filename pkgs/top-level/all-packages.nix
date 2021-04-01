@@ -4670,6 +4670,17 @@ in
     humanfriendly;
   };
 
+  git-annex-remote-googledrive = callPackage ../applications/version-management/git-and-tools/git-annex-remote-googledrive {
+    inherit (python3Packages)
+    buildPythonApplication
+    fetchPypi
+    annexremote
+    drivelib
+    GitPython
+    tenacity
+    humanfriendly;
+  };
+
   git-annex-remote-rclone = callPackage ../applications/version-management/git-and-tools/git-annex-remote-rclone { };
 
   git-annex-utils = callPackage ../applications/version-management/git-and-tools/git-annex-utils { };
