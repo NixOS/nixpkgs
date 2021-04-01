@@ -4,9 +4,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-power-manager";
-  version = "1.6.6";
+  version = "4.16.0";
 
-  sha256 = "0lyp3dp4ijbpf21vanrvgm6rmfp8v0zyqxibdj5gxnadmvcq38iy";
+  sha256 = "1rfw07xbv83rfb0mz3ayanlcvnaq7xpl2znsyya0hspysvavwks2";
 
   nativeBuildInputs = [ automakeAddFlags exo ];
   buildInputs = [ gtk3 libnotify libxfce4ui libxfce4util upower xfconf ];

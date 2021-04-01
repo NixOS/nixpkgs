@@ -5,7 +5,6 @@
 , pcre
 , libxfce4util
 , xfce4-panel
-, xfconf
 }:
 
 mkXfceDerivation {

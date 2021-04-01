@@ -1,15 +1,11 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , intltool
-, libxfce4util
 , xfce4-panel
 , libxfce4ui
 , xfconf
-, gtk2
-, libunique
 , xfce
 }:
 
@@ -30,15 +26,10 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libxfce4util
     libxfce4ui
     xfce4-panel
     xfconf
-    gtk2
-    libunique
   ];
-
-  hardeningDisable = [ "format" ];
 
   passthru.updateScript = xfce.updateScript {
     inherit pname version;

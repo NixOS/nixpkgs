@@ -3,10 +3,9 @@
 , fetchurl
 , pkg-config
 , intltool
-, libxfce4util
 , xfce4-panel
 , libxfce4ui
-, gtk3
+, xfconf
 , xfce
 }:
 
@@ -14,11 +13,11 @@ let
   category = "panel-plugins";
 in stdenv.mkDerivation rec {
   pname  = "xfce4-systemload-plugin";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "BTG435I8ujvo0GTLi2OLlU33SRXlpEciiZlReEd4mDU=";
+    sha256 = "0lknh5l30qs5c69wwjcblbyhczvdbxs59fqkb8mpqbfm05w01lan";
   };
 
   nativeBuildInputs = [
@@ -27,10 +26,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libxfce4util
     libxfce4ui
     xfce4-panel
-    gtk3
+    xfconf
   ];
 
   passthru.updateScript = xfce.updateScript {
