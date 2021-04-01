@@ -1002,11 +1002,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXres = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libXres-1.2.0";
+    name = "libXres-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXres-1.2.0.tar.bz2";
-      sha256 = "1m0jr0lbz9ixpp9ihk68349q0i7ry2379lnfzdy4mrl86ijc2xgz";
+      url = "mirror://xorg/individual/lib/libXres-1.2.1.tar.bz2";
+      sha256 = "049b7dk6hx47161hg47ryjrm6pwsp27r5pby05b0wqb1pcggprmn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
