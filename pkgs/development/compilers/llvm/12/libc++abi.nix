@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, fetch, libcxx, libunwind, llvm, version
+{ lib, stdenv, cmake, python3, fetch, libcxx, libunwind, llvm, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   src = fetch "libcxxabi" "1vdc6zld5rlbrbpxf0fxs0m6k1cabpi82ksiwgj1pmhx8l140n0q";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python3 ];
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
@@ -20,8 +20,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
-
-  patches = [ ./libcxxabi-no-threads.patch ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
