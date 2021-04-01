@@ -15,14 +15,7 @@ stdenv.mkDerivation {
     mv llvm-* llvm
   '';
 
-  patches = [
-    (fetchpatch {
-      # Backported from LLVM 12, avoids clashes with commonly used "block.h" header.
-      url = "https://github.com/llvm/llvm-project/commit/19bc9ea480b60b607a3e303f20c7a3a2ea553369.patch";
-      sha256 = "sha256-aWa66ogmPkG0xHzSfcpD0qZyZQcNKwLV44js4eiun78=";
-      stripLen = 1;
-    })
-  ] ++ lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
+  patches = lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
