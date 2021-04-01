@@ -9573,8 +9573,6 @@ in
   zinnia = callPackage ../tools/inputmethods/zinnia { };
   tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
 
-  zimreader = callPackage ../tools/text/zimreader { };
-
   zimwriterfs = callPackage ../tools/text/zimwriterfs { };
 
   par = callPackage ../tools/text/par { };
@@ -21182,6 +21180,8 @@ in
 
   mustache-go = callPackage ../development/tools/mustache-go { };
 
+  mustache-hpp = callPackage ../development/libraries/mustache-hpp { };
+
   myrica = callPackage ../data/fonts/myrica { };
 
   nafees = callPackage ../data/fonts/nafees { };
@@ -23747,7 +23747,7 @@ in
     ffmpeg = ffmpeg_2;
   };
 
-  kiwix = callPackage ../applications/misc/kiwix { };
+  kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
