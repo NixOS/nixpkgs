@@ -652,6 +652,62 @@ in {
         description = "Extra configuration to merge into shell-config.yml";
       };
 
+      puma.workers = mkOption {
+        type = types.int;
+        default = 2;
+        apply = x: builtins.toString x;
+        description = ''
+          The number of worker processes Puma should spawn. This
+          controls the amount of parallel Ruby code can be
+          executed. GitLab recommends <quote>Number of CPU cores -
+          1</quote>, but at least two.
+
+          <note>
+            <para>
+              Each worker consumes quite a bit of memory, so
+              be careful when increasing this.
+            </para>
+          </note>
+        '';
+      };
+
+      puma.threadsMin = mkOption {
+        type = types.int;
+        default = 0;
+        apply = x: builtins.toString x;
+        description = ''
+          The minimum number of threads Puma should use per
+          worker.
+
+          <note>
+            <para>
+              Each thread consumes memory and contributes to Global VM
+              Lock contention, so be careful when increasing this.
+            </para>
+          </note>
+        '';
+      };
+
+      puma.threadsMax = mkOption {
+        type = types.int;
+        default = 4;
+        apply = x: builtins.toString x;
+        description = ''
+          The maximum number of threads Puma should use per
+          worker. This limits how many threads Puma will automatically
+          spawn in response to requests. In contrast to workers,
+          threads will never be able to run Ruby code in parallel, but
+          give higher IO parallelism.
+
+          <note>
+            <para>
+              Each thread consumes memory and contributes to Global VM
+              Lock contention, so be careful when increasing this.
+            </para>
+          </note>
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
@@ -1145,7 +1201,13 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/puma -C ${cfg.statePath}/config/puma.rb -e production";
+        ExecStart = concatStringsSep " " [
+          "${cfg.packages.gitlab.rubyEnv}/bin/puma"
+          "-e production"
+          "-C ${cfg.statePath}/config/puma.rb"
+          "-w ${cfg.puma.workers}"
+          "-t ${cfg.puma.threadsMin}:${cfg.puma.threadsMax}"
+        ];
       };
 
     };
