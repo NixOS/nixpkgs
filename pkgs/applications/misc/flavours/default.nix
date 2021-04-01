@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flavours";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Misterio77";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nys1sh4qwda1ql6aq07bhyvhjp5zf0qm98kr4kf2fmr87ddc12q";
+    sha256 = "sha256-rDy859jg+F8XC4sJogIgdn1FoT8cf7S+KORt+7kboAc=";
   };
 
-  cargoSha256 = "0bmmxiv8bd09kgxmhmynslfscsx2aml1m1glvid3inaipylcq45h";
+  cargoSha256 = "sha256-cAXiAPhHdxdd8pFQ0Gq7eHO2p/Dam53gDbE583UYY/k=";
 
   meta = with lib; {
     description = "An easy to use base16 scheme manager/builder that integrates with any workflow";

@@ -24,10 +24,11 @@ let
     preInstall ? "",
     postInstall ? "",
     path ? lib.getName pluginName,
-    dependencies ? [],
     ...
   }:
-    addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
+    if lib.hasAttr "dependencies" a then
+      throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
+    else addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
       pname = namePrefix + pluginName;
 
       inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
@@ -44,8 +45,6 @@ let
 
         runHook postInstall
       '';
-
-      dependencies = [ pkgs.bash ] ++ dependencies;
     }));
 
 in rec {
@@ -73,7 +72,6 @@ in rec {
       rev = "26eb5ffce0b559d682b9f98c8d4b6c370ecb639b";
       sha256 = "1glwa89bv2r92qz579a49prk3jf612cpd5hw46j4wfb35xhnj3ab";
     };
-    dependencies = [ resurrect ];
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
       description = "continous saving of tmux environment";
@@ -156,7 +154,15 @@ in rec {
       sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
       fetchSubmodules = true;
     };
-    dependencies = [ pkgs.gawk ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
+      wrapProgram $target/scripts/$f \
+        --prefix PATH : ${with pkgs; lib.makeBinPath (
+          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
+        )}
+      done
+    '';
   };
 
   fpp = mkTmuxPlugin {
@@ -171,7 +177,6 @@ in rec {
     postInstall = ''
       sed -i -e 's|fpp |${pkgs.fpp}/bin/fpp |g' $target/fpp.tmux
     '';
-    dependencies = [ pkgs.fpp ];
   };
 
   fzf-tmux-url = mkTmuxPlugin {
@@ -211,8 +216,6 @@ in rec {
     postInstall = ''
       sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
     '';
-    dependencies = [ pkgs.ruby ];
-
     meta = with lib; {
       homepage = "https://github.com/schasse/tmux-jump";
       description = "Vimium/Easymotion like navigation for tmux";
@@ -477,7 +480,7 @@ in rec {
       find $target -type f -print0 | xargs -0 sed -i -e 's|sed |${pkgs.gnused}/bin/sed |g'
       find $target -type f -print0 | xargs -0 sed -i -e 's|tput |${pkgs.ncurses}/bin/tput |g'
     '';
-     meta = {
+    meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
       description = "Use fzf to manage your tmux work environment! ";
       longDescription =
@@ -510,7 +513,6 @@ in rec {
     postInstall = ''
       sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
     '';
-    dependencies = [ pkgs.urlview ];
   };
 
   vim-tmux-focus-events = mkTmuxPlugin {

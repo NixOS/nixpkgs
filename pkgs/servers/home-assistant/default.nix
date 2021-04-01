@@ -176,6 +176,7 @@ in with py.pkgs; buildPythonApplication rec {
   # services. Before adding new components to this list make sure we have all
   # its dependencies packaged and listed in ./component-packages.nix.
   componentTests = [
+    "accuweather"
     "alert"
     "api"
     "auth"
@@ -200,6 +201,7 @@ in with py.pkgs; buildPythonApplication rec {
     "device_automation"
     "device_sun_light_trigger"
     "device_tracker"
+    "devolo_home_control"
     "dhcp"
     "discovery"
     "emulated_hue"
@@ -226,6 +228,7 @@ in with py.pkgs; buildPythonApplication rec {
     "history_stats"
     "homekit_controller"
     "homeassistant"
+    "homematic"
     "html5"
     "http"
     "hue"
@@ -301,6 +304,7 @@ in with py.pkgs; buildPythonApplication rec {
     "smtp"
     "solaredge"
     "sonos"
+    "spotify"
     "sql"
     "ssdp"
     "stream"

@@ -6917,6 +6917,8 @@ in {
 
   pytricia = callPackage ../development/python-modules/pytricia { };
 
+  pytube = callPackage ../development/python-modules/pytube { };
+
   pytun = callPackage ../development/python-modules/pytun { };
 
   pytz = callPackage ../development/python-modules/pytz { };
@@ -7125,6 +7127,8 @@ in {
   ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   random2 = callPackage ../development/python-modules/random2 { };
+
+  rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
 
   rarfile = callPackage ../development/python-modules/rarfile {
     inherit (pkgs) libarchive;

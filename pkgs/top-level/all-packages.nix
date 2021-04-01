@@ -5766,6 +5766,8 @@ in
 
   knockknock = callPackage ../tools/security/knockknock { };
 
+  knockpy = callPackage ../tools/security/knockpy { };
+
   kore = callPackage ../development/web/kore { };
 
   krakenx = callPackage ../tools/system/krakenx { };
@@ -8323,6 +8325,8 @@ in
   speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
 
   splot = haskell.lib.justStaticExecutables haskellPackages.splot;
+
+  spotdl = callPackage ../tools/audio/spotdl { };
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
@@ -25715,6 +25719,8 @@ in
   };
 
   sunvox = callPackage ../applications/audio/sunvox { };
+
+  svkbd = callPackage ../applications/accessibility/svkbd { };
 
   swaglyrics = callPackage ../tools/misc/swaglyrics { };
 

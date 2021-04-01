@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
-  version = "0.17.0";
+  version = "0.17.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_home_control_api";
     rev = "v${version}";
-    sha256 = "sha256-g82YmlxlBdyNn7KPU+k+J3/P7ABWMMdLXUpXWnCkdpM=";
+    sha256 = "sha256-5PaIZPwikDmT4kmh0Qfg65gBAUYralmO6a22GtzoB7A=";
   };
 
   propagatedBuildInputs = [
