@@ -243,6 +243,18 @@ let
     meta.homepage = "https://github.com/andreyorst/smarttab.kak/";
   };
 
+  snippets-kak = buildKakounePluginFrom2Nix {
+    pname = "snippets-kak";
+    version = "2021-02-23";
+    src = fetchFromGitHub {
+      owner = "alexherbo2";
+      repo = "snippets.kak";
+      rev = "3cde27f99605e6c680f4e60c2779ef3d2b77cadd";
+      sha256 = "0z55v5bvhqgzvn9qcaxlylhigi72y2jpr56zqmbp98rgsy542fps";
+    };
+    meta.homepage = "https://github.com/alexherbo2/snippets.kak/";
+  };
+
   tabs-kak = buildKakounePluginFrom2Nix {
     pname = "tabs-kak";
     version = "2021-02-16";
