@@ -8,7 +8,7 @@
 
 let
   release_version = "12.0.0";
-  candidate = "rc3"; # empty or "rcN"
+  candidate = "rc4"; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
   targetConfig = stdenv.targetPlatform.config;
@@ -18,7 +18,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "1p6ln69iciwwpng226mfvxf3vylfvbz73y0a4y4v2rg7pn7hk671";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1m1qga8m967bzqkxwx9xqkw1lkxi9dhlrn6km2k7g2yqyb6k14ag";
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });

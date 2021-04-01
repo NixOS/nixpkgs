@@ -11,7 +11,7 @@ in
 stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version;
-  src = fetch pname "1n4jf0clwj3q0vfc7xjl0k4dqj69fvgsmib8qdqh45imgamnypvb";
+  src = fetch pname "01dvir3858qkjmqhw2h6jjagq0la0kasnwzqbyv91yixnwx8369z";
 
   nativeBuildInputs = [ cmake python3 llvm ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
