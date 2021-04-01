@@ -1712,6 +1712,14 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
+  # Too strict version bounds on ansi-terminal
+  # This patch will be contained with the next release (current is 0.1.0.0).
+  colourista = appendPatch super.colourista
+    (pkgs.fetchpatch {
+      url = "https://github.com/kowainik/colourista/commit/15ace92105b56eba4ea3717bd55f733afe5be401.patch";
+      sha256 = "sha256-9gJFlyWUkO5sJodDRNuH10I66j8/0ZZIv6nJQkhlA0s=";
+    });
+
   # Too strict version bounds on base16-bytestring and http-link-header.
   # This patch will be merged when next release comes.
   github = appendPatch super.github (pkgs.fetchpatch {
