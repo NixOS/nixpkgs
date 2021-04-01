@@ -2,8 +2,8 @@
 #! nix-shell -i bash -p nodePackages.node2nix
 
 # Download package.json and package-lock.json from the v1.7.0 release
-curl https://raw.githubusercontent.com/matrix-org/matrix-appservice-slack/d589aa2e258213ec5ee61ab1d6205c4fb56d116d/package.json -o package.json
-curl https://raw.githubusercontent.com/matrix-org/matrix-appservice-slack/d589aa2e258213ec5ee61ab1d6205c4fb56d116d/package-lock.json -o package-lock.json
+curl https://raw.githubusercontent.com/matrix-org/matrix-appservice-slack/1.7.0/package.json -o package.json
+curl https://raw.githubusercontent.com/matrix-org/matrix-appservice-slack/1.7.0/package-lock.json -o package-lock.json
 
 node2nix \
   --nodejs-12 \
