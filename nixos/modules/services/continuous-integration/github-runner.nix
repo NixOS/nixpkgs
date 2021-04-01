@@ -112,8 +112,8 @@ in
       description = "GitHub Actions runner";
 
       wantedBy = [ "multi-user.target" ];
-
-      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network.target" "network-online.target" ];
 
       environment = {
         HOME = runtimeDir;
@@ -239,7 +239,7 @@ in
               ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$RUNTIME_DIRECTORY/"
             '';
           in
-          map (x: "${x} ${escapeShellArgs [stateDir runtimeDir logsDir]}") [
+          map (x: "${x} ${escapeShellArgs [ stateDir runtimeDir logsDir ]}") [
             "+${ownConfigTokens}" # runs as root
             unconfigureRunner
             configureRunner
