@@ -12,7 +12,7 @@
 # Configuration
 { lib, stdenv, version
 
-, features ? { grsecurity = false; xen_dom0 = false; }
+, features ? { grsecurity = false; }
 }:
 
 with lib;
@@ -547,13 +547,8 @@ let
       VBOXGUEST = option no;
       DRM_VBOXVIDEO = option no;
 
-    } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
-      XEN = option yes;
-
-      # XXX: why isn't this in the xen-dom0 conditional section below?
-      XEN_DOM0 = option yes;
-
-    } // optionalAttrs features.xen_dom0 {
+      XEN                         = option yes;
+      XEN_DOM0                    = option yes;
       PCI_XEN                     = option yes;
       HVC_XEN                     = option yes;
       HVC_XEN_FRONTEND            = option yes;
@@ -572,7 +567,7 @@ let
       XEN_SELFBALLOONING          = option yes;
       XEN_STUB                    = option yes;
       XEN_TMEM                    = option yes;
-    });
+    };
 
     media = {
       MEDIA_DIGITAL_TV_SUPPORT = yes;
