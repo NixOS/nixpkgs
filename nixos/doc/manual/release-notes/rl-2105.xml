@@ -948,6 +948,11 @@ environment.systemPackages = [
      <link linkend="opt-boot.extraSystemdUnitPaths">boot.extraSystemdUnitPaths</link> list.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PostgreSQL 9.5 is scheduled EOL during the 21.05 life cycle and has been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
