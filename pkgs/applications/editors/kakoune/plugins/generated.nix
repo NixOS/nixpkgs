@@ -123,6 +123,18 @@ let
     meta.homepage = "https://github.com/occivink/kakoune-gdb/";
   };
 
+  kakoune-palette = buildKakounePluginFrom2Nix {
+    pname = "kakoune-palette";
+    version = "2019-09-16";
+    src = fetchFromGitHub {
+      owner = "Delapouite";
+      repo = "kakoune-palette";
+      rev = "052cab5f48578679d94717ed5f62429be9865d5d";
+      sha256 = "1p9mpzx6i816pcw9sala2kvy0ky39kwccxgsf3y3bpw6m8pi6kby";
+    };
+    meta.homepage = "https://github.com/Delapouite/kakoune-palette/";
+  };
+
   kakoune-rainbow = buildKakounePluginFrom2Nix {
     pname = "kakoune-rainbow";
     version = "2020-09-01";
