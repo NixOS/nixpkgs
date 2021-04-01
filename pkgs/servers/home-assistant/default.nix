@@ -226,6 +226,7 @@ in with py.pkgs; buildPythonApplication rec {
     "history_stats"
     "homekit_controller"
     "homeassistant"
+    "homematic"
     "html5"
     "http"
     "hue"
