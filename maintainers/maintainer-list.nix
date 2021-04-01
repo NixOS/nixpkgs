@@ -1969,6 +1969,12 @@
     githubId = 1222362;
     name = "Matías Lang";
   };
+  critbase = {
+    email = "12738442+critbase@users.noreply.github.com";
+    github = "critbase";
+    githubId = 12738442;
+    name = "critbase";
+  };
   CRTified = {
     email = "carl.schneider+nixos@rub.de";
     github = "CRTified";
