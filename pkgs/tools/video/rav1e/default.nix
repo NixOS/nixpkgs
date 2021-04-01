@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c }:
+{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1j92prjyr86wyx58h10xq9c9z28ky86h291x65w7qrxpj658aiz1";
   nativeBuildInputs = [ nasm cargo-c ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postBuild = ''
     cargo cbuild --release --frozen --prefix=${placeholder "out"}
