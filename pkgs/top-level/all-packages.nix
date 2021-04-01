@@ -10894,13 +10894,13 @@ in
     stdenv = gcc7Stdenv;
   }));
 
-  llvmPackages_12 = callPackage ../development/compilers/llvm/12 ({
+  llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_12.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_12.libraries;
   } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
-  });
+  }));
 
   llvmPackages_latest = llvmPackages_11;
 
