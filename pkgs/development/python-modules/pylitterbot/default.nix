@@ -3,28 +3,35 @@
 , buildPythonPackage
 , fetchFromGitHub
 , httpx
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2021.2.5";
+  version = "2021.3.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = pname;
     rev = version;
-    sha256 = "0705bxm0rlpgwg8my7z5pp6y362bs2j53zy1yslha0ya6cgx37g8";
+    sha256 = "sha256-w2iyzCYoma8zQsXGIQnpgijDHNqmlvCnbeyF7PmLz9c=";
   };
 
   propagatedBuildInputs = [
     authlib
     httpx
+    pytz
   ];
 
-  # Project has no tests
-  doCheck = false;
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "pylitterbot" ];
 
   meta = with lib; {

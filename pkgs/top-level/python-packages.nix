@@ -2543,6 +2543,8 @@ in {
 
   fpylll = callPackage ../development/python-modules/fpylll { };
 
+  freebox-api = callPackage ../development/python-modules/freebox-api { };
+
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = if isPy27 then
@@ -8978,6 +8980,8 @@ in {
 
   xnd = callPackage ../development/python-modules/xnd { };
 
+  xpath-expressions = callPackage ../development/python-modules/xpath-expressions { };
+
   xpybutil = callPackage ../development/python-modules/xpybutil { };
 
   xstatic-bootbox = callPackage ../development/python-modules/xstatic-bootbox { };
@@ -9023,6 +9027,8 @@ in {
   yarg = callPackage ../development/python-modules/yarg { };
 
   yarl = callPackage ../development/python-modules/yarl { };
+
+  yaswfp = callPackage ../development/python-modules/yaswfp { };
 
   yattag = callPackage ../development/python-modules/yattag { };
 

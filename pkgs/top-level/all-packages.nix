@@ -259,6 +259,16 @@ in
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
 
+  protoc-gen-go = callPackage ../development/tools/protoc-gen-go { };
+
+  protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
+
+  protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
+
+  protoc-gen-twirp_swagger = callPackage ../development/tools/protoc-gen-twirp_swagger { };
+
+  protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
+
   ptags = callPackage ../development/tools/misc/ptags { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
@@ -2728,6 +2738,8 @@ in
 
   monsoon = callPackage ../tools/security/monsoon {};
 
+  moodle-dl = callPackage ../tools/networking/moodle-dl { };
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
   };
@@ -3869,6 +3881,9 @@ in
   };
 
   drone = callPackage ../development/tools/continuous-integration/drone { };
+  drone-oss = callPackage ../development/tools/continuous-integration/drone {
+    enableUnfree = false;
+  };
 
   drone-cli = callPackage ../development/tools/continuous-integration/drone-cli { };
 
@@ -5920,6 +5935,8 @@ in
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
 
   matrix-synapse-tools = recurseIntoAttrs matrix-synapse.tools;
+
+  matrix-appservice-irc = callPackage ../servers/matrix-synapse/matrix-appservice-irc { };
 
   matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
 
@@ -14083,7 +14100,7 @@ in
 
   fstrm = callPackage ../development/libraries/fstrm { };
 
-  cfitsio = callPackage ../development/libraries/cfitsio { };
+  cfitsio = callPackage ../development/libraries/science/astronomy/cfitsio { };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
@@ -14781,9 +14798,9 @@ in
   indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
 
-  indilib = callPackage ../development/libraries/indilib { };
-  indi-3rdparty = callPackage ../development/libraries/indilib/indi-3rdparty.nix { };
-  indi-full = callPackage ../development/libraries/indilib/indi-full.nix { };
+  indilib = callPackage ../development/libraries/science/astronomy/indilib { };
+  indi-3rdparty = callPackage ../development/libraries/science/astronomy/indilib/indi-3rdparty.nix { };
+  indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
 
   inih = callPackage ../development/libraries/inih { };
 
@@ -15742,7 +15759,7 @@ in
 
   libnih = callPackage ../development/libraries/libnih { };
 
-  libnova = callPackage ../development/libraries/libnova { };
+  libnova = callPackage ../development/libraries/science/astronomy/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
 
@@ -17617,7 +17634,7 @@ in
 
   waylandpp = callPackage ../development/libraries/waylandpp { };
 
-  wcslib = callPackage ../development/libraries/wcslib { };
+  wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
@@ -19846,6 +19863,8 @@ in
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
+    isgx = callPackage ../os-specific/linux/isgx { };
+
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
@@ -21920,6 +21939,8 @@ in
 
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
+  calibre-web = callPackage ../servers/calibre-web { };
+
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     # Must use the same Qt version as Calligra itself:
     poppler = libsForQt5.poppler_0_61;
@@ -23382,6 +23403,8 @@ in
 
   i3-layout-manager = callPackage ../applications/window-managers/i3/layout-manager.nix { };
 
+  i3-ratiosplit =  callPackage ../applications/window-managers/i3/i3-ratiosplit.nix { };
+
   i3-resurrect = python3Packages.callPackage ../applications/window-managers/i3/i3-resurrect.nix { };
 
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
@@ -23754,6 +23777,10 @@ in
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
+
+  kuttl = callPackage ../applications/networking/cluster/kuttl {
+    buildGoModule = buildGo115Module;
+  };
 
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor { };
 
@@ -25641,7 +25668,7 @@ in
     sublime-merge-dev;
 
   inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
-    subversion19 subversion_1_10 subversion;
+    subversion_1_10 subversion;
 
   subversionClient = appendToName "client" (pkgs.subversion.override {
     bdbSupport = false;
@@ -26274,6 +26301,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  wapiti = callPackage ../tools/security/wapiti { };
+
   way-cooler = throw ("way-cooler is abandoned by its author: " +
     "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html");
 
@@ -26546,6 +26575,8 @@ in
   xcalib = callPackage ../tools/X11/xcalib { };
 
   xcape = callPackage ../tools/X11/xcape { };
+
+  xcat = callPackage ../tools/security/xcat { };
 
   xchainkeys = callPackage ../tools/X11/xchainkeys { };
 
@@ -29043,7 +29074,7 @@ in
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
-  stellarsolver = libsForQt5.callPackage ../development/libraries/stellarsolver { };
+  stellarsolver = libsForQt5.callPackage ../development/libraries/science/astronomy/stellarsolver { };
 
   astrolabe-generator = callPackage ../applications/science/astronomy/astrolabe-generator { };
 
