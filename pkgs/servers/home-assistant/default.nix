@@ -200,6 +200,7 @@ in with py.pkgs; buildPythonApplication rec {
     "device_automation"
     "device_sun_light_trigger"
     "device_tracker"
+    "devolo_home_control"
     "dhcp"
     "discovery"
     "emulated_hue"
