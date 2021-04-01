@@ -99,6 +99,18 @@ let
     meta.homepage = "https://github.com/kakoune-editor/kakoune-extra-filetypes/";
   };
 
+  kakoune-gdb = buildKakounePluginFrom2Nix {
+    pname = "kakoune-gdb";
+    version = "2021-03-03";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-gdb";
+      rev = "e24d0eabbd0b6b277385448ff158434d249b9690";
+      sha256 = "17g5bd7yk3d8j6qlbrz1knphjls2s47k6sj2c7a9nyzyiw8821yp";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-gdb/";
+  };
+
   kakoune-rainbow = buildKakounePluginFrom2Nix {
     pname = "kakoune-rainbow";
     version = "2020-09-01";
