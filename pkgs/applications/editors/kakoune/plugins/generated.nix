@@ -268,6 +268,18 @@ let
     meta.homepage = "https://github.com/occivink/kakoune-vertical-selection/";
   };
 
+  kakoune-wiki = buildKakounePluginFrom2Nix {
+    pname = "kakoune-wiki";
+    version = "2020-09-21";
+    src = fetchFromGitHub {
+      owner = "TeddyDD";
+      repo = "kakoune-wiki";
+      rev = "910734f3eeeddb0eb7f608b81704ca353e328704";
+      sha256 = "1j5k69sf1dvjv6d4z1189zp1lyi3nzk3yj5v7zz15r3xdpfqyfi8";
+    };
+    meta.homepage = "https://github.com/TeddyDD/kakoune-wiki/";
+  };
+
   kaktree = buildKakounePluginFrom2Nix {
     pname = "kaktree";
     version = "2021-02-26";
