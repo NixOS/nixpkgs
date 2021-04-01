@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.03.31";
+  version = "2021.04.01";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1svcgrhq1yxpcd6k3piqs5paalrcsq9bm79h5ras1g7yjzid05gj";
+    sha256 = "1vw9l32bv115129v1lfar626y3vivvxkp36bc1phjcrsjfayz67h";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
