@@ -9987,12 +9987,11 @@ in
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_10;
   })
-    crystal_0_31
-    crystal_0_32
     crystal_0_33
     crystal_0_34
     crystal_0_35
     crystal_0_36
+    crystal_1_0
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
