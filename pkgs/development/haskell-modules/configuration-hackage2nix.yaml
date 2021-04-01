@@ -11133,7 +11133,6 @@ broken-packages:
   - universe-instances-base
   - universe-instances-extended
   - universe-instances-trans
-  - universe-reverse-instances
   - universe-th
   - unix-fcntl
   - unix-handle
