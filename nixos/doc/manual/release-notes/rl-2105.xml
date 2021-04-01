@@ -244,7 +244,7 @@
    </listitem>
    <listitem>
      <para>
-       xfsprogs was update from 4.19 to 5.10. It now enables reflink support by default on filesystem creation.
+       xfsprogs was update from 4.19 to 5.11. It now enables reflink support by default on filesystem creation.
        Support for reflinks was added with an experimental status to kernel 4.9 and deemed stable in kernel 4.16.
        If you want to be able to mount XFS filesystems created with this release of xfsprogs on kernel releases older than those, you need to format them
        with <literal>mkfs.xfs -m reflink=0</literal>.

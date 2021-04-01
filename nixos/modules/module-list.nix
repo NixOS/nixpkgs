@@ -515,6 +515,7 @@
   ./services/misc/nzbget.nix
   ./services/misc/nzbhydra2.nix
   ./services/misc/octoprint.nix
+  ./services/misc/ombi.nix
   ./services/misc/osrm.nix
   ./services/misc/packagekit.nix
   ./services/misc/paperless.nix

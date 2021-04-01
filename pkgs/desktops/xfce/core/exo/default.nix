@@ -1,12 +1,12 @@
-{ mkXfceDerivation, docbook_xsl, glib, libxslt, gtk2, gtk3
+{ mkXfceDerivation, docbook_xsl, glib, libxslt, gtk3
 , libxfce4ui, libxfce4util, perl }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "exo";
-  version = "0.12.11";
+  version = "4.16.1";
 
-  sha256 = "1db7w6jk3i501x4qw0hs0ydrm1fjdkxmahzbv5iag859wnnlg0pd";
+  sha256 = "1220mq8gs5s8l0d1p92j6icldzqj6zaisp27ss5jm7hwkkcnms9n";
 
   nativeBuildInputs = [
     libxslt
@@ -14,7 +14,6 @@ mkXfceDerivation {
   ];
 
   buildInputs = [
-    gtk2 # some xfce plugins still uses gtk2
     gtk3
     glib
     libxfce4ui
