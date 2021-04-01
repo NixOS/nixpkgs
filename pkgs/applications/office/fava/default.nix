@@ -27,6 +27,7 @@ buildPythonApplication rec {
       simplejson
       werkzeug
       jaraco_functools
+      setuptools_scm
     ];
 
   # CLI test expects fava on $PATH.  Not sure why static_url fails.
