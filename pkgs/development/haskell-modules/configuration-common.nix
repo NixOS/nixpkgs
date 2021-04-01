@@ -1413,9 +1413,6 @@ self: super: {
   # 2021-03-19: https://github.com/Avi-D-coder/implicit-hie-cradle/pull/8
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
 
-  # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
-  lsp-test = doDistribute (dontCheck self.lsp-test_0_13_0_0);
-
   # 2021-03-09: Golden tests seem to be missing in hackage release:
   # https://github.com/haskell/haskell-language-server/issues/1536
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
