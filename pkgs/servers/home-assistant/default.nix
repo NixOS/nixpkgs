@@ -300,6 +300,7 @@ in with py.pkgs; buildPythonApplication rec {
     "smtp"
     "solaredge"
     "sonos"
+    "spotify"
     "sql"
     "ssdp"
     "stream"
