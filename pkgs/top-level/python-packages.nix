@@ -2059,6 +2059,8 @@ in {
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
+  drivelib = callPackage ../development/python-modules/drivelib { };
+
   drms = callPackage ../development/python-modules/drms { };
 
   dropbox = callPackage ../development/python-modules/dropbox { };
