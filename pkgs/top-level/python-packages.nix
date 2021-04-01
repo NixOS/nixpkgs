@@ -2233,6 +2233,8 @@ in {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  expiringdict = callPackage ../development/python-modules/expiringdict { };
+
   exrex = callPackage ../development/python-modules/exrex { };
 
   extras = callPackage ../development/python-modules/extras { };
