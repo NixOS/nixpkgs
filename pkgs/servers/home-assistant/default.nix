@@ -177,6 +177,7 @@ in with py.pkgs; buildPythonApplication rec {
   # its dependencies packaged and listed in ./component-packages.nix.
   componentTests = [
     "accuweather"
+    "airly"
     "alert"
     "api"
     "auth"
