@@ -51,6 +51,19 @@ let
     meta.homepage = "https://github.com/andreyorst/fzf.kak/";
   };
 
+  kak-tree = buildKakounePluginFrom2Nix {
+    pname = "kak-tree";
+    version = "2021-01-24";
+    src = fetchFromGitHub {
+      owner = "ul";
+      repo = "kak-tree";
+      rev = "863924d21c7bba970b33faab84ff12136ff4ad1a";
+      sha256 = "0nsq2qnli8zsvqxgwwrlizcdk9i2013cxc11xssakrvqylx4wbi2";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/ul/kak-tree/";
+  };
+
   kakoune-buffer-switcher = buildKakounePluginFrom2Nix {
     pname = "kakoune-buffer-switcher";
     version = "2020-12-27";
