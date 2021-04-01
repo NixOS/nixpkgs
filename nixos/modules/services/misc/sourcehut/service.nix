@@ -22,7 +22,10 @@ with serviceCfg; with lib; recursiveUpdate
     Group = user;
     Restart = "always";
     WorkingDirectory = statePath;
-  };
+  } // (if (cfg.statePath == "/var/lib/sourcehut/${serviceDrv.pname}") then {
+          StateDirectory = [ "sourcehut/${serviceDrv.pname}" ];
+        } else {})
+  ;
 
   preStart = ''
     if ! test -e ${statePath}/db; then

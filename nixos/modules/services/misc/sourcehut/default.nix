@@ -95,9 +95,12 @@ in
 
     statePath = mkOption {
       type = types.path;
-      default = "/var/sourcehut";
+      default = "/var/lib/sourcehut";
       description = ''
-        Root state path for the sourcehut network.
+        Root state path for the sourcehut network. If left as the default value
+        this directory will automatically be created before the MPD server
+        starts, otherwise the sysadmin is responsible for ensuring the
+        directory exists with appropriate ownership and permissions.
       '';
     };
 
