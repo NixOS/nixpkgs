@@ -68,6 +68,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres metadark ];
     platforms = platforms.unix;
+    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${version}";
   };
 }
 
