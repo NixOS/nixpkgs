@@ -2,12 +2,12 @@
 
 let
   pname = "lens";
-  version = "4.1.4";
+  version = "4.2.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lensapp/lens/releases/download/v${version}/Lens-${version}.x86_64.AppImage";
-    sha256 = "0g7k3sld6m31qi0zc9z5gydi60waw7ykwz48qnyg77xz1cpm6z5x";
+    sha256 = "0g60d1h2dn41qdzdnqavwknqynjqil7s8kcqy01h021r81rdpn2q";
     name="${pname}.AppImage";
   };
 
