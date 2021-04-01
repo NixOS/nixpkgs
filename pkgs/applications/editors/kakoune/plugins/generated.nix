@@ -171,6 +171,18 @@ let
     meta.homepage = "https://github.com/occivink/kakoune-vertical-selection/";
   };
 
+  luar = buildKakounePluginFrom2Nix {
+    pname = "luar";
+    version = "2021-02-11";
+    src = fetchFromGitHub {
+      owner = "gustavo-hms";
+      repo = "luar";
+      rev = "7c74e7cac64aac58d15d399a0a7239f63e02b074";
+      sha256 = "1ymcxfig3w75dj848l73vffinirjy2yczvjrvinq2iqgrfaslp1a";
+    };
+    meta.homepage = "https://github.com/gustavo-hms/luar/";
+  };
+
   openscad-kak = buildKakounePluginFrom2Nix {
     pname = "openscad-kak";
     version = "2020-12-10";
