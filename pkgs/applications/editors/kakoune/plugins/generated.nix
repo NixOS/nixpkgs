@@ -75,6 +75,18 @@ let
     meta.homepage = "https://github.com/Delapouite/kakoune-buffers/";
   };
 
+  kakoune-colors = buildKakounePluginFrom2Nix {
+    pname = "kakoune-colors";
+    version = "2020-09-03";
+    src = fetchFromGitHub {
+      owner = "Delapouite";
+      repo = "kakoune-colors";
+      rev = "f506944c9d0149cec59582ad048ce08f8e965ac2";
+      sha256 = "1vrzm2klbrdhxv4q5lx8xjzw2xbnyfr0gkqzfz65qplycm2j37kp";
+    };
+    meta.homepage = "https://github.com/Delapouite/kakoune-colors/";
+  };
+
   kakoune-easymotion = buildKakounePluginFrom2Nix {
     pname = "kakoune-easymotion";
     version = "2020-03-09";
