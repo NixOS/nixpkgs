@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
     url = "http://downloads.xiph.org/releases/theora/${name}.tar.gz";
     sha256 = "0swiaj8987n995rc7hw0asvpwhhzpjiws8kr3s6r44bqqib2k5a0";
   };
+
   patches = [
     # fix error in autoconf scripts
     (fetchpatch {
