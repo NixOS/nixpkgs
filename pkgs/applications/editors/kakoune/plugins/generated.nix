@@ -148,6 +148,18 @@ let
     meta.homepage = "https://github.com/Delapouite/kakoune-palette/";
   };
 
+  kakoune-phantom-selection = buildKakounePluginFrom2Nix {
+    pname = "kakoune-phantom-selection";
+    version = "2021-03-30";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-phantom-selection";
+      rev = "034d7a79f7f07e659e632468ef64c48ae82730f2";
+      sha256 = "0bwa6r7nqysjchsfjpj6jbxwvqb3dflh1ygij3pnyn29jplc8068";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-phantom-selection/";
+  };
+
   kakoune-rainbow = buildKakounePluginFrom2Nix {
     pname = "kakoune-rainbow";
     version = "2020-09-01";
