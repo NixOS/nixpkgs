@@ -195,6 +195,18 @@ let
     meta.homepage = "https://github.com/occivink/kakoune-vertical-selection/";
   };
 
+  kaktree = buildKakounePluginFrom2Nix {
+    pname = "kaktree";
+    version = "2021-02-26";
+    src = fetchFromGitHub {
+      owner = "andreyorst";
+      repo = "kaktree";
+      rev = "34ae50bb2f1234a37cfdcd29fb647792ecd3010a";
+      sha256 = "0l1gvg1b973bsgpzdi7klpgf05h2nc13gdmbb0lh13fsk8knr66i";
+    };
+    meta.homepage = "https://github.com/andreyorst/kaktree/";
+  };
+
   luar = buildKakounePluginFrom2Nix {
     pname = "luar";
     version = "2021-02-11";
