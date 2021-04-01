@@ -268,6 +268,18 @@ let
     meta.homepage = "https://github.com/mayjs/openscad.kak/";
   };
 
+  plug-kak = buildKakounePluginFrom2Nix {
+    pname = "plug-kak";
+    version = "2021-03-06";
+    src = fetchFromGitHub {
+      owner = "andreyorst";
+      repo = "plug.kak";
+      rev = "d2162d4deba8ec071148f35d666b7675243bcd6b";
+      sha256 = "06kz66m77c9sd8jb2x1wq4bki70a1xcmq1x4yh2fmrj7pwxdcqvy";
+    };
+    meta.homepage = "https://github.com/andreyorst/plug.kak/";
+  };
+
   powerline-kak = buildKakounePluginFrom2Nix {
     pname = "powerline-kak";
     version = "2021-02-25";
