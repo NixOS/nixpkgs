@@ -257,6 +257,7 @@ in with py.pkgs; buildPythonApplication rec {
     "media_player"
     "media_source"
     "met"
+    "minecraft_server"
     "mobile_app"
     "modbus"
     "moon"
