@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-
   pname = "nullfs";
   version = "0.3";
   name = "${pname}-${version}+linux-${kernel.version}";
@@ -33,6 +32,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
     # workaround for broken Makefile
     make -j$NIX_BUILD_CORES -C "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" M="$out/build" modules
+    runHook postBuild
   '';
 
   installPhase = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       mount -t nullfs nullfs /tmp/nullfs
     '';
     homepage = "https://github.com/abbbi/nullfsvfs";
-    license = licenses.gpl1;
+    license = licenses.gpl1Only;
     platforms = platforms.linux;
   };
 }
