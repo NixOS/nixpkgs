@@ -4,11 +4,11 @@
 , cmake
 , doxygen
 , fetchFromGitLab
-, fetchpatch
 , ffmpeg_3
 , glew
 , gsm
 , intltool
+, lib
 , libGL
 , libGLU
 , libX11
@@ -28,7 +28,7 @@
 , SDL
 , speex
 , srtp
-, lib, stdenv
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };
