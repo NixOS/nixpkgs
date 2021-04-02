@@ -4,11 +4,11 @@
 , cmake
 , doxygen
 , fetchFromGitLab
-, fetchpatch
 , ffmpeg_3
 , glew
 , gsm
 , intltool
+, lib
 , libGL
 , libGLU
 , libX11
@@ -24,16 +24,16 @@
 , libvpx
 , ortp
 , pkg-config
-, python
+, python3
 , SDL
 , speex
 , srtp
-, lib, stdenv
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  version = "4.4.35";
+  version = "4.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "18qmg678m087k7qsaxwfcv2p875z2kpy91pqryiv955km40drl0g";
+    sha256 = "0aqma9834lzy1593qb9qwmzvzn50y6fzhmmg493jznf8977b0gsw";
   };
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     doxygen
     intltool
     pkg-config
-    python
+    python3
   ];
 
   propagatedBuildInputs = [
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };
