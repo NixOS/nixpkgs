@@ -25504,6 +25504,8 @@ in
 
   split2flac = callPackage ../applications/audio/split2flac { };
 
+  spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
+
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
