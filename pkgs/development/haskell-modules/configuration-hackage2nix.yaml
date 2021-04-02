@@ -5387,6 +5387,7 @@ broken-packages:
   - forest
   - forest-fire
   - Forestry
+  - forex2ledger
   - forger
   - ForkableT
   - formal
@@ -5404,6 +5405,7 @@ broken-packages:
   - forth-hll
   - Fortnite-Hack-Cheats-Free-V-Bucks-Generator
   - fortran-src
+  - fortran-src-extras
   - fortytwo
   - foscam-directory
   - foscam-filename
@@ -7321,6 +7323,7 @@ broken-packages:
   - json-pointer-hasql
   - json-pointy
   - json-python
+  - json-query
   - json-rpc-client
   - json-schema
   - json-sop
@@ -8609,6 +8612,7 @@ broken-packages:
   - OpenAFP
   - OpenAFP-Utils
   - openai-hs
+  - openai-servant
   - openapi-petstore
   - openapi-typed
   - openapi3
@@ -9016,7 +9020,11 @@ broken-packages:
   - polydata-core
   - polynomial
   - polysemy-chronos
+  - polysemy-conc
   - polysemy-http
+  - polysemy-log
+  - polysemy-log-co
+  - polysemy-log-di
   - polysemy-methodology
   - polysemy-methodology-composite
   - polysemy-optics
@@ -10082,6 +10090,7 @@ broken-packages:
   - signable
   - signals
   - signed-multiset
+  - signify-hs
   - silkscreen
   - silvi
   - simd
@@ -10577,6 +10586,7 @@ broken-packages:
   - swf
   - swift-lda
   - swiss-ephemeris
+  - switch
   - sws
   - syb-extras
   - syb-with-class-instances-text
@@ -11837,6 +11847,7 @@ broken-packages:
   - zoom-cache-pcm
   - zoom-cache-sndfile
   - zoom-refs
+  - zoovisitor
   - zsdd
   - zsh-battery
   - zsyntax
