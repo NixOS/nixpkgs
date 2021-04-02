@@ -10671,7 +10671,6 @@ broken-packages:
   - target
   - task
   - task-distribution
-  - taskell
   - TaskMonad
   - tasty-auto
   - tasty-bdd
