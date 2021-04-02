@@ -742,11 +742,11 @@
     md5name = "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f-postgresql-13.1.tar.bz2";
   }
   {
-    name = "Python-3.8.4.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/Python-3.8.4.tar.xz";
-    sha256 = "5f41968a95afe9bc12192d7e6861aab31e80a46c46fa59d3d837def6a4cd4d37";
+    name = "Python-3.8.8rc1.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/Python-3.8.8rc1.tar.xz";
+    sha256 = "bd746ed1ad9ccfa9b2a8d13736a5c452025c3600913d000078e6ed1df3d767b6";
     md5 = "";
-    md5name = "5f41968a95afe9bc12192d7e6861aab31e80a46c46fa59d3d837def6a4cd4d37-Python-3.8.4.tar.xz";
+    md5name = "bd746ed1ad9ccfa9b2a8d13736a5c452025c3600913d000078e6ed1df3d767b6-Python-3.8.8rc1.tar.xz";
   }
   {
     name = "QR-Code-generator-1.4.0.tar.gz";
