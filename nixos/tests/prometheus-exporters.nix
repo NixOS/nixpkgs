@@ -603,6 +603,66 @@ let
       '';
     };
 
+    openldap = {
+      exporterConfig = {
+        enable = true;
+        ldapCredentialFile = "${pkgs.writeText "exporter.yml" ''
+          ldapUser: "cn=root,dc=example"
+          ldapPass: "notapassword"
+        ''}";
+      };
+      metricProvider = {
+        services.openldap = {
+          enable = true;
+          settings.children = {
+            "cn=schema".includes = [
+              "${pkgs.openldap}/etc/schema/core.ldif"
+              "${pkgs.openldap}/etc/schema/cosine.ldif"
+              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              "${pkgs.openldap}/etc/schema/nis.ldif"
+            ];
+            "olcDatabase={1}mdb" = {
+              attrs = {
+                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+                olcDatabase = "{1}mdb";
+                olcDbDirectory = "/var/db/openldap";
+                olcSuffix = "dc=example";
+                olcRootDN = {
+                  # cn=root,dc=example
+                  base64 = "Y249cm9vdCxkYz1leGFtcGxl";
+                };
+                olcRootPW = {
+                  path = "${pkgs.writeText "rootpw" "notapassword"}";
+                };
+              };
+            };
+            "olcDatabase={2}monitor".attrs = {
+              objectClass = [ "olcDatabaseConfig" ];
+              olcDatabase = "{2}monitor";
+              olcAccess = [ "to dn.subtree=cn=monitor by users read" ];
+            };
+          };
+          declarativeContents."dc=example" = ''
+            dn: dc=example
+            objectClass: domain
+            dc: example
+
+            dn: ou=users,dc=example
+            objectClass: organizationalUnit
+            ou: users
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-openldap-exporter.service")
+        wait_for_open_port(389)
+        wait_for_open_port(9330)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9330/metrics | grep -q 'openldap_scrape{result=\"ok\"} 1'"
+        )
+      '';
+    };
+
     openvpn = {
       exporterConfig = {
         enable = true;

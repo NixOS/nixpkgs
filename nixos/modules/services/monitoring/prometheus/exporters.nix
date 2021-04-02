@@ -43,6 +43,7 @@ let
     "nginx"
     "nginxlog"
     "node"
+    "openldap"
     "openvpn"
     "postfix"
     "postgres"
