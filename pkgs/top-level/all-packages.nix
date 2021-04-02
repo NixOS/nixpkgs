@@ -7640,6 +7640,8 @@ in
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
+  qmk = callPackage ../tools/misc/qmk { };
+
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
   qownnotes = libsForQt514.callPackage ../applications/office/qownnotes { };
