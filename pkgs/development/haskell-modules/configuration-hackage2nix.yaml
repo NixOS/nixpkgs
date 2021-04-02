@@ -2850,6 +2850,7 @@ package-maintainers:
     - haskell-language-server
     - shake-bench
     - iCalendar
+    - stm-containers
   sorki:
     - cayene-lpp
     - data-stm32
@@ -9116,7 +9117,6 @@ broken-packages:
   - primitive-checked
   - primitive-containers
   - primitive-convenience
-  - primitive-extras
   - primitive-foreign
   - primitive-indexed
   - primitive-maybe
@@ -10428,9 +10428,7 @@ broken-packages:
   - STL
   - STLinkUSB
   - stm-chunked-queues
-  - stm-containers
   - stm-firehose
-  - stm-hamt
   - stm-promise
   - stm-stats
   - STM32-Zombie
