@@ -1747,4 +1747,12 @@ self: super: {
   # Too strict bounds on base: https://github.com/runarorama/fuzzyfind/issues/1
   fuzzyfind = doJailbreak super.fuzzyfind;
 
+  # Apply patch from master relaxing the version bounds on tasty.
+  # Can be removed at next release (current is 0.10.1.0).
+  ginger = appendPatch super.ginger
+    (pkgs.fetchpatch {
+      url = "https://github.com/tdammers/ginger/commit/bd8cb39c1853d4fb4f663c4c201884575906acea.patch";
+      sha256 = "1rdy53k0384g52bnc59j1f0i13hr4lbnbksfsabr4av6zmw9wmzf";
+    });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
