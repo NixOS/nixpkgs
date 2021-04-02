@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "End-to-end encryption library for instant messaging";
     homepage = "http://www.linphone.org/technical-corner/lime";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
