@@ -4422,6 +4422,8 @@ in
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
+  libbtbb = callPackage ../development/libraries/libbtbb { };
+
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
   fastlane = callPackage ../tools/admin/fastlane { };
@@ -8851,6 +8853,8 @@ in
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
   ubridge = callPackage ../tools/networking/ubridge { };
+
+  ubertooth = callPackage ../applications/radio/ubertooth { };
 
   ucl = callPackage ../development/libraries/ucl { };
 
