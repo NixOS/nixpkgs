@@ -41,7 +41,7 @@ common =
 
       nativeBuildInputs =
         [ pkg-config ]
-        ++ lib.optionals (is24 && stdenv.isLinux) [ util-linuxMinimal ]
+        ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ]
         ++ lib.optionals is24
           [ autoreconfHook
             autoconf-archive

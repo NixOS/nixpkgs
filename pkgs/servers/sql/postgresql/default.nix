@@ -216,6 +216,7 @@ in self: {
     this = self.postgresql_10;
     thisAttr = "postgresql_10";
     inherit self;
+    icu = self.icu67;
   };
 
   postgresql_11 = self.callPackage generic {

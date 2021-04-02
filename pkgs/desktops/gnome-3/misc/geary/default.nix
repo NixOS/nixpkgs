@@ -118,6 +118,10 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/yaml_to_json.py
 
     chmod +x desktop/geary-attach
+
+    # Drop test that breaks after webkitgtk 2.32.0 update
+    # https://gitlab.gnome.org/GNOME/geary/-/issues/1180
+    sed -i '/add_test("edit_context_font", edit_context_font);/d' test/js/composer-page-state-test.vala
   '';
 
   doCheck = true;

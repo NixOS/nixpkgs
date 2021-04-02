@@ -18,7 +18,12 @@ let
     else toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeText "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+
+  configFileCheck = pkgs.runCommand "postgresql-configfile-check" {} ''
+    ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
+    touch $out
+  '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
@@ -51,6 +56,12 @@ in
         description = ''
           The port on which PostgreSQL listens.
         '';
+      };
+
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Check the syntax of the configuration file at compile time";
       };
 
       dataDir = mkOption {
@@ -314,6 +325,8 @@ in
      "/share/postgresql"
     ];
 
+    system.extraDependencies = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
+
     systemd.services.postgresql =
       { description = "PostgreSQL Server";
 
@@ -337,7 +350,7 @@ in
               touch "${cfg.dataDir}/.first_startup"
             fi
 
-            ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
+            ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
             ${optionalString (cfg.recoveryConfig != null) ''
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
