@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-power-manager";
-  version = "1.24.2";
+  version = "1.24.3";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fni41p3kraxwjnx9l5mdspng0zib1gfdxwlaiyq31mh4g79yjyj";
+    sha256 = "1rmcrpii3hl35qjznk6h5cq72n60cs12n294hjyakxr9kvgns7l6";
   };
 
   nativeBuildInputs = [
