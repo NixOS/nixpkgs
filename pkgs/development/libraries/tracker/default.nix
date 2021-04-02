@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -27,7 +28,7 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "tracker";
   version = "3.1.1";
 
@@ -43,6 +44,14 @@ stdenv.mkDerivation (rec {
       src = ./fix-paths.patch;
       inherit asciidoc;
     })
+
+    # Add missing build target dependencies to fix parallel building of docs.
+    # TODO: Upstream this.
+    ./fix-docs.patch
+
+    # Fix 32bit datetime issue, use this upstream patch until 3.1.2 lands
+    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/401
+    ./fix-datetime.patch
   ];
 
   nativeBuildInputs = [
@@ -74,16 +83,16 @@ stdenv.mkDerivation (rec {
     libstemmer
   ];
 
-  checkInputs = [
-    python3.pkgs.pygobject3
+  checkInputs = with python3.pkgs; [
+    pygobject3
+    tappy
   ];
 
   mesonFlags = [
     "-Ddocs=true"
   ];
 
-  # https://gitlab.gnome.org/GNOME/tracker/-/issues/292#note_1075369
-  doCheck = !stdenv.isi686;
+  doCheck = true;
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
@@ -135,8 +144,3 @@ stdenv.mkDerivation (rec {
     platforms = platforms.linux;
   };
 }
-  // lib.optionalAttrs stdenv.isi686 {
-    # TMP: fatal error: libtracker-sparql/tracker-sparql-enum-types.h: No such file or directory
-    enableParallelBuilding = false;
-  }
-)
