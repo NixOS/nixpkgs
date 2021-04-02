@@ -1744,4 +1744,7 @@ self: super: {
       preConfigure = ''substituteInPlace iCalendar.cabal --replace "network >=2.6 && <2.7" "network -any"'';
   };
 
+  # Too strict bounds on base: https://github.com/runarorama/fuzzyfind/issues/1
+  fuzzyfind = doJailbreak super.fuzzyfind;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
