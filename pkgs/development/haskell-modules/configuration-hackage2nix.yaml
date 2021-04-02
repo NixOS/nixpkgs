@@ -2871,7 +2871,7 @@ package-maintainers:
     - iCalendar
     - stm-containers
   sorki:
-    - cayene-lpp
+    - cayenne-lpp
     - data-stm32
     - gcodehs
     - nix-derivation
