@@ -1763,4 +1763,8 @@ self: super: {
   # https://github.com/haskell/ThreadScope/issues/118
   threadscope = doJailbreak super.threadscope;
 
+  # Too strict version bounds on tasty
+  # Can likely be removed next week (2021-04-09) when 1.1.1.1 is released.
+  fused-effects = doJailbreak super.fused-effects;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
