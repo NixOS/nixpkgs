@@ -23,8 +23,6 @@ in
         {
           default_session = {
             command = "''${pkgs.greetd.greetd}/bin/agreety --cmd sway";
-            # you have to create the 'greeter'-user
-            user = "greeter";
           };
         }
       '';
@@ -55,6 +53,7 @@ in
   config = mkIf cfg.enable {
 
     services.greetd.settings.terminal.vt = mkDefault cfg.vt;
+    services.greetd.settings.default_session = mkDefault "greeter";
 
     security.pam.services.greetd = {
       allowNullPassword = true;
@@ -98,6 +97,8 @@ in
     };
 
     systemd.defaultUnit = "graphical.target";
+
+    users.users.greeter.isSystemUser = true;
   };
 
   meta.maintainers = with maintainers; [ queezle ];
