@@ -691,6 +691,8 @@ let
 
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
+    mirage-crypto-ec = callPackage ../development/ocaml-modules/mirage-crypto/ec.nix { };
+
     mirage-crypto-pk = callPackage ../development/ocaml-modules/mirage-crypto/pk.nix { };
 
     mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };

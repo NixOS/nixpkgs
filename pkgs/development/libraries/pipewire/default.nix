@@ -75,6 +75,11 @@ let
       ./0070-installed-tests-path.patch
       # Add flag to specify configuration directory (different from the installation directory).
       ./0080-pipewire-config-dir.patch
+      # Fix JSON parser.
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/34800dc0191a4ee7a329eeb361a6f2ccf4a75176.diff";
+        sha256 = "0dzxzr408qqzf0252nwg14709p1lb2k826i3kdzg6djq8w98d5aj";
+      })
     ];
 
     nativeBuildInputs = [

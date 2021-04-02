@@ -2658,6 +2658,8 @@ in
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
 
+  lisgd = callPackage ../tools/inputmethods/lisgd { };
+
   lite = callPackage ../applications/editors/lite { };
 
   loadwatch = callPackage ../tools/system/loadwatch { };
