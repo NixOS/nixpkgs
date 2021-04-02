@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.isc.org/isc-projects/bind9/commit/6ed167ad0a647dff20c8cb08c944a7967df2d415.patch";
       sha256 = "1r191hvqabq8bpnik8hmx7qirghfv48fhrzzmiq8vbjmwkbvvjrj";
     })
+    (fetchpatch {
+      name = "CVE-2020-8624.patch";
+      url = "https://gitlab.isc.org/isc-projects/bind9/commit/7630a64141a997b5247d9ad4a7dfff6ac6d9a485.patch";
+      sha256 = "01xbi0nrl9zqv8yih92x2xman23dr8lbkxy4frrzsikfak41s1zd";
+    })
   ];
 
   nativeBuildInputs = [ perl ];
