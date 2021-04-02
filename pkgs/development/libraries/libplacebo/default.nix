@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -17,22 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "3.104.0";
-
-  patches = [
-    (fetchpatch {
-      # support glslang>=11.0.0; Upstream MR: https://code.videolan.org/videolan/libplacebo/-/merge_requests/131
-      url = "https://code.videolan.org/videolan/libplacebo/-/commit/affd15a2faa1340d40dcf277a8acffe2987f517c.patch";
-      sha256 = "1nm27mdm9rn3wsbjdif46pici6mbzmfb6521ijl8ah4mxn9p1ikc";
-    })
-  ];
+  version = "3.120.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0p5mx8ch7cp7b54yrkl4fs8bcvqma1h461gx6ps4kagn4dsx8asb";
+    sha256 = "1vjcp703h0a8z70bqkx1fawhpyv3zl11c7rczyky8v4cmcihscgg";
   };
 
   nativeBuildInputs = [
