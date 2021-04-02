@@ -415,9 +415,7 @@ let
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
-    imagelib = callPackage ../development/ocaml-modules/imagelib {
-      decompress = decompress-1-2;
-    };
+    imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
