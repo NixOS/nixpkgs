@@ -19,6 +19,10 @@ let
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
       };
+
+      sage_docbuild = self.callPackage ./sage_docbuild.nix {
+        inherit sage-src;
+      };
     };
   };
 
@@ -55,6 +59,7 @@ let
   # the env-locations file.
   sage-env = callPackage ./sage-env.nix {
     sagelib = python3.pkgs.sagelib;
+    sage_docbuild = python3.pkgs.sage_docbuild;
     inherit env-locations;
     inherit python3 singular palp flint pynac pythonEnv maxima-ecl;
     ecl = maxima-ecl.ecl;
@@ -88,6 +93,7 @@ let
 
   pythonRuntimeDeps = with python3.pkgs; [
     sagelib
+    sage_docbuild
     cvxopt
     networkx
     service-identity
