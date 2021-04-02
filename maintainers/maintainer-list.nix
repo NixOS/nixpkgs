@@ -10482,6 +10482,12 @@
     githubId = 13489144;
     name = "Calle Rosenquist";
   };
+  xdhampus = {
+    name = "Hampus";
+    email = "16954508+xdHampus@users.noreply.github.com";
+    github = "xdHampus";
+    githubId = 16954508;
+  };
   xe = {
     email = "me@christine.website";
     github = "Xe";

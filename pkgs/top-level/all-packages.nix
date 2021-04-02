@@ -779,6 +779,8 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  quich = callPackage ../tools/misc/quich { } ;
+
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
