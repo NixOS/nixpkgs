@@ -9,6 +9,7 @@
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
 , executableName, longName, shortName, pname
+, commandLineArgs
 }:
 
 let
@@ -92,6 +93,12 @@ in
         sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName}
         grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
       '';
+
+    preFixup = ''
+      eval gappsWrapperArgs+=(
+        --add-flags ${lib.escapeShellArg (lib.escapeShellArg commandLineArgs)}
+      )
+    '';
 
     inherit meta;
   }
