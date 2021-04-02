@@ -1,7 +1,7 @@
-From a1454e8edb7a1a87093808dc7db540232147df3d Mon Sep 17 00:00:00 2001
+From 5580303956ca7d8eb431d23c2af0030c9cc0e6e9 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
-Subject: [PATCH 07/18] hostnamed, localed, timedated: disable methods that
+Subject: [PATCH 07/19] hostnamed, localed, timedated: disable methods that
  change system settings.
 
 ---
@@ -69,7 +69,7 @@ index 736dacdee9..53e0ee935e 100644
          model = empty_to_null(model);
          variant = empty_to_null(variant);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 8bfcfd5cdc..a0ee03f134 100644
+index 76fe04900d..e87c4c8919 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -646,6 +646,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
@@ -90,10 +90,10 @@ index 8bfcfd5cdc..a0ee03f134 100644
 +        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
 +            "Changing system settings via systemd is not supported on NixOS.");
 +
-         if (lrtc == c->local_rtc)
+         if (lrtc == c->local_rtc && !fix_system)
                  return sd_bus_reply_method_return(m, NULL);
  
-@@ -905,6 +912,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+@@ -907,6 +914,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
          if (r < 0)
                  return r;
  
@@ -104,5 +104,5 @@ index 8bfcfd5cdc..a0ee03f134 100644
          if (r < 0)
                  return r;
 -- 
-2.29.2
+2.30.1
 
