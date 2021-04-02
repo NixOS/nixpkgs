@@ -1165,10 +1165,11 @@ self: super: {
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
-  # version constraints break the build, so we jailbreak
-  # can be removed at a new release which also fixes
-  # https://github.com/jgm/gitit/issues/665
-  gitit = doJailbreak super.gitit;
+  # * jailbreak can be removed at the next release (current is 0.13.0.0)
+  # * patch fixes compilation with pandoc >= 2.12, can be removed if a
+  #   release contains https://github.com/jgm/gitit/pull/670 or equivalent.
+  #   Patch is vendored in as it may change upstream in the future.
+  gitit = doJailbreak (appendPatch super.gitit ./patches/gitit-pandoc-2.12.patch);
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
