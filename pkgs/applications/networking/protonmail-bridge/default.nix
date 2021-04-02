@@ -21,7 +21,7 @@ buildGoModule rec {
     runHook preBuild
 
     patchShebangs ./utils/
-    make BUILD_TIME= build-nogui
+    make BUILD_TIME= -j$NIX_BUILD_CORES build-nogui
 
     runHook postBuild
   '';
