@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
   nativeBuildInputs = [ m4 bison flex gettext bzip2 ]
-    ++ lib.optional stdenv.hostPlatform.isMusl [ pkg-config autoreconfHook ]
-    ++ lib.optional enableDebuginfod [ pkg-config ];
+    ++ lib.optional stdenv.hostPlatform.isMusl autoreconfHook
+    ++ lib.optional (enableDebuginfod || stdenv.hostPlatform.isMusl) pkg-config;
   buildInputs = [ zlib bzip2 xz ]
-    ++ lib.optional stdenv.hostPlatform.isMusl [
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
     argp-standalone
     musl-fts
     musl-obstack

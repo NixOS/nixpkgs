@@ -28,12 +28,12 @@ in rec {
     src = "${src}/clang";
   };
 
-  lld = callPackage ./lld.nix {
+  lld = callPackage ./lld {
     inherit llvm version;
     src = "${src}/lld";
   };
 
-  llvm = callPackage ./llvm.nix {
+  llvm = callPackage ./llvm {
     inherit version;
     src = "${src}/llvm";
   };

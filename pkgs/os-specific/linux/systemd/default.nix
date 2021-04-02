@@ -113,7 +113,7 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.3";
+  version = "247.6";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -124,12 +124,12 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0zn0b74iwz3vxabqsk4yydwpgky3c5z4dl83wxbs1qi5d2dnbqa7";
+    sha256 = "sha256-7XYEq3Qw25suwjbtPzx9lVPHUu9ZY/1bADXl2wQbkJc=";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
   # systemd worktree, rebase to the more recent systemd version, and export the
-  # patches again via `git format-patch v${version}`.
+  # patches again via `git -c format.signoff=false format-patch v${version}`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
@@ -150,7 +150,7 @@ stdenv.mkDerivation {
     ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
-    ./0019-Revert-pkg-config-prefix-is-not-really-configurable-.patch
+    ./0019-pkg-config-derive-prefix-from-prefix.patch
   ];
 
   postPatch = ''

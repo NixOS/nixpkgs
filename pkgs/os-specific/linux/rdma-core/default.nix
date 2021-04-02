@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
 , pandoc, ethtool, iproute, libnl, udev, python3, perl
-, makeWrapper
-} :
+}:
 
 let
   version = "34.0";
@@ -17,7 +16,7 @@ in stdenv.mkDerivation {
     sha256 = "sha256-2HFtj595sDmWqAewIMwKMaiSDVVWKdQA9l0QsPcw8qA=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config pandoc docutils makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config pandoc docutils ];
   buildInputs = [ libnl ethtool iproute udev python3 perl ];
 
   cmakeFlags = [
@@ -39,7 +38,8 @@ in stdenv.mkDerivation {
   postFixup = ''
     for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
       echo "wrapping $pls"
-      wrapProgram $pls --prefix PERL5LIB : "$out/${perl.libPrefix}"
+      substituteInPlace $pls --replace \
+        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
     done
   '';
 
