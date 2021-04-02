@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pluma";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1sgc5f480icr2ans6gd3akvcax58mr4jp3zjk3xn7bx1mw9i299f";
+    sha256 = "183frfhll3sb4r12p24160j1c1cfd102nlp5rrwvyv5qqm7i2fg4";
   };
 
   nativeBuildInputs = [
