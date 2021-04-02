@@ -1,8 +1,10 @@
-{ stdenv
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , genericUpdater
 , common-updater-scripts
+, makeWrapper
+, openssh
 }:
 
 buildGoModule rec {
@@ -31,7 +33,13 @@ buildGoModule rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/agent --prefix PATH : ${lib.makeBinPath [ openssh ]}
+  '';
+
+  meta = with lib; {
     description =
       "Enables easy access any Linux device behind firewall and NAT";
     longDescription = ''
