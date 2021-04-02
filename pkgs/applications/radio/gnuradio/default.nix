@@ -44,14 +44,14 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "0";
+  minor = "1";
   patch = "0";
 }
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 =  "ZjQzioAuWrd8jsYOnLNH1mK4n9EbrjgvPX3mTzVFdLk=";
+  sourceSha256 = "0zydmrr3gkaqiv4jv8f42awrfzs177bqb349q34rnr6j3d32z2vp";
   featuresInfo = {
     # Needed always
     basic = {
