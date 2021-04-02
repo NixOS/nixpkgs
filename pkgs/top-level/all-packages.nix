@@ -16307,6 +16307,10 @@ in
     erlang = erlangR21;
   };
 
+  couchdb3 = callPackage ../servers/http/couchdb/3.nix {
+    erlang = erlangR22;
+  };
+
   couchpotato = callPackage ../servers/couchpotato {};
 
   dex-oidc = callPackage ../servers/dex { };
