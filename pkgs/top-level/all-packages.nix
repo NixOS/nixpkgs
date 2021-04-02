@@ -3625,6 +3625,8 @@ in
 
   cutensor = cutensor_cudatoolkit_10;
 
+  curie = callPackage ../data/fonts/curie { };
+
   curlFull = curl.override {
     ldapSupport = true;
   };
