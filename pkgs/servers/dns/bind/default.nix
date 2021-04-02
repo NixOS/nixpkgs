@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-keep-configure-flags.patch
     ./remove-mkdir-var.patch
+    (fetchpatch {
+      name = "CVE-2020-8621.patch";
+      url = "https://gitlab.isc.org/isc-projects/bind9/commit/81514ff925dfc6e0c293745e0fc8320a8af95586.patch";
+      sha256 = "1h3p60xcxj1zd3ksqllhgr4z43li13n2famyvb8kyydycw0rhi4d";
+    })
   ];
 
   nativeBuildInputs = [ perl ];
