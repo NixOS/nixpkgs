@@ -27934,6 +27934,8 @@ in
 
   ufoai = callPackage ../games/ufoai { };
 
+  uhexen2 = callPackage ../games/uhexen2 { };
+
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
