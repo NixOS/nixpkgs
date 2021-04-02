@@ -31,6 +31,6 @@ mkDerivation rec {
     homepage = "https://github.com/kraxarn/spotify-qt";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kiyengar ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
    };
 }
