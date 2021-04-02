@@ -1767,4 +1767,8 @@ self: super: {
   # Can likely be removed next week (2021-04-09) when 1.1.1.1 is released.
   fused-effects = doJailbreak super.fused-effects;
 
+  # Test suite doesn't support base16-bytestring >= 1.0
+  # https://github.com/centromere/blake2/issues/6
+  blake2 = dontCheck super.blake2;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
