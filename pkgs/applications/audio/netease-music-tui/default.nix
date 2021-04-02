@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netease-music-tui";
-  version = "v0.1.2";
+  version = "v0.1.3";
 
   src = fetchFromGitHub {
     owner = "betta-cyber";
     repo = "netease-music-tui";
     rev = version;
-    sha256 = "0m5b3q493d32kxznm4apn56216l07b1c49km236i03mpfvdw7m1f";
+    sha256 = "09355a6d197ckayh9833y39dsarklgpgrq3raapiv25z59di30qq";
   };
 
   cargoPatches = [ ./cargo-lock.patch ];
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib openssl ];
 
-  cargoSha256 = "1kfbnwy3lkbhz0ggxwr5n6qd1plipkr1ycr3z2r7c0amrzzbkc7l";
+  cargoSha256 = "1p6z7p4z5kmsf12yfhxf84zzvkfsx0f1wl6mq5h0bsasdcba6v7s";
 
   meta = with lib; {
     homepage = "https://github.com/betta-cyber/netease-music-tui";
