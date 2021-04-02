@@ -211,7 +211,16 @@ in
     '';
   };
 
-  pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.0") {
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.1") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.0";
+        sha256 = "0ghk0dlmrn634p3zjr41fy4ipgw8i44f67a4l8cspqg0395m3rp5";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  } // lib.optionalAttrs (attrs.version == "1.3.0") {
+    # Needed for gitlab
     dontBuild = false;
     postPatch = ''
       sed -i "s;'https://codeload.github.com.*';'${fetchurl {
