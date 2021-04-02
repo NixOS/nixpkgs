@@ -1771,4 +1771,8 @@ self: super: {
   # https://github.com/centromere/blake2/issues/6
   blake2 = dontCheck super.blake2;
 
+  # Test suite doesn't support base16-bytestring >= 1.0
+  # https://github.com/serokell/haskell-crypto/issues/25
+  crypto-sodium = dontCheck super.crypto-sodium;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
