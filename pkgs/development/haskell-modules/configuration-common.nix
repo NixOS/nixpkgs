@@ -1759,4 +1759,8 @@ self: super: {
   # https://github.com/obsidiansystems/haveibeenpwned/issues/7
   haveibeenpwned = doJailbreak super.haveibeenpwned;
 
+  # Too strict version bounds on ghc-events
+  # https://github.com/haskell/ThreadScope/issues/118
+  threadscope = doJailbreak super.threadscope;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
