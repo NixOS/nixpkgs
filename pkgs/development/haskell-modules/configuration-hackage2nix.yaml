@@ -73,6 +73,10 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
+  # Needs Cabal 3.4 for Setup.hs
+  - gi-javascriptcore < 4.0.23 #
+  - gi-soup < 2.4.24 #
+  - gi-webkit2 < 4.0.27 #
   # To stay hls 1.0 compatible
   - ghcide < 1.1
   - hls-retrie-plugin < 1.0.0.1
