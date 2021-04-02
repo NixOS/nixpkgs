@@ -3,7 +3,7 @@
 , pkg-config
 , gettext
 , libpthreadstubs
-, libudev
+, udev
 , libusb1
 , ncurses
 , qemu
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     gettext
     libarchive
     libpthreadstubs
-    libudev
+    udev
     libusb1
     libxml2
     ncurses
