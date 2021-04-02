@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.0.3";
+  version = "3.1.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-b1yEqzvh7aUgUBsq7XIhYWoM8VKRDFN3V7U4vAXv/KM=";
+    sha256 = "sha256:1rwafk58dm8fpfdb3yk77g0f9gxkk5dy8hm2yx26y1jlhkly4xj3";
   };
 
   patches = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit asciidoc;
     })
+    ./fix-docs.patch
   ];
 
   nativeBuildInputs = [
@@ -74,9 +75,10 @@ stdenv.mkDerivation rec {
     libstemmer
   ];
 
-  checkInputs = [
-    python3.pkgs.pygobject3
-  ];
+  checkInputs = (with python3.pkgs [
+    pygobject3
+    tappy
+  ]);
 
   mesonFlags = [
     "-Ddocs=true"
@@ -89,6 +91,7 @@ stdenv.mkDerivation rec {
     patchShebangs utils/data-generators/cc/generate
     patchShebangs tests/functional-tests/test-runner.sh.in
     patchShebangs tests/functional-tests/*.py
+    patchShebangs examples/python/endpoint.py
   '';
 
   preCheck = ''
