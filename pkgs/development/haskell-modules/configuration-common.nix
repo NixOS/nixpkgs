@@ -1755,4 +1755,8 @@ self: super: {
       sha256 = "1rdy53k0384g52bnc59j1f0i13hr4lbnbksfsabr4av6zmw9wmzf";
     });
 
+  # Too strict version bounds on cryptonite
+  # https://github.com/obsidiansystems/haveibeenpwned/issues/7
+  haveibeenpwned = doJailbreak super.haveibeenpwned;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
