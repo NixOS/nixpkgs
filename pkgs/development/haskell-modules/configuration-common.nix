@@ -1730,4 +1730,10 @@ self: super: {
     sha256 = "0pmx54xd7ah85y9mfi5366wbnwrp918j0wbx8yw8hrdac92qi4gh";
   });
 
+  # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
+  trial-optparse-applicative = assert super.trial-optparse-applicative.version == "0.0.0.0"; doJailbreak super.trial-optparse-applicative;
+
+  # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
+  extensions = assert super.extensions.version == "0.0.0.1"; doJailbreak super.extensions;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
