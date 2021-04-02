@@ -13,6 +13,7 @@ buildPythonApplication rec {
   };
 
   checkInputs = [ python3.pkgs.pytest ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
   propagatedBuildInputs = with python3.pkgs;
     [
       Babel
