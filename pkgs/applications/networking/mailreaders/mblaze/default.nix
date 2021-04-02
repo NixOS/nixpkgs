@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     installShellCompletion contrib/_mblaze
   '' + lib.optionalString (ruby != null) ''

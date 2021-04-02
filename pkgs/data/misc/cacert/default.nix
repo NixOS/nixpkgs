@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   certdata2pem = fetchurl {
     name = "certdata2pem.py";
-    url = [
+    urls = [
       "https://salsa.debian.org/debian/ca-certificates/raw/debian/20170717/mozilla/certdata2pem.py"
       "https://git.launchpad.net/ubuntu/+source/ca-certificates/plain/mozilla/certdata2pem.py?id=47e49e1e0a8a1ca74deda27f88fe181191562957"
     ];

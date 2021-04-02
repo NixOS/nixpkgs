@@ -414,7 +414,7 @@ mapAliases ({
   memtest86 = memtest86plus; # added 2019-05-08
   mesa_noglu = mesa; # added 2019-05-28
   # NOTE: 2018-07-12: legacy alias:
-  # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
+  # grsecurity business is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
   # floating point textures patents are expired,
   # so package reduced to alias
   mesa_drivers = mesa.drivers;
@@ -702,7 +702,7 @@ mapAliases ({
 
   net_snmp = net-snmp; # added 2019-12-21
   oracleXE = throw "oracleXE has been removed, as it's heavily outdated and unmaintained."; # added 2020-10-09
-  spaceOrbit = space-orbit; # addewd 2016-05-23
+  spaceOrbit = space-orbit; # added 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
