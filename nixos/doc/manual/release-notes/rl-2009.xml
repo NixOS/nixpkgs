@@ -1019,6 +1019,14 @@ systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
    </listitem>
    <listitem>
     <para>
+      The syntax of the PostgreSQL configuration file is now checked at build
+      time. If your configuration includes a file inaccessible inside the build
+      sandbox, set <varname>services.postgresql.checkConfig</varname> to
+        <literal>false</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The rkt module has been removed, it was archived by upstream.
     </para>
    </listitem>

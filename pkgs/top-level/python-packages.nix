@@ -2064,6 +2064,8 @@ in {
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
+  drivelib = callPackage ../development/python-modules/drivelib { };
+
   drms = callPackage ../development/python-modules/drms { };
 
   dropbox = callPackage ../development/python-modules/dropbox { };
@@ -2239,6 +2241,8 @@ in {
   executor = callPackage ../development/python-modules/executor { };
 
   exifread = callPackage ../development/python-modules/exifread { };
+
+  expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   exrex = callPackage ../development/python-modules/exrex { };
 

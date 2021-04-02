@@ -230,6 +230,7 @@ in stdenv.mkDerivation {
 
     passthru = {
       pythonPackages = python3Packages;
+      ffmpeg = ffmpeg;
     };
 
     meta = with lib; {

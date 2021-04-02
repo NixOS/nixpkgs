@@ -779,6 +779,8 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  quich = callPackage ../tools/misc/quich { } ;
+
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
@@ -1033,6 +1035,8 @@ in
   };
 
   async = callPackage ../development/tools/async {};
+
+  async-profiler = callPackage ../development/tools/async-profiler { };
 
   atheme = callPackage ../servers/irc/atheme { };
 
@@ -3625,6 +3629,8 @@ in
 
   cutensor = cutensor_cudatoolkit_10;
 
+  curie = callPackage ../data/fonts/curie { };
+
   curlFull = curl.override {
     ldapSupport = true;
   };
@@ -4422,6 +4428,8 @@ in
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
+  libbtbb = callPackage ../development/libraries/libbtbb { };
+
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
   fastlane = callPackage ../tools/admin/fastlane { };
@@ -4690,6 +4698,17 @@ in
     fetchPypi
     dropbox
     annexremote
+    humanfriendly;
+  };
+
+  git-annex-remote-googledrive = callPackage ../applications/version-management/git-and-tools/git-annex-remote-googledrive {
+    inherit (python3Packages)
+    buildPythonApplication
+    fetchPypi
+    annexremote
+    drivelib
+    GitPython
+    tenacity
     humanfriendly;
   };
 
@@ -8853,6 +8872,8 @@ in
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
   ubridge = callPackage ../tools/networking/ubridge { };
+
+  ubertooth = callPackage ../applications/radio/ubertooth { };
 
   ucl = callPackage ../development/libraries/ucl { };
 
@@ -28103,6 +28124,7 @@ in
     clock-override = callPackage ../desktops/gnome-3/extensions/clock-override { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
+    disable-unredirect = callPackage ../desktops/gnome-3/extensions/disable-unredirect { };
     draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
     dynamic-panel-transparency = callPackage ../desktops/gnome-3/extensions/dynamic-panel-transparency { };
