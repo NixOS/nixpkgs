@@ -10,10 +10,8 @@
 , cyrus_sasl
 , doxygen
 , fetchFromGitLab
-, fetchurl
 , ffmpeg_3
 , gdk-pixbuf
-, git
 , glib
 , graphviz
 , gtk2
@@ -30,7 +28,6 @@
 , makeWrapper
 , mbedtls
 , mediastreamer
-, mediastreamer-openh264
 , openldap
 , ortp
 , pango
