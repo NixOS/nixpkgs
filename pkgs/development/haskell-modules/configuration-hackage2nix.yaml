@@ -2849,6 +2849,7 @@ package-maintainers:
     - taskwarrior
     - haskell-language-server
     - shake-bench
+    - iCalendar
   sorki:
     - cayene-lpp
     - data-stm32
@@ -7025,7 +7026,6 @@ broken-packages:
   - ib-api
   - iban
   - ical
-  - iCalendar
   - ice40-prim
   - IcoGrid
   - iconv-typed
