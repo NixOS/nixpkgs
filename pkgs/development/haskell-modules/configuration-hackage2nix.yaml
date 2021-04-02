@@ -2877,7 +2877,7 @@ package-maintainers:
     - nix-derivation
     - nix-narinfo
     - ttn
-    # - ttn-client
+    - ttn-client
     - update-nix-fetchgit
     - zre
   utdemir:
@@ -11103,7 +11103,6 @@ broken-packages:
   - tsvsql
   - tsweb
   - ttask
-  - ttn-client
   - tttool
   - tubes
   - tuntap
