@@ -73,8 +73,11 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  - ghcide < 1.1 # To stay hls 1.0 compatible
-  - hls-retrie-plugin < 1.0.0.1 # To stay hls 1.0 compatible
+  # To stay hls 1.0 compatible
+  - ghcide < 1.1
+  - hls-retrie-plugin < 1.0.0.1
+  - lsp < 1.2
+  - lsp-types < 1.2
 
   # Stackage Nightly 2021-03-21
   - abstract-deque ==0.3
@@ -2762,11 +2765,9 @@ extra-packages:
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
-  - haskell-lsp == 0.23.0.0             # required by hls-plugin-api 0.7.0.0, 2021-02-08
-  - haskell-lsp-types == 0.23.0.0       # required by hls-plugin-api 0.7.0.0, 2021-02-08
-  - lsp-test == 0.11.0.7                # required by hls-plugin-api 0.7.0.0, 2021-02-08
   - hlint < 3.3                         # We don‘t have ghc-lib-parser 9.0.X yet.
   - optparse-applicative < 0.16         # needed for niv-0.2.19
+  - lsp-test < 0.14                     # needed for hls 1.0.0
 
 package-maintainers:
   peti:

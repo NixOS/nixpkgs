@@ -1430,6 +1430,9 @@ self: super: {
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
   });
 
+  # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
+  lsp-test = doDistribute (dontCheck self.lsp-test_0_13_0_0);
+
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
   # Jailbreak because of: https://github.com/haskell/haskell-language-server/pull/1595
