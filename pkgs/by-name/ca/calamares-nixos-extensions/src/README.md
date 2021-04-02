@@ -172,9 +172,13 @@ phase).
 
 - [mobile](modules/mobile/CMakeLists.txt) is a QML **view** that
   takes over a number of other view steps. It is specific to
-  mobile phone use, possibly specific to PostmarketOS. It does
-  a number of "welcome to your new phone" things, e.g.
-  with PostmarketOS installed on a PinePhone.
+  mobile phone use, and as of writing used by
+  [postmarketOS](https://postmarketos.org) and
+  [Mobian](https://mobian-project.org/).  Among other things, it
+  allows to set up full disk encryption and to configure the
+  default user's password.  Read the
+  [on-device installer](https://wiki.postmarketos.org/wiki/On-device_installer)
+  article for more information.
 
 ### CMake Preparation
 
