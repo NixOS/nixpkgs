@@ -12,7 +12,6 @@
 , nixosTests
 , criu
 , system
-, fetchpatch
 }:
 
 let
@@ -29,6 +28,7 @@ let
     "test_pid_file.py"
     "test_preserve_fds.py"
     "test_resources"
+    "test_seccomp"
     "test_start.py"
     "test_uid_gid.py"
     "test_update.py"
@@ -38,23 +38,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VjMpfj2qUQdhqdnLpZsYigfo2sM7gNl0GrE4nitp13g=";
+    sha256 = "sha256-G9asWedX03cP5Qg5HIzlSIwwqNL16kiyWairk+6Kabw=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # For 0.18 some tests switched to static builds, this was reverted after 0.18 was released
-    (fetchpatch {
-      url = "https://github.com/containers/crun/commit/d26579bfe56aa36dd522745d47a661ce8c70d4e7.patch";
-      sha256 = "1xmc0wj0j2xcg0915vxn0pplc4s94rpmw0s5g8cyf8dshfl283f9";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
