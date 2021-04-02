@@ -800,6 +800,10 @@ self: super:
     };
   });
 
+  xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
+    buildInputs = attrs.buildInputs ++ [ self.libXv ];
+  });
+
   xf86videoxgi = super.xf86videoxgi.overrideAttrs (attrs: {
     patches = [
       # fixes invalid open mode
