@@ -34,6 +34,8 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pipewireSupport ? stdenv.isLinux
+, pipewire
 }:
 
 let
@@ -76,7 +78,8 @@ in mkDerivation rec {
   ]
   ++ optionals scriptingSupport [ luajit swig python3 ]
   ++ optional alsaSupport alsaLib
-  ++ optional pulseaudioSupport libpulseaudio;
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optional pipewireSupport pipewire;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
