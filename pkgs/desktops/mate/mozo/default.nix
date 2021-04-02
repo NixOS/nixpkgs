@@ -1,4 +1,4 @@
-{ lib, python3, fetchurl, pkg-config, gettext, mate, gtk3, glib, wrapGAppsHook, gobject-introspection }:
+{ lib, python3, fetchurl, pkg-config, gettext, mate, gtk3, glib, wrapGAppsHook, gobject-introspection, mateUpdateScript }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozo";
@@ -19,6 +19,8 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [ gtk3 glib ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "MATE Desktop menu editor";

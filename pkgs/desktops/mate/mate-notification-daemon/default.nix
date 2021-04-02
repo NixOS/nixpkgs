@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, gettext, glib, libcanberra-gtk3,
-  libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook }:
+  libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-notification-daemon";
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Notification daemon for MATE Desktop";

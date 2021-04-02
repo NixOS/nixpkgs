@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme }:
+{ lib, stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-icon-theme-faenza";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = {
     description = "Faenza icon theme from MATE";

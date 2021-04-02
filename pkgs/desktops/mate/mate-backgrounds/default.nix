@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, gettext }:
+{ lib, stdenv, fetchurl, meson, ninja, gettext, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-backgrounds";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ];
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Background images and data for MATE";

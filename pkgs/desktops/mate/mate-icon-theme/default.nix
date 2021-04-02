@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, iconnamingutils, librsvg, gtk3, hicolor-icon-theme }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, iconnamingutils, librsvg, gtk3, hicolor-icon-theme, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-icon-theme";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = {
     description = "Icon themes from MATE";

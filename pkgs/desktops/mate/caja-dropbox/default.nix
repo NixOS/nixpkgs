@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, substituteAll
 , pkg-config, gobject-introspection, gdk-pixbuf
-, gtk3, mate, python3, dropbox }:
+, gtk3, mate, python3, dropbox, mateUpdateScript }:
 
 let
   dropboxd = "${dropbox}/bin/dropbox";
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-caja-extension-dir=$$out/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Dropbox extension for Caja file manager";

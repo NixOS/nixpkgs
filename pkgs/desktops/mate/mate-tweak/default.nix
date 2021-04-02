@@ -9,6 +9,8 @@
 , gobject-introspection
 , wrapGAppsHook
 , glib
+, genericUpdater
+, common-updater-scripts
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -71,6 +73,12 @@ python3Packages.buildPythonApplication rec {
       sed -i "s,usr,run/current-system/sw,g" $out/$i
     done
   '';
+
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    attrPath = "mate.${pname}";
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  };
 
   meta = with lib; {
     description = "Tweak tool for the MATE Desktop";

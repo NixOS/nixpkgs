@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libxklavier }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libxklavier, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "libmatekbd";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 libxklavier ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Keyboard management library for MATE";

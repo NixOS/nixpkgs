@@ -17,6 +17,7 @@
 , enablePostScript ? true, libspectre
 , enableXps ? true, libgxps
 , enableImages ? false
+, mateUpdateScript
 }:
 
 with lib;
@@ -66,6 +67,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "A simple multi-page document viewer for the MATE desktop";

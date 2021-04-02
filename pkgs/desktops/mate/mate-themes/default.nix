@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, gettext, mate-icon-theme, gtk2, gtk3,
-  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg }:
+  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-themes";
@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript {
+    inherit pname version;
+    url = "https://pub.mate-desktop.org/releases/themes";
+  };
 
   meta = {
     description = "A set of themes from MATE";

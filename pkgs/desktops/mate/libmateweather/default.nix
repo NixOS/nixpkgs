@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libsoup, tzdata }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libsoup, tzdata, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   preFixup = "rm -f $out/share/icons/mate/icon-theme.cache";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Library to access weather information from online services for MATE";
