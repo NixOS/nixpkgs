@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozo";
-  version = "1.24.0";
+  version = "1.24.1";
 
   format = "other";
   doCheck = false;
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "01lyi47a04xk0by5bvnfmqgv5sysk2wdlri6a4ssmy1qhgwh9zr3";
+    sha256 = "14ps43gdh1sfvq49yhl58gxq3rc0d25i2d7r4ghlzf07ssxl53b0";
   };
 
   nativeBuildInputs = [ pkg-config gettext gobject-introspection wrapGAppsHook ];
