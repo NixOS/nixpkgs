@@ -94,10 +94,6 @@
 /pkgs/applications/science/math/R   @peti
 /pkgs/development/r-modules         @peti
 
-# Ruby
-/pkgs/development/interpreters/ruby @alyssais
-/pkgs/development/ruby-modules      @alyssais
-
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
 /pkgs/build-support/rust @andir @danieldk @zowoq
