@@ -22,8 +22,7 @@ let
       rebar3 = callPackage ../tools/build-managers/rebar3 { };
 
       # rebar3 port compiler plugin is required by buildRebar3
-      pc_1_6_0 = callPackage ./pc { };
-      pc = pc_1_6_0;
+      pc = callPackage ./pc { };
 
       fetchHex = callPackage ./fetch-hex.nix { };
 
