@@ -4,7 +4,7 @@
 , cmake
 , ninja
 , perl # Project uses Perl for scripting and testing
-, python
+, python3
 
 , enableThreading ? true # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
 }:
@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "0mz7n373b8d287crwi6kq2hb8ryyi228j38h25744lqai23qj5cf";
   };
 
-  nativeBuildInputs = [ cmake ninja perl python ];
+  nativeBuildInputs = [ cmake ninja perl python3 ];
+
+  strictDeps = true;
 
   postConfigure = lib.optionals enableThreading ''
     perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer

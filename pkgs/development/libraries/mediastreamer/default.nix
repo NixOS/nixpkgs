@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
     srtp
   ];
 
+  strictDeps = true;
+
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
