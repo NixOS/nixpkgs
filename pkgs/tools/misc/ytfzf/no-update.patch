@@ -23,8 +23,8 @@ index 42f41c0..f75f5cb 100755
 -
 -	rm "$updatefile"
 -	exit
-+ 	printf "%bUpdates have to be installed through Nix.%b\n" "$c_red" "$c_reset"
-+ 	exit 1
++	printf "%bUpdates have to be installed through Nix.%b\n" "$c_red" "$c_reset"
++	exit 1
  }
  
  scrape_subscriptions () {
