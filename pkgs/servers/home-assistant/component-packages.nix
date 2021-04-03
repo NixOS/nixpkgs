@@ -277,7 +277,7 @@
     "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms
-    "freebox" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: freebox-api
+    "freebox" = ps: with ps; [ aiohttp-cors freebox-api netdisco zeroconf ];
     "freedns" = ps: with ps; [ ];
     "fritz" = ps: with ps; [ fritzconnection ];
     "fritzbox" = ps: with ps; [ pyfritzhome ];
