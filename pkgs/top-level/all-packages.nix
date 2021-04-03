@@ -7160,6 +7160,8 @@ in
 
   owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
 
+  oxefmsynth = callPackage ../applications/audio/oxefmsynth { };
+
   oxidized = callPackage ../tools/admin/oxidized { };
 
   oxipng = callPackage ../tools/graphics/oxipng { };
