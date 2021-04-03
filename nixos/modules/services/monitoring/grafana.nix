@@ -15,6 +15,7 @@ let
     SERVER_PROTOCOL = cfg.protocol;
     SERVER_HTTP_ADDR = cfg.addr;
     SERVER_HTTP_PORT = cfg.port;
+    SERVER_SOCKET = cfg.socket;
     SERVER_DOMAIN = cfg.domain;
     SERVER_ROOT_URL = cfg.rootUrl;
     SERVER_STATIC_ROOT_PATH = cfg.staticRootPath;
@@ -289,6 +290,12 @@ in {
       description = "Listening port.";
       default = 3000;
       type = types.int;
+    };
+
+    socket = mkOption {
+      description = "Listening socket.";
+      default = "/run/grafana/grafana.sock";
+      type = types.str;
     };
 
     domain = mkOption {
@@ -622,6 +629,8 @@ in {
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
+        RuntimeDirectory = "grafana";
+        RuntimeDirectoryMode = "0755";
       };
       preStart = ''
         ln -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}

@@ -25508,6 +25508,8 @@ in
 
   split2flac = callPackage ../applications/audio/split2flac { };
 
+  spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
+
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
@@ -29303,6 +29305,8 @@ in
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
 
+  cups-drv-rastertosag-gdi = callPackage ../misc/cups/drivers/cups-drv-rastertosag-gdi { };
+
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
@@ -29539,6 +29543,8 @@ in
   };
 
   martyr = callPackage ../development/libraries/martyr { };
+
+  mas = callPackage ../os-specific/darwin/mas { };
 
   moltengamepad = callPackage ../misc/drivers/moltengamepad { };
 
@@ -30616,13 +30622,6 @@ in
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare {};
 
   pentablet-driver = libsForQt5.callPackage ../misc/drivers/pentablet-driver { };
-
-  qmk_firmware = callPackage ../development/misc/qmk_firmware {
-    avrgcc = pkgsCross.avr.buildPackages.gcc;
-    avrbinutils = pkgsCross.avr.buildPackages.binutils;
-    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
-    gcc-armhf-embedded = pkgsCross.armhf-embedded.buildPackages.gcc;
-  };
 
   new-session-manager = callPackage ../applications/audio/new-session-manager { };
 
