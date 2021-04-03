@@ -3286,6 +3286,8 @@ with pkgs;
 
   maigret = callPackage ../tools/security/maigret { };
 
+  maliit-framework = libsForQt5.callPackage ../applications/misc/maliit-framework { };
+
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
