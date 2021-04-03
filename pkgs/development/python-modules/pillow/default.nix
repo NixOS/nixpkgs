@@ -86,6 +86,7 @@ buildPythonPackage rec {
       url = "https://github.com/python-pillow/Pillow/commit/480f6819b592d7f07b9a9a52a7656c10bbe07442.patch";
       sha256 = "0d7797g0lib3szz5w41b7winpdxcnbf35y4fpyklb49f753wl972";
     })
+    ./7.2.0-CVE-2021-25287-CVE-2021-25288.patch
   ];
 
   # patching mechanism doesn't work with binary files, but the commits contain
@@ -205,6 +206,26 @@ buildPythonPackage rec {
       commit = "480f6819b592d7f07b9a9a52a7656c10bbe07442";
       sha256 = "1y6317hfvmlcnkbf2qy6a7i8zxgydi9s8lagb21fn2a3k1igymha";
       path = "Tests/images/oom-8ed3316a4109213ca96fb8a256a0bfefdece1461.icns";
+    }
+    { # needed by 7.2.0-CVE-2021-25287-CVE-2021-25288.patch
+      commit = "3bf5eddb89afdf690eceaa52bc4d3546ba9a5f87";
+      sha256 = "1rsjr6nsljghs6v0vp671bffpw3sj5b57g23mcd0acj4qsm9rjdy";
+      path = "Tests/images/crash-4fb027452e6988530aa5dabee76eecacb3b79f8a.j2k";
+    }
+    { # needed by 7.2.0-CVE-2021-25287-CVE-2021-25288.patch
+      commit = "3bf5eddb89afdf690eceaa52bc4d3546ba9a5f87";
+      sha256 = "13immd1h2cwcj9vf1g7v1yrhwnbk50dqz447fzjz4m1zsp17627i";
+      path = "Tests/images/crash-7d4c83eb92150fb8f1653a697703ae06ae7c4998.j2k";
+    }
+    { # needed by 7.2.0-CVE-2021-25287-CVE-2021-25288.patch
+      commit = "3bf5eddb89afdf690eceaa52bc4d3546ba9a5f87";
+      sha256 = "0xdnaayjj6n9mzpxpprq6508p0w618l2c6y2jgbs36gmj21smpis";
+      path = "Tests/images/crash-ccca68ff40171fdae983d924e127a721cab2bd50.j2k";
+    }
+    { # needed by 7.2.0-CVE-2021-25287-CVE-2021-25288.patch
+      commit = "3bf5eddb89afdf690eceaa52bc4d3546ba9a5f87";
+      sha256 = "1czlvbdc89bcq48cgf1kay3ncbgag4i1pz555g8cm4dxxirv5j0x";
+      path = "Tests/images/crash-d2c93af851d3ab9a19e34503626368b2ecde9c03.j2k";
     }
   ];
 
