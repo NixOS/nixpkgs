@@ -5593,6 +5593,8 @@ in
 
   ispike = callPackage ../development/libraries/science/robotics/ispike { };
 
+  isrcsubmit = callPackage ../tools/audio/isrcsubmit { };
+
   isync = callPackage ../tools/networking/isync {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
