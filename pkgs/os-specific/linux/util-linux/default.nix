@@ -67,7 +67,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "A set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
-    license = licenses.gpl2; # also contains parts under more permissive licenses
+    # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
+    license = with licenses; [ gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain ];
     platforms = platforms.linux;
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
