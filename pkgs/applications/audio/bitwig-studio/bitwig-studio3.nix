@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "10nf29zr0xg9mxmknkc39jh3y9kpxzy5wg1v0s3kkd180lja9zpn";
+    sha256 = "sha256-k7L6CU2lY9192tfaWtVOxq9BCY7FZZdxmHT8EA+ZFsk=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];

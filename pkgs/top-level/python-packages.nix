@@ -5966,6 +5966,8 @@ in {
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 
+  pymemcache = callPackage ../development/python-modules/pymemcache { };
+
   pymemoize = callPackage ../development/python-modules/pymemoize { };
 
   pyment = callPackage ../development/python-modules/pyment { };

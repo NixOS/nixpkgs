@@ -9821,6 +9821,12 @@
     githubId = 27586264;
     name = "Tobias Schmidt";
   };
+  totoroot = {
+    name = "Matthias Thym";
+    email = "git@thym.at";
+    github = "totoroot";
+    githubId = 39650930;
+  };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
     github = "travisbhartwell";
