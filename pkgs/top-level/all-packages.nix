@@ -30565,6 +30565,8 @@ in
 
   opengrm-ngram = callPackage ../development/libraries/opengrm-ngram {};
 
+  openring = callPackage ../applications/misc/openring { };
+
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
   duti = callPackage ../os-specific/darwin/duti {
