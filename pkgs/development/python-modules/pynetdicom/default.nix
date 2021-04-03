@@ -35,12 +35,19 @@ buildPythonPackage rec {
     "test_associate_reject"
     "TestEchoSCP"
     "TestEchoSCPCLI"
+    "TestFindSCP"
+    "TestFindSCPCLI"
+    "TestGetSCP"
+    "TestGetSCPCLI"
+    "TestMoveSCP"
+    "TestMoveSCPCLI"
+    "TestQRGetServiceClass"
+    "TestQRMoveServiceClass"
     "TestStoreSCP"
     "TestStoreSCPCLI"
     "TestStoreSCU"
     "TestStoreSCUCLI"
-    "TestQRGetServiceClass"
-    "TestQRMoveServiceClass"
+    "TestState"
   ];
 
   pythonImportsCheck = [ "pynetdicom" ];
