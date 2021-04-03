@@ -8128,6 +8128,8 @@ in {
 
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
+  tap = callPackage ../development/python-modules/python-tap { };
+
   tarman = callPackage ../development/python-modules/tarman { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
