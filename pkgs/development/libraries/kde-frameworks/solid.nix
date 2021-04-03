@@ -1,14 +1,11 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   bison, extra-cmake-modules, flex,
   media-player-info, qtbase, qtdeclarative, qttools
 }:
 
 mkDerivation {
   name = "solid";
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
   nativeBuildInputs = [ bison extra-cmake-modules flex media-player-info ];
   buildInputs = [ qtdeclarative qttools ];
   propagatedBuildInputs = [ qtbase ];

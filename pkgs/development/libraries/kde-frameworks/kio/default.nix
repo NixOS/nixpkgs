@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchpatch,
+  mkDerivation, fetchpatch,
   extra-cmake-modules, kdoctools, qttools,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
@@ -9,7 +9,6 @@
 
 mkDerivation {
   name = "kio";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
