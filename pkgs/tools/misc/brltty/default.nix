@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, python3, bluez
-, tcl, acl, kmod, coreutils, shadow
+, tcl, acl, kmod, coreutils, shadow, util-linux, udev
 , alsaSupport ? stdenv.isLinux, alsaLib
 , systemdSupport ? stdenv.isLinux, systemd
 }:
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "SYSTEMD_USERS_DIRECTORY=$(out)/lib/sysusers.d"
     "SYSTEMD_FILES_DIRECTORY=$(out)/lib/tmpfiles.d"
     "UDEV_LIBRARY_DIRECTORY=$(out)/lib/udev"
+    "UDEV_RULES_TYPE=all"
     "POLKIT_POLICY_DIR=$(out)/share/polkit-1/actions"
     "POLKIT_RULE_DIR=$(out)/share/polkit-1/rules.d"
   ];
@@ -70,6 +71,8 @@ stdenv.mkDerivation rec {
       substituteInPlace systemd/system/brltty@.service \
         --replace '/usr/lib' "$out/lib" \
         --replace '/sbin/modprobe' '${kmod}/bin/modprobe'
+      # Ensure the systemd-wrapper script uses the correct path to the brltty binary
+      sed "/^Environment=\"BRLTTY_EXECUTABLE_ARGUMENTS.*/a Environment=\"BRLTTY_EXECUTABLE_PATH=$out/bin/brltty\"" -i systemd/system/brltty@.service
       substituteInPlace systemd/system/brltty-device@.service \
         --replace '/usr/bin/true' '${coreutils}/bin/true'
       substituteInPlace udev/rules.d/90-brltty-uinput.rules \
@@ -79,6 +82,14 @@ stdenv.mkDerivation rec {
 
       # Remove unused commands from udev rules
       sed '/initctl/d' -i udev/rules.d/90-brltty-device.rules
-    )
+      # Remove pulse-access group from systemd unit and sysusers
+      substituteInPlace systemd/system/brltty@.service \
+        --replace 'SupplementaryGroups=pulse-access' '# SupplementaryGroups=pulse-access'
+      substituteInPlace sysusers.d/brltty.conf \
+        --replace 'm brltty pulse-access' '# m brltty pulse-access'
+     )
+     substituteInPlace $out/libexec/brltty/systemd-wrapper \
+       --replace 'logger' "${util-linux}/bin/logger" \
+       --replace 'udevadm' "${udev}/bin/udevadm"
   '';
 }
