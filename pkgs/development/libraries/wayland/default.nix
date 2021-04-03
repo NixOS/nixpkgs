@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     patchShebangs doc/doxygen/gen-doxygen.py
   '';
 
-  outputs = [ "out" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
+  outputs = [ "out" "bin" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
 
   mesonFlags = [
