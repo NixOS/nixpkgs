@@ -5945,8 +5945,6 @@ in
 
   kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
 
-  kippo = callPackage ../servers/kippo { };
-
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   lagrange = callPackage ../applications/networking/browsers/lagrange {
@@ -14266,8 +14264,6 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
-
   gdal_2 = callPackage ../development/libraries/gdal/2.4.nix { };
 
   gdcm = callPackage ../development/libraries/gdcm { };
@@ -15362,7 +15358,9 @@ in
 
   libgxps = callPackage ../development/libraries/libgxps { };
 
-  libiio = callPackage ../development/libraries/libiio { };
+  libiio = callPackage ../development/libraries/libiio {
+    python = python3;
+  };
 
   libinjection = callPackage ../development/libraries/libinjection { };
 
@@ -22783,7 +22781,7 @@ in
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  gtimelog = pythonPackages.gtimelog;
+  gtimelog = with python3Packages; toPythonApplication gtimelog;
 
   inherit (gnome3) gucharmap;
 
@@ -27454,9 +27452,7 @@ in
 
   icbm3d = callPackage ../games/icbm3d { };
 
-  ingen = callPackage ../applications/audio/ingen {
-    inherit (pythonPackages) rdflib;
-  };
+  ingen = callPackage ../applications/audio/ingen { };
 
   ideogram = callPackage ../applications/graphics/ideogram { };
 
