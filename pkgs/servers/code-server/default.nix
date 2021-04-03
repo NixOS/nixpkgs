@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cdr";
     repo = "code-server";
-    rev = commit;
+    rev = "v${version}";
     sha256 = "0jgmf8d7hki1iv6yy1z0s5qjyxchxnwj8kv53jrwkllim08swbi3";
   };
 
