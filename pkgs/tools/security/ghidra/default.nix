@@ -25,12 +25,12 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "ghidra";
-  version = "9.2.1";
-  versiondate = "20201215";
+  version = "9.2.2";
+  versiondate = "20201229";
 
   src = fetchzip {
     url = "https://www.ghidra-sre.org/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    sha256 = "0rjzmx0nbv9flb666mk3w2dqliyfzjyc4ldjfmb5d29wpgnf9bnz";
+    sha256 = "1xahkwiqdcwxssah16hhgrmyam49cb341xp5ysycj1h0kkm8p53s";
   };
 
   nativeBuildInputs = [
