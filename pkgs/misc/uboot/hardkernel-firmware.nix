@@ -98,8 +98,11 @@ in {
     '';
 
     filesToInstall = [
-      "build/scp_task/bl301.bin" "fip/gxb/bl30.bin" "fip/gxb/bl2.package"
-      "sd_fuse/sd_fusing.sh" "sd_fuse/bl1.bin.hardkernel"
+      "build/scp_task/bl301.bin"
+      "fip/gxb/bl2.package"
+      "fip/gxb/bl30.bin"
+      "sd_fuse/bl1.bin.hardkernel"
+      "sd_fuse/sd_fusing.sh"
     ];
 
     extraMeta.platforms = [ "aarch64-linux" ];
@@ -123,11 +126,20 @@ in {
     '';
 
     filesToInstall = [
-      "build/board/hardkernel/odroidc4/firmware/acs.bin" "build/scp_task/bl301.bin"
-      "fip/g12a/bl2.bin" "fip/g12a/bl30.bin" "fip/g12a/bl31.img"
-      "fip/g12a/ddr3_1d.fw" "fip/g12a/ddr4_1d.fw" "fip/g12a/ddr4_2d.fw"
-      "fip/g12a/lpddr3_1d.fw" "fip/g12a/lpddr4_1d.fw" "fip/g12a/lpddr4_2d.fw"
-      "fip/g12a/diag_lpddr4.fw" "fip/g12a/piei.fw" "fip/g12a/aml_ddr.fw"
+      "build/board/hardkernel/odroidc4/firmware/acs.bin"
+      "build/scp_task/bl301.bin"
+      "fip/g12a/aml_ddr.fw"
+      "fip/g12a/bl2.bin"
+      "fip/g12a/bl30.bin"
+      "fip/g12a/bl31.img"
+      "fip/g12a/ddr3_1d.fw"
+      "fip/g12a/ddr4_1d.fw"
+      "fip/g12a/ddr4_2d.fw"
+      "fip/g12a/diag_lpddr4.fw"
+      "fip/g12a/lpddr3_1d.fw"
+      "fip/g12a/lpddr4_1d.fw"
+      "fip/g12a/lpddr4_2d.fw"
+      "fip/g12a/piei.fw"
       "sd_fuse/sd_fusing.sh"
     ];
 
