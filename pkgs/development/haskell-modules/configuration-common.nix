@@ -331,7 +331,7 @@ self: super: {
   pipes-websockets = dontCheck super.pipes-websockets;
   posix-pty = dontCheck super.posix-pty; # https://github.com/merijn/posix-pty/issues/12
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
-  postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
+  postgresql-simple-migration = doJailbreak (dontCheck super.postgresql-simple-migration);
   process-streaming = dontCheck super.process-streaming;
   punycode = dontCheck super.punycode;
   pwstore-cli = dontCheck super.pwstore-cli;
@@ -1027,10 +1027,16 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  # Requires pg_ctl command during tests
-  beam-postgres = overrideCabal super.beam-postgres (drv: {
+  # Aeson dependency version bound not satifised but it builds fine without it
+  beam-core = doJailbreak super.beam-core;
+
+  # Aeson dependency version bound not satifised but it builds fine without it
+  beam-migrate = doJailbreak super.beam-migrate;
+
+  # dontcheck: Even though pg_ctl command is provided during tests it doesn't work.
+  beam-postgres = doJailbreak (dontCheck (overrideCabal super.beam-postgres (drv: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
-    });
+    })));
 
   # Fix for base >= 4.11
   scat = overrideCabal super.scat (drv: {

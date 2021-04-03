@@ -3575,11 +3575,8 @@ broken-packages:
   - bdo
   - beam
   - beam-automigrate
-  - beam-core
-  - beam-migrate
   - beam-mysql
   - beam-newtype-field
-  - beam-postgres
   - beam-sqlite
   - beam-th
   - beamable
@@ -9138,7 +9135,6 @@ broken-packages:
   - postgresql-named
   - postgresql-query
   - postgresql-simple-bind
-  - postgresql-simple-migration
   - postgresql-simple-named
   - postgresql-simple-queue
   - postgresql-simple-sop
