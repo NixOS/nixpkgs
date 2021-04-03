@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
@@ -35,7 +36,7 @@
 , scipy
 , shiboken2
 , soqt
-, spaceNavSupport ? false
+, spaceNavSupport ? stdenv.isLinux
 , swig
 , vtk
 , wrapQtAppsHook

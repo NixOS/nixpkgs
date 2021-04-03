@@ -7,9 +7,11 @@
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
-, spaceNavSupport ? false, libspnav
+, spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, potrace
+, openxr-loader
 , embree, gmp
 }:
 
@@ -24,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.91.0";
+  version = "2.92.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "0x396lgmk0dq9115yrc36s8zwxzmjr490sr5n2y6w27y17yllyjm";
+    sha256 = "15a5vffn18a920286x0avbc2rap56k6y531wgibq68r90g2cz4g7";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -44,11 +46,13 @@ stdenv.mkDerivation rec {
       embree
       gmp
       pugixml
+      potrace
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
       libGLU libGL openal
       libXxf86vm
+      openxr-loader
       # OpenVDB currently doesn't build on darwin
       openvdb
     ]
@@ -104,6 +108,7 @@ stdenv.mkDerivation rec {
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
       "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python.sitePackages}/numpy/core/include"
       "-DWITH_OPENVDB=ON"
       "-DWITH_TBB=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
