@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, makeWrapper, python, qmake, ctags, gdb }:
+{ mkDerivation, lib, fetchurl, makeWrapper, python3, qmake, ctags, gdb }:
 
 mkDerivation rec {
   pname = "gede";
@@ -9,9 +9,11 @@ mkDerivation rec {
     sha256 = "0hbsy2ymzgl8xd9mnh43gxdfncy7g6czxfvfyh7zp3ij8yiwf8x3";
   };
 
-  nativeBuildInputs = [ qmake makeWrapper python ];
+  nativeBuildInputs = [ qmake makeWrapper python3 ];
 
   buildInputs = [ ctags ];
+
+  strictDeps = true;
 
   dontUseQmakeConfigure = true;
 

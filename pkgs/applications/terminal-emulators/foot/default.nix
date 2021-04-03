@@ -18,10 +18,14 @@
 , pkg-config
 , allowPgo ? true
 , python3  # for PGO
+# for clang stdenv check
+, foot
+, llvmPackages
+, llvmPackages_latest
 }:
 
 let
-  version = "1.7.0";
+  version = "1.7.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -67,8 +71,8 @@ let
 
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#performance-optimized-pgo
   pgoCflags = {
-    "clang" = "-O3 -Wno-ignored-optimization-argument -Wno-profile-instr-out-of-date -Wno-profile-instr-unprofiled";
-    "gcc" = "-O3 -Wno-missing-profile";
+    "clang" = "-O3 -Wno-ignored-optimization-argument";
+    "gcc" = "-O3";
   }."${compilerName}";
 
   # ar with lto support
@@ -89,7 +93,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0w07fw7y31g891335ji3fm783r4dsk5py82qp0zx6z3rfr07paby";
+    sha256 = "1x6nyhlp0zynnbdjx87c4ybfx6fyr0r53vypkfima56dwbfh98ka";
   };
 
   nativeBuildInputs = [
@@ -130,11 +134,25 @@ stdenv.mkDerivation rec {
   preBuild = lib.optionalString doPgo ''
     meson configure -Db_pgo=generate
     ninja
+    # make sure there is _some_ profiling data on all binaries
+    ./footclient --version
+    ./foot --version
+    # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
-  '' + lib.optionalString (doPgo && stdenv.cc.cc.pname == "clang") ''
+  '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
+
+  passthru.tests = {
+    clang-default-compilation = foot.override {
+      inherit (llvmPackages) stdenv;
+    };
+
+    clang-latest-compilation = foot.override {
+      inherit (llvmPackages_latest) stdenv;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
