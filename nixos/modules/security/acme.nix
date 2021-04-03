@@ -68,7 +68,7 @@ let
     '' + (concatStringsSep "\n" (mapAttrsToList (cert: data: ''
       for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
-          chmod -R u=rwX,g=rX,o= "$fixpath"
+          chmod -R u=rwX,g=rX,o=${optionalString data.worldReadable "rX"} "$fixpath"
           chown -R acme:${data.group} "$fixpath"
         fi
       done
@@ -94,6 +94,7 @@ let
     acmeServer = if data.server != null then data.server else cfg.server;
     useDns = data.dnsProvider != null;
     destPath = "/var/lib/acme/${cert}";
+    certPermissions = if data.worldReadable then "644" else "640";
     selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
     # Minica and lego have a "feature" which replaces * with _. We need
@@ -159,8 +160,7 @@ let
 
   in {
     inherit accountHash cert selfsignedDeps;
-
-    group = data.group;
+    inherit (data) group worldReadable;
 
     renewTimer = {
       description = "Renew ACME Certificate for ${cert}";
@@ -220,7 +220,7 @@ let
         cat cert.pem chain.pem > fullchain.pem
         cat key.pem fullchain.pem > full.pem
 
-        chmod 640 *
+        chmod ${certPermissions} *
 
         # Group might change between runs, re-apply it
         chown 'acme:${data.group}' *
@@ -340,7 +340,7 @@ let
         fi
 
         mv domainhash.txt certificates/
-        chmod 640 certificates/*
+        chmod ${certPermissions} certificates/*
         chmod -R u=rwX,g=,o= accounts/*
 
         # Group might change between runs, re-apply it
@@ -422,6 +422,16 @@ let
         type = types.str;
         default = "acme";
         description = "Group running the ACME client.";
+      };
+
+      worldReadable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Makes the certificate files world readable. This alleviates the need
+          to add deamon users to the <literal>acme</literal> group, at the cost
+          of decreased security.
+        '';
       };
 
       postRun = mkOption {
