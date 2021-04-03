@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "2.6.7";
+  version = "2.6.8";
 
   src = fetchFromGitHub {
-    owner = "peak3d";
+    owner = "xbmc";
     repo = "inputstream.adaptive";
     rev = "${version}-${rel}";
-    sha256 = "1pwqmbr78wp12jn6rwv63npdfc456adwz0amlxf6gvgg43li6p7s";
+    sha256 = "0m2d5r0f82qv4kqmq5yxzpi1awkjir2b2s2mfwkjn8p55r7gzp7c";
   };
 
   extraBuildInputs = [ expat ];
@@ -20,7 +20,7 @@ buildKodiBinaryAddon rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/peak3d/inputstream.adaptive";
+    homepage = "https://github.com/xbmc/inputstream.adaptive";
     description = "Kodi inputstream addon for several manifest types";
     platforms = platforms.all;
     license = licenses.gpl2Only;

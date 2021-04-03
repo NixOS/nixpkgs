@@ -670,6 +670,8 @@ in
 
   acme-sh = callPackage ../tools/admin/acme.sh { };
 
+  acousticbrainz-client = callPackage ../tools/audio/acousticbrainz-client { };
+
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_2;
   };
@@ -904,6 +906,8 @@ in
   wezterm = callPackage ../applications/terminal-emulators/wezterm {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
   };
+
+  writefreely = callPackage ../applications/misc/writefreely { };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
 
@@ -2468,6 +2472,8 @@ in
   fzy = callPackage ../tools/misc/fzy { };
 
   g2o = libsForQt5.callPackage ../development/libraries/g2o { };
+
+  gb-backup = callPackage ../tools/backup/gamerbackup { };
 
   gbsplay = callPackage ../applications/audio/gbsplay { };
 
@@ -5587,6 +5593,8 @@ in
 
   ispike = callPackage ../development/libraries/science/robotics/ispike { };
 
+  isrcsubmit = callPackage ../tools/audio/isrcsubmit { };
+
   isync = callPackage ../tools/networking/isync {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7157,6 +7165,8 @@ in
   ovito = libsForQt5.callPackage ../applications/graphics/ovito { };
 
   owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
+
+  oxefmsynth = callPackage ../applications/audio/oxefmsynth { };
 
   oxidized = callPackage ../tools/admin/oxidized { };
 
