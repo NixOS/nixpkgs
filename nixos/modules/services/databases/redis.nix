@@ -295,6 +295,32 @@ in
         StateDirectoryMode = "0700";
         # Access write directories
         UMask = "0077";
+        # Capabilities
+        CapabilityBoundingSet = "";
+        # Security
+        NoNewPrivileges = true;
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @privileged @raw-io @reboot @resources @setuid @swap";
       };
     };
   };
