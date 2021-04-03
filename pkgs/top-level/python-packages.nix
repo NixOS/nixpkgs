@@ -8380,6 +8380,8 @@ in {
 
   tailer = callPackage ../development/python-modules/tailer { };
 
+  tappy = callPackage ../development/python-modules/tappy { };
+
   tarman = callPackage ../development/python-modules/tarman { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
