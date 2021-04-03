@@ -15,10 +15,14 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    eth-utils
     pysha3
     pycrypto
     pycryptodome
+  ];
+
+  pipInstallFlags = [
+    # Circular dependency on eth-utils
+    "--no-dependencies"
   ];
 
   # setuptools-markdown uses pypandoc which is broken at the moment
