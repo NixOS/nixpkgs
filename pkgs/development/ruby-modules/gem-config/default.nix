@@ -211,12 +211,12 @@ in
     '';
   };
 
-  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.1") {
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
     dontBuild = false;
     postPatch = ''
       sed -i "s;'https://codeload.github.com.*';'${fetchurl {
-        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.0";
-        sha256 = "0ghk0dlmrn634p3zjr41fy4ipgw8i44f67a4l8cspqg0395m3rp5";
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
+        sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
       }}';" ext/pg_query/extconf.rb
     '';
   } // lib.optionalAttrs (attrs.version == "1.3.0") {
