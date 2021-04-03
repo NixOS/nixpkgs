@@ -48,11 +48,11 @@ let
         maintainers = with maintainers; [ aarapov ];
       } // extraMeta;
     } // removeAttrs args [ "extraMeta" ]);
-    postPatch = ''
+    preBuild = ''
         substituteInPlace Makefile --replace "/bin/pwd" "pwd"
       '';
 in {
-  inherit buildHardkernelFirmware postPatch;
+  inherit buildHardkernelFirmware preBuild;
 
   firmwareOdroidC2 = buildHardkernelFirmware {
     defconfig = "odroidc2_config";
@@ -65,36 +65,37 @@ in {
       sha256 = "09s0y69ilrwnvqi1g11axsnhylq8kfljwqxdfjifa227mi0kzq37";
     };
 
-    # https://wiki.odroid.com/odroid-c2/software/building_u-boot
-    postPatch = ''
-      patch -p1 < ${fetchpatch {
+    patches = [ # https://wiki.odroid.com/odroid-c2/software/building_u-boot
+      (fetchpatch {
         url = "https://github.com/hardkernel/u-boot_firmware/commit/5ce504067bb83de03d17173d5585e849df5d5a33.patch";
         sha256 = "0m9slsv7lwm2cf2akmx1x6mqzmfckrvw1r0nls91w6g40982qwly";
-      }}
-      patch -p1 < ${fetchpatch {
+      })
+      (fetchpatch {
         url = "https://github.com/hardkernel/u-boot_firmware/commit/0002fa877ca919e808e5fb7675194f17abde5d8d.patch";
         sha256 = "0hr6037xl69v9clch8i3vr80vgfn453wcvza630mzifkkn2d1fh8";
-      }}
-      patch -p1 < ${fetchpatch {
+      })
+      (fetchpatch {
         url = "https://github.com/hardkernel/u-boot_firmware/commit/b129006d2bdd0aee3bc78593f9401b0873e6baf9.patch";
         sha256 = "1bj7mb6h8njpvimjbjgv801ay97gwdgg9cd1hlv39fwqvv1nzfir";
-      }}
-      patch -p1 < ${fetchpatch {
+      })
+      (fetchpatch {
         url = "https://github.com/hardkernel/u-boot_firmware/commit/d3642b8329a605f641046cf25aeba935fa2f06dc.patch";
         sha256 = "0iw06zvw8407s3r3n6v89z6jj8r6lwy0qm1izhf815qi3wxh55pq";
-      }}
-      patch -p1 < ${fetchpatch {
+      })
+      (fetchpatch {
         url = "https://github.com/hardkernel/u-boot_firmware/commit/911ab14f86b7c820aa3fe310b7eb7be0398292b1.patch";
         sha256 = "1sq4mynw6iivx2xm0hp55x7r58bvfgav62d169q5mwgi9imbv6kg";
-      }}
-      patch -p1 < ${fetchpatch {
+      })
+      (fetchpatch {
         url = "https://github.com/hardkernel/u-boot_firmware/commit/b7b90c1099b057d35ebae886b7846b5d9bfb4143.patch";
         sha256 = "17x5fc2rphgz6jybya7yk35j4h9iq0b7cnq2qhkq3lpw2060ldlg";
-      }}
+      })
+    ];
 
+    preBuild = ''
       substituteInPlace ./arch/arm/cpu/armv8/gxb/firmware/scp_task/Makefile \
         --replace "CROSS_COMPILE" "CROSS_COMPILE_32"
-    '' + postPatch;
+    '' + preBuild;
 
     filesToInstall = [
       "build/scp_task/bl301.bin"
@@ -119,10 +120,10 @@ in {
       sha256 = "0kv9hpsgpbikp370wknbyj6r6cyhp7hng3ng6xzzqaw13yy4qiz9";
     };
 
-    postPatch = ''
+    preBuild = ''
       substituteInPlace ./arch/arm/cpu/armv8/g12a/firmware/scp_task/Makefile \
         --replace "CROSS_COMPILE" "CROSS_COMPILE_32"
-    '' + postPatch;
+    '' + preBuild;
 
     filesToInstall = [
       "build/board/hardkernel/odroidc4/firmware/acs.bin"
