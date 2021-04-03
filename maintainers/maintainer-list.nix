@@ -4283,6 +4283,12 @@
     githubId = 2588851;
     name = "Jan Solanti";
   };
+  jappie = {
+    email = "jappieklooster@hotmail.com";
+    github = "jappeace";
+    githubId = 3874017;
+    name = "Jappie Klooster";
+  };
   javaguirre = {
     email = "contacto@javaguirre.net";
     github = "javaguirre";
