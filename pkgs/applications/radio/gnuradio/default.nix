@@ -260,9 +260,6 @@ stdenv.mkDerivation rec {
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
       "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
     ]
-    ++ lib.optionals (hasFeature "volk" features && volk != null) [
-      "-DENABLE_INTERNAL_VOLK=OFF"
-    ]
   ;
 
   postInstall = shared.postInstall
