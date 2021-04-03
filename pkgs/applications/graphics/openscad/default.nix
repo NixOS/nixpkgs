@@ -25,6 +25,7 @@
 , mkDerivation
 , qtmacextras
 , qmake
+, spacenavSupport ? stdenv.isLinux, libspnav
 }:
 
 mkDerivation rec {
@@ -46,9 +47,15 @@ mkDerivation rec {
     qtbase qtmultimedia qscintilla
   ] ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
     ++ lib.optional stdenv.isDarwin qtmacextras
+    ++ lib.optional spacenavSupport libspnav
   ;
 
-  qmakeFlags = [ "VERSION=${version}" ];
+  qmakeFlags = [ "VERSION=${version}" ] ++
+    lib.optionals spacenavSupport [
+      "ENABLE_SPNAV=1"
+      "SPNAV_INCLUDEPATH=${libspnav}/include"
+      "SPNAV_LIBPATH=${libspnav}/lib"
+    ];
 
   # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
   enableParallelBuilding = false; # true by default due to qmake
