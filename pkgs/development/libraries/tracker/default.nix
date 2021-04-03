@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.0.3";
+  version = "3.1.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-b1yEqzvh7aUgUBsq7XIhYWoM8VKRDFN3V7U4vAXv/KM=";
+    sha256 = "sha256-Q3bi6YRUBm9E96JC5FuZs7/kwDtn+rGauw7Vhsp0iuc=";
   };
 
   patches = [
@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     python3.pkgs.pygobject3
+    python3.pkgs.tap
   ];
 
   mesonFlags = [
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
     patchShebangs utils/data-generators/cc/generate
     patchShebangs tests/functional-tests/test-runner.sh.in
     patchShebangs tests/functional-tests/*.py
+    patchShebangs examples/python/*.py
   '';
 
   preCheck = ''
