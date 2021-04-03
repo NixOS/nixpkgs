@@ -393,5 +393,6 @@ in with py.pkgs; buildPythonApplication rec {
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
+    platforms = platforms.linux;
   };
 }
