@@ -1,15 +1,17 @@
-{ lib, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python36, cmake
+{ lib, callPackage, fetchurl, fetchFromGitLab, buildPythonPackage, fetchFromGitHub, python36, cmake
 , pyqt5, numpy, scipy_1_4, shapely, libarcusLulzbot, doxygen, gettext, pythonOlder }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   version = "3.6.21";
   pname = "uranium";
   name = "uraniumLulzbot";
   format = "other";
 
-  src = fetchgit {
-    url = "https://code.alephobjects.com/diffusion/U/uranium.git";
-    rev = "54d911edd2551c5875c554928896122835a0dd6c";
+  src = fetchFromGitLab {
+    group = "lulzbot3d";
+    owner = "cura-le";
+    repo = "Uranium";
+    rev = "v${version}";
     sha256 = "04bym3vwikaxw8ab0mymv9sc9n8i7yw5kfsv99ic811g9lzz3j1i";
   };
 
@@ -29,7 +31,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A Python framework for building Desktop applications";
-    homepage = "https://code.alephobjects.com/diffusion/U/";
+    homepage = "https://gitlab.com/lulzbot3d/cura-le/uranium";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

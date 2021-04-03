@@ -1,12 +1,14 @@
-{ lib, mkDerivation, wrapQtAppsHook, callPackage, fetchgit, cmake, jq, python36, qtbase, qtquickcontrols2 }:
+{ lib, mkDerivation, wrapQtAppsHook, callPackage, fetchFromGitLab, cmake, jq, python36, qtbase, qtquickcontrols2 }:
 
 let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
-  curaBinaryDataVersion = "3.6.21"; # Marlin v2.0.0.174 for Bio, v2.0.0.144 for others.
-  curaBinaryData = fetchgit {
-    url = "https://code.alephobjects.com/diffusion/CBD/cura-binary-data.git";
-    rev = "5c75d0f6c10d8b7a903e2072a48cd1f08059509e";
-    sha256 = "1qdsj6rczwzdwzyr7nz7fnypbphckjrnwl8c9dr6izsxyzs465c4";
+  curaBinaryDataVersion = "3.6.23";
+  curaBinaryData = fetchFromGitLab {
+    group = "lulzbot3d";
+    owner = "cura-le";
+    repo = "cura-binary-data";
+    rev = "${curaBinaryDataVersion}";
+    sha256 = "188976fmzsvpvqfhriyws0g986zym9r7m2ismswiw2q6acj8r2nf";
   };
 
   libarcusLulzbot = callPackage ./libarcus.nix {
@@ -27,12 +29,14 @@ let
 in
 mkDerivation rec {
   pname = "cura-lulzbot";
-  version = "3.6.21";
+  version = "3.6.23";
 
-  src = fetchgit {
-    url = "https://code.alephobjects.com/source/cura-lulzbot.git";
-    rev = "7faeb18604c83004846a02c60cb240708db0034f";
-    sha256 = "10q38s8c8x6xkh1vns4p3iqa5y267vrjh5vq8h55mg1q5001scyq";
+  src = fetchFromGitLab {
+    group = "lulzbot3d";
+    owner = "cura-le";
+    repo = "cura-lulzbot";
+    rev = version;
+    sha256 = "1nq2jjjky5l5r16vcb1l49zsvqhkaq23dh4ghwdss88cpay8c9fk";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 ];
@@ -74,7 +78,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
-    homepage = "https://code.alephobjects.com/diffusion/CURA/";
+    homepage = "https://gitlab.com/lulzbot3d/cura-le/cura-lulzbot";
     license = licenses.agpl3;  # a partial relicense to LGPL has happened, but not certain that all AGPL bits are expunged
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];
