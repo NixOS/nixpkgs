@@ -5654,7 +5654,6 @@ broken-packages:
   - GGg
   - ggtsTC
   - gh-labeler
-  - ghc-bignum
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
