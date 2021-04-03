@@ -182,6 +182,7 @@ in with py.pkgs; buildPythonApplication rec {
     "api"
     "auth"
     "automation"
+    "axis"
     "bayesian"
     "binary_sensor"
     "caldav"
