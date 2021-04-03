@@ -2,8 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , docutils
-, pytestCheckHook
-, doCheck ? true
 }:
 
 buildPythonPackage rec {
@@ -17,8 +15,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ docutils ];
 
-  inherit doCheck;
-  checkInputs = [ pytestCheckHook ];
+  # Circular dependency with sphinx
+  doCheck = false;
 
   meta = {
     homepage = "https://pygments.org/";
