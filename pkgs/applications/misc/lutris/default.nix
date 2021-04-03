@@ -17,11 +17,13 @@
 , dbus-python
 , distro
 , evdev
+, lxml
 , pillow
 , pygobject3
 , pyyaml
 , requests
 , keyring
+, python_magic
 
 # commands that lutris needs
 , xrandr
@@ -71,13 +73,13 @@ let
 
 in buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.7.1";
+  version = "0.5.8.3";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "12ispwkbbm5aq263n3bdjmjfkpwplizacnqs2c0wnag4zj4kpm29";
+    sha256 = "sha256-NnWIP9oEndk/hDo5Z33pkmZ61pxT/ScmZ4YpS2ajK/8=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -94,7 +96,16 @@ in buildPythonApplication rec {
   ] ++ gstDeps;
 
   propagatedBuildInputs = [
-    evdev distro pyyaml pygobject3 requests pillow dbus-python keyring
+    evdev
+    distro
+    lxml
+    pyyaml
+    pygobject3
+    requests
+    pillow
+    dbus-python
+    keyring
+    python_magic
   ];
 
   # avoid double wrapping
@@ -112,7 +123,7 @@ in buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.linux;
   };
