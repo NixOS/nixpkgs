@@ -183,12 +183,12 @@ in {
     };
 
     package = mkOption {
-      default = pkgs.home-assistant.overrideAttrs (oldAttrs: {
-        doInstallCheck = false;
+      default = pkgs.home-assistant.overridePythonAttrs (oldAttrs: {
+        doCheck = false;
       });
       defaultText = literalExample ''
-        pkgs.home-assistant.overrideAttrs (oldAttrs: {
-          doInstallCheck = false;
+        pkgs.home-assistant.overridePythonAttrs (oldAttrs: {
+          doCheck = false;
         })
       '';
       type = types.package;
