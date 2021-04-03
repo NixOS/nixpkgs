@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     # The installer includes a copy of the streaming_extractor_music binary (not a symlink),
-    # which we don't need, because the wrapper adds ${essentia-extractor}/binary to PATH.
+    # which we don't need, because the wrapper adds essentia-extractor/binary to PATH.
     rm $out/bin/streaming_extractor_music
   '';
 
