@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.16.2";
+  version = "1.16.3";
 
   format = "other";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    sha256 = "1a48ca66izmm8hnp608jv5isg3jxb0vlfmhns0bg9nbkilag7390";
+    sha256 = "07qnqwr8g4q9b2rbcnhlb1svgpsqc6fz19k5p6lsmk15dhjhm81n";
   };
 
   nativeBuildInputs = [

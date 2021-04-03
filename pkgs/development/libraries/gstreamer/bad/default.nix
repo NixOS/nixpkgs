@@ -87,22 +87,16 @@ let
   inherit (stdenv.lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.16.2";
+  version = "1.16.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0x0y0hm0ga3zqi5q4090hw5sjh59y1ry9ak16qsaascm72i7mjzi";
+    sha256 = "0kaifdk997h63v10h26bvh2m37qhxxj0zcnmlm9hm3v525qfbvw4";
   };
 
   patches = [
-    # Fix build with neon 0.31
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1165
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/f10b424418e448211e3427a76fcd046e157ef0b7.patch";
-      sha256 = "0l1f6kqcl04q7w12a2b4qibcvjz6gqhs0csdv2wbvfd6zndpjm6p";
-    })
     ./fix_pkgconfig_includedir.patch
     # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1235
     ./opencv-4.3.patch
