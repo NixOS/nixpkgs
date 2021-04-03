@@ -670,6 +670,8 @@ in
 
   acme-sh = callPackage ../tools/admin/acme.sh { };
 
+  acousticbrainz-client = callPackage ../tools/audio/acousticbrainz-client { };
+
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_2;
   };
