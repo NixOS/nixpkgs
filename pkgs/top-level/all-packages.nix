@@ -2006,6 +2006,8 @@ in
 
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
 
+  clickclack = callPackage ../tools/misc/clickclack { };
+
   clog-cli = callPackage ../development/tools/clog-cli { };
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { };
