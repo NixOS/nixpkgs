@@ -29,10 +29,6 @@ let
       ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.stdenv.cc
         ++ lib.optional (!stdenv.isAarch64) pkgsCross.aarch64-multiplatform.buildPackages.gcc49;
 
-      postPatch = ''
-        substituteInPlace Makefile --replace "/bin/pwd" "pwd"
-      '';
-
       makeFlags = [
         "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
         "CROSS_COMPILE_32=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
@@ -52,8 +48,11 @@ let
         maintainers = with maintainers; [ aarapov ];
       } // extraMeta;
     } // removeAttrs args [ "extraMeta" ]);
+    postPatch = ''
+        substituteInPlace Makefile --replace "/bin/pwd" "pwd"
+      '';
 in {
-  inherit buildHardkernelFirmware;
+  inherit buildHardkernelFirmware postPatch;
 
   firmwareOdroidC2 = buildHardkernelFirmware {
     defconfig = "odroidc2_config";
@@ -67,7 +66,7 @@ in {
     };
 
     # https://wiki.odroid.com/odroid-c2/software/building_u-boot
-    prePatch = ''
+    postPatch = ''
       patch -p1 < ${fetchpatch {
         url = "https://github.com/hardkernel/u-boot_firmware/commit/5ce504067bb83de03d17173d5585e849df5d5a33.patch";
         sha256 = "0m9slsv7lwm2cf2akmx1x6mqzmfckrvw1r0nls91w6g40982qwly";
@@ -95,7 +94,7 @@ in {
 
       substituteInPlace ./arch/arm/cpu/armv8/gxb/firmware/scp_task/Makefile \
         --replace "CROSS_COMPILE" "CROSS_COMPILE_32"
-    '';
+    '' + postPatch;
 
     filesToInstall = [
       "build/scp_task/bl301.bin"
@@ -120,10 +119,10 @@ in {
       sha256 = "0kv9hpsgpbikp370wknbyj6r6cyhp7hng3ng6xzzqaw13yy4qiz9";
     };
 
-    prePatch = ''
+    postPatch = ''
       substituteInPlace ./arch/arm/cpu/armv8/g12a/firmware/scp_task/Makefile \
         --replace "CROSS_COMPILE" "CROSS_COMPILE_32"
-    '';
+    '' + postPatch;
 
     filesToInstall = [
       "build/board/hardkernel/odroidc4/firmware/acs.bin"
