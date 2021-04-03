@@ -227,6 +227,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hddtemp"
     "history"
     "history_stats"
+    "homekit"
     "homekit_controller"
     "homeassistant"
     "homematic"
