@@ -2,7 +2,8 @@
   mkDerivation, lib,
   extra-cmake-modules,
   kbookmarks, kcompletion, kconfig, kconfigwidgets, ki18n, kiconthemes, kio,
-  knewstuff, knotifications, kpackage, kwidgetsaddons, libXcursor, qtx11extras
+  knewstuff, knotifications, kpackage, kwidgetsaddons, libXcursor, qtx11extras,
+  kpackage
 }:
 
 mkDerivation {
@@ -14,4 +15,7 @@ mkDerivation {
     kwidgetsaddons libXcursor qtx11extras
   ];
   propagatedBuildInputs = [ kconfigwidgets kiconthemes ];
+  postInstall=''
+    ln -s {${kpackage},$out}/libexec
+  '';
 }
