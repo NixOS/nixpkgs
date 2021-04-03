@@ -283,7 +283,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     with subtest("machinectl reboot"):
         server.succeed("machinectl reboot container0")
-        server.wait_until_fails("ping -4 container0 -c3 >&2")
         server.wait_until_succeeds("ping -4 container0 -c3 >&2")
 
     with subtest("Dynamic networking"):
