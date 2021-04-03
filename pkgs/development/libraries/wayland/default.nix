@@ -1,16 +1,15 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
+, substituteAll
 , meson
 , pkg-config
-, substituteAll
 , ninja
-, libffi
-, libxml2
 , wayland
-, expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
+, expat
+, libxml2
 , withLibraries ? stdenv.isLinux
+, libffi
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
@@ -25,8 +24,6 @@
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
 
-# Require the optional to be enabled until upstream fixes or removes the configure flag
-assert expat != null;
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
@@ -46,6 +43,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = lib.optionalString withDocumentation ''
+    patchShebangs doc/doxygen/gen-doxygen.py
+  '';
+
   outputs = [ "out" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
 
@@ -53,10 +54,6 @@ stdenv.mkDerivation rec {
     "-Dlibraries=${lib.boolToString withLibraries}"
     "-Ddocumentation=${lib.boolToString withDocumentation}"
   ];
-
-  postPatch = lib.optionalString withDocumentation ''
-    patchShebangs doc/doxygen/gen-doxygen.py
-  '';
 
   depsBuildBuild = [
     pkg-config
