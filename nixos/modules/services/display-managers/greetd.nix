@@ -42,7 +42,8 @@ in
 
     restart = mkOption {
       type = types.bool;
-      default = true;
+      default = !(cfg.settings ? initial_session);
+      defaultText = "!(config.services.greetd.settings ? initial_session)";
       description = ''
         Wether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
