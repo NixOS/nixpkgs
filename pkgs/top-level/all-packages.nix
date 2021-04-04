@@ -19147,6 +19147,8 @@ in
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
+  trafficserver = callPackage ../servers/http/trafficserver { };
+
   inherit (callPackages ../servers/http/tomcat { })
     tomcat7
     tomcat8
