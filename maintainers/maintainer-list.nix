@@ -5006,6 +5006,12 @@
     githubId = 16481032;
     name = "Kiba Fox";
   };
+  kidd = {
+    email = "raimonster@gmail.com";
+    github = "kidd";
+    githubId = 25607;
+    name = "Raimon Grau";
+  };
   kierdavis = {
     email = "kierdavis@gmail.com";
     github = "kierdavis";
