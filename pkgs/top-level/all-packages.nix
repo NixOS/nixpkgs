@@ -13228,6 +13228,8 @@ in
 
   shellcheck = callPackage ../development/tools/shellcheck {};
 
+  shellharden = callPackage ../development/tools/shellharden {};
+
   schemaspy = callPackage ../development/tools/database/schemaspy { };
 
   shncpd = callPackage ../tools/networking/shncpd { };
