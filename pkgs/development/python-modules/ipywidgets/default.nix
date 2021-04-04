@@ -7,6 +7,7 @@
 , mock
 , ipython
 , ipykernel
+, jupyterlab-widgets
 , traitlets
 , notebook
 , widgetsnbextension
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ipython
     ipykernel
+    jupyterlab-widgets
     traitlets
     notebook
     widgetsnbextension
