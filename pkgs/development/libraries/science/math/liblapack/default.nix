@@ -7,7 +7,7 @@
 }:
 let
   inherit (lib) optional;
-  version = "3.9.0";
+  version = "3.9.1";
 in
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${version}";
-    sha256 = "0sxnc97z67i7phdmcnq8f8lmxgw10wdwvr8ami0w3pb179cgrbpb";
+    sha256 = "sha256-B7eRaEY9vaLvuKkJ7d2KWanGE7OXh43O0UbXFheUWK8=";
   };
 
   nativeBuildInputs = [ gfortran cmake ];
