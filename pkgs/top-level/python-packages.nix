@@ -896,6 +896,8 @@ in {
 
   backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat { };
 
+  backports-entry-points-selectable = callPackage ../development/python-modules/backports-entry-points-selectable { };
+
   backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
 
   backports_lzma = callPackage ../development/python-modules/backports_lzma { };
