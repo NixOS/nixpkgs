@@ -10,12 +10,10 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.E-3";
-
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
-      rev = version;
+      rev = common.version;
       sha256 = "qhHtsm5cM0ct/7qXev0SiLInO2jqs2odxhWndLfRDIE=";
     };
 
