@@ -19777,7 +19777,7 @@ in
     inherit (kernel) stdenv; # in particular, use the same compiler by default
 
     # to help determine module compatibility
-    inherit (kernel) isXen isZen isHardened isLibre;
+    inherit (kernel) isZen isHardened isLibre;
     inherit (kernel) kernelOlder kernelAtLeast;
 
     # Obsolete aliases (these packages do not depend on the kernel).
