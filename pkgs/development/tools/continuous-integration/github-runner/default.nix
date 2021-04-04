@@ -66,6 +66,11 @@ let
       "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
       "RepositoryActionWithWrapperActionfile_PreSteps"
       "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
+    ] ++ map
+    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
+    [
+      "EnsureDotnetsdkBashDownloadScriptUpToDate"
+      "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
     ];
   testFilterXml = lib.concatStringsSep "&amp;" disabledTest;
 in
