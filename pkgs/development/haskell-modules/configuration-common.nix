@@ -1034,7 +1034,9 @@ self: super: {
   beam-migrate = doJailbreak super.beam-migrate;
 
   # dontcheck: Even though pg_ctl command is provided during tests it doesn't work.
-  beam-postgres = doJailbreak (dontCheck (overrideCabal super.beam-postgres (drv: {
+  beam-postgres = overrideCabal super.beam-postgres (drv: {
+    jailbreak = true;
+    doCheck = false;
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
     })));
 
