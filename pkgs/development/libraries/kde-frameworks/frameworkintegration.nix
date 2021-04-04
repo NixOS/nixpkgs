@@ -2,8 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules,
   kbookmarks, kcompletion, kconfig, kconfigwidgets, ki18n, kiconthemes, kio,
-  knewstuff, knotifications, kpackage, kwidgetsaddons, libXcursor, qtx11extras,
-  kpackage
+  knewstuff, knotifications, kpackage, kwidgetsaddons, libXcursor, qtx11extras
 }:
 
 mkDerivation {
