@@ -28,6 +28,7 @@ let
     "blackbox"
     "collectd"
     "dnsmasq"
+    "domain"
     "dovecot"
     "fritzbox"
     "json"

@@ -201,6 +201,22 @@ let
       '';
     };
 
+    # Access to WHOIS server is required to properly test this exporter, so
+    # just perform basic sanity check that the exporter is running and returns
+    # a failure.
+    domain = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-domain-exporter.service")
+        wait_for_open_port(9222)
+        succeed(
+            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep -q 'domain_probe_success 0'"
+        )
+      '';
+    };
+
     dovecot = {
       exporterConfig = {
         enable = true;
