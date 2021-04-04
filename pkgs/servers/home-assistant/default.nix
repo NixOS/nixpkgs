@@ -306,6 +306,7 @@ in with py.pkgs; buildPythonApplication rec {
     "sensor"
     "smarttub"
     "smtp"
+    "smappee"
     "solaredge"
     "sonos"
     "spotify"
