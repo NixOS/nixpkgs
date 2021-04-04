@@ -3,6 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "netmask";
   version = "2.4.4";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tlby";

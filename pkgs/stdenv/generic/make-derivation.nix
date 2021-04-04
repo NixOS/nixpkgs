@@ -89,6 +89,10 @@ in rec {
 
     , patches ? []
 
+    # Experimental.  For simple packages mostly just works,
+    # but for anything complex, be prepared to debug if enabling.
+    , __structuredAttrs ? false
+
     , ... } @ attrs:
 
     let
@@ -216,6 +220,7 @@ in rec {
 
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+          inherit __structuredAttrs;
 
           inherit strictDeps;
 

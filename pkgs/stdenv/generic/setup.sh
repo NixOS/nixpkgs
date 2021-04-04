@@ -5,7 +5,24 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
-: ${outputs:=out}
+if [ -f .attrs.sh ]; then
+    __structuredAttrs=1
+else
+    __structuredAttrs=
+fi
+
+# Set up shell-style variables for outputs.
+#
+# Output names are identifiers and values are store paths,
+# so they're all space-free and this style works cleanly.
+if [ -n "$__structuredAttrs" ]; then
+    for outputName in "${!outputs[@]}"; do
+        eval export\ "$outputName"="${outputs[$outputName]}"
+    done
+    export outputs="${!outputs[*]}"
+else
+    : ${outputs:=out}
+fi
 
 
 ######################################################################
@@ -165,6 +182,52 @@ addToSearchPathWithCustomDelimiter() {
 
 addToSearchPath() {
     addToSearchPathWithCustomDelimiter ":" "$@"
+}
+
+# Prepend elements to variable "$1", which may come from an attr.
+#
+# This is useful in generic setup code, which must (for now) support
+# both derivations with and without __structuredAttrs true, so the
+# variable may be an array or a space-separated string.
+#
+# Expressions for individual packages should simply switch to array
+# syntax when they switch to setting __structuredAttrs = true.
+_prepend() {
+    local varName="$1"; shift
+    if [ -n "$__structuredAttrs" ]; then
+        # e.g., buildFlags=( "$@" ${buildFlags+"${buildFlags[@]}"} )
+        eval $varName'=( "$@" ${'$varName'+"${'$varName'[@]}"} )'
+    else
+        # e.g., buildFlags="$* $buildFlags"
+        eval $varName'="$* ${'$varName'-}"'
+    fi
+}
+
+# Accumulate into `flagsArray` the flags from the named variables.
+#
+# If __structuredAttrs, the variables are all treated as arrays
+# and simply concatenated onto `flagsArray`.
+#
+# If not __structuredAttrs, then:
+#   * Each variable is treated as a string, and split on whitespace;
+#   * except variables whose names end in "Array", which are treated
+#     as arrays.
+_accumFlagsArray() {
+    local name
+    if [ -n "$__structuredAttrs" ]; then
+        for name in "$@"; do
+            eval 'flagsArray+=( ${'$name'+"${'$name'[@]}"} )'
+        done
+    else
+        for name in "$@"; do
+            case "$name" in
+                *Array)
+                    eval 'flagsArray+=( ${'$name'+"${'$name'[@]}"} )' ;;
+                *)
+                    eval 'flagsArray+=( ${'$name'-} )' ;;
+            esac
+        done
+    fi
 }
 
 # Add $1/lib* into rpaths.
@@ -430,6 +493,10 @@ findInputs() {
     done
 }
 
+# The way we handle deps* and *Inputs works with structured attrs
+# either enabled or disabled.  For this it's convenient that the items
+# in each list must be store paths, and therefore space-free.
+
 # Make sure all are at least defined as empty
 : ${depsBuildBuild=} ${depsBuildBuildPropagated=}
 : ${nativeBuildInputs=} ${propagatedNativeBuildInputs=} ${defaultNativeBuildInputs=}
@@ -438,29 +505,29 @@ findInputs() {
 : ${buildInputs=} ${propagatedBuildInputs=} ${defaultBuildInputs=}
 : ${depsTargetTarget=} ${depsTargetTargetPropagated=}
 
-for pkg in $depsBuildBuild $depsBuildBuildPropagated; do
+for pkg in ${depsBuildBuild[@]} ${depsBuildBuildPropagated[@]}; do
     findInputs "$pkg" -1 -1
 done
-for pkg in $nativeBuildInputs $propagatedNativeBuildInputs; do
+for pkg in ${nativeBuildInputs[@]} ${propagatedNativeBuildInputs[@]}; do
     findInputs "$pkg" -1  0
 done
-for pkg in $depsBuildTarget $depsBuildTargetPropagated; do
+for pkg in ${depsBuildTarget[@]} ${depsBuildTargetPropagated[@]}; do
     findInputs "$pkg" -1  1
 done
-for pkg in $depsHostHost $depsHostHostPropagated; do
+for pkg in ${depsHostHost[@]} ${depsHostHostPropagated[@]}; do
     findInputs "$pkg"  0  0
 done
-for pkg in $buildInputs $propagatedBuildInputs ; do
+for pkg in ${buildInputs[@]} ${propagatedBuildInputs[@]} ; do
     findInputs "$pkg"  0  1
 done
-for pkg in $depsTargetTarget $depsTargetTargetPropagated; do
+for pkg in ${depsTargetTarget[@]} ${depsTargetTargetPropagated[@]}; do
     findInputs "$pkg"  1  1
 done
 # Default inputs must be processed last
-for pkg in $defaultNativeBuildInputs; do
+for pkg in ${defaultNativeBuildInputs[@]}; do
     findInputs "$pkg" -1  0
 done
-for pkg in $defaultBuildInputs; do
+for pkg in ${defaultBuildInputs[@]}; do
     findInputs "$pkg"  0  1
 done
 
@@ -864,6 +931,13 @@ unpackPhase() {
         srcs="$src"
     fi
 
+    local -a srcsArray
+    if [ -n "$__structuredAttrs" ]; then
+        srcsArray=( "${srcs[@]}" )
+    else
+        srcsArray=( $srcs )
+    fi
+
     # To determine the source directory created by unpacking the
     # source archives, we record the contents of the current
     # directory, then look below which directory got added.  Yeah,
@@ -876,7 +950,7 @@ unpackPhase() {
     done
 
     # Unpack all source archives.
-    for i in $srcs; do
+    for i in "${srcsArray[@]}"; do
         unpackFile "$i"
     done
 
@@ -926,7 +1000,14 @@ unpackPhase() {
 patchPhase() {
     runHook prePatch
 
-    for i in ${patches:-}; do
+    local -a patchesArray
+    if [ -n "$__structuredAttrs" ]; then
+        patchesArray=( ${patches:+"${patches[@]}"} )
+    else
+        patchesArray=( ${patches:-} )
+    fi
+
+    for i in "${patchesArray[@]}"; do
         header "applying patch $i" 3
         local uncompress=cat
         case "$i" in
@@ -943,9 +1024,15 @@ patchPhase() {
                 uncompress="lzma -d"
                 ;;
         esac
+        local -a flagsArray
+        if [ -n "$__structuredAttrs" ]; then
+            flagsArray=( "${patchFlags[@]:--p1}" )
+        else
+            # shellcheck disable=SC2086
+            flagsArray=( ${patchFlags:--p1} )
+        fi
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
-        # shellcheck disable=SC2086
-        $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
+        $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
     done
 
     runHook postPatch
@@ -962,7 +1049,6 @@ configurePhase() {
 
     # set to empty if unset
     : ${configureScript=}
-    : ${configureFlags=}
 
     if [[ -z "$configureScript" && -x ./configure ]]; then
         configureScript=./configure
@@ -977,29 +1063,27 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
+        _prepend configureFlags "${prefixKey:---prefix=}$prefix"
     fi
 
     # Add --disable-dependency-tracking to speed up some builds.
     if [ -z "${dontAddDisableDepTrack:-}" ]; then
         if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
-            configureFlags="--disable-dependency-tracking $configureFlags"
+            _prepend configureFlags --disable-dependency-tracking
         fi
     fi
 
     # By default, disable static builds.
     if [ -z "${dontDisableStatic:-}" ]; then
         if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
-            configureFlags="--disable-static $configureFlags"
+            _prepend configureFlags --disable-static
         fi
     fi
 
     if [ -n "$configureScript" ]; then
-        # Old bash empty array hack
-        # shellcheck disable=SC2086
-        local flagsArray=(
-            $configureFlags ${configureFlagsArray+"${configureFlagsArray[@]}"}
-        )
+        local -a flagsArray
+        _accumFlagsArray configureFlags configureFlagsArray
+
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
         $configureScript "${flagsArray[@]}"
@@ -1015,22 +1099,17 @@ configurePhase() {
 buildPhase() {
     runHook preBuild
 
-    # set to empty if unset
-    : ${makeFlags=}
-
-    if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
     else
         foundMakefile=1
 
-        # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
+        _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
         echoCmd 'build flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1067,10 +1146,15 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
-            ${checkTarget}
         )
+        _accumFlagsArray makeFlags makeFlagsArray
+        if [ -n "$__structuredAttrs" ]; then
+            flagsArray+=( "${checkFlags[@]:-VERBOSE=y}" )
+        else
+            flagsArray+=( ${checkFlags:-VERBOSE=y} )
+        fi
+        _accumFlagsArray checkFlagsArray
+        flagsArray+=( ${checkTarget} )
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1089,14 +1173,16 @@ installPhase() {
         mkdir -p "$prefix"
     fi
 
-    # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
-        ${installTargets:-install}
     )
+    _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
+    if [ -n "$__structuredAttrs" ]; then
+        flagsArray+=( "${installTargets[@]:-install}" )
+    else
+        flagsArray+=( ${installTargets:-install} )
+    fi
 
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1196,15 +1282,14 @@ installCheckPhase() {
        && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
-        # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
-            ${installCheckTarget:-installcheck}
         )
+        _accumFlagsArray makeFlags makeFlagsArray \
+          installCheckFlags installCheckFlagsArray
+        flagsArray+=( ${installCheckTarget:-installcheck} )
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1218,11 +1303,9 @@ installCheckPhase() {
 distPhase() {
     runHook preDist
 
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
-    )
+    local flagsArray=()
+    _accumFlagsArray distFlags distFlagsArray
+    flagsArray+=( ${distTarget:-dist} )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1233,7 +1316,7 @@ distPhase() {
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.
         # shellcheck disable=SC2086
-        cp -pvd ${tarballs:-*.tar.gz} "$out/tarballs"
+        cp -pvd ${tarballs[*]:-*.tar.gz} "$out/tarballs"
     fi
 
     runHook postDist
@@ -1266,14 +1349,18 @@ genericBuild() {
         return
     fi
 
-    if [ -z "${phases:-}" ]; then
-        phases="${prePhases:-} unpackPhase patchPhase ${preConfigurePhases:-} \
-            configurePhase ${preBuildPhases:-} buildPhase checkPhase \
-            ${preInstallPhases:-} installPhase ${preFixupPhases:-} fixupPhase installCheckPhase \
-            ${preDistPhases:-} distPhase ${postPhases:-}";
+    if [ -z "${phases[*]:-}" ]; then
+        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
+            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
+            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
+            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
     fi
 
-    for curPhase in $phases; do
+    # The use of ${phases[*]} gives the correct behavior both with and
+    # without structured attrs.  This relies on the fact that each
+    # phase name is space-free, which it must be because it's the name
+    # of either a shell variable or a shell function.
+    for curPhase in ${phases[*]}; do
         if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
         if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
         if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
