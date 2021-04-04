@@ -15,6 +15,6 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kconfigwidgets kiconthemes ];
   postInstall=''
-    ln -s {${kpackage},$out}/libexec
+    ln -s {${kpackage}/libexec $out/libexec
   '';
 }
