@@ -277,7 +277,7 @@
     "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms
-    "freebox" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: freebox-api
+    "freebox" = ps: with ps; [ aiohttp-cors freebox-api netdisco zeroconf ];
     "freedns" = ps: with ps; [ ];
     "fritz" = ps: with ps; [ fritzconnection ];
     "fritzbox" = ps: with ps; [ pyfritzhome ];
@@ -353,7 +353,7 @@
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "home_connect" = ps: with ps; [ aiohttp-cors ]; # missing inputs: homeconnect
     "homeassistant" = ps: with ps; [ ];
-    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors base36 fnvhash ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG
+    "homekit" = ps: with ps; [ HAP-python pyqrcode pyturbojpeg aiohttp-cors base36 fnvhash ha-ffmpeg zeroconf ];
     "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip

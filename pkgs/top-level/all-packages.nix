@@ -2006,6 +2006,8 @@ in
 
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
 
+  clickclack = callPackage ../tools/misc/clickclack { };
+
   clog-cli = callPackage ../development/tools/clog-cli { };
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { };
@@ -5944,8 +5946,6 @@ in
   kapp = callPackage ../tools/networking/kapp {};
 
   kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
-
-  kippo = callPackage ../servers/kippo { };
 
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
@@ -14270,8 +14270,6 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
-
   gdal_2 = callPackage ../development/libraries/gdal/2.4.nix { };
 
   gdcm = callPackage ../development/libraries/gdcm { };
@@ -15366,7 +15364,9 @@ in
 
   libgxps = callPackage ../development/libraries/libgxps { };
 
-  libiio = callPackage ../development/libraries/libiio { };
+  libiio = callPackage ../development/libraries/libiio {
+    python = python3;
+  };
 
   libinjection = callPackage ../development/libraries/libinjection { };
 
@@ -18887,6 +18887,7 @@ in
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-nginxlog-exporter = callPackage ../servers/monitoring/prometheus/nginxlog-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
+  prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix { };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
@@ -22786,7 +22787,7 @@ in
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  gtimelog = pythonPackages.gtimelog;
+  gtimelog = with python3Packages; toPythonApplication gtimelog;
 
   inherit (gnome3) gucharmap;
 
@@ -27457,9 +27458,7 @@ in
 
   icbm3d = callPackage ../games/icbm3d { };
 
-  ingen = callPackage ../applications/audio/ingen {
-    inherit (pythonPackages) rdflib;
-  };
+  ingen = callPackage ../applications/audio/ingen { };
 
   ideogram = callPackage ../applications/graphics/ideogram { };
 

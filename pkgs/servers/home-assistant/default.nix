@@ -190,6 +190,7 @@ in with py.pkgs; buildPythonApplication rec {
     "api"
     "auth"
     "automation"
+    "axis"
     "bayesian"
     "binary_sensor"
     "caldav"
@@ -224,6 +225,7 @@ in with py.pkgs; buildPythonApplication rec {
     "flux"
     "folder"
     "folder_watcher"
+    "freebox"
     "fritzbox"
     "fritzbox_callmonitor"
     "frontend"
@@ -235,6 +237,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hddtemp"
     "history"
     "history_stats"
+    "homekit"
     "homekit_controller"
     "homeassistant"
     "homematic"
@@ -400,5 +403,6 @@ in with py.pkgs; buildPythonApplication rec {
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
+    platforms = platforms.linux;
   };
 }

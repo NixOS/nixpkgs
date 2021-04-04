@@ -32,14 +32,22 @@ buildPythonPackage rec {
   disabledTests = [
     # Some tests needs network capabilities
     "test_str_types_empty"
+    "test_associate_reject"
     "TestEchoSCP"
     "TestEchoSCPCLI"
+    "TestFindSCP"
+    "TestFindSCPCLI"
+    "TestGetSCP"
+    "TestGetSCPCLI"
+    "TestMoveSCP"
+    "TestMoveSCPCLI"
+    "TestQRGetServiceClass"
+    "TestQRMoveServiceClass"
     "TestStoreSCP"
     "TestStoreSCPCLI"
     "TestStoreSCU"
     "TestStoreSCUCLI"
-    "TestQRGetServiceClass"
-    "TestQRMoveServiceClass"
+    "TestState"
   ];
 
   pythonImportsCheck = [ "pynetdicom" ];
@@ -49,7 +57,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pydicom/pynetdicom";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    # Tests are not passing on Darwin, thus it's assumed that it doesn't work
-    broken = stdenv.isDarwin;
+    # Tests are not passing on Darwin/Aarch64, thus it's assumed that it doesn't work
+    broken = stdenv.isDarwin || stdenv.isAarch64;
   };
 }

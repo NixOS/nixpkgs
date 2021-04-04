@@ -1,6 +1,6 @@
 { fetchurl, fetchpatch, lib, stdenv,
   cmake, netcdf, gfortran, libpng, openjpeg,
-  enablePython ? false, pythonPackages }:
+  enablePython ? false, pythonPackages ? null }:
 
 stdenv.mkDerivation rec {
   pname = "grib-api";

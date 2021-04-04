@@ -6438,6 +6438,8 @@ in {
 
   pytun = callPackage ../development/python-modules/pytun { };
 
+  pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
+
   pytz = callPackage ../development/python-modules/pytz { };
 
   pytzdata = callPackage ../development/python-modules/pytzdata { };
