@@ -12403,6 +12403,8 @@ in
 
   cookiecutter = with python3Packages; toPythonApplication cookiecutter;
 
+  corrosion = callPackage ../development/tools/build-managers/corrosion { };
+
   corundum = callPackage ../development/tools/corundum { };
 
   confluent-platform = callPackage ../servers/confluent-platform {};
@@ -21710,6 +21712,8 @@ in
       buildFHSUserEnv = buildFHSUserEnvBubblewrap;
     });
   android-studio = androidStudioPackages.stable;
+
+  angelfish = libsForQt5.callPackage ../applications/networking/browsers/angelfish { };
 
   animbar = callPackage ../applications/graphics/animbar { };
 
