@@ -8408,6 +8408,8 @@ in
 
   super = callPackage ../tools/security/super { };
 
+  supertag = callPackage ../tools/filesystems/supertag { };
+
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
 
   svgbob = callPackage ../tools/graphics/svgbob { };
