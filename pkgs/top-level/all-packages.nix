@@ -23836,6 +23836,8 @@ in
 
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
+  pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap/default.nix { };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
