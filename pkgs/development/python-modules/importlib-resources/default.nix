@@ -4,19 +4,19 @@
 , setuptools_scm
 , toml
 , importlib-metadata
-, typing
-, singledispatch
+, typing ? null
+, singledispatch ? null
 , pythonOlder
 , python
 }:
 
 buildPythonPackage rec {
   pname = "importlib_resources";
-  version = "3.3.1";
+  version = "5.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ed250dbd291947d1a298e89f39afcc477d5a6624770503034b72588601bcc05";
+    sha256 = "642586fc4740bd1cad7690f836b3321309402b20b332529f25617ff18e8e1370";
   };
 
   nativeBuildInputs = [ setuptools_scm toml ];

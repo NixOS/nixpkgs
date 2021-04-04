@@ -1,5 +1,5 @@
 { lib, isPy3k, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography, singledispatch
+, six, enum34, pyasn1, cryptography, singledispatch ? null
 , fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {

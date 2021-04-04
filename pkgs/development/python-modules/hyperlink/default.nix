@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, idna, typing }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, idna, typing ? null }:
 
 buildPythonPackage rec {
   pname = "hyperlink";
-  version = "20.0.1";
+  version = "21.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "47fcc7cd339c6cb2444463ec3277bdcfe142c8b1daf2160bdd52248deec815af";
+    sha256 = "427af957daa58bc909471c6c40f74c5450fa123dd093fc53efd2e91d2705a56b";
   };
 
   propagatedBuildInputs = [ idna ]

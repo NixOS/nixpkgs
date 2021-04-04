@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pylatexenc";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "phfaist";
     repo = "pylatexenc";
     rev = "v${version}";
-    sha256 = "0m9vrbh1gmbgq6dqm7xzklar3accadw0pn896rqsdi5jbgd3w0mh";
+    sha256 = "1kzfyhdpm3cw3g4mgd12nj0cs1kgqjr22yxr7vkawljaid4ail5z";
   };
 
   pythonImportsCheck = [ "pylatexenc" ];

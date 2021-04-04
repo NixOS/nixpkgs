@@ -26,7 +26,7 @@
 , six
 , swagger-ui-bundle
 , testfixtures
-, typing
+, typing ? null
 , ujson
 }:
 

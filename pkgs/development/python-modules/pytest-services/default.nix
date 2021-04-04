@@ -6,7 +6,7 @@
 , psutil
 , pytest
 , setuptools_scm
-, subprocess32
+, subprocess32 ? null
 , toml
 , zc_lockfile
 }:

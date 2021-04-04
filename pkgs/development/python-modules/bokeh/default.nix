@@ -1,6 +1,6 @@
 { buildPythonPackage
 , fetchPypi
-, futures
+, futures ? null
 , isPy27
 , isPyPy
 , jinja2

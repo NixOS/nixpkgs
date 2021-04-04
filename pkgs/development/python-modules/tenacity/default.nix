@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
-, pbr, six, futures, monotonic, typing, setuptools_scm
+, pbr, six, futures ? null, monotonic ? null, typing ? null, setuptools_scm
 , pytest, sphinx, tornado, typeguard
 }:
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "6.3.1";
+  version = "7.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zsdajdpcjd7inrl7r9pwiyh7qpgh9jk7g2bj1iva2d3n0gijkg1";
+    sha256 = "5bd16ef5d3b985647fe28dfa6f695d343aa26479a04e8792b9d3c8f49e361ae1";
   };
 
   nativeBuildInputs = [ pbr setuptools_scm ];

@@ -1,5 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
-, isPy27, isPyPy, python, pycares, typing, trollius }:
+, isPy27, isPyPy, python, pycares, typing ? null
+, trollius ? null
+}:
 
 buildPythonPackage rec {
   pname = "aiodns";

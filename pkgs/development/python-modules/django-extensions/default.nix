@@ -11,7 +11,7 @@
 , shortuuid
 , six
 , tox
-, typing
+, typing ? null
 , vobject
 , werkzeug
 }:

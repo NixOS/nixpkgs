@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "sentinel";
-  version = "0.1.2";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7aeee3f57c56a8e52771fc64230345deecd62c48debbbe1f1aca453439741d0";
+    sha256 = "f28143aa4716dbc8f6193f5682176a3c33cd26aaae05d9ecf66c186a9887cc2d";
   };
 
   meta = with lib; {

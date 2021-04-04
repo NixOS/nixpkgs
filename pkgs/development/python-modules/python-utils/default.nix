@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.4.0";
+  version = "2.5.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12c0glzkm81ljgf6pwh0d4rmdm1r7vvgg3ifzp8yp9cfyngw07zj";
+    sha256 = "352d5b1febeebf9b3cdb9f3c87a3b26ef22d3c9e274a8ec1e7048ecd2fac4349";
   };
 
   postPatch = ''

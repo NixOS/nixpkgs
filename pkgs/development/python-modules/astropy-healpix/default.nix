@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
-  version = "0.5";
+  version = "0.6";
 
   doCheck = false; # tests require pytest-astropy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bfdq33mj6mwk5fkc6n23f9bc9z8j7kmvql3zchz4h58jskmvqas";
+    sha256 = "409a6621c383641456c074f0f0350a24a4a58e910eaeef14e9bbce3e00ad6690";
   };
 
   propagatedBuildInputs = [ numpy astropy astropy-helpers ];
