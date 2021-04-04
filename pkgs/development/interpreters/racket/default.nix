@@ -72,6 +72,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
 
+  patches = [
+    # Hardcode variant detection because we wrap the Racket binary making it
+    # fail to detect its variant at runtime.
+    # See: https://github.com/NixOS/nixpkgs/issues/114993#issuecomment-812951247
+    ./force-cs-variant.patch
+  ];
+
   preConfigure = ''
     unset AR
     for f in src/lt/configure src/cs/c/configure src/bc/src/string.c src/ChezScheme/workarea; do
@@ -96,10 +103,6 @@ stdenv.mkDerivation rec {
   configureScript = "../configure";
 
   enableParallelBuilding = false;
-
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapProgram $out/bin/drracket --prefix DYLD_LIBRARY_PATH : ${xorg.libX11}/lib
-  '';
 
   meta = with lib; {
     description = "A programmable programming language";
