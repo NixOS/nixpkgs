@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "crlfuzz";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03g7z7cczn52hvg6srp1i5xhdbpia226adrh2d54cs640063bx3m";
+    sha256 = "sha256-rqhdxOQmZCRtq+IZygKLleb5GoKP2akyEc3rbGcnZmw=";
   };
 
-  vendorSha256 = "19cj07f7d3ksp7lh5amdjz1s8p7xmqbwal4vp61al82n8944ify8";
+  vendorSha256 = "sha256-yLtISEJWIKqCuZtQxReu/Vykw5etqgLpuXqOdtwBkqU=";
 
   doCheck = true;
 
