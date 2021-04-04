@@ -2,23 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "xpadneo";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f146snbjkr3dgg3g1dav4q2621560zg5ixsip2wsvp7wfvahnhy";
+    hash = "sha256-VUcS4OzvPj0o627ZWIOBqEAQJ4JuMCMjgaZoMkL/IHc=";
   };
 
   setSourceRoot = ''
     export sourceRoot=$(pwd)/source/hid-xpadneo/src
-  '';
-
-  postPatch = ''
-    # Set kernel module version
-    substituteInPlace version.h \
-      --subst-var-by DO_NOT_CHANGE ${version}
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -28,6 +22,7 @@ stdenv.mkDerivation rec {
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(sourceRoot)"
+    "VERSION=${version}"
   ];
 
   buildFlags = [ "modules" ];
