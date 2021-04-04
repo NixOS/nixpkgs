@@ -44,14 +44,14 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "0";
+  minor = "1";
   patch = "0";
 }
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 =  "ZjQzioAuWrd8jsYOnLNH1mK4n9EbrjgvPX3mTzVFdLk=";
+  sourceSha256 = "0zydmrr3gkaqiv4jv8f42awrfzs177bqb349q34rnr6j3d32z2vp";
   featuresInfo = {
     # Needed always
     basic = {
@@ -190,11 +190,10 @@ let
       runtime = [ SDL ];
       cmakeEnableFlag = "GR_VIDEO_SDL";
     };
-    # codec2 and gsm support is broken with gr3.9: https://github.com/gnuradio/gnuradio/issues/4278
-    # gr-vocoder = {
-      # runtime = [ codec2 gsm ];
-      # cmakeEnableFlag = "GR_VOCODER";
-    # };
+    gr-vocoder = {
+      runtime = [ codec2 gsm ];
+      cmakeEnableFlag = "GR_VOCODER";
+    };
     gr-wavelet = {
       cmakeEnableFlag = "GR_WAVELET";
       runtime = [ gsl libsodium ];
@@ -234,7 +233,6 @@ stdenv.mkDerivation rec {
     src
     nativeBuildInputs
     buildInputs
-    cmakeFlags
     disallowedReferences
     stripDebugList
     doCheck
@@ -250,6 +248,19 @@ stdenv.mkDerivation rec {
   } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
     inherit (libsForQt5) qwt;
   };
+  cmakeFlags = shared.cmakeFlags
+    # From some reason, if these are not set, libcodec2 and gsm are not
+    # detected properly.
+    ++ lib.optionals (hasFeature "gr-vocoder" features) [
+      "-DLIBCODEC2_FOUND=TRUE"
+      "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
+      "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
+      "-DLIBCODEC2_HAS_FREEDV_API=ON"
+      "-DLIBGSM_FOUND=TRUE"
+      "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
+      "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
+    ]
+  ;
 
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
