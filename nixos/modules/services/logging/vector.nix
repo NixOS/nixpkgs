@@ -44,7 +44,7 @@ in
           conf = format.generate "vector.toml" cfg.settings;
           validateConfig = file:
             pkgs.runCommand "validate-vector-conf" { } ''
-              ${pkgs.vector}/bin/vector validate --no-topology --no-environment "${file}"
+              ${pkgs.vector}/bin/vector validate --no-environment "${file}"
               ln -s "${file}" "$out"
             '';
         in
