@@ -1,8 +1,10 @@
-{ lib, fetchPypi, buildPythonApplication, protobuf }:
+{ lib, fetchPypi, buildPythonApplication, protobuf, pythonOlder }:
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";
   version = "2.4";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
