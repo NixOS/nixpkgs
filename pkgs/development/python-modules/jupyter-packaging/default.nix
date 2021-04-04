@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-packaging";
-  version = "0.8.0";
+  version = "0.8.2";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "jupyter_packaging";
     inherit version;
-    sha256 = "276c9f884286695f6ab57a017f4bb9dd4df4f5e232b783050d2aa55b6b9ed650";
+    sha256 = "sha256-ddzJDcFyY5Iida4QvpACh0FRBIy95IQHCEF5HQl5QbI=";
   };
 
   propagatedBuildInputs = [ deprecation packaging tomlkit ];
