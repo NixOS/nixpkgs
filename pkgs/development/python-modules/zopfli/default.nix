@@ -10,6 +10,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
+  # doesn't work with pytestCheckHook
   checkInputs = [ pytest ];
 
   meta = with lib; {
