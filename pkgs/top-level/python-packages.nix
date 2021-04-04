@@ -4802,6 +4802,8 @@ in {
     pythonPackages = self;
   }));
 
+  openhomedevice = callPackage ../development/python-modules/openhomedevice { };
+
   openidc-client = callPackage ../development/python-modules/openidc-client { };
 
   openpyxl = if pythonAtLeast "3.6" then
