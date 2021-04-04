@@ -1102,6 +1102,8 @@ in
 
   betterdiscordctl = callPackage ../tools/misc/betterdiscordctl { };
 
+  betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
+
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt514.callPackage ../applications/misc/brewtarget { } ;
