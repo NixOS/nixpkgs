@@ -17623,7 +17623,9 @@ in
     inherit (llvmPackages) openmp;
   };
 
-  vigra = callPackage ../development/libraries/vigra { };
+  vigra = callPackage ../development/libraries/vigra {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
