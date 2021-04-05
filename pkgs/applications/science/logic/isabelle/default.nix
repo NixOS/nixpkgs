@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/Tools/env \
       --replace /usr/bin/env ${coreutils}/bin/env
 
+    echo 'PATH="${perl}/bin:$PATH"' >> etc/settings
+
     rm -rf lib/classes heaps
     '');
 
