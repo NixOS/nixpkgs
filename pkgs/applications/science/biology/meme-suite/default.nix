@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "38d73d256d431ad4eb7da2c817ce56ff2b4e26c39387ff0d6ada088938b38eb5";
   };
 
-  nativeBuildInputs = [ perl python3 zlib ];
+  buildInputs = [ zlib ];
+  nativeBuildInputs = [ perl python3 ];
 
   meta = with lib; {
     description = "Motif-based sequence analysis tools";
