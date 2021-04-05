@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "All your games in one place";
     homepage = "https://tkashkin.tk/projects/gamehub/";
-    mantainers = with mantainers; [ pasqui23 ];
+    mantainers = with maintainers; [ pasqui23 ];
     license = with licenses; [ gpl3Only ];
     platforms = with platforms; [ linux ];
   };
