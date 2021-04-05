@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "packet-cli";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "packethost";
     repo = pname;
     rev = version;
-    sha256 = "089fcn7yslijjivyvwl85j32gfwif8aazqdhm6hi676lz80ssppp";
+    sha256 = "sha256-P1Bn6vli0d/MroHUsioTWBrjWN+UZmSo3qmzo+fCDwM=";
   };
 
-  vendorSha256 = "1p3v4pzw9hc1iviv1zghw9imbd23nlp24dpa8hf0w8a03jvpy96x";
+  vendorSha256 = "sha256-PjKiUdhN87guPAa0loZrWYuwbl0HaspuIjmKgyq4Zp8=";
 
   postInstall = ''
     ln -s $out/bin/packet-cli $out/bin/packet
