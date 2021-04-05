@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2fd6fe25343f7017c22e2733a0358c64b3171edc1669d0c8a1e1f07f86a048c4";
+    sha256 = "sha256-NT/+2mtIaEMyXnmM1fWX4kEV9pb1+aNas2lNobUPR14=";
   };
 
   postPatch = ''
