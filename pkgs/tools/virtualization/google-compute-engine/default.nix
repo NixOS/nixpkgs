@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20190124";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
