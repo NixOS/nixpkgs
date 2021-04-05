@@ -6047,6 +6047,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  natscli = callPackage ../tools/system/natscli { };
+
   nbench = callPackage ../tools/misc/nbench { };
 
   ncrack = callPackage ../tools/security/ncrack { };
