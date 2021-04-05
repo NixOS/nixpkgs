@@ -542,6 +542,8 @@ in {
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
 
+  asyncio-nats-client = callPackage ../development/python-modules/asyncio-nats-client { };
+
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
@@ -4511,6 +4513,8 @@ in {
   nanotime = callPackage ../development/python-modules/nanotime { };
 
   nassl = callPackage ../development/python-modules/nassl { };
+
+  nats-python = callPackage ../development/python-modules/nats-python { };
 
   natsort = callPackage ../development/python-modules/natsort { };
 
