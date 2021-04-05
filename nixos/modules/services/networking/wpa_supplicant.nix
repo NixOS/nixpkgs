@@ -8,28 +8,44 @@ let
     else pkgs.wpa_supplicant;
 
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
-    ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
-      update_config=1''}
-    ${cfg.extraConfig}
-    ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
-      key = if psk != null
-        then ''"${psk}"''
-        else pskRaw;
-      baseAuth = if key != null
-        then "psk=${key}"
-        else "key_mgmt=NONE";
-    in ''
-      network={
-        ssid="${ssid}"
-        ${optionalString (priority != null) ''priority=${toString priority}''}
-        ${optionalString hidden "scan_ssid=1"}
-        ${if (auth != null) then auth else baseAuth}
-        ${extraConfig}
-      }
-    '') cfg.networks)}
-  '' else "/etc/wpa_supplicant.conf";
+
+  mkNetwork = ssid: opts:
+  let
+    quote = x: ''"${x}"'';
+    indent = x: "  " + x;
+
+    pskString = if opts.psk != null
+      then quote opts.psk
+      else opts.pskRaw;
+
+    options = [
+      "ssid=${quote ssid}"
+    ] ++ optional opts.hidden "scan_ssid=1"
+      ++ optional (pskString == null && opts.auth == null) "key_mgmt=NONE"
+      ++ optional (pskString != null) "psk=${pskString}"
+      ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
+      ++ optional (opts.priority != null) "priority=${toString opts.priority}"
+      ++ optional (opts.extraConfig != "") opts.extraConfig;
+  in ''
+    network={
+    ${concatMapStringsSep "\n" indent options}
+    }
+  '';
+
+  generatedConfig = concatStringsSep "\n" (
+    (mapAttrsToList mkNetwork cfg.networks)
+    ++ optional cfg.userControlled.enable (concatStringsSep "\n"
+      [ "ctrl_interface=/run/wpa_supplicant"
+        "ctrl_interface_group=${cfg.userControlled.group}"
+        "update_config=1"
+      ])
+    ++ optional (cfg.extraConfig != "") cfg.extraConfig);
+
+  configFile =
+    if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable
+      then pkgs.writeText "wpa_supplicant.conf" generatedConfig
+      else "/etc/wpa_supplicant.conf";
+
 in {
   options = {
     networking.wireless = {
@@ -200,6 +216,7 @@ in {
           description = "Members of this group can control wpa_supplicant.";
         };
       };
+
       extraConfig = mkOption {
         type = types.str;
         default = "";
