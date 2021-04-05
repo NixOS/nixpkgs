@@ -27503,6 +27503,8 @@ in
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
   };
 
+  vouch-proxy = callPackage ../servers/vouch-proxy { };
+
   vttest = callPackage ../tools/misc/vttest { };
 
   wacomtablet = libsForQt514.callPackage ../tools/misc/wacomtablet { };
