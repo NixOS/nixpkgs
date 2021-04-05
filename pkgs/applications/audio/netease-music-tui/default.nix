@@ -2,12 +2,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netease-music-tui";
-  version = "v0.1.3";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "betta-cyber";
     repo = "netease-music-tui";
-    rev = version;
+    rev = "v${version}";
     sha256 = "09355a6d197ckayh9833y39dsarklgpgrq3raapiv25z59di30qq";
   };
 
