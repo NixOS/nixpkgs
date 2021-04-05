@@ -3,7 +3,7 @@
   tree }:
 
 let
-  version = "3.14.2";
+  version = "3.14.4";
 
   # Dependencies should match the ones in:
   # https://github.com/erlang/rebar3/blob/${version}/rebar.lock
@@ -12,27 +12,27 @@ let
   bbmustache = fetchHex {
     pkg = "bbmustache";
     version = "1.10.0";
-    sha256 = "43effa3fd4bb9523157af5a9e2276c493495b8459fc8737144aa186cb13ce2ee";
+    sha256 = "1vp27jqnq65a8iqp7j4z8nw9ad29dhky5agmg8aj75dvshzzmvs3";
   };
   certifi = fetchHex {
     pkg = "certifi";
-    version = "2.5.2";
-    sha256 = "3b3b5f36493004ac3455966991eaf6e768ce9884693d9968055aeeeb1e575040";
+    version = "2.5.3";
+    sha256 = "040w1scglvqhcvc1ifdnlcyrbwr0smi00w4xi8h03c99775nllgd";
   };
   cf = fetchHex {
     pkg = "cf";
     version = "0.3.1";
-    sha256 = "315e8d447d3a4b02bcdbfa397ad03bbb988a6e0aa6f44d3add0f4e3c3bf97672";
+    sha256 = "0wknz4xkqkhgvlx4vx5619p8m65v7g87lfgsvfy04jrsgm28spii";
   };
   cth_readable = fetchHex {
     pkg = "cth_readable";
-    version = "1.4.9";
-    sha256 = "b4c6ababdb046c5f2fbb3c22f030b4c5a679083956dcdd29c1df0cb30b18da24";
+    version = "1.5.0";
+    sha256 = "0z58b6frqdnhyzrmbdf6x78l3izbbh5z5i3am8hqc253r7xwv0dx";
   };
   erlware_commons = fetchHex {
     pkg = "erlware_commons";
-    version = "1.3.1";
-    sha256 = "7aada93f368d0a0430122e39931b7fb4ac9e94dbf043cdc980ad4330fd9cd166";
+    version = "1.4.0";
+    sha256 = "1rp2vkgzqm6sax7fc13rh9x6qzxsgg718dnv7l0kmarvyifcyphq";
   };
   eunit_formatters = fetchHex {
     pkg = "eunit_formatters";
@@ -46,29 +46,26 @@ let
   };
   parse_trans = fetchHex {
     pkg = "parse_trans";
-    version = "3.3.0";
-    sha256 = "17ef63abde837ad30680ea7f857dd9e7ced9476cdd7b0394432af4bfc241b960";
+    version = "3.3.1";
+    sha256 = "12w8ai6b5s6b4hnvkav7hwxd846zdd74r32f84nkcmjzi1vrbk87";
   };
+
   providers = fetchHex {
     pkg = "providers";
     version = "1.8.1";
-    sha256 = "e45745ade9c476a9a469ea0840e418ab19360dc44f01a233304e118a44486ba0";
+    sha256 = "183b9128l4af60rs40agqh6kc6db33j4027ad6jajxn4x6nlamz4";
   };
+
   relx = fetchHex {
     pkg = "relx";
-    version = "4.1.0";
-    sha256 = "b94a3f96697a479ee5217a853345e0f4977bdf40d3c040af0d3d80fadad82af4";
+    version = "4.3.0";
+    sha256 = "0h044arh41sr92r1nlg176shavlv7pvw17alwklhszgwlr4hk3kk";
   };
+
   ssl_verify_fun = fetchHex {
     pkg = "ssl_verify_fun";
     version = "1.1.6";
-    sha256 = "bdb0d2471f453c88ff3908e7686f86f9be327d065cc1ec16fa4540197ea04680";
-  };
-
-  hex_core = fetchHex {
-    pkg = "hex_core";
-    version = "0.7.1";
-    sha256 = "05c60411511b6dc79affcd99a93e67d71e1b9d6abcb28ba75cd4ebc8585b8d02";
+    sha256 = "1026l1z1jh25z8bfrhaw0ryk5gprhrpnirq877zqhg253x3x5c5x";
   };
 in
 stdenv.mkDerivation rec {
@@ -81,7 +78,7 @@ stdenv.mkDerivation rec {
     owner = "erlang";
     repo = pname;
     rev = version;
-    sha256 = "02gz6xs8j5rm14r6dndcpdm8q3rl4mcj363gnnx4y5xvvfnv9bfa";
+    sha256 = "09bnqwli93sq1pcz4h88ks7qg7k8yrjy9fd46yyp8xdl7i4irwy2";
   };
 
   bootstrapper = ./rebar3-nix-bootstrap;
@@ -103,8 +100,6 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -R ${providers} _checkouts/providers
     cp --no-preserve=mode -R ${relx} _checkouts/relx
     cp --no-preserve=mode -R ${ssl_verify_fun} _checkouts/ssl_verify_fun
-
-    cp --no-preserve=mode -R ${hex_core} _checkouts/hex_core
 
     # Bootstrap script expects the dependencies in _build/default/lib
     # TODO: Make it accept checkouts?
