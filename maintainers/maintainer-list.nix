@@ -1300,6 +1300,12 @@
     githubId = 50839;
     name = "Brian Jones";
   };
+  bootstrap-prime = {
+    email = "bootstrap.prime@gmail.com";
+    github = "bootstrap-prime";
+    githubId = 68566724;
+    name = "bootstrap-prime";
+  };
   commandodev = {
     email = "ben@perurbis.com";
     github = "commandodev";
