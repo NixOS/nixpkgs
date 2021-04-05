@@ -2375,6 +2375,12 @@
     githubId = 10913120;
     name = "Dje4321";
   };
+  djwf = {
+    email = "dave@weller-fahy.com";
+    github = "djwf";
+    githubId = 73162;
+    name = "David J. Weller-Fahy";
+  };
   dkabot = {
     email = "dkabot@dkabot.com";
     github = "dkabot";
