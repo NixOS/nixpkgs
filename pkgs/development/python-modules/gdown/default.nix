@@ -3,8 +3,9 @@
 , fetchPypi
 , filelock
 , requests
-, tqdm
 , setuptools
+, six
+, tqdm
 }:
 
 buildPythonApplication rec {
@@ -16,7 +17,13 @@ buildPythonApplication rec {
     sha256 = "4b3a1301e57bfd8dce939bf25ef8fbb4b23967fd0f878eede328bdcc41386bac";
   };
 
-  propagatedBuildInputs = [ filelock requests tqdm setuptools ];
+  propagatedBuildInputs = [
+    filelock
+    requests
+    setuptools
+    six
+    tqdm
+  ];
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null
