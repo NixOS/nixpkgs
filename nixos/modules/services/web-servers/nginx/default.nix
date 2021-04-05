@@ -154,9 +154,9 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   90;
-        proxy_send_timeout      90;
-        proxy_read_timeout      90;
+        proxy_connect_timeout   60;
+        proxy_send_timeout      60;
+        proxy_read_timeout      60;
         proxy_http_version      1.0;
         include ${recommendedProxyConfig};
       ''}

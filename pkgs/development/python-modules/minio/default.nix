@@ -8,6 +8,7 @@
 , pytz
 , pytestCheckHook
 , urllib3
+, certifi
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     python-dateutil
     pytz
     urllib3
+    certifi
   ];
 
   checkInputs = [ faker mock nose pytestCheckHook ];
