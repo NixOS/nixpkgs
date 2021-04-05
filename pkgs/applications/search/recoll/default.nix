@@ -33,8 +33,6 @@
 , withGui ? true
 }:
 
-assert stdenv.hostPlatform.system != "powerpc-linux";
-
 mkDerivation rec {
   pname = "recoll";
   version = "1.28.6";
