@@ -51,11 +51,7 @@ buildPythonPackage rec {
     patchShebangs $out/bin/*
   '';
 
-  checkPhase = ''
-    # this package has its own test suite, but they assume the ability to
-    # access resources like /sys/class/net causing them to fail in the sandbox
-    python -c 'import google_compute_engine'
-  '';
+  pythonImportsCheck = [ "import google_compute_engine" ];
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";
