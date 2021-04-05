@@ -24192,6 +24192,8 @@ in
 
   meme = callPackage ../applications/graphics/meme { };
 
+  meme-suite = callPackage ../applications/science/biology/meme-suite { };
+
   # Needs qtwebkit which is broken on qt5.15
   mendeley = libsForQt514.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
