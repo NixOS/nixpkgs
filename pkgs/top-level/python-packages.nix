@@ -7164,6 +7164,10 @@ in {
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
+  recoll = disabledIf (!isPy3k) (toPythonModule (pkgs.recoll.override {
+    python3Packages = self;
+  }));
+
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
   redbaron = callPackage ../development/python-modules/redbaron { };
