@@ -1,12 +1,12 @@
 { lib, fetchzip }:
 
 let
-  version = "0.034";
+  version = "0.035";
 
 in fetchzip {
   name = "JuliaMono-${version}";
   url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono.zip";
-  sha256 = "sha256:0xx3mhzs17baaich67kvwyzqg8h9ga11jrja2i8sxx4861dp1z85";
+  sha256 = "sha256:17w8rn37wadxnmakhd6mpmqdx14dsrc3qym4k9b47albl1a34i1j";
 
   postFetch = ''
     mkdir -p $out/share/fonts/truetype
