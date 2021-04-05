@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
-  buildInputs = (lib.optional withLZMA xz)
-    ++ (lib.optional withBzip2 bzip2)
-    ++ (lib.optional withOpenssl openssl );
+  buildInputs = lib.optionals withLZMA [ xz ]
+    ++ lib.optionals withBzip2 [ bzip2 ]
+    ++ lib.optionals withOpenssl [ openssl ];
 
   preCheck = ''
     # regress/runtest is a generated file
