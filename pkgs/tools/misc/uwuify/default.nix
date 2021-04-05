@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uwuify";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "Daniel-Liu-c0deb0t";
     repo = "uwu";
     rev = "v${version}";
-    sha256 = "sha256-tPmLqgrWi7wDoMjMrxodKp4S0ICwV9Kp7Pa151rHho0=";
+    sha256 = "sha256-MzXObbxccwEG7egmQMCdhUukGqZS+NgbYwZjTaqME7I=";
   };
 
-  cargoSha256 = "sha256-HUP6OEvoGJ/BtAl+yuGzqEp1bsxfGAh0UJtXz9/ZiK8=";
+  cargoSha256 = "sha256-iyoGLFIfHToOwqEb5lQ1nXR0W1gLOVMfvw39LX6ib+U=";
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta = with lib; {
