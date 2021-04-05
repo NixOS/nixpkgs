@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "hetzner";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     repo = "hetzner";
     owner = "aszlig";
     rev = "v${version}";
-    sha256 = "152fklxff08s71v0b78yp5ajwpqyszm3sd7j0qsrwa2x9ik4968h";
+    sha256 = "0nhm7j2y4rgmrl0c1rklg982qllp7fky34dchqwd4czbsdnv9j7a";
   };
 
   meta = with stdenv.lib; {
