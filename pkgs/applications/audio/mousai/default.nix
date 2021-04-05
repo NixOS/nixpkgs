@@ -1,8 +1,8 @@
-{ fetchurl
-, stdenv
+{ lib
+, fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , wrapGAppsHook
 , gobject-introspection
@@ -15,7 +15,6 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
   version = "0.2.0";
-  strictDeps = false;
   format = "other";
 
   src = fetchurl {
@@ -26,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gobject-introspection
     python3
@@ -58,9 +57,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Simple application for identifying songs";
     homepage = "https://github.com/SeaDve/Mousai";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];
   };
 }
-
