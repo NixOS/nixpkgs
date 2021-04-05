@@ -72,7 +72,6 @@ let
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
-    grsecurity = false;
     ia32Emulation = true;
   } // features) kernelPatches;
 
