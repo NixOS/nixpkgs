@@ -15,11 +15,12 @@
 , libxslt
 , upower
 , systemd
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.1";
+  version = "0.8.1";
 
   outputs = [ "out" "devdoc" ];
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "hadess";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "012w3aryw5d43dr9jj5i6wy2a0n21jidr4ggs9ix7d4z9byr175w";
+    sha256 = "sha256-OnCUr7KWVPpYGDseBUcJD/PdOobvFnyNA97NhnKbTKY=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     systemd
     upower
     glib
+    (python3.withPackages (ps: with ps; [ ps.pygobject3 ])) # for cli tool
   ];
 
   mesonFlags = [
