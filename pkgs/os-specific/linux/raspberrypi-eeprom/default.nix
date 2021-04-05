@@ -3,13 +3,13 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-eeprom";
-  version = "2021-01-11";
+  version = "2021-03-18";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "54cadc816ba739afd08ead6d679e647de028a65c";
-    sha256 = "0zlacr4z6h40h0g47195xsbss29gaa7kf8r31h372sxsn8srlnjf";
+    rev = "ff27ccf69403b01e337fc4ee6e7ae75244028cce";
+    sha256 = "1q1vlld0xxh9zinf5g0qa6jw1dggq93br938mvrfx3nb2aviiwcj";
   };
 
   buildInputs = [ python3 ];
@@ -28,7 +28,6 @@ stdenvNoCC.mkDerivation {
 
     cp rpi-eeprom-config rpi-eeprom-update $out/bin
     cp -r firmware/{beta,critical,old,stable} $out/share/rpi-eeprom
-    cp -r firmware/vl805 $out/bin
   '';
 
   fixupPhase = ''
