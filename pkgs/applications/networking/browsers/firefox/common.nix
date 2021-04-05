@@ -24,7 +24,7 @@
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, gssSupport ? true, kerberos
+, gssSupport ? true, libkrb5
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
 ## privacy-related options
@@ -174,7 +174,7 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
-  ++ lib.optional  gssSupport kerberos
+  ++ lib.optional  gssSupport libkrb5
   ++ lib.optional  waylandSupport libxkbcommon
   ++ lib.optional  pipewireSupport pipewire
   ++ lib.optional  (lib.versionAtLeast ffversion "82") gnum4

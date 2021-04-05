@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2 }:
 
 buildGoModule rec {
   pname = "tailscale";
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${
-      lib.makeBinPath [ iproute iptables ]
+      lib.makeBinPath [ iproute2 iptables ]
     }
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service

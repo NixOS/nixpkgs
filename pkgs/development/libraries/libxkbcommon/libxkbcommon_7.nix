@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, yacc, flex, xkeyboard_config, libxcb, libX11 }:
+{ lib, stdenv, fetchurl, pkg-config, bison, flex, xkeyboard_config, libxcb, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "libxkbcommon-0.7.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ yacc flex xkeyboard_config libxcb ];
+  buildInputs = [ bison flex xkeyboard_config libxcb ];
 
   configureFlags = [
     "--with-xkb-config-root=${xkeyboard_config}/etc/X11/xkb"

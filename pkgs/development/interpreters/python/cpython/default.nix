@@ -3,7 +3,7 @@
 , expat
 , libffi
 , gdbm
-, lzma
+, xz
 , mime-types ? null, mimetypesSupport ? true
 , ncurses
 , openssl
@@ -103,7 +103,7 @@ let
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])

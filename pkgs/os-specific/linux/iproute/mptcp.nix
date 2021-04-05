@@ -1,6 +1,6 @@
-{ lib, iproute, fetchFromGitHub }:
+{ lib, iproute2, fetchFromGitHub }:
 
-iproute.overrideAttrs (oa: rec {
+iproute2.overrideAttrs (oa: rec {
   pname = "iproute_mptcp";
   version = "0.95";
 

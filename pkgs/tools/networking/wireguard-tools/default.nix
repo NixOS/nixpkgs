@@ -3,7 +3,7 @@
 , fetchzip
 , nixosTests
 , iptables
-, iproute
+, iproute2
 , makeWrapper
 , openresolv
 , procps
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + lib.optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ procps iproute iptables openresolv ]}
+      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables openresolv ]}
     done
   '' + lib.optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do

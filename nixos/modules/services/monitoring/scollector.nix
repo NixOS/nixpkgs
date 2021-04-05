@@ -113,7 +113,7 @@ in {
       description = "scollector metrics collector (part of Bosun)";
       wantedBy = [ "multi-user.target" ];
 
-      path = [ pkgs.coreutils pkgs.iproute ];
+      path = [ pkgs.coreutils pkgs.iproute2 ];
 
       serviceConfig = {
         User = cfg.user;

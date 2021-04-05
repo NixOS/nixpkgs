@@ -17,7 +17,7 @@
 , glib
 , gtk3
 , icu
-, iproute
+, iproute2
 , krb5
 , lib
 , mesa
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "$ORIGIN:$out/opt/appgate/service/:$out/opt/appgate/:${rpath}" $binary
     done
 
-    wrapProgram $out/opt/appgate/appgate-driver --prefix PATH : ${lib.makeBinPath [ iproute networkmanager dnsmasq ]}
+    wrapProgram $out/opt/appgate/appgate-driver --prefix PATH : ${lib.makeBinPath [ iproute2 networkmanager dnsmasq ]}
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
   '';
   meta = with lib; {
