@@ -233,6 +233,7 @@
   ./services/audio/alsa.nix
   ./services/audio/jack.nix
   ./services/audio/icecast.nix
+  ./services/audio/jmusicbot.nix
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix

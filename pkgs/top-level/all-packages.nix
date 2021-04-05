@@ -23078,6 +23078,8 @@ in
     jdk = callPackage ../development/compilers/jetbrains-jdk {  };
   });
 
+  jmusicbot = callPackage ../applications/audio/jmusicbot { };
+
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   librespot = callPackage ../applications/audio/librespot {
