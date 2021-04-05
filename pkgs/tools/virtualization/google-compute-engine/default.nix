@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildPythonApplication
+, buildPythonPackage
 , bash
 , bashInteractive
 , systemd
@@ -10,7 +10,7 @@
 , distro
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20190124";
   namePrefix = "";
@@ -24,7 +24,6 @@ buildPythonApplication rec {
 
   buildInputs = [ bash ];
   propagatedBuildInputs = [ boto setuptools distro ];
-
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
@@ -53,7 +52,11 @@ buildPythonApplication rec {
     patchShebangs $out/bin/*
   '';
 
-  doCheck = false;
+  checkPhase = ''
+    # this package has its own test suite, but they assume the ability to
+    # access resources like /sys/class/net causing them to fail in the sandbox
+    python -c 'import google_compute_engine'
+  '';
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";
