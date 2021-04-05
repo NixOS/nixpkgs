@@ -20,8 +20,10 @@ let
 
     options = [
       "ssid=${quote ssid}"
+      (if pskString != null || opts.auth != null
+        then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
+        else "key_mgmt=NONE")
     ] ++ optional opts.hidden "scan_ssid=1"
-      ++ optional (pskString == null && opts.auth == null) "key_mgmt=NONE"
       ++ optional (pskString != null) "psk=${pskString}"
       ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
       ++ optional (opts.priority != null) "priority=${toString opts.priority}"
@@ -39,6 +41,7 @@ let
         "ctrl_interface_group=${cfg.userControlled.group}"
         "update_config=1"
       ])
+    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig);
 
   configFile =
@@ -77,6 +80,16 @@ in {
         '';
       };
 
+      scanOnLowSignal = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to periodically scan for (better) networks when the signal of
+          the current one is low. This will make roaming between access points
+          faster, but will consume more power.
+        '';
+      };
+
       networks = mkOption {
         type = types.attrsOf (types.submodule {
           options = {
@@ -105,11 +118,52 @@ in {
               '';
             };
 
+            authProtocols = mkOption {
+              default = [
+                # WPA2 and WPA3
+                "WPA-PSK" "WPA-EAP" "SAE"
+                # 802.11r variants of the above
+                "FT-PSK" "FT-EAP" "FT-SAE"
+              ];
+              # The list can be obtained by running this command
+              # awk '
+              #   /^# key_mgmt: /{ run=1 }
+              #   /^#$/{ run=0 }
+              #   /^# [A-Z0-9-]{2,}/{ if(run){printf("\"%s\"\n", $2)} }
+              # ' /run/current-system/sw/share/doc/wpa_supplicant/wpa_supplicant.conf.example
+              type = types.listOf (types.enum [
+                "WPA-PSK"
+                "WPA-EAP"
+                "IEEE8021X"
+                "NONE"
+                "WPA-NONE"
+                "FT-PSK"
+                "FT-EAP"
+                "FT-EAP-SHA384"
+                "WPA-PSK-SHA256"
+                "WPA-EAP-SHA256"
+                "SAE"
+                "FT-SAE"
+                "WPA-EAP-SUITE-B"
+                "WPA-EAP-SUITE-B-192"
+                "OSEN"
+                "FILS-SHA256"
+                "FILS-SHA384"
+                "FT-FILS-SHA256"
+                "FT-FILS-SHA384"
+                "OWE"
+                "DPP"
+              ]);
+              description = ''
+                The list of authentication protocols accepted by this network.
+                This corresponds to the <literal>key_mgmt</literal> option in wpa_supplicant.
+              '';
+            };
+
             auth = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = ''
-                key_mgmt=WPA-EAP
                 eap=PEAP
                 identity="user@example.com"
                 password="secret"
