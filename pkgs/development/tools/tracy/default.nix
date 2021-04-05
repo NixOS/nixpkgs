@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
     install -D ./update/build/unix/update-release $out/bin/update
   '';
 
-  fixupPhase = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/Tracy
   '';
 
