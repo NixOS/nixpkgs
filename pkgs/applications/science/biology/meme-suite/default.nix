@@ -17,5 +17,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ gschwartz ];
     platforms = platforms.linux;
   };
-
 }
