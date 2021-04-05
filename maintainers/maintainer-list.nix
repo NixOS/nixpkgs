@@ -3689,6 +3689,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  gschwartz = {
+    email = "gsch@pennmedicine.upenn.edu";
+    github = "GregorySchwartz";
+    githubId = 2490088;
+    name = "Gregory Schwartz";
+  };
   gtrunsec = {
     email = "gtrunsec@hardenedlinux.org";
     github = "GTrunSec";
