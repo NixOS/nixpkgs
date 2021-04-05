@@ -79,7 +79,7 @@ $ nix-shell -p 'python38.withPackages(ps: with ps; [ numpy toolz ])'
 By default `nix-shell` will start a `bash` session with this interpreter in our
 `PATH`, so if we then run:
 
-```
+```Python console
 [nix-shell:~/src/nixpkgs]$ python3
 Python 3.8.1 (default, Dec 18 2019, 19:06:26)
 [GCC 9.2.0] on linux
@@ -90,7 +90,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 Note that no other modules are in scope, even if they were imperatively
 installed into our user environment as a dependency of a Python application:
 
-```
+```Python console
 >>> import requests
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
@@ -146,8 +146,8 @@ print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 Executing this script requires a `python3` that has `numpy`. Using what we learned
 in the previous section, we could startup a shell and just run it like so:
 
-```
-nix-shell -p 'python38.withPackages(ps: with ps; [ numpy ])' --run 'python3 foo.py'
+```ShellSesssion
+$ nix-shell -p 'python38.withPackages(ps: with ps; [ numpy ])' --run 'python3 foo.py'
 The dot product of [1 2] and [3 4] is: 11
 ```
 
