@@ -63,7 +63,7 @@ let
   };
 
 in {
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = teams.home-assistant.members;
 
   options.services.home-assistant = {
     enable = mkEnableOption "Home Assistant";

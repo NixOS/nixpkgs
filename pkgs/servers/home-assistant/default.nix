@@ -396,7 +396,7 @@ in with py.pkgs; buildPythonApplication rec {
     homepage = "https://home-assistant.io/";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin mic92 hexa ];
+    maintainers = teams.home-assistant.members;
     platforms = platforms.linux;
   };
 }
