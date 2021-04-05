@@ -22,6 +22,26 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-keep-configure-flags.patch
     ./remove-mkdir-var.patch
+    (fetchpatch {
+      name = "CVE-2020-8621.patch";
+      url = "https://gitlab.isc.org/isc-projects/bind9/commit/81514ff925dfc6e0c293745e0fc8320a8af95586.patch";
+      sha256 = "1h3p60xcxj1zd3ksqllhgr4z43li13n2famyvb8kyydycw0rhi4d";
+    })
+    (fetchpatch {
+      name = "CVE-2020-8622.patch";
+      url = "https://gitlab.isc.org/isc-projects/bind9/commit/6ed167ad0a647dff20c8cb08c944a7967df2d415.patch";
+      sha256 = "1r191hvqabq8bpnik8hmx7qirghfv48fhrzzmiq8vbjmwkbvvjrj";
+    })
+    (fetchpatch {
+      name = "CVE-2020-8624.patch";
+      url = "https://gitlab.isc.org/isc-projects/bind9/commit/7630a64141a997b5247d9ad4a7dfff6ac6d9a485.patch";
+      sha256 = "01xbi0nrl9zqv8yih92x2xman23dr8lbkxy4frrzsikfak41s1zd";
+    })
+    (fetchpatch {
+      name = "CVE-2020-8625.patch";
+      url = "https://gitlab.isc.org/isc-projects/bind9/commit/b04cb88462863d762093760ffcfe1946200e30f5.patch";
+      sha256 = "14h57z1jpp4hbqp8wmdwnfwgz63v8zdcy1gzgjbwg8nbfy2h1gmk";
+    })
   ];
 
   nativeBuildInputs = [ perl ];
