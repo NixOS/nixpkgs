@@ -8,19 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0in2fq2x4yhyjmcn9n5n43zsawsdh12d4sm6l57934kgb75gqb21";
+    sha256 = "16is71cgqnvpl55y9kh1zb7r2gx2f3a1abljm7drjp90nbr7imlg";
   };
-
-  patches = [
-    ./fix-cross-compilation.patch
-  ];
 
   outputs = [ "out" "dev" "doc" ];
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config yacc doxygen ]
     ++ lib.optional withWaylandSupport wayland;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
