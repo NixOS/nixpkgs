@@ -51,7 +51,8 @@ buildPythonPackage rec {
     patchShebangs $out/bin/*
   '';
 
-  pythonImportsCheck = [ "import google_compute_engine" ];
+  doCheck = false;
+  pythonImportsCheck = [ "google_compute_engine" ];
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";
