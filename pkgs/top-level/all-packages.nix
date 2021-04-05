@@ -14741,6 +14741,8 @@ in
 
   pkgdiff = callPackage ../tools/misc/pkgdiff { };
 
+  place-cursor-at = haskell.lib.justStaticExecutables haskellPackages.place-cursor-at;
+
   plib = callPackage ../development/libraries/plib { };
 
   pocketsphinx = callPackage ../development/libraries/pocketsphinx { };
