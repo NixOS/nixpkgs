@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool for interacting with remote images and registries";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/google/go-containerregistry";
     license = licenses.apsl20;
     maintainers = with maintainers; [ yurrriq ];
   };
