@@ -10,11 +10,15 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "121fjdv5phx1aqk21vx9k9vsc5k1w8s86gp6pamy2y31r2ph7r8y";
+    # FIXME: this should unconditionally be `tar.xz` but for 4.4.3 the file was actually `bzip2`
+    # compressed, rather than `xz` compressed, and nix can't deal with that well.
+    url = if version == "4.4.3"
+      then "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz"
+      else "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0rwghzci2wn2jmisvnzs23yxc2z3d4dcx2qbbhcvjyi3q8ij61nl";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
