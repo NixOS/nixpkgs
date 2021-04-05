@@ -118,6 +118,7 @@ let
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
+    qtwayland = [ ./qtwayland-libdrm-build.patch ];
   };
 
   qtModule =
