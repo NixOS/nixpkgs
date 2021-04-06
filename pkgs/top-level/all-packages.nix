@@ -18549,6 +18549,11 @@ in
     nodejs-slim = nodejs-slim-12_x;
   };
 
+  materialize = callPackage ../servers/sql/materialize {
+    inherit (buildPackages.darwin) bootstrap_cmds;
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  };
+
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
