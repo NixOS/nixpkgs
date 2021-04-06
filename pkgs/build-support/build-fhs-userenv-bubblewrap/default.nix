@@ -95,7 +95,7 @@ let
       if [[ $path == '/etc' ]]; then
         :
       elif [[ -L $i ]]; then
-        symlinks+=(--symlink "$(readlink "$i")" "$path")
+        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$path")
         blacklist+=("$path")
       else
         ro_mounts+=(--ro-bind "$i" "$path")

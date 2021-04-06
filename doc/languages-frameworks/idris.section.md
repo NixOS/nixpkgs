@@ -4,7 +4,7 @@
 
 The easiest way to get a working idris version is to install the `idris` attribute:
 
-```
+```ShellSesssion
 $ # On NixOS
 $ nix-env -i nixos.idris
 $ # On non-NixOS
@@ -21,7 +21,7 @@ self: super: {
 
 And then:
 
-```
+```ShellSesssion
 $ # On NixOS
 $ nix-env -iA nixos.myIdris
 $ # On non-NixOS
@@ -29,7 +29,7 @@ $ nix-env -iA nixpkgs.myIdris
 ```
 
 To see all available Idris packages:
-```
+```ShellSesssion
 $ # On NixOS
 $ nix-env -qaPA nixos.idrisPackages
 $ # On non-NixOS
@@ -37,7 +37,7 @@ $ nix-env -qaPA nixpkgs.idrisPackages
 ```
 
 Similarly, entering a `nix-shell`:
-```
+```ShellSesssion
 $ nix-shell -p 'idrisPackages.with-packages (with idrisPackages; [ contrib pruviloj ])'
 ```
 
@@ -45,14 +45,14 @@ $ nix-shell -p 'idrisPackages.with-packages (with idrisPackages; [ contrib pruvi
 
 To have access to these libraries in idris, call it with an argument `-p <library name>` for each library:
 
-```
+```ShellSesssion
 $ nix-shell -p 'idrisPackages.with-packages (with idrisPackages; [ contrib pruviloj ])'
 [nix-shell:~]$ idris -p contrib -p pruviloj
 ```
 
 A listing of all available packages the Idris binary has access to is available via `--listlibs`:
 
-```
+```ShellSesssion
 $ idris --listlibs
 00prelude-idx.ibc
 pruviloj
@@ -105,7 +105,7 @@ build-idris-package  {
 
 Assuming this file is saved as `yaml.nix`, it's buildable using
 
-```
+```ShellSesssion
 $ nix-build -E '(import <nixpkgs> {}).idrisPackages.callPackage ./yaml.nix {}'
 ```
 
@@ -121,7 +121,7 @@ with import <nixpkgs> {};
 
 in another file (say `default.nix`) to be able to build it with
 
-```
+```ShellSesssion
 $ nix-build -A yaml
 ```
 
@@ -133,7 +133,7 @@ Specifically, you can set `idrisBuildOptions`, `idrisTestOptions`, `idrisInstall
 
 For example you could set
 
-```
+```nix
 build-idris-package {
   idrisBuildOptions = [ "--log" "1" "--verbose" ]
 

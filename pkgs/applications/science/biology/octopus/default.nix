@@ -1,4 +1,4 @@
-{lib, stdenv, fetchpatch, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, lzma, pkg-config}:
+{lib, stdenv, fetchpatch, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, xz, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "octopus";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ boost gmp htslib zlib lzma ];
+  buildInputs = [ boost gmp htslib zlib xz ];
 
   postInstall = ''
     mkdir $out/bin

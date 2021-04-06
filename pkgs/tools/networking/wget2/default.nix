@@ -17,7 +17,7 @@
 , libhsts
 , libidn2
 , libpsl
-, lzma
+, xz
 , nghttp2
 , sslSupport ? true
 , openssl
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook flex lzip pkg-config python3 texinfo ];
 
-  buildInputs = [ brotli bzip2 gpgme libhsts libidn2 libpsl lzma nghttp2 pcre2 zlib zstd ]
+  buildInputs = [ brotli bzip2 gpgme libhsts libidn2 libpsl xz nghttp2 pcre2 zlib zstd ]
     ++ lib.optional sslSupport openssl;
 
   # TODO: include translation files

@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, google-api-core }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, google-api-core, proto-plus }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ncgcnbvmgqph54yh2pjx2hh82gnkhsrw5yirp4wlf7jclh6j9xh";
+    sha256 = "sha256-tGNwSv+rMnwdP6SvKAqFhjW19ZqIRWsqCNtiozajUqo=";
   };
 
-  propagatedBuildInputs = [ google-api-core ];
+  propagatedBuildInputs = [ google-api-core proto-plus ];
 
   # No tests in repo
   doCheck = false;

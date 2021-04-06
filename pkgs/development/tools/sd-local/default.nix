@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "sd-local";
-  version = "1.0.29";
+  version = "1.0.30";
 
   src = fetchFromGitHub {
     owner = "screwdriver-cd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Po6kP6kAY5W3SQJ3iFCtzifSlQ+JgLIDhuk2UHSwAxM=";
+    sha256 = "sha256-Ha0E0e9CPR8dnApw0cR4A7Tzi3shYVtSeaQ+6I80qcU=";
   };
 
   vendorSha256 = "sha256-4xuWehRrmVdS2F6r00LZLKq/oHlWqCTQ/jYUKeIJ6DI=";

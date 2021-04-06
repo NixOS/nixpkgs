@@ -8,7 +8,7 @@
 , libusb1, pciutils, nss, re2
 
 , python2Packages, perl, pkg-config
-, nspr, systemd, kerberos
+, nspr, systemd, libkrb5
 , util-linux, alsaLib
 , bison, gperf
 , glib, gtk3, dbus-glib
@@ -135,7 +135,7 @@ let
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
       util-linux alsaLib
-      bison gperf kerberos
+      bison gperf libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core

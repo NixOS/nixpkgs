@@ -2,8 +2,8 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.4.79";
-  tag = "1.20201201";
+  modDirVersion = "5.10.17";
+  tag = "1.20210303";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -13,7 +13,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "093p5kh5f27djkhbcw371w079lhhihvg3s4by3wzsd40di4fcgn9";
+    sha256 = "0ffsllayl18ka4mgp4rdy9h0da5gy1n6g0kfvinvzdzabb5wzvrx";
   };
 
   defconfig = {
@@ -23,14 +23,17 @@ lib.overrideDerivation (buildLinux (args // {
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
 
-  extraConfig = ''
-    # ../drivers/pci/controller/pcie-altera.c:679:8: error: too few arguments to function 'devm_of_pci_get_host_bridge_resources'
-    PCIE_ALTERA n
-  '';
-
   features = {
     efiBootStub = false;
   } // (args.features or {});
+
+  extraConfig = ''
+    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: error: initialization of 'void (*)(struct drm_crtc *, struct drm_atomic_state *)' from incompatible pointer type 'void (*)(struct drm_crtc *, struct drm_crtc_state *)' [-Werror=incompatible-pointer-types]
+    #   851 |  .atomic_flush = ast_crtc_helper_atomic_flush,
+    #       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: note: (near initialization for 'ast_crtc_helper_funcs.atomic_flush')
+    DRM_AST n
+  '';
 
   extraMeta = if (rpiVersion < 3) then {
     platforms = with lib.platforms; [ arm ];

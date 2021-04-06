@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "rtsp-simple-server";
-  version = "0.15.2";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "aler9";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XuyE0gubkE08Qei30/q8fLdX8V7zBsbFsdaiqbXgeI4=";
+    sha256 = "sha256-eY3XtGmHp7TM+lXC9tdd51x7sLuuZfBDJxTZ79Ye0Qs=";
   };
 
-  vendorSha256 = "sha256-4R2gA9QwfyBNDasRuDawDFEmXu31yGuZUQZS6cZL3B0=";
+  vendorSha256 = "sha256-SiWcOI1XxrwwTAzp8HC5zOO5e2oSWBMFRYsW2RwPA5I=";
 
   # Tests need docker
   doCheck = false;

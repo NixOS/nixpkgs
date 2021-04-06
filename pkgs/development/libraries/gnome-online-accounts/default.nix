@@ -22,7 +22,7 @@
 , docbook_xml_dtd_412
 , gnome3
 , gcr
-, kerberos
+, libkrb5
 , gvfs
 , dbus
 , wrapGAppsHook
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     gvfs # OwnCloud, Google Drive
     icu
     json-glib
-    kerberos
+    libkrb5
     librest
     libsecret
     libsoup

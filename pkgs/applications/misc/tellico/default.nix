@@ -1,29 +1,30 @@
 { lib
 , fetchurl
 , mkDerivation
-, libkcddb
-, kinit
-, kdelibs4support
-, solid
-, kxmlgui
-, karchive
-, kfilemetadata
-, khtml
-, knewstuff
-, libksane
 , cmake
 , exempi
 , extra-cmake-modules
-, libcdio
-, poppler
-, makeWrapper
+, karchive
 , kdoctools
+, kfilemetadata
+, khtml
+, kitemmodels
+, knewstuff
+, kxmlgui
+, libcdio
+, libkcddb
+, libksane
+, makeWrapper
+, poppler
+, qtcharts
+, qtwebengine
+, solid
 , taglib
 }:
 
 mkDerivation rec {
-  name = "tellico";
-  version = "3.3.3";
+  pname = "tellico";
+  version = "3.4";
 
   src = fetchurl {
     # version 3.3.0 just uses 3.3 in its name
@@ -31,7 +32,7 @@ mkDerivation rec {
       "https://tellico-project.org/files/tellico-${version}.tar.xz"
       "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz"
     ];
-    sha256 = "sha256-9cdbUTa2Mt3/yNylOSdGjgDETD74sR0dU4C58uW0Y6o=";
+    sha256 = "sha256-YXMJrAkfehe3ox4WZ19igyFbXwtjO5wxN3bmgP01jPs=";
   };
 
   nativeBuildInputs = [
@@ -43,17 +44,18 @@ mkDerivation rec {
 
   buildInputs = [
     exempi
-    extra-cmake-modules
     karchive
-    libkcddb
-    kdelibs4support
     kfilemetadata
     khtml
+    kitemmodels
     knewstuff
     kxmlgui
     libcdio
+    libkcddb
     libksane
     poppler
+    qtcharts
+    qtwebengine
     solid
     taglib
   ];

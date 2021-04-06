@@ -23,7 +23,7 @@
 , libtool
 , libuuid
 , libxml2
-, lzma
+, xz
 , nspr
 , nss
 , openssl
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     libuuid
     libxcb
     libxml2
-    lzma
+    xz
     nspr
     nss
     openssl
