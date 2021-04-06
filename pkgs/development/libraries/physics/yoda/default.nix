@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.8.5";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "1z9jmabsaddhs003zzq73fpq2absd12rnc2sa5qn45zwf62nnbjc";
+    sha256 = "1x7xi6w7lb92x8202kbaxgqg1sly534wana4f38l3gpbzw9dwmcs";
   };
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
@@ -39,7 +39,5 @@ stdenv.mkDerivation rec {
     homepage    = "https://yoda.hepforge.org";
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
-    # https://gitlab.com/hepcedar/yoda/-/issues/24
-    broken      = withRootSupport;
   };
 }
