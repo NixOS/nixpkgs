@@ -8128,9 +8128,13 @@ in {
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tables = if isPy3k then
-    callPackage ../development/python-modules/tables { }
+    callPackage ../development/python-modules/tables {
+      hdf5 = pkgs.hdf5_1_10;
+    }
   else
-    callPackage ../development/python-modules/tables/3.5.nix { };
+    callPackage ../development/python-modules/tables/3.5.nix {
+      hdf5 = pkgs.hdf5_1_10;
+    };
 
   tablib = callPackage ../development/python-modules/tablib { };
 
