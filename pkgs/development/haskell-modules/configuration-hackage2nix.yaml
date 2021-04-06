@@ -5548,7 +5548,6 @@ broken-packages:
   - fused-effects-squeal
   - fused-effects-th
   - fusion
-  - futhark
   - futun
   - future
   - fuzzy-time-gen
