@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , meson
 , ninja
 , pkg-config
@@ -17,9 +17,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.2.0";
   format = "other";
 
-  src = fetchurl {
-    url = "https://github.com/SeaDve/Mousai/archive/refs/tags/v${version}.tar.gz";
-    sha256 = "1lzlrj1q2vcg6k9gilxj2b3z6d0iaqwn60iwi48v5blwjdaqr96v";
+  src = fetchFromGitHub {
+    owner = "SeaDve";
+    repo = "Mousai";
+    rev = "v${version}";
+    sha256 = "10g3wj9yy15yzyfa1l96i97i3k6blm064p49hn7hp001cmc3w045";
   };
 
   nativeBuildInputs = [
@@ -30,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     python3
     desktop-file-utils
+    python3.pkgs.wrapPython
   ];
 
   buildInputs = [
@@ -48,6 +51,10 @@ python3.pkgs.buildPythonApplication rec {
     gst-python
     requests
   ];
+
+  preFixup = ''
+    wrapPythonPrograms
+  '';
 
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
