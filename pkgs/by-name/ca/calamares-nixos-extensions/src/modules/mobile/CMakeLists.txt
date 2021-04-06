@@ -6,13 +6,9 @@ calamares_add_plugin( mobile
     EXPORT_MACRO PLUGINDLLEXPORT_PRO
     SOURCES
         Config.cpp
-        Config.h
         MobileQmlViewStep.cpp
-        MobileQmlViewStep.h
         PartitionJob.cpp
-        PartitionJob.h
         UsersJob.cpp
-        UsersJob.h
     RESOURCES
         mobile.qrc
     SHARED_LIB
