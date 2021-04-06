@@ -3875,6 +3875,18 @@ let
     meta.homepage = "https://github.com/ccarpita/rtorrent-syntax-file/";
   };
 
+  rust-tools-nvim = buildVimPluginFrom2Nix {
+    pname = "rust-tools-nvim";
+    version = "2021-04-06";
+    src = fetchFromGitHub {
+      owner = "simrat39";
+      repo = "rust-tools.nvim";
+      rev = "42a9fb0441630ea640b7d3e967d6ad5c7f41b520";
+      sha256 = "0mcjcxhq2ri1galva5xjx4f0z98jyskmwypxc77gizisl2fjplnz";
+    };
+    meta.homepage = "https://github.com/simrat39/rust-tools.nvim/";
+  };
+
   rust-vim = buildVimPluginFrom2Nix {
     pname = "rust-vim";
     version = "2021-02-15";
