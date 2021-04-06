@@ -5314,6 +5314,8 @@ in
     szip = null;
   };
 
+  hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
+
   hdf5-mpi = appendToName "mpi" (hdf5.override {
     szip = null;
     mpiSupport = true;
