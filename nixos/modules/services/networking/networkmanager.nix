@@ -484,6 +484,8 @@ in {
       })
     ];
 
+    boot.kernelModules = [ "ctr" ];
+
     security.polkit.extraConfig = polkitConf;
 
     services.dbus.packages = cfg.packages
