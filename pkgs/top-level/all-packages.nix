@@ -2568,6 +2568,8 @@ in
 
   gringo = callPackage ../tools/misc/gringo { };
 
+  grit = callPackage ../tools/misc/grit { };
+
   grobi = callPackage ../tools/X11/grobi { };
 
   gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
