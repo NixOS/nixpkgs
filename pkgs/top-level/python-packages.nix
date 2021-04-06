@@ -8565,6 +8565,8 @@ in {
 
   tvnamer = callPackage ../development/python-modules/tvnamer { };
 
+  tweedledum = callPackage ../development/python-modules/tweedledum { };
+
   tweepy = callPackage ../development/python-modules/tweepy { };
 
   twentemilieu = callPackage ../development/python-modules/twentemilieu { };
