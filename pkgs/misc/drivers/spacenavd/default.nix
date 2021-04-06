@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
     # Changes the socket path from /run/spnav.sock to $XDG_RUNTIME_DIR/spnav.sock
     # to allow for a user service
     ./configure-socket-path.patch
+    # Changes the pidfile path from /run/spnavd.pid to $XDG_RUNTIME_DIR/spnavd.pid
+    # to allow for a user service
+    ./configure-pidfile-path.patch
   ];
 
   buildInputs = [ libX11 ]
