@@ -63,7 +63,7 @@ let
   };
 
 in {
-  meta.maintainers = with maintainers; [ dotlambda ];
+  meta.maintainers = with maintainers; [ ];
 
   options.services.home-assistant = {
     enable = mkEnableOption "Home Assistant";

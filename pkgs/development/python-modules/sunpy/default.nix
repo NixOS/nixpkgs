@@ -5,6 +5,7 @@
 , pythonOlder
 , asdf
 , astropy
+, setuptools-scm
 , astropy-helpers
 , astropy-extension-helpers
 , beautifulsoup4
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools-scm
     astropy-extension-helpers
   ];
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   # It's used to locate headers
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "get_output('krb5-config gssapi --prefix')" "'${lib.getDev krb5Full}'"
+      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5Full}"'
   '';
 
   nativeBuildInputs = [

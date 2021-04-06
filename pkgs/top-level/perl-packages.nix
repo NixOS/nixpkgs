@@ -15114,18 +15114,15 @@ let
 
   NetCIDRLite = buildPerlPackage {
     pname = "Net-CIDR-Lite";
-    version = "0.21";
+    version = "0.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOUGW/Net-CIDR-Lite-0.21.tar.gz";
-      sha256 = "cfa125e8a2aef9259bc3a44e07cbdfb7894b64d22e7c0cee92aee2f5c7915093";
+      url = "mirror://cpan/authors/id/S/ST/STIGTSP/Net-CIDR-Lite-0.22.tar.gz";
+      sha256 = "05w57db2lx4djb4vixzdr6qgrzyzkk047nl812g7nq8s6k5xh5s3";
     };
-    patches = [
-      # Fix for security issue: prevent leading zeroes in ipv4 octets
-      # https://blog.urth.org/2021/03/29/security-issues-in-perl-ip-address-distros/
-      ../development/perl-modules/Net-CIDR-Lite-prevent-leading-zeroes-ipv4.patch
-    ];
     meta = {
       description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 

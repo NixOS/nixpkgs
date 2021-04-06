@@ -2,7 +2,7 @@
 , makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx
 , top-git, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
 , perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
-, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
+, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, xz, gnutar
 , rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, src ? null, version ? null
 , migration ? false, patches ? []
 , tests ? {}, mdbook
@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
 
   hydraPath = lib.makeBinPath (
     [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 lzma gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
+      gzip bzip2 xz gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
   nativeBuildInputs = [ autoreconfHook pkg-config mdbook ];

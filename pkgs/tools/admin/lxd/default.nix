@@ -1,6 +1,6 @@
 { lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
+, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
 , libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
@@ -48,7 +48,7 @@ buildGoPackage rec {
 
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       networkPkgs
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''
              exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
            '') ]

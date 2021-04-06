@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54431535309cfab50897d9c181e8c2226268825aa6e42e930b05b99c5041a18c";
+    sha256 = "sha256-CYMsbnUDL5OBjt8a/+R0YSHWQMYlpb75tclq9nbpju4=";
   };
 
   propagatedBuildInputs = [

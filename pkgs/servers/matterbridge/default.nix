@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "matterbridge";
-  version = "1.22.0";
+  version = "1.22.1";
 
   vendorSha256 = null;
 
@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchurl {
     url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";
-    sha256 = "sha256-jwatqxQh4t4tgNiOEjS9vxIM+9XtnH8QNch887+xDnI=";
+    sha256 = "sha256-yV805OWFNOxKIGd6t2kRcUzdB8xYWYHFK+W2u/QPTXg=";
   };
 
   meta = with lib; {

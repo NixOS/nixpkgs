@@ -5,7 +5,7 @@
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, kerberos, libdrm, mesa
+, libkrb5, libdrm, mesa
 , libxkbcommon, wayland # ozone/wayland
 
 # Command line programs
@@ -66,7 +66,7 @@ let
     liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    kerberos libdrm mesa coreutils
+    libkrb5 libdrm mesa coreutils
     libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva

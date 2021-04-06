@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
-, numpy
-, pytest
+, cython, numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,11 +15,15 @@ buildPythonPackage rec {
     sha256 = "02zxfmqw7a5kz8qjdph9a9961mbkd4haxwwa28yjkxs5hzs5x3c8";
   };
 
+  nativeBuildInputs = [ cython ];
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest
+  checkInputs = [ pytestCheckHook ];
+  preCheck = ''
+    pushd gsd/test
+  '';
+  postCheck = ''
+    popd
   '';
 
   meta = with lib; {

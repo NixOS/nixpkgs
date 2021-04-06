@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.17";
+  version = "0.3.18";
 
   # Some files for tests missing from PyPi
   # https://github.com/Instagram/LibCST/issues/331
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "instagram";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mlSeB9OjCiUVYwcPYNrQdlfcj9DV/+wqVWt91uFsQsU=";
+    sha256 = "sha256-19yGaKBLpGASSPv/aSX0kx9lh2JxKExHJDKKtuBbuqI=";
   };
 
   disabled = pythonOlder "3.6";

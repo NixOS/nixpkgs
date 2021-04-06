@@ -25,7 +25,7 @@
 , libarchive
 , libcap
 , bzip2
-, yacc
+, bison
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     which
     makeWrapper
-    yacc
+    bison
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42

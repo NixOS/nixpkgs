@@ -8,7 +8,7 @@
 , tridactyl-native
 , fx_cast_bridge
 , udev
-, kerberos
+, libkrb5
 , libva
 , mesa # firefox wants gbm for drm+dmabuf
 }:
@@ -65,7 +65,7 @@ let
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver ]
             ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
             ++ lib.optional ffmpegSupport ffmpeg
-            ++ lib.optional gssSupport kerberos
+            ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])

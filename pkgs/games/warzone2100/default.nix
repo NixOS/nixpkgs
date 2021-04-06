@@ -1,24 +1,19 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchurl
 , cmake
 , ninja
-, zip, unzip
+, zip
 , pkg-config
 , asciidoctor
 , gettext
 
-, qtbase
-, qtscript
 , SDL2
 , libtheora
 , libvorbis
 , openal
 , openalSoft
-, glew
 , physfs
-, fribidi
-, libXrandr
 , miniupnpc
 , libsodium
 , curl
@@ -27,6 +22,9 @@
 , harfbuzz
 , sqlite
 , which
+, vulkan-headers
+, vulkan-loader
+, shaderc
 
 , withVideos ? false
 }:
@@ -39,27 +37,22 @@ let
   };
 in
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   inherit pname;
-  version  = "3.4.1";
+  version  = "4.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "0savalmw1kp1sf8vg5aqrl5hc77p4jacxy5y9qj8k2hi2vqdfb7a";
+    sha256 = "1d94072yns2xrjpagw1mqq7iyywhwz7vn3lgjdwmbgjy79jzcs1k";
   };
 
   buildInputs = [
-    qtbase
-    qtscript
     SDL2
     libtheora
     libvorbis
     openal
     openalSoft
-    glew
     physfs
-    fribidi
-    libXrandr
     miniupnpc
     libsodium
     curl
@@ -67,14 +60,18 @@ mkDerivation rec {
     freetype
     harfbuzz
     sqlite
+    vulkan-headers
+    vulkan-loader
   ];
 
   nativeBuildInputs = [
+    pkg-config
     cmake
     ninja
-    zip unzip
+    zip
     asciidoctor
     gettext
+    shaderc
   ];
 
   postPatch = ''

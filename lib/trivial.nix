@@ -158,7 +158,7 @@ rec {
     seq deepSeq genericClosure;
 
 
-  ## nixpks version strings
+  ## nixpkgs version strings
 
   /* Returns the current full nixpkgs version number. */
   version = release + versionSuffix;

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute, ronn }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute ];
+  buildInputs = [ openssl lzo zlib iproute2 ];
 
   enableParallelBuilding = true;
 

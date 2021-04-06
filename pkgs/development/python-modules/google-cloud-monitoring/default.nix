@@ -5,6 +5,7 @@
 , google-cloud-testutils
 , libcst
 , proto-plus
+, pandas
 , pytestCheckHook
 , pytest-asyncio
 , mock
@@ -12,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9c21e1c0976805022f5358debfcf3fca2640050bd8e745d31547ad6e129e5b18";
+    sha256 = "sha256-QeMJBJKjW3Zu0p0mSmo5dVOJNwRmmA5FKXRXjCd+zN4=";
   };
 
   propagatedBuildInputs = [ libcst google-api-core proto-plus ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [ google-cloud-testutils mock pandas pytestCheckHook pytest-asyncio ];
 
   disabledTests = [
     # requires credentials

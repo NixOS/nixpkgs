@@ -1,6 +1,6 @@
 { stdenv, lib
 , makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, kerberos, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
+, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     stdenv.cc.cc.lib
-    kerberos
+    libkrb5
     curl
     lttng-ust
     libpulseaudio

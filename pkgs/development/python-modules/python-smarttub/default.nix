@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.19";
+  version = "0.0.21";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mdz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01i4pvgvpl7inwhy53c6b34pi5zvfiv2scn507j8jdg5cjs04g80";
+    sha256 = "sha256-7phx6CI6sqUCZIUxL6ea25UWAcI3NAz66hIleUfN4bk=";
   };
 
   propagatedBuildInputs = [

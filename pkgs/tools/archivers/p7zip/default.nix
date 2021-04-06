@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "p7zip";
-  version = "17.03";
+  version = "17.04";
 
   src = fetchFromGitHub {
     owner  = "szcnick";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0zgpa90z5p30jbpqydiig1h8hn41c76n2x26rh8cc92xw72ni33d";
+    sha256 = "sha256-19F4hPV0nKVuFZNbOcXrcA1uW6Y3HQolaHVIYXGmh18=";
   };
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional

@@ -465,7 +465,7 @@ in {
       restartTriggers = [ configFile overrideNameserversScript ];
 
       # useful binaries for user-specified hooks
-      path = [ pkgs.iproute pkgs.util-linux pkgs.coreutils ];
+      path = [ pkgs.iproute2 pkgs.util-linux pkgs.coreutils ];
       aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 
