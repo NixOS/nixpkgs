@@ -196,13 +196,17 @@ in stdenv.mkDerivation rec {
     python3 TOOLS/osxbundle.py -s build/mpv
   '';
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = (stdenv.lib.optionals stdenv.isDarwin [
     # Fix cocoa backend. Remove with the next release
     (fetchpatch {
       url = "https://github.com/mpv-player/mpv/commit/188169854313b99d01da8f69fe129f0a487eb7c4.patch";
       sha256 = "062sz4666prb2wg1rn5q8brqkzlq6lxn8sxic78a8lb0125c01f7";
     })
-  ];
+  ]) ++ [
+    (fetchpatch {
+      url = "https://github.com/mpv-player/mpv/commit/d0c530919d8cd4d7a774e38ab064e0fabdae34e6.patch";
+      sha256 = "1cxfdvzxm963kaiign876ypbr1zs762vr5bcww0mc9spgdxzjcx2";
+    })];
 
   postInstall = ''
     # Use a standard font
