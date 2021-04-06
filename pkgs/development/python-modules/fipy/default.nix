@@ -37,7 +37,7 @@ buildPythonPackage rec {
     scikit-fmm
     openssh
   ] ++ lib.optionals isPy27 [ pysparse ]
-    ++ lib.optionals (! stdenv.isDarwin) [ gmsh ];
+  ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
