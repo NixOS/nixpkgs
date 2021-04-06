@@ -154,6 +154,8 @@ in
 
   ankisyncd = callPackage ../servers/ankisyncd { };
 
+  antsimulator = callPackage ../games/antsimulator { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
