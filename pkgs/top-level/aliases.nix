@@ -453,6 +453,7 @@ mapAliases ({
   nilfs_utils = nilfs-utils; # added 2018-04-25
   nix-review = nixpkgs-review; # added 2019-12-22
   nmap_graphical = nmap-graphical;  # added 2017-01-19
+  nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25
   nxproxy = nx-libs; # added 2019-02-15
   nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
