@@ -9,11 +9,11 @@ let
 
   writeConfig = cfg: pkgs.writeText "dhcpd.conf"
     ''
-      default-lease-time 600;
-      max-lease-time 7200;
+      default-lease-time ${toString cfg.defaultLeaseTime};
+      max-lease-time ${toString cfg.maxLeaseTime};
       ${optionalString (!cfg.authoritative) "not "}authoritative;
-      ddns-update-style interim;
-      log-facility local1; # see dhcpd.nix
+      ddns-update-style ${cfg.ddnsUpdateStyle};
+      log-facility ${cfg.logFacility}; # see dhcpd.nix
 
       ${cfg.extraConfig}
 
@@ -186,6 +186,67 @@ let
       '';
     };
 
+    ddnsUpdateStyle = mkOption {
+      type = types.enum [ "ad-hoc" "interim" "none" ];
+      default = "interim";
+      description = ''
+        The ddns-update-style statement is only meaningful in the outer scope
+        it is evaluated once after reading the dhcpd.conf file, rather than each
+        time a client is assigned an IP address, so there is no way to use
+        different DNS update styles for different clients.
+      '';
+    };
+
+    defaultLeaseTime = mkOption {
+      type = types.int;
+      default = 600;
+      description = ''
+        Time should be the length in seconds that will be assigned to a lease
+        if the client requesting the lease does not ask for a specific expiration time.
+      '';
+    };
+
+    maxLeaseTime = mkOption {
+      type = types.int;
+      default = 7200;
+      description = ''
+        Time should be the maximum length in seconds that will be assigned to a lease.
+      '';
+    };
+
+    logFacility = mkOption {
+      type = types.enum [
+        "auth"
+        "authpriv"
+        "cron"
+        "daemon"
+        "ftp"
+        "kern"
+        "lpr"
+        "mail"
+        "mark"
+        "news"
+        "ntp"
+        "security"
+        "syslog"
+        "user"
+        "uucp"
+        "lo‐cal0"
+        "local0"
+        "local1"
+        "local2"
+        "local3"
+        "local4"
+        "local5"
+        "local6"
+        "local7"
+      ];
+      default = "local1";
+      description = ''
+        This statement causes the DHCP server to do all of its logging on the
+        specified log facility once the dhcpd.conf file has been read.
+      '';
+    };
   };
 
 in
