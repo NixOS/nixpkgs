@@ -1,8 +1,6 @@
 { stdenv, lib, fetchgit, flex, bison, pkg-config, which
-, pythonSupport ? false, python ? null, swig
+, pythonSupport ? false, python, swig, libyaml
 }:
-
-assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "dtc";
@@ -14,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0li992wwd7kgy71bikanqky49y4hq3p3vx35p2hvyxy1k0wfy7i8";
   };
 
+  buildInputs = [ libyaml ];
   nativeBuildInputs = [ flex bison pkg-config which ] ++ lib.optionals pythonSupport [ python swig ];
 
   postPatch = ''
