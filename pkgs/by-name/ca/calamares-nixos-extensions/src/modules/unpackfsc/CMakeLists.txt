@@ -5,7 +5,6 @@ calamares_add_plugin( unpackfsc
     TYPE job
     EXPORT_MACRO PLUGINDLLEXPORT_PRO
     SOURCES
-        Config.cpp
         UnpackFSCJob.cpp
     SHARED_LIB
 )

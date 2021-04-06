@@ -10,8 +10,6 @@
 #ifndef UNPACKFSC_UNPACKFSCJOB_H
 #define UNPACKFSC_UNPACKFSCJOB_H
 
-#include "Config.h"
-
 #include <CppJob.h>
 #include <DllMacro.h>
 #include <utils/PluginFactory.h>
@@ -21,6 +19,13 @@ class PLUGINDLLEXPORT UnpackFSCJob : public Calamares::CppJob
     Q_OBJECT
 
 public:
+    enum class Type
+    {
+        None,  /// << Invalid
+        FSArchive,
+        Squashfs,
+    };
+
     explicit UnpackFSCJob( QObject* parent = nullptr );
     ~UnpackFSCJob() override;
 
@@ -31,7 +36,9 @@ public:
     void setConfigurationMap( const QVariantMap& configurationMap ) override;
 
 private:
-    Config m_config;
+    QString m_source;
+    QString m_destination;
+    Type m_type = Type::None;
 };
 
 CALAMARES_PLUGIN_FACTORY_DECLARATION( UnpackFSCFactory )
