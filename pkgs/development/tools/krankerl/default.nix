@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromGitHub
 , rustPlatform
 , pkg-config
 , openssl
@@ -12,15 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "krankerl";
-  version = "v0.13.0";
+  version = "0.13.0";
 
-  src = fetchgit {
-    url = "https://github.com/ChristophWurst/krankerl.git";
-    rev = version;
+  src = fetchFromGitHub {
+    owner = "ChristophWurst";
+    repo = "krankerl";
+    rev = "v${version}";
     sha256 = "1gp8b2m8kcz2f16zv9xwv4n1zki6imvz9z31kixh6amdj6fif3d1";
   };
 
-  cargoSha256 = "sha256:00b634w9kwbqjhyifnb3py2mdqghhf6j82q4k555fffidy1pnzxx";
+  cargoSha256 = "sha256:01hcxs14wwhhvr08x816wa3jcm4zvm6g7vais793cgijipyv00rc";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,9 +40,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = " A CLI helper to manage, package and publish Nextcloud apps ";
+    description = "A CLI helper to manage, package and publish Nextcloud apps";
     homepage = "https://github.com/ChristophWurst/krankerl";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];
   };
