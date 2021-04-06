@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PYTHON=python" ];
   installFlags = [ "INSTALL=install" "PREFIX=$(out)" "SETUP_PREFIX=$(out)" ];
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Device Tree Compiler";
     homepage = "https://git.kernel.org/cgit/utils/dtc/dtc.git";
