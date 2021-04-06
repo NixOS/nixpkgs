@@ -6,5 +6,9 @@ calamares_add_plugin( unpackfsc
     EXPORT_MACRO PLUGINDLLEXPORT_PRO
     SOURCES
         UnpackFSCJob.cpp
+        # The workers for differently-packed filesystems
+        Runners.cpp
+        FSArchiverRunner.cpp
+        UnsquashRunner.cpp
     SHARED_LIB
 )

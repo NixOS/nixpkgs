@@ -9,9 +9,13 @@
 
 #include "UnpackFSCJob.h"
 
+#include "Runners.h"
+
 #include <utils/Logger.h>
 #include <utils/NamedEnum.h>
 #include <utils/Variant.h>
+
+#include <memory>
 
 static const NamedEnumTable< UnpackFSCJob::Type > typeNames()
 {
@@ -46,7 +50,23 @@ UnpackFSCJob::prettyName() const
 Calamares::JobResult
 UnpackFSCJob::exec()
 {
-    return Calamares::JobResult::ok();
+    std::unique_ptr<Runner> r;
+    switch ( m_type )
+    {
+        case Type::FSArchive:
+            r = std::make_unique<FSArchiverRunner>(m_source, m_destination);
+            break;
+        case Type::Squashfs:
+            r = std::make_unique<UnsquashRunner>(m_source, m_destination);
+            break;
+        case Type::None:
+        default:
+            cDebug() << "Nothing to do.";
+            return Calamares::JobResult::ok();
+    }
+
+    // progress?
+    return r->run();
 }
 
 void
