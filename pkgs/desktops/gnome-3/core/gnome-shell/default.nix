@@ -1,5 +1,6 @@
 { fetchurl
 , fetchpatch
+, callPackage
 , substituteAll
 , lib, stdenv
 , meson
@@ -62,6 +63,7 @@
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
+  gdmBootstrap = gdm.override { bootstrap = false; }; # gnome-shell requires gdm as a dependency, but gdm has to know about the final location of gnome-shell
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
@@ -72,7 +74,6 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-vOcfQC36qcXiab9lv0iiI0PYlubPmiw0ZpOS1/v2hHg=";
-  };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
@@ -135,7 +136,7 @@ stdenv.mkDerivation rec {
     libical
     gtk3
     gtk4
-    gdm
+    gdmBootstrap
     geoclue2
     adwaita-icon-theme
     gnome-bluetooth

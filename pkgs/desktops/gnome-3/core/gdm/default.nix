@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , fetchpatch
+, callPackage
 , substituteAll
 , meson
 , ninja
@@ -29,6 +30,7 @@
 , xwayland
 , dbus
 , nixos-icons
+, bootstrap ? true # Whether we should set dbus's PATH to include gnome-session. This flag is required because we would have a circular dependency otherwise.
 }:
 
 let
@@ -37,6 +39,7 @@ let
     src = ./org.gnome.login-screen.gschema.override;
     icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
   };
+  dbus-original = dbus;
 
 in
 
@@ -97,7 +100,9 @@ stdenv.mkDerivation rec {
     })
 
     # Change hardcoded paths to nix store paths.
-    (substituteAll {
+    (let
+        dbus = if (bootstrap) then callPackage ./dbus-wrap.nix {} else dbus-original;
+    in substituteAll {
       src = ./fix-paths.patch;
       inherit coreutils plymouth xwayland dbus;
     })
