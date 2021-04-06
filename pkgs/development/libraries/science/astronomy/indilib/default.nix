@@ -24,20 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-W6LfrKL56K1B6srEfbNcq1MZwg7Oj8qoJkQ83ZhYhFs=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    curl
-    cfitsio
-    libusb1
-    zlib
-    boost
-    libnova
-    libjpeg
-    gsl
-    fftw
+    curl boost zlib libusb1 gsl fftw
+    libnova cfitsio libjpeg
   ];
 
   cmakeFlags = [
@@ -51,6 +42,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }
