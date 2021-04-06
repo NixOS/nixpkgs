@@ -10009,7 +10009,6 @@ broken-packages:
   - shake-cabal-build
   - shake-dhall
   - shake-extras
-  - shake-futhark
   - shake-minify
   - shake-pack
   - shake-path
