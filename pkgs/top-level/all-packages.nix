@@ -2487,6 +2487,8 @@ in
 
   go-chromecast = callPackage ../applications/video/go-chromecast { };
 
+  go-containerregistry = callPackage ../development/tools/go-containerregistry { };
+
   go-rice = callPackage ../tools/misc/go.rice {};
 
   go-2fa = callPackage ../tools/security/2fa {};
