@@ -19786,6 +19786,13 @@ in
     ];
   };
 
+  linux_xanmod = callPackage ../os-specific/linux/kernel/linux-xanmod.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+    ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -20105,6 +20112,9 @@ in
   # zen-kernel
   linuxPackages_zen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_zen);
   linuxPackages_lqx = recurseIntoAttrs (linuxPackagesFor pkgs.linux_lqx);
+
+  # XanMod kernel
+  linuxPackages_xanmod = recurseIntoAttrs (linuxPackagesFor pkgs.linux_xanmod);
 
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
