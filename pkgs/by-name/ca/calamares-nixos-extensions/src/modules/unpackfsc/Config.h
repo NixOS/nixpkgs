@@ -27,6 +27,8 @@ struct UnpackEntry
     Type type;
 };
 
+using UnpackEntryList = QList< UnpackEntry >;
+
 class Config : public Calamares::ModuleSystem::Config
 {
     Q_OBJECT
@@ -36,8 +38,10 @@ public:
 
     void setConfigurationMap( const QVariantMap& map ) override;
 
+    const UnpackEntryList entries() const { return m_entries; }
+
 private:
-    QList< UnpackEntry > m_entries;
+    UnpackEntryList m_entries;
 };
 
 #endif

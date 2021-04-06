@@ -9,6 +9,8 @@
 
 #include "UnpackFSCJob.h"
 
+#include <utils/Logger.h>
+
 UnpackFSCJob::UnpackFSCJob( QObject* parent )
     : Calamares::CppJob( parent )
 {
@@ -25,6 +27,12 @@ UnpackFSCJob::prettyName() const
 Calamares::JobResult
 UnpackFSCJob::exec()
 {
+    cDebug() << "Unpacking" << m_config.entries().count() << "entries";
+    for ( const auto& i : m_config.entries() )
+    {
+        cDebug() << Logger::SubEntry << i.source << "->" << i.destination;
+    }
+
     return Calamares::JobResult::ok();
 }
 
