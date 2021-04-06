@@ -103,6 +103,7 @@ calamares_add_module_subdirectory( modules/mobile LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/os-freebsd LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/os-nixos LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/slowpython LIST_SKIPPED_MODULES )  # Python job
+calamares_add_module_subdirectory( modules/unpackfsc LIST_SKIPPED_MODULES )
 
 # If modules cannot be built, they usually call a macro
 # which builds a list of explanations; show that list.
