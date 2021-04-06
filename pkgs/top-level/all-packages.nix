@@ -4091,7 +4091,6 @@ in
 
   wrangler = callPackage ../development/tools/wrangler {
    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
-   inherit (darwin) libiconv;
   };
 
   wsl-open = callPackage ../tools/misc/wsl-open { };
