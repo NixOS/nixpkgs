@@ -2026,6 +2026,18 @@ let
     meta.homepage = "https://github.com/davidhalter/jedi-vim/";
   };
 
+  jellybeans-nvim = buildVimPluginFrom2Nix {
+    pname = "jellybeans-nvim";
+    version = "2021-04-05";
+    src = fetchFromGitHub {
+      owner = "metalelf0";
+      repo = "jellybeans-nvim";
+      rev = "736aa1024741871aa5902ae5a7d5fb21192b4fa1";
+      sha256 = "13k3hf2y979xk3j4q4pwwhrxv0mw320ri4nyg3q39j3fprkryxs7";
+    };
+    meta.homepage = "https://github.com/metalelf0/jellybeans-nvim/";
+  };
+
   jellybeans-vim = buildVimPluginFrom2Nix {
     pname = "jellybeans-vim";
     version = "2019-06-22";
