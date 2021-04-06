@@ -15888,6 +15888,8 @@ in
 
   libpeas = callPackage ../development/libraries/libpeas { };
 
+  libpg_query = callPackage ../development/libraries/libpg_query { };
+
   libpipeline = callPackage ../development/libraries/libpipeline { };
 
   libpgf = callPackage ../development/libraries/libpgf { };
