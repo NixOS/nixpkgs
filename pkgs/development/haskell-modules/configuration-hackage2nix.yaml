@@ -10111,7 +10111,6 @@ broken-packages:
   - shake-cabal-build
   - shake-dhall
   - shake-extras
-  - shake-futhark
   - shake-minify
   - shake-minify-css
   - shake-pack
