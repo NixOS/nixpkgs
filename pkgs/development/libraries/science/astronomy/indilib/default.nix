@@ -24,11 +24,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-W6LfrKL56K1B6srEfbNcq1MZwg7Oj8qoJkQ83ZhYhFs=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
-    curl boost zlib libusb1 gsl fftw
-    libnova cfitsio libjpeg
+    curl
+    cfitsio
+    libusb1
+    zlib
+    boost
+    libnova
+    libjpeg
+    gsl
+    fftw
   ];
 
   cmakeFlags = [
