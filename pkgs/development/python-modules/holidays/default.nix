@@ -1,31 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , convertdate
 , dateutil
+, fetchPypi
 , hijri-converter
 , korean-lunar-calendar
+, pytestCheckHook
+, pythonOlder
 , six
-, python
-, flake8
 }:
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.10.5.2";
+  version = "0.11.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g4hqbb94cwxlcwsjzrzxzlann1ks2r4mgnfzqz74a2rg1nih5zd";
+    sha256 = "sha256-f6/YRvZ/Drfh+cGcOPSnlnvweu1d7S3XqKovk3sOoBs=";
   };
-
-  postPatch = ''
-    # ignore too long line issues
-    # https://github.com/dr-prodigy/python-holidays/issues/423
-    substituteInPlace tests.py \
-      --replace "flake8.get_style_guide(ignore=[" "flake8.get_style_guide(ignore=['E501', "
-  '';
-
 
   propagatedBuildInputs = [
     convertdate
@@ -36,12 +29,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    flake8
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
 
   pythonImportsCheck = [ "holidays" ];
 
