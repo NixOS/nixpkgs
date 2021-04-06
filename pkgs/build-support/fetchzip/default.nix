@@ -12,6 +12,7 @@
 , url
 , extraPostFetch ? ""
 , name ? "source"
+, extension ? ""
 , ... } @ args:
 
 (fetchurl ({
@@ -27,7 +28,7 @@
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${baseNameOf url}"
+      renamed="$TMPDIR/${baseNameOf url}${extension}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
     ''
