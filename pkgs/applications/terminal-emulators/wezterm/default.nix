@@ -2,19 +2,11 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
-
 , pkg-config
 , fontconfig
 , python3
 , openssl
 , perl
-
-# Apple frameworks
-, CoreGraphics
-, Cocoa
-, Foundation
-, libiconv
-
 , dbus
 , libX11
 , xcbutil
@@ -30,6 +22,11 @@
 , libGL
 , freetype
 , zlib
+# Apple frameworks
+, CoreGraphics
+, Cocoa
+, Foundation
+, libiconv
 }:
 let
   runtimeDeps = [
@@ -50,38 +47,38 @@ let
     wayland
     libGLU
     libGL
+    openssl
   ] ++ lib.optionals (stdenv.isDarwin) [
     Foundation
     CoreGraphics
     Cocoa
     libiconv
   ];
-  pname = "wezterm";
 in
 
-rustPlatform.buildRustPackage {
-  inherit pname;
-  version = "20210314";
+rustPlatform.buildRustPackage rec {
+  pname = "wezterm";
+  version = "20210407-nightly";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
-    rev = "20210314-114017-04b7cedd";
-    sha256 = "sha256-EwoJLwOgoXtTEBbf/4pM+pCCG8fGkVruHVYh2HivCd0=";
+    rev = "d2419fb99e567e3b260980694cc840a1a3b86922";
+    sha256 = "4tVjrdDlrDPKzcbTYK9vRlzfC9tfvkD+D0aN19A8RWE=";
     fetchSubmodules = true;
   };
-  cargoSha256 = "sha256-OHbWgnlul9VfbPcMdzbuRJG59+myiukkzmnWohj5v2k=";
+
+  cargoSha256 = "sha256-UaXeeuRuQk+CWF936mEAaWTjZuTSRPmxbQ/9E2oZIqg=";
 
   nativeBuildInputs = [
     pkg-config
     python3
-    openssl.dev
     perl
   ];
 
   buildInputs = runtimeDeps;
 
-  preFixup = "" + lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do
       patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $out/bin/$artifact
     done
@@ -101,7 +98,7 @@ rustPlatform.buildRustPackage {
     description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
-    maintainers = with maintainers; [ steveej ];
+    maintainers = with maintainers; [ steveej SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }
