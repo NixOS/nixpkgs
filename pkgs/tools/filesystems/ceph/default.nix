@@ -110,6 +110,7 @@ let
     ps.jsonpatch
     ps.pecan
     ps.prettytable
+    ps.pyopenssl
     ps.pyjwt
     ps.webob
     ps.bcrypt
