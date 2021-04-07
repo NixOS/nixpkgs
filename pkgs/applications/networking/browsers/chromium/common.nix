@@ -170,7 +170,10 @@ let
       )
     ];
 
-    postPatch = ''
+    postPatch = lib.optionalString (chromiumVersionAtLeast "91") ''
+      # Required for patchShebangs (unsupported):
+      chmod -x third_party/webgpu-cts/src/tools/deno
+    '' + ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
