@@ -1,0 +1,14 @@
+diff --git a/src/VBox/HostDrivers/VBoxNetFlt/linux/VBoxNetFlt-linux.c b/src/VBox/HostDrivers/VBoxNetFlt/linux/VBoxNetFlt-linux.c
+index 8819b580a0..bf68eac2e7 100644
+--- a/vboxnetflt/linux/VBoxNetFlt-linux.c
++++ b/vboxnetflt/linux/VBoxNetFlt-linux.c
+@@ -48,6 +48,9 @@
+ #if RTLNX_VER_MIN(4,5,0)
+ #include <uapi/linux/pkt_cls.h>
+ #endif
++#if RTLNX_VER_MIN(5,11,0)
++#include <linux/ethtool.h>
++#endif
+ #include <net/ipv6.h>
+ #include <net/if_inet6.h>
+ #include <net/addrconf.h>
