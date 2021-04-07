@@ -313,5 +313,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed(
             "docker images --format '{{.Repository}}' | grep -F '${examples.prefixedLayeredImage.imageName}'"
         )
+
+    with subtest("buildLayeredImage supports running chown with fakeRootCommands"):
+        docker.succeed(
+            "docker load --input='${examples.layeredImageWithFakeRootCommands}'"
+        )
+        docker.succeed(
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+        )
   '';
 })

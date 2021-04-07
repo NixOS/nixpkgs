@@ -197,6 +197,7 @@ in with py.pkgs; buildPythonApplication rec {
     "caldav"
     "calendar"
     "camera"
+    "cast"
     "climate"
     "cloud"
     "command_line"

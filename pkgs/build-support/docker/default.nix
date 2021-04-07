@@ -7,6 +7,7 @@
   coreutils,
   docker,
   e2fsprogs,
+  fakeroot,
   findutils,
   go,
   jq,
@@ -740,6 +741,9 @@ rec {
     created ? "1970-01-01T00:00:01Z",
     # Optional bash script to run on the files prior to fixturizing the layer.
     extraCommands ? "",
+    # Optional bash script to run inside fakeroot environment.
+    # Could be used for changing ownership of files in customisation layer.
+    fakeRootCommands ? "",
     # We pick 100 to ensure there is plenty of room for extension. I
     # believe the actual maximum is 128.
     maxLayers ? 100
@@ -765,19 +769,24 @@ rec {
       customisationLayer = symlinkJoin {
         name = "${baseName}-customisation-layer";
         paths = contentsList;
-        inherit extraCommands;
+        inherit extraCommands fakeRootCommands;
+        nativeBuildInputs = [ fakeroot ];
         postBuild = ''
           mv $out old_out
           (cd old_out; eval "$extraCommands" )
 
           mkdir $out
 
-          tar \
-            --sort name \
-            --owner 0 --group 0 --mtime "@$SOURCE_DATE_EPOCH" \
-            --hard-dereference \
-            -C old_out \
-            -cf $out/layer.tar .
+          fakeroot bash -c '
+            source $stdenv/setup
+            cd old_out
+            eval "$fakeRootCommands"
+            tar \
+              --sort name \
+              --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
+              --hard-dereference \
+              -cf $out/layer.tar .
+          '
 
           sha256sum $out/layer.tar \
             | cut -f 1 -d ' ' \

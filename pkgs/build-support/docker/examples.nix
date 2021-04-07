@@ -484,4 +484,17 @@ rec {
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
+
+  # layered image with files owned by a user other than root
+  layeredImageWithFakeRootCommands = pkgs.dockerTools.buildLayeredImage {
+    name = "layered-image-with-fake-root-commands";
+    tag = "latest";
+    contents = [
+      pkgs.pkgsStatic.busybox
+    ];
+    fakeRootCommands = ''
+      mkdir -p ./home/jane
+      chown 1000 ./home/jane
+    '';
+  };
 }
