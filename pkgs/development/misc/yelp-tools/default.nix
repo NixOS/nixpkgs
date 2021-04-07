@@ -11,9 +11,11 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "yelp-tools";
   version = "40.0";
+
+  format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-tools/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -24,16 +26,23 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    python3
-    python3.pkgs.lxml
+  ];
+
+  propagatedBuildInputs = [
+    libxml2 # xmllint required by yelp-check.
+    libxslt # xsltproc required by yelp-build and yelp-check.
   ];
 
   buildInputs = [
-    libxml2
-    libxslt
-    itstool
+    itstool # build script checks for its presence but I am not sure if anything uses it
     gnome3.yelp-xsl
   ];
+
+  pythonPath = [
+    python3.pkgs.lxml
+  ];
+
+  strictDeps = false; # TODO: Meson cannot find xmllint oherwise. Maybe add it to machine file?
 
   doCheck = true;
 
