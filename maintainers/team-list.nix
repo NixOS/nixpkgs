@@ -87,6 +87,16 @@ with lib.maintainers; {
     scope = "Maintain GNOME desktop environment and platform.";
   };
 
+  home-assistant = {
+    members = [
+      fab
+      globin
+      hexa
+      mic92
+    ];
+    scope = "Maintain the Home Assistant ecosystem";
+  };
+
   jitsi = {
     members = [
       mmilata
