@@ -81,6 +81,8 @@ in
     # supporting it, or their bundled containerd
     systemd.enableUnifiedCgroupHierarchy = false;
 
+    environment.systemPackages = [ config.services.k3s.package ];
+
     systemd.services.k3s = {
       description = "k3s service";
       after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
