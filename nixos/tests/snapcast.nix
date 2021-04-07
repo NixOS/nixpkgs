@@ -34,6 +34,10 @@ in {
             type = "tcp";
             location = "127.0.0.1:${toString tcpStreamPort}";
           };
+          meta = {
+            type = "meta";
+            location = "/mpd/bluetooth/tcp";
+          };
         };
       };
     };
