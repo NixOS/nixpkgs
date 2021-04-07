@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "16is71cgqnvpl55y9kh1zb7r2gx2f3a1abljm7drjp90nbr7imlg";
+    sha256 = "1cqzd4vd5jw3ghibmdqvy90mb1h8vvazc81bxgavk6sc0b9sfcz8";
   };
 
   outputs = [ "out" "dev" "doc" ];
