@@ -183,7 +183,7 @@ GEM
     rubocop-ast (0.2.0)
       parser (>= 2.7.0.1)
     ruby-progressbar (1.10.1)
-    rugged (1.0.1)
+    rugged (1.1.0)
     sanitize (4.6.6)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
@@ -233,7 +233,7 @@ DEPENDENCIES
   rspec
   rspec-parameterized
   rubocop (~> 0.69)
-  rugged (~> 1.0.1)
+  rugged (~> 1.1)
   sentry-raven (~> 3.0)
   timecop
 

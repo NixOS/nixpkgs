@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace
+, fixup_yarn_lock, replace, file
 }:
 
 let
@@ -31,6 +31,10 @@ let
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
+        };
+        ruby-magic-static = x.ruby-magic-static // {
+          buildInputs = [ file ];
+          buildFlags = [ "--enable-system-libraries" ];
         };
       };
     groups = [
