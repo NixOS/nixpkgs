@@ -30,6 +30,13 @@ existing packages here and modify it as necessary.
 }:
 
 let
+  minQtVersion = "5.15";
+  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
+  maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
+  license = with lib.licenses; [
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+  ];
+
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
@@ -81,14 +88,15 @@ let
             defaultSetupHook = if hasBin && hasDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
-            meta = {
-              license = with lib.licenses; [
-                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-              ];
-              platforms = lib.platforms.linux;
-              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
-              homepage = "http://www.kde.org";
-            } // (args.meta or {});
+            meta =
+              let meta = args.meta or {}; in
+              meta // {
+                homepage = meta.homepage or "http://www.kde.org";
+                license = meta.license or license;
+                maintainers = (meta.maintainers or []) ++ maintainers;
+                platforms = meta.platforms or lib.platforms.linux;
+                broken = meta.broken or broken;
+              };
           in
           mkDerivation (args // {
             name = "${name}-${version}";
