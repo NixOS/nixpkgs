@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "qmk";
     repo = pname;
     rev = version;
-    sha256 = "E/oe5u6F9pxvavRLlrXmr9kCc6pSdSmQgtg4a3wbIuA=";
+    hash = "sha256-E/oe5u6F9pxvavRLlrXmr9kCc6pSdSmQgtg4a3wbIuA=";
     fetchSubmodules = true;
   };
 
@@ -62,5 +62,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
+    broken = true;
   };
 }
