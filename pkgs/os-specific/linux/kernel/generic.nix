@@ -178,7 +178,7 @@ let
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig isXen isZen isHardened isLibre;
+    inherit commonStructuredConfig isXen isZen isHardened isLibre modDirVersion;
     kernelOlder = lib.versionOlder version;
     kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
