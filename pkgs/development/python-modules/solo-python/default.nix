@@ -60,5 +60,8 @@
     homepage = "https://github.com/solokeys/solo-python";
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ asl20 mit ];
+    # solo-python v0.0.27 does not support fido2 >= v0.9
+    # https://github.com/solokeys/solo-python/issues/110
+    broken = true;
   };
 }
