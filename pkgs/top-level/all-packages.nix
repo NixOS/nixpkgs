@@ -21708,6 +21708,8 @@ in
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
+  foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
+
   aeolus = callPackage ../applications/audio/aeolus { };
 
   aewan = callPackage ../applications/editors/aewan { };
