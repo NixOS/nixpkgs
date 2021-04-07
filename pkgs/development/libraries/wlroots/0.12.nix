@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ primeos synthetica ];
   };
 }
