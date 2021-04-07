@@ -356,5 +356,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed("docker run --rm ${examples.redis.imageName} redis-cli --version")
         docker.succeed("docker rmi ${examples.bashNoTag.imageName}:${examples.bashNoTag.imageTag}")
         docker.succeed("docker rmi ${examples.redis.imageName}")
+
+    with subtest("mergeImages preserves owners of the original images"):
+        docker.succeed(
+            "docker load --input='${examples.mergedBashFakeRoot}'"
+        )
+        docker.succeed(
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+        )
   '';
 })
