@@ -48,6 +48,7 @@
 , python37Packages
 , stdenv
 , systemd
+, xdg-utils
 , zlib
 }:
 with lib;
@@ -92,7 +93,7 @@ let
     systemd
     zlib
   ];
-  rpath = lib.makeLibraryPath deps ;
+  rpath = lib.makeLibraryPath deps;
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
@@ -171,6 +172,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/opt/appgate/appgate-driver --prefix PATH : ${lib.makeBinPath [ iproute2 networkmanager dnsmasq ]}
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
+    wrapProgram $out/bin/appgate --prefix PATH : ${xdg-utils}/bin
   '';
   meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";

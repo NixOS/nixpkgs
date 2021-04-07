@@ -2,13 +2,12 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, typing-extensions
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytube";
-  version = "10.6.1";
+  version = "10.7.1";
 
   disabled = pythonOlder "3.6";
 
@@ -16,7 +15,7 @@ buildPythonPackage rec {
     owner = "pytube";
     repo = "pytube";
     rev = "v${version}";
-    sha256 = "sha256-b0tN4m3/+K243zQ7L4wW4crk9r69Tj64is6C4I5oFZU=";
+    sha256 = "sha256-a9MYEQFJXfPXYkWiuZkjt/PGs73Dm5614/Xvv6Nn8RA=";
   };
 
   checkInputs = [

@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # directories flags
-    "--sysconfdir=${placeholder "out"}/etc"
+    "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-dbusdatadir=${placeholder "out"}/share"

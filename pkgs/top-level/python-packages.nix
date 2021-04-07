@@ -4452,6 +4452,8 @@ in {
     pythonPackages = self;
   });
 
+  openhomedevice = callPackage ../development/python-modules/openhomedevice { };
+
   openidc-client = callPackage ../development/python-modules/openidc-client { };
 
   openpyxl = callPackage ../development/python-modules/openpyxl { };

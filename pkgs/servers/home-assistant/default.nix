@@ -125,6 +125,7 @@ in with py.pkgs; buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "aiohttp==3.7.4" "aiohttp>=3.7.3" \
       --replace "attrs==19.3.0" "attrs>=19.3.0" \
+      --replace "awesomeversion==21.2.3" "awesomeversion>=21.2.3" \
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
       --replace "cryptography==3.3.2" "cryptography" \
       --replace "httpx==0.16.1" "httpx>=0.16.1" \
