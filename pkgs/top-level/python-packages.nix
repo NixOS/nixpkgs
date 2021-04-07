@@ -6255,6 +6255,8 @@ in {
     inherit (pkgs) xmlsec;
   };
 
+  pysatochip = callPackage ../development/python-modules/pysatochip { };
+
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
   pyscard = callPackage ../development/python-modules/pyscard {
