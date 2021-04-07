@@ -358,6 +358,7 @@
   ./services/development/jupyter/default.nix
   ./services/development/jupyterhub/default.nix
   ./services/development/lorri.nix
+  ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/factorio.nix
