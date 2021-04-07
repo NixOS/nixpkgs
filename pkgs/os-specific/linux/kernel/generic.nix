@@ -55,7 +55,7 @@
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
-
+, kernelTests ? []
 , ...
 }:
 
@@ -182,6 +182,7 @@ let
     kernelOlder = lib.versionOlder version;
     kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
+    tests = kernelTests;
   };
 
 in lib.extendDerivation true passthru kernel
