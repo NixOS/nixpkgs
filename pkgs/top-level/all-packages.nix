@@ -1102,6 +1102,8 @@ in
 
   betterdiscordctl = callPackage ../tools/misc/betterdiscordctl { };
 
+  betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
+
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt514.callPackage ../applications/misc/brewtarget { } ;
@@ -2865,6 +2867,8 @@ in
   piglit = callPackage ../tools/graphics/piglit { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
+
+  poweralertd = callPackage ../tools/misc/poweralertd { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
 
@@ -12886,6 +12890,7 @@ in
 
   khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
 
+  krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
 
@@ -27998,6 +28003,8 @@ in
   udig = callPackage ../applications/gis/udig { };
 
   ufoai = callPackage ../games/ufoai { };
+
+  uhexen2 = callPackage ../games/uhexen2 { };
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
