@@ -7540,6 +7540,8 @@ in {
 
   screeninfo = callPackage ../development/python-modules/screeninfo { };
 
+  screenlogicpy = callPackage ../development/python-modules/screenlogicpy { };
+
   scripttest = callPackage ../development/python-modules/scripttest { };
 
   scs = callPackage ../development/python-modules/scs { scs = pkgs.scs; };
