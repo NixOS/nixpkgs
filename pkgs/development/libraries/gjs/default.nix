@@ -37,6 +37,20 @@ in stdenv.mkDerivation rec {
     sha256 = "1vqsmzy2wmyhmq37y2c6jl0wq4xnicf0z7k6jaxn3aw11sh783ph";
   };
 
+  patches = [
+    # Fixes https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/3961.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gjs/-/commit/58337929c338e7b5c0a35196d783d3b2be542900.patch";
+      sha256 = "QgmU+d838fU5LiS4lhTF+179U1lY1L5tJbYtX/oc68k=";
+    })
+
+    # Hard-code various paths
+    ./fix-paths.patch
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
+  ];
+
   outputs = [ "out" "dev" "installedTests" ];
 
   nativeBuildInputs = [
@@ -67,14 +81,6 @@ in stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dprofiler=disabled"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-  ];
-
-  patches = [
-    # Hard-code various paths
-    ./fix-paths.patch
-
-    # Allow installing installed tests to a separate output.
-    ./installed-tests-path.patch
   ];
 
   doCheck = true;
