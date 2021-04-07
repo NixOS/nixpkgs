@@ -8,11 +8,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyspread";
-  version = "1.99.5";
+  version = "1.99.6";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-05bC+Uvx72FAh3qxkgXm8jdb/gHRv1D/M7tjOEdE3Xg=";
+    sha256 = "sha256-B1oyWUAXn63mmVFN9brJwbHxi7I5nYrK2JJU1DjAlb8=";
   };
 
   patches = [
@@ -35,10 +35,12 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     dateutil
+    markdown2
     matplotlib
     numpy
     pyenchant
     pyqt5
+    setuptools
   ];
 
   doCheck = false; # it fails miserably with a core dump
