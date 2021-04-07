@@ -4107,6 +4107,8 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
+  makefun = callPackage ../development/python-modules/makefun { };
+
   Mako = callPackage ../development/python-modules/Mako { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
