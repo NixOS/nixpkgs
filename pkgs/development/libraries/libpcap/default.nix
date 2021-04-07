@@ -4,11 +4,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "153h1378diqyc27jjgz6gg5nxmb4ddk006d9xg69nqavgiikflk3";
+    sha256 = "sha256-jRK0JiPu7+6HLxI70NyF1TWwDfTULoZfmTxA97/JKx4=";
   };
 
   nativeBuildInputs = [ flex bison ]
@@ -21,12 +21,10 @@ stdenv.mkDerivation rec {
       linux = "linux";
       darwin = "bpf";
     }.${stdenv.hostPlatform.parsed.kernel.name})
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-universal"
   ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform)
     [ "ac_cv_linux_vers=2" ];
-
-  prePatch = optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace " -arch i386" ""
-  '';
 
   postInstall = ''
     if [ "$dontDisableStatic" -ne "1" ]; then

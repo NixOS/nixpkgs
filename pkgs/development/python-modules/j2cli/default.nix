@@ -26,7 +26,7 @@ buildPythonPackage rec {
       J2Cli is a command-line tool for templating in shell-scripts,
       leveraging the Jinja2 library.
     '';
-    maintainers = with maintainers; [ rushmorem ];
+    maintainers = with maintainers; [ rushmorem SuperSandro2000 ];
   };
 
 }

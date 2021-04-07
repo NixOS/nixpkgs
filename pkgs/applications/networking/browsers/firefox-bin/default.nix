@@ -13,7 +13,7 @@
 , glibc
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libxcb
@@ -33,6 +33,7 @@
 , nspr
 , nss
 , pango
+, pciutils
 , libheimdal
 , libpulseaudio
 , systemd
@@ -92,7 +93,6 @@ stdenv.mkDerivation {
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      (lib.getDev alsaLib)
       atk
       cairo
       curl
@@ -106,7 +106,7 @@ stdenv.mkDerivation {
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
       mesa
       libX11
       libXScrnSaver
@@ -126,9 +126,9 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pciutils
       libheimdal
       libpulseaudio
-      (lib.getDev libpulseaudio)
       systemd
       ffmpeg
     ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
@@ -201,6 +201,6 @@ stdenv.mkDerivation {
       url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ taku0 ];
+    maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

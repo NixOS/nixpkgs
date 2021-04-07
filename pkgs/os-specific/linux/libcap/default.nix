@@ -7,11 +7,11 @@ assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.44";
+  version = "2.48";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "1qf80lifygbnxwvqjf8jz5j24n6fqqx4ixnkbf76xs2vrmcq664j";
+    sha256 = "sha256-TelZDuCah8KC1Vhzf/tbYXXMv9JtWArdEN9E0PBH9sI=";
   };
 
   patches = lib.optional isStatic ./no-shared-lib.patch;
@@ -34,11 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    # use relative bash path
-    substituteInPlace progs/capsh.c --replace "/bin/bash" "bash"
-
-    # ensure capsh can find bash in $PATH
-    substituteInPlace progs/capsh.c --replace execve execvpe
+    # use full path to bash
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "${stdenv.shell}"
 
     # set prefixes
     substituteInPlace Make.Rules \

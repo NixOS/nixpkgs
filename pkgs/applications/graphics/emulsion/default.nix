@@ -15,7 +15,6 @@
 , libxcb
 , libxkbcommon
 , wayland
-, xdg_utils
 , AppKit
 , CoreGraphics
 , CoreServices

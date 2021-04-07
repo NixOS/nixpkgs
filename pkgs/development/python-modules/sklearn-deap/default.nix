@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix for newer versions of scikit-learn. See: https://github.com/rsteca/sklearn-deap/pull/62
+    # Fix for scikit-learn v0.21.1. See: https://github.com/rsteca/sklearn-deap/pull/62
     (fetchpatch {
       url = "https://github.com/rsteca/sklearn-deap/commit/3ae62990fc87f36b59382e7c4db3c74cf99ec3bf.patch";
       sha256 = "1na6wf4v0dcmyz3pz8aiqkmv76d1iz3hi4iyfq9kfnycgzpv1kxk";
@@ -31,6 +31,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/rsteca/sklearn-deap";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ psyanticy ];
+    # broken by scikit-learn 0.24.1
+    broken = true;
   };
 }
 

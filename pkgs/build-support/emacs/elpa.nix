@@ -1,6 +1,6 @@
 # builder for Emacs packages built for packages.el
 
-{ lib, stdenv, emacs, texinfo }:
+{ lib, stdenv, emacs, texinfo, writeText }:
 
 with lib;
 
@@ -19,7 +19,7 @@ let
 
 in
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+import ./generic.nix { inherit lib stdenv emacs texinfo writeText; } ({
 
   phases = "installPhase fixupPhase distPhase";
 

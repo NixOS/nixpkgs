@@ -11,7 +11,7 @@
   desktop client is packaged at <literal>pkgs.nextcloud-client</literal>.
  </para>
  <para>
-  The current default by NixOS is <package>nextcloud20</package> which is also the latest
+  The current default by NixOS is <package>nextcloud21</package> which is also the latest
   major version available.
  </para>
  <section xml:id="module-services-nextcloud-basic-usage">
@@ -179,6 +179,17 @@
     };
   };
 }</programlisting>
+  </para>
+ </section>
+
+ <section xml:id="installing-apps-php-extensions-nextcloud">
+  <title>Installing Apps and PHP extensions</title>
+
+  <para>
+   Nextcloud apps are installed statefully through the web interface.
+
+   Some apps may require extra PHP extensions to be installed.
+   This can be configured with the <xref linkend="opt-services.nextcloud.phpExtraExtensions" /> setting.
   </para>
  </section>
 

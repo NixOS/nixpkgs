@@ -1,10 +1,10 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
-, pandoc, ethtool, iproute, libnl, udev, python, perl
+, pandoc, ethtool, iproute2, libnl, udev, python3, perl
 , makeWrapper
 } :
 
 let
-  version = "33.0";
+  version = "34.0";
 
 in stdenv.mkDerivation {
   pname = "rdma-core";
@@ -14,11 +14,11 @@ in stdenv.mkDerivation {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "04q4z95nxxxjc674qnbwn19bv18nl3x7xwp6aql17h1cw3gdmhw4";
+    sha256 = "sha256-2HFtj595sDmWqAewIMwKMaiSDVVWKdQA9l0QsPcw8qA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config pandoc docutils makeWrapper ];
-  buildInputs = [ libnl ethtool iproute udev python perl ];
+  buildInputs = [ libnl ethtool iproute2 udev python3 perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "RDMA Core Userspace Libraries and Daemons";
     homepage = "https://github.com/linux-rdma/rdma-core";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ markuskowa ];
   };

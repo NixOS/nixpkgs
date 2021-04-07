@@ -4,11 +4,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "ntbtls";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchurl {
     url = "mirror://gnupg/ntbtls/ntbtls-${version}.tar.bz2";
-    sha256 = "1rywgdyj7prmwdi5r1rpglakqpnjskgln1mqksqm28qcwn2dnh42";
+    sha256 = "sha256-ZJ/nSjEdE+Q7FrJuuqkWZd22MpJbc5AlkurD7TBRnhc=";
   };
 
   outputs = [ "dev" "out" ];

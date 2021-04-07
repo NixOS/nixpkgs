@@ -84,6 +84,7 @@ let
       # Kernel module loading.
       "systemd-modules-load.service"
       "kmod-static-nodes.service"
+      "modprobe@.service"
 
       # Filesystems.
       "systemd-fsck@.service"
@@ -175,8 +176,10 @@ let
       "timers.target.wants"
     ];
 
-  upstreamUserUnits =
-    [ "basic.target"
+    upstreamUserUnits = [
+      "app.slice"
+      "background.slice"
+      "basic.target"
       "bluetooth.target"
       "default.target"
       "exit.target"
@@ -184,6 +187,7 @@ let
       "graphical-session.target"
       "paths.target"
       "printer.target"
+      "session.slice"
       "shutdown.target"
       "smartcard.target"
       "sockets.target"
@@ -193,6 +197,7 @@ let
       "systemd-tmpfiles-clean.timer"
       "systemd-tmpfiles-setup.service"
       "timers.target"
+      "xdg-desktop-autostart.target"
     ];
 
   makeJobScript = name: text:
@@ -1183,9 +1188,12 @@ in
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
-    boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
-      "kernel.core_pattern" = "core";
-    };
+    boot.kernel.sysctl."kernel.core_pattern" = mkIf (!cfg.coredump.enable) "core";
+
+    # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
+    # https://github.com/systemd/systemd/pull/12226
+    boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
+
     boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
   };
 

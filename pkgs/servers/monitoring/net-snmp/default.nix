@@ -2,11 +2,12 @@
 , file, openssl, perl, perlPackages, unzip, nettools, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "net-snmp-5.8";
+  pname = "net-snmp";
+  version = "5.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/net-snmp/${name}.tar.gz";
-    sha256 = "1pvajzj9gmj56dmwix0ywmkmy2pglh6nny646hkm7ghfhh03bz5j";
+    url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
+    sha256 = "0wb0vyafpspw3mcifkjjmf17r1r80kjvslycscb8nvaxz1k3lc04";
   };
 
   patches =
@@ -17,7 +18,6 @@ stdenv.mkDerivation rec {
   in [
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-    ./0002-autoconf-version.patch
   ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo ];
-  buildInputs = with perlPackages; [ file perl unzip openssl ncurses JSON Tk TermReadKey ];
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo unzip ];
+  buildInputs = with perlPackages; [ file perl openssl ncurses JSON Tk TermReadKey ];
 
   enableParallelBuilding = true;
   doCheck = false;  # tries to use networking

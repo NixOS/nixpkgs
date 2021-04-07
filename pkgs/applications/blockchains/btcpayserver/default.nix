@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, linkFarmFromDrvs, makeWrapper,
-  dotnetPackages, dotnetCorePackages, writeScript, bash
+  dotnetPackages, dotnetCorePackages
 }:
 
 let
@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "btcpayserver";
-  version = "1.0.5.9";
+  version = "1.0.7.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "011pp94i49fx587ng16m6ml63vwiysjvpkijihrk6xamz78zddgx";
+    sha256 = "1hxpbzc4l1zxrcvmdm93vvphhksfwd0mw2dv6h8vi4451p77dhd9";
   };
 
   nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget makeWrapper ];

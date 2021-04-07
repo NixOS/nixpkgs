@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     license = licenses.osl3;
     homepage = "https://restya.com";
     maintainers = with maintainers; [ tstrobel ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 

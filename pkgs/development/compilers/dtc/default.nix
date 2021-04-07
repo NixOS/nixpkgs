@@ -1,6 +1,8 @@
 { stdenv, lib, fetchgit, flex, bison, pkg-config, which
-, pythonSupport ? false, python, swig
+, pythonSupport ? false, python ? null, swig
 }:
+
+assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "dtc";

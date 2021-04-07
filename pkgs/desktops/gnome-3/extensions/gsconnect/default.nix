@@ -15,7 +15,6 @@
 , gnome3
 , gjs
 , nixosTests
-, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {

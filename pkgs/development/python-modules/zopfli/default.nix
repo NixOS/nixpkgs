@@ -2,14 +2,15 @@
 
 buildPythonPackage rec {
   pname = "zopfli";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "512892714f0e3dcc9a77222cb509ed519f41ce2b92467e47a4b406a23b48561a";
+    sha256 = "8b977dc07e3797907ab59e08096583bcd0b7e6c739849fbbeec09263f6356623";
     extension = "zip";
   };
 
+  # doesn't work with pytestCheckHook
   checkInputs = [ pytest ];
 
   meta = with lib; {

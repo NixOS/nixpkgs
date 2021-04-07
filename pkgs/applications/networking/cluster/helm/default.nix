@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "helm";
-  version = "3.4.2";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "17bb0f2w0qn6zq5isskckwqlscqig2d6pra3f7mfwilnckg1lj9s";
+    sha256 = "sha256-7xO07JDy6ujWlDF+5Xd3myRQ8ajTppCXz9fNe4yizVw=";
   };
-  vendorSha256 = "0ycp0i26rf3c96i4nqcbh7rb6i6lk62hljcsgsjyggq3pj3gpb4x";
+  vendorSha256 = "sha256-lpEoUgABtJczwShNdvD+zYAPDFTJqILSei2YY6mQ2mw=";
 
   doCheck = false;
 

@@ -61,6 +61,8 @@ in openmw.overrideAttrs (oldAttrs: rec {
     "-DRakNet_LIBRARY_DEBUG=${rakNetLibrary}/lib/libRakNetLibStatic.a"
   ];
 
+  dontWrapQtApps = true;
+
   # https://github.com/TES3MP/openmw-tes3mp/issues/552
   patches = [
     ./tes3mp.patch

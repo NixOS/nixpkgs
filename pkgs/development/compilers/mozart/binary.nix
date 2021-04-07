@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   TK_LIBRARY = "${tk-8_5}/lib/tk8.5";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     mkdir $out

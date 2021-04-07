@@ -40,9 +40,9 @@ mkDerivation rec {
   passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "GUI configuration tool for compton X composite manager";
     homepage = "https://github.com/lxqt/compton-conf";
-    license = licenses.lgpl21;
+    description = "GUI configuration tool for compton X composite manager";
+    license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

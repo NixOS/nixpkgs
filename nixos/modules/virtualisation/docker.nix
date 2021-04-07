@@ -157,6 +157,7 @@ in
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
+        requires = [ "docker.socket" ];
         environment = proxy_env;
         serviceConfig = {
           Type = "notify";

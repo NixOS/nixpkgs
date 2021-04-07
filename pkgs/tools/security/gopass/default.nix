@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , buildGoModule
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.11.0";
+  version = "1.12.5";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -20,10 +21,12 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0plg3hck6yqxcazjczx9m5palzz5h3qs5minzmmq8yzvfwi0shic";
+    sha256 = "06qc68q9px2g19iz23nbc4ay5dwqhgh99d1jj5l2dhb3mgknh19n";
   };
 
-  vendorSha256 = "1sycbcld5qyriqb771l52drxy4vhzm4nh9q5s6kn70nq1s2a3h7x";
+  vendorSha256 = "1jir1lb60p86fmk5sh92ywchqva59c31g1badlq9pjgd7jip5vnl";
+
+  subPackages = [ "." ];
 
   doCheck = false;
 
@@ -38,18 +41,19 @@ buildGoModule rec {
   );
 
   postInstall = ''
+    HOME=$TMPDIR
     for shell in bash fish zsh; do
       $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
+    go run helpers/man/main.go > gopass.1
+    installManPage gopass.1
   '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
 
   postFixup = ''
-    for bin in $out/bin/*; do
-      wrapProgram $bin --prefix PATH : "${wrapperPath}"
-    done
+    wrapProgram $out/bin/gopass --prefix PATH : "${wrapperPath}"
   '';
 
   meta = with lib; {
@@ -57,7 +61,7 @@ buildGoModule rec {
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of

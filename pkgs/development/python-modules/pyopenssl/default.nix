@@ -64,12 +64,13 @@ let
 in
 
 buildPythonPackage rec {
-  pname = "pyOpenSSL";
-  version = "20.0.0";
+  pname = "pyopenssl";
+  version = "20.0.1";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1i8ab5zn9i9iq2ksizp3rd42v157kacddzz88kviqw3kpp68xw4j";
+    pname = "pyOpenSSL";
+    inherit version;
+    sha256 = "4c231c759543ba02560fcd2480c48dcec4dae34c9da7d3747c508227e0624b51";
   };
 
   outputs = [ "out" "dev" ];

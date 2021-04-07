@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://trackballs.github.io/";
     description = "3D Marble Madness clone";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    # Music is licensed under Ethymonics Free Music License.
+    license = licenses.gpl2Plus;
   };
 }

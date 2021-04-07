@@ -45,9 +45,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Crossplatform tool for fast making screenshots";
     homepage = "https://github.com/lxqt/screengrab";
-    license = licenses.gpl2;
+    description = "Crossplatform tool for fast making screenshots";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

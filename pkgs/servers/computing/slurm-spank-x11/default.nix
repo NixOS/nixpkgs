@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/hautreux/slurm-spank-x11";
     description = "Plugin for SLURM to allow for interactive X11 sessions";
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ markuskowa ];
   };
 }

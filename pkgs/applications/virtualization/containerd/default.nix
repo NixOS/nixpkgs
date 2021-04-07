@@ -10,13 +10,13 @@
 
 buildGoPackage rec {
   pname = "containerd";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "09xvhjg5f8h90w1y94kqqnqzhbhd62dcdd9wb9sdqakisjk6zrl0";
+    sha256 = "0qjbfj1dw6pykxhh8zahcxlgpyjzgnrngk5vjaf34akwyan8nrxb";
   };
 
   goPackagePath = "github.com/containerd/containerd";
@@ -40,13 +40,8 @@ buildGoPackage rec {
   installPhase = ''
     install -Dm555 bin/* -t $out/bin
     installManPage man/*.[1-9]
-  '';
-
-  # completion installed separately so it can be overridden in docker
-  # can be moved to installPhase when docker uses containerd >= 1.4
-  postInstall = ''
-    installShellFiles --bash contrib/autocomplete/ctr
-    installShellFiles --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
   '';
 
   passthru.tests = { inherit (nixosTests) docker; };

@@ -1,13 +1,43 @@
-{ lib, stdenv, fetchurl, substituteAll, pkg-config, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
-, glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd
-, gtk3, gsettings-desktop-schemas, gnome-desktop, libxmlb, gnome-online-accounts
-, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils
-, libsysprof-capture }:
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, pkg-config
+, meson
+, ninja
+, gettext
+, gnome3
+, wrapGAppsHook
+, packagekit
+, ostree
+, glib
+, appstream-glib
+, libsoup
+, polkit
+, isocodes
+, gspell
+, libxslt
+, gobject-introspection
+, flatpak
+, fwupd
+, gtk3
+, gsettings-desktop-schemas
+, gnome-desktop
+, libxmlb
+, gnome-online-accounts
+, json-glib
+, libsecret
+, valgrind-light
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, docbook_xml_dtd_43
+, gtk-doc
+, desktop-file-utils
+, libsysprof-capture
+}:
 
 let
-
   withFwupd = stdenv.isx86_64 || stdenv.isi686;
-
 in
 
 stdenv.mkDerivation rec {
@@ -27,15 +57,38 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config gettext wrapGAppsHook libxslt docbook_xml_dtd_42 docbook_xml_dtd_43
-    valgrind-light docbook_xsl gtk-doc desktop-file-utils gobject-introspection
+    meson
+    ninja
+    pkg-config
+    gettext
+    wrapGAppsHook
+    libxslt
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    valgrind-light
+    docbook-xsl-nons
+    gtk-doc
+    desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
-    gtk3 glib packagekit appstream-glib libsoup
-    gsettings-desktop-schemas gnome-desktop
-    gspell json-glib libsecret ostree
-    polkit flatpak libxmlb gnome-online-accounts libsysprof-capture
+    gtk3
+    glib
+    packagekit
+    appstream-glib
+    libsoup
+    gsettings-desktop-schemas
+    gnome-desktop
+    gspell
+    json-glib
+    libsecret
+    ostree
+    polkit
+    flatpak
+    libxmlb
+    gnome-online-accounts
+    libsysprof-capture
   ] ++ lib.optionals withFwupd [
     fwupd
   ];
@@ -51,7 +104,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-software";
+      packageName = pname;
       attrPath = "gnome3.gnome-software";
     };
   };
@@ -59,7 +112,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Software store that lets you install and update applications and system extensions";
     homepage = "https://wiki.gnome.org/Apps/Software";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };

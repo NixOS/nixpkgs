@@ -1,25 +1,68 @@
-{ lib, buildPythonApplication, fetchFromGitHub, callPackage
-, mpv, python-mpv-jsonipc, jellyfin-apiclient-python
-, pillow, tkinter, pystray, jinja2, pywebview }:
+{ lib
+, buildPythonApplication
+, copyDesktopItems
+, fetchPypi
+, makeDesktopItem
+, flask
+, jellyfin-apiclient-python
+, jinja2
+, mpv
+, pillow
+, pydantic
+, pyqtwebengine
+, pystray
+, python-mpv-jsonipc
+, pywebview
+, qt5
+, tkinter
+, werkzeug
+}:
 
-let
-  shaderPack = callPackage ./shader-pack.nix {};
-in
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "1.7.1";
+  version = "1.10.3";
 
-  src = fetchFromGitHub {
-    owner = "iwalton3";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0alrh5h3f8pq9mrq09jmpqa0yslxsjqwij6kwn24ggbwc10zkq75";
-    fetchSubmodules = true; # needed for display_mirror css file
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-Tl7P8SJ/ZuwIi8RxDWkhfd7LUd63xv5Ehg1UqaYHb1g=";
   };
 
-  patches = [
-    ./disable-desktop-client.patch
-    ./disable-update-check.patch
+  propagatedBuildInputs = [
+    jellyfin-apiclient-python
+    mpv
+    pillow
+    pydantic
+    python-mpv-jsonipc
+
+    # gui dependencies
+    pystray
+    tkinter
+
+    # display_mirror dependencies
+    jinja2
+    pywebview
+
+    # desktop dependencies
+    flask
+    pyqtwebengine
+    werkzeug
+  ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    qt5.wrapQtAppsHook
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Jellyfin Desktop";
+      exec = "jellyfin-desktop";
+      icon = "jellyfin-desktop";
+      desktopName = "jellyfin-desktop";
+      comment = "MPV-based desktop and cast client for Jellyfin";
+      genericName = "MPV-based desktop and cast client for Jellyfin";
+      categories = "Video;AudioVideo;TV;Player";
+    })
   ];
 
   # override $HOME directory:
@@ -34,31 +77,27 @@ buildPythonApplication rec {
   '';
 
   postPatch = ''
-    # link the default shader pack
-    ln -s ${shaderPack} jellyfin_mpv_shim/default_shader_pack
+    substituteInPlace jellyfin_mpv_shim/conf.py \
+      --replace "check_updates: bool = True" "check_updates: bool = False" \
+      --replace "notify_updates: bool = True" "notify_updates: bool = False"
   '';
 
-  propagatedBuildInputs = [
-    jellyfin-apiclient-python
-    mpv
-    pillow
-    python-mpv-jsonipc
+  postInstall = ''
+    mkdir -p $out/share/pixmaps
+    cp jellyfin_mpv_shim/integration/jellyfin-256.png $out/share/pixmaps/jellyfin-desktop.png
+  '';
 
-    # gui dependencies
-    pystray
-    tkinter
-
-    # display_mirror dependencies
-    jinja2
-    pywebview
-  ];
+  postFixup = ''
+    wrapQtApp $out/bin/jellyfin-desktop
+    wrapQtApp $out/bin/jellyfin-mpv-desktop
+  '';
 
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "jellyfin_mpv_shim" ];
 
   meta = with lib; {
-    homepage = "https://github.com/iwalton3/jellyfin-mpv-shim";
+    homepage = "https://github.com/jellyfin/jellyfin-desktop";
     description = "Allows casting of videos to MPV via the jellyfin mobile and web app";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jojosch ];

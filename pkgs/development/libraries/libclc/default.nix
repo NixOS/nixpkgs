@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ninja, cmake, python, llvmPackages }:
+{ lib, stdenv, fetchFromGitHub, ninja, cmake, python3, llvmPackages }:
 
 let
   llvm = llvmPackages.llvm;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ llvm clang clang-unwrapped python ];
+  buildInputs = [ llvm clang clang-unwrapped python3 ];
   enableParallelBuilding = true;
 
   meta = with lib; {

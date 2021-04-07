@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
-  version = "1.3.35";
+  version = "1.3.36";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "0l024l4hawm9s3jqrgi2j0lxgm61dqh8sgkj1017ma7y11hqv2hq";
+    sha256 = "0ilg6fkppb4avzais1dvi3qf6ln7v3mzj7gjm83w7pwwfpg3ynsx";
   };
 
   patches = [
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
+    "--with-frozenpaths"
     "--with-quantum-depth=${toString quantumdepth}"
     "--with-gslib=yes"
   ];

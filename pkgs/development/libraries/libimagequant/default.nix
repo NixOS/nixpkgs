@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libimagequant";
-  version = "2.13.1";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = pname;
     rev = version;
-    sha256 = "1543h1i59k2hbj2g8shcl8fvhz2silipacynwjgw412r38hkr33j";
+    sha256 = "sha256-yWtwBTAs6dlrZz3Bd/4DUb488IJsahPKwjluukTlv/o=";
   };
 
   preConfigure = ''
     patchShebangs ./configure
   '';
+
+  configureFlags = lib.optionals stdenv.isAarch64 [ "--disable-sse" ];
 
   meta = with lib; {
     homepage = "https://pngquant.org/lib/";

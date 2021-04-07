@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
       { url = "http://neoload.installers.neotys.com/documents/download/neoload/v4.1/neoload_4_1_4_linux_x86.sh";
         sha256 = "1z66jiwcxixsqqwa0f4q8m2p5kna4knq6lic8y8l74dgv25mw912"; } );
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   phases = [ "installPhase" ];
 
   # TODO: load generator / monitoring agent only builds

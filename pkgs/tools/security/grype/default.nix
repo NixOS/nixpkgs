@@ -1,25 +1,29 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , docker
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.6.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0schq11vckvdj538mnkdzhxl452nrssqrfapab9qc44yxdi1wf8k";
+    sha256 = "sha256-X67TEHKmKKuTFGo55ZVkYVNw4f/d8aU2b/FQsq1OIJg=";
   };
 
-  vendorSha256 = "0lna7zhsj3wnw83nv0dp93aj869pplb51gqzrkka7vnqp0rjcw50";
+  vendorSha256 = "sha256-SGO8RKSOK0PHqSIJfTdcuAmqMtFuo9MBdiEylDUpOFo=";
 
   propagatedBuildInputs = [ docker ];
 
-  # tests require a running Docker instance
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X github.com/anchore/grype/internal/version.version=${version}")
+  '';
+
+  # Tests require a running Docker instance
   doCheck = false;
 
   meta = with lib; {

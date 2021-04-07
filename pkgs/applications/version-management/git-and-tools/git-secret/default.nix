@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     sha256 = "0hc7yavcp8jmn6b7wngjqhy8kl7f4191sfpik8ycvqghkvvimxj4";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -D git-secret $out/bin/git-secret

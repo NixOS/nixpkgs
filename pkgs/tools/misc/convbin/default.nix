@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n502zj8igm583kbfvyv7zhd97vb71jac41ncb9jr2yz2v5ir8j9";
   };
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   checkPhase = ''
     pushd test

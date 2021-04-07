@@ -6,7 +6,6 @@
 , pyenchant
 , pygeoip
 , pytestCheckHook
-, python
 , pytz
 , sqlalchemy
 , xmltodict
@@ -51,6 +50,8 @@ buildPythonPackage rec {
   postCheck = ''
     popd
   '';
+
+  pythonImportsCheck = [ "sopel" ];
 
   meta = with lib; {
     description = "Simple and extensible IRC bot";

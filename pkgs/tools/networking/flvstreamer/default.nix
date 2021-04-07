@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    make CC=cc posix
+    make CC=${stdenv.cc.targetPrefix}cc posix
   '';
 
   installPhase = ''

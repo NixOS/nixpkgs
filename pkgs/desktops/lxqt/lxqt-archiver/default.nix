@@ -42,9 +42,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Archive tool for the LXQt desktop environment";
     homepage = "https://github.com/lxqt/lxqt-archiver/";
-    license = licenses.gpl2;
+    description = "Archive tool for the LXQt desktop environment";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ jchw ];
   };

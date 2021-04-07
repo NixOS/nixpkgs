@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
    sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
   '';
 
-  buildInputs = [ unzip txt2tags ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ txt2tags ];
 
   meta = {
     homepage = "http://repo.cat-v.org/libixp/"; # see also https://libs.suckless.org/deprecated/libixp

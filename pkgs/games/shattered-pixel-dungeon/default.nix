@@ -2,7 +2,7 @@
 , makeWrapper
 , fetchFromGitHub
 , nixosTests
-, gradle_5
+, gradle
 , perl
 , jre
 , libpulseaudio
@@ -10,13 +10,15 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.9.1d";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
-    rev = "v${version}";
-    sha256 = "0f9vi1iffh477zi03hi07rmfbkb8i4chwvv43vs70mgjh4qx7247";
+    # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
+    # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
+    rev = "5be9ee815f1fc6e3511a09a367d3f9d8dc55c783";
+    sha256 = "0wknrf7jjnkshj4gmb1ksqiqif1rq53ffi3y29ynhcz68sa0frx6";
   };
 
   postPatch = ''
@@ -31,7 +33,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit version src postPatch;
-    nativeBuildInputs = [ gradle_5 perl ];
+    nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
@@ -52,7 +54,7 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version src postPatch;
 
-  nativeBuildInputs = [ gradle_5 perl makeWrapper ];
+  nativeBuildInputs = [ gradle perl makeWrapper ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -79,11 +81,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://shatteredpixel.com/";
     downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     # https://github.com/NixOS/nixpkgs/pull/99885#issuecomment-740065005
     broken = stdenv.isDarwin;
   };
 }
-

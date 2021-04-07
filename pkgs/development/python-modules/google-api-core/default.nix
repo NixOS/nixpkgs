@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-auth
-, googleapis_common_protos
+, googleapis-common-protos
 , grpcio
 , protobuf
 , pytz
@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "1.24.1";
+  version = "1.26.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sflnpgsvk2h1cr1m3mgxx6pzz55xw7sk4y4qdimhs5jdm2fw78g";
+    sha256 = "sha256-uRQ0XH6iOGEWJpOidwO6uASlVQT35umryv8XTYDfMqw=";
   };
 
   propagatedBuildInputs = [
-    googleapis_common_protos
+    googleapis-common-protos
     google-auth
     grpcio
     protobuf

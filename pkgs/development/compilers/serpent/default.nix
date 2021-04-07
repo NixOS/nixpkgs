@@ -14,6 +14,10 @@ stdenv.mkDerivation {
     sha256 = "1bns9wgn5i1ahj19qx7v1wwdy8ca3q3pigxwznm5nywsw7s7lqxs";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     mv serpent $out/bin
@@ -33,6 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ethereum/wiki/wiki/Serpent";
     license = with licenses; [ wtfpl ];
     maintainers = with maintainers; [ chris-martin ];
-    platforms = with platforms; linux;
+    platforms = platforms.all;
   };
 }

@@ -4,21 +4,21 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "eb98cd28e34144c6473b79743066d1c63c6427ab";
+    rev = "2d79788dbcd005bdcfe5b5120007d0faf8f1fc82";
     sha256 = "001a3bx8yyx1hq8y5yiy1jzp122q8gcl369lj0609gaxp6dk5bdw";
   };
 in
 
 buildGoPackage rec {
   pname = "teleport";
-  version = "5.1.0";
+  version = "5.1.2";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "0jkr4max6mcn8k5nhlg71byb0yzr9kplpl1q96pdk2gbvkh7q6xb";
+    sha256 = "0h1hn2dpdsmhxac06gn6787z2mnfcwb3wn0c2l7l2qhw6iqpgmvh";
   };
 
   goPackagePath = "github.com/gravitational/teleport";
@@ -41,13 +41,29 @@ buildGoPackage rec {
     popd
   '';
 
-  dontStrip = true;
+  # Reduce closure size for client machines
+  outputs = [ "out" "client" ];
 
-  meta = {
+  buildTargets = [ "full" ];
+
+  postInstall = ''
+    install -Dm755 -t $client/bin $out/bin/tsh
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/tsh version | grep ${version} > /dev/null
+    $client/bin/tsh version | grep ${version} > /dev/null
+    $out/bin/tctl version | grep ${version} > /dev/null
+    $out/bin/teleport version | grep ${version} > /dev/null
+  '';
+
+  meta = with lib; {
     description = "A SSH CA management suite";
     homepage = "https://gravitational.com/teleport/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sigma tomberek ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sigma tomberek freezeboy ];
+    platforms = platforms.unix;
   };
 }

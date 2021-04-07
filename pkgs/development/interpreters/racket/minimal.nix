@@ -5,7 +5,7 @@ racket.overrideAttrs (oldAttrs: rec {
   name = "racket-minimal-${oldAttrs.version}";
   src = oldAttrs.src.override {
     inherit name;
-    sha256 = "0yc5zkpq1bavj64h67pllw6mfjhmdp65fgdpyqcaan3syy6b5cia";
+    sha256 = "0qvfi6rg9cwzh716q5j7m30rqq9xysi6zsalqlpdqrzhnx8y54k0";
   };
 
   meta = oldAttrs.meta // {

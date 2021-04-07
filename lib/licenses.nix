@@ -7,7 +7,7 @@ let
 
 in
 
-lib.mapAttrs (n: v: v // { shortName = n; }) {
+lib.mapAttrs (n: v: v // { shortName = n; }) ({
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
@@ -98,6 +98,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   bsd0 = spdx {
     spdxId = "0BSD";
     fullName = "BSD Zero Clause License";
+  };
+
+  bsd1 = spdx {
+    spdxId = "BSD-1-Clause";
+    fullName = "BSD 1-Clause License";
   };
 
   bsd2 = spdx {
@@ -299,6 +304,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   fdl11Only = spdx {
     spdxId = "GFDL-1.1-only";
     fullName = "GNU Free Documentation License v1.1 only";
+  };
+
+  fdl11Plus = spdx {
+    spdxId = "GFDL-1.1-or-later";
+    fullName = "GNU Free Documentation License v1.1 or later";
   };
 
   fdl12Only = spdx {
@@ -593,6 +603,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     free = false;
   };
 
+  odbl = spdx {
+    spdxId = "ODbL-1.0";
+    fullName = "Open Data Commons Open Database License v1.0";
+  };
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
@@ -867,4 +882,4 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU Lesser General Public License v3.0";
     deprecated = true;
   };
-}
+})

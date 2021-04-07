@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "02354yn1lh1dxny35ky2d0b44iq302krsqpwk5grr4glma00hhq6";
   };
 
-  makeFlags = [ "CC=cc prefix=$(out)" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc prefix=$(out)" ];
 
   enableParallelBuilding = true;
 

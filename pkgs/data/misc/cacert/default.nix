@@ -10,13 +10,6 @@
 with lib;
 
 let
-
-  certdata2pem = fetchurl {
-    name = "certdata2pem.py";
-    url = "https://salsa.debian.org/debian/ca-certificates/raw/debian/20170717/mozilla/certdata2pem.py";
-    sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
-  };
-
   version = "3.60";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 in
@@ -27,6 +20,15 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/nss-${version}.tar.gz";
     sha256 = "hKvVV1q4dMU65RG9Rh5dCGjRobOE7kB1MVTN0dWQ/j0=";
+  };
+
+  certdata2pem = fetchurl {
+    name = "certdata2pem.py";
+    urls = [
+      "https://salsa.debian.org/debian/ca-certificates/raw/debian/20170717/mozilla/certdata2pem.py"
+      "https://git.launchpad.net/ubuntu/+source/ca-certificates/plain/mozilla/certdata2pem.py?id=47e49e1e0a8a1ca74deda27f88fe181191562957"
+    ];
+    sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
 
   outputs = [ "out" "unbundled" ];
@@ -40,7 +42,8 @@ stdenv.mkDerivation {
     ${concatStringsSep "\n" (map (c: ''"${c}"'') blacklist)}
     EOF
 
-    cat ${certdata2pem} > certdata2pem.py
+    # copy from the store, otherwise python will scan it for imports
+    cat "$certdata2pem" > certdata2pem.py
   '';
 
   buildPhase = ''

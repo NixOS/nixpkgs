@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   buildFlags = lib.optional stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
   installFlags = [ "INSTALL_DIR=$(out)" ];
 

@@ -43,6 +43,7 @@ let
 
     patches = []
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
+      ++ optional (vpxSupport && hasPrefix "12." version) ./vpx-12.3-libvpx-1.8.patch
       ;
 
     postPatch = ''
@@ -60,7 +61,7 @@ let
       "--enable-avplay"
       "--enable-shared"
       "--enable-runtime-cpudetect"
-      "--cc=cc"
+      "--cc=${stdenv.cc.targetPrefix}cc"
       (enableFeature enableGPL "gpl")
       (enableFeature enableGPL "swscale")
       (enableFeature mp3Support "libmp3lame")
@@ -126,6 +127,10 @@ let
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
       platforms = with platforms; linux ++ darwin;
+      knownVulnerabilities =
+        lib.optional (lib.versionOlder version "12.1") "CVE-2017-9051"
+        ++ lib.optionals (lib.versionOlder version "12.3") [ "CVE-2018-5684" "CVE-2018-5766" ]
+        ++ lib.optionals (lib.versionOlder version "12.4") [ "CVE-2019-9717" "CVE-2019-9720" ];
     };
   }; # libavFun
 

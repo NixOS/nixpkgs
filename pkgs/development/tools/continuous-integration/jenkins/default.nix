@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix, nixfmt
-, writeScript, nixosTests, jq, cacert, curl }:
+{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix
+, nixfmt, writeScript, nixosTests, jq, cacert, curl }:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.263.2";
+  version = "2.277.1";
 
   src = fetchurl {
     url = "http://mirrors.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "13l7y1307iv54z2zsjy0slzv2hpqv9i35qb15xa8s6sl7lcm9l49";
+    sha256 = "0lficvngxzl7q088n3ssnnhjicd0xxr0k3n0inz7pvjj27dl35rr";
   };
 
   buildCommand = ''

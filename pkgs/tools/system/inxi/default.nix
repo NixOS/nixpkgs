@@ -2,7 +2,7 @@
 , ps, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
-, file, hddtemp, iproute, ipmitool, usbutils, kmod, lm_sensors, smartmontools
+, file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
 , binutils, tree, upower, pciutils
 , withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
 }:
@@ -11,7 +11,7 @@ let
   prefixPath = programs:
     "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
-    util-linuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
+    util-linuxMinimal dmidecode file hddtemp iproute2 ipmitool usbutils kmod
     lm_sensors smartmontools binutils tree upower pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals
@@ -22,16 +22,17 @@ let
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.2.02-2";
+  version = "3.3.03-1";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "sha256-WHfW0empveOxC3jvYq46jlvVZDb8JLne5JHPtFE6nTs=";
+    sha256 = "sha256-OFjhMlBR1QUYUvpuFATCWZWZp2dop30Iz8qVCIK2UN0=";
   };
 
-  buildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   installPhase = ''
     mkdir -p $out/bin

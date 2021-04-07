@@ -1,18 +1,18 @@
-{ mkDerivation, fetchurl, pkgs, lib, php }:
+{ mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "php-cs-fixer";
-  version = "2.18.0";
+  version = "2.18.4";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-    sha256 = "sha256-euvk/Rs6fZIJVWprzKiTVNPlGOsCN6t58DzvwYh3wDA=";
+    sha256 = "sha256-ZgnWv7Xd+0XgZ/IPdjVpAEraNNJq2KHB3aUUIG1SirU=";
   };
 
   phases = [ "installPhase" ];
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,7 +21,7 @@ mkDerivation {
       --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "A tool to automatically fix PHP coding standards issues";
     license = licenses.mit;
     homepage = "http://cs.sensiolabs.org/";

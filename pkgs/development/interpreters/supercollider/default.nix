@@ -1,16 +1,15 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, alsaLib
+{ lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, alsaLib
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebengine
 , readline, qtwebsockets, useSCEL ? false, emacs
 }:
 
-let optional = lib.optional;
+let
+  inherit (lib) optional;
 in
-
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "supercollider";
   version = "3.11.2";
-
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     maintainers = with maintainers; [ mrmebelman ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = [ "x686-linux" "x86_64-linux" ];
   };
 }

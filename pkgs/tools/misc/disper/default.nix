@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, xorg, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python2, xorg, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "disper";
@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ python ];
+  strictDeps = true;
+
+  buildInputs = [ python2 ];
 
   preConfigure = ''
     export makeFlags="PREFIX=$out"
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "On-the-fly display switch utility";
-    homepage = "http://willem.engen.nl/projects/disper/";
+    homepage = "https://willem.engen.nl/projects/disper/";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
   };

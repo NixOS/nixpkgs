@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   inherit (google-fonts) src version;
 
   installPhase = ''
-    install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/*.ttf
+    install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/static/*.ttf
   '';
 
   meta = with lib; {

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     patchShebangs ./install.sh
   '';
 
-  buildInputs = [ bash makeWrapper ];
+  nativeBuildInputs = [ bash makeWrapper ];
 
   installPhase = ''
     ./install.sh --prefix=$out/bin

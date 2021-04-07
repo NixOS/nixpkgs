@@ -1,9 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , perl
-, perlPackages
 , inkscape
-, pngcrush
 , librsvg
 , targets ? [ "all" ]
 }:

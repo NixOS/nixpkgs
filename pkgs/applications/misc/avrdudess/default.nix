@@ -1,4 +1,4 @@
-{ lib, stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg_utils }:
+{ lib, stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg-utils }:
 
 stdenv.mkDerivation {
   name = "avrdudess-2.2.20140102";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "18llpvjsfhypzijrvfbzmcg3g141f307mzsrg11wcdxh9syxqak6";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   phases = [ "buildPhase" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     export LD_LIBRARY_PATH="${lib.makeLibraryPath [gtk2 mono]}"
     # We need PATH from user env for xdg-open to find its tools, which
     # typically depend on the currently running desktop environment.
-    export PATH="${lib.makeBinPath [ avrdude xdg_utils ]}:\$PATH"
+    export PATH="${lib.makeBinPath [ avrdude xdg-utils ]}:\$PATH"
 
     # avrdudess must have its resource files in its current working directory
     cd $out/avrdudess && exec ${mono}/bin/mono "$out/avrdudess/avrdudess.exe" "\$@"

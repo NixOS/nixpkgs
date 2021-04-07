@@ -96,5 +96,5 @@ in self // {
         license = lib.licenses.free;
         hydraPlatforms = [ ];
       } // meta;
-    });
+    } // extraArgs);
 }

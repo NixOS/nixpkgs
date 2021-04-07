@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.0.0";
+  version = "2.1.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "0id1h46490mjqp8ijhv2qswpdli2nh2z15mgh6gfc2wl3bhwhi1g";
+    sha256 = "0mjqy0d60l62vqqbrayj6270173501i6aqgnkczywrqyzqw8522l";
   };
 
   # -DWARNINGS_AS_ERRORS=OFF to be removed once https://github.com/timescale/timescaledb/issues/2770 is fixed in upstream

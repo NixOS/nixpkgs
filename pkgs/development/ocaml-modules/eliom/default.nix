@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchzip, which, ocsigen_server, ocaml,
+{ stdenv, lib, fetchzip, fetchpatch, which, ocsigen_server, ocaml,
   lwt_react,
   opaline, ppx_deriving, findlib
+, ocaml-migrate-parsetree
 , ppx_tools_versioned
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
@@ -22,7 +23,17 @@ stdenv.mkDerivation rec
     sha256 = "00m6v2k4mg8705dy41934lznl6gj91i6dk7p1nkaccm51nna25kz";
   };
 
-  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline
+  patches = [
+    # Compatibility with js_of_ocaml >= 3.9.0, remove at next release
+    (fetchpatch {
+      url = "https://github.com/ocsigen/eliom/commit/4106a4217956f7b74a8ef3f73a1e1f55e02ade45.patch";
+      sha256 = "1cgbvpljn9x6zxirxf3rdjrsdwy319ykz3qq03c36cc40hy2w13p";
+    })
+  ];
+
+  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild
+    ocaml-migrate-parsetree
+    js_of_ocaml-ppx_deriving_json opaline
     ppx_tools_versioned
   ];
 

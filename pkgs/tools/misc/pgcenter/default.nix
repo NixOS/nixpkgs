@@ -2,16 +2,24 @@
 
 buildGoModule rec {
   pname = "pgcenter";
-  version = "0.6.6";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner  = "lesovsky";
     repo   = "pgcenter";
     rev    = "v${version}";
-    sha256 = "1axwsclssxsg38ppdmd4v1lbs87ksrwj5z76ckjk8jjfni1xp9sr";
+    sha256 = "sha256-ow26wuM7nw/WbeaPVcNm5iYUYLydeujhw+7BcTirPcA=";
   };
 
-  vendorSha256 = "1mzvpr12qh9668iz97p62zl4zhlrcyfgwr4a9zg9irj585pkb5x2";
+  vendorSha256 = "sha256-9hYiyZ34atmSL7JvuXyiGU7HR4E6qN7bGZlyU+hP+FU=";
+
+  subPackages = [ "cmd" ];
+
+  buildFlagsArray = [ "-ldflags=-w -s -X main.gitTag=${src.rev} -X main.gitCommit=${src.rev} -X main.gitBranch=master" ];
+
+  postInstall = ''
+    mv $out/bin/cmd $out/bin/pgcenter
+  '';
 
   doCheck = false;
 

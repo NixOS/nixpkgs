@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vy5vgbp45ai957gaby2dj1hvmbxfdlfnwcanwqm9f8q16qipdbq";
   };
 
-  buildInputs = [ ant jdk makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ant jdk ];
   buildPhase = ''
     export ANT_OPTS=-Dbuild.sysclasspath=ignore
     ${ant}/bin/ant -f openproj_build/build.xml

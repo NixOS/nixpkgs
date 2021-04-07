@@ -1,19 +1,19 @@
 { stdenv, fetchurl, lib
-, pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss
+, pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss, libuuid
 , abrmdSupport ? true, tpm2-abrmd ? null }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";
-  version = "4.1.3";
+  version = "5.0";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0117r0zzdnblkibv81y71v3limixsw5m7g9xwf7lcx8fc8836pdv";
+    sha256 = "sha256-4bkH/imHdigFLgithO68bD92RtKVBe1IYulhYqjJG6E=";
   };
 
   nativeBuildInputs = [ pandoc pkg-config makeWrapper ];
   buildInputs = [
-    curl openssl tpm2-tss
+    curl openssl tpm2-tss libuuid
   ];
 
   preFixup = let

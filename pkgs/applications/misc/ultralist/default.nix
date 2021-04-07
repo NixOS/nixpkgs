@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ultralist";
-  version = "1.5.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ultralist";
     repo = "ultralist";
     rev = version;
-    sha256 = "09kgf83jn5k35lyrnyzbsy0l1livzmy292qmlbx5dkdpaq5wxnmp";
+    sha256 = "sha256-GGBW6rpwv1bVbLTD//cU8jNbq/27Ls0su7DymCJTSmY=";
   };
 
   vendorSha256 = null;

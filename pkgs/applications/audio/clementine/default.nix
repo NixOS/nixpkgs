@@ -10,7 +10,7 @@ let
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
 
-  # On the update after all 1.4rc, qt5.15 will be supported.
+  # On the update after all 1.4rc, qt5.15 and protobuf 3.15 will be supported.
   version = "1.4.0rc1";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ let
     ./clementine-spotify-blob.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [
     boost
@@ -68,7 +68,7 @@ let
     inherit src patches nativeBuildInputs postPatch;
 
     # gst_plugins needed for setup-hooks
-    buildInputs = buildInputs ++ [ makeWrapper ] ++ gst_plugins;
+    buildInputs = buildInputs ++ gst_plugins;
 
     preConfigure = ''
       rm -rf ext/{,lib}clementine-spotifyblob
@@ -102,7 +102,7 @@ let
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs patches postPatch;
 
-    buildInputs = buildInputs ++ [ libspotify makeWrapper ];
+    buildInputs = buildInputs ++ [ libspotify ];
     # Only build and install the Spotify blob
     preBuild = ''
       cd ext/clementine-spotifyblob

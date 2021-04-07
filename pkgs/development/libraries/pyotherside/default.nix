@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     python3 qtbase qtquickcontrols qtsvg ncurses
   ];
 
+  dontWrapQtApps = true;
+
   patches = [ ./qml-path.patch ];
   installTargets = [ "sub-src-install_subtargets" ];
 

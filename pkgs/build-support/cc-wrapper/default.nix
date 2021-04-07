@@ -160,6 +160,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
+        export use_response_file_by_default=${if isClang then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
@@ -298,7 +299,10 @@ stdenv.mkDerivation {
     # vs libstdc++, etc.) since Darwin isn't `useLLVM` on all counts. (See
     # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
     # break `useLLVM` into.)
-    + optionalString (isClang && gccForLibs != null && targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+    + optionalString (isClang && gccForLibs != null
+                      && targetPlatform.isLinux
+                      && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+                      && !(stdenv.targetPlatform.useLLVM or false)) ''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     ''
 
@@ -451,6 +455,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString (targetPlatform.libc == "musl" && targetPlatform.isx86_32) ''
+      hardening_unsupported_flags+=" stackprotector"
     '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString cc.langAda or false ''
@@ -477,6 +483,10 @@ stdenv.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+    ''
+
+    + optionalString stdenv.targetPlatform.isDarwin ''
+      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
     ##

@@ -4,13 +4,15 @@
 
 let
   libinf = libinfinity.override { gtkWidgets = true; inherit avahiSupport; };
-in stdenv.mkDerivation {
-  name = "gobby-unstable-2018-04-03";
+in stdenv.mkDerivation rec {
+  pname = "gobby";
+  version = "0.6.0";
+
   src = fetchFromGitHub {
     owner = "gobby";
     repo = "gobby";
-    rev = "ea4df27c9b6b885434797b0071ce198b23f9f63b";
-    sha256 = "0q7lq64yn16lxvj4jphs8y9194h0xppj8k7y9x8b276krraak2az";
+    rev = "v${version}";
+    sha256 = "06cbc2y4xkw89jaa0ayhgh7fxr5p2nv3jjs8h2xcbbbgwaw08lk0";
   };
 
   nativeBuildInputs = [ autoconf automake pkg-config intltool itstool yelp-tools wrapGAppsHook ];

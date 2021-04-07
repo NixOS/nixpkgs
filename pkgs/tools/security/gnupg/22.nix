@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
   '' + lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-  ''; #" fix Emacs syntax highlighting :-(
+  '';
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = [

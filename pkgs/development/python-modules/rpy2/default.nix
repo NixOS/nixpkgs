@@ -1,15 +1,13 @@
 { stdenv
 , lib
-, python
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , isPyPy
 , R
 , rWrapper
 , rPackages
 , pcre
-, lzma
+, xz
 , bzip2
 , zlib
 , icu
@@ -26,13 +24,13 @@
 }:
 
 buildPythonPackage rec {
-    version = "3.4.1";
+    version = "3.4.2";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "1qnjjlgh6i31z45jykwd29n1336gq678fn9zw7gh0rv5d6sn0hv4";
+      sha256 = "8f7d1348b77bc45425b846a0d625f24a51a1c4f32ef2cd1c07a24222aa64e2e0";
     };
 
     patches = [
@@ -48,7 +46,7 @@ buildPythonPackage rec {
 
     buildInputs = [
       pcre
-      lzma
+      xz
       bzip2
       zlib
       icu

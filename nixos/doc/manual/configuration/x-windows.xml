@@ -150,7 +150,6 @@
 <xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy390" ];
 <xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy340" ];
 <xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy304" ];
-<xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy173" ];
 </programlisting>
    You may need to reboot after enabling this driver to prevent a clash with
    other kernel modules.
@@ -159,21 +158,16 @@
  <simplesect xml:id="sec-x11--graphics-cards-amd">
   <title>Proprietary AMD drivers</title>
   <para>
-   AMD provides a proprietary driver for its graphics cards that has better 3D
-   performance than the X.org drivers. It is not enabled by default because
-   it’s not free software. You can enable it as follows:
+   AMD provides a proprietary driver for its graphics cards that is not
+   enabled by default because it’s not Free Software, is often broken
+   in nixpkgs and as of this writing doesn't offer more features or
+   performance. If you still want to use it anyway, you need to explicitly set:
 <programlisting>
-<xref linkend="opt-services.xserver.videoDrivers"/> = [ "ati_unfree" ];
+<xref linkend="opt-services.xserver.videoDrivers"/> = [ "amdgpu-pro" ];
 </programlisting>
    You will need to reboot after enabling this driver to prevent a clash with
    other kernel modules.
   </para>
-  <note>
-  <para>
-   For recent AMD GPUs you most likely want to keep either the defaults
-   or <literal>"amdgpu"</literal> (both free).
-  </para>
-  </note>
  </simplesect>
  <simplesect xml:id="sec-x11-touchpads">
   <title>Touchpads</title>

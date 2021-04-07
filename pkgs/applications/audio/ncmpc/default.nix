@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, ncurses
-, mpd_clientlib, gettext, boost
-, pcreSupport ? false
-, pcre ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, glib
+, ncurses
+, libmpdclient
+, gettext
+, boost
+, pcreSupport ? false, pcre ? null
 }:
 
 with lib;
@@ -10,16 +18,16 @@ assert pcreSupport -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "ncmpc";
-  version = "0.42";
+  version = "0.45";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "ncmpc";
     rev    = "v${version}";
-    sha256 = "1c21sbdm6pp3kwhnzc7c6ksna7madvsmfa7j91as2g8485symqv2";
+    sha256 = "sha256-KDSHbEZ2PJLEIlXqPvBQ2ZPWno+IoajTjkl9faAXIko=";
   };
 
-  buildInputs = [ glib ncurses mpd_clientlib boost ]
+  buildInputs = [ glib ncurses libmpdclient boost ]
     ++ optional pcreSupport pcre;
   nativeBuildInputs = [ meson ninja pkg-config gettext ];
 

@@ -1,16 +1,16 @@
 { stdenv, fetchurl, alsaLib, cairo, dpkg, freetype
 , gdk-pixbuf, glib, gtk3, lib, xorg
 , libglvnd, libjack2, ffmpeg_3
-, libxkbcommon, xdg_utils, zlib, pulseaudio
+, libxkbcommon, xdg-utils, zlib, pulseaudio
 , wrapGAppsHook, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "3.3.1";
+  version = "3.3.6";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "0f7xysk0cl48q7i28m25hasmrp30grgm3kah0s7xmkjgm33887pi";
+    sha256 = "sha256-k7L6CU2lY9192tfaWtVOxq9BCY7FZZdxmHT8EA+ZFsk=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   binPath = lib.makeBinPath [
-    xdg_utils ffmpeg_3
+    xdg-utils ffmpeg_3
   ];
 
   ldLibraryPath = lib.strings.makeLibraryPath buildInputs;

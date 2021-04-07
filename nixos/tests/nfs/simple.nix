@@ -4,7 +4,7 @@ let
 
   client =
     { pkgs, ... }:
-    { fileSystems = pkgs.lib.mkVMOverride
+    { virtualisation.fileSystems =
         { "/data" =
            { # nfs4 exports the export with fsid=0 as a virtual root directory
              device = if (version == 4) then "server:/" else "server:/data";

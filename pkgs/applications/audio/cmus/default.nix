@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
-, libiconv, CoreAudio
+, libiconv, CoreAudio, AudioUnit
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
 # simple fallback for everyone else
@@ -102,13 +102,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "sha256-eSKF3xacJptAYdm0Qf1AEWLa+lKUWz6C8nKyTHAl5QI=";
+    sha256 = "sha256-HEiEnEWf/MzhPO19VKTLYzhylpEvyzy1Jxs6EW2NU34=";
   };
 
   patches = [ ./option-debugging.patch ];
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
     ++ lib.optional stdenv.cc.isClang clangGCC
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit ]
     ++ flatten (concatMap (a: a.deps) opts);
 
   makeFlags = [ "LD=$(CC)" ];

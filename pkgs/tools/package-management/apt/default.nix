@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config, cmake, perlPackages, curl, gtest
-, gnutls, libtasn1, lzma, bzip2, lz4, zstd, libseccomp, udev
+, gnutls, libtasn1, xz, bzip2, lz4, zstd, libseccomp, udev
 , db, dpkg, libxslt, docbook_xsl, docbook_xml_dtd_45
 
 # used when WITH_DOC=ON
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake gtest libxslt.bin ];
 
   buildInputs = [
-    perlPackages.perl curl gnutls libtasn1 lzma bzip2 lz4 zstd libseccomp udev db dpkg
+    perlPackages.perl curl gnutls libtasn1 xz bzip2 lz4 zstd libseccomp udev db dpkg
   ] ++ lib.optionals withDocs [
     doxygen perlPackages.Po4a w3m docbook_xml_dtd_45
   ] ++ lib.optionals withNLS [

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/onqtam/doctest";
     description = "The fastest feature-rich C++11/14/17/20 single-header testing framework";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ davidtwco ];
   };

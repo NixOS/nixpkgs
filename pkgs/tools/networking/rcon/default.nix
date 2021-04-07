@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rcon";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "n0la";
     repo = "rcon";
     rev = version;
-    sha256 = "1jsnmsm2qkiv8dan1yncx0qp6zfkcbyvf81c7xwpv6r499ijw1nb";
+    sha256 = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

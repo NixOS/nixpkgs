@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitLab, cmake, gfortran, perl }:
 
 let
-  version = "5.1.0";
+  version = "5.1.2";
 
 in stdenv.mkDerivation {
   pname = "libxc";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    sha256 = "0qbxh0lfx4cab1fk1qfnx72g4yvs376zqrq74jn224vy32nam2x7";
+    sha256 = "1bcj7x0kaal62m41v9hxb4h1d2cxs2ynvsfqqg7c5yi7829nvapb";
   };
 
   buildInputs = [ gfortran ];

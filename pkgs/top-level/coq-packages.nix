@@ -33,6 +33,7 @@ let
       equations = callPackage ../development/coq-modules/equations { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
+      fourcolor = callPackage ../development/coq-modules/fourcolor {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
       heq = callPackage ../development/coq-modules/heq {};
       hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
@@ -57,6 +58,7 @@ let
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
+      odd-order = callPackage ../development/coq-modules/odd-order { };
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , dask
 , numpy, toolz # dask[array]
 , scipy
@@ -38,6 +37,7 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest --ignore=tests/test_dask_image/
   '';
+  pythonImportsCheck = [ "dask_image" ];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-image";

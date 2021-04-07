@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ shiboken2 ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;

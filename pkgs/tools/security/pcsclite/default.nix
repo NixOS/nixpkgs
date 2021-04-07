@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, udev, dbus, perl, python3
-, IOKit ? null }:
+{ lib, stdenv, fetchurl, pkg-config, udev, dbus, perl, python3, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "pcsclite";
-  version = "1.9.0";
+  version = "1.9.1";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "1y9f9zipnrmgiw0mxrvcgky8vfrcmg6zh40gbln5a93i2c1x8j01";
+    sha256 = "sha256-c8R4m3h2qDOnD0k82iFlXf6FaJ2bfilwHCQyduVeaDo=";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -19,9 +18,9 @@ stdenv.mkDerivation rec {
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
     "--enable-confdir=/etc"
   ] ++ lib.optional stdenv.isLinux
-         "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
-    ++ lib.optional (!stdenv.isLinux)
-         "--disable-libsystemd";
+    "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
+  ++ lib.optional (!stdenv.isLinux)
+    "--disable-libsystemd";
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
@@ -35,8 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ python3 ] ++ lib.optionals stdenv.isLinux [ udev dbus ]
-             ++ lib.optionals stdenv.isDarwin [ IOKit ];
+
+  buildInputs = [ python3 ]
+    ++ lib.optionals stdenv.isLinux [ udev dbus ]
+    ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";

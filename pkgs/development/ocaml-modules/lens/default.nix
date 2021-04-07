@@ -24,5 +24,6 @@ buildDunePackage rec {
     maintainers = with maintainers; [
       kazcw
     ];
+    broken = true; # Not compatible with ppx_deriving ≥ 5.0
   };
 }

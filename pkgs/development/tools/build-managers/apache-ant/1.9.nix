@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "ant";
   inherit version;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";

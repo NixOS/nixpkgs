@@ -10,13 +10,13 @@ let
 
 common =
   { lib, stdenv, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , bash, coreutils, gzip, gnutar
+  , bash, coreutils, util-linuxMinimal, gzip, gnutar
   , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
-  , jq, libarchive
+  , jq, libarchive, libcpuid
   , lowdown, mdbook
   # Used by tests
-  , gmock
+  , gtest
   , busybox-sandbox-shell
   , storeDir
   , stateDir
@@ -41,6 +41,7 @@ common =
 
       nativeBuildInputs =
         [ pkg-config ]
+        ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ]
         ++ lib.optionals is24
           [ autoreconfHook
             autoconf-archive
@@ -55,7 +56,8 @@ common =
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gmock lowdown ]
+        ++ lib.optionals is24 [ libarchive gtest lowdown ]
+        ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -138,7 +140,7 @@ common =
       doInstallCheck = true; # not cross
 
       # socket path becomes too long otherwise
-      preInstallCheck = lib.optional stdenv.isDarwin ''
+      preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
       '';
 
@@ -212,21 +214,14 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20201205_a5d85d0";
+    suffix = "pre20210326_dd77f71";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a5d85d07faa94cf3518e98273be4bee3d495f06a";
-      sha256 = "0g9jjhh0vs4hjrff5yx88x6sh7rk87ngvni3gnyxajqia957dipg";
+      rev = "dd77f71afe6733e9790dd001125c423cb648b7ce";
+      sha256 = "rVHzrsCtdiWjyLuHnDplG2mx+7dw5VyzZ9ReXxuCvHY=";
     };
-
-    patches = [
-      (fetchpatch { # Fix build on gcc10
-        url = "https://github.com/NixOS/nix/commit/d4870462f8f539adeaa6dca476aff6f1f31e1981.patch";
-        sha256 = "mTvLvuxb2QVybRDgntKMq+b6da/s3YgM/ll2rWBeY/Y=";
-      })
-    ];
 
     inherit storeDir stateDir confDir boehmgc;
   });

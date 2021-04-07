@@ -2,9 +2,7 @@
 
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
 , fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango
-, yacc, fetchpatch, xorg ? null, ApplicationServices ? null }:
-
-assert stdenv.isDarwin -> ApplicationServices != null;
+, bison, fetchpatch, xorg ? null, ApplicationServices }:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -39,7 +37,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
-    libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
+    libpng libjpeg expat bison libtool fontconfig gd gts libdevil flex pango
     gettext
   ] ++ optionals (xorg != null) (with xorg; [ libXrender libXaw libXpm ])
     ++ optionals (stdenv.isDarwin) [ ApplicationServices ];

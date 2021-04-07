@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Package management framework for Ruby";
     homepage = "https://rubygems.org/";
     license = with licenses; [ mit /* or */ ruby ];
-    maintainers = with maintainers; [ qyliss zimbatm ];
+    maintainers = with maintainers; [ zimbatm ];
   };
 }

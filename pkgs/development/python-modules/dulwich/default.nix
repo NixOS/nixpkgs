@@ -1,15 +1,24 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
-, urllib3, certifi
-, gevent, geventhttpclient, mock, fastimport
-, git, glibcLocales }:
+{ lib
+, stdenv
+, buildPythonPackage
+, certifi
+, fastimport
+, fetchPypi
+, gevent
+, geventhttpclient
+, git
+, glibcLocales
+, mock
+, urllib3
+}:
 
 buildPythonPackage rec {
-  version = "0.20.15";
+  version = "0.20.21";
   pname = "dulwich";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1248942fr12av2rkzpm2fq0qn6rajvv2lcgq65h8kby27qvp65zv";
+    sha256 = "sha256-rHZMmpuA+mGv40BNUnDFBgqlf38IexGpU5XTt287cf0=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -21,6 +30,8 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
+  pythonImportsCheck = [ "dulwich" ];
+
   meta = with lib; {
     description = "Simple Python implementation of the Git file formats and protocols";
     longDescription = ''
@@ -29,7 +40,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
-    license = with licenses; [ asl20 gpl2Plus];
+    license = with licenses; [ asl20 gpl2Plus ];
     maintainers = with maintainers; [ koral ];
   };
 }

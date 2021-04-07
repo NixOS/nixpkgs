@@ -1,4 +1,6 @@
-{ lib, buildPythonApplication, buildPythonPackage, isPy3k, fetchurl, rpkg, offtrac, urlgrabber, pyopenssl, python_fedora }:
+{ lib, python2Packages, fetchurl }:
+
+with python2Packages;
 
 let
   fedora_cert = buildPythonPackage rec {

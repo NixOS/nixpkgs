@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl
+{lib, stdenv, fetchurl, fetchpatch
 , libtool, autoconf, automake
 , texinfo
 , gmp, mpfr, libffi, makeWrapper
@@ -11,10 +11,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="ecl";
-    version="20.4.24";
+    version="21.2.1";
     name="${baseName}-${version}";
     url="https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
-    sha256="01qgdmr54wkj854f69qdm9sybrvd6gd21dpx4askdaaqybnkh237";
+    sha256="000906nnq25177bgsfndiw3iqqgrjc9spk10hzk653sbz3f7anmi";
   };
   buildInputs = [
     libtool autoconf automake texinfo makeWrapper
@@ -36,37 +36,10 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    # https://trac.sagemath.org/ticket/22191#comment:237
-    (fetchurl {
-      name = "ECL_WITH_LISP_FPE.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/ECL_WITH_LISP_FPE.patch?h=9.2";
-      sha256 = "0b194613avcmzr1k9gq725z41wdkg5rsa0q21kdw050iqpprcj1c";
-    })
-
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
-    (fetchurl {
-      name = "write_error.patch";
+    (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
-      sha256 = "1lvdvh77blnxp0zbd27dsbq1ljkb5qblabf1illszn4j7qgq88fh";
-    })
-
-    # Three patches to fix ecl's unicode handling (https://trac.sagemath.org/ticket/30122)
-    (fetchurl {
-      name = "0001-unicode-fix-ecl_string_case-for-non-ascii-characters.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/0001-unicode-fix-ecl_string_case-for-non-ascii-characters.patch?h=9.2";
-      sha256 = "0z8pnhawivrrbg4vz144nr2sz64jxp7764hn6df13bgkz84iqbmk";
-    })
-
-    (fetchurl {
-      name = "0002-cosmetic-fix-some-compiler-warnings.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/0002-cosmetic-fix-some-compiler-warnings.patch?h=9.2";
-      sha256 = "0msx3say9igwr9z5ywnr3gs6vsndnzlx47fmzwzh4l0m274cnia8";
-    })
-
-    (fetchurl {
-      name = "0003-printer-fix-printing-of-symbols-with-non-ascii-names.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/0003-printer-fix-printing-of-symbols-with-non-ascii-names.patch?h=9.2";
-      sha256 = "0ln5dsx6p265fkph3bl5wblgfi3f7frb4jl6v473wz3ibvcx1x9a";
+      sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
   ];
 
@@ -96,6 +69,7 @@ stdenv.mkDerivation {
     homepage = "https://common-lisp.net/project/ecl/";
     license = lib.licenses.mit ;
     maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
+    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${s.version}/CHANGELOG";
   };
 }

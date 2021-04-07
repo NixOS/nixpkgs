@@ -2,7 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, setuptools_scm
+, setuptools-scm
+, pythonOlder
 , sdcc
 , nmigen
 , fx2
@@ -18,18 +19,19 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2020-06-29";
+  version = "unstable-2021-03-02";
+  disabled = pythonOlder "3.7";
   # python software/setup.py --version
-  realVersion = "0.1.dev1352+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev1660+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "f885790d7927b893e631c33744622d6ebc18b5e3";
-    sha256 = "sha256-fSorSEa5K09aPEOk4XPWOFRxYl1KGVy29jOBqIvs2hk=";
+    rev = "41c48bbcee284d024e4249a81419fbbae674cf40";
+    sha256 = "1fg8ps228930d70bczwmcwnrd1gvm02a58mxbpn8pyakwbwwa6hq";
   };
 
-  nativeBuildInputs = [ setuptools_scm sdcc ];
+  nativeBuildInputs = [ setuptools-scm sdcc ];
 
   propagatedBuildInputs = [
     setuptools

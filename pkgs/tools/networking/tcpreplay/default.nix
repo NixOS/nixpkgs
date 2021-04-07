@@ -31,5 +31,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 gpl3 ];
     maintainers = with maintainers; [ eleanor ];
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2020-24265" # https://github.com/appneta/tcpreplay/issues/616
+      "CVE-2020-24266" # https://github.com/appneta/tcpreplay/issues/617
+    ];
   };
 }

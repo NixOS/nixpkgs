@@ -17,7 +17,6 @@
 , hicolor-icon-theme
 , intltool
 , ladspaH
-, libav
 , libjack2
 , libsndfile
 , lilv
@@ -74,7 +73,6 @@ stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     ladspaH
-    libav
     libjack2
     libsndfile
     lilv

@@ -13,6 +13,7 @@ import sys
 from codecs import iterdecode
 from collections import OrderedDict
 from datetime import datetime
+from distutils.version import LooseVersion
 from os.path import abspath, dirname
 from urllib.request import urlopen
 
@@ -122,7 +123,7 @@ def print_updates(channels_old, channels_new):
     for channel_name in channels_old:
         version_old = channels_old[channel_name]["version"]
         version_new = channels_new[channel_name]["version"]
-        if version_old < version_new:
+        if LooseVersion(version_old) < LooseVersion(version_new):
             attr_name = channel_name_to_attr_name(channel_name)
             print(f'- {attr_name}: {version_old} -> {version_new}')
 
@@ -165,9 +166,18 @@ with urlopen(HISTORY_URL) as resp:
                 f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
                 f'google-chrome-{google_chrome_suffix}_{build["version"]}-1_amd64.deb')
         except subprocess.CalledProcessError:
-            # This build isn't actually available yet.  Continue to
-            # the next one.
-            continue
+            if (channel_name == 'ungoogled-chromium' and 'sha256' in channel and
+                    build['version'].split('.')[0] == last_channels['stable']['version'].split('.')[0]):
+                # Sometimes ungoogled-chromium is updated to a newer tag than
+                # the latest stable Chromium version. In this case we'll set
+                # sha256bin64 to null and the Nixpkgs code will fall back to
+                # the latest stable Google Chrome (only required for
+                # Widevine/DRM which is disabled by default):
+                channel['sha256bin64'] = None
+            else:
+                # This build isn't actually available yet.  Continue to
+                # the next one.
+                continue
 
         channel['deps'] = get_channel_dependencies(channel['version'])
         if channel_name == 'stable':

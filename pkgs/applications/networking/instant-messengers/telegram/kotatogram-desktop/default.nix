@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, pkg-config, python3, cmake, ninja
-, qtbase, qtimageformats, libdbusmenu, hunspell, xdg_utils, ffmpeg_3, openalSoft
-, lzma, lz4, xxHash, zlib, minizip, openssl, libtgvoip, microsoft_gsl, tl-expected
+, qtbase, qtimageformats, libdbusmenu, hunspell, xdg-utils, ffmpeg_3, openalSoft
+, xz, lz4, xxHash, zlib, minizip, openssl, libtgvoip, microsoft_gsl, tl-expected
 , range-v3
 }:
 
@@ -21,12 +21,12 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config python3 cmake ninja ];
 
   buildInputs = [
-    qtbase qtimageformats ffmpeg_3 openalSoft lzma lz4 xxHash libdbusmenu
+    qtbase qtimageformats ffmpeg_3 openalSoft xz lz4 xxHash libdbusmenu
     zlib minizip openssl hunspell libtgvoip microsoft_gsl tl-expected range-v3
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${xdg_utils}/bin"
+    "--prefix PATH : ${xdg-utils}/bin"
   ];
 
   cmakeFlags = [

@@ -157,7 +157,8 @@ addToSearchPathWithCustomDelimiter() {
     local delimiter="$1"
     local varName="$2"
     local dir="$3"
-    if [ -d "$dir" ]; then
+    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" \
+          != *"${delimiter}${dir}${delimiter}"* ]]; then
         export "${varName}=${!varName:+${!varName}${delimiter}}${dir}"
     fi
 }
@@ -787,7 +788,7 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        export >| "$NIX_BUILD_TOP/env-vars" || true
+        export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars" || true
     fi
 }
 

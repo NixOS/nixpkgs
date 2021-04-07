@@ -38,5 +38,16 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     repositories.git = "git://git.gnupg.org/libgcrypt.git";
+    knownVulnerabilities = [
+      "CVE-2014-3591"
+      "CVE-2015-0837"
+      "CVE-2015-7511"
+      "CVE-2017-0379"
+      "CVE-2017-7526"
+      "CVE-2017-9526"
+      "CVE-2018-0495"
+      "CVE-2018-6829"
+      "CVE-2018-12437"
+    ];
   };
 }

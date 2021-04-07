@@ -9,6 +9,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+  dontWrapQtApps = true;
   nativeBuildInputs = [ qmake ];
 
   buildInputs = [ qtdeclarative ];

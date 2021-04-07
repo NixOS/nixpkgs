@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   # on system paths being set.
   patches = [ ./gst-plugin-paths.patch ];
 
+  dontWrapQtApps = true;
+
   NIX_CFLAGS_COMPILE =
     let gstPluginPaths =
           lib.makeSearchPathOutput "lib" "/lib/gstreamer-1.0"

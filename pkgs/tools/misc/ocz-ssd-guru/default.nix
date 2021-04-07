@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ri7qmpc1xpy12lpzl6k298c641wcibcwrzz8jn75wdg4rr176r5";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   libPath = lib.makeLibraryPath [
       xorg.libX11

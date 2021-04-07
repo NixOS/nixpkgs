@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "gcc" "${stdenv.cc.targetPrefix}cc" \
+      --replace "ar" "${stdenv.cc.targetPrefix}ar"
+  '';
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "DATATYPE=double"
@@ -40,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mborgerding/kissfft";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

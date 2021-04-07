@@ -16,7 +16,6 @@
 , Kajiki
 , mock
 , sqlalchemy
-, uwsgi
 , virtualenv
 }:
 

@@ -1,43 +1,44 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, ujson
 , email_validator
-, typing-extensions
-, python
-, isPy3k
-, pytest
-, pytestcov
+, fetchFromGitHub
 , pytest-mock
+, pytestCheckHook
+, python-dotenv
+, pythonOlder
+, typing-extensions
+, ujson
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.7.3";
-  disabled = !isPy3k;
+  version = "1.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "xihEDmly0vprmA+VdeCoGXg9PjWRPmBWAwk/9f2DLts=";
+    sha256 = "sha256-+HfnM/IrFlUyQJdiOYyaJUNenh8dLtd8CUJWSbn6hwQ=";
   };
 
   propagatedBuildInputs = [
-    ujson
     email_validator
+    python-dotenv
     typing-extensions
+    ujson
   ];
 
   checkInputs = [
-    pytest
-    pytestcov
     pytest-mock
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
+
+  pythonImportsCheck = [ "pydantic" ];
 
   meta = with lib; {
     homepage = "https://github.com/samuelcolvin/pydantic";

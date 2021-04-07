@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hzyh66rlawxip4n2pvz7pbs0cq82clqv1d6c7hf60v1drjxw287";
   };
 
-  buildInputs = [mercurial.python mercurial makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [mercurial.python mercurial];
 
   installPhase = ''
     binPath=$out/bin

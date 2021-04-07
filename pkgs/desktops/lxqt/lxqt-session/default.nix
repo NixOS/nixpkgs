@@ -49,9 +49,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "An alternative session manager ported from the original razor-session";
     homepage = "https://github.com/lxqt/lxqt-session";
-    license = licenses.lgpl21;
+    description = "An alternative session manager ported from the original razor-session";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

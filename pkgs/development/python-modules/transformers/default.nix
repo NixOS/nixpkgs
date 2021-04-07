@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.2.2";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sBMCzEgYX6HQbzoEIYnmMdpYecCCsQjTdl2mO1Veu9M=";
+    hash = "sha256-kl1Z2FBo+yqVXUqLaUtet6IycmdcAtfydNTI4MNNrkc=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    sed -ri 's/tokenizers==[^"]+/tokenizers/g' setup.py src/transformers/dependency_versions_table.py
+    sed -ri 's/tokenizers[=>]=[^"]+/tokenizers/g' setup.py src/transformers/dependency_versions_table.py
   '';
 
   pythonImportsCheck = [ "transformers" ];

@@ -1,6 +1,5 @@
 { stdenv, lib, buildPythonPackage, isPy3k, fetchPypi
 , mock
-, meld3
 , pytest
 , setuptools
 }:
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [ meld3 setuptools ];
+  propagatedBuildInputs = [ setuptools ];
 
   meta = with lib; {
     description = "A system for controlling process state under UNIX";

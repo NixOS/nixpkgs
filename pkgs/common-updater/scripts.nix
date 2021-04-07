@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "common-updater-scripts";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
 

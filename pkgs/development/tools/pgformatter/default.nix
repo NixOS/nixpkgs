@@ -2,13 +2,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "4.4";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     rev = "v${version}";
-    sha256 = "1sqjw6q005lws7qhkd26jqyb1xqmpcklzw5hk8paxxi8mzyjn0jp";
+    sha256 = "10ml3va6ip501ibaykbhq8282y1j6r8bc8azc1gqxskk5jvfz1jm";
   };
 
   outputs = [ "out" ];

@@ -3,8 +3,14 @@
 with lib; mkCoqDerivation rec {
   pname = "corn";
   inherit version;
-  defaultVersion = if versions.range "8.6" "8.9" coq.coq-version then "8.8.1" else null;
-  release."8.8.1".sha256 = "0gh32j0f18vv5lmf6nb87nr5450w6ai06rhrnvlx2wwi79gv10wp";
+  defaultVersion = switch coq.coq-version [
+    { case = "8.6"; out = "8.8.1"; }
+    { case = (versions.range "8.7" "8.12"); out = "8.12.0"; }
+  ] null;
+  release = {
+    "8.8.1".sha256 = "0gh32j0f18vv5lmf6nb87nr5450w6ai06rhrnvlx2wwi79gv10wp";
+    "8.12.0".sha256 = "0b92vhyzn1j6cs84z2182fn82hxxj0bqq7hk6cs4awwb3vc7dkhi";
+  };
 
   preConfigure = "patchShebangs ./configure.sh";
   configureScript = "./configure.sh";

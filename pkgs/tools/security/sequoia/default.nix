@@ -23,16 +23,18 @@ assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "1.0.0";
+  # Upstream has separate version numbering for the library and the CLI frontend.
+  # This derivation provides the CLI frontend, and thus uses its version number.
+  version = "0.24.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia";
-    rev = "v${version}";
-    sha256 = "0y80bl786m29ww3272qsl1ql0xc3pwd6iiqlkv3nmhnjsmygbn0d";
+    rev = "sq/v${version}";
+    sha256 = "0zavkf0grkqljyiywcprsiv8igidk8vc3yfj3fzqvbhm43vnnbdw";
   };
 
-  cargoSha256 = "03ngywa5z0c7qmdmhynk13xcivhg8gpivvpzg2gxp34gfr7j438l";
+  cargoSha256 = "172f0gsy5hssrqv0l1np3c0qd1ayp6nqbpqmgwrkc4l37y5fn232";
 
   nativeBuildInputs = [
     pkg-config

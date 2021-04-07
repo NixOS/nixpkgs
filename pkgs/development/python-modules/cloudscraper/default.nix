@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cloudscraper";
-  version = "1.2.52";
+  version = "1.2.56";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07j2nhzimzhcskj2wpxpvpb3dhpci19daw02r2ckkjiq3zifhm6v";
+    sha256 = "84c5910023dd393619b2b793fdb154392c5c8887b55e4bcac3ad2646f1cfe212";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python module to bypass Cloudflare's anti-bot page";
-    homepage = https://github.com/venomous/cloudscraper;
+    homepage = "https://github.com/venomous/cloudscraper";
     license = licenses.mit;
     maintainers = with maintainers; [ kini ];
   };

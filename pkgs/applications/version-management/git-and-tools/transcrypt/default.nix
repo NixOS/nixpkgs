@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dkr69plk16wllk5bzlkchrzw63pk239dgbjhrb3mb61i065jdam";
   };
 
-  buildInputs = [ makeWrapper git openssl coreutils util-linux gnugrep gnused gawk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ git openssl coreutils util-linux gnugrep gnused gawk ];
 
   patches = [ ./helper-scripts_depspathprefix.patch ];
 

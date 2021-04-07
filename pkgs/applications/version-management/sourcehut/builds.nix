@@ -1,5 +1,4 @@
 { lib, fetchgit, buildPythonPackage
-, python
 , buildGoModule
 , srht, redis, celery, pyyaml, markdown }:
 

@@ -171,23 +171,23 @@ in rec {
 
   sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
     module = {
-        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
-        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+        armv6l-linux = ./modules/installer/sd-card/sd-image-raspberrypi-installer.nix;
+        armv7l-linux = ./modules/installer/sd-card/sd-image-armv7l-multiplatform-installer.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-installer.nix;
       }.${system};
     inherit system;
   });
 
   sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
     module = {
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
       }.${system};
     type = "minimal-new-kernel";
     inherit system;
   });
 
   sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
+    module = ./modules/installer/sd-card/sd-image-raspberrypi4-installer.nix;
     inherit system;
   });
 

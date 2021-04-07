@@ -31,6 +31,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
 
+  pythonImportsCheck = [ "spyder" ];
+
   meta = with lib; {
     description = "Library providing a scientific python development environment";
     longDescription = ''

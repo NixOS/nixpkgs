@@ -1,11 +1,12 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-unification";
   version = "20200925-git";
 
-  description = ''The CL-UNIFICATION system.
+  description = "The CL-UNIFICATION system.
 
-The system contains the definitions for the 'unification' machinery.'';
+The system contains the definitions for the 'unification' machinery.";
 
   deps = [ ];
 

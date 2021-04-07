@@ -17,7 +17,7 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
+{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
@@ -201,13 +201,32 @@ in
 
   gitlab-markup = attrs: { meta.priority = 1; };
 
-  gitlab-pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.0") {
+  gitlab-pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.1") {
     dontBuild = false;
     postPatch = ''
-      sed -i 's;"https://gitlab.com.*";"${fetchurl {
-        url = "https://gitlab.com/gitlab-org/libpg_query/-/archive/gitlab-10-1.0.3/libpg_query-gitlab-10-1.0.3.tar.gz";
-        sha256 = "1519x4v6wrk189mjg4hlfah0f7hjy3syg8kk8b6g644gdspzs26j";
-      }}";' ext/pg_query/extconf.rb
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/10-1.0.3";
+        sha256 = "0jfij8apzxsdabl70j42xgd5f3ka1gdcrk764nccp66164gpcchk";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  };
+
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
+        sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  } // lib.optionalAttrs (attrs.version == "1.3.0") {
+    # Needed for gitlab
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/10-1.0.4";
+        sha256 = "0f0kshhai0pnkqj0w4kgz3fssnvwidllc31n1fysxjjzdqlr1k48";
+      }}';" ext/pg_query/extconf.rb
     '';
   };
 
@@ -403,6 +422,10 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  openssl = attrs: {
+    buildInputs = [ openssl ];
+  };
+
   opus-ruby = attrs: {
     dontBuild = false;
     postPatch = ''
@@ -584,7 +607,7 @@ in
   };
 
   timfel-krb5-auth = attrs: {
-    buildInputs = [ kerberos ];
+    buildInputs = [ libkrb5 ];
   };
 
   tiny_tds = attrs: {

@@ -1,4 +1,4 @@
-{ lib, pkgs, makeWrapper, haskellPackages, haskell, pandoc, imagemagick7 }:
+{ lib, pkgs, makeWrapper, haskellPackages, haskell, pandoc, imagemagick }:
 
 with lib;
 with haskell.lib;
@@ -29,7 +29,7 @@ justStaticExecutables (overrideCabal ldgallery-compiler (oldAttrs: {
 
     # wrapper for runtime dependencies registration
     wrapProgram "$out/bin/ldgallery" \
-      --prefix PATH : ${lib.makeBinPath [ imagemagick7 ]}
+      --prefix PATH : ${lib.makeBinPath [ imagemagick ]}
 
     # bash completion
     mkdir -p "$out/share/bash-completion/completions"

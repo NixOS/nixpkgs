@@ -2,30 +2,48 @@
 , fetchurl
 
 , pkg-config
+, cmake
 
-, zlib
+, libdeflate
 , libjpeg
 , xz
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.0";
   pname = "libtiff";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "0d46bdvxdiv59lxnb0xz9ywm8arsr6xsapi5s6y6vnys2wjz6aax";
+    sha256 = "1jrkjv0xya9radddn8idxvs2gqzp3l2b1s8knlizmn7ad3jq817b";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  cmakeFlags = if stdenv.isDarwin then [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ] else null;
 
-  nativeBuildInputs = [ pkg-config ];
+  # FreeImage needs this patch
+  patches = [ ./headers.patch ];
 
-  propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
+  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+
+  postFixup = ''
+    moveToOutput include/tif_dir.h $dev_private
+    moveToOutput include/tif_config.h $dev_private
+    moveToOutput include/tiffiop.h $dev_private
+  '';
+
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
+
+  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
 
   enableParallelBuilding = true;
 
-  doCheck = true; # not cross;
+  doInstallCheck = true;
+  installCheckTarget = "test";
 
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";

@@ -9,17 +9,6 @@ let
     rev = "e5b3425575734c323e1d947009dd74709437b684";
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
-  # abseil-cpp in nixpkgs is too old
-  abseil-cpp_2020923 = abseil-cpp.overrideAttrs (old: rec {
-    version = "20200923.2";
-    src = fetchFromGitHub {
-      owner = "abseil";
-      repo = "abseil-cpp";
-      rev = version;
-      sha256 = "G+wkaC4IPtyc/xCUyVFJOcHppPFU7KkhIHjv6uhVKGU=";
-    };
-    cmakeFlags = [ "-DCMAKE_CXX_STANDARD=17" "-DBUILD_SHARED_LIBS=ON" ];
-  });
   zipcode_rel = "202011";
   jigyosyo = fetchurl {
     url = "https://osdn.net/projects/ponsfoot-aur/storage/mozc/jigyosyo-${zipcode_rel}.zip";
@@ -44,7 +33,7 @@ in clangStdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gyp ninja mesa python pkg-config qt5.wrapQtAppsHook six which unzip ];
 
-  buildInputs = [ protobuf zinnia qt5.qtbase fcitx5 abseil-cpp_2020923 jsoncpp gtest gtk2 ];
+  buildInputs = [ protobuf zinnia qt5.qtbase fcitx5 abseil-cpp jsoncpp gtest gtk2 ];
 
   patches = [
     # Support linking system abseil-cpp

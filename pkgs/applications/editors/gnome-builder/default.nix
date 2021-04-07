@@ -35,16 +35,15 @@
 , wrapGAppsHook
 , dbus
 , xvfb_run
-, glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06wcyfrwcjyj2vcqyw0z3sy1r4qxpcdpwqq1qmpsaphpz8acycjn";
+    sha256 = "jFNco64yoZC1TZbTIHGVf+wBYYQHo2JRiMZFHngzYTs=";
   };
 
   nativeBuildInputs = [

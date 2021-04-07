@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  dontWrapQtApps = true;
+
   preConfigure = ''
     export QMAKEFEATURES=${libcommuni}/features
   '';

@@ -48,6 +48,7 @@ in {
 
       startAt = mkOption {
         default = "*-*-* 01:15:00";
+        type = types.str;
         description = ''
           This option defines (see <literal>systemd.time</literal> for format) when the
           databases should be dumped.
@@ -70,6 +71,7 @@ in {
 
       databases = mkOption {
         default = [];
+        type = types.listOf types.str;
         description = ''
           List of database names to dump.
         '';
@@ -77,6 +79,7 @@ in {
 
       location = mkOption {
         default = "/var/backup/postgresql";
+        type = types.path;
         description = ''
           Location to put the gzipped PostgreSQL database dumps.
         '';

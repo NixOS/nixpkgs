@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.linphone.org/BC/public/bcunit";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin jluttine ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

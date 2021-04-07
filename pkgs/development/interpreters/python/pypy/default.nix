@@ -1,7 +1,7 @@
 { lib, stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, self, gdbm, db, lzma
+, self, gdbm, db, xz
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
@@ -45,7 +45,7 @@ in with passthru; stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-src.tar.bz2";
+    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
     inherit sha256;
   };
 
@@ -53,7 +53,7 @@ in with passthru; stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
   ]  ++ optionals isPy3k [
-    lzma
+    xz
   ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
     stdenv.cc.libc
   ] ++ optionals zlibSupport [

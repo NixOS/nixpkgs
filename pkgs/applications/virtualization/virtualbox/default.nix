@@ -2,7 +2,7 @@
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
@@ -103,6 +103,8 @@ in stdenv.mkDerivation {
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
   ++ [
+    # NOTE: the patch for linux 5.11 can be removed when the next version of VirtualBox is released
+    ./linux-5-11.patch
     ./qtx11extras.patch
   ];
 

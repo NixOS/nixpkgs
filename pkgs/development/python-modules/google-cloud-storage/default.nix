@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.35.0";
+  version = "1.37.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17kal75wmyjpva7g04cb9yg7qbyrgwfn575z4gqijd4gz2r0sp2m";
+    sha256 = "sha256-IAPF7Uc/mzfQRfMMTIvn0w19Dripe80sWLOovFScTMw=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,8 @@ buildPythonPackage rec {
     "get"
     "post"
     "test_build_api_url"
+    "test_ctor_mtls"
+    "test_open"
   ];
 
   pytestFlagsArray = [

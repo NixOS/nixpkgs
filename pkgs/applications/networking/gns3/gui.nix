@@ -44,6 +44,6 @@ in python.pkgs.buildPythonPackage rec {
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

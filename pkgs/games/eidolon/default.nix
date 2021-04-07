@@ -1,11 +1,12 @@
-{ lib, fetchgit, rustPlatform, pkg-config, openssl }:
+{ lib, fetchFromSourcehut, rustPlatform, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eidolon";
   version = "1.4.6";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~nicohman/eidolon";
+  src = fetchFromSourcehut {
+    owner = "~nicohman";
+    repo = pname;
     rev = version;
     sha256 = "1yn3k569pxzw43mmsk97088xpkdc714rks3ncchbb6ccx25kgxrr";
   };

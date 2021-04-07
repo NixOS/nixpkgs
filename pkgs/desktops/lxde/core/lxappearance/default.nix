@@ -9,10 +9,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lxappearance-0.6.3";
+  pname = "lxappearance";
+  version = "0.6.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/lxde/LXAppearance/${name}.tar.xz";
+    url = "mirror://sourceforge/project/lxde/LXAppearance/${pname}-${version}.tar.xz";
     sha256 = "0f4bjaamfxxdr9civvy55pa6vv9dx1hjs522gjbbgx7yp1cdh8kj";
   };
 
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";
     homepage = "https://lxde.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ hinton romildo ];
   };

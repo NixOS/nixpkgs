@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ayatana-ido";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = pname;
     rev = version;
-    sha256 = "1mcw6gmacrzx4cyg4223dpwcmj3qf8l30mxsg43292lajzwsm2hz";
+    sha256 = "sha256-nJ4F2faK0XZPj9GzUk3Ueap5h6rALFXISHqFQ30RuoU=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook gtk-doc vala gobject-introspection ];

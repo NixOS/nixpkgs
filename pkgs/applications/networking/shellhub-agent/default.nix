@@ -3,22 +3,24 @@
 , fetchFromGitHub
 , genericUpdater
 , common-updater-scripts
+, makeWrapper
+, openssh
 }:
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "1vg236vc2v4g47lb68hb1vy3phamhsyb383fdbblh3vc4vf46j8a";
+    sha256 = "0vdasz3qph73xb9y831bnr1hpcw0669n9zckqn95v1bsjc936313";
   };
 
   modRoot = "./agent";
 
-  vendorSha256 = "1l8x9cvisjb8smnsg91v04j1vvawpjzp0lcq0ahw8slz8rfdm80c";
+  vendorSha256 = "059772rd1l7zyf2vlqjm35hg8ibmjc1p6cfazqd47n8mqqlqkilw";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AgentVersion=v${version}" ];
 
@@ -30,6 +32,12 @@ buildGoModule rec {
       ignoredVersions = ".(rc|beta).*";
     };
   };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/agent --prefix PATH : ${lib.makeBinPath [ openssh ]}
+  '';
 
   meta = with lib; {
     description =

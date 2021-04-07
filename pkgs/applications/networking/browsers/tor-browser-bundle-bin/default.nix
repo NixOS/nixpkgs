@@ -33,9 +33,6 @@
 
 , gmp
 
-# Pluggable transport dependencies
-, python27
-
 # Wrapper runtime
 , coreutils
 , glibcLocales
@@ -91,19 +88,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.8";
+  version = "10.0.15";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "23sp9vMbXg/c4o9wm+G0bW4KaP7lCUMpSQNK/5mSmeo=";
+      sha256 = "1ah69jmfgik063f9gkvyv9d4k706pqihmzc4k7cc95zyd17v8wrs";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "vliiyw8KSCiZ2ycCvqOPEW3qSDH9wXwIygU1RYAqA6g=";
+      sha256 = "0gyhxfs4qpg6ys038d52cxnmb4khbng1w4hcsavi2rlgv18bz75p";
     };
   };
 in
@@ -133,7 +130,7 @@ stdenv.mkDerivation rec {
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"
-    tar xf "${src}" -C "$TBB_IN_STORE" --strip-components=2
+    tar xf "$src" -C "$TBB_IN_STORE" --strip-components=2
     pushd "$TBB_IN_STORE"
 
     # Set ELF interpreter

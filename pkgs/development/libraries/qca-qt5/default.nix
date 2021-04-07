@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl qtbase ];
   nativeBuildInputs = [ cmake pkg-config ];
 
+  dontWrapQtApps = true;
+
   # Without this patch cmake fails with a "No known features for CXX compiler"
   # error on darwin
   patches = lib.optional stdenv.isDarwin ./move-project.patch ;

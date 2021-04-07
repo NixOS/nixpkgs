@@ -20,7 +20,7 @@ buildPhase() {
         sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        make SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_CORES
+        make IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_CORES
 
         cd ..
     fi

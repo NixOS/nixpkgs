@@ -1,3 +1,4 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "fset";
@@ -5,9 +6,9 @@ rec {
 
   parasites = [ "fset/test" ];
 
-  description = ''A functional set-theoretic collections library.
+  description = "A functional set-theoretic collections library.
 See: http://www.ergy.com/FSet.html
-'';
+";
 
   deps = [ args."misc-extensions" args."mt19937" args."named-readtables" ];
 

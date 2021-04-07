@@ -66,7 +66,7 @@ rec {
       xorg.xrandr
       which
       perl
-      xdg_utils
+      xdg-utils
       iana-etc
       krb5
     ];
@@ -121,7 +121,6 @@ rec {
       libusb1
       udev
       dbus-glib
-      libav
       atk
       at-spi2-atk
       libudev0-shim
@@ -185,6 +184,7 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
+      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
     ];
   };

@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   # because upstream tarball has no top-level directory.
   sourceRoot = ".";
 
-  buildInputs = [ bash pharo unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ bash pharo ];
 
   installPhase = ''
     mkdir -p $prefix/share/pharo-launcher

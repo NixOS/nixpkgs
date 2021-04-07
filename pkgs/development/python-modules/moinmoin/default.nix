@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "moinmoin";
-  version = "1.9.10";
+  version = "1.9.11";
 
   # SyntaxError in setup.py
   disabled = isPy3k;
 
   src = fetchurl {
     url = "http://static.moinmo.in/files/moin-${version}.tar.gz";
-    sha256 = "0g05lnl1s8v61phi3z1g3b6lfj4g98grj9kw8nyjl246x0c489ja";
+    sha256 = "sha256-Ar4x1V851P4MYlPfi0ngG3bQlWNMvRtW0YX2bh4MPPU=";
   };
 
   patches = [

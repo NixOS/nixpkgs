@@ -1,29 +1,40 @@
 { lib
+, aiohttp
+, aioresponses
+, aiounittest
 , buildPythonPackage
 , fetchFromGitHub
-, aiohttp
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "airly";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ak-ambi";
     repo = "python-airly";
     rev = "v${version}";
-    sha256 = "0an6nbl0i5pahxm6x4z03s9apzgqrw9zf7srjcs0r3y1ppicb4s6";
+    sha256 = "sha256-weliT/FYnRX+pzVAyRWFly7lfj2z7P+hpq5SIhyIgmI=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    aioresponses
+    aiounittest
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    cd tests
+  '';
 
   disabledTests = [
     "InstallationsLoaderTestCase"
     "MeasurementsSessionTestCase"
   ];
+
   pythonImportsCheck = [ "airly" ];
 
   meta = with lib; {

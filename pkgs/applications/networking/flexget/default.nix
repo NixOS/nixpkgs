@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.1.98";
+  version = "3.1.106";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "d2d17a5ea821a580c55680294fce9ecf7012ef86c086c742414ec5bcb8468972";
+    sha256 = "f0ff300a1762d701b77eb16142dcc13d9d099bbed695f1e950392c1d1bb988eb";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     terminaltables
     zxcvbn
     # plugins
-    transmissionrpc
+    transmission-rpc
   ];
 
   meta = with lib; {

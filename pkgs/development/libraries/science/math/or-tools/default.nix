@@ -1,40 +1,84 @@
-{ lib, stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
-, lsb-release, glog, protobuf, cbc, zlib
-, ensureNewerSourcesForZipFilesHook, python, swig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, abseil-cpp
+, bzip2
+, zlib
+, lsb-release
+, which
+, protobuf
+, cbc
+, ensureNewerSourcesForZipFilesHook
+, python
+, swig4
+}:
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "7.7";
+  version = "8.1";
+  disabled = python.pythonOlder "3.6";  # not supported upstream
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "06ig9a1afmzgzcg817y0rdq49ahll0q9y7bhhg9d89x6zy959ypv";
+    sha256 = "1zqgvkaw5vf2d8pwsa34g9jysbpiwplzxc8jyy8kdbzmj8ax3gpg";
   };
+
+  patches = [
+    # This patch (on master as of Feb 11, 2021) fixes or-tools failing to respect
+    # USE_SCIP=OFF and then failing to find scip/scip.h
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/17321869832b5adaccd9864e7e5576122730a5d5.patch";
+      sha256 = "0bi2z1hqlpdm1if3xa5dzc2zv0qlm5xi2x979brx10f8k779ghn0";
+    })
+  ];
 
   # The original build system uses cmake which does things like pull
   # in dependencies through git and Makefile creation time. We
   # obviously don't want to do this so instead we provide the
   # dependencies straight from nixpkgs and use the make build method.
+
+  # Cbc is linked against bzip2 and declares this in its pkgs-config file,
+  # but this makefile doesn't use pkgs-config, so we also have to add lbz2
   configurePhase = ''
+    substituteInPlace makefiles/Makefile.third_party.unix.mk \
+      --replace 'COINUTILS_LNK = $(STATIC_COINUTILS_LNK)' \
+                'COINUTILS_LNK = $(STATIC_COINUTILS_LNK) -lbz2'
+
     cat <<EOF > Makefile.local
-    UNIX_ABSL_DIR=${abseil-cpp}
-    UNIX_GFLAGS_DIR=${gflags}
-    UNIX_GLOG_DIR=${glog}
-    UNIX_PROTOBUF_DIR=${protobuf}
-    UNIX_CBC_DIR=${cbc}
+      UNIX_ABSL_DIR=${abseil-cpp}
+      UNIX_PROTOBUF_DIR=${protobuf}
+      UNIX_CBC_DIR=${cbc}
+      USE_SCIP=OFF
     EOF
   '';
 
+  # Many of these 'samples' (which are really the tests) require using SCIP, and or-tools 8.1
+  # will just crash if SCIP is not found because it doesn't fall back to using one of
+  # the available solvers: https://github.com/google/or-tools/blob/b77bd3ac69b7f3bb02f55b7bab6cbb4bab3917f2/ortools/linear_solver/linear_solver.cc#L427
+  # We don't compile with SCIP because it does not have an open source license.
+  # See https://github.com/google/or-tools/issues/2395
+  preBuild = ''
+    for file in ortools/linear_solver/samples/*.cc; do
+      if grep -q SCIP_MIXED_INTEGER_PROGRAMMING $file; then
+        substituteInPlace $file --replace SCIP_MIXED_INTEGER_PROGRAMMING CBC_MIXED_INTEGER_PROGRAMMING
+      fi;
+    done
+
+    substituteInPlace ortools/linear_solver/samples/simple_mip_program.cc \
+      --replace 'SCIP' 'CBC'
+  '';
   makeFlags = [
     "prefix=${placeholder "out"}"
     "PROTOBUF_PYTHON_DESC=${python.pkgs.protobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
   ];
   buildFlags = [ "cc" "pypi_archive" ];
 
-  checkTarget = "test_cc";
   doCheck = true;
+  checkTarget = "test_cc";
 
   installTargets = [ "install_cc" ];
   # The upstream install_python target installs to $HOME.
@@ -43,14 +87,30 @@ stdenv.mkDerivation rec {
     (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
   '';
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [
-    cmake lsb-release swig which zlib python
+    cmake
+    lsb-release
+    swig4
+    which
     ensureNewerSourcesForZipFilesHook
-    python.pkgs.setuptools python.pkgs.wheel
+    python.pkgs.setuptools
+    python.pkgs.wheel
+  ];
+  buildInputs = [
+    zlib
+    bzip2
+    python
   ];
   propagatedBuildInputs = [
-    abseil-cpp gflags glog protobuf cbc
-    python.pkgs.protobuf python.pkgs.six
+    abseil-cpp
+    protobuf
+
+    python.pkgs.protobuf
+    python.pkgs.six
+    python.pkgs.absl-py
+    python.pkgs.mypy-protobuf
   ];
 
   outputs = [ "out" "python" ];

@@ -34,6 +34,8 @@ buildPythonPackage rec {
   # no tests, just bindings for `poppler_qt5`
   doCheck = false;
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://github.com/wbsoft/python-poppler-qt5";
     license = licenses.gpl2;

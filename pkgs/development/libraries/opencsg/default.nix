@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     rmdir $out/bin || true
   '';
 
+  dontWrapQtApps = true;
+
   postFixup = lib.optionalString stdenv.isDarwin ''
     app=$out/Applications/opencsgexample.app/Contents/MacOS/opencsgexample
     install_name_tool -change \

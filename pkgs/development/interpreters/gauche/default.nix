@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, gaucheBootstrap, pkg-config, texinfo
-,  libiconv, gdbm, openssl, zlib, mbedtls, cacert }:
+, libiconv, gdbm, openssl, zlib, mbedtls, cacert }:
 
 stdenv.mkDerivation rec {
   pname = "gauche";
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mnacamura ];
     license = licenses.bsd3;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

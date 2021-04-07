@@ -13,10 +13,10 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1kbjbqb03yapz7067q589gaa7d6cqaipj7hmp1l3nh0bmggzsc4c";
-    x86_64-darwin = "1qgadm52c5lzkvgvqrz0n8brm4qbjg8hf1dk6a2ynqhqjxcwbj4r";
-    aarch64-linux = "0i3yl9rx9h7qkl3k9qk6gg35nhz737qzzbvzvdwkqjaacsbpfgf8";
-    armv7l-linux = "19iz2bxcq6y8sklr6zcnbp47kki9l00x3nvr213lkk3kj08l0afv";
+    x86_64-linux = "0z1diiiykv4ilsiljffz9sl2mlvrxq0xwm8ga2ralfvjwbhzr6dn";
+    x86_64-darwin = "02gzw46w3kzw1ya9nx8fkhvzi0mbpz2fyp47n58jki2zkdsfiwzh";
+    aarch64-linux = "0bkvgdxch95dqcb41ncsjkaaswmwv6zad4hzdsr3famjm2vym1ky";
+    armv7l-linux = "0wdp97ihdnx9bcyn2dh6wzhb7qvdj6x730r7ng1q3i9jhd19wfi3";
   }.${system};
 in
   callPackage ./generic.nix rec {
@@ -25,7 +25,7 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.52.1";
+    version = "1.55.0";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -34,7 +34,7 @@ in
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
+      url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
       inherit sha256;
     };
 

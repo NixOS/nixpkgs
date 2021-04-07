@@ -18,20 +18,25 @@
   #
 , withSystemd ? false
 , systemd ? null
+  # optionally support DNS-over-HTTPS as a server
+, withDoH ? false
+, libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.13.0";
+  version = "1.13.1";
 
   src = fetchurl {
     url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "18dj7migq6379hps59793457l81s3z7dll3y0fj6qcmhjlx08m59";
+    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  buildInputs = [ openssl nettle expat libevent ] ++ lib.optionals withSystemd [ pkg-config systemd ];
+  buildInputs = [ openssl nettle expat libevent ]
+    ++ lib.optionals withSystemd [ pkg-config systemd ]
+    ++ lib.optionals withDoH [ libnghttp2 ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -47,6 +52,8 @@ stdenv.mkDerivation rec {
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
+  ] ++ lib.optionals withDoH [
+    "--with-libnghttp2=${libnghttp2.dev}"
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];

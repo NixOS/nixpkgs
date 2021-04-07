@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luna-icons";
-  version = "0.9.2";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0ajx7yjkgj5ynbjmd6k3cldjn0qr51h6k80hjgr7vqd0ybyylh5p";
+    sha256 = "11g740x1asy7jbfn52gp1zx7hzhklw6f97m469wgyi9yf954js15";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/icons
     cp -a Luna* $out/share/icons
-
-    # remove files with spaces in the name, otherwise
-    # gtk-update-icon-cache fails with the message "The generated cache
-    # was invalid"
-    # https://github.com/darkomarko42/Luna-Icons/issues/2
-    rm "$out/share/icons/Luna/scalable/apps/yast-checkmedia (copia).svg"
 
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache "$theme"

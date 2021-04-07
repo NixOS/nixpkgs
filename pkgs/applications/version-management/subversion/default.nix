@@ -111,11 +111,6 @@ let
   });
 
 in {
-  subversion19 = common {
-    version = "1.9.12";
-    sha256 = "15z33gdnfiqblm5515020wfdwnp2837r3hnparava6m2fgyiafiw";
-  };
-
   subversion_1_10 = common {
     version = "1.10.6";
     sha256 = "19zc215mhpnm92mlyl5jbv57r5zqp6cavr3s2g9yglp6j4kfgj0q";

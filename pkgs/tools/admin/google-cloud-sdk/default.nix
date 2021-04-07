@@ -21,31 +21,37 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0ziz7cipi3m4aiba6ljz8419w2rps20rii6nwv0pyq5j7qvlvnqp";
+      sha256 = "0csgdmzr9h3vnqn8gxvgg2mnjzackkvrid1i55l2fqcad69h6w1k";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1a9mqhqzmn0zfc1ab6jmac15yn192cmqkijw34di3ld6syqvaziw";
+      sha256 = "0gcxldk3c03dipbkj9yzaa4v1s6bf9zlwslvi8dv3s3kbljjd84b";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "323.0.0";
+  version = "334.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
-  buildInputs = [ python makeWrapper ];
+  buildInputs = [ python ];
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [ jq makeWrapper ];
 
   patches = [
+    # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
     ./gcloud-path.patch
+    # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
+    # Try to use cloud_sql_proxy from SDK only if it actually exists, otherwise, search for one in PATH
+    ./cloud_sql_proxy_path.patch
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/google-cloud-sdk
     cp -R * .install $out/google-cloud-sdk/
 
@@ -75,7 +81,8 @@ in stdenv.mkDerivation rec {
 
     # setup bash completion
     mkdir -p $out/share/bash-completion/completions
-    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud.inc
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud
+    ln -s $out/share/bash-completion/completions/gcloud $out/share/bash-completion/completions/gsutil
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -91,6 +98,8 @@ in stdenv.mkDerivation rec {
       jq -c . $path > $path.min
       mv $path.min $path
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

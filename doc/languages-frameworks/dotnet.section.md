@@ -4,7 +4,7 @@
 
 For local development, it's recommended to use nix-shell to create a dotnet environment:
 
-```
+```nix
 # shell.nix
 with import <nixpkgs> {};
 
@@ -20,7 +20,7 @@ mkShell {
 
 It's very likely that more than one sdk will be needed on a given project. Dotnet provides several different frameworks (E.g dotnetcore, aspnetcore, etc.) as well as many versions for a given framework. Normally, dotnet is able to fetch a framework and install it relative to the executable. However, this would mean writing to the nix store in nixpkgs, which is read-only. To support the many-sdk use case, one can compose an environment using `dotnetCorePackages.combinePackages`:
 
-```
+```nix
 with import <nixpkgs> {};
 
 mkShell {
@@ -37,7 +37,7 @@ mkShell {
 
 This will produce a dotnet installation that has the dotnet 3.1, 3.0, and 2.1 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
 
-```
+```ShellSesssion
 $ dotnet --info
 .NET Core SDK (reflecting any global.json):
  Version:   3.1.101
@@ -64,7 +64,7 @@ $ dotnet --info
 
 The `dotnetCorePackages.sdk_X_Y` is preferred over the old dotnet-sdk as both major and minor version are very important for a dotnet environment. If a given minor version isn't present (or was changed), then this will likely break your ability to build a project.
 
-## dotnetCorePackages.sdk vs vs dotnetCorePackages.net vs dotnetCorePackages.netcore vs dotnetCorePackages.aspnetcore
+## dotnetCorePackages.sdk vs dotnetCorePackages.net vs dotnetCorePackages.netcore vs dotnetCorePackages.aspnetcore
 
 The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given version. The `net`, `netcore` and `aspnetcore` packages are meant to serve as minimal runtimes to deploy alongside already built applications. For runtime versions >= .NET 5 `net` is used while `netcore` is used for older .NET Core runtime version.
 

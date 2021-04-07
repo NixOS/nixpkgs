@@ -71,5 +71,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
+    # imager.c:70:2: error: unknown type name 'loff_t'; did you mean 'off_t'?
+    broken = stdenv.isDarwin;
   };
 }

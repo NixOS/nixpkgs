@@ -1,30 +1,27 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , python
-, alembic, bugsnag, click, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, sqlalchemy, survey, watchdog
+, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
 , importlib-metadata
-, importlib-resources
-, dbus-next
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.3.1";
+  version = "1.4.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "sha256-SspyTdmAbbmWN3AqVp9bj/QfAKLVgU2bLiiHjZO0aCM=";
+    sha256 = "sha256-3GleQNkJrGIkFqOL2Dq0jTpgw7ts9ecpovKbyh3OrEI=";
   };
 
   propagatedBuildInputs = [
-    alembic
-    bugsnag
     click
+    desktop-notifier
     dropbox
     fasteners
     keyring
@@ -35,15 +32,10 @@ buildPythonPackage rec {
     requests
     setuptools
     sdnotify
-    sqlalchemy
     survey
     watchdog
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ] ++ lib.optionals stdenv.isLinux [
-    dbus-next
   ];
 
   makeWrapperArgs = [

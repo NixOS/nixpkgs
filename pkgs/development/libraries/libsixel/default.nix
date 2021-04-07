@@ -22,5 +22,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;
     platforms = with platforms; unix;
+    knownVulnerabilities = [
+      "CVE-2020-11721" # https://github.com/saitoha/libsixel/issues/134
+      "CVE-2020-19668" # https://github.com/saitoha/libsixel/issues/136
+    ];
   };
 }

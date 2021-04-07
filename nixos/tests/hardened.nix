@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
       boot.initrd.postDeviceCommands = ''
         ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
       '';
-      fileSystems = lib.mkVMOverride {
+      virtualisation.fileSystems = {
         "/efi" = {
           device = "/dev/disk/by-label/EFISYS";
           fsType = "vfat";
@@ -63,17 +63,6 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
       # Test loading out-of-tree modules
       with subtest("Out-of-tree modules can be loaded"):
           machine.succeed("grep -Fq wireguard /proc/modules")
-
-
-      # Test hidepid
-      with subtest("hidepid=2 option is applied and works"):
-          # Linux >= 5.8 shows "invisible"
-          machine.succeed(
-              "grep -Fq hidepid=2 /proc/mounts || grep -Fq hidepid=invisible /proc/mounts"
-          )
-          # cannot use pgrep -u here, it segfaults when access to process info is denied
-          machine.succeed("[ `su - sybil -c 'ps --no-headers --user root | wc -l'` = 0 ]")
-          machine.succeed("[ `su - alice -c 'ps --no-headers --user root | wc -l'` != 0 ]")
 
 
       # Test kernel module hardening

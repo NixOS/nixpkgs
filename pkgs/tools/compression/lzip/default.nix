@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lzip";
-  version = "1.21";
+  version = "1.22";
 
   nativeBuildInputs = [ texinfo ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
-    sha256 = "12qdcw5k1cx77brv9yxi1h4dzwibhfmdpigrj43nfk8nscwm12z4";
+    sha256 = "sha256-wzQtQuZxOcFluLEo0DO1yWiToTrF8lkzGQMVIU6HqUg=";
   };
 
   configureFlags = [

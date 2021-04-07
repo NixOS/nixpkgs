@@ -37,5 +37,6 @@ stdenv.mkDerivation {
 
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+    maintainers = lib.teams.beam.members;
   };
 }

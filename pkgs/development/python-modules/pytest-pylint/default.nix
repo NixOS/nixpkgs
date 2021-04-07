@@ -21,8 +21,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
-    pytest
     pylint
     six
     toml

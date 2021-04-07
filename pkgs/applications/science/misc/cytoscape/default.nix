@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [jre makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}

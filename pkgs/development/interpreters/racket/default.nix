@@ -8,6 +8,7 @@
 , libGL
 , libGLU
 , libjpeg
+, ncurses
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
@@ -46,7 +47,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "7.9"; # always change at once with ./minimal.nix
+  version = "8.0"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "0gmp2ahmfd97nn9bwpfx9lznjmjkd042slnrrbdmyh59cqh98y2m";
+    sha256 = "0lqqpa88v0br93qw7450a4blyi3pwn7sq2k04h0ikbsqrdnfj7lj";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -68,12 +69,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cacert wrapGAppsHook ];
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
 
   preConfigure = ''
     unset AR
-    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
-      substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
+    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c src/ChezScheme/workarea; do
+      substituteInPlace "$f" \
+        --replace /usr/bin/uname ${coreutils}/bin/uname \
+        --replace /bin/cp ${coreutils}/bin/cp \
+        --replace /bin/ln ${coreutils}/bin/ln \
+        --replace /bin/rm ${coreutils}/bin/rm \
+        --replace /bin/true ${coreutils}/bin/true
     done
     mkdir src/build
     cd src/build

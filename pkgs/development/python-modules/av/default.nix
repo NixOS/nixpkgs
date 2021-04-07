@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "8.0.2";
+  version = "8.0.3";
   disabled = isPy27; # setup.py no longer compatible
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3bba6bf68766b8a1a057f28869c7078cf0a1ec3207c7788c2ce8fe6f6bd8267";
+    sha256 = "521814309c91d526b6b5c9517018aef2dd12bc3d86351037db69aa67730692b8";
   };
 
   checkInputs = [ numpy ];

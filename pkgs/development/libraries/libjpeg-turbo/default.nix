@@ -1,4 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, nasm
+, openjdk
+, enableJava ? false # whether to build the java wrapper
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -15,17 +17,29 @@ stdenv.mkDerivation rec {
     sha256 = "0njdxfmyk8smj8bbd6fs3lxjaq3lybivwgg16gpnbiyl984dpi9b";
   };
 
-  patches =
-    lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+  # This is needed by freeimage
+  patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
+    ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
-  nativeBuildInputs = [ cmake nasm ];
+  postFixup = ''
+    moveToOutput include/transupp.h $dev_private
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    nasm
+  ] ++ lib.optionals enableJava [
+    openjdk
+  ];
 
   cmakeFlags = [
     "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
     "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
+  ] ++ lib.optionals enableJava [
+    "-DWITH_JAVA=1"
   ];
 
   doInstallCheck = true;

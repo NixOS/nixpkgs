@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-${version}";
-  version = "1.9.16";
+  version = "1.9.17";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "0pzgrjy5fi2nif2j442fs3j2bbshxpnmq9kzwcqz54wx1w8fzdfr";
+    sha256 = "sha256-T6UJpLsXrsIL3HaChfVP52w0v9DCs/sJqty2/kAWNfE=";
   };
 
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
         --replace /bin/bash ${bash}/bin/bash
   '';
 
+  PKGCONFIG = "${stdenv.cc.targetPrefix}pkg-config";
+
+  dontAddWafCrossFlags = "true";
   wafConfigureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"

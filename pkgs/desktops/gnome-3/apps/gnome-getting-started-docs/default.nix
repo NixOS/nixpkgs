@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-getting-started-docs";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-getting-started-docs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ficf4i4njqrx3dn5rdkvpvcys5mwfma4zkgfmfkq964jxpwzqvw";
+    sha256 = "EPviPyw85CdTmk4wekYWlNOHCyMgBGT3BbfYGvmTyFk=";
   };
 
   passthru = {

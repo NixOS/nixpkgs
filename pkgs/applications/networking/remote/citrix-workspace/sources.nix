@@ -11,7 +11,7 @@ let
   # Attribute-set with all actively supported versions of the Citrix workspace app
   # for Linux.
   #
-  # The latest versions can be found at https://www.citrix.com/de-de/downloads/workspace-app/linux/
+  # The latest versions can be found at https://www.citrix.com/downloads/workspace-app/linux/
   supportedVersions = lib.mapAttrs mkVersionInfo {
     "20.04.0" = {
       major     = "20";
@@ -65,7 +65,29 @@ let
       x86hash   = "0f982d5y9k4hscqfmqpfs277cqw1pvp191ybvg5p8rxk12fh67vf";
       x64suffix = "12";
       x86suffix = "12";
+      homepage  = "https://www.citrix.com/de-de/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-2012.html";
+    };
+
+    "21.01.0" = {
+      major     = "21";
+      minor     = "1";
+      patch     = "0";
+      x64hash   = "01m9g1bs6iiqbd778gjps2zznvqijlyn3mfw38aa0w1rr6ms326a";
+      x86hash   = "1mmx5r3wi9i6bwh4kdlpw446m8kijkaar8shi0q1n21fv0ygg3r5";
+      x64suffix = "14";
+      x86suffix = "14";
       homepage  = "https://www.citrix.com/de-de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
+    };
+
+    "21.03.0" = {
+      major     = "21";
+      minor     = "3";
+      patch     = "0";
+      x64hash   = "004pgvxl81l99sqvrs5xzvjivjlc21rrlm2gky9hmbsm53nsl3zc";
+      x86hash   = "11nn9734a515dm1q880z9wmhvx8ikyh3riayyn42z22q4kd852n3";
+      x64suffix = "38";
+      x86suffix = "38";
+      homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };
   };
 

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "13216b8rfkzak5k6bvpx6jvqv3cnbgpijnjwj8a8d3kq4cl0a1ra";
   };
 
-  buildInputs = [ libxslt docbook_xsl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libxslt docbook_xsl ];
 
   preFixup = ''
     # fallback values need to be last

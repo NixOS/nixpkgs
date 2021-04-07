@@ -3,24 +3,24 @@
 , fetchPypi
 , isPy3k
 , protobuf
-, googleapis_common_protos
+, googleapis-common-protos
 , pytestCheckHook
 , pytz
 }:
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.13.0";
+  version = "1.18.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i5jjnwpd288378h37zads08h695iwmhxm0sxbr3ln6aax97rdb1";
+    sha256 = "sha256-z8RUdMftoP48S57KJUISTyoP9VQyQr7GHo0IvOD1vUg=";
   };
 
   propagatedBuildInputs = [ protobuf ];
 
-  checkInputs = [ pytestCheckHook pytz googleapis_common_protos ];
+  checkInputs = [ pytestCheckHook pytz googleapis-common-protos ];
 
   pythonImportsCheck = [ "proto" ];
 

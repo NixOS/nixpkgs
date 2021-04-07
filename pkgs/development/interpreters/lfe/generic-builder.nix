@@ -87,7 +87,7 @@ buildRebar3 {
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
     license      = licenses.asl20;
-    maintainers  = with maintainers; [ yurrriq ankhers ];
+    maintainers  = teams.beam.members;
     platforms    = platforms.unix;
   };
 }

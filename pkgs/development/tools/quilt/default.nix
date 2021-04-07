@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "01vfvk4pqigahx82fhaaffg921ivd3k7rylz1yfvy4zbdyd32jri";
   };
 
-  buildInputs = [ makeWrapper perl bash diffutils patch findutils diffstat ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl bash diffutils patch findutils diffstat ];
 
   postInstall = ''
     wrapProgram $out/bin/quilt --prefix PATH : \

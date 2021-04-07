@@ -17,10 +17,11 @@ buildPythonPackage rec {
     sha256 = "fb083925a17ce636f33997c275f61123e63372c1db11fefac1e991ed25a4ca37";
   };
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
     six
     numpy
-    pytest
   ];
 
   checkInputs = [

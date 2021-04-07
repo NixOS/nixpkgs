@@ -10,17 +10,18 @@
 , youtube-dl
 , glib
 , ffmpeg
+, aria
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
-  version = "2.3.042";
+  version = "2.3.110";
 
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
     rev = "v${version}";
-    sha256 = "117q4s2b2js3204506qv3kjcsy3amcf0mpwj6q0ixs1256ilkxwj";
+    sha256 = "0sdbd2lsc4bvgkwi55arjwbzwmq05abfmv6vsrvz4gsdv8s8wha5";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,8 @@ python3Packages.buildPythonApplication rec {
     feedparser
     playsound
     ffmpeg
+    matplotlib
+    aria
   ];
 
   buildInputs = [
@@ -49,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    sed -i "/^\s*install_requires/s/, 'pgi'\|'pgi', \|'pgi'//" setup.py
+    sed -i "/^\s*'pgi',$/d" setup.py
   '';
 
   postInstall = ''

@@ -12,8 +12,6 @@ let
 
     mopidy = callPackage ./mopidy.nix { };
 
-    mopidy-gmusic = callPackage ./gmusic.nix { };
-
     mopidy-iris = callPackage ./iris.nix { };
 
     mopidy-local = callPackage ./local.nix { };
@@ -41,6 +39,8 @@ let
     mopidy-tunein = callPackage ./tunein.nix { };
 
     mopidy-youtube = callPackage ./youtube.nix { };
+
+    mopidy-subidy = callPackage ./subidy.nix { };
   };
 
 in self

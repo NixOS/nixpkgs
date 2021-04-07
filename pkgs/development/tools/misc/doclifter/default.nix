@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, python}:
+{lib, stdenv, fetchurl, python3}:
 
 stdenv.mkDerivation {
   name = "doclifter-2.19";
@@ -6,7 +6,9 @@ stdenv.mkDerivation {
     url = "http://www.catb.org/~esr/doclifter/doclifter-2.19.tar.gz";
     sha256 = "1as6z7mdjrrkw2kism41q5ybvyzvwcmj9qzla2fz98v9f4jbj2s2";
   };
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
+
+  strictDeps = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
 

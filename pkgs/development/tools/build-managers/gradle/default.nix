@@ -33,7 +33,8 @@ rec {
         echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
       '';
 
-    buildInputs = [ unzip java makeWrapper ];
+    nativeBuildInputs = [ makeWrapper unzip ];
+    buildInputs = [ java ];
 
     meta = {
       description = "Enterprise-grade build system";
@@ -51,15 +52,15 @@ rec {
     };
   };
 
-  gradle_latest = gradle_6_7;
+  gradle_latest = gradle_6_8;
 
-  gradle_6_7 = gradleGen rec {
-    name = "gradle-6.7";
-    nativeVersion = "0.22-milestone-8";
+  gradle_6_8 = gradleGen rec {
+    name = "gradle-6.8.3";
+    nativeVersion = "0.22-milestone-9";
 
     src = fetchurl {
       url = "https://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1i6zm55wzy13wvvmf3804b0rs47yrqqablf4gpf374ls05cpgmca";
+      sha256 = "01fjrk5nfdp6mldyblfmnkq2gv1rz1818kzgr0k2i1wzfsc73akz";
     };
   };
 

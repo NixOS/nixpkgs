@@ -17,11 +17,11 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.38";
+  version = "1.41";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "00px79xzyc5lj8aig7i4fhk29h1lkqp4840wjfgi9mv9m9sq566q";
+    sha256 = "0hi7jbcs1l9kxzhiqcs2iivsb048642mwaimgqyh1hy3bas7ic34";
   };
 
   postPatch = ''
@@ -66,7 +66,8 @@ in stdenv.mkDerivation (rec {
   doCheck = true; # not cross
 
   meta = with lib; {
-    homepage = "https://www.gnupg.org/related_software/libgpg-error/index.html";
+    homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
     description = "A small library that defines common error values for all GnuPG components";
 
     longDescription = ''

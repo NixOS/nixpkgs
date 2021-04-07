@@ -42,9 +42,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "LXQt service for global keyboard shortcuts registration";
     homepage = "https://github.com/lxqt/lxqt-globalkeys";
-    license = licenses.lgpl21;
+    description = "LXQt service for global keyboard shortcuts registration";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

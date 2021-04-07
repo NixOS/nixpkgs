@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "A sed-like editor for binary files";
     homepage = "http://bbe-.sourceforge.net/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.hhm ];
   };
 }

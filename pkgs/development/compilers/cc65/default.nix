@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
   };
 }

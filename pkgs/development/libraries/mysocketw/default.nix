@@ -16,7 +16,7 @@ stdenv.mkDerivation {
         --replace -Wl,-soname, -Wl,-install_name,$out/lib/
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "CXX=c++" ];
+  makeFlags = [ "PREFIX=$(out)" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = {
     description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";

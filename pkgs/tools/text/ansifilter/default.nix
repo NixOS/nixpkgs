@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
-  version = "2.17";
+  version = "2.18";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
-    sha256 = "0by4rhy30l7jgxvq6mwf8p43s1472q96l3g7n2skq2lnkjrvx1ar";
+    sha256 = "sha256-Zs8BfTakPV9q4gYJzjtYZHSU7mwOQfxoLFmL/859fTk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

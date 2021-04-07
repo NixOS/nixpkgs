@@ -468,7 +468,7 @@ let
         '';
       };
 
-      value = mkOption {
+      values = mkOption {
         type = types.listOf types.str;
         default = [];
         description = ''

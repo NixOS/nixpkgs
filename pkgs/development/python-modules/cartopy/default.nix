@@ -54,6 +54,7 @@ buildPythonPackage rec {
     license = licenses.lgpl3;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     maintainers = with maintainers; [ mredaelli ];
+    # following tests fail: test_eccentric_globe and test_ellipse_globe
+    broken = true;
   };
-
 }

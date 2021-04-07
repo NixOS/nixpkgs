@@ -36,7 +36,7 @@ buildPythonPackage rec {
       Socket.IO is a lightweight transport protocol that enables real-time
       bidirectional event-based communication between clients and a server.
     '';
-    homepage = "https://github.com/miguelgrinberg/python-engineio/";
+    homepage = "https://github.com/miguelgrinberg/python-socketio/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mic92 ];
   };

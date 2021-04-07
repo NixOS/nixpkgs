@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "hepmc3";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "0h9dbsbbf3y7iia27ms9cy4pfk2yyrkdnxcqsbvkhkl0izvv930f";
+    sha256 = "sha256-jKrazCyWmIPNH5lLYieV/IhftLFdrYyK5kvL2/DL1H0=";
   };
 
   nativeBuildInputs = [ cmake ];

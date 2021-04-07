@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
     rev = "v${version}";
-    sha256 = "0s5r6l39ck2scks54hmwwdf4lcihqqnqzjfx9lz2b67vxkajpwmc";
+    sha256 = "1caz6j2kdhj0kccrnqri6b4g2d6wzkkx8y9vxyvm7axvrwkv2vyn";
   };
 
   propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;

@@ -12,7 +12,7 @@
 }:
 
 # Additional plugins that can be added:
-#  wavpack (http://www.wavpack.com/)
+#  wavpack (https://www.wavpack.com/)
 #  gme (Game music support)
 #  Ogg Opus support
 #  BS2B effect plugin (http://bs2b.sourceforge.net/)
@@ -29,11 +29,11 @@
 # handle that.
 
 mkDerivation rec {
-  name = "qmmp-1.4.2";
+  name = "qmmp-1.4.4";
 
   src = fetchurl {
     url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "1kvzw0n90crg3dgy8834qrjv0zb3ia5cny7virax9ax73y653jfa";
+    sha256 = "sha256-sZRZVhCf2ceETuV4AULA0kVkuIMn3C+aYdKThqvPnVQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

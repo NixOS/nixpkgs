@@ -7,6 +7,7 @@ buildLinux (args // {
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs";
+    # commit does not exist on any branch on the target repository
     rev = "6a505b63ed3003faf5000f19fd08bbd477d93fbc";
     sha256 = "1rf34gzv9npafp1c3i6lymk3b0gnqp4rb0wl33pw6yrpgnsry3cc";
   };

@@ -26,12 +26,13 @@
 , libuuid
 , libxcb
 , libxkbcommon
+, libxshmfence
 , mesa
 , nspr
 , nss
 , pango
 , systemd
-, xdg_utils
+, xdg-utils
 , xorg
 }:
 
@@ -41,11 +42,11 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.12.2";
-  x86_64-darwin-sha256 = "0qflv2glfy7d77zjgqi7qcjr53c9dni26gmqkg9vk2xijmmd3xy7";
+  x86_64-darwin-version = "4.14.0";
+  x86_64-darwin-sha256 = "0kpjsnriav6rcddjkz0z9arxjd09i6bw2krnmf3dc31my64nmxs6";
 
-  x86_64-linux-version = "4.12.2";
-  x86_64-linux-sha256 = "sha256-G5uQI078N7AbhEJs6a/17Hoi5DSdwvYLM1T/ttrEw4s=";
+  x86_64-linux-version = "4.14.0";
+  x86_64-linux-sha256 = "0xy9i8ssjba62ca7lfan58rhwx69wkapfd0jzkaj95qhqnv019fg";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -117,6 +118,7 @@ let
       xorg.libXi
       xorg.libXrandr
       xorg.libXrender
+      xorg.libxshmfence
       xorg.libXtst
       xorg.libxkbfile
     ] + ":${stdenv.cc.cc.lib}/lib64";
@@ -151,7 +153,7 @@ let
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${xdg_utils}/bin
+        --prefix PATH : ${xdg-utils}/bin
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \

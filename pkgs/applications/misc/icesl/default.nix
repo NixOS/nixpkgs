@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sl54fsb2gz6dy0bwdscpdq1ab6ph5b7zald3bwzgkqsvna7p1jr";
   } else throw "Unsupported architecture";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     cp -r ./ $out
     mkdir $out/oldbin

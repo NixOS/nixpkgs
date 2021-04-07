@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper
-, libsndfile, jack2Full
+, libsndfile, jack2
 , libGLU, libGL, lv2, cairo
 , ladspaH, php }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config php makeWrapper ];
-  buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH ];
+  buildInputs = [ jack2 libsndfile libGLU libGL lv2 cairo ladspaH ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

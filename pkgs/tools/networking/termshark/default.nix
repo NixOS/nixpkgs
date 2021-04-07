@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "termshark";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "gcla";
     repo = "termshark";
     rev = "v${version}";
-    sha256 = "14h548apg3zvjvq6yy22hpw2ziy5vmwyr04vv59ls1mjg4qf2v8b";
+    sha256 = "sha256-vS6j8Mcri3SI/6HqtFX/EzVl8S0lx8fWU+0ddjzJz8g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ wireshark-cli ];
 
-  vendorSha256 = "14apff3vcbndr30765lzi4qswakavb4396bjixxvpxv6i5c04dq7";
+  vendorSha256 = "sha256-md9HHiYOsBimCBjD1FyjTqnskCZksQiEggWd5UW0RPM=";
 
   doCheck = false;
 

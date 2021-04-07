@@ -2,7 +2,7 @@
 , coreutils, git, gnused, nix, nixfmt }:
 
 let
-  version = "2.0.9";
+  version = "2.0.16";
 
   zshCompletion = fetchurl {
     url =
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "sha256-jqSv9VBLotl6YVWgWNznvTThRIiMUStQ0WbN6u01b1c=";
+    sha256 = "sha256-Yx6PvBo763GnEwU5s7AYUs++Au25TF6cZ4WYGgruHpw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,14 +37,7 @@ in stdenv.mkDerivation rec {
     #!${stdenv.shell}
     set -o errexit
     PATH=${
-      lib.makeBinPath [
-        common-updater-scripts
-        coreutils
-        git
-        gnused
-        nix
-        nixfmt
-      ]
+      lib.makeBinPath [ common-updater-scripts coreutils git gnused nix nixfmt ]
     }
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
     latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} 'v*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"

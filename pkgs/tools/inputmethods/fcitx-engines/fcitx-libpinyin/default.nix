@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
       cp -rv ${store_path} $NIX_BUILD_TOP/$name/data/${ZHUYIN_DATA_FILE_NAME}
     '';
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     isFcitxEngine = true;
     description  = "Fcitx Wrapper for libpinyin, Library to deal with pinyin";

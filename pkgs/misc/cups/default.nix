@@ -9,7 +9,7 @@
 , pam
 , dbus
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
-, systemd ? null
+, systemd
 , acl
 , gmp
 , darwin
@@ -19,8 +19,6 @@
 , libpaper ? null
 , coreutils
 }:
-
-assert enableSystemd -> systemd != null;
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.

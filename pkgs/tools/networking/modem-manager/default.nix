@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "modem-manager";
-  version = "1.14.8";
+  version = "1.14.10";
 
   package = "ModemManager";
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "15cjy7zzsxagx649vz0990avin47vpgdmm4ss2msggdla6x2c6py";
+    sha256 = "sha256-TqYLN1p2HhfnuwlbyolFee0OjjOyc9xpi1y+A5R/NX8=";
   };
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];

@@ -3,7 +3,7 @@
 ## How to use Agda
 
 Agda can be installed from `agda`:
-```
+```ShellSession
 $ nix-env -iA agda
 ```
 
@@ -15,13 +15,13 @@ To use Agda with libraries, the `agda.withPackages` function can be used. This f
 
 For example, suppose we wanted a version of Agda which has access to the standard library. This can be obtained with the expressions:
 
-```
+```nix
 agda.withPackages [ agdaPackages.standard-library ]
 ```
 
 or
 
-```
+```nix
 agda.withPackages (p: [ p.standard-library ])
 ```
 
@@ -32,7 +32,7 @@ If you want to use a library in your home directory (for instance if it is a dev
 Agda will not by default use these libraries. To tell Agda to use the library we have some options:
 
 * Call `agda` with the library flag:
-```
+```ShellSession
 $ agda -l standard-library -i . MyFile.agda
 ```
 * Write a `my-library.agda-lib` file for the project you are working on which may look like:
@@ -46,10 +46,10 @@ depend: standard-library
 More information can be found in the [official Agda documentation on library management](https://agda.readthedocs.io/en/v2.6.1/tools/package-system.html).
 
 ## Compiling Agda
-Agda modules can be compiled with the `--compile` flag. A version of `ghc` with `ieee` is made available to the Agda program via the `--with-compiler` flag.
+Agda modules can be compiled with the `--compile` flag. A version of `ghc` with `ieee754` is made available to the Agda program via the `--with-compiler` flag.
 This can be overridden by a different version of `ghc` as follows:
 
-```
+```nix
 agda.withPackages {
   pkgs = [ ... ];
   ghc = haskell.compiler.ghcHEAD;
@@ -80,12 +80,12 @@ By default, Agda sources are files ending on `.agda`, or literate Agda files end
 ## Adding Agda packages to Nixpkgs
 
 To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/development/libraries/agda/${library-name}/` and an entry should be added to `pkgs/top-level/agda-packages.nix`. Here it is called in a scope with access to all other Agda libraries, so the top line of the `default.nix` can look like:
-```
+```nix
 { mkDerivation, standard-library, fetchFromGitHub }:
 ```
 and `mkDerivation` should be called instead of `agdaPackages.mkDerivation`. Here is an example skeleton derivation for iowa-stdlib:
 
-```
+```nix
 mkDerivation {
   version = "1.5.0";
   pname = "iowa-stdlib";

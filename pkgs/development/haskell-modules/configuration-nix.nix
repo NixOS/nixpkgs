@@ -207,6 +207,7 @@ self: super: builtins.intersectAttrs super {
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
+  pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
@@ -226,6 +227,7 @@ self: super: builtins.intersectAttrs super {
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
+  telegraph = dontCheck super.telegraph;
   typed-process = dontCheck super.typed-process;
   js-jquery = dontCheck super.js-jquery;
   hPDB-examples = dontCheck super.hPDB-examples;
@@ -443,9 +445,7 @@ self: super: builtins.intersectAttrs super {
 
   # requires an X11 display in test suite
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
-
-  # depends on 'hie' executable
-  lsp-test = dontCheck super.lsp-test;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -659,7 +659,9 @@ self: super: builtins.intersectAttrs super {
     let
       # spago requires an older version of megaparsec, but it appears to work
       # fine with newer versions.
-      spagoWithOverrides = doJailbreak super.spago;
+      spagoWithOverrides = doJailbreak (super.spago.override {
+        dhall = self.dhall_1_37_1;
+      });
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
@@ -785,7 +787,7 @@ self: super: builtins.intersectAttrs super {
     testTarget = "unit-tests";
   };
 
-  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
+  haskell-language-server = enableCabalFlag (enableCabalFlag (overrideCabal super.haskell-language-server (drv: {
     postInstall = let
       inherit (pkgs.lib) concatStringsSep take splitString;
       ghc_version = self.ghc.version;
@@ -800,8 +802,18 @@ self: super: builtins.intersectAttrs super {
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
     '';
-  });
+  })) "all-plugins") "all-formatters";
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
+
+  # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
+  # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
+  hadolint = disableCabalFlag super.hadolint "static";
+
+  # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
+  doctest-driver-gen = dontCheck super.doctest-driver-gen;
+
+  # Tests access internet
+  prune-juice = dontCheck super.prune-juice;
 }

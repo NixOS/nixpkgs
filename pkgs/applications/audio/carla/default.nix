@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     file liblo alsaLib fluidsynth ffmpeg_3 jack2 libpulseaudio libsndfile
-  ] ++ pythonPath
-    ++ optional withQt qtbase
+  ] ++ optional withQt qtbase
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
+
+  propagatedBuildInputs = pythonPath;
 
   enableParallelBuilding = true;
 
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
       patchPythonScript "$f"
     done
     patchPythonScript "$out/share/carla/carla_settings.py"
+    patchPythonScript "$out/share/carla/carla_database.py"
 
     for program in $out/bin/*; do
       wrapQtApp "$program" \

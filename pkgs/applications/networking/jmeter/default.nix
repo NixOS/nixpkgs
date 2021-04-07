@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "jmeter";
-  version = "5.4";
+  version = "5.4.1";
   src = fetchurl {
     url = "https://archive.apache.org/dist/jmeter/binaries/apache-${pname}-${version}.tgz";
-    sha256 = "1hbyvh0hrvfvrsf7wpnwqsry5gaziac632s0bwb5zbq6y5b0z41a";
+    sha256 = "sha256-TtrpmIHRzbUEiYesy9ArPzza3qShCNFtB/sVJe9hLPM=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];

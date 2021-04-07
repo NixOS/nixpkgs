@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bzrtp";
-  version = "4.4.9";
+  version = "4.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1yjmsbqmymzl4r7sba6w4a2yld8m6hzafr6jf7sj0syhwpnc3zv6";
+    sha256 = "1a500ncgznwha0j3c27ak3p4jh5jm6fnnb531k7c0a4i91745agj";
   };
 
   buildInputs = [ bctoolbox sqlite ];

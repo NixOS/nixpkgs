@@ -6,7 +6,9 @@
  <title>Release 20.09 (“Nightingale”, 2020.10/27)</title>
 
   <para>
-   Support is planned until the end of April 2021, handing over to 21.03.
+   Support is planned until the end of June 2021, handing over to 21.05.
+   (Plans <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md#core-changes">
+   have shifted</link> by two months since release of 20.09.)
   </para>
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1017,6 +1019,14 @@ systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
    </listitem>
    <listitem>
     <para>
+      The syntax of the PostgreSQL configuration file is now checked at build
+      time. If your configuration includes a file inaccessible inside the build
+      sandbox, set <varname>services.postgresql.checkConfig</varname> to
+        <literal>false</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The rkt module has been removed, it was archived by upstream.
     </para>
    </listitem>
@@ -1538,7 +1548,7 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    <listitem>
     <para>
      Specifying <link linkend="opt-services.dovecot2.mailboxes">mailboxes</link> in the <package>dovecot2</package> module
-     as a list is deprecated and will break eval in 21.03. Instead, an attribute-set should be specified where the <literal>name</literal>
+     as a list is deprecated and will break eval in 21.05. Instead, an attribute-set should be specified where the <literal>name</literal>
      should be the key of the attribute.
     </para>
     <para>

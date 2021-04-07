@@ -1,34 +1,31 @@
 { lib
 , stdenv
+, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , python
 , buildPythonPackage
-, isPy27
-, isPy3k
 , numpy
 , llvmlite
-, funcsigs
-, singledispatch
+, setuptools
 , libcxx
 }:
 
 buildPythonPackage rec {
-  version = "0.51.2";
+  version = "0.52.0";
   pname = "numba";
-  # uses f-strings
-  disabled = pythonOlder "3.6";
+  # uses f-strings, python 3.9 is not yet supported
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16bd59572114adbf5f600ea383880d7b2071ae45477e84a24994e089ea390768";
+    sha256 = "44661c5bd85e3d3619be0a40eedee34e397e9ccb3d4c458b70e10bf95d1ce933";
   };
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  propagatedBuildInputs = [numpy llvmlite]
-    ++ lib.optionals isPy27 [ funcsigs singledispatch];
-
+  propagatedBuildInputs = [ numpy llvmlite setuptools ];
+  pythonImportsCheck = [ "numba" ];
   # Copy test script into $out and run the test suite.
   checkPhase = ''
     ${python.interpreter} -m numba.runtests

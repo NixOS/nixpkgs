@@ -149,11 +149,11 @@ stdenv.mkDerivation {
     sha256 = "12agi6bacqic2wq6q3l28283badzamspajmajzqm7fbdl2aq1a4p";
   };
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
     nodejs
     clojure
     jre
-    unzip
     python
     openssl
     gnutar

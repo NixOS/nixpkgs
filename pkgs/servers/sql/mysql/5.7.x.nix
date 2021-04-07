@@ -23,8 +23,9 @@ self = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake bison pkg-config rpcsvc-proto ];
 
-  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib libtirpc ]
-     ++ lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
+  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
+     ++ lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ]
+     ++ lib.optionals stdenv.isLinux [ libtirpc ];
 
   outputs = [ "out" "static" ];
 

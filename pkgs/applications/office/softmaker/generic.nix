@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, makeDesktopItem, makeWrapper, copyDesktopItems
+{ lib, stdenv, autoPatchelfHook, makeDesktopItem, makeWrapper, copyDesktopItems
 
   # Dynamic Libraries
 , curl, libGL, libX11, libXext, libXmu, libXrandr, libXrender

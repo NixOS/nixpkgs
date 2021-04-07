@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
     homepage    = "https://github.com/gcp/leela-zero";

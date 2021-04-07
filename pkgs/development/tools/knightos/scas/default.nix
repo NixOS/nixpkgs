@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSCAS_LIBRARY=1" ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
@@ -21,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Assembler and linker for the Z80";
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    platforms   = platforms.all;
   };
 }

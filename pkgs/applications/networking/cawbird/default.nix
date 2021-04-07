@@ -5,6 +5,7 @@
 , json-glib
 , sqlite
 , libsoup
+, liboauth
 , gettext
 , gspell
 , vala
@@ -21,14 +22,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.3.2";
   pname = "cawbird";
 
   src = fetchFromGitHub {
     owner = "IBBoard";
     repo = "cawbird";
     rev = "v${version}";
-    sha256 = "11s8x48syy5wjj23ab4bn5jxhi7l5sx7aw6q2ggk99v042hxh3h2";
+    sha256 = "1baw3h5wq2ib4bnphazq7n9c9wc94g0n6v4y5kg71n1dir0c3jkh";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     json-glib
     sqlite
     libsoup
+    liboauth
     gettext
     dconf
     gspell

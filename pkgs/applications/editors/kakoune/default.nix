@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     export version="v${version}"
   '';
 
+  enableParallelBuilding = true;
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/kak -ui json -e "kill 0"

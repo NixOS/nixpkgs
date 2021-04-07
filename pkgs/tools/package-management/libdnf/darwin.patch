@@ -1,5 +1,25 @@
---- src/libdnf/hy-iutil.cpp	2020-12-02 07:53:42.000000000 -0800
-+++ src/libdnf/hy-iutil.cpp	2020-12-21 14:24:14.000000000 -0800
+diff --git src/libdnf/config.h src/libdnf/config.h
+index 16121f6f..737d0bc4 100644
+--- src/libdnf/config.h
++++ src/libdnf/config.h
+@@ -18,7 +18,12 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+  */
+ 
++
++#ifdef __APPLE__
++#include <stdint.h>
++#else
+ #include <bits/wordsize.h>
++#endif
+
+ 
+ #if __WORDSIZE == 32
+ #include "config-32.h"
+diff --git src/libdnf/hy-iutil.cpp src/libdnf/hy-iutil.cpp
+index 497c560d..5de077fa 100644
+--- src/libdnf/hy-iutil.cpp
++++ src/libdnf/hy-iutil.cpp
 @@ -22,7 +22,7 @@
  #include <errno.h>
  #include <dirent.h>
@@ -9,8 +29,10 @@
  #include <pwd.h>
  #include <unistd.h>
  #include <stdio.h>
---- src/libdnf/hy-util.cpp	2020-12-02 07:53:42.000000000 -0800
-+++ src/libdnf/hy-util.cpp	2020-12-21 14:23:21.000000000 -0800
+diff --git src/libdnf/hy-util.cpp src/libdnf/hy-util.cpp
+index 295fdc1b..9d584b8a 100644
+--- src/libdnf/hy-util.cpp
++++ src/libdnf/hy-util.cpp
 @@ -24,7 +24,20 @@
  #include <ctype.h>
  #include <sys/utsname.h>

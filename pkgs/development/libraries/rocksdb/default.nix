@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.15.4";
+  version = "6.17.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06lddr6md4ypmywvi6qrrkw97c8ddz0flj43hzx32ia3iq2mw4w5";
+    sha256 = "sha256-mfONfYMxZ3CT7Bk3OYSwg0UChmk4mQ1+cHN94gEDZcM=";
   };
 
   nativeBuildInputs = [ cmake ninja ];

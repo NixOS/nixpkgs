@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, irmin, irmin-mem, irmin-test }:
+{ lib, buildDunePackage, irmin, irmin-test, alcotest }:
 
 buildDunePackage rec {
 
@@ -8,7 +8,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ irmin ];
 
   doCheck = true;
-  checkInputs = [ irmin-mem irmin-test ];
+  checkInputs = [ alcotest irmin-test ];
 
   meta = irmin.meta // {
     description = "Irmin backend which allow to store values into chunks";

@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "kwalletcli";
-  version = "3.02";
+  version = "3.03";
 
   src = fetchFromGitHub {
     owner = "MirBSD";
     repo = pname;
     rev = "${pname}-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1gq45afb5nmmjfqxglv7wvcxcjd9822pc7nysq0350jmmmqwb474";
+    sha256 = "sha256-DUtaQITzHhQrqA9QJd0U/5EDjH0IzY9/kal/7SYQ/Ck=";
   };
 
   postPatch = ''

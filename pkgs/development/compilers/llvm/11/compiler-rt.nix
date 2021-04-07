@@ -11,7 +11,7 @@ in
 stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version;
-  src = fetch pname "1z470r8c5aahdwkmflglx998n0i77j8b1c69d7cir1kf27qy6yq8";
+  src = fetch pname "0x1j8ngf1zj63wlnns9vlibafq48qcm72p4jpaxkmkb4qw0grwfy";
 
   nativeBuildInputs = [ cmake python3 llvm ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (stdenv.isDarwin) [
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
+    "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"

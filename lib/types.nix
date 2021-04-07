@@ -454,7 +454,8 @@ rec {
     };
 
     functionTo = elemType: mkOptionType {
-      name = "function that evaluates to a(n) ${elemType.name}";
+      name = "functionTo";
+      description = "function that evaluates to a(n) ${elemType.name}";
       check = isFunction;
       merge = loc: defs:
         fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;

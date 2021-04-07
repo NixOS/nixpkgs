@@ -25,6 +25,8 @@
 , # don't include the bundled 32-bit libraries on 64-bit platforms,
   # even if it’s in downloaded binary
   disable32Bit ? false
+  # 32 bit libs only version of this package
+, lib32 ? null
 }:
 
 with lib;
@@ -93,6 +95,8 @@ let
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
+    } // optionalAttrs (!i686bundled) {
+      inherit lib32;
     };
 
     meta = with lib; {

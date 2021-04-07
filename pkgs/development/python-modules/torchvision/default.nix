@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "PyTorch vision library";
     homepage = "https://pytorch.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ericsagnes SuperSandro2000 ];
+    maintainers = with maintainers; [ ericsagnes ];
   };
 }

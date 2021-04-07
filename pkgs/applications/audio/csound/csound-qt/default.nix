@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
                  "SHARE_DIR=${placeholder "out"}/share"
                  ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features";
     homepage = "https://csoundqt.github.io/";

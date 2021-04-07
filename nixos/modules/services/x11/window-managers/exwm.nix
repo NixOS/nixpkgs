@@ -21,6 +21,7 @@ in
       enable = mkEnableOption "exwm";
       loadScript = mkOption {
         default = "(require 'exwm)";
+        type = types.lines;
         example = literalExample ''
           (require 'exwm)
           (exwm-enable)

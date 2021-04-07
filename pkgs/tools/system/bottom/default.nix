@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    sha256 = "sha256-88uEEsb+coX8PTKrem+0t5AkamCmqJsFYsENFTZSsys=";
+    sha256 = "sha256-9L7FtYIaWSOwNQ8zOLvxjt51o8A5MqqfF/iIyJs2TJA=";
   };
 
   prePatch = ''
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
-  cargoSha256 = "sha256-qnh4Tl6JRgxBJbu+t9IJX/XChIR15rTRLvsl+/ZvPxY=";
+  cargoSha256 = "sha256-4oH1A88Qn0c6hkE/1b6mTrEIph8xT98j+DkP9/5JALs=";
 
   doCheck = false;
 

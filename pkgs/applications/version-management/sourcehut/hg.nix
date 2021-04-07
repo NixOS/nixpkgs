@@ -1,5 +1,4 @@
 { lib, fetchhg, buildPythonPackage
-, python
 , srht, hglib, scmsrht, unidiff }:
 
 buildPythonPackage rec {

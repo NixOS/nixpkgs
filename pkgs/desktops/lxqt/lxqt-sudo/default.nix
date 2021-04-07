@@ -44,9 +44,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "GUI frontend for sudo/su";
     homepage = "https://github.com/lxqt/lxqt-sudo";
-    license = licenses.lgpl21;
+    description = "GUI frontend for sudo/su";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

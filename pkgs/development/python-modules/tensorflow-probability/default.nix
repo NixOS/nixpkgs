@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , fetchpatch
+, bazel_0_26
 , buildBazelPackage
 , buildPythonPackage
 , python
@@ -26,6 +27,8 @@ let
 
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
+    bazel = bazel_0_26;
+
     name = "${pname}-${version}-py2.py3-none-any.whl";
 
     src = fetchFromGitHub {

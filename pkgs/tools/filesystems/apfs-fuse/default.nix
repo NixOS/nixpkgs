@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "apfs-fuse-unstable";
-  version = "2019-07-23";
+  version = "2020-09-28";
 
   src = fetchFromGitHub {
     owner  = "sgan81";
     repo   = "apfs-fuse";
-    rev    = "309ecb030f38edac4c10fa741a004c5eb7a23e15";
-    sha256 = "0wq6rlqi00m5dp5gbzy65i1plm40j6nsm7938zvfgx5laal4wzr2";
+    rev    = "ee71aa5c87c0831c1ae17048951fe9cd7579c3db";
+    sha256 = "0wvsx708km1lnhghny5y69k694x0zy8vlbndswkb7sq81j1r6kwx";
     fetchSubmodules = true;
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage    = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ealasu ];
     platforms   = platforms.linux;
   };

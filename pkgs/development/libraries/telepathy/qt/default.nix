@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cmake, qtbase, pkg-config, python3Packages, dbus-glib, dbus
-, telepathy-farstream, telepathy-glib, fetchpatch }:
+, telepathy-farstream, telepathy-glib }:
 
 let
   inherit (python3Packages) python dbus-python;
@@ -19,6 +19,8 @@ in stdenv.mkDerivation rec {
   # No point in building tests if they are not run
   # On 0.9.7, they do not even build with QT4
   cmakeFlags = lib.optional (!doCheck) "-DENABLE_TESTS=OFF";
+
+  dontWrapQtApps = true;
 
   doCheck = false; # giving up for now
 

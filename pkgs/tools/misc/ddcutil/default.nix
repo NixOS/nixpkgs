@@ -3,14 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "0.9.9";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner  = "rockowitz";
     repo   = "ddcutil";
     rev    = "v${version}";
-    sha256 = "1ppiddnrvkbb9iir28kl9hzpww0hpgb05jfxzf07xsqkdfb4qv71";
+    sha256 = "sha256-F/tKW81bAyYtwpxhl5XC8YyMB+6S0XmqqigwJY2WFDU=";
   };
+
+  patches = [
+    # Look for kernel modules in /run/booted-system/kernel-modules/lib/modules/*
+    ./nixos-paths.diff
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [

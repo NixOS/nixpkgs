@@ -3,11 +3,11 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "3.1.1";
+  version = "3.1.2";
 
   srcs = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "1yhc8j67phrj5xgx09b5h7c67pgc4wj4jnkmkq0r3s6j7jn43vv8";
+    hash = "sha256-dwnIOuu0QyWRl6RSdyQw7dGsAZ4xpXpx6jOpCkp4efE=";
   };
 
   propagatedBuildInputs =

@@ -12,26 +12,25 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildPhase = ''
-    sed -i '/\''${ZDOTDIR:\-\$HOME}\/.zpreztorc" ]]/i\
-    if [[ -s "/etc/zpreztorc" ]]; then\
-      source "/etc/zpreztorc"\
-    fi' init.zsh
-    sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/|g" init.zsh
-    for i in runcoms/*; do
-      sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/|g" $i
-    done
+  postPatch = ''
+    # make zshrc aware of where zsh-prezto is installed
+    sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/share/zsh-prezto/|g" runcoms/zshrc
   '';
 
   installPhase = ''
-    mkdir -p $out
-    cp ./* $out/ -R
+    mkdir -p $out/share/zsh-prezto
+    cp -R ./ $out/share/zsh-prezto
   '';
 
   passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
-    description = "Prezto is the configuration framework for Zsh; it enriches the command line interface environment with sane defaults, aliases, functions, auto completion, and prompt themes";
+    description = "The configuration framework for Zsh";
+    longDescription = ''
+      Prezto is the configuration framework for Zsh; it enriches
+      the command line interface environment with sane defaults,
+      aliases, functions, auto completion, and prompt themes.
+    '';
     homepage = "https://github.com/sorin-ionescu/prezto";
     license = licenses.mit;
     maintainers = with maintainers; [ holymonson ];

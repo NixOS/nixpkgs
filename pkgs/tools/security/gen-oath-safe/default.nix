@@ -1,4 +1,4 @@
-{ coreutils, fetchFromGitHub, file, libcaca, makeWrapper, python, openssl, qrencode, lib, stdenv, yubikey-manager }:
+{ coreutils, fetchFromGitHub, file, libcaca, makeWrapper, python3, openssl, qrencode, lib, stdenv, yubikey-manager }:
 
 stdenv.mkDerivation rec {
   pname = "gen-oath-safe";
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1914z0jgj7lni0nf3hslkjgkv87mhxdr92cmhmbzhpjgjgr23ydp";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase =
     let
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
         file
         libcaca.bin
         openssl.bin
-        python
+        python3
         qrencode
         yubikey-manager
       ];

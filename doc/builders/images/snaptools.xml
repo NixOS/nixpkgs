@@ -16,7 +16,7 @@
   </para>
 
   <para>
-   The <parameter>base</parameter> should not be be specified, as <function>makeSnap</function> will force set it.
+   The <parameter>base</parameter> should not be specified, as <function>makeSnap</function> will force set it.
   </para>
 
   <para>

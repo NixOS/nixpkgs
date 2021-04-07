@@ -131,21 +131,25 @@ let
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
       plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault {};
       plasma-workspace = callPackage ./plasma-workspace {};
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
       polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
       powerdevil = callPackage ./powerdevil.nix {};
+      qqc2-breeze-style = callPackage ./qqc2-breeze-style.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
       xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
 
       thirdParty = let inherit (libsForQt5) callPackage; in {
         plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
+        plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+        parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 
     };

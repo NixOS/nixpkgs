@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     (mkFlag qt5Support "QT5")
   ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
     description = "A PDF rendering library";

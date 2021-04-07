@@ -6,17 +6,19 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage =
-    let
-      base = pkgs.php74;
-    in
-      base.buildEnv {
-        extensions = { enabled, all }: with all;
-          enabled ++ [
-            apcu redis memcached imagick
-          ];
-        extraConfig = phpOptionsStr;
-      };
+  phpPackage = pkgs.php74.buildEnv {
+    extensions = { enabled, all }:
+      (with all;
+        enabled
+        ++ optional (!cfg.disableImagemagick) imagick
+        # Optionally enabled depending on caching settings
+        ++ optional cfg.caching.apcu apcu
+        ++ optional cfg.caching.redis redis
+        ++ optional cfg.caching.memcached memcached
+      )
+      ++ cfg.phpExtraExtensions all; # Enabled by user
+    extraConfig = toKeyValue phpOptions;
+  };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
@@ -26,8 +28,10 @@ let
     upload_max_filesize = cfg.maxUploadSize;
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
-  } // cfg.phpOptions;
-  phpOptionsStr = toKeyValue phpOptions;
+  } // cfg.phpOptions
+    // optionalAttrs cfg.caching.apcu {
+      "apc.enable_cli" = "1";
+    };
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
@@ -85,7 +89,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud18" "nextcloud19" "nextcloud20" ];
+      relatedPackages = [ "nextcloud19" "nextcloud20" "nextcloud21" ];
     };
 
     maxUploadSize = mkOption {
@@ -113,6 +117,21 @@ in {
       description = ''
         Enable this option if you plan on using the webfinger plugin.
         The appropriate nginx rewrite rules will be added to your configuration.
+      '';
+    };
+
+    phpExtraExtensions = mkOption {
+      type = with types; functionTo (listOf package);
+      default = all: [];
+      defaultText = "all: []";
+      description = ''
+        Additional PHP extensions to use for nextcloud.
+        By default, only extensions necessary for a vanilla nextcloud installation are enabled,
+        but you may choose from the list of available extensions and add further ones.
+        This is sometimes necessary to be able to install a certain nextcloud app that has additional requirements.
+      '';
+      example = literalExample ''
+        all: [ all.pdlib all.bz2 ]
       '';
     };
 
@@ -228,7 +247,8 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          The full path to a file that contains the admin's password.
+          The full path to a file that contains the admin's password. Must be
+          readable by user <literal>nextcloud</literal>.
         '';
       };
 
@@ -263,6 +283,36 @@ in {
           may be served via HTTPS.
         '';
       };
+
+      defaultPhoneRegion = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        example = "DE";
+        description = ''
+          <warning>
+           <para>This option exists since Nextcloud 21! If older versions are used,
+            this will throw an eval-error!</para>
+          </warning>
+
+          <link xlink:href="https://www.iso.org/iso-3166-country-codes.html">ISO 3611-1</link>
+          country codes for automatic phone-number detection without a country code.
+
+          With e.g. <literal>DE</literal> set, the <literal>+49</literal> can be omitted for
+          phone-numbers.
+        '';
+      };
+    };
+
+    disableImagemagick = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to not load the ImageMagick module into PHP.
+        This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
+        You may want to disable it for increased security. In that case, previews will still be available
+        for some images (e.g. JPEG and PNG).
+        See https://github.com/nextcloud/server/issues/13099
+      '';
     };
 
     caching = {
@@ -328,10 +378,13 @@ in {
             && !(acfg.adminpass != null && acfg.adminpassFile != null));
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
+        { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
+          message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
+        }
       ];
 
       warnings = let
-        latest = 20;
+        latest = 21;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -349,9 +402,9 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "18") (upgradeWarning 17 "20.03"))
         ++ (optional (versionOlder cfg.package.version "19") (upgradeWarning 18 "20.09"))
-        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.03"));
+        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
+        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -361,10 +414,13 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "20.03" then nextcloud17
           else if versionOlder stateVersion "20.09" then nextcloud18
+          # 21.03 will not be an official release - it was instead 21.05.
+          # This versionOlder statement remains set to 21.03 for backwards compatibility.
+          # See https://github.com/NixOS/nixpkgs/pull/108899 and
+          # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
           else if versionOlder stateVersion "21.03" then nextcloud19
-          else nextcloud20
+          else nextcloud21
         );
     }
 
@@ -422,6 +478,7 @@ in {
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+              ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
             ];
           '';
           occInstallCmd = let
@@ -466,6 +523,28 @@ in {
           path = [ occ ];
           script = ''
             chmod og+x ${cfg.home}
+
+            ${optionalString (c.dbpassFile != null) ''
+              if [ ! -r "${c.dbpassFile}" ]; then
+                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                exit 1
+              fi
+              if [ -z "$(<${c.dbpassFile})" ]; then
+                echo "dbpassFile ${c.dbpassFile} is empty!"
+                exit 1
+              fi
+            ''}
+            ${optionalString (c.adminpassFile != null) ''
+              if [ ! -r "${c.adminpassFile}" ]; then
+                echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                exit 1
+              fi
+              if [ -z "$(<${c.adminpassFile})" ]; then
+                echo "adminpassFile ${c.adminpassFile} is empty!"
+                exit 1
+              fi
+            ''}
+
             ln -sf ${cfg.package}/apps ${cfg.home}/
 
             # create nextcloud directories.
@@ -511,7 +590,6 @@ in {
         pools.nextcloud = {
           user = "nextcloud";
           group = "nextcloud";
-          phpOptions = phpOptionsStr;
           phpPackage = phpPackage;
           phpEnv = {
             NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
@@ -549,6 +627,14 @@ in {
               access_log off;
             '';
           };
+          "= /" = {
+            priority = 100;
+            extraConfig = ''
+              if ( $http_user_agent ~ ^DavClnt ) {
+                return 302 /remote.php/webdav/$is_args$args;
+              }
+            '';
+          };
           "/" = {
             priority = 900;
             extraConfig = "rewrite ^ /index.php;";
@@ -560,11 +646,15 @@ in {
           "^~ /.well-known" = {
             priority = 210;
             extraConfig = ''
+              absolute_redirect off;
               location = /.well-known/carddav {
-                return 301 $scheme://$host/remote.php/dav;
+                return 301 /remote.php/dav;
               }
               location = /.well-known/caldav {
-                return 301 $scheme://$host/remote.php/dav;
+                return 301 /remote.php/dav;
+              }
+              location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
+                return 301 /index.php$request_uri;
               }
               try_files $uri $uri/ =404;
             '';
@@ -572,7 +662,7 @@ in {
           "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
             return 404;
           '';
-          "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)".extraConfig = ''
+          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
             return 404;
           '';
           "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {

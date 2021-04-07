@@ -5,7 +5,6 @@
 , openssl
 , libuuid
 , coreutils
-, go
 , which
 , makeWrapper
 , cryptsetup
@@ -16,11 +15,11 @@ with lib;
 
 buildGoPackage rec {
   pname = "singularity";
-  version = "3.7.0";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
-    sha256 = "0y6lm23g6a2ljm78w8iyak7yivxvpj3i55fjbd56m9b2ykssm5pv";
+    sha256 = "sha256-NpFiIuJvuTRATwdm4P82jtrDbX/DHKVx9fYJRmYJBms=";
   };
 
   goPackagePath = "github.com/sylabs/singularity";

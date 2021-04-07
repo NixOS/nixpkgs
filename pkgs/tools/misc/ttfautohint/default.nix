@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "An automatic hinter for TrueType fonts";
     longDescription = ''

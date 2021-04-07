@@ -79,6 +79,8 @@ let
       include ${pkgs.mailcap}/etc/nginx/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
+
+      default_type application/octet-stream;
   '';
 
   configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
@@ -152,9 +154,9 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   90;
-        proxy_send_timeout      90;
-        proxy_read_timeout      90;
+        proxy_connect_timeout   60;
+        proxy_send_timeout      60;
+        proxy_read_timeout      60;
         proxy_http_version      1.0;
         include ${recommendedProxyConfig};
       ''}
@@ -404,6 +406,7 @@ in
 
       logError = mkOption {
         default = "stderr";
+        type = types.str;
         description = "
           Configures logging.
           The first parameter defines a file that will store the log. The
@@ -801,7 +804,7 @@ in
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) pkgs.nginx.modules);
+        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) (optionals (cfg.package ? modules) cfg.package.modules));
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         PrivateMounts = true;

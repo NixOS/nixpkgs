@@ -6,6 +6,7 @@
 , go
 , ninja
 , python3
+, nixosTests
 }:
 
 let
@@ -56,7 +57,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-mct7anzErY9eSujZyGORfRJqzAO9XuFAv04DS8VRZKM=";
+    sha256 = "0q72c2zrl5vc8afkhkwyalb2h0mxn3133d4b9z4gag0p95wbwgc0";
     dontUseCmakeConfigure = true;
     preInstall = ''
       # Strip out the path to the build location (by deleting the comment line).
@@ -109,6 +110,11 @@ buildBazelPackage rec {
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
   ];
+
+  passthru.tests = {
+    # No tests for Envoy itself (yet), but it's tested as a core component of Pomerium.
+    inherit (nixosTests) pomerium;
+  };
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";

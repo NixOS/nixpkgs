@@ -3,12 +3,12 @@
 let
   pname = "rst2html5";
   version = "1.10.6";
-in python3Packages.buildPythonPackage {
-  inherit pname version;
   format = "wheel";
+in python3Packages.buildPythonPackage {
+  inherit pname version format;
 
   src = python3Packages.fetchPypi {
-    inherit pname version;
+    inherit pname version format;
     sha256 = "sha256-jmToDFLQODqgTycBp2J8LyoJ1Zxho9w1VdhFMzvDFkg=";
   };
 

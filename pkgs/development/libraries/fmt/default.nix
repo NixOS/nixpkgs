@@ -37,7 +37,7 @@ let
         homepage = "http://fmtlib.net/";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ maintainers.jdehaas ];
-        license = licenses.bsd2;
+        license = licenses.mit;
         platforms = platforms.all;
       };
     };

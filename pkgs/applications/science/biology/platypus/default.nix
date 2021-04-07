@@ -13,7 +13,8 @@ in stdenv.mkDerivation {
     sha256 = "0nah6r54b8xm778gqyb8b7rsd76z8ji4g73sm6rvpw5s96iib1vw";
   };
 
-  buildInputs = [ htslib python zlib makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ htslib python zlib ];
 
   buildPhase = ''
     patchShebangs .

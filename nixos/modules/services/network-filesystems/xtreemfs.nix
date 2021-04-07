@@ -92,6 +92,7 @@ in
       enable = mkEnableOption "XtreemFS";
 
       homeDir = mkOption {
+        type = types.path;
         default = "/var/lib/xtreemfs";
         description = ''
           XtreemFS home dir for the xtreemfs user.
@@ -109,6 +110,7 @@ in
 
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e40";
+          type = types.str;
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
@@ -117,11 +119,13 @@ in
         };
         port = mkOption {
           default = 32638;
+          type = types.port;
           description = ''
             The port to listen on for incoming connections (TCP).
           '';
         };
         address = mkOption {
+          type = types.str;
           example = "127.0.0.1";
           default = "";
           description = ''
@@ -131,12 +135,14 @@ in
         };
         httpPort = mkOption {
           default = 30638;
+          type = types.port;
           description = ''
             Specifies the listen port for the HTTP service that returns the
             status page.
           '';
         };
         syncMode = mkOption {
+          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "ASYNC" ];
           default = "FSYNC";
           example = "FDATASYNC";
           description = ''
@@ -229,6 +235,7 @@ in
 
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e41";
+          type = types.str;
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
@@ -237,12 +244,14 @@ in
         };
         port = mkOption {
           default = 32636;
+          type = types.port;
           description = ''
             The port to listen on for incoming connections (TCP).
           '';
         };
         address = mkOption {
           example = "127.0.0.1";
+          type = types.str;
           default = "";
           description = ''
             If specified, it defines the interface to listen on. If not
@@ -251,6 +260,7 @@ in
         };
         httpPort = mkOption {
           default = 30636;
+          type = types.port;
           description = ''
             Specifies the listen port for the HTTP service that returns the
             status page.
@@ -258,6 +268,7 @@ in
         };
         syncMode = mkOption {
           default = "FSYNC";
+          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "ASYNC" ];
           example = "FDATASYNC";
           description = ''
             The sync mode influences how operations are committed to the disk
@@ -367,6 +378,7 @@ in
 
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e42";
+          type = types.str;
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
@@ -375,12 +387,14 @@ in
         };
         port = mkOption {
           default = 32640;
+          type = types.port;
           description = ''
             The port to listen on for incoming connections (TCP and UDP).
           '';
         };
         address = mkOption {
           example = "127.0.0.1";
+          type = types.str;
           default = "";
           description = ''
             If specified, it defines the interface to listen on. If not
@@ -389,6 +403,7 @@ in
         };
         httpPort = mkOption {
           default = 30640;
+          type = types.port;
           description = ''
             Specifies the listen port for the HTTP service that returns the
             status page.

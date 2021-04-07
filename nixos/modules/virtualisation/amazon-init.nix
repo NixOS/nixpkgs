@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
+  cfg = config.virtualisation.amazon-init;
+
   script = ''
     #!${pkgs.runtimeShell} -eu
 
@@ -41,20 +45,33 @@ let
     nixos-rebuild switch
   '';
 in {
-  systemd.services.amazon-init = {
-    inherit script;
-    description = "Reconfigure the system from EC2 userdata on startup";
 
-    wantedBy = [ "multi-user.target" ];
-    after = [ "multi-user.target" ];
-    requires = [ "network-online.target" ];
+  options.virtualisation.amazon-init = {
+    enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Enable or disable the amazon-init service.
+      '';
+    };
+  };
 
-    restartIfChanged = false;
-    unitConfig.X-StopOnRemoval = false;
+  config = mkIf cfg.enable {
+    systemd.services.amazon-init = {
+      inherit script;
+      description = "Reconfigure the system from EC2 userdata on startup";
 
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
+      wantedBy = [ "multi-user.target" ];
+      after = [ "multi-user.target" ];
+      requires = [ "network-online.target" ];
+
+      restartIfChanged = false;
+      unitConfig.X-StopOnRemoval = false;
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
     };
   };
 }

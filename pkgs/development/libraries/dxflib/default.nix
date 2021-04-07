@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     qmake
   ];
+  dontWrapQtApps = true;
   preConfigure = ''
     sed -i 's/CONFIG += staticlib/CONFIG += shared/' dxflib.pro
   '';

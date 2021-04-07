@@ -1,14 +1,14 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute, ronn }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
-  version = "1.6.2";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "0lky68fjrqjsd62g97jkn5a9hzj53g8wb6d2ncx8s21rknpncdar";
+    sha256 = "06b6k1rzqkd7cdl7n0gz5ky48fs2nhn0q2qxx1rww38vbfc7lpmf";
   };
 
   preConfigure = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute ];
+  buildInputs = [ openssl lzo zlib iproute2 ];
 
   enableParallelBuilding = true;
 

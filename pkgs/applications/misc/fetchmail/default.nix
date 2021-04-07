@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, openssl }:
 
 let
-  version = "6.4.15";
+  version = "6.4.16";
 in
 stdenv.mkDerivation {
   pname = "fetchmail";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
-    sha256 = "sha256-c1shdHSTfhPPzeotQqNGv2hIfg1h7+vk0Nnt3LOia5Y=";
+    sha256 = "sha256-BEuaCsA6+653RJed7+Pi4y45FBvKaP0Mje2i7UCIT7k=";
   };
 
   buildInputs = [ openssl ];

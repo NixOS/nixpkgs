@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config
-, bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+, bzip2, curlMinimal, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
 , ps
@@ -14,18 +14,18 @@
 assert withQt5 -> useQt4 == false;
 assert useQt4 -> withQt5 == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "cmake"
           + lib.optionalString isBootstrap "-boot"
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.19.2";
+  version = "3.19.6";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "1w67w0ak6vf37501dlz9yhnzlvvpw1w10n2nm3hi7yxp4cxzvq73";
+    sha256 = "sha256-7IerZ8RfR8QoXyBCgMXN5I4ckgz8/tFVWyf7OxodILo=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ setupHook pkg-config ];
 
   buildInputs = []
-    ++ lib.optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
+    ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
     ++ lib.optional useQt4 qt4
@@ -64,8 +64,6 @@ stdenv.mkDerivation rec {
       --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
-    substituteInPlace Modules/FindCxxTest.cmake \
-      --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
   ''
   # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
   + ''
@@ -130,4 +128,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };
-}
+} // (if withQt5 then { dontWrapQtApps = true; } else {})
+)

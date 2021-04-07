@@ -12,13 +12,13 @@
 
 mkDerivation rec {
   pname = "melonDS";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Arisotura";
     repo = pname;
     rev = version;
-    sha256 = "0m45m1ch0az8l3d3grjbqvi5vvydbffxwka9w3k3qiia50m7fnph";
+    sha256 = "sha256-bvi0Y+zwfEcsZMNxoH85hxwIGn0UIYlg/ZaE6yJ7vlo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];

@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
+, curl, libcap,  libuuid, lm_sensors, zlib
 , nixosTests
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
@@ -15,14 +15,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.28.0";
+  version = "1.29.3";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "1266jbfw55r1zh00xi6c90j2fs9hw8hmsb7686rh04l8mffny9f4";
+    sha256 = "sha256-GWIQZEC5agJ+Zw7l58IIAJhXP6dxirCmWVBJulzBO5Q=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -36,6 +36,8 @@ in stdenv.mkDerivation rec {
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
+    # required to prevent plugins from relying on /etc
+    # and /var
     ./no-files-in-etc-and-var.patch
   ];
 
@@ -77,7 +79,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];
   };

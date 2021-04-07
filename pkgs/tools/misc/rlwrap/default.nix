@@ -1,26 +1,30 @@
-{ lib, stdenv, fetchurl, readline }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl, readline }:
 
 stdenv.mkDerivation rec {
   pname = "rlwrap";
-  version = "0.43";
+  version = "0.45";
 
-  src = fetchurl {
-    url = "https://github.com/hanslub42/rlwrap/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0bzb7ylk2770iv59v2d0gypb21y2xn87m299s9rqm6rdi2vx11lf";
+  src = fetchFromGitHub {
+    owner = "hanslub42";
+    repo = "rlwrap";
+    rev = "v${version}";
+    sha256 = "1ppkjdnxrxh99g4xaiaglm5bmp24006rfahci0cn1g7zwilkjy8s";
   };
+
+  postPatch = ''
+    substituteInPlace src/readline.c \
+      --replace "if(*p >= 0 && *p < ' ')" "if(*p >= 0 && (*p >= 0) && (*p < ' '))"
+  '';
+
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   buildInputs = [ readline ];
 
-  # Be high-bit-friendly
-  preBuild = ''
-    sed -i src/readline.c -e "s@[*]p [<] ' '@(*p >= 0) \\&\\& (*p < ' ')@"
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Readline wrapper for console programs";
     homepage = "https://github.com/hanslub42/rlwrap";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

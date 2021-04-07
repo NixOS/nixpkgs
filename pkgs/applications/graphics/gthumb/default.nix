@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , gnome3
 , pkg-config
 , meson
@@ -33,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.10.1";
+  version = "3.10.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0gm7q6n9lnjsdqpx5b0cqjayhzwnplqb6p5pshzhbfp2zqd2g9ss";
+    sha256 = "/erkKBg3j5s8qwBgTu61t8Cnpez+ad4IuZOGd0ZDXJM=";
   };
 
   nativeBuildInputs = [

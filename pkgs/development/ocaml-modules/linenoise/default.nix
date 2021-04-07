@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "linenoise";
   version = "1.3.0";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.02";
 
   src = fetchFromGitHub {

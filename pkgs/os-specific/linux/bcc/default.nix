@@ -6,13 +6,13 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.18.0";
+  version = "0.19.0";
 
   disabled = !stdenv.isLinux;
 
   src = fetchurl {
     url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "sha256-0F8tppVFu7cnuSnlgcEvbEdykxYhGJnTc04I98/yIVs=";
+    sha256 = "sha256-TEH8Gmp+8ghLQ8UsGy5hBCMLqfMeApWEFr8THYSOdOQ=";
   };
   format = "other";
 

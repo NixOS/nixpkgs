@@ -2,9 +2,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aniso8601
-, iso8601
 , graphql-core
 , graphql-relay
+, promise
 , pytestCheckHook
 , pytest-asyncio
 , pytest-benchmark
@@ -31,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    promise
     pytestCheckHook
     pytest-asyncio
     pytest-benchmark
@@ -38,6 +39,8 @@ buildPythonPackage rec {
     pytz
     snapshottest
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "graphene" ];
 

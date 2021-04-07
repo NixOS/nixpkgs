@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ file zlib ] ++ optionals client [ openal SDL SDL_image libogg libvorbis ];
 
   targets = (optionalString server "server") + (optionalString client " client");
-  makeFlags = [ "-C source/src" "CXX=c++" targets ];
+  makeFlags = [ "-C source/src" "CXX=${stdenv.cc.targetPrefix}c++" targets ];
 
   desktop = makeDesktopItem {
     name = "AssaultCube";

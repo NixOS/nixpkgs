@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome3, darwin }:
+{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome3, darwin, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.64.2";
+  version = "2.64.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1v6lp23fr2qh4zshcnm28sn29j3nzgsvcqj2nhmrnvamipjq4lm7";
+    sha256 = "sha256-UI/IbiyRQRmKoWwiWxb9a5EZF8DTgXYCZShE0Jc+o4Y=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
+    meson
     pkg-config
+    ninja
     gnum4
     glib # for glib-compile-schemas
   ];

@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
-, mpd_clientlib
+, libmpdclient
 , openssl
 , lua5_3
 , libid3tag
@@ -21,12 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QGJti1tKKJlumLgABPmROplF0UVGMWMnyRXLb2cEieQ=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    mpd_clientlib
+    libmpdclient
     openssl
     lua5_3
     libid3tag

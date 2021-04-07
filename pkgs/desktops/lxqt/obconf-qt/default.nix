@@ -44,9 +44,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "The Qt port of obconf, the Openbox configuration tool";
     homepage = "https://github.com/lxqt/obconf-qt";
-    license = licenses.gpl2;
+    description = "The Qt port of obconf, the Openbox configuration tool";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

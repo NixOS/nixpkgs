@@ -6,25 +6,26 @@
 , dbus
 , libpulseaudio
 , notmuch
+, openssl
 , ethtool
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.14.3";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1k9dgmd4wz9950kr35da31rhph43gmvg8dif7hg1xw41xch6bi60";
+    sha256 = "1ndqh4bzwim32n8psgsgdd47xmlb45rhvcwla1wm506byb21nk4c";
   };
 
-  cargoSha256 = "0qqkcgl9iz4kxl1a2vv2p7vy7wxn970y28jynf3n7hfp16i3liy2";
+  cargoSha256 = "098dzwqwbhcyswm73m880z0w03i7xrq56x79vfyvacw4k27q2zm9";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [ dbus libpulseaudio notmuch ];
+  buildInputs = [ dbus libpulseaudio notmuch openssl ];
 
   cargoBuildFlags = [
     "--features=notmuch"

@@ -1,64 +1,58 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, python36
-, tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
-, freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
-, dbus, doxygen, qt5, c-blosc, libGLU, gnome3, dconf, gtk3, pcre
-, bison, flex, libpthreadstubs, libX11
-, embree2, makeWrapper, gsettings-desktop-schemas, glib
-, withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp, rocm-opencl-runtime
-}:
+{ lib, config, stdenv, fetchFromGitHub, symlinkJoin, wrapGAppsHook, cmake, boost172
+, pkg-config, flex, bison, libpng, libtiff, zlib, python3, embree, openexr
+, openimagedenoise, openimageio, tbb, c-blosc, gtk3, pcre, doxygen
+# OpenCL Support
+, withOpenCL ? true, ocl-icd
+# Cuda Support
+, withCuda ? config.cudaSupport or false, cudatoolkit }:
 
 let
-      python = python36;
+  boostWithPython = boost172.override {
+    enablePython = true;
+    enableNumpy = true;
+    python = python3;
+  };
 
-      boost_static = boost165.override {
-      inherit python;
-      enableStatic = true;
-      enablePython = true;
-    };
+  # Requires a version number like "<MAJOR><MINOR>"
+  pythonVersion = (lib.versions.major python3.version)
+    + (lib.versions.minor python3.version);
 
-    version = "2.0";
-    sha256 = "15nn39ybsfjf3cw3xgkbarvxn4a9ymfd579ankm7yjxkw5gcif38";
-
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "luxcorerender";
-  inherit version;
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "LuxCoreRender";
     repo = "LuxCore";
     rev = "luxcorerender_v${version}";
-    inherit sha256;
+    sha256 = "0xvivw79719fa1q762b76nyvzawfd3hmp8y5j04bax8a7f8mfa9k";
   };
 
-  nativeBuildInputs = [ cmake flex bison doxygen makeWrapper pkg-config ];
-  buildInputs = [
-    embree2 zlib boost_static libjpeg
-    libtiff libpng ilmbase freetype openexr openimageio
-    tbb qt5.full c-blosc libGLU pcre
-    libX11 libpthreadstubs python libXdmcp libxkbcommon
-    epoxy at-spi2-core dbus
-    # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
-    # needed for XDG_ICON_DIRS
-    gnome3.adwaita-icon-theme
-    (lib.getLib dconf)
-  ] ++ lib.optionals withOpenCL [ opencl-headers ocl-icd opencl-clhpp rocm-opencl-runtime ];
+  nativeBuildInputs = [ pkg-config cmake flex bison doxygen wrapGAppsHook ];
 
-  cmakeFlags = [
-    "-DOpenEXR_Iex_INCLUDE_DIR=${openexr.dev}/include/OpenEXR"
-    "-DOpenEXR_IlmThread_INCLUDE_DIR=${ilmbase.dev}/include/OpenEXR"
-    "-DOpenEXR_Imath_INCLUDE_DIR=${openexr.dev}/include/OpenEXR"
-    "-DOpenEXR_half_INCLUDE_DIR=${ilmbase.dev}/include"
-    "-DPYTHON_LIBRARY=${python}/lib/libpython3.so"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.pythonVersion}"
-    "-DEMBREE_INCLUDE_PATH=${embree2}/include"
-    "-DEMBREE_LIBRARY=${embree2}/lib/libembree.so"
-    "-DBoost_PYTHON_LIBRARY_RELEASE=${boost_static}/lib/libboost_python3-mt.so"
-  ] ++ lib.optional withOpenCL
-    "-DOPENCL_INCLUDE_DIR=${opencl-headers}/include";
+  buildInputs = [
+    libpng
+    libtiff
+    zlib
+    boostWithPython.dev
+    python3
+    embree
+    openexr
+    openimagedenoise
+    tbb
+    c-blosc
+    gtk3
+    pcre
+    openimageio.dev
+    openimageio.out
+  ] ++ lib.optionals withOpenCL [ ocl-icd ]
+    ++ lib.optionals withCuda [ cudatoolkit ];
+
+  cmakeFlags = [ "-DPYTHON_V=${pythonVersion}" ]
+    ++ lib.optional (!withOpenCL) "-DLUXRAYS_DISABLE_OPENCL=1"
+    ++ lib.optional (!withCuda) "-DLUXRAYS_DISABLE_CUDA=1";
 
   preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -isystem ${python}/include/python${python.pythonVersion}"
     NIX_LDFLAGS+=" -lpython3"
   '';
 
@@ -69,13 +63,6 @@ in stdenv.mkDerivation {
     cp -va lib/* $out/lib
   '';
 
-  preFixup = ''
-    wrapProgram "$out/bin/luxcoreui" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share' \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
-  '';
-
   meta = with lib; {
     description = "Open source, physically based, unbiased rendering engine";
     homepage = "https://luxcorerender.org/";
@@ -84,7 +71,6 @@ in stdenv.mkDerivation {
     platforms = platforms.linux;
   };
 }
-
 
 # TODO (might not be necessary):
 #

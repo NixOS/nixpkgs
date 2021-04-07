@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "075vqnha21rhr1b61dim7dqlfwm1yffyzcaa83s36rpk9r5sddzx";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

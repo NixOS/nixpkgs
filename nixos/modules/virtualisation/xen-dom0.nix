@@ -57,7 +57,8 @@ in
 
     virtualisation.xen.bootParams =
       mkOption {
-        default = "";
+        default = [];
+        type = types.listOf types.str;
         description =
           ''
             Parameters passed to the Xen hypervisor at boot time.
@@ -68,6 +69,7 @@ in
       mkOption {
         default = 0;
         example = 512;
+        type = types.addCheck types.int (n: n >= 0);
         description =
           ''
             Amount of memory (in MiB) allocated to Domain 0 on boot.
@@ -78,6 +80,7 @@ in
     virtualisation.xen.bridge = {
         name = mkOption {
           default = "xenbr0";
+          type = types.str;
           description = ''
               Name of bridge the Xen domUs connect to.
             '';
@@ -245,7 +248,7 @@ in
     # Xen provides udev rules.
     services.udev.packages = [ cfg.package ];
 
-    services.udev.path = [ pkgs.bridge-utils pkgs.iproute ];
+    services.udev.path = [ pkgs.bridge-utils pkgs.iproute2 ];
 
     systemd.services.xen-store = {
       description = "Xen Store Daemon";

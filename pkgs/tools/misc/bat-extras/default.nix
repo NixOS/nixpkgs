@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, bat
+{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, bat
 # batdiff, batgrep, and batwatch
 , coreutils
 , less

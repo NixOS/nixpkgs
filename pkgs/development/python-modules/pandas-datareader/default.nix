@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , isPy27
 , pandas
 , lxml

@@ -1,14 +1,15 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.17.1";
+  version = "2.20.0";
   srcName = "azure-cli-${version}-src";
+
   src = fetchFromGitHub {
     name = srcName;
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-RTYCsdoZx1YQa9a8ZyvwQ9yTLEB6r7/mMgfecc/vGvM=";
+    sha256 = "sha256-unG17oiqZZJNGg8QCg7xY0GzuMu2gaAIIgGF8TlMBQQ=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -136,6 +137,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     psutil
     requests
     scp
+    semver
     six
     sshtunnel
     urllib3

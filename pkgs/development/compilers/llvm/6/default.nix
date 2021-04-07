@@ -36,6 +36,7 @@ let
 
     llvm-manpages = lowPrio (tools.llvm.override {
       enableManpages = true;
+      enableSharedLibraries = false;
       python3 = pkgs.python3;  # don't use python-boot
     });
 

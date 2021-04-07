@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
+{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
 , future, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.1.6.1";
+  version = "3.1.6.2";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "sha256-lYvFNeCuvLIV//fEQDZIj+nLGZmrKHfAQyNpe4vMmfU=";
+    sha256 = "sha256-6vxJKIwMKz8KQn10aOzqXhVBDfBLylw925hR1hWP7/A=";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):

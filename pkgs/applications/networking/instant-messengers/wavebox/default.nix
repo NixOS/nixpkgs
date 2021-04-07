@@ -1,5 +1,5 @@
 { alsaLib, autoPatchelfHook, fetchurl, gtk3, libnotify
-, makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg_utils
+, makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg-utils
 , xorg
 }:
 
@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
-      --prefix PATH : ${xdg_utils}/bin
+      --prefix PATH : ${xdg-utils}/bin
   '';
 
   meta = with lib; {

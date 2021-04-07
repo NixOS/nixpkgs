@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     "-DENABLE_PULSEAUDIO=ON"
   ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Application for practicing playing musical scores and ear training";
     homepage = "https://nootka.sourceforge.io/";

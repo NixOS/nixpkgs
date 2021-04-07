@@ -1,5 +1,10 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
+let
+  # ounit is only available for OCaml >= 4.04
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+in
+
 stdenv.mkDerivation {
   pname = "ocamlmod";
   version = "0.0.9";
@@ -9,13 +14,15 @@ stdenv.mkDerivation {
     sha256 = "0cgp9qqrq7ayyhddrmqmq1affvfqcn722qiakjq4dkywvp67h4aa";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
+  configurePhase = "ocaml setup.ml -configure --prefix $out"
+    + lib.optionalString doCheck " --enable-tests";
   buildPhase     = "ocaml setup.ml -build";
   installPhase   = "ocaml setup.ml -install";
 
-  doCheck = true;
+  inherit doCheck;
+  checkInputs = [ ounit ];
 
   checkPhase = "ocaml setup.ml -test";
 

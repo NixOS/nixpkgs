@@ -7,19 +7,21 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.23.2";
+  version = "1.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-auGbFAvwLR7aDChhgeNZPZPNGJo+b9Q4TFDaOrmU2zI=";
+    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
   };
 
   propagatedBuildInputs = [
     cli-helpers
     click
     configobj
+    importlib-resources
     paramiko
     prompt_toolkit
+    pyaes
     pycrypto
     pygments
     pymysql
@@ -39,7 +41,8 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse"
+      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
+      --replace "importlib_resources >= 5.0.0" "importlib_resources"
   '';
 
   meta = with lib; {
