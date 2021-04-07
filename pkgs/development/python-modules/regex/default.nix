@@ -4,14 +4,13 @@
 , python
 }:
 
-
 buildPythonPackage rec {
   pname = "regex";
-  version = "2021.3.17";
+  version = "2021.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b8a1fb724904139149a43e172850f35aa6ea97fb0545244dc0b805e0154ed68";
+    sha256 = "sha256-Uro9P5uULEnX5LwQW7KFUcRAZfE5plBiq3kSvvEMmvs=";
   };
 
   postCheck = ''
@@ -22,10 +21,12 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "regex" ];
+
+  meta = with lib; {
     description = "Alternative regular expression module, to replace re";
     homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
-    license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = licenses.psfl;
+    maintainers = with maintainers; [ abbradar ];
   };
 }
