@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer";
-  version = "1.16.2";
+  version = "1.16.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0kp93622y29pck8asvil1fmzf55s2gx76wv475a6izc3cwj49w73";
+    sha256 = "1is3jpjwgcckh77pyh11a13phv72w9s9c7gpn04fam74d1wh6bv9";
   };
 
   patches = [

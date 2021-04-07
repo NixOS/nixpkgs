@@ -46,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.16.2";
+  version = "1.16.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "068k3cbv1yf3gbllfdzqsg263kzwh21y8dpwr0wvgh15vapkpfs0";
+    sha256 = "0pzq565ijl5z3mphvix34878m7hck6a58rdpj7sp7rixwwzkm8nk";
   };
 
   patches = [ ./fix_pkgconfig_includedir.patch ];

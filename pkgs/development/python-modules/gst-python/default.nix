@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.16.2";
+  version = "1.16.3";
 
   format = "other";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    sha256 = "1a48ca66izmm8hnp608jv5isg3jxb0vlfmhns0bg9nbkilag7390";
+    sha256 = "07qnqwr8g4q9b2rbcnhlb1svgpsqc6fz19k5p6lsmk15dhjhm81n";
   };
 
   nativeBuildInputs = [
@@ -44,13 +44,6 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/GStreamer/gst-python/commit/f98c206bdf01529f8ea395a719b10baf2bdf717f.patch";
       sha256 = "04n4zrnfivgr7iaqw4sjlbd882s8halc2bbbhfxqf0sg2lqwmrxg";
-    })
-  ] ++ [
-    # Fix linking against Python 3.8
-    # https://gitlab.freedesktop.org/gstreamer/gst-python/merge_requests/30
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-python/commit/22f28155d86e27c4134de4ed2861264003fcfd23.patch";
-      sha256 = "Y70qVguHUBmmRVMFBKAP0d6anBQw5W0TKyu2bAwxbQg=";
     })
   ];
 
