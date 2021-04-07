@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , makeWrapper
-, fetchFromGitHub
 # Dynamic libraries
 , alsaLib
 , atk
