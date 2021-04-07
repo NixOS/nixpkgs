@@ -23,7 +23,7 @@ buildGoModule rec {
   buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildFlagsArray = lib.optional enableCmount "-tags=cmount"
+  buildFlagsArray = lib.optionals enableCmount [ "-tags=cmount" ]
     ++ [ "-ldflags=-s -w -X github.com/rclone/rclone/fs.Version=${version}" ];
 
   postInstall =
