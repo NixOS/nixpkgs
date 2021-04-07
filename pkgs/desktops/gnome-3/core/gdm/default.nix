@@ -90,12 +90,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/112
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/1d28d4b3568381b8590d2235737b924aefd1746c.patch";
-      sha256 = "ZUXKZS4T0o0hzrApxaqcR0txCRv5zBgqeQ9K9fLNX1o=";
-    })
-
     # GDM fails to find g-s with the following error in the journal.
     # gdm-x-session[976]: dbus-run-session: failed to exec 'gnome-session': No such file or directory
     # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/92
