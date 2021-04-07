@@ -50,9 +50,14 @@ let
   # List of components used in config
   extraComponents = filter useComponent availableComponents;
 
-  package = if (cfg.autoExtraComponents && cfg.config != null)
+  testedPackage = if (cfg.autoExtraComponents && cfg.config != null)
     then (cfg.package.override { inherit extraComponents; })
     else cfg.package;
+
+  # overridePythonAttrs has to be applied after override
+  package = testedPackage.overridePythonAttrs (oldAttrs: {
+    doCheck = false;
+  });
 
   # If you are changing this, please update the description in applyDefaultConfig
   defaultConfig = {
@@ -183,13 +188,9 @@ in {
     };
 
     package = mkOption {
-      default = pkgs.home-assistant.overridePythonAttrs (oldAttrs: {
-        doCheck = false;
-      });
+      default = pkgs.home-assistant;
       defaultText = literalExample ''
-        pkgs.home-assistant.overridePythonAttrs (oldAttrs: {
-          doCheck = false;
-        })
+        pkgs.home-assistant
       '';
       type = types.package;
       example = literalExample ''
@@ -198,10 +199,12 @@ in {
         }
       '';
       description = ''
-        Home Assistant package to use. By default the tests are disabled, as they take a considerable amout of time to complete.
+        Home Assistant package to use. Tests are automatically disabled, as they take a considerable amout of time to complete.
         Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
         If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
         to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
+        Avoid <literal>home-assistant.overridePythonAttrs</literal> if you use
+        <literal>autoExtraComponents</literal>.
       '';
     };
 
