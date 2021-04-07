@@ -25,6 +25,7 @@ let
   }));
 in
 with pkgs; {
+  linux_4_14 = makeKernelTest "4.14" linuxPackages_4_14;
   linux_4_19 = makeKernelTest "4.19" linuxPackages_4_19;
   linux_5_4 = makeKernelTest "5.4" linuxPackages_5_4;
   linux_5_10 = makeKernelTest "5.10" linuxPackages_5_10;
