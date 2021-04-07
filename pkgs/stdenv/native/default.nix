@@ -8,14 +8,16 @@ let
   inherit (localSystem) system;
 
   shell =
-    if system == "i686-freebsd" || system == "x86_64-freebsd" then "/usr/local/bin/bash"
+    if system == "i686-freebsd" || system == "x86_64-freebsd" ||
+       # bash 3.x is too old on darwin systems, so we need an externally installed one (at least bash 4)
+       system == "x86_64-darwin" || system == "aarch64-darwin" then "/usr/local/bin/bash"
     else "/bin/bash";
 
   path =
     (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
     (if system == "x86_64-solaris" then [ "/opt/local/gnu" ] else []) ++
-    ["/" "/usr" "/usr/local"];
+    [ "/usr/local"  "/usr" "/" ];
 
   prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
