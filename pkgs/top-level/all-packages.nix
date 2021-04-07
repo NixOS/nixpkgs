@@ -14973,7 +14973,7 @@ in
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
 
-  icu = icu68;
+  icu = icu69;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
