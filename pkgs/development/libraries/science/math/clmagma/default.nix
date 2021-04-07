@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, gfortran, opencl-headers, clblas, ocl-icd, mkl, intel-ocl }:
+{ lib, stdenv, fetchurl, gfortran, opencl-headers, clblas, ocl-icd, mkl, intel-ocl }:
 
-with stdenv.lib;
+with lib;
 
 let 
   version = "1.3.0";
@@ -65,10 +65,10 @@ in stdenv.mkDerivation {
     cp ${incfile} make.inc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures, OpenCL port";
     license = licenses.bsd3;
-    homepage = http://icl.cs.utk.edu/magma/index.html;
+    homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.linux;
     maintainers = with maintainers; [ volhovm ];
   };

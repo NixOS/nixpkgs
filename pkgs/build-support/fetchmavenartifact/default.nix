@@ -1,12 +1,12 @@
 # Adaptation of the MIT-licensed work on `sbt2nix` done by Charles O'Farrell
 
-{ fetchurl, stdenv }:
+{ lib, fetchurl, stdenv }:
 let
   defaultRepos = [
-    http://central.maven.org/maven2
-    http://oss.sonatype.org/content/repositories/releases
-    http://oss.sonatype.org/content/repositories/public
-    http://repo.typesafe.com/typesafe/releases
+    "https://repo1.maven.org/maven2"
+    "https://oss.sonatype.org/content/repositories/releases"
+    "https://oss.sonatype.org/content/repositories/public"
+    "https://repo.typesafe.com/typesafe/releases"
   ];
 in
 
@@ -17,6 +17,8 @@ args@
   artifactId
 , # Example: "4.3.6"
   version
+, # Example: "jdk11"
+  classifier ? null
 , # List of maven repositories from where to fetch the artifact.
   # Example: [ http://oss.sonatype.org/content/repositories/public ].
   repos ? defaultRepos
@@ -34,21 +36,20 @@ assert (url == "") || (urls == []);
 # if repos is empty, then url or urls must be specified.
 assert (repos != []) || (url != "") || (urls != []);
 
-
 let
   name_ =
-    with stdenv.lib; concatStrings [
-      (replaceChars ["."] ["_"] groupId) "_"
-      (replaceChars ["."] ["_"] artifactId) "-"
+    lib.concatStrings [
+      (lib.replaceChars ["."] ["_"] groupId) "_"
+      (lib.replaceChars ["."] ["_"] artifactId) "-"
       version
     ];
   mkJarUrl = repoUrl:
-    with stdenv.lib; concatStringsSep "/" [
-      (removeSuffix "/" repoUrl)
-      (replaceChars ["."] ["/"] groupId)
+    lib.concatStringsSep "/" [
+      (lib.removeSuffix "/" repoUrl)
+      (lib.replaceChars ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}.jar"
+      "${artifactId}-${version}${lib.optionalString (!isNull classifier) "-${classifier}"}.jar"
     ];
   urls_ =
     if url != "" then [url]
@@ -56,7 +57,7 @@ let
     else map mkJarUrl repos;
   jar =
     fetchurl (
-      builtins.removeAttrs args ["groupId" "artifactId" "version" "repos" "url" ]
+      builtins.removeAttrs args ["groupId" "artifactId" "version" "classifier" "repos" "url" ]
         // { urls = urls_; name = "${name_}.jar"; }
     );
 in

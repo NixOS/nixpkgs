@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, yacc }:
+{ lib, stdenv, fetchurl, bison }:
 
 stdenv.mkDerivation rec {
   name = "jam-2.6.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "19xkvkpycxfsncxvin6yqrql3x3z9ypc1j8kzls5k659q4kv5rmc";
   };
 
-  nativeBuildInputs = [ yacc ];
+  nativeBuildInputs = [ bison ];
 
   preConfigure = ''
     unset AR
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.perforce.com/resources/documentation/jam;
+  meta = with lib; {
+    homepage = "https://www.perforce.com/resources/documentation/jam";
     license = licenses.free;
     description = "Just Another Make";
     maintainers = with maintainers; [ orivej ];

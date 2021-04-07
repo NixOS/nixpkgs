@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, perl, kbd, bdftopcf
+{ lib, stdenv, fetchurl, perl, kbd, bdftopcf
 , libfaketime, fonttosfnt, mkfontscale
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "uni-vga";
 
   src = fetchurl {
-    url = http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz;
+    url = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";
     sha256 = "05sns8h5yspa7xkl81ri7y1yxf5icgsnl497f3xnaryhx11s2rv6";
   };
 
@@ -34,28 +34,25 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    # install pcf (for X11 applications)
-    install -m 644 -D *.pcf.gz -t "$out/share/fonts"
+    # install pcf and otb (for X11 and GTK applications)
+    install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts"
     mkfontdir "$out/share/fonts"
 
     # install bdf font
     install -m 644 -D *.bdf -t "$bdf/share/fonts"
     mkfontdir "$bdf/share/fonts"
 
-    # install otb font (for GTK applications)
-    install -m 644 -D *.otb -t "$otb/share/fonts"
-    mkfontdir "$otb/share/fonts"
   '' + optionalString stdenv.isLinux ''
     # install psf (for linux virtual terminal)
     install -m 644 -D *.psf.gz -t "$out/share/consolefonts"
   '';
 
-  outputs = [ "out" "bdf" "otb" ];
+  outputs = [ "out" "bdf" ];
 
   meta = {
     description = "Unicode VGA font";
     maintainers = [ maintainers.ftrvxmtrx ];
-    homepage = http://www.inp.nsk.su/~bolkhov/files/fonts/univga/;
+    homepage = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/";
     license = licenses.mit;
   };
 }

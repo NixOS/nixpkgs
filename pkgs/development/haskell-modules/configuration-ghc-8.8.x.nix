@@ -41,13 +41,34 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Hasura 1.3.1
+  # Because of ghc-heap-view, profiling needs to be disabled.
+  graphql-engine = overrideCabal (super.graphql-engine) (drv: {
+     # GHC 8.8.x needs a revert of https://github.com/hasura/graphql-engine/commit/a77bb0570f4210fb826985e17a84ddcc4c95d3ea
+     patches = [ ./patches/hasura-884-compat.patch ];
+  });
+
+  # GHC 8.8.x can build haddock version 2.23.*
+  haddock = self.haddock_2_23_1;
+  haddock-api = self.haddock-api_2_23_1;
+
+  # This build needs a newer version of Cabal.
+  cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
+
+  # cabal-install needs more recent versions of Cabal and random, but an older
+  # version of base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_4_0_0;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    random = dontCheck super.random_1_2_0;  # break infinite recursion
+    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+  });
+
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
   async = doJailbreak super.async;
-  cabal-install = doJailbreak super.cabal-install;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   chell = doJailbreak super.chell;
-  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
   hashable = doJailbreak super.hashable;
@@ -56,7 +77,6 @@ self: super: {
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;
-  quickcheck-instances = doJailbreak super.quickcheck-instances;
   setlocale = doJailbreak super.setlocale;
   split = doJailbreak super.split;
   system-fileio = doJailbreak super.system-fileio;
@@ -67,87 +87,54 @@ self: super: {
   # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
   io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
   snap-server = doJailbreak super.snap-server;
-  xmobar = doJailbreak super.xmobar;
-
-  # use latest version to fix the build
-  brick = self.brick_0_51;
-  dbus = self.dbus_1_2_11;
-  doctemplates = self.doctemplates_0_8;
   exact-pi = doJailbreak super.exact-pi;
-  generics-sop = self.generics-sop_0_5_0_0;
-  hackage-db = self.hackage-db_2_1_0;
-  haddock-library = self.haddock-library_1_8_0;
-  haskell-src-meta = self.haskell-src-meta_0_8_5;
-  haskell-src-meta_0_8_5 = dontCheck super.haskell-src-meta_0_8_5;
-  HaTeX = self.HaTeX_3_22_0_0;
-  HsYAML = self.HsYAML_0_2_1_0;
-  json-autotype = doJailbreak super.json-autotype;
-  lens = self.lens_4_19;
-  memory = self.memory_0_15_0;
-  microlens = self.microlens_0_4_11_2;
-  microlens-ghc = self.microlens-ghc_0_4_12;
-  microlens-mtl = self.microlens-mtl_0_2_0_1;
-  microlens-platform = self.microlens-platform_0_4_1;
-  microlens-th = self.microlens-th_0_4_3_4;
-  network = self.network_3_1_1_1;
-  optparse-applicative = self.optparse-applicative_0_15_1_0;
-  pandoc = dontCheck super.pandoc_2_9_1_1;        # https://github.com/jgm/pandoc/issues/6086
-  pandoc-types = self.pandoc-types_1_20;
-  prettyprinter = self.prettyprinter_1_6_0;
-  primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
-  regex-base = self.regex-base_0_94_0_0;
-  regex-compat = self.regex-compat_0_95_2_0;
-  regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
-  regex-posix = self.regex-posix_0_96_0_0;
-  regex-tdfa = self.regex-tdfa_1_3_1_0;
-  shelly = self.shelly_1_9_0;
-  singletons = self.singletons_2_6;
-  skylighting = self.skylighting_0_8_3_2;
-  skylighting-core = self.skylighting-core_0_8_3_2;
-  sop-core = self.sop-core_0_5_0_0;
-  texmath = self.texmath_0_12;
-  th-desugar = self.th-desugar_1_10;
-  tls = self.tls_1_5_3;
-  trifecta = self.trifecta_2_1;
-  vty = self.vty_5_26;
-  xml-conduit = overrideCabal super.xml-conduit (drv: { version = "1.9.0.0"; sha256 = "1p57v127882rxvvmwjmvnqdmk3x2wg1z4d8y03849h0xaz1vid0w"; });
-  xmonad-contrib = self.xmonad-contrib_0_16;
-
-  # These packages don't work and need patching and/or an update.
-  hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
-    sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
-  });
-  polyparse = appendPatch (doJailbreak super.polyparse) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/polyparse-1.12.1.patch";
-    sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
-  });
+  time-compat = doJailbreak super.time-compat;
+  http-media = unmarkBroken (doJailbreak super.http-media);
+  servant-server = unmarkBroken (doJailbreak super.servant-server);
   foundation = dontCheck super.foundation;
   vault = dontHaddock super.vault;
 
   # https://github.com/snapframework/snap-core/issues/288
   snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
-  # needs a release
-  json = overrideCabal super.json (drv: { prePatch = "substituteInPlace json.cabal --replace '4.13' '4.14'"; patches = [(
-    pkgs.fetchpatch {
-      url = "https://github.com/GaloisInc/json/commit/9d36ca5d865be7e4b2126b68a444b901941d2492.patch";
-      sha256 = "0vyi5nbivkqg6zngq7rb3wwcj9043m4hmyk155nrcddl8j2smfzv";
-    }
-  )]; });
 
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
-  # mark broken packages
-  bencode = markBrokenVersion "0.6.0.0" super.bencode;
-  easytest = markBroken super.easytest;
-  easytest_0_3 = markBroken super.easytest_0_3;
-  haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
-
-  # The LTS-14.x version of the dependencies are too old.
-  policeman = super.policeman.overrideScope (self: super: { ansi-terminal = self.ansi-terminal_0_10_2; relude = self.relude_0_6_0_0; });
-
   # https://github.com/kowainik/relude/issues/241
-  relude_0_6_0_0 = dontCheck super.relude_0_6_0_0;
+  relude = dontCheck super.relude;
 
+  # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
+  # of issues with Cabal 3.x.
+  darcs = dontDistribute super.darcs;
+
+  # The package needs the latest Cabal version.
+  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+
+  # cabal-fmt requires Cabal3
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
+
+  # liquidhaskell does not support ghc version 8.8.x.
+  liquid = markBroken super.liquid;
+  liquid-base = markBroken super.liquid-base;
+  liquid-bytestring = markBroken super.liquid-bytestring;
+  liquid-containers = markBroken super.liquid-containers;
+  liquid-ghc-prim = markBroken super.liquid-ghc-prim;
+  liquid-parallel = markBroken super.liquid-parallel;
+  liquid-platform = markBroken super.liquid-platform;
+  liquid-prelude = markBroken super.liquid-prelude;
+  liquid-vector = markBroken super.liquid-vector;
+  liquidhaskell = markBroken super.liquidhaskell;
+
+  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_4;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+
+  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
+  vector = dontCheck super.vector;
 }

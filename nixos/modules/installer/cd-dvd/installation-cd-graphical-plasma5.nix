@@ -8,14 +8,16 @@ with lib;
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
+  isoImage.edition = "plasma5";
+
   services.xserver = {
     desktopManager.plasma5 = {
       enable = true;
     };
 
     # Automatically login as nixos.
-    displayManager.sddm = {
-      enable = true;
+    displayManager = {
+      sddm.enable = true;
       autoLogin = {
         enable = true;
         user = "nixos";

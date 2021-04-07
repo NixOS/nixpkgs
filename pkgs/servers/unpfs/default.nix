@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "unpfs";
@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/example/unpfs";
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1d33nwj3i333a6ji3r3037mgg553lc3wsawm0pz13kbvhjf336i8";
+  cargoSha256 = "13mk86d8ql2196039qb7z0rx4svwffw1mzpiyxp35gg5fhcphriq";
 
   RUSTC_BOOTSTRAP = 1;
 
@@ -25,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     install -D -m 0444 ../../LICEN* -t "$out/share/doc/${pname}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "9P2000.L server implementation in Rust";
     homepage = "https://github.com/pfpacket/rust-9p";
     license = licenses.bsd3;

@@ -8,13 +8,12 @@
 , dbus
 , fontconfig
 , freetype
-, gconf
 , gdk-pixbuf
 , glib
 , glibc
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libxcb
@@ -27,15 +26,14 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
+, libcanberra
 , libnotify
 , gnome3
 , libGLU, libGL
 , nspr
 , nss
 , pango
+, pciutils
 , libheimdal
 , libpulseaudio
 , systemd
@@ -50,6 +48,7 @@
 , gnupg
 , ffmpeg
 , runtimeShell
+, mesa # firefox wants gbm for drm+dmabuf
 , systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
 
@@ -76,9 +75,9 @@ let
 
   policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
   name = "firefox-${channel}-bin-unwrapped-${version}";
 
@@ -87,14 +86,13 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl { inherit (source) url sha512; };
+  src = fetchurl { inherit (source) url sha256; };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      (lib.getDev alsaLib)
       atk
       cairo
       curl
@@ -103,13 +101,13 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gconf
       gdk-pixbuf
       glib
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
+      mesa
       libX11
       libXScrnSaver
       libXcomposite
@@ -122,20 +120,18 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
+      libcanberra
       libnotify
       libGLU libGL
       nspr
       nss
       pango
+      pciutils
       libheimdal
       libpulseaudio
-      (lib.getDev libpulseaudio)
       systemd
       ffmpeg
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
@@ -197,14 +193,14 @@ stdenv.mkDerivation {
         then "http://archive.mozilla.org/pub/devedition/releases/"
         else "http://archive.mozilla.org/pub/firefox/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
-    homepage = http://www.mozilla.org/firefox/;
+    homepage = "http://www.mozilla.org/firefox/";
     license = {
       free = false;
-      url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
+      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ taku0 ];
+    maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

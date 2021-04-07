@@ -1,19 +1,25 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "gotestsum";
-  version = "0.4.0";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "gotestyourself";
     repo = "gotestsum";
     rev = "v${version}";
-    sha256 = "0y71qr3ss3hgc8c7nmvpwk946xy1jc5d8whsv6y77wb24ncla7n0";
+    sha256 = "sha256-xUDhJLTO3JZ7rlUUzcypUev60qmRK9zOlO2VYeXqT4o=";
   };
 
-  modSha256 = "1dgs643pmcw68yc003zss52hbvsy6hxzwkrhr0qmsqkmzxryb3bn";
+  vendorSha256 = "sha256-sHi8iW+ZV/coeAwDUYnSH039UNtUO9HK0Bhz9Gmtv8k=";
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  subPackages = [ "." ];
+
+  meta = with lib; {
     homepage = "https://github.com/gotestyourself/gotestsum";
     description = "A human friendly `go test` runner";
     platforms = platforms.linux ++ platforms.darwin;

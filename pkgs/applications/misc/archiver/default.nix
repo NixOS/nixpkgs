@@ -5,22 +5,25 @@
 
 buildGoModule rec {
   pname = "archiver";
-  version = "3.2.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "mholt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kq2cyhbniwdabk426j493cs8d4nj35vmznm9031rrdd9ln5h9gl";
+    sha256 = "0fdkqfs87svpijccz8m11gvby8pvmznq6fs9k94vbzak0kxhw1wg";
   };
 
-  modSha256 = "13vwgqpw7ypq6mrvwmnl8n38x0h89ymryrrzkf7ya478fp00vclj";
+  vendorSha256 = "0avnskay23mpl3qkyf1h75rr7szpsxis2bj5pplhwf8q8q0212xf";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=unknown" ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Easily create & extract archives, and compress & decompress files of various formats";
     homepage = "https://github.com/mholt/archiver";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.all;
   };
 }

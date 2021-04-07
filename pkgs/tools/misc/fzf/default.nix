@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.20.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "02zy3c4k84rzqdkaf04idbj10v286hi0ix1xl2qsz1wrblh168w8";
+    sha256 = "sha256-q0rAAD6du0WLcd46LUpkG3gBIvmtOE/foEMW5QCoIak=";
   };
 
-  modSha256 = "12lnv8b96adpcg9qfizcyd9nxz590nxd82xch6ij719zlqyps143";
+  vendorSha256 = "sha256-FKDCIotyra/TZ48wbpzudJZ2aI2pn+ZR4EoZ+9+19Mw=";
 
   outputs = [ "out" "man" ];
 
@@ -19,17 +19,26 @@ buildGoModule rec {
 
   buildInputs = [ ncurses ];
 
+  buildFlagsArray = [
+    "-ldflags=-s -w -X main.version=${version} -X main.revision=${src.rev}"
+  ];
+
   # The vim plugin expects a relative path to the binary; patch it to abspath.
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/fzf.vim
 
     if ! grep -q $out plugin/fzf.vim; then
         echo "Failed to replace vim base_dir path with $out"
         exit 1
     fi
-  '';
 
-  doCheck = true;
+    # Has a sneaky dependency on perl
+    # Include first args to make sure we're patching the right thing
+    substituteInPlace shell/key-bindings.zsh \
+      --replace " perl -ne " " ${perl}/bin/perl -ne "
+    substituteInPlace shell/key-bindings.bash \
+      --replace " perl -n " " ${perl}/bin/perl -n "
+  '';
 
   preInstall = ''
     mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
@@ -60,7 +69,8 @@ buildGoModule rec {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
+    changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
   };
 }

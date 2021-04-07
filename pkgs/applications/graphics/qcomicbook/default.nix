@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools, qtx11extras, poppler }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qcomicbook";
   version = "0.9.1";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig
+    cmake pkg-config
   ];
 
   buildInputs = [
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       --replace "Exec=qcomicbook" "Exec=$out/bin/qcomicbook"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/stolowski/QComicBook;
+  meta = with lib; {
+    homepage = "https://github.com/stolowski/QComicBook";
     description = "Comic book reader in Qt5";
     license = licenses.gpl2;
 

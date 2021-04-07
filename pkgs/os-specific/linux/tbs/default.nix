@@ -53,11 +53,11 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = https://www.tbsdtv.com/;
+    homepage = "https://www.tbsdtv.com/";
     description = "Linux driver for TBSDTV cards";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ck3d ];
     priority = -1;
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
+    broken = lib.versionAtLeast kernel.version "4.18";
   };
 }

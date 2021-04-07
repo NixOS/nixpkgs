@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 
 , SystemConfiguration ? null, Foundation ? null
 }:
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
        lib.optional isDarwin SystemConfiguration
     ++ lib.optional isDarwin Foundation;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts HTML files to PostScript and PDF";
-    homepage    = https://michaelrsweet.github.io/htmldoc;
+    homepage    = "https://michaelrsweet.github.io/htmldoc";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ shanemikel ];
     platforms   = with platforms; linux ++ darwin;

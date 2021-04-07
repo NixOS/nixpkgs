@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, m4 }:
+{ lib, stdenv, fetchurl, gmp, m4 }:
 
 let
   pname = "ecm";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   # See https://trac.sagemath.org/ticket/19233
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-asm-redc";
+  configureFlags = lib.optional stdenv.isDarwin "--disable-asm-redc";
 
   buildInputs = [ m4 gmp ];
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Elliptic Curve Method for Integer Factorization";
-    license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://ecm.gforge.inria.fr/;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
+    homepage = "http://ecm.gforge.inria.fr/";
+    maintainers = [ lib.maintainers.roconnor ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

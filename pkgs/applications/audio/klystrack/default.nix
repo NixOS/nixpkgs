@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , SDL2, SDL2_image
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2 SDL2_image
   ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patches = [
     (fetchpatch {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       --replace "klystrack %f" "$out/bin/klystrack %f"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A chiptune tracker";
     homepage = "https://kometbomb.github.io/klystrack";
     license = licenses.mit;

@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
@@ -14,8 +14,8 @@ let
         then ''"${psk}"''
         else pskRaw;
       baseAuth = if key != null
-        then ''psk=${key}''
-        else ''key_mgmt=NONE'';
+        then "psk=${key}"
+        else "key_mgmt=NONE";
     in ''
       network={
         ssid="${ssid}"
@@ -233,6 +233,9 @@ in {
       path = [ pkgs.wpa_supplicant ];
 
       script = ''
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
+        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        fi
         iface_args="-s -u -D${cfg.driver} -c ${configFile}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
@@ -253,12 +256,12 @@ in {
     };
 
     powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
+      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
     '';
 
     # Restart wpa_supplicant when a wlan device appears or disappears.
     services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 

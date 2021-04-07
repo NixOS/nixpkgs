@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   # Tests are in build directory but we need extension modules that are in $out
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for parsing MediaWiki articles and converting them to different output formats";
     homepage = "http://pediapress.com/code/";
     license = licenses.bsd3;

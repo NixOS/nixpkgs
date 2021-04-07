@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, coreutils }:
+{ lib, stdenv, fetchurl, perl, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "berkeley_upc-2.22.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ coreutils ];
   buildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compiler for the Berkely Unified Parallel C language";
     longDescription = ''
       Unified Parallel C (UPC) is an extension of the C programming language
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       parallelism is fixed at program startup time, typically with a single
       thread of execution per processor.
     '';
-    homepage = https://upc.lbl.gov/;
+    homepage = "https://upc.lbl.gov/";
     license = licenses.mit;
     platforms = with platforms; [ linux ];
     maintainers = with maintainers; [ zimbatm ];

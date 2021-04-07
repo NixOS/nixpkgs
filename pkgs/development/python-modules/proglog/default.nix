@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, tqdm }:
+{ lib, fetchPypi, buildPythonPackage, tqdm }:
 
 buildPythonPackage rec {
   pname = "proglog";
@@ -11,9 +11,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tqdm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logs and progress bars manager for Python";
-    homepage = https://github.com/Edinburgh-Genome-Foundry/Proglog;
+    homepage = "https://github.com/Edinburgh-Genome-Foundry/Proglog";
     license = licenses.mit;
   };
 }

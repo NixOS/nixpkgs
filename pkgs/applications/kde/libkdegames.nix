@@ -13,7 +13,7 @@
 }:
 
 mkDerivation {
-  name = "libkdegames";
+  pname = "libkdegames";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kdelibs4support qtdeclarative kdeclarative kdnssd knewstuff openal libsndfile

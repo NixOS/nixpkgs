@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXi, libconfuse }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXi, libconfuse }:
 
 stdenv.mkDerivation rec {
   pname = "dispad";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXi libconfuse ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small daemon for disabling trackpads while typing";
-    homepage = https://github.com/BlueDragonX/dispad;
+    homepage = "https://github.com/BlueDragonX/dispad";
     license = licenses.gpl2;
     maintainers = with maintainers; [ zimbatm ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libX11, libXext, libXft }:
 
 let version = "1.40"; in
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1fx4jwq4s98p2wpvawsiww7d6568bpjgcjpks61dzfj8p2j32s4d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXext libXft ];
 
   postPatch =
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       sed "s|/usr/local|$out|g" Makefile.orig >> Makefile
     '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Small and simple stacking window manager";
       homepage    = "http://nickgravgaard.com/windowlab/";
       license     = licenses.gpl2;

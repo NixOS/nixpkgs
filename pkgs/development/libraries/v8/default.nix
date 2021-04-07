@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchFromGitHub
-, gn, ninja, python, glib, pkgconfig, icu
+, gn, ninja, python, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch
 }:
@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
     chmod u+w -R .
   '';
 
-  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+  postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
   '';
 
   gnFlags = [
     "use_custom_libcxx=false"
-    "is_clang=${if stdenv.cc.isClang then "true" else "false"}"
+    "is_clang=${lib.boolToString stdenv.cc.isClang}"
     "use_sysroot=false"
     # "use_system_icu=true"
     "is_component_build=false"
@@ -95,14 +95,14 @@ stdenv.mkDerivation rec {
     # ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
-  ] ++ stdenv.lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
+  ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
 
   # with gcc8, -Wclass-memaccess became part of -Wall and causes logging limit
   # to be exceeded
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-class-memaccess";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-class-memaccess";
 
-  nativeBuildInputs = [ gn ninja pkgconfig python ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];
+  nativeBuildInputs = [ gn ninja pkg-config python ]
+    ++ lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];
   buildInputs = [ glib icu ];
 
   ninjaFlags = [ ":d8" "v8_monolith" ];

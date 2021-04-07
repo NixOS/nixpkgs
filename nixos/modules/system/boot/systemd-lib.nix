@@ -59,6 +59,11 @@ in rec {
     optional (attr ? ${name} && ! isMacAddress attr.${name})
       "Systemd ${group} field `${name}' must be a valid mac address.";
 
+  isPort = i: i >= 0 && i <= 65535;
+
+  assertPort = name: group: attr:
+    optional (attr ? ${name} && ! isPort attr.${name})
+      "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
 
   assertValueOneOf = name: values: group: attr:
     optional (attr ? ${name} && !elem attr.${name} values)
@@ -87,10 +92,12 @@ in rec {
 
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual
-    # unit options might contain attributes from mkOverride that we need to
+    # unit options might contain attributes from mkOverride and mkIf that we need to
     # convert into single values before checking them.
     defs = mapAttrs (const (v:
-      if v._type or "" == "override" then v.content else v
+      if v._type or "" == "override" then v.content
+      else if v._type or "" == "if" then v.content
+      else v
     )) attrs;
     errors = concatMap (c: c group defs) checks;
   in if errors == [] then true
@@ -109,7 +116,9 @@ in rec {
         (if isList value then value else [value]))
         as));
 
-  generateUnits = type: units: upstreamUnits: upstreamWants:
+  generateUnits = generateUnits' true;
+
+  generateUnits' = allowCollisions: type: units: upstreamUnits: upstreamWants:
     pkgs.runCommand "${type}-units"
       { preferLocalBuild = true;
         allowSubstitutes = false;
@@ -177,8 +186,13 @@ in rec {
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
             ln -sfn /dev/null $out/$fn
           else
-            mkdir -p $out/$fn.d
-            ln -s $i/$fn $out/$fn.d/overrides.conf
+            ${if allowCollisions then ''
+              mkdir -p $out/$fn.d
+              ln -s $i/$fn $out/$fn.d/overrides.conf
+            '' else ''
+              echo "Found multiple derivations configuring $fn!"
+              exit 1
+            ''}
           fi
        else
           ln -fs $i/$fn $out/

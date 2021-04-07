@@ -1,38 +1,43 @@
-{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
-, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
+{ lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
+, less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 # R as of writing does not support outputting both .so and .a files; it outputs:
 #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
-, javaSupport ? (!stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64)
 }:
 
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 stdenv.mkDerivation rec {
-  name = "R-3.6.2";
+  pname = "R";
+  version = "4.0.4";
 
   src = fetchurl {
-    url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0m69pfi0nxyriyb2yz74xfzaxwfkinnf9kpvf1rz727vvmfa8rdx";
+    url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
+    sha256 = "0bl098xcv8v316kqnf43v6gb4kcsv31ydqfm1f7qr824jzb2fgsj";
   };
 
   dontUseImakeConfigure = true;
 
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which openblas curl tcl tk
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
-    ++ stdenv.lib.optional javaSupport jdk;
+    pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
+    pkg-config bison imake which blas lapack curl tcl tk jdk
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
+    ./fix-failing-test.patch
   ];
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+  prePatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure \
+      --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
+      --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
+      --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
   '';
 
   dontDisableStatic = static;
@@ -40,9 +45,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray=(
       --disable-lto
-      --with${stdenv.lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-      --with-blas="-L${openblas}/lib -lopenblas"
-      --with-lapack="-L${openblas}/lib -lopenblas"
+      --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
+      --with-blas="-L${blas}/lib -lblas"
+      --with-lapack="-L${lapack}/lib -llapack"
       --with-readline
       --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
       --with-cairo
@@ -50,17 +55,17 @@ stdenv.mkDerivation rec {
       --with-jpeglib
       --with-libtiff
       --with-ICU
-      ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
+      ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
       ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
       AR=$(type -p ar)
       AWK=$(type -p gawk)
       CC=$(type -p cc)
       CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      ${stdenv.lib.optionalString javaSupport "JAVA_HOME=\"${jdk}\""}
+      JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework
       OBJC="clang"
       CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
@@ -85,8 +90,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.r-project.org/;
+  meta = with lib; {
+    homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     license = licenses.gpl2Plus;
 
@@ -112,6 +117,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     hydraPlatforms = platforms.linux;
 
-    maintainers = with maintainers; [ peti timokau ];
+    maintainers = with maintainers; [ peti ] ++ teams.sage.members;
   };
 }

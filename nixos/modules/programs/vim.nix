@@ -14,10 +14,20 @@ in {
         using the EDITOR environment variable.
       '';
     };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vim;
+      defaultText = "pkgs.vim";
+      example = "pkgs.vimHugeX";
+      description = ''
+        vim package to use.
+      '';
+    };
   };
 
   config = mkIf cfg.defaultEditor {
-        environment.systemPackages = [ pkgs.vim ];
-        environment.variables = { EDITOR = mkOverride 900 "vim"; };
+    environment.systemPackages = [ cfg.package ];
+    environment.variables = { EDITOR = mkOverride 900 "vim"; };
   };
 }

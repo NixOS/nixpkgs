@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "0.19.0";
+  version = "2.6.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = pname;
     rev = "v${version}";
-    sha256 = "179x2lsckpmkrkkdnvvbzky86g1ba882z677qwbayhsc835wbp0y";
+    sha256 = "11mskhb7i55i04cy0vkxi7kpaifbz8zc2m8x9s5y6yyyjinvly36";
   };
 
   checkInputs = [
@@ -84,8 +84,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;  # Dashboard broken, other build failures.
     description = "A hyperparameter optimization framework";
-    homepage = https://optuna.org/;
+    homepage = "https://optuna.org/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

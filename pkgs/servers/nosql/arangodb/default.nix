@@ -32,20 +32,12 @@ let
       # do not set GCC's -march=xxx based on builder's /proc/cpuinfo
       "-DUSE_OPTIMIZE_FOR_ARCHITECTURE=OFF"
       # also avoid using builder's /proc/cpuinfo
-    ] ++
-    { westmere       = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      sandybridge    = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      ivybridge      = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      haswell        = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      broadwell      = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      skylake        = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      skylake-avx512 = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-    }.${stdenv.hostPlatform.platform.gcc.arch or ""} or [ "-DHAVE_SSE42=OFF" "-DASM_OPTIMIZATIONS=OFF" ];
-
-    enableParallelBuilding = true;
+      "-DHAVE_SSE42=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+      "-DASM_OPTIMIZATIONS=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+    ];
 
     meta = with lib; {
-      homepage = https://www.arangodb.com;
+      homepage = "https://www.arangodb.com";
       description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
       license = licenses.asl20;
       platforms = platforms.linux;

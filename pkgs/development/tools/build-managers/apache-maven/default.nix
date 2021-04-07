@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, makeWrapper }:
+{ lib, stdenv, fetchurl, jdk, makeWrapper }:
 
 assert jdk != null;
 
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "1i9qlj3vy4j1yyf22nwisd0pg88n9qzp9ymfhwqabadka7br3b96";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   inherit jdk;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Build automation tool (used primarily for Java projects)";
-    homepage = http://maven.apache.org/;
+    homepage = "http://maven.apache.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ cko ];

@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
     cp build/xhyve $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight Virtualization on macOS Based on bhyve";
-    homepage = https://github.com/mist64/xhyve;
-    maintainers = [ lib.maintainers.lnl7 ];
-    platforms = lib.platforms.darwin;
+    homepage = "https://github.com/mist64/xhyve";
+    maintainers = [ maintainers.lnl7 ];
+    license = licenses.bsd2;
+    platforms = platforms.darwin;
   };
 }

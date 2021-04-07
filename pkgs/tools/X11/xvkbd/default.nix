@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, imake, libXt, libXaw, libXtst
+{ lib, stdenv, fetchurl, imake, libXt, libXaw, libXtst
 , libXi, libXpm, xorgproto, gccmakedep, Xaw3d }:
 
 stdenv.mkDerivation {
@@ -18,14 +18,14 @@ stdenv.mkDerivation {
     "MANPATH=$(out)/man"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual keyboard for X window system";
     longDescription = ''
       xvkbd is a virtual (graphical) keyboard program for X Window System which provides
       facility to enter characters onto other clients (softwares) by clicking on a
       keyboard displayed on the screen.
     '';
-    homepage = http://t-sato.in.coocan.jp/xvkbd;
+    homepage = "http://t-sato.in.coocan.jp/xvkbd";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.bennofs ];
     platforms = platforms.linux;

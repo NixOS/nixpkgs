@@ -1,5 +1,5 @@
 { stdenv, lib, python, kernel, makeWrapper, writeText
-, gawk, iproute }:
+, gawk, iproute2 }:
 
 let
   libexec = "libexec/hypervkvpd";
@@ -42,7 +42,7 @@ let
 
     postFixup = ''
       wrapProgram $out/bin/hv_kvp_daemon \
-        --prefix PATH : $out/bin:${lib.makeBinPath [ gawk iproute ]}
+        --prefix PATH : $out/bin:${lib.makeBinPath [ gawk iproute2 ]}
     '';
   };
 
@@ -98,7 +98,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integration Services for running NixOS under HyperV";
     longDescription = ''
       This packages contains the daemons that are used by the Hyper-V hypervisor

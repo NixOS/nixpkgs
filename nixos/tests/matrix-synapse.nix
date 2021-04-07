@@ -29,18 +29,37 @@ import ./make-test-python.nix ({ pkgs, ... } : let
 in {
 
   name = "matrix-synapse";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ corngood ];
+  meta = with pkgs.lib; {
+    maintainers = teams.matrix.members;
   };
 
   nodes = {
     # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
-    serverpostgres = args: {
+    serverpostgres = { pkgs, ... }: {
       services.matrix-synapse = {
         enable = true;
         database_type = "psycopg2";
         tls_certificate_path = "${cert}";
         tls_private_key_path = "${key}";
+        database_args = {
+          password = "synapse";
+        };
+      };
+      services.postgresql = {
+        enable = true;
+
+        # The database name and user are configured by the following options:
+        #   - services.matrix-synapse.database_name
+        #   - services.matrix-synapse.database_user
+        #
+        # The values used here represent the default values of the module.
+        initialScript = pkgs.writeText "synapse-init.sql" ''
+          CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
+          CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
+            TEMPLATE template0
+            LC_COLLATE = "C"
+            LC_CTYPE = "C";
+        '';
       };
     };
 
@@ -58,12 +77,12 @@ in {
     start_all()
     serverpostgres.wait_for_unit("matrix-synapse.service")
     serverpostgres.wait_until_succeeds(
-        "curl -L --cacert ${ca_pem} https://localhost:8448/"
+        "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
     )
     serverpostgres.require_unit_state("postgresql.service")
     serversqlite.wait_for_unit("matrix-synapse.service")
     serversqlite.wait_until_succeeds(
-        "curl -L --cacert ${ca_pem} https://localhost:8448/"
+        "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
     )
     serversqlite.succeed("[ -e /var/lib/matrix-synapse/homeserver.db ]")
   '';

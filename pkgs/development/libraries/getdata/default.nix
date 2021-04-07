@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool }:
+{ lib, stdenv, fetchurl, libtool }:
 stdenv.mkDerivation rec {
   pname = "getdata";
   version = "0.10.0";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtool ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reference implementation of the Dirfile Standards";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.vbgl ];
-    homepage = http://getdata.sourceforge.net/;
+    homepage = "http://getdata.sourceforge.net/";
   };
 }

@@ -1,13 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, pygments, greenlet, curtsies, urwid, requests, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, curtsies
+, greenlet
+, mock
+, pygments
+, requests
+, substituteAll
+, urwid
+, which }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.18";
+  version = "0.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "56cc20dbe568c98c81de4990fddf5862c0d8d3ab0ad1cf7057988abc5f7686c2";
+    sha256 = "88aa9b89974f6a7726499a2608fa7ded216d84c69e78114ab2ef996a45709487";
   };
+
+  patches = [ (substituteAll {
+    src = ./clipboard-make-which-substitutable.patch;
+    which = "${which}/bin/which";
+  })];
 
   propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
 
@@ -21,7 +36,7 @@ buildPythonPackage rec {
   # tests fail: https://github.com/bpython/bpython/issues/712
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;

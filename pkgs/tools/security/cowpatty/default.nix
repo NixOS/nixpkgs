@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, openssl, libpcap
+{ lib, stdenv, fetchurl, openssl, libpcap
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "cowpatty";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Offline dictionary attack against WPA/WPA2 networks";
     license = licenses.gpl2;
-    homepage = https://www.willhackforsushi.com/?page_id=50;
+    homepage = "https://www.willhackforsushi.com/?page_id=50";
     maintainers = with maintainers; [ nico202 ];
     platforms = platforms.linux;
   };

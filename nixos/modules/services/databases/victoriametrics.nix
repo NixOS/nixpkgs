@@ -40,17 +40,17 @@ let cfg = config.services.victoriametrics; in
     systemd.services.victoriametrics = {
       description = "VictoriaMetrics time series database";
       after = [ "network.target" ];
+      startLimitBurst = 5;
       serviceConfig = {
         Restart = "on-failure";
         RestartSec = 1;
-        StartLimitBurst = 5;
         StateDirectory = "victoriametrics";
         DynamicUser = true;
         ExecStart = ''
           ${cfg.package}/bin/victoria-metrics \
               -storageDataPath=/var/lib/victoriametrics \
-              -httpListenAddr ${cfg.listenAddress}
-              -retentionPeriod ${toString cfg.retentionPeriod}
+              -httpListenAddr ${cfg.listenAddress} \
+              -retentionPeriod ${toString cfg.retentionPeriod} \
               ${lib.escapeShellArgs cfg.extraOptions}
         '';
       };

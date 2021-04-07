@@ -1,15 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''kmrcl'';
-  version = ''20150923-git'';
+  baseName = "kmrcl";
+  version = "20201016-git";
 
-  description = ''System lacks description'';
+  parasites = [ "kmrcl/test" ];
 
-  deps = [ ];
+  description = "System lacks description";
+
+  deps = [ args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/kmrcl/2015-09-23/kmrcl-20150923-git.tgz'';
-    sha256 = ''0sx7p16pp5i4qr569p2265ky6rd65gyjp21k348a6c3fs2yn0r2g'';
+    url = "http://beta.quicklisp.org/archive/kmrcl/2020-10-16/kmrcl-20201016-git.tgz";
+    sha256 = "0i0k61385hrzbg15qs1wprz6sis7mx2abxv1hqcc2f53rqm9b2hf";
   };
 
   packageName = "kmrcl";
@@ -18,7 +21,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM kmrcl DESCRIPTION System lacks description SHA256
-    0sx7p16pp5i4qr569p2265ky6rd65gyjp21k348a6c3fs2yn0r2g URL
-    http://beta.quicklisp.org/archive/kmrcl/2015-09-23/kmrcl-20150923-git.tgz
-    MD5 0cd15d3ed3e7d56528dd3243d1a5c9b1 NAME kmrcl FILENAME kmrcl DEPS NIL
-    DEPENDENCIES NIL VERSION 20150923-git SIBLINGS (kmrcl-tests) PARASITES NIL) */
+    0i0k61385hrzbg15qs1wprz6sis7mx2abxv1hqcc2f53rqm9b2hf URL
+    http://beta.quicklisp.org/archive/kmrcl/2020-10-16/kmrcl-20201016-git.tgz
+    MD5 f86bc410907f748c3c453469702755b8 NAME kmrcl FILENAME kmrcl DEPS
+    ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION 20201016-git SIBLINGS NIL
+    PARASITES (kmrcl/test)) */

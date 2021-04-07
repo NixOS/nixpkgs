@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, gpgme }:
+{ lib, stdenv, fetchurl, ncurses, gpgme }:
 
 stdenv.mkDerivation rec {
   pname = "gpgstats";
@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
     cp gpgstats $out/bin
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.is64bit)
+  NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.is64bit)
     "-D_FILE_OFFSET_BITS=64 -DLARGEFILE_SOURCE=1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculates statistics on the keys in your gpg key-ring";
     longDescription = ''
     GPGstats calculates statistics on the keys in your key-ring.
     '';
-    homepage = http://www.vanheusden.com/gpgstats/;
+    homepage = "http://www.vanheusden.com/gpgstats/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;

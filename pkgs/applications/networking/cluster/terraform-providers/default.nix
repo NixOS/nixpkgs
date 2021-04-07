@@ -1,37 +1,69 @@
 { lib
+, buildGoModule
 , buildGoPackage
 , fetchFromGitHub
 , callPackage
-, buildGo112Module
+, runtimeShell
 }:
 let
-  list = import ./data.nix;
+  list = lib.importJSON ./providers.json;
 
-  toDrv = data:
-    buildGoPackage rec {
-      inherit (data) owner repo rev version sha256;
-      name = "${repo}-${version}";
-      goPackagePath = "github.com/${owner}/${repo}";
+  buildWithGoModule = data:
+    buildGoModule {
+      pname = data.repo;
+      version = data.version;
       subPackages = [ "." ];
       src = fetchFromGitHub {
-        inherit owner repo rev sha256;
+        inherit (data) owner repo rev sha256;
       };
-
+      vendorSha256 = data.vendorSha256 or null;
 
       # Terraform allow checking the provider versions, but this breaks
       # if the versions are not provided via file paths.
-      postBuild = "mv go/bin/${repo}{,_v${version}}";
+      postBuild = "mv $NIX_BUILD_TOP/go/bin/${data.repo}{,_v${data.version}}";
+      passthru = data;
     };
-in
-  {
-    elasticsearch = callPackage ./elasticsearch {
-      # Version 0.7.0 fails to build with go 1.13 due to dependencies:
-      #   verifying git.apache.org/thrift.git@v0.12.0/go.mod: git.apache.org/thrift.git@v0.12.0/go.mod: Get https://sum.golang.org/lookup/git.apache.org/thrift.git@v0.12.0: dial tcp: lookup sum.golang.org on [::1]:53: read udp [::1]:52968->[::1]:53: read: connection refused
-      #   verifying github.com/hashicorp/terraform@v0.12.0/go.mod: github.com/hashicorp/terraform@v0.12.0/go.mod: Get https://sum.golang.org/lookup/github.com/hashicorp/terraform@v0.12.0: dial tcp: lookup sum.golang.org on [::1]:53: read udp [::1]:52968->[::1]:53: read: connection refused
-      buildGoModule = buildGo112Module;
+
+  buildWithGoPackage = data:
+    buildGoPackage {
+      pname = data.repo;
+      version = data.version;
+      goPackagePath = "github.com/${data.owner}/${data.repo}";
+      subPackages = [ "." ];
+      src = fetchFromGitHub {
+        inherit (data) owner repo rev sha256;
+      };
+      # Terraform allow checking the provider versions, but this breaks
+      # if the versions are not provided via file paths.
+      postBuild = "mv $NIX_BUILD_TOP/go/bin/${data.repo}{,_v${data.version}}";
+      passthru = data;
     };
-    gandi = callPackage ./gandi {};
-    ibm = callPackage ./ibm {};
-    libvirt = callPackage ./libvirt {};
+
+  # These providers are managed with the ./update-all script
+  automated-providers = lib.mapAttrs (_: attrs:
+    (if (lib.hasAttr "vendorSha256" attrs) then buildWithGoModule else buildWithGoPackage)
+      attrs) list;
+
+  # These are the providers that don't fall in line with the default model
+  special-providers = {
+    acme = automated-providers.acme.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
+      '';
+    });
+
+    # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
-  } // lib.mapAttrs (n: v: toDrv v) list
+    cloudfoundry = callPackage ./cloudfoundry {};
+    gandi = callPackage ./gandi {};
+    hcloud = callPackage ./hcloud {};
+    keycloak = callPackage ./keycloak {};
+    libvirt = callPackage ./libvirt {};
+    linuxbox = callPackage ./linuxbox {};
+    lxd = callPackage ./lxd {};
+    vpsadmin = callPackage ./vpsadmin {};
+    vercel = callPackage ./vercel {};
+  };
+in
+  automated-providers // special-providers

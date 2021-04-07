@@ -1,37 +1,41 @@
 { stdenv, lib, runCommand, patchelf
-, fetchFromGitHub, rustPlatform
-, pkgconfig, curl, Security, CoreServices }:
+, fetchFromGitHub, rustPlatform, makeWrapper
+, pkg-config, curl, zlib, Security, CoreServices }:
+
+let
+  libPath = lib.makeLibraryPath [
+    zlib # libz.so.1
+  ];
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.21.1";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "0d7l3j8js16zgdx37kykavr343v65vchldz88j38jjyc43pcm2pg";
+    sha256 = "1i3ipkq6j47bf9dh9j3axzj6z443jm4j651g38cxyrrx8b2s15x0";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "1zkrrg5m0j9rk65g51v2zh404529p9z84qqb7bfyjmgiqlnh48ig";
 
-  cargoSha256 = "0kn3sq99sgsh8msignyb4vjllv0wf1crqaw7sqp3ggmlkrdq35sd";
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
-    curl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    curl zlib
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; } ''
-       export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-       substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-         --subst-var patchelf \
-         --subst-var dynamicLinker
+    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
+     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+       --subst-var patchelf \
+       --subst-var dynamicLinker \
+       --subst-var libPath
     '')
   ];
 
@@ -49,6 +53,8 @@ rustPlatform.buildRustPackage rec {
     done
     popd
 
+    wrapProgram $out/bin/rustup --prefix "LD_LIBRARY_PATH" : "${libPath}"
+
     # tries to create .rustup
     export HOME=$(mktemp -d)
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
@@ -64,11 +70,10 @@ rustPlatform.buildRustPackage rec {
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Rust toolchain installer";
-    homepage = https://www.rustup.rs/;
+    homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mic92 ];
-    platforms = platforms.all;
   };
 }

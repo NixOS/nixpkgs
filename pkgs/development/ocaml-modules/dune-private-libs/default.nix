@@ -3,7 +3,11 @@
 buildDunePackage rec {
   pname = "dune-private-libs";
 
-  inherit (dune_2) src version;
+  useDune2 = true;
+
+  inherit (dune_2) src version patches;
+
+  minimumOCamlVersion = "4.08";
 
   dontAddPrefix = true;
 

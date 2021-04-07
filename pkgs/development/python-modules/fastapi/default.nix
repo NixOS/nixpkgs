@@ -1,55 +1,58 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, uvicorn
-, starlette
 , pydantic
-, isPy3k
-, pytest
-, pytestcov
-, pyjwt
-, passlib
+, starlette
+, pytestCheckHook
+, pytest-asyncio
 , aiosqlite
+, databases
+, flask
+, httpx
+, passlib
+, peewee
+, python-jose
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.45.0";
+  version = "0.63.0";
   format = "flit";
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "1qwh382ny6qa3zi64micdq4j7dc64zv4rfd8g91j0digd4rhs6i1";
+    sha256 = "0l3imrcs42pqf9d6k8c1q15k5sqcnapl5zk71xl52mrxhz49lgpi";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette ==0.13.6" "starlette"
+  '';
+
   propagatedBuildInputs = [
-    uvicorn
     starlette
     pydantic
   ];
 
   checkInputs = [
-    pytest
-    pytestcov
-    pyjwt
-    passlib
     aiosqlite
+    databases
+    flask
+    httpx
+    passlib
+    peewee
+    python-jose
+    pytestCheckHook
+    pytest-asyncio
+    sqlalchemy
   ];
 
-  # starlette pinning kept in place due to 0.12.9 being a hard
-  # dependency luckily fastapi is currently the only dependent on
-  # starlette. Please remove pinning when possible
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "pydantic >=0.32.2,<=0.32.2" "pydantic"
-  '';
-
-  checkPhase = ''
-    pytest --ignore=tests/test_default_response_class.py
-  '';
+  # disabled tests require orjson which requires rust nightly
+  pytestFlagsArray = [ "--ignore=tests/test_default_response_class.py" ];
+  disabledTests = [ "test_get_custom_response" ];
 
   meta = with lib; {
     homepage = "https://github.com/tiangolo/fastapi";

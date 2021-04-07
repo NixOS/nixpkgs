@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -14,9 +14,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WSGI HTTP Digest Authentication middleware";
-    homepage = https://github.com/jonashaag/httpauth;
+    homepage = "https://github.com/jonashaag/httpauth";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
   };

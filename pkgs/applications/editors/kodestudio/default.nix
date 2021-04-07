@@ -29,7 +29,8 @@ in
         inherit sha256;
     };
 
-    buildInputs = [ makeWrapper libXScrnSaver ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ libXScrnSaver ];
 
     desktopItem = makeDesktopItem {
       name = "kodestudio";
@@ -111,10 +112,10 @@ in
 
       # Wrap preload libXss
       wrapProgram $out/bin/kodestudio \
-          --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
+          --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         An IDE for Kha based on Visual Studio Code
       '';
@@ -125,8 +126,8 @@ in
         (with JavaScript coming soon). Using Kha or Kore you can access all
         hardware at the lowest possible level in a completely portable way.
       '';
-      homepage = http://kode.tech/;
-      downloadPage = https://github.com/Kode/KodeStudio/releases;
+      homepage = "http://kode.tech/";
+      downloadPage = "https://github.com/Kode/KodeStudio/releases";
       license = licenses.mit;
       maintainers = [ maintainers.patternspandemic ];
       platforms = [ "x86_64-linux" "i686-cygwin" ];

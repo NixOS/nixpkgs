@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
-  version = "2.0";
+  version = "2.0.1";
   pname = "crc32c";
 
   src = fetchFromGitHub {
     owner = "ICRAR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15x1sj23n50qdjmi8mjq5wgf5jfn1yv78vjc59wplvl0s50w2dnk";
+    sha256 = "0vyac7pchh083h5qdjwhhacfq77frkrq1bjzsn51qv1vwcdrpnrf";
   };
 
   meta = {

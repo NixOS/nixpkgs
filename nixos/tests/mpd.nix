@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       # License: http://creativecommons.org/licenses/by-sa/4.0/
 
       name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
-      url = https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3;
+      url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
       sha256 = "0xw417bxkx4gqqy139bb21yldi37xx8xjfxrwaqa0gyw19dl6mgp";
     };
 
@@ -27,10 +27,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       after = [ "mpd.service" ];
       wantedBy = [ "default.target" ];
       script = ''
-        mkdir -p ${musicDirectory} && chown -R ${user}:${group} ${musicDirectory}
         cp ${track} ${musicDirectory}
-        chown ${user}:${group} ${musicDirectory}/$(basename ${track})
       '';
+      serviceConfig = {
+        User = user;
+        Group = group;
+      };
     };
 
     mkServer = { mpd, musicService, }:
@@ -41,7 +43,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
   in {
     name = "mpd";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ emmanuelrosa ];
     };
 
@@ -105,7 +107,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         for track in tracks.splitlines():
             server.succeed(f"{mpc} add {track}")
 
-        _, added_tracks = server.execute(f"{mpc} listall")
+        _, added_tracks = server.execute(f"{mpc} playlist")
 
         # Check we succeeded adding audio tracks to the playlist
         assert len(added_tracks.splitlines()) > 0

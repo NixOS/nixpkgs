@@ -1,12 +1,14 @@
-{ stdenv, fetchzip, unixtools, which }:
+{ lib, stdenv, fetchFromGitHub, unixtools, which }:
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
-  version = "5.1.0";
+  version = "6.2.0";
 
-  src = fetchzip {
-    url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "0ja8ds9gpibrnwcf8n6cpbggwkbks0ik3z9vfx5h1yf3ln1nycky";
+  src = fetchFromGitHub {
+    owner = "tj";
+    repo = "git-extras";
+    rev = version;
+    sha256 = "sha256-ACuTb1DGft2/32Ezg23jhpl9yua5kUTZ2kKL8KHU+BU=";
   };
 
   nativeBuildInputs = [ unixtools.column which ];
@@ -24,11 +26,11 @@ stdenv.mkDerivation rec {
     install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/tj/git-extras;
+  meta = with lib; {
+    homepage = "https://github.com/tj/git-extras";
     description = "GIT utilities -- repo summary, repl, changelog population, author commit percentages and more";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.spwhitt maintainers.cko ];
+    maintainers = with maintainers; [ spwhitt cko ];
   };
 }

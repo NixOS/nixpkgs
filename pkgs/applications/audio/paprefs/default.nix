@@ -1,9 +1,9 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , meson
 , ninja
 , gettext
-, pkgconfig
+, pkg-config
 , pulseaudioFull
 , glibmm
 , gtkmm3
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gtkmm3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PulseAudio Preferences";
 
     longDescription = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       dialog for the PulseAudio sound server.
     '';
 
-    homepage = http://freedesktop.org/software/pulseaudio/paprefs/;
+    homepage = "http://freedesktop.org/software/pulseaudio/paprefs/";
 
     license = licenses.gpl2Plus;
 

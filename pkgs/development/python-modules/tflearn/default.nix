@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "tflearn";
-  version = "0.3.2";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "034lvbslcivyj64r4w6xmr90ckmyxmrnkka9kal50x4175h02n1z";
+    sha256 = "818aa57667693810415dc203ba3f75f1541e931a8dc30b6e8b21563541a70388";
   };
 
   buildInputs = [ pytest ];

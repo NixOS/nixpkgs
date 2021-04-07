@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python3 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.2.6";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "19krnxpp3i1n65zafazvdm9mvnjry5rml0y9imj4365q4bkj20g2";
+    sha256 = "1pzy7v48x4ip8v6aqm8hl5ywx7xiqbsfypxxifih8gnlangp1n8y";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -37,7 +37,7 @@ buildPythonApplication rec {
   # Tests need a DISPLAY
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python IDE for beginners";
     longDescription = ''
       Thonny is a Python IDE for beginners. It supports different ways
@@ -45,7 +45,7 @@ buildPythonApplication rec {
       evaluation, detailed visualization of the call stack and a mode
       for explaining the concepts of references and heap.
     '';
-    homepage = https://www.thonny.org/;
+    homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , click
 , requests
 , tabulate
@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "databricks-cli";
-  version = "0.9.1";
+  version = "0.14.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ebf123b5567c06b7583688077120ead075ca06938b9995d4acafa97863ed8ff";
+    sha256 = "bdf89a3917a3f8f8b99163e38d40e66dc478c7408954747f145cd09816b05e2c";
   };
 
   checkInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     configparser
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/databricks/databricks-cli";
     description = "A command line interface for Databricks";
     license = licenses.asl20;

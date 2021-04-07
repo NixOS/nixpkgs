@@ -1,5 +1,5 @@
-{ stdenv, rustPlatform, fetchFromGitHub
-, pkgconfig, openssl
+{ lib, stdenv, rustPlatform, fetchFromGitHub, nixosTests
+, pkg-config, openssl
 , Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
@@ -8,27 +8,24 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
-  version = "1.13.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "0af8cnpx86a096m59wmszcfyrfgf7adlqr39phbg647mgjfzwcrk";
+    sha256 = "1ncy4iwmdzdp8rv1gc5i4s1rp97d94n4l4bh08v6w4zdpx0zn8b9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = with stdenv.lib; [ openssl ]
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = with lib; [ openssl ]
     ++ optionals stdenv.isDarwin [ Security CoreServices ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
   RUSTC_BOOTSTRAP = 1;
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1v6n4aqhd5pyvvhlzhpmq7ykclfxw82wn2bg7n49b53d9p72jwq6";
+  cargoSha256 = "139by5y2ma3v52nabzr5man1qy395rchs2dlivkj9xi829kg4mcr";
   cargoBuildFlags = [ featuresFlag ];
 
   checkPhase = ''
@@ -38,11 +35,12 @@ in rustPlatform.buildRustPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = nixosTests.bitwarden;
+
+  meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/bitwarden_rs";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ msteen ];
-    platforms = platforms.all;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkgconfig, wrapGAppsHook
+, autoreconfHook, pkg-config, wrapGAppsHook
 , glib, gtk3, expat, gnome-doc-utils, which
 , at-spi2-core, dbus
 , libxslt, libxml2
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     wrapGAppsHook
-    pkgconfig
+    pkg-config
     # doc generation
     gnome-doc-utils
     which
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   ] ++ lib.optional speechSupport speechd;
 
   meta = {
-    homepage = http://www.inference.org.uk/dasher/;
+    homepage = "http://www.inference.org.uk/dasher/";
     description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.Profpatsch ];

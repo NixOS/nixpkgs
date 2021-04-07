@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, perl, zlib, jam }:
+{ lib, stdenv, fetchurl, openssl, perl, zlib, jam }:
 stdenv.mkDerivation rec {
   version = "3.2.0";
   pname = "archiveopteryx";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     mv installroot/$out $out
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://archiveopteryx.org/;
+  meta = with lib; {
+    homepage = "http://archiveopteryx.org/";
     description = "An advanced PostgreSQL-based IMAP/POP server";
     license = licenses.postgresql;
     maintainers = [ maintainers.phunehehe ];

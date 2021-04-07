@@ -36,7 +36,7 @@ let
     // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
     // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
     // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages; }
+    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
    );
 
   # Generate DocBook documentation for a list of packages. This is
@@ -48,7 +48,7 @@ let
   # - a list:    that will be interpreted as an attribute path from `pkgs`,
   # - an attrset: that can specify `name`, `path`, `package`, `comment`
   #   (either of `name`, `path` is required, the rest are optional).
-  genRelatedPackages = packages:
+  genRelatedPackages = packages: optName:
     let
       unpack = p: if lib.isString p then { name = p; }
                   else if lib.isList p then { path = p; }
@@ -58,7 +58,7 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
           path = args.path or [ args.name ];
-          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
+          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}' found while evaluating `relatedPackages' of option `${optName}'") pkgs);
         in "<listitem>"
         + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
         + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
@@ -86,7 +86,7 @@ let
   optionsList = lib.sort optionLess optionsListDesc;
 
   # Convert the list of options into an XML file.
-  optionsXML = pkgs.writeText "options.xml" (builtins.toXML optionsList);
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
@@ -133,6 +133,7 @@ in {
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
+      buildInputs = [ pkgs.brotli ];
     }
     ''
       # Export list of options in different format.
@@ -141,8 +142,11 @@ in {
 
       cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix))} $dst/options.json
 
+      brotli -9 < $dst/options.json > $dst/options.json.br
+
       mkdir -p $out/nix-support
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+      echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     ''; # */
 
   optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''

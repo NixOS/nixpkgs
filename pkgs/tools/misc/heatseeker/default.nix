@@ -1,30 +1,32 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, coreutils }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "heatseeker";
-  version = "1.5.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "rschmitt";
     repo = "heatseeker";
     rev = "v${version}";
-    sha256 = "1fcrbjwnhcz71i70ppy0rcgk5crwwmbkm9nrk1kapvks33pv0az7";
+    sha256 = "1x7mdyf1m17s55f6yjdr1j510kb7a8f3zkd7lb2kzdc7nd3vgaxg";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "0jnlcm7v29m4nc318qgf7r7jvs80s7n04fw83imm506vwr9rxbx9";
 
-  cargoSha256 = "0m3sxbz1iii31s30cnv1970i1mwfhl6gm19k8wv0n7zji30ayx07";
+  # https://github.com/rschmitt/heatseeker/issues/42
+  # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple
+  # as a substitution, and this works since we have the path to coreutils stty.
+  patchPhase = ''
+    substituteInPlace src/screen/unix.rs --replace "/bin/stty" "${coreutils}/bin/stty"
+  '';
 
   # some tests require a tty, this variable turns them off for Travis CI,
   # which we can also make use of
   TRAVIS = "true";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A general-purpose fuzzy selector";
-    homepage = https://github.com/rschmitt/heatseeker;
+    homepage = "https://github.com/rschmitt/heatseeker";
     license = licenses.mit;
     maintainers = [ maintainers.michaelpj ];
     platforms = platforms.unix;

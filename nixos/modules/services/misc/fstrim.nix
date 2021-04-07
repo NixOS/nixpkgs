@@ -31,7 +31,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.packages = [ pkgs.utillinux ];
+    systemd.packages = [ pkgs.util-linux ];
 
     systemd.timers.fstrim = {
       timerConfig = {

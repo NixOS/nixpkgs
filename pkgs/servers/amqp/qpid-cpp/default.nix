@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
+{ lib, stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
 
 let
-  name = "qpid-cpp-${version}";
+  pname = "qpid-cpp";
+  name = "${pname}-${version}";
   version = "1.39.0";
 
   src = fetchurl {
@@ -9,10 +10,10 @@ let
     sha256 = "088dx1l6myrksbhpr15bs09j6qm8vdliqwjp2ja5amym47md103r";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://qpid.apache.org;
-    repositories.git = git://git.apache.org/qpid.git;
-    repositories.svn = http://svn.apache.org/repos/asf/qpid;
+  meta = with lib; {
+    homepage = "http://qpid.apache.org";
+    repositories.git = "git://git.apache.org/qpid.git";
+    repositories.svn = "http://svn.apache.org/repos/asf/qpid";
     description = "An AMQP message broker and a C++ messaging API";
     license = licenses.asl20;
     platforms = platforms.linux;
@@ -20,7 +21,7 @@ let
   };
 
   qpid-cpp = stdenv.mkDerivation {
-    inherit src meta name;
+    inherit src meta pname version;
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ boost libuuid ruby python2 ];
@@ -40,13 +41,13 @@ let
       "-Wno-error=unused-function"
       "-Wno-error=ignored-qualifiers"
       "-Wno-error=catch-value"
-    ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
+    ] ++ lib.optionals stdenv.cc.isGNU [
       "-Wno-error=deprecated-copy"
     ]);
   };
 
   python-frontend = buildPythonPackage {
-    inherit name meta src;
+    inherit pname version meta src;
 
     sourceRoot = "${name}/management/python";
 

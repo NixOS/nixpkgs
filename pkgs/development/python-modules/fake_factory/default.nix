@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -26,9 +26,9 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest faker.tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python package that generates fake data for you";
-    homepage    = https://pypi.python.org/pypi/fake-factory;
+    homepage    = "https://pypi.python.org/pypi/fake-factory";
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

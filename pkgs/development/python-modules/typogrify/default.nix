@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # Wants to set up Django
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Filters to enhance web typography, including support for Django & Jinja templates";
     homepage = "https://github.com/mintchaos/typogrify";
     license = licenses.bsd3;

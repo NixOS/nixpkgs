@@ -1,4 +1,4 @@
-{ stdenv, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ lib, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
       --replace sample-projects $out/share/${pname}/sample-projects
    '';
 
-  buildPhase = '''';
+  buildPhase = "";
 
   installPhase = ''
     mkdir -p $out/share/${pname}
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "A open-source tool for writers";
-    homepage = http://www.theologeek.ch/manuskript;
+    homepage = "http://www.theologeek.ch/manuskript";
     longDescription = ''
     Manuskript is a tool for those writer who like to organize and
     plan everything before writing.  The snowflake method can help you
@@ -55,8 +55,8 @@ python3Packages.buildPythonApplication rec {
     outline your story. Organize your ideas about the world your
     characters live in.
     '';
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.steveej ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.steveej ];
+    platforms = lib.platforms.unix;
   };
 }

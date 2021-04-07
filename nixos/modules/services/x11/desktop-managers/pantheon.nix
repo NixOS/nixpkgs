@@ -16,7 +16,10 @@ in
 
 {
 
-  meta.maintainers = pkgs.pantheon.maintainers;
+  meta = {
+    doc = ./pantheon.xml;
+    maintainers = pkgs.pantheon.maintainers;
+  };
 
   options = {
 
@@ -39,6 +42,7 @@ in
 
       sessionPath = mkOption {
         default = [];
+        type = types.listOf types.package;
         example = literalExample "[ pkgs.gnome3.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
@@ -106,7 +110,7 @@ in
 
       # Without this, elementary LightDM greeter will pre-select non-existent `default` session
       # https://github.com/elementary/greeter/issues/368
-      services.xserver.displayManager.defaultSession = "pantheon";
+      services.xserver.displayManager.defaultSession = mkDefault "pantheon";
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
@@ -178,7 +182,6 @@ in
         hicolor-icon-theme
         lightlocker
         onboard
-        plank
         qgnomeplatform
         shared-mime-info
         sound-theme-freedesktop
@@ -192,6 +195,7 @@ in
 
         # Desktop
         elementary-default-settings
+        elementary-dock
         elementary-session-settings
         elementary-shortcut-overlay
         gala
@@ -203,9 +207,9 @@ in
         })
 
         # Services
-        cerbere
         elementary-capnet-assist
         elementary-dpms-helper
+        elementary-notifications
         elementary-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
@@ -236,15 +240,17 @@ in
       # Otherwise you can't store NetworkManager Secrets with
       # "Store the password only for this user"
       programs.nm-applet.enable = true;
+      # Pantheon has its own network indicator
+      programs.nm-applet.indicator = false;
 
       # Shell integration for VTE terminals
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
       # Harmonize Qt5 applications under Pantheon
-      qt.enable = true;
-      qt.platformTheme = "qgnomeplatform";
-      qt.style.name = "adwaita";
+      qt5.enable = true;
+      qt5.platformTheme = "gnome";
+      qt5.style = "adwaita";
 
       # Default Fonts
       fonts.fonts = with pkgs; [

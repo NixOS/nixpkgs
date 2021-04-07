@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   name = "it87-${version}-${kernel.version}";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Patched module for IT87xx superio chip sensors support";
-    homepage = https://github.com/hannesha/it87;
+    homepage = "https://github.com/hannesha/it87";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ yorickvp ];

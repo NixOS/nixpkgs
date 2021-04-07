@@ -1,10 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , python3
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -18,17 +19,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1dwq9rqswgnnglhrgcpvrp6shn3pb4x8f8f23x84sqakb430idp7";
+    sha256 = "sha256-Sws6FqUL7QAROInDrcqYAp6j1TCC4aGV0/hi5Kmm5wQ=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -57,9 +58,9 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Security & Privacy Plug";
-    homepage = https://github.com/elementary/switchboard-plug-security-privacy;
+    homepage = "https://github.com/elementary/switchboard-plug-security-privacy";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

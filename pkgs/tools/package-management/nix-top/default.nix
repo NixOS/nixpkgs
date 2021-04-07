@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
     install -D -m755 ./nix-top $out/bin/nix-top
     wrapProgram $out/bin/nix-top \
       --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     ln -s /bin/stty $out/libexec/nix-top
   '';
 
   meta = with lib; {
     description = "Tracks what nix is building";
-    homepage = https://github.com/samueldr/nix-top;
+    homepage = "https://github.com/samueldr/nix-top";
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
     platforms = platforms.linux ++ platforms.darwin;

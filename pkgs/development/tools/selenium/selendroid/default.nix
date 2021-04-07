@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, jdk, selenium-server-standalone }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk, selenium-server-standalone }:
 
-with stdenv.lib;
+with lib;
 let
     name = "selendroid-standalone-${version}";
     pluginName = "selendroid-grid-plugin-${version}";
@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  buildInputs = [ jdk makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk ];
 
   installPhase = ''
     mkdir -p $out/share/lib/selendroid
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://selendroid.io/;
+    homepage = "http://selendroid.io/";
     description = "Test automation for native or hybrid Android apps and the mobile web";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.all;

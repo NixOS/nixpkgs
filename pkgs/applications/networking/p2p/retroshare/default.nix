@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
-, libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv, qmake, ffmpeg
+{ lib, stdenv, fetchFromGitHub, libupnp, gpgme, gnome3, glib, libssh, pkg-config, protobuf, bzip2
+, libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv, qmake, ffmpeg_3
 , qtmultimedia, qtx11extras, qttools }:
 
 stdenv.mkDerivation rec {
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
       libretroshare/src/upnp/UPnPBase.cpp
   '';
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     speex libupnp gpgme gnome3.libgnome-keyring glib libssh qtmultimedia qtx11extras qttools
-    protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher libmicrohttpd opencv ffmpeg
+    protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher libmicrohttpd opencv ffmpeg_3
   ];
 
   preConfigure = ''
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     cp libbitdht/src/bitdht/bdboot.txt $out/share/retroshare
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "";
-    homepage = http://retroshare.sourceforge.net/;
+    homepage = "http://retroshare.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     broken = true; # broken by libupnp: 1.6.21 -> 1.8.3 (#41684)
   };
 }

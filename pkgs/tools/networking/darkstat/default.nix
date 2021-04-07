@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, zlib }:
+{ lib, stdenv, fetchurl, libpcap, zlib }:
 
 stdenv.mkDerivation rec {
   version = "3.0.719";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network statistics web interface";
     longDescription = ''
       Captures network traffic, calculates statistics about usage, and serves
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       - Small. Portable. Single-threaded. Efficient.
       - Supports IPv6.
     '';
-    homepage = http://unix4lyfe.org/darkstat;
+    homepage = "http://unix4lyfe.org/darkstat";
     license = licenses.gpl2;
     platforms = with platforms; unix;
   };

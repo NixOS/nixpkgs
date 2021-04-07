@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
-, librsvg, gettext, itstool, libxml2, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gtk3, gnome3, gdk-pixbuf
+, librsvg, libgnome-games-support, gettext, itstool, libxml2, wrapGAppsHook
 , meson, ninja, python3, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "tali";
-  version = "3.32.1";
+  version = "3.38.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tali/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0na7sswfh63wj44aibcnqdsbb24yfngcwgi07lv8rky6rry0kqgz";
+    url = "mirror://gnome/sources/tali/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "AhVCi1DEoIJ/sN4uTmum5WZ4+bp22NJbfuyoUhXyWjk=";
   };
 
   passthru = {
@@ -18,20 +18,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja python3 desktop-file-utils
-    pkgconfig gnome3.adwaita-icon-theme
+    pkg-config gnome3.adwaita-icon-theme
     libxml2 itstool gettext wrapGAppsHook
   ];
-  buildInputs = [ gtk3 gdk-pixbuf librsvg ];
+  buildInputs = [ gtk3 gdk-pixbuf librsvg libgnome-games-support ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Tali;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Apps/Tali";
     description = "Sort of poker with dice and less money";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

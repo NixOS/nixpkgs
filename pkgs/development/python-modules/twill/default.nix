@@ -1,21 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, nose }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, nose
+, lxml
+, requests
+, pyparsing
+}:
 buildPythonPackage rec {
   pname = "twill";
-  version = "1.8.0";
-
-  disabled = isPy3k;
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d63e8b09aa4f6645571c70cd3ba47a911abbae4d7baa4b38fc7eb72f6cfda188";
+    sha256 = "01770eddb34f5fe6ee59992b84619968885d359ad3d6d9191e8ba8eec93482aa";
   };
 
   checkInputs = [ nose ];
 
+  propagatedBuildInputs = [
+    lxml
+    requests
+    pyparsing
+  ];
+
   doCheck = false; # pypi package comes without tests, other homepage does not provide all verisons
 
   meta = with lib; {
-    homepage = http://twill.idyll.org/;
+    homepage = "https://twill-tools.github.io/twill/";
     description = "A simple scripting language for Web browsing";
     license     = licenses.mit;
     maintainers = with maintainers; [ mic92 ];

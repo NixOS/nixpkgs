@@ -1,0 +1,58 @@
+commit 363c5be465dd6dde35c3d31abd7b5cca9b1f3a9f
+Author: Jan Tojnar <jtojnar@gmail.com>
+Date:   Thu Jul 23 18:49:03 2020 +0200
+
+    Improve separation between malcontent and malcontent-ui packages
+    
+    These artefacts go into both packages by default:
+    
+    * malcontent-control – a CLI tool
+    * PAM module
+    * gettext locale data
+    * help pages ✨
+    * AccountService/D-Bus interfaces
+    * Polkit com.endlessm.ParentalControls rules and policy
+    
+    Items marked with ✨ will go to ui package, while the rest is installed with the base library.
+    
+    See also the packaging done by upstream in Endless:
+    https://github.com/endlessm/malcontent/tree/5482b7eb99aee9b8c344629bc078e193d3c26ffc/debian
+    
+    Cannot upstream this since they are worried about maintainability:
+    https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/38#note_437946
+
+diff --git a/meson.build b/meson.build
+index 6e1dfa5..196350b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -123,9 +123,8 @@ test_env = [
+   'LC_ALL=C.UTF-8',
+ ]
+ 
+-subdir('accounts-service')
+-subdir('help')
+ if not get_option('use_system_libmalcontent')
++  subdir('accounts-service')
+   subdir('libmalcontent')
+ else
+   libmalcontent_api_version = '0'
+@@ -136,11 +135,16 @@ endif
+ if get_option('ui').enabled()
+   subdir('libmalcontent-ui')
+ endif
+-subdir('malcontent-client')
++if not get_option('use_system_libmalcontent')
++  subdir('malcontent-client')
++endif
+ if get_option('ui').enabled()
+   subdir('malcontent-control')
++  subdir('help')
++endif
++if not get_option('use_system_libmalcontent')
++  subdir('pam')
++  subdir('po')
+ endif
+-subdir('pam')
+-subdir('po')
+ 
+ meson.add_install_script('build-aux/meson_post_install.py')

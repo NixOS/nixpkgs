@@ -5,18 +5,19 @@
 , pytest
 , pytest-flake8
 , more-itertools
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "zipp";
-  version = "0.6.0";
+  version = "3.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3718b1cbcd963c7d4c5511a8240812904164b7f381b647143a89d3b98f9bcd8e";
+    sha256 = "3607921face881ba3e026887d8150cca609d517579abe052ac81fc5aeffdbd76";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm toml ];
 
   propagatedBuildInputs = [ more-itertools ];
 
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pathlib-compatible object wrapper for zip files";
-    homepage = https://github.com/jaraco/zipp;
+    homepage = "https://github.com/jaraco/zipp";
     license = licenses.mit;
   };
 }

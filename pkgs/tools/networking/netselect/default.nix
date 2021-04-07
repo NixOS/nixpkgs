@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "netselect";
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/apenwarr/netselect;
+  meta = with lib; {
+    homepage = "https://github.com/apenwarr/netselect";
     description = "An ultrafast intelligent parallelizing binary-search implementation of \"ping\"";
     license = licenses.bsd3;
     platforms = platforms.linux;

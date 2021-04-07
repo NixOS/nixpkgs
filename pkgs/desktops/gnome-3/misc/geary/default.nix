@@ -1,58 +1,135 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
-, desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
-, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext, fetchpatch
-, sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking
-, gobject-introspection, gspell, appstream-glib, libytnef, libhandy }:
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, gtk3
+, vala
+, enchant2
+, wrapGAppsHook
+, meson
+, ninja
+, desktop-file-utils
+, gnome-online-accounts
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, libpeas
+, libsecret
+, gmime3
+, isocodes
+, libxml2
+, gettext
+, sqlite
+, gcr
+, json-glib
+, itstool
+, libgee
+, gnome3
+, webkitgtk
+, python3
+, gnutls
+, cacert
+, xvfb_run
+, glibcLocales
+, dbus
+, shared-mime-info
+, libunwind
+, folks
+, glib-networking
+, gobject-introspection
+, gspell
+, appstream-glib
+, libytnef
+, libhandy
+, gsound
+}:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.34.2";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1a6j70pzr57ga7m4nypqdkqwlzk2dablpz93yaympgrlqpf5zkvm";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "04p8fjkz4xp5afp0ld1m09pnv0zkcx51l7hf23amfrjkk0kj2bp7";
   };
 
+  patches = [
+    # Longer timeout for client test.
+    ./Bump-client-test-timeout-to-300s.patch
+  ];
+
   nativeBuildInputs = [
-    desktop-file-utils gettext itstool libxml2 meson ninja
-    pkgconfig vala wrapGAppsHook python3 appstream-glib
+    appstream-glib
+    desktop-file-utils
+    gettext
     gobject-introspection
+    itstool
+    libxml2
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    adwaita-icon-theme enchant2 gcr gmime gnome-online-accounts
-    gsettings-desktop-schemas gtk3 isocodes json-glib libcanberra-gtk3
-    libgee libsecret sqlite webkitgtk glib-networking
-    libunwind libunity folks gspell libytnef libhandy
+    adwaita-icon-theme
+    enchant2
+    folks
+    gcr
+    glib-networking
+    gmime3
+    gnome-online-accounts
+    gsettings-desktop-schemas
+    gsound
+    gspell
+    gtk3
+    isocodes
+    json-glib
+    libgee
+    libhandy
+    libpeas
+    libsecret
+    libunwind
+    libytnef
+    sqlite
+    webkitgtk
   ];
 
-  checkInputs = [ xvfb_run dbus ];
+  checkInputs = [
+    dbus
+    gnutls # for certtool
+    cacert # trust store for glib-networking
+    xvfb_run
+    glibcLocales # required by Geary.ImapDb.DatabaseTest/utf8_case_insensitive_collation
+  ];
 
   mesonFlags = [
     "-Dcontractor=true" # install the contractor file (Pantheon specific)
   ];
 
-  patches = [
-    # Longer timeout for client test.
-    (fetchpatch {
-      url = "https://salsa.debian.org/gnome-team/geary/raw/04be1e058a2e65075dd8cf8843d469ee45a9e09a/debian/patches/Bump-client-test-timeout-to-300s.patch";
-      sha256 = "1zvnq8bgla160531bjdra8hcg15mp8r1j1n53m1xfgm0ssnj5knx";
-    })
-  ];
-
+  # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
+  # https://gitlab.gnome.org/GNOME/geary/commit/f7f72143e0f00ca5e0e6a798691805c53976ae31#0cc1139e3347f573ae1feee5b73dbc8a8a21fcfa
   postPatch = ''
     chmod +x build-aux/post_install.py build-aux/git_version.py
+
     patchShebangs build-aux/post_install.py build-aux/git_version.py
 
+    chmod +x build-aux/yaml_to_json.py
+    patchShebangs build-aux/yaml_to_json.py
+
     chmod +x desktop/geary-attach
+
+    # Drop test that breaks after webkitgtk 2.32.0 update
+    # https://gitlab.gnome.org/GNOME/geary/-/issues/1180
+    sed -i '/add_test("edit_context_font", edit_context_font);/d' test/js/composer-page-state-test.vala
   '';
 
   doCheck = true;
 
   checkPhase = ''
     NO_AT_BRIDGE=1 \
-    XDG_DATA_DIRS=:$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share \
+    GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules \
+    XDG_DATA_DIRS=$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share:${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test -v --no-stdsplit
@@ -70,10 +147,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Geary;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Apps/Geary";
     description = "Mail client for GNOME 3";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

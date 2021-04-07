@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , simplejson
@@ -25,9 +25,9 @@ buildPythonPackage rec {
   # No proper tests are available
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python etcd client that just works";
-    homepage = https://github.com/dsoprea/PythonEtcdClient;
+    homepage = "https://github.com/dsoprea/PythonEtcdClient";
     license = licenses.gpl2;
   };
 

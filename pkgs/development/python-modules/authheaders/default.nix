@@ -1,22 +1,22 @@
 { buildPythonPackage, fetchPypi, isPy27, lib
-, authres, dnspython, dkimpy, ipaddress, publicsuffix
+, authres, dnspython, dkimpy, ipaddress, publicsuffix2
 }:
 
 buildPythonPackage rec {
   pname = "authheaders";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hf1p6ws3jma608pmcb5qsl58xg33wz2s51qqzi9zix0llcnyc97";
+    sha256 = "935726b784cc636cbcfed2c977f1a6887dc60056806da4eff60db932c5896692";
   };
 
-  propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix ]
+  propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ]
                           ++ lib.optional isPy27 ipaddress;
 
   meta = {
     description = "Python library for the generation of email authentication headers";
-    homepage = https://github.com/ValiMail/authentication-headers;
+    homepage = "https://github.com/ValiMail/authentication-headers";
     license = lib.licenses.mit;
   };
 }

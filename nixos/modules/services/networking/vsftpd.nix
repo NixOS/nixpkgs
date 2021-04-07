@@ -116,7 +116,8 @@ let
         userlist_file=${cfg.userlistFile}
       ''}
       background=YES
-      listen=YES
+      listen=NO
+      listen_ipv6=YES
       nopriv_user=vsftpd
       secure_chroot_dir=/var/empty
       ${optionalString (cfg.localRoot != null) ''
@@ -133,8 +134,8 @@ let
       ${optionalString cfg.enableVirtualUsers ''
         guest_enable=YES
         guest_username=vsftpd
-        pam_service_name=vsftpd
       ''}
+      pam_service_name=vsftpd
       ${cfg.extraConfig}
     '';
 

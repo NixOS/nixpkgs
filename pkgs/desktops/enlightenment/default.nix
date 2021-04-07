@@ -1,16 +1,15 @@
 { callPackage, pkgs }:
 {
   #### CORE EFL
-  efl = callPackage ./efl.nix {
-    openjpeg = pkgs.openjpeg_1;
-  };
+  efl = callPackage ./efl { };
 
   #### WINDOW MANAGER
-  enlightenment = callPackage ./enlightenment.nix { };
+  enlightenment = callPackage ./enlightenment { };
 
   #### APPLICATIONS
-  econnman = callPackage ./econnman.nix { };
-  terminology = callPackage ./terminology.nix { };
-  rage = callPackage ./rage.nix { };
-  ephoto = callPackage ./ephoto.nix { };
+  econnman = callPackage ./econnman { };
+  evisum = callPackage ./evisum { };
+  terminology = callPackage ./terminology { };
+  rage = callPackage ./rage { };
+  ephoto = callPackage ./ephoto { };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -18,12 +18,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zc_buildout ];
   checkInputs = [ zope_testrunner ];
+  doCheck = !python.pkgs.isPy27;
   checkPhase = ''
     ${python.interpreter} -m zope.testrunner --test-path=src []
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/z3c.checkversions;
+  meta = with lib; {
+    homepage = "https://github.com/zopefoundation/z3c.checkversions";
     description = "Find newer package versions on PyPI";
     license = licenses.zpl21;
   };

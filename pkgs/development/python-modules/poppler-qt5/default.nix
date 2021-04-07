@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, stdenv, sip, qtbase, pyqt5, poppler, pkgconfig, fetchpatch
+{ buildPythonPackage, fetchPypi, lib, sip, qtbase, pyqt5, poppler, pkg-config, fetchpatch
 , substituteAll
 }:
 
@@ -28,14 +28,16 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ qtbase.dev poppler ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ sip pyqt5.dev ];
 
   # no tests, just bindings for `poppler_qt5`
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/wbsoft/python-poppler-qt5;
+  dontWrapQtApps = true;
+
+  meta = with lib; {
+    homepage = "https://github.com/wbsoft/python-poppler-qt5";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
   };

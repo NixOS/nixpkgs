@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
+{ stdenv
+, lib
+, fetchFromGitHub
+, removeReferencesTo
+, which
+, go
+, makeWrapper
+, rsync
+, installShellFiles
+
 , components ? [
-    "cmd/kubeadm"
-    "cmd/kubectl"
     "cmd/kubelet"
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
@@ -11,22 +18,22 @@
   ]
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.16.5";
+  version = "1.20.5";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "12ks79sjgbd0c97pipid4j3l5fwiimaxa25rvmf2vccdrw4ngx4m";
+    sha256 = "sha256-RDaD7tlTtAucW8ido9FumKb5E9n6F9H8HwxQ9TPyOLk=";
   };
 
-  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
+  nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
 
-  outputs = ["out" "man" "pause"];
+  outputs = [ "out" "man" "pause" ];
+
+  patches = [ ./fixup-addonmanager-lib-path.patch ];
 
   postPatch = ''
     # go env breaks the sandbox
@@ -41,39 +48,51 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT=concatStringsSep " " components;
+  WHAT = lib.concatStringsSep " " ([
+    "cmd/kubeadm"
+    "cmd/kubectl"
+  ] ++ components);
 
   postBuild = ''
     ./hack/update-generated-docs.sh
-    (cd build/pause && cc pause.c -o pause)
+    (cd build/pause/linux && cc pause.c -o pause)
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin" "$out/share/bash-completion/completions" "$out/share/zsh/site-functions" "$man/share/man" "$pause/bin"
+    for p in $WHAT; do
+      install -D _output/local/go/bin/''${p##*/} -t $out/bin
+    done
 
-    cp _output/local/go/bin/* "$out/bin/"
-    cp build/pause/pause "$pause/bin/pause"
-    cp -R docs/man/man1 "$man/share/man"
+    install -D build/pause/linux/pause -t $pause/bin
+    installManPage docs/man/man1/*.[1-9]
 
-    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
+    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the current working dir
+    # or in /opt. We have to patch this for now.
+    substitute cluster/addons/addon-manager/kube-addons-main.sh $out/bin/kube-addons \
+      --subst-var out
+
+    chmod +x $out/bin/kube-addons
     patchShebangs $out/bin/kube-addons
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
-    cp ${./mk-docker-opts.sh} $out/bin/mk-docker-opts.sh
+    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons-lib.sh
 
-    $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
-    $out/bin/kubectl completion zsh > $out/share/zsh/site-functions/_kubectl
+    for tool in kubeadm kubectl; do
+      installShellCompletion --cmd $tool \
+        --bash <($out/bin/$tool completion bash) \
+        --zsh <($out/bin/$tool completion zsh)
+    done
   '';
 
   preFixup = ''
     find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
-    homepage = https://kubernetes.io;
-    maintainers = with maintainers; [johanot offline saschagrunert];
+    homepage = "https://kubernetes.io";
+    maintainers = with maintainers; [ johanot offline saschagrunert ];
     platforms = platforms.unix;
   };
 }

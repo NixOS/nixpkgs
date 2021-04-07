@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rsync, ocamlPackages }:
+{ lib, stdenv, fetchurl, rsync, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "abella";
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
       of programming languages and other logical systems which manipulate
       objects with binding.
     '';
-    homepage = http://abella-prover.org/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ bcdarwin ciil ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://abella-prover.org/";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ bcdarwin ciil ];
+    platforms = lib.platforms.unix;
   };
 }

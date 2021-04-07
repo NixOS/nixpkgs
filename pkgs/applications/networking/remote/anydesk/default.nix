@@ -1,19 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
 , lsb-release, freetype, fontconfig, polkit, polkit_gnome
 , pulseaudio }:
 
 let
-  sha256 = {
-    x86_64-linux = "0az7n4lhmd4pz0spjvyiwd4w1gnqbh8f1fvr1jinsssyq0j26ldj";
-    i386-linux   = "0vjxbg5hwkqkh600rr75xviwy848r1xw9mxwf6bb6l8b0isvlsgg";
-  }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
-
-  arch = {
-    x86_64-linux = "amd64";
-    i386-linux   = "i386";
-  }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
-
   description = "Desktop sharing application, providing remote support and online meetings";
 
   desktopItem = makeDesktopItem {
@@ -22,20 +12,33 @@ let
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
-    categories = "Application;Network;";
+    categories = "Network;";
     startupNotify = "false";
   };
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "5.5.2";
+  version = "6.1.0";
 
   src = fetchurl {
     urls = [
-      "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz"
-      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-${arch}.tar.gz"
+      "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
+      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    inherit sha256;
+    sha256 = "1qbq6r0yanjappsi8yglw8r54bwf32bjb2i63awmr6pk5kmhhy3r";
+  };
+
+  passthru = {
+    updateScript = genericUpdater {
+      inherit pname version;
+      versionLister = writeShellScript "anydesk-versionLister" ''
+        echo "# Versions for $1:" >> "$2"
+        curl -s https://anydesk.com/en/downloads/linux \
+          | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
+          | uniq \
+          | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
+      '';
+    };
   };
 
   buildInputs = [
@@ -64,7 +67,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}" \
+      --set-rpath "${lib.makeLibraryPath buildInputs}" \
       $out/bin/anydesk
 
     # pangox is not actually necessary (it was only added as a part of gtkglext)
@@ -73,17 +76,17 @@ in stdenv.mkDerivation rec {
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ lsb-release ]}
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]}
 
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
-    homepage = https://www.anydesk.com;
+    homepage = "https://www.anydesk.com";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ shyim ];
   };
 }

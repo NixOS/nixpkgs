@@ -1,20 +1,20 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, poppler, pkgconfig, libunarr
+{ mkDerivation, lib, fetchFromGitHub, qmake, poppler, pkg-config, libunarr
 , libGLU, qtdeclarative, qtgraphicaleffects, qtmultimedia, qtquickcontrols
 , qtscript
 }:
 
 mkDerivation rec {
   pname = "yacreader";
-  version = "9.6.2";
+  version = "9.7.1";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = pname;
     rev = version;
-    sha256 = "1s7kb72skhr364kq8wr2i012jjmaz2vzcz526h0b2bch8921wrnf";
+    sha256 = "17kzh69sxpyk4n7c2gkbsvr9y4j14azdy1qxzghsbwp7ij4iw9kv";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [ poppler libunarr libGLU qtmultimedia qtscript ];
   propagatedBuildInputs = [ qtquickcontrols qtgraphicaleffects qtdeclarative ];
 

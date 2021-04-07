@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, pkgconfig, cppunit, zlib}:
+{lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib}:
 let
   s = # Generated upstream information
   rec {
@@ -9,7 +9,7 @@ let
     url="mirror://sourceforge/project/libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.xz";
     sha256="1cj76cz4mqcy2mgv9l5xlc95bypyk8zbq0ls9cswqrs2y0lhfgwk";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost cppunit zlib
   ];
@@ -34,9 +34,9 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (s) version;
-    description = ''A base library for writing document import filters'';
-    license = stdenv.lib.licenses.mpl20 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "A base library for writing document import filters";
+    license = lib.licenses.mpl20 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

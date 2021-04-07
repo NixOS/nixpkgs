@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, SDL, SDL_ttf, SDL_gfx, SDL_mixer, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, SDL, SDL_ttf, SDL_gfx, SDL_mixer, autoreconfHook,
   libpng, glew, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "hyperrogue";
-  version = "11.2d";
+  version = "11.3o";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
-    rev = stdenv.lib.strings.stringAsChars (x: if x == "." then "" else x) "v${version}";
-    sha256 = "0aj4xy5xjdj32l5mk8796ldh9d7h8rx35kgc1vr7acb4fhpppb0f";
+    rev = "v${version}";
+    sha256 = "0bijgbqpc867pq8lbwwvcnc713gm51mmz625xb5br0q2qw09nkyh";
   };
 
   CPPFLAGS = "-I${SDL.dev}/include/SDL";
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.roguetemple.com/z/hyper/;
+  meta = with lib; {
+    homepage = "http://www.roguetemple.com/z/hyper/";
     description = "A roguelike game set in hyperbolic geometry";
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2;

@@ -1,6 +1,6 @@
-{ stdenv, mkChromiumDerivation, channel, enableWideVine }:
+{ lib, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
 
-with stdenv.lib;
+with lib;
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
@@ -13,10 +13,20 @@ mkChromiumDerivation (base: rec {
 
   installPhase = ''
     mkdir -p "$libExecPath"
-    cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
+
+    # Swiftshader
+    # See https://stackoverflow.com/a/4264351/263061 for the find invocation.
+    if [ -n "$(find "$buildPath/swiftshader/" -maxdepth 1 -name '*.so' -print -quit)" ]; then
+      echo "Swiftshader files found; installing"
+      mkdir -p "$libExecPath/swiftshader"
+      cp -v "$buildPath/swiftshader/"*.so "$libExecPath/swiftshader/"
+    else
+      echo "Swiftshader files not found"
+    fi
 
     mkdir -p "$sandbox/bin"
     cp -v "$buildPath/chrome_sandbox" "$sandbox/bin/${sandboxExecutableName}"
@@ -59,26 +69,26 @@ mkChromiumDerivation (base: rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    description = "An open source web browser from Google";
+    description = "An open source web browser from Google"
+      + optionalString ungoogled ", with dependencies on Google web services removed";
     longDescription = ''
       Chromium is an open source web browser from Google that aims to build a
       safer, faster, and more stable way for all Internet users to experience
       the web. It has a minimalist user interface and provides the vast majority
       of source code for Google Chrome (which has some additional features).
     '';
-    homepage = https://www.chromium.org/;
-    maintainers = with maintainers; [ bendlas thefloweringash primeos ];
-    # Overview of the maintainer roles:
-    # nixos-unstable:
-    # - TODO: Need a new maintainer for x86_64 [0]
-    # - @thefloweringash: aarch64
-    # - @primeos: Provisional maintainer (x86_64)
-    # Stable channel:
-    # - TODO (need someone to test backports [0])
-    # [0]: https://github.com/NixOS/nixpkgs/issues/78450
+    homepage = if ungoogled
+      then "https://github.com/Eloston/ungoogled-chromium"
+      else "https://www.chromium.org/";
+    maintainers = with maintainers; if ungoogled
+      then [ squalus primeos ]
+      else [ primeos thefloweringash bendlas ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
-    hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
-    timeout = 172800; # 48 hours
+    hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
+      then ["aarch64-linux" "x86_64-linux"]
+      else [];
+    timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+    broken = elem channel [ "beta" "dev" ];
   };
 })

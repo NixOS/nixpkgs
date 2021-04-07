@@ -129,6 +129,15 @@ sub findFiles {
         return;
     }
 
+    # If target already exists and both targets resolves to the same path, skip
+    if (defined $oldTarget && $oldTarget ne "" && abs_path($target) eq abs_path($oldTarget)) {
+        # Prefer the target that is not a symlink, if any
+        if (-l $oldTarget && ! -l $target) {
+            $symlinks{$relName} = [$target, $priority];
+        }
+        return;
+    }
+
     # If target already exists as a symlink to a file (not a
     # directory) in a higher-priority package, skip.
     if (defined $oldTarget && $priority > $oldPriority && $oldTarget ne "" && ! -d $oldTarget) {

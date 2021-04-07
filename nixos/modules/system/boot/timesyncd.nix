@@ -16,6 +16,7 @@ with lib;
       };
       servers = mkOption {
         default = config.networking.timeServers;
+        type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
@@ -41,6 +42,7 @@ with lib;
 
     systemd.services.systemd-timesyncd = {
       wantedBy = [ "sysinit.target" ];
+      aliases = [ "dbus-org.freedesktop.timesync1.service" ];
       restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
     };
 

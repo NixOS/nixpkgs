@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "1.4.4";
+  version = "1.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e6ccb7ccf9bab9c49a391db37e0d399ba0e73f969801ae35ff74020bfd4fc346";
+    sha256 = "1bb56f9061c3238d89ec8871bc842f5b8d0e868f892347e8455c98d5b6fa58a1";
   };
 
   checkInputs = [ pytest mock ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helps when interfacing with Ansible";
-    homepage = https://github.com/ansible/ansible-runner;
+    homepage = "https://github.com/ansible/ansible-runner";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

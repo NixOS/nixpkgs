@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , requests
 , protobuf
 , pycryptodome
@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests protobuf pycryptodome ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/NoMore201/googleplay-api;
+  meta = with lib; {
+    homepage = "https://github.com/NoMore201/googleplay-api";
     license = licenses.gpl3;
     description = "Google Play Unofficial Python API";
     maintainers = with maintainers; [ ];

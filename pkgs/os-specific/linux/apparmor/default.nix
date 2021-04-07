@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
-, pkgconfig, which
+, pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
@@ -14,11 +14,11 @@
 
 let
   apparmor-series = "2.13";
-  apparmor-patchver = "3";
+  apparmor-patchver = "6";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
-  apparmor-meta = component: with stdenv.lib; {
-    homepage = http://apparmor.net/;
+  apparmor-meta = component: with lib; {
+    homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom thoughtpolice joachifm ];
@@ -27,35 +27,30 @@ let
 
   apparmor-sources = fetchurl {
     url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "0fbnk9fzjsffwcijsv2wwykmybvfdckpqk99qlib3kb89him6w16";
+    sha256 = "13xshy7905d9q9n8d8i0jmdi9m36wr525g4wlsp8k21n7yvvh9j4";
   };
 
   prePatchCommon = ''
+    chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
+    patchShebangs ./common/list_capabilities.sh ./common/list_af_names.sh
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man"
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html"
     substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
     substituteInPlace ./common/Make.rules --replace "/usr/share/man" "share/man"
   '';
 
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
+      url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
     (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0007-Do-not-build-install-vim-file-with-utils-package.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
+      url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0007-Do-not-build-install-vim-file-with-utils-package.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0007-Do-not-build-install-vim-file-with-utils-package.patch";
       sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
     })
     # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
-    ] ++ [
-      ./cross.patch
-      # Support Python 3.8
-      (fetchpatch {
-        url = https://gitlab.com/apparmor/apparmor/commit/ccbf1e0bf1bf5c3bbab47029fbbc5415ef73bac1.patch;
-        sha256 = "0kfzc0wyjybj38n10yvwakaaqvglalzigd3kk7gcrbp1xdn70pq2";
-      })
     ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
@@ -72,7 +67,7 @@ let
       autoreconfHook
       bison
       flex
-      pkgconfig
+      pkg-config
       swig
       ncurses
       which
@@ -80,8 +75,8 @@ let
     ];
 
     buildInputs = []
-      ++ stdenv.lib.optional withPerl perl
-      ++ stdenv.lib.optional withPython python;
+      ++ lib.optional withPerl perl
+      ++ lib.optional withPython python;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
@@ -89,21 +84,21 @@ let
     prePatch = prePatchCommon + ''
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
-      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.lib.getDev stdenv.cc.libc}/include/netinet/in.h"
-      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.lib.getDev stdenv.cc.libc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
     '';
     inherit patches;
 
     postPatch = "cd ./libraries/libapparmor";
     # https://gitlab.com/apparmor/apparmor/issues/1
     configureFlags = [
-      (stdenv.lib.withFeature withPerl "perl")
-      (stdenv.lib.withFeature withPython "python")
+      (lib.withFeature withPerl "perl")
+      (lib.withFeature withPython "python")
     ];
 
-    outputs = [ "out" ] ++ stdenv.lib.optional withPython "python";
+    outputs = [ "out" ] ++ lib.optional withPython "python";
 
-    postInstall = stdenv.lib.optionalString withPython ''
+    postInstall = lib.optionalString withPython ''
       mkdir -p $python/lib
       mv $out/lib/python* $python/lib/
     '';
@@ -126,7 +121,11 @@ let
       libapparmor.python
     ];
 
-    prePatch = prePatchCommon;
+    prePatch = prePatchCommon + ''
+      substituteInPlace ./utils/apparmor/easyprof.py --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+      substituteInPlace ./utils/apparmor/aa.py --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+      substituteInPlace ./utils/logprof.conf --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+    '';
     inherit patches;
     postPatch = "cd ./utils";
     makeFlags = [ "LANGS=" ];
@@ -137,10 +136,9 @@ let
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
-      substituteInPlace $out/bin/aa-notify --replace /usr/bin/notify-send ${libnotify}/bin/notify-send
-      # aa-notify checks its name and does not work named ".aa-notify-wrapped"
-      mv $out/bin/aa-notify $out/bin/aa-notify-wrapped
-      makeWrapper ${perl}/bin/perl $out/bin/aa-notify --set PERL5LIB ${libapparmor}/${perl.libPrefix} --add-flags $out/bin/aa-notify-wrapped
+      substituteInPlace $out/bin/aa-notify \
+        --replace /usr/bin/notify-send ${libnotify}/bin/notify-send \
+        --replace /usr/bin/perl "${perl}/bin/perl -I ${libapparmor}/${perl.libPrefix}"
     '';
 
     inherit doCheck;
@@ -155,7 +153,7 @@ let
     src = apparmor-sources;
 
     nativeBuildInputs = [
-      pkgconfig
+      pkg-config
       libapparmor
       gawk
       which
@@ -207,7 +205,7 @@ let
     name = "apparmor-pam-${apparmor-version}";
     src = apparmor-sources;
 
-    nativeBuildInputs = [ pkgconfig which ];
+    nativeBuildInputs = [ pkg-config which ];
 
     buildInputs = [ libapparmor pam ];
 
@@ -238,7 +236,7 @@ let
     name = "apparmor-kernel-patches-${apparmor-version}";
     src = apparmor-sources;
 
-    phases = ''unpackPhase installPhase'';
+    phases = "unpackPhase installPhase";
 
     installPhase = ''
       mkdir "$out"

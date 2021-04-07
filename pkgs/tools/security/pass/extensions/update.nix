@@ -1,25 +1,30 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "pass-update";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-update";
     rev = "v${version}";
-    sha256 = "0a81q0jfni185zmbislzbcv0qr1rdp0cgr9wf9riygis2xv6rs6k";
+    sha256 = "0yx8w97jcp6lv7ad5jxqnj04csbrn2hhc4pskssxknw2sbvg4g6c";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "BASHCOMPDIR ?= /etc/bash_completion.d" "BASHCOMPDIR ?= $out/share/bash-completion/completions"
+  '';
 
   dontBuild = true;
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pass extension that provides an easy flow for updating passwords";
-    homepage = https://github.com/roddhjav/pass-update;
+    homepage = "https://github.com/roddhjav/pass-update";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher ];
+    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
     platforms = platforms.unix;
   };
 }

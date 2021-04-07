@@ -1,11 +1,11 @@
-{stdenv, fetchurl, zlib, libX11, libpng}:
+{lib, stdenv, fetchurl, zlib, libX11, libpng}:
 
 stdenv.mkDerivation {
   name = "ploticus-2.42";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/ploticus/ploticus/2.41/pl241src.tar.gz;
+    url = "mirror://sourceforge/ploticus/ploticus/2.41/pl241src.tar.gz";
     sha256 = "1065r0nizjixi9sxxfxrnwg10r458i6fgsd23nrxa200rypvdk7c";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     ln -sf pl.1 "$out"/man/man1/ploticus.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A non-interactive software package for producing plots and charts";
     longDescription = ''Ploticus is a free, GPL'd, non-interactive
       software package for producing plots, charts, and graphics from
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       over colors, styles, options and details.'';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
-    homepage = http://ploticus.sourceforge.net/;
+    homepage = "http://ploticus.sourceforge.net/";
     platforms = with platforms; linux;
   };
 }

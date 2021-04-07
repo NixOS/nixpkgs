@@ -1,16 +1,16 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
 stdenv.mkDerivation rec {
   pname = "civetweb";
-  version = "1.11";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:1drnid6gs97cp9zpvsxz42yfj8djmgx98fg9p2993x9mpi547vzv";
+    sha256 = "/q7Q1lavIR3i126uI4NsKByHJ6Tp+DSN60R4YxR506U=";
   };
 
   makeFlags = [
@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  installTargets = [
+    "install-headers"
+    "install-lib"
+    "install-slib"
+    "install"
+  ];
+
   preInstall = ''
     mkdir -p $dev/include
     mkdir -p $out/lib
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Embedded C/C++ web server";
-    homepage = https://github.com/civetweb/civetweb;
-    license = [ stdenv.lib.licenses.mit ];
+    homepage = "https://github.com/civetweb/civetweb";
+    license = [ lib.licenses.mit ];
   };
 }

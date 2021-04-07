@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "flux";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "11f3ypg0sdq5kj69zgz6kih1yrzgm48r16spyvzwvlswng147410";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with lib; {
     description = "An interface description language used by DirectFB";

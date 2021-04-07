@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, libarchive, iucode-tool }:
+{ lib, stdenv, fetchFromGitHub, libarchive, iucode-tool }:
 
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
-  version = "20191115";
+  version = "20210216";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "Intel-Linux-Processor-Microcode-Data-Files";
     rev = "microcode-${version}";
-    sha256 = "0pzi5qmrcrdf6nsds4bvyq1hnvv9d1dlrvqrbzcrpxk84rcjwq1x";
+    sha256 = "17wrfp7h7xbvncgm1fp103zkyz9n1f820jy6yca1aq208264hjkv";
   };
 
   nativeBuildInputs = [ iucode-tool libarchive ];
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.intel.com/;
+  meta = with lib; {
+    homepage = "http://www.intel.com/";
     description = "Microcode for Intel processors";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit
 , flex, bison, fig2dev, imagemagick, netpbm, gtk2
-, pkgconfig
+, pkg-config
 }:
 
 with lib;
@@ -18,13 +18,13 @@ stdenv.mkDerivation {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "LEX=flex"
-    "RGBDEF=${netpbm}/share/netpbm/misc/rgb.txt"
+    "RGBDEF=${netpbm.out}/share/netpbm/misc/rgb.txt"
   ];
 
   nativeBuildInputs = [
     flex
     bison
-    pkgconfig
+    pkg-config
     imagemagick
     fig2dev
     netpbm
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An editor that allows the interactive creation of footprints electronic components";
-    homepage = http://projects.qi-hardware.com/index.php/p/fped/;
+    homepage = "http://projects.qi-hardware.com/index.php/p/fped/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ expipiplus1 ];
     platforms = platforms.linux;

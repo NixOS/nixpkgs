@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "wbox";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple HTTP benchmarking tool";
-    homepage = http://www.hping.org/wbox/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.hping.org/wbox/";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

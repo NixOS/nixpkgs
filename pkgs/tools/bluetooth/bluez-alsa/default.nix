@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , alsaLib, bluez, glib, sbc, dbus
 
 # optional, but useful utils
@@ -9,20 +9,20 @@
 # TODO: aptxSupport
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
     rev = "v${version}";
-    sha256 = "08mppgnjf1j2733bk9yf0cny6rfxxwiys0s62lz2zd2lpdl6d9lz";
+    sha256 = "1jlsgxyqfhncfhx1sy3ry0dp6p95kd4agh7g2b7g51h0c4cv74h8";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
     alsaLib bluez glib sbc dbus
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   ++ optional aacSupport fdk_aac;
 
   configureFlags = [
-    "--with-alsaplugindir=\$out/lib/alsa-lib"
-    "--with-dbusconfdir=\$out/etc/dbus-1"
+    "--with-alsaplugindir=${placeholder "out"}/lib/alsa-lib"
+    "--with-dbusconfdir=${placeholder "out"}/share/dbus-1/system.d"
     "--enable-rfcomm"
     "--enable-hcitop"
   ]

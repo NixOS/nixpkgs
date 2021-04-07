@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gotty";
@@ -14,9 +14,9 @@ buildGoPackage rec {
     sha256 = "1vhhs7d4k1vpkf2k69ai2r3bp3zwnwa8l9q7vza0rck69g4nmz7a";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Share your terminal as a web application";
-    homepage = https://github.com/yudai/gotty;
+    homepage = "https://github.com/yudai/gotty";
     maintainers = with maintainers; [ ];
     license = licenses.mit;
   };

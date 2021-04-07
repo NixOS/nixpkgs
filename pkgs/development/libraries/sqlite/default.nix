@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
+{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
+, python3Packages
+}:
 
 assert interactive -> readline != null && ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  archiveVersion = import ./archive-version.nix stdenv.lib;
+  archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.31.0";
+  version = "3.35.2";
 
-  # NB! Make sure to update analyzer.nix src (in the same directory).
+  # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2020/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "1w7i954349sjd5a6rvy118prra43k07y9hy8rpajs6vmjmnnx7bw";
+    url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "1bfczv5006ycwr1vw7xbq7cmys0jvfr8awmx7wi1b40zyj0yss8j";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -73,10 +75,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails to link against tcl
 
+  passthru.tests = {
+    inherit (python3Packages) sqlalchemy;
+  };
+
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
-    downloadPage = https://sqlite.org/download.html;
-    homepage = https://www.sqlite.org/;
+    downloadPage = "https://sqlite.org/download.html";
+    homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;

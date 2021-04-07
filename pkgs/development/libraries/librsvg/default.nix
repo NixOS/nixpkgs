@@ -1,26 +1,29 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rustc, cargo, gnome3
+{ lib, stdenv, fetchurl, pkg-config, glib, gdk-pixbuf, pango, cairo, libxml2
+, bzip2, libintl, darwin, rustc, cargo, gnome3
 , vala, gobject-introspection }:
 
 let
   pname = "librsvg";
-  version = "2.46.4";
+  version = "2.50.1";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0afc82nsxc6kw136xid4vcq9kmq4rmgzzk8bh2pvln2cnvirwnxl";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "02csvx2nzygh8kyal2qiy3y6xb7d52vszxxr37dzav704a9pkncv";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
-  nativeBuildInputs = [ pkgconfig rustc cargo vala gobject-introspection ]
+  nativeBuildInputs = [ pkg-config rustc cargo vala gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
     ]);
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     "--enable-vala"
     "--enable-installed-tests"
     "--enable-always-build-tests"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic";
 
   makeFlags = [
     "installed_test_metadir=$(installedTests)/share/installed-tests/RSVG"
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE
-    = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
+    = lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the
@@ -75,11 +78,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small library to render SVG images to Cairo surfaces";
-    homepage = https://wiki.gnome.org/Projects/LibRsvg;
+    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

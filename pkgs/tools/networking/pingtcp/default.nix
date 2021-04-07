@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "pingtcp";
@@ -14,17 +14,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   doCheck = false;
 
   postInstall = ''
     install -Dm644 {..,$out/share/doc/pingtcp}/README.md
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Measure TCP handshake time";
-    homepage = https://github.com/LanetNetwork/pingtcp;
+    homepage = "https://github.com/LanetNetwork/pingtcp";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

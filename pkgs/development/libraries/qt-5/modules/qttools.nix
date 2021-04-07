@@ -11,6 +11,8 @@ qtModule {
   postPatch = ''
     sed -i "src/linguist/linguist.pro" \
         -e '/^cmake_linguist_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${getDev qtbase}|'
+    sed -i "src/qtattributionsscanner/qtattributionsscanner.pro" \
+        -e '/^cmake_qattributionsscanner_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${getDev qtbase}|'
   '';
 
   devTools = [
@@ -20,14 +22,18 @@ qtModule {
     "bin/qdoc"
     "bin/lconvert"
     "bin/designer"
-    "bin/qtattributesscanner"
+    "bin/qtattributionsscanner"
     "bin/lrelease"
+    "bin/lrelease-pro"
     "bin/pixeltool"
     "bin/lupdate"
+    "bin/lupdate-pro"
     "bin/qtdiag"
     "bin/qhelpgenerator"
     "bin/qtplugininfo"
     "bin/qthelpconverter"
+    "bin/lprodump"
+    "bin/qdistancefieldgenerator"
   ] ++ optionals stdenv.isDarwin [
     "bin/macdeployqt"
   ];

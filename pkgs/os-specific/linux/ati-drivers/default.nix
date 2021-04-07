@@ -9,7 +9,7 @@
 
 assert (!libsOnly) -> kernel != null;
 
-with stdenv.lib;
+with lib;
 
 # This derivation requires a maximum of gcc49, Linux kernel 4.1 and xorg.xserver 1.17
 # and will not build or run using versions newer
@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
                  (lib.versionAtLeast kernel.version "4.9") )
                [ ./patches/4.9-get_user_pages.patch ];
 
+  nativeBuildInputs = [ unzip ];
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
       xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
       patchelf
-      unzip
       libGLU libGL
       fontconfig
       freetype
@@ -126,9 +126,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ATI Catalyst display drivers";
-    homepage = http://support.amd.com/us/gpudownload/Pages/index.aspx;
+    homepage = "http://support.amd.com/us/gpudownload/Pages/index.aspx";
     license = licenses.unfree;
     maintainers = with maintainers; [ marcweber offline jerith666 ];
     platforms = platforms.linux;

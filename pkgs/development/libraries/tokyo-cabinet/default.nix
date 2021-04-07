@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, bzip2 }:
+{ fetchurl, lib, stdenv, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "tokyocabinet-1.4.48";
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
          robustness, supports 64-bit architecture.
       '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

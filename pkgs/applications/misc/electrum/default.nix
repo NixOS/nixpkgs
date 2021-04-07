@@ -1,7 +1,12 @@
-{ stdenv, fetchurl, fetchFromGitHub, wrapQtAppsHook, python3, python3Packages, zbar, secp256k1
-, enableQt ? !stdenv.isDarwin
-
-
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, wrapQtAppsHook
+, python3
+, zbar
+, secp256k1
+, enableQt ? true
 # for updater.nix
 , writeScript
 , common-updater-scripts
@@ -15,7 +20,7 @@
 }:
 
 let
-  version = "3.3.8";
+  version = "4.1.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -31,7 +36,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1di8ba77kgapcys0d7h5nx1qqakv3s60c6sp8skw8p69ramsl73c";
+    sha256 = "0zvv8nmjzw5pchykz5p28483nby4lp4ah7iqr08pv36gy89l51v5";
 
     extraPostFetch = ''
       mv $out ./all
@@ -40,13 +45,13 @@ let
   };
 in
 
-python3Packages.buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1g00cj1pmckd4xis8r032wmraiv3vd3zc803hnyxa2bnhj8z3bg2";
+    sha256 = "0yg6ld92a4xgn7y8i51hmr3kmgmrbrjwniikkmyq9q141h2drb80";
   };
 
   postUnpack = ''
@@ -54,34 +59,30 @@ python3Packages.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
-    aiorpcx
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
+    aiorpcx
+    attrs
+    bitstring
+    cryptography
     dnspython
-    ecdsa
     jsonrpclib-pelix
     matplotlib
     pbkdf2
     protobuf
-    pyaes
-    pycryptodomex
     pysocks
     qrcode
     requests
     tlslite-ng
-
     # plugins
+    btchip
     ckcc-protocol
     keepkey
     trezor
-    btchip
-
-    # TODO plugins
-    # amodem
-  ] ++ stdenv.lib.optionals enableQt [ pyqt5 qdarkstyle ];
+  ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -90,12 +91,11 @@ python3Packages.buildPythonApplication {
   '' + (if enableQt then ''
     substituteInPlace ./electrum/qrscanner.py \
       --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-    sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     # Despite setting usr_share above, these files are installed under
     # $out/nix ...
     mv $out/${python3.sitePackages}/nix/store"/"*/share $out
@@ -109,19 +109,24 @@ python3Packages.buildPythonApplication {
 
   '';
 
-  postFixup = stdenv.lib.optionalString enableQt ''
+  postFixup = lib.optionalString enableQt ''
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3Packages; [ pytest ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
-  checkPhase = ''
-    py.test electrum/tests
+  pytestFlagsArray = [ "electrum/tests" ];
+
+  disabledTests = [
+    "test_loop"  # test tries to bind 127.0.0.1 causing permission error
+  ];
+
+  postCheck = ''
     $out/bin/electrum help >/dev/null
   '';
 
   passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
+    inherit lib;
     inherit
       writeScript
       common-updater-scripts
@@ -135,7 +140,7 @@ python3Packages.buildPythonApplication {
     ;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
@@ -143,9 +148,9 @@ python3Packages.buildPythonApplication {
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://electrum.org/;
+    homepage = "https://electrum.org/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry joachifm np ];
+    maintainers = with maintainers; [ joachifm np prusnak ];
   };
 }

@@ -113,14 +113,14 @@ let
   in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.runCommand "xserver.conf"
-    { xfs = optionalString (cfg.useXFS != false)
-        ''FontPath "${toString cfg.useXFS}"'';
+    { fontpath = optionalString (cfg.fontPath != null)
+        ''FontPath "${cfg.fontPath}"'';
       inherit (cfg) config;
       preferLocalBuild = true;
     }
       ''
         echo 'Section "Files"' >> $out
-        echo $xfs >> $out
+        echo $fontpath >> $out
 
         for i in ${toString fontsForXServer}; do
           if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
@@ -136,6 +136,7 @@ let
           fi
         done
 
+        echo '${cfg.filesSection}' >> $out
         echo 'EndSection' >> $out
 
         echo "$config" >> $out
@@ -151,6 +152,11 @@ in
       ./desktop-managers/default.nix
       (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
         "See the 16.09 release notes for more information.")
+      (mkRemovedOptionModule
+        [ "services" "xserver" "startDbusSession" ]
+        "The user D-Bus session is now always socket activated and this option can safely be removed.")
+      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+        "Use services.xserver.fontPath instead of useXFS")
     ];
 
 
@@ -245,11 +251,10 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "radeon" "cirrus" "vesa" "vmware" "modesetting" ];
+        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
         example = [
-          "ati_unfree" "amdgpu" "amdgpu-pro"
-          "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "amdgpu-pro"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
@@ -294,14 +299,6 @@ in
         type = types.nullOr types.int;
         default = null;
         description = "DPI resolution to use for X server.";
-      };
-
-      startDbusSession = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start a new DBus session when you log in with dbus-launch.
-        '';
       };
 
       updateDbusEnvironment = mkOption {
@@ -362,6 +359,13 @@ in
           The contents of the configuration file of the X server
           (<filename>xorg.conf</filename>).
         '';
+      };
+
+      filesSection = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''FontPath "/path/to/my/fonts"'';
+        description = "Contents of the first <literal>Files</literal> section of the X server configuration file.";
       };
 
       deviceSection = mkOption {
@@ -436,6 +440,7 @@ in
 
       serverFlagsSection = mkOption {
         default = "";
+        type = types.lines;
         example =
           ''
           Option "BlankTime" "0"
@@ -481,11 +486,15 @@ in
         description = "Default colour depth.";
       };
 
-      useXFS = mkOption {
-        # FIXME: what's the type of this option?
-        default = false;
+      fontPath = mkOption {
+        type = types.nullOr types.str;
+        default = null;
         example = "unix/:7100";
-        description = "Determines how to connect to the X Font Server.";
+        description = ''
+          Set the X server FontPath. Defaults to null, which
+          means the compiled in defaults will be used. See
+          man xorg.conf for details.
+        '';
       };
 
       tty = mkOption {
@@ -506,6 +515,19 @@ in
         example = { x = 2048; y = 2048; };
         description = ''
           Virtual screen size for Xrandr.
+        '';
+      };
+
+      logFile = mkOption {
+        type = types.nullOr types.str;
+        default = "/dev/null";
+        example = "/var/log/Xorg.0.log";
+        description = ''
+          Controls the file Xorg logs to.
+
+          The default of <literal>/dev/null</literal> is set so that systemd services (like <literal>displayManagers</literal>) only log to the journal and don't create their own log files.
+
+          Setting this to <literal>null</literal> will not pass the <literal>-logfile</literal> argument to Xorg which allows it to log to its default logfile locations instead (see <literal>man Xorg</literal>). You probably only want this behaviour when running Xorg manually (e.g. via <literal>startx</literal>).
         '';
       };
 
@@ -573,7 +595,7 @@ in
            then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
-      in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
+      in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
       { assertion = config.security.polkit.enable;
@@ -627,7 +649,7 @@ in
         xorg.xprop
         xorg.xauth
         pkgs.xterm
-        pkgs.xdg_utils
+        pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
@@ -651,8 +673,7 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "acpid.service" "systemd-logind.service" ];
-        wants = [ "systemd-udev-settle.service" ];
+        after = [ "acpid.service" "systemd-logind.service" ];
 
         restartIfChanged = false;
 
@@ -670,25 +691,24 @@ in
 
         script = "${cfg.displayManager.job.execCmd}";
 
+        # Stop restarting if the display manager stops (crashes) 2 times
+        # in one minute. Starting X typically takes 3-4s.
+        startLimitIntervalSec = 30;
+        startLimitBurst = 3;
         serviceConfig = {
           Restart = "always";
           RestartSec = "200ms";
           SyslogIdentifier = "display-manager";
-          # Stop restarting if the display manager stops (crashes) 2 times
-          # in one minute. Starting X typically takes 3-4s.
-          StartLimitInterval = "30s";
-          StartLimitBurst = "3";
         };
       };
 
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
-        # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
-         "-logfile" "/dev/null"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
+        ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
         ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
         ++ optional (!cfg.enableTCP) "-nolisten tcp"
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
@@ -703,7 +723,7 @@ in
 
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
-      nativeBuildInputs = [ pkgs.xkbvalidate ];
+      nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
@@ -740,7 +760,7 @@ in
           ${cfg.serverLayoutSection}
           # Reference the Screen sections for each driver.  This will
           # cause the X server to try each in turn.
-          ${flip concatMapStrings cfg.drivers (d: ''
+          ${flip concatMapStrings (filter (d: d.display) cfg.drivers) (d: ''
             Screen "Screen-${d.name}[0]"
           '')}
         EndSection
@@ -764,42 +784,44 @@ in
             ${driver.deviceSection or ""}
             ${xrandrDeviceSection}
           EndSection
+          ${optionalString driver.display ''
 
-          Section "Screen"
-            Identifier "Screen-${driver.name}[0]"
-            Device "Device-${driver.name}[0]"
-            ${optionalString (cfg.monitorSection != "") ''
-              Monitor "Monitor[0]"
-            ''}
+            Section "Screen"
+              Identifier "Screen-${driver.name}[0]"
+              Device "Device-${driver.name}[0]"
+              ${optionalString (cfg.monitorSection != "") ''
+                Monitor "Monitor[0]"
+              ''}
 
-            ${cfg.screenSection}
-            ${driver.screenSection or ""}
+              ${cfg.screenSection}
+              ${driver.screenSection or ""}
 
-            ${optionalString (cfg.defaultDepth != 0) ''
-              DefaultDepth ${toString cfg.defaultDepth}
-            ''}
+              ${optionalString (cfg.defaultDepth != 0) ''
+                DefaultDepth ${toString cfg.defaultDepth}
+              ''}
 
-            ${optionalString
-                (driver.name != "virtualbox" &&
-                 (cfg.resolutions != [] ||
-                  cfg.extraDisplaySettings != "" ||
-                  cfg.virtualScreen != null))
-              (let
-                f = depth:
-                  ''
-                    SubSection "Display"
-                      Depth ${toString depth}
-                      ${optionalString (cfg.resolutions != [])
-                        "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
-                      ${cfg.extraDisplaySettings}
-                      ${optionalString (cfg.virtualScreen != null)
-                        "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
-                    EndSubSection
-                  '';
-              in concatMapStrings f [8 16 24]
-            )}
+              ${optionalString
+                  (driver.name != "virtualbox" &&
+                  (cfg.resolutions != [] ||
+                    cfg.extraDisplaySettings != "" ||
+                    cfg.virtualScreen != null))
+                (let
+                  f = depth:
+                    ''
+                      SubSection "Display"
+                        Depth ${toString depth}
+                        ${optionalString (cfg.resolutions != [])
+                          "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
+                        ${cfg.extraDisplaySettings}
+                        ${optionalString (cfg.virtualScreen != null)
+                          "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
+                      EndSubSection
+                    '';
+                in concatMapStrings f [8 16 24]
+              )}
 
-          EndSection
+            EndSection
+          ''}
         '')}
 
         ${xrandrMonitorSections}

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, buildDunePackage
-, pkgconfig, cairo
+{ stdenv, lib, fetchurl, buildDunePackage, ocaml
+, pkg-config, cairo
 }:
 
 buildDunePackage rec {
@@ -11,10 +11,12 @@ buildDunePackage rec {
     sha256 = "1ik4qf4b9443sliq2z7x9acd40rmzvyzjh3bh98wvjklxbb84a9i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !(stdenv.isDarwin
+  # https://github.com/Chris00/ocaml-cairo/issues/19
+  || lib.versionAtLeast ocaml.version "4.10");
 
   meta = {
     homepage = "https://github.com/Chris00/ocaml-cairo";

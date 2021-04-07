@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "sic";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple IRC client";
-    homepage = https://tools.suckless.org/sic/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://tools.suckless.org/sic/";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

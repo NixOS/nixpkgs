@@ -1,11 +1,12 @@
 { mkXfceDerivation, gtk3, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-battery-plugin";
-  version = "1.1.2";
-  rev = version;
-  sha256 = "0329miiclc8da6j0sz495p99hyrf9fjhvpmdl0556fphybz5agc0";
+  version = "1.1.3";
+  rev-prefix = "";
+  odd-unstable = false;
+  sha256 = "0ligdiasrfc3170kd7sif2ml6lvlpp11lbxz3xdvklqkv7p3323y";
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
 

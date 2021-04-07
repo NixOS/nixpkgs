@@ -1,4 +1,5 @@
-{ config
+{ lib
+, config
 , stdenv
 , fetchurl
 , fetchpatch
@@ -12,7 +13,7 @@
 , libass
 , fftw
 , ffms
-, ffmpeg
+, ffmpeg_3
 , pkg-config
 , zlib
 , icu
@@ -45,7 +46,7 @@ assert alsaSupport -> (alsaLib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation
  rec {
   pname = "aegisub";
@@ -68,6 +69,12 @@ stdenv.mkDerivation
       url = "https://github.com/Aegisub/Aegisub/commit/c3c446a8d6abc5127c9432387f50c5ad50012561.patch";
       sha256 = "1n8wmjka480j43b1pr30i665z8hdy6n3wdiz1ls81wyv7ai5yygf";
     })
+
+    # Compatbility with make 4.3
+    (fetchpatch {
+      url = "https://github.com/Aegisub/Aegisub/commit/6bd3f4c26b8fc1f76a8b797fcee11e7611d59a39.patch";
+      sha256 = "1s9cc5rikrqb9ivjbag4b8yxcyjsmmmw744394d5xq8xi4k12vxc";
+    })
   ];
 
   nativeBuildInputs = [
@@ -75,7 +82,7 @@ stdenv.mkDerivation
     intltool
   ];
 
-  buildInputs = with stdenv.lib; [
+  buildInputs = with lib; [
     libX11
     wxGTK
     fontconfig
@@ -85,7 +92,7 @@ stdenv.mkDerivation
     libass
     fftw
     ffms
-    ffmpeg
+    ffmpeg_3
     zlib
     icu
     boost

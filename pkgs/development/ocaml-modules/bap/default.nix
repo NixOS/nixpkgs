@@ -1,23 +1,27 @@
-{ stdenv, fetchFromGitHub, fetchurl
-, ocaml, findlib, ocamlbuild, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp,
- utop, libxml2,
- ppx_tools_versioned,
- which, makeWrapper, writeText
+{ lib, stdenv, fetchFromGitHub, fetchurl
+, ocaml, findlib, ocamlbuild, ocaml_oasis
+, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
+, utop, libxml2, ncurses
+, linenoise
+, ppx_bap
+, ppx_bitstring
+, yojson
+, which, makeWrapper, writeText
+, z3
 }:
 
-if stdenv.lib.versionAtLeast core_kernel.version "0.12"
-then throw "BAP needs core_kernel-0.11 (hence OCaml ≤ 4.06)"
+if !lib.versionAtLeast ocaml.version "4.08"
+then throw "BAP is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bap-${version}";
-  version = "1.6.0";
+  version = "2.2.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "0ryf2xb37pj2f9mc3p5prqgqrylph9qgq7q9jnbx8b03nzzpa6h6";
+    sha256 = "0c53sps6ba9n5cjdmapi8ylzlpcc11pksijp9swzlwgxyz5d276f";
   };
 
   sigs = fetchurl {
@@ -35,11 +39,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  llvm ppx_tools_versioned
-                  utop libxml2 ];
+                  linenoise
+                  ounit
+                  ppx_bitstring
+                  z3
+                  utop libxml2 ncurses ];
 
-  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_jane core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
-                            piqi-ocaml uuidm frontc ounit ];
+  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_bap core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
+                            piqi-ocaml uuidm frontc yojson ];
 
   installPhase = ''
     export OCAMLPATH=$OCAMLPATH:$OCAMLFIND_DESTDIR;
@@ -53,15 +60,19 @@ stdenv.mkDerivation rec {
     ln -s $sigs $out/share/bap/sigs.zip
   '';
 
-  disableIda = "--disable-ida --disable-fsi-benchmark";
+  disableIda = "--disable-ida";
+
+  patches = [ ./curses_is_ncurses.patch ];
+
+  preConfigure = ''
+    substituteInPlace oasis/elf-loader --replace bitstring.ppx ppx_bitstring
+  '';
 
   configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
 
-  BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";
-    homepage = https://github.com/BinaryAnalysisPlatform/bap/;
+    homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
     maintainers = [ maintainers.maurer ];
     license = licenses.mit;
   };

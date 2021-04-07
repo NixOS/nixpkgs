@@ -216,6 +216,10 @@ in
 
   config = mkIf cfg.enable {
 
+    warnings = mkIf (config.networking.firewall.enable == false && config.networking.nftables.enable == false) [
+      "fail2ban can not be used without a firewall"
+    ];
+
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = {
@@ -239,7 +243,7 @@ in
       restartTriggers = [ fail2banConf jailConf pathsConf ];
       reloadIfChanged = true;
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute ];
+      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ];
 
       unitConfig.Documentation = "man:fail2ban(1)";
 
@@ -278,12 +282,12 @@ in
     services.fail2ban.jails.DEFAULT = ''
       ${optionalString cfg.bantime-increment.enable ''
         # Bantime incremental
-        bantime.increment    = ${if cfg.bantime-increment.enable then "true" else "false"}
+        bantime.increment    = ${boolToString cfg.bantime-increment.enable}
         bantime.maxtime      = ${cfg.bantime-increment.maxtime}
         bantime.factor       = ${cfg.bantime-increment.factor}
         bantime.formula      = ${cfg.bantime-increment.formula}
         bantime.multipliers  = ${cfg.bantime-increment.multipliers}
-        bantime.overalljails = ${if cfg.bantime-increment.overalljails then "true" else "false"}
+        bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}
       ''}
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}

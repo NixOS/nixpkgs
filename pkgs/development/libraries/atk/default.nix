@@ -1,25 +1,24 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
+{ lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, glib
 , fixDarwinDylibNames, gobject-introspection, gnome3
 }:
 
 let
   pname = "atk";
-  version = "2.34.1";
+  version = "2.36.0";
 in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1jwp16r6p5z66k4b2v8zlzhyshhwlmyi27ippkrgqr8jsary7w6l";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1217cmmykjgkkim0zr1lv5j13733m4w5vipmy4ivw0ll6rz28xpv";
   };
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext gobject-introspection glib ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [
     # Required by atk.pc
@@ -51,12 +50,12 @@ stdenv.mkDerivation rec {
       control running applications.
     '';
 
-    homepage = http://library.gnome.org/devel/atk/;
+    homepage = "http://library.gnome.org/devel/atk/";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
 }

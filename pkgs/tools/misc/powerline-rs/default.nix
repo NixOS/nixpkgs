@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitLab, pkgconfig, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitLab, pkg-config, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "powerline-rs";
@@ -12,17 +12,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0rqlxxl58dpfvm2idhi0vzinraf4bgiapmawiih9wxs599fnhm3y";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "0a41a6kgwgz4040c2369jldvk6xy6s6fkgayca0qy7hdwc4bcxdp";
 
-  cargoSha256 = "1vdx5nwj4qmkb3rdgnchd9xixc5pmhvskvn6dmqgm91s41p2al1p";
-
-  nativeBuildInputs = [ pkgconfig file perl cmake curl ];
+  nativeBuildInputs = [ pkg-config file perl cmake curl ];
   buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;
 
   COMPLETION_OUT = "out";
   postInstall = ''
-    install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/etc/bash_completion.d/${pname}"
+    install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/share/bash-completion/completions/${pname}"
     install -Dm 755 "${COMPLETION_OUT}/${pname}.fish" "$out/share/fish/vendor_completions.d/${pname}"
   '';
 

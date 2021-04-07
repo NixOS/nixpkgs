@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
-cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core }:
+{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
+atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsaLib, dbus, at-spi2-atk,
+cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "20.1.30";
+  version = "21.1.18";
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "0jns5zqjm0gqn18ypghbgk6gb713mh7p44ax1r8y4vcwijlp5nql";
+    sha256 = "sha256-cc0m1gOwIY4M0ljSSdj8WaQfU/ikGI1Zlf8gGDdht4Q=";
   };
 
   sourceRoot = ".";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       gtk3-x11
-      gnome2.pango
+      pango
       atk
       cairo
       gdk-pixbuf
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       xorg.libXrender
       xorg.libXtst
       xorg_sys_opengl
-      utillinux
+      util-linux
       xorg.libXrandr
       xorg.libXScrnSaver
       alsaLib
@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
       libpulseaudio
       systemd
       vivaldi-ffmpeg-codecs
+      libxkbcommon
+      mesa
     ];
   in ''
     patchelf \
@@ -70,11 +72,11 @@ stdenv.mkDerivation rec {
       $out/Exodus
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut rople380 ];
   };
 }

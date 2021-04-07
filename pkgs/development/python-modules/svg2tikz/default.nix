@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , lxml
@@ -18,8 +18,8 @@ buildPythonPackage {
     rev = "ad36f2c3818da13c4136d70a0fd8153acf8daef4";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kjellmf/svg2tikz;
+  meta = with lib; {
+    homepage = "https://github.com/kjellmf/svg2tikz";
     description = "An SVG to TikZ converter";
     license = licenses.gpl2Plus;
     maintainers =  with maintainers; [ gal_bolle ];

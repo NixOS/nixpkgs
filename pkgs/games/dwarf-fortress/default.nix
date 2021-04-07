@@ -40,7 +40,7 @@ let
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this.
-  latestVersion = "0.47.02";
+  latestVersion = "0.47.04";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
@@ -86,6 +86,8 @@ let
         twbt = twbt;
         dfhack = dfhack;
         dwarf-therapist = dwarf-therapist;
+
+        jdk = pkgs.jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
       };
   }) (lib.attrNames self.df-hashes));
 
@@ -104,7 +106,9 @@ let
 
     soundSense = callPackage ./soundsense.nix { };
 
-    legends-browser = callPackage ./legends-browser {};
+    legends-browser = callPackage ./legends-browser {
+      jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    };
 
     themes = recurseIntoAttrs (callPackage ./themes {
       stdenv = stdenvNoCC;

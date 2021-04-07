@@ -1,26 +1,22 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-xbuild";
-  version = "0.5.24";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "rust-osdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1haq8gv4k6qgihyjplf76589d2hbb1720g6yvwk88aksjxmqj4jm";
+    sha256 = "01whdjryz6zjsk4149h72w5xdjnkpcn5daf0xnsb59b0q38hjgg9";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "1gcixzxca1yi4rvy55s986my6j0vx7n6fm1g5r4v4w0zgzlz4d89";
 
-  cargoSha256 = "011r5n68ay94dvfm37xpd9s8x086l6qsll74iw98hcvw3inxp1ws";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically cross-compiles the sysroot crates core, compiler_builtins, and alloc";
     homepage = "https://github.com/rust-osdev/cargo-xbuild";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ johntitor xrelkd ];
   };
 }

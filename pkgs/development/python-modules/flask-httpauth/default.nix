@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-HTTPAuth";
-  version = "3.3.0";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fb1kr1iw6inkwfv160rpjx54vv1q9b90psdyyghyy1f6dhvgy3f";
+    sha256 = "8c7e49e53ce7dc14e66fe39b9334e4b7ceb8d0b99a6ba1c3562bb528ef9da84a";
   };
 
   propagatedBuildInputs = [ flask ];
@@ -15,6 +15,6 @@ buildPythonPackage rec {
     description = "Extension that provides HTTP authentication for Flask routes";
     homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
     license = licenses.mit;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

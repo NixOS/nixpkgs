@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , writeTextFile
-, python
 , sagelib
 , env-locations
 , gfortran
@@ -41,7 +40,8 @@
 , lcalc
 , rubiks
 , flintqs
-, openblasCompat
+, blas
+, lapack
 , flint
 , gmp
 , mpfr
@@ -49,24 +49,23 @@
 , zlib
 , gsl
 , ntl
-, jdk
+, jdk8
 , less
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
 # It sets up various environment variables, telling sage where to find its
 # dependencies.
 
 let
+  jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+
   runtimepath = (lib.makeBinPath ([
     "@sage-local@"
     "@sage-local@/build"
     pythonEnv
-    # empty python env to add python wrapper that clears PYTHONHOME (see
-    # wrapper.nix). This is necessary because sage will call the python3 binary
-    # (from python2 code). The python2 PYTHONHOME (again set in wrapper.nix)
-    # will then confuse python3, if it is not overwritten.
-    python3.buildEnv
     gfortran # for inline fortran
     stdenv.cc # for cython
     bash
@@ -114,7 +113,7 @@ writeTextFile rec {
         # testsuite instead, but since all the packages are also runtime
         # dependencies it doesn't really hurt to include them here.
         singular
-        openblasCompat
+        blas lapack
         fflas-ffpack givaro
         gd
         libpng zlib
@@ -124,8 +123,21 @@ writeTextFile rec {
       ]
     }'
     export SAGE_ROOT='${sagelib.src}'
-    export SAGE_LOCAL='@sage-local@'
+  '' +
+    # TODO: is using pythonEnv instead of @sage-local@ here a good
+    # idea? there is a test in src/sage/env.py that checks if the values
+    # SAGE_ROOT and SAGE_LOCAL set here match the ones set in env.py.
+    # we fix up env.py's SAGE_ROOT in sage-src.nix (which does not
+    # have access to sage-with-env), but env.py autodetects
+    # SAGE_LOCAL to be pythonEnv.
+    # setting SAGE_LOCAL to pythonEnv also avoids having to create
+    # python3, ipython, ipython3 and jupyter symlinks in
+    # sage-with-env.nix.
+  ''
+    export SAGE_LOCAL='${pythonEnv}'
+
     export SAGE_SHARE='${sagelib}/share'
+    export SAGE_ENV_CONFIG_SOURCED=1 # sage-env complains if sage-env-config is not sourced beforehand
     orig_path="$PATH"
     export PATH='${runtimepath}'
 
@@ -172,9 +184,9 @@ writeTextFile rec {
       ])
     }'
 
-    export SAGE_LIB='${sagelib}/${python.sitePackages}'
+    export SAGE_LIB='${sagelib}/${python3.sitePackages}'
 
-    export SAGE_EXTCODE='${sagelib.src}/src/ext'
+    export SAGE_EXTCODE='${sagelib.src}/src/sage/ext_data'
 
   # for find_library
     export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"

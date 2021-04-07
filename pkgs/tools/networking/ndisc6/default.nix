@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "ndisc6-1.0.4";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     "localstatedir=$(TMPDIR)"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.remlab.net/ndisc6/;
+  meta = with lib; {
+    homepage = "https://www.remlab.net/ndisc6/";
     description = "A small collection of useful tools for IPv6 networking";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonApplication, click, future, six }:
+{ lib, fetchurl, buildPythonApplication, click, future, six }:
 
 buildPythonApplication rec {
   pname = "proselint";
@@ -13,9 +13,9 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ click future six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A linter for prose";
-    homepage = http://proselint.com;
+    homepage = "http://proselint.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ alibabzo ];
   };

@@ -1,10 +1,16 @@
-{ lib, fetchurl, buildDunePackage, angstrom, angstrom-lwt-unix,
+{ lib, fetchurl, ocaml, buildDunePackage, angstrom, angstrom-lwt-unix,
   batteries, cmdliner, lwt_ppx, ocaml_lwt, ppx_deriving_yojson,
   ppx_tools_versioned, yojson }:
+
+if lib.versionAtLeast ocaml.version "4.08"
+then throw "earlybird is not available for OCaml ${ocaml.version}"
+else
 
 buildDunePackage rec {
   pname = "earlybird";
   version = "0.1.5";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 

@@ -1,35 +1,52 @@
-{ buildPythonApplication, lib, fetchPypi, isPy3k
-, cli-helpers, click, configobj, humanize, prompt_toolkit, psycopg2
-, pygments, sqlparse, pgspecial, setproctitle, keyring, pytest, mock
+{ lib, stdenv
+, buildPythonApplication
+, fetchPypi
+, isPy3k
+, cli-helpers
+, click
+, configobj
+, humanize
+, prompt_toolkit
+, psycopg2
+, pygments
+, sqlparse
+, pgspecial
+, setproctitle
+, keyring
+, pendulum
+, pytestCheckHook
+, mock
 }:
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "2.2.0";
+  version = "3.1.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54138a31e6736a34c63b84a6d134c9292c9a73543cc0f66e80a0aaf79259d39b";
+    sha256 = "d5b2d803f7e4e7fe679306a000bde5d14d15ec590ddd108f3dc4c0ecad169d2b";
   };
 
   propagatedBuildInputs = [
-    cli-helpers click configobj humanize prompt_toolkit psycopg2
-    pygments sqlparse pgspecial setproctitle keyring
+    cli-helpers
+    click
+    configobj
+    humanize
+    prompt_toolkit
+    psycopg2
+    pygments
+    sqlparse
+    pgspecial
+    setproctitle
+    keyring
+    pendulum
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "prompt_toolkit>=2.0.6,<3.0.0" "prompt_toolkit"
-  '';
+  checkInputs = [ pytestCheckHook mock ];
 
-  checkInputs = [ pytest mock ];
-
-  # `test_application_name_db_uri` fails: https://github.com/dbcli/pgcli/issues/1104
-  checkPhase = ''
-    pytest --deselect=tests/test_main.py::test_application_name_db_uri
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";
@@ -37,7 +54,8 @@ buildPythonApplication rec {
       Rich command-line interface for PostgreSQL with auto-completion and
       syntax highlighting.
     '';
-    homepage = https://pgcli.com;
+    homepage = "https://pgcli.com";
+    changelog = "https://github.com/dbcli/pgcli/blob/v${version}/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dywedir ];
   };

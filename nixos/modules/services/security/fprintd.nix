@@ -29,7 +29,6 @@ in
         type = types.package;
         default = pkgs.fprintd;
         defaultText = "pkgs.fprintd";
-        example = "pkgs.fprintd-thinkpad";
         description = ''
           fprintd package to use.
         '';
@@ -44,9 +43,9 @@ in
 
   config = mkIf cfg.enable {
 
-    services.dbus.packages = [ pkgs.fprintd ];
+    services.dbus.packages = [ cfg.package ];
 
-    environment.systemPackages = [ pkgs.fprintd ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];
 

@@ -4,14 +4,13 @@ with lib;
 
 let
   cfg = config.services.factorio;
-  factorio = pkgs.factorio-headless;
   name = "Factorio";
   stateDir = "/var/lib/${cfg.stateDirName}";
   mkSavePath = name: "${stateDir}/saves/${name}.zip";
   configFile = pkgs.writeText "factorio.conf" ''
     use-system-read-write-data-directories=true
     [path]
-    read-data=${factorio}/share/factorio/data
+    read-data=${cfg.package}/share/factorio/data
     write-data=${stateDir}
   '';
   serverSettings = {
@@ -37,7 +36,8 @@ let
     only_admins_can_pause_the_game = true;
     autosave_only_on_server = true;
     admins = [];
-  };
+    non_blocking_saving = cfg.nonBlockingSaving;
+  } // cfg.extraSettings;
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
 in
@@ -50,8 +50,13 @@ in
         default = 34197;
         description = ''
           The port to which the service should bind.
-
-          This option will also open up the UDP port in the firewall configuration.
+        '';
+      };
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically open the specified UDP port in the firewall.
         '';
       };
       saveName = mkOption {
@@ -115,6 +120,14 @@ in
           Description of the game that will appear in the listing.
         '';
       };
+      extraSettings = mkOption {
+        type = types.attrs;
+        default = {};
+        example = { admins = [ "username" ];};
+        description = ''
+          Extra game configuration that will go into server-settings.json
+        '';
+      };
       public = mkOption {
         type = types.bool;
         default = false;
@@ -134,6 +147,15 @@ in
         default = null;
         description = ''
           Your factorio.com login credentials. Required for games with visibility public.
+        '';
+      };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.factorio-headless;
+        defaultText = "pkgs.factorio-headless";
+        example = "pkgs.factorio-headless-experimental";
+        description = ''
+          Factorio version to use. This defaults to the stable channel.
         '';
       };
       password = mkOption {
@@ -172,6 +194,15 @@ in
           Autosave interval in minutes.
         '';
       };
+      nonBlockingSaving = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Highly experimental feature, enable only at your own risk of losing your saves.
+          On UNIX systems, server will fork itself to create an autosave.
+          Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
+        '';
+      };
     };
   };
 
@@ -184,7 +215,7 @@ in
       preStart = toString [
         "test -e ${stateDir}/saves/${cfg.saveName}.zip"
         "||"
-        "${factorio}/bin/factorio"
+        "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--create=${mkSavePath cfg.saveName}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
@@ -197,7 +228,7 @@ in
         StateDirectory = cfg.stateDirName;
         UMask = "0007";
         ExecStart = toString [
-          "${factorio}/bin/factorio"
+          "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--port=${toString cfg.port}"
           "--start-server=${mkSavePath cfg.saveName}"
@@ -221,6 +252,6 @@ in
       };
     };
 
-    networking.firewall.allowedUDPPorts = [ cfg.port ];
+    networking.firewall.allowedUDPPorts = if cfg.openFirewall then [ cfg.port ] else [];
   };
 }

@@ -38,13 +38,18 @@ let
       cassandraYaml = builtins.toJSON cassandraConfigWithAddresses;
       cassandraEnvPkg = "${cfg.package}/conf/cassandra-env.sh";
       cassandraLogbackConfig = pkgs.writeText "logback.xml" cfg.logbackConfig;
+      passAsFile = [ "extraEnvSh" ];
+      inherit (cfg) extraEnvSh;
       buildCommand = ''
         mkdir -p "$out"
 
         echo "$cassandraYaml" > "$out/cassandra.yaml"
         ln -s "$cassandraLogbackConfig" "$out/logback.xml"
 
-        cp "$cassandraEnvPkg" "$out/cassandra-env.sh"
+        ( cat "$cassandraEnvPkg"
+          echo "# lines from services.cassandra.extraEnvSh: "
+          cat "$extraEnvShPath"
+        ) > "$out/cassandra-env.sh"
 
         # Delete default JMX Port, otherwise we can't set it using env variable
         sed -i '/JMX_PORT="7199"/d' "$out/cassandra-env.sh"
@@ -222,6 +227,14 @@ in {
         };
       description = ''
         Extra options to be merged into cassandra.yaml as nix attribute set.
+      '';
+    };
+    extraEnvSh = mkOption {
+      type = types.lines;
+      default = "";
+      example = "CLASSPATH=$CLASSPATH:\${extraJar}";
+      description = ''
+        Extra shell lines to be appended onto cassandra-env.sh.
       '';
     };
     fullRepairInterval = mkOption {

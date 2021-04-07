@@ -1,22 +1,23 @@
-{ stdenv, requireFile, avahi }:
+{ lib, stdenv, requireFile, avahi }:
 
 stdenv.mkDerivation rec {
   pname = "ndi";
-  version = "4";
+  fullVersion = "4.6.0";
+  version = builtins.head (builtins.splitVersion fullVersion);
 
   src = requireFile rec {
     name    = "InstallNDISDK_v${version}_Linux.tar.gz";
-    sha256  = "1hac5npyg8nifs9ipj34pkn0zjyx8774x3i3h8znhmijx2j2982p";
+    sha256  = "19jrj2v7x1amdpc9pdq3042vm2l3szwqbzb83lirgbc24s2q043m";
     message = ''
-      In order to use the NDI SDK, you need to comply with NewTek's license and
-      download the Linux version ${version} tarball from:
+      In order to use NDI SDK version ${fullVersion}, you need to comply with
+      NewTek's license and download the appropriate Linux tarball from:
 
-      ${meta.homepage}
+        ${meta.homepage}
 
       Once you have downloaded the file, please use the following command and
       re-run the installation:
 
-      nix-prefetch-url file://\$PWD/${name}
+        \$ nix-prefetch-url file://\$PWD/${name}
     '';
   };
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   # Stripping breaks ndi-record.
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ndi.tv/sdk/";
     description = "NDI Software Developer Kit";
     platforms = ["x86_64-linux"];

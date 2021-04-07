@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libjpeg, libpng, libtiff, perl }:
+{ fetchurl, lib, stdenv, libjpeg, libpng, libtiff, perl }:
 
 stdenv.mkDerivation rec {
   name = "libpano13-2.9.19";
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   #doCheck = true;
 
   meta = {
-    homepage = http://panotools.sourceforge.net/;
+    homepage = "http://panotools.sourceforge.net/";
     description = "Free software suite for authoring and displaying virtual reality panoramas";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

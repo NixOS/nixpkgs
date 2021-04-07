@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, postgresql, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl }:
 
 # # To enable on NixOS:
 # config.services.postgresql = {
@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "1.6.0";
+  version = "2.1.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl ];
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "0b42rhkycr4pwwa4fxnmppd3bl0xz7azvlm145rd7warlsr5h0lb";
+    sha256 = "0mjqy0d60l62vqqbrayj6270173501i6aqgnkczywrqyzqw8522l";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" ];
+  # -DWARNINGS_AS_ERRORS=OFF to be removed once https://github.com/timescale/timescaledb/issues/2770 is fixed in upstream
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DWARNINGS_AS_ERRORS=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.
@@ -36,9 +37,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
-    homepage    = https://www.timescale.com/;
+    homepage    = "https://www.timescale.com/";
     maintainers = with maintainers; [ volth marsam ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;

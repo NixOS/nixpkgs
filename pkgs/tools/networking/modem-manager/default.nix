@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
+{ lib, stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkg-config
 , libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
   pname = "modem-manager";
-  version = "1.12.4";
+  version = "1.14.10";
 
   package = "ModemManager";
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "0nx9b6wfz2r29gb3wgsi5vflycibfhnij5wvc068s6hcbrsn2bc5";
+    sha256 = "sha256-TqYLN1p2HhfnuwlbyolFee0OjjOyc9xpi1y+A5R/NX8=";
   };
 
-  nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
+  nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
@@ -30,11 +30,13 @@ stdenv.mkDerivation rec {
     export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
   '';
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WWAN modem manager, part of NetworkManager";
-    homepage = https://www.freedesktop.org/wiki/Software/ModemManager/;
+    homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp }:
+{ lib, stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
   name = "isl-0.20";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://isl.gforge.inria.fr/;
-    license = stdenv.lib.licenses.lgpl21;
+    homepage = "http://isl.gforge.inria.fr/";
+    license = lib.licenses.lgpl21;
     description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

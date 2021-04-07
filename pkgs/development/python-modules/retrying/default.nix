@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   # doesn't ship tests in tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rholder/retrying;
+  meta = with lib; {
+    homepage = "https://github.com/rholder/retrying";
     description = "General-purpose retrying library";
     license = licenses.asl20;
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, mutt }:
+{ lib, stdenv, fetchurl, perlPackages, mutt }:
 
 stdenv.mkDerivation {
   pname = "grepm";
@@ -22,10 +22,10 @@ stdenv.mkDerivation {
       -e "s:^\( *\)mutt:\1${mutt}/bin/mutt:" \
       $out/bin/grepm
   '';
-  
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "Wrapper for grepmail utilizing mutt";
-    homepage = http://www.barsnick.net/sw/grepm.html;
+    homepage = "http://www.barsnick.net/sw/grepm.html";
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

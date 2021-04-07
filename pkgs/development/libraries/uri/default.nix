@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, doxygen }:
+{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "uri-${version}";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ URI library";
-    homepage = https://cpp-netlib.org;
-    license = stdenv.lib.licenses.boost;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://cpp-netlib.org";
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
   };
 }

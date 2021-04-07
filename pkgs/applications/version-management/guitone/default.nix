@@ -1,4 +1,4 @@
-{ stdenv, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
+{ lib, stdenv, fetchmtn, qt4, qmake4Hook, pkg-config, graphviz }:
 
 let version = "1.0-mtn-head"; in
 stdenv.mkDerivation {
@@ -19,16 +19,16 @@ stdenv.mkDerivation {
 
   patches = [ ./parallel-building.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ qt4 qmake4Hook graphviz ];
 
   qmakeFlags = [ "guitone.pro" ];
 
   meta = {
     description = "Qt4 based GUI for monotone";
-    homepage = https://guitone.thomaskeller.biz;
-    downloadPage = https://code.monotone.ca/p/guitone/;
-    license = stdenv.lib.licenses.gpl3;
+    homepage = "https://guitone.thomaskeller.biz";
+    downloadPage = "https://code.monotone.ca/p/guitone/";
+    license = lib.licenses.gpl3;
     inherit (qt4.meta) platforms;
   };
 }

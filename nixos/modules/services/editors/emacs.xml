@@ -53,11 +53,11 @@
        <varname>emacs</varname>
       </term>
       <term>
-       <varname>emacs25</varname>
+       <varname>emacs</varname>
       </term>
       <listitem>
        <para>
-        The latest stable version of Emacs 25 using the
+        The latest stable version of Emacs using the
         <link
                 xlink:href="http://www.gtk.org">GTK 2</link>
         widget toolkit.
@@ -66,11 +66,11 @@
      </varlistentry>
      <varlistentry>
       <term>
-       <varname>emacs25-nox</varname>
+       <varname>emacs-nox</varname>
       </term>
       <listitem>
        <para>
-        Emacs 25 built without any dependency on X11 libraries.
+        Emacs built without any dependency on X11 libraries.
        </para>
       </listitem>
      </varlistentry>
@@ -79,11 +79,11 @@
        <varname>emacsMacport</varname>
       </term>
       <term>
-       <varname>emacs25Macport</varname>
+       <varname>emacsMacport</varname>
       </term>
       <listitem>
        <para>
-        Emacs 25 with the "Mac port" patches, providing a more native look and
+        Emacs with the "Mac port" patches, providing a more native look and
         feel under macOS.
        </para>
       </listitem>
@@ -156,7 +156,7 @@ $ ./result/bin/emacs
 
 let
   myEmacs = pkgs.emacs; <co xml:id="ex-emacsNix-2" />
-  emacsWithPackages = (pkgs.emacsPackagesGen myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
+  emacsWithPackages = (pkgs.emacsPackagesFor myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
 in
   emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [ <co xml:id="ex-emacsNix-4" />
     magit          # ; Integrate git &lt;C-x g&gt;
@@ -254,10 +254,10 @@ in
     <example xml:id="module-services-emacs-querying-packages">
      <title>Querying Emacs packages</title>
 <programlisting><![CDATA[
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.elpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaStablePackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackages.orgPackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.elpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaStablePackages
+nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 ]]></programlisting>
     </example>
    </para>
@@ -294,7 +294,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
     If you are not on NixOS or want to install this particular Emacs only for
     yourself, you can do so by adding it to your
     <filename>~/.config/nixpkgs/config.nix</filename> (see
-    <link xlink:href="http://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs
+    <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs
     manual</link>):
     <example xml:id="module-services-emacs-config-nix">
      <title>Custom Emacs in <filename>~/.config/nixpkgs/config.nix</filename></title>
@@ -322,7 +322,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
     If you want, you can tweak the Emacs package itself from your
     <filename>emacs.nix</filename>. For example, if you want to have a
     GTK 3-based Emacs instead of the default GTK 2-based binary and remove the
-    automatically generated <filename>emacs.desktop</filename> (useful is you
+    automatically generated <filename>emacs.desktop</filename> (useful if you
     only use <command>emacsclient</command>), you can change your file
     <filename>emacs.nix</filename> in this way:
    </para>

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 let
 
-patch-base = https://github.com/LukeSmithxyz/kjv/commit/;
+patch-base = "https://github.com/LukeSmithxyz/kjv/commit/";
 
 add-apocrypha = fetchpatch {
   url = patch-base + "b92b7622285d10464f9274f11e740bef90705bbc.patch";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Bible, King James Version";
     homepage = "https://github.com/bontibon/kjv";
     license = licenses.publicDomain;

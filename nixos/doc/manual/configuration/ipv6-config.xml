@@ -26,7 +26,7 @@
   As with IPv4 networking interfaces are automatically configured via DHCPv6.
   You can configure an interface manually:
 <programlisting>
-<link linkend="opt-networking.interfaces._name__.ipv6.addresses">networking.interfaces.eth0.ipv6.addresses</link> = [ {
+<link linkend="opt-networking.interfaces._name_.ipv6.addresses">networking.interfaces.eth0.ipv6.addresses</link> = [ {
   address = "fe00:aa:bb:cc::2";
   prefixLength = 64;
 } ];

@@ -43,12 +43,10 @@ in
   options = {
     services.netatalk = {
 
-      enable = mkOption {
-          default = false;
-          description = "Whether to enable the Netatalk AFP fileserver.";
-        };
+      enable = mkEnableOption "the Netatalk AFP fileserver";
 
       port = mkOption {
+        type = types.port;
         default = 548;
         description = "TCP port to be used for AFP.";
       };
@@ -65,11 +63,13 @@ in
 
       homes = {
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = "Enable sharing of the UNIX server user home directories.";
         };
 
         path = mkOption {
+          type = types.str;
           default = "";
           example = "afp-data";
           description = "Share not the whole user home but this subdirectory path.";
@@ -77,6 +77,7 @@ in
 
         basedirRegex = mkOption {
           example = "/home";
+          type = types.str;
           description = "Regex which matches the parent directory of the user homes.";
         };
 
@@ -98,21 +99,22 @@ in
             Set of AFP volumes to export.
             See <literal>man apf.conf</literal> for more information.
           '';
-        example =
+        example = literalExample ''
           { srv =
              { path = "/srv";
                "read only" = true;
                "hosts allow" = "10.1.0.0/16 10.2.1.100 2001:0db8:1234::/48";
              };
-          };
+          }
+        '';
       };
 
       extmap = mkOption {
         type = types.lines;
-	default = "";
-	description = ''
-	  File name extension mappings.
-	  See <literal>man extmap.conf</literal> for more information.
+        default = "";
+        description = ''
+          File name extension mappings.
+          See <literal>man extmap.conf</literal> for more information.
         '';
       };
 
@@ -133,10 +135,10 @@ in
         Type = "forking";
         GuessMainPID = "no";
         PIDFile = "/run/lock/netatalk";
-	ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 0755 -p /var/lib/netatalk/CNID";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 0755 -p /var/lib/netatalk/CNID";
         ExecStart  = "${pkgs.netatalk}/sbin/netatalk -F ${afpConfFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP  $MAINPID";
-	ExecStop   = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
+        ExecStop   = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         Restart = "always";
         RestartSec = 1;
       };

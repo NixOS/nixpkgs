@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgcrypt, autoreconfHook }:
+{ lib, stdenv, fetchurl, libgcrypt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libotr-4.1.1";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libgcrypt ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.cypherpunks.ca/otr/;
-    repositories.git = git://git.code.sf.net/p/otr/libotr;
+  meta = with lib; {
+    homepage = "http://www.cypherpunks.ca/otr/";
+    repositories.git = "git://git.code.sf.net/p/otr/libotr";
     license = licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
     platforms = platforms.unix;

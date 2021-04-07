@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "brook";
@@ -15,8 +15,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/txthinking/brook;
+  meta = with lib; {
+    homepage = "https://github.com/txthinking/brook";
     description = "A cross-platform Proxy/VPN software";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;

@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , dateutil
 , jmespath
@@ -12,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.14.13"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.20.45"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6478d9207db6dbcb5106fd4db2cdd5194d0b2dc0b73776019d56877ab802fe87";
+    sha256 = "sha256-s6WbIcb0BNLF3LGiFphISlrBu+Y5ypey4PDhnFLC6+E=";
   };
 
   propagatedBuildInputs = [
@@ -28,10 +29,6 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace ",<0.16" ""
-  '';
-
   checkInputs = [ mock nose ];
 
   checkPhase = ''
@@ -41,9 +38,11 @@ buildPythonPackage rec {
   # Network access
   doCheck = false;
 
-  meta = {
-    homepage = https://github.com/boto/botocore;
-    license = "bsd";
+  pythonImportsCheck = [ "botocore" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/boto/botocore";
+    license = licenses.asl20;
     description = "A low-level interface to a growing number of Amazon Web Services";
   };
 }

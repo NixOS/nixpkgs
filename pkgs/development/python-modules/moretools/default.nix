@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , six, pathpy, zetup, pytest
 , decorator }:
 
@@ -19,11 +19,11 @@ buildPythonPackage rec {
   checkInputs = [ six pathpy pytest ];
   propagatedBuildInputs = [ decorator ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Many more basic tools for python 2/3 extending itertools, functools, operator and collections
     '';
-    homepage = https://bitbucket.org/userzimmermann/python-moretools;
+    homepage = "https://bitbucket.org/userzimmermann/python-moretools";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

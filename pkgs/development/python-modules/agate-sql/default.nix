@@ -1,20 +1,39 @@
-{ stdenv, fetchPypi, buildPythonPackage, agate, sqlalchemy }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, agate
+, sqlalchemy
+, crate
+, nose
+, geojson
+}:
 
 buildPythonPackage rec {
-    pname = "agate-sql";
-    version = "0.5.4";
+  pname = "agate-sql";
+  version = "0.5.6";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "9277490ba8b8e7c747a9ae3671f52fe486784b48d4a14e78ca197fb0e36f281b";
-    };
+  disabled = isPy27;
 
-    propagatedBuildInputs = [ agate sqlalchemy ];
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "056dc9e587fbdfdf3f1c9950f4793a5ee87622c19deba31aa0a6d6681816dcde";
+  };
 
-    meta = with stdenv.lib; {
-      description = "Adds SQL read/write support to agate.";
-      homepage    = https://github.com/wireservice/agate-sql;
-      license     = with licenses; [ mit ];
-      maintainers = with maintainers; [ vrthra ];
-    };
+  propagatedBuildInputs = [ agate sqlalchemy ];
+
+  checkInputs = [ crate nose geojson ];
+
+  checkPhase = ''
+    nosetests
+  '';
+
+  pythonImportsCheck = [ "agatesql" ];
+
+  meta = with lib; {
+    description = "Adds SQL read/write support to agate.";
+    homepage = "https://github.com/wireservice/agate-sql";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ vrthra ];
+  };
 }

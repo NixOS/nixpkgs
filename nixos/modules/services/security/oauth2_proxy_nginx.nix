@@ -31,7 +31,7 @@ in
         proxyPass = cfg.proxy;
         extraConfig = ''
           proxy_set_header X-Scheme                $scheme;
-          proxy_set_header X-Auth-Request-Redirect $request_uri;
+          proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
         '';
       };
       locations."/oauth2/auth" = {

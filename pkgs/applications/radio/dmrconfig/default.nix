@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libusb1, systemd }:
 
 stdenv.mkDerivation rec {
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     install 99-dmr.rules $out/lib/udev/rules.d/99-dmr.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configuration utility for DMR radios";
     longDescription = ''
       DMRconfig is a utility for programming digital radios via USB programming cable.
     '';
-    homepage = https://github.com/sergev/dmrconfig;
+    homepage = "https://github.com/sergev/dmrconfig";
     license = licenses.asl20;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;

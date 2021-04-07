@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , python3
 , ninja
@@ -20,17 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.1";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0y8lfrrkzcj8nw94jqawbxr4jz41ac0z539kkr3n3x0qmx72md2y";
+    sha256 = "sha256-rZzZIh4bwZfwQFDbfPDKQtfLMJQ2IdykH1yiV6ckqnw=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -54,22 +54,14 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  patches = [
-    # Add support for libecal-2.0
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/3ccd05d611e6dd5274a03f061ba1b5e13d6fe0cf.patch";
-      sha256 = "011q9b4pjmk4fpq5zscl5r8m4n3jiyx464023h4j7zf8r1070jz6";
-    })
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Date & Time Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-datetime;
+    homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

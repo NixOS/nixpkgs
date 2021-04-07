@@ -7,7 +7,8 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
+  libsForQt5 = pkgs.plasma5Packages;
+  inherit (libsForQt5) kdeApplications kdeFrameworks plasma5;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
@@ -52,6 +53,8 @@ let
   '';
 
   activationScript = ''
+    ${set_XDG_CONFIG_HOME}
+
     # The KDE icon cache is supposed to update itself automatically, but it uses
     # the timestamp on the icon theme directory as a trigger. This doesn't work
     # on NixOS because the timestamp never changes. As a workaround, delete the
@@ -62,7 +65,7 @@ let
     # xdg-desktop-settings generates this empty file but
     # it makes kbuildsyscoca5 fail silently. To fix this
     # remove that menu if it exists.
-    rm -fv ''${XDG_CONFIG_HOME:?}/menus/applications-merged/xdg-desktop-menu-dummy.menu
+    rm -fv ''${XDG_CONFIG_HOME}/menus/applications-merged/xdg-desktop-menu-dummy.menu
 
     # Qt writes a weird ‘libraryPath’ line to
     # ~/.config/Trolltech.conf that causes the KDE plugin
@@ -71,7 +74,7 @@ let
     # disastrous, so here we nuke references to the Nix store
     # in Trolltech.conf.  A better solution would be to stop
     # Qt from doing this wackiness in the first place.
-    trolltech_conf="''${XDG_CONFIG_HOME:?}/Trolltech.conf"
+    trolltech_conf="''${XDG_CONFIG_HOME}/Trolltech.conf"
     if [ -e "$trolltech_conf" ]; then
         ${sed} -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
     fi
@@ -81,13 +84,23 @@ let
     # recognize that software that has been removed.
     rm -fv $HOME/.cache/ksycoca*
 
-    ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+    ${libsForQt5.kservice}/bin/kbuildsycoca5
+  '';
+
+  set_XDG_CONFIG_HOME = ''
+      # Set the default XDG_CONFIG_HOME if it is unset.
+      # Per the XDG Base Directory Specification:
+      # https://specifications.freedesktop.org/basedir-spec/latest
+      # 1. Never export this variable! If it is unset, then child processes are
+      # expected to set the default themselves.
+      # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
+      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
   startplasma =
     ''
-      export XDG_CONFIG_HOME="''${XDG_CONFIG_HOME:-$HOME/.config}"
-      mkdir -p "''${XDG_CONFIG_HOME:?}"
+      ${set_XDG_CONFIG_HOME}
+      mkdir -p "''${XDG_CONFIG_HOME}"
 
     ''
     + optionalString pulseaudio.enable ''
@@ -100,10 +113,10 @@ let
       ${activationScript}
 
       # Create default configurations if Plasma has never been started.
-      kdeglobals="''${XDG_CONFIG_HOME:?}/kdeglobals"
+      kdeglobals="''${XDG_CONFIG_HOME}/kdeglobals"
       if ! [ -f "$kdeglobals" ]
       then
-          kcminputrc="''${XDG_CONFIG_HOME:?}/kcminputrc"
+          kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
           if ! [ -f "$kcminputrc" ]
           then
               cat ${kcminputrc} >"$kcminputrc"
@@ -115,7 +128,7 @@ let
               cat ${gtkrc2} >"$gtkrc2"
           fi
 
-          gtk3_settings="''${XDG_CONFIG_HOME:?}/gtk-3.0/settings.ini"
+          gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
           if ! [ -f "$gtk3_settings" ]
           then
               mkdir -p "$(dirname "$gtk3_settings")"
@@ -146,6 +159,19 @@ in
         example = "vlc";
         description = "Phonon audio backend to install.";
       };
+
+      supportDDC = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Support setting monitor brightness via DDC.
+          </para>
+          <para>
+          This is not needed for controlling brightness of the internal monitor
+          of a laptop and as it is considered experimental by upstream, it is
+          disabled by default.
+        '';
+      };
     };
 
   };
@@ -157,6 +183,13 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      # Seed our configuration into nixos-generate-config
+      system.nixos-generate-config.desktopConfiguration = [''
+        # Enable the Plasma 5 Desktop Environment.
+        services.xserver.displayManager.sddm.enable = true;
+        services.xserver.desktopManager.plasma5.enable = true;
+      ''];
+
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;
@@ -164,15 +197,23 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
-        start_kdeinit.source = "${lib.getBin pkgs.kinit}/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+        start_kdeinit.source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
         kwin_wayland = {
           source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
           capabilities = "cap_sys_nice+ep";
         };
       };
 
-      environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
+      # DDC support
+      boot.kernelModules = lib.optional cfg.supportDDC "i2c_dev";
+      services.udev.extraRules = lib.optionalString cfg.supportDDC ''
+        KERNEL=="i2c-[0-9]*", TAG+="uaccess"
+      '';
+
+      environment.systemPackages =
+        with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
         [
           frameworkintegration
           kactivities
@@ -195,6 +236,7 @@ in
           kidletime
           kimageformats
           kinit
+          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
           kio
           kjobwidgets
           knewstuff
@@ -239,6 +281,7 @@ in
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent
+          spectacle
           systemsettings
 
           plasma-desktop
@@ -262,7 +305,7 @@ in
 
           qtvirtualkeyboard
 
-          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
 
         # Phonon audio backend
@@ -270,13 +313,13 @@ in
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt openobex obexftp ]
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
-        ++ lib.optional config.services.colord.enable colord-kde
+        ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
-        ++ lib.optional config.services.xserver.wacom.enable wacomtablet;
+        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -290,7 +333,7 @@ in
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
-        monospace = [ "Hack" "Noto Mono" ];
+        monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
         serif = [ "Noto Serif" ];
       };
@@ -323,10 +366,12 @@ in
       security.pam.services.sddm.enableKwallet = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
+      xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
+
+      nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
     })
   ];
 

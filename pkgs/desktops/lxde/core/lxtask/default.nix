@@ -1,21 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libintl }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, gtk3
+, libintl
+}:
 
 stdenv.mkDerivation rec {
   pname = "lxtask";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
-    sha256 = "0cv4hx5dg01hbyi5p10pl78n0a40xajpq4wx9c7886pkmpq8isj1";
+    sha256 = "0b2fxg8jjjpk219gh7qa18g45365598nd2bq7rrq0bdvqjdxy5i2";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   buildInputs = [ gtk3 libintl ];
 
   configureFlags = [ "--enable-gtk3" ];
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://wiki.lxde.org/en/LXTask";
     description = "Lightweight and desktop independent task manager";
     longDescription = ''
       LXTask is a lightweight task manager derived from xfce4 task manager
@@ -24,9 +32,8 @@ stdenv.mkDerivation rec {
       Desktop Environment, it's totally desktop independent and only
       requires pure GTK.
     '';
-    homepage = https://wiki.lxde.org/en/LXTask;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

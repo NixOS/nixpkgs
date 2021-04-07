@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.36.0";
+  version = "0.36.6";
 
   src = fetchPypi {
     inherit version;
     pname = "SQLAlchemy-Utils";
-    sha256 = "1wkk6jj0jkp2hi3ziqw95q0b19zabpvzm6v5kixgnssj027hq0yv";
+    sha256 = "0srs5w486wp5zydjs70igi5ypgxhm6h73grb85jz03fqpqaanzvs";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/kvesteri/sqlalchemy-utils;
+    homepage = "https://github.com/kvesteri/sqlalchemy-utils";
     description = "Various utility functions and datatypes for SQLAlchemy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];

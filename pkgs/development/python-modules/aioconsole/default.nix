@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
 
 # This package provides a binary "apython" which sometimes invokes
 # [sys.executable, '-m', 'aioconsole'] as a subprocess. If apython is
@@ -10,11 +10,12 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.1.15";
+  version = "0.3.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gbl08p89959g8dqy2vainppg3kyf948xlh18p7iwk5p0mw5d3j9";
+    sha256 = "7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5";
   };
 
   # hardcodes a test dependency on an old version of pytest-asyncio
@@ -22,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Asynchronous console and interfaces for asyncio";
-    homepage = https://github.com/vxgmichel/aioconsole;
+    homepage = "https://github.com/vxgmichel/aioconsole";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.catern ];
   };

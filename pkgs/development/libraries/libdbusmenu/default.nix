@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, file
-, pkgconfig, intltool
+, pkg-config, intltool
 , glib, dbus-glib, json-glib
 , gobject-introspection, vala
 , gtkVersion ? null, gtk2 ? null, gtk3 ? null }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "12l7z8dhl917iy9h02sxmpclnhkdjryn08r8i4sr8l3lrlm4mk5r";
   };
 
-  nativeBuildInputs = [ vala pkgconfig intltool gobject-introspection ];
+  nativeBuildInputs = [ vala pkg-config intltool gobject-introspection ];
 
   buildInputs = [
     glib dbus-glib json-glib
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for passing menu structures across DBus";
-    homepage = https://launchpad.net/dbusmenu;
+    homepage = "https://launchpad.net/dbusmenu";
     license = with licenses; [ gpl3 lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

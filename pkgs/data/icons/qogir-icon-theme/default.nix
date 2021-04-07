@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "qogir-icon-theme";
-  version = "2020-01-29";
+  version = "2020-11-22";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0g6qiry4gzkr48xn4qi8sdna0hi3982sywskz9adkzqcznir542h";
+    sha256 = "04rkpsiz8jg9i55mslsh7a6wgyp30ja3xss7qacqimdab236300d";
   };
 
   nativeBuildInputs = [ gtk3 ];
+
+  propagatedBuildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
@@ -21,8 +23,8 @@ stdenv.mkDerivation rec {
     name= ./install.sh -d $out/share/icons
   '';
 
-  meta = with stdenv.lib; {
-    description = "A colorful design icon theme for linux desktops";
+  meta = with lib; {
+    description = "Flat colorful design icon theme";
     homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;

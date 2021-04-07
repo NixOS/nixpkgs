@@ -1,6 +1,6 @@
-{stdenv, fetchurl, ocaml, findlib, gmp, mpfr, ncurses }:
+{stdenv, lib, fetchurl, ocaml, findlib, gmp, mpfr, ncurses }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.03"
+if lib.versionAtLeast ocaml.version "4.03"
 then throw "mlgmp is not available for OCaml ${ocaml.version}" else
 
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "3ce1a53fa452ff5a9ba618864d3bc46ef32190b57202d1e996ca7df837ad4f24";
   };
 
-  makeFlags = [ 
+  makeFlags = [
     "DESTDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/gmp"
   ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://opam.ocamlpro.com/pkg/mlgmp.20120224.html;
+    homepage = "http://opam.ocamlpro.com/pkg/mlgmp.20120224.html";
     description = "OCaml bindings to GNU MP library";
     license = "Free software ?";
   };

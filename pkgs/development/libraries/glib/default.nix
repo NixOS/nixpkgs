@@ -1,7 +1,7 @@
-{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3
+{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
-# use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
-, utillinuxMinimal ? null
+# use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
+, util-linuxMinimal ? null
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
@@ -11,14 +11,11 @@
 , darwin, fetchpatch
 }:
 
-with stdenv.lib;
+with lib;
 
-assert stdenv.isLinux -> utillinuxMinimal != null;
+assert stdenv.isLinux -> util-linuxMinimal != null;
 
 # TODO:
-# * Add gio-module-fam
-#     Problem: cyclic dependency on gamin
-#     Possible solution: build as a standalone module, set env. vars
 # * Make it build without python
 #     Problem: an example (test?) program needs it.
 #     Possible solution: disable compilation of this example somehow
@@ -32,7 +29,7 @@ assert stdenv.isLinux -> utillinuxMinimal != null;
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
-  # Some packages don't get "Cflags" from pkgconfig correctly
+  # Some packages don't get "Cflags" from pkg-config correctly
   # and then fail to build when directly including like <glib/...>.
   # This is intended to be run in postInstall of any package
   # which has $out/include/ containing just some disjunct directories.
@@ -48,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.62.4";
+  version = "2.66.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1g2vj9lyh032kcwij7avx5d6a99rcsnkd07sbl9i55zsfw6h712c";
+    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-l7yH3ZE2VYmvXLv+oldIM66nobcYQP02Xs0oUsdrnIs=";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -62,8 +59,6 @@ stdenv.mkDerivation rec {
     ./gobject_init_on_demand.patch
   ] ++ [
     ./schema-override-variable.patch
-    # Require substituteInPlace in postPatch
-    ./fix-gio-launch-desktop-path.patch
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
@@ -97,15 +92,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libelf setupHook pcre
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+    gtk-doc
   ] ++ optionals stdenv.isLinux [
     libselinux
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]);
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
+    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -113,9 +111,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
+    "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
-    "-Ddevbindir=${placeholder ''dev''}/bin"
+    "-Ddevbindir=${placeholder "dev"}/bin"
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -125,10 +123,9 @@ stdenv.mkDerivation rec {
     "-DG_DISABLE_CAST_CHECKS"
   ];
 
-  postPatch = ''
-    # substitute fix-gio-launch-desktop-path.patch
-    substituteInPlace gio/gdesktopappinfo.c --replace "@bindir@" "$out/bin"
+  hardeningDisable = [ "pie" ];
 
+  postPatch = ''
     chmod +x gio/tests/gengiotypefuncs.py
     patchShebangs gio/tests/gengiotypefuncs.py
     chmod +x docs/reference/gio/concat-files-helper.py
@@ -148,16 +145,11 @@ stdenv.mkDerivation rec {
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
     sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
-  '' + optionalString (!stdenv.isDarwin) ''
-    # Add gio-launch-desktop to $out so we can refer to it from $lib
-    mkdir $out/bin
-    mv "$bin/bin/gio-launch-desktop" "$out/bin/"
-    ln -s "$out/bin/gio-launch-desktop" "$bin/bin/"
   '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
-  checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
+  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -195,9 +187,9 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "glib"; };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = https://www.gtk.org/;
+    homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
     platforms   = platforms.unix;

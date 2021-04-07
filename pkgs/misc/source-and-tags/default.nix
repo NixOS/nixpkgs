@@ -1,6 +1,6 @@
 { stdenv, lib, glibcLocales, unzip, hasktags, ctags } : {
   # optional srcDir
-  annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags 
+  annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags
                                       || x ? meta && x.meta ? sourceWithTags );
   # hack because passthru doesn't work the way I'd expect. Don't have time to spend on this right now
   # that's why I'm abusing meta for the same purpose in ghcsAndLibs
@@ -10,12 +10,12 @@
 
   # createTagFiles =  [ { name  = "my_tag_name_without_suffix", tagCmd = "ctags -R . -o \$TAG_FILE"; } ]
   # tag command must create file named $TAG_FILE
-  sourceWithTagsDerivation = {name, src, srcDir ? ".", tagSuffix ? "_tags", createTagFiles ? []} :  
+  sourceWithTagsDerivation = {name, src, srcDir ? ".", tagSuffix ? "_tags", createTagFiles ? []} :
     stdenv.mkDerivation {
     phases = "unpackPhase buildPhase";
     inherit src srcDir tagSuffix;
     name = "${name}-source-with-tags";
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
     # using separate tag directory so that you don't have to glob that much files when starting your editor
     # is this a good choice?
     buildPhase =
@@ -72,7 +72,7 @@
 
 
   addCTaggingInfo = deriv :
-    deriv // { 
+    deriv // {
       passthru = {
         sourceWithTags = {
          inherit (deriv) src;

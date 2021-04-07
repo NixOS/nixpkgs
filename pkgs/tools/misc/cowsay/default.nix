@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   version = "3.03+dfsg2";
   pname = "cowsay";
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec{
     install -m644 cows/* -t $out/share/cows/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program which generates ASCII pictures of a cow with a message";
-    homepage = https://en.wikipedia.org/wiki/Cowsay;
+    homepage = "https://en.wikipedia.org/wiki/Cowsay";
     license = licenses.gpl1;
     platforms = platforms.all;
     maintainers = [ maintainers.rob ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, makeDesktopItem
+{ lib, fetchurl, fetchFromGitHub, makeDesktopItem
 , python3, python3Packages
 , glew, glm, freeglut, libpng, libxml2, tk, freetype, msgpack }:
 
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = description;
-    homepage = https://www.pymol.org/;
+    homepage = "https://www.pymol.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ samlich ];
   };

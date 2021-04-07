@@ -1,11 +1,11 @@
-{ lib, buildFHSUserEnv }:
+{ lib, buildFHSUserEnv, version, src }:
 
 let
   pio-pkgs = pkgs:
     let
       python = pkgs.python3.override {
         packageOverrides = self: super: {
-          platformio = self.callPackage ./core.nix { };
+          platformio = self.callPackage ./core.nix { inherit version src; };
         };
       };
     in (with pkgs; [
@@ -34,7 +34,10 @@ in buildFHSUserEnv {
   };
 
   extraInstallCommands = ''
+    mkdir -p $out/lib/udev/rules.d
+
     ln -s $out/bin/platformio $out/bin/pio
+    ln -s ${src}/scripts/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
   '';
 
   runScript = "platformio";

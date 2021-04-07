@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
+, nasm
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , orc
@@ -24,47 +25,47 @@
 , libsoup
 , libpulseaudio
 , libintl
-, darwin
+, Cocoa
 , lame
 , mpg123
 , twolame
-, gtkSupport ? false, gtk3 ? null
-  # As of writing, jack2 incurs a Qt dependency (big!) via `ffado`.
-  # In the future we should probably split `ffado`.
-, enableJack ? false, jack2
+, gtkSupport ? false, gtk3
+, qt5Support ? false, qt5
+, raspiCameraSupport ? false, libraspberrypi
+, enableJack ? true, libjack2
 , libXdamage
 , libXext
 , libXfixes
 , ncurses
+, wayland
+, wayland-protocols
 , xorg
 , libgudev
 , wavpack
 }:
 
-assert gtkSupport -> gtk3 != null;
+assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
-let
-  inherit (stdenv.lib) optionals;
-in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.16.2";
+  version = "1.18.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "068k3cbv1yf3gbllfdzqsg263kzwh21y8dpwr0wvgh15vapkpfs0";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1929nhjsvbl4bw37nfagnfsnxz737cm2x3ayz9ayrn9lwkfm45zp";
   };
 
-  patches = [ ./fix_pkgconfig_includedir.patch ];
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
     meson
     ninja
     gettext
+    nasm
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-protocols
   ];
 
   buildInputs = [
@@ -93,29 +94,39 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXdamage
     wavpack
-  ] ++ optionals gtkSupport [
+  ] ++ lib.optionals raspiCameraSupport [
+    libraspberrypi
+  ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
-  ] ++ optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals qt5Support (with qt5; [
+    qtbase
+    qtdeclarative
+    qtwayland
+    qtx11extras
+  ]) ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ] ++ lib.optionals stdenv.isLinux [
     libv4l
     libpulseaudio
     libavc1394
     libiec61883
     libgudev
-  ] ++ optionals (stdenv.isLinux && enableJack) [
-    jack2
+    wayland
+  ] ++ lib.optionals enableJack [
+    libjack2
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
-  ] ++ optionals (!gtkSupport) [
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ] ++ lib.optionals (!qt5Support) [
+    "-Dqt5=disabled"
+  ] ++ lib.optionals (!gtkSupport) [
     "-Dgtk3=disabled"
-  ] ++ optionals (!stdenv.isLinux || !enableJack) [
-    "-Djack=disabled" # unclear whether Jack works on Darwin
-  ] ++ optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!enableJack) [
+    "-Djack=disabled"
+  ] ++ lib.optionals (!stdenv.isLinux) [
     "-Ddv1394=disabled" # Linux only
     "-Doss4=disabled" # Linux only
     "-Doss=disabled" # Linux only
@@ -123,9 +134,14 @@ stdenv.mkDerivation rec {
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
     "-Dximagesrc=disabled" # Linux-only
-    "-Dpulse=disabled" # TODO check if we can keep this enabled
+  ] ++ lib.optionals (!raspiCameraSupport) [
+    "-Drpicamsrc=disabled"
   ];
 
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   NIX_LDFLAGS = [
     # linking error on Darwin
@@ -136,7 +152,10 @@ stdenv.mkDerivation rec {
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  # must be explicitely set since 5590e365
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "GStreamer Good Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

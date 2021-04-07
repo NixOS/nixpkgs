@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
+, libpng, boost, doxygen, cairomm, pkg-config, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch { /* glibmm 2.50 fix */
-      url = https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch;
+      url = "https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch";
       sha256 = "162icv1hicr2dirkb9ijacvg9bhz5j30yfwg7b45ijavk8rns62j";
     })
   ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
   '';
 
-  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkgconfig perl asciidoc ];
+  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkg-config perl asciidoc ];
 
   buildInputs = [
      libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D editor with support for procedural editing";
-    homepage = http://www.k-3d.org/;
+    homepage = "http://www.k-3d.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;

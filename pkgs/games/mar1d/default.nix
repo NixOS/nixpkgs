@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , libGLU
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "First person Super Mario Bros";
     longDescription = ''
       The original Super Mario Bros as you've never seen it. Step into Mario's
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       original, however, the game still takes place in a two dimensional world.
       You must view the world as mario does, as a one dimensional line.
     '';
-    homepage = https://github.com/olynch/fp_mario;
+    homepage = "https://github.com/olynch/fp_mario";
     license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;

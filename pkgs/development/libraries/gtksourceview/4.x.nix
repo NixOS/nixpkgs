@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, fribidi, vala
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, atk, cairo, glib, gtk3, pango, fribidi, vala
 , libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info
 , meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "4.4.0";
+  version = "4.8.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16k8kqw9w775f1ijsk898hp210an5mv4yfyrmik9m8khxx593nwx";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0WPXG1/K+8Wx7sbdhB7b283dOnURzV/c/9hri7/mmsE=";
   };
 
   propagatedBuildInputs = [
@@ -20,13 +20,22 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext perl gobject-introspection vala ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext perl gobject-introspection vala ];
 
   checkInputs = [ xvfb_run dbus ];
 
   buildInputs = [ atk cairo glib pango fribidi libxml2 ];
 
-  patches = [ ./4.x-nix_share_path.patch ];
+  patches = [
+    ./4.x-nix_share_path.patch
+
+    # fixes intermittent "gtksourceview-gresources.h: no such file" errors
+    (fetchpatch {
+      name = "ensure-access-to-resources-in-corelib-build.patch";
+      url = "https://gitlab.gnome.org/GNOME/gtksourceview/-/commit/9bea9d1c4a56310701717bb106c52a5324ee392a.patch";
+      sha256 = "sha256-rSB6lOFEyz58HfOSj7ZM48/tHxhqbtWWbh60JuySAZ0=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
@@ -45,10 +54,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/GtkSourceView;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl21;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

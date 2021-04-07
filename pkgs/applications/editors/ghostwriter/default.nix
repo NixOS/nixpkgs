@@ -1,25 +1,26 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, qttools, qtwebengine, hunspell }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkg-config, qttools, qtwebengine, hunspell }:
 
 mkDerivation rec {
   pname = "ghostwriter";
-  version = "1.8.0";
+  version = "2.0.0-rc5";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "13yn82m1l2pq93wbl569a2lzpc3sn8a8g30hsgdch1l9xlmhwran";
+    rev = version;
+    sha256 = "sha256-Gc0/AHxxJd5Cq3dBQ0Xy2TF78CBmQFYUzm4s7q1aHEE=";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig qttools ];
+  nativeBuildInputs = [ qmake pkg-config qttools ];
 
   buildInputs = [ qtwebengine hunspell ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform, aesthetic, distraction-free Markdown editor";
     homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda erictapen ];
+    broken = stdenv.isDarwin;
   };
 }

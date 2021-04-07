@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, pruneLibtoolFiles, flex, bison
+{ lib, stdenv, fetchurl, pkg-config, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
 , nftablesCompat ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "1.8.4";
+  version = "1.8.7";
   pname = "iptables";
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
-    sha256 = "0z0mgs1ghvn3slc868mgbf2g26njgrzcy5ggyb5w4i55j1a3lflr";
+    sha256 = "1w6qx3sxzkv80shk21f63rq41c84irpx68k62m2cv629n1mwj2f1";
   };
 
-  nativeBuildInputs = [ pkgconfig pruneLibtoolFiles flex bison ];
+  nativeBuildInputs = [ pkg-config pruneLibtoolFiles flex bison ];
 
   buildInputs = [ libmnl libnetfilter_conntrack libnfnetlink libnftnl libpcap ];
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program to configure the Linux IP packet filtering ruleset";
-    homepage = https://www.netfilter.org/projects/iptables/index.html;
+    homepage = "https://www.netfilter.org/projects/iptables/index.html";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl2;

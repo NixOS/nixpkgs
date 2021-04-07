@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , isPyPy
@@ -10,16 +10,16 @@ buildPythonPackage rec {
   pname = "mmpython";
 
   src = fetchurl {
-    url = https://sourceforge.net/projects/mmpython/files/latest/download;
+    url = "https://sourceforge.net/projects/mmpython/files/latest/download";
     sha256 = "1b7qfad3shgakj37gcj1b9h78j1hxlz6wp9k7h76pb4sq4bfyihy";
     name = "${pname}-${version}.tar.gz";
   };
 
   disabled = isPyPy || isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Media Meta Data retrieval framework";
-    homepage = https://sourceforge.net/projects/mmpython/;
+    homepage = "https://sourceforge.net/projects/mmpython/";
     license = licenses.gpl2;
   };
 

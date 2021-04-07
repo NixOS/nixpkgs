@@ -1,27 +1,36 @@
-{ stdenv, fetchFromGitHub, cmake, gmp }:
+{ lib, stdenv, fetchFromGitHub, cmake, gmp, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "lean";
-  version = "3.5.1";
+  version = "3.28.0";
 
   src = fetchFromGitHub {
     owner  = "leanprover-community";
     repo   = "lean";
     rev    = "v${version}";
-    sha256 = "0m7knf1hfbn2v6p6kmqxlx8c40p5nzv8d975w2xwljaccc42j1yp";
+    sha256 = "sha256-IzoFE92F559WeSUCiYZ/fx2hrsyRzgOACr3/pzJ4OOY=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gmp ];
-  enableParallelBuilding = true;
 
-  preConfigure = ''
-    cd src
+  cmakeDir = "../src";
+
+  # Running the tests is required to build the *.olean files for the core
+  # library.
+  doCheck = true;
+
+  postPatch = "patchShebangs .";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace $out/bin/leanpkg \
+      --replace "greadlink" "${coreutils}/bin/readlink"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic and interactive theorem prover";
-    homepage    = https://leanprover.github.io/;
+    homepage    = "https://leanprover.github.io/";
+    changelog   = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
     license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice gebner ];

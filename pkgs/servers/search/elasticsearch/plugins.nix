@@ -18,13 +18,34 @@ let
       inherit installPhase;
       pname = "elasticsearch-${pluginName}";
       dontUnpack = true;
-      buildInputs = [ unzip ];
+      # Work around the "unpacker appears to have produced no directories"
+      # case that happens when the archive doesn't have a subdirectory.
+      setSourceRoot = "sourceRoot=$(pwd)";
+      nativeBuildInputs = [ unzip ];
       meta = a.meta // {
         platforms = elasticsearch.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ (with lib.maintainers; [ offline ]);
       };
     });
 in {
+
+  analysis-icu = esPlugin rec {
+    name = "elasticsearch-analysis-icu-${version}";
+    pluginName = "analysis-icu";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      sha256 =
+        if version == "7.5.1" then "0v6ynbk34g7pl9cwy8ga8bk1my18jb6pc3pqbjl8p93w38219vi6"
+        else if version == "6.8.3" then "0vbaqyj0lfy3ijl1c9h92b0nh605h5mjs57bk2zhycdvbw5sx2lv"
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-icu";
+      description = "The ICU Analysis plugin integrates the Lucene ICU module into elasticsearch";
+      license = licenses.asl20;
+    };
+  };
 
   analysis-lemmagen = esPlugin rec {
     pluginName = "analysis-lemmagen";
@@ -37,8 +58,25 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
+      homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
+      license = licenses.asl20;
+    };
+  };
+
+  analysis-phonetic = esPlugin rec {
+    pluginName = "analysis-phonetic";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      sha256 =
+        if version == "7.5.1" then "0znmbdf99bli4kvyb3vxr5x48yb6n64nl38gpa63iqsv3nlbi0hp"
+        else if version == "6.8.3" then "0ggdhf7w50bxsffmcznrjy14b578fps0f8arg3v54qvj94v9jc37"
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-phonetic";
+      description = "The Phonetic Analysis plugin integrates phonetic token filter analysis with elasticsearch";
       license = licenses.asl20;
     };
   };
@@ -54,7 +92,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2";
       description = "The EC2 discovery plugin uses the AWS API for unicast discovery.";
       license = licenses.asl20;
     };
@@ -71,7 +109,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/ingest-attachment;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/ingest-attachment";
       description = "Ingest processor that uses Apache Tika to extract contents";
       license = licenses.asl20;
     };
@@ -88,7 +126,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/repository-s3;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-s3";
       description = "The S3 repository plugin adds support for using AWS S3 as a repository for Snapshot/Restore.";
       license = licenses.asl20;
     };
@@ -105,7 +143,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/repository-gcs;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-gcs";
       description = "The GCS repository plugin adds support for using Google Cloud Storage as a repository for Snapshot/Restore.";
       license = licenses.asl20;
     };
@@ -128,7 +166,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://search-guard.com;
+      homepage = "https://search-guard.com";
       description = "Elasticsearch plugin that offers encryption, authentication, and authorisation. ";
       license = licenses.asl20;
     };

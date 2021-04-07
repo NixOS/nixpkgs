@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
-, gd, geoip, gperftools, jemalloc
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+, substituteAll, gd, geoip, gperftools, jemalloc
 , withDebug ? false
 , withMail ? false
 , withStream ? false
@@ -7,25 +7,31 @@
 , ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.2";
+  version = "2.3.3";
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
-    sha256 = "04xfnbc0qlk8vi6bb8sl38nxnx9naxh550xsgrb4hql6jdi0wv7l";
+    sha256 = "0p43qsldwhx4zfwp585x8kps0akrf7b0gxdgf0sh0yqcp7l28gmx";
   };
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
-  patches = [
+  patches = singleton (substituteAll {
+    src = ../nginx/nix-etag-1.15.4.patch;
+    preInstall = ''
+      export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
+    '';
+  }) ++ [
     ./check-resolv-conf.patch
+    ../nginx/nix-skip-check-logs-path.patch
   ];
 
   configureFlags = [
@@ -53,6 +59,14 @@ stdenv.mkDerivation rec {
     "--with-poll_module"
     "--with-google_perftools_module"
     "--with-jemalloc"
+    "--http-log-path=/var/log/nginx/access.log"
+    "--error-log-path=/var/log/nginx/error.log"
+    "--pid-path=/var/log/nginx/nginx.pid"
+    "--http-client-body-temp-path=/var/cache/nginx/client_body"
+    "--http-proxy-temp-path=/var/cache/nginx/proxy"
+    "--http-fastcgi-temp-path=/var/cache/nginx/fastcgi"
+    "--http-uwsgi-temp-path=/var/cache/nginx/uwsgi"
+    "--http-scgi-temp-path=/var/cache/nginx/scgi"
   ] ++ optionals withDebug [
     "--with-debug"
   ] ++ optionals withMail [
@@ -98,8 +112,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A web server based on Nginx and has many advanced features, originated by Taobao.";
-    homepage    = https://tengine.taobao.org;
+    description = "A web server based on Nginx and has many advanced features, originated by Taobao";
+    homepage    = "https://tengine.taobao.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ izorkin ];

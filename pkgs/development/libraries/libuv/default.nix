@@ -1,25 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, ApplicationServices, CoreServices }:
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.34.2";
+  version = "1.41.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "14ax49daz7j86lybi242jiry49jrnnvlyc39k6va700n03py4h9n";
+    sha256 = "sha256-i6AYD1Ony0L2+3yWK6bxOfwoZEvd9qCg33QSqA7bRXI=";
   };
 
   postPatch = let
     toDisable = [
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
+      "tcp_connect_timeout" # tries to reach out to 8.8.8.8
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
-      "tcp_writealot" # times out sometimes
-    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+    ] ++ lib.optionals stdenv.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
         # be much more robust.
@@ -34,13 +35,13 @@ stdenv.mkDerivation rec {
         "tcp_open" "tcp_write_queue_order" "tcp_try_write" "tcp_writealot"
         "multiple_listen" "delayed_accept"
         "shutdown_close_tcp" "shutdown_eof" "shutdown_twice" "callback_stack"
-        "tty_pty" "condvar_5" "hrtime"
+        "tty_pty" "condvar_5" "hrtime" "udp_multicast_join"
         # Tests that fail when sandboxing is enabled.
         "fs_event_close_in_callback" "fs_event_watch_dir" "fs_event_error_reporting"
         "fs_event_watch_dir_recursive" "fs_event_watch_file"
         "fs_event_watch_file_current_dir" "fs_event_watch_file_exact_path"
         "process_priority" "udp_create_early_bad_bind"
-    ] ++ stdenv.lib.optionals stdenv.isAarch32 [
+    ] ++ lib.optionals stdenv.isAarch32 [
       # I observe this test failing with some regularity on ARMv7:
       # https://github.com/libuv/libuv/issues/1871
       "shutdown_close_pipe"
@@ -50,8 +51,8 @@ stdenv.mkDerivation rec {
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
+  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
+  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh
@@ -66,7 +67,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
-    homepage    = https://github.com/libuv/libuv;
+    homepage    = "https://libuv.org/";
+    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];

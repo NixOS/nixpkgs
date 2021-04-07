@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation {
 
   installPhase = "ocaml setup.ml -install";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pure OCaml library to read and write CSV files";
-    homepage = https://github.com/Chris00/ocaml-csv;
+    homepage = "https://github.com/Chris00/ocaml-csv";
     license = licenses.lgpl21;
     maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];

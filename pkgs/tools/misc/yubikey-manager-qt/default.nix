@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , wrapQtAppsHook
 , pcsclite
@@ -10,21 +11,17 @@
 , qtgraphicaleffects
 , qtquickcontrols
 , qtquickcontrols2
-, qtdeclarative
-, qtsvg
 , yubikey-manager
 , yubikey-personalization
 }:
 
-let inherit (stdenv) lib; in
-
 stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0rbr72741q7fqkr9qmvgj2mi6192ayz7bl935q2bsnqils4wsa3f";
+    sha256 = "1yimlaqvhq34gw6wkqgil0qq8x9zbfzh4psqihjr2d9jaa2wygwy";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook python3.pkgs.wrapPython qmake ];
@@ -35,8 +32,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pythonPackages.python qtbase qtgraphicaleffects qtquickcontrols qtquickcontrols2 pyotherside ];
 
-  enableParallelBuilding = true;
-
   pythonPath = [ yubikey-manager ];
 
   dontWrapQtApps = true;
@@ -44,7 +39,7 @@ stdenv.mkDerivation rec {
     buildPythonPath "$pythonPath"
 
     wrapQtApp $out/bin/ykman-gui \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
+      --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
       --prefix PYTHONPATH : "$program_PYTHONPATH"
 
     mkdir -p $out/share/applications
@@ -57,8 +52,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit version;
-    description = "Cross-platform application for configuring any YubiKey over all USB interfaces.";
-    homepage = https://developers.yubico.com/yubikey-manager-qt/;
+    description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
+    homepage = "https://developers.yubico.com/yubikey-manager-qt/";
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];
     platforms = platforms.linux;

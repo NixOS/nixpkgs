@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , requests }:
 
 buildPythonPackage rec {
@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # This description is terrible, but it's what upstream uses.
     description = "Package to update stuff";
-    homepage = https://github.com/ludeeus/pyupdate;
+    homepage = "https://github.com/ludeeus/pyupdate";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

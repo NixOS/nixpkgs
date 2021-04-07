@@ -17,9 +17,9 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
-, pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
+{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python, stdenv, which
+, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
+, pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
@@ -39,18 +39,9 @@ let
 in
 
 {
-  asciidoctor-diagram = { version, ruby, ... }: {
-    postInstall = ''
-      # Delete vendored JAR files unless using JRuby.
-      if ruby -e 'exit(RUBY_PLATFORM != "java")'; then
-          rm -v $out/${ruby.gemPath}/gems/$gemName-${version}/lib/*.jar
-      fi
-    '';
-  };
-
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
-    nativeBuildInputs = [ rake bundler pkgconfig ];
+    nativeBuildInputs = [ rake bundler pkg-config ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook atk ];
   };
 
@@ -70,12 +61,12 @@ in
     };
 
   cairo = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
@@ -84,7 +75,7 @@ in
   };
 
   cld3 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ protobuf ];
   };
 
@@ -189,12 +180,12 @@ in
   };
 
   ffi = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libffi ];
   };
 
   gdk_pixbuf2 = attrs: {
-    nativeBuildInputs = [ pkgconfig bundler rake ];
+    nativeBuildInputs = [ pkg-config bundler rake ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
   };
 
@@ -204,22 +195,51 @@ in
   };
 
   gio2 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
 
+  gitlab-pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.1") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/10-1.0.3";
+        sha256 = "0jfij8apzxsdabl70j42xgd5f3ka1gdcrk764nccp66164gpcchk";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  };
+
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
+        sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  } // lib.optionalAttrs (attrs.version == "1.3.0") {
+    # Needed for gitlab
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/10-1.0.4";
+        sha256 = "0f0kshhai0pnkqj0w4kgz3fssnvwidllc31n1fysxjjzdqlr1k48";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  };
+
   glib2 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ gtk2 pcre ];
   };
 
   gtk2 = attrs: {
     nativeBuildInputs = [
-      binutils pkgconfig
+      binutils pkg-config
     ] ++ lib.optionals stdenv.isLinux [
-      utillinux libselinux libsepol
+      util-linux libselinux libsepol
     ];
     propagatedBuildInputs = [
       atk
@@ -237,12 +257,12 @@ in
   };
 
   gobject-introspection = attrs: {
-    nativeBuildInputs = [ pkgconfig pcre ];
+    nativeBuildInputs = [ pkg-config pcre ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
 
   grpc = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     NIX_CFLAGS_COMPILE = toString [
@@ -264,7 +284,7 @@ in
 
   hitimes = attrs: {
     buildInputs =
-      stdenv.lib.optionals stdenv.isDarwin
+      lib.optionals stdenv.isDarwin
         [ darwin.apple_sdk.frameworks.CoreServices ];
   };
 
@@ -314,18 +334,26 @@ in
   };
 
   mathematical = attrs: {
-    buildInputs = [
+    nativeBuildInputs = [
+      ruby
       cmake
       bison
       flex
-      glib
-      pkgconfig
-      cairo
-      pango
-      gdk-pixbuf
-      libxml2
+      pkg-config
       python3
+      patchelf
     ];
+
+    buildInputs = [
+      cairo
+      fribidi
+      gdk-pixbuf
+      glib
+      libxml2
+      pango
+    ];
+
+    strictDeps = true;
 
     # The ruby build script takes care of this
     dontUseCmakeConfigure = true;
@@ -338,12 +366,13 @@ in
             $out/${ruby.gemPath}/extensions/*/*/mathematical-${attrs.version}/gem_make.out
     '';
 
-    # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
+    # For some reason 'mathematical.so' is missing cairo, glib, and
+    # lasem in its RPATH, add them explicitly here
     postFixup = lib.optionalString stdenv.isLinux ''
       soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
-      ${patchelf}/bin/patchelf \
-        --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(${patchelf}/bin/patchelf --print-rpath "$soPath")" \
-        "$soPath"
+      rpath="$(patchelf --print-rpath "$soPath")"
+      patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
+      patchelf --replace-needed liblasem.so liblasem-0.4.so "$soPath"
     '';
   };
 
@@ -384,7 +413,8 @@ in
   nokogiri = attrs: {
     buildFlags = [
       "--use-system-libraries"
-      "--with-zlib-dir=${zlib.dev}"
+      "--with-zlib-lib=${zlib.out}/lib"
+      "--with-zlib-include=${zlib.dev}/include"
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
       "--with-xslt-lib=${libxslt.out}/lib"
@@ -392,6 +422,10 @@ in
       "--with-exslt-lib=${libxslt.out}/lib"
       "--with-exslt-include=${libxslt.dev}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+  };
+
+  openssl = attrs: {
+    buildInputs = [ openssl ];
   };
 
   opus-ruby = attrs: {
@@ -409,7 +443,7 @@ in
 
   pango = attrs: {
     nativeBuildInputs = [
-      pkgconfig
+      pkg-config
       fribidi
       harfbuzz
       pcre
@@ -467,7 +501,7 @@ in
   };
 
   rmagick = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ imagemagick which ];
   };
 
@@ -476,7 +510,7 @@ in
   };
 
   ruby-libvirt = attrs: {
-    buildInputs = [ libvirt pkgconfig ];
+    buildInputs = [ libvirt pkg-config ];
     buildFlags = [
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
@@ -506,13 +540,13 @@ in
         --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
       substituteInPlace lib/vips.rb \
-        --replace "vips_libname = 'vips'" "vips_libname = '${vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        --replace "vips_libname = 'vips'" "vips_libname = '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
     '';
   };
 
   rugged = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ which cmake openssl libssh2 zlib ];
+    nativeBuildInputs = [ cmake pkg-config which ];
+    buildInputs = [ openssl libssh2 zlib ];
     dontUseCmakeConfigure = true;
   };
 
@@ -575,11 +609,11 @@ in
   };
 
   timfel-krb5-auth = attrs: {
-    buildInputs = [ kerberos ];
+    buildInputs = [ libkrb5 ];
   };
 
   tiny_tds = attrs: {
-    nativeBuildInputs = [ pkgconfig openssl ];
+    nativeBuildInputs = [ pkg-config openssl ];
     buildInputs = [ freetds ];
   };
 
@@ -608,7 +642,7 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-    nativeBuildInputs = [ rake pkgconfig bundler ];
+    nativeBuildInputs = [ rake pkg-config bundler ];
     buildInputs = [ xapian zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile
@@ -623,7 +657,7 @@ in
   };
 
   zookeeper = attrs: {
-    buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    buildInputs = lib.optionals stdenv.isDarwin [ darwin.cctools ];
     dontBuild = false;
     postPatch = ''
       sed -i ext/extconf.rb -e "4a \

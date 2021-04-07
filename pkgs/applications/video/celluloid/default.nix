@@ -1,10 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , python3
 , gettext
-, pkgconfig
+, pkg-config
 , desktop-file-utils
 , wrapGAppsHook
 , appstream-glib
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.18";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    sha256 = "1j8z75y98liirr41rlcn89cshvp1xp71cspcclm6wx455i7q2cg1";
+    hash = "sha256-fEZnH8EqU6CykgKINXnKChuBUlisroa97B1vjcx2cWA=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     python3
     appstream-glib
     gettext
-    pkgconfig
+    pkg-config
     desktop-file-utils
     wrapGAppsHook
   ];
@@ -49,7 +50,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
     description = "Simple GTK frontend for the mpv video player";
     longDescription = ''
       GNOME MPV interacts with mpv via the client API exported by libmpv,

@@ -94,7 +94,12 @@ in
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
           networkConfig.IPv6PrivacyExtensions = "kernel";
-        } ];
+          linkConfig = optionalAttrs (i.macAddress != null) {
+            MACAddress = i.macAddress;
+          } // optionalAttrs (i.mtu != null) {
+            MTUBytes = toString i.mtu;
+          };
+        }];
       })))
       (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
         netdevs."40-${name}" = {
@@ -254,7 +259,7 @@ in
             wants = deps; # if one or more interface fails, the switch should continue to run
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            path = [ pkgs.iproute2 config.virtualisation.vswitch.package ];
             preStart = ''
               echo "Resetting Open vSwitch ${n}..."
               ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \

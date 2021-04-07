@@ -1,19 +1,47 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, argtable, curl, libmicrohttpd
-, doxygen, catch, pkgconfig
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, cmake
+, argtable
+, catch2
+, curl
+, doxygen
+, hiredis
+, jsoncpp
+, libmicrohttpd
 }:
 
 stdenv.mkDerivation rec {
   pname = "libjson-rpc-cpp";
-  version = "0.7.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cinemast";
     repo = "libjson-rpc-cpp";
-    sha256 = "07bg4nyvx0yyhy8c4x9i22kwqpx5jlv36dvpabgbb46ayyndhr7a";
+    sha256 = "sha256-EAakiqlfMprwLjloDekOssaB/EnAmn5njcwHGZtYs9w=";
     rev = "v${version}";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${catch}/include/catch";
+  NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
+
+  patches = [
+    (fetchpatch {
+      name = "int-to-MHD_Result.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/cinemast/libjson-rpc-cpp/pull/299.patch";
+      sha256 = "sha256-hiey6etzbOxhMElTMX7offKbey7c2OO/UWeN03k0AaM=";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config cmake doxygen ];
+  buildInputs = [
+    argtable
+    catch2
+    curl
+    hiredis
+    jsoncpp
+    libmicrohttpd
+  ];
 
   postPatch = ''
     for f in cmake/FindArgtable.cmake \
@@ -26,41 +54,47 @@ stdenv.mkDerivation rec {
     sed -i -re 's#MATCHES "jsoncpp"#MATCHES ".*/jsoncpp/json$"#g' cmake/FindJsoncpp.cmake
   '';
 
-  configurePhase = ''
+  preConfigure = ''
     mkdir -p Build/Install
     pushd Build
-
-    cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/Install \
-             -DCMAKE_BUILD_TYPE=Release
   '';
 
-  installPhase = ''
-    mkdir -p $out
+  # this hack is needed because the cmake scripts
+  # require write permission to absolute paths
+  configurePhase = ''
+    runHook preConfigure
+    cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/Install \
+             -DCMAKE_BUILD_TYPE=Release
+    runHook postConfigure
+  '';
 
+  preInstall = ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      q="$p:${stdenv.lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
+      q="$p:${lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
       patchelf --set-rpath $q $1
     }
 
-    make install
+    mkdir -p $out
+  '';
 
-    sed -i -re "s#-([LI]).*/Build/Install(.*)#-\1$out\2#g" Install/lib/pkgconfig/*.pc
-    for f in Install/lib/*.so* $(find Install/bin -executable -type f); do
+  postInstall = ''
+    sed -i -re "s#-([LI]).*/Build/Install(.*)#-\1$out\2#g" Install/lib64/pkgconfig/*.pc
+    for f in Install/lib64/*.so* $(find Install/bin -executable -type f); do
       fixRunPath $f
     done
-
     cp -r Install/* $out
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake jsoncpp argtable curl libmicrohttpd doxygen catch ];
+  installPhase = ''
+    runHook preInstall
+    make install
+    runHook postInstall
+  '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ framework for json-rpc (json remote procedure call)";
-    homepage = https://github.com/cinemast/libjson-rpc-cpp;
+    homepage = "https://github.com/cinemast/libjson-rpc-cpp";
     license = licenses.mit;
     platforms = platforms.linux;
   };

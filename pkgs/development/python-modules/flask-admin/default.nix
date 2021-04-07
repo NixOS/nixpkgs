@@ -8,12 +8,16 @@
 , wtf-peewee
 , sqlalchemy
 , sqlalchemy-citext
+, sqlalchemy-utils
 , flask-mongoengine
 , flask_sqlalchemy
 , flask-babelex
 , shapely
 , geoalchemy2
 , psycopg2
+, arrow
+, colour
+, email_validator
 , flask
 , wtforms
 , isPy27
@@ -22,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "1.5.3";
+  version = "1.5.6";
 
   src = fetchPypi {
     pname = "Flask-Admin";
     inherit version;
-    sha256 = "ca0be6ec11a6913b73f656c65c444ae5be416c57c75638dd3199376ce6bc7422";
+    sha256 = "1f31vzc0p2xni5mh1wvjk9jxf4ddlx2fj4r0f3vv2n9db3c63iv8";
   };
 
   checkInputs = [
@@ -38,12 +42,16 @@ buildPythonPackage rec {
     wtf-peewee
     sqlalchemy
     sqlalchemy-citext
+    sqlalchemy-utils
     flask-mongoengine
     flask_sqlalchemy
     flask-babelex
     shapely
     geoalchemy2
     psycopg2
+    arrow
+    colour
+    email_validator
   ];
 
   propagatedBuildInputs = [
@@ -52,19 +60,20 @@ buildPythonPackage rec {
   ] ++ lib.optionals isPy27 [ enum34 ];
 
   checkPhase = ''
-    # disable tests that require mongodb, postresql
+    # disable tests that require mongodb, postresql, or network
     nosetests \
      -e "mongoengine" \
      -e "pymongo" \
      -e "test_form_upload" \
      -e "test_postgres" \
      -e "geoa" \
+     -e "test_ajax_fk" \
      flask_admin/tests
   '';
 
   meta = with lib; {
     description = "Simple and extensible admin interface framework for Flask";
-    homepage = https://github.com/flask-admin/flask-admin/;
+    homepage = "https://github.com/flask-admin/flask-admin/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

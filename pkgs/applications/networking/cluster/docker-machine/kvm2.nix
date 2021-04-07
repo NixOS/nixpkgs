@@ -1,32 +1,27 @@
-{ stdenv, buildGoModule, libvirt, pkgconfig, minikube }:
+{ lib, buildGoModule, minikube }:
 
 buildGoModule rec {
+  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256 doCheck;
+
   pname = "docker-machine-kvm2";
-  version = minikube.version;
 
-  goPackagePath = "k8s.io/minikube";
-  subPackages = [ "cmd/drivers/kvm" ];
-
-  src = minikube.src;
-
-  modSha256 = minikube.go-modules.outputHash;
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libvirt ];
-
-  preBuild = ''
-    export buildFlagsArray=(-ldflags="-X k8s.io/minikube/pkg/drivers/kvm/version.VERSION=v${version}")
+  postPatch = ''
+    sed -i '/GOARCH=$*/d' Makefile
   '';
 
-  postInstall = ''
-    mv $out/bin/kvm $out/bin/docker-machine-driver-kvm2
+  buildPhase = ''
+    make docker-machine-driver-kvm2 COMMIT=${src.rev}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kubernetes/minikube/blob/master/docs/drivers.md;
-    description = "KVM2 driver for docker-machine.";
+  installPhase = ''
+    install out/docker-machine-driver-kvm2 -Dt $out/bin
+  '';
+
+  meta = with lib; {
+    homepage = "https://minikube.sigs.k8s.io/docs/drivers/kvm2";
+    description = "KVM2 driver for docker-machine";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tadfisher ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ tadfisher atkinschang ];
+    platforms = platforms.linux;
   };
 }

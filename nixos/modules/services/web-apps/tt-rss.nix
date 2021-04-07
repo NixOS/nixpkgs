@@ -631,9 +631,10 @@ let
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon";
-          StandardOutput = "syslog";
-          StandardError = "syslog";
+          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon --quiet";
+          Restart = "on-failure";
+          RestartSec = "60";
+          SyslogIdentifier = "tt-rss";
         };
 
         wantedBy = [ "multi-user.target" ];

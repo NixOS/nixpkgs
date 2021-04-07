@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "asn1c";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://lionet.info/asn1c/compiler.html;
+  meta = with lib; {
+    homepage = "http://lionet.info/asn1c/compiler.html";
     description = "Open Source ASN.1 Compiler";
     license = licenses.bsd2;
     platforms = platforms.all;

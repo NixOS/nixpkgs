@@ -1,28 +1,28 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , libbladeRF
-, libusb
+, libusb1
 , ncurses
 , rtl-sdr
 }:
 
 stdenv.mkDerivation rec {
   pname = "dump1090";
-  version = "3.7.2";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vlv9bd805kid202xxkrnl51rh02cyrl055gbcqlqgk51j5rrq8w";
+    sha256 = "1zacsqaqsiapljhzw31dwc4nld2rp98jm3ivkyznrhzk9n156p42";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libbladeRF
-    libusb
+    libusb1
     ncurses
     rtl-sdr
   ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cp -vr public_html $out/share/dump1090
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple Mode S decoder for RTLSDR devices";
     homepage = "https://github.com/flightaware/dump1090";
     license = licenses.gpl2Plus;

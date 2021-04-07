@@ -1,26 +1,29 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ppx_deriving
-, alcotest, biocaml, gnuplot, lacaml, menhir, owl }:
+{ lib, buildDunePackage, fetchFromGitHub, ppx_deriving
+, alcotest, angstrom-unix, biocaml, gnuplot, gsl, lacaml, menhir, owl, printbox }:
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "unstable-2019-11-15";
+  version = "unstable-2020-11-23";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner  = "biocaml";
     repo   = pname;
-    rev    = "91c03834db065cf4a86f33affbb9cfd216defc9f";
-    sha256 = "0i9m0633a6a724as35ix8z3p1gj267cl0hmqrpw4qfq39zxmgnxb";
+    rev    = "e6e10efa0a3a8fd61bf4ab69e91a09549cc1ded6";
+    sha256 = "0pmypzp0rvlpzm8zpbcfkphwnhrpyfwfv44kshvx2f8nslmksh8c";
   };
 
   minimumOCamlVersion = "4.08";  # e.g., uses Float.min
 
   checkInputs = [ alcotest ];
-  propagatedBuildInputs = [ biocaml gnuplot lacaml menhir owl ppx_deriving ];
+  buildInputs = [ menhir ];
+  propagatedBuildInputs = [ angstrom-unix biocaml gnuplot gsl lacaml owl ppx_deriving printbox ];
 
   doCheck = false;  # many tests require bppsuite
 
-  meta = with stdenv.lib; {
-    inherit (std.meta) homepage;
+  meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Bioinformatics library for Ocaml";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.cecill-b;

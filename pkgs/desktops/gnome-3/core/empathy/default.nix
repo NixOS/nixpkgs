@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , intltool
 , fetchurl
 , webkitgtk
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , file
@@ -55,19 +55,19 @@ stdenv.mkDerivation rec {
   version = "3.25.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/empathy/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/empathy/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0sn10fcymc6lyrabk7vx8lpvlaxxkqnmcwj9zdkfa8qf3388k4nc";
   };
 
   propagatedBuildInputs = [
-    folks
+    (folks.override { telepathySupport = true; })
     telepathy-logger
     evolution-data-server
     telepathy-mission-control
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     libtool
     intltool
     itstool
@@ -137,10 +137,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Empathy;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Apps/Empathy";
     description = "Messaging program which supports text, voice, video chat, and file transfers over many different protocols";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
   };

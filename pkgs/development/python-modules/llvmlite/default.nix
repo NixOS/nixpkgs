@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , python
@@ -6,21 +7,22 @@
 , pythonOlder
 , isPyPy
 , enum34
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.31.0";
+  version = "0.36.0";
 
-  disabled = isPyPy;
+  disabled = isPyPy || !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "22ab2b9d7ec79fab66ac8b3d2133347de86addc2e2df1b3793e523ac84baa3c8";
+    sha256 = "765128fdf5f149ed0b889ffbe2b05eb1717f8e20a5c87fa2b4018fbcce0fcfc9";
   };
 
   nativeBuildInputs = [ llvm ];
-  propagatedBuildInputs = [ ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = [ ] ++ lib.optional (pythonOlder "3.4") enum34;
 
   # Disable static linking
   # https://github.com/numba/llvmlite/issues/93
@@ -37,14 +39,14 @@ buildPythonPackage rec {
     ${python.executable} runtests.py
   '';
 
-  __impureHostDeps = stdenv.lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+  __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
 
   passthru.llvm = llvm;
 
-  meta = {
+  meta = with lib; {
     description = "A lightweight LLVM python binding for writing JIT compilers";
-    homepage = http://llvmlite.pydata.org/;
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ fridh ];
+    homepage = "http://llvmlite.pydata.org/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fridh ];
   };
 }

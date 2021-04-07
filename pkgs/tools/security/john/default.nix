@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
+{ lib, stdenv, fetchurl, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
 , gcc, python3Packages, perl, perlPackages, makeWrapper
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "john";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "--with-systemwide"
   ];
 
-  buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 ];
+  buildInputs = [ openssl nss nspr libkrb5 gmp zlib libpcap re2 ];
   nativeBuildInputs = [ gcc python3Packages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with python3Packages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
                           (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
@@ -48,27 +48,28 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   postInstall = ''
-    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules"
+    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/${perlPackages.perl.libPrefix}"
     find -L ../run -mindepth 1 -maxdepth 1 -type f -executable \
       -exec cp -d {} "$out/bin" \;
     cp -vt "$out/etc/john" ../run/*.conf
     cp -vt "$out/share/john" ../run/*.chr ../run/password.lst
     cp -vt "$out/share/john/rules" ../run/rules/*.rule
     cp -vrt "$out/share/doc/john" ../doc/*
+    cp -vt "$out/${perlPackages.perl.libPrefix}" ../run/lib/*
   '';
 
   postFixup = ''
     wrapPythonPrograms
 
     for i in $out/bin/*.pl; do
-      wrapProgram "$i" --prefix PERL5LIB : $PERL5LIB
+      wrapProgram "$i" --prefix PERL5LIB : "$PERL5LIB:$out/${perlPackages.perl.libPrefix}"
     done
   '';
 
   meta = {
     description = "John the Ripper password cracker";
     license = licenses.gpl2;
-    homepage = https://github.com/magnumripper/JohnTheRipper/;
+    homepage = "https://github.com/magnumripper/JohnTheRipper/";
     maintainers = with maintainers; [ offline matthewbauer ];
     platforms = platforms.unix;
   };

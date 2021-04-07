@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "mage";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "magefile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lazf4r5ps1s04pvz608qaxbrbc6dv0j99n39iv42zwxxh0mbd0p";
+    sha256 = "sha256-ghOk44VcQUAAYm9NCLsgYdky1KEpwOeChBNrgUKjnC8=";
   };
 
-  modSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+  vendorSha256 = null;
+
+  doCheck = false;
 
   buildFlagsArray = [
     "-ldflags="
@@ -25,6 +27,5 @@ buildGoModule rec {
     homepage = "https://magefile.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ swdunlop ];
-    platforms = platforms.all;
   };
 }

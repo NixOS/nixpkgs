@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, Carbon }:
+{ lib, stdenv, fetchFromGitHub, Carbon }:
 
 stdenv.mkDerivation rec {
   pname = "skhd";
-  version = "0.3.0";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
-    repo = "skhd";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "13pqnassmzppy2ipv995rh8lzw9rraxvi0ph6zgy63cbsdfzbhgl";
+    sha256 = "0x099979kgpim18r0vi9vd821qnv0rl3rkj0nd1nx3wljxgf7mrg";
   };
 
   buildInputs = [ Carbon ];
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.skhd.plist --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple hotkey daemon for macOS";
-    homepage = https://github.com/koekeishiya/skhd;
+    homepage = "https://github.com/koekeishiya/skhd";
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ lnl7 periklis ];
+    maintainers = with maintainers; [ cmacrae lnl7 periklis ];
     license = licenses.mit;
   };
 }

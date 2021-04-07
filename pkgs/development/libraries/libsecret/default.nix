@@ -1,23 +1,15 @@
-{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, gettext, libxslt, python3
+{ lib, stdenv, fetchurl, fetchpatch, glib, pkg-config, gettext, libxslt, python3
 , docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
 , gtk-doc, gnome3, gjs, libintl, dbus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.0";
+  version = "0.20.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hxfpm8f4rlx685igd4bv89wb80v2952h373g3w6l42kniq7667i";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0a4xnfmraxchd9cq5ai66j12jv2vrgjmaaxz25kl031jvda4qnij";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "rename-internal-functions-to-avoid-conflicts-and-fix-build.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsecret/commit/cf21ad50b62f7c8e4b22ef374f0a73290a99bdb8.patch";
-      sha256 = "1n9nyzq5qrvw7s6sj5gzj33ia3rrx719jpys1cfhfbayg2sxyd4n";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -27,8 +19,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [
-    pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
-    gobject-introspection vala gtk-doc
+    pkg-config gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
+    gobject-introspection vala gtk-doc glib
   ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
@@ -62,8 +54,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for storing and retrieving passwords and other secrets";
-    homepage = https://wiki.gnome.org/Projects/Libsecret;
-    license = stdenv.lib.licenses.lgpl21Plus;
+    homepage = "https://wiki.gnome.org/Projects/Libsecret";
+    license = lib.licenses.lgpl21Plus;
     inherit (glib.meta) platforms maintainers;
   };
 }

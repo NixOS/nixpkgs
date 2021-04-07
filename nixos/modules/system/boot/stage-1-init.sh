@@ -2,6 +2,13 @@
 
 targetRoot=/mnt-root
 console=tty1
+verbose="@verbose@"
+
+info() {
+    if [[ -n "$verbose" ]]; then
+        echo "$@"
+    fi
+}
 
 extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
@@ -55,7 +62,7 @@ EOF
         echo "Rebooting..."
         reboot -f
     else
-        echo "Continuing..."
+        info "Continuing..."
     fi
 }
 
@@ -63,9 +70,9 @@ trap 'fail' 0
 
 
 # Print a greeting.
-echo
-echo "[1;32m<<< NixOS Stage 1 >>>[0m"
-echo
+info
+info "[1;32m<<< NixOS Stage 1 >>>[0m"
+info
 
 # Make several required directories.
 mkdir -p /etc/udev
@@ -120,7 +127,7 @@ eval "exec $logOutFd>&1 $logErrFd>&2"
 if test -w /dev/kmsg; then
     tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
         if test -n "$line"; then
-            echo "<7>stage-1-init: $line" > /dev/kmsg
+            echo "<7>stage-1-init: [$(date)] $line" > /dev/kmsg
         fi
     done &
 else
@@ -143,6 +150,14 @@ for o in $(cat /proc/cmdline); do
         init=*)
             set -- $(IFS==; echo $o)
             stage2Init=$2
+            ;;
+        boot.persistence=*)
+            set -- $(IFS==; echo $o)
+            persistence=$2
+            ;;
+        boot.persistence.opt=*)
+            set -- $(IFS==; echo $o)
+            persistence_opt=$2
             ;;
         boot.trace|debugtrace)
             # Show each command.
@@ -202,14 +217,20 @@ ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
-    echo "loading module $(basename $i)..."
+    info "loading module $(basename $i)..."
     modprobe $i
 done
 
 
 # Create device nodes in /dev.
 @preDeviceCommands@
-echo "running udev..."
+info "running udev..."
+ln -sfn /proc/self/fd /dev/fd
+ln -sfn /proc/self/fd/0 /dev/stdin
+ln -sfn /proc/self/fd/1 /dev/stdout
+ln -sfn /proc/self/fd/2 /dev/stderr
+mkdir -p /etc/systemd
+ln -sfn @linkUnits@ /etc/systemd/network
 mkdir -p /etc/udev
 ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
@@ -221,8 +242,7 @@ udevadm settle
 # XXX: Use case usb->lvm will still fail, usb->luks->lvm is covered
 @preLVMCommands@
 
-
-echo "starting device mapper and LVM..."
+info "starting device mapper and LVM..."
 lvm vgchange -ay
 
 if test -n "$debug1devices"; then fail; fi
@@ -266,7 +286,7 @@ checkFS() {
         return 0
     fi
 
-    # Device might be already mounted manually 
+    # Device might be already mounted manually
     # e.g. NBD-device or the host filesystem of the file which contains encrypted root fs
     if mount | grep -q "^$device on "; then
         echo "skip checking already mounted $device"
@@ -345,13 +365,14 @@ mountFS() {
     case $options in
         *x-nixos.autoresize*)
             if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                modprobe "$fsType"
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"
             elif [ "$fsType" = f2fs ]; then
                 echo "resizing $device..."
                 fsck.f2fs -fp "$device"
-                resize.f2fs "$device" 
+                resize.f2fs "$device"
             fi
             ;;
     esac
@@ -364,16 +385,18 @@ mountFS() {
         done
     fi
 
-    echo "mounting $device on $mountPoint..."
+    info "mounting $device on $mountPoint..."
 
     mkdir -p "/mnt-root$mountPoint"
 
-    # For CIFS mounts, retry a few times before giving up.
+    # For ZFS and CIFS mounts, retry a few times before giving up.
+    # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
     local n=0
     while true; do
         mount "/mnt-root$mountPoint" && break
-        if [ "$fsType" != cifs -o "$n" -ge 10 ]; then fail; break; fi
+        if [ \( "$fsType" != cifs -a "$fsType" != zfs \) -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."
+        sleep 1
         n=$((n + 1))
     done
 
@@ -532,6 +555,14 @@ while read -u 3 mountPoint; do
       continue
     fi
 
+    if [ "$mountPoint" = / ] && [ "$device" = tmpfs ] && [ ! -z "$persistence" ]; then
+        echo persistence...
+        waitDevice "$persistence"
+        echo enabling persistence...
+        mountFS "$persistence" "$mountPoint" "$persistence_opt" "auto"
+        continue
+    fi
+
     mountFS "$device" "$mountPoint" "$options" "$fsType"
 done
 
@@ -583,11 +614,16 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 
 
 # Start stage 2.  `switch_root' deletes all files in the ramfs on the
-# current root.  Note that $stage2Init might be an absolute symlink,
-# in which case "-e" won't work because we're not in the chroot yet.
-if [ ! -e "$targetRoot/$stage2Init" ] && [ ! -L "$targetRoot/$stage2Init" ] ; then
-    echo "stage 2 init script ($targetRoot/$stage2Init) not found"
-    fail
+# current root.  The path has to be valid in the chroot not outside.
+if [ ! -e "$targetRoot/$stage2Init" ]; then
+    stage2Check=${stage2Init}
+    while [ "$stage2Check" != "${stage2Check%/*}" ] && [ ! -L "$targetRoot/$stage2Check" ]; do
+        stage2Check=${stage2Check%/*}
+    done
+    if [ ! -L "$targetRoot/$stage2Check" ]; then
+        echo "stage 2 init script ($targetRoot/$stage2Init) not found"
+        fail
+    fi
 fi
 
 mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run

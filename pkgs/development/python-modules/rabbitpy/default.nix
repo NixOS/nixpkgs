@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , mock
@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "2.0.1";
   pname = "rabbitpy";
 
   # No tests in the pypi tarball, so we directly fetch from git
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "gmr";
     repo = pname;
     rev = version;
-    sha256 = "0fd80zlr4p2sh77rxyyfi9l0h2zqi2csgadr0rhnpgpqsy10qck6";
+    sha256 = "0m5z3i3d5adrz1wh6y35xjlls3cq6p4y9p1mzghw3k7hdvg26cck";
   };
 
   propagatedBuildInputs = [ pamqp ];
@@ -31,13 +31,17 @@ buildPythonPackage rec {
   postPatch = ''
     # See: https://github.com/gmr/rabbitpy/issues/118
     substituteInPlace setup.py \
-      --replace 'pamqp>=1.6.1,<2.0' 'pamqp'
+      --replace 'pamqp>=2,<3' 'pamqp'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pure python, thread-safe, minimalistic and pythonic RabbitMQ client library";
-    homepage = https://pypi.python.org/pypi/rabbitpy;
+    homepage = "https://pypi.python.org/pypi/rabbitpy";
     license = licenses.bsd3;
+
+    # broken by pamqp==3, tracked in
+    # https://github.com/gmr/rabbitpy/issues/125
+    broken = true;
   };
 
 }

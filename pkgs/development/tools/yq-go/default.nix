@@ -1,19 +1,30 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "3.1.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
-    rev = version;
+    rev = "v${version}";
     repo = "yq";
-    sha256 = "0gjxmnmphav8ms4zdkcjcsgrjs77ccwdfpc1qpxjp6fr2g4v5vmq";
+    sha256 = "sha256-+qSGdskv8qUZRl7wYKn8WsgAcD8DYw1BwZnVKK6g/sI=";
   };
 
-  modSha256 = "035w9bh96rr2x21w7bwwpngyng6839wglpgwf7gy8p6difvnn2v9";
+  vendorSha256 = "sha256-vpvIl1lfaziuoHs+oDEIztufH1somphiBAn6qTaQaZw=";
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/yq shell-completion $shell > yq.$shell
+      installShellCompletion yq.$shell
+    done
+  '';
+
+  meta = with lib; {
     description = "Portable command-line YAML processor";
     homepage = "https://mikefarah.gitbook.io/yq/";
     license = [ licenses.mit ];

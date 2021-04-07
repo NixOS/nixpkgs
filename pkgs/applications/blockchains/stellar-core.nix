@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, libtool, automake, pkgconfig, git
+{ lib, stdenv, fetchgit, autoconf, libtool, automake, pkg-config, git
 , bison, flex, postgresql }:
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake libtool git ];
 
   propagatedBuildInputs = [ bison flex postgresql ];
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implements the Stellar Consensus Protocol, a federated consensus protocol";
     longDescription = ''
       Stellar-core is the backbone of the Stellar network. It maintains a
@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
       instances of stellar-core on the network. Optionally, stellar-core can
       store historical records of the ledger and participate in consensus.
     '';
-    homepage = https://www.stellar.org/;
+    homepage = "https://www.stellar.org/";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ chris-martin ];
     license = licenses.asl20;

@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   name = "binutils-2.16.1-arm";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ftp.nluug.nl/gnu/binutils/binutils-2.16.1.tar.bz2;
+    url = "http://ftp.nluug.nl/gnu/binutils/binutils-2.16.1.tar.bz2";
     sha256 = "1ian3kwh2vg6hr3ymrv48s04gijs539vzrq62xr76bxbhbwnz2np";
   };
   inherit noSysDirs;
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
   name = "linux-headers-2.6.13.1-arm";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.13.1.tar.bz2;
+    url = "http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.13.1.tar.bz2";
     sha256 = "12qxmc827fjhaz53kjy7vyrzsaqcg78amiqsb3qm20z26w705lma";
   };
 }
@@ -220,7 +220,7 @@ fi
 
 preConfigure=preConfigure
 preConfigure() {
-    
+
     # Determine the frontends to build.
     langs="c"
     if test -n "$langCC"; then
@@ -262,7 +262,7 @@ postInstall() {
 
 #if test -z "$profiledCompiler"; then
     #makeFlags="bootstrap"
-#else    
+#else
     #makeFlags="profiledbootstrap"
 #fi
 

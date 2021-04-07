@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted,isPy37 }:
+{ lib, buildPythonPackage, fetchPypi, pytest, mock, six, twisted, isPy37, isPy27 }:
 
 buildPythonPackage rec {
   pname = "txaio";
-  version = "18.8.1";
+  version = "21.2.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67e360ac73b12c52058219bb5f8b3ed4105d2636707a36a7cdafb56fe06db7fe";
+    sha256 = "7d6f89745680233f1c4db9ddb748df5e88d2a7a37962be174c0fd04c8dba1dc8";
   };
 
   checkInputs = [ pytest mock ];
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   # Needs some fixing
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
     homepage    = "https://github.com/crossbario/txaio";
     license     = licenses.mit;

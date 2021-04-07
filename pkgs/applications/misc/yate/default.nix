@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, qt4, openssl, pkgconfig }:
+{ stdenv, fetchurl, lib, qt4, openssl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "yate";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO zaptel ? postgres ?
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ qt4 openssl ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Yet another telephony engine";
-    homepage = http://yate.null.ro/;
+    homepage = "http://yate.null.ro/";
     # Yate's license is GPL with an exception for linking with
     # OpenH323 and PWlib (licensed under MPL).
     license = ["GPL" "MPL"];

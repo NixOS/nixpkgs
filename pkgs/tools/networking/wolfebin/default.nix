@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, python }:
+{ lib, stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
   version = "5.4";
   pname = "wolfebin";
-  
+
   src = fetchFromGitHub {
     owner = "thejoshwolfe";
     repo = "wolfebin";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     install -m 755 wolfebin_server.py $out/bin/wolfebin_server
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/thejoshwolfe/wolfebin;
+  meta = with lib; {
+    homepage = "https://github.com/thejoshwolfe/wolfebin";
     description = "Quick and easy file sharing";
     license = licenses.mit;
     maintainers = [ maintainers.andrewrk ];

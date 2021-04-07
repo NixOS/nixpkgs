@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, gnome2, keybinder }:
+{ lib, fetchFromGitHub, python2Packages, gnome2, keybinder }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   ver = "0.93";
   name = "dockbarx-${ver}";
 
@@ -24,13 +24,16 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace dockx_applets/volume-control.py         --replace /usr/share/             $out/share/
   '';
 
-  propagatedBuildInputs = (with pythonPackages; [ pygtk pyxdg dbus-python pillow xlib ])
+  propagatedBuildInputs = (with python2Packages; [ pygtk pyxdg dbus-python pillow xlib ])
     ++ (with gnome2; [ gnome_python gnome_python_desktop ])
     ++ [ keybinder ];
 
-  meta = with stdenv.lib; {
-    homepage = https://launchpad.net/dockbar/;
-    description = "DockBarX is a lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
+  # no tests
+  doCheck = false;
+
+  meta = with lib; {
+    homepage = "https://launchpad.net/dockbar/";
+    description = "Lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.volth ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, xorgserver, qt4, libGLU, libGL, geis, qmake4Hook }:
+{ lib, stdenv, fetchurl, xorg, xorgserver, qt4, libGLU, libGL, geis, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/JoseExposito/touchegg;
+    homepage = "https://github.com/JoseExposito/touchegg";
     description = "Macro binding for touch surfaces";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

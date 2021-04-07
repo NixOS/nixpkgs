@@ -1,32 +1,28 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file, libuv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.9.6";
+  version = "0.9.23";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
     rev = "v${version}";
-    sha256 = "083il7b5kw3pc7m5p9xjpb9dlvfarc51sni92mkgm9ckc32x9vpp";
+    sha256 = "0swn95cf11fqczllmxr0nj3ig532rw4n3w6g3ckdnqka8520xjyr";
   };
 
-  nativeBuildInputs = [ autoreconfHook file pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook file pkg-config ];
   buildInputs = [ libuv ];
 
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/ " "
   '';
 
-  doCheck = false;
-  # Due to
-  #io_uv_recv/success/first                                    [ ERROR ]
-  #Error: test/lib/dir.c:97: No such file or directory
-  #Error: child killed by signal 6 (Aborted)
+  doCheck = true;
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Fully asynchronous C implementation of the Raft consensus protocol
     '';
@@ -39,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
-    maintainers = [ maintainers.wucke13 ];
+    maintainers = with maintainers; [ wucke13 ];
   };
 }

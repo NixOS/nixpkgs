@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${lib.makeBinPath ([coreutils] ++ extraUtilsPath)}"
     '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bulletmark/libinput-gestures;
+  meta = with lib; {
+    homepage = "https://github.com/bulletmark/libinput-gestures";
     description = "Gesture mapper for libinput";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

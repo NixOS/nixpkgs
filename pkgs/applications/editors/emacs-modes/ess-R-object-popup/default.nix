@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   name = "ess-R-object-popup-20130302";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Popup descriptions of R objects";
-    homepage = https://github.com/myuhe/ess-R-object-popup.el;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/myuhe/ess-R-object-popup.el";
+    platforms = lib.platforms.all;
   };
 }

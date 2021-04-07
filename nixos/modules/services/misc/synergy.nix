@@ -19,20 +19,18 @@ in
       # !!! All these option descriptions needs to be cleaned up.
 
       client = {
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the Synergy client (receive keyboard and mouse events from a Synergy server).
-          ";
-        };
+        enable = mkEnableOption "the Synergy client (receive keyboard and mouse events from a Synergy server)";
+
         screenName = mkOption {
           default = "";
+          type = types.str;
           description = ''
             Use the given name instead of the hostname to identify
             ourselves to the server.
           '';
         };
         serverAddress = mkOption {
+          type = types.str;
           description = ''
             The server address is of the form: [hostname][:port].  The
             hostname must be the address or hostname of the server.  The
@@ -47,17 +45,15 @@ in
       };
 
       server = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable the Synergy server (send keyboard and mouse events).
-          '';
-        };
+        enable = mkEnableOption "the Synergy server (send keyboard and mouse events)";
+
         configFile = mkOption {
+          type = types.path;
           default = "/etc/synergy-server.conf";
           description = "The Synergy server configuration file.";
         };
         screenName = mkOption {
+          type = types.str;
           default = "";
           description = ''
             Use the given name instead of the hostname to identify
@@ -65,6 +61,7 @@ in
           '';
         };
         address = mkOption {
+          type = types.str;
           default = "";
           description = "Address on which to listen for clients.";
         };

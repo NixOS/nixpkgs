@@ -1,32 +1,58 @@
-{ stdenv, python3, glibcLocales }:
+{ lib
+, python3
+, glibcLocales
+, installShellFiles
+, jq
+}:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.7.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16brw2zhm5vamffin6qjb0lxjlj3ba40vaficl851nw2xh2mrdhy";
+    sha256 = "e7e5cab13ecce0562b1f13f46ab8cbc079caed4b462f2371929f8a4abff2bcbe";
   };
 
-    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
-    LANG = "en_US.UTF-8";
-    LC_TYPE = "en_US.UTF-8";
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+  propagatedBuildInputs = with python3.pkgs; [
+    atomicwrites
+    click
+    click-log
+    click-repl
+    configobj
+    humanize
+    icalendar
+    parsedatetime
+    python-dateutil
+    pyxdg
+    tabulate
+    urwid
+  ];
 
-  buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ atomicwrites click click-log click-repl configobj humanize icalendar parsedatetime
-      python-dateutil pyxdg tabulate urwid ];
+  checkInputs = with python3.pkgs; [
+    flake8
+    flake8-import-order
+    freezegun
+    hypothesis
+    pytest
+    pytestrunner
+    pytestcov
+    glibcLocales
+  ];
 
-  checkInputs = with python3.pkgs;
-    [ flake8 flake8-import-order freezegun hypothesis pytest pytestrunner pytestcov ];
+  LC_ALL = "en_US.UTF-8";
 
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-                      "--set CHARSET en_us.UTF-8" ];
+  postInstall = ''
+    installShellCompletion --bash contrib/completion/bash/_todo
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    installShellCompletion --zsh contrib/completion/zsh/_todo
+  '';
 
   preCheck = ''
     # Remove one failing test that only checks whether the command line works
@@ -34,8 +60,8 @@ buildPythonApplication rec {
     rm tests/test_cli.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pimutils/todoman;
+  meta = with lib; {
+    homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
       Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos

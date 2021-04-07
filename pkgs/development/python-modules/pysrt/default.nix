@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , chardet
@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ chardet ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/byroot/pysrt;
+  meta = with lib; {
+    homepage = "https://github.com/byroot/pysrt";
     license = licenses.gpl3;
     description = "Python library used to edit or create SubRip files";
   };

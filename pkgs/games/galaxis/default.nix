@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, ncurses, xmlto }:
+{ lib, stdenv, fetchurl, ncurses, xmlto }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec{
+with lib;
+stdenv.mkDerivation rec {
 
   pname = "galaxis";
   version = "1.10";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec{
       interface of the original, but compensates by automating away some of the
       game's simpler deductions.
     '';
-    homepage = http://catb.org/~esr/galaxis/;
+    homepage = "http://catb.org/~esr/galaxis/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

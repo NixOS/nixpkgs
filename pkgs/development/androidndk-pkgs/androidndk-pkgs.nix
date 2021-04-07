@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , runCommand, wrapBintoolsWith, wrapCCWith
 , buildAndroidndk, androidndk, targetAndroidndkPkgs
@@ -48,12 +48,14 @@ let
   hostInfo = ndkInfoFun stdenv.hostPlatform;
   targetInfo = ndkInfoFun stdenv.targetPlatform;
 
-  prefix = stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
+  prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
 in
 
 rec {
   # Misc tools
-  binaries = runCommand "ndk-gcc-binutils" {
+  binaries = runCommand "ndk-toolchain-binutils" {
+    pname = "ndk-toolchain-binutils";
+    inherit (androidndk) version;
     isClang = true; # clang based cc, but bintools ld
     nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = [ androidndk ];
@@ -82,7 +84,10 @@ rec {
   };
 
   clang = wrapCCWith {
-    cc = binaries;
+    cc = binaries // {
+      # for packages expecting libcompiler-rt, etc. to come from here (stdenv.cc.cc.lib)
+      lib = targetAndroidndkPkgs.libraries;
+    };
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''

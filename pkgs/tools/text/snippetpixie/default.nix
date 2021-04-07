@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , appstream
 , desktop-file-utils
@@ -18,24 +19,25 @@
 , ibus
 , json-glib
 , pantheon
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "snippetpixie";
-  version = "1.2.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = pname;
     rev = version;
-    sha256 = "096xj7n1ypr8ss8mbwd1hyypvmzw5lc0hjlj2d1x8hbjljldfd13";
+    sha256 = "047ghk0zfmcsnbr4h2h5ar7g1sw2mnk8r2887v81dh3vf767rqg2";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     appstream
     desktop-file-utils
@@ -52,6 +54,7 @@ stdenv.mkDerivation rec {
     dbus
     ibus
     json-glib
+    xorg.libXtst
     pantheon.granite
     pantheon.elementary-gtk-theme
     pantheon.elementary-icon-theme
@@ -65,12 +68,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Your little expandable text snippet helper";
     longDescription = ''
       Your little expandable text snippet helper.
@@ -78,8 +81,10 @@ stdenv.mkDerivation rec {
       Save your often used text snippets and then expand them whenever you type their abbreviation.
 
       For example:- "spr`" expands to "Snippet Pixie rules!"
+
+      For non-accessible applications such as browsers and Electron apps, there's a shortcut (default is Ctrl+`) for opening a search window that pastes the selected snippet.
     '';
-    homepage = https://www.snippetpixie.com;
+    homepage = "https://www.snippetpixie.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       ianmjones

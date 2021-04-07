@@ -1,12 +1,18 @@
-{ stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd, xxHash }:
+{ lib, stdenv
+, fetchurl
+, makeWrapper
+, opencl-headers
+, ocl-icd
+, xxHash
+}:
 
 stdenv.mkDerivation rec {
   pname   = "hashcat";
-  version = "5.1.0";
+  version = "6.1.1";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "0f73y4cg8c7a6q7x34qvpfi4g3lw6j9bnn0a13g43aqyiskflfr8";
+    sha256 = "104z63m7lqbb0sdrxhf9yi15l4a9zwf9m6zs9dbb3gf0nfxl1h9r";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,13 +26,19 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_XXHASH=1"
   ];
 
+  preFixup = ''
+    for f in $out/share/hashcat/OpenCL/*.cl; do
+      sed "s|#include \"\(.*\)\"|#include \"$out/share/hashcat/OpenCL/\1\"|g" -i "$f"
+    done
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast password cracker";
-    homepage    = https://hashcat.net/hashcat/;
+    homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ kierdavis zimbatm ];

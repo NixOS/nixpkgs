@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicefabric";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1x18grkjf2p2r1ihlwv607sna9yjvsr2jwnkjc55askrgrwx5jx2";
+    sha256 = "5771f24516c8d4a27f5569f23f3a606f6f106e4ad502eec7f38aedfcd3eadc74";
   };
 
   propagatedBuildInputs = [
@@ -26,11 +26,7 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
-  # this is still needed for overriding to previous versions
-  # E.g azure-cli
-  postInstall = lib.optionalString isPy3k ''
-    rm -f $out/${python.sitePackages}/azure/{,mgmt/}__init__.py
-  '';
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;
@@ -39,6 +35,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Service Fabric Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

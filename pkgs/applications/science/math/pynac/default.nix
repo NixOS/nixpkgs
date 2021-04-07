@@ -1,11 +1,13 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchurl
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , flint
 , gmp
-, python2
+, python3
 , singular
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -23,16 +25,24 @@ stdenv.mkDerivation rec {
     flint
     gmp
     singular
-    singular
-    python2
+    python3
+    ncurses
   ];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  patches = [
+    (fetchurl {
+      name = "py_ssize_t_clean.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/py_ssize_t_clean.patch?h=9.2";
+      sha256 = "0l3gbg9hc4v671zf4w376krnk3wh8hj3649610nlvzzxckcryzab";
+    })
+  ];
+
+  meta = with lib; {
     description = "Python is Not a CAS -- modified version of Ginac";
     longDescription = ''
       Pynac -- "Python is Not a CAS" is a modified version of Ginac that
@@ -40,9 +50,9 @@ stdenv.mkDerivation rec {
       It is a lite version of GiNaC as well, not implementing all the features
       of the full GiNaC, and it is *only* meant to be used as a Python library.
     '';
-    homepage    = http://pynac.org;
+    homepage    = "http://pynac.org";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms   = platforms.unix;
   };
 }

@@ -1,23 +1,29 @@
-{ stdenv, callPackage, fetchurl }:
+{ lib, stdenv, callPackage, fetchurl, nixosTests }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
   plat = {
     x86_64-linux = "linux-x64";
-    x86_64-darwin = "darwin";
+    x86_64-darwin = "darwin-x64";
+    aarch64-linux = "linux-arm64";
+    armv7l-linux = "linux-armhf";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1pac3rv7ps23ymynvy8dwd5k2154aln33ksr75z1d8w859x3f1dy";
-    x86_64-darwin = "1imzgqynbd65c7gbfp2gb1cxjbazx7afvbdvbqnm5qg7pvq22rni";
+    x86_64-linux = "0zzdbknmljf1hizmxnrby17i8v3kp98rklinywnr632jwgjms81j";
+    x86_64-darwin = "0mccq1b0l6r1ipxp5gvyam43c2hh8hxdvwqikkz6g7y93p29wz9g";
+    aarch64-linux = "12gpday6gzl1adcykqhgz3xrdm9568a26gsndmplkn2n6l6agnp0";
+    armv7l-linux = "0l886vdw7az0nvvhh14pjawz0yyib59ymychy7gbk8ay5g9vfv03";
   }.${system};
 
   sourceRoot = {
     x86_64-linux = ".";
     x86_64-darwin = "";
+    aarch64-linux = ".";
+    armv7l-linux = ".";
   }.${system};
 in
   callPackage ./generic.nix rec {
@@ -25,19 +31,23 @@ in
     # The update script doesn't correctly change the hash for darwin, so please:
     # nixpkgs-update: no auto update
 
-    version = "1.42.1";
+    # Please backport all compatible updates to the stable release.
+    # This is important for the extension ecosystem.
+    version = "1.55.0";
     pname = "vscodium";
 
     executableName = "codium";
     longName = "VSCodium";
-    shortName = "Codium";
+    shortName = "vscodium";
 
     src = fetchurl {
       url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
       inherit sha256;
     };
 
-    meta = with stdenv.lib; {
+    tests = nixosTests.vscodium;
+
+    meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS (VS Code without MS branding/telemetry/licensing)
@@ -49,10 +59,10 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = https://github.com/VSCodium/vscodium;
-      downloadPage = https://github.com/VSCodium/vscodium/releases;
+      homepage = "https://github.com/VSCodium/vscodium";
+      downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
-      maintainers = with maintainers; [ synthetica ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" ];
+      maintainers = with maintainers; [ synthetica turion ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

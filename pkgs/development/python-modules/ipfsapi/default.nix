@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -6,21 +6,21 @@
 , requests
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "ipfsapi";
-  version = "0.4.2.post1";
+  version = "0.7.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "py-ipfs-api";
-    rev = "0c485544a114f580c65e2ffbb5782efbf7fd9f61";
-    sha256 = "1v7f77cv95yv0v80gisdh71mj7jcq41xcfip6bqm57zfdbsa0xpn";
+    rev = version;
+    sha256 = "02yx7x9pdnfcav4vqd6ygqcisd3483b0zbx2j4brb4gxixk2hlyj";
   };
 
   propagatedBuildInputs = [ six requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python client library for the IPFS API";
     license = licenses.mit;
     maintainers = with maintainers; [ mguentner ];

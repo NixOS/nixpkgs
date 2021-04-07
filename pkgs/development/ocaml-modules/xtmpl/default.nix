@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitLab, ocaml, findlib, iri, ppx_tools, js_of_ocaml
+{ lib, stdenv, fetchFromGitLab, ocaml, findlib, iri, ppx_tools, js_of_ocaml
 , js_of_ocaml-ppx, re }:
 
-if stdenv.lib.versionOlder ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
+|| lib.versionAtLeast ocaml.version "4.11"
 then throw "xtmpl not supported for ocaml ${ocaml.version}"
 else
 stdenv.mkDerivation rec {
@@ -17,6 +18,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./jsoo.patch ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace js_of_ocaml.ppx js_of_ocaml-ppx
+  '';
+
   buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-ppx ];
   propagatedBuildInputs = [ iri re ];
 
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML templating library for OCaml";
     homepage = "https://www.good-eris.net/xtmpl/";
     license = licenses.lgpl3;

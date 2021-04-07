@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "s-tar";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       The way star acts may be modified by additional options.
       Note that unpacking tar archives may be a security risk because star may overwrite existing files.
     '';
-    homepage = http://cdrtools.sourceforge.net/private/star.html;
-    license = stdenv.lib.licenses.cddl;
-    maintainers = [ stdenv.lib.maintainers.wucke13 ];
+    homepage = "http://cdrtools.sourceforge.net/private/star.html";
+    license = lib.licenses.cddl;
+    maintainers = [ lib.maintainers.wucke13 ];
     platforms = [ "x86_64-linux" ];
   };
 }

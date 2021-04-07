@@ -1,10 +1,14 @@
 [
-    "elm-test",
-    "elm-verify-examples",
-    "elm-doc-preview",
-    "elm-upgrade",
-    "elm-analyse",
-    "elm-live",
-    "elm-xref",
-    "@elm-tooling/elm-language-server"
+  "elm-analyse",
+  "elm-coverage",
+  "elm-doc-preview",
+  "@elm-tooling/elm-language-server",
+  "elm-live",
+  "elm-test",
+  "elm-upgrade",
+  "elm-verify-examples",
+  "elm-xref",
+  "create-elm-app",
+  "elm-optimize-level-2",
+  "elm-review"
 ]

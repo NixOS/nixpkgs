@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , meson
 , ninja
@@ -6,7 +6,7 @@
 , fetchpatch
 , apacheHttpd
 , nautilus
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , libxml2
@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
   version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "04r9ck9v4i0d31grbli1d4slw2d6dcsfkpaybkwbzi7wnj72l30x";
   };
 
   patches = [
     # fix gio-unix-2.0 lookup
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gnome-user-share/commit/8772980d4732c15505b15dccff2ca3c97e96d49d.patch;
+      url = "https://gitlab.gnome.org/GNOME/gnome-user-share/commit/8772980d4732c15505b15dccff2ca3c97e96d49d.patch";
       sha256 = "03clzhrx72pq1cbmg2y24hvw4i1xsvrg9ip113fi5bc3w4gcji7p";
     })
   ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gettext
@@ -86,10 +86,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://help.gnome.org/users/gnome-user-share/3.8;
+  meta = with lib; {
+    homepage = "https://help.gnome.org/users/gnome-user-share/3.8";
     description = "Service that exports the contents of the Public folder in your home directory on the local network";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

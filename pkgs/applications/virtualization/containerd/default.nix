@@ -1,51 +1,53 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
-
-with lib;
+{ lib
+, fetchFromGitHub
+, buildGoPackage
+, btrfs-progs
+, go-md2man
+, installShellFiles
+, util-linux
+, nixosTests
+}:
 
 buildGoPackage rec {
   pname = "containerd";
-  version = "1.2.6";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
+    sha256 = "0qjbfj1dw6pykxhh8zahcxlgpyjzgnrngk5vjaf34akwyan8nrxb";
   };
 
   goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
-  buildInputs = [ btrfs-progs go-md2man utillinux ];
-  buildFlags = [ "VERSION=v${version}" ];
+  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
-  BUILDTAGS = []
-    ++ optional (btrfs-progs == null) "no_btrfs";
+  buildInputs = [ btrfs-progs ];
+
+  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
+
+  BUILDTAGS = [ ]
+    ++ lib.optional (btrfs-progs == null) "no_btrfs";
 
   buildPhase = ''
     cd go/src/${goPackagePath}
     patchShebangs .
-    make binaries
+    make binaries man $buildFlags
   '';
 
   installPhase = ''
-    for b in bin/*; do
-      install -Dm555 $b $bin/$b
-    done
-
-    make man
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manFile in man/*; do
-      manName="$(basename "$manFile")" # "docker-build.1"
-      number="$(echo $manName | rev | cut -d'.' -f1 | rev)"
-      mkdir -p "$manRoot/man$number"
-      gzip -c "$manFile" > "$manRoot/man$number/$manName.gz"
-    done
+    install -Dm555 bin/* -t $out/bin
+    installManPage man/*.[1-9]
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
   '';
 
-  meta = {
-    homepage = https://containerd.io/;
+  passthru.tests = { inherit (nixosTests) docker; };
+
+  meta = with lib; {
+    homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline vdemeester ];

@@ -1,6 +1,8 @@
-{ stdenv, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config, epoxy, libxslt, libunwind, makeWrapper, egl-wayland }:
+{ lib, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config
+, epoxy, libxslt, libunwind, makeWrapper, egl-wayland
+, defaultFontPath ? "" }:
 
-with stdenv.lib;
+with lib;
 
 xorgserver.overrideAttrs (oldAttrs: {
 
@@ -19,7 +21,7 @@ xorgserver.overrideAttrs (oldAttrs: {
     "--disable-xquartz"
     "--disable-xwin"
     "--enable-glamor"
-    "--with-default-font-path="
+    "--with-default-font-path=${defaultFontPath}"
     "--with-xkb-bin-directory=${xkbcomp}/bin"
     "--with-xkb-path=${xkeyboard_config}/etc/X11/xkb"
     "--with-xkb-output=$(out)/share/X11/xkb/compiled"
@@ -31,7 +33,7 @@ xorgserver.overrideAttrs (oldAttrs: {
 
   meta = {
     description = "An X server for interfacing X11 apps with the Wayland protocol";
-    homepage = https://wayland.freedesktop.org/xserver.html;
+    homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     platforms = platforms.linux;
   };

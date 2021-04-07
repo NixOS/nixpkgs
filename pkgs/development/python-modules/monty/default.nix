@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "3.0.2";
+  version = "2021.3.3";
   disabled = isPy27; # uses type annotations
 
   # No tests in Pypi
@@ -23,11 +23,18 @@ buildPythonPackage rec {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wxqxp0j7i6czdpr2r1imgmy3qbgn2l7d4za2h1lg3hllvx6jra1";
+    sha256 = "1nbv0ys0fv70rgzskkk8gsfr9dsmm7ykim5wv36li840zsj83b1l";
   };
 
   checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
   propagatedBuildInputs = [ six ruamel_yaml ];
+
+  # test suite tries to decode bytes, but msgpack now returns a str
+  # https://github.com/materialsvirtuallab/monty/pull/121
+  postPatch = ''
+    substituteInPlace tests/test_serialization.py \
+      --replace ".decode('utf-8')" ""
+  '';
 
   preCheck = ''
     substituteInPlace tests/test_os.py \
@@ -41,7 +48,7 @@ buildPythonPackage rec {
       standard library. Examples include useful utilities like transparent support for zipped files, useful design
       patterns such as singleton and cached_class, and many more.
     ";
-    homepage = https://github.com/materialsvirtuallab/monty;
+    homepage = "https://github.com/materialsvirtuallab/monty";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

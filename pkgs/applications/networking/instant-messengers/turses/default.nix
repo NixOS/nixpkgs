@@ -1,6 +1,6 @@
-{ stdenv, fetchpatch, python3Packages }:
+{ lib, fetchpatch, python3Packages }:
 
-with stdenv.lib;
+with lib;
 with python3Packages;
 
 buildPythonPackage rec {
@@ -44,8 +44,8 @@ buildPythonPackage rec {
     sed -i -e "s|self.observer.update.assert_called_once()|assert self.observer.update.call_count == 1|" tests/test_meta.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/louipc/turses;
+  meta = with lib; {
+    homepage = "https://github.com/louipc/turses";
     description = "A Twitter client for the console";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

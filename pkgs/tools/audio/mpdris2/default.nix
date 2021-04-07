@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , autoreconfHook
 , fetchFromGitHub
 , glib
@@ -45,9 +45,9 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MPRIS 2 support for mpd";
-    homepage = https://github.com/eonpatapon/mpDris2/;
+    homepage = "https://github.com/eonpatapon/mpDris2/";
     license = licenses.gpl3;
     maintainers = with maintainers; [];
     platforms = platforms.unix;

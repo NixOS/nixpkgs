@@ -1,4 +1,4 @@
-{stdenv, buildOcamlJane, type_conv}:
+{lib, buildOcamlJane, type_conv}:
 
 buildOcamlJane {
   name = "variantslib";
@@ -10,8 +10,8 @@ buildOcamlJane {
 
   propagatedBuildInputs = [ type_conv ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/variantslib;
+  meta = with lib; {
+    homepage = "https://github.com/janestreet/variantslib";
     description = "OCaml variants as first class values";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer maintainers.ericbmerritt ];

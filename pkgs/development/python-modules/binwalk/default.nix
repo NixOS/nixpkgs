@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
+, stdenv
 , zlib
 , xz
 , ncompress
@@ -9,28 +10,30 @@
 , gnutar
 , p7zip
 , cabextract
-, lzma
+, cramfsprogs
+, cramfsswap
+, sasquatch
+, squashfsTools
+, matplotlib
 , nose
 , pycrypto
-, pyqtgraph ? null }:
+, pyqtgraph
+, visualizationSupport ? false }:
 
-let
-  visualizationSupport = (pyqtgraph != null);
-  version = "2.2.0";
-in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "binwalk";
-  inherit version;
+  version = "27";
 
   src = fetchFromGitHub {
-    owner = "devttys0";
+    owner = "ReFirmLabs";
     repo = "binwalk";
-    rev = "be738a52e09b0da2a6e21470e0dbcd5beb42ed1b";
-    sha256 = "1bxgj569fzwv6jhcbl864nmlsi9x1k1r20aywjxc8b9b1zgqrlvc";
+    rev = "python${version}";
+    sha256 = "03kqhs3j9czdc2pnr1v8iszwx254ljpvrmmj0j5ls0ssjrfxacyx";
   };
 
-  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma pycrypto ]
-  ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
+  ++ lib.optionals visualizationSupport [ matplotlib pyqtgraph ]
+  ++ lib.optionals (!stdenv.isDarwin) [ cramfsprogs cramfsswap sasquatch ];
 
   # setup.py only installs version.py during install, not test
   postPatch = ''
@@ -44,7 +47,9 @@ buildPythonPackage {
 
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "binwalk" ];
+
+  meta = with lib; {
     homepage = "https://github.com/ReFirmLabs/binwalk";
     description = "A tool for searching a given binary image for embedded files";
     maintainers = [ maintainers.koral ];

@@ -1,23 +1,62 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, numpy, pydispatcher, sympy, requests, monty, ruamel_yaml, six, scipy, tabulate, enum34, matplotlib, palettable, spglib, pandas, networkx }:
+{ lib, buildPythonPackage, fetchPypi
+, enum34
+, glibcLocales
+, matplotlib
+, monty
+, networkx
+, numpy
+, palettable
+, pandas
+, plotly
+, pydispatcher
+, requests
+, ruamel_yaml
+, scipy
+, six
+, spglib
+, sympy
+, tabulate
+, uncertainties
+}:
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2019.12.22";
+  version = "2022.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ffc6efcc2ba15bff22cca29c07b93b01fac400f649c41d5dd01bfff7915f80b";
+    sha256 = "69c370ebd2ff9aceb15bb6efd364473609ffb23d2b2f02a3eb64fd537df69de0";
   };
 
   nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ numpy pydispatcher sympy requests monty ruamel_yaml six scipy tabulate enum34 matplotlib palettable spglib pandas networkx ];
+
+  propagatedBuildInputs = [
+    enum34
+    matplotlib
+    monty
+    networkx
+    numpy
+    palettable
+    pandas
+    plotly
+    pydispatcher
+    requests
+    ruamel_yaml
+    scipy
+    six
+    spglib
+    sympy
+    tabulate
+    uncertainties
+  ];
 
   # No tests in pypi tarball.
   doCheck = false;
+  pythonImportsCheck = [ "pymatgen" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";
-    homepage = https://pymatgen.org/;
+    homepage = "https://pymatgen.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

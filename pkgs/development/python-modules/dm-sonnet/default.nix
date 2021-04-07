@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, bazel_0_26
 , buildBazelPackage
 , buildPythonPackage
 , git
@@ -19,6 +20,8 @@ let
 
   # first build all binaries and generate setup.py using bazel
   bazel-build = buildBazelPackage {
+    bazel = bazel_0_26;
+
     name = "dm-sonnet-bazel-${version}";
 
     src = fetchFromGitHub {
@@ -36,13 +39,8 @@ let
     bazelTarget = ":install";
 
     fetchAttrs = {
-      sha256 = "0mxma7jajm42v1hv6agl909xra0azihj588032ivhlmmh403x6wg";
+      sha256 = "09dzxs2v5wpiaxrz7qj257q1fbx0gxwbk0jyx58n81m5kys7yj9k";
     };
-
-    bazelFlags = [
-      # https://github.com/deepmind/sonnet/issues/134
-      "--incompatible_disable_deprecated_attr_params=false"
-    ];
 
     buildAttrs = {
       preBuild = ''
@@ -84,7 +82,7 @@ in buildPythonPackage {
 
   meta = with lib; {
     description = "TensorFlow-based neural network library";
-    homepage = https://sonnet.dev;
+    homepage = "https://sonnet.dev";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
     platforms = platforms.linux;

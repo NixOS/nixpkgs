@@ -1,24 +1,54 @@
-{ buildPythonPackage, fetchPypi, lib, isPy3k
-, pkgconfig, igraph }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pkg-config
+, igraph
+, texttable
+, python
+}:
 
 buildPythonPackage rec {
   pname = "python-igraph";
-  version = "0.7.1.post6";
+  version = "0.9.1";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ igraph ];
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0xp61zz710qlzhmzbfr65d5flvsi8zf2xy78s6rsszh719wl5sm5";
+  src = fetchFromGitHub {
+    owner = "igraph";
+    repo = "python-igraph";
+    rev = version;
+    sha256 = "1ldyzza25zvwh144lw8x856z76s8gfvnbdm56fcmwkvm7aj81npw";
   };
 
-  doCheck = !isPy3k;
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  meta = {
+  buildInputs = [
+    igraph
+    igraph.dev
+  ];
+
+  propagatedBuildInputs = [
+    texttable
+  ];
+
+  # NB: We want to use our igraph, not vendored igraph, but even with
+  # pkg-config on the PATH, their custom setup.py still needs to be explicitly
+  # told to do it. ~ C.
+  setupPyGlobalFlags = [ "--use-pkg-config" ];
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest
+  '';
+
+  pythonImportsCheck = [ "igraph" ];
+
+  meta = with lib; {
     description = "High performance graph data structures and algorithms";
     homepage = "https://igraph.org/python/";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.MostAwesomeDude ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pam, openssl, openssh, shadow, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pam, openssl, openssh, shadow, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "2.20";
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     cp shellinabox/* $out/lib
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/shellinabox/shellinabox;
+  meta = with lib; {
+    homepage = "https://github.com/shellinabox/shellinabox";
     description = "Web based AJAX terminal emulator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tomberek lihop ];

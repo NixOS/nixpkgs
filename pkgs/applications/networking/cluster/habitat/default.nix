@@ -1,27 +1,23 @@
-{ lib, fetchFromGitHub, rustPlatform, pkgconfig
-, libsodium, libarchive, openssl }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config
+, libsodium, libarchive, openssl, zeromq }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "habitat";
-  version = "0.30.2";
+  # Newer versions required protobuf, which requires some finesse to get to
+  # compile with the vendored protobuf crate.
+  version = "0.90.6";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
     rev = version;
-    sha256 = "0pqrm85pd9hqn5fwqjbyyrrfh4k7q9mi9qy9hm8yigk5l8mw44y1";
+    sha256 = "0rwi0lkmhlq4i8fba3s9nd9ajhz2dqxzkgfp5i8y0rvbfmhmfd6b";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "08sncz0jgsr2s821j3s4bk7d54xqwmnld7m57avavym1xqvsnbmy";
 
-  cargoSha256 = "1ahfm5agvabqqqgjsyjb95xxbc7mng1mdyclcakwp1m1qdkxx9p0";
-
-  buildInputs = [ libsodium libarchive openssl ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libsodium libarchive openssl zeromq ];
 
   cargoBuildFlags = ["--package hab"];
 
@@ -34,10 +30,9 @@ buildRustPackage rec {
 
   meta = with lib; {
     description = "An application automation framework";
-    homepage = https://www.habitat.sh;
+    homepage = "https://www.habitat.sh";
     license = licenses.asl20;
-    maintainers = [ maintainers.rushmorem ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    broken = true; # mark temporary as broken due git dependencies
+    maintainers = with maintainers; [ rushmorem ];
+    platforms = [ "x86_64-linux" ];
   };
 }

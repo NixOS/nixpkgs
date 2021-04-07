@@ -26,7 +26,6 @@ let
       [global]
       security = ${cfg.securityType}
       passwd program = /run/wrappers/bin/passwd %u
-      pam password change = ${smbToString cfg.syncPasswordsByPam}
       invalid users = ${smbToString cfg.invalidUsers}
 
       ${cfg.extraConfig}
@@ -67,6 +66,7 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
+    (mkRemovedOptionModule [ "services" "samba" "syncPasswordsByPam" ] "This option has been removed by upstream, see https://bugzilla.samba.org/show_bug.cgi?id=10669#c10")
   ];
 
   ###### interface
@@ -124,18 +124,6 @@ in
         '';
       };
 
-      syncPasswordsByPam = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enabling this will add a line directly after pam_unix.so.
-          Whenever a password is changed the samba password will be updated as well.
-          However, you still have to add the samba password once, using smbpasswd -a user.
-          If you don't want to maintain an extra password database, you still can send plain text
-          passwords which is not secure.
-        '';
-      };
-
       invalidUsers = mkOption {
         type = types.listOf types.str;
         default = [ "root" ];
@@ -189,7 +177,7 @@ in
           See <command>man smb.conf</command> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
-        example =
+        example = literalExample ''
           { public =
             { path = "/srv/public";
               "read only" = true;
@@ -197,7 +185,8 @@ in
               "guest ok" = "yes";
               comment = "Public samba share.";
             };
-          };
+          }
+        '';
       };
 
     };
@@ -223,6 +212,7 @@ in
       (mkIf cfg.enable {
 
         system.nssModules = optional cfg.nsswins samba;
+        system.nssDatabases.hosts = optional cfg.nsswins "wins";
 
         systemd = {
           targets.samba = {
@@ -246,7 +236,7 @@ in
         };
 
         security.pam.services.samba = {};
-
+        environment.systemPackages = [ config.services.samba.package ];
       })
     ];
 

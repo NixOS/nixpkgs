@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkgconfig, libX11, libXcursor
+{ stdenv, lib, fetchFromGitHub, scons, pkg-config, libX11, libXcursor
 , libXinerama, libXrandr, libXrender, libpulseaudio ? null
 , libXi ? null, libXext, libXfixes, freetype, openssl
 , alsaLib, libGLU, zlib, yasm ? null }:
@@ -10,16 +10,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.1.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "12305wj2i4067jc50l8r0wmb7zjcna24fli8vb8kiaild0jrlip6";
+    sha256 = "19vrp5lhyvxbm6wjxzn28sn3i0s8j08ca7nani8l1nrhvlc8wi0v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     scons libX11 libXcursor libXinerama libXrandr libXrender
     libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
@@ -61,8 +61,8 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
-    license     = stdenv.lib.licenses.mit;
+    license     = lib.licenses.mit;
     platforms   = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.twey ];
+    maintainers = [ lib.maintainers.twey ];
   };
 }

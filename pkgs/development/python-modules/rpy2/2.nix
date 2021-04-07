@@ -9,7 +9,7 @@
 , rWrapper
 , rPackages
 , pcre
-, lzma
+, xz
 , bzip2
 , zlib
 , icu
@@ -35,7 +35,7 @@ buildPythonPackage rec {
       readline
       R
       pcre
-      lzma
+      xz
       bzip2
       zlib
       icu
@@ -99,7 +99,7 @@ buildPythonPackage rec {
     '';
 
     meta = {
-      homepage = http://rpy.sourceforge.net/rpy2;
+      homepage = "http://rpy.sourceforge.net/rpy2";
       description = "Python interface to R";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;

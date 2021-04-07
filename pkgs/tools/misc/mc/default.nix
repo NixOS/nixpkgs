@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , glib
 , gpm
 , file
@@ -15,18 +15,19 @@
 , libssh2
 , openssl
 , coreutils
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.23";
+  version = "4.8.26";
 
   src = fetchurl {
-    url = "http://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "077z7phzq3m1sxyz7li77lyzv4rjmmh3wp2vy86pnc4387kpqzyx";
+    url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
+    sha256 = "sha256-xt6txQWV8tmiLcbCmanyizk+NYNG6/bKREqEadwWbCc=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config autoreconfHook unzip ];
 
   buildInputs = [
     file
@@ -38,9 +39,8 @@ stdenv.mkDerivation rec {
     openssl
     perl
     slang
-    unzip
     zip
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
@@ -51,19 +51,19 @@ stdenv.mkDerivation rec {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  postFixup = ''
+  preFixup = ''
     # remove unwanted build-dependency references
     sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File Manager and User Shell for the GNU Project";
-    downloadPage = "http://www.midnight-commander.org/downloads/";
-    homepage = "http://www.midnight-commander.org";
+    downloadPage = "https://www.midnight-commander.org/downloads/";
+    homepage = "https://www.midnight-commander.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
-    repositories.git = git://github.com/MidnightCommander/mc.git;
+    repositories.git = "https://github.com/MidnightCommander/mc.git";
     updateWalker = true;
   };
 }

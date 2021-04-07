@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, expat, xlibsWrapper, freetype }:
+{ lib, stdenv, fetchurl, perl, expat, xlibsWrapper, freetype }:
 
 # !!! assert freetype == xorg.freetype
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Player for Z-Code, TADS and HUGO stories or games";
     longDescription = ''
       Zoom is a player for Z-Code, TADS and HUGO stories or games. These are

@@ -1,29 +1,27 @@
-{ stdenv, fetchFromGitLab, kernel }:
+{ lib, stdenv, fetchFromGitLab, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
-  version = "0.3.2";
+  version = "0.3.3";
   name = "${pname}-${kernel.version}-${version}";
 
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
     rev = "v${version}";
-    sha256 = "0jl4l3vvxn85cbqr80p6bgyhf2vx9kbadrwx086wkj9ni8k6x5m6";
+    sha256 = "0vkkja3ykjil783zjpwp0vz7jy2fp9ccazzi3afd4fjk8gldin7f";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=incompatible-pointer-types" ];
-
   prePatch = ''
     substituteInPlace ./ddcci/Makefile \
-      --replace 'SUBDIRS="$(src)"' 'M=$(PWD)' \
+      --replace '"$(src)"' '$(PWD)' \
       --replace depmod \#
     substituteInPlace ./ddcci-backlight/Makefile \
-      --replace 'SUBDIRS="$(src)"' 'M=$(PWD)' \
+      --replace '"$(src)"' '$(PWD)' \
       --replace depmod \#
   '';
 
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
     "INCLUDEDIR=$(out)/include"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = licenses.gpl2;

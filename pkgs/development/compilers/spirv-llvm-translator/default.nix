@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/KhronosGroup/SPIRV-LLVM-Translator;
+  meta = with lib; {
+    homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
     license     = licenses.ncsa;
     platforms   = platforms.all;

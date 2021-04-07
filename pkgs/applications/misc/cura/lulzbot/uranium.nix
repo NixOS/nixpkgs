@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
+{ lib, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
 , pyqt5, numpy, scipy, shapely, libarcusLulzbot, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage {
@@ -8,7 +8,7 @@ buildPythonPackage {
   format = "other";
 
   src = fetchgit {
-    url = https://code.alephobjects.com/diffusion/U/uranium.git;
+    url = "https://code.alephobjects.com/diffusion/U/uranium.git";
     rev = "54d911edd2551c5875c554928896122835a0dd6c";
     sha256 = "04bym3vwikaxw8ab0mymv9sc9n8i7yw5kfsv99ic811g9lzz3j1i";
   };
@@ -27,9 +27,9 @@ buildPythonPackage {
      UM/Application.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python framework for building Desktop applications";
-    homepage = https://code.alephobjects.com/diffusion/U/;
+    homepage = "https://code.alephobjects.com/diffusion/U/";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

@@ -1,6 +1,6 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "2016-01-26";
@@ -46,6 +46,6 @@ in
       maintainers = [ maintainers.simonvandel ];
       platforms = platforms.unix;
       license = licenses.unfree;
-      homepage = https://support.sundtek.com/index.php/topic,1573.0.html;
+      homepage = "https://support.sundtek.com/index.php/topic,1573.0.html";
     };
   }

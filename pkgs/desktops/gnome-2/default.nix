@@ -58,9 +58,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
 
-  gtksourceview = callPackage ./desktop/gtksourceview { };
-
-  gnome_icon_theme = callPackage ./desktop/gnome-icon-theme { };
+  gtksourceview = callPackage ./desktop/gtksourceview {
+    autoreconfHook = pkgs.autoreconfHook269;
+  };
 
   vte = callPackage ./desktop/vte { };
 
@@ -87,6 +87,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   startup_notification = pkgs.libstartup_notification;
   startupnotification = pkgs.libstartup_notification;
   gnomedocutils = pkgs.gnome-doc-utils;
-  gnomeicontheme = self.gnome_icon_theme;
+  gnome-icon-theme = pkgs.gnome-icon-theme;
+  gnome_icon_theme = self.gnome-icon-theme;
+  gnomeicontheme = self.gnome-icon-theme;
   gnome_common = gnome-common;
 })

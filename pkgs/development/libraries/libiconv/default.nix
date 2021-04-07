@@ -1,6 +1,6 @@
 { fetchurl, stdenv, lib
-, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
-, enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = https://www.gnu.org/software/libiconv/;
+    homepage = "https://www.gnu.org/software/libiconv/";
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];

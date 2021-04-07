@@ -1,6 +1,6 @@
-{ stdenv
+{ lib
 , python3Packages
-, pkgconfig
+, pkg-config
 , librsvg
 , gobject-introspection
 , atk
@@ -16,7 +16,7 @@
 , wrapGAppsHook
 }:
 
-with stdenv.lib;
+with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       It is the core base of a complete business solution providing
       modularity, scalability and security.
     '';
-    homepage = http://www.tryton.org/;
+    homepage = "http://www.tryton.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ johbo udono ];
   };

@@ -1,9 +1,10 @@
 { callPackage, ... } @ args:
 
-callPackage ./generic.nix (args // {
+callPackage ./generic.nix (args // rec {
   brand = "Midas";
   type = "M32";
-  version = "3.2";
-  sha256 = "1cds6qinz37086l6pmmgrzrxadygjr2z96sjjyznnai2wz4z2nrd";
-  homepage = http://www.musictri.be/Categories/Midas/Mixers/Digital/M32/p/P0B3I/downloads;
+  version = "4.1";
+  url = "https://mediadl.musictribe.com/download/software/midas_${type}/${type}-Edit_LINUX_64-Bit_${version}.tar.gz";
+  sha256 = "0aqhdrxqa49liyvbbw5x32kwk0h1spzvmizmdxklrfs64vvr9bvh";
+  homepage = "https://midasconsoles.com/midas/product?modelCode=P0B3I";
 })

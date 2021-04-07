@@ -61,12 +61,16 @@ let
     ]
       # FIXME this on Darwin; see
       # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
-    ++ lib.optional hostPlatform.isLinux ../../build-support/setup-hooks/audit-tmpdir.sh
+    ++ lib.optionals hostPlatform.isLinux [
+      ../../build-support/setup-hooks/audit-tmpdir.sh
+      ../../build-support/setup-hooks/move-systemd-user-units.sh
+    ]
     ++ [
       ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
       ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+      ../../build-support/setup-hooks/reproducible-builds.sh
       # TODO use lib.optional instead
       (if hasCC then cc else null)
     ];
@@ -98,7 +102,7 @@ let
       # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
       # there (yet?) so it goes here until then.
       preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
-        export NIX_BUILD_DONT_SET_RPATH=1
+        export NIX_DONT_SET_RPATH_FOR_BUILD=1
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
@@ -107,7 +111,7 @@ let
       # think the best solution would just be to fixup linux RPATHs so we don't
       # need to set `-rpath` anywhere.
       # + lib.optionalString targetPlatform.isDarwin ''
-      #   export NIX_TARGET_DONT_SET_RPATH=1
+      #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
       # ''
       ;
 
@@ -138,16 +142,22 @@ let
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
 
-      # The derivation's `system` is `buildPlatform.system`.
-      inherit (buildPlatform) system;
+      # Override `system` so that packages can get the system of the host
+      # platform through `stdenv.system`. `system` is originally set to the
+      # build platform within the derivation above so that Nix directs the build
+      # to correct type of machine.
+      inherit (hostPlatform) system;
 
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;
       }) mkDerivation;
 
-      # For convenience, bring in the library functions in lib/ so
-      # packages don't have to do that themselves.
-      inherit lib;
+      # Slated for removal in 21.11
+      lib = if config.allowAliases or true then builtins.trace
+        ( "Warning: `stdenv.lib` is deprecated and will be removed in the next release."
+         + " Please use `lib` instead."
+         + " For more information see https://github.com/NixOS/nixpkgs/issues/108938")
+        lib else throw "`stdenv.lib` is a deprecated alias for `lib`";
 
       inherit fetchurlBoot;
 

@@ -1,41 +1,57 @@
-{ stdenv, autoconf, automake, pkgconfig, gettext, libtool, bison
-, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb, readline
-, python3
-, svfSupport ? true
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, autoreconfHook
+, gettext
+, libftdi1
+, libtool
+, libusb-compat-0_1
+, makeWrapper
+, pkg-config
+, readline
+, which
 , bsdlSupport ? true
-, staplSupport ? true
 , jedecSupport ? true
+, staplSupport ? true
+, svfSupport ? true
 }:
 
-stdenv.mkDerivation {
-  version = "0.10";
+stdenv.mkDerivation rec {
   pname = "urjtag";
+  version = "2021.03";
 
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/urjtag/svn/trunk/urjtag";
-    rev = "2051";
-    sha256 = "0pyl0y27136nr8mmjdml7zjnfnpbjmgqzkjk99j3hvj38k10wq7f";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-sKLqokVROvCW3E13AQmDIzXGlMbBKqXpL++uhoVBbxw=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gettext autoconf automake libtool bison flex which
-    subversion makeWrapper readline libftdi libusb python3 ];
-
-  configureFlags = [
-    (stdenv.lib.enableFeature svfSupport   "svf")
-    (stdenv.lib.enableFeature bsdlSupport  "bsdl")
-    (stdenv.lib.enableFeature staplSupport "stapl")
-    (stdenv.lib.enableFeature jedecSupport "jedec-exp")
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    which
+    gettext
+  ];
+  buildInputs = [
+    libftdi1
+    libtool
+    libusb-compat-0_1
+    readline
   ];
 
-  preConfigure = "./autogen.sh";
+  configureFlags = [
+    (lib.enableFeature bsdlSupport  "bsdl")
+    (lib.enableFeature jedecSupport "jedec-exp")
+    (lib.enableFeature staplSupport "stapl")
+    (lib.enableFeature svfSupport   "svf")
+  ];
 
-  meta = {
-    description = "Enhanced, modern tool for communicating over JTAG with flash chips, CPUs,and many more";
-    homepage = http://urjtag.org/;
-    license = with stdenv.lib.licenses; [ gpl2Plus lgpl21Plus ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
-    maintainers = with stdenv.lib.maintainers; [ lowfatcomputing ];
+  meta = with lib; {
+    homepage = "http://urjtag.org/";
+    description = "Universal JTAG library, server and tools";
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
-

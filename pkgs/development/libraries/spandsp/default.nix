@@ -1,4 +1,4 @@
-{stdenv, fetchurl, audiofile, libtiff}:
+{lib, stdenv, fetchurl, audiofile, libtiff}:
 stdenv.mkDerivation rec {
   version = "0.0.6";
   pname = "spandsp";
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [audiofile libtiff];
   meta = {
     description = "A portable and modular SIP User-Agent with audio and video support";
-    homepage = http://www.creytiv.com/baresip.html;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "http://www.creytiv.com/baresip.html";
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [raskin];
+    license = lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
     inherit version;
     updateWalker = true;

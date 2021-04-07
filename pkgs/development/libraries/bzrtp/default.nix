@@ -1,26 +1,36 @@
-{ stdenv, cmake, fetchFromGitHub, bctoolbox, sqlite }:
+{ bctoolbox
+, cmake
+, fetchFromGitLab
+, sqlite
+, lib, stdenv
+}:
 
 stdenv.mkDerivation rec {
-  baseName = "bzrtp";
-  version = "1.0.6";
-  name = "${baseName}-${version}";
+  pname = "bzrtp";
+  version = "4.5.1";
 
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
-    repo = baseName;
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
     rev = version;
-    sha256 = "0438zzxp82bj5fmvqnwlljkgrz9ab5qm5lgpwwgmg1cp78bp2l45";
+    sha256 = "1a500ncgznwha0j3c27ak3p4jh5jm6fnnb531k7c0a4i91745agj";
   };
 
   buildInputs = [ bctoolbox sqlite ];
   nativeBuildInputs = [ cmake ];
 
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
-  meta = with stdenv.lib; {
-    description = "BZRTP is an opensource implementation of ZRTP keys exchange protocol";
-    homepage = https://github.com/BelledonneCommunications/bzrtp;
-    license = licenses.lgpl21;
+  meta = with lib; {
+    description = "An opensource implementation of ZRTP keys exchange protocol";
+    homepage = "https://gitlab.linphone.org/BC/public/bzrtp";
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

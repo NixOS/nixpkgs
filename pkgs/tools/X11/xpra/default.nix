@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
+{ lib, fetchurl, callPackage, substituteAll, python3, pkg-config, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
-, wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
-, ffmpeg_4, x264, libvpx, libwebp, x265
+, wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
+, ffmpeg, x264, libvpx, libwebp, x265
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobject-introspection
 , pam }:
@@ -11,28 +11,46 @@ with lib;
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
-  xf86videodummy = callPackage ./xf86videodummy { };
+  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+    patches = [
+      ./0002-Constant-DPI.patch
+      ./0003-fix-pointer-limits.patch
+      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
+    ];
+  });
+
+  xorgModulePaths = writeText "module-paths" ''
+    Section "Files"
+      ModulePath "${xorgserver}/lib/xorg/modules"
+      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
+      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
+    EndSection
+  '';
+
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "3.0.6";
+  version = "4.0.6";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "0msm53iphb6zr1phb2knkrn94hjcg3a9n1vvbis5sipdvlx50m08";
+    sha256 = "nGcvbZFGYd2nQ75LL4YN+xcWb7UsViA3OAqpcrTwieg=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit (xorg) xkeyboardconfig;
+      inherit libfakeXinerama;
     })
+    ./fix-41106.patch
   ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
   '';
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = with xorg; [
     libX11 xorgproto libXrender libXi
     libXtst libXfixes libXcomposite libXdamage
@@ -42,7 +60,7 @@ in buildPythonApplication rec {
 
     pango cairo gdk-pixbuf atk.out gtk3 glib
 
-    ffmpeg_4 libvpx x264 libwebp x265
+    ffmpeg libvpx x264 libwebp x265
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -67,28 +85,38 @@ in buildPythonApplication rec {
     "--with-Xdummy"
     "--without-strict"
     "--with-gtk3"
-    "--without-gtk2"
     # Override these, setup.py checks for headers in /usr/* paths
     "--with-pam"
     "--with-vsock"
   ];
 
+  dontWrapGApps = true;
   preFixup = ''
-    gappsWrapperArgs+=(
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
+      --set XPRA_COMMAND "$out/bin/xpra"
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
+      --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
     )
+  '';
+
+  # append module paths to xorg.conf
+  postInstall = ''
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
   '';
 
   doCheck = false;
 
   enableParallelBuilding = true;
 
-  passthru = { inherit xf86videodummy; };
+  passthru = {
+    inherit xf86videodummy;
+    updateScript = ./update.sh;
+  };
 
   meta = {
-    homepage = http://xpra.org/;
+    homepage = "http://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";

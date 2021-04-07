@@ -1,30 +1,30 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, six, pycryptodome, chardet, nose, sortedcontainers }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, cryptography, chardet, nose, sortedcontainers }:
 
 buildPythonPackage rec {
   pname = "pdfminer_six";
-  version = "20191020";
+  version = "20201018";
+
+  disabled = !isPy3k;
 
   # No tests in PyPi Tarball
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
     rev = version;
-    sha256 = "1fqn4ilcscvw6ws9a1yqiprha9d3rgw3d0280clkbk6s4l26wm9h";
+    sha256 = "1a2fxxnnjqbx344znpvx7cnv1881dk6585ibw01inhfq3w6yj2lr";
   };
 
-  propagatedBuildInputs = [ six pycryptodome sortedcontainers ]
-    ++ stdenv.lib.optionals isPy3k [ chardet ];
+  propagatedBuildInputs = [ chardet cryptography sortedcontainers ];
 
   checkInputs = [ nose ];
   checkPhase = ''
     nosetests
   '';
 
-  meta = with stdenv.lib; {
-    description = "fork of PDFMiner using six for Python 2+3 compatibility";
-    homepage = https://github.com/pdfminer/pdfminer.six;
+  meta = with lib; {
+    description = "PDF parser and analyzer";
+    homepage = "https://github.com/pdfminer/pdfminer.six";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy marsam ];
   };
 }
-

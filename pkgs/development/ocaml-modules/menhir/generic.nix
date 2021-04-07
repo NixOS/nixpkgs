@@ -1,4 +1,4 @@
-{ version, src, stdenv, ocaml, findlib, ocamlbuild, ... }:
+{ version, src, lib, stdenv, ocaml, findlib, ocamlbuild, ... }:
 
 stdenv.mkDerivation {
   pname = "menhir";
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
     export PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://pauillac.inria.fr/~fpottier/menhir/;
+  meta = with lib; {
+    homepage = "http://pauillac.inria.fr/~fpottier/menhir/";
     description = "A LR(1) parser generator for OCaml";
     longDescription = ''
       Menhir is a LR(1) parser generator for the Objective Caml programming

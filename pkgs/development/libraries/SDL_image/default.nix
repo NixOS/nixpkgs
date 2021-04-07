@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
+{ lib, stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_image";
@@ -17,11 +17,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [
+    # Disable its dynamic loading or dlopen will fail because of no proper rpath
+    "--disable-jpg-shared"
+    "--disable-png-shared"
+    "--disable-tif-shared"
+  ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   buildInputs = [ SDL libpng libjpeg libtiff libungif libXpm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL image library";
     homepage    = "http://www.libsdl.org/projects/SDL_image/";
     maintainers = with maintainers; [ lovek323 ];

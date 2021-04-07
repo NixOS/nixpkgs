@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "dcadec";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "ERROR: Run 'git submodule update --init test/samples' first."
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DTS Coherent Acoustics decoder with support for HD extensions";
     maintainers = with maintainers; [ edwtjo ];
-    homepage = https://github.com/foo86/dcadec;
+    homepage = "https://github.com/foo86/dcadec";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

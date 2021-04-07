@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "sieve-connect";
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
         TermReadKey TermReadLineGnu ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for the MANAGESIEVE Protocol";
     longDescription = ''
       This is sieve-connect. A client for the ManageSieve protocol,
       as specifed in RFC 5804. Historically, this was MANAGESIEVE as
       implemented by timsieved in Cyrus IMAP.
     '';
-    homepage = https://github.com/philpennock/sieve-connect;
+    homepage = "https://github.com/philpennock/sieve-connect";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ das_j ];

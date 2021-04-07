@@ -1,36 +1,53 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, Security, ansi2html }:
+{ lib, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, asciidoctor
+, openssl
+, Security
+, ansi2html
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.15.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "mdcat-${version}";
-    sha256 = "0qvlnjw0h2hnap1crnprdrynqvg7pywq32qin5fdkk4fv496wjhs";
+    hash = "sha256-i36MYTMkbSuWxxlWUDsyYMay/4Mg7M5jEFhHM60UrkM=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "12s0dakv37vvvd43xzkydr7w3cpp7sizk8s1kalg4b0xz6ydghcp";
+  cargoSha256 = "sha256-mnDUIJhEGNoh3eq2Vhww1T/tpZh9RP+RxbRsBNrpOzw=";
 
   checkInputs = [ ansi2html ];
-  checkPhase = ''
-    # Skip tests that use the network and that include files.
-    cargo test -- --skip terminal::iterm2 \
-      --skip magic::tests::detect_mimetype_of_svg_image \
-      --skip magic::tests::detect_mimetype_of_png_image \
-      --skip resources::tests::read_url_with_http_url_fails_when_status_404 \
-      --skip resources::tests::read_url_with_http_url_returns_content_when_status_200
+  # Skip tests that use the network and that include files.
+  checkFlags = [
+    "--skip magic::tests::detect_mimetype_of_larger_than_magic_param_bytes_max_length"
+    "--skip magic::tests::detect_mimetype_of_magic_param_bytes_max_length"
+    "--skip magic::tests::detect_mimetype_of_png_image"
+    "--skip magic::tests::detect_mimetype_of_svg_image"
+    "--skip resources::tests::read_url_with_http_url_fails_when_status_404"
+    "--skip resources::tests::read_url_with_http_url_returns_content_when_status_200"
+    "--skip iterm2_tests_render_md_samples_images_md"
+  ];
+
+  postInstall = ''
+    installManPage $releaseDir/build/mdcat-*/out/mdcat.1
+    installShellCompletion --bash $releaseDir/build/mdcat-*/out/completions/mdcat.bash
+    installShellCompletion --fish $releaseDir/build/mdcat-*/out/completions/mdcat.fish
+    installShellCompletion --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "cat for markdown";
-    homepage = https://github.com/lunaryorn/mdcat;
+    homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ davidtwco ];
-    platforms = platforms.all;
   };
 }

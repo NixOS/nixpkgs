@@ -1,19 +1,23 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "renderizer";
-  version = "2.0.5";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "gomatic";
     repo = pname;
-    rev = version;
-    sha256 = "186wcfzw60z6i59yl37rkppw8w88z5kikvsi65k4r9kwpll2z6z4";
+    rev = "v${version}";
+    sha256 = "sha256-Ji+wTTXLp17EYRIjUiVgd33ZeBdT8K2O8R2Ejq2Ll5I=";
   };
 
-  modSha256 = "1sxg9skd5hjpg2f4wyxh5hwjrplw3b3v32gn61a9yixfk3wvi05x";
+  buildFlagsArray = [
+    "-ldflags=-s -w -X main.version=${version} -X main.commitHash=${src.rev} -X main.date=19700101T000000"
+  ];
 
-  meta = with stdenv.lib; {
+  vendorSha256 = null;
+
+  meta = with lib; {
     description = "CLI to render Go template text files";
     inherit (src.meta) homepage;
     license = licenses.gpl3;

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
-, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
-, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark
+{ lib, stdenv, fetchFromGitLab, pkg-config, autoconf, automake, libiconv, drake
+, ruby, docbook_xsl, file, xdg-utils, gettext, expat, boost, libebml, zlib
+, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
 , withGUI ? true
   , qtbase ? null
   , qtmultimedia ? null
@@ -9,27 +9,27 @@
 
 assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "43.0.0";
+  version = "55.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "0ra9kgvhh5yhbr0hsia1va5lw45zr4kdwcdjhas5ljjyj75mlyxc";
+    sha256 = "129azp4cpdd05f6072gkxdjj811aqs29nbw6v6qm8vv47gfvjcf7";
   };
 
   nativeBuildInputs = [
-    pkgconfig autoconf automake gettext
+    pkg-config autoconf automake gettext
     drake ruby docbook_xsl libxslt
   ];
 
   buildInputs = [
-    expat file xdg_utils boost libebml zlib fmt
-    libmatroska libogg libvorbis flac cmark
+    expat file xdg-utils boost libebml zlib fmt
+    libmatroska libogg libvorbis flac cmark pcre2
   ] ++ optional  stdenv.isDarwin libiconv
     ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];
 
@@ -50,17 +50,18 @@ stdenv.mkDerivation rec {
     (enableFeature withGUI "qt")
   ];
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++14";
+  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
+  LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
 
   dontWrapQtApps = true;
   postFixup = optionalString withGUI ''
     wrapQtApp $out/bin/mkvtoolnix-gui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform tools for Matroska";
-    homepage    = http://www.bunkus.org/videotools/mkvtoolnix/;
-    license     = licenses.gpl2;
+    homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ codyopel rnhmjoj ];
     platforms   = platforms.linux
       ++ optionals (!withGUI) platforms.darwin;

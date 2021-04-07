@@ -17,7 +17,7 @@ let
         # Prevent a potential stack overflow
         # https://github.com/docbook/xslt10-stylesheets/pull/37
         (fetchpatch {
-          url = https://src.fedoraproject.org/rpms/docbook-style-xsl/raw/e3ae7a97ed1d185594dd35954e1a02196afb205a/f/docbook-style-xsl-non-recursive-string-subst.patch;
+          url = "https://src.fedoraproject.org/rpms/docbook-style-xsl/raw/e3ae7a97ed1d185594dd35954e1a02196afb205a/f/docbook-style-xsl-non-recursive-string-subst.patch";
           sha256 = "0lrjjg5kpwwmbhkxzz6i5zmimb6lsvrrdhzc2qgjmb3r6jnsmii3";
           stripLen = "1";
         })
@@ -63,7 +63,7 @@ let
         '';
 
       meta = {
-        homepage = http://wiki.docbook.org/topic/DocBookXslStylesheets;
+        homepage = "http://wiki.docbook.org/topic/DocBookXslStylesheets";
         description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
         maintainers = [ lib.maintainers.eelco ];
         platforms = lib.platforms.all;

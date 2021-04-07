@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "webmetro";
@@ -11,12 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1n2c7ygs8qsd5zgii6fqqcwg427bsij082bg4ijnzkq5630dx651";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "0xifc3jwj0c6ynx0gzm5zlnfcq023fjpjmdg9x0vs1fh3b42pdsy";
 
-  cargoSha256 = "03ncwj9bn21590phcnqyclclcird7rikbhxbwhg8i9i0nad81aaa";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple relay server for broadcasting a WebM stream";
     longDescription = ''
     Webmetro is a simple relay server for broadcasting a WebM stream
@@ -28,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
   };
 }

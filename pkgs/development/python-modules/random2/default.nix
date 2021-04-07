@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -15,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "34ad30aac341039872401595df9ab2c9dc36d0b7c077db1cea9ade430ed1c007";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://pypi.python.org/pypi/random2;
+  meta = with lib; {
+    homepage = "http://pypi.python.org/pypi/random2";
     description = "Python 3 compatible Python 2 `random` Module";
     license = licenses.psfl;
   };

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "perl-completion";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Minor mode provides useful features for editing perl codes";
-    homepage = http://emacswiki.org/emacs/PerlCompletion;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://emacswiki.org/emacs/PerlCompletion";
+    platforms = lib.platforms.all;
   };
 }

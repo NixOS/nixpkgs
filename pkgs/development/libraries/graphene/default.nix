@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , ninja
 , python3
@@ -15,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.10.0";
+  version = "1.10.2";
 
   outputs = [ "out" "devdoc" "installedTests" ];
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "16vqwih5bfxv7r3mm7iiha804rpsxzxjfrs4kx76d9q5yg2hayxr";
+    sha256 = "1ljhhjafi1nlndjswx7mg0d01zci90wz77yvz5w8bd9mm8ssw38s";
   };
 
   patches = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     python3
   ];
@@ -62,9 +63,13 @@ stdenv.mkDerivation rec {
     tests = {
       installedTests = nixosTests.installed-tests.graphene;
     };
+
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A thin layer of graphic data types";
     homepage = "https://ebassi.github.com/graphene";
     license = licenses.mit;

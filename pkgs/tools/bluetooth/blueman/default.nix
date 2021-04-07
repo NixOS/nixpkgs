@@ -1,29 +1,29 @@
-{ config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
-, obex_data_server, xdg_utils, dnsmasq, dhcp, libappindicator, iproute
+{ config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
+, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
 , gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
   pythonPackages = python3Packages;
-  binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp iproute ];
+  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute2 ];
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.1.1";
+  version = "2.1.4";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1hyvc5x97j8b4kvwzh58zzlc454d0h0hk440zbg8f5as9qrv5spi";
+    sha256 = "1nk46s1s8yrlqv37sc7la05nnn7sdgqhkrcdm98qin34llwkv70x";
   };
 
   nativeBuildInputs = [
-    gobject-introspection intltool pkgconfig pythonPackages.cython
+    gobject-introspection intltool pkg-config pythonPackages.cython
     pythonPackages.wrapPython wrapGAppsHook
     autoreconfHook # drop when below patch is removed
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome3.adwaita-icon-theme iproute libappindicator networkmanager ]
+                  gnome3.adwaita-icon-theme iproute2 libappindicator networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/blueman-project/blueman;
+    homepage = "https://github.com/blueman-project/blueman";
     description = "GTK-based Bluetooth Manager";
     license = licenses.gpl3;
     platforms = platforms.linux;

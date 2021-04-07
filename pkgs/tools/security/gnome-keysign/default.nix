@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitLab
 , fetchpatch
 , python3
@@ -6,7 +6,6 @@
 , gobject-introspection
 , gtk3
 , glib
-, gnome3
 , gst_all_1
 }:
 
@@ -53,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-plugins-bad # for zbar plug-in
+    (gst_all_1.gst-plugins-bad.override { enableZbar = true; }) # for zbar plug-in
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -68,23 +67,17 @@ python3.pkgs.buildPythonApplication rec {
     twisted
   ];
 
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-    };
-  };
-
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
   # bunch of linting
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
-    homepage = https://wiki.gnome.org/Apps/Keysign;
+    homepage = "https://wiki.gnome.org/Apps/Keysign";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pkgs, async-timeout, hiredis, isPyPy, isPy27
 }:
 
@@ -15,14 +15,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
-  ] ++ stdenv.lib.optional (!isPyPy) hiredis;
+  ] ++ lib.optional (!isPyPy) hiredis;
 
   # Wants to run redis-server, hardcoded FHS paths, too much trouble.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Asyncio (PEP 3156) Redis client library";
-    homepage = https://github.com/aio-libs/aioredis;
+    homepage = "https://github.com/aio-libs/aioredis";
     license = licenses.mit;
     maintainers = with maintainers; [ mmai ];
   };

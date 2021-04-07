@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "rote";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Our Own Terminal Emulation Library";
     longDescription = ''
       ROTE is a simple C library for VT102 terminal emulation. It allows the
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       ncurses as well so that you may render the virtual screen to the real
       screen when you need to.
     '';
-    homepage = http://rote.sourceforge.net/;
+    homepage = "http://rote.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

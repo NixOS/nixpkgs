@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, ncurses, libtcod, makeDesktopItem }:
+{ lib, stdenv, fetchurl, SDL, ncurses, libtcod, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "brogue";
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
   # fix crash; shouldn’t be a security risk because it’s an offline game
   hardeningDisable = [ "stackprotector" "fortify" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A roguelike game";
-    homepage = https://sites.google.com/site/broguegame/;
+    homepage = "https://sites.google.com/site/broguegame/";
     license = licenses.agpl3;
     maintainers = [ maintainers.skeidel ];
     platforms = [ "x86_64-linux" ];

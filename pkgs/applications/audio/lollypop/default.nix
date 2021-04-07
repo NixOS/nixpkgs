@@ -1,17 +1,23 @@
 { lib
 , fetchgit
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , gst_all_1
+, libhandy
 , libsecret
 , libsoup
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
 , gobject-introspection
+, glib-networking
+, gdk-pixbuf
+, glib
+, pango
 , wrapGAppsHook
 , lastFMSupport ? true
 , youtubeSupport ? true
@@ -19,7 +25,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.2.16";
+  version = "1.4.17";
 
   format = "other";
   doCheck = false;
@@ -28,7 +34,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0rl4a5npjh5sm3kih11cs2j7ik894nlygllbw4j5pn9n9v66x51w";
+    sha256 = "sha256-GrznUXIYUTYOKQ1znsCqmBdm5YImCABMK2NGRtx5fSk=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +43,14 @@ python3.pkgs.buildPythonApplication rec  {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = with gst_all_1; [
+    gdk-pixbuf
+    glib
+    glib-networking
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -49,7 +58,9 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
+    libhandy
     libsoup
+    pango
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
 
@@ -83,12 +94,19 @@ python3.pkgs.buildPythonApplication rec  {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     description = "A modern music player for GNOME";
-    homepage = https://wiki.gnome.org/Apps/Lollypop;
+    homepage = "https://wiki.gnome.org/Apps/Lollypop";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ worldofpeace lovesegfault ];
     platforms = platforms.linux;
   };
 }

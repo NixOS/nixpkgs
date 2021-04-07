@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "eventlog-0.2.12";
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
       Where you had a simple non-structrured string in syslog() you have a
       combination of description and tag/value pairs.
     '';
-    homepage = https://www.balabit.com/support/community/products/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.balabit.com/support/community/products/";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

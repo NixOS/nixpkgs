@@ -1,37 +1,44 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, cacert, curl
+{ lib, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, openssl
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
-  version = "1.2.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "1v9wq4k7k4lmdz6xy6kabchjpbx9lds20yh6va87shypdh9iva29";
+    sha256 = "1f37qlw4nxdhlqlqzzb4j11gsv26abk2nk2qhbzj77kp4v2b125x";
   };
 
-  cargoSha256 = "0rr9mqylcs3nb7wgilp810qia0rv2pnalyhh28q0wnqyz0kqfrzr";
+  cargoSha256 = "0g5fjj677qzhw3nw7f3n5gghsj2y811bdclxpy8aq2n58gbwvhvc";
 
-  buildInputs = [ openssl cacert curl ]
-    ++ (stdenv.lib.optional stdenv.isDarwin Security);
+  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+
+  postInstall = ''
+    installShellCompletion --bash --name tealdeer.bash bash_tealdeer
+    installShellCompletion --fish --name tealdeer.fish fish_tealdeer
+    installShellCompletion --zsh --name _tealdeer zsh_tealdeer
+  '';
 
   # disable tests for now since one needs network
   # what is unavailable in sandbox build
   # and i can't disable just this one
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];
-    platforms = platforms.all;
   };
 }

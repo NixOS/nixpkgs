@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, six
-, flake8, pep8-naming, pytest, pytestcov, pytestpep8 }:
+, flake8, pep8-naming, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "jsonlines";
@@ -14,14 +14,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ flake8 pep8-naming pytest pytestcov pytestpep8 ];
+  checkInputs = [ flake8 pep8-naming pytest pytestcov ];
   checkPhase = ''
     pytest
   '';
 
   meta = with lib; {
     description = "Python library to simplify working with jsonlines and ndjson data";
-    homepage = https://github.com/wbolster/jsonlines;
+    homepage = "https://github.com/wbolster/jsonlines";
     maintainers = with maintainers; [ sondr3 ];
     license = licenses.bsd3;
   };

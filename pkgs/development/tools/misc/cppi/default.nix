@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "cppi-1.18";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://savannah.gnu.org/projects/cppi/;
+    homepage = "https://savannah.gnu.org/projects/cppi/";
 
     description = "A C preprocessor directive indenter";
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
          to the level of nesting of that directive.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,12 +1,14 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , python3
 , ninja
 , vala
 , gtk3
+, glib
 , granite
 , libnotify
 , wingpanel
@@ -16,31 +18,33 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";
-  version = "2.1.4";
+  version = "unstable-2020-10-01";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "05v3qy4rxi4l3g1ql99vcjylb01hz3galh19c2jc3lqc1mf1z1j1";
+    rev = "2b59d646ea0d66ae45dafc851374f24dcd98c064";
+    sha256 = "sha256-selp70P+7RhbdHF6iiNmcNbMf/c+B9zZ6nlxwRSZGn4=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
+    glib # for glib-compile-schemas
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
 
   buildInputs = [
+    glib
     granite
     gtk3
     libgee
@@ -53,9 +57,9 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-bluetooth;
+    homepage = "https://github.com/elementary/wingpanel-indicator-bluetooth";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, desktop-file-utils
-, python3, vala, wrapGAppsHook
+{ lib, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, desktop-file-utils
+, python3
+, vala
+, wrapGAppsHook
 , evolution-data-server
 , libical
 , libgee
@@ -15,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
-  version = "2.1.1";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
     rev = version;
-    sha256 = "0swj94pqf00wwzsgjap8z19k33gg1wj2b78ba1aj9h791j8lmaim";
+    sha256 = "0s2f9q7i31c2splflfnaiqviwnxbsp2zvibr70xafhbhnkmzlrsk";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -36,24 +42,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     evolution-data-server
-    libical
-    libgee
-    json-glib
     glib
-    sqlite
-    libsoup
     gtk3
-    pantheon.granite
-    webkitgtk
+    json-glib
+    libgee
+    libical
+    libsoup
     pantheon.elementary-icon-theme
-  ];
-
-  # Fix version string, remove in next update!
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/alainm23/planner/pull/194/commits/3d0a2197087b13fe90fa6f85f817ba56798d632c.patch";
-      sha256 = "077q5jddi8jaw2ypc6szbd1c50i4x3b21jvmvi3w7g5zhjwpkmf5";
-    })
+    pantheon.granite
+    sqlite
+    webkitgtk
   ];
 
   postPatch = ''
@@ -61,8 +59,15 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
-    description = "Task and project manager designed to elementary OS";
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # the theme is hardcoded
+      --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
+    )
+  '';
+
+  meta = with lib; {
+    description = "Task manager with Todoist support designed for GNU/Linux 🚀️";
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ] ++ pantheon.maintainers;

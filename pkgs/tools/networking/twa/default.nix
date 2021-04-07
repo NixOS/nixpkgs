@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     install -Dm 0644 README.md "$out/share/doc/twa/README.md"
 
     wrapProgram "$out/bin/twa" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ curl
+      --prefix PATH : ${lib.makeBinPath [ curl
                                                  host.dnsutils
                                                  jq
                                                  ncurses
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tiny web auditor with strong opinions";
-    homepage = https://github.com/trailofbits/twa;
+    homepage = "https://github.com/trailofbits/twa";
     license = licenses.mit;
     maintainers = with maintainers; [ avaq ];
     platforms = platforms.unix;

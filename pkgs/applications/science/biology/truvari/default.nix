@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "1.3.2";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "spiralgenetics";
     repo = "truvari";
     rev = "v${version}";
-    sha256 = "0wmjz8nzibvj0ixky1m0qi7iyd204prk7glbvig1cvaab33k19f1";
+    sha256 = "0lp1wnldjv92k4ncga1h0icb0dpjsrx427vggg40x04a7kp9lwx0";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -21,16 +21,20 @@ python3Packages.buildPythonApplication rec {
     pysam
     pyfaidx
     intervaltree
+    pytabix
+    acebinf
+    bwapy
+    joblib
+    pandas
   ];
 
-  prePatch = ''
-    substituteInPlace ./setup.py \
-      --replace '"progressbar2==3.41.0",' "" \
-      --replace '"pysam==0.15.2",' ""
-  '';
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "truvari" ];
 
   meta = with lib; {
     description = "Structural variant comparison tool for VCFs";
+    homepage = "https://github.com/spiralgenetics/truvari";
     license = licenses.mit;
     maintainers = with maintainers; [ scalavision ];
     longDescription = ''

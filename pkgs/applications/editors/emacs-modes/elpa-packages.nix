@@ -5,12 +5,22 @@
 To update the list of packages from MELPA,
 
 1. Run `./update-elpa`.
-2. Check for evaluation errors: `nix-instantiate ../../../.. -A emacsPackagesNg.elpaPackages`.
+2. Check for evaluation errors: `nix-instantiate ../../../.. -A emacs.pkgs.elpaPackages`.
 3. `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
+
+## Update from overlay
+
+Alternatively, run the following command:
+
+./update-from-overlay
+
+It will update both melpa and elpa packages using
+https://github.com/nix-community/emacs-overlay. It's almost
+instantenous and formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo }:
+{ lib, stdenv, texinfo, writeText }:
 
 self: let
 
@@ -21,7 +31,7 @@ self: let
   };
 
   elpaBuild = import ../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo;
+    inherit lib stdenv texinfo writeText;
     inherit (self) emacs;
   };
 
@@ -43,6 +53,9 @@ self: let
       seq = if lib.versionAtLeast self.emacs.version "27"
             then null
             else super.seq;
+      project = if lib.versionAtLeast self.emacs.version "28"
+                then null
+                else super.project;
     };
 
     elpaPackages = super // overrides;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation rec {
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Chris00/ANSITerminal";
     description = "A module allowing to use the colors and cursor movements on ANSI terminals";
     longDescription = ''

@@ -4,18 +4,18 @@
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
 , gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, nspr, nss, pango
+, libxcb, libuuid, libxshmfence, nspr, nss, pango
 
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "12.6.5";
+  version = "14.5.1";
 
   src = fetchurl {
-    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    sha256 = "14x4h680q3w9wsdmivy2k1bggb09vdm3a3wrpfwd79dbaagjk4lc";
+    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
+    hash = "sha256-ZrEoeeEhHQOLm/L3KA43Ru5fruIPK35CCUsllwpPB58=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     libXi
     libXrandr
     libXrender
+    libxshmfence
     libXtst
     libxcb
     libuuid
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
   ];
 
   dontBuild = true;
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share
-    cp -r opt/draw.io $out/share/
+    cp -r opt/drawio $out/share/
 
     # Application icon
     mkdir -p $out/share/icons/hicolor
@@ -77,17 +78,18 @@ stdenv.mkDerivation rec {
 
     # Symlink wrapper
     mkdir -p $out/bin
-    ln -s $out/share/draw.io/drawio $out/bin/drawio
+    ln -s $out/share/drawio/drawio $out/bin/drawio
 
     # Update binary path
     substituteInPlace $out/share/applications/drawio.desktop \
-      --replace /opt/draw.io/drawio $out/bin/drawio
+      --replace /opt/drawio/drawio $out/bin/drawio
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A desktop application for creating diagrams";
-    homepage = https://about.draw.io/;
+    homepage = "https://about.draw.io/";
     license = licenses.asl20;
+    changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ danieldk ];
     platforms = [ "x86_64-linux" ];
   };

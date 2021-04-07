@@ -1,24 +1,23 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
-  pname = "recursive";
-  version = "1.030";
+let
+  version = "1.077";
+in
+fetchzip {
+  name = "recursive-${version}";
 
-  src = fetchzip {
-    url = "https://github.com/arrowtype/recursive/releases/download/${version}/recursive-beta_1_030--statics.zip";
-    sha256 = "1clds4ljiqdf0zc3b7nlna1w7kc23pc9gxdd5vwbgmz9xfvkam0f";
-    stripRoot = false;
-  };
+  url = "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/{opentype,truetype,woff2}
-    find -name "*.otf" -exec cp "{}" $out/share/fonts/opentype \;
-    find -name "*.ttf" -exec cp "{}" $out/share/fonts/truetype \;
-    find -name "*.woff2" -exec cp "{}" $out/share/fonts/woff2 \;
+  postFetch = ''
+    mkdir -p $out/share/fonts/
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/arrowtype/recursive;
+  sha256 = "sha256-deztulQ33TIMevEQOP5OS8tmf6UjXT8IiVpRjkdismY=";
+
+  meta = with lib; {
+    homepage = "https://recursive.design/";
     description = "A variable font family for code & UI";
     license = licenses.ofl;
     maintainers = [ maintainers.eadwu ];

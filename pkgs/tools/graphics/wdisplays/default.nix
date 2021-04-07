@@ -1,20 +1,32 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gtk3, epoxy, wayland }:
-stdenv.mkDerivation {
-  pname = "wdisplays-unstable";
-  version = "2020-01-12";
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, gtk3, epoxy, wayland, wrapGAppsHook
+, fetchpatch
+}:
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+stdenv.mkDerivation rec {
+  pname = "wdisplays";
+  version = "1.0";
+
+  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
   buildInputs = [ gtk3 epoxy wayland ];
 
   src = fetchFromGitHub {
     owner = "cyclopsian";
     repo = "wdisplays";
-    rev = "ba331cab535318888a562f5a2731d2523b310dac";
-    sha256 = "0fk3l78hirxdi74iqmq6mxi9daqnxdkbb5a2wfshmr11ic9xixpm";
+    rev = version;
+    sha256 = "1xhgrcihja2i7yg54ghbwr1v6kf8jnsfcp364yb97vkxskc4y21y";
   };
 
-  meta = let inherit (stdenv) lib; in {
+  patches = [
+    # Fixes `Gdk-Message: 10:26:38.752: Error reading events from display: Success`
+    # https://github.com/cyclopsian/wdisplays/pull/20
+    (fetchpatch {
+      url = "https://github.com/cyclopsian/wdisplays/commit/5198a9c94b40ff157c284df413be5402f1b75118.patch";
+      sha256 = "1xwphyn0ksf8isy9dz3mfdhmsz4jv02870qz5615zs7aqqfcwn85";
+    })
+  ];
+
+  meta = with lib; {
     description = "A graphical application for configuring displays in Wayland compositors";
     homepage = "https://github.com/cyclopsian/wdisplays";
     maintainers = with lib.maintainers; [ lheckemann ma27 ];

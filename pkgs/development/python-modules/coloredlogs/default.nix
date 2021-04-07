@@ -1,34 +1,42 @@
-{ lib, buildPythonPackage, fetchFromGitHub, stdenv, isPy3k, fetchpatch, humanfriendly, verboselogs, capturer, pytest, mock, utillinux }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, humanfriendly
+, verboselogs
+, capturer
+, pytest
+, mock
+, util-linux
+}:
 
 buildPythonPackage rec {
   pname = "coloredlogs";
-  version = "10.0";
+  version = "15.0";
 
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-coloredlogs";
     rev = version;
-    sha256 = "0rdvp4dfvzhx7z7s2jdl3fv7x1hazgpy5gc7bcf05bnbv2iia54a";
+    sha256 = "sha256-C1Eo+XrrL3bwhT49KyOE6xjbAHJxn9Qy4s1RR5ERVtA=";
   };
 
-  # patch by risicle
-  patches = lib.optional (stdenv.isDarwin && isPy3k) (fetchpatch {
-    name = "darwin-py3-capture-fix.patch";
-    url = "https://github.com/xolox/python-coloredlogs/pull/74.patch";
-    sha256 = "0pk7k94iz0gdripw623vzdl4hd83vwhsfzshl8pbvh1n6swi0xx9";
-  });
-
+  # capturer is broken on darwin / py38, so we skip the test until a fix for
+  # https://github.com/xolox/python-capturer/issues/10 is released.
+  doCheck = !stdenv.isDarwin;
   checkPhase = ''
     PATH=$PATH:$out/bin pytest . -k "not test_plain_text_output_format \
                                      and not test_auto_install"
   '';
-  checkInputs = [ pytest mock utillinux ];
+  checkInputs = [ pytest mock util-linux verboselogs capturer ];
 
-  propagatedBuildInputs = [ humanfriendly verboselogs capturer ];
+  pythonImportsCheck = [ "coloredlogs" ];
+
+  propagatedBuildInputs = [ humanfriendly ];
 
   meta = with lib; {
     description = "Colored stream handler for Python's logging module";
-    homepage = https://github.com/xolox/python-coloredlogs;
+    homepage = "https://github.com/xolox/python-coloredlogs";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, libintl, ncurses, openssl
+{ lib, stdenv, fetchurl, gettext, libintl, ncurses, openssl
 , fftw ? null }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://vanheusden.com/httping;
+  meta = with lib; {
+    homepage = "https://vanheusden.com/httping";
     description = "ping with HTTP requests";
     longDescription = ''
       Give httping an url, and it'll show you how long it takes to connect,

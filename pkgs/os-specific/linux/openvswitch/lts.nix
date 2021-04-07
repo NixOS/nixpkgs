@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python2, iproute , perl
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
+, procps, libcap_ng, openssl, python2, perl
 , automake, autoconf, libtool, kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;
@@ -19,9 +19,8 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ autoconf libtool automake pkgconfig  ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python2
-                  perl procps which ];
+  nativeBuildInputs = [ autoconf libtool automake pkg-config makeWrapper ];
+  buildInputs = [ util-linux openssl libcap_ng python2 perl procps which ];
 
   preConfigure = "./boot.sh";
 
@@ -61,7 +60,7 @@ in stdenv.mkDerivation rec {
       --replace "self.cert_dir" "root_prefix + self.cert_dir"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =
@@ -75,7 +74,7 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = https://www.openvswitch.org/;
+    homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ netixx kmcopper ];
   };

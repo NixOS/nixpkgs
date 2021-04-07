@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "arpa2cm";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     owner = "arpa2";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CMake Module library for the ARPA2 project";
     license = licenses.bsd2;
     maintainers = with maintainers; [ leenaars ];

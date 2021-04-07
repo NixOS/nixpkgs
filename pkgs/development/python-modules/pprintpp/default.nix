@@ -22,7 +22,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/wolever/pprintpp;
+    homepage = "https://github.com/wolever/pprintpp";
     description = "A drop-in replacement for pprint that's actually pretty";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jakewaksbaum ];

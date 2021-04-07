@@ -52,7 +52,7 @@ in
             ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem } accept
 
             # allow "ping"
-            ip6 nexthdr icmp icmpv6 type echo-request accept
+            ip6 nexthdr icmpv6 icmpv6 type echo-request accept
             ip protocol icmp icmp type echo-request accept
 
             # accept SSH connections (required for a server)
@@ -99,7 +99,7 @@ in
   config = mkIf cfg.enable {
     assertions = [{
       assertion = config.networking.firewall.enable == false;
-      message = "You can not use nftables with services.networking.firewall.";
+      message = "You can not use nftables and iptables at the same time. networking.firewall.enable must be set to false.";
     }];
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];

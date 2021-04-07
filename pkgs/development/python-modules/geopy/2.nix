@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "1.21.0";
+  version = "1.22.0";
 
   disabled = !isPy27; # only Python 2.7
   doCheck = false; # Needs network access
@@ -16,10 +16,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p1sgy2p59j0297bp7c82b45bx4d3i1p4kvbgf89c9i0llyb80nw";
+    sha256 = "0jypkaqlbyr8icqypwm23lzsvq7flakp3a3nqr8ib5fmd0fzsq7q";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     license = licenses.mit;

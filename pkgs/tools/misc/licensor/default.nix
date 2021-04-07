@@ -2,25 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "licensor";
-  version = "2.1.0";
+  version = "unstable-2021-02-03";
 
   src = fetchFromGitHub {
     owner = "raftario";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0zr8hcq7crmhrdhwcclc0nap68wvg5kqn5l93ha0vn9xgjy8z11p";
+    rev = "1897882a708ec6ed65a9569ae0e07d6ea576c652";
+    sha256 = "0x0lkfrj7jka0p6nx6i9syz0bnzya5z9np9cw09zm1c9njv9mm32";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "042dplm0cdxkv73m5qlkc61h0x9fpzxn2b0c8gjx2hwvigcia139";
+  cargoSha256 = "1yix40351yasg7mjmz7qwvwh1dq292dv47gy2a3bwkzhcn6whyjf";
 
   meta = with lib; {
     description = "Write licenses to stdout";
     homepage = "https://github.com/raftario/licensor";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

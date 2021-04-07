@@ -22,9 +22,7 @@ buildPythonPackage rec {
     azure-common
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm -rf $out/${python.sitePackages}/azure/__init__.py
-  '';
+  pythonNamespaces = [ "azure" ];
 
   # has no tests
   doCheck = false;
@@ -33,6 +31,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Log Analytics Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight jonringer ];
+    maintainers = with maintainers; [ maxwilson jonringer ];
   };
 }

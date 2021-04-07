@@ -1,6 +1,6 @@
 {   lib, buildPythonApplication, fetchPypi
   , altair, astor, base58, blinker, boto3, botocore, click, enum-compat
-  , future, pillow, protobuf, requests, toml, tornado, tzlocal, validators, watchdog
+  , future, pillow, protobuf, requests, toml, tornado_5, tzlocal, validators, watchdog
   , jinja2, setuptools
 }:
 
@@ -16,7 +16,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     altair astor base58 blinker boto3 botocore click enum-compat
-    future pillow protobuf requests toml tornado tzlocal validators watchdog
+    future pillow protobuf requests toml tornado_5 tzlocal validators watchdog
     jinja2 setuptools
   ];
 
@@ -25,7 +25,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://streamlit.io/;
+    homepage = "https://streamlit.io/";
     description = "The fastest way to build custom ML tools";
     maintainers = with maintainers; [ yrashk ];
     license = licenses.asl20;

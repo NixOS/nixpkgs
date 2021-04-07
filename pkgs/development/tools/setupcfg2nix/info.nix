@@ -1,7 +1,7 @@
 {
-  pname = ''setupcfg2nix'';
-  version = ''1.1.0'';
+  pname = "setupcfg2nix";
+  version = "2.0.1";
   install_requires = [
-    ''setuptools''
+    "setuptools"
   ];
 }

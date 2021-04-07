@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, python }:
+{ lib, fetchPypi, buildPythonPackage, python }:
 
 buildPythonPackage rec {
   pname = "authres";
@@ -14,14 +14,14 @@ buildPythonPackage rec {
     ${python.interpreter} -m authres
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Email Authentication-Results Headers generation and parsing for Python/Python3";
     longDescription = ''
       Python module that implements various internet RFC's: 5451/7001/7601
       Authentication-Results Headers generation and parsing for
       Python/Python3.
     '';
-    homepage = https://launchpad.net/authentication-results-python;
+    homepage = "https://launchpad.net/authentication-results-python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ leenaars ];
   };

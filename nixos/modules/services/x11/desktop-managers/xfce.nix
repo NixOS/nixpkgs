@@ -8,6 +8,10 @@ in
 
 {
 
+  meta = {
+    maintainers = with maintainers; [ worldofpeace ];
+  };
+
   imports = [
     # added 2019-08-18
     # needed to preserve some semblance of UI familarity
@@ -54,7 +58,7 @@ in
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = "Don't install XFCE desktop components (xfdesktop, panel and notification daemon).";
+        description = "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
@@ -94,6 +98,7 @@ in
       parole
       ristretto
       xfce4-appfinder
+      xfce4-notifyd
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
@@ -115,7 +120,6 @@ in
         xfwm4
         xfwm4-themes
       ] ++ optionals (!cfg.noDesktop) [
-        xfce4-notifyd
         xfce4-panel
         xfdesktop
       ];
@@ -129,6 +133,7 @@ in
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
+      desktopNames = [ "XFCE" ];
       bgSupport = true;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
@@ -161,7 +166,8 @@ in
     # Systemd services
     systemd.packages = with pkgs.xfce; [
       (thunar.override { thunarPlugins = cfg.thunarPlugins; })
-    ] ++ optional (!cfg.noDesktop) xfce4-notifyd;
+      xfce4-notifyd
+    ];
 
   };
 }

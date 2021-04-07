@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "lrzsz-0.12.20";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--program-transform-name=s/^l//" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://ohse.de/uwe/software/lrzsz.html;
+  meta = with lib; {
+    homepage = "https://ohse.de/uwe/software/lrzsz.html";
     description = "Communication package providing the XMODEM, YMODEM ZMODEM file transfer protocols";
     license = licenses.gpl2;
     platforms = platforms.unix;

@@ -3,6 +3,7 @@
 , fetchPypi
 , isPy3k
 , pythonOlder
+, setuptools
 , aenum
 , pytest
 , pytestcov
@@ -10,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "1.8";
+  version = "1.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "115067100fbb9eb36f530d94b64b4e1e36a8d304537af0847d562ff9ed399c05";
+    sha256 = "2979b38ca5f72cfa0a5db78af2f62d04db6a7647ee7f03eac7a67f9e86e3f5f9";
   };
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.6") [ aenum ];
+  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (pythonOlder "3.6") [ aenum ];
 
   checkInputs = [ pytest pytestcov ];
 

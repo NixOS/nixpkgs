@@ -1,7 +1,7 @@
 { lib, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
 
 buildPythonApplication rec {
-  name = "frescobaldi-${version}";
+  pname = "frescobaldi";
   version = "3.1.1";
 
   src = fetchFromGitHub {
@@ -28,10 +28,10 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = http://frescobaldi.org/;
-    description = ''Frescobaldi is a LilyPond sheet music text editor'';
+    homepage = "https://frescobaldi.org/";
+    description = "A LilyPond sheet music text editor";
     longDescription = ''
-      Powerful text editor with syntax highlighting and automatic completion, 
+      Powerful text editor with syntax highlighting and automatic completion,
       Music view with advanced Point & Click, Midi player to proof-listen
       LilyPond-generated MIDI files, Midi capturing to enter music,
       Powerful Score Wizard to quickly setup a music score, Snippet Manager

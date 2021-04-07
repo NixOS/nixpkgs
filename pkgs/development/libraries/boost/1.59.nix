@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, ... } @ args:
+{ callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // {
   version = "1.59.0";

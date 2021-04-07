@@ -1,36 +1,58 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
-, mkDerivation
+{ lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt5
+, gnuradio3_8Minimal
+, log4cpp
+, mpir
+, fftwFloat
+, alsaLib
+, libjack2
 # drivers (optional):
-, rtl-sdr, hackrf
+, rtl-sdr
+, hackrf
 , pulseaudioSupport ? true, libpulseaudio
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
-mkDerivation rec {
+gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.12.1";
+  version = "2.14.4";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "00alf3q6y313xpx6p7v43vqsphd2x4am4q362lw21bcy9wc4jidw";
+    sha256 = "sha256-mMaxu0jq2GaNLWjLsJQXx+zCxtyiCAZQJJZ8GJtnllQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
   buildInputs = [
-    qtbase qtsvg gnuradio boost gr-osmosdr rtl-sdr hackrf
-  ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
-
-  enableParallelBuilding = true;
+    log4cpp
+    mpir
+    fftwFloat
+    alsaLib
+    libjack2
+    gnuradio3_8Minimal.unwrapped.boost
+    qt5.qtbase
+    qt5.qtsvg
+    gnuradio3_8Minimal.pkgs.osmosdr
+    rtl-sdr
+    hackrf
+  ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   postInstall = ''
     install -vD $src/gqrx.desktop -t "$out/share/applications/"
-    install -vD $src/resources/icons/gqrx.svg -t "$out/share/icons/"
+    install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software defined radio (SDR) receiver";
     longDescription = ''
       Gqrx is a software defined radio receiver powered by GNU Radio and the Qt
@@ -38,11 +60,11 @@ mkDerivation rec {
       including Funcube Dongle Pro/Pro+, rtl-sdr, HackRF, and Universal
       Software Radio Peripheral (USRP) devices.
     '';
-    homepage = http://gqrx.dk/;
+    homepage = "https://gqrx.dk/";
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;  # should work on Darwin / macOS too
-    maintainers = with maintainers; [ bjornfor the-kenny fpletz ];
+    maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

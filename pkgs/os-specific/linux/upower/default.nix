@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libxslt
 , docbook_xsl
 , udev
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = https://gitlab.freedesktop.org/upower/upower/uploads/93cfe7c8d66ed486001c4f3f55399b7a/upower-0.99.11.tar.xz;
+    url = "https://gitlab.freedesktop.org/upower/upower/uploads/93cfe7c8d66ed486001c4f3f55399b7a/upower-0.99.11.tar.xz";
     sha256 = "1vxxvmz2cxb1qy6ibszaz5bskqdy9nd9fxspj9fv3gfmrjzzzdb4";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     gettext
     gobject-introspection
     libxslt
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     udev
     systemd
   ]
-  ++ stdenv.lib.optional useIMobileDevice libimobiledevice
+  ++ lib.optional useIMobileDevice libimobiledevice
   ;
 
   propagatedBuildInputs = [
@@ -62,8 +62,8 @@ stdenv.mkDerivation {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://upower.freedesktop.org/;
+  meta = with lib; {
+    homepage = "https://upower.freedesktop.org/";
     description = "A D-Bus service for power management";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

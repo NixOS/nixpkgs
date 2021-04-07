@@ -7,14 +7,14 @@
     This package could be seen as providing a set of in-tree mods,
     while the `mod.nix` pacakges provide a single out-of-tree mod.
 */
-{ stdenv
+{ lib, stdenv
 , packageAttrs
 , patchEngine
 , wrapLaunchGame
 , engine
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   name = "${pname}-${version}";

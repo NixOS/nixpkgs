@@ -1,57 +1,66 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, isPy27
 , aiofiles
 , graphene
 , itsdangerous
 , jinja2
+, python-multipart
 , pyyaml
 , requests
-, ujson
-, python-multipart
-, pytest
-, uvicorn
-, isPy27
-, darwin
-, databases
 , aiosqlite
+, databases
+, pytestCheckHook
+, pytest-asyncio
+, typing-extensions
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.13.0";
+  version = "0.14.2";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6bd414152d40d000ccbf6aa40ed89718b40868366a0f69fb83034f416303acef";
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = pname;
+    rev = version;
+    sha256 = "0fz28czvwiww693ig9vwdja59xxs7m0yp1df32ms1hzr99666bia";
   };
+
+  postPatch = ''
+    # remove coverage arguments to pytest
+    sed -i '/--cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     aiofiles
     graphene
     itsdangerous
     jinja2
+    python-multipart
     pyyaml
     requests
-    ujson
-    uvicorn
-    python-multipart
-    databases
-  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+  ] ++ lib.optional stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
-    pytest
     aiosqlite
+    databases
+    pytest-asyncio
+    pytestCheckHook
+    typing-extensions
   ];
 
-  checkPhase = ''
-    pytest --ignore=tests/test_graphql.py
-  '';
+  # fails to import graphql, but integrated graphql support is about to
+  # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
+  disabledTestPaths = [ "tests/test_graphql.py" ];
+
+  pythonImportsCheck = [ "starlette" ];
 
   meta = with lib; {
-    homepage = https://www.starlette.io/;
+    homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

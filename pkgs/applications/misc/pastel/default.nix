@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pastel";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c47bph1qraq3g0g5bp23jqlz7qdn4f8vh264y937jz17avvacx5";
+    sha256 = "00xxrssa3gbr5w2jsqlf632jlzc0lc2rpybnbv618ndy5lxidnw0";
   };
 
-  cargoSha256 = "1hkqahsrhmgcpgp0pvfpc0wmwqivnqylsxzjrz63k1s9ssdv9syy";
+  cargoSha256 = "1ji64h0f8f2sq12cx33kymypzar9swhaj903gclf3jdwgna77326";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command-line tool to generate, analyze, convert and manipulate colors";
-    homepage = https://github.com/sharkdp/pastel;
+    homepage = "https://github.com/sharkdp/pastel";
+    changelog = "https://github.com/sharkdp/pastel/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ davidtwco ];
-    platforms = platforms.all;
   };
 }

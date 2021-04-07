@@ -13,9 +13,9 @@
 , libnotify
 , libxklavier
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , pulseaudio
-, stdenv
+, lib, stdenv
 , systemd
 , upower
 , dconf
@@ -27,11 +27,13 @@
 , xorg
 , fontconfig
 , tzdata
+, nss
+, libgudev
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "4.4.0";
+  version = "4.6.4";
 
   /* csd-power-manager.c:50:10: fatal error: csd-power-proxy.h: No such file or directory
    #include "csd-power-proxy.h"
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1h74d68a7hx85vv6ak26b85jq0wr56ps9rzfvqsnxwk81zxw2n7q";
+    sha256 = "1xcjzjfwnzvkv9jiyw8adsjyhz92almzhyfwb91115774zgqnb7m";
   };
 
   patches = [
@@ -81,6 +83,8 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXfixes
     fontconfig
+    nss
+    libgudev
   ];
 
   nativeBuildInputs = [
@@ -88,8 +92,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
     wrapGAppsHook
     intltool
-    pkgconfig
+    pkg-config
   ];
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     sed "s|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g" -i plugins/datetime/system-timezone.h
@@ -101,7 +107,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/csd-backlight-helper $out/bin/cinnamon-settings-daemon/csd-backlight-helper
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
     description = "The settings daemon for the Cinnamon desktop";
     license = licenses.gpl2;

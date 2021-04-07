@@ -1,31 +1,30 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , libgsf
-, pkgconfig
+, pkg-config
 , openssl
 , curl
 }:
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "unstable-2019-07-25";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
-    rev = "18810b7e0bb1d8e0d25b6c2565a065cf66bce5d7";
-    sha256 = "02jnbr3xdsb5dpll3k65080ryrfr7agawmjavwxd0v40w0an5yq8";
+    rev = version;
+    sha256 = "0iwxdzqan2bswz62pmwjcyh01vs6ifpdcannw3s192gqzac1lgg3";
   };
 
-  nativeBuildInputs = [ autoreconfHook libgsf pkgconfig openssl curl ];
+  nativeBuildInputs = [ autoreconfHook libgsf pkg-config openssl curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mtrojnar/osslsigncode";
     description = "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut prusnak ];
     platforms = platforms.all;
   };
 }
-

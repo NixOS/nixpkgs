@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl
+{ lib, stdenv, fetchurl, perl
 , version, sha256, patches ? []
 , ...
 }:
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to manipulate patch files";
-    homepage = http://cyberelk.net/tim/software/patchutils;
+    homepage = "http://cyberelk.net/tim/software/patchutils";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     executables = [ "combinediff" "dehtmldiff" "editdiff" "espdiff"

@@ -9,19 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "1.4.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "Edu4rdSHL";
     repo = pname;
     rev = version;
-    sha256 = "1hqvs6h6cfimg0y6hggnmc0mlddajwmh3h36n160n6imq0lfixka";
+    sha256 = "sha256-uv1boI9iaBeobo/58Di4oslh1eGLuK9HR5EwQQeWn+0=";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "0brkza04b38hcjjmqz4bkd8gj0n0mrh0p7427007f5xlnhj7hrn4";
+  cargoSha256 = "sha256-31OD/sv4br9cdBNqNGr4McypSGkBbKs7b7H1u7mFt3o=";
 
   nativeBuildInputs = [ installShellFiles perl ];
   buildInputs = lib.optional stdenv.isDarwin Security;
@@ -33,8 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "The fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Edu4rdSHL/findomain";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

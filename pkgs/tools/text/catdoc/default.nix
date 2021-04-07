@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "catdoc";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-wordview" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MS-Word/Excel/PowerPoint to text converter";
     platforms = platforms.all;
     license = licenses.gpl2;

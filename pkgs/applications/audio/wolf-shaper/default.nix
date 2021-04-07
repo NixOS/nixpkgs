@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub , libjack2, lv2, xorg, liblo, libGL, libXcursor, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub , libjack2, lv2, xorg, liblo, libGL, libXcursor, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "wolf-shaper";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "pdesaulniers";
     repo = "wolf-shaper";
     rev = "v${version}";
-    sha256 = "0lllgcbnnh1m95bp29hh17x170hl7170zizjrvy892qfkn36830d";
+    sha256 = "1j9xmh1nkf45ay1c5dz2g165qvrwlanzcq6mvb3nfxar265drd9q";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 lv2 xorg.libX11 liblo libGL libXcursor  ];
 
   makeFlags = [
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     cp -r bin/wolf-shaper        $out/bin/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://pdesaulniers.github.io/wolf-shaper/;
+  meta = with lib; {
+    homepage = "https://pdesaulniers.github.io/wolf-shaper/";
     description = "Waveshaper plugin with spline-based graph editor";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];

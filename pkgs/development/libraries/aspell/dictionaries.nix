@@ -49,7 +49,7 @@ let
 
       meta = {
         description = "Aspell dictionary for ${fullName}";
-        platforms = stdenv.lib.platforms.all;
+        platforms = lib.platforms.all;
       } // (args.meta or {});
     } // removeAttrs args [ "meta" ]);
 
@@ -132,15 +132,15 @@ let
         # drop comments
         aspell-affix() {
           words-only \
-            | grep -v '#' \
+            | grep -a -v '#' \
             | aspell-create "$@"
         }
 
         # Hack: drop comments and words with affixes
         aspell-plain() {
           words-only \
-            | grep -v '#' \
-            | grep -v '/' \
+            | grep -a -v '#' \
+            | grep -a -v '/' \
             | aspell-create "$@"
         }
 
@@ -274,10 +274,10 @@ in rec {
 
   de = buildOfficialDict {
     language = "de";
-    version = "20030222-1";
+    version = "20161207-7-0";
     fullName = "German";
     filename = "aspell6";
-    sha256 = "01p92qj66cqb346gk7hjfynaap5sbcn85xz07kjfdq623ghr8v5s";
+    sha256 = "0wamclvp66xfmv5wff96v6gdlnfv4y8lx3f8wvxyzm5imwgms4n2";
   };
 
   de-alt = buildOfficialDict {
@@ -298,10 +298,10 @@ in rec {
 
   en = buildOfficialDict {
     language = "en";
-    version = "2019.10.06-0";
+    version = "2020.12.07-0";
     fullName = "English";
     filename = "aspell6";
-    sha256 = "1zai9wrqwgb9z9vfgb22qhrvxvg73jg0ix44j1khm2f6m96lncr4";
+    sha256 = "1cwzqkm8gr1w51rpckwlvb43sb0b5nbwy7s8ns5vi250515773sc";
   };
 
   eo = buildOfficialDict {
@@ -694,18 +694,18 @@ in rec {
 
   pt_BR = buildOfficialDict {
     language = "pt_BR";
-    version = "20090702-0";
+    version = "20131030-12-0";
     fullName = "Brazilian Portuguese";
     filename = "aspell6";
-    sha256 = "1y09lx9zf2rnp55r16b2vgj953l3538z1vaqgflg9mdvm555bz3p";
+    sha256 = "1xqlpk21s93c6blkdnpk7l62q9fxjvzdv2x86chl8p2x1gdrj3gb";
   };
 
   pt_PT = buildOfficialDict {
     language = "pt_PT";
-    version = "20070510-0";
+    version = "20190329-1-0";
     fullName = "Portuguese";
     filename = "aspell6";
-    sha256 = "1mnr994cwlag6shy8865ky99lymysiln07mbldcncahg90dagdxq";
+    sha256 = "0ld0d0ily4jqifjfsxfv4shbicz6ymm2gk56fq9gbzra1j4qnw75";
   };
 
   qu = buildOfficialDict {
@@ -899,7 +899,7 @@ in rec {
     fullName = "English Computer Jargon";
 
     src = fetchurl {
-      url = https://mrsatterly.com/computer.dic;
+      url = "https://mrsatterly.com/computer.dic";
       sha256 = "1vzk7cdvcm9r1c6mgxpabrdcpvghdv9mjmnf6iq5wllcif5nsw2b";
     };
 
@@ -909,7 +909,7 @@ in rec {
     installPhase = "aspell-install en-computers";
 
     meta = {
-      homepage = https://mrsatterly.com/spelling.html;
+      homepage = "https://mrsatterly.com/spelling.html";
     };
   };
 
@@ -918,12 +918,12 @@ in rec {
     fullName = "English Scientific Jargon";
 
     src1 = fetchurl {
-      url = http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt;
+      url = "http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt";
       sha256 = "1nf4py2mg0mlv9s5a7had2wn29z2v6bcca0fs6rbpdn4nqc4s7dm";
     };
 
     src2 = fetchurl {
-      url = http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt;
+      url = "http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt";
       sha256 = "0f88il1ds6qazy1ghxviqcwsywrbf6pzl2lmzf4f3qvhdfb6f1y0";
     };
 
@@ -936,7 +936,7 @@ in rec {
     installPhase = "aspell-install en_US-science en_GB-science";
 
     meta = {
-      homepage = http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/;
+      homepage = "http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
     };
 
   };

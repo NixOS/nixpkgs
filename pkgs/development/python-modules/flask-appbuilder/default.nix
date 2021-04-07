@@ -5,6 +5,7 @@
 , apispec
 , colorama
 , click
+, email_validator
 , flask
 , flask-babel
 , flask_login
@@ -19,18 +20,17 @@
 , python-dateutil
 , prison
 , pyjwt
-, pyyaml
 , sqlalchemy-utils
 }:
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "2.1.6";
+  version = "3.1.1";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "a37d7d6a62407a2e0975af5305c795f2fb5c06ecc34e3cf64659d083b1b2dd5f";
+    sha256 = "076b020b0ba125339a2e710e74eab52648cde2b18599f7cb0fa1eada9bbb648c";
   };
 
   checkInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
     apispec
     colorama
     click
+    email_validator
     flask
     flask-babel
     flask_login
@@ -56,25 +57,25 @@ buildPythonPackage rec {
     prison
     pyjwt
     sqlalchemy-utils
-    pyyaml
   ];
 
   postPatch = ''
-   substituteInPlace setup.py \
-     --replace "jsonschema>=3.0.1<4" "jsonschema" \
-     --replace "marshmallow>=2.18.0,<2.20" "marshmallow" \
-     --replace "PyJWT>=1.7.1" "PyJWT" \
-     --replace "Flask-SQLAlchemy>=2.4,<3" "Flask-SQLAlchemy" \
-     --replace "Flask-JWT-Extended>=3.18,<4" "Flask-JWT-Extended"
+    substituteInPlace setup.py \
+      --replace "apispec[yaml]>=3.3, <4" "apispec" \
+      --replace "Flask-Login>=0.3, <0.5" "Flask-Login" \
+      --replace "Flask-Babel>=1, <2" "Flask-Babel" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy" \
+      --replace "prison>=0.1.3, <1.0.0" "prison"
   '';
+
 
   # majority of tests require network access or mongo
   doCheck = false;
 
   meta = with lib; {
     description = "Simple and rapid application development framework, built on top of Flask";
-    homepage = https://github.com/dpgaspar/flask-appbuilder/;
+    homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

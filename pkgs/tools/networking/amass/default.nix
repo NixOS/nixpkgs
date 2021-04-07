@@ -5,22 +5,22 @@
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.4.4";
+  version = "3.11.2";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
     rev = "v${version}";
-    sha256 = "1qr9cd22m6w5r32bsvg08bmvyvzz7agaklrghf8n1d23ijj1563p";
+    sha256 = "sha256-3J4yT7GTuVzkxMb+fCD3S9u0XBHa4Y0W+BnkDJ4PhWI=";
   };
 
-  modSha256 = "00pd0xi0m3w4xqdqq7ldqcpirq9plln45nhpjrsp5r9bz7yc5wn9";
+  vendorSha256 = "sha256-8GzzihKhrf71lLKgb2i3NnmSctvKb95V5pOGoWAgclk=";
 
   outputs = [ "out" "wordlists" ];
 
   postInstall = ''
     mkdir -p $wordlists
-    cp -R $src/examples/wordlists/*.txt $wordlists
+    cp -R examples/wordlists/*.txt $wordlists
     gzip $wordlists/*.txt
   '';
 

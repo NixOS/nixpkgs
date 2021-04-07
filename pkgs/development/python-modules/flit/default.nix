@@ -1,16 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , isPy3k
 , docutils
 , requests
 , requests_download
 , zipfile36
 , pythonOlder
-, pytest_4
+, pytest
 , testpath
 , responses
-, pytoml
+, flit-core
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -20,18 +21,30 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "1.3";
-  disabled = !isPy3k;
+  version = "3.2.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6f6f0fb83c51ffa3a150fa41b5ac118df9ea4a87c2c06dff4ebf9adbe7b52b36";
+  src = fetchFromGitHub {
+    owner = "takluyver";
+    repo = "flit";
+    rev = version;
+    sha256 = "sha256-zN+/oAyXBo6Ho7n/xhOQ2mjtPGKA1anCvl3sVf7t+Do=";
   };
 
-  propagatedBuildInputs = [ docutils requests requests_download pytoml ]
-    ++ lib.optional (pythonOlder "3.6") zipfile36;
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  checkInputs = [ pytest_4 testpath responses ];
+  propagatedBuildInputs = [
+    docutils
+    requests
+    requests_download
+    flit-core
+  ] ++ lib.optionals (pythonOlder "3.6") [
+    zipfile36
+  ];
+
+  checkInputs = [ pytest testpath responses ];
 
   # Disable test that needs some ini file.
   # Disable test that wants hg
@@ -41,7 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple packaging tool for simple packages";
-    homepage = https://github.com/takluyver/flit;
+    homepage = "https://github.com/takluyver/flit";
     license = licenses.bsd3;
     maintainers = [ maintainers.fridh ];
   };

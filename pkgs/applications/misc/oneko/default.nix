@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, imake, gccmakedep, xlibsWrapper }:
+{ lib, stdenv, fetchurl, imake, gccmakedep, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   version_name = "1.2.sakura.5";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
   installTargets = [ "install" "install.man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Creates a cute cat chasing around your mouse cursor";
     longDescription = ''
     Oneko changes your mouse cursor into a mouse

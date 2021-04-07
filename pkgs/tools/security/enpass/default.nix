@@ -2,7 +2,7 @@
 , glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
 , makeWrapper , python2Packages, lib
-, lsof, curl, libuuid, cups, mesa
+, lsof, curl, libuuid, cups, mesa, xz, libxkbcommon
 }:
 
 let
@@ -14,7 +14,7 @@ let
 
   data = all_data.${system_map.${stdenv.hostPlatform.system} or (throw "Unsupported platform")};
 
-  baseUrl = http://repo.sinew.in;
+  baseUrl = "http://repo.sinew.in";
 
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
@@ -38,6 +38,8 @@ let
     curl
     libuuid
     cups
+    xz
+    libxkbcommon
   ]);
   package = stdenv.mkDerivation {
 
@@ -49,14 +51,16 @@ let
       url = "${baseUrl}/${data.path}";
     };
 
-    meta = {
-      description = "a well known password manager";
-      homepage = https://www.enpass.io/;
-      license = lib.licenses.unfree;
+    meta = with lib; {
+      description = "A well known password manager";
+      homepage = "https://www.enpass.io/";
+      license = licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux"];
+      maintainers = with maintainers; [ ewok ];
     };
 
-    buildInputs = [makeWrapper dpkg];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [dpkg];
     phases = [ "unpackPhase" "installPhase" ];
 
     unpackPhase = "dpkg -X $src .";
@@ -76,7 +80,9 @@ let
       # lsof must be in PATH for proper operation
       wrapProgram $out/bin/Enpass \
         --set LD_LIBRARY_PATH "${libPath}" \
-        --prefix PATH : ${lsof}/bin
+        --prefix PATH : ${lsof}/bin \
+        --unset QML2_IMPORT_PATH \
+        --unset QT_PLUGIN_PATH
     '';
   };
   updater = {

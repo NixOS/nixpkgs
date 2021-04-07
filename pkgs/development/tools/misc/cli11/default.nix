@@ -1,26 +1,26 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchFromGitHub,
   cmake,
   gtest,
-  python,
+  python3,
   boost
 }:
 
 stdenv.mkDerivation rec {
   pname = "cli11";
-  version = "1.8.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "CLIUtils";
     repo = "CLI11";
     rev = "v${version}";
-    sha256 = "0i1x4ax5hal7jdsxw40ljwfv68h0ac85iyi35i8p52p9s5qsc71q";
+    sha256 = "0hbch0vk8irgmiaxnfqlqys65v1770rxxdfn3d23m2vqyjh0j9l6";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python ];
+  checkInputs = [ boost python3 ];
 
   doCheck = true;
 
@@ -30,14 +30,12 @@ stdenv.mkDerivation rec {
     sed -i '/TrueFalseTest/d' tests/CMakeLists.txt
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    description = "CLI11 is a command line parser for C++11";
-    homepage = https://github.com/CLIUtils/CLI11;
-    platforms = [ "x86_64-linux" ];
+  meta = with lib; {
+    description = "Command line parser for C++11";
+    homepage = "https://github.com/CLIUtils/CLI11";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nand0p ];
-    license = licenses.unfreeRedistributable;
+    license = licenses.bsd3;
   };
 
 }

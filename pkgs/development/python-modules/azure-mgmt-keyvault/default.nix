@@ -7,30 +7,28 @@
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
+, azure-mgmt-core
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-keyvault";
-  version = "2.0.0";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "057ii54h8yr7rhfnbl0r29xbsg7mhf031hjffmdv0zf93552kmja";
+    sha256 = "2c974c6114d8d27152642c82a975812790a5e86ccf609bf370a476d9ea0d2e7d";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 
-  # this is still need when overriding to prevoius versions
-  # E.g. azure-cli
-  postInstall = lib.optionalString isPy3k ''
-    rm -f $out/${python.sitePackages}/azure/{,mgmt/}__init__.py
-  '';
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;
@@ -39,6 +37,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Key Vault Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer maxwilson ];
   };
 }

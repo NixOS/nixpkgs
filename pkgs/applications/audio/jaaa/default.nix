@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libclthreads, libclxclient, libX11, libXft, libXrender, fftwFloat, libjack2, zita-alsa-pcmi }:
+{ lib, stdenv, fetchurl, alsaLib, libclthreads, libclxclient, libX11, libXft, libXrender, fftwFloat, libjack2, zita-alsa-pcmi }:
 
 stdenv.mkDerivation rec {
   pname = "jaaa";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     cd ./source/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/index.html;
+  meta = with lib; {
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     description = "JACK and ALSA Audio Analyser";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

@@ -1,32 +1,53 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, yacc, xkeyboard_config, libxcb, libX11, doxygen }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, bison, doxygen
+, xkeyboard_config, libxcb, libxml2
+, python3
+, libX11
+# To enable the "interactive-wayland" subcommand of xkbcli:
+, withWaylandSupport ? false, wayland, wayland-protocols
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "0.10.0";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "1wmnl0hngn6vrqrya4r8hvimlkr4jag39yjprls4gyrqvh667hsp";
+    sha256 = "16is71cgqnvpl55y9kh1zb7r2gx2f3a1abljm7drjp90nbr7imlg";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig yacc doxygen ];
-  buildInputs = [ xkeyboard_config libxcb ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
+    ++ lib.optional withWaylandSupport wayland;
+  buildInputs = [ xkeyboard_config libxcb libxml2 ]
+    ++ lib.optionals withWaylandSupport [ wayland wayland-protocols ];
+  checkInputs = [ python3 ];
 
   mesonFlags = [
-    "-Denable-wayland=false"
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
+    "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
+    "-Denable-wayland=${lib.boolToString withWaylandSupport}"
   ];
 
-  doCheck = false; # fails, needs unicode locale
+  doCheck = true;
+  preCheck = ''
+    patchShebangs ../test/
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to handle keyboard descriptions";
-    homepage = https://xkbcommon.org;
+    longDescription = ''
+      libxkbcommon is a keyboard keymap compiler and support library which
+      processes a reduced subset of keymaps as defined by the XKB (X Keyboard
+      Extension) specification. It also contains a module for handling Compose
+      and dead keys.
+    ''; # and a separate library for listing available keyboard layouts.
+    homepage = "https://xkbcommon.org";
+    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ primeos ttuegel ];
     platforms = with platforms; unix;
   };
 }

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, gstreamer, gst-plugins-base, GConf, libX11, cairo
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
+, libX11, cairo
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
 assert withMesa -> libGLU != null && libGL != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "2.8.12.1";
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "1l1w4i113csv3bd5r8ybyj0qpxdq83lj6jrc5p7cc10mkwyiagqz";
   };
 
-  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base GConf libX11 cairo ]
+  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xorgproto libX11 cairo ]
     ++ optional withMesa libGLU;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   hardeningDisable = [ "format" ];
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = platforms.linux;
     license = licenses.wxWindows;
-    homepage = https://www.wxwidgets.org/;
+    homepage = "https://www.wxwidgets.org/";
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
   };

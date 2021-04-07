@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     ln -s ${jre} $out/libexec/jre
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mind-mapping software";
     longDescription = ''
       XMind is a mind mapping and brainstorming software. In addition
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       GTD. Meanwhile, XMind can read FreeMind and MindManager files,
       and save to Evernote.
     '';
-    homepage = https://www.xmind.net/;
+    homepage = "https://www.xmind.net/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michalrus ma27 ];

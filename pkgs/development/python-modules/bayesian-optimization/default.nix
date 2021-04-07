@@ -5,27 +5,30 @@
 , scikitlearn
 , scipy
 , pytest
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.0.1";
+  version = "1.2.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "fmfn";
     repo = "BayesianOptimization";
-    rev = "v${version}";
-    sha256 = "07sqymg6k5512k7wq4kbp7rsrkb4g90n0ck1f0b9s6glyfpcy4pq";
+    rev = version;
+    sha256 = "01mg9npiqh1qmq5ldnbpjmr8qkiw827msiv3crpkhbj4bdzasbfm";
   };
 
   propagatedBuildInputs = [
     scikitlearn
     scipy
   ];
-  
+
   checkInputs = [ pytest ];
   checkPhase = ''
-    pytest tests
+    # New sklearn broke one test: https://github.com/fmfn/BayesianOptimization/issues/243
+    pytest tests -k "not test_suggest_with_one_observation"
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 stdenv.mkDerivation {
   name = "ries-2018-04-11";
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://mrob.com/pub/ries/;
+  meta = with lib; {
+    homepage = "https://mrob.com/pub/ries/";
     description = "Tool to produce a list of equations that approximately solve to a given number";
     platforms = platforms.all;
     maintainers = with maintainers; [ symphorien ];

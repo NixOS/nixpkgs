@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -37,8 +37,8 @@ buildPythonApplication rec {
     six
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/michael-lazar/rtv;
+  meta = with lib; {
+    homepage = "https://github.com/michael-lazar/rtv";
     description = "Browse Reddit from your Terminal";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer wedens ];

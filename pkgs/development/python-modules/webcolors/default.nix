@@ -1,17 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , python
 , six
 }:
 
 buildPythonPackage rec {
   pname = "webcolors";
-  version = "1.10";
+  version = "1.11.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b11194c414dcf4b9bd8fb5ceaafc9da183b27430883c62f620589eb79b91b6e";
+    sha256 = "76f360636957d1c976db7466bc71dcb713bb95ac8911944dffc55c01cb516de6";
   };
 
   propagatedBuildInputs = [ six ];
@@ -22,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library for working with color names/values defined by the HTML and CSS specifications";
-    homepage = https://bitbucket.org/ubernostrum/webcolors/overview/;
+    homepage = "https://bitbucket.org/ubernostrum/webcolors/overview/";
     license = lib.licenses.bsd3;
   };
 }

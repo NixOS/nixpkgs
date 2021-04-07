@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip
+{ lib, stdenv, fetchurl, unzip
 , bdftopcf, mkfontscale, fontforge
 }:
 
@@ -41,25 +41,23 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz
+    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz *.otb
     install -D -m 644 -t "$bdf/share/fonts/misc" *.bdf
-    install -D -m 644 -t "$otb/share/fonts/misc" *.otb
     mkfontdir "$out/share/fonts/misc"
     mkfontdir "$bdf/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" "otb" ];
+  outputs = [ "out" "bdf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A monospace bitmap font aimed at programmers";
     longDescription = ''
       Dina is a monospace bitmap font, primarily aimed at programmers. It is
       relatively compact to allow a lot of code on screen, while (hopefully)
       clear enough to remain readable even at high resolutions.
     '';
-    homepage = https://www.donationcoder.com/Software/Jibz/Dina/;
-    downloadPage = https://www.donationcoder.com/Software/Jibz/Dina/;
+    homepage = "https://www.donationcoder.com/Software/Jibz/Dina/";
+    downloadPage = "https://www.donationcoder.com/Software/Jibz/Dina/";
     license = licenses.free;
     maintainers = [ maintainers.prikhi ];
   };

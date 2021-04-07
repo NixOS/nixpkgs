@@ -1,24 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, fetchpatch
+, pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "parso";
-  version = "0.5.2";
+  version = "0.8.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "55cf25df1a35fd88b878715874d2c4dc1ad3f0eebd1e0266a67e1f55efccfbe1";
+    sha256 = "8519430ad07087d4c997fda3a7918f7cfa27cb58972a8c89c2a0295a1c940e9e";
   };
 
-  checkInputs = [ pytest ];
+  patches = [
+    # Fix the flaky test due to slow moving time on Apple Silicon chips.
+    # Remove when https://github.com/davidhalter/parso/pull/177 is in the next release.
+    (fetchpatch {
+      url = "https://github.com/davidhalter/parso/pull/177/commits/2799a7a3c2cf87fdc2d0c19a0890acea425091ce.patch";
+      sha256 = "sha256-A5EQly1wR/7lo+L8Pp0UPSUIhC0WcblXEWQNvRMlZYA=";
+    })
+  ];
 
-  meta = {
+  checkInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
     description = "A Python Parser";
-    homepage = https://github.com/davidhalter/parso;
-    license = lib.licenses.mit;
+    homepage = "https://parso.readthedocs.io/en/latest/";
+    changelog = "https://github.com/davidhalter/parso/blob/master/CHANGELOG.rst";
+    license = licenses.mit;
   };
-
 }

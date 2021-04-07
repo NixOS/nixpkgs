@@ -1,18 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl
+{ lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
+, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2
 , autoreconfHook
 }:
 
-let inherit (stdenv.lib) optional optionals; in
+let inherit (lib) optional optionals; in
 
-# Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "2.9.2";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "298cdf33aa7589b50df7e5833694b24cd2de8b6d17cee7e1673873fe576db6ee";
+    sha256 = "695e7d7a0abefc5a8fd01f3b3080f030f33b0948215f84cd4892c6d904390802";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -27,16 +26,23 @@ stdenv.mkDerivation rec {
     # Don't try to create directories like /var/lib/knot at build time.
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
+    ./runtime-deps.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     gnutls liburcu libidn2 libunistring
     nettle libedit
     libiconv lmdb libintl
+    nghttp2 # DoH support in kdig
+    libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
+    # TODO: add dnstap support?
   ]
-    ++ optionals stdenv.isLinux [ libcap_ng systemd ]
+    ++ optionals stdenv.isLinux [
+      libcap_ng systemd
+      libbpf # XDP support
+    ]
     ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
@@ -44,15 +50,15 @@ stdenv.mkDerivation rec {
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   doCheck = true;
-  doInstallCheck = false; # needs pykeymgr?
+  doInstallCheck = true;
 
   postInstall = ''
     rm -r "$out"/lib/*.la
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
-    homepage = https://knot-dns.cz;
+    homepage = "https://knot-dns.cz";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];

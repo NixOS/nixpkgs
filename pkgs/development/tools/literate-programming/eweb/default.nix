@@ -1,25 +1,24 @@
-{ stdenv, fetchurl, python3, asciidoc }:
+{ lib, stdenv, fetchurl, python3, asciidoc }:
 
-stdenv.mkDerivation rec{
-
-  name = "eweb-${meta.version}";
+stdenv.mkDerivation rec {
+  pname = "eweb";
+  version = "9.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/eweb/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/eweb/${pname}-${version}.tar.bz2";
     sha256 = "1xy7vm2sj5q6s620fm25klmnwnz9xkrxmx4q2f8h6c85ydisayd5";
   };
 
   buildInputs = [ python3 asciidoc ];
 
   installPhase = ''
-    install -d $out/bin $out/share/doc/${name}
+    install -d $out/bin $out/share/doc/${pname}-${version}
     cp etangle.py $out/bin
-    cp etangle.w etangle.html $out/share/doc/${name}
+    cp etangle.w etangle.html $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
-    version = "9.10" ;
-    homepage = http://eweb.sf.net;
+  meta = with lib; {
+    homepage = "http://eweb.sourceforge.net/";
     description = "An Asciidoc-based literate programming tool, written in Python";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

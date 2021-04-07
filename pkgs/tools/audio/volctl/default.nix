@@ -1,56 +1,54 @@
-{ stdenv, fetchFromGitHub, pythonPackages, libpulseaudio, glib, gtk3, gobject-introspection, wrapGAppsHook }:
+{ lib, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection, libpulseaudio, glib, gtk3, pango, xorg }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "volctl";
-  version = "0.6.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "buzz";
     repo = pname;
-    rev = version;
-    sha256 = "1bqq5mrpi7qxzl37z6fj67pqappjmwhi8d8db95j3lmf16svm2xk";
+    rev = "v${version}";
+    sha256 = "02scfscf4mdrphzrd7cbwbhpig9bhvaws8qk4zc81z8vvf3mcfv2";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    wrapGAppsHook
-  ];
-
-  buildInputs = [
-    glib
-    gtk3
-    libpulseaudio
-  ];
-
-  pythonPath = with pythonPackages; [
-    pygobject3
-  ];
-
-  strictDeps = false;
-
   postPatch = ''
-    # The user can set a mixer application in the preferences. The
-    # default is pavucontrol. Do not hard code its path and hope it
-    # can be found in $PATH.
-
-    substituteInPlace volctl/app.py --replace /usr/bin/pavucontrol pavucontrol
+    substituteInPlace volctl/lib/xwrappers.py \
+      --replace 'libXfixes.so' "${xorg.libXfixes}/lib/libXfixes.so" \
+      --replace 'libXfixes.so.3' "${xorg.libXfixes}/lib/libXfixes.so.3"
   '';
 
   preBuild = ''
     export LD_LIBRARY_PATH=${libpulseaudio}/lib
   '';
 
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  propagatedBuildInputs = [ pango gtk3 ] ++ (with python3Packages; [
+    click
+    pycairo
+    pygobject3
+    pyyaml
+  ]);
+
+  # with strictDeps importing "gi.repository.Gtk" fails with "gi.RepositoryError: Typelib file for namespace 'Pango', version '1.0' not found"
+  strictDeps = false;
+
+  # no tests included
+  doCheck = false;
+
+  pythonImportsCheck = [ "volctl" ];
+
   preFixup = ''
     glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
-
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib"
-    )
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PulseAudio enabled volume control featuring per-app sliders";
-    homepage = https://buzz.github.io/volctl/;
+    homepage = "https://buzz.github.io/volctl/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

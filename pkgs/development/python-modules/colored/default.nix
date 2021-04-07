@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   # No proper test suite
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://gitlab.com/dslackw/colored;
+  meta = with lib; {
+    homepage = "https://gitlab.com/dslackw/colored";
     description = "Simple library for color and formatting to terminal";
     license = licenses.mit;
   };

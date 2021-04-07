@@ -16,7 +16,7 @@
  </para>
 
 <programlisting>
-nix-build -A netboot nixos/release.nix
+nix-build -A netboot.x86_64-linux nixos/release.nix
 </programlisting>
 
  <para>

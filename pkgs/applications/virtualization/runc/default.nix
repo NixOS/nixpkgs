@@ -1,59 +1,64 @@
-{ lib, fetchFromGitHub, buildGoPackage, go-md2man
-, pkgconfig, libapparmor, apparmor-parser, libseccomp, which }:
-
-with lib;
+{ lib
+, fetchFromGitHub
+, buildGoPackage
+, go-md2man
+, installShellFiles
+, pkg-config
+, which
+, libapparmor
+, apparmor-parser
+, libseccomp
+, libselinux
+, makeWrapper
+, procps
+, nixosTests
+}:
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc10";
+  version = "1.0.0-rc93";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
+    sha256 = "008d5wkznic80n5q1vwx727qn5ifalc7cydq68hc1gk9wrhna4v4";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
-  hardeningDisable = ["fortify"];
+  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ go-md2man libseccomp libapparmor apparmor-parser which ];
+  buildInputs = [ libselinux libseccomp libapparmor ];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" ];
+  makeFlags = [ "BUILDTAGS+=seccomp" ];
 
   buildPhase = ''
+    runHook preBuild
     cd go/src/${goPackagePath}
     patchShebangs .
-    substituteInPlace libcontainer/apparmor/apparmor.go \
-      --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
-    make ${toString makeFlags} runc
+    make ${toString makeFlags} runc man
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -Dm755 runc $bin/bin/runc
-
-    # Include contributed man pages
-    man/md2man-all.sh -q
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manDir in man/man?; do
-      manBase="$(basename "$manDir")" # "man1"
-      for manFile in "$manDir"/*; do
-        manName="$(basename "$manFile")" # "docker-build.1"
-        mkdir -p "$manRoot/$manBase"
-        gzip -c "$manFile" > "$manRoot/$manBase/$manName.gz"
-      done
-    done
+    runHook preInstall
+    install -Dm755 runc $out/bin/runc
+    installManPage man/*/*.[1-9]
+    wrapProgram $out/bin/runc \
+      --prefix PATH : ${lib.makeBinPath [ procps ]} \
+      --prefix PATH : /run/current-system/systemd/bin
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = https://runc.io/;
+  passthru.tests = { inherit (nixosTests) cri-o docker podman; };
+
+  meta = with lib; {
+    homepage = "https://github.com/opencontainers/runc";
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester saschagrunert ];
+    maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

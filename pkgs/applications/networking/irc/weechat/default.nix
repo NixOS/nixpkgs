@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls, gettext
-, zlib, curl, pkgconfig, libgcrypt
+, zlib, curl, pkg-config, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
 , asciidoctor # manpages
 , guileSupport ? true, guile
@@ -27,40 +27,39 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.7.1";
+      version = "3.1";
       pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0acz41jg7lmipni9z2agfqw4dhmx5hf6k9w4pvr4zih1fhkldva2";
+        sha256 = "06w147wzrzp6xbqiz6s5nq5xdjy7jn3f18xajxy50pynjd6vmfh5";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
-      enableParallelBuilding = true;
-      cmakeFlags = with stdenv.lib; [
+      cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
         "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
         "-DENABLE_PHP=OFF"
       ]
-        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
+        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
-      buildInputs = with stdenv.lib; [
-          ncurses openssl aspell gnutls gettext zlib curl pkgconfig
-          libgcrypt makeWrapper cmake asciidoctor
-          ]
+      nativeBuildInputs = [ cmake pkg-config makeWrapper asciidoctor ];
+      buildInputs = with lib; [
+          ncurses openssl aspell gnutls gettext zlib curl
+          libgcrypt ]
         ++ optionals stdenv.isDarwin [ libobjc libresolv ]
         ++ concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
       NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
-        + (stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
+        + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
-      postInstall = with stdenv.lib; ''
+      postInstall = with lib; ''
         for p in ${concatMapStringsSep " " (p: p.name) enabledPlugins}; do
           from=$out/lib/weechat/plugins/$p.so
           to=''${!p}/lib/weechat/plugins/$p.so
@@ -70,15 +69,15 @@ let
       '';
 
       meta = {
-        homepage = http://www.weechat.org/;
+        homepage = "http://www.weechat.org/";
         description = "A fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package
           (eg. adding python modules for scripts that would require them, etc.)
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
-        license = stdenv.lib.licenses.gpl3;
-        maintainers = with stdenv.lib.maintainers; [ lovek323 the-kenny lheckemann ma27 ];
-        platforms = stdenv.lib.platforms.unix;
+        license = lib.licenses.gpl3;
+        maintainers = with lib.maintainers; [ lovek323 lheckemann ];
+        platforms = lib.platforms.unix;
       };
     }

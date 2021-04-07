@@ -79,7 +79,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.linux-kernel.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -105,7 +105,7 @@ let
         modules = makeModules module {};
       };
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
       pkgs.symlinkJoin {
         name = "netboot";
@@ -155,6 +155,12 @@ in rec {
     inherit system;
   });
 
+  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-gnome.nix;
+    type = "gnome";
+    inherit system;
+  });
+
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
   iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
@@ -165,23 +171,23 @@ in rec {
 
   sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
     module = {
-        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
-        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+        armv6l-linux = ./modules/installer/sd-card/sd-image-raspberrypi-installer.nix;
+        armv7l-linux = ./modules/installer/sd-card/sd-image-armv7l-multiplatform-installer.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-installer.nix;
       }.${system};
     inherit system;
   });
 
   sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
     module = {
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
       }.${system};
     type = "minimal-new-kernel";
     inherit system;
   });
 
   sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
+    module = ./modules/installer/sd-card/sd-image-raspberrypi4-installer.nix;
     inherit system;
   });
 
@@ -304,13 +310,18 @@ in rec {
         services.xserver.desktopManager.gnome3.enable = true;
       });
 
+    pantheon = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.desktopManager.pantheon.enable = true;
+      });
+
     # Linux/Apache/PostgreSQL/PHP stack.
     lapp = makeClosure ({ pkgs, ... }:
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
+        services.httpd.enablePHP = true;
         services.postgresql.enable = true;
         services.postgresql.package = pkgs.postgresql;
-        environment.systemPackages = [ pkgs.php ];
       });
   };
 }

@@ -1,32 +1,31 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , alsaLib
 , dbus
 , glib
 , json_c
 , libical
-, pkgconfig
+, pkg-config
 , python3
 , readline
 , systemd
 , udev
-}:
-
-stdenv.mkDerivation rec {
-  pname = "bluez";
-  version = "5.52";
-
-  src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "02jng21lp6fb3c2bh6vf9y7cj4gaxwk29dfc32ncy0lj0gi4q57p";
-  };
-
+}: let
   pythonPath = with python3.pkgs; [
     dbus-python
     pygobject3
     recursivePthLoader
   ];
+in stdenv.mkDerivation rec {
+  pname = "bluez";
+  version = "5.56";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "sha256-WcTbqfyKripqX48S8ZvBsMLcJzVcfKMSPu0/5r19C50=";
+  };
 
   buildInputs = [
     alsaLib
@@ -40,11 +39,20 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" "test" ];
+  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
+
+  patches = [
+    # Fixes https://github.com/NixOS/nixpkgs/issues/117663
+    (fetchpatch {
+      name = "disconnect-fix.patch";
+      url = "https://github.com/bluez/bluez/commit/28ddec8d6b829e002fa268c07b71e4c564ba9e16.patch";
+      sha256 = "sha256-vzMf1i44e4JrpL7cXbn9oDr+3B+Glf7dPW3QDstEnEM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
@@ -79,7 +87,7 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = ''
+  postInstall = lib.optionalString doCheck ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
@@ -94,8 +102,8 @@ stdenv.mkDerivation rec {
       ln -s ../test/$a $test/bin/bluez-$a
     done
     popd
-    wrapPythonProgramsIn $test/test "$test/test $pythonPath"
-
+    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
+  '' + ''
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -114,11 +122,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth support for Linux";
-    homepage = http://www.bluez.org/;
+    homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
-    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
+    repositories.git = "https://git.kernel.org/pub/scm/bluetooth/bluez.git";
   };
 }

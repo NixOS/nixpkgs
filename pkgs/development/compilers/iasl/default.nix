@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, bison, flex}:
+{lib, stdenv, fetchurl, fetchpatch, bison, flex}:
 
 stdenv.mkDerivation rec {
   pname = "iasl";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Intel ACPI Compiler";
-    homepage = http://www.acpica.org/;
-    license = stdenv.lib.licenses.iasl;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.acpica.org/";
+    license = lib.licenses.iasl;
+    platforms = lib.platforms.unix;
   };
 }

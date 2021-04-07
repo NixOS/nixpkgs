@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, libXaw }:
+{ lib, stdenv, fetchurl, libX11, libXt, libXext, libXaw }:
 
 stdenv.mkDerivation rec {
   pname = "darcnes";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   installPhase = "install -Dt $out/bin darcnes";
 
   meta = {
-    homepage = https://web.archive.org/web/20130502171725/http://www.dridus.com/~nyef/darcnes/;
+    homepage = "https://web.archive.org/web/20130502171725/http://www.dridus.com/~nyef/darcnes/";
     description = "Sega Master System, Game Gear, SG-1000, NES, ColecoVision and Apple II emulator";
     # Prohibited commercial use, credit required.
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
     platforms = [ "i686-linux" ];
   };
 }

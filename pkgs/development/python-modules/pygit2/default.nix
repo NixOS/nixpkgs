@@ -1,19 +1,25 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, pytestCheckHook, cffi, cacert }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.0.3";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ql7hkcxrh8yszglrg7d3y0ivh1l56xdc3j34j2fjy4qq06ifv6y";
+    sha256 = "9711367bd05f96ad6fc9c91d88fa96126ba2d1f1c3ea6f23c11402c243d66a20";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  propagatedBuildInputs = [ libgit2 ] ++ lib.optional (!isPyPy) cffi;
+  buildInputs = [
+    libgit2
+  ];
+
+  propagatedBuildInputs = [
+    cached-property
+  ] ++ lib.optional (!isPyPy) cffi;
 
   checkInputs = [ pytestCheckHook ];
 
@@ -40,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of Python bindings to the libgit2 shared library";
-    homepage = https://pypi.python.org/pypi/pygit2;
+    homepage = "https://pypi.python.org/pypi/pygit2";
     license = licenses.gpl2;
   };
 }

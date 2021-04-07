@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, makeDesktopItem }:
+{ lib, fetchurl, pythonPackages, makeDesktopItem }:
 
 pythonPackages.buildPythonApplication rec {
   name = "winpdb-1.4.8";
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     comment = "Platform independend Python debugger";
     desktopName = "Winpdb";
     genericName = "Python Debugger";
-    categories = "Application;Development;Debugger;";
+    categories = "Development;Debugger;";
   };
 
   # Don't call gnome-terminal with "--disable-factory" flag, which is
@@ -36,14 +36,17 @@ pythonPackages.buildPythonApplication rec {
     cp artwork/winpdb-icon.svg "$out"/share/icons/winpdb.svg
   '';
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+
+  meta = with lib; {
     description = "Platform independent Python debugger";
     longDescription = ''
       Winpdb is a platform independent GPL Python debugger with support for
       multiple threads, namespace modification, embedded debugging, encrypted
       communication and is up to 20 times faster than pdb.
     '';
-    homepage = http://winpdb.org/;
+    homepage = "http://winpdb.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

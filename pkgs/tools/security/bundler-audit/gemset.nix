@@ -1,19 +1,23 @@
 {
   bundler-audit = {
     dependencies = ["thor"];
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pm22xpn3xyymsainixnrk8v3l3xi9bzwkjkspx00cfzp84xvxbq";
+      sha256 = "00l8rs7cna0j3yh4s9sza0r88x7kjc7j4gp9yl378422k7i0r73v";
       type = "gem";
     };
-    version = "0.6.1";
+    version = "0.8.0";
   };
   thor = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1yhrnp9x8qcy5vc7g438amd5j9sw83ih7c30dr6g6slgw9zj3g29";
+      sha256 = "18yhlvmfya23cs3pvhr1qy38y41b6mhr5q9vwv5lrgk16wmf3jna";
       type = "gem";
     };
-    version = "0.20.3";
+    version = "1.1.0";
   };
 }

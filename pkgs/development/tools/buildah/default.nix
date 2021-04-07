@@ -1,44 +1,71 @@
-{ stdenv, buildGoPackage, fetchFromGitHub
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, libselinux, libseccomp
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, go-md2man
+, installShellFiles
+, pkg-config
+, gpgme
+, lvm2
+, btrfs-progs
+, libapparmor
+, libselinux
+, libseccomp
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "buildah";
-  version = "1.14.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
-    owner  = "containers";
-    repo   = "buildah";
-    rev    = "v${version}";
-    sha256 = "0nbcrhfd0c14d0m9a4mkd01jxk5i503z38kv2qfz5cvfghx517qq";
+    owner = "containers";
+    repo = "buildah";
+    rev = "v${version}";
+    sha256 = "12gmn61mfrr58071x3cdsksad6swn1b23ghih128hjdpdzk1zxs3";
   };
 
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
-  goPackagePath = "github.com/containers/buildah";
-  excludedPackages = [ "tests" ];
+  patches = [
+    ../../../applications/virtualization/podman/remove-unconfigured-runtime-warn.patch
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
+  vendorSha256 = null;
 
-  patches = [ ./disable-go-module-mode.patch ];
+  doCheck = false;
+
+  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
+
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
-    make GIT_COMMIT="unknown"
-    install -Dm755 buildah $bin/bin/buildah
-    install -Dm444 contrib/completions/bash/buildah $bin/share/bash-completion/completions/buildah
+    runHook preBuild
+    patchShebangs .
+    make bin/buildah GIT_COMMIT="unknown"
+    make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
+    runHook postBuild
   '';
 
-  postBuild = ''
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 bin/buildah $out/bin/buildah
+    installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool which facilitates building OCI images";
-    homepage = "https://github.com/containers/buildah";
+    homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch vdemeester saschagrunert ];
+    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    platforms = platforms.linux;
   };
 }

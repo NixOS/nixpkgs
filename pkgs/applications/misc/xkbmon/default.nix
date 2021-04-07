@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11 }:
+{ lib, stdenv, fetchFromGitHub, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "xkbmon";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -D -t $out/bin xkbmon";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/xkbmon/xkbmon;
+  meta = with lib; {
+    homepage = "https://github.com/xkbmon/xkbmon";
     description = "Command-line keyboard layout monitor for X11";
     license = licenses.mit;
     platforms = platforms.linux;

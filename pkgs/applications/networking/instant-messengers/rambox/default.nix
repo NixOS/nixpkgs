@@ -1,49 +1,27 @@
-{ stdenv, fetchurl, xdg_utils, dpkg, makeWrapper, autoPatchelfHook
-, libXtst, libXScrnSaver, gtk3, nss, alsaLib, udev, libnotify
-}:
+{ stdenv, callPackage, fetchurl, lib }:
 
 let
-  version = "0.7.3";
-in stdenv.mkDerivation rec {
+  mkRambox = opts: callPackage (import ./rambox.nix opts) { };
+in mkRambox rec {
   pname = "rambox";
-  inherit version;
+  version = "0.7.7";
+
   src = {
     x86_64-linux = fetchurl {
-      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-amd64.deb";
-      sha256 = "09v8zlayas906zhqy2aw4wkvyl87ykr09sjf0nmgmf69piwmjgg6";
+      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-x86_64.AppImage";
+      sha256 = "0f82hq0dzcjicdz6lkzj8889y100yqciqrwh8wjjy9pxkhjcdini";
     };
     i686-linux = fetchurl {
-      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-i386.deb";
-      sha256 = "0gv4pf3vhrw4xyccm24ivv92d9qy4zpwsh0m82ib1w764lyxmyrz";
+      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-i386.AppImage";
+      sha256 = "1nhgqjha10jvyf9nsghvlkibg7byj8qz140639ygag9qlpd52rfs";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
-  buildInputs = [ libXtst libXScrnSaver gtk3 nss alsaLib ];
-  runtimeDependencies = [ udev.lib libnotify ];
-
-  unpackPhase = "dpkg-deb -x $src .";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r opt $out
-    ln -s $out/opt/Rambox/rambox $out/bin
-
-    # provide resources
-    cp -r usr/share $out
-    substituteInPlace $out/share/applications/rambox.desktop \
-      --replace Exec=/opt/Rambox/rambox Exec=rambox
-  '';
-
-  postFixup = ''
-    wrapProgram $out/opt/Rambox/rambox --prefix PATH : ${xdg_utils}/bin
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and Open Source messaging and emailing app that combines common web applications into one";
-    homepage = http://rambox.pro;
+    homepage = "https://rambox.pro";
     license = licenses.mit;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = with maintainers; [ gnidorah ma27 ];
     platforms = ["i686-linux" "x86_64-linux"];
     hydraPlatforms = [];
   };

@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Convenience class for doing maths with explicit coordinates";
-    homepage = https://github.com/clbarnes/coordinates;
+    homepage = "https://github.com/clbarnes/coordinates";
     license = licenses.mit;
-    maintainers = [ maintainers.mildlyincompetent ];
+    maintainers = [ ];
   };
 }

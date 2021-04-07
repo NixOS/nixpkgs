@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2, emacs }:
+{ lib, stdenv, fetchurl, python2, emacs }:
 
 stdenv.mkDerivation {
   name = "pydb-1.26";
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Python debugger with GDB-like commands and Emacs bindings";
-    homepage = http://bashdb.sourceforge.net/pydb/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://bashdb.sourceforge.net/pydb/";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

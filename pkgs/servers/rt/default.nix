@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchurl, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, buildEnv, fetchurl, perl, perlPackages, makeWrapper }:
 
 # This package isn't extremely useful as it is, but is getting close.
 # After running:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     perl
     (buildEnv {
       name = "rt-perl-deps";
-      paths = (with perlPackages; [
+      paths = with perlPackages; (requiredPerlModules [
         ApacheSession BusinessHours CGIEmulatePSGI CGIPSGI
         CSSMinifierXS CSSSquish ConvertColor CryptEksblowfish
         CryptSSLeay DBDSQLite DBDmysql DBIxSearchBuilder DataGUID
@@ -97,6 +97,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

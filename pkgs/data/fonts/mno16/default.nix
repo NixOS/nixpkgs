@@ -15,7 +15,7 @@ in fetchzip rec {
 
   meta = with lib; {
     description = "minimalist monospaced font";
-    homepage = https://sev.dev/fonts/mno16; 
+    homepage = "https://sev.dev/fonts/mno16";
     license = licenses.cc0;
   };
 }

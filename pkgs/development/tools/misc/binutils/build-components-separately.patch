@@ -1,19 +1,8 @@
-From bc09a9236f67e710d545ac11bcdac7b55dbcc1a0 Mon Sep 17 00:00:00 2001
-From: John Ericson <John.Ericson@Obsidian.Systems>
-Date: Thu, 12 Oct 2017 11:16:57 -0400
-Subject: [PATCH] Build components separately
-
----
- bfd/configure.ac     | 18 +++---------------
- opcodes/Makefile.am  | 17 +++++++++++++----
- opcodes/configure.ac | 45 ++++++---------------------------------------
- 3 files changed, 22 insertions(+), 58 deletions(-)
-
 diff --git a/bfd/configure.ac b/bfd/configure.ac
-index 9a183c1628..8728837384 100644
+index c5bfbd5d..45ad4c26 100644
 --- a/bfd/configure.ac
 +++ b/bfd/configure.ac
-@@ -241,31 +241,19 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
+@@ -278,31 +278,19 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
  
  LT_LIB_M
  
@@ -33,26 +22,26 @@ index 9a183c1628..8728837384 100644
 -    SHARED_LIBADD="-L`pwd`/../libiberty/pic -liberty"
 -  fi
 -
- # More hacks to build DLLs on Windows.
    case "${host}" in
+   # More hacks to build DLLs on Windows.
    *-*-cygwin*)
      SHARED_LDFLAGS="-no-undefined"
 -    SHARED_LIBADD="-L`pwd`/../libiberty -liberty -L`pwd`/../intl -lintl -lcygwin -lkernel32"
 +    SHARED_LIBADD="-liberty -lintl -lcygwin -lkernel32"
    ;;
  
-   # Hack to build or1k-src on OSX
-   or1k*-*-darwin*)
+   # Use built-in libintl on macOS, since it is not provided by libc.
+   *-*-darwin*)
 -    SHARED_LIBADD="-L`pwd`/../libiberty/pic -L`pwd`/../intl -liberty -lintl"
 +    SHARED_LIBADD="-liberty -lintl"
    ;;
    esac
  
 diff --git a/opcodes/Makefile.am b/opcodes/Makefile.am
-index 925e7ff651..47b395c195 100644
+index 4f06074a..6836c589 100644
 --- a/opcodes/Makefile.am
 +++ b/opcodes/Makefile.am
-@@ -52,7 +52,7 @@ libopcodes_la_LDFLAGS += -rpath $(rpath_bfdlibdir)
+@@ -51,7 +51,7 @@ libopcodes_la_LDFLAGS += -rpath $(rpath_bfdlibdir)
  endif
  
  # This is where bfd.h lives.
@@ -61,7 +50,7 @@ index 925e7ff651..47b395c195 100644
  
  BUILD_LIBS = @BUILD_LIBS@
  BUILD_LIB_DEPS = @BUILD_LIB_DEPS@
-@@ -303,7 +303,7 @@ OFILES = @BFD_MACHINES@
+@@ -301,7 +301,7 @@ OFILES = @BFD_MACHINES@
  # development.sh is used to determine -Werror default.
  CONFIG_STATUS_DEPENDENCIES = $(BFDDIR)/development.sh
  
@@ -70,7 +59,7 @@ index 925e7ff651..47b395c195 100644
  
  disassemble.lo: disassemble.c
  if am__fastdepCC
-@@ -324,12 +324,21 @@ libopcodes_la_SOURCES =  dis-buf.c disassemble.c dis-init.c
+@@ -322,12 +322,21 @@ libopcodes_la_SOURCES =  dis-buf.c disassemble.c dis-init.c
  # old version of libbfd, or to pick up libbfd for the wrong architecture
  # if host != build. So for building with shared libraries we use a
  # hardcoded path to libbfd.so instead of relying on the entries in libbfd.la.
@@ -95,10 +84,10 @@ index 925e7ff651..47b395c195 100644
  # the build directory so that we don't have to convert all the
  # programs that use libopcodes.a simultaneously.  This is a hack which
 diff --git a/opcodes/configure.ac b/opcodes/configure.ac
-index b9f5eb8a4f..ef2c2152b7 100644
+index 00be9c88..6e589ae4 100644
 --- a/opcodes/configure.ac
 +++ b/opcodes/configure.ac
-@@ -89,6 +89,7 @@ AC_PROG_INSTALL
+@@ -86,6 +86,7 @@ AC_PROG_INSTALL
  
  AC_CHECK_HEADERS(string.h strings.h stdlib.h limits.h)
  ACX_HEADER_STRING
@@ -106,7 +95,7 @@ index b9f5eb8a4f..ef2c2152b7 100644
  
  AC_CHECK_DECLS([basename, stpcpy])
  
-@@ -134,61 +135,27 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
+@@ -137,61 +138,27 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
  
  LT_LIB_M
  
@@ -173,6 +162,3 @@ index b9f5eb8a4f..ef2c2152b7 100644
        ;;
    esac
  
--- 
-2.14.2
-

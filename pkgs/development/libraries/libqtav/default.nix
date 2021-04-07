@@ -9,7 +9,7 @@ with lib;
 
 mkDerivation rec {
   pname = "libqtav";
-  version = "1.12.0";
+  version = "git-2020-09-10";
 
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   buildInputs = [
@@ -20,8 +20,8 @@ mkDerivation rec {
   ];
 
   src = fetchFromGitHub {
-    sha256 = "03ii9l38l3fsr27g42fx4151ipzkip2kr4akdr8x28sx5r9rr5m2";
-    rev = "v${version}";
+    sha256 = "0qwrk40dihkbwmm7krz6qaqyn9v3qdjnd2k9b4s3a67x4403pib3";
+    rev = "2a470d2a8d2fe22fae969bee5d594909a07b350a";
     repo = "QtAV";
     owner = "wang-bin";
     fetchSubmodules = true;
@@ -43,9 +43,8 @@ mkDerivation rec {
     description = "A multimedia playback framework based on Qt + FFmpeg";
     #license = licenses.lgpl21; # For the libraries / headers only.
     license = licenses.gpl3; # With the examples (under bin) and most likely some of the optional dependencies used.
-    homepage = http://www.qtav.org/;
+    homepage = "http://www.qtav.org/";
     maintainers = [ maintainers.jraygauthier ];
     platforms = platforms.linux;
   };
 }
-

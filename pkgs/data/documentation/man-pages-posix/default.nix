@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "man-pages-posix-2013-a";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "POSIX man-pages (0p, 1p, 3p)";
-    homepage = https://www.kernel.org/doc/man-pages/;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.kernel.org/doc/man-pages/";
+    platforms = lib.platforms.unix;
   };
 }

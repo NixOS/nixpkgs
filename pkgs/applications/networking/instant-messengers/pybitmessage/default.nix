@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages, openssl }:
+{ lib, fetchFromGitHub, python2Packages, openssl }:
 
 python2Packages.buildPythonApplication rec {
   pname = "pybitmessage";
@@ -30,8 +30,8 @@ python2Packages.buildPythonApplication rec {
 
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://bitmessage.org/;
+  meta = with lib; {
+    homepage = "https://bitmessage.org/";
     description = "The official Bitmessage client";
     license = licenses.mit;
     maintainers = with maintainers; [ jgillich ];

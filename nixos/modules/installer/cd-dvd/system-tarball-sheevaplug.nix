@@ -96,7 +96,7 @@ in
 
   boot.initrd.extraUtilsCommands =
     ''
-      copy_bin_and_libs ${pkgs.utillinux}/sbin/hwclock
+      copy_bin_and_libs ${pkgs.util-linux}/sbin/hwclock
     '';
 
   boot.initrd.postDeviceCommands =
@@ -122,7 +122,7 @@ in
       device = "/dev/something";
     };
 
-  services.mingetty = {
+  services.getty = {
     # Some more help text.
     helpLine = ''
       Log in as "root" with an empty password.  ${

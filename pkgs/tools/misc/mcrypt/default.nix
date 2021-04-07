@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmcrypt, libmhash }:
+{ lib, stdenv, fetchurl, libmcrypt, libmhash }:
 
 stdenv.mkDerivation rec {
   version = "2.6.8";
@@ -9,7 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098";
   };
 
-  patches = [ ./format-string.patch ./overflow.patch ./segv.patch ./sprintf.patch ];
+  patches = [
+    ./format-string_CVE-2012-4426.patch
+    ./overflow_CVE-2012-4409.patch
+    ./segv.patch
+    ./sprintf_CVE-2012-4527.patch
+    ./malloc_to_stdlib.patch
+  ];
 
   buildInputs = [ libmcrypt libmhash ];
 
@@ -20,9 +26,9 @@ stdenv.mkDerivation rec {
       for the old Unix crypt, except that they are under the GPL and support an
       ever-wider range of algorithms and modes.
     '';
-    homepage = http://mcrypt.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.qknight ];
+    homepage = "http://mcrypt.sourceforge.net";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.qknight ];
   };
 }

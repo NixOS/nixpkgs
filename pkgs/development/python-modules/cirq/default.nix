@@ -1,20 +1,24 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, google_api_python_client
+, google-api-core
 , matplotlib
 , networkx
 , numpy
 , pandas
-, pythonProtobuf  # pythonPackages.protobuf
+, protobuf
 , requests
 , scipy
 , sortedcontainers
 , sympy
+, tqdm
 , typing-extensions
   # test inputs
+, freezegun
 , pytestCheckHook
+, pytest-asyncio
 , pytest-benchmark
 , ply
 , pydot
@@ -24,62 +28,86 @@
 
 buildPythonPackage rec {
   pname = "cirq";
-  version = "0.6.1";
+  version = "0.10.0";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    sha256 = "0lhr2dka7vpz9xd6akxphrcv2b3ni2cgjywpc1r7qpqa5mrq1q7f";
+    sha256 = "0xinml44n2lfl0q2lb2apmn69gsszlwim83082f66vyk0gpwd4lr";
   };
 
-  # Cirq 0.6 requires networkx==2.3 only for optional qiskit dependency/test, disable this to avoid networkx version conflicts. https://github.com/quantumlib/Cirq/issues/2368
-  # Cirq locks protobuf==3.8.0, but tested working with default pythonPackages.protobuf (3.7). This avoids overrides/pythonPackages.protobuf conflicts
-  prePatch = ''
-    substituteInPlace requirements.txt --replace "networkx==2.3" "networkx" \
-      --replace "protobuf==3.8.0" "protobuf"
-
-    # Fix sympy 1.5 test failures. Should be fixed in v0.7
-    substituteInPlace cirq/optimizers/eject_phased_paulis_test.py --replace "phase_exponent=0.125 + x / 8" "phase_exponent=0.125 + x * 0.125"
-    substituteInPlace cirq/contrib/quirk/cells/parse_test.py --replace "parse_formula('5t') == 5 * t" "parse_formula('5t') == 5.0 * t"
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "matplotlib~=3.0" "matplotlib" \
+      --replace "networkx~=2.4" "networkx" \
+      --replace "numpy~=1.16" "numpy" \
+      --replace "protobuf~=3.13.0" "protobuf"
   '';
 
   propagatedBuildInputs = [
-    google_api_python_client
-    numpy
+    google-api-core
     matplotlib
     networkx
+    numpy
     pandas
-    pythonProtobuf
+    protobuf
     requests
     scipy
     sortedcontainers
     sympy
+    tqdm
     typing-extensions
   ];
 
-  doCheck = true;
-  # pythonImportsCheck = [ "cirq" "cirq.Ciruit" ];  # cirq's importlib hook doesn't work here
-  dontUseSetuptoolsCheck = true;
+  # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];  # cirq's importlib hook doesn't work here
   checkInputs = [
     pytestCheckHook
+    freezegun
+    pytest-asyncio
     pytest-benchmark
     ply
     pydot
     pyyaml
     pygraphviz
   ];
-  # TODO: enable op_serializer_test. Error is type checking, for some reason wants bool instead of numpy.bool_. Not sure if protobuf or internal issue
+
   pytestFlagsArray = [
     "--ignore=dev_tools"  # Only needed when developing new code, which is out-of-scope
-    "--ignore=cirq/google/op_serializer_test.py"  # investigating in https://github.com/quantumlib/Cirq/issues/2727
+    "--ignore=cirq/contrib/"  # requires external (unpackaged) python packages, so untested.
+    "--benchmark-disable" # Don't need to run benchmarks when packaging.
+  ];
+  disabledTests = lib.optionals stdenv.isAarch64 [
+    # Seem to fail due to math issues on aarch64?
+    "expectation_from_wavefunction"
+    "test_single_qubit_op_to_framed_phase_form_output_on_example_case"
+  ] ++ [
+    # slow tests, for quicker building
+    "test_anneal_search_method_calls"
+    "test_density_matrix_from_state_tomography_is_correct"
+    "test_example_runs_qubit_characterizations"
+    "test_example_runs_hello_line_perf"
+    "test_example_runs_bc_mean_field_perf"
+    "test_main_loop"
+    "test_clifford_circuit_2"
+    "test_decompose_specific_matrices"
+    "test_two_qubit_randomized_benchmarking"
+    "test_kak_decomposition_perf"
+    "test_example_runs_simon"
+    "test_decompose_random_unitary"
+    "test_decompose_size_special_unitary"
+    "test_api_retry_5xx_errors"
+    "test_xeb_fidelity"
+    "test_example_runs_phase_estimator_perf"
+    "test_cross_entropy_benchmarking"
   ];
 
   meta = with lib; {
     description = "A framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits.";
-    homepage = "http://github.com/quantumlib/cirq";
+    homepage = "https://github.com/quantumlib/cirq";
+    changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

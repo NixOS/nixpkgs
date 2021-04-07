@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql, zeromq, openssl }:
+{ lib, stdenv, fetchFromGitHub, postgresql, zeromq, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "pipelinedb";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension {pipelinedb-*.sql,pipelinedb.control}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-performance time-series aggregation for PostgreSQL";
-    homepage = https://www.pipelinedb.com/;
+    homepage = "https://www.pipelinedb.com/";
     license = licenses.asl20;
     platforms = postgresql.meta.platforms;
     maintainers = [ maintainers.marsam ];

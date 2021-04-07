@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, glibmm, cairomm, pangomm, atkmm }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, glibmm, cairomm, pangomm, atkmm }:
 
 stdenv.mkDerivation rec {
   name = "gtkmm-${minVer}.5";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ glibmm gtk2 atkmm cairomm pangomm ];
 
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = https://gtkmm.org/;
+    homepage = "https://gtkmm.org/";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin vcunat ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ raskin vcunat ];
+    platforms = lib.platforms.unix;
   };
 }

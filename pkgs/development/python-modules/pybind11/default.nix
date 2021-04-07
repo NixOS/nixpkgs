@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.4.3";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0k89w4bsfbpzw963ykg1cyszi3h3nk393qd31m6y46pcfxkqh4rd";
+    sha256 = "1lsacpawl2gb5qlh0cawj9swsyfbwhzhwiv6553a7lsigdbadqpy";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,14 +40,6 @@ buildPythonPackage rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
 
-  patches = [
-    ./0001-Find-include-directory.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace pybind11/__init__.py --subst-var-by include "$out/include"
-  '';
-
   preFixup = ''
     pushd ..
     export PYBIND11_USE_CMAKE=1
@@ -65,15 +57,15 @@ buildPythonPackage rec {
     scipy
   ];
 
-  meta = {
-    homepage = https://github.com/pybind/pybind11;
+  meta = with lib; {
+    homepage = "https://github.com/pybind/pybind11";
     description = "Seamless operability between C++11 and Python";
     longDescription = ''
       Pybind11 is a lightweight header-only library that exposes
       C++ types in Python and vice versa, mainly to create Python
       bindings of existing C++ code.
     '';
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.yuriaisaka ];
+    license = licenses.bsd3;
+    maintainers = with maintainers;[ yuriaisaka ];
   };
 }

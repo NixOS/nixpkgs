@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, cmake, openssl
+{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, qttools
 , ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
 , xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
 , withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "symless";
@@ -14,7 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
   };
 
-  patches = [ ./build-tests.patch
+  patches = [
+    ./build-tests.patch
+    (fetchpatch {
+      name = "CVE-2020-15117.patch";
+      url = "https://github.com/symless/synergy-core/commit/"
+          + "0a97c2be0da2d0df25cb86dfd642429e7a8bea39.patch";
+      sha256 = "03q8m5n50fms7fjfjgmqrgy9mrxwi9kkz3f3vlrs2x5h21dl6bmj";
+    })
   ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
 
   # Since the included gtest and gmock don't support clang and the
@@ -43,6 +50,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals withGUI [
+    qttools
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices Carbon Cocoa CoreServices ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [
@@ -71,9 +80,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = http://synergy-project.org/;
+    homepage = "http://synergy-project.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ aszlig enzime ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

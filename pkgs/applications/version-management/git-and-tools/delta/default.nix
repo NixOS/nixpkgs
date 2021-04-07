@@ -1,26 +1,39 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, libiconv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.0.16";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "01jiqizg1ywvrrwhqzfqzbaqrzyfaqm66sixas0mpyzmd6cdwmh6";
+    sha256 = "02gm3fxqq91gn1hffy9kc6dkc0y7p09sl6f8njfpsaficij4bs7a";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "1crz7410xfixx2vb1c060fnygwkkp2k2lgh7y1mjjxjzhpybniw5";
 
-  cargoSha256 = "1zmk70hccrxn1gdr1bksnvh6sa2h4518s0ni8k2ihxi4ld1ch5p2";
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  postInstall = ''
+    installShellCompletion --bash --name delta.bash etc/completion/completion.bash
+    installShellCompletion --zsh --name _delta etc/completion/completion.zsh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";
     description = "A syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ma27 ];
+    maintainers = with maintainers; [ marsam zowoq ];
   };
 }

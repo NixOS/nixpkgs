@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 let
   arch_table = {
     "x86_64-linux" = "linux-x86_64";
@@ -14,13 +14,13 @@ let
 
   arch = arch_table.${stdenv.system};
   sha = sha_table.${stdenv.system};
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "essentia-extractor";
   version = "2.1_beta2";
 
   src = fetchurl {
-    url =
-      "ftp://ftp.acousticbrainz.org/pub/acousticbrainz/essentia-extractor-v${version}-${arch}.tar.gz";
+    url = "ftp://ftp.acousticbrainz.org/pub/acousticbrainz/essentia-extractor-v${version}-${arch}.tar.gz";
     sha256 = sha;
   };
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     cp streaming_extractor_music $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://acousticbrainz.org/download";
     description = "AcousticBrainz audio feature extractor";
     license = licenses.agpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "2.2.1";
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.tntnet.org/cxxtools.html;
+    homepage = "http://www.tntnet.org/cxxtools.html";
     description = "Comprehensive C++ class library for Unix and Linux";
-    platforms = stdenv.lib.platforms.linux ;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.juliendehos ];
+    platforms = lib.platforms.linux ;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

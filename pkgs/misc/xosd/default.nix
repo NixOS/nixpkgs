@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXext, libXt, xorgproto }:
+{ lib, stdenv, fetchurl, libX11, libXext, libXt, xorgproto }:
 
 stdenv.mkDerivation rec {
   pname = "xosd";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXext libXt xorgproto ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Displays text on your screen";
-    homepage = https://sourceforge.net/projects/libxosd;
+    homepage = "https://sourceforge.net/projects/libxosd";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];

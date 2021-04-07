@@ -7,43 +7,51 @@
 , libsecret
 , openssl
 , pcre
-, pkgconfig
+, pkg-config
 , qtbase
 , qtkeychain
 , qttools
 , qtwebengine
+, qtwebsockets
+, qtquickcontrols2
+, qtgraphicaleffects
 , sqlite
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "2.6.3";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "17w1bx305w656jkiv55lwncxwdly8rf2dsisqw3c9bc7vz19l6p8";
+    sha256 = "sha256-8Ql6tOvWOjAvMJA87WlT9TbpnbciBsjDxRuYlMVi/m8=";
   };
 
   patches = [
+    # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 
   buildInputs = [
     inotify-tools
     libcloudproviders
+    libsecret
     openssl
     pcre
     qtbase
     qtkeychain
     qttools
     qtwebengine
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtwebsockets
     sqlite
   ];
 
@@ -58,9 +66,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Nextcloud themed desktop client";
-    homepage = https://nextcloud.com;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ caugner ma27 ];
+    homepage = "https://nextcloud.com";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ caugner ];
     platforms = platforms.linux;
   };
 }

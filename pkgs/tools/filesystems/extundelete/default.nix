@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, e2fsprogs }:
+{ lib, stdenv, fetchurl, e2fsprogs }:
 
 stdenv.mkDerivation {
   version = "0.2.4";
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
       --replace "inode.i_dir_acl" "inode.i_size_high"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility that can recover deleted files from an ext3 or ext4 partition";
-    homepage = http://extundelete.sourceforge.net/;
+    homepage = "http://extundelete.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];

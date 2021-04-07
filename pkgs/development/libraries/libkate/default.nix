@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libogg, libpng }:
+{ lib, stdenv, fetchurl, libogg, libpng }:
 
 stdenv.mkDerivation rec {
   name = "libkate-0.4.1";
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libogg libpng ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for encoding and decoding Kate streams";
     longDescription = ''
       This is libkate, the reference implementation of a codec for the Kate
       bitstream format. Kate is a karaoke and text codec meant for encapsulation
       in an Ogg container. It can carry Unicode text, images, and animate
       them.'';
-    homepage = https://code.google.com/archive/p/libkate/;
+    homepage = "https://code.google.com/archive/p/libkate/";
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

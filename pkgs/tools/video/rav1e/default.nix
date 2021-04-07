@@ -1,8 +1,8 @@
-{ rustPlatform, fetchFromGitHub, fetchurl, stdenv, lib, nasm }:
+{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-${version}-source";
@@ -11,26 +11,32 @@ rustPlatform.buildRustPackage rec {
       owner = "xiph";
       repo = "rav1e";
       rev = "v${version}";
-      sha256 = "001v29baa77pkab13d7imi71llixyvffqax8kgjwhm1dhsqlm7bl";
+      sha256 = "0jnq5a3fv6fzzbmprzfxidlcwwgblkwwm0135cfw741wjv7f7h6r";
     };
+
     cargoLock = fetchurl {
       url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
-      sha256 = "06l8jj75ma5kvz1m14x58an2zvx12i6wcq70gzq5k47nvj5l0zax";
+      sha256 = "14fi9wam9rs5206rvcd2f3sjpzq41pnfml14w74wn2ws3gpi46zn";
     };
 
     installPhase = ''
       mkdir -p $out
-      cp -R ./* $out/
+      cp -r ./* $out/
       cp ${cargoLock} $out/Cargo.lock
     '';
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "1j92prjyr86wyx58h10xq9c9z28ky86h291x65w7qrxpj658aiz1";
+  nativeBuildInputs = [ nasm cargo-c ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  cargoSha256 = "0jxc8qsp5fasnh5cbg6yl9d878n7dppay9gzjndlb65kj9j43h84";
+  postBuild = ''
+    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+  '';
 
-  nativeBuildInputs = [ nasm ];
+  postInstall = ''
+    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+  '';
 
   meta = with lib; {
     description = "The fastest and safest AV1 encoder";
@@ -40,9 +46,9 @@ rustPlatform.buildRustPackage rec {
       libaom (the reference encoder) is too slow.
       Features: https://github.com/xiph/rav1e#features
     '';
-    inherit (src.src.meta) homepage;
+    homepage = "https://github.com/xiph/rav1e";
+    changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ maintainers.primeos ];
-    platforms = platforms.all;
   };
 }

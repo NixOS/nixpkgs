@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, curl, openssl }:
+{ lib, stdenv, fetchurl, pkg-config, curl, openssl }:
 
 stdenv.mkDerivation {
   name = "liblastfm-SF-0.5";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ curl openssl ];
 
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = http://liblastfm.sourceforge.net;
+    homepage = "http://liblastfm.sourceforge.net";
     description = "Unofficial C lastfm library";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

@@ -1,11 +1,21 @@
-{ stdenv, pkgs, mavenbuild }:
+{ lib
+, pkgs
+, mavenbuild
+, maven
+, jdk8
+}:
 
 with pkgs.javaPackages;
 
 let
   poms = import ../poms.nix { inherit fetchMaven; };
+  mavenbuild-jdk8 = mavenbuild.override {
+    maven = maven.override {
+      jdk = jdk8;
+    };
+  };
 in rec {
-  mavenHelloRec = { mavenDeps, sha512, version, skipTests ? true, quiet ? true }: mavenbuild {
+  mavenHelloRec = { mavenDeps, mavenbuild, sha512, version, skipTests ? true, quiet ? true }: mavenbuild {
     inherit mavenDeps sha512 version skipTests quiet;
 
     name = "maven-hello-${version}";
@@ -18,11 +28,11 @@ in rec {
     m2Path = "/com/nequissimus/maven-hello/${version}";
 
     meta = {
-      homepage = https://github.com/NeQuissimus/maven-hello/;
+      homepage = "https://github.com/NeQuissimus/maven-hello/";
       description = "Maven Hello World";
-      license = stdenv.lib.licenses.unlicense;
-      platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers;
+      license = lib.licenses.unlicense;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers;
         [ nequissimus ];
     };
   };
@@ -31,6 +41,7 @@ in rec {
     mavenDeps = [];
     sha512 = "3kv5z1i02wfb0l5x3phbsk3qb3wky05sqn4v3y4cx56slqfp9z8j76vnh8v45ydgskwl2vs9xjx6ai8991mzb5ikvl3vdgmrj1j17p2";
     version = "1.0";
+    mavenbuild = mavenbuild-jdk8;
   };
 
   mavenHello_1_1 = mavenHelloRec {
@@ -39,5 +50,6 @@ in rec {
     version = "1.1";
     skipTests = false;
     quiet = false;
+    mavenbuild = mavenbuild-jdk8;
   };
 }

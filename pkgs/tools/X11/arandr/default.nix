@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, python3Packages
+{ lib, fetchurl, python3Packages
 , gobject-introspection, gsettings-desktop-schemas, gtk3
 , wrapGAppsHook, xrandr
 }:
 
 let
   inherit (python3Packages) buildPythonApplication docutils pygobject3;
+  pname = "arandr";
+  version = "0.1.10";
+  name = "${pname}-${version}";
 in buildPythonApplication rec {
-  name = "arandr-0.1.10";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://christian.amsuess.com/tools/arandr/files/${name}.tar.gz";
@@ -29,9 +32,9 @@ in buildPythonApplication rec {
   propagatedBuildInputs = [ xrandr pygobject3 ];
 
   meta = {
-    homepage = http://christian.amsuess.com/tools/arandr/;
+    homepage = "http://christian.amsuess.com/tools/arandr/";
     description = "A simple visual front end for XRandR";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.domenkozar ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.domenkozar ];
   };
 }

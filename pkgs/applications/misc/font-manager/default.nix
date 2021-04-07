@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
-  pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg, yelp-tools,
-  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
+{ lib, stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
+  pkg-config, libxml2, json-glib , sqlite, itstool, yelp-tools,
+  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection,
+  libsoup, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.7.7";
+  version = "0.8.5-1";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "1bzqvspplp1zj0n0869jqbc60wgbjhf0vdrn5bj8dfawxynh8s5f";
+    sha256 = "1p0hfnf06892hn25a6zv8fnhbh4ln11nn2fv1vjqs63rr59fprbk";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gettext
@@ -33,9 +34,10 @@ stdenv.mkDerivation rec {
     libxml2
     json-glib
     sqlite
-    librsvg
     gtk3
     gnome3.adwaita-icon-theme
+    libsoup
+    webkitgtk
   ];
 
   postPatch = ''
@@ -43,8 +45,8 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://fontmanager.github.io/;
+  meta = with lib; {
+    homepage = "https://fontmanager.github.io/";
     description = "Simple font management for GTK desktop environments";
     longDescription = ''
       Font Manager is intended to provide a way for average users to
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
 
       Font Manager is NOT a professional-grade font management solution.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

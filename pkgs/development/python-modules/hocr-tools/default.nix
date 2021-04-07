@@ -3,7 +3,7 @@
 , lxml
 , pillow
 , reportlab
-, stdenv
+, lib
 }:
 buildPythonPackage rec {
   pname = "hocr-tools";
@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow lxml reportlab ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "
 Tools for manipulating and evaluating the hOCR format for representing multi-lingual OCR results by embedding them into HTML";
-    homepage = https://github.com/tmbdev/hocr-tools;
+    homepage = "https://github.com/tmbdev/hocr-tools";
     license = licenses.asl20;
     maintainers = [ maintainers.kiwi ];
   };

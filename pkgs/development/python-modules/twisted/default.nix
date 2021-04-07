@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -16,12 +16,12 @@
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  version = "19.10.0";
+  version = "20.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.bz2";
-    sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+    sha256 = "040yzha6cyshnn6ljgk2birgh6mh2cnra48xp5ina5vfsnsmab6p";
   };
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/twisted/python/_inotify.py --replace \
       "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
   '';
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   # Tests require network
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://twistedmatrix.com/;
+  meta = with lib; {
+    homepage = "https://twistedmatrix.com/";
     description = "Twisted, an event-driven networking engine written in Python";
     longDescription = ''
       Twisted is an event-driven networking engine written in Python

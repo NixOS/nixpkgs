@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   # Tests do not work due to this bug: https://github.com/gak/pycallgraph/issues/118
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://pycallgraph.slowchop.com;
+  meta = with lib; {
+    homepage = "http://pycallgraph.slowchop.com";
     description = "Call graph visualizations for Python applications";
     maintainers = with maintainers; [ auntie ];
     license = licenses.gpl2;

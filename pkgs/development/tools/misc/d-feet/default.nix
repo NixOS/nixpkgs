@@ -1,5 +1,5 @@
-{ stdenv
-, pkgconfig
+{ lib
+, pkg-config
 , fetchurl
 , meson
 , ninja
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/d-feet/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/d-feet/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1cgxgpj546jgpyns6z9nkm5k48lid8s36mvzj8ydkjqws2d19zqz";
   };
 
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -68,13 +68,13 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Feet is an easy to use D-Bus debugger";
     longDescription = ''
       D-Feet can be used to inspect D-Bus interfaces of running programs
       and invoke methods on those interfaces.
     '';
-    homepage = https://wiki.gnome.org/Apps/DFeet;
+    homepage = "https://wiki.gnome.org/Apps/DFeet";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ ktosiek ];

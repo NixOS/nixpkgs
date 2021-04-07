@@ -15,10 +15,7 @@ in
 
     services.rethinkdb = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the RethinkDB server.";
-      };
+      enable = mkEnableOption "RethinkDB server";
 
       #package = mkOption {
       #  default = pkgs.rethinkdb;

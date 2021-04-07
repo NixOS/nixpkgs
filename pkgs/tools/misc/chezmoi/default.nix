@@ -1,37 +1,38 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "chezmoi";
-  version = "1.7.13";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     rev = "v${version}";
-    sha256 = "1xqmr7sps5s3ib4q91z7drwlglp1av37gb2jm0zw7y3ijyp2c749";
+    sha256 = "sha256-bGrGekZLystw3AvQP9bdFGlxteGCzwrhamaO8WLKf7U=";
   };
 
-  modSha256 = "07fglc3k3a5y70slly4ri3izwnyk4nwghmvkjwgc8lbw8m1zx0r8";
+  vendorSha256 = "sha256-YU+t8GVsLYWONezUIB4NUrVxtYOmf/2b5v4v3VSYtBU=";
+
+  doCheck = false;
 
   buildFlagsArray = [
-    "-ldflags=-s -w -X github.com/twpayne/chezmoi/cmd.VersionStr=${version}"
+    "-ldflags=-s -w -X main.version=${version} -X main.builtBy=nixpkgs"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    installShellCompletion --bash completions/chezmoi-completion.bash
+    installShellCompletion --bash --name chezmoi.bash completions/chezmoi-completion.bash
     installShellCompletion --fish completions/chezmoi.fish
     installShellCompletion --zsh completions/chezmoi.zsh
   '';
 
   subPackages = [ "." ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/twpayne/chezmoi;
+  meta = with lib; {
+    homepage = "https://www.chezmoi.io/";
     description = "Manage your dotfiles across multiple machines, securely";
     license = licenses.mit;
     maintainers = with maintainers; [ jhillyerd ];
-    platforms = platforms.all;
   };
 }

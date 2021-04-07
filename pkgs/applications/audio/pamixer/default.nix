@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "pamixer";
@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
     install -Dm755 pamixer -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pulseaudio command line mixer";
     longDescription = ''
       Features:
-        - Get the current volume of the default sink, the default source or a selected one by his id
+        - Get the current volume of the default sink, the default source or a selected one by its id
         - Set the volume for the default sink, the default source or any other device
         - List the sinks
         - List the sources
         - Increase / Decrease the volume for a device
         - Mute or unmute a device
     '';
-    homepage = https://github.com/cdemoulins/pamixer;
+    homepage = "https://github.com/cdemoulins/pamixer";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

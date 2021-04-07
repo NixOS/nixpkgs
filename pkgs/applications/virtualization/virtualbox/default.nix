@@ -1,8 +1,11 @@
 { config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
-, qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+, qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll
+# If open-watcom-bin is not passed, VirtualBox will fall back to use
+# the shipped alternative sources (assembly).
+, open-watcom-bin ? null
 , makeself, perl
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
@@ -11,18 +14,16 @@
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
-, patchelfUnstable # needed until 0.10 is released
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   python = python3;
   buildType = "release";
-  # Remember to change the extpackRev and version in extpack.nix and
-  # guest-additions/default.nix as well.
-  main = "036x2mvkk22lbg72cz6pik9z538j1ag6mmwjjmfikgrq1i7v24jy";
-  version = "6.0.14";
+  # Use maintainers/scripts/update.nix to update the version and all related hashes or
+  # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
+  version = "6.1.18";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -39,12 +40,12 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = main;
+    sha256 = "108d42b9b391b7a332a33df1662cf7b0e9d9a80f3079d16288d8b9487f427d40";
   };
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
+  nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
@@ -89,6 +90,7 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
+  ++ [ ./extra_symbols.patch ]
      # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
      # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
      # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
@@ -101,32 +103,18 @@ in stdenv.mkDerivation {
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
   ++ [
+    # NOTE: the patch for linux 5.11 can be removed when the next version of VirtualBox is released
+    ./linux-5-11.patch
     ./qtx11extras.patch
-    # Kernel 5.4 fix, should be fixed with next upstream release
-    # https://www.virtualbox.org/ticket/18945
-    (fetchpatch {
-      name = "kernel-5.4-fix-1.patch";
-      url = "https://www.virtualbox.org/changeset/81586/vbox?format=diff";
-      sha256 = "0zbkc9v65pkdmjik53x29g39qyf7narkhpwpx5n1n1bfqnhf0k1r";
-      stripLen = 1;
-    })
-    (fetchpatch {
-      name = "kernel-5.4-fix-2.patch";
-      url = "https://www.virtualbox.org/changeset/81587/vbox?format=diff";
-      sha256 = "1j98cqxj8qlqwaqr4mvwwbkmchw8jmygjwgzz82gix7fj76j2y9c";
-      stripLen = 1;
-    })
-    (fetchpatch {
-      name = "kernel-5.4-fix-3.patch";
-      url = "https://www.virtualbox.org/changeset/81649/vbox?format=diff";
-      sha256 = "1d6p5k5dgzmjglqfkbcbvpn1x3wxila30q4gcbb7pxwfgclaw2hk";
-      stripLen = 1;
-    })
   ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
+  '' + optionalString headless ''
+    # Fix compile error in version 6.1.6
+    substituteInPlace src/VBox/HostServices/SharedClipboard/VBoxSharedClipboardSvc-x11-stubs.cpp \
+      --replace PSHCLFORMATDATA PSHCLFORMATS
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
@@ -164,6 +152,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
+      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -235,12 +224,13 @@ in stdenv.mkDerivation {
   passthru = {
     inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
+    updateScript = ./update.sh;
   };
 
   meta = {
     description = "PC emulator";
     license = licenses.gpl2;
-    homepage = https://www.virtualbox.org/;
+    homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander ];
     platforms = [ "x86_64-linux" ];
   };

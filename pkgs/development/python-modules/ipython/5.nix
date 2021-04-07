@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sha256 = "4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906";
   };
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
 
@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "IPython: Productive Interactive Computing";
-    homepage = http://ipython.org/;
+    homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bjornfor orivej lnl7 ];
   };

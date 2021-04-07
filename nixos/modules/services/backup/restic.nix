@@ -31,6 +31,59 @@ in
           '';
         };
 
+        rcloneOptions = mkOption {
+          type = with types; nullOr (attrsOf (oneOf [ str bool ]));
+          default = null;
+          description = ''
+            Options to pass to rclone to control its behavior.
+            See <link xlink:href="https://rclone.org/docs/#options"/> for
+            available options. When specifying option names, strip the
+            leading <literal>--</literal>. To set a flag such as
+            <literal>--drive-use-trash</literal>, which does not take a value,
+            set the value to the Boolean <literal>true</literal>.
+          '';
+          example = {
+            bwlimit = "10M";
+            drive-use-trash = "true";
+          };
+        };
+
+        rcloneConfig = mkOption {
+          type = with types; nullOr (attrsOf (oneOf [ str bool ]));
+          default = null;
+          description = ''
+            Configuration for the rclone remote being used for backup.
+            See the remote's specific options under rclone's docs at
+            <link xlink:href="https://rclone.org/docs/"/>. When specifying
+            option names, use the "config" name specified in the docs.
+            For example, to set <literal>--b2-hard-delete</literal> for a B2
+            remote, use <literal>hard_delete = true</literal> in the
+            attribute set.
+            Warning: Secrets set in here will be world-readable in the Nix
+            store! Consider using the <literal>rcloneConfigFile</literal>
+            option instead to specify secret values separately. Note that
+            options set here will override those set in the config file.
+          '';
+          example = {
+            type = "b2";
+            account = "xxx";
+            key = "xxx";
+            hard_delete = true;
+          };
+        };
+
+        rcloneConfigFile = mkOption {
+          type = with types; nullOr path;
+          default = null;
+          description = ''
+            Path to the file containing rclone configuration. This file
+            must contain configuration for the remote specified in this backup
+            set and also must be readable by root. Options set in
+            <literal>rcloneConfig</literal> will override those set in this
+            file.
+          '';
+        };
+
         repository = mkOption {
           type = types.str;
           description = ''
@@ -40,10 +93,12 @@ in
         };
 
         paths = mkOption {
-          type = types.listOf types.str;
-          default = [];
+          type = types.nullOr (types.listOf types.str);
+          default = null;
           description = ''
-            Which paths to backup.
+            Which paths to backup.  If null or an empty array, no
+            backup command will be run.  This can be used to create a
+            prune-only job.
           '';
           example = [
             "/var/lib/postgresql"
@@ -164,24 +219,38 @@ in
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
           filesFromTmpFile = "/run/restic-backups-${name}/includes";
           backupPaths = if (backup.dynamicFilesFrom == null)
-                        then concatStringsSep " " backup.paths
+                        then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
                         else "--files-from ${filesFromTmpFile}";
           pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
             ( resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts) )
             ( resticCmd + " check" )
           ];
+          # Helper functions for rclone remotes
+          rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
+          rcloneAttrToOpt = v: "RCLONE_" + toUpper (builtins.replaceStrings [ "-" ] [ "_" ] v);
+          rcloneAttrToConf = v: "RCLONE_CONFIG_" + toUpper (rcloneRemoteName + "_" + v);
+          toRcloneVal = v: if lib.isBool v then lib.boolToString v else v;
         in nameValuePair "restic-backups-${name}" ({
           environment = {
             RESTIC_PASSWORD_FILE = backup.passwordFile;
             RESTIC_REPOSITORY = backup.repository;
-          };
+          } // optionalAttrs (backup.rcloneOptions != null) (mapAttrs' (name: value:
+            nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+          ) backup.rcloneOptions) // optionalAttrs (backup.rcloneConfigFile != null) {
+            RCLONE_CONFIG = backup.rcloneConfigFile;
+          } // optionalAttrs (backup.rcloneConfig != null) (mapAttrs' (name: value:
+            nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+          ) backup.rcloneConfig);
           path = [ pkgs.openssh ];
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = [ "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ] ++ pruneCmd;
+            ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ])
+                        ++ pruneCmd;
             User = backup.user;
             RuntimeDirectory = "restic-backups-${name}";
+            CacheDirectory = "restic-backups-${name}";
+            CacheDirectoryMode = "0700";
           } // optionalAttrs (backup.s3CredentialsFile != null) {
             EnvironmentFile = backup.s3CredentialsFile;
           };

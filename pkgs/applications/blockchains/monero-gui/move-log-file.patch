@@ -1,15 +1,14 @@
-diff --git a/main.cpp b/main.cpp
-index a51568d..5a9f683 100644
---- a/main.cpp
-+++ b/main.cpp
-@@ -152,7 +152,9 @@ int main(int argc, char *argv[])
+diff --git a/src/main/main.cpp b/src/main/main.cpp
+index c5210e5f..45794d72 100644
+--- a/src/main/main.cpp
++++ b/src/main/main.cpp
+@@ -220,6 +220,9 @@ int main(int argc, char *argv[])
      QCommandLineOption logPathOption(QStringList() << "l" << "log-file",
          QCoreApplication::translate("main", "Log to specified file"),
          QCoreApplication::translate("main", "file"));
--
 +    logPathOption.setDefaultValue(
 +        QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
 +        + "/monero-wallet-gui.log");
-     parser.addOption(logPathOption);
-     parser.addHelpOption();
-     parser.process(app);
+ 
+     QCommandLineOption testQmlOption("test-qml");
+     testQmlOption.setFlags(QCommandLineOption::HiddenFromHelp);

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 let version = "0.9.5.1.1"; in
 
@@ -14,8 +14,8 @@ python2Packages.buildPythonPackage {
   doCheck = false;
 
   meta = {
-    homepage = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/;
+    homepage = "http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/";
     description = "A language for writing Python extension modules";
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

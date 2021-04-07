@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , dconf
@@ -7,7 +7,6 @@
 , gettext
 , glib
 , gnome-desktop
-, gnome-flashback
 , gnome-menus
 , gnome3
 , gtk3
@@ -16,22 +15,21 @@
 , libsoup
 , libwnck3
 , libxml2
-, pkgconfig
+, pkg-config
 , polkit
 , systemd
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.34.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "03dr54njdh2szy6yrib2q0agjscbj3bmzrfb9fb4psrf4mah5g56";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-GosVrvCgKmyqm5IJyNP7Q+e5h6OAB2aRwj8DFOwwLxU=";
   };
 
   # make .desktop Exec absolute
@@ -46,8 +44,8 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome-menus}/share:${gnome-flashback}/share"
-      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg:${gnome-flashback}/etc/xdg"
+      --prefix XDG_DATA_DIRS : "${gnome-menus}/share"
+      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg"
     )
   '';
 
@@ -56,7 +54,7 @@ in stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -90,11 +88,11 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Component of Gnome Flashback that provides panels and default applets for the desktop";
-    homepage = https://wiki.gnome.org/Projects/GnomePanel;
+    homepage = "https://wiki.gnome.org/Projects/GnomePanel";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

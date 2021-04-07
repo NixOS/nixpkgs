@@ -1,5 +1,5 @@
-{ stdenv, config, fetchurl, pkgconfig
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, config, fetchurl, pkg-config
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
@@ -15,22 +15,23 @@
 , libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
 , audiofile, libiconv
+, withStatic ? false
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.10";
+  version = "2.0.14";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "0mqxp6w5jhbq6y1j690g9r3gpzwjxh4czaglw8x05l7hl49nqrdl";
+    sha256 = "1g1jahknv5r4yhh1xq5sf0md20ybdw1zh1i15lry26sq39bmn8fq";
   };
-
+  dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
@@ -41,9 +42,14 @@ stdenv.mkDerivation rec {
     substituteInPlace include/SDL_opengl_glext.h \
       --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
       --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
+
+    substituteInPlace configure \
+      --replace 'WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`' 'WAYLAND_SCANNER=`pkg-config --variable=wayland_scanner wayland-scanner`'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
@@ -120,9 +126,9 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit openglSupport; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform multimedia library";
-    homepage = http://www.libsdl.org/;
+    homepage = "http://www.libsdl.org/";
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];

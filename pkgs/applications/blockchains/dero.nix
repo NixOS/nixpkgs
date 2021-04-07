@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unbound, openssl, boost
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unbound, openssl, boost
 , lmdb, miniupnpc, readline }:
 
 stdenv.mkDerivation rec {
@@ -12,10 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v8b9wbmqbpyf4jpc0v276qzk3hc5fpddcmwvv5k5yfi30nmbh5c";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ boost miniupnpc openssl lmdb unbound readline ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Secure, private blockchain with smart contracts based on Monero";

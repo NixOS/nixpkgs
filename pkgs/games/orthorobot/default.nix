@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "orthorobot";
@@ -46,12 +46,12 @@ stdenv.mkDerivation {
     chmod +x $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recharge the robot";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://stabyourself.net/orthorobot/;
+    downloadPage = "http://stabyourself.net/orthorobot/";
   };
 
 }

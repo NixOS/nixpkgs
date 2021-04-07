@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, gawk
+{ lib, fetchFromGitHub, makeWrapper, gawk
 , makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
 }:
 
@@ -46,9 +46,9 @@ perlPackages.buildPerlPackage rec {
         completions/zsh/_feedgnuplot
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General purpose pipe-oriented plotting tool";
-    homepage = https://github.com/dkogan/feedgnuplot/;
+    homepage = "https://github.com/dkogan/feedgnuplot/";
     license = with licenses; [ artistic1 gpl1Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ mnacamura ];

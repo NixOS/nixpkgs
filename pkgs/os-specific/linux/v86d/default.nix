@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , kernel, klibc
 }:
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ klibc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A daemon to run x86 code in an emulated environment";
-    homepage = https://github.com/mjanusz/v86d;
+    homepage = "https://github.com/mjanusz/v86d";
     license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
     platforms = [ "i686-linux" "x86_64-linux" ];

@@ -1,7 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
+, fetchpatch
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -15,12 +17,13 @@
 , libgee
 , elementary-icon-theme
 , appstream
+, pcre2
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.1";
+  version = "5.5.2";
 
   repoName = "terminal";
 
@@ -28,11 +31,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1b8fzs9s7djhwp02l3fwjpwxylklpbnw7x46mv7c8ksbp0m75iyj";
+    sha256 = "sha256-giVmL0zYEVYJ40ZBQ9dDb4hOx4HaYRt7tUTOu37lMYU=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -55,6 +58,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libnotify
+    pcre2
     vte
   ];
 
@@ -66,13 +70,13 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
-    homepage = https://github.com/elementary/terminal;
+    homepage = "https://github.com/elementary/terminal";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

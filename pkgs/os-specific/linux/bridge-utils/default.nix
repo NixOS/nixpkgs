@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "bridge-utils-1.5";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "https://sourceforge.net/projects/bridge/";
-    homepage = https://wiki.linuxfoundation.org/networking/bridge;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://wiki.linuxfoundation.org/networking/bridge";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

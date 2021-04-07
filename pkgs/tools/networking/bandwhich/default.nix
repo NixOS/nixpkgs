@@ -1,24 +1,21 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.11.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = version;
-    sha256 = "1c4lndrr7xndgp60zcdjqpciwibm9sjwwrd3921fyz4jg44g76zy";
+    sha256 = "014blvrv0kk4gzga86mbk7gd5dl1szajfi972da3lrfznck1w24n";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "0b5pqsdggdjq9sl54rmh2gaq31va6b2crdv7ihh3198ixwasaf02";
 
-  cargoSha256 = "1sa81570cvvpqgdcpnb08b0q4c6ap8a2wxfp2z336jzbv0zgv8a6";
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
@@ -29,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne ma27 ];
     platforms = platforms.unix;
   };
 }

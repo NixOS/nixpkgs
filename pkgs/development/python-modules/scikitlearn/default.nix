@@ -3,23 +3,37 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, gfortran, glibcLocales
-, numpy, scipy, pytest, pillow
+, gfortran
+, glibcLocales
+, numpy
+, scipy
+, pytest
+, pillow
 , cython
 , joblib
 , llvmPackages
+, threadpoolctl
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.21.3";
-  # UnboundLocalError: local variable 'message' referenced before assignment
-  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  version = "0.24.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb9b8ebf59eddd8b96366428238ab27d05a19e89c5516ce294abc35cea75d003";
+    sha256 = "oDNKGALmTWVgIsO/q1anP71r9LEpg0PzaIryFRgQu98=";
   };
+
+  patches = [
+    # This patch fixes compatibility with numpy 1.20. It was merged before 0.24.1 was released,
+    # but for some reason was not included in the 0.24.1 release tarball.
+    (fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/e7ef22c3ba2334cb3b476e95d7c083cf6b48ce56.patch";
+      sha256 = "174554k1pbf92bj7wgq0xjj16bkib32ailyhwavdxaknh4bd9nmv";
+    })
+  ];
 
   buildInputs = [
     pillow
@@ -38,17 +52,9 @@ buildPythonPackage rec {
     scipy
     numpy.blas
     joblib
+    threadpoolctl
   ];
   checkInputs = [ pytest ];
-
-  patches = [
-    # Fixes tests by changing threshold of a test-case that broke
-    # with numpy versions >= 1.17. This should be removed for versions > 0.21.2.
-	( fetchpatch {
-	  url = "https://github.com/scikit-learn/scikit-learn/commit/b730befc821caec5b984d9ff3aa7bc4bd7f4d9bb.patch";
-	  sha256 = "0z36m05mv6d494qwq0688rgwa7c4bbnm5s2rcjlrp29fwn3fy1bv";
-	})
-  ];
 
   LC_ALL="en_US.UTF-8";
 
@@ -59,9 +65,15 @@ buildPythonPackage rec {
     HOME=$TMPDIR OMP_NUM_THREADS=1 pytest -k "not test_feature_importance_regression" --pyargs sklearn
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of python modules for machine learning and data mining";
-    homepage = http://scikit-learn.org;
+    changelog = let
+      major = versions.major version;
+      minor = versions.minor version;
+      dashVer = replaceChars ["."] ["-"] version;
+    in
+      "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
+    homepage = "https://scikit-learn.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

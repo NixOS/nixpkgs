@@ -1,10 +1,10 @@
-{stdenv, fetchurl, unzip, makeWrapper}:
+{stdenv, lib, fetchurl, unzip, makeWrapper}:
 
 let
   # Gradle is a build system that bootstraps itself. This is what it actually
   # downloads in the bootstrap phase.
   gradleAllZip = fetchurl {
-    url = http://services.gradle.org/distributions/gradle-4.1-all.zip;
+    url = "http://services.gradle.org/distributions/gradle-4.1-all.zip";
     sha256 = "1rcrh263vq7a0is800y5z36jj97p67c6zpqzzfcbr7r0qaxb61sw";
   };
 
@@ -55,16 +55,16 @@ in
 stdenv.mkDerivation {
   name = "mobilesdk-8.2.1.GA";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = https://builds.appcelerator.com/mobile/8_2_X/mobilesdk-8.2.1.v20191025070136-linux.zip;
+    url = "https://builds.appcelerator.com/mobile/8_2_X/mobilesdk-8.2.1.v20191025070136-linux.zip";
     sha256 = "1nvcmm6cby6bmwdiacq46n5y4zjpz9qlipakvglw27j3p4rbmkwl";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = https://builds.appcelerator.com/mobile/8_2_X/mobilesdk-8.2.1.v20191025070136-osx.zip;
+    url = "https://builds.appcelerator.com/mobile/8_2_X/mobilesdk-8.2.1.v20191025070136-osx.zip";
     sha256 = "1nxwmyw3vqc5wghj38kpksisy0i808x0x3pa8w3p290w709g311l";
   }
   else throw "Platform: ${stdenv.system} not supported!";
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   buildCommand = ''
     mkdir -p $out
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     # Patch maven central repository with our own local directory. This prevents the builder from downloading Maven artifacts
     sed -i -e 's|mavenCentral()|maven { url "${fakeMavenRepo}" }|' android/templates/build/proguard.gradle
 
-    ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
+    ${lib.optionalString (stdenv.system == "x86_64-darwin") ''
       # Patch the strip frameworks script in the iPhone build template to not let
       # it skip the strip phase. This is caused by an assumption on the file
       # permissions in which Nix deviates from the standard.

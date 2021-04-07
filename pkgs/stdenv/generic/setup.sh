@@ -157,7 +157,8 @@ addToSearchPathWithCustomDelimiter() {
     local delimiter="$1"
     local varName="$2"
     local dir="$3"
-    if [ -d "$dir" ]; then
+    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" \
+          != *"${delimiter}${dir}${delimiter}"* ]]; then
         export "${varName}=${!varName:+${!varName}${delimiter}}${dir}"
     fi
 }
@@ -219,12 +220,13 @@ printWords() {
 # Initialisation.
 
 
-# Set a fallback default value for SOURCE_DATE_EPOCH, used by some
-# build tools to provide a deterministic substitute for the "current"
-# time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
-# confuses some applications.
+# Set a fallback default value for SOURCE_DATE_EPOCH, used by some build tools
+# to provide a deterministic substitute for the "current" time. Note that
+# 315532800 = 1980-01-01 12:00:00. We use this date because python's wheel
+# implementation uses zip archive and zip does not support dates going back to
+# 1970.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=1}
+: ${SOURCE_DATE_EPOCH:=315532800}
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -482,8 +484,12 @@ activatePackage() {
     # the transition, we do include everything in thatcase.
     #
     # TODO(@Ericson2314): Don't special-case native compilation
-    if [[ ( -z "${strictDeps-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
+    if [[ -z "${strictDeps-}" || "$hostOffset" -le -1 ]]; then
         addToSearchPath _PATH "$pkg/bin"
+    fi
+
+    if [[ "$hostOffset" -le -1 ]]; then
+        addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
@@ -601,13 +607,16 @@ fi
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
 HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
+export XDG_DATA_DIRS="${_XDG_DATA_DIRS-}${_XDG_DATA_DIRS:+${XDG_DATA_DIRS:+:}}${XDG_DATA_DIRS-}"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
     echo "final host path: $HOST_PATH"
+    echo "final data dirs: $XDG_DATA_DIRS"
 fi
 
 unset _PATH
 unset _HOST_PATH
+unset _XDG_DATA_DIRS
 
 
 # Make GNU Make produce nested output.
@@ -779,7 +788,7 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        export > "$NIX_BUILD_TOP/env-vars" || true
+        export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars" || true
     fi
 }
 
@@ -1036,7 +1045,7 @@ checkPhase() {
     runHook preCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom checkPhase, doing nothing"
         runHook postCheck
         return
     fi
@@ -1181,7 +1190,7 @@ installCheckPhase() {
     runHook preInstallCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
        && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
@@ -1266,6 +1275,7 @@ genericBuild() {
 
     for curPhase in $phases; do
         if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
+        if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
         if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
         if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi

@@ -1,6 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
+, meson
+, ninja
 , gettext
 , gnupg
 , p11-kit
@@ -15,30 +17,38 @@
 , vala
 , gnome3
 , python3
+, shared-mime-info
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.34.0";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0925snsixzkwh49xiayqmj6fcrmklqk8kyy0jkv7m64h9abm1pr9";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "F/yvnEqTpl+xxyuCZDuxAsEzRAhGh9WIbqZjE4aNnsk=";
   };
 
   postPatch = ''
     patchShebangs build/ gcr/fixtures/
+
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
+    meson
+    python3
+    ninja
     gettext
     gobject-introspection
     libxslt
     makeWrapper
     vala
+    shared-mime-info
   ];
 
   buildInputs = [
@@ -58,6 +68,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+  mesonFlags = [
+    "-Dgtk_doc=false"
+  ];
+
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
   enableParallelBuilding = true;
@@ -73,9 +87,9 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
     license = licenses.lgpl2Plus;

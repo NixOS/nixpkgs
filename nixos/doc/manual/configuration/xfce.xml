@@ -9,7 +9,6 @@
 <programlisting>
 <xref linkend="opt-services.xserver.desktopManager.xfce.enable" /> = true;
 <xref linkend="opt-services.xserver.displayManager.defaultSession" /> = "xfce";
-};
 </programlisting>
  </para>
  <para>
@@ -17,11 +16,11 @@
   effects, some example settings:
 <programlisting>
 <link linkend="opt-services.picom.enable">services.picom</link> = {
-  <link linkend="opt-services.picom.enable">enable</link>          = true;
-  <link linkend="opt-services.picom.fade">fade</link>            = true;
-  <link linkend="opt-services.picom.inactiveOpacity">inactiveOpacity</link> = "0.9";
-  <link linkend="opt-services.picom.shadow">shadow</link>          = true;
-  <link linkend="opt-services.picom.fadeDelta">fadeDelta</link>       = 4;
+  <link linkend="opt-services.picom.enable">enable</link> = true;
+  <link linkend="opt-services.picom.fade">fade</link> = true;
+  <link linkend="opt-services.picom.inactiveOpacity">inactiveOpacity</link> = 0.9;
+  <link linkend="opt-services.picom.shadow">shadow</link> = true;
+  <link linkend="opt-services.picom.fadeDelta">fadeDelta</link> = 4;
 };
 </programlisting>
  </para>

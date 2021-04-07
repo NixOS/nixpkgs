@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ladspaH
+{ lib, stdenv, fetchurl, ladspaH
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preInstall="mkdir -p $out/lib/ladspa";
 
   meta = {
-    description = ''a four-band parametric equaliser, which has the nice property of being stable even while parameters are being changed'';
+    description = "a four-band parametric equaliser, which has the nice property of being stable even while parameters are being changed";
     longDescription = ''
       Each section has an active/bypass switch, frequency, bandwidth and gain controls.
       There is also a global bypass switch and gain control.
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
       This should make this plugin a good candidate for use in systems that allow automation of plugin control ports, such as Ardour, or for stage use.
     '';
     version = version;
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

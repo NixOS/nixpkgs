@@ -1,44 +1,46 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , certifi
+, decorator
 , future
 , urllib3
 , tornado
 , pytest
+, APScheduler
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "12.3.0";
+  version = "13.3";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yrg5342zz0hpf2pc85ffwx57msa6jpcmvvjfkzh8nh2lc98aq21";
+    hash = "sha256-dw1sGfdeUw3n9qh4TsBpRdqEvNI0SnKTK4wqBaeM1CE=";
   };
 
-  prePatch = ''
-    rm -rf telegram/vendor
-    substituteInPlace telegram/utils/request.py \
-      --replace "import telegram.vendor.ptb_urllib3.urllib3 as urllib3" "import urllib3 as urllib3" \
-      --replace "import telegram.vendor.ptb_urllib3.urllib3.contrib.appengine as appengine" "import urllib3.contrib.appengine as appengine" \
-      --replace "from telegram.vendor.ptb_urllib3.urllib3.connection import HTTPConnection" "from urllib3.connection import HTTPConnection" \
-      --replace "from telegram.vendor.ptb_urllib3.urllib3.util.timeout import Timeout" "from urllib3.util.timeout import Timeout" \
-      --replace "from telegram.vendor.ptb_urllib3.urllib3.fields import RequestField" "from urllib3.fields import RequestField"
-
-    touch LICENSE.dual
-  '';
-
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ certifi future urllib3 tornado ];
+  propagatedBuildInputs = [ certifi future urllib3 tornado decorator APScheduler ];
+
+  # --with-upstream-urllib3 is not working properly
+  postPatch = ''
+    rm -r telegram/vendor
+
+    substituteInPlace requirements.txt \
+      --replace 'APScheduler==3.6.3' 'APScheduler'
+  '';
+  setupPyGlobalFlags = "--with-upstream-urllib3";
 
   # tests not included with release
   doCheck = false;
+  pythonImportsCheck = [ "telegram" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This library provides a pure Python interface for the Telegram Bot API.";
-    homepage = https://python-telegram-bot.org;
-    license = licenses.lgpl3;
+    homepage = "https://python-telegram-bot.org";
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ veprbl pingiun ];
   };
 }

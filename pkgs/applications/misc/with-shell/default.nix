@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation {
   name = "with-2016-08-20";
   src = fetchFromGitHub {
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
     cp with $out/bin/with
   '';
   meta = {
-    homepage = https://github.com/mchav/With;
+    homepage = "https://github.com/mchav/With";
     description = "Command prefixing for continuous workflow using a single tool";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

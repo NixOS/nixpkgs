@@ -1,41 +1,76 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
-, numpy
+, fetchFromGitHub
+, pythonOlder
+, brotlipy
+, zopfli
+, fs
+, lxml
+, scipy
+, munkres
+, unicodedata2
+, sympy
+, matplotlib
+, reportlab
+, sphinx
 , pytest
-, pytestrunner
+, pytest-randomly
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.2.2";
-  disabled = isPy27;
+  version = "4.21.1";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "66bb3dfe7efe5972b0145339c063ffaf9539e973f7ff8791df84366eafc65804";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner  = pname;
+    repo   = pname;
+    rev    = version;
+    sha256 = "1x9qrg6ppqhm5214ymwvn0r34qdz8pqvyxd0sj7rkp06wa757z2i";
   };
 
-  buildInputs = [
-    numpy
-  ];
-
+  # all dependencies are optional, but
+  # we run the checks with them
   checkInputs = [
     pytest
-    pytestrunner
+    pytest-randomly
     glibcLocales
+    # etree extra
+    lxml
+    # ufo extra
+    fs
+    # woff extra
+    brotlipy
+    zopfli
+    # unicode extra
+    unicodedata2
+    # interpolatable extra
+    scipy
+    munkres
+    # symfont
+    sympy
+    # varLib
+    matplotlib
+    # pens
+    reportlab
+    sphinx
   ];
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
   '';
 
-  meta = {
-    homepage = https://github.com/fonttools/fonttools;
+  # avoid timing issues with timestamps in subset_test.py and ttx_test.py
+  checkPhase = ''
+    pytest Tests fontTools \
+      -k 'not ttcompile_timestamp_calcs and not recalc_timestamp'
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/fonttools/fonttools";
     description = "A library to manipulate font files from Python";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

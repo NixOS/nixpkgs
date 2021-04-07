@@ -15,8 +15,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
+    inherit pname version format;
     python = "py3";
     sha256 = "1b27d7d63e3191e5d7238631fc828e4493590e94dcea034e386c079d853cce14";
   };
@@ -29,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streaming HTTP uploads and multipart/form-data encoding";
-    homepage = https://atlee.ca/software/poster/;
+    homepage = "https://atlee.ca/software/poster/";
     license = licenses.mit;
     maintainers = with maintainers; [ WhittlesJr ];
   };

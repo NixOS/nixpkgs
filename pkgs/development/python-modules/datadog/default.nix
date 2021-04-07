@@ -1,30 +1,61 @@
-{ lib, buildPythonPackage, fetchPypi
-, decorator, requests, simplejson, pillow
-, nose, mock, pytest, freezegun }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, decorator
+, requests
+, typing ? null
+, configparser
+, click
+, freezegun
+, mock
+, pytestCheckHook
+, pytest-vcr
+, python-dateutil
+, vcrpy
+}:
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.33.0";
+  version = "0.40.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bce73f33a4496b004402baa502251150e3b48a48f610ff89d4cd110b366ee0ab";
+    sha256 = "438c1dde5462e68c5c792b7b4a1d87a0ddd970af3db31b3cf15980eed0c44311";
   };
 
   postPatch = ''
     find . -name '*.pyc' -exec rm {} \;
   '';
 
-  propagatedBuildInputs = [ decorator requests simplejson pillow ];
+  propagatedBuildInputs = [ decorator requests ]
+    ++ lib.optional (pythonOlder "3.5") typing
+    ++ lib.optional (pythonOlder "3.0") configparser;
 
-  checkInputs = [ nose mock pytest freezegun ];
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [
+    click
+    freezegun
+    mock
+    pytestCheckHook
+    pytest-vcr
+    python-dateutil
+    vcrpy
+  ];
+
+  disabledTestPaths = [
+    "tests/unit/dogstatsd/test_statsd.py" # does not work in sandbox
+  ];
+
+  disabledTests = [
+    "test_default_settings_set"
+    "test_threadstats_thread_safety"
+  ];
+
+  pythonImportsCheck = [ "datadog" ];
 
   meta = with lib; {
     description = "The Datadog Python library";
     license = licenses.bsd3;
-    homepage = https://github.com/DataDog/datadogpy;
+    homepage = "https://github.com/DataDog/datadogpy";
   };
 }

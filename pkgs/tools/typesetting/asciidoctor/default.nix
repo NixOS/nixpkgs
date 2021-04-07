@@ -1,6 +1,6 @@
 { lib, bundlerApp, makeWrapper,
   # Optional dependencies, can be null
-  epubcheck, kindlegen,
+  epubcheck,
   bundlerUpdateScript
 }:
 
@@ -12,16 +12,15 @@ let
     exes = [
       "asciidoctor"
       "asciidoctor-pdf"
-      "asciidoctor-safe"
       "asciidoctor-epub3"
+      "asciidoctor-revealjs"
     ];
 
     buildInputs = [ makeWrapper ];
 
     postBuild = ''
         wrapProgram "$out/bin/asciidoctor-epub3" \
-          ${lib.optionalString (epubcheck != null) "--set EPUBCHECK ${epubcheck}/bin/epubcheck"} \
-          ${lib.optionalString (kindlegen != null) "--set KINDLEGEN ${kindlegen}/bin/kindlegen"}
+          ${lib.optionalString (epubcheck != null) "--set EPUBCHECK ${epubcheck}/bin/epubcheck"}
       '';
 
     passthru = {
@@ -30,7 +29,7 @@ let
 
     meta = with lib; {
       description = "A faster Asciidoc processor written in Ruby";
-      homepage = https://asciidoctor.org/;
+      homepage = "https://asciidoctor.org/";
       license = licenses.mit;
       maintainers = with maintainers; [ gpyh nicknovitski ];
       platforms = platforms.unix;

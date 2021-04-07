@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -21,9 +21,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python 3 DNS library";
-    homepage = https://launchpad.net/py3dns;
+    homepage = "https://launchpad.net/py3dns";
     license = licenses.psfl;
   };
 

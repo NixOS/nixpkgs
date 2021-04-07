@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , requests }:
 
 buildPythonPackage rec {
@@ -15,9 +15,9 @@ buildPythonPackage rec {
   # tests require network
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bindings and command line utility for the Pushover notification service";
-    homepage = https://github.com/Thibauth/python-pushover;
+    homepage = "https://github.com/Thibauth/python-pushover";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
   };

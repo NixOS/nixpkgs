@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "bviplus";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "CFLAGS=-fgnu89-inline" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ncurses based hex editor with a vim-like interface";
-    homepage = http://bviplus.sourceforge.net;
+    homepage = "http://bviplus.sourceforge.net";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

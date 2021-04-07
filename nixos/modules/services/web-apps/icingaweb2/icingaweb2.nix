@@ -167,8 +167,8 @@ in {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         user = "icingaweb2";
+        phpPackage = pkgs.php.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
         phpOptions = ''
-          extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
           date.timezone = "${cfg.timezone}"
         '';
         settings = mapAttrs (name: mkDefault) {

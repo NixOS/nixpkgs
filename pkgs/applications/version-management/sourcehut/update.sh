@@ -40,8 +40,8 @@ update_version() {
   git commit -m "$1: $version_old -> $version"
 }
 
-services=( "srht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "listssrht" "mansrht" "metasrht"
-           "pastesrht" "todosrht" "scmsrht" )
+services=( "srht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
+           "metasrht" "pastesrht" "todosrht" "scmsrht" )
 
 # Whether or not a specific service is requested
 if [ -n "$1" ]; then

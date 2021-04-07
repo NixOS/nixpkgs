@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml
+, jsooSupport ? true
+}:
 
 stdenv.mkDerivation rec {
   version = "0.8.5";
@@ -10,16 +12,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg js_of_ocaml ];
+  buildInputs = [ findlib topkg ]
+    ++ lib.optional jsooSupport js_of_ocaml;
 
   propagatedBuildInputs = [ result ];
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml true";
+  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
 
   inherit (topkg) installPhase;
 
   meta = {
-    homepage = https://erratique.ch/software/ptime;
+    homepage = "https://erratique.ch/software/ptime";
     description = "POSIX time for OCaml";
     longDescription = ''
       Ptime has platform independent POSIX time support in pure OCaml.
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
 
       Ptime is not a calendar library.
     '';
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

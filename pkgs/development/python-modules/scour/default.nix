@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "scour";
-  version = "0.37";
+  version = "0.38.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05k1f8i8v7sp5v39lian865vwvapq05a6vmvk7fwnxv8kivi6ccn";
+    sha256 = "6881ec26660c130c5ecd996ac6f6b03939dd574198f50773f2508b81a68e0daf";
   };
 
   propagatedBuildInputs = [ six ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An SVG Optimizer / Cleaner ";
-    homepage    = https://github.com/scour-project/scour;
+    homepage    = "https://github.com/scour-project/scour";
     license     = licenses.asl20;
     maintainers = with maintainers; [ worldofpeace ];
   };

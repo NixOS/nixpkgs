@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "websocketd";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "joewalnes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qc4yi4kwy7bfi3fb17w58ff0i95yi6m4syldh8j79930syr5y8q";
+    sha256 = "sha256-cp4iBSQ6Cd0+NPZ2i79Mulg1z17u//OCm3yoArbZEHs=";
   };
 
-  modSha256 = "18hamj557ln8k3vmvcrpvnydjr1dy7zi9490iacwdldw5vp870xs";
+  vendorSha256 = "sha256-i5IPJ3srUXL7WWjBW9w803VSoyjwA5JgPWKsAckPYxY=";
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";

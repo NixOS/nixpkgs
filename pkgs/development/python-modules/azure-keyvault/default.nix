@@ -1,26 +1,30 @@
 { lib, buildPythonPackage, isPy27, fetchPypi
+, azure-keyvault-certificates
 , azure-keyvault-keys
 , azure-keyvault-secrets
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault";
-  version = "4.0.0";
+  version = "4.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e85f5bd6cb4f10b3248b99bbf02e3acc6371d366846897027d4153f18025a2d7";
+    sha256 = "69002a546921a8290eb54d9a3805cfc515c321bc1d4c0bfcfb463620245eca40";
   };
 
   propagatedBuildInputs = [
+    azure-keyvault-certificates
     azure-keyvault-keys
     azure-keyvault-secrets
   ];
 
   # this is just a meta package, which contains keys and secrets
   doCheck = false;
+
+  pythonNamespaces = [ "azure" ];
 
   pythonImportsCheck = [
     "azure.keyvault.keys"

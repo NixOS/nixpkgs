@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "rawdog";
@@ -11,10 +11,14 @@ python2Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python2Packages; [ feedparser ];
 
+  # Requested by @SuperSandro20001
+  pythonImportsCheck = [ "feedparser" ];
+  doCheck = false;
+
   namePrefix = "";
 
-  meta = with stdenv.lib; {
-    homepage = https://offog.org/code/rawdog/;
+  meta = with lib; {
+    homepage = "https://offog.org/code/rawdog/";
     description = "RSS Aggregator Without Delusions Of Grandeur";
     license = licenses.gpl2;
     platforms = platforms.unix;

@@ -1,26 +1,25 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , pkg-config
 , autoPatchelfHook
 , installShellFiles
-, ncurses5
 , ocl-icd
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "computecpp";
-  version = "1.2.0";
+  version = "2.3.0";
 
   src = fetchzip {
-    url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/ubuntu-16.04-64bit.tar.gz";
-    sha256 = "191kwvzxfg1sbaq6aw6f84chi7bhsibb2a63zsyz3gz8m0c0syr5";
+    url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/x86_64-linux-gnu.tar.gz";
+    hash = "sha256-AUHSls4BOX20PVKzDAp3RqpeRDwgbgYzz6CRvRN+kdk=";
     stripRoot = true;
   };
 
   dontStrip = true;
 
-  buildInputs = [ stdenv.cc.cc.lib ncurses5 ocl-icd zlib ];
+  buildInputs = [ stdenv.cc.cc.lib ocl-icd zlib ];
   nativeBuildInputs = [ autoPatchelfHook pkg-config installShellFiles ];
 
   installPhase = ''
@@ -37,14 +36,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     isClang = true;
-  } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-    gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
-    homepage = https://www.codeplay.com/products/computesuite/computecpp;
+    homepage = "https://www.codeplay.com/products/computesuite/computecpp";
     license = licenses.unfree;
     maintainers = with maintainers; [ davidtwco ];
     platforms = [ "x86_64-linux" ];

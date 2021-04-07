@@ -1,59 +1,76 @@
-{ stdenv
+{ lib, stdenv
+, substituteAll
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gobject-introspection
 , python3
 , libyaml
+, rpm
+, file
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
+, help2man
 , docbook_xml_dtd_412
 , glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmodulemd";
-  version = "2.6.0";
+  version = "2.12.0";
 
-  outputs = [ "out" "devdoc" "py" ];
+  outputs = [ "bin" "out" "dev" "devdoc" "man" "py" ];
 
   src = fetchFromGitHub {
     owner = "fedora-modularity";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0gizfmzs6jrzb29lwcimm5dq3027935xbzwgkbvbp67zcmjd3y5i";
+    sha256 = "1mq9as98q4wyka404f8xwfc44cn5j4bsk0fch5pf07v81sagc1q9";
   };
 
   patches = [
-    ./pygobject-dir.patch
+    # Use proper glib devdoc path.
+    (substituteAll {
+      src = ./glib-devdoc.patch;
+      glib_devdoc = glib.devdoc;
+    })
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc
-    docbook_xsl
+    docbook-xsl-nons
+    help2man
     docbook_xml_dtd_412
     gobject-introspection
   ];
 
   buildInputs = [
     libyaml
+    rpm
+    file # for libmagic
     glib
   ];
 
   mesonFlags = [
     "-Ddeveloper_build=false"
-    "-Dpygobject_override_dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
+    "-Dgobject_overrides_dir_py3=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
-  meta = with stdenv.lib; {
+  postFixup = ''
+    # Python overrides depend our own typelibs and other packages
+    mkdir -p "$py/nix-support"
+    echo "$out ${python3.pkgs.pygobject3} ${python3.pkgs.six}" > "$py/nix-support/propagated-build-inputs"
+  '';
+
+  meta = with lib; {
     description = "C Library for manipulating module metadata files";
     homepage = "https://github.com/fedora-modularity/libmodulemd";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin ;
   };
 }

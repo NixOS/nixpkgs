@@ -1,16 +1,16 @@
-{ stdenv, gettext, libxml2, fetchurl, pkgconfig, libcanberra-gtk3
+{ lib, stdenv, gettext, libxml2, libhandy, fetchurl, pkg-config, libcanberra-gtk3
 , gtk3, glib, meson, ninja, python3, wrapGAppsHook, appstream-glib, desktop-file-utils
 , gnome3, gsettings-desktop-schemas }:
 
 let
   pname = "gnome-screenshot";
-  version = "3.34.0";
+  version = "3.38.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1rmiq890j7gfn5mcz31xy6jfnnxgc17dq67bhn2k9m5ylbvza2n8";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1h4zsaybjrlkfcrvriyybg4gfr7v9d1ndh2p516k94ad2gfx6mp5";
   };
 
   doCheck = true;
@@ -20,9 +20,9 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/postinstall.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib libcanberra-gtk3 gnome3.adwaita-icon-theme
+    gtk3 glib libcanberra-gtk3 libhandy gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
   ];
 
@@ -33,10 +33,10 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://en.wikipedia.org/wiki/GNOME_Screenshot;
+  meta = with lib; {
+    homepage = "https://en.wikipedia.org/wiki/GNOME_Screenshot";
     description = "Utility used in the GNOME desktop environment for taking screenshots";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

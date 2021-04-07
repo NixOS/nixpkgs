@@ -1,30 +1,54 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+{ lib, stdenv
+, fetchurl
+, python
+, pkg-config
+, bison
+, flex
+, perl
+, libxslt
+, docbook_xsl
+, rpcgen
 , fixDarwinDylibNames
-, docbook_xml_dtd_42, readline
-, popt, iniparser, libbsd, libarchive, libiconv, gettext
-, krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme, libuuid
+, docbook_xml_dtd_45
+, readline
+, popt
+, dbus
+, libbsd
+, libarchive
+, zlib
+, liburing
+, fam
+, gnutls
+, libunwind
+, systemd
+, jansson
+, libtasn1
+, tdb
+, cmocka
+, rpcsvc-proto
+, nixosTests
 
-, enableLDAP ? false
-, enablePrinting ? false
-, enableMDNS ? false
-, enableDomainController ? false
-, enableRegedit ? true
-, enableCephFS ? false
-, enableGlusterFS ? false
-, enableAcl ? (!stdenv.isDarwin)
-, enablePam ? (!stdenv.isDarwin)
+, enableLDAP ? false, openldap
+, enablePrinting ? false, cups
+, enableProfiling ? true
+, enableMDNS ? false, avahi
+, enableDomainController ? false, gpgme, lmdb
+, enableRegedit ? true, ncurses
+, enableCephFS ? false, libceph
+, enableGlusterFS ? false, glusterfs, libuuid
+, enableAcl ? (!stdenv.isDarwin), acl
+, enablePam ? (!stdenv.isDarwin), pam
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.11.5";
+  version = "4.13.7";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "0gyr773dl0krcra6pvyp8i9adj3r16ihrrm2b71c0974cbzrkqpk";
+    sha256 = "1ajvr5hzl9kmrf77hb9c71zvnm8j0xgy40nqfjz4f407cw470zaf";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -34,20 +58,41 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
-    (fetchpatch {
-      name = "test-oLschema2ldif-fmemopen.patch";
-      url = "https://gitlab.com/samba-team/samba/commit/5e517e57c9d4d35e1042a49d3592652b05f0c45b.patch";
-      sha256 = "1bbldf794svsdvcbp649imghmj0jck7545d3k9xs953qkkgwkbxi";
-    })
+    # Backport, should be removed for version 4.14
+    ./0001-lib-util-Standardize-use-of-st_-acm-time-ns.patch
   ];
 
-  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
+  nativeBuildInputs = [
+    pkg-config
+    bison
+    flex
+    perl
+    perl.pkgs.ParseYapp
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_45
+    cmocka
+    rpcsvc-proto
+  ] ++ optionals stdenv.isDarwin [
+    rpcgen
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
-    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-    docbook_xml_dtd_45 */ readline popt iniparser jansson
-    libbsd libarchive zlib fam libiconv gettext libunwind krb5Full gnutls
-  ] ++ optionals stdenv.isLinux [ libaio systemd ]
+    python
+    readline
+    popt
+    dbus
+    jansson
+    libbsd
+    libarchive
+    zlib
+    fam
+    libunwind
+    gnutls
+    libtasn1
+    tdb
+  ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
@@ -71,16 +116,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
-    "--with-system-mitkrb5"
-    "--with-system-mitkdc" krb5Full
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ singleton (if enableDomainController
-         then "--with-experimental-mit-ad-dc"
-         else "--without-ad-dc")
-    ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
+  ] ++ optional (!enableDomainController)
+    "--without-ad-dc"
+  ++ optionals (!enableLDAP) [
+    "--without-ldap"
+    "--without-ads"
+  ] ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";
 
@@ -104,11 +149,17 @@ stdenv.mkDerivation rec {
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    tests.samba = nixosTests.samba;
+  };
+
+  meta = with lib; {
     homepage = "https://www.samba.org";
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    # N.B. enableGlusterFS does not build
+    broken = stdenv.isDarwin || enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
   };
 }

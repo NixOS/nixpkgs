@@ -7,6 +7,10 @@ with lib;
     (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
   ];
 
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   options.xdg.portal = {
     enable =
       mkEnableOption "<link xlink:href='https://github.com/flatpak/xdg-desktop-portal'>xdg desktop integration</link>"//{
@@ -58,7 +62,7 @@ with lib;
       services.dbus.packages  = packages;
       systemd.packages = packages;
 
-      environment.variables = {
+      environment.sessionVariables = {
         GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
         XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
       };

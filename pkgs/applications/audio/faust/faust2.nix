@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , fetchFromGitHub
 , makeWrapper
-, pkgconfig
+, pkg-config
 , cmake
 , llvm
 , emscripten
@@ -16,23 +16,23 @@
 , which
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 
-  version = "2.20.2";
+  version = "unstable-2020-08-27";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = version;
-    sha256 = "08hv8gyj6c83128z3si92r1ka5ckf9sdpn5jdnlhrqyzja4mrxsy";
+    rev = "c10f316fa90f338e248787ebf55e3795c3a0d70e";
+    sha256 = "068pm04ddafbsj2r8akdpqyzb0m8mp9ql0rgi83hcqs4ndr8v7sb";
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://faust.grame.fr/;
-    downloadPage = https://sourceforge.net/projects/faudiostream/files/;
+  meta = with lib; {
+    homepage = "https://faust.grame.fr/";
+    downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magnetophon pmahoney ];
@@ -45,7 +45,7 @@ let
 
     inherit src;
 
-    nativeBuildInputs = [ makeWrapper pkgconfig cmake vim which ];
+    nativeBuildInputs = [ makeWrapper pkg-config cmake vim which ];
     buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
 
 
@@ -168,12 +168,11 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ pkg-config makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
-      libPath = stdenv.lib.makeLibraryPath propagatedBuildInputs;
+      libPath = lib.makeLibraryPath propagatedBuildInputs;
 
       postFixup = ''
 
@@ -209,7 +208,7 @@ let
 
     in stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       postFixup = ''
         for script in "$out"/bin/*; do

@@ -1,36 +1,26 @@
 { lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k
-, nose, mock, blinker
+, nose, mock, blinker, pytest
 , flask, six, pytz, aniso8601, pycrypto
 }:
 
 buildPythonPackage rec {
   pname = "Flask-RESTful";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01rlvl2iq074ciyn4schmjip7cyplkwkysbb8f610zil06am35ap";
+    sha256 = "05b9lzx5yc3wgml2bcq50lq35h66m8zpj6dc9advcb5z3acsbaay";
   };
 
-  patches = [
-    (fetchpatch {
-      url = https://github.com/flask-restful/flask-restful/commit/54979f0a49b2217babc53c5b65b5df10b6de8e05.patch;
-      sha256 = "11s6ag6l42g61ccg5jw9j1f26hwgjfa3sp890cbl5r4hy5ycpyr5";
-    })
-    (fetchpatch {
-      url = https://github.com/flask-restful/flask-restful/commit/f45e81a45ed03922fd225afe27006315811077e6.patch;
-      sha256 = "16avd369j5r08d1l23mwbba26zjwnmfqvfvnfz02am3gr5l6p3gl";
-    })
-  ];
-
-  postPatch = lib.optionalString isPy3k ''
-    # TypeError: Only byte strings can be passed to C code
-    rm tests/test_crypto.py tests/test_paging.py
-  '';
-
-  checkInputs = [ nose mock blinker ];
-
   propagatedBuildInputs = [ flask six pytz aniso8601 pycrypto ];
+
+  checkInputs = [ pytest nose mock blinker ];
+
+  # test_reqparse.py: werkzeug move Multidict location (only imported in tests)
+  # handle_non_api_error isn't updated for addition encoding argument
+  checkPhase = ''
+    pytest --ignore=tests/test_reqparse.py -k 'not handle_non_api_error'
+  '';
 
   meta = with lib; {
     homepage = "https://flask-restful.readthedocs.io/";

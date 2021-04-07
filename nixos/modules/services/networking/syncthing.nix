@@ -18,6 +18,7 @@ let
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
     ignorePerms = folder.ignorePerms;
+    ignoreDelete = folder.ignoreDelete;
     versioning = folder.versioning;
   }) (filterAttrs (
     _: folder:
@@ -169,12 +170,14 @@ in {
           description = ''
             folders which should be shared by syncthing.
           '';
-          example = {
-            "/home/user/sync" = {
-              id = "syncme";
-              devices = [ "bigbox" ];
-            };
-          };
+          example = literalExample ''
+            {
+              "/home/user/sync" = {
+                id = "syncme";
+                devices = [ "bigbox" ];
+              };
+            }
+          '';
           type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 
@@ -282,8 +285,6 @@ in {
                 });
               };
 
-
-
               rescanInterval = mkOption {
                 type = types.int;
                 default = 3600;
@@ -322,6 +323,16 @@ in {
                 default = true;
                 description = ''
                   Whether to propagate permission changes.
+                '';
+              };
+
+              ignoreDelete = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to delete files in destination. See <link
+                  xlink:href="https://docs.syncthing.net/advanced/folder-ignoredelete.html">
+                  upstream's docs</link>.
                 '';
               };
 

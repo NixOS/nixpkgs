@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, zlib, gputils ? null
+{ lib, stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, zlib, gputils ? null
 , excludePorts ? [] }:
 
-with stdenv.lib;
+with lib;
 
 let
   # choices: mcs51 z80 z180 r2k r3ka gbz80 tlcs90 ds390 ds400 pic14 pic16 hc08 s08 stm8
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       Rabbit 3000A). Work is in progress on supporting the Microchip PIC16 and
       PIC18 targets. It can be retargeted for other microprocessors.
     '';
-    homepage = http://sdcc.sourceforge.net/;
+    homepage = "http://sdcc.sourceforge.net/";
     license = with licenses; if (gputils == null) then gpl2 else unfreeRedistributable;
     maintainers = with maintainers; [ bjornfor yorickvp ];
     platforms = platforms.all;

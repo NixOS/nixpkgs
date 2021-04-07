@@ -86,8 +86,8 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ];
-        defaultText = "[ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ]";
+        default = [ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ];
+        defaultText = "[ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the jenkins process.
@@ -207,7 +207,7 @@ in {
 
       # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
-        ${pkgs.jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${pkgs.jdk11}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   -Djava.awt.headless=true \

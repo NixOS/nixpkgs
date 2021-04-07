@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "python-snappy";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9c26532cfa510f45e8d135cde140e8a5603d3fb254cfec273ebc0ecf9f668e2";
+    sha256 = "06l9my361ig4x5ycyrmq33q83zcdib3y2zxfxv7k7dlpyp9ri2hn";
   };
 
   buildInputs = [ snappy ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for the snappy compression library from Google";
-    homepage = https://github.com/andrix/python-snappy;
+    homepage = "https://github.com/andrix/python-snappy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

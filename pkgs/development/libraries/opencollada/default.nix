@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, libxml2, pcre
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2, pcre
 , darwin}:
 
 stdenv.mkDerivation rec {
@@ -13,13 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1ym16fxx9qhf952vva71sdzgbm7ifis0h1n5fj1bfdj8zvvkbw5w";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AGL ]);
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AGL ]);
 
   propagatedBuildInputs = [ libxml2 pcre ];
-
-  enableParallelBuilding = true;
 
   patchPhase = ''
     patch -p1 < ${./pcre.patch}
@@ -30,9 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for handling the COLLADA file format";
-    homepage = https://github.com/KhronosGroup/OpenCOLLADA/;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.mit;
+    homepage = "https://github.com/KhronosGroup/OpenCOLLADA/";
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

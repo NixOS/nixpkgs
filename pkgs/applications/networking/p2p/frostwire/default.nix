@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ lib, stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
 
 let
   version = "6.6.7-build-529";
@@ -84,8 +84,8 @@ in stdenv.mkDerivation {
       --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.frostwire.com/;
+  meta = with lib; {
+    homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];

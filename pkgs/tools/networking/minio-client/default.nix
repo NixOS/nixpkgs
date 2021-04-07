@@ -1,24 +1,30 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "minio-client";
-  version = "2019-01-30T19-57-22Z";
+  version = "2021-03-23T05-46-11Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "mc";
     rev = "RELEASE.${version}";
-    sha256 = "1w0ig0daf0zxpkz449xq2hm7ajhzn8hlnnmpac6ip82qy53xnbm4";
+    sha256 = "sha256-AtE9Zy8tRvcE+gYc0pqJDEFnXL4jSbJ4b6l3ZOe69Y4=";
   };
 
-  goPackagePath = "github.com/minio/mc";
+  vendorSha256 = "sha256-cIr8d5jz4EfBFuOBZG4Kz20wSXy1Cni77V+JR6vLHwQ=";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags=-X github.com/minio/mc/cmd.Version=${version}")
+  doCheck = false;
+
+  subPackages = [ "." ];
+
+  patchPhase = ''
+    sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
+    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
+    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/minio/mc;
+  meta = with lib; {
+    homepage = "https://github.com/minio/mc";
     description = "A replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;

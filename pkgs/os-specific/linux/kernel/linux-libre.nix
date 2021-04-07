@@ -1,8 +1,8 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "17322";
-    sha256 = "1hhi1gsfr08zj9d8mglbfk5wicfy1gqrh68vg90hxglp61dsx97x";
+    rev = "17920";
+    sha256 = "0qmhabh4922lpiimrh9smi1q0w8giw3qqxpyzzy2bmr2037011k0";
   }
 , ...
 }:
@@ -17,12 +17,14 @@ let
 in linux.override {
   argsOverride = {
     modDirVersion = "${linux.modDirVersion}-gnu";
+    isLibre = true;
 
     src = stdenv.mkDerivation {
       name = "${linux.name}-libre-src";
       src = linux.src;
       buildPhase = ''
-        ${scripts}/${majorMinor}/deblob-${majorMinor} \
+        # --force flag to skip empty files after deblobbing
+        ${scripts}/${majorMinor}/deblob-${majorMinor} --force \
             ${major} ${minor} ${patch}
       '';
       checkPhase = ''
@@ -32,6 +34,8 @@ in linux.override {
         cp -r . "$out"
       '';
     };
+
+    extraMeta.broken = true;
 
     passthru.updateScript = ./update-libre.sh;
 

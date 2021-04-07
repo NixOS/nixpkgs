@@ -1,12 +1,13 @@
 { buildPythonPackage, isPy3k, fetchFromGitHub, lib,
-  z3, ply, python-igraph, oset, ordered-set, dictionaries }:
+  z3, ply, python-igraph, oset, ordered-set, dictionaries, setuptools }:
 
 buildPythonPackage {
   pname = "cozy";
   version = "2.0a1";
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [
-    z3 ply python-igraph oset ordered-set dictionaries
+    setuptools z3 ply python-igraph oset ordered-set dictionaries
   ];
 
   src = fetchFromGitHub {
@@ -18,22 +19,22 @@ buildPythonPackage {
 
   # Yoink the Z3 dependency name, because our Z3 package doesn't provide it.
   postPatch = ''
-    sed -i -e '/z3-solver/d' requirements.txt
+    sed -i -e '/z3-solver/d' -e 's/^dictionaries.*$/dictionaries/' requirements.txt
   '';
 
   # Tests are not correctly set up in the source tree.
   doCheck = false;
+  pythonImportsCheck = [ "cozy" ];
 
   # There is some first-time-run codegen that we will force to happen.
   postInstall = ''
     $out/bin/cozy --help
   '';
 
-  disabled = !isPy3k;
 
   meta = {
     description = "The collection synthesizer";
-    homepage = https://cozy.uwplse.org/;
+    homepage = "https://cozy.uwplse.org/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };

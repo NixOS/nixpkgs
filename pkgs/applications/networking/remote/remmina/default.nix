@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitLab, cmake, ninja, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
 , glib, gtk3, gettext, libxkbfile, libX11
 , freerdp, libssh, libgcrypt, gnutls
-, pcre, libdbusmenu-gtk3, libappindicator-gtk3
+, pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
@@ -9,25 +9,25 @@
 , gnome3
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.3.10";
+  version = "1.4.12";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "0gc7b88129avl9sbax3ncvm7zf2qvq35ixvvpr2zj74g3qnphl08";
+    sha256 = "sha256-CjlNEmca4Kob5rdpZa+YfvdOIDDDYfhNsGYqGDxSGKY=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
   buildInputs = [
     gsettings-desktop-schemas
     glib gtk3 gettext libxkbfile libX11
     freerdp libssh libgcrypt gnutls
-    pcre libdbusmenu-gtk3 libappindicator-gtk3
+    pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
     libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
     openssl gnome3.adwaita-icon-theme json-glib libsodium webkitgtk
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = licenses.gpl2;
-    homepage = https://gitlab.com/Remmina/Remmina;
+    homepage = "https://gitlab.com/Remmina/Remmina";
     description = "Remote desktop client written in GTK";
     maintainers = with maintainers; [ melsigl ryantm ];
     platforms = platforms.linux;

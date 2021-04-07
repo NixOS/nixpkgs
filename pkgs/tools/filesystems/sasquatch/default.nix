@@ -2,9 +2,8 @@
 , fetchurl
 , lz4 ? null
 , lz4Support ? false
-, lzma
 , lzo
-, stdenv
+, lib, stdenv
 , xz
 , zlib
 }:
@@ -24,12 +23,12 @@ stdenv.mkDerivation rec {
   version = "4.3";
 
   src = fetchurl {
-    url = mirror://sourceforge/squashfs/squashfs4.3.tar.gz;
+    url = "mirror://sourceforge/squashfs/squashfs4.3.tar.gz";
     sha256 = "1xpklm0y43nd9i6jw43y2xh5zvlmj9ar2rvknh0bh7kv8c95aq0d";
   };
 
-  buildInputs = [ lzma lzo xz zlib ]
-    ++ stdenv.lib.optional lz4Support lz4;
+  buildInputs = [ xz lzo xz zlib ]
+    ++ lib.optional lz4Support lz4;
 
   patches = [ patch ];
   patchFlags = [ "-p0" ];
@@ -41,9 +40,9 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
   makeFlags = [ "XZ_SUPPORT=1" ]
-    ++ stdenv.lib.optional lz4Support "LZ4_SUPPORT=1";
+    ++ lib.optional lz4Support "LZ4_SUPPORT=1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/devttys0/sasquatch";
     description = "Set of patches to the standard unsquashfs utility (part of squashfs-tools) that attempts to add support for as many hacked-up vendor-specific SquashFS implementations as possible";
     license = licenses.gpl2Plus;

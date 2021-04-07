@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
 , procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;
   pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.12.0";
+  version = "2.14.1";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1y78ix5inhhcvicbvyy2ij38am1215nr55vydhab3d4065q45z8k";
+    sha256 = "sha256-GAttQsCrSybyH1i4vzszdiA9dHWqeo7xUTZVFMNQiP4=";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng pythonEnv
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ util-linux openssl libcap_ng pythonEnv
                   perl procps which ];
 
   configureFlags = [
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # bash-completion test fails with "compgen: command not found"
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = https://www.openvswitch.org/;
+    homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ netixx kmcopper ];
   };

@@ -1,5 +1,6 @@
-{ stdenv, python, fetchFromGitHub, cmake, swig, ninja,
-  opencascade, smesh, freetype, libGL, libGLU, libX11 }:
+{ lib, stdenv, python, fetchFromGitHub, cmake, swig, ninja
+, opencascade, smesh, freetype, libGL, libGLU, libX11
+, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
@@ -12,11 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "1jk4y7f75z9lyawffpfkr50qw5452xzi1imcdlw9pdvf4i0y86k3";
   };
 
-  nativeBuildInputs = [ cmake swig ninja ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+    --replace "/usr/X11R6/lib/libGL.dylib" "${libGL}/lib/libGL.dylib" \
+    --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
+  '';
+
+  nativeBuildInputs = [ cmake swig ];
   buildInputs = [
     python opencascade smesh
     freetype libGL libGLU libX11
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [
     "-Wno-dev"
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
     "-DPYTHONOCC_WRAP_SMESH=TRUE"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
     license = licenses.lgpl3;

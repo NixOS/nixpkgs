@@ -45,10 +45,71 @@ in {
           The file name of the VirtualBox appliance.
         '';
       };
+      params = mkOption {
+        type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        example = {
+          audio = "alsa";
+          rtcuseutc = "on";
+          usb = "off";
+        };
+        description = ''
+          Parameters passed to the Virtualbox appliance.
+
+          Run <literal>VBoxManage modifyvm --help</literal> to see more options.
+        '';
+     };
+      extraDisk = mkOption {
+        description = ''
+          Optional extra disk/hdd configuration.
+          The disk will be an 'ext4' partition on a separate VMDK file.
+        '';
+        default = null;
+        example = {
+          label = "storage";
+          mountPoint = "/home/demo/storage";
+          size = 100 * 1024;
+        };
+        type = types.nullOr (types.submodule {
+          options = {
+            size = mkOption {
+              type = types.int;
+              description = "Size in MiB";
+            };
+            label = mkOption {
+              type = types.str;
+              default = "vm-extra-storage";
+              description = "Label for the disk partition";
+            };
+            mountPoint = mkOption {
+              type = types.str;
+              description = "Path where to mount this disk.";
+            };
+          };
+        });
+      };
     };
   };
 
   config = {
+
+    virtualbox.params = mkMerge [
+      (mapAttrs (name: mkDefault) {
+        acpi = "on";
+        vram = 32;
+        nictype1 = "virtio";
+        nic1 = "nat";
+        audiocontroller = "ac97";
+        audio = "alsa";
+        audioout = "on";
+        graphicscontroller = "vmsvga";
+        rtcuseutc = "on";
+        usb = "on";
+        usbehci = "on";
+        mouse = "usbtablet";
+      })
+      (mkIf (pkgs.stdenv.hostPlatform.system == "i686-linux") { pae = "on"; })
+    ];
+
     system.build.virtualBoxOVA = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
 
@@ -64,20 +125,34 @@ in {
           echo "creating VirtualBox pass-through disk wrapper (no copying involved)..."
           VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage
 
+          ${optionalString (cfg.extraDisk != null) ''
+            echo "creating extra disk: data-disk.raw"
+            dataDiskImage=data-disk.raw
+            truncate -s ${toString cfg.extraDisk.size}M $dataDiskImage
+
+            parted --script $dataDiskImage -- \
+              mklabel msdos \
+              mkpart primary ext4 1MiB -1
+            eval $(partx $dataDiskImage -o START,SECTORS --nr 1 --pairs)
+            mkfs.ext4 -F -L ${cfg.extraDisk.label} $dataDiskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+            echo "creating extra disk: data-disk.vmdk"
+            VBoxManage internalcommands createrawvmdk -filename data-disk.vmdk -rawdisk $dataDiskImage
+          ''}
+
           echo "creating VirtualBox VM..."
           vmName="${cfg.vmName}";
           VBoxManage createvm --name "$vmName" --register \
             --ostype ${if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
           VBoxManage modifyvm "$vmName" \
-            --memory ${toString cfg.memorySize} --acpi on --vram 32 \
-            ${optionalString (pkgs.stdenv.hostPlatform.system == "i686-linux") "--pae on"} \
-            --nictype1 virtio --nic1 nat \
-            --audiocontroller ac97 --audio alsa --audioout on \
-            --rtcuseutc on \
-            --usb on --usbehci on --mouse usbtablet
+            --memory ${toString cfg.memorySize} \
+            ${lib.cli.toGNUCommandLineShell { } cfg.params}
           VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
           VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
             --medium disk.vmdk
+          ${optionalString (cfg.extraDisk != null) ''
+            VBoxManage storageattach "$vmName" --storagectl SATA --port 1 --device 0 --type hdd \
+            --medium data-disk.vmdk
+          ''}
 
           echo "exporting VirtualBox VM..."
           mkdir -p $out
@@ -91,11 +166,19 @@ in {
         '';
     };
 
-    fileSystems."/" = {
-      device = "/dev/disk/by-label/nixos";
-      autoResize = true;
-      fsType = "ext4";
-    };
+    fileSystems = {
+      "/" = {
+        device = "/dev/disk/by-label/nixos";
+        autoResize = true;
+        fsType = "ext4";
+      };
+    } // (lib.optionalAttrs (cfg.extraDisk != null) {
+      ${cfg.extraDisk.mountPoint} = {
+        device = "/dev/disk/by-label/" + cfg.extraDisk.label;
+        autoResize = true;
+        fsType = "ext4";
+      };
+    });
 
     boot.growPartition = true;
     boot.loader.grub.device = "/dev/sda";

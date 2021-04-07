@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, psmisc }:
+{ lib, stdenv, fetchurl, psmisc }:
 
 stdenv.mkDerivation {
   name = "tmpwatch-2.11";
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-fuser=${psmisc}/bin/fuser" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://fedorahosted.org/tmpwatch/;
+  meta = with lib; {
+    homepage = "https://fedorahosted.org/tmpwatch/";
     description = "Recursively searches through specified directories and removes files which have not been accessed in a specified period of time";
     license = licenses.gpl2;
     maintainers = with maintainers; [ vlstill ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, llvmPackages }:
+{ lib, stdenv, fetchFromGitHub, python3, llvmPackages }:
 
 let
   llvm = llvmPackages.llvm;
@@ -16,8 +16,9 @@ stdenv.mkDerivation {
     sha256 = "03l9frx3iw3qdsb9rrscgzdwm6872gv6mkssvn027ndf9y321xk7";
   };
 
-  nativeBuildInputs = [ python ];
-  buildInputs = [ llvm clang clang-unwrapped ];
+  nativeBuildInputs = [ python3 llvm ];
+
+  strictDeps = true;
 
   postPatch = ''
     sed -i 's,llvm_clang =.*,llvm_clang = "${clang-unwrapped}/bin/clang",' configure.py
@@ -25,13 +26,13 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    ${python.interpreter} ./configure.py --prefix=$out
+    ${python3.interpreter} ./configure.py --prefix=$out
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://libclc.llvm.org/;
+  meta = with lib; {
+    homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;
     platforms = platforms.all;

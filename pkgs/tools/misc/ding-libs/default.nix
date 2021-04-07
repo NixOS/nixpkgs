@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, check }:
+{ lib, stdenv, fetchurl, check }:
 
 stdenv.mkDerivation rec {
   pname = "ding-libs";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "'D is not GLib' utility libraries";
-    homepage = https://fedorahosted.org/sssd/;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ e-user ];
-    license = [ stdenv.lib.licenses.gpl3 stdenv.lib.licenses.lgpl3 ];
+    homepage = "https://fedorahosted.org/sssd/";
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ e-user ];
+    license = [ lib.licenses.gpl3 lib.licenses.lgpl3 ];
   };
 }

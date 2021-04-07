@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
     export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
       C or C++ programs, though that is not its primary goal.
     '';
 
-    homepage = https://hboehm.info/gc/;
+    homepage = "https://hboehm.info/gc/";
 
     # non-copyleft, X11-style license
-    license = https://hboehm.info/gc/license.txt;
+    license = "https://hboehm.info/gc/license.txt";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

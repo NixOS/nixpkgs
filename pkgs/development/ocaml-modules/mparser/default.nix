@@ -1,9 +1,9 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-mparser-1.2.3";
   src = fetchzip {
-    url = https://github.com/cakeplus/mparser/archive/1.2.3.tar.gz;
+    url = "https://github.com/cakeplus/mparser/archive/1.2.3.tar.gz";
     sha256 = "1f8vpagmv0jdm50pxs2xwh2xcmvgaprx4kw871hlml9ahsflxgnw";
   };
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A simple monadic parser combinator OCaml library";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    homepage = https://github.com/cakeplus/mparser;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    homepage = "https://github.com/cakeplus/mparser";
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

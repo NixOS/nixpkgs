@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libpng, zlib, lcms2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, zlib, lcms2 }:
 
 stdenv.mkDerivation rec {
   pname = "pngquant";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng zlib lcms2 ];
 
-  meta = with stdenv.lib; {
-    homepage = https://pngquant.org/;
+  meta = with lib; {
+    homepage = "https://pngquant.org/";
     description = "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
     platforms = platforms.unix;
     license = licenses.gpl3;

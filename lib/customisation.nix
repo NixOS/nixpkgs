@@ -131,7 +131,12 @@ rec {
       origArgs = auto // args;
       pkgs = f origArgs;
       mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
-    in lib.mapAttrs mkAttrOverridable pkgs;
+    in
+      if lib.isDerivation pkgs then throw
+        ("function `callPackages` was called on a *single* derivation "
+          + ''"${pkgs.name or "<unknown-name>"}";''
+          + " did you mean to use `callPackage` instead?")
+      else lib.mapAttrs mkAttrOverridable pkgs;
 
 
   /* Add attributes to each output of a derivation without changing
@@ -210,6 +215,33 @@ rec {
           overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
           packages = f;
         };
+    in self;
+
+  /* Like the above, but aims to support cross compilation. It's still ugly, but
+     hopefully it helps a little bit. */
+  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: f:
+    let
+      spliced = splicePackages {
+        pkgsBuildBuild = otherSplices.selfBuildBuild;
+        pkgsBuildHost = otherSplices.selfBuildHost;
+        pkgsBuildTarget = otherSplices.selfBuildTarget;
+        pkgsHostHost = otherSplices.selfHostHost;
+        pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
+        pkgsTargetTarget = otherSplices.selfTargetTarget;
+      } // keep self;
+      self = f self // {
+        newScope = scope: newScope (spliced // scope);
+        callPackage = newScope spliced; # == self.newScope {};
+        # N.B. the other stages of the package set spliced in are *not*
+        # overridden.
+        overrideScope = g: makeScopeWithSplicing
+          splicePackages
+          newScope
+          otherSplices
+          keep
+          (lib.fixedPoints.extends g f);
+        packages = f;
+      };
     in self;
 
 }

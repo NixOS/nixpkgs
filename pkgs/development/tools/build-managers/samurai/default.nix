@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "samurai";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "michaelforney";
     repo = pname;
     rev = version;
-    sha256 = "1jsxfpwa6q893x18qlvpsiym29rrw5cj0k805wgmk2n57j9rw4f2";
+    sha256 = "sha256-RPY3MFlnSDBZ5LOkdWnMiR/CZIBdqIFo9uLU+SAKPBI=";
   };
 
   makeFlags = [ "DESTDIR=" "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ninja-compatible build tool written in C";
     homepage = "https://github.com/michaelforney/samurai";
     license = with licenses; [ mit asl20 ]; # see LICENSE

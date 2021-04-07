@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, libpulseaudio, alsaLib, libcap
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, libpulseaudio, alsaLib, libcap
 , CoreAudio, CoreServices, AudioUnit
 , usePulseAudio }:
 
@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux  [ alsaLib libcap ] ++
     lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     longDescription = ''
       Libao is Xiph.org's cross-platform audio library that allows
       programs to output audio using a simple API on a wide variety of
       platforms.
     '';
-    homepage = https://xiph.org/ao/;
+    homepage = "https://xiph.org/ao/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;

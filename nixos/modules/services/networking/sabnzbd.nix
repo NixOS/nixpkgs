@@ -15,21 +15,22 @@ in
 
   options = {
     services.sabnzbd = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the sabnzbd server.";
-      };
+      enable = mkEnableOption "the sabnzbd server";
+
       configFile = mkOption {
+        type = types.path;
         default = "/var/lib/sabnzbd/sabnzbd.ini";
         description = "Path to config file.";
       };
 
       user = mkOption {
         default = "sabnzbd";
+        type = types.str;
         description = "User to run the service as";
       };
 
       group = mkOption {
+        type = types.str;
         default = "sabnzbd";
         description = "Group to run the service as";
       };

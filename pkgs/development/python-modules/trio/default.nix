@@ -5,7 +5,7 @@
 , idna
 , outcome
 , contextvars
-, pytest
+, pytestCheckHook
 , pyopenssl
 , trustme
 , sniffio
@@ -18,23 +18,25 @@
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.13.0";
-  disabled = pythonOlder "3.5";
+  version = "0.18.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1cf00054ad974c86d9b7afa187a65d79fd5995340abe01e8e4784d86f4acb30";
+    sha256 = "0xm0bd1rrlb4l9q0nf2n1wg7xh42ljdnm4i4j0651zi73zk6m9l7";
   };
 
-  checkInputs = [ astor pytest pyopenssl trustme jedi pylint yapf ];
+  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
-  checkPhase = ''
-    HOME=$TMPDIR py.test -k 'not getnameinfo \
-                             and not SocketType_resolve \
-                             and not getprotobyname \
-                             and not waitpid \
-                             and not static_tool_sees_all_symbols'
-  '';
+  disabledTests = [
+    "getnameinfo"
+    "SocketType_resolve"
+    "getprotobyname"
+    "waitpid"
+    "static_tool_sees_all_symbols"
+    # tests pytest more than python
+    "fallback_when_no_hook_claims_it"
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -50,7 +52,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "An async/await-native I/O library for humans and snake people";
-    homepage = https://github.com/python-trio/trio;
+    homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, unzip, wxPython, wrapPython, tor }:
+{ lib, stdenv, fetchurl, python, unzip, wxPython, wrapPython, tor }:
 stdenv.mkDerivation rec {
 
   pname = "torchat";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rb4lvv40pz6ab5kxq40ycvh7kh1yxn7swzgv2ff2nbhi62xnzp0";
   };
 
-  buildInputs = [ python unzip wxPython wrapPython ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ python wxPython wrapPython ];
   pythonPath = [ wxPython ];
 
   preConfigure = "cd torchat/src; rm portable.txt";
@@ -27,8 +28,8 @@ stdenv.mkDerivation rec {
         --add-flags "-O $out/lib/torchat/torchat.py"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/prof7bit/TorChat;
+  meta = with lib; {
+    homepage = "https://github.com/prof7bit/TorChat";
     description = "Instant messaging application on top of the Tor network and it's location hidden services";
     license = licenses.gpl3;
     maintainers = [ maintainers.phreedom ];

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgs, pythonPackages, wrapGAppsHook}:
+{ lib, fetchFromGitHub, pkgs, python3, wrapGAppsHook}:
 
-pythonPackages.buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   pname = "pdf-quench";
   version = "1.0.5";
 
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication {
     goocanvas2
     poppler_gi
   ];
-  propagatedBuildInputs = with pythonPackages; [ pygobject3 pypdf2 ];
+  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pypdf2 ];
 
   format = "other";
   doCheck = false;
@@ -27,8 +27,8 @@ pythonPackages.buildPythonApplication {
     install -D -T -m 755 src/pdf_quench.py $out/bin/pdf-quench
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/linuxerwang/pdf-quench;
+  meta = with lib; {
+    homepage = "https://github.com/linuxerwang/pdf-quench";
     description = "A visual tool for cropping pdf files";
     platforms = platforms.linux;
     license = licenses.gpl2;

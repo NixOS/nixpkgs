@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qtbase, qmake, libX11, libXtst, openssl, libscrypt }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qtbase, qmake, libX11, libXtst, openssl, libscrypt }:
 
 mkDerivation rec {
   name = "qMasterPassword";
@@ -30,7 +30,7 @@ mkDerivation rec {
     mv data/icons/* $out/share/icons/qmasterpassword
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stateless Master Password Manager";
     longDescription = ''
       Access all your passwords using only a single master password. But in
@@ -40,7 +40,7 @@ mkDerivation rec {
       there is no password file that can be lost or get stolen. There is also
       no need to trust any online password service.
     '';
-    homepage = https://github.com/bkueng/qMasterPassword;
+    homepage = "https://github.com/bkueng/qMasterPassword";
     license = licenses.gpl3;
     maintainers = [ maintainers.tadeokondrak ];
     platforms = platforms.all;

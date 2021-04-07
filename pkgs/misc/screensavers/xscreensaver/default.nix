@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, bc, perl, perlPackages, pam, libXext, libXScrnSaver, libX11
+{ lib, stdenv, fetchurl, pkg-config, bc, perl, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU, libGL, gtk2
-, libxml2, libglade, intltool, xorg, makeWrapper, gle
+, libxml2, libglade, intltool, xorg, makeWrapper, gle, gdk-pixbuf, gdk-pixbuf-xlib
 , forceInstallAllHacks ? false
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.43";
+  version = "5.44";
   pname = "xscreensaver";
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1571pj1a9998sq14y9366s2rw9wd2kq3l3dvvsk610vyd0fki3qm";
+    sha256 = "15bv05vpfjwsrqbazrjmm382jd7vvw0mp6y9vasn6wvxzjf0in3k";
   };
 
   buildInputs =
-    [ pkgconfig bc perl libjpeg libGLU libGL gtk2 libxml2 libglade pam
+    [ pkg-config bc perl libjpeg libGLU libGL gtk2 libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
-      libXxf86misc intltool xorg.appres makeWrapper gle
+      libXxf86misc intltool xorg.appres makeWrapper gle gdk-pixbuf
+      gdk-pixbuf-xlib
     ];
 
   preConfigure =
@@ -36,14 +37,16 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
       wrapProgram $out/bin/xscreensaver-text \
-        --prefix PATH : ${stdenv.lib.makeBinPath [xorg.appres]}
-      wrapProgram $out/bin/xscreensaver-getimage-file \
-        --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-              EncodeLocale HTTPDate HTTPMessage IOSocketSSL LWP LWPProtocolHttps
-              MozillaCA NetHTTP NetSSLeay TryTiny URI
-              ]}"
+        --prefix PATH : ${lib.makeBinPath [xorg.appres]}
+
+      substituteInPlace $out/bin/xscreensaver-getimage-file \
+        --replace '${perl}' '${perl.withPackages (p: with p;
+          [ EncodeLocale HTTPDate HTTPMessage IOSocketSSL
+            LWP LWPProtocolHttps MozillaCA NetHTTP
+            NetSSLeay TryTiny URI
+          ])}'
   ''
-  + stdenv.lib.optionalString forceInstallAllHacks ''
+  + lib.optionalString forceInstallAllHacks ''
     make -C hacks/glx dnalogo
     cat hacks/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks
     cat hacks/glx/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks/glx
@@ -52,10 +55,10 @@ stdenv.mkDerivation rec {
   ;
 
   meta = {
-    homepage = https://www.jwz.org/xscreensaver/;
+    homepage = "https://www.jwz.org/xscreensaver/";
     description = "A set of screensavers";
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix; # Once had cygwin problems
     inherit version;
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
     updateWalker = true;

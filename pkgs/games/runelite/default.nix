@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     terminal = "false";
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
-    categories = "Application;Game";
+    categories = "Game";
     startupNotify = null;
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # colon is bash form of no-op (do nothing)
   dontUnpack = true;

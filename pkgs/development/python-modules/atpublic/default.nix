@@ -1,26 +1,34 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, pytest }:
+{ lib, isPy3k, pythonOlder, fetchPypi, buildPythonPackage
+, pytest
+, pytestcov
+, sybil
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "1.0";
+  version = "2.1.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i3sbxkdlbb4560rrlmwwd5y4ps7k73lp4d8wnmd7ag9k426gjkx";
+    sha256 = "e0b274759bfbcb6eeb7c7b44a7a46391990a43ac77aa55359b075765b54d9f5d";
   };
 
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
   checkInputs = [
-    pytest
+    pytest pytestcov sybil
   ];
 
   checkPhase = ''
-    pytest --pyargs public
+    pytest
   '';
 
   meta = with lib; {
-    homepage = https://public.readthedocs.io/en/latest/;
+    homepage = "https://public.readthedocs.io/en/latest/";
     description = "A decorator and function which populates a module's __all__ and globals";
     longDescription = ''
       This is a very simple decorator and function which populates a module's

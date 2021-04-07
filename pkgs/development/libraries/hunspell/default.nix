@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.7.0";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://hunspell.sourceforge.net;
+  meta = with lib; {
+    homepage = "http://hunspell.sourceforge.net";
     description = "Spell checker";
     longDescription = ''
       Hunspell is the spell checker of LibreOffice, OpenOffice.org, Mozilla
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = with licenses; [ gpl2 lgpl21 mpl11 ];
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

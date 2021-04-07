@@ -1,19 +1,19 @@
-{ stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
+{ lib, stdenv, gettext, fetchurl, pkg-config, udisks2, libsecret, libdvdread
 , meson, ninja, gtk3, glib, wrapGAppsHook, python3, libnotify
 , itstool, gnome3, libxml2, gsettings-desktop-schemas
 , libcanberra-gtk3, libxslt, docbook_xsl, libpwquality, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-disk-utility";
-  version = "3.34.4";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0p7pifmihg1vpsvym4qabdjqdp96yx9b4cbc6cnmf5i055js7i8y";
+    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-EL7d5UlL6zTjoiDW8w2TIMiCUv7rhCa9mM760YNteOk=";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxslt docbook_xsl
+    meson ninja pkg-config gettext itstool libxslt docbook_xsl
     wrapGAppsHook python3 libxml2
   ];
 
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://en.wikipedia.org/wiki/GNOME_Disks;
+  meta = with lib; {
+    homepage = "https://en.wikipedia.org/wiki/GNOME_Disks";
     description = "A udisks graphical front-end";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

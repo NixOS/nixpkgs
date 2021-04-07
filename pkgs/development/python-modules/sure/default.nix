@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , rednose
@@ -20,9 +20,9 @@ buildPythonPackage rec {
   buildInputs = [ rednose ];
   propagatedBuildInputs = [ six mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility belt for automated testing";
-    homepage = https://sure.readthedocs.io/en/latest/;
+    homepage = "https://sure.readthedocs.io/en/latest/";
     license = licenses.gpl3Plus;
   };
 

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     geckodriver urllib3
   ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.isLinux ''
     cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
     substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${xorg.libX11.out}/lib/libX11.so.6"
     cc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The selenium package is used to automate web browser interaction from Python";
-    homepage = http://www.seleniumhq.org;
+    homepage = "http://www.seleniumhq.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ jraygauthier ];
   };

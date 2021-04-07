@@ -1,22 +1,22 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
 , gettext
-, config
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , orc
 , gobject-introspection
-, enableZbar ? true
+, enableZbar ? false
 , faacSupport ? false
-, faac ? null
+, faac
 , faad2
 , libass
 , libkate
 , libmms
-, librdf
+, lrdf
 , ladspaH
 , libnice
 , webrtc-audio-processing
@@ -28,13 +28,13 @@
 , libbs2b
 , libmodplug
 , mpeg2dec
+, libmicrodns
 , openjpeg
 , libopus
 , librsvg
 , bluez
 , chromaprint
 , curl
-, darwin
 , directfb
 , fdk_aac
 , flite
@@ -64,6 +64,7 @@
 , wayland-protocols
 , wildmidi
 , fluidsynth
+, libva
 , libvdpau
 , wayland
 , libwebp
@@ -78,41 +79,50 @@
 , x265
 , libxml2
 , srt
+, vo-aacenc
+, VideoToolbox
+, AudioToolbox
+, AVFoundation
+, CoreMedia
+, CoreVideo
+, Foundation
+, MediaToolbox
 }:
 
-assert faacSupport -> faac != null;
-
-let
-  inherit (stdenv.lib) optional optionals;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.16.2";
+  version = "1.18.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0x0y0hm0ga3zqi5q4090hw5sjh59y1ry9ak16qsaascm72i7mjzi";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "06ildd4rl6cynirv3p00d2ddf5is9svj4i7mkahldzhq24pq5mca";
   };
 
   patches = [
+    # Use pkgconfig to inject the includedirs
     ./fix_pkgconfig_includedir.patch
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
+    orc # for orcc
     python3
     gettext
     gobject-introspection
-  ] ++ optionals stdenv.isLinux [
-    wayland-protocols
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland # for wayland-scanner
   ];
 
   buildInputs = [
     gst-plugins-base
     orc
+    # gobject-introspection has to be in both nativeBuildInputs and
+    # buildInputs. The build tries to link against libgirepository-1.0.so
+    gobject-introspection
     faad2
     libass
     libkate
@@ -121,6 +131,7 @@ in stdenv.mkDerivation rec {
     libbs2b
     libmodplug
     mpeg2dec
+    libmicrodns
     openjpeg
     libopus
     librsvg
@@ -157,14 +168,17 @@ in stdenv.mkDerivation rec {
     libxml2
     libintl
     srt
-  ] ++ optionals enableZbar [
+    vo-aacenc
+  ] ++ lib.optionals enableZbar [
     zbar
-  ] ++ optionals faacSupport [
+  ] ++ lib.optionals faacSupport [
     faac
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     bluez
+    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
-  ] ++ optionals (!stdenv.isDarwin) [
+    wayland-protocols
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
     wildmidi
@@ -178,13 +192,12 @@ in stdenv.mkDerivation rec {
     libgudev
     libnice
     libofa
-    librdf
     sbc
     spandsp
 
     # ladspa plug-in
     ladspaH
-    librdf # TODO: make build on Darwin
+    lrdf # TODO: make build on Darwin
 
     # lv2 plug-in
     lilv
@@ -192,7 +205,7 @@ in stdenv.mkDerivation rec {
     serd
     sord
     sratom
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
     #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
@@ -203,15 +216,18 @@ in stdenv.mkDerivation rec {
     CoreVideo
     Foundation
     MediaToolbox
-  ]);
+  ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
 
+    "-Davtp=disabled"
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
     "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing
+    "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
     # As of writing, with `libmpcdec` in `buildInputs` we get
     #   "Could not find libmpcdec header files, but Musepack was enabled via options"
@@ -228,21 +244,20 @@ in stdenv.mkDerivation rec {
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
+    "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
-    "-Dvoaacenc=disabled" # required `vo-aacenc` library not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
     "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
+    "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
-
-    # Requires CUDA and we haven't figured out how to make Meson find CUDA yet;
-    # it probably searches via pkgconfig, for which we have no .pc files,
-    # see https://github.com/NixOS/nixpkgs/issues/54395
-    "-Dnvdec=disabled"
-    "-Dnvenc=disabled"
+    "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
   ]
-  ++ optionals stdenv.isDarwin [
+  ++ lib.optionals (!stdenv.isLinux) [
+    "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ]
+  ++ lib.optionals stdenv.isDarwin [
     "-Dbluez=disabled"
     "-Dchromaprint=disabled"
     "-Ddirectfb=disabled"
@@ -255,18 +270,27 @@ in stdenv.mkDerivation rec {
     "-Ddvb=disabled"
     "-Dfbdev=disabled"
     "-Duvch264=disabled" # requires gudev
+    "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
-  ] ++ optionals (!gst-plugins-base.glEnabled) [
-    "-Dgl=disabled"]
-  ++ optionals (!gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+    "-Dgl=disabled"
+  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
     "-Dwayland=disabled"
-  ] ++ optionals (!gst-plugins-base.glEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
   ];
+
+  # Argument list too long
+  strictDeps = true;
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   # This package has some `_("string literal")` string formats
   # that trip up clang with format security enabled.
@@ -274,7 +298,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GStreamer Bad Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

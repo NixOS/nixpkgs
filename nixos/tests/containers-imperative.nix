@@ -1,9 +1,7 @@
-# Test for NixOS' container support.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-imperative";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco kampfschlaefer ];
+  meta = {
+    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
   };
 
   machine =
@@ -44,6 +42,15 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             script = "ls -al /foo";
             wantedBy = [ "multi-user.target" ];
           };
+        }
+      '';
+      brokenCfg = pkgs.writeText "broken.nix" ''
+        {
+          assertions = [
+            { assertion = false;
+              message = "I never evaluate";
+            }
+          ];
         }
       '';
     in ''
@@ -130,5 +137,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       with subtest("Ensure that the container path is gone"):
           print(machine.succeed("ls -lsa /var/lib/containers"))
           machine.succeed(f"test ! -e /var/lib/containers/{id1}")
+
+      with subtest("Ensure that a failed container creation doesn'leave any state"):
+          machine.fail(
+              "nixos-container create b0rk --config-file ${brokenCfg}"
+          )
+          machine.succeed(f"test ! -e /var/lib/containers/b0rk")
     '';
 })

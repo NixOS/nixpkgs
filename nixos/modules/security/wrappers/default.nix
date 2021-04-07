@@ -10,16 +10,8 @@ let
       (n: v: (if v ? program then v else v // {program=n;}))
       wrappers);
 
-  securityWrapper = pkgs.stdenv.mkDerivation {
-    name            = "security-wrapper";
-    phases          = [ "installPhase" "fixupPhase" ];
-    buildInputs     = [ pkgs.libcap pkgs.libcap_ng pkgs.linuxHeaders ];
-    hardeningEnable = [ "pie" ];
-    installPhase = ''
-      mkdir -p $out/bin
-      $CC -Wall -O2 -DWRAPPER_DIR=\"${parentWrapperDir}\" \
-          -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper
-    '';
+  securityWrapper = pkgs.callPackage ./wrapper.nix {
+    inherit parentWrapperDir;
   };
 
   ###### Activation script for the setcap wrappers
@@ -160,13 +152,16 @@ in
   config = {
 
     security.wrappers = {
+      # These are mount related wrappers that require the +s permission.
       fusermount.source = "${pkgs.fuse}/bin/fusermount";
       fusermount3.source = "${pkgs.fuse3}/bin/fusermount3";
+      mount.source = "${lib.getBin pkgs.util-linux}/bin/mount";
+      umount.source = "${lib.getBin pkgs.util-linux}/bin/umount";
     };
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
-      options = [ "nodev" ];
+      options = [ "nodev" "mode=755" ];
     };
 
     # Make sure our wrapperDir exports to the PATH env variable when
@@ -184,6 +179,8 @@ in
           # programs to be wrapped.
           WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
+          chmod 755 "${parentWrapperDir}"
+
           # We want to place the tmpdirs for the wrappers to the parent dir.
           wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
           chmod a+rx $wrapperDir
@@ -194,6 +191,9 @@ in
             # Atomically replace the symlink
             # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
             old=$(readlink -f ${wrapperDir})
+            if [ -e ${wrapperDir}-tmp ]; then
+              rm --force --recursive ${wrapperDir}-tmp
+            fi
             ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
             mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
             rm --force --recursive $old

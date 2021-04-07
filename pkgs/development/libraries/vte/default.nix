@@ -3,7 +3,7 @@
 , fetchurl
 , fetchpatch
 , gettext
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gnome3
@@ -18,17 +18,19 @@
 , pcre2
 , fribidi
 , zlib
+, icu
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.58.2";
+  version = "0.62.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h1bljr090cgnzim00q4pnsmjqblzn1sig3d87wv1hzjn796dj9k";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-sDALvPDALfWBKhCjy45P/3I7q5LAjJegqQwWfPVDr/A=";
   };
 
   passthru = {
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
     gnutls
     pcre2
     zlib
+    icu
+    systemd
   ];
 
   propagatedBuildInputs = [
@@ -76,8 +80,8 @@ stdenv.mkDerivation rec {
     patchShebangs src/box_drawing_generate.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnome.org/;
+  meta = with lib; {
+    homepage = "https://www.gnome.org/";
     description = "A library implementing a terminal emulator widget for GTK";
     longDescription = ''
       VTE is a library (libvte) implementing a terminal emulator widget for
@@ -88,7 +92,7 @@ stdenv.mkDerivation rec {
       the system's terminfo database.
     '';
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ astsmtl antono lethalman ] ++ gnome3.maintainers;
+    maintainers = with maintainers; [ astsmtl antono lethalman ] ++ teams.gnome.members;
     platforms = platforms.unix;
   };
 }

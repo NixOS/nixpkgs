@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, gmp, flex, bison }:
+{ lib, stdenv, fetchurl, autoreconfHook, gmp, flex, bison }:
 
 stdenv.mkDerivation {
   pname = "veriT";
@@ -21,9 +21,9 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open, trustable and efficient SMT-solver";
-    homepage = http://www.verit-solver.org/;
+    homepage = "http://www.verit-solver.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

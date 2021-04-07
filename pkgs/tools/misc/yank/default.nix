@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, xsel }:
+{ lib, stdenv, fetchFromGitHub, xsel }:
 
 stdenv.mkDerivation rec {
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
   makeFlags = [ "YANKCMD=${xsel}/bin/xsel" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mptre/yank;
+  meta = with lib; {
+    homepage = "https://github.com/mptre/yank";
     description = "Yank terminal output to clipboard";
     longDescription = ''
       Read input from stdin and display a selection interface that allows a

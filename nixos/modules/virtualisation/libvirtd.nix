@@ -7,10 +7,8 @@ let
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
-    unix_sock_group = "libvirtd"
-    unix_sock_rw_perms = "0770"
-    auth_unix_ro = "none"
-    auth_unix_rw = "none"
+    auth_unix_ro = "polkit"
+    auth_unix_rw = "polkit"
     ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
@@ -116,7 +114,7 @@ in {
         Specifies the action to be done to / on the guests when the host boots.
         The "start" option starts all guests that were running prior to shutdown
         regardless of their autostart settings. The "ignore" option will not
-        start the formally running guest on boot. However, any guest marked as
+        start the formerly running guest on boot. However, any guest marked as
         autostart will still be automatically started by libvirtd.
       '';
     };
@@ -214,14 +212,14 @@ in {
     };
 
     systemd.services.libvirtd = {
-      description = "Libvirt Virtual Machine Management Daemon";
-
-      wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
-      after = [ "systemd-udev-settle.service" "libvirtd-config.service" ]
+      after = [ "libvirtd-config.service" ]
               ++ optional vswitch.enable "ovs-vswitchd.service";
 
-      environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
+      environment.LIBVIRTD_ARGS = escapeShellArgs (
+        [ "--config" configFile
+          "--timeout" "120"     # from ${libvirt}/var/lib/sysconfig/libvirtd
+        ] ++ cfg.extraOptions);
 
       path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
              ++ optional vswitch.enable vswitch.package;
@@ -266,5 +264,17 @@ in {
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlockd virtlockd";
       restartIfChanged = false;
     };
+
+    # https://libvirt.org/daemons.html#monolithic-systemd-integration
+    systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
+
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.libvirt.unix.manage" &&
+          subject.isInGroup("libvirtd")) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 }

@@ -2,7 +2,7 @@
 
 with python.pkgs;
 buildPythonApplication rec {
-  version = "0.3.6";
+  version = "0.3.9";
   pname = "nbstripout";
 
   # Mercurial should be added as a build input but because it's a Python
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1x6010akw7iqxn7ba5m6malfr2fvaf0bjp3cdh983qn1s7vwlq0r";
+    sha256 = "b46dddbf78b8b137176bc72729124e378242ef9ce93af63f6e0a8c4850c972e7";
   };
 
   # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
@@ -31,7 +31,7 @@ buildPythonApplication rec {
   meta = {
     inherit version;
     description = "Strip output from Jupyter and IPython notebooks";
-    homepage = https://github.com/kynan/nbstripout;
+    homepage = "https://github.com/kynan/nbstripout";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };

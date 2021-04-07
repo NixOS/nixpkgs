@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , cmake
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     ctest -E "utf_8_char" .
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://editorconfig.org;
+  meta = with lib; {
+    homepage = "https://editorconfig.org";
     description = "EditorConfig File Locator and Interpreter for Python";
     license = licenses.psfl;
   };

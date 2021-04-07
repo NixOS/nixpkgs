@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest, scipy }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest, scipy }:
 
 buildPythonPackage {
   pname = "fastpair";
@@ -26,8 +26,8 @@ buildPythonPackage {
     pytest fastpair
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/carsonfarmer/fastpair;
+  meta = with lib; {
+    homepage = "https://github.com/carsonfarmer/fastpair";
     description = "Data-structure for the dynamic closest-pair problem";
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai ];

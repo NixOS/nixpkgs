@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, kernel, perl, kmod, libelf }:
+{ lib, stdenv, fetchurl, kernel, perl, kmod, libelf }:
 let
-  version = "1.62-pre";
+  version = "1.63";
 in
 stdenv.mkDerivation {
   name = "ndiswrapper-${version}-${kernel.version}";
@@ -14,7 +14,6 @@ stdenv.mkDerivation {
   kernel = kernel.dev;
 
   buildPhase = "
-    cd ndiswrapper
     echo make KBUILD=$(echo \$kernel/lib/modules/*/build);
     echo -n $kernel/lib/modules/*/build > kbuild_path
     export PATH=${kmod}/sbin:$PATH
@@ -30,20 +29,18 @@ stdenv.mkDerivation {
     patchShebangs $out/sbin
   '';
 
-  # should we use unstable?
-  src = fetchFromGitHub {
-    owner = "pgiri";
-    repo = "ndiswrapper";
-    rev = "5e29f6a9d41df949b435066c173e3b1947f179d3";
-    sha256 = "0sprrmxxkf170bmh1nz9xw00gs89dddr84djlf666bn5bhy6jffi";
+  src = fetchurl {
+    url = "mirror://sourceforge/ndiswrapper/files/stable/ndiswrapper-${version}.tar.gz";
+    sha256 = "1v6b66jhisl110jfl00hm43lmnrav32vs39d85gcbxrjqnmcx08g";
   };
 
   buildInputs = [ perl libelf ];
 
   meta = {
     description = "Ndis driver wrapper for the Linux kernel";
-    homepage = https://sourceforge.net/projects/ndiswrapper;
+    homepage = "https://sourceforge.net/projects/ndiswrapper";
     license = "GPL";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = lib.versionAtLeast kernel.version "5.8";
   };
 }

@@ -38,8 +38,8 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable the Siproxd SIP 
-	  proxy/masquerading daemon.
+          Whether to enable the Siproxd SIP
+          proxy/masquerading daemon.
         '';
       };
 
@@ -57,29 +57,29 @@ in
 
       hostsAllowReg = mkOption {
         type = types.listOf types.str;
-	default = [ ];
+        default = [ ];
         example = [ "192.168.1.0/24" "192.168.2.0/24" ];
-	description = ''
+        description = ''
           Acess control list for incoming SIP registrations.
         '';
       };
 
       hostsAllowSip = mkOption {
         type = types.listOf types.str;
-	default = [ ];
+        default = [ ];
         example = [ "123.45.0.0/16" "123.46.0.0/16" ];
-	description = ''
+        description = ''
           Acess control list for incoming SIP traffic.
         '';
       };
 
       hostsDenySip = mkOption {
         type = types.listOf types.str;
-	default = [ ];
+        default = [ ];
         example = [ "10.0.0.0/8" "11.0.0.0/8" ];
-	description = ''
+        description = ''
           Acess control list for denying incoming
-	   SIP registrations and traffic.
+          SIP registrations and traffic.
         '';
       };
 
@@ -87,7 +87,7 @@ in
         type = types.int;
         default = 5060;
         description = ''
-	  Port to listen for incoming SIP messages.
+          Port to listen for incoming SIP messages.
         '';
       };
 
@@ -111,7 +111,7 @@ in
         type = types.int;
         default = 300;
         description = ''
-          Timeout for an RTP stream. If for the specified 
+          Timeout for an RTP stream. If for the specified
           number of seconds no data is relayed on an active
           stream, it is considered dead and will be killed.
         '';
@@ -122,7 +122,7 @@ in
         default = 46;
         description = ''
           DSCP (differentiated services) value to be assigned
-          to RTP packets. Allows QOS aware routers to handle 
+          to RTP packets. Allows QOS aware routers to handle
           different types traffic with different priorities.
         '';
       };
@@ -132,7 +132,7 @@ in
         default = 0;
         description = ''
           DSCP (differentiated services) value to be assigned
-          to SIP packets. Allows QOS aware routers to handle 
+          to SIP packets. Allows QOS aware routers to handle
           different types traffic with different priorities.
         '';
       };

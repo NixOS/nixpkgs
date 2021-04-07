@@ -1,42 +1,38 @@
 { mkDerivation, lib, fetchFromGitHub, pkg-config, python3, cmake, ninja
-, qtbase, qtimageformats, enchant, xdg_utils, ffmpeg, openalSoft, lzma
-, lz4, xxHash, zlib, minizip, openssl, libtgvoip, range-v3
+, qtbase, qtimageformats, libdbusmenu, hunspell, xdg-utils, ffmpeg_3, openalSoft
+, xz, lz4, xxHash, zlib, minizip, openssl, libtgvoip, microsoft_gsl, tl-expected
+, range-v3
 }:
 
 with lib;
 
 mkDerivation rec {
   pname = "kotatogram-desktop";
-  version = "1.1.5";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
     repo = "kotatogram-desktop";
     rev = "k${version}";
-    sha256 = "1j5wn3k1mr2c39szmyzm0pf720jmbllcaj40p2ydx0p3lir1s760";
+    sha256 = "00pdx3cjhrihf7ihhmszcf159jrzn1bcx20vwiiizs5r1qk8l210";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace Telegram/lib_spellcheck/spellcheck/platform/linux/linux_enchant.cpp \
-      --replace '"libenchant-2.so.2"' '"${enchant}/lib/libenchant-2.so.2"'
-  '';
 
   nativeBuildInputs = [ pkg-config python3 cmake ninja ];
 
   buildInputs = [
-    qtbase qtimageformats ffmpeg openalSoft lzma lz4 xxHash
-    zlib minizip openssl enchant libtgvoip range-v3
+    qtbase qtimageformats ffmpeg_3 openalSoft xz lz4 xxHash libdbusmenu
+    zlib minizip openssl hunspell libtgvoip microsoft_gsl tl-expected range-v3
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${xdg_utils}/bin"
+    "--prefix PATH : ${xdg-utils}/bin"
   ];
 
   cmakeFlags = [
     "-DTDESKTOP_API_TEST=ON"
-    "-DTDESKTOP_DISABLE_GTK_INTEGRATION=ON"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
+    "-DDESKTOP_APP_USE_PACKAGED_VARIANT=OFF"
   ];
 
   meta = {
@@ -48,7 +44,7 @@ mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.linux;
-    homepage = https://kotatogram.github.io;
+    homepage = "https://kotatogram.github.io";
     maintainers = with maintainers; [ ilya-fedin ];
   };
 }

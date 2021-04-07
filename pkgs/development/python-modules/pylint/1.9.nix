@@ -1,6 +1,6 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, astroid, six, isort,
   mccabe, configparser, backports_functools_lru_cache, singledispatch,
-  pytest, pytestrunner, pyenchant, setuptools }:
+  pytest, pytestrunner, setuptools }:
 
 buildPythonPackage rec {
   pname = "pylint";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "004kfapkqxqy2s85pmddqv0fabxdxywxrlbi549p0v237pr2v94p";
   };
 
-  checkInputs = [ pytest pytestrunner pyenchant ];
+  checkInputs = [ pytest pytestrunner ];
 
   propagatedBuildInputs = [ astroid six isort mccabe configparser backports_functools_lru_cache singledispatch setuptools ];
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/PyCQA/pylint;
+    homepage = "https://github.com/PyCQA/pylint";
     description = "A bug and style checker for Python";
     platforms = platforms.all;
     license = licenses.gpl1Plus;

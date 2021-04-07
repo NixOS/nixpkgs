@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , btrfs-progs
@@ -25,9 +25,9 @@ buildPythonPackage rec {
 
   buildInputs = [ btrfs-progs ];
   propagatedBuildInputs = [ contextlib2 pyxdg pycparser alembic ]
-    ++ stdenv.lib.optionals (!isPyPy) [ cffi ];
+    ++ lib.optionals (!isPyPy) [ cffi ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deduplication for Btrfs";
     longDescription = ''
       Deduplication for Btrfs. bedup looks for new and changed files,
@@ -35,7 +35,7 @@ buildPythonPackage rec {
       on disk. It integrates deeply with btrfs so that scans are
       incremental and low-impact.
     '';
-    homepage = https://github.com/g2p/bedup;
+    homepage = "https://github.com/g2p/bedup";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bluescreen303 ];
   };

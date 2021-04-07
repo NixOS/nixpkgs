@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # There is no test embedded
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A snapshot of django-filebrowser for the Mezzanine CMS";
     longDescription = ''
       filebrowser_safe was created to provide a snapshot of the
@@ -30,8 +30,8 @@ buildPythonPackage rec {
       with Django 1.1 - filebrowser_safe was therefore created to
       address these specific issues.
     '';
-    homepage = https://github.com/stephenmcd/filebrowser-safe;
-    downloadPage = https://pypi.python.org/pypi/filebrowser_safe/;
+    homepage = "https://github.com/stephenmcd/filebrowser-safe";
+    downloadPage = "https://pypi.python.org/pypi/filebrowser_safe/";
     license = licenses.free;
     maintainers = with maintainers; [ prikhi ];
     platforms = platforms.unix;

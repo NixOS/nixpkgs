@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, expat, curl, fftw }:
+{ lib, stdenv, fetchurl, expat, curl, fftw }:
 
 let
   version = "0.9.3";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ expat curl fftw ];
 
-  meta = with stdenv.lib; {
-    homepage = https://code.google.com/archive/p/musicip-libofa/;
+  meta = with lib; {
+    homepage = "https://code.google.com/archive/p/musicip-libofa/";
     description = "Library Open Fingerprint Architecture";
     longDescription = ''
       LibOFA (Library Open Fingerprint Architecture) is an open-source audio

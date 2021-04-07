@@ -1,6 +1,7 @@
 { pkgs
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , isPy38
 , python
 , nose
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
+  disabled = pythonAtLeast "3.9"; # no longer compatible with hmac std lib package
 
   src = fetchPypi {
     inherit pname version;
@@ -27,7 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests httpretty ];
 
   meta = with pkgs.lib; {
-    homepage = https://github.com/boto/boto;
+    homepage = "https://github.com/boto/boto";
     license = licenses.mit;
     description = "Python interface to Amazon Web Services";
     longDescription = ''

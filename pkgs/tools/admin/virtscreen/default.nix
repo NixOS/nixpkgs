@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, x11vnc, xrandr, libGL }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, x11vnc, xrandr, libGL }:
 
 python3Packages.buildPythonApplication rec {
   pname = "virtscreen";
@@ -30,9 +30,9 @@ python3Packages.buildPythonApplication rec {
       --replace "'GL'" "'${libGL}/lib/libGL${ext}'" \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Make your iPad/tablet/computer as a secondary monitor on Linux";
-    homepage = https://github.com/kbumsik/VirtScreen;
+    homepage = "https://github.com/kbumsik/VirtScreen";
     license = licenses.gpl3;
     maintainers = with maintainers; [ borisbabic ];
   };

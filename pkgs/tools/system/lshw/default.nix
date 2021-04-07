@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, withGUI ? false, gtk2, pkgconfig, sqlite # compile GUI
+, withGUI ? false, gtk2, pkg-config, sqlite # compile GUI
 }:
 
 let numVersion = "02.18"; # :(
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals withGUI [ gtk2 sqlite ];
 
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://ezix.org/project/wiki/HardwareLiSter;
+  meta = with lib; {
+    homepage = "https://ezix.org/project/wiki/HardwareLiSter";
     description = "Provide detailed information on the hardware configuration of the machine";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom ];

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "1.0.0";
+  version = "3.0.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ddvcgycv5m7q4rn5bch9qnhxjgn7192z537b1wzpmwd5s074cgz";
+    sha256 = "f83cac08454f225a34a305daa20e2110d5e6335135d505f93bc66583a5f9c10d";
   };
 
   propagatedBuildInputs = [ xlwt openpyxl pyyaml xlrd odfpy ];

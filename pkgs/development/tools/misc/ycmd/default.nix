@@ -2,23 +2,26 @@
 , gocode ? null
 , godef ? null
 , gotools ? null
+, nodePackages ? null
 , rustracerd ? null
 , fixDarwinDylibNames, Cocoa ? null
 }:
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "2019-09-19";
+  version = "2020-02-22";
+  disabled = !python.isPy3k;
 
   src = fetchgit {
     url = "https://github.com/Valloric/ycmd.git";
-    rev = "c6d360775b0c5c82e2513dce7b625f8bf3812702";
-    sha256 = "19rxlval20gg65xc5p7q9cnzfm9zw2j0m6vxxk0vqlalcyh0rnzd";
+    rev = "9a6b86e3a156066335b678c328f226229746bae5";
+    sha256 = "1c5axdngxaxj5vc6lr8sxb99mr5adsm1dnjckaxc23kq78pc8cn7";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost llvmPackages.libclang ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
@@ -68,6 +71,9 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
     mkdir -p $TARGET
     ln -sf ${gotools}/bin/gopls $TARGET
+  '' + lib.optionalString (nodePackages != null) ''
+    TARGET=$out/lib/ycmd/third_party/tsserver
+    ln -sf ${nodePackages.typescript} $TARGET
   '' + lib.optionalString (rustracerd != null) ''
     TARGET=$out/lib/ycmd/third_party/racerd/target/release
     mkdir -p $TARGET
@@ -84,9 +90,9 @@ stdenv.mkDerivation {
                 "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code-completion and comprehension server";
-    homepage = https://github.com/Valloric/ycmd;
+    homepage = "https://github.com/Valloric/ycmd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rasendubi cstrahan lnl7 ];
     platforms = platforms.all;

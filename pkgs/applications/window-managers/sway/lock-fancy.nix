@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, coreutils, grim, gawk, swaylock
+{ lib, stdenv, fetchFromGitHub, coreutils, grim, gawk, swaylock
 , imagemagick, getopt, fontconfig, makeWrapper
 }:
 
 let
-  depsPath = stdenv.lib.makeBinPath [
+  depsPath = lib.makeBinPath [
     coreutils
     grim
     gawk
@@ -14,13 +14,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "swaylock-fancy-unstable";
-  version = "2019-03-31";
+  version = "2020-02-22";
 
   src = fetchFromGitHub {
     owner = "Big-B";
     repo = "swaylock-fancy";
-    rev = "35618ceec70338047355b6b057825e68f16971b5";
-    sha256 = "06fjqwblmj0d9pq6y11rr73mizirna4ixy6xkvblf1c7sn5n8lpc";
+    rev = "5cf977b12f372740aa7b7e5a607d583f93f1e028";
+    sha256 = "0laqwzi6069sgz91i69438ns0g2nq4zkqickavrf80h4g3gcs8vm";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${depsPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This is an swaylock bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
     homepage = "https://github.com/Big-B/swaylock-fancy";
     license = licenses.mit;

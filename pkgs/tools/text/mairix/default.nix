@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, bison, flex }:
+{ lib, stdenv, fetchurl, zlib, bzip2, bison, flex }:
 
 stdenv.mkDerivation rec {
   name = "mairix-0.24";
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.rc0.org.uk/mairix;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://www.rc0.org.uk/mairix";
+    license = lib.licenses.gpl2Plus;
     description = "Program for indexing and searching email messages stored in maildir, MH or mbox";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; all;
   };
 }

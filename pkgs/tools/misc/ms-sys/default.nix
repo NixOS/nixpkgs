@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext }:
+{ lib, stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "ms-sys";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program for writing Microsoft-compatible boot records";
-    homepage = http://ms-sys.sourceforge.net/;
+    homepage = "http://ms-sys.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux;
   };

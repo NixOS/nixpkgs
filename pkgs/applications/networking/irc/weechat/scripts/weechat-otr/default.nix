@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, python3Packages, gmp }:
+{ lib, stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, python3Packages, gmp }:
 
 let
   # pure-python-otr (potr) requires an older version of pycrypto, which is
@@ -8,13 +8,19 @@ let
 
   pycrypto = python3Packages.buildPythonPackage rec {
     pname = "pycrypto";
-    version = "2.6.1-10";
+    version = "2.6.1-13.1";
 
     src = fetchgit {
       url = "https://salsa.debian.org/sramacher/python-crypto.git";
       rev = "debian/${version}";
-      sha256 = "10rgq8bmjfpiqqa1g1p1hh7pxlxs7x0nawvk6zip0pd6x2vsr661";
+      sha256 = "1mahqmlgilgk0rn5hfkhza7kscfm7agdakkb6rqnif9g0qp3s52f";
     };
+
+    postPatch = ''
+      for p in debian/patches/*.patch; do
+        patch -p1 < "$p"
+      done
+    '';
 
     buildInputs = [ gmp ];
 
@@ -55,10 +61,10 @@ in stdenv.mkDerivation rec {
     cp weechat_otr.py $out/share/weechat_otr.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mmb/weechat-otr";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
     description = "WeeChat script for Off-the-Record messaging";
   };
 }

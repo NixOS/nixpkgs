@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkg-config, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
-  version = "0.84.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "21.02.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0ccp2gx05cz5y04k5pgbyi4ikyq60nafa7x2yx4aaf1vfkd318f7";
+    sha256 = "sha256-XBR1nJmJHm5HKs7W1fD/Haz4XYDNkCbTZcVcZT7feSw=";
   };
 
   outputs = [ "out" "dev" ];
@@ -31,12 +31,14 @@ stdenv.mkDerivation rec {
     ++ optional utils nss
     ++ optional introspectionSupport gobject-introspection;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   # Workaround #54606
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
+
+  dontWrapQtApps = true;
 
   cmakeFlags = [
     (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = https://poppler.freedesktop.org/;
+    homepage = "https://poppler.freedesktop.org/";
     description = "A PDF rendering library";
 
     longDescription = ''
@@ -59,6 +61,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
 }

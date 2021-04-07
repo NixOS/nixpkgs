@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
+{ lib, stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "tiptop";
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Performance monitoring tool for Linux";
-    homepage = http://tiptop.gforge.inria.fr;
+    homepage = "http://tiptop.gforge.inria.fr";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];

@@ -1,5 +1,5 @@
-{ stdenv, rustPlatform, fetchgit, runCommand, symlinkJoin
-, pkgconfig, minijail, dtc, libusb1, libcap
+{ stdenv, lib, rustPlatform, fetchgit, runCommand, symlinkJoin
+, pkg-config, minijail, dtc, libusb1, libcap, linux
 }:
 
 let
@@ -53,12 +53,9 @@ in
       ./default-seccomp-policy-dir.diff
     ];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+    cargoSha256 = "0lhivwvdihslwp81i3sa5q88p5hr83bzkvklrcgf6x73arwk8kdz";
 
-    cargoSha256 = "1d7y07wkliy5qnlyx5zj6ni39avhs3s48sqgvwxm5g5zrahg2a85";
-
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
 
     buildInputs = [ dtc libcap libusb1 minijail ];
 
@@ -76,13 +73,17 @@ in
       cp seccomp/${arch}/* $out/share/policy/
     '';
 
+    CROSVM_CARGO_TEST_KERNEL_BINARY =
+      lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
+        "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
+
     passthru = {
       inherit adhdSrc;
       src = crosvmSrc;
       updateScript = ./update.py;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A secure virtual machine monitor for KVM";
       homepage = "https://chromium.googlesource.com/chromiumos/platform/crosvm/";
       maintainers = with maintainers; [ qyliss ];

@@ -135,7 +135,7 @@ in {
           ];
           execPkgs = lib.concatMap (opt: let
             isSet = config.serviceConfig ? ${opt};
-          in lib.optional isSet config.serviceConfig.${opt}) execOpts;
+          in lib.flatten (lib.optional isSet config.serviceConfig.${opt})) execOpts;
           unitAttrs = toplevelConfig.systemd.units."${name}.service";
           allPkgs = lib.singleton (builtins.toJSON unitAttrs);
           unitPkgs = if fullUnit then allPkgs else execPkgs;
@@ -159,6 +159,11 @@ in {
       message = "${whatOpt "DynamicUser"}. Please create a dedicated user via"
               + " the 'users.users' option instead as this combination is"
               + " currently not supported.";
+    }
+    { assertion = cfg.serviceConfig ? ProtectSystem -> cfg.serviceConfig.ProtectSystem == false;
+      message = "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
+              + " with service confinement as it fails to remount /usr within"
+              + " our chroot. Please disable the option.";
     }
   ]) config.systemd.services);
 

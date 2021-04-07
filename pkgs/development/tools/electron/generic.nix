@@ -1,19 +1,42 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core}:
+{ lib, stdenv
+, libXScrnSaver
+, makeWrapper
+, fetchurl
+, wrapGAppsHook
+, glib
+, gtk3
+, unzip
+, atomEnv
+, libuuid
+, at-spi2-atk
+, at-spi2-core
+, libdrm
+, mesa
+, libxkbcommon
+, libappindicator-gtk3
+, libxshmfence
+}:
 
 version: hashes:
 let
   name = "electron-${version}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross platform desktop application shell";
-    homepage = https://github.com/electron/electron;
+    homepage = "https://github.com/electron/electron";
     license = licenses.mit;
-    maintainers = with maintainers; [ travisbhartwell manveru ];
+    maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
+    knownVulnerabilities = optional (versionOlder version "6.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
     url = "https://github.com/electron/electron/releases/download/v${vers}/electron-v${vers}-${tag}.zip";
+    sha256 = hash;
+  };
+
+  headersFetcher = vers: hash: fetchurl {
+    url = "https://atom.io/download/electron/v${vers}/node-v${vers}-headers.tar.gz";
     sha256 = hash;
   };
 
@@ -31,10 +54,18 @@ let
   common = platform: {
     inherit name version meta;
     src = fetcher version (get tags platform) (get hashes platform);
+    passthru.headers = headersFetcher version hashes.headers;
   };
 
+  electronLibPath = with lib; makeLibraryPath (
+    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
+    ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
+    ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
+    ++ optionals (! versionOlder version "12.0.0") [ libxshmfence ]
+  );
+
   linux = {
-    buildInputs = [ gtk3 ];
+    buildInputs = [ glib gtk3 ];
 
     nativeBuildInputs = [
       unzip
@@ -44,26 +75,29 @@ let
 
     dontWrapGApps = true; # electron is in lib, we need to wrap it manually
 
-    buildCommand = ''
+    dontUnpack = true;
+    dontBuild = true;
+
+    installPhase = ''
       mkdir -p $out/lib/electron $out/bin
       unzip -d $out/lib/electron $src
       ln -s $out/lib/electron/electron $out/bin
+    '';
 
-      fixupPhase
-
+    postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libuuid at-spi2-atk at-spi2-core ]}:$out/lib/electron" \
+        --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
+        --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
         "''${gappsWrapperArgs[@]}"
     '';
   };
 
   darwin = {
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
 
     buildCommand = ''
       mkdir -p $out/Applications

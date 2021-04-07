@@ -1,19 +1,21 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.6072";
+  version = "0.1.15149";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sbzl6y7974sib14qr2qa6d20cs54h6a3mc1whbxifg87cw02qjn";
+    sha256 = "sha256-pmLDCNgCQv4fetl/q6ZokH1qF6pSqsR0DUWbzGeEtaw=";
   };
 
-  modSha256 = "1pxqc2a1hb6bk67sd2c37zwg6n7h0jay3yqsjcs4jc0bqv48gzip";
+  vendorSha256 = "sha256-j7VP/QKKMdmWQ60BYpChG4syDlll7CY4rb4wfb4+Z1s=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" ];
+  doCheck = false;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version} -X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev} -X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
 
   preBuild = ''
     substituteInPlace data/data.go \
@@ -24,7 +26,7 @@ buildGoModule rec {
     install -Dm644 -t $out/share/circleci-cli _data/data.yml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # Box blurb edited from the AUR package circleci-cli
     description = ''
       Command to enable you to reproduce the CircleCI environment locally and
@@ -32,6 +34,6 @@ buildGoModule rec {
     '';
     maintainers = with maintainers; [ synthetica ];
     license = licenses.mit;
-    homepage = https://circleci.com/;
+    homepage = "https://circleci.com/";
   };
 }

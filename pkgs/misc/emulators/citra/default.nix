@@ -1,19 +1,20 @@
-{ stdenv, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
+{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "citra";
-  version = "2019-10-05";
+  version = "2020-12-07";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "35690e3ac7a340d941d3bf56080cf5aa6187c5c3";
-    sha256 = "11a4mdjabn3qrh0nn4pjl5fxs9nhf1k27wd486csfx88q2q9jvq8";
+    rev = "3f13e1cc2419fac837952c44d7be9db78b054a2f";
+    sha256 = "1bbg8cwrgncmcavqpj3yp4dbfkip1i491krp6dcpgvsd5yfr7f0v";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 qtbase qtmultimedia boost ];
+
+  dontWrapQtApps = true;
 
   preConfigure = ''
     # Trick configure system.
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://citra-emu.org";
     description = "An open-source emulator for the Nintendo 3DS";
     license = licenses.gpl2;

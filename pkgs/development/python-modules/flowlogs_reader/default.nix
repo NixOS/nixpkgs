@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , botocore
 , boto3
 , docutils
@@ -10,17 +11,18 @@
 
 buildPythonPackage rec {
   pname = "flowlogs_reader";
-  version = "2.0.0";
+  version = "2.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "256c67afabc1783e8a378c7589877f76660c6a645aa6dfe1759e26f4a93a22d0";
+    sha256 = "e47637b40a068a0c814ba2087fb691b43aa12e6174ab06b6cdb7109bb94624e4";
   };
 
   propagatedBuildInputs = [ botocore boto3 docutils ];
   buildInputs = [ unittest2 mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
     homepage = "https://github.com/obsrvbl/flowlogs-reader";
     maintainers = with maintainers; [ cransom ];

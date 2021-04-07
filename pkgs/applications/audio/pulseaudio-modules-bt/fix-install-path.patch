@@ -8,4 +8,4 @@ index 8d20dbf..63fe7ba 100644
          module-bluetooth-policy
 -        LIBRARY DESTINATION ${PulseAudio_modlibexecdir})
 -
-+        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pulse-${PulseAudio_VERSION}/modules/)
++        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${PULSE_DIR}/modules/)

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool, libxml2, cppunit, boost
+{ lib, stdenv, fetchurl, libtool, libxml2, cppunit, boost
 , apr, aprutil, db, expat
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     }' src/examples/cpp/console.cpp \
        src/main/cpp/inputstreamreader.cpp \
        src/main/cpp/socketoutputstream.cpp
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's/namespace std { class locale; }/#include <locale>/' src/main/include/log4cxx/helpers/simpledateformat.h
     sed -i 's/\(#include <cctype>\)/\1\n#include <cstdlib>/' src/main/cpp/stringhelper.cpp
   '';
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool ];
 
   meta = {
-    homepage = https://logging.apache.org/log4cxx/index.html;
+    homepage = "https://logging.apache.org/log4cxx/index.html";
     description = "A logging framework for C++ patterned after Apache log4j";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

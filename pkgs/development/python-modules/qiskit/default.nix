@@ -1,65 +1,56 @@
-{ stdenv
-, isPy3k
+{ lib
+, pythonOlder
 , buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, sympy
-, matplotlib
-, networkx
-, ply
-, pillow
-, cffi
-, requests
-, requests_ntlm
-, IBMQuantumExperience
-, jsonschema
-, psutil
-, cmake
-, llvmPackages 
+, fetchFromGitHub
+  # Python Inputs
+, qiskit-aer
+, qiskit-aqua
+, qiskit-ibmq-provider
+, qiskit-ignis
+, qiskit-terra
+  # Check Inputs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "qiskit";
-  version = "0.14.0";
+  # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
+  version = "0.24.1";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d086a21d0eee61bb12e1f2cd6148a7292005fd10584ca33d6c404dd5c53ba95f";
+  src = fetchFromGitHub {
+    owner = "qiskit";
+    repo = "qiskit";
+    rev = version;
+    sha256 = "0qfz69n8sl7sk4hzygni9qars9q1cyz0n3bv1lca00ia5qsc72d2";
   };
 
-  buildInputs = [ cmake ]
-    ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp;
-
   propagatedBuildInputs = [
-    numpy
-    matplotlib
-    networkx
-    ply
-    scipy
-    sympy
-    pillow
-    cffi
-    requests
-    requests_ntlm
-    IBMQuantumExperience
-    jsonschema
-    psutil
+    qiskit-aer
+    qiskit-aqua
+    qiskit-ibmq-provider
+    qiskit-ignis
+    qiskit-terra
   ];
 
-  # Pypi's tarball doesn't contain tests
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
 
-  meta = {
-    description = "Quantum Software Development Kit for writing quantum computing experiments, programs, and applications";
-    homepage    = https://github.com/QISKit/qiskit-terra;
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [
-      pandaman
-    ];
-    # Needs to be updated and have its new dependencies added
-    broken = true;
+  pythonImportsCheck = [
+    "qiskit"
+    "qiskit.aqua"
+    "qiskit.circuit"
+    "qiskit.ignis"
+    "qiskit.providers.aer"
+    "qiskit.providers.ibmq"
+  ];
+
+  meta = with lib; {
+    description = "Software for developing quantum computing programs";
+    homepage = "https://qiskit.org";
+    downloadPage = "https://github.com/QISKit/qiskit/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ drewrisinger pandaman ];
   };
 }

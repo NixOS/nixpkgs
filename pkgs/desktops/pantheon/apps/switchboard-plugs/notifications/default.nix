@@ -1,29 +1,32 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
+, fetchpatch
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
 , gtk3
 , switchboard
+, elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "2.1.5";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0p0aj3bbjrh6x8wajqqb5yqm2iqfnj7kp16zf4hdr4siw0sx5p8n";
+    sha256 = "sha256-MBCSQ+4l0mpS2OTDRJ7+91qo0SWm5nJNYO7SZaSoVQk=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -31,22 +34,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
   buildInputs = [
+    elementary-notifications
     granite
     gtk3
     libgee
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Notifications Plug";
-    homepage = https://github.com/elementary/switchboard-plug-notifications;
+    homepage = "https://github.com/elementary/switchboard-plug-notifications";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -1,24 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, requests
-, pytest, testtools, requests-mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, requests, netifaces
+, pytestCheckHook, testtools, requests-mock }:
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.7.10";
+  version = "0.9.10";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "scarface-4711";
     repo = "denonavr";
     rev = version;
-    sha256 = "078nhr69f68nfazhmkf2sl7wiadqx96a5ry3ziggiy1xs04vflj7";
+    sha256 = "sha256-3ap8F3ayBTpaR98md+gT0+hkIWlFBNxStTGWT5AL//A=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+    netifaces
+  ];
 
-  doCheck = !isPy27;
-  checkInputs = [ pytest testtools requests-mock ];
-  checkPhase = ''
-    pytest tests
-  '';
+  checkInputs = [
+    pytestCheckHook
+    testtools
+    requests-mock
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/scarface-4711/denonavr";

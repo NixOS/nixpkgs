@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
@@ -26,8 +26,8 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover tests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pjdelport/backports.os;
+  meta = with lib; {
+    homepage = "https://github.com/pjdelport/backports.os";
     description = "Backport of new features in Python's os module";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

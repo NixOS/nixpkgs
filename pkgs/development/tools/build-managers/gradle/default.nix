@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
+{ lib, stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
   gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
@@ -33,7 +33,8 @@ rec {
         echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
       '';
 
-    buildInputs = [ unzip java makeWrapper ];
+    nativeBuildInputs = [ makeWrapper unzip ];
+    buildInputs = [ java ];
 
     meta = {
       description = "Enterprise-grade build system";
@@ -45,20 +46,30 @@ rec {
         between the flexibility of Ant and the convenience of a
         build-by-convention behavior.
       '';
-      homepage = http://www.gradle.org/;
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.unix;
+      homepage = "http://www.gradle.org/";
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.unix;
     };
   };
 
-  gradle_latest = gradle_5_6;
+  gradle_latest = gradle_6_8;
+
+  gradle_6_8 = gradleGen rec {
+    name = "gradle-6.8.3";
+    nativeVersion = "0.22-milestone-9";
+
+    src = fetchurl {
+      url = "https://services.gradle.org/distributions/${name}-bin.zip";
+      sha256 = "01fjrk5nfdp6mldyblfmnkq2gv1rz1818kzgr0k2i1wzfsc73akz";
+    };
+  };
 
   gradle_5_6 = gradleGen rec {
     name = "gradle-5.6.4";
     nativeVersion = "0.18";
 
     src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      url = "https://services.gradle.org/distributions/${name}-bin.zip";
       sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
     };
   };
@@ -68,7 +79,7 @@ rec {
     nativeVersion = "0.14";
 
     src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      url = "https://services.gradle.org/distributions/${name}-bin.zip";
       sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
     };
   };

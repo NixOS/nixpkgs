@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
-, libvorbis, libxml2, movit, pkgconfig, sox
-, gtk2
+{ lib, stdenv, fetchFromGitHub, makeWrapper
+, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate, libexif
+, libvorbis, libxml2, movit, pkg-config, sox, fftw, opencv4, SDL2
+, gtk2, genericUpdater, common-updater-scripts, libebur128
 }:
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "6.18.0";
+  version = "6.24.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0iiqym15n8kbnjzj0asmm86gs23yykz0va5b475cc4v2vv5admgx";
+    sha256 = "1my43ica2qax2622307dv4gn3w8hkchy643i9pq8r9yh2hd4pvs9";
   };
 
   buildInputs = [
     SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig sox
-    gtk2
+    makeWrapper movit pkg-config sox libexif gtk2 fftw libebur128
+    opencv4 SDL2
   ];
 
   # Mostly taken from:
@@ -38,9 +38,15 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/mlt/libmltopengl.so -e "s|$s|$t|g"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    rev-prefix = "v";
+  };
+
+  meta = with lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    homepage = https://www.mltframework.org;
+    homepage = "https://www.mltframework.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tohl peti ];
     platforms = platforms.linux;

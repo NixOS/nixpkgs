@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkgconfig, glib, gtk3, cairo, sqlite, gnome3
+{ fetchurl, lib, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome3
 , clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
@@ -6,13 +6,13 @@ stdenv.mkDerivation rec {
   version = "0.12.20";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rihpb0npqpihqcdz4w03rq6xl7jdckfqskvv9diq2hkrnzv8ch2";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
 
   buildInputs = [ sqlite libsoup ];
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/libchamplain;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/libchamplain";
     license = licenses.lgpl2Plus;
 
     description = "C library providing a ClutterActor to display maps";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-     maintainers = gnome3.maintainers;
+     maintainers = teams.gnome.members;
      platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

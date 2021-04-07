@@ -1,9 +1,11 @@
---- a/repo	2020-02-05 21:11:52.773854798 +0100
-+++ b/repo	2020-02-05 21:12:34.018329462 +0100
-@@ -137,6 +137,7 @@
+diff --git a/repo b/repo
+index 8b05def..f394b3e 100755
+--- a/repo
++++ b/repo
+@@ -236,6 +236,7 @@ import optparse
+ import re
+ import shutil
  import stat
- import subprocess
- import sys
 +import ssl
  
  if sys.version_info[0] == 3:

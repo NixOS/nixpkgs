@@ -1,6 +1,6 @@
 # See pkgs/build-support/setup-hooks/role.bash
 getHostRole
 
-export NIX_${role_pre}LDFLAGS+=" -lnbcompat"
-export NIX_${role_pre}CFLAGS_COMPILE+=" -DHAVE_NBTOOL_CONFIG_H"
-export NIX_${role_pre}CFLAGS_COMPILE+=" -include nbtool_config.h"
+export NIX_LDFLAGS${role_post}+=" -lnbcompat"
+export NIX_CFLAGS_COMPILE${role_post}+=" -DHAVE_NBTOOL_CONFIG_H"
+export NIX_CFLAGS_COMPILE${role_post}+=" -include nbtool_config.h"

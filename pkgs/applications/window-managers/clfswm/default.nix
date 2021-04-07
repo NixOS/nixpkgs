@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
+{ lib, stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
 , makeWrapper }:
 
 stdenv.mkDerivation {
@@ -39,9 +39,9 @@ stdenv.mkDerivation {
     echo ${xdpyinfo} ${lispPackages.clx} ${lispPackages.cl-ppcre} > $out/nix-support/depends
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A(nother) Common Lisp FullScreen Window Manager";
-    homepage    = https://common-lisp.net/project/clfswm/;
+    homepage    = "https://common-lisp.net/project/clfswm/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ robgssp ];
     platforms   = platforms.linux;

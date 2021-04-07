@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, ghostscript }:
+{ lib, stdenv, autoreconfHook, ghostscript }:
 
 stdenv.mkDerivation {
   name = "ijs-${ghostscript.version}";
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--enable-shared" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.openprinting.org/download/ijs/;
+  meta = with lib; {
+    homepage = "https://www.openprinting.org/download/ijs/";
     description = "Raster printer driver architecture";
 
     license = licenses.gpl3Plus;

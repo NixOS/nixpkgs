@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "sedutil";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DTA sedutil Self encrypting drive software";
-    homepage    = https://www.drivetrust.com;
+    homepage    = "https://www.drivetrust.com";
     license     = licenses.gpl3;
     platforms   = platforms.linux;
   };

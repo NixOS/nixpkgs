@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub
+{ lib, fetchFromGitHub, mkDerivation
 , cmake, libjpeg, libpng, libtiff, boost
 , qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "scantailor-advanced";
   version = "1.0.16";
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake qttools ];
   buildInputs = [ libjpeg libpng libtiff boost qtbase ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/4lex4/scantailor-advanced;
+  meta = with lib; {
+    homepage = "https://github.com/4lex4/scantailor-advanced";
     description = "Interactive post-processing tool for scanned pages";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jfrankenau ];

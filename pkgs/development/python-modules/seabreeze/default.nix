@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildPythonPackage
 , pyusb
@@ -6,25 +6,24 @@
 }:
 
 ## Usage
-# In NixOS, simply add the `udev` multiple output to services.udev.packages:
-#   services.udev.packages = [ pkgs.python3Packages.seabreeze.udev ];
+# In NixOS, add the package to services.udev.packages for non-root plugdev
+# users to get device access permission:
+#    services.udev.packages = [ pkgs.python3Packages.seabreeze ];
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "0.6.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "python-seabreeze-v${version}";
-    sha256 = "0bc2s9ic77gz9m40w89snixphxlzib60xa4f49n4zasjrddfz1l8";
+    rev = "v${version}";
+    sha256 = "1lna3w1vsci35dhyi7qjvbb99gxvzk23k195c7by7kkrps844q1j";
   };
 
-  outputs = [ "out" "udev" ];
-
   postInstall = ''
-    mkdir -p $udev/lib/udev/rules.d
-    cp misc/10-oceanoptics.rules $udev/lib/udev/rules.d/10-oceanoptics.rules
+    mkdir -p $out/etc/udev/rules.d
+    cp misc/10-oceanoptics.rules $out/etc/udev/rules.d/10-oceanoptics.rules
   '';
 
   # underlying c libraries are tested and fail
@@ -35,7 +34,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
     description = "A python library to access Ocean Optics spectrometers";
     maintainers = [];

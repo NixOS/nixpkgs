@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , docopt, requests, pygments }:
 
 buildPythonPackage rec {
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   # No local packages or download links found for requests
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ncrocfer/clf;
+  meta = with lib; {
+    homepage = "https://github.com/ncrocfer/clf";
     description = "Command line tool to search snippets on Commandlinefu.com";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];

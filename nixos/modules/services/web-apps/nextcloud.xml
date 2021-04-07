@@ -10,6 +10,10 @@
   <link linkend="opt-services.nextcloud.enable">services.nextcloud</link>. A
   desktop client is packaged at <literal>pkgs.nextcloud-client</literal>.
  </para>
+ <para>
+  The current default by NixOS is <package>nextcloud21</package> which is also the latest
+  major version available.
+ </para>
  <section xml:id="module-services-nextcloud-basic-usage">
   <title>Basic usage</title>
 
@@ -29,7 +33,6 @@
   services.nextcloud = {
     <link linkend="opt-services.nextcloud.enable">enable</link> = true;
     <link linkend="opt-services.nextcloud.hostName">hostName</link> = "nextcloud.tld";
-    <link linkend="opt-services.nextcloud.nginx.enable">nginx.enable</link> = true;
     config = {
       <link linkend="opt-services.nextcloud.config.dbtype">dbtype</link> = "pgsql";
       <link linkend="opt-services.nextcloud.config.dbuser">dbuser</link> = "nextcloud";
@@ -61,9 +64,8 @@
   </para>
 
   <para>
-   The options <literal>hostName</literal> and <literal>nginx.enable</literal>
-   are used internally to configure an HTTP server using
-   <literal><link xlink:href="https://php-fpm.org/">PHP-FPM</link></literal>
+   The <literal>hostName</literal> option is used internally to configure an HTTP
+   server using <literal><link xlink:href="https://php-fpm.org/">PHP-FPM</link></literal>
    and <literal>nginx</literal>. The <literal>config</literal> attribute set is
    used by the imperative installer and all values are written to an additional file
    to ensure that changes can be applied by changing the module's options.
@@ -113,5 +115,125 @@
    maintenance:install</literal>! This command tries to install the application
    and can cause unwanted side-effects!</para>
   </warning>
+
+  <para>
+   Nextcloud doesn't allow to move more than one major-version forward. If you're e.g. on
+   <literal>v16</literal>, you cannot upgrade to <literal>v18</literal>, you need to upgrade to
+   <literal>v17</literal> first. This is ensured automatically as long as the
+   <link linkend="opt-system.stateVersion">stateVersion</link> is declared properly. In that case
+   the oldest version available (one major behind the one from the previous NixOS
+   release) will be selected by default and the module will generate a warning that reminds
+   the user to upgrade to latest Nextcloud <emphasis>after</emphasis> that deploy.
+  </para>
+ </section>
+
+ <section xml:id="module-services-nextcloud-httpd">
+  <title>Using an alternative webserver as reverse-proxy (e.g. <literal>httpd</literal>)</title>
+  <para>
+   By default, <package>nginx</package> is used as reverse-proxy for <package>nextcloud</package>.
+   However, it's possible to use e.g. <package>httpd</package> by explicitly disabling
+   <package>nginx</package> using <xref linkend="opt-services.nginx.enable" /> and fixing the
+   settings <literal>listen.owner</literal> &amp; <literal>listen.group</literal> in the
+   <link linkend="opt-services.phpfpm.pools">corresponding <literal>phpfpm</literal> pool</link>.
+  </para>
+  <para>
+   An exemplary configuration may look like this:
+<programlisting>{ config, lib, pkgs, ... }: {
+  <link linkend="opt-services.nginx.enable">services.nginx.enable</link> = false;
+  services.nextcloud = {
+    <link linkend="opt-services.nextcloud.enable">enable</link> = true;
+    <link linkend="opt-services.nextcloud.hostName">hostName</link> = "localhost";
+
+    /* further, required options */
+  };
+  <link linkend="opt-services.phpfpm.pools._name_.settings">services.phpfpm.pools.nextcloud.settings</link> = {
+    "listen.owner" = config.services.httpd.user;
+    "listen.group" = config.services.httpd.group;
+  };
+  services.httpd = {
+    <link linkend="opt-services.httpd.enable">enable</link> = true;
+    <link linkend="opt-services.httpd.adminAddr">adminAddr</link> = "webmaster@localhost";
+    <link linkend="opt-services.httpd.extraModules">extraModules</link> = [ "proxy_fcgi" ];
+    virtualHosts."localhost" = {
+      <link linkend="opt-services.httpd.virtualHosts._name_.documentRoot">documentRoot</link> = config.services.nextcloud.package;
+      <link linkend="opt-services.httpd.virtualHosts._name_.extraConfig">extraConfig</link> = ''
+        &lt;Directory "${config.services.nextcloud.package}"&gt;
+          &lt;FilesMatch "\.php$"&gt;
+            &lt;If "-f %{REQUEST_FILENAME}"&gt;
+              SetHandler "proxy:unix:${config.services.phpfpm.pools.nextcloud.socket}|fcgi://localhost/"
+            &lt;/If&gt;
+          &lt;/FilesMatch&gt;
+          &lt;IfModule mod_rewrite.c&gt;
+            RewriteEngine On
+            RewriteBase /
+            RewriteRule ^index\.php$ - [L]
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteRule . /index.php [L]
+          &lt;/IfModule&gt;
+          DirectoryIndex index.php
+          Require all granted
+          Options +FollowSymLinks
+        &lt;/Directory&gt;
+      '';
+    };
+  };
+}</programlisting>
+  </para>
+ </section>
+
+ <section xml:id="installing-apps-php-extensions-nextcloud">
+  <title>Installing Apps and PHP extensions</title>
+
+  <para>
+   Nextcloud apps are installed statefully through the web interface.
+
+   Some apps may require extra PHP extensions to be installed.
+   This can be configured with the <xref linkend="opt-services.nextcloud.phpExtraExtensions" /> setting.
+  </para>
+ </section>
+
+ <section xml:id="module-services-nextcloud-maintainer-info">
+  <title>Maintainer information</title>
+
+  <para>
+   As stated in the previous paragraph, we must provide a clean upgrade-path for Nextcloud
+   since it cannot move more than one major version forward on a single upgrade. This chapter
+   adds some notes how Nextcloud updates should be rolled out in the future.
+  </para>
+
+  <para>
+   While minor and patch-level updates are no problem and can be done directly in the
+   package-expression (and should be backported to supported stable branches after that),
+   major-releases should be added in a new attribute (e.g. Nextcloud <literal>v19.0.0</literal>
+   should be available in <literal>nixpkgs</literal> as <literal>pkgs.nextcloud19</literal>).
+   To provide simple upgrade paths it's generally useful to backport those as well to stable
+   branches. As long as the package-default isn't altered, this won't break existing setups.
+   After that, the versioning-warning in the <literal>nextcloud</literal>-module should be
+   updated to make sure that the
+   <link linkend="opt-services.nextcloud.package">package</link>-option selects the latest version
+   on fresh setups.
+  </para>
+
+  <para>
+   If major-releases will be abandoned by upstream, we should check first if those are needed
+   in NixOS for a safe upgrade-path before removing those. In that case we shold keep those
+   packages, but mark them as insecure in an expression like this (in
+   <literal>&lt;nixpkgs/pkgs/servers/nextcloud/default.nix&gt;</literal>):
+<programlisting>/* ... */
+{
+  nextcloud17 = generic {
+    version = "17.0.x";
+    sha256 = "0000000000000000000000000000000000000000000000000000";
+    eol = true;
+  };
+}</programlisting>
+  </para>
+
+  <para>
+   Ideally we should make sure that it's possible to jump two NixOS versions forward:
+   i.e. the warnings and the logic in the module should guard a user to upgrade from a
+   Nextcloud on e.g. 19.09 to a Nextcloud on 20.09.
+  </para>
  </section>
 </chapter>

@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -18,28 +17,17 @@
 
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.6.0";
+  version = "1.8.1";
 
   # Due to Protobuf packaging issues this build of Onnx with Python 2 gives
-  # errors on import
+  # errors on import.
+  # Also support for Python 2 will be deprecated from Onnx v1.8.
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ig33jl3591041lyylxp52yi20rfrcqx3i030hd6al8iabzc721v";
+    sha256 = "9d65c52009a90499f8c25fdfe5acda3ac88efe0788eb1d5f2575a989277145fb";
   };
-
-  # Remove the unqualified requirement for the typing package for running the
-  # tests. typing is already required for the installation, where it is
-  # correctly qualified so as to only be required for sufficiently old Python
-  # versions.
-  # This patch should be in the next release (>1.6).
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/onnx/onnx/commit/c963586d0f8dd5740777b2fd06f04ec60816de9f.patch";
-      sha256 = "1hl26cw5zckc91gmh0bdah87jyprccxiw0f4i5h1gwkq28hm6wbj";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -58,7 +46,12 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    patchShebangs tools/protoc-gen-mypy.py
+    chmod +x tools/protoc-gen-mypy.sh.in
+    patchShebangs tools/protoc-gen-mypy.sh.in tools/protoc-gen-mypy.py
+  '';
+
+  preBuild = ''
+    export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
   # The executables are just utility scripts that aren't too important
@@ -66,11 +59,11 @@ buildPythonPackage rec {
     rm -r $out/bin
   '';
 
-  # The setup.py does all the configuration (running CMake)
-  dontConfigure = true;
+  # The setup.py does all the configuration
+  dontUseCmakeConfigure = true;
 
   meta = {
-    homepage    = http://onnx.ai;
+    homepage    = "http://onnx.ai";
     description = "Open Neural Network Exchange";
     license     = lib.licenses.mit;
     maintainers = [ lib.maintainers.acairncross ];

@@ -1,37 +1,47 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, cmocka, doxygen, ibm-sw-tpm2, iproute, openssl, perl, pkgconfig, procps
-, uthash, which
+{ stdenv, lib, fetchFromGitHub
+, autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
+, openssl, json_c, curl, libgcrypt
+, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "2.3.2";
+  version = "3.0.3";
 
-  src = fetchurl {
-    url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "19jg09sxy3aj4dc1yv32jjv0m62cnmhjlw02jbh4d4pk2439m4l2";
+  src = fetchFromGitHub {
+    owner = "tpm2-software";
+    repo = pname;
+    rev = version;
+    sha256 = "106yhsjwjadxsl9dqxywg287mdwsksman02hdalhav18vcnvnlpj";
   };
 
-  patches = [
-    # Fix test failure. see https://github.com/tpm2-software/tpm2-tss/pull/1585
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/tpm2-software/tpm2-tss/pull/1585.patch";
-      sha256 = "0ak3l588ahzv3yx1gfa4sa6p74lsffxzkr23ppznm34wvlcci86n";
-    })
-  ];
-
   nativeBuildInputs = [
-    doxygen perl pkgconfig
-    # For unit tests and integration tests.
-    ibm-sw-tpm2 iproute procps which
+    autoreconfHook autoconf-archive pkg-config doxygen perl
   ];
-  buildInputs = [
-    openssl
-    # For unit tests and integration tests.
-    cmocka uthash
+  buildInputs = [ openssl json_c curl libgcrypt ];
+  checkInputs = [
+    cmocka uthash ibm-sw-tpm2 iproute2 procps which
   ];
 
-  postPatch = "patchShebangs script";
+  preAutoreconf = "./bootstrap";
+
+  enableParallelBuilding = true;
+
+  patches = [
+    # Do not rely on dynamic loader path
+    # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
+    ./no-dynamic-loader-path.patch
+  ];
+
+  postPatch = ''
+    patchShebangs script
+    substituteInPlace src/tss2-tcti/tctildr-dl.c \
+      --replace '@PREFIX@' $out/lib/
+    substituteInPlace ./test/unit/tctildr-dl.c \
+      --replace ', "libtss2' ", \"$out/lib/libtss2" \
+      --replace ', "foo' ", \"$out/lib/foo" \
+      --replace ', TEST_TCTI_NAME' ", \"$out/lib/\"TEST_TCTI_NAME"
+  '';
 
   configureFlags = [
     "--enable-unit"
@@ -39,6 +49,14 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+  preCheck = ''
+    # Since we rewrote the load path in the dynamic loader for the TCTI
+    # The various tcti implementation should be placed in their target directory
+    # before we could run tests
+    installPhase
+    # install already done, dont need another one
+    dontInstall=1
+  '';
 
   postInstall = ''
     # Do not install the upstream udev rules, they rely on specific
@@ -48,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
-    homepage = https://github.com/tpm2-software/tpm2-tss;
+    homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ delroth ];

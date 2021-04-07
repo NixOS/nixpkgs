@@ -21,33 +21,37 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "10h0khh8npj2j5f7h3z86h46zbb1skbfs74firssich6jk7rx6km";
+      sha256 = "0csgdmzr9h3vnqn8gxvgg2mnjzackkvrid1i55l2fqcad69h6w1k";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "182r9lgpks50ihcrkarc5w6l4rfmpdnx825lazamj5j2jsha73xw";
+      sha256 = "0gcxldk3c03dipbkj9yzaa4v1s6bf9zlwslvi8dv3s3kbljjd84b";
     };
   }.${system};
 
-  strip = if stdenv.isDarwin then "strip -x" else "strip";
-
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "268.0.0";
+  version = "334.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
-  buildInputs = [ python makeWrapper ];
+  buildInputs = [ python ];
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [ jq makeWrapper ];
 
   patches = [
+    # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
     ./gcloud-path.patch
+    # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
+    # Try to use cloud_sql_proxy from SDK only if it actually exists, otherwise, search for one in PATH
+    ./cloud_sql_proxy_path.patch
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/google-cloud-sdk
     cp -R * .install $out/google-cloud-sdk/
 
@@ -76,8 +80,9 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
+    mkdir -p $out/share/bash-completion/completions
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud
+    ln -s $out/share/bash-completion/completions/gcloud $out/share/bash-completion/completions/gsutil
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -94,17 +99,16 @@ in stdenv.mkDerivation rec {
       mv $path.min $path
     done
 
-    # strip the Cython gRPC library
-    ${strip} $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [ pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

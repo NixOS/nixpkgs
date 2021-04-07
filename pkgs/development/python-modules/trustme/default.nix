@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy3k
 , cryptography
-, futures
+, futures ? null
 , pytest
 , pyopenssl
 , service-identity
@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9dfb18b568729d0219f758cddca1a91bab59f62ca41ee0e8acce5e657ec97b6c";
+    sha256 = "1fde1dd27052ab5e5693e1fbe3ba091a6496daf1125409d73232561145fca369";
   };
 
   checkInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";
-    homepage = https://github.com/python-trio/trustme;
+    homepage = "https://github.com/python-trio/trustme";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

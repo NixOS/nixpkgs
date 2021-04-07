@@ -3,7 +3,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fsspec
-, pytest
+, pytestCheckHook
+, pytest-rerunfailures
 , pythonOlder
 , cloudpickle
 , numpy
@@ -11,24 +12,22 @@
 , dill
 , pandas
 , partd
+, pytest-xdist
+, withExtraComplete ? false
+, distributed
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.10.1";
-
+  version = "2021.03.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "035mr7385yf5ng5wf60qxr80529h8dsla5hymkyg68dxhkd0jvbr";
+    sha256 = "LACv7lWpQULQknNGX/9vH9ckLsypbqKDGnsNBgKT1eI=";
   };
-
-  checkInputs = [
-    pytest
-  ];
 
   propagatedBuildInputs = [
     bokeh
@@ -39,7 +38,19 @@ buildPythonPackage rec {
     pandas
     partd
     toolz
+  ] ++ lib.optionals withExtraComplete [
+    distributed
   ];
+
+  doCheck = false;
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-rerunfailures
+    pytest-xdist
+  ];
+
+  dontUseSetuptoolsCheck = true;
 
   postPatch = ''
     # versioneer hack to set version of github package
@@ -50,14 +61,18 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  checkPhase = ''
-    pytest
-  '';
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
-  meta = {
+  disabledTests = [
+    "test_annotation_pack_unpack"
+    "test_annotations_blockwise_unpack"
+  ];
+
+  meta = with lib; {
     description = "Minimal task scheduling abstraction";
-    homepage = https://github.com/ContinuumIO/dask/;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://dask.org/";
+    changelog = "https://docs.dask.org/en/latest/changelog.html";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fonttosfnt, mkfontdir }:
+{ lib, stdenv, fetchFromGitHub, fonttosfnt, mkfontdir }:
 
 stdenv.mkDerivation rec {
   pname = "cherry";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     mkfontdir $out/share/fonts/misc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "cherry font";
-    homepage = https://github.com/turquoise-hexagon/cherry;
+    homepage = "https://github.com/turquoise-hexagon/cherry";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

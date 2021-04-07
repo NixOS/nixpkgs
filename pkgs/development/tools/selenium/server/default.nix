@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, makeWrapper, jre
+{ lib, stdenv, fetchurl, makeWrapper, jre
 , htmlunit-driver, chromedriver, chromeSupport ? true }:
 
-with stdenv.lib;
+with lib;
 
 let
-  minorVersion = "3.6";
-  patchVersion = "0";
+  minorVersion = "3.141";
+  patchVersion = "59";
 
 in stdenv.mkDerivation rec {
   pname = "selenium-server-standalone";
@@ -13,12 +13,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
-    sha256 = "11v340nm8vzqc2bkmbjfm9a7j4dj0bi9bfk8wdpfan0fb8prf772";
+    sha256 = "1jzkx0ahsb27zzzfvjqv660x9fz2pbcddgmhdzdmasxns5vipxxc";
   };
 
   dontUnpack = true;
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -p $out/share/lib/${pname}-${version}
@@ -30,7 +31,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.seleniumhq.org/;
+    homepage = "http://www.seleniumhq.org/";
     description = "Selenium Server for remote WebDriver";
     maintainers = with maintainers; [ coconnor offline ];
     platforms = platforms.all;

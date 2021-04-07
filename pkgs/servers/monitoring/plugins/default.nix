@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, runCommand
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, runCommand
 , coreutils, gnugrep, gnused, lm_sensors, net-snmp, openssh, openssl, perl
 , dnsutils, libdbi, libmysqlclient, zlib, openldap, procps
 , runtimeShell }:
 
-with stdenv.lib;
+with lib;
 
 let
   majorVersion = "2.2";
@@ -77,8 +77,8 @@ _EOF
   '';
 
   meta = {
-    description = "Official monitoring plugins for Nagios/Icinga/Sensu and others.";
-    homepage    = https://www.monitoring-plugins.org;
+    description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
+    homepage    = "https://www.monitoring-plugins.org";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice relrod ];

@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , boost, python3, eigen
 , icestorm, trellis
 , llvmPackages
 
-, enableGui ? true
-, wrapQtAppsHook
-, qtbase
+, enableGui ? false
+, wrapQtAppsHook ? null
+, qtbase ? null
 , OpenGL ? null
 }:
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
 in
-with stdenv; mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2020.02.04";
+  version = "2021.01.02";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr";
-      rev    = "ca733561873cd54be047ae30a94efcd71b3f8be5";
-      sha256 = "176drrq6w53qbwmnksa1b22w9qz3gd1db9hy2lyv8svbcdxd9qwp";
+      rev    = "9b9628047c01a970cfe20f83f2b7129ed109440d";
+      sha256 = "0pcv96d0n40h2ipywi909hpzlys5b6r4pamc320qk1xxhppmgkmm";
       name   = "nextpnr";
     })
     (fetchFromGitHub {
@@ -43,19 +43,18 @@ with stdenv; mkDerivation rec {
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
-  enableParallelBuilding = true;
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
       "-DARCH=generic;ice40;ecp5"
       "-DBUILD_TESTS=ON"
-      "-DICEBOX_ROOT=${icestorm}/share/icebox"
+      "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
-      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
-      "-DSERIALIZE_CHIPDB=OFF"
+      "-DSERIALIZE_CHIPDBS=OFF"
     ]
-    ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
+    ++ (lib.optional enableGui "-DBUILD_GUI=ON")
     ++ (lib.optional (enableGui && stdenv.isDarwin)
         "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
@@ -79,7 +78,7 @@ with stdenv; mkDerivation rec {
 
   meta = with lib; {
     description = "Place and route tool for FPGAs";
-    homepage    = https://github.com/yosyshq/nextpnr;
+    homepage    = "https://github.com/yosyshq/nextpnr";
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice emily ];

@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, autoPatchelfHook }:
+{ lib, stdenv, fetchurl, postgresql, autoPatchelfHook, writeScript }:
 
 let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.10.2";
+  version = "3.13.3";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "03c717qjlbym02nwy82l6jhrkbidsdm1jv5k8p3c10p6a46jy9nl"
-      else "1ay0lmbv2rw9klz289yg0hhsac83kfzzlbwwhjpi28xndl2lq4bf";
+      then "sha256-+b9S0ekQmXF5KwvVcmHIDpp0iZRO2W1ls8eYhDzjUUw="
+      else "sha256-Qu6xPzbUdqO93j353cfQILlFYqmwFSnFWG9TjniX0+c=";
   };
 
-  buildInputs = [ stdenv.cc.cc ];
+  buildInputs = [ stdenv.cc.cc postgresql.lib ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -28,9 +28,32 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = writeScript "update-teampeak-server" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused
+
+    set -eu -o pipefail
+
+    version=$( \
+        curl -s "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/" \
+        | grep softwareVersion \
+        | sed -E -e 's/^.*<span itemprop="softwareVersion">([^<]+)<\/span>.*$/\1/' \
+    )
+
+    versionOld=$(nix-instantiate --eval --strict -A "teamspeak_server.version")
+
+    nixFile=pkgs/applications/networking/instant-messengers/teamspeak/server.nix
+
+    update-source-version teamspeak_server "$version" --system=i686-linux
+
+    sed -i -e "s/version = \"$version\";/version = $versionOld;/" "$nixFile"
+
+    update-source-version teamspeak_server "$version" --system=x86_64-linux
+  '';
+
+  meta = with lib; {
     description = "TeamSpeak voice communication server";
-    homepage = https://teamspeak.com/;
+    homepage = "https://teamspeak.com/";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn gerschtli ];

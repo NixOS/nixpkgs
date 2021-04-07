@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , tornado
 , futures
@@ -8,7 +8,8 @@
 }:
 
 buildPythonPackage {
-  name = "gateone-1.2-0d57c3";
+  pname = "gateone";
+  version = "1.2-0d57c3";
   disabled = isPy3k;
 
   src = pkgs.fetchFromGitHub {
@@ -24,7 +25,7 @@ buildPythonPackage {
     cp -R "$out/gateone/"* $out/lib/python2.7/site-packages/gateone
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://liftoffsoftware.com/";
     description = "GateOne is a web-based terminal emulator and SSH client";
     maintainers = with maintainers; [ tomberek ];

@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, withTwitter ? false}:
+{ lib, python3Packages, withTwitter ? false}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mailman-rss";
@@ -10,15 +10,15 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [ dateutil future requests beautifulsoup4 ]
-    ++ stdenv.lib.optional withTwitter python3Packages.twitter
+    ++ lib.optional withTwitter python3Packages.twitter
   ;
 
   # No tests in Pypi Tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mailman archive -> rss converter";
-    homepage = https://github.com/kyamagu/mailman-rss;
+    homepage = "https://github.com/kyamagu/mailman-rss";
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
   };

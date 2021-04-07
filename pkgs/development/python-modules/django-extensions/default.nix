@@ -11,20 +11,20 @@
 , shortuuid
 , six
 , tox
-, typing
+, typing ? null
 , vobject
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.2.8";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1gd3nykwzh3azq1p9cvgkc3l5dwrv7y86sfjxd9llbyj8ky71iaj";
+    sha256 = "0ss5x3d21c3g8i1s79l4akazlf116yp4y50gx4vrk1dxh3jb29zj";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -49,10 +49,11 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  # tests not compatible with pip>=20
+  # remove tests that need network access
   checkPhase = ''
     rm tests/management/commands/test_pipchecker.py
-    ${python.interpreter} setup.py test
+    DJANGO_SETTINGS_MODULE=tests.testapp.settings \
+      pytest django_extensions tests
   '';
 
   meta = with lib; {

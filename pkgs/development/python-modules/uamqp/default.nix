@@ -1,22 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, isPy3k
 , certifi
-, CFNetwork
 , cmake
 , enum34
 , openssl
-, Security
 , six
-, stdenv
+, CFNetwork
+, CoreFoundation
+, Security
 }:
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.2.5";
+  version = "1.2.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02d78242fcd0a58489aaf275964a6cf7581d7a2334ee240d2d547f8aca8607c6";
+    sha256 = "sha256-zDUFe/yMCThn+qJqDekMrUHEf1glGxBw4pioExLLoqg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Azure/azure-c-shared-utility/commit/52ab2095649b5951e6af77f68954209473296983.patch";
+      sha256 = "06pxhdpkv94pv3lhj1vy0wlsqsdznz485bvg3zafj67r55g40lhd";
+      stripLen = "2";
+      extraPrefix = "src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/";
+    })
+  ];
 
   buildInputs = [
     openssl
@@ -25,7 +39,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPy3k) [
     enum34
   ] ++ lib.optionals stdenv.isDarwin [
-    CFNetwork Security
+    CoreFoundation
+    CFNetwork
+    Security
   ];
 
   dontUseCmakeConfigure = true;
@@ -39,8 +55,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An AMQP 1.0 client library for Python";
-    homepage = https://github.com/Azure/azure-uamqp-python;
+    homepage = "https://github.com/Azure/azure-uamqp-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

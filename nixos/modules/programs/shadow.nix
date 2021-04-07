@@ -114,8 +114,9 @@ in
       newgrp.source    = "${pkgs.shadow.out}/bin/newgrp";
       newuidmap.source = "${pkgs.shadow.out}/bin/newuidmap";
       newgidmap.source = "${pkgs.shadow.out}/bin/newgidmap";
-    } // (if config.users.mutableUsers then {
+    } // lib.optionalAttrs config.users.mutableUsers {
+      chsh.source      = "${pkgs.shadow.out}/bin/chsh";
       passwd.source    = "${pkgs.shadow.out}/bin/passwd";
-    } else {});
+    };
   };
 }

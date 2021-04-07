@@ -1,21 +1,23 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
-, intltool
+, asciidoc
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, gettext
 , itstool
 , libxslt
 , gexiv2
 , tracker
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , bzip2
 , dbus
 , evolution-data-server
 , exempi
-, flac
 , giflib
 , glib
 , gnome3
@@ -35,9 +37,10 @@
 , libsoup
 , libtiff
 , libuuid
-, libvorbis
 , libxml2
+, networkmanager
 , poppler
+, systemd
 , taglib
 , upower
 , totem-pl-parser
@@ -45,20 +48,23 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "2.3.1";
+  version = "3.0.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1q4hlpl3nkr0y13rzkwryyajnpy5s661z8n82dw1rskrg9mf07bv";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-E877xx1S93RvPTfQQdjFvBM2pA/13ZK1Nw6GUMJqiY4=";
   };
 
   nativeBuildInputs = [
-    intltool
+    asciidoc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    gettext
     itstool
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -69,7 +75,6 @@ stdenv.mkDerivation rec {
     dbus
     evolution-data-server
     exempi
-    flac
     giflib
     glib
     gexiv2
@@ -92,9 +97,10 @@ stdenv.mkDerivation rec {
     libsoup
     libtiff
     libuuid
-    libvorbis
     libxml2
+    networkmanager
     poppler
+    systemd
     taglib
     upower
   ];
@@ -102,19 +108,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
-    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
-    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tracker;
-    })
-    # https://bugzilla.gnome.org/show_bug.cgi?id=795576
-    (fetchurl {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=371427;
-      sha256 = "187flswvzymjfxwfrrhizb1cvs780zm39aa3i2vwa5fbllr7kcpf";
+      inherit asciidoc;
     })
   ];
 
@@ -125,15 +124,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Tracker;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

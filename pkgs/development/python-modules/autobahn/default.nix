@@ -1,14 +1,15 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k,
-  six, txaio, twisted, zope_interface, cffi, trollius, futures,
+  six, txaio, twisted, zope_interface, cffi,
+  trollius ? null, futures ? null,
   mock, pytest, cryptography, pynacl
 }:
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "19.11.1";
+  version = "21.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "201b9879b49c6e259d4126dbafe9e3c73807de0c242d50065fbebc62c6ccb181";
+    sha256 = "e126c1f583e872fb59e79d36977cfa1f2d0a8a79f90ae31f406faae7664b8e03";
   };
 
   propagatedBuildInputs = [ six txaio twisted zope_interface cffi cryptography pynacl ] ++

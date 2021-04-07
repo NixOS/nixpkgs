@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, django, futures, mock, jinja2, jsmin, slimit }:
+, django, futures ? null, mock ? null, jinja2, jsmin, slimit }:
 
 buildPythonPackage rec {
   pname = "django-pipeline";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pipeline is an asset packaging library for Django";
-    homepage = https://github.com/cyberdelia/django-pipeline;
+    homepage = "https://github.com/cyberdelia/django-pipeline";
     license = licenses.mit;
     broken = true;
   };

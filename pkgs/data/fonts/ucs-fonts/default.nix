@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bdftopcf
+{ lib, stdenv, fetchurl, bdftopcf
 , libfaketime, fonttosfnt, mkfontscale
 }:
 
@@ -8,15 +8,15 @@ stdenv.mkDerivation {
 
   srcs = [
     (fetchurl {
-      url = http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz;
+      url = "http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz";
       sha256 = "12hgizg25fzmk10wjl0c88x97h3pg5r9ga122s3y28wixz6x2bvh";
     })
     (fetchurl {
-      url = http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts-asian.tar.gz;
+      url = "http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts-asian.tar.gz";
       sha256 = "0ibjy4xpz5j373hsdr8bx99czfpclqmviwwv768j8n7z12z3wa51";
     })
     (fetchurl {
-      url = http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts-75dpi100dpi.tar.gz;
+      url = "http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts-75dpi100dpi.tar.gz";
       sha256 = "08vqr8yb636xa1s28vf3pm22dzkia0gisvsi2svqjqh4kk290pzh";
     })
   ];
@@ -42,18 +42,16 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -m 644 -D *.pcf.gz -t "$out/share/fonts/misc"
-    install -m 644 -D *.bdf    -t "$bdf/share/fonts/misc"
-    install -m 644 -D *.otb    -t "$otb/share/fonts/misc"
+    install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts/misc"
+    install -m 644 -D *.bdf -t "$bdf/share/fonts/misc"
 
     mkfontdir "$out/share/fonts/misc"
     mkfontdir "$bdf/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" "otb" ];
+  outputs = [ "out" "bdf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";
     description = "Unicode bitmap fonts";
     license = licenses.publicDomain;

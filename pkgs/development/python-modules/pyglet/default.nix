@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , libGL
@@ -11,6 +11,7 @@
 , gdk-pixbuf
 , fontconfig
 , freetype
+, ffmpeg-full
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,8 @@ buildPythonPackage rec {
                 path = '${fontconfig.lib}/lib/libfontconfig${ext}'
             elif name == 'freetype':
                 path = '${freetype}/lib/libfreetype${ext}'
+            elif name[0:2] == 'av' or name[0:2] == 'sw':
+                path = '${ffmpeg-full}/lib/lib' + name + '${ext}'
             if path is not None:
                 return ctypes.cdll.LoadLibrary(path)
         raise Exception("Could not load library {}".format(names))
@@ -72,7 +75,7 @@ buildPythonPackage rec {
     py.test tests/unit tests/integration
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.pyglet.org/";
     description = "A cross-platform windowing and multimedia library";
     license = licenses.bsd3;

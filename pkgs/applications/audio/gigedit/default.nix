@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, which
+{ lib, stdenv, fetchurl, autoconf, automake, intltool, libtool, pkg-config, which
 , docbook_xml_dtd_45, docbook_xsl, gtkmm2, libgig, libsndfile, libxslt
 }:
 
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = "make -f Makefile.svn";
 
-  nativeBuildInputs = [ autoconf automake intltool libtool pkgconfig which ];
+  nativeBuildInputs = [ autoconf automake intltool libtool pkg-config which ];
 
   buildInputs = [ docbook_xml_dtd_45 docbook_xsl gtkmm2 libgig libsndfile libxslt ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+  meta = with lib; {
+    homepage = "http://www.linuxsampler.org";
     description = "Gigasampler file access library";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

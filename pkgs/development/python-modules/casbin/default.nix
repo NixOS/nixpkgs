@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "0.8.3";
+  version = "0.19.1";
 
   disabled = isPy27;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "pycasbin";
     rev = "v${version}";
-    sha256 = "1s89m62933m4wprsknwhabgg7irykrcimv80hh2zkyyslz5vbq71";
+    sha256 = "0fkkz5k3h4pkxacrbacamnh4yfghxgajdzzmdlck7i4v5x06vz8f";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python";
-    homepage = https://github.com/casbin/pycasbin;
+    homepage = "https://github.com/casbin/pycasbin";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

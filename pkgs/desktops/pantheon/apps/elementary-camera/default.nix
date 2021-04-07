@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "1.0.5";
+  version = "1.0.6";
 
   repoName = "camera";
 
@@ -31,11 +32,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "05amcljvc3w77a1b0c76y6rha8g0zm6lqflvg1g7jzz00jchx9d4";
+    sha256 = "sha256-asl5NdSuLItXebxvqGlSEjwWhdButmka12YQAYkQT44=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -72,9 +73,9 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Camera app designed for elementary OS";
-    homepage = https://github.com/elementary/camera;
+    homepage = "https://github.com/elementary/camera";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

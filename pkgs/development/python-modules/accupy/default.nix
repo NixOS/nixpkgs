@@ -1,43 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , mpmath
 , numpy
-, pipdate
 , pybind11
 , pyfma
 , eigen
-, pytest
+, importlib-metadata
+, pytestCheckHook
 , matplotlib
-, perfplot
+, dufte
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "accupy";
-  version = "0.2.0";
+  version = "0.3.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e27ca7eed8a1bde2e6e040f8f3ee94a5d7522f42c4360756c9ec8931cf13ca98";
+    sha256 = "36506aca53154528997ac22aee6292c83da0f4850bb375c149512b5284bd4948";
   };
 
+  nativeBuildInputs = [
+    pybind11
+  ];
+
   buildInputs = [
-    pybind11 eigen
+    eigen
   ];
 
   propagatedBuildInputs = [
     mpmath
     numpy
-    pipdate
     pyfma
-  ];
+  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     matplotlib
-    perfplot
+    dufte
   ];
 
   postConfigure = ''
@@ -49,13 +53,19 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkPhase = ''
-    pytest test
+  # performance tests aren't useful to us and disabling them allows us to
+  # decouple ourselves from an unnecessary build dep
+  preCheck = ''
+    for f in test/test*.py ; do
+      substituteInPlace $f --replace 'import perfplot' ""
+    done
   '';
+  disabledTests = [ "test_speed_comparison1" "test_speed_comparison2" ];
+  pythonImportsCheck = [ "accupy" ];
 
   meta = with lib; {
     description = "Accurate sums and dot products for Python";
-    homepage = https://github.com/nschloe/accupy;
+    homepage = "https://github.com/nschloe/accupy";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

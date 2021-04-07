@@ -1,14 +1,15 @@
-{ stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
+{ lib, stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
+, python, pkg-config, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
+, libpcap, CoreAudioKit, ForceFeedback
 , installShellFiles }:
 
 let
   majorVersion = "0";
-  minorVersion = "218";
+  minorVersion = "226";
 
   desktopItem = makeDesktopItem {
     name = "MAME";
-    exec = "mame${stdenv.lib.optionalString stdenv.is64bit "64"}";
+    exec = "mame${lib.optionalString stdenv.is64bit "64"}";
     desktopName = "MAME";
     genericName = "MAME is a multi-purpose emulation framework";
     categories = "System;Emulator;";
@@ -23,23 +24,34 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "11qschyxhi45pbpf9q3k71kybqxmcfhjml8axqpi43sv4q2ack6q";
+    sha256 = "0pnsvz4vkjkqb1ac5wzwz31vx0iknyg5ffly90nhl13kcr656jrj";
   };
 
   hardeningDisable = [ "fortify" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
 
-  makeFlags = [ "TOOLS=1" ];
+  makeFlags = [
+    "TOOLS=1"
+    "USE_LIBSDL=1"
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ "CC=clang" "CXX=clang++" ]
+  ;
 
   dontWrapQtApps = true;
 
-  buildInputs = [ SDL2 SDL2_ttf alsaLib qtbase libXinerama ];
-  nativeBuildInputs = [ python pkgconfig which makeWrapper installShellFiles ];
+  buildInputs =
+    [ SDL2 SDL2_ttf qtbase libXinerama ]
+    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ]
+    ;
+  nativeBuildInputs = [ python pkg-config which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
   # install directory, so we add absolute paths here
-  patches = [ ./emuopts.patch ];
+  patches = [
+    ./emuopts.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/emu/emuopts.cpp \
@@ -47,7 +59,7 @@ in mkDerivation {
   '';
 
   installPhase = ''
-    make -f dist.mak PTR64=${stdenv.lib.optionalString stdenv.is64bit "1"}
+    make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
     mkdir -p ${dest}
     mv build/release/*/Release/mame/* ${dest}
 
@@ -58,16 +70,18 @@ in mkDerivation {
     installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
 
     mv artwork plugins samples ${dest}
-
+  '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $out/share
     ln -s ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Is a multi-purpose emulation framework";
-    homepage = https://www.mamedev.org/;
+    homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
+    # makefile needs fixes for install target
+    badPlatforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ gnidorah ];
   };
 }

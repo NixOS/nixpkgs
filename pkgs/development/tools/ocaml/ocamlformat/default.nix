@@ -1,31 +1,56 @@
-{ lib, fetchurl, ocamlPackages }:
+{ lib, fetchurl, fetchzip, callPackage }:
 
-with ocamlPackages; buildDunePackage rec {
-  pname = "ocamlformat";
-  version = "0.13.0";
+let mkOCamlformat = callPackage ./generic.nix; in
 
-  minimumOCamlVersion = "4.06";
+# Older versions should be removed when their usage decrease
+# This script scraps Github looking for OCamlformat's options and versions usage:
+#  https://gist.github.com/Julow/110dc94308d6078225e0665e3eccd433
 
-  src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}-2.tbz";
-    sha256 = "0ki2flqi3xkhw9mfridivb6laxm7gml8rj9qz42vqmy9yx76jjxq";
+rec {
+  ocamlformat_0_11_0 = mkOCamlformat {
+    version = "0.11.0";
   };
 
-  buildInputs = [
-    cmdliner
-    fpath
-    ocaml-migrate-parsetree
-    odoc
-    re
-    stdio
-    uuseg
-    uutf
-  ];
-
-  meta = {
-    homepage = "https://github.com/ocaml-ppx/ocamlformat";
-    description = "Auto-formatter for OCaml code";
-    maintainers = [ lib.maintainers.Zimmi48 ];
-    license = lib.licenses.mit;
+  ocamlformat_0_12 = mkOCamlformat {
+    version = "0.12";
   };
+
+  ocamlformat_0_13_0 = mkOCamlformat rec {
+    version = "0.13.0";
+    tarballName = "ocamlformat-${version}-2.tbz";
+  };
+
+  ocamlformat_0_14_0 = mkOCamlformat {
+    version = "0.14.0";
+  };
+
+  ocamlformat_0_14_1 = mkOCamlformat {
+    version = "0.14.1";
+  };
+
+  ocamlformat_0_14_2 = mkOCamlformat {
+    version = "0.14.2";
+  };
+
+  ocamlformat_0_14_3 = mkOCamlformat {
+    version = "0.14.3";
+  };
+
+  ocamlformat_0_15_0 = mkOCamlformat {
+    version = "0.15.0";
+  };
+
+  ocamlformat_0_15_1 = mkOCamlformat {
+    version = "0.15.1";
+  };
+
+  ocamlformat_0_16_0 = mkOCamlformat {
+    version = "0.16.0";
+  };
+
+  ocamlformat_0_17_0 = mkOCamlformat {
+    version = "0.17.0";
+  };
+
+  ocamlformat = ocamlformat_0_17_0;
 }

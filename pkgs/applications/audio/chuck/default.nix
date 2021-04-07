@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0.0";
+  version = "1.4.0.1";
   pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "1b17rsf7bv45gfhyhfmpz9d4rkxn24c0m2hgmpfjz3nlp0rf7bic";
+    sha256 = "1m0fhndbqaf0lii1asyc50c66bv55ib6mbnm8fzk5qc5ncs0r8hi";
   };
 
   nativeBuildInputs = [ flex bison which ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";
-    homepage = http://chuck.cs.princeton.edu;
+    homepage = "http://chuck.cs.princeton.edu";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];

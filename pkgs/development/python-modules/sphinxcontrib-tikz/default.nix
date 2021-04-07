@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
-  version = "0.4.8";
+  version = "0.4.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rvm0l40iz1z03d09irkqdwzi9gs6pn0203hylaqbix5c7gabwhy";
+    sha256 = "5c5194055d3219e2ed8d02b52b664d399674154f3db9724ae09e881d091b3d10";
   };
 
   patches = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "TikZ extension for Sphinx";
-    homepage = https://bitbucket.org/philexander/tikz;
+    homepage = "https://bitbucket.org/philexander/tikz";
     maintainers = with maintainers; [ costrouc ];
     license = licenses.bsd3;
   };

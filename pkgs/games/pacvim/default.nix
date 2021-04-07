@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation {
   pname = "pacvim";
@@ -13,9 +13,9 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jmoon018/PacVim";
-    description = "PacVim is a game that teaches you vim commands.";
+    description = "A game that teaches you vim commands";
     maintainers = with maintainers; [ infinisil ];
     license = licenses.lgpl3;
     platforms = platforms.unix;

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python2, cairo, libjpeg, ntk, libjack2
-, libsndfile, ladspaH, liblrdf, liblo, libsigcxx, wafHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, python2, cairo, libjpeg, ntk, libjack2
+, libsndfile, ladspaH, liblo, libsigcxx, lrdf, wafHook
 }:
 
 stdenv.mkDerivation {
@@ -12,16 +12,16 @@ stdenv.mkDerivation {
     sha256 = "1cljkkyi9dxqpqhx8y6l2ja4zjmlya26m26kqxml8gx08vyvddhx";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [ python2 cairo libjpeg ntk libjack2 libsndfile
-    ladspaH liblrdf liblo libsigcxx
+    ladspaH liblo libsigcxx lrdf
   ];
 
   meta = {
     description = "Lightweight and lightning fast modular Digital Audio Workstation";
-    homepage = http://non.tuxfamily.org;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    homepage = "http://non.tuxfamily.org";
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

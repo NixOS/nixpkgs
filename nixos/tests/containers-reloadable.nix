@@ -1,7 +1,6 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
   client_base = {
-
     containers.test1 = {
       autoStart = true;
       config = {
@@ -9,15 +8,15 @@ let
       };
     };
 
-    # prevent make-test.nix to change IP
+    # prevent make-test-python.nix to change IP
     networking.interfaces = {
       eth1.ipv4.addresses = lib.mkOverride 0 [ ];
     };
   };
 in {
-  name = "cotnainers-reloadable";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ danbst ];
+  name = "containers-reloadable";
+  meta = {
+    maintainers = with lib.maintainers; [ danbst ];
   };
 
   nodes = {

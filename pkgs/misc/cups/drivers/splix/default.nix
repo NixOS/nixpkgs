@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, fetchurl, cups, cups-filters, jbigkit, zlib }:
+{ lib, stdenv, fetchsvn, fetchurl, cups, cups-filters, jbigkit, zlib }:
 
 let
 
@@ -45,9 +45,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ cups zlib jbigkit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CUPS drivers for SPL (Samsung Printer Language) printers";
-    homepage = http://splix.ap2c.org;
+    homepage = "http://splix.ap2c.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau peti ];

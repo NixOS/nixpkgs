@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -17,9 +17,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.portaudio ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for PortAudio";
-    homepage = https://people.csail.mit.edu/hubert/pyaudio/;
+    homepage = "https://people.csail.mit.edu/hubert/pyaudio/";
     license = licenses.mit;
   };
 

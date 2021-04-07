@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, lzma, openssl, zlib, bzip2, fts, autoconf }:
+{ lib, stdenv, fetchurl, libxml2, xz, openssl, zlib, bzip2, fts, autoconf }:
 
 stdenv.mkDerivation rec {
   version = "1.6.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ghmsbs6xwg1092v7pjcibmk5wkyifwxw6ygp08gfz25d2chhipf";
   };
 
-  buildInputs = [ libxml2 lzma openssl zlib bzip2 fts autoconf ];
+  buildInputs = [ libxml2 xz openssl zlib bzip2 fts autoconf ];
 
   prePatch = ''
     substituteInPlace configure.ac \
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage    = https://mackyle.github.io/xar/;
+    homepage    = "https://mackyle.github.io/xar/";
     description = "Extensible Archiver";
 
     longDescription =
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
          of content's rich meta-data.
       '';
 
-    license     = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ copumpkin ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ copumpkin ];
+    platforms   = lib.platforms.all;
   };
 }

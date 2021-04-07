@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mtdev-1.1.6";
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1q700h9dqcm3zl6c3gj0qxxjcx6ibw2c51wjijydhwdcm26v5mqm";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://bitmath.org/code/mtdev/;
+  meta = with lib; {
+    homepage = "http://bitmath.org/code/mtdev/";
     description = "Multitouch Protocol Translation Library";
     longDescription = ''
       The mtdev is a stand-alone library which transforms all variants of

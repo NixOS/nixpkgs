@@ -1,13 +1,15 @@
 # Hooks for building Python packages.
 { python
-, callPackage
+, lib
 , makeSetupHook
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
+, findutils
 }:
 
 let
+  callPackage = python.pythonForBuild.pkgs.callPackage;
   pythonInterpreter = python.pythonForBuild.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
@@ -89,10 +91,36 @@ in rec {
       };
     } ./python-imports-check-hook.sh) {};
 
+  pythonNamespacesHook = callPackage ({}:
+    makeSetupHook {
+      name = "python-namespaces-hook.sh";
+      substitutions = {
+        inherit pythonSitePackages findutils;
+      };
+    } ./python-namespaces-hook.sh) {};
+
+  pythonRecompileBytecodeHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-recompile-bytecode-hook";
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        compileArgs = lib.concatStringsSep " " (["-q" "-f" "-i -"] ++ lib.optionals isPy3k ["-j $NIX_BUILD_CORES"]);
+        bytecodeName = if isPy3k then "__pycache__" else "*.pyc";
+      };
+    } ./python-recompile-bytecode-hook.sh ) {};
+
   pythonRemoveBinBytecodeHook = callPackage ({ }:
     makeSetupHook {
       name = "python-remove-bin-bytecode-hook";
     } ./python-remove-bin-bytecode-hook.sh) {};
+
+  pythonRemoveTestsDirHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-remove-tests-dir-hook";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-remove-tests-dir-hook.sh) {};
 
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {

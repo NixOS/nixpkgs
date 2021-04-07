@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl}:
+{lib, stdenv, fetchurl, perl}:
 stdenv.mkDerivation rec {
   pname = "ipcalc";
   version = "0.41";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "Simple IP network calculator";
-    homepage = http://jodies.de/ipcalc;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://jodies.de/ipcalc";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

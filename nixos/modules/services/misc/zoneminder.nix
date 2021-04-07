@@ -63,10 +63,6 @@ let
     ${cfg.extraConfig}
   '';
 
-  phpExtensions = with pkgs.phpPackages; [
-    { pkg = apcu; name = "apcu"; }
-  ];
-
 in {
   options = {
     services.zoneminder = with lib; {
@@ -77,6 +73,8 @@ in {
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
+        Additionally, you will need to run `zmupdate.pl` yourself when
+        upgrading to a newer version.
       '';
 
       webserver = mkOption {
@@ -287,11 +285,9 @@ in {
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
           inherit user group;
+          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
-
-            ${lib.concatStringsSep "\n" (map (e:
-            "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
           '';
           settings = lib.mapAttrs (name: lib.mkDefault) {
             "listen.owner" = user;
@@ -330,6 +326,8 @@ in {
             ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
             touch "/var/lib/${dirName}/db-created"
           fi
+
+          ${zoneminder}/bin/zmupdate.pl -nointeractive
         '';
         serviceConfig = {
           User = user;

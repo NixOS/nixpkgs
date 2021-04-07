@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, libdbi
+{ lib, stdenv, fetchurl, libdbi
 , libmysqlclient ? null
 , sqlite ? null
 , postgresql ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "libdbi-drivers-0.9.0";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--with-dbi-libdir=${libdbi}/lib"
   ] ++ optionals (libmysqlclient != null) [
     "--with-mysql"
-    "--with-mysql-incdir=${libmysqlclient}/include/mysql"
+    "--with-mysql-incdir=${getDev libmysqlclient}/include/mysql"
     "--with-mysql-libdir=${libmysqlclient}/lib/mysql"
   ] ++ optionals (sqlite != null) [
     "--with-sqlite3"
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://libdbi-drivers.sourceforge.net/;
+    homepage = "http://libdbi-drivers.sourceforge.net/";
     description = "Database drivers for libdbi";
     platforms = platforms.all;
     license = licenses.lgpl21;

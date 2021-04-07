@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, ocamlPackages, zlib, bzip2, ncurses, file, gd, libpng, libjpeg }:
+{ lib, stdenv, fetchurl, ocamlPackages, zlib, bzip2, ncurses, file, gd, libpng, libjpeg }:
 
 stdenv.mkDerivation ({
   name = "mldonkey-3.1.6";
 
   src = fetchurl {
-    url = https://github.com/ygrek/mldonkey/releases/download/release-3-1-6/mldonkey-3.1.6.tar.bz2;
+    url = "https://github.com/ygrek/mldonkey/releases/download/release-3-1-6/mldonkey-3.1.6.tar.bz2";
     sha256 = "0g84islkj72ymp0zzppcj9n4r21h0vlghnq87hv2wg580mybadhv";
   };
 
-  preConfigure = stdenv.lib.optionalString (ocamlPackages.camlp4 != null) ''
+  preConfigure = lib.optionalString (ocamlPackages.camlp4 != null) ''
     substituteInPlace Makefile --replace '+camlp4' \
       '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
   '';
@@ -19,9 +19,9 @@ stdenv.mkDerivation ({
 
   meta = {
     description = "Client for many p2p networks, with multiple frontends";
-    homepage = http://mldonkey.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://mldonkey.sourceforge.net/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 } // (if !ocamlPackages.ocaml.nativeCompilers then
 {

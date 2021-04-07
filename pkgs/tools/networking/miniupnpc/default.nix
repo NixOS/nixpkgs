@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, cctools }:
+{ lib, stdenv, fetchurl, which, cctools }:
 
 let
   generic = { version, sha256 }:
@@ -11,16 +11,16 @@ let
         inherit sha256;
       };
 
-      nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ which cctools ];
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [ which cctools ];
 
-      patches = stdenv.lib.optional stdenv.isFreeBSD ./freebsd.patch;
+      patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
       doCheck = !stdenv.isFreeBSD;
 
       makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
-      meta = with stdenv.lib; {
-        homepage = http://miniupnp.free.fr/;
+      meta = with lib; {
+        homepage = "http://miniupnp.free.fr/";
         description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
         platforms = with platforms; linux ++ freebsd ++ darwin;
         license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ed, autoreconfHook
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
   ];
 
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
          more original files, producing patched versions.
       '';
 
-    homepage = https://savannah.gnu.org/projects/patch;
+    homepage = "https://savannah.gnu.org/projects/patch";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

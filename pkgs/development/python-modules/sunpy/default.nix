@@ -1,41 +1,47 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pandas
-, astropy
-, parfive
+, fetchPypi
 , pythonOlder
-, sqlalchemy
-, scikitimage
-, glymur
+, asdf
+, astropy
+, setuptools-scm
+, astropy-helpers
+, astropy-extension-helpers
 , beautifulsoup4
 , drms
-, python-dateutil
-, zeep
-, tqdm
-, asdf
-, astropy-helpers
+, glymur
 , hypothesis
+, matplotlib
+, numpy
+, pandas
+, parfive
 , pytest-astropy
-, pytestcov
 , pytest-mock
+, pytestcov
+, python-dateutil
+, scikitimage
+, scipy
+, sqlalchemy
+, towncrier
+, tqdm
+, zeep
 }:
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "1.0.6";
+  version = "2.1.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "sunpy";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0j2yfhfxgi95rig8cfp9lvszb7694gq90jvs0xrb472hwnzgh2sk";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "8bbc440e606a4f3fcbd1441150d81da6f0208adace9dc06f6afd2c9cb7c08908";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    astropy-extension-helpers
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -47,6 +53,7 @@ buildPythonPackage rec {
     parfive
     sqlalchemy
     scikitimage
+    towncrier
     glymur
     beautifulsoup4
     drms
@@ -63,21 +70,16 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-    export HOME=$(mktemp -d)
-  '';
-
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
   # ignore documentation tests
   checkPhase = ''
-    pytest sunpy -k 'not rst'
+    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst'
   '';
 
   meta = with lib; {
     description = "SunPy: Python for Solar Physics";
-    homepage = https://sunpy.org;
+    homepage = "https://sunpy.org";
     license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];
   };

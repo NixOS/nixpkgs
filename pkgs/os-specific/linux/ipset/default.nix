@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "ipset";
-  version = "7.5";
+  version = "7.11";
 
   src = fetchurl {
     url = "http://ipset.netfilter.org/${pname}-${version}.tar.bz2";
-    sha256 = "02vangpxdyyk9z84vc0ba1vbjvfnd6zlniisc029xzkgmdafwym5";
+    sha256 = "sha256-MVG6rTDx2eMXsqtPL1qnqfe03BH8+P5zrNDcC126v30=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
   configureFlags = [ "--with-kmod=no" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://ipset.netfilter.org/;
+  meta = with lib; {
+    homepage = "http://ipset.netfilter.org/";
     description = "Administration tool for IP sets";
     license = licenses.gpl2;
     platforms = platforms.linux;

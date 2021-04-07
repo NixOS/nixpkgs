@@ -1,29 +1,37 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, ronn, installShellFiles }:
 
 buildGoPackage rec {
   pname = "git-lfs";
-  version = "2.8.0";
+  version = "2.13.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "17x9q4g1acf51bxr9lfmd2ym7w740n4ghdi0ncmma77kwabw9d3x";
+    sha256 = "sha256-T4s/xnu5nL6dkEIo7xGywaE+EPH2OnzsaCF9OCGu7WQ=";
   };
 
   goPackagePath = "github.com/git-lfs/git-lfs";
 
+  nativeBuildInputs = [ ronn installShellFiles ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/config.Vendor=${version} -X ${goPackagePath}/config.GitCommit=${src.rev}" ];
+
   subPackages = [ "." ];
 
-  preBuild = ''
-    cd go/src/${goPackagePath}
-    go generate ./commands
+  postBuild = ''
+    make -C go/src/${goPackagePath} man
   '';
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    installManPage go/src/${goPackagePath}/man/*.{1,5}
+  '';
+
+  meta = with lib; {
     description = "Git extension for versioning large files";
-    homepage    = https://git-lfs.github.com/;
+    homepage    = "https://git-lfs.github.com/";
+    changelog   = "https://github.com/git-lfs/git-lfs/blob/v${version}/CHANGELOG.md";
     license     = [ licenses.mit ];
-    maintainers = [ maintainers.twey ];
+    maintainers = [ maintainers.twey maintainers.marsam ];
   };
 }

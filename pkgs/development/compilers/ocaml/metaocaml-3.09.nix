@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, ncurses }:
+{ lib, stdenv, fetchurl, xlibsWrapper, ncurses }:
 
 stdenv.mkDerivation ({
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation ({
   '';
 
   meta = {
-    homepage = http://www.metaocaml.org/;
-    license = with stdenv.lib.licenses; [ qpl lgpl2 ];
+    homepage = "http://www.metaocaml.org/";
+    license = with lib.licenses; [ qpl lgpl2 ];
     description = "A compiled, type-safe, multi-stage programming language";
     broken = true;
   };

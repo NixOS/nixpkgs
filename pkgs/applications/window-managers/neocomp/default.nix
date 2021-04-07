@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , asciidoc
 , docbook_xml_dtd_45
@@ -17,7 +17,7 @@
 , libXrandr
 , libXrender
 , pcre
-, pkgconfig
+, pkg-config
 }:
 let
   rev   = "v0.6-17-g271e784";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libXrender
     pcre
-    pkgconfig
+    pkg-config
   ];
 
   makeFlags = [
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
       "#define MAX_PATH_LENGTH 128"
   '';
 
-  meta = with stdenv.lib; {
-    homepage        = https://github.com/DelusionalLogic/NeoComp;
+  meta = with lib; {
+    homepage        = "https://github.com/DelusionalLogic/NeoComp";
     license         = licenses.gpl3;
     maintainers     = with maintainers; [ twey ];
     platforms       = platforms.linux;

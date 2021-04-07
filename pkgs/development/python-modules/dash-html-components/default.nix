@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dash_html_components";
-  version = "1.0.2";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "166agkrl52j5qin2npsdl2a96jccxz5f1jvcz0hxsnjg0ix0k4l9";
+    sha256 = "83eaa39667b7c3e6cbefa360743e6e536d913269ea15db14308ad022c78bc301";
   };
 
   # No tests in archive
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTML components for Dash";
-    homepage = https://dash.plot.ly/dash-html-components;
+    homepage = "https://dash.plot.ly/dash-html-components";
     license = licenses.mit;
     maintainers = [ maintainers.antoinerg ];
   };

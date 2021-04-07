@@ -1,15 +1,15 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , jdk
 , ant, cunit, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
-  version = "3.5.42";
+  version = "3.5.45";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "1gi4zc7fhqm7rb1ajpnxx0n7ngpa06ja46mb5p65h025mz567ywd";
+    sha256 = "sha256-rnlloa0DicWT1RlP2szDvBINvT5/RZ17GOarUzvX1AI=";
   };
 
   buildInputs = [ jdk ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cp lib/libwrapper.so $out/lib/libwrapper.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enables a Java Application to be run as a Windows Service or Unix Daemon";
     homepage = "https://wrapper.tanukisoftware.com/";
     license = licenses.gpl2;

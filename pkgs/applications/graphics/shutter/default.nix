@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, imagemagick, gdk-pixbuf, librsvg
+{ lib, stdenv, fetchurl, perlPackages, makeWrapper, imagemagick, gdk-pixbuf, librsvg
 , hicolor-icon-theme, procps
 }:
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Screenshot and annotation tool";
-    homepage = https://shutter-project.org/;
+    homepage = "https://shutter-project.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

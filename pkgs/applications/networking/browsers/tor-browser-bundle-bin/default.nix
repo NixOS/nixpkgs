@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeDesktopItem
 
@@ -28,13 +28,10 @@
 , apulse
 
 # Media support (implies audio support)
-, mediaSupport ? false
-, ffmpeg
+, mediaSupport ? true
+, ffmpeg_3
 
 , gmp
-
-# Pluggable transport dependencies
-, python27
 
 # Wrapper runtime
 , coreutils
@@ -46,7 +43,8 @@
 
 # Hardening
 , graphene-hardened-malloc
-, useHardenedMalloc ? graphene-hardened-malloc != null && builtins.elem stdenv.system graphene-hardened-malloc.meta.platforms
+# crashes with intel driver
+, useHardenedMalloc ? false
 
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
@@ -56,7 +54,7 @@
 , extraPrefs ? ""
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   libPath = makeLibraryPath libPkgs;
@@ -83,30 +81,29 @@ let
   ]
   ++ optionals pulseaudioSupport [ libpulseaudio ]
   ++ optionals mediaSupport [
-    ffmpeg
+    ffmpeg_3
   ];
 
   # Library search path for the fte transport
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "9.0.5";
+  version = "10.0.15";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "1d4c3mrvqd6v086mwn3rnv776y2j3y45agnd0k5njqnmr53ybn2s";
+      sha256 = "1ah69jmfgik063f9gkvyv9d4k706pqihmzc4k7cc95zyd17v8wrs";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "040nh79hjkg5afvzshzhp7588dbi1pcpjsyk8phfqaapds74ma8y";
+      sha256 = "0gyhxfs4qpg6ys038d52cxnmb4khbng1w4hcsavi2rlgv18bz75p";
     };
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
   inherit version;
@@ -133,7 +130,7 @@ stdenv.mkDerivation rec {
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"
-    tar xf "${src}" -C "$TBB_IN_STORE" --strip-components=2
+    tar xf "$src" -C "$TBB_IN_STORE" --strip-components=2
     pushd "$TBB_IN_STORE"
 
     # Set ELF interpreter
@@ -231,9 +228,10 @@ stdenv.mkDerivation rec {
 
     # Preload extensions by moving into the runtime instead of storing under the
     # user's profile directory.
-    mkdir -p "$TBB_IN_STORE/browser/extensions"
+    # See https://support.mozilla.org/en-US/kb/deploying-firefox-with-extensions
+    mkdir -p "$TBB_IN_STORE/distribution/extensions"
     mv "$TBB_IN_STORE/TorBrowser/Data/Browser/profile.default/extensions/"* \
-      "$TBB_IN_STORE/browser/extensions"
+      "$TBB_IN_STORE/distribution/extensions"
 
     # Hard-code paths to geoip data files.  TBB resolves the geoip files
     # relative to torrc-defaults_path but if we do not hard-code them
@@ -389,7 +387,7 @@ stdenv.mkDerivation rec {
       $out/bin/tor-browser --version >/dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = ''
       Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of
@@ -401,8 +399,9 @@ stdenv.mkDerivation rec {
       the `/nix/store`.
     '';
     homepage = "https://www.torproject.org/";
+    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
+    maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 cap KarlJoad ];
     hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

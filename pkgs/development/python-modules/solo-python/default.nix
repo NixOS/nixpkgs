@@ -1,9 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, click, ecdsa, fido2, intelhex, pyserial, pyusb, requests}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, click
+, cryptography
+, ecdsa
+, fido2
+, intelhex
+, pyserial
+, pyusb
+, requests
+}:
 
  buildPythonPackage rec {
   pname = "solo-python";
-  version = "0.0.23";
+  version = "0.0.27";
   format = "flit";
   disabled = pythonOlder "3.6"; # only python>=3.6 is supported
 
@@ -11,7 +22,7 @@
     owner = "solokeys";
     repo = pname;
     rev = version;
-    sha256 = "0r9cq0sd8pqnavgwa5cqgdxzbgly2baq8fpclnnz6anb2974kg3f";
+    sha256 = "sha256-OCiKa6mnqJGoNCC4KqI+hMw22tzhdN63x9/KujNJqcE=";
   };
 
   # replaced pinned fido, with unrestricted fido version
@@ -21,6 +32,7 @@
 
   propagatedBuildInputs = [
     click
+    cryptography
     ecdsa
     fido2
     intelhex

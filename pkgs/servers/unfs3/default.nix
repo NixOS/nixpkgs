@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, flex, bison }:
+{ fetchurl, lib, stdenv, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "unfs3-0.9.22";
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
          server.
       '';
 
-    homepage = http://unfs3.sourceforge.net/;
+    homepage = "http://unfs3.sourceforge.net/";
 
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

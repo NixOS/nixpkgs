@@ -1,21 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
+{ lib, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
 , six, munch, urllib3, beautifulsoup4, openidc-client, lockfile }:
 
 buildPythonPackage rec {
   pname = "python-fedora";
-  version = "0.10.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5516b8c066bb2eb5d604ae8e84c3d31e27753795c5d84f6a792979363756405c";
+    sha256 = "56b9d841a39b4030e388e90c7b77dacd479f1ce5e2ff9b18c3954d97d5709a19";
   };
   propagatedBuildInputs = [ kitchen requests bunch paver lockfile
     six munch urllib3 beautifulsoup4 openidc-client ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Fedora Module";
-    homepage = https://github.com/fedora-infra/python-fedora;
+    homepage = "https://github.com/fedora-infra/python-fedora";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
   };

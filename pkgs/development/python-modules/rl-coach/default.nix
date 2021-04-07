@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
@@ -28,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c4f3a334ff55d534d2fc7f83d5e791f64b780391039e367f6cd9b4381838744";
+    sha256 = "0i47hf0l76ydyrky6f8h760bfr0zg5g3vy675x6m6pgm9wrklkqc";
   };
 
   propagatedBuildInputs = [
@@ -89,10 +88,12 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5"; # minimum required version
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enables easy experimentation with state of the art Reinforcement Learning algorithms";
     homepage = "https://nervanasystems.github.io/coach/";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
+    # pythonPackages.gym is too new
+    broken = true; # since 2020-04-20
   };
 }

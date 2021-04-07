@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, future }:
+{ lib, buildPythonPackage, fetchPypi, future }:
 
 buildPythonPackage rec {
 
@@ -12,9 +12,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Backport of Python 3 csv module";
-    homepage = https://github.com/ryanhiebert;
+    homepage = "https://github.com/ryanhiebert";
     license = licenses.psfl;
   };
 }

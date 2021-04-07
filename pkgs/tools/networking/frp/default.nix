@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "frp";
-  version = "0.31.2";
+  version = "0.36.1";
 
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0947psq6qcr175xsgwr5k6idphs3s4vdv130ms738bcqf0h9snky";
+    sha256 = "sha256-oOq5Y/6n7VHU9WPjnt+moVWZgo8mQl6Jd8daLJ2/pSQ=";
   };
 
-  modSha256 = "1zbl0gfc99pbzdacxhfa1k3y6i7v13sb441wpbp9aygxhvwqrms9";
+  vendorSha256 = "sha256-Q4ZwCH/RTa8cLtSg06s1S790MdZLgfWOvaD+WAt/RBM=";
+
+  doCheck = false;
 
   subPackages = [ "cmd/frpc" "cmd/frps" ];
 
@@ -25,7 +27,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/fatedier/frp";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

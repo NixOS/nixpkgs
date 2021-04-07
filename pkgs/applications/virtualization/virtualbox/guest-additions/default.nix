@@ -1,9 +1,9 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox, dos2unix, fetchpatch, findutils, patchutils }:
+, zlib, xorg, dbus, virtualbox}:
 
 let
   version = virtualbox.version;
-  xserverVListFunc = builtins.elemAt (stdenv.lib.splitVersion xorg.xorgserver.version);
+  xserverVListFunc = builtins.elemAt (lib.splitVersion xorg.xorgserver.version);
 
   # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
   # as it even fails to build otherwise.  Still, override this even here,
@@ -19,6 +19,7 @@ let
   dlopenLibs = [
     { name = "libdbus-1.so"; pkg = dbus; }
     { name = "libXfixes.so"; pkg = xorg.libXfixes; }
+    { name = "libXrandr.so"; pkg = xorg.libXrandr; }
   ];
 
 in stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "1c9ysx0fhxxginmp607b4fk74dvlr32n6w52gawm06prf4xg90nb";
+    sha256 = "904432eb331d7ae517afaa4e4304e6492b7947b46ecb8267de7ef792c4921b4c";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -43,67 +44,9 @@ in stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
       --replace "<ttm/" "<drm/ttm/"
-    
-    echo ${lib.escapeShellArgs patches} | \
-      ${findutils}/bin/xargs -n1 ${patchutils}/bin/lsdiff --strip=1 --addprefix=src/vboxguest-${version}/ | \
-      ${findutils}/bin/xargs ${dos2unix}/bin/dos2unix
   '';
 
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
-  # Kernel 5.4 fix, should be fixed with next upstream release
-  # https://www.virtualbox.org/ticket/18945
-  patches = lib.concatLists (lib.mapAttrsToList (changeset: args:
-    map (arg:
-      fetchpatch ({
-        name = "kernel-5.4-fix-${changeset}.patch";
-        url = "https://www.virtualbox.org/changeset/${changeset}/vbox?format=diff";
-      } // arg)) args) {
-        "81586" = [{
-          sha256 = "126z67x6vy65w6jlqbh4z4f1cffxnycwb69vns0154bawbsbxsiw";
-          stripLen = 5;
-          extraPrefix = "vboxguest/";
-        }];
-        "81587" = [
-          {
-            sha256 = "0simzswnl0wvnc2i9gixz99rfc7lxk1nrnskksrlrrl9hqnh0lva";
-            stripLen = 5;
-            extraPrefix = "vboxsf/";
-            includes = [ "*/the-linux-kernel.h" ];
-          }
-          {
-            sha256 = "0a8r9h3x3lcjq2fykgqhdaykp00rnnkbxz8xnxg847zgvca15y02";
-            stripLen = 5;
-            extraPrefix = "vboxguest/";
-            includes = [ "*/the-linux-kernel.h" ];
-          }
-        ];
-        "81649" = [
-          {
-            sha256 = "1p1skxlvqigydxr4sk7w51lpk7nxg0d9lppq39sdnfmgi1z0h0sc";
-            stripLen = 2;
-            extraPrefix = "vboxguest/";
-            includes = [ "*/cdefs.h" ];
-          }
-          {
-            sha256 = "1j060ggdnndyjdhkfvs15306gl7g932sim9xjmx2mnx8gjdmg37f";
-            stripLen = 2;
-            extraPrefix = "vboxsf/";
-            includes = [ "*/cdefs.h" ];
-          }
-          {
-            sha256 = "060h3a5k2yklbvlg0hyg4x87xrg37cvv3rjb67xizlwvlyy6ykkg";
-            stripLen = 5;
-            extraPrefix = "vboxguest/";
-            includes = [ "*/thread2-r0drv-linux.c" ];
-          }
-          {
-            sha256 = "0cxlkf7cy751gl8dgzr7vkims1kmx5pgzsrxyk8w18zyp5nk9glw";
-            stripLen = 7;
-            extraPrefix = "vboxvideo/";
-            includes = [ "*/vbox_*.c" ];
-          }
-        ];
-      });
 
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
@@ -162,7 +105,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     # Install kernel modules.
     cd src/vboxguest-${version}
-    make install INSTALL_MOD_PATH=$out
+    make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
     # Install binaries

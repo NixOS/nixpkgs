@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, withMtp ? true, libmtp, pkgconfig, which, qt4, qmake4Hook }:
+{ stdenv, lib, fetchurl, withMtp ? true, libmtp, pkg-config, which, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   pname = "qtscrobbler";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01c8e48f616ed09504833d27d92fd62f455bd645ea2d1cc2a5f4c287d641daba";
   };
 
-  nativeBuildInputs = [ qmake4Hook ] ++ lib.optionals withMtp [ pkgconfig which ];
+  nativeBuildInputs = [ qmake4Hook ] ++ lib.optionals withMtp [ pkg-config which ];
   buildInputs = [ qt4 ] ++ lib.optional withMtp libmtp;
 
   enableParallelBuilding = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       It is able to gather this information from Apple iPods or DAPs running the Rockbox replacement firmware.
     '';
 
-    homepage = http://qtscrob.sourceforge.net;
+    homepage = "http://qtscrob.sourceforge.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.vanzef ];
     platforms = platforms.linux;

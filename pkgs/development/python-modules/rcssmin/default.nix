@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "rcssmin";
   version = "1.0.6";
@@ -12,8 +12,8 @@ buildPythonPackage rec {
   # tests auto-discovery
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://opensource.perlig.de/rcssmin/;
+  meta = with lib; {
+    homepage = "http://opensource.perlig.de/rcssmin/";
     license = licenses.asl20;
     description = "CSS minifier written in pure python";
   };

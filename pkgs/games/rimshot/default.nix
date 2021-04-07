@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "rimshot";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   unpackPhase = ''
     unzip -j $src
-  '';  
+  '';
 
   installPhase =
   ''
@@ -51,12 +51,12 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create your own music";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://stabyourself.net/rimshot/;
+    downloadPage = "http://stabyourself.net/rimshot/";
   };
 
 }

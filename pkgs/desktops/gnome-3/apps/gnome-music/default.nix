@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , meson
 , ninja
 , gettext
@@ -14,8 +14,9 @@
 , gnome-online-accounts
 , grilo
 , grilo-plugins
-, pkgconfig
+, pkg-config
 , gtk3
+, pango
 , glib
 , desktop-file-utils
 , appstream-glib
@@ -29,13 +30,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "3.34.4";
+  version = "3.38.2";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1l2jaf5jfdkqqpjxwahsjslb3sa2vlhjgpi1ib51is04ln729xb6";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0c2051wngf3jrifl5bv5kyqcci459n62vixxkryiryjcaqwbd1am";
   };
 
   nativeBuildInputs = [
@@ -43,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     gettext
     itstool
-    pkgconfig
+    pkg-config
     libxml2
     wrapGAppsHook
     desktop-file-utils
@@ -53,6 +54,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
+    pango
     glib
     libmediaart
     gnome-online-accounts
@@ -91,6 +93,9 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
+  # handle setup hooks better
+  strictDeps = false;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
@@ -98,10 +103,10 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Music";
     description = "Music player and management application for the GNOME desktop environment";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

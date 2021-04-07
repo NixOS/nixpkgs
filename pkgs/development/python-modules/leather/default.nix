@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, six }:
+{ lib, fetchPypi, buildPythonPackage, six }:
 
 buildPythonPackage rec {
   pname = "leather";
@@ -11,8 +11,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
-    homepage = http://leather.rtfd.io;
+  meta = with lib; {
+    homepage = "http://leather.rtfd.io";
     description = "Python charting library";
     license = licenses.mit;
     platforms = platforms.all;

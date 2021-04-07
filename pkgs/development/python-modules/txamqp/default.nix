@@ -1,22 +1,22 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchurl
+, fetchPypi
 , twisted
 }:
 
 buildPythonPackage rec {
-  pname = "txamqp";
-  version = "0.3";
+  pname = "txAMQP";
+  version = "0.8.2";
 
-  src = fetchurl {
-    url = "https://launchpad.net/txamqp/trunk/${version}/+download/python-txamqp_${version}.orig.tar.gz";
-    sha256 = "1r2ha0r7g14i4b5figv2spizjrmgfpspdbl1m031lw9px2hhm463";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0jd9864k3csc06kipiwzjlk9mq4054s8kzk5q1cfnxj8572s4iv4";
   };
 
-  buildInputs = [ twisted ];
+  propagatedBuildInputs = [ twisted ];
 
-  meta = with stdenv.lib; {
-    homepage = https://launchpad.net/txamqp;
+  meta = with lib; {
+    homepage = "https://github.com/txamqp/txamqp";
     description = "Library for communicating with AMQP peers and brokers using Twisted";
     license = licenses.asl20;
     maintainers = [];

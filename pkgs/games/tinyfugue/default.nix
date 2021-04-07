@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, ncurses, zlib
+{ lib, stdenv, fetchurl, ncurses, zlib
 , openssl ? null
 , sslSupport ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 assert sslSupport -> openssl != null;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ++ optional sslSupport openssl;
 
   meta = {
-    homepage = http://tinyfugue.sourceforge.net/;
+    homepage = "http://tinyfugue.sourceforge.net/";
     description = "A terminal UI, screen-oriented MUD client";
     longDescription = ''
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use

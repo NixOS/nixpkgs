@@ -1,16 +1,18 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pkgs
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2019.11.22";
+  version = "2021.03.13";
+  disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ccc6906fd644444a1edd0984d10bddf5abf4dd91c94eeeaa4660f7dc3eca320";
+    sha256 = "c13dd7a84eddfcf9c3068d57f3c9da90ea7c0d11688dc3f78f9265f3f093c6ea";
   };
 
   patchPhase = ''
@@ -20,7 +22,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
     license = licenses.bsd3;

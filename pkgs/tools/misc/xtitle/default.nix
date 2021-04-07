@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxcb, xcbutil, xcbutilwm, git }:
+{ lib, stdenv, fetchurl, libxcb, xcbutil, xcbutilwm, git }:
 
 stdenv.mkDerivation {
    name = "xtitle-0.4.4";
@@ -15,9 +15,9 @@ stdenv.mkDerivation {
 
    meta = {
      description = "Outputs X window titles";
-     homepage = https://github.com/baskerville/xtitle;
-     maintainers = [ stdenv.lib.maintainers.meisternu ];
+     homepage = "https://github.com/baskerville/xtitle";
+     maintainers = [ lib.maintainers.meisternu ];
      license = "Custom";
-     platforms = stdenv.lib.platforms.linux;
+     platforms = lib.platforms.linux;
    };
 }

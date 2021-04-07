@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , inflect
 , jinja2
 , jinja2_pluralize
@@ -6,7 +6,6 @@
 , six
 # test dependencies
 , coverage
-, flake8
 , mock
 , nose
 , pycodestyle
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "diff_cover";
-  version = "2.6.0";
+  version = "5.0.1";
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8;
@@ -25,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bsxc9x3yx5dy2r3b3lzi97wz0ma3ncd14jr27n6lbqvl20w92mm";
+    sha256 = "e80f7a4979b7a9d373903776588279ed2898f17729e608255c4119462c822edb";
   };
 
   propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];
@@ -37,9 +36,9 @@ buildPythonPackage rec {
     pytest -k 'not added_file_pylint_console and not file_does_not_exist'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
-    homepage = https://github.com/Bachmann1234/diff-cover;
+    homepage = "https://github.com/Bachmann1234/diff-cover";
     license = licenses.asl20;
     maintainers = with maintainers; [ dzabraev ];
   };

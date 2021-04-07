@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "5.0";
-    url = "https://dl.winehq.org/wine/source/5.0/wine-${version}.tar.xz";
-    sha256 = "1d0kcy338radq07hrnzcpc9lc9j2fvzjh37q673002x8d6x5058q";
+    version = "6.0";
+    url = "https://dl.winehq.org/wine/source/6.0/wine-${version}.tar.xz";
+    sha256 = "sha256-tJMGXy+D7kKcYuLsWGmKPPY+94ci4bIHZYIxUuhYLFY=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -31,33 +31,46 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "4.9.4";
-      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
-      sha256 = "1p8g45xphxnns7dkg9rbaknarbjy5cjhrngaf0fsgk9z68wgz9ji";
+      version = "5.1.1";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
+      sha256 = "09wjrfxbw0072iv6d2vqnkc3y7dzj15vp8mv4ay44n1qp5ji4m3l";
     };
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+    ];
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "5.0";
-    url = "https://dl.winehq.org/wine/source/5.0/wine-${version}.tar.xz";
-    sha256 = "1d0kcy338radq07hrnzcpc9lc9j2fvzjh37q673002x8d6x5058q";
+    version = "6.5";
+    url = "https://dl.winehq.org/wine/source/6.x/wine-${version}.tar.xz";
+    sha256 = "sha256-BgD9IIwGkl1mNNKfVDu6CmQ2HDTpvXYJwvDiCWEK00c=";
     inherit (stable) mono gecko32 gecko64;
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+     ];
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "054m2glvav29qnlgr3p36kahyv3kbxzba82djzqpc7cmsrin0d3f";
+    sha256 = "sha256-u6wDavrFirN1e0fFra4ui3i4PnJF0gcENYoIyNwhIYc=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
+
+    # Just keep list empty, if current release haven't broken patchsets
+    disabledPatchsets = [ ];
   };
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20191224";
-    sha256 = "07q3zh2i3xqzpg46ljarhq3a4ha9zwpc6jqzvly0kfglkh3b3v66";
+    version = "20201206";
+    sha256 = "1xs09v1zr98yvwvdsmzgryc2hbk92mwn54yxx8162l461465razc";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

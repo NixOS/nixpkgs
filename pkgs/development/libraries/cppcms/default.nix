@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pcre, zlib, python, openssl }:
+{ lib, stdenv, fetchurl, cmake, pcre, zlib, python2, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cppcms";
@@ -9,16 +9,17 @@ stdenv.mkDerivation rec {
       sha256 = "0lmcdjzicmzhnr8pa0q3f5lgapz2cnh9w0dr56i4kj890iqwgzhh";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ pcre zlib python2 openssl ];
 
-  buildInputs = [ cmake pcre zlib python openssl ];
+  strictDeps = true;
 
   cmakeFlags = [
     "--no-warn-unused-cli"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://cppcms.com;
+  meta = with lib; {
+    homepage = "http://cppcms.com";
     description = "High Performance C++ Web Framework";
     platforms = platforms.linux ;
     license = licenses.lgpl3;

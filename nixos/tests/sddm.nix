@@ -37,15 +37,15 @@ let
 
     autoLogin = {
       name = "sddm-autologin";
-      meta = with pkgs.stdenv.lib.maintainers; {
+      meta = with pkgs.lib.maintainers; {
         maintainers = [ ttuegel ];
       };
 
       machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
-        services.xserver.displayManager.sddm = {
-          enable = true;
+        services.xserver.displayManager = {
+          sddm.enable = true;
           autoLogin = {
             enable = true;
             user = "alice";

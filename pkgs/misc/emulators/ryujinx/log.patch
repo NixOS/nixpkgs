@@ -1,0 +1,13 @@
+diff --git a/Ryujinx.Common/Configuration/LoggerModule.cs b/Ryujinx.Common/Configuration/LoggerModule.cs
+index 20c0fb46..534576bc 100644
+--- a/Ryujinx.Common/Configuration/LoggerModule.cs
++++ b/Ryujinx.Common/Configuration/LoggerModule.cs
+@@ -75,7 +75,7 @@ namespace Ryujinx.Configuration
+             if (e.NewValue)
+             {
+                 Logger.AddTarget(new AsyncLogTargetWrapper(
+-                    new FileLogTarget(AppDomain.CurrentDomain.BaseDirectory, "file"),
++                    new FileLogTarget(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Ryujinx"), "file"),
+                     1000,
+                     AsyncLogTargetOverflowAction.Block
+                 ));

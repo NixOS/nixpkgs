@@ -1,58 +1,42 @@
 { stdenv, lib, fetchFromGitHub
-, rustPlatform, pkgconfig, openssl
+, rustPlatform, pkg-config, openssl
+# testing packages
+, cargo-insta
 # darwin dependencies
 , Security, CoreFoundation, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0kvmjahyx5dcjhry2hkvcshi0lbgipfj0as74a3h3bllfvdfkkg0";
+    sha256 = "1z920p8i3gkjadyd6bqjk4i5yr5ds3m3sbcnf7plcqr69dsjr4b8";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "1zh6fjfynkn4kgk1chigzd0sh4x1bagizyn7x6qyxgzc57a49bp7";
 
-  cargoSha256 = "0aykhhxk416p237safmqh5dhwjgrhvgc6zikkmxi9rq567ypp914";
-  cargoPatches = [ ./cargo-lock.patch ];
-
-  # Multiple tests require internet connectivity, so they are disabled here.
-  # If we ever get cargo-insta (https://crates.io/crates/insta) in tree,
-  # we might be able to run these with something like
-  # `cargo insta review` in the `preCheck` phase.
   checkPhase = ''
-    cd cargo-geiger/tests/snapshots
-    for file in *
-    do
-      mv $file r#$file
-    done
-    cd -
-    cargo test -- \
-    --skip test_package::case_2 \
-    --skip test_package::case_3 \
-    --skip test_package::case_6
+    ${cargo-insta}/bin/cargo-insta test
   '';
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
   # CFURLSetResourcePropertyForKey is defined in the headers but there's no
   # corresponding implementation in the sources from opensource.apple.com.
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
   '';
 
   meta = with lib; {
-    description = "Detects usage of unsafe Rust in a Rust crate and its dependencies.";
-    homepage = https://github.com/rust-secure-code/cargo-geiger;
+    description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
+    homepage = "https://github.com/rust-secure-code/cargo-geiger";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ evanjs ];
-    platforms = platforms.all;
   };
 }

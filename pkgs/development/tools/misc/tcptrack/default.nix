@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, libpcap }:
+{ lib, stdenv, fetchFromGitHub, ncurses, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "tcptrack";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "libpcap based program for live TCP connection monitoring";
     license = licenses.lgpl21;

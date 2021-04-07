@@ -23,8 +23,7 @@ make_platform() {
   make clean
   make PROBE_HOST="$1"
 
-  if [ "$1" = libftdi ]; then
-    mkdir -p "$out/bin"
+  if [ "$1" = "hosted" ]; then
     install -m 0555 blackmagic "$out/bin"
   fi
 
@@ -44,6 +43,8 @@ make -C libopencm3
 ################################################################################
 # And now all of the platforms:
 cd src
+
+mkdir -p "$out/bin"
 
 for platform in platforms/*/Makefile.inc; do
   probe=$(basename "$(dirname "$platform")")

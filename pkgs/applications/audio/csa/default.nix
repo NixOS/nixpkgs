@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "csa";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   # so we remove one of them:
   postInstall = "rm $out/lib/ladspa/celllm_3890.*";
 
-  meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/csa/;
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/csa/";
     description = "A group of LADSPA Audio plugins for FM broadcast and more";
     longDescription = ''
       CSA means : Contrôle Signal Audio.
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

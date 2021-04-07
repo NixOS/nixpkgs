@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , alsaSupport ? !stdenv.isDarwin, alsaLib ? null
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio ? null
 , CoreServices, AudioUnit, AudioToolbox
 }:
 
-with stdenv.lib;
+with lib;
 
 assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> libpulseaudio != null;
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OpenAL alternative";
-    homepage = https://kcat.strangesoft.net/openal.html;
+    homepage = "https://kcat.strangesoft.net/openal.html";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;

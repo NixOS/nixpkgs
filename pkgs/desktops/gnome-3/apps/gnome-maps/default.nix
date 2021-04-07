@@ -1,29 +1,71 @@
-{ stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
-, gobject-introspection, gdk-pixbuf, librsvg, libgweather
-, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
-, webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
+{ lib, stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, python3
+, pkg-config
+, gnome3
+, gtk3
+, gobject-introspection
+, gdk-pixbuf
+, librsvg
+, libgweather
+, geoclue2
+, wrapGAppsHook
+, folks
+, libchamplain
+, gfbgraph
+, libsoup
+, gsettings-desktop-schemas
+, webkitgtk
+, gjs
+, libgee
+, libhandy
+, geocode-glib
+, evolution-data-server
+, gnome-online-accounts
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "3.34.3";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1p58il8dqj96nlv41gf926y8nw6ya15vmv9yr52025sizxaqzydw";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-1WQekf/kePsqqcpIliJczxjsLqTZjjV2UXmBin2+RKM=";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext python3 wrapGAppsHook ];
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
+    python3
+    wrapGAppsHook
+  ];
+
   buildInputs = [
+    evolution-data-server
+    folks
+    gdk-pixbuf
+    geoclue2
+    geocode-glib
+    gfbgraph
+    gjs
+    gnome-online-accounts
+    gnome3.adwaita-icon-theme
     gobject-introspection
-    gtk3 geoclue2 gjs libgee folks gfbgraph
-    geocode-glib libchamplain libsoup
-    gdk-pixbuf librsvg libgweather
-    gsettings-desktop-schemas evolution-data-server
-    gnome-online-accounts gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    libchamplain
+    libgee
+    libgweather
+    libhandy
+    librsvg
+    libsoup
     webkitgtk
   ];
 
@@ -47,10 +89,10 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Maps;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Apps/Maps";
     description = "A map application for GNOME 3";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

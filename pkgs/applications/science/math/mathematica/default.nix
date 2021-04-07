@@ -1,16 +1,18 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , patchelf
 , requireFile
 , callPackage
+, makeWrapper
 , alsaLib
 , dbus
 , fontconfig
 , freetype
 , gcc
 , glib
+, libssh2
 , ncurses
-, opencv
+, opencv4
 , openssl
 , unixODBC
 , xkeyboard_config
@@ -26,7 +28,7 @@
 let
   l10n =
     import ./l10ns.nix {
-      lib = stdenv.lib;
+      lib = lib;
       inherit requireFile lang;
     };
 in
@@ -36,6 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils
     patchelf
+    makeWrapper
     alsaLib
     coreutils
     dbus
@@ -44,9 +47,11 @@ stdenv.mkDerivation rec {
     gcc.cc
     gcc.libc
     glib
+    libssh2
     ncurses
-    opencv
+    opencv4
     openssl
+    stdenv.cc.cc.lib
     unixODBC
     xkeyboard_config
     libxml2
@@ -69,9 +74,9 @@ stdenv.mkDerivation rec {
     libSM
   ]);
 
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath = lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
@@ -93,7 +98,7 @@ stdenv.mkDerivation rec {
     # Fix library paths
     cd $out/libexec/Mathematica/Executables
     for path in mathematica MathKernel Mathematica WolframKernel wolfram math; do
-      sed -i -e "2iexport LD_LIBRARY_PATH=${zlib}/lib:\''${LD_LIBRARY_PATH}\n" $path
+      sed -i -e "2iexport LD_LIBRARY_PATH=${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}\n" $path
     done
 
     # Fix xkeyboard config path for Qt
@@ -102,7 +107,10 @@ stdenv.mkDerivation rec {
     done
 
     # Remove some broken libraries
-    rm $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
+    rm -f $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
+
+    # Set environment variable to fix libQt errors - see https://github.com/NixOS/nixpkgs/issues/96490
+    wrapProgram $out/bin/mathematica --set USE_WOLFRAM_LD_LIBRARY_PATH 1
   '';
 
   preFixup = ''
@@ -117,7 +125,7 @@ stdenv.mkDerivation rec {
         echo "patching $f executable <<"
         patchelf --shrink-rpath "$f"
         patchelf \
-	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
           "$f" \
           && patchelf --shrink-rpath "$f" \
@@ -137,15 +145,18 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
+  # This is primarily an IO bound build; there's little benefit to building remotely.
+  preferLocalBuild = true;
+
   # all binaries are already stripped
   dontStrip = true;
 
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wolfram Mathematica computational software system";
-    homepage = http://www.wolfram.com/mathematica/;
+    homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
     maintainers = with maintainers; [ herberteuler ];
     platforms = [ "x86_64-linux" ];

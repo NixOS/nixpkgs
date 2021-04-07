@@ -4,8 +4,9 @@ diff -ur texinfo-6.5/configure texinfo-6.5-patched/configure
 @@ -23281,7 +23281,7 @@
    # env -i gives this build host configure a clean environment;
    # consequently, we have to re-initialize $PATH.
-   env -i CC="$BUILD_CC" AR="$BUILD_AR" RANLIB="$BUILD_RANLIB" \
+-  env -i CC="$BUILD_CC" AR="$BUILD_AR" RANLIB="$BUILD_RANLIB" \
 -      PATH="$PATH" \
++  env -i CC="$CC_FOR_BUILD" AR="$AR_FOR_BUILD" RANLIB="$RANLIB_FOR_BUILD" \
 +      PATH="$PATH" CFLAGS="$NATIVE_TOOLS_CFLAGS" LDFLAGS="$NATIVE_TOOLS_LDFLAGS" \
        tools_only=1 \
      ${confdir}/configure --build=${build} --host=${build} \

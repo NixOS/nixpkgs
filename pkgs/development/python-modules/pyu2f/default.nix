@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest six mock pyfakefs unittest2 ];
+  checkInputs = [ pytest mock pyfakefs unittest2 ];
 
   checkPhase = ''
     pytest pyu2f/tests
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "U2F host library for interacting with a U2F device over USB";
-    homepage = https://github.com/google/pyu2f/;
+    homepage = "https://github.com/google/pyu2f/";
     license = licenses.asl20;
     maintainers = with maintainers; [ prusnak ];
   };

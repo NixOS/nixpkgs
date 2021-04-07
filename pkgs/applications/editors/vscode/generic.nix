@@ -1,7 +1,10 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, wrapGAppsHook
+, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig
+, systemd, fontconfig, libdbusmenu
+
+# Populate passthru.tests
+, tests
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
@@ -16,7 +19,7 @@ in
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName;
+      inherit executableName tests;
     };
 
     desktopItem = makeDesktopItem {
@@ -24,8 +27,8 @@ in
       desktopName = longName;
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
-      exec = executableName;
-      icon = "@out@/share/pixmaps/code.png";
+      exec = "${executableName} %F";
+      icon = "code";
       startupNotify = "true";
       categories = "Utility;TextEditor;Development;IDE;";
       mimeType = "text/plain;inode/directory;";
@@ -37,7 +40,7 @@ in
         [Desktop Action new-empty-window]
         Name=New Empty Window
         Exec=${executableName} --new-window %F
-        Icon=@out@/share/pixmaps/code.png
+        Icon=code
       '';
     };
 
@@ -47,7 +50,7 @@ in
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
-      icon = "@out@/share/pixmaps/code.png";
+      icon = "code";
       startupNotify = "true";
       categories = "Utility;TextEditor;Development;IDE;";
       mimeType = "x-scheme-handler/vscode;";
@@ -57,12 +60,12 @@ in
       '';
     };
 
-    buildInputs = (if stdenv.isDarwin
-      then [ unzip ]
-      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
-        ++ [ libsecret libXScrnSaver ];
+    buildInputs = [ libsecret libXScrnSaver libxshmfence ]
+      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages);
 
-    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+
+    nativeBuildInputs = [unzip] ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 
     dontBuild = true;
     dontConfigure = true;
@@ -76,15 +79,11 @@ in
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
 
-        substituteInPlace $out/lib/vscode/bin/${executableName} --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
-
         ln -s $out/lib/vscode/bin/${executableName} $out/bin
 
         mkdir -p $out/share/applications
-        substitute $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop \
-          --subst-var out
-        substitute $urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop $out/share/applications/${executableName}-url-handler.desktop \
-          --subst-var out
+        ln -s $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop
+        ln -s $urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop $out/share/applications/${executableName}-url-handler.desktop
 
         mkdir -p $out/share/pixmaps
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
@@ -93,10 +92,6 @@ in
         sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName}
         grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
       '';
-
-    preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]})
-    '';
 
     inherit meta;
   }

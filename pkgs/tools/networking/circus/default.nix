@@ -1,16 +1,23 @@
-{ stdenv, python3Packages }:
+{ lib, python3 }:
 
 let
-  inherit (python3Packages) buildPythonApplication fetchPypi iowait psutil pyzmq tornado_4 mock;
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      tornado = super.tornado_4;
+    };
+  };
+
+  inherit (python.pkgs) buildPythonApplication fetchPypi iowait psutil pyzmq tornado mock six;
 in
 
 buildPythonApplication rec {
   pname = "circus";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1603cf4c4f620ce6593d3d2a67fad25bf0242183ea24110d8bb1c8079c55d1b";
+    sha256 = "0paccmqwgard2l0z7swcc3nwc418l9b4mfaddb4s31bpnqg02z6x";
   };
 
   postPatch = ''
@@ -23,9 +30,9 @@ buildPythonApplication rec {
 
   doCheck = false; # weird error
 
-  propagatedBuildInputs = [ iowait psutil pyzmq tornado_4 ];
+  propagatedBuildInputs = [ iowait psutil pyzmq tornado six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A process and socket manager";
     homepage = "https://github.circus.com/circus-tent/circus";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
 , openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
 
 let
@@ -9,7 +9,7 @@ let
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "False";
+    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
     categories = "Game;RolePlaying;";
@@ -18,11 +18,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.6.6";
+  version = "1.6.7";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "1amx0y49scy9hq71wjvkdzvgclwa2g54vkv4bf40mxyp4pl0bq7m";
+    sha256 = "0283hvms5hr29zr0grd6gq059k0hg8hcz3fsmwjmysiih8790i68";
   };
 
   prePatch = ''
@@ -70,9 +70,9 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tales of Maj'eyal (rogue-like game)";
-    homepage = https://te4.org/;
+    homepage = "https://te4.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ chattered peterhoeg ];
     platforms = with platforms; [ "i686-linux" "x86_64-linux" ];

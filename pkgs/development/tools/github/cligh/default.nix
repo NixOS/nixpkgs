@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonApplication, pyxdg, PyGithub }:
+{ lib, fetchFromGitHub, buildPythonApplication, pyxdg, PyGithub }:
 
 buildPythonApplication rec {
   pname = "cligh";
@@ -15,8 +15,8 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyxdg PyGithub ];
 
-  meta = with stdenv.lib; {
-    homepage = http://the-brannons.com/software/cligh.html;
+  meta = with lib; {
+    homepage = "http://the-brannons.com/software/cligh.html";
     description = "A simple command-line interface to the facilities of Github";
     longDescription = ''
         Cligh is a simple command-line interface to the facilities of GitHub.

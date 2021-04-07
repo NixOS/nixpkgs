@@ -9,7 +9,7 @@ buildGoPackage rec {
   rev = "218875ebe23806e7af82f3b5b14bb3355534f679";
 
   goPackagePath = "github.com/fatih/motion";
-  excludedPackages = ''testdata'';
+  excludedPackages = "testdata";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -30,7 +30,7 @@ buildGoPackage rec {
       It's optimized and created to work with vim-go, but it's designed to work
       with any editor. It's currently work in progress and open to change.
     '';
-    homepage = https://github.com/fatih/motion;
+    homepage = "https://github.com/fatih/motion";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

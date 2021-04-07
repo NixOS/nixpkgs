@@ -1,11 +1,11 @@
-{ stdenv
+{ lib
 , buildBazelPackage
 , fetchFromGitHub
 , cacert
 , git
 , glibcLocales
 , go
-, iproute
+, iproute2
 , iptables
 , makeWrapper
 , procps
@@ -76,7 +76,7 @@ in buildBazelPackage rec {
       rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
     '';
 
-    sha256 = "122qk6iv8hd7g2a84y9aqqhij4r0m47vpxzbqhhh6k5livc73qd6";
+    sha256 = "0fhmlq0d2317gwhma2mz1anb69j4chybk90j71j88wpgw1hxbk34";
   };
 
   buildAttrs = {
@@ -87,13 +87,13 @@ in buildBazelPackage rec {
 
       # Needed for the 'runsc do' subcomand
       wrapProgram $out/bin/runsc \
-        --prefix PATH : ${stdenv.lib.makeBinPath [ iproute iptables procps ]}
+        --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Container Runtime Sandbox";
-    homepage = https://github.com/google/gvisor;
+    homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;
     maintainers = with maintainers; [ andrew-d ];
     platforms = [ "x86_64-linux" ];

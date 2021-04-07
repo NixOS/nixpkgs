@@ -21,7 +21,7 @@ in fetchzip {
       presentation of information in emacs. This package provides
       the fonts needed to make the package work properly.
     '';
-    homepage = https://github.com/domtronn/all-the-icons.el;
+    homepage = "https://github.com/domtronn/all-the-icons.el";
 
     /*
     The fonts come under a mixture of licenses - the MIT license,

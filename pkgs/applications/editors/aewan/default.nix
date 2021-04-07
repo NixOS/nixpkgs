@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, ncurses }:
+{ lib, stdenv, fetchurl, zlib, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "aewan";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Ascii-art Editor Without A Name";
-    homepage = http://aewan.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://aewan.sourceforge.net/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

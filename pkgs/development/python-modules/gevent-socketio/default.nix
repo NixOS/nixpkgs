@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , versiontools
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   buildInputs = [ versiontools gevent-websocket mock pytest ];
   propagatedBuildInputs = [ gevent ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/abourget/gevent-socketio;
+  meta = with lib; {
+    homepage = "https://github.com/abourget/gevent-socketio";
     description = "SocketIO server based on the Gevent pywsgi server, a Python network library";
     license = licenses.bsd0;
   };

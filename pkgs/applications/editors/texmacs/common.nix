@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tex, extraFonts, chineseFonts, japaneseFonts, koreanFonts }:
+{ lib, fetchurl, tex, extraFonts, chineseFonts, japaneseFonts, koreanFonts }:
 rec {
   extraFontsSrc = fetchurl {
     url = "ftp://ftp.texmacs.org/pub/TeXmacs/fonts/TeXmacs-extra-fonts-1.0-noarch.tar.gz";
@@ -62,7 +62,7 @@ rec {
     Scheme extension language.  A native spreadsheet and tools for
     collaborative authoring are planned for later.
   '';
-    homepage = http://texmacs.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://texmacs.org/";
+    license = lib.licenses.gpl2Plus;
   };
 }

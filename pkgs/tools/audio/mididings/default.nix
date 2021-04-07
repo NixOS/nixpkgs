@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, fetchFromGitHub, pkg-config, glib, alsaLib, libjack2  }:
+{ lib, pythonPackages, fetchFromGitHub, pkg-config, glib, alsaLib, libjack2  }:
 
 pythonPackages.buildPythonApplication {
   version = "2015-11-17";
@@ -23,12 +23,12 @@ pythonPackages.buildPythonApplication {
     # so mididings knows where to look for config files
     ++ [ pyxdg ];
 
-  preBuild = with stdenv.lib.versions; ''
+  preBuild = with lib.versions; ''
     substituteInPlace setup.py \
       --replace boost_python "boost_python${major pythonPackages.python.version}${minor pythonPackages.python.version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A MIDI router and processor based on Python, supporting ALSA and JACK MIDI";
     homepage = "http://das.nasophon.de/mididings";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, perl }:
+{ lib, stdenv, fetchurl, bash, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gecode";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs configure";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
-    homepage = https://www.gecode.org;
+    homepage = "https://www.gecode.org";
     description = "Toolkit for developing constraint-based systems";
     platforms = platforms.all;
     maintainers = [ maintainers.manveru ];

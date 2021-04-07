@@ -1,4 +1,4 @@
-{stdenv, buildOcamlJane, async_kernel, bin_prot, core_kernel,
+{lib, buildOcamlJane, async_kernel, bin_prot, core_kernel,
  fieldslib, ppx_assert, ppx_bench, ppx_driver, ppx_expect, ppx_inline_test,
  ppx_jane, sexplib, typerep, variantslib}:
 
@@ -9,8 +9,8 @@ buildOcamlJane {
     ppx_assert ppx_bench ppx_driver ppx_expect ppx_inline_test ppx_jane
     sexplib typerep variantslib ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async_rpc_kernel;
+  meta = with lib; {
+    homepage = "https://github.com/janestreet/async_rpc_kernel";
     description = "Platform-independent core of Async RPC library";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];

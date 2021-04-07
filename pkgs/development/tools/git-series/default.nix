@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform
-, openssl, cmake, perl, pkgconfig, zlib, curl, libgit2, libssh2
+{ lib, fetchFromGitHub, fetchpatch, rustPlatform
+, openssl, cmake, perl, pkg-config, zlib, curl, libgit2, libssh2
 }:
 
 with rustPlatform;
@@ -15,10 +15,7 @@ buildRustPackage rec {
     sha256 = "07mgq5h6r1gf3jflbv2khcz32bdazw7z1s8xcsafdarnm13ps014";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "16qjbvppc01yxk8x9jk7gs8jaag5nkfl30j3lyv3dc27vv9mckjv";
+  cargoSha256 = "0ijgx8fksg2najb336dhddxlqfzc338f9ylydkpw6b39k72mm00d";
 
   cargoPatches = [
     (fetchpatch {
@@ -39,21 +36,21 @@ buildRustPackage rec {
 
   LIBGIT2_SYS_USE_PKG_CONFIG = true;
   LIBSSH2_SYS_USE_PKG_CONFIG = true;
-  nativeBuildInputs = [ cmake pkgconfig perl ];
+  nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ openssl zlib curl libgit2 libssh2 ];
 
   postBuild = ''
     install -D "$src/git-series.1" "$out/man/man1/git-series.1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to help with formatting git patches for review on mailing lists";
     longDescription = ''
           git series tracks changes to a patch series over time. git
           series also tracks a cover letter for the patch series,
           formats the series for email, and prepares pull requests.
     '';
-    homepage = https://github.com/git-series/git-series;
+    homepage = "https://github.com/git-series/git-series";
 
     license = licenses.mit;
     maintainers = with maintainers; [ edef vmandela ];

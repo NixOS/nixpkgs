@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, django, fetchpatch }:
+{ lib, buildPythonPackage, fetchFromGitHub, six, django, fetchpatch }:
 buildPythonPackage rec {
   pname = "django-appconf";
   version = "1.0.3";
@@ -26,9 +26,9 @@ buildPythonPackage rec {
     python -m django test --settings="tests.test_settings"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A helper class for handling configuration defaults of packaged apps gracefully";
-    homepage = https://django-appconf.readthedocs.org/;
+    homepage = "https://django-appconf.readthedocs.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };

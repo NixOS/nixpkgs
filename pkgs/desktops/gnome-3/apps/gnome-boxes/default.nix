@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , gettext
 , itstool
 , libvirt-glib
@@ -11,12 +11,15 @@
 , gobject-introspection
 , libxml2
 , gtk3
+, gtksourceview4
 , gtk-vnc
 , freerdp
 , libvirt
 , spice-gtk
 , python3
+, appstream-glib
 , spice-protocol
+, libhandy_0
 , libsoup
 , libosinfo
 , systemd
@@ -34,14 +37,13 @@
 , mtools
 , cdrkit
 , libcdio
-, libusb
+, libusb1
 , libarchive
 , acl
 , libgudev
 , libsecret
 , libcap_ng
 , numactl
-, xen
 , libapparmor
 , json-glib
 , webkitgtk
@@ -51,23 +53,24 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "3.34.4";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1bqrl36nngbd8jpj31ipnywg2k0rg2j3bcgnyvn8r86ysh1gnm0f";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1zjvng0izbws3506998l3dwsxjbm7wnhqipb8nmqzvi096czvajl";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
+    appstream-glib # for appstream-util
     desktop-file-utils
     gettext
     gobject-introspection
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -89,17 +92,19 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     gtk-vnc
     gtk3
+    gtksourceview4
     json-glib
     libapparmor
     libarchive
     libcap
     libcap_ng
     libgudev
+    libhandy_0
     libosinfo
     librsvg
     libsecret
     libsoup
-    libusb
+    libusb1
     libvirt
     libvirt-glib
     libxml2
@@ -111,12 +116,11 @@ stdenv.mkDerivation rec {
     tracker-miners
     vte
     webkitgtk
-    xen
     yajl
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
 
   postPatch = ''
@@ -131,11 +135,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
-    homepage = https://wiki.gnome.org/Apps/Boxes;
+    homepage = "https://wiki.gnome.org/Apps/Boxes";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

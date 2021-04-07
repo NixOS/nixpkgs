@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ lib, stdenv, fetchurl, qt4 }:
 
 stdenv.mkDerivation {
   name = "qtscriptgenerator-0.1.0";
@@ -41,8 +41,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "QtScript bindings generator";
-    homepage = https://code.qt.io/cgit/qt-labs/qtscriptgenerator.git/;
+    homepage = "https://code.qt.io/cgit/qt-labs/qtscriptgenerator.git/";
     inherit (qt4.meta) platforms;
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 }

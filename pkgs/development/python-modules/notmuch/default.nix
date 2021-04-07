@@ -1,26 +1,29 @@
-{ stdenv
+{ lib
+
 , buildPythonPackage
-, pkgs
+, notmuch
 , python
 }:
 
 buildPythonPackage {
-  name = "python-${pkgs.notmuch.name}";
+  inherit (notmuch) pname version src;
 
-  src = pkgs.notmuch.src;
+  sourceRoot = notmuch.pythonSourceRoot;
 
-  sourceRoot = pkgs.notmuch.pythonSourceRoot;
-
-  buildInputs = [ python pkgs.notmuch ];
+  buildInputs = [ python notmuch ];
 
   postPatch = ''
-    sed -i -e '/CDLL/s@"libnotmuch\.@"${pkgs.notmuch}/lib/libnotmuch.@' \
+    sed -i -e '/CDLL/s@"libnotmuch\.@"${notmuch}/lib/libnotmuch.@' \
       notmuch/globals.py
   '';
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "notmuch" ];
+
+  meta = with lib; {
     description = "A Python wrapper around notmuch";
-    homepage = https://notmuchmail.org/;
+    homepage = "https://notmuchmail.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
   };

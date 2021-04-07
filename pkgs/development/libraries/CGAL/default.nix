@@ -1,14 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, boost, gmp, mpfr }:
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, gmp
+, mpfr
+}:
 
 stdenv.mkDerivation rec {
-  version = "5.0";
-  name = "cgal-" + version;
+  pname = "cgal";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "CGAL";
     repo = "releases";
     rev = "CGAL-${version}";
-    sha256 = "15r631kddphw3wsvrxrkdbq9y7m0q8kx0kwc9zq97x6ksg3v0gs3";
+    sha256 = "1+ov1fu79MXoW0D8odInMZPFMYg69st//PoMW42oXpA=";
   };
 
   # note: optional component libCGAL_ImageIO would need zlib and opengl;
@@ -16,11 +22,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost gmp mpfr ];
   nativeBuildInputs = [ cmake ];
 
+  patches = [ ./cgal_path.patch ];
+
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Computational Geometry Algorithms Library";
-    homepage = http://cgal.org;
+    homepage = "http://cgal.org";
     license = with licenses; [ gpl3Plus lgpl3Plus];
     platforms = platforms.all;
     maintainers = [ maintainers.raskin ];

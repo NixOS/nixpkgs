@@ -1,9 +1,10 @@
-{ stdenv, cmake, fetchFromGitHub, pkgconfig, boost, exiv2, fftwFloat, gsl
+{ lib, mkDerivation, cmake, fetchFromGitHub, pkg-config
+, boost, exiv2, fftwFloat, gsl
 , ilmbase, lcms2, libraw, libtiff, openexr
 , qtbase, qtdeclarative, qttools, qtwebengine, eigen
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "luminance-hdr";
   version = "2.6.0";
 
@@ -21,10 +22,10 @@ stdenv.mkDerivation rec {
     boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
-    homepage = http://qtpfsgui.sourceforge.net/;
+  meta = with lib; {
+    homepage = "http://qtpfsgui.sourceforge.net/";
     description = "A complete open source solution for HDR photography";
     license = licenses.gpl2;
     platforms = platforms.linux;

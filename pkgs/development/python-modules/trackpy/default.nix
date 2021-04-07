@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01fdv93f6z16gypmvqnlbjmcih7dmr7a63n5w9swmp11x3if4iyq";
+    sha256 = "16mc22z3104fvygky4gy3gvifjijm42db48v2z1y0fmyf6whi9p6";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    ${stdenv.lib.optionalString (stdenv.isDarwin) ''
+    ${lib.optionalString (stdenv.isDarwin) ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
@@ -49,10 +49,11 @@ buildPythonPackage rec {
                    --ignore trackpy/tests/test_legacy_linking.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Particle-tracking toolkit";
-    homepage = https://github.com/soft-matter/trackpy;
+    homepage = "https://github.com/soft-matter/trackpy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = true; # not compatible with latest pandas
   };
 }

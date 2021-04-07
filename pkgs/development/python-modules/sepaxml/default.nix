@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , lxml
 , pytest
 , text-unidecode
@@ -28,8 +28,8 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/raphaelm/python-sepaxml/;
+  meta = with lib; {
+    homepage = "https://github.com/raphaelm/python-sepaxml/";
     description = "SEPA Direct Debit XML generation in python";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];

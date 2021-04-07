@@ -1,5 +1,5 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , perl
 , libxml2
 , postgresql
@@ -7,29 +7,30 @@
 , proj
 , gdal
 , json_c
-, pkgconfig
+, pkg-config
 , file
 , protobufc
 , libiconv
+, nixosTests
 }:
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.0.0";
+  version = "3.1.1";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "15557fbk0xkngihwhqsbdyz2ng49blisf5zydw81j0gabk6x4vy0";
+    sha256 = "0z9a39243fv37mansbbjq5mmxpnhr7xzn8pv92fr7dkdb3psz5hf";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
-                ++ stdenv.lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkgconfig ];
+                ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [ perl pkg-config ];
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
-  NIX_LDFLAGS = "-L${stdenv.lib.getLib json_c}/lib";
+  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
@@ -65,9 +66,11 @@ stdenv.mkDerivation rec {
     mv doc/* $doc/share/doc/postgis/
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests.postgis = nixosTests.postgis;
+
+  meta = with lib; {
     description = "Geographic Objects for PostgreSQL";
-    homepage = https://postgis.net/;
+    homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];

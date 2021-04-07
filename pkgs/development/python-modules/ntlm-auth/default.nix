@@ -1,35 +1,41 @@
 { lib
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , mock
-, pytest
-, unittest2
+, pytestCheckHook
+, requests
 , six
 }:
 
 buildPythonPackage rec {
   pname = "ntlm-auth";
-  version = "1.0.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "ntlm-auth";
     rev = "v${version}";
-    sha256 = "09f2g4ivfi9lh1kr30hlg0q4n2imnvmd79w83gza11q9nmhhiwpz";
+    sha256 = "00dpf5bfsy07frsjihv1k10zmwcyq4bvkilbxha7h6nlwpcm2409";
   };
 
-  checkInputs = [ mock pytest unittest2 ];
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    cryptography
+    six
+  ];
 
-  # Functional tests require networking
-  checkPhase = ''
-    py.test --ignore=tests/functional/test_iis.py
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+    requests
+  ];
+
+  pythonImportsCheck = [ "ntlm_auth" ];
 
   meta = with lib; {
     description = "Calculates NTLM Authentication codes";
-    homepage = https://github.com/jborean93/ntlm-auth;
-    license = licenses.lgpl3;
+    homepage = "https://github.com/jborean93/ntlm-auth";
+    license = licenses.mit;
     maintainers = with maintainers; [ elasticdog ];
     platforms = platforms.all;
   };

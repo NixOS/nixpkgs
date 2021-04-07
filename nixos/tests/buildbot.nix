@@ -41,7 +41,7 @@ import ./make-test-python.nix {
       systemd.services.git-daemon = {
         description   = "Git daemon for the test";
         wantedBy      = [ "multi-user.target" ];
-        after         = [ "network.target" ];
+        after         = [ "network.target" "sshd.service" ];
 
         serviceConfig.Restart = "always";
         path = with pkgs; [ coreutils git openssh ];
@@ -109,5 +109,5 @@ import ./make-test-python.nix {
         bbworker.fail("nc -z bbmaster 8011")
   '';
 
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ nand0p ];
+  meta.maintainers = with pkgs.lib.maintainers; [ nand0p ];
 } {}

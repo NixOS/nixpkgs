@@ -4,7 +4,7 @@
 , nose
 , msgpack
 , greenlet
-, trollius
+, trollius ? null
 , pythonOlder
 , isPyPy
 , pytestrunner
@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n2cx22lrmbq7xk7356lyn6k77ryqvkxplw9k0fglk35ckb1isam";
+    sha256 = "3a795378bde5e8092fbeb3a1a99be9c613d2685542f1db0e5c6fd467eed56dff";
   };
 
   nativeBuildInputs = [

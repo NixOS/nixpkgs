@@ -1,13 +1,11 @@
-{ stdenv, lib, buildPythonPackage, python, fetchFromGitHub, isPy3k
+{ lib, buildPythonPackage, python, fetchFromGitHub, isPy3k
 , notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
-, service-identity
-, gnupg ? null, sphinx, awk ? null, procps ? null, future ? null
-, withManpage ? false }:
-
+, service-identity, gnupg, sphinx, gawk, procps, future , withManpage ? false
+}:
 
 buildPythonPackage rec {
   pname = "alot";
-  version = "0.9";
+  version = "0.9.1";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
 
   disabled = !isPy3k;
@@ -16,8 +14,12 @@ buildPythonPackage rec {
     owner = "pazz";
     repo = "alot";
     rev = version;
-    sha256 = "sha256-WUwOJcq8JE7YO8sFeZwYikCRhpufO0pL6MKu54ZYsHI=";
+    sha256 = "0s94m17yph1gq9f2svipb3bbwbw1s4j3zf2xkg5h91006v8286r6";
   };
+
+  postPatch = ''
+    substituteInPlace alot/settings/manager.py --replace /usr/share "$out/share"
+  '';
 
   nativeBuildInputs = lib.optional withManpage sphinx;
 
@@ -37,7 +39,7 @@ buildPythonPackage rec {
   doCheck = false;
   postBuild = lib.optionalString withManpage "make -C docs man";
 
-  checkInputs =  [ awk future mock gnupg procps ];
+  checkInputs =  [ gawk future mock gnupg procps ];
 
   postInstall = let
     completionPython = python.withPackages (ps: [ ps.configobj ]);
@@ -56,11 +58,11 @@ buildPythonPackage rec {
     sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pazz/alot;
+  meta = with lib; {
+    homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ edibopp ];
   };
 }

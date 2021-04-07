@@ -1,59 +1,85 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem, fetchFromGitHub
-, qtbase, qmake, qtmultimedia, qttools
-, qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols, qtquickcontrols2
-, qtwebchannel, qtwebengine, qtx11extras, qtxmlpatterns
-, monero, unbound, readline, boost, libunwind
-, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
-, hidapi, randomx
+{ lib, stdenv, wrapQtAppsHook, makeDesktopItem
+, fetchFromGitHub
+, cmake, qttools, pkg-config
+, qtbase, qtdeclarative, qtgraphicaleffects
+, qtmultimedia, qtxmlpatterns
+, qtquickcontrols, qtquickcontrols2
+, qtmacextras
+, monero, miniupnpc, unbound, readline
+, boost, libunwind, libsodium, pcsclite
+, randomx, zeromq, libgcrypt, libgpgerror
+, hidapi, rapidjson, quirc
+, trezorSupport ? true
+,   libusb1
+,   protobuf
+,   python3
 }:
 
-with stdenv.lib;
+with lib;
+
+let
+  arch = if stdenv.isx86_64  then "x86-64"
+    else if stdenv.isi686    then "i686"
+    else if stdenv.isAarch64 then "armv8-a"
+    else throw "unsupported architecture";
+in
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.15.0.1";
+  version = "0.17.1.9";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "08j8kkncdn57xql0bhmlzjpjkdfhqbpda1p07r797q8qi0nl4w8n";
+    sha256 = "0143mmxk0jfb5pmjlx6v0knvf8v49kmkpjxlp6rw8lwnlf71xadn";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
-
-  buildInputs = [
-    qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation
-    qtquickcontrols qtquickcontrols2
-    qtwebchannel qtwebengine qtx11extras
-    qtxmlpatterns monero unbound readline
-    boost libunwind libsodium pcsclite zeromq
-    cppzmq hidapi randomx
+  nativeBuildInputs = [
+    cmake pkg-config wrapQtAppsHook
+    (getDev qttools)
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
+  buildInputs = [
+    qtbase qtdeclarative qtgraphicaleffects
+    qtmultimedia qtquickcontrols qtquickcontrols2
+    qtxmlpatterns
+    monero miniupnpc unbound readline
+    randomx libgcrypt libgpgerror
+    boost libunwind libsodium pcsclite
+    zeromq hidapi rapidjson quirc
+  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
+    ++ optionals stdenv.isDarwin [ qtmacextras ];
+
+  postUnpack = ''
+    # copy monero sources here
+    # (needs to be writable)
+    cp -r ${monero.source}/* source/monero
+    chmod -R +w source/monero
+  '';
 
   patches = [ ./move-log-file.patch ];
 
   postPatch = ''
-    echo '
-      var GUI_VERSION = "${version}";
-      var GUI_MONERO_VERSION = "${getVersion monero}";
-    ' > version.js
-    substituteInPlace monero-wallet-gui.pro \
-      --replace '$$[QT_INSTALL_BINS]/lrelease' '${getDev qttools}/bin/lrelease'
+    # set monero-gui version
+    substituteInPlace src/version.js.in \
+       --replace '@VERSION_TAG_GUI@' '${version}'
+
+    # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \
       --replace 'QApplication::applicationDirPath() + "' '"${monero}/bin'
+
+    # only build external deps, *not* the full monero
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory(monero)' \
+                'add_subdirectory(monero EXCLUDE_FROM_ALL)'
+
+    # use nixpkgs quirc
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory(external)' ""
   '';
 
-  makeFlags = [ "INSTALL_ROOT=$(out)" ];
-
-  preBuild = ''
-    sed -i s#/opt/monero-wallet-gui##g Makefile
-    make -C src/zxcvbn-c
-  '';
+  cmakeFlags = [ "-DARCH=${arch}" ];
 
   desktopItem = makeDesktopItem {
     name = "monero-wallet-gui";
@@ -61,29 +87,28 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Application;Network;Utility;";
+    categories  = "Network;Utility;";
   };
 
   postInstall = ''
     # install desktop entry
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    install -Dm644 -t $out/share/applications \
+      ${desktopItem}/share/applications/*
 
     # install icons
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      cp $src/images/appicons/$size.png \
-         $out/share/icons/hicolor/$size/apps/monero.png
+      install -Dm644 \
+        -t $out/share/icons/hicolor/$size/apps/monero.png \
+        $src/images/appicons/$size.png
     done;
   '';
 
   meta = {
     description  = "Private, secure, untraceable currency";
-    homepage     = https://getmonero.org/;
+    homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
-    badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

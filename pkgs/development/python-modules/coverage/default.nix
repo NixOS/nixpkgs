@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "4.5.4";
+  version = "5.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e07d9f1a23e9e93ab5c62902833bf3e4b1f65502927379148b6622686223125c";
+    sha256 = "ebe78fe9a0e874362175b02371bdfbee64d8edc42a044253ddf4ee7d3c15212c";
   };
 
   # No tests in archive
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Code coverage measurement for python";
-    homepage = http://nedbatchelder.com/code/coverage/;
+    homepage = "http://nedbatchelder.com/code/coverage/";
     license = lib.licenses.bsd3;
   };
 }

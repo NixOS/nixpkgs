@@ -37,7 +37,14 @@ let
         default = null;
         example = "/mnt-root/root/.swapkey";
         type = types.nullOr types.str;
-        description = "File system location of keyfile. This unlocks the drive after the root has been mounted to <literal>/mnt-root</literal>.";
+        description = ''
+          Path to a keyfile used to unlock the backing encrypted
+          device. At the time this keyfile is accessed, the
+          <literal>neededForBoot</literal> filesystems (see
+          <literal>fileSystems.&lt;name?&gt;.neededForBoot</literal>)
+          will have been mounted under <literal>/mnt-root</literal>,
+          so the keyfile path should usually start with "/mnt-root/".
+        '';
       };
     };
   };
@@ -47,7 +54,7 @@ in
 
   options = {
     fileSystems = mkOption {
-      type = with lib.types; loaOf (submodule encryptedFSOptions);
+      type = with lib.types; attrsOf (submodule encryptedFSOptions);
     };
     swapDevices = mkOption {
       type = with lib.types; listOf (submodule encryptedFSOptions);
@@ -65,12 +72,16 @@ in
     boot.initrd = {
       luks = {
         devices =
-          builtins.listToAttrs (map (dev: { name = dev.encrypted.label; value = { device = dev.encrypted.blkDev; }; }) keylessEncDevs);
+          builtins.listToAttrs (map (dev: {
+            name = dev.encrypted.label;
+            value = { device = dev.encrypted.blkDev; };
+          }) keylessEncDevs);
         forceLuksSupportInInitrd = true;
       };
       postMountCommands =
-        concatMapStrings (dev: "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n") keyedEncDevs;
+        concatMapStrings (dev:
+          "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
+        ) keyedEncDevs;
     };
   };
 }
-

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , webob
@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ webob six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Taking Google App Engine's webapp to the next level";
-    homepage = http://webapp-improved.appspot.com;
+    homepage = "http://webapp-improved.appspot.com";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,47 +1,59 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pcre
+{ lib, stdenv
+, fetchpatch
+, fetchFromGitHub
+, autoreconfHook
+, pcre
+, pkg-config
+, protobufc
 , withCrypto ? true, openssl
 , enableMagic ? true, file
 , enableCuckoo ? true, jansson
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.11.0";
+  version = "4.0.5";
   pname = "yara";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v${version}";
-    sha256 = "0mx3xm2a70fx8vlynkavq8gfd9w5yjcix5rx85444i2s1h6kcd0j";
+    sha256 = "1gkdll2ygdlqy1f27a5b84gw2bq75ss7acsx06yhiss90qwdaalq";
   };
 
-  # See: https://github.com/VirusTotal/yara/issues/1036
-  # TODO: This patch should not be necessary in the next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/VirusTotal/yara/commit/04df811fa61fa54390b274bfcf56d7403c184404.patch";
-      sha256 = "0hsbc2k7nmk2kskll971draz0an4rmcs5v0iql47mz596vqvkzmb";
-    })
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ autoconf automake libtool pcre ]
-    ++ stdenv.lib.optionals withCrypto [ openssl ]
-    ++ stdenv.lib.optionals enableMagic [ file ]
-    ++ stdenv.lib.optionals enableCuckoo [ jansson ]
+  buildInputs = [ pcre protobufc ]
+    ++ lib.optionals withCrypto [ openssl ]
+    ++ lib.optionals enableMagic [ file ]
+    ++ lib.optionals enableCuckoo [ jansson ]
   ;
 
   preConfigure = "./bootstrap.sh";
 
-  configureFlags = [
-    (stdenv.lib.withFeature withCrypto "crypto")
-    (stdenv.lib.enableFeature enableMagic "magic")
-    (stdenv.lib.enableFeature enableCuckoo "cuckoo")
+  # If static builds are disabled, `make all-am` will fail to find libyara.a and
+  # cause a build failure. It appears that somewhere between yara 4.0.1 and
+  # 4.0.5, linking the yara binaries dynamically against libyara.so was broken.
+  #
+  # This was already fixed in yara master. Backport the patch to yara 4.0.5.
+  patches = [
+    (fetchpatch {
+      name = "fix-build-with-no-static.patch";
+      url = "https://github.com/VirusTotal/yara/commit/52e6866023b9aca26571c78fb8759bc3a51ba6dc.diff";
+      sha256 = "074cf99j0rqiyacp60j1hkvjqxia7qwd11xjqgcr8jmfwihb38nr";
+    })
   ];
 
-  meta = with stdenv.lib; {
+  configureFlags = [
+    (lib.withFeature withCrypto "crypto")
+    (lib.enableFeature enableMagic "magic")
+    (lib.enableFeature enableCuckoo "cuckoo")
+  ];
+
+  meta = with lib; {
     description = "The pattern matching swiss knife for malware researchers";
-    homepage    = http://Virustotal.github.io/yara/;
-    license     = licenses.asl20;
-    platforms   = stdenv.lib.platforms.all;
+    homepage = "http://Virustotal.github.io/yara/";
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

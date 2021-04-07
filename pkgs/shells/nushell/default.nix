@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , openssl
+, zlib
 , pkg-config
 , python3
 , xorg
@@ -10,42 +11,35 @@
 , AppKit
 , Security
 , withStableFeatures ? true
-, withTestBinaries ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.10.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "08zqvk8qkilynfivx1jnr2yqrav64p9cy9i30jjgcqrh2gsrb9dd";
+    sha256 = "sha256-RZz8hmcLOJRz0HpPXc3121B1UcbtDgCFv8Zdv29E+XQ=";
   };
 
-  cargoSha256 = "1gpg0jpd5pmmny9gzzbkph1h2kqmjlapdsw04jzx852yg89lls5v";
+  cargoSha256 = "sha256-V6Qdg8xSm2/6BbSEOH5mH92Gjx+xy0J2CZ9FQxmhI88=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ]
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
 
-  cargoTestFlags = lib.optional withTestBinaries "--features test-bins";
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo cargo test ${lib.strings.concatStringsSep " " cargoTestFlags} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test ${lib.strings.concatStringsSep " " cargoTestFlags} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    echo "Running cargo test"
+    HOME=$TMPDIR cargo test
     runHook postCheck
   '';
 
@@ -53,8 +47,8 @@ rustPlatform.buildRustPackage rec {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 marsam ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 
   passthru = {

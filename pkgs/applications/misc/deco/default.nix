@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scsh, feh, xorg }:
+{ lib, stdenv, fetchFromGitHub, scsh, feh, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "deco";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/deco --replace "xdpyinfo" "${xorg.xdpyinfo}/bin/xdpyinfo"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/deco;
+  meta = with lib; {
+    homepage = "https://github.com/ebzzry/deco";
     description = "A simple root image setter";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

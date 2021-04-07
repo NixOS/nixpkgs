@@ -1,4 +1,15 @@
-{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin, enableStatic ? false }:
+{ lib
+, stdenv
+, callPackage
+, stdenvNoCC
+, fetchurl
+, rpmextract
+, undmg
+, darwin
+, validatePkgConfig
+, enableStatic ? stdenv.hostPlatform.isStatic
+}:
+
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
@@ -7,17 +18,23 @@ let
   # Release notes and download URLs are here:
   # https://registrationcenter.intel.com/en/products/
   version = "${year}.${spot}.${rel}";
-  year = "2019";
 
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
-  spot = if stdenvNoCC.isDarwin then "3" else "5";
-  rel = if stdenvNoCC.isDarwin then "199" else "281";
+  year = if stdenvNoCC.isDarwin then "2019" else "2020";
+  spot = if stdenvNoCC.isDarwin then "3" else "4";
+  rel = if stdenvNoCC.isDarwin then "199" else "304";
+
+  # Replace `openmpSpot` by `spot` after 2020.
+  openmpSpot = if stdenvNoCC.isDarwin then spot else "3";
 
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
   # Intel openmp uses its own versioning, but shares the spot release patch.
-  openmp-ver = "19.0.${spot}-${rel}-19.0.${spot}-${rel}";
+  openmp = if stdenvNoCC.isDarwin then "19.0" else "19.1";
+  openmp-ver = "${openmp}.${openmpSpot}-${rel}-${openmp}.${openmpSpot}-${rel}";
+
+  shlibExt = stdenvNoCC.hostPlatform.extensions.sharedLibrary;
 
 in stdenvNoCC.mkDerivation {
   pname = "mkl";
@@ -31,15 +48,15 @@ in stdenvNoCC.mkDerivation {
       })
     else
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15816/l_mkl_${version}.tgz";
-        sha256 = "0zkk4rrq7g44acxaxhpd2053r66w169mww6917an0lxhd52fm5cr";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16917/l_mkl_${version}.tgz";
+        hash = "sha256-IxTUZTaXTb0I8qTk+emhVdx+eeJ5jHTn3fqtAKWRfqU=";
       });
 
-  nativeBuildInputs = if stdenvNoCC.isDarwin
+  nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
     then
       [ undmg darwin.cctools ]
     else
-      [ rpmextract ];
+      [ rpmextract ]);
 
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
@@ -74,7 +91,9 @@ in stdenvNoCC.mkDerivation {
       bn=$(basename $f)
       substituteInPlace $f \
         --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
-        --replace "lib/intel64_lin" "lib"
+        --replace $\{MKLROOT} "$out" \
+        --replace "lib/intel64_lin" "lib" \
+        --replace "lib/intel64" "lib"
     done
 
     for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
@@ -110,12 +129,24 @@ in stdenvNoCC.mkDerivation {
       cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/*.so* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/*.so* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/*dynamic*.pc $out/lib/pkgconfig
-    '');
+    '') + ''
+
+    # Setup symlinks for blas / lapack
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
+  '' + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
+  '';
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool
   # explicitly and ignore the error.
-  postFixup = stdenvNoCC.lib.optionalString stdenvNoCC.isDarwin ''
+  postFixup = lib.optionalString stdenvNoCC.isDarwin ''
     for f in $out/lib/*.dylib; do
       install_name_tool -id $out/lib/$(basename $f) $f || true
     done
@@ -128,7 +159,9 @@ in stdenvNoCC.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with stdenvNoCC.lib; {
+  passthru.tests.pkg-config = callPackage ./test { };
+
+  meta = with lib; {
     description = "Intel Math Kernel Library";
     longDescription = ''
       Intel Math Kernel Library (Intel MKL) optimizes code with minimal effort
@@ -136,7 +169,7 @@ in stdenvNoCC.mkDerivation {
       choice of compilers, languages, operating systems, and linking and
       threading models.
     '';
-    homepage = https://software.intel.com/en-us/mkl;
+    homepage = "https://software.intel.com/en-us/mkl";
     license = licenses.issl;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ bhipple ];

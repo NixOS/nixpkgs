@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, substituteAll, python, nose, mercurial }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, substituteAll, python, nose, mercurial }:
 
 buildPythonPackage rec {
   pname = "python-hglib";
@@ -30,11 +30,10 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   checkPhase = ''
-    ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg" -v \
-      --exclude=test_merge_prompt_cb # https://bz.mercurial-scm.org/show_bug.cgi?id=6265
+    ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg" -v
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mercurial Python library";
     homepage = "http://selenic.com/repo/python-hglib";
     license = licenses.mit;

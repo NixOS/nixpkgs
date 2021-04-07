@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
+{ lib, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
 
 buildPythonPackage {
   pname = "libsavitar-lulzbot";
@@ -7,7 +7,7 @@ buildPythonPackage {
   format = "other";
 
   src = fetchgit {
-    url = https://code.alephobjects.com/source/savitar.git;
+    url = "https://code.alephobjects.com/source/savitar.git";
     rev = "ee8ada42c55f54727ce4d275c294ba426d3d8234";
     sha256 = "1wm5ii3cmni8dk3c65kw4wglpypkdsfpgd480d3hc1r5bqpq0d6j";
   };
@@ -23,9 +23,9 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.4.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ implementation of 3mf loading with SIP python bindings";
-    homepage = https://github.com/Ultimaker/libSavitar;
+    homepage = "https://github.com/Ultimaker/libSavitar";
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ chaduffy ];

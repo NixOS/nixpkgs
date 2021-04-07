@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d49c9d4dd1913beec2a997f831543c8cbd53e535b1a739e921642fe416235f01";
+    sha256 = "248081a39bcb56784deb018977e428605c1c758f10897a339fce1dd728ff007d";
   };
 
   patches = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/erocarrera/pydot;
+    homepage = "https://github.com/erocarrera/pydot";
     description = "Allows to easily create both directed and non directed graphs from Python";
     license = lib.licenses.mit;
   };

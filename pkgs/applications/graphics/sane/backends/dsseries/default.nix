@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpmextract }:
+{ lib, stdenv, fetchurl, rpmextract }:
 
 stdenv.mkDerivation rec {
   pname = "libsane-dsseries";
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother DSSeries SANE backend driver";
-    homepage = http://www.brother.com;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ callahad ];
+    homepage = "http://www.brother.com";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ callahad ];
   };
 }

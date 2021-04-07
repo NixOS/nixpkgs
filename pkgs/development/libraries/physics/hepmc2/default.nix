@@ -1,29 +1,26 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "hepmc";
-  version = "2.06.10";
+  version = "2.06.11";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC-${version}.tar.gz";
-    sha256 = "190i9jlnwz1xpc495y0xc70s4zdqb9s2zdq1zkjy2ivl7ygdvpjs";
+    sha256 = "1pp89bs05nv60wjk1690ndwh4dsd5mk20bzsd4a2lklysdifvb6f";
   };
 
-  patches = [ ./in_source.patch ];
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-Dmomentum:STRING=GEV"
     "-Dlength:STRING=MM"
   ];
 
-  enableParallelBuilding = true;
-
-  meta = {
+  meta = with lib; {
     description = "The HepMC package is an object oriented event record written in C++ for High Energy Physics Monte Carlo Generators";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = http://hepmc.web.cern.ch/hepmc/;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    license     = licenses.lgpl21;
+    homepage    = "http://hepmc.web.cern.ch/hepmc/";
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -1,22 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
 
 buildPythonPackage rec {
   pname = "mailmanclient";
-  version = "3.3.0";
+  version = "3.3.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8736cbe152ae1bd58b46ccfbcafb6a1e301513530772e7fda89f91d1e5c1ae9";
+    sha256 = "4082ac0c66d7f7bee15751fe2564098b971177c0013e66d0c8ceee1ebdcb5592";
   };
 
   propagatedBuildInputs = [ six httplib2 requests ];
 
-  # no tests with Pypi tar ball, checkPhase removes setup.py which invalidates import check
-  doCheck = false;
-  pythonImportsCheck = [ "mailmanclient" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "REST client for driving Mailman 3";
     license = licenses.lgpl3;

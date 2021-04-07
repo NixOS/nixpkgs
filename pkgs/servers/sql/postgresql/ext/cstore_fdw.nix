@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql, protobufc }:
+{ lib, stdenv, fetchFromGitHub, postgresql, protobufc }:
 
 stdenv.mkDerivation rec {
   pname = "cstore_fdw";
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Columnar storage for PostgreSQL";
-    homepage    = https://www.citusdata.com/;
+    homepage    = "https://www.citusdata.com/";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;

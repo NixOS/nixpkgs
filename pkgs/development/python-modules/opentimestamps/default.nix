@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, isPy3k
 , bitcoinlib, GitPython, pysha3, git }:
 
 buildPythonPackage rec {
@@ -15,6 +15,14 @@ buildPythonPackage rec {
     sha256 = "0c45ij8absfgwizq6dfgg81siq3y8605sgg184vazp292w8nqmqr";
   };
 
+  patches = [
+    # build against bitcoinlib-0.11
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/opentimestamps/python-opentimestamps/pull/43.patch";
+      sha256 = "0bxzk4pzpqk7zrk2x7vn2bj2n3pc5whf8ijbd225s6674q450zbg";
+    })
+  ];
+
   # Remove a failing test which expects the test source file to reside in the
   # project's Git repo
   postPatch = ''
@@ -26,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Create and verify OpenTimestamps proofs";
-    homepage = https://github.com/opentimestamps/python-opentimestamps;
+    homepage = "https://github.com/opentimestamps/python-opentimestamps";
     license = lib.licenses.lgpl3;
   };
 }

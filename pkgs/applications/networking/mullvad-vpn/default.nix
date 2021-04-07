@@ -1,7 +1,7 @@
-{ stdenv, makeWrapper, fetchurl, dpkg
+{ stdenv, lib, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
-, xorg, autoPatchelfHook, systemd, libnotify
+, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 }:
 
 let deps = [
@@ -18,6 +18,7 @@ let deps = [
     gnome2.GConf
     pango
     gtk3
+    libappindicator
     libnotify
     xorg.libX11
     xorg.libXScrnSaver
@@ -40,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2020.2";
+  version = "2021.2";
 
   src = fetchurl {
-    url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "4f5970714684a86fba44b742d77f9bbe1147a111330e487d160d9844f34ae3d5";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    sha256 = "sha256-nNZK11MckiQ+z8NDgDc7aJ6yrXWI1hPOvMZkrGwDDgU=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ systemd.lib libnotify ];
+  runtimeDependencies = [ (lib.getLib systemd) libnotify libappindicator ];
 
   installPhase = ''
     runHook preInstall
@@ -74,17 +75,18 @@ stdenv.mkDerivation rec {
 
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
+    ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
 
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers ;[ filalex77 xfix ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ];
   };
 
 }

@@ -1,28 +1,40 @@
-{ stdenv, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k, isPy38 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, glibcLocales
+, isPy3k
+, mock
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "parameterized";
-  version = "0.7.1";
+  version = "0.8.1";
+  disable = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6a94dbea30c6abde99fd4c2f2042c1bf7f980e48908bf92ead62394f93cf57ed";
+    sha256 = "sha256-Qbv/N9YYZDD3f5ANd35btqJJKKHEb7HeaS+LUriDO1w=";
   };
 
-  # Tests require some python3-isms but code works without.
-  # python38 is not fully supported yet
-  doCheck = isPy3k && (!isPy38);
-
-  checkInputs = [ nose mock glibcLocales ];
+  checkInputs = [
+    nose
+    mock
+    glibcLocales
+  ];
 
   checkPhase = ''
+    runHook preCheck
     LC_ALL="en_US.UTF-8" nosetests -v
+    runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "parameterized" ];
+
+  meta = with lib; {
     description = "Parameterized testing with any Python test framework";
-    homepage = https://pypi.python.org/pypi/parameterized;
-    license = licenses.bsd3;
+    homepage = "https://github.com/wolever/parameterized";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ ma27 ];
   };
 }

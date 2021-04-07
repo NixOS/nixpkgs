@@ -1,12 +1,12 @@
-{stdenv, fetchurl, libdvdcss}:
+{lib, stdenv, fetchurl, libdvdcss}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdread";
-  version = "6.0.2";
+  version = "6.1.1";
 
   src = fetchurl {
     url = "http://get.videolan.org/libdvdread/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1c7yqqn67m3y3n7nfrgrnzz034zjaw5caijbwbfrq89v46ph257r";
+    sha256 = "15hpwbw3nm84y432l0j61w0zmqxplsyymfc52dry6nvwl44p6d9y";
   };
 
   buildInputs = [libdvdcss];
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://dvdnav.mplayerhq.hu/;
+    homepage = "http://dvdnav.mplayerhq.hu/";
     description = "A library for reading DVDs";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.wmertens ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.wmertens ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

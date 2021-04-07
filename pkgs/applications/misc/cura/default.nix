@@ -1,26 +1,28 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase,
+ qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
 
 mkDerivation rec {
   pname = "cura";
-  version = "4.4.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
-    rev = "v${version}";
-    sha256 = "131n36qhdfky584wr3zv73ckjjprwaqb5fih8yln2syf8b7ziwlz";
+    rev = version;
+    sha256 = "060fqzspipm93ks0inrj7yrj5wmvkdfv8xaxrv22590yb9f95s9m";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
     rev = version;
-    sha256 = "141cv1f2pv2pznhgj32zg8bw3kmw9002g6rx16jq7lhclr0x3xls";
+    sha256 = "0hi9w1fsnazlr0vvxdr3alsdb8m1vjjfp5zhmlz4kyyxhsy3bc33";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf
+    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
+    sentry-sdk trimesh
   ] ++ plugins;
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
@@ -55,7 +57,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
-    homepage = https://github.com/Ultimaker/Cura;
+    homepage = "https://github.com/Ultimaker/Cura";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar gebner ];

@@ -63,7 +63,7 @@ Activate the system: look for a directory in nix/store similar to:
 Having found it, activate that nixos system *twice*:
   chroot . /nix/store/SOMETHING-nixos-SOMETHING/activate
   chroot . /nix/store/SOMETHING-nixos-SOMETHING/activate
-  
+
 This runs a 'hostname' command. Restore your old hostname with:
   hostname OLDHOSTNAME
 

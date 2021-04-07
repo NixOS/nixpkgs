@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, xtmpl, ulex }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, xtmpl, ulex }:
 
 stdenv.mkDerivation rec {
   pname = "higlo";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   patches = ./install.patch;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OCaml library for syntax highlighting";
-    homepage = https://zoggy.github.io/higlo/;
+    homepage = "https://zoggy.github.io/higlo/";
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

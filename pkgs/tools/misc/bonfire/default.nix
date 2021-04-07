@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 with python3Packages;
 
@@ -38,8 +38,8 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ arrow click keyring parsedatetime requests six termcolor ];
 
-  meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/bonfire;
+  meta = with lib; {
+    homepage = "https://pypi.python.org/pypi/bonfire";
     description = "CLI Graylog Client with Follow Mode";
     license = licenses.bsd3;
     maintainers = [ maintainers.womfoo ];

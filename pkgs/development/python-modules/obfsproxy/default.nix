@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , pyptlib
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pluggable transport proxy";
-    homepage = https://www.torproject.org/projects/obfsproxy;
-    repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
+    homepage = "https://www.torproject.org/projects/obfsproxy";
+    repositories.git = "https://git.torproject.org/pluggable-transports/obfsproxy.git";
     maintainers = with maintainers; [ phreedom thoughtpolice ];
   };
 

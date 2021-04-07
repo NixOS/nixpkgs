@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "rush";
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
          sftp-server or scp, that lack this ability.
       '';
 
-    homepage = https://www.gnu.org/software/rush/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/rush/";
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.bjg ];
+    platforms = lib.platforms.all;
   };
 
   passthru = {

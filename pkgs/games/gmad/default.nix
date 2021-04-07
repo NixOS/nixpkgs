@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, premake4, bootil }:
+{ lib, stdenv, fetchFromGitHub, premake4, bootil }:
 
 stdenv.mkDerivation rec {
   name = "gmad-unstable-2015-04-16";
 
   meta = {
     description = "Garry's Mod Addon Creator and Extractor";
-    homepage = https://github.com/garrynewman/gmad;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.abigailbuccaneer ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/garrynewman/gmad";
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.abigailbuccaneer ];
+    platforms = lib.platforms.all;
   };
 
   src = fetchFromGitHub {

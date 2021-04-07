@@ -23,7 +23,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ pytest pytestrunner glibcLocales ];
+  checkInputs = [ numpy pytest pytestrunner glibcLocales ];
   propagatedBuildInputs = [ cairo cffi ] ++ lib.optional withXcffib xcffib;
 
   checkPhase = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = https://github.com/SimonSapin/cairocffi;
+    homepage = "https://github.com/SimonSapin/cairocffi";
     license = licenses.bsd3;
     maintainers = with maintainers; [];
     description = "cffi-based cairo bindings for Python";

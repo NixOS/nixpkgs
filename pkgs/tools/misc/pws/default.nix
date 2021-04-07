@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "pws-${(import ./gemset.nix).pws.version}";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   phases = ["installPhase"];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line password safe";
-    homepage    = https://github.com/janlelis/pws;
+    homepage    = "https://github.com/janlelis/pws";
     license     = licenses.mit;
     maintainers = with maintainers; [ swistak35 nicknovitski ];
     platforms   = platforms.unix;

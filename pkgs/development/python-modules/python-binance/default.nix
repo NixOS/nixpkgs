@@ -3,12 +3,12 @@
 , autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted }:
 
 buildPythonPackage rec {
-  version = "0.7.4";
+  version = "0.7.9";
   pname = "python-binance";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d0b81a9d395fd071581d275af09a31f0c5ae3ecb25a3f47faaaf1eff779de3f";
+    sha256 = "476459d91f6cfe0a37ccac38911643ea6cca632499ad8682e0957a075f73d239";
   };
 
   doCheck = false;  # Tries to test multiple interpreters with tox
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Binance Exchange API python implementation for automated trading";
-    homepage = https://github.com/sammchardy/python-binance;
+    homepage = "https://github.com/sammchardy/python-binance";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bhipple ];
   };

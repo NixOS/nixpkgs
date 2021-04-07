@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml }:
+{ lib, stdenv, fetchzip, ocaml }:
 
 let version = "0.1.10"; in
 
@@ -24,10 +24,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/ocaml-obuild/obuild;
+    homepage = "https://github.com/ocaml-obuild/obuild";
     platforms = ocaml.meta.platforms or [];
     description = "Simple package build system for OCaml";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ volth ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ volth ];
   };
 }

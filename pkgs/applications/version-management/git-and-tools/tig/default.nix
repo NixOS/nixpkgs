@@ -1,37 +1,29 @@
-{ stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, fetchpatch
-, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkgconfig
+{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
+, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "1lrzgnq8ywq28qd4xyd0y5qfv3j25ra81lcbdqqfywasl8lwz3lf";
+    sha256 = "sha256-BXs7aKUYiU5L2OjhhmJ+dkHvNcrnw5qREwOTB6npLnw=";
   };
 
-  nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkgconfig ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
 
   autoreconfFlags = "-I tools -v";
 
   buildInputs = [ ncurses readline git ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
-      rm -f contrib/config.make-*
+      rm contrib/config.make-*
   '';
-
-  patches = [
-    # Fix memory leak. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/jonas/tig/commit/6202c6032f17438a2facb23f02e330b9d0566d9d.patch";
-      sha256 = "15zn8hw9y7bqa1np4mj0qnm2z86nif7qwh7wc4vgy2rwxdil85bd";
-    })
-  ];
 
   enableParallelBuilding = true;
 
@@ -39,22 +31,26 @@ stdenv.mkDerivation rec {
     make install
     make install-doc
 
-    substituteInPlace contrib/tig-completion.zsh \
-      --replace 'e=$(dirname ''${funcsourcetrace[1]%:*})/tig-completion.bash' "e=$out/etc/bash_completion.d/tig-completion.bash"
+    # fixes tig-completion __git-complete dependency
+    sed -i '1s;^;source ${git}/share/bash-completion/completions/git\n;' contrib/tig-completion.bash
 
-    install -D contrib/tig-completion.bash $out/etc/bash_completion.d/tig-completion.bash
-    install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
+    install -D contrib/tig-completion.bash $out/share/bash-completion/completions/tig
     cp contrib/vim.tigrc $out/etc/
+
+    # Note: Until https://github.com/jonas/tig/issues/940 is resolved it is best
+    # not to install the ZSH completion so that the fallback implemenation from
+    # ZSH can be used (Completion/Unix/Command/_git: "_tig () { _git-log }"):
+    #install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
 
     wrapProgram $out/bin/tig \
       --prefix PATH ':' "${git}/bin"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://jonas.github.io/tig/;
+  meta = with lib; {
+    homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 ];
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

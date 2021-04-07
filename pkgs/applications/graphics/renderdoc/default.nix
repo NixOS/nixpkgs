@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
+{ lib, fetchFromGitHub, cmake, pkg-config, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
-, vulkan-loader, xorg, python3, python3Packages
+, vulkan-loader, libglvnd, xorg, python3, python3Packages
 , bison, pcre, automake, autoconf, addOpenGLRunpath
 }:
 let
@@ -13,14 +13,14 @@ let
   pythonPackages = python3Packages;
 in
 mkDerivation rec {
-  version = "1.6";
+  version = "1.12";
   pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0b2f9m5azzvcjbmxkwcl1d7jvvp720b81zwn19rrskznfcc2r1i8";
+    sha256 = "4k0WsTsz4WwPZC8Dj85l2ntJOZkLgmBBOJcX9Bb4U7I=";
   };
 
   buildInputs = [
@@ -28,7 +28,7 @@ mkDerivation rec {
   ]; # ++ (with pythonPackages; [pyside2 pyside2-tools shiboken2]);
   # TODO: figure out how to make cmake recognise pyside2
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -52,8 +52,8 @@ mkDerivation rec {
 
   dontWrapQtApps = true;
   preFixup = ''
-    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib"
-    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib"
+    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
+    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
   '';
 
   # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
@@ -61,11 +61,9 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A single-frame graphics debugger";
-    homepage = https://renderdoc.org/;
+    homepage = "https://renderdoc.org/";
     license = licenses.mit;
     longDescription = ''
       RenderDoc is a free MIT licensed stand-alone graphics debugger that

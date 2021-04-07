@@ -1,22 +1,13 @@
-{ stdenv, fetchzip, fetchFromGitHub, ruby, dune, ocamlPackages
-, ipaexfont, junicode
+{ lib, stdenv, fetchFromGitHub, ruby, dune_2, ocamlPackages
+, ipaexfont, junicode, lmodern, lmmath
 }:
 let
-  lm = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/latin-modern/download/lm2.004otf.zip";
-    sha256 = "1mc88fbhfd2wki2vr700pgv96smya6d1z783xs3mfy138yb6ga2p";
-    stripRoot = false;
-  };
-  lm-math = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";
-    sha256 = "15l3lxjciyjmbh0q6jjvzz16ibk4ij79in9fs47qhrfr2wrddpvs";
-  };
   camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "camlpdf";
-      rev = "v2.2.2+satysfi";
-      sha256 = "1dkyibjd8qb9fzljlzdsfdhb798vc9m8xqkd7295fm6bcfpr5r5k";
+      rev = "v2.3.1+satysfi";
+      sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
     };
   });
   otfm = ocamlPackages.otfm.overrideAttrs (o: {
@@ -27,23 +18,29 @@ let
       sha256 = "0y8s0ij1vp1s4h5y1hn3ns76fzki2ba5ysqdib33akdav9krbj8p";
     };
   });
-  yojson = ocamlPackages.yojson.overrideAttrs (o: {
+  yojson-with-position = ocamlPackages.buildDunePackage {
+    pname = "yojson-with-position";
+    version = "1.4.2";
     src = fetchFromGitHub {
       owner = "gfngfn";
-      repo = "yojson";
-      rev = "v1.4.1+satysfi";
-      sha256 = "06lajzycwmvc6s26cf40s9xn001cjxrpxijgfha3s4f4rpybb1mp";
+      repo = "yojson-with-position";
+      rev = "v1.4.2+satysfi";
+      sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
     };
-  });
+    useDune2 = true;
+    nativeBuildInputs = [ ocamlPackages.cppo ];
+    propagatedBuildInputs = [ ocamlPackages.biniou ];
+    inherit (ocamlPackages.yojson) meta;
+  };
 in
   stdenv.mkDerivation rec {
     pname = "satysfi";
-    version = "0.0.4";
+    version = "0.0.6";
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "SATySFi";
       rev = "v${version}";
-      sha256 = "0ilvgixglklqwavf8p9mcbrjq6cjfm9pk4kqx163c0irh0lh0adv";
+      sha256 = "1wdmcz2b7v37msmsvjvbyj7x5a80qfws8a7w72q0g5959pw5fdxj";
       fetchSubmodules = true;
     };
 
@@ -53,27 +50,28 @@ in
       $out/share/satysfi
     '';
 
-    nativeBuildInputs = [ ruby dune ];
+    nativeBuildInputs = [ ruby dune_2 ];
 
-    buildInputs = [ camlpdf otfm ] ++ (with ocamlPackages; [
+    buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [
       ocaml findlib menhir
-      batteries camlimages core_kernel ppx_deriving uutf yojson omd cppo re
+      batteries camlimages core_kernel ppx_deriving uutf omd cppo re
     ]);
 
     installPhase = ''
       cp -r ${ipaexfont}/share/fonts/opentype/* lib-satysfi/dist/fonts/
       cp -r ${junicode}/share/fonts/junicode-ttf/* lib-satysfi/dist/fonts/
-      cp -r ${lm}/* lib-satysfi/dist/fonts/
-      cp -r ${lm-math}/otf/latinmodern-math.otf lib-satysfi/dist/fonts/
+      cp -r ${lmodern}/share/fonts/opentype/public/lm/* lib-satysfi/dist/fonts/
+      cp -r ${lmmath}/share/fonts/opentype/latinmodern-math.otf lib-satysfi/dist/fonts/
       make install PREFIX=$out LIBDIR=$out/share/satysfi
       mkdir -p $out/share/satysfi/
       cp -r lib-satysfi/dist/ $out/share/satysfi/
     '';
 
-    meta = with stdenv.lib; {
-      homepage = https://github.com/gfngfn/SATySFi;
+    meta = with lib; {
+      homepage = "https://github.com/gfngfn/SATySFi";
       description = "A statically-typed, functional typesetting system";
-      license = licenses.lgpl3;
+      changelog = "https://github.com/gfngfn/SATySFi/blob/v${version}/CHANGELOG.md";
+      license = licenses.lgpl3Only;
       maintainers = [ maintainers.mt-caret maintainers.marsam ];
       platforms = platforms.all;
     };

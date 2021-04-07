@@ -1,17 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "pycryptodomex";
-  version = "3.9.4";
-
-  meta = {
-    description = "A self-contained cryptographic library for Python";
-    homepage = https://www.pycryptodome.org;
-    license = lib.licenses.bsd2;
-  };
+  version = "3.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "22d970cee5c096b9123415e183ae03702b2cd4d3ba3f0ced25c4e1aba3967167";
+    sha256 = "sha256-VBzT4+JS+xmntI9CC3mLU0gzArf+TZlUyUdgXQomPWI=";
+  };
+
+  pythonImportsCheck = [ "Cryptodome" ];
+
+  meta = with lib; {
+    description = "A self-contained cryptographic library for Python";
+    homepage = "https://www.pycryptodome.org";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
   };
 }

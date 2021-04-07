@@ -1,34 +1,55 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, acme, aiohttp, snitun, attrs, pytest-aiohttp, warrant, pytest }:
+{ lib
+, acme
+, aiohttp
+, asynctest
+, atomicwrites
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pycognito
+, pytest-aiohttp
+, pytestCheckHook
+, snitun
+, warrant
+}:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.29";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "182nh5i3hlj0kqkbynk69md0ddq83w02l8lz4m03d8xbjixzi1k1";
+    sha256 = "sha256-vDgjuNgwNp9cDgiCNxhACOcuaxcrR+0DW/U5OaSW0n4=";
   };
 
-  # upstreamed in https://github.com/NabuCasa/hass-nabucasa/pull/119
   postPatch = ''
-    sed -i 's/"acme.*/"acme>=0.40.0,<2.0"/' setup.py
-    cat setup.py
+    sed -i 's/"acme.*"/"acme"/' setup.py
   '';
 
-  propagatedBuildInputs = [ acme aiohttp snitun attrs warrant ];
+  propagatedBuildInputs = [
+    acme
+    aiohttp
+    atomicwrites
+    attrs
+    pycognito
+    snitun
+    warrant
+  ];
 
-  checkInputs = [ pytest pytest-aiohttp ];
+  checkInputs = [
+    asynctest
+    pytest-aiohttp
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest tests/
-    '';
+  pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Home Assistant cloud integration by Nabu Casa, inc.";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };
 }

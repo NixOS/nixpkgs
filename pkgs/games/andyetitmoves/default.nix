@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libvorbis, libogg, libtheora, SDL, libXft, SDL_image, zlib, libX11, libpng, openal, runtimeShell, requireFile, commercialVersion ? false }:
+{ lib, stdenv, fetchurl, libvorbis, libogg, libtheora, SDL, libXft, SDL_image, zlib, libX11, libpng, openal, runtimeShell, requireFile, commercialVersion ? false }:
 
 let plainName = "andyetitmoves";
     version   = "1.2.2";
@@ -66,10 +66,10 @@ stdenv.mkDerivation {
       And Yet It Moves is an award-winning physics-based platform game in which players rotate the game world at will to solve challenging puzzles. Tilting the world turns walls into floors, slides into platforms, and stacks of rocks into dangerous hazards.
     '';
 
-    homepage = http://www.andyetitmoves.net/;
+    homepage = "http://www.andyetitmoves.net/";
 
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
 
-    maintainers = with stdenv.lib.maintainers; [bluescreen303];
+    maintainers = with lib.maintainers; [bluescreen303];
   };
 }

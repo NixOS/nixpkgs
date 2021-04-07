@@ -8,11 +8,12 @@
 , hypothesis
 , glibcLocales
 , pathlib ? null
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "6.2.0";
+  version = "7.1.1";
 
   checkInputs = [
     pytest
@@ -26,8 +27,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58c6fb2f355117e88a19808394ec1ed30a2ff881bdd2c81c436952caebd30668";
+    sha256 = "00c603a42365830c4722a2eb7663a25919551217ec09a243d3399fa8dd4ac403";
   };
+
+  # Does not support Python 2
+  disabled = !isPy3k;
 
   # testing based on project's tox.ini
   # natsort_keygen has pytest mock issues
@@ -38,7 +42,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Natural sorting for python";
-    homepage = https://github.com/SethMMorton/natsort;
+    homepage = "https://github.com/SethMMorton/natsort";
     license = lib.licenses.mit;
   };
 }

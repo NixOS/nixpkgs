@@ -42,29 +42,52 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Jailbreak to fix the build.
-  async = doJailbreak super.async;
-  hashable = doJailbreak super.hashable;
-  primitive_0_7_0_0 = doJailbreak (dontCheck super.primitive_0_7_0_0);  # evaluating the test suite gives an infinite recursion
-  regex-base_0_94_0_0 = doJailbreak super.regex-base_0_94_0_0;
-  regex-compat_0_95_2_0 = doJailbreak super.regex-compat_0_95_2_0;
-  regex-posix_0_96_0_0 = doJailbreak super.regex-posix_0_96_0_0;
-  tar = doJailbreak super.tar;
-  tasty-expected-failure = doJailbreak super.tasty-expected-failure;
-  unliftio-core = doJailbreak super.unliftio-core;
-  vector = doJailbreak super.vector;
-  zlib = doJailbreak super.zlib;
-  parallel = doJailbreak super.parallel;
-  split = doJailbreak super.split;
+  # cabal-install needs more recent versions of Cabal and random, but an older
+  # version of base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_4_0_0;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    random = dontCheck super.random_1_2_0;  # break infinite recursion
+    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+  });
 
-  # Use the latest version to fix the build.
-  generic-deriving = self.generic-deriving_1_13_1;
-  optparse-applicative = self.optparse-applicative_0_15_1_0;
-  primitive = self.primitive_0_7_0_0;
-  regex-base = self.regex-base_0_94_0_0;
-  regex-compat = self.regex-compat_0_95_2_0;
-  regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
-  regex-posix = self.regex-posix_0_96_0_0;
-  regex-tdfa = self.regex-tdfa_1_3_1_0;
+  # cabal-install-parsers is written for Cabal 3.4
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_4_0_0; };
+
+  # Jailbreak to fix the build.
+  base-noprelude = doJailbreak super.base-noprelude;
+  system-fileio = doJailbreak super.system-fileio;
+  unliftio-core = doJailbreak super.unliftio-core;
+
+  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  monoidal-containers = doJailbreak super.monoidal-containers;
+
+  # Jailbreak to fix the build.
+  brick = doJailbreak super.brick;
+  exact-pi = doJailbreak super.exact-pi;
+  serialise = doJailbreak super.serialise;
+  setlocale = doJailbreak super.setlocale;
+  shellmet = doJailbreak super.shellmet;
+  shower = doJailbreak super.shower;
+
+  # The shipped Setup.hs file is broken.
+  csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
+
+  # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
+  language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
+    name = "language-haskell-extract-0.2.4.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
+    sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
+  });
+
+  # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
+  hnix = generateOptparseApplicativeCompletion "hnix"
+    (overrideCabal super.hnix (drv: {
+      # executable is allowed for ghc >= 8.10 and needs repline
+      executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
+    }));
+
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
 
 }

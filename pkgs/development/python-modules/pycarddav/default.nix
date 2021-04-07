@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ vobject lxml requests urwid pyxdg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line interface carddav client";
-    homepage = http://lostpackets.de/pycarddav;
+    homepage = "http://lostpackets.de/pycarddav";
     license = licenses.mit;
   };
 

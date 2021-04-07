@@ -1,20 +1,7 @@
-{ stdenv, lib, fetchurl, vscode, unzip }:
-
+{ stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip, jq }:
 let
-  extendedPkgVersion = lib.getVersion vscode;
-  extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
-
-  mktplcExtRefToFetchArgs = ext: {
-    url = "https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
-    sha256 = ext.sha256;
-    # The `*.vsix` file is in the end a simple zip file. Change the extension
-    # so that existing `unzip` hooks takes care of the unpacking.
-    name = "${ext.publisher}-${ext.name}.zip";
-  };
-
   buildVscodeExtension = a@{
     name,
-    namePrefix ? "${extendedPkgName}-extension-",
     src,
     # Same as "Unique Identifier" on the extension's web page.
     # For the moment, only serve as unique extension dir.
@@ -26,18 +13,19 @@ let
     buildInputs ? [],
     ...
   }:
-  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
+  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
 
-    name = namePrefix + name;
+    name = "vscode-extension-${name}";
 
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
-    installPrefix = "share/${extendedPkgName}/extensions/${vscodeExtUniqueId}";
+    installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
     buildInputs = [ unzip ] ++ buildInputs;
 
     installPhase = ''
+
       runHook preInstall
 
       mkdir -p "$out/$installPrefix"
@@ -48,19 +36,21 @@ let
 
   });
 
-
   fetchVsixFromVscodeMarketplace = mktplcExtRef:
-    fetchurl((mktplcExtRefToFetchArgs mktplcExtRef));
+    fetchurl((import ./mktplcExtRefToFetchArgs.nix mktplcExtRef));
 
   buildVscodeMarketplaceExtension = a@{
     name ? "",
     src ? null,
+    vsix ? null,
     mktplcRef,
     ...
   }: assert "" == name; assert null == src;
-  buildVscodeExtension ((removeAttrs a [ "mktplcRef" ]) // {
+  buildVscodeExtension ((removeAttrs a [ "mktplcRef" "vsix" ]) // {
     name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
-    src = fetchVsixFromVscodeMarketplace mktplcRef;
+    src = if (vsix != null)
+      then vsix
+      else fetchVsixFromVscodeMarketplace mktplcRef;
     vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
   });
 
@@ -80,10 +70,25 @@ let
   extensionsFromVscodeMarketplace = mktplcExtRefList:
     builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
 
-in
+  vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
+   inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;
+   vscodeDefault = vscode;
+  };
 
+
+  vscodeExts2nix = import ./vscodeExts2nix.nix {
+    inherit lib writeShellScriptBin;
+    vscodeDefault = vscode;
+  };
+
+  vscodeEnv = import ./vscodeEnv.nix {
+    inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace jq;
+    vscodeDefault = vscode;
+  };
+in
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
-          extensionsFromVscodeMarketplace;
+          extensionsFromVscodeMarketplace
+          vscodeWithConfiguration vscodeExts2nix vscodeEnv;
 }

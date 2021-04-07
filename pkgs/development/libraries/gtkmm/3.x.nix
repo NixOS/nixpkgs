@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.2";
+  version = "3.24.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hxdnhavjyvbcpxhd5z17l9fj4182028s66lc0s16qqqrldhjwbd";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-YEl8T381TDvSVXSF8CVPi3tM9L68n+4L4mp3dE6s1DU=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config meson ninja python3 ];
   buildInputs = [ epoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ interface to the GTK graphical user interface library";
 
     longDescription = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = https://gtkmm.org/;
+    homepage = "https://gtkmm.org/";
 
     license = licenses.lgpl2Plus;
 

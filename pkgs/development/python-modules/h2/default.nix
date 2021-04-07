@@ -1,18 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, enum34, hpack, hyperframe }:
+{ lib, buildPythonPackage, fetchPypi
+, enum34, hpack, hyperframe, pytestCheckHook, hypothesis }:
 
 buildPythonPackage rec {
   pname = "h2";
-  version = "3.1.1";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d1svhixk3hr78ph3nx8wi7sagx1xrvm712mmk028i2rhb92p8xq";
+    sha256 = "bb7ac7099dd67a857ed52c815a6192b6b1f5ba6b516237fc24a085341340593d";
   };
 
   propagatedBuildInputs = [ enum34 hpack hyperframe ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook hypothesis ];
+
+  meta = with lib; {
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "http://hyper.rtfd.org/";
     license = licenses.mit;

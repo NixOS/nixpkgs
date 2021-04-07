@@ -20,7 +20,7 @@ in
       port = mkOption {
         type = types.int;
         default = 25826;
-        description = ''Network address on which to accept collectd binary network packets.'';
+        description = "Network address on which to accept collectd binary network packets.";
       };
 
       listenAddress = mkOption {
@@ -66,7 +66,7 @@ in
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-collectd-exporter}/bin/collectd_exporter \
-          -log.format ${cfg.logFormat} \
+          -log.format ${escapeShellArg cfg.logFormat} \
           -log.level ${cfg.logLevel} \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           ${collectSettingsArgs} \

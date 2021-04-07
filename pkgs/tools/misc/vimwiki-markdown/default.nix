@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonApplication
 , fetchPypi
 , markdown
@@ -6,12 +6,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "0.2.0";
+  version = "0.3.3";
   pname = "vimwiki-markdown";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0k7srlglhq4bm85kgd5ismslrk1fk8v16mm41a8k0kmcr9k4vi4a";
+    sha256 = "ee4ef08f7e4df27f67ffebb5fa413a7cf4fad967a248c1c75d48b00122a5b945";
   };
 
   propagatedBuildInputs= [
@@ -19,9 +19,9 @@ buildPythonApplication rec {
     pygments
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vimwiki markdown plugin";
-    homepage = https://github.com/WnP/vimwiki_markdown;
+    homepage = "https://github.com/WnP/vimwiki_markdown";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
   };

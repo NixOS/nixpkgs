@@ -1,5 +1,5 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
 , flock
 , withMysql ? false
 , withPgsql ? false
@@ -21,20 +21,20 @@ let
     fi
   '';
 
-  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
+  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "20.01";
+  version = "20.12";
   pname = "ejabberd";
 
   src = fetchurl {
-    url = "https://www.process-one.net/downloads/ejabberd/${version}/${pname}-${version}.tgz";
-    sha256 = "14bgwa6y17bhnwhcqb2hdl7psds0iqkcawb4kpaw6d7lzzsx4ay6";
+    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
+    sha256 = "sha256-nZxdYXRyv4UejPLHNT/p6CrvW22Koo7rZSi96KRjqFQ=";
   };
 
-  nativeBuildInputs = [ fakegit ];
+  nativeBuildInputs = [ fakegit makeWrapper ];
 
-  buildInputs = [ erlang openssl expat libyaml gd makeWrapper ]
+  buildInputs = [ erlang openssl expat libyaml gd ]
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "097c84qp00dq8x7ngfqcrv9fa0wm0k94grashmi1fxlasgbvxh18";
+    outputHash = "sha256-0/hBgA+9rsDOBcvbROSpc5Xnw4JkYpuLCl2V+lJnieY=";
   };
 
   configureFlags =
@@ -107,15 +107,15 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
-    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
-    homepage = https://www.ejabberd.im;
+    homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar ajs124 ];
+    maintainers = with maintainers; [ sander abbradar ];
     broken = withElixir;
   };
 }

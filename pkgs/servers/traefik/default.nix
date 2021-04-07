@@ -1,39 +1,39 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata}:
+{ lib, fetchzip, buildGoModule, go-bindata, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "traefik";
-  version = "1.7.14";
+  version = "2.4.8";
 
-  goPackagePath = "github.com/containous/traefik";
-
-  src = fetchFromGitHub {
-    owner = "containous";
-    repo = "traefik";
-    rev = "v${version}";
-    sha256 = "1j3p09j8rpdkp8v4d4mz224ddakkvhzchvccm9qryrqc2fq4022v";
+  src = fetchzip {
+    url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
+    sha256 = "sha256-hCBhJazI0Y1qQjULF+CBfUfz6PvkgLXafvXKR6iKHmU=";
+    stripRoot = false;
   };
 
-  buildInputs = [ go-bindata bash ];
+  vendorSha256 = "sha256-MW/JG4TbUvbo4dQnQbKIbLlLgkQvOqsfagpXILJ/BYQ=";
 
-  buildPhase = ''
-    runHook preBuild
-    (
-      cd go/src/github.com/containous/traefik
-      bash ./script/make.sh generate
+  doCheck = false;
 
-      CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
-      go build -ldflags "\
-        -X github.com/containous/traefik/version.Version=${version} \
-        -X github.com/containous/traefik/version.Codename=$CODENAME \
-      " -a -o $bin/bin/traefik ./cmd/traefik
-    )
-    runHook postBuild
+  subPackages = [ "cmd/traefik" ];
+
+  nativeBuildInputs = [ go-bindata ];
+
+  passthru.tests = { inherit (nixosTests) traefik; };
+
+  preBuild = ''
+    go generate
+
+    CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
+
+    buildFlagsArray+=("-ldflags=\
+      -X github.com/traefik/traefik/v2/pkg/version.Version=${version} \
+      -X github.com/traefik/traefik/v2/pkg/version.Codename=$CODENAME")
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://traefik.io;
+  meta = with lib; {
+    homepage = "https://traefik.io";
     description = "A modern reverse proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ hamhut1066 vdemeester ];
+    maintainers = with maintainers; [ vdemeester ];
   };
 }

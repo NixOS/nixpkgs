@@ -173,7 +173,7 @@
      <listitem>
       <para>
        For users of a daemon-less Nix installation on Linux or macOS, you can
-       upgrade Nix by running <command>curl https://nixos.org/nix/install |
+       upgrade Nix by running <command>curl -L https://nixos.org/nix/install |
        sh</command>, or prior to doing a channel update, running
        <command>nix-env -iA nix</command>.
       </para>

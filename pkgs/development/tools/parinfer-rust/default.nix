@@ -1,22 +1,20 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages }:
+{ lib, rustPlatform, fetchFromGitHub, llvmPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "parinfer-rust";
     rev = "v${version}";
-    sha256 = "1k2kr1zlxx3w3kwb634kngzx8vl5iif1yr6zk2xh46gjwqb3223l";
+    sha256 = "0hj5in5h7pj72m4ag80ing513fh65q8xlsf341qzm3vmxm3y3jgd";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "16ylk125p368mcz8nandmfqlygrqjlf8mqaxlbpixqga378saidl";
 
-  cargoSha256 = "0i5wy15w985nxwl4b6rzb06hchzjwph6ygzjkkmigm9diw9jcycn";
-
-  buildInputs = [ llvmPackages.libclang llvmPackages.clang ];
+  nativeBuildInputs = [ llvmPackages.clang ];
+  buildInputs = [ llvmPackages.libclang ];
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   postInstall = ''
@@ -29,11 +27,10 @@ rustPlatform.buildRustPackage rec {
       plugin/parinfer.vim >$rtpPath/plugin/parinfer.vim
   '';
 
-  meta = with stdenv.lib; {
-    description = "Infer parentheses for Clojure, Lisp, and Scheme.";
+  meta = with lib; {
+    description = "Infer parentheses for Clojure, Lisp, and Scheme";
     homepage = "https://github.com/eraserhd/parinfer-rust";
     license = licenses.isc;
     maintainers = with maintainers; [ eraserhd ];
-    platforms = platforms.all;
   };
 }

@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/slice
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.zeroc.com/ice.html;
+  meta = with lib; {
+    homepage = "http://www.zeroc.com/ice.html";
     description = "The internet communications engine";
     license = licenses.gpl2;
     platforms = platforms.unix;

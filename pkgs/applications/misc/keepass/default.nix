@@ -1,18 +1,19 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
-  unzip, icoutils, gtk2, xorg, xdotool, xsel, plugins ? [] }:
+{ lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
+  unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
 
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.40";
+  version = "2.46";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "1gldl74wz2lvsci6rn71d6q1zmnhr52z6fjib9nsragsazq5byz9";
+    sha256 = "0zyclydgyg8nhwxrzw7x4f82975cqdmp12py33k6sballx6jhgiy";
   };
 
   sourceRoot = ".";
 
-  buildInputs = [ unzip makeWrapper icoutils ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ icoutils ];
 
   patches = [
     (substituteAll {
@@ -20,6 +21,9 @@ with builtins; buildDotnetPackage rec {
       xsel = "${xsel}/bin/xsel";
       xprop = "${xorg.xprop}/bin/xprop";
       xdotool = "${xdotool}/bin/xdotool";
+      uname = "${coreutils}/bin/uname";
+      whereis = "${unixtools.whereis}/bin/whereis";
+      gsettings = "${glib}/bin/gsettings";
     })
   ];
 
@@ -65,8 +69,8 @@ with builtins; buildDotnetPackage rec {
     icon = "keepass";
     desktopName = "Keepass";
     genericName = "Password manager";
-    categories = "Application;Utility;";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    categories = "Utility;";
+    mimeType = lib.concatStringsSep ";" [
       "application/x-keepass2"
       ""
     ];
@@ -82,9 +86,9 @@ with builtins; buildDotnetPackage rec {
   # is found and does not pollute output path.
   binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
 
-  dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
+  dynlibPath = lib.makeLibraryPath [ gtk2 ];
 
-  postInstall = 
+  postInstall =
   let
     extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
   in
@@ -107,9 +111,9 @@ with builtins; buildDotnetPackage rec {
 
   meta = {
     description = "GUI password manager with strong cryptography";
-    homepage = http://www.keepass.info/;
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz joncojonathan jraygauthier ];
-    platforms = with stdenv.lib.platforms; all;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "http://www.keepass.info/";
+    maintainers = with lib.maintainers; [ amorsillo obadz ];
+    platforms = with lib.platforms; all;
+    license = lib.licenses.gpl2;
   };
 }

@@ -36,14 +36,14 @@ let
 
 in {
   name = "borgbackup";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 
   nodes = {
     client = { ... }: {
       services.borgbackup.jobs = {
-        
+
         local = {
           paths = dataDir;
           repo = localRepo;

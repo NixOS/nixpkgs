@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "1.8.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11skbvjlj93aw1pqx6j56h73sy9r06jwq7z5h64fd1a3d4z2gsvy";
+    sha256 = "067ipkp186h26j7whfid8hjf6cwjmw2b5jp6fvvg280j7q9bjsa9";
   };
 
   propagatedBuildInputs = [
@@ -43,11 +43,8 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    pytest tests/unit/test_configs.py
-    pytest tests/unit/test_fingerprint.py
-    pytest tests/unit/test_import.py
-    pytest tests/unit/test_resources.py
-    pytest tests/unit/dash/
+    pytest tests/unit/test_{configs,fingerprint,resources}.py \
+      tests/unit/dash/
   '';
 
   pythonImportsCheck = [
@@ -56,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python framework for building analytical web applications";
-    homepage = https://dash.plot.ly/;
+    homepage = "https://dash.plot.ly/";
     license = licenses.mit;
     maintainers = [ maintainers.antoinerg ];
   };

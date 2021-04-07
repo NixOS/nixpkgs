@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -18,9 +18,9 @@ buildPythonPackage rec {
   # No tests. Breaks when not disabling.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for the Apache Thrift RPC system";
-    homepage = http://thrift.apache.org/;
+    homepage = "http://thrift.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ hbunke ];
   };

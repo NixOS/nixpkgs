@@ -15,7 +15,7 @@
 , enableDebugInfo ? false
 , ... }@attrs:
 
-with stdenv.lib;
+with lib;
 
 let
 

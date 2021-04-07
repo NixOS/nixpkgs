@@ -1,11 +1,11 @@
-{ stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ lib, stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
 , derez, rez, setfile
-, AGL, Cocoa, Kernel
+, AGL, Cocoa, Kernel, WebKit
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
+  version = "3.0.5.1";
   pname = "wxmac";
 
   src = fetchzip {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat libiconv libjpeg libpng libtiff zlib
     derez rez setfile
-    AGL Cocoa Kernel
+    AGL Cocoa Kernel WebKit
   ];
 
   postPatch = ''
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.darwin;
     license = licenses.wxWindows;
     maintainers = [ maintainers.lnl7 ];
-    homepage = https://www.wxwidgets.org/;
+    homepage = "https://www.wxwidgets.org/";
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
   };

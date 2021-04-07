@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
-, pkgconfig
-, vala
+, pkg-config
+, vala_0_46
 , cmake
 , ninja
 , gtk3
@@ -30,8 +31,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    vala
-    pkgconfig
+    # fails with newer vala: https://github.com/Philip-Scott/Notes-up/issues/349
+    vala_0_46
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -48,18 +50,18 @@ stdenv.mkDerivation rec {
   ];
 
   # Whether to build with contractor support (Pantheon specific)
-  cmakeFlags = stdenv.lib.optional (!withPantheon) "-Dnoele=yes";
+  cmakeFlags = lib.optional (!withPantheon) "-Dnoele=yes";
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Markdown notes editor and manager designed for elementary OS"
-    + stdenv.lib.optionalString withPantheon " - built with Contractor support";
-    homepage = https://github.com/Philip-Scott/Notes-up;
+    + lib.optionalString withPantheon " - built with Contractor support";
+    homepage = "https://github.com/Philip-Scott/Notes-up";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak worldofpeace ];
     platforms = platforms.linux;

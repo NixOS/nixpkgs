@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   name = "helm-words-20190917";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Emacs major mode for jade and stylus";
-    homepage = https://github.com/brianc/helm-words;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/brianc/helm-words";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

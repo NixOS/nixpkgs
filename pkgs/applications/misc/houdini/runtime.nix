@@ -1,9 +1,9 @@
-{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
+{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
 
 let
   ld_library_path = builtins.concatStringsSep ":" [
     "${stdenv.cc.cc.lib}/lib64"
-    (stdenv.lib.makeLibraryPath [
+    (lib.makeLibraryPath [
       libGLU
       libGL
       xorg.libXmu
@@ -78,10 +78,11 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "3D animation application software";
-    homepage = https://www.sidefx.com;
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.canndrew ];
+    homepage = "https://www.sidefx.com";
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    hydraPlatforms = [ ]; # requireFile src's should be excluded
+    maintainers = [ lib.maintainers.canndrew ];
   };
 }
 

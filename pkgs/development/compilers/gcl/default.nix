@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
+{ lib, stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
 , texinfo, libX11, xorgproto, libXi, gmp
 , libXext, libXt, libXaw, libXmu } :
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [(fetchurl {
-    url = https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-lisp/gcl/files/gcl-2.6.12-gcc5.patch;
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-lisp/gcl/files/gcl-2.6.12-gcc5.patch";
     sha256 = "00jbsn0qp8ki2w7dx8caha7g2hr9076xa6bg48j3qqqncff93zdh";
   })];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU Common Lisp compiler working via GCC";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;

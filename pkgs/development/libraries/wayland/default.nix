@@ -1,53 +1,91 @@
-{ lib, stdenv, fetchurl, meson, pkgconfig, ninja
-, libffi, libxml2, wayland
-, expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
-, withDocumentation ? false, graphviz-nox, doxygen, libxslt, xmlto, python3
-, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, meson
+, pkg-config
+, ninja
+, wayland
+, expat
+, libxml2
+, withLibraries ? stdenv.isLinux
+, libffi
+, withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
+, graphviz-nox
+, doxygen
+, libxslt
+, xmlto
+, python3
+, docbook_xsl
+, docbook_xml_dtd_45
+, docbook_xml_dtd_42
 }:
 
-# Require the optional to be enabled until upstream fixes or removes the configure flag
-assert expat != null;
+# Documentation is only built when building libraries.
+assert withDocumentation -> withLibraries;
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wayland";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0k995rn96xkplrapz5k648j651wc43kq817xk1x8280h16gsfxa6";
+    sha256 = "05bd2vphyx8qwa1mhsj1zdaiv4m4v94wrlssrn0lad8d601dkk5s";
   };
 
-  separateDebugInfo = true;
-
-  mesonFlags = [ "-Ddocumentation=${lib.boolToString withDocumentation}" ];
-
-  patches = lib.optional isCross ./fix-wayland-cross-compilation.patch;
+  patches = [
+    (substituteAll {
+      src = ./0001-add-placeholder-for-nm.patch;
+      nm = "${stdenv.cc.targetPrefix}nm";
+    })
+  ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
-  '' + lib.optionalString isCross ''
-    substituteInPlace egl/meson.build --replace \
-      "find_program('nm').path()" \
-      "find_program('${stdenv.cc.targetPrefix}nm').path()"
   '';
 
+  outputs = [ "out" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
+  separateDebugInfo = true;
+
+  mesonFlags = [
+    "-Dlibraries=${lib.boolToString withLibraries}"
+    "-Ddocumentation=${lib.boolToString withDocumentation}"
+  ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    meson pkgconfig ninja
+    meson
+    pkg-config
+    ninja
   ] ++ lib.optionals isCross [
     wayland # For wayland-scanner during the build
   ] ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
-    doxygen libxslt xmlto python3 docbook_xml_dtd_45
+    doxygen
+    libxslt
+    xmlto
+    python3
+    docbook_xml_dtd_45
   ];
 
-  buildInputs = [ libffi expat libxml2
+  buildInputs = [
+    expat
+    libxml2
+  ] ++ lib.optionals withLibraries [
+    libffi
   ] ++ lib.optionals withDocumentation [
-    docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42
+    docbook_xsl
+    docbook_xml_dtd_45
+    docbook_xml_dtd_42
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
@@ -57,10 +95,10 @@ in stdenv.mkDerivation rec {
       and other interactions that must go through the compositor (but not
       rendering).
     '';
-    homepage    = https://wayland.freedesktop.org/;
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ primeos codyopel ];
+    homepage = "https://wayland.freedesktop.org/";
+    license = licenses.mit; # Expat version
+    platforms = if withLibraries then platforms.linux else platforms.unix;
+    maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
 
   passthru.version = version;

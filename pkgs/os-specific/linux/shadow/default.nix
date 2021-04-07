@@ -1,5 +1,5 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
+{ lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
+, libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
 , pam ? null, glibcCross ? null
 }:
 
@@ -11,7 +11,7 @@ let
     else assert stdenv.hostPlatform.libc == "glibc"; stdenv.cc.libc;
 
   dots_in_usernames = fetchpatch {
-    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch;
+    url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch";
     sha256 = "1fj3rg6x3jppm5jvi9y7fhd2djbi4nc5pgwisw00xlh4qapgz692";
   };
 
@@ -19,16 +19,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.8";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     rev = version;
-    sha256 = "05a636dqxip09l5jjrrs30lvwq6xkhjrdgjbbj3bg6b6z7hc67qk";
+    sha256 = "13407r6qwss00504qy740jghb2dzd561la7dhp47rg8w3g8jarpn";
   };
 
-  buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
+  buildInputs = lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
     docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-man"
     "--with-group-name-max-length=32"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
+  ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
 
-  preBuild = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "glibc")
+  preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc")
     ''
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
     '';
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
       mv $out/bin/su $su/bin
     '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/shadow-maint;
+  meta = with lib; {
+    homepage = "https://github.com/shadow-maint";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = licenses.bsd3;
     platforms = platforms.linux;
@@ -86,5 +86,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/nologin";
+    tests = { inherit (nixosTests) shadow; };
   };
 }

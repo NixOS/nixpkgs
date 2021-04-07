@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   pname = "openfire";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     mv $out/conf $out/conf.inst
     ln -s /var/log/openfire $out/logs
     ln -s /etc/openfire $out/conf
-  ''; 
+  '';
 
   meta = {
     description = "XMPP server in Java";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     # Some security advisories seem to apply, and each next version wants to
     # write into larger parts of installation directory; installation is just
     # unpacking, though

@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome3-xorg";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = pkgs.gnome3.maintainers;
+  meta = with lib; {
+    maintainers = teams.gnome.members;
   };
 
   machine = { nodes, ... }: let
@@ -12,8 +12,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager.gdm = {
-        enable = true;
+      services.xserver.displayManager = {
+        gdm.enable = true;
+        gdm.debug = true;
         autoLogin = {
           enable = true;
           user = user.name;
@@ -21,6 +22,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       };
 
       services.xserver.desktopManager.gnome3.enable = true;
+      services.xserver.desktopManager.gnome3.debug = true;
       services.xserver.displayManager.defaultSession = "gnome-xorg";
 
       virtualisation.memorySize = 1024;

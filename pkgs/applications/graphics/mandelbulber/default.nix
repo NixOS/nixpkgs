@@ -19,13 +19,13 @@ assert withOpenCL -> ocl-icd != null;
 
 mkDerivation rec {
   pname = "mandelbulber";
-  version = "2.20";
+  version = "2.24";
 
   src = fetchFromGitHub {
     owner = "buddhi1980";
     repo = "mandelbulber2";
     rev = version;
-    sha256 = "043dks9fimhradyhdzqdc6lb9z0x9lkj3szj10751g424lppp207";
+    sha256 = "sha256-JgpYGzD2FsqcCWnOKBiVCxUKqLfT4S++uUBZekhGWmA=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ mkDerivation rec {
   sourceRoot = "${src.name}/mandelbulber2";
 
   qmakeFlags = [
-    "SHARED_PATH=${placeholder ''out''}"
+    "SHARED_PATH=${placeholder "out"}"
     (if withOpenCL
       then "qmake/mandelbulber-opencl.pro"
       else "qmake/mandelbulber.pro")

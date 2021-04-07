@@ -1,47 +1,64 @@
-{ stdenv, appimage-run, fetchurl, runtimeShell }:
+{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
+, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
-  version = "3.0.15";
+  version = "3.5.18";
+  pname = "standardnotes";
+  name = "${pname}-${version}";
 
   plat = {
-    i386-linux = "i386";
+    i386-linux = "-i386";
     x86_64-linux = "x86_64";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    i386-linux = "0v2nsis6vb1lnhmjd28vrfxqwwpycv02j0nvjlfzcgj4b3400j7a";
-    x86_64-linux = "130n586cw0836zsbwqcz3pp3h0d4ny74ngqs4k4cvfb92556r7xh";
+    i386-linux = "009fnnd7ysxkyykkbmhvr0vn13b21j1j5mzwdvqdkhm9v3c9rbgj";
+    x86_64-linux = "1zrnvvr9x0s2gp948iajsmgn38xm6x0g2dgxrfjis39rpplsrdww";
   }.${stdenv.hostPlatform.system};
-in
-
-stdenv.mkDerivation {
-  pname = "standardnotes";
-  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-${plat}.AppImage";
+    url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
     inherit sha256;
   };
 
-  buildInputs = [ appimage-run ];
+  appimageContents = appimageTools.extract {
+    inherit name src;
+  };
 
-  dontUnpack = true;
+  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
 
-  installPhase = ''
-    mkdir -p $out/{bin,share}
-    cp $src $out/share/standardNotes.AppImage
-    echo "#!${runtimeShell}" > $out/bin/standardnotes
-    echo "${appimage-run}/bin/appimage-run $out/share/standardNotes.AppImage" >> $out/bin/standardnotes
-    chmod +x $out/bin/standardnotes $out/share/standardNotes.AppImage
+in appimageTools.wrapType2 rec {
+  inherit name src;
+
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
-  meta = with stdenv.lib; {
+  extraPkgs = pkgs: with pkgs; [
+    libsecret
+  ];
+
+  extraInstallCommands = ''
+    # directory in /nix/store so readonly
+    cp -r  ${appimageContents}/* $out
+    cd $out
+    chmod -R +w $out
+    mv $out/bin/${name} $out/bin/${pname}
+
+    # fixup and install desktop file
+    ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
+      --set-key Exec --set-value ${pname} standard-notes.desktop
+
+    rm usr/lib/* AppRun standard-notes.desktop .so*
+  '';
+
+  meta = with lib; {
     description = "A simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
-    homepage = https://standardnotes.org;
+    homepage = "https://standardnotes.org";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mgregoire ];
     platforms = [ "i386-linux" "x86_64-linux" ];

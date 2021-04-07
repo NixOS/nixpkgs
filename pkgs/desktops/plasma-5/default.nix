@@ -87,7 +87,7 @@ let
               ];
               platforms = lib.platforms.linux;
               maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
-              homepage = http://www.kde.org;
+              homepage = "http://www.kde.org";
             } // (args.meta or {});
           in
           mkDerivation (args // {
@@ -118,6 +118,7 @@ let
       ksysguard = callPackage ./ksysguard.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
+      kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
       libkscreen = callPackage ./libkscreen {};
@@ -126,18 +127,31 @@ let
       oxygen = callPackage ./oxygen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
+      plasma-disks = callPackage ./plasma-disks.nix {};
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
+      plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault {};
       plasma-workspace = callPackage ./plasma-workspace {};
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
       polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
       powerdevil = callPackage ./powerdevil.nix {};
+      qqc2-breeze-style = callPackage ./qqc2-breeze-style.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
-      user-manager = callPackage ./user-manager.nix {};
       xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
+
+      thirdParty = let inherit (libsForQt5) callPackage; in {
+        plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
+        plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
+        kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
+        kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
+        krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+        parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
+      };
+
     };
 in
 lib.makeScope libsForQt5.newScope packages

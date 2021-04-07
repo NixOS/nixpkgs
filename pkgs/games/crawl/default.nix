@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkgconfig, ncurses
+{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkg-config, ncurses
 , dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU, libGL, freetype, pngcrush, advancecomp
-, tileMode ? false, enableSound ? tileMode
+, tileMode ? false, enableSound ? tileMode, buildPackages
 
 # MacOS / Darwin builds
 , darwin ? null
@@ -8,19 +8,19 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.24.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "1cdjd33z04gj70manavihc3lj9ckpmd75n09vvyw01z41s33fzs0";
+    sha256 = "sha256-lh0lCMZRH+c6jSHjLFDU3wjy6Oyp59ZcPaqg5PWVrkk=";
   };
 
   # Patch hard-coded paths and remove force library builds
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
+  nativeBuildInputs = [ pkg-config which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
 
   fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
+  makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=${stdenv.cc.targetPrefix}cc" "FORCE_CXX=${stdenv.cc.targetPrefix}c++" "HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}c++"
+                "FORCE_PKGCONFIG=y"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
                 "DATADIR=${placeholder "out"}"
               ] ++ lib.optional tileMode "TILES=y"
@@ -60,9 +61,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source, single-player, role-playing roguelike game";
-    homepage = http://crawl.develz.org/;
+    homepage = "http://crawl.develz.org/";
     longDescription = ''
       Dungeon Crawl: Stone Soup, an open-source, single-player, role-playing
       roguelike game of exploration and treasure-hunting in dungeons filled

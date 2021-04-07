@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , gcc-arm-embedded, binutils-arm-embedded, ruby
 }:
 
@@ -49,9 +49,9 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Navigation-enabled flight control software";
-    homepage = https://inavflight.github.io;
+    homepage = "https://inavflight.github.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
     broken = true;

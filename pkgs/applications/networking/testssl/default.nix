@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, makeWrapper, lib
-, dnsutils, coreutils, openssl, nettools, utillinux, procps }:
+, dnsutils, coreutils, openssl, nettools, util-linux, procps }:
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
-  version = "3.0rc6";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = pname;
     rev = version;
-    sha256 = "1ks7pqgrg382ry0a0jf1dwgcwv81snhkrhkjdbcpym6w5flmpjsv";
+    sha256 = "sha256-Rcvkzw1DfoRXrk0vlpL6CojEHYfYga3voc2hm4qxdmw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     nettools  # for hostname
     openssl   # for openssl
     procps    # for ps
-    utillinux # for hexdump
+    util-linux # for hexdump
   ];
 
   postPatch = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI tool to check a server's TLS/SSL capabilities";
     longDescription = ''
       CLI tool which checks a server's service on any port for the support of

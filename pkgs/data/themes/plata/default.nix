@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, parallel
 , sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
@@ -19,28 +19,28 @@
 
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.9.2";
+  version = "0.9.8";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "1z8kiac3gb4hsyq92p5dd8fyjv7bad55q65kbnjiskpm4ircg4ja";
+    sha256 = "1sqmydvx36f6r4snw22s2q4dvcyg30jd7kg7dibpzqn3njfkkfag";
   };
 
   preferLocalBuild = true;
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     parallel
     sassc
     inkscape
     libxml2
     glib.dev
   ]
-  ++ stdenv.lib.optionals mateSupport [ gtk3 marco ]
-  ++ stdenv.lib.optional telegramSupport zip;
+  ++ lib.optionals mateSupport [ gtk3 marco ]
+  ++ lib.optional telegramSupport zip;
 
   buildInputs = [
     gdk-pixbuf
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     let
-      inherit (stdenv.lib) enableFeature optional;
+      inherit (lib) enableFeature optional;
       withOptional = value: feat: optional (value != null) "--with-${feat}=${value}";
     in [
       "--enable-parallel"
@@ -81,9 +81,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK theme based on Material Design Refresh";
-    homepage = https://gitlab.com/tista500/plata-theme;
+    homepage = "https://gitlab.com/tista500/plata-theme";
     license = with licenses; [ gpl2 cc-by-sa-40 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.tadfisher ];

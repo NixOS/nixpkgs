@@ -18,10 +18,9 @@ in fetchFromGitHub {
   sha256 = "1y9yzvpqs2v3ssnqk2iiglrh8amgsscnk8vmfgnqgqi9f4dhdvnv";
 
   meta = with lib; {
-    homepage = https://www.theleagueofmoveabletype.com/orbitron;
+    homepage = "https://www.theleagueofmoveabletype.com/orbitron";
     downloadPage = "https://www.theleagueofmoveabletype.com/orbitron/download";
-    description = ''
-     Geometric sans-serif for display purposes by Matt McInerney'';
+    description = "Geometric sans-serif for display purposes by Matt McInerney";
     longDescription = ''
      Orbitron is a geometric sans-serif typeface intended for display
      purposes. It features four weights (light, medium, bold, and

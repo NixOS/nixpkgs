@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , swig2
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pybox2d/pybox2d;
+  meta = with lib; {
+    homepage = "https://github.com/pybox2d/pybox2d";
     description = ''
       A 2D game physics library for Python under
       the very liberal zlib license

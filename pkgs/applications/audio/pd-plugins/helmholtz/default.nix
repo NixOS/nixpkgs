@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, puredata }:
+{ lib, stdenv, fetchurl, unzip, puredata }:
 
 stdenv.mkDerivation {
   name = "helmholtz";
@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "0h1fj7lmvq9j6rmw33rb8k0byxb898bi2xhcwkqalb84avhywgvs";
   };
 
-  buildInputs = [ unzip puredata ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ puredata ];
 
   unpackPhase = ''
     unzip $src
@@ -38,9 +39,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Time domain pitch tracker for Pure Data";
-    homepage = http://www.katjaas.nl/helmholtz/helmholtz.html;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://www.katjaas.nl/helmholtz/helmholtz.html";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

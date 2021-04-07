@@ -3,13 +3,13 @@
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, akonadi-notes, akonadi-search, gpgme, grantlee,
   grantleetheme, karchive, kcodecs, kconfig, kconfigwidgets, kcontacts,
-  kdepim-apps-libs, kiconthemes, kidentitymanagement, kio, kjobwidgets, kldap,
+  kiconthemes, kidentitymanagement, kio, kjobwidgets, kldap,
   kmailtransport, kmbox, kmime, kwindowsystem, libgravatar, libkdepim, libkleo,
-  pimcommon, qtwebengine, qtwebkit, syntax-highlighting
+  pimcommon, qca-qt5, qtwebengine, syntax-highlighting
 }:
 
 mkDerivation {
-  name = "messagelib";
+  pname = "messagelib";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
@@ -17,8 +17,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     akonadi-notes akonadi-search gpgme grantlee grantleetheme karchive kcodecs
-    kconfig kconfigwidgets kdepim-apps-libs kiconthemes kio kjobwidgets kldap
-    kmailtransport kmbox kmime kwindowsystem libgravatar libkdepim qtwebkit
+    kconfig kconfigwidgets kiconthemes kio kjobwidgets kldap
+    kmailtransport kmbox kmime kwindowsystem libgravatar libkdepim qca-qt5
     syntax-highlighting
   ];
   propagatedBuildInputs = [

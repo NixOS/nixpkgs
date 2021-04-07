@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "switch-test";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ gleber ];
   };
 
@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     # Ensures failures pass through using pipefail, otherwise failing to
     # switch-to-configuration is hidden by the success of `tee`.
     stderrRunner = pkgs.writeScript "stderr-runner" ''
-      #! ${pkgs.stdenv.shell}
+      #! ${pkgs.runtimeShell}
       set -e
       set -o pipefail
       exec env -i "$@" | tee /dev/stderr

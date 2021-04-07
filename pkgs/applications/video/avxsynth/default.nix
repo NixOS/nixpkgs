@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, cairo, ffmpeg, ffms, libjpeg, log4cpp, pango
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+, cairo, ffmpeg_3, ffms, libjpeg, log4cpp, pango
 , avxeditSupport ? false, qt4 ? null
 }:
 
 let
-  inherit (stdenv.lib) enableFeature optional;
+  inherit (lib) enableFeature optional;
 in
 
 stdenv.mkDerivation {
@@ -27,14 +27,14 @@ stdenv.mkDerivation {
     "--with-jpeg=${libjpeg.out}/lib"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ cairo ffmpeg ffms libjpeg log4cpp pango ]
+  buildInputs = [ cairo ffmpeg_3 ffms libjpeg log4cpp pango ]
     ++ optional avxeditSupport qt4;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A script system that allows advanced non-linear editing";
-    homepage = https://github.com/avxsynth/avxsynth;
+    homepage = "https://github.com/avxsynth/avxsynth";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.linux;

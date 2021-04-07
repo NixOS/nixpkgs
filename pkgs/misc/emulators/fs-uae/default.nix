@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , gettext, gtk2, SDL2, zlib, glib, openal, libGLU, libGL, lua, freetype, libmpeg2, zip }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "fs-uae";
-  version = "3.0.2";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1awakxs3rlbm0bxpi37cbavi5fpb89wszksyw62as4nz3qsdrpjf";
+    sha256 = "1qwzhp34wy7bnd3c0plv11rg9fs5m92rh3ffnr9pn6ng0cpc8vpj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gettext gtk2 SDL2 zlib glib openal libGLU libGL lua freetype libmpeg2 zip ];
 
   meta = {
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       create customized Amigas.
     '';
     license = licenses.gpl2Plus;
-    homepage = https://fs-uae.net;
-    maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
+    homepage = "https://fs-uae.net";
+    maintainers = with lib; [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

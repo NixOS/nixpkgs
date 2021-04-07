@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
+{ stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11
+, libXcursor, libXrandr, fontconfig, openjdk15-bootstrap
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -9,24 +9,24 @@
 }:
 
 let
-  major = "12";
-  update = ".0.2";
-  build = "ga";
+  major = "15";
+  update = ".0.1";
+  build = "-ga";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}-${build}";
+    version = "${major}${update}${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1ndlxmikyy298z7lqpr1bd0zxq7yx6xidj8y3c8mw9m9fy64h9c7";
+      url = "https://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      sha256 = "1h8n5figc9q0k9p8b0qggyhvqagvxanfih1lj5j492c74cd1mx1l";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
+      cpio file which zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk15-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -35,17 +35,17 @@ let
       ./fix-java-home-jdk10.patch
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
-      ./increase-javadoc-heap.patch
+      ./increase-javadoc-heap-jdk13.patch
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
       # so grab the work-around from
       # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
       (fetchurl {
-        url = https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch;
+        url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk10.patch
+      ./swing-use-gtk-jdk13.patch
     ];
 
     prePatch = ''
@@ -54,7 +54,8 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk11.home}"
+      "--with-boot-jdk=${openjdk15-bootstrap.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -91,6 +92,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
@@ -137,10 +139,10 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk11 ];
+    disallowedReferences = [ openjdk15-bootstrap ];
 
-    meta = with stdenv.lib; {
-      homepage = http://openjdk.java.net/;
+    meta = with lib; {
+      homepage = "https://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
       maintainers = with maintainers; [ edwtjo ];
@@ -150,6 +152,7 @@ let
     passthru = {
       architecture = "";
       home = "${openjdk}/lib/openjdk";
+      inherit gtk3;
     };
   };
 in openjdk

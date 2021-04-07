@@ -1,4 +1,4 @@
-{ stdenv, requireFile, gogUnpackHook }:
+{ lib, stdenv, requireFile, gogUnpackHook }:
 
 let
   generic = ver: source: let
@@ -40,9 +40,9 @@ let
       runHook postInstall
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Descent ${toString ver} assets from GOG";
-      homepage    = https://www.dxx-rebirth.com/;
+      homepage    = "https://www.dxx-rebirth.com/";
       license     = licenses.unfree;
       maintainers = with maintainers; [ peterhoeg ];
       hydraPlatforms = [];

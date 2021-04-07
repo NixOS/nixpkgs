@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, google-fonts, migu, fontforge, which }:
+{ lib, stdenv, fetchurl, google-fonts, migu, fontforge, which }:
 
 stdenv.mkDerivation rec {
   pname = "ricty";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     install -m644 --target $out/share/fonts/truetype/ricty -D Ricty-*.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-quality Japanese font based on Inconsolata and Migu 1M";
-    homepage = http://www.yusa.lab.uec.ac.jp/~yusa/ricty.html;
+    homepage = "http://www.yusa.lab.uec.ac.jp/~yusa/ricty.html";
     license = licenses.unfree;
     maintainers = [ maintainers.mikoim ];
   };

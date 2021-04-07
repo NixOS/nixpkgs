@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-garbage'';
-  version = ''20190521-git'';
+  baseName = "trivial-garbage";
+  version = "20200925-git";
 
   parasites = [ "trivial-garbage/tests" ];
 
-  description = ''Portable finalizers, weak hash-tables and weak pointers.'';
+  description = "Portable finalizers, weak hash-tables and weak pointers.";
 
   deps = [ args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-garbage/2019-05-21/trivial-garbage-20190521-git.tgz'';
-    sha256 = ''0yhb7rkrbcfgghwvbw13nvmr86v19ka6qb53j8n89c7r270d8fdl'';
+    url = "http://beta.quicklisp.org/archive/trivial-garbage/2020-09-25/trivial-garbage-20200925-git.tgz";
+    sha256 = "00iw2iw6qzji9b2gwy798l54jdk185sxh1k7m2qd9srs8s730k83";
   };
 
   packageName = "trivial-garbage";
@@ -21,8 +22,8 @@ rec {
 }
 /* (SYSTEM trivial-garbage DESCRIPTION
     Portable finalizers, weak hash-tables and weak pointers. SHA256
-    0yhb7rkrbcfgghwvbw13nvmr86v19ka6qb53j8n89c7r270d8fdl URL
-    http://beta.quicklisp.org/archive/trivial-garbage/2019-05-21/trivial-garbage-20190521-git.tgz
-    MD5 38fb70797069d4402c6b0fe91f4ca5a8 NAME trivial-garbage FILENAME
+    00iw2iw6qzji9b2gwy798l54jdk185sxh1k7m2qd9srs8s730k83 URL
+    http://beta.quicklisp.org/archive/trivial-garbage/2020-09-25/trivial-garbage-20200925-git.tgz
+    MD5 9d748d1d549f419ce474f35906707420 NAME trivial-garbage FILENAME
     trivial-garbage DEPS ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION
-    20190521-git SIBLINGS NIL PARASITES (trivial-garbage/tests)) */
+    20200925-git SIBLINGS NIL PARASITES (trivial-garbage/tests)) */

@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchurl, fetchpatch, readline }:
+{ stdenv, lib, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.7.0";
+  version = "0.8.8";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    sha256 = "12c9s462879adb6mwd3fqafk0dnqsm16s18rhym6cmzfzy8v8zm3";
+    sha256 = "sha256-J9aNuw72qufoVY6VnbdpCtpcI6GAI7ON10XGEJuqieI=";
   };
 
   postPatch = ''
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     ];
 
     maintainers = with lib.maintainers; [ lheckemann alva ];
+    changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };
 
   passthru = {

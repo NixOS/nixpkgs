@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, bison
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, bison
 , libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "opensmtpd";
-  version = "6.6.3p1";
+  version = "6.8.0p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
-    sha256 = "1dqysjlyl0x3qzdzc9sjrla0063vpmlyq735lzf88p7wgzmw1xwy";
+    sha256 = "05sd7bmq29ibnqbl2z53hiyprfxzf0qydfdaixs68rz55wqhbgsi";
   };
 
   patches = [
@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.opensmtpd.org/;
+  meta = with lib; {
+    homepage = "https://www.opensmtpd.org/";
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
       RFC 5321, with some additional standard extensions
     '';
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rickynils obadz ekleog ];
+    maintainers = with maintainers; [ obadz ekleog ];
   };
   passthru.tests = {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;

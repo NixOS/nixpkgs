@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
 , libgweather, meson, ninja, geoclue2, gnome-desktop, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "3.34.0";
+  version = "3.36.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1g63xzs17i36if923b36k9fwbk0nqa5vz6zh1k6q2axrzhhpx1i4";
+    url = "mirror://gnome/sources/gnome-weather/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "11z75ky6xp9hx7lm24xng7ydr20bzh4d6p9sbi9c8ccz2m3fdrk8";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook python3 ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook python3 ];
   buildInputs = [
     gtk3 gjs gobject-introspection gnome-desktop
     libgweather gnome3.adwaita-icon-theme geoclue2 gsettings-desktop-schemas
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Weather;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Apps/Weather";
     description = "Access current weather conditions and forecasts";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

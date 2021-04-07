@@ -1,41 +1,40 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig
-, gtk2, gtk3, libXinerama, libSM, libXxf86vm
-, xorgproto, gstreamer, gst-plugins-base, GConf, setfile
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
+{ lib, stdenv, fetchFromGitHub, fetchurl, pkg-config
+, libXinerama, libSM, libXxf86vm
+, gtk2, gtk3
+, xorgproto, gst_all_1, setfile
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? libGLSupported
+, libGLU, libGL
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk ? null
-, AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
+, withWebKit ? false, webkitgtk
+, AGL, Carbon, Cocoa, Kernel, QTKit
 }:
 
-with stdenv.lib;
-
-assert withMesa -> libGLU != null && libGL != null;
-assert withWebKit -> webkitgtk != null;
+with lib;
 
 assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK30: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
   pname = "wxwidgets";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    sha256 = "19mqglghjjqjgz4rbybn3qdgn2cz9xc511nq1pvvli9wx2k8syl1";
+    sha256 = "1l33629ifx2dl2j71idqbd2qb6zb1d566ijpkvz6irrr50s6gbx7";
   };
 
-  buildInputs =
-    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xorgproto gstreamer
-      gst-plugins-base GConf ]
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    libXinerama libSM libXxf86vm xorgproto gst_all_1.gstreamer gst_all_1.gst-plugins-base
+  ] ++ optional withGtk2 gtk2
+    ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
     ++ optional withWebKit webkitgtk
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
-
-  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;
-    homepage = https://www.wxwidgets.org/;
+    homepage = "https://www.wxwidgets.org/";
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
     badPlatforms = [ "x86_64-darwin" ];

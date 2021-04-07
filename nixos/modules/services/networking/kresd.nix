@@ -8,14 +8,14 @@ let
   # Convert systemd-style address specification to kresd config line(s).
   # On Nix level we don't attempt to precisely validate the address specifications.
   mkListen = kind: addr: let
-    al_v4 = builtins.match "([0-9.]\+):([0-9]\+)" addr;
-    al_v6 = builtins.match "\\[(.\+)]:([0-9]\+)" addr;
-    al_portOnly = builtins.match "()([0-9]\+)" addr;
+    al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
+    al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
+    al_portOnly = builtins.match "([0-9]+)" addr;
     al = findFirst (a: a != null)
       (throw "services.kresd.*: incorrect address specification '${addr}'")
       [ al_v4 al_v6 al_portOnly ];
     port = last al;
-    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '127.0.0.1'}";
+    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
     in # freebind is set for compatibility with earlier kresd services;
        # it could be configurable, for example.
       ''
@@ -23,18 +23,14 @@ let
       '';
 
   configFile = pkgs.writeText "kresd.conf" (
-    optionalString (cfg.listenDoH != []) ''
-      modules.load('http')
-    ''
+    ""
     + concatMapStrings (mkListen "dns") cfg.listenPlain
     + concatMapStrings (mkListen "tls") cfg.listenTLS
-    + concatMapStrings (mkListen "doh") cfg.listenDoH
+    + concatMapStrings (mkListen "doh2") cfg.listenDoH
     + cfg.extraConfig
   );
 
-  package = pkgs.knot-resolver.override {
-    extraFeatures = cfg.listenDoH != [];
-  };
+  package = pkgs.knot-resolver;
 in {
   meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
 
@@ -92,7 +88,7 @@ in {
       default = [];
       example = [ "198.51.100.1:443" "[2001:db8::1]:443" "443" ];
       description = ''
-        Addresses and ports on which kresd should provide DNS over HTTPS (see RFC 8484).
+        Addresses and ports on which kresd should provide DNS over HTTPS/2 (see RFC 8484).
         For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
@@ -129,17 +125,17 @@ in {
     systemd.services."kresd@".serviceConfig = {
       ExecStart = "${package}/bin/kresd --noninteractive "
         + "-c ${package}/lib/knot-resolver/distro-preconfig.lua -c ${configFile}";
-      # Ensure correct ownership in case UID or GID changes.
+      # Ensure /run/knot-resolver exists
+      RuntimeDirectory = "knot-resolver";
+      RuntimeDirectoryMode = "0770";
+      # Ensure /var/lib/knot-resolver exists
+      StateDirectory = "knot-resolver";
+      StateDirectoryMode = "0770";
+      # Ensure /var/cache/knot-resolver exists
       CacheDirectory = "knot-resolver";
-      CacheDirectoryMode = "0750";
+      CacheDirectoryMode = "0770";
     };
-
-    environment.etc."tmpfiles.d/knot-resolver.conf".source =
-      "${package}/lib/tmpfiles.d/knot-resolver.conf";
-
-    # Try cleaning up the previously default location of cache file.
-    # Note that /var/cache/* should always be safe to remove.
-    # TODO: remove later, probably between 20.09 and 21.03
-    systemd.tmpfiles.rules = [ "R /var/cache/kresd" ];
+    # We don't mind running stop phase from wrong version.  It seems less racy.
+    systemd.services."kresd@".stopIfChanged = false;
   };
 }

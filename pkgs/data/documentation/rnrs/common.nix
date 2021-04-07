@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ texinfo ];
 
-  # Tell the builder about the name of the report.  
+  # Tell the builder about the name of the report.
   reportName = name;
 
   builder = ./builder.sh;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       Algorithmic Language Scheme.
     '';
 
-    homepage = http://swiss.csail.mit.edu/~jaffer/Scheme;
+    homepage = "http://swiss.csail.mit.edu/~jaffer/Scheme";
 
     broken = true;
   };

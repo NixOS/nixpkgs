@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 
 , at-spi2-core
 , atk
@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-atk";
-  version = "2.34.1";
+  version = "2.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05ncp7s5nddjinffs26mcvpbd63vk1m3cv5y530p3plgfhqgjvbp";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "z6AIpa+CKzauYofxgYLEDJHdaZxV+qOGBYge0XXKRk8=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ at-spi2-core atk dbus glib libxml2 ];
 
   doCheck = false; # fails with "No test data file provided"
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Bus bridge for Assistive Technology Service Provider Interface (AT-SPI) and Accessibility Toolkit (ATK)";
-    homepage = https://gitlab.gnome.org/GNOME/at-spi2-atk;
+    homepage = "https://gitlab.gnome.org/GNOME/at-spi2-atk";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

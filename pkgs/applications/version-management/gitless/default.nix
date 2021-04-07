@@ -1,4 +1,4 @@
-{ fetchFromGitHub, python, stdenv }:
+{ fetchFromGitHub, python, lib }:
 
 with python.pkgs;
 buildPythonApplication rec {
@@ -16,8 +16,8 @@ buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://gitless.com/;
+  meta = with lib; {
+    homepage = "https://gitless.com/";
     description = "A version control system built on top of Git";
     license = licenses.gpl2;
     platforms = platforms.all;

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "humanfriendly";
-  version = "4.18";
+  version = "9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "33ee8ceb63f1db61cce8b5c800c531e1a61023ac5488ccde2ba574a85be00a85";
+    sha256 = "sha256-BmVilWY5qyH/JnbR/aC1mH6YXFNPx2cAoZvVS8uBEh0=";
   };
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.3") monotonic;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Human friendly output for text interfaces using Python";
-    homepage = https://humanfriendly.readthedocs.io/;
+    homepage = "https://humanfriendly.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ montag451 ];
   };

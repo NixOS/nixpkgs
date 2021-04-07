@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libX11 }:
+{ lib, stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
   version = "0.2";
   pname = "sselp";
- 
+
   src = fetchurl {
     url = "https://dl.suckless.org/tools/${pname}-${version}.tar.gz";
     sha256 = "08mqp00lrh1chdrbs18qr0xv63h866lkmfj87kfscwdm1vn9a3yd";
   };
- 
+
   buildInputs = [ libX11 ];
 
   patchPhase = ''
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://tools.suckless.org/sselp;
+    homepage = "https://tools.suckless.org/sselp";
     description = "Prints the X selection to stdout, useful in scripts";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

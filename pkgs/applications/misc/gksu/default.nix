@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, gnome2, gnome3, libgksu,
+{ lib, stdenv, fetchurl, pkg-config, gtk2, gnome2, gnome3, libgksu,
   intltool, libstartup_notification, gtk-doc, wrapGAppsHook
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool gtk-doc wrapGAppsHook
+    pkg-config intltool gtk-doc wrapGAppsHook
   ];
 
   buildInputs = [
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
       programs that need to ask a user's password to run another program
       as another user.
     '';
-    homepage = https://www.nongnu.org/gksu/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.nongnu.org/gksu/";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.romildo ];
+    platforms = lib.platforms.linux;
   };
 }

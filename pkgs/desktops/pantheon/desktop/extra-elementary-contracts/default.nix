@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchFromGitHub
 , file-roller
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     cp *.contract $out/share/contractor/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extra contractor files for elementary";
-    homepage = https://github.com/worldofpeace/extra-elementary-contracts;
+    homepage = "https://github.com/worldofpeace/extra-elementary-contracts";
     license = licenses.gpl2;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

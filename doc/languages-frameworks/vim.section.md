@@ -1,9 +1,4 @@
----
-title: User's Guide for Vim in Nixpkgs
-author: Marc Weber
-date: 2016-06-25
----
-# Vim
+# Vim {#vim}
 
 Both Neovim and Vim can be configured to include your favorite plugins
 and additional libraries.
@@ -161,7 +156,7 @@ assuming that "using latest version" is ok most of the time.
 
 First create a vim-scripts file having one plugin name per line. Example:
 
-```
+```vim
 "tlib"
 {'name': 'vim-addon-sql'}
 {'filetype_regex': '\%(vim)$', 'names': ['reload', 'vim-dev-plugin']}
@@ -202,7 +197,7 @@ nix-shell -p vimUtils.vim_with_vim2nix --command "vim -c 'source generate.vim'"
 You should get a Vim buffer with the nix derivations (output1) and vam.pluginDictionaries (output2).
 You can add your Vim to your system's configuration file like this and start it by "vim-my":
 
-```
+```nix
 my-vim =
   let plugins = let inherit (vimUtils) buildVimPluginFrom2Nix; in {
     copy paste output1 here
@@ -222,7 +217,7 @@ my-vim =
 
 Sample output1:
 
-```
+```nix
 "reload" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
   name = "reload";
   src = fetchgit {
@@ -253,7 +248,7 @@ Nix expressions for Vim plugins are stored in [pkgs/misc/vim-plugins](/pkgs/misc
 
 Some plugins require overrides in order to function properly. Overrides are placed in [overrides.nix](/pkgs/misc/vim-plugins/overrides.nix). Overrides are most often required when a plugin requires some dependencies, or extra steps are required during the build process. For example `deoplete-fish` requires both `deoplete-nvim` and `vim-fish`, and so the following override was added:
 
-```
+```nix
 deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
   dependencies = with super; [ deoplete-nvim vim-fish ];
 });
@@ -261,12 +256,23 @@ deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
 
 Sometimes plugins require an override that must be changed when the plugin is updated. This can cause issues when Vim plugins are auto-updated but the associated override isn't updated. For these plugins, the override should be written so that it specifies all information required to install the plugin, and running `./update.py` doesn't change the derivation for the plugin. Manually updating the override is required to update these types of plugins. An example of such a plugin is `LanguageClient-neovim`.
 
-To add a new plugin:
+To add a new plugin, run `./update.py --add "[owner]/[name]"`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
-  1. run `./update.py` and create a commit named "vimPlugins: Update",
-  2. add the new plugin to [vim-plugin-names](/pkgs/misc/vim-plugins/vim-plugin-names) and add overrides if required to [overrides.nix](/pkgs/misc/vim-plugins/overrides.nix),
-  3. run `./update.py` again and create a commit named "vimPlugins.[name]: init at [version]" (where `name` and `version` can be found in [generated.nix](/pkgs/misc/vim-plugins/generated.nix)), and
-  4. create a pull request.
+Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of Language Server Protocol integration with vim/neovim.
+
+## Updating plugins in nixpkgs
+
+Run the update script with a GitHub API token that has at least `public_repo` access. Running the script without the token is likely to result in rate-limiting (429 errors). For steps on creating an API token, please refer to [GitHub's token documentation](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token).
+
+```sh
+GITHUB_API_TOKEN=my_token ./pkgs/misc/vim-plugins/update.py
+```
+
+Alternatively, set the number of processes to a lower count to avoid rate-limiting.
+
+```sh
+./pkgs/misc/vim-plugins/update.py --proc 1
+```
 
 ## Important repositories
 

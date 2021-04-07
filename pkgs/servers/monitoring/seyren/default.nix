@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "seyren";
@@ -11,16 +11,17 @@ stdenv.mkDerivation rec {
 
   phases = ["installPhase"];
 
-  buildInputs = [ makeWrapper jre ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -p "$out"/bin
     makeWrapper "${jre}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An alerting dashboard for Graphite";
-    homepage = https://github.com/scobal/seyren;
+    homepage = "https://github.com/scobal/seyren";
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];
     platforms = platforms.all;

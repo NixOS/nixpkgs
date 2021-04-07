@@ -4,35 +4,37 @@
 , cmake
 , future
 , numpy
-  # check inputs
+, qdldl
 , scipy
+# check inputs
 , pytestCheckHook
-, mkl
+, cvxopt
 }:
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.1";
+  version = "0.6.2.post0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "130frig5bznfacqp9jwbshmbqd2xw3ixdspsbkrwsvkdaab7kca7";
+    sha256 = "5f0695f26a3bef0fae91254bc283fab790dcca0064bfe0f425167f9c9e8b4cbc";
   };
 
   nativeBuildInputs = [ cmake ];
   dontUseCmakeConfigure = true;
 
   propagatedBuildInputs = [
-    numpy
     future
+    numpy
+    qdldl
+    scipy
   ];
 
-  checkInputs = [ scipy pytestCheckHook mkl ];
   pythonImportsCheck = [ "osqp" ];
-  dontUseSetuptoolsCheck = true;  # running setup.py fails if false
-  preCheck = ''
-    export LD_LIBRARY_PATH=${lib.strings.makeLibraryPath [ mkl ]}:$LD_LIBRARY_PATH;
-  '';
+  checkInputs = [ pytestCheckHook cvxopt ];
+  disabledTests = [
+    "mkl_"
+  ];
 
   meta = with lib; {
     description = "The Operator Splitting QP Solver";
@@ -44,8 +46,8 @@ buildPythonPackage rec {
       where x in R^n is the optimization variable
     '';
     homepage = "https://osqp.org/";
-    downloadPage = "https://github.com/oxfordcontrol/osqp";
+    downloadPage = "https://github.com/oxfordcontrol/osqp-python/releases";
     license = licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

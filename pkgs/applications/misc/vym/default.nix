@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, pkgconfig, qmake, qtscript, qtsvg }:
+{ lib, mkDerivation, fetchurl, pkg-config, qmake, qtscript, qtsvg }:
 
 mkDerivation rec {
   pname = "vym";
@@ -32,7 +32,7 @@ mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [ qtscript qtsvg ];
 
   postInstall = ''
@@ -41,7 +41,7 @@ mkDerivation rec {
 
   dontGzipMan = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A mind-mapping software";
     longDescription = ''
       VYM (View Your Mind) is a tool to generate and manipulate maps which show your thoughts.
@@ -53,7 +53,7 @@ mkDerivation rec {
       While a tree like structure like shown on this page can be drawn by hand or any drawing software
       vym offers much more features to work with such maps.
     '';
-    homepage = http://www.insilmaril.de/vym/;
+    homepage = "http://www.insilmaril.de/vym/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

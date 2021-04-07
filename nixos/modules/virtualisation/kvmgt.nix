@@ -9,8 +9,8 @@ let
 
   vgpuOptions = {
     uuid = mkOption {
-      type = types.str;
-      description = "UUID of VGPU device. You can generate one with <package>libossp_uuid</package>.";
+      type = with types; listOf str;
+      description = "UUID(s) of VGPU device. You can generate one with <package>libossp_uuid</package>.";
     };
   };
 
@@ -19,7 +19,8 @@ in {
     virtualisation.kvmgt = {
       enable = mkEnableOption ''
         KVMGT (iGVT-g) VGPU support. Allows Qemu/KVM guests to share host's Intel integrated graphics card.
-        Currently only one graphical device can be shared
+        Currently only one graphical device can be shared. To allow users to access the device without root add them
+        to the kvm group: <literal>users.extraUsers.&lt;yourusername&gt;.extraGroups = [ "kvm" ];</literal>
       '';
       # multi GPU support is under the question
       device = mkOption {
@@ -35,9 +36,7 @@ in {
           and find info about device via <command>cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description</command>
         '';
         example = {
-          i915-GVTg_V5_8 = {
-            uuid = "a297db4a-f4c2-11e6-90f6-d3b88d6c9525";
-          };
+          i915-GVTg_V5_8.uuid = [ "a297db4a-f4c2-11e6-90f6-d3b88d6c9525" ];
         };
       };
     };
@@ -50,32 +49,37 @@ in {
     };
 
     boot.kernelModules = [ "kvmgt" ];
+    boot.kernelParams = [ "i915.enable_gvt=1" ];
 
-    boot.extraModprobeConfig = ''
-      options i915 enable_gvt=1
+    services.udev.extraRules = ''
+      SUBSYSTEM=="vfio", OWNER="root", GROUP="kvm"
     '';
 
-    systemd.paths = mapAttrs' (name: value:
-      nameValuePair "kvmgt-${name}" {
-        description = "KVMGT VGPU ${name} path";
-        wantedBy = [ "multi-user.target" ];
-        pathConfig = {
-          PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create";
-        };
-      }
-    ) cfg.vgpus;
+    systemd = let
+      vgpus = listToAttrs (flatten (mapAttrsToList
+        (mdev: opt: map (id: nameValuePair "kvmgt-${id}" { inherit mdev; uuid = id; }) opt.uuid)
+        cfg.vgpus));
+    in {
+      paths = mapAttrs (_: opt:
+        {
+          description = "KVMGT VGPU ${opt.uuid} path";
+          wantedBy = [ "multi-user.target" ];
+          pathConfig = {
+            PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${opt.mdev}/create";
+          };
+        }) vgpus;
 
-    systemd.services = mapAttrs' (name: value:
-      nameValuePair "kvmgt-${name}" {
-        description = "KVMGT VGPU ${name}";
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${pkgs.runtimeShell} -c 'echo ${value.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create'";
-          ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${value.uuid}/remove'";
-        };
-      }
-    ) cfg.vgpus;
+      services = mapAttrs (_: opt:
+        {
+          description = "KVMGT VGPU ${opt.uuid}";
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.runtimeShell} -c 'echo ${opt.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${opt.mdev}/create'";
+            ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${opt.uuid}/remove'";
+          };
+        }) vgpus;
+    };
   };
 
   meta.maintainers = with maintainers; [ gnidorah ];

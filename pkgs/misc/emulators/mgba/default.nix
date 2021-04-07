@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkgconfig
-, cmake, epoxy, libzip, ffmpeg, imagemagick, SDL2, qtbase, qtmultimedia, libedit
-, qttools, minizip }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkg-config
+, cmake, epoxy, libzip, libelf, libedit, ffmpeg_3, SDL2, imagemagick
+, qtbase, qtmultimedia, qttools, minizip }:
 
 let
   desktopItem = makeDesktopItem {
@@ -15,29 +15,28 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.7.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "1wrmwh50rv8bd328r8cisrihq6h90kx2bfb0vmjfbsd3l1jvgrgm";
+    sha256 = "sha256-JVauGyHJVfiXVG4Z+Ydh1lRypy5rk9SKeTbeHFNFYJs=";
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
+  nativeBuildInputs = [ wrapQtAppsHook pkg-config cmake ];
 
   buildInputs = [
-    libzip epoxy ffmpeg imagemagick SDL2 qtbase qtmultimedia libedit minizip
-    qttools
+    epoxy libzip libelf libedit ffmpeg_3 SDL2 imagemagick
+    qtbase qtmultimedia qttools minizip
   ];
 
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://mgba.io;
+  meta = with lib; {
+    homepage = "https://mgba.io";
     description = "A modern GBA emulator with a focus on accuracy";
 
     longDescription = ''

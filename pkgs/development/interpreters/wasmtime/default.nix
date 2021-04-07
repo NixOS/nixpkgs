@@ -2,31 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "v0.8.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
-    repo = "${pname}";
-    rev = "${version}";
-    sha256 = "0az893srw49szvs5461bd165ffla4cc98gh42p3dwskwfkhpqjm4";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0q7wsnq5zdskxwzsxwm98jfnv2frnwca1dkhwndcn9yyz2gyw57m";
     fetchSubmodules = true;
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "08b3rbnl7qwyfbwaqcb7z84sh0h94v18v6557hrf0dlil414v54i";
-
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "1r1fm28zaxfbzd17jzaz8ql6ss6y6djgdhpfpkvpbw9l8l06x4lc";
 
   nativeBuildInputs = [ python cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
-    homepage = https://github.com/CraneStation/wasmtime;
+    homepage = "https://github.com/bytecodealliance/wasmtime";
     license = licenses.asl20;
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.unix;

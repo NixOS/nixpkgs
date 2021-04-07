@@ -1,31 +1,51 @@
-{ stdenv, fetchurl, autoreconfHook, boost, libgsf,
-  pkgconfig, bzip2, xmlto, gettext, imagemagick, doxygen }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, bzip2
+, doxygen
+, gettext
+, imagemagick
+, libgsf
+, xmlto
+}:
 
 stdenv.mkDerivation rec {
-  name = "libpst-0.6.74";
+  name = "libpst-0.6.75";
 
   src = fetchurl {
     url = "http://www.five-ten-sg.com/libpst/packages/${name}.tar.gz";
-    sha256 = "0dzx8jniz7mczbbp08zfrl46h27hyfrsnjxmka9pi5aawzfdm1zp";
+    sha256 = "11wrf47i3brlxg25wsfz17373q7m5fpjxn2lr41dj252ignqzaac";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    doxygen
+    gettext
+    xmlto
+  ];
+
   buildInputs = [
-    boost libgsf bzip2
-    xmlto gettext imagemagick doxygen
+    bzip2
+    imagemagick
+    libgsf
   ];
 
   configureFlags = [
     "--enable-python=no"
+    "--disable-static"
+    "--enable-libpst-shared"
   ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.five-ten-sg.com/libpst/;
+  meta = with lib; {
+    homepage = "https://www.five-ten-sg.com/libpst/";
     description = "A library to read PST (MS Outlook Personal Folders) files";
-    license = licenses.gpl2;
-    maintainers = [maintainers.tohl];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.tohl ];
     platforms = platforms.unix;
   };
 }

@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Enum field for Marshmallow";
-    homepage = https://github.com/justanr/marshmallow_enum;
+    homepage = "https://github.com/justanr/marshmallow_enum";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

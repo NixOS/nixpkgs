@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.1.26";
+  version = "3.1.106";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0bd8ccc9ae8e9fd9d5aa4f61a1a5d8b62ff30257fc0f5b2ec61b2f4b26275eee";
+    sha256 = "f0ff300a1762d701b77eb16142dcc13d9d099bbed695f1e950392c1d1bb988eb";
   };
 
   postPatch = ''
@@ -26,13 +26,14 @@ python3Packages.buildPythonApplication rec {
     APScheduler
     beautifulsoup4
     cherrypy
+    colorama
     colorclass
     feedparser
     flask-compress
     flask-cors
     flask_login
     flask-restful
-    flask-restplus
+    flask-restx
     flask
     guessit
     html5lib
@@ -49,9 +50,12 @@ python3Packages.buildPythonApplication rec {
     rebulk
     requests
     rpyc
+    sgmllib3k
     sqlalchemy
     terminaltables
     zxcvbn
+    # plugins
+    transmission-rpc
   ];
 
   meta = with lib; {

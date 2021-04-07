@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, makeWrapper, unzip
+{ lib, stdenv, fetchurl, python2Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
 , ApplicationServices
 , mercurialSrc ? fetchurl rec {
@@ -21,14 +21,15 @@ in python2Packages.buildPythonApplication {
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ makeWrapper docutils unzip ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ docutils ]
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   propagatedBuildInputs = [ hg-git dulwich ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  postInstall = (stdenv.lib.optionalString guiSupport
+  postInstall = (lib.optionalString guiSupport
     ''
       mkdir -p $out/etc/mercurial
       cp contrib/hgk $out/bin
@@ -60,12 +61,12 @@ in python2Packages.buildPythonApplication {
   meta = {
     inherit (mercurialSrc.meta) version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = https://www.mercurial-scm.org;
-    downloadPage = https://www.mercurial-scm.org/release/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.eraserhd ];
+    homepage = "https://www.mercurial-scm.org";
+    downloadPage = "https://www.mercurial-scm.org/release/";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.eraserhd ];
     updateWalker = true;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
 

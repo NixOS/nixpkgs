@@ -98,7 +98,7 @@ index 924a45ec..f05055c3 100644
 +
 +	plugin_path = g_getenv ("OFONO_PLUGIN_PATH");
 +
-+	if (!plugin_path) {
++	if (plugin_path) {
 +		gchar **plugin_path_list;
 +		gsize i;
 +

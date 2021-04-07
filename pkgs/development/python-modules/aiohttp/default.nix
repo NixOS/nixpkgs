@@ -3,67 +3,87 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, pythonAtLeast
+, async-timeout
 , attrs
 , chardet
-, multidict
-, async-timeout
-, yarl
 , idna-ssl
+, multidict
 , typing-extensions
-, pytestrunner
-, pytest
-, gunicorn
-, pytest-timeout
+, yarl
 , async_generator
-, pytest_xdist
-, pytestcov
-, pytest-mock
-, trustme
 , brotlipy
 , freezegun
+, gunicorn
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, re-assert
+, trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.6.2";
-  # https://github.com/aio-libs/aiohttp/issues/4525 python3.8 failures
-  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
+  version = "3.7.4.post0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09pkw6f1790prnrq0k8cqgnf1qy57ll8lpmc6kld09q7zw4vi6i5";
+    sha256 = "493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf";
   };
 
-  checkInputs = [
-    pytestrunner pytest gunicorn async_generator pytest_xdist
-    pytest-mock pytestcov trustme brotlipy freezegun
+  postPatch = ''
+    substituteInPlace setup.cfg --replace " --cov=aiohttp" ""
+  '';
+
+  propagatedBuildInputs = [
+    async-timeout
+    attrs
+    chardet
+    multidict
+    typing-extensions
+    yarl
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    idna-ssl
   ];
 
-  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
-    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
+  checkInputs = [
+    async_generator
+    brotlipy
+    freezegun
+    gunicorn
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+    re-assert
+    trustme
+  ];
 
-  # disable tests which attempt to do loopback connections
-  checkPhase = ''
+  pytestFlagsArray = [
+    "-n auto"
+  ];
+
+  disabledTests = [
+    # Disable tests that require network access
+    "test_mark_formdata_as_processed"
+  ] ++ lib.optionals stdenv.is32bit [
+    "test_cookiejar"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+    "test_close"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  # aiohttp in current folder shadows installed version
+  # Probably because we run `python -m pytest` instead of `pytest` in the hook.
+  preCheck = ''
     cd tests
-    pytest -k "not get_valid_log_format_exc \
-               and not test_access_logger_atoms \
-               and not aiohttp_request_coroutine \
-               and not server_close_keepalive_connection \
-               and not connector \
-               and not client_disconnect \
-               and not handle_keepalive_on_closed_connection \
-               and not proxy_https_bad_response \
-               and not partially_applied_handler \
-               ${lib.optionalString stdenv.is32bit "and not test_cookiejar"} \
-               and not middleware" \
-      --ignore=test_connector.py
   '';
 
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = licenses.asl20;
-    homepage = https://github.com/aio-libs/aiohttp;
+    homepage = "https://github.com/aio-libs/aiohttp";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

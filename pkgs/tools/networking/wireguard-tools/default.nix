@@ -1,24 +1,25 @@
-{
-  stdenv, fetchzip,
-
-  iptables ? null,
-  iproute ? null,
-  makeWrapper ? null,
-  openresolv ? null,
-  procps ? null,
-  wireguard-go ? null,
+{ lib
+, stdenv
+, fetchzip
+, nixosTests
+, iptables
+, iproute2
+, makeWrapper
+, openresolv
+, procps
+, wireguard-go
 }:
-
-with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "1.0.20200206";
+  version = "1.0.20210315";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
-    sha256 = "0ivc08lds5w39a6f2xdfih9wlk5g724hl3kpdvxvh5yff4l84qb7";
+    sha256 = "sha256-aCqgjriqhBInK7C7KapoKVfgj+zreGQzacMKwbMF1Og=";
   };
+
+  outputs = [ "out" "man" ];
 
   sourceRoot = "source/src";
 
@@ -35,19 +36,22 @@ stdenv.mkDerivation rec {
   postFixup = ''
     substituteInPlace $out/lib/systemd/system/wg-quick@.service \
       --replace /usr/bin $out/bin
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute iptables openresolv]}
+      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables openresolv ]}
     done
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
       wrapProgram $f --prefix PATH : ${wireguard-go}/bin
     done
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = nixosTests.wireguard;
+  };
 
-  meta = {
+  meta = with lib; {
     description = "Tools for the WireGuard secure network tunnel";
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";

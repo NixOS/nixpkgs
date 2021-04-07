@@ -1,6 +1,6 @@
-{stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib, camlp4}:
+{lib, stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib, camlp4}:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "ocaml-http is not available for OCaml ${ocaml.version}"
 else
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "ocaml-http-0.1.5";
 
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/545/ocaml-http-0.1.5.tar.gz;
+    url = "https://forge.ocamlcore.org/frs/download.php/545/ocaml-http-0.1.5.tar.gz";
     sha256 = "09q12b0j01iymflssxigsqggbsp8dqh9pfvkm76dv860544mygws";
   };
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation {
     make all opt
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://ocaml-http.forge.ocamlcore.org/;
+  meta = with lib; {
+    homepage = "http://ocaml-http.forge.ocamlcore.org/";
     platforms = ocaml.meta.platforms or [];
     description = "Do it yourself (OCaml) HTTP daemon";
     license = licenses.lgpl2;

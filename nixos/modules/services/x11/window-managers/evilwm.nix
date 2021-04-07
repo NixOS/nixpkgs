@@ -16,8 +16,8 @@ in
     services.xserver.windowManager.session = singleton {
       name = "evilwm";
       start = ''
-	${pkgs.evilwm}/bin/evilwm &
-	waitPID=$!
+        ${pkgs.evilwm}/bin/evilwm &
+        waitPID=$!
       '';
     };
     environment.systemPackages = [ pkgs.evilwm ];

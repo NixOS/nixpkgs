@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "dcfldd-1.3.4-1";
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An enhanced version of GNU dd";
 
-    homepage = http://dcfldd.sourceforge.net/;
+    homepage = "http://dcfldd.sourceforge.net/";
 
     license = licenses.gpl2;
 

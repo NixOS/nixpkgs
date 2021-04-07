@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, allegro }:
+{ lib, stdenv, fetchurl, allegro }:
 
 stdenv.mkDerivation rec {
   pname = "atanks";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)/" "INSTALL=install" "CXX=g++" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Atomic Tanks ballistics game";
-    homepage = http://atanks.sourceforge.net/;
+    homepage = "http://atanks.sourceforge.net/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;

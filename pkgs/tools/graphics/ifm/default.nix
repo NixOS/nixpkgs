@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false; # ifm-scan.l:16:10: fatal error: ifm-parse.h: No such file or directory
 
   meta = with lib; {
-    homepage = https://bitbucket.org/zondo/ifm;
+    homepage = "https://bitbucket.org/zondo/ifm";
     description = "Interactive fiction mapper";
     license = licenses.gpl2;
     platforms = platforms.linux;

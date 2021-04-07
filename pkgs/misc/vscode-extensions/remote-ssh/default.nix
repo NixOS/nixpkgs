@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , vscode-utils
 , useLocalExtensions ? false}:
 # Note that useLocalExtensions requires that vscode-server is not running
@@ -7,7 +7,7 @@
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
-  
+
   # patch runs on remote machine hence use of which
   # links to local node if version is 12
   patch = ''
@@ -21,7 +21,7 @@ let
         ln -s ''$localNodePath ''$f
       fi
     fi
-    ${stdenv.lib.optionalString useLocalExtensions ''
+    ${lib.optionalString useLocalExtensions ''
       # Use local extensions
       if [ -d ~/.vscode/extensions ]; then
         if ! test -L "~/.vscode-server/extensions"; then
@@ -36,8 +36,8 @@ in
     mktplcRef = {
       name = "remote-ssh";
       publisher = "ms-vscode-remote";
-      version = "0.48.0";
-      sha256 = "04q53gljqh5snkrdf5l69g0ahn1s5z35a4ipfcbf1rsjjmm85a19";
+      version = "0.50.0";
+      sha256 = "01pyd6759p5nkjhjy3iplrl748xblr54l1jphk2g02s1n5ds2qb9";
     };
 
     postPatch = ''
@@ -45,7 +45,7 @@ in
         --replace "# install extensions" '${patch}'
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description ="Use any remote machine with a SSH server as your development environment.";
       license = licenses.unfree;
       maintainers = with maintainers; [

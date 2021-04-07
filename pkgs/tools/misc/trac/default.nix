@@ -16,12 +16,12 @@
 
 buildPythonApplication rec {
   pname = "trac";
-  version = "1.4";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit version;
     pname = "Trac";
-    sha256 = "1cg51rg0vb9vf23wgn28z3szlxhwnxprj5m0mvibqyypi123bvx1";
+    sha256 = "0d61ypn0j9wb8119bj3pj7s8swfjykdl0sz398p92k9bvxh4dayz";
   };
 
   prePatch = ''

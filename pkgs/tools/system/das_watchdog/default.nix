@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libgtop, xmessage, which, pkgconfig }:
+{ lib, stdenv, fetchgit, libgtop, xmessage, which, pkg-config }:
 
 stdenv.mkDerivation {
   pname = "das_watchdog";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "02y1vfb3wh4908xjj1kpyf8kgxk29x8dw7yl3pnl220qz2gi99vr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgtop xmessage which ];
 
   installPhase = ''
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
     cp test_rt $out/bin/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kmatheussen/das_watchdog;
+  meta = with lib; {
+    homepage = "https://github.com/kmatheussen/das_watchdog";
     description = "A general watchdog for the linux operating system";
     longDescription = ''
       It should run in the background at all times to ensure a realtime process

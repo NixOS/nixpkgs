@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXext, libjpeg, libpng, giflib }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXext, libjpeg, libpng, giflib }:
 
 stdenv.mkDerivation {
   name = "meh-unstable-2015-04-11";
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A minimal image viewer using raw XLib";
-    homepage = https://www.johnhawthorn.com/meh/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.johnhawthorn.com/meh/";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

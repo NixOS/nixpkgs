@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
 
 stdenv.mkDerivation rec {
   name = "a2ps-4.14";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
       sha256 = "0grqqsc3m45niac56m19m5gx7gc0m8zvia5iman1l4rlq31shf8s";
     })
     (fetchpatch {
+      name = "CVE-2015-8107.patch";
       url = "https://sources.debian.net/data/main/a/a2ps/1:4.14-1.3/debian/patches/fix-format-security.diff";
       sha256 = "0pq7zl41gf2kc6ahwyjnzn93vbxb4jc2c5g8j20isp4vw6dqrnwv";
     })
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf file bison perl ];
   buildInputs = [ libpaper gperf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An Anything to PostScript converter and pretty-printer";
     longDescription = ''
       GNU a2ps converts files into PostScript for printing or viewing. It uses a nice default format,
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
       (page number, printing date, file name or supplied header), line numbering, symbol substitution as
       well as pretty printing for a wide range of programming languages.
     '';
-    homepage = https://www.gnu.org/software/a2ps/;
+    homepage = "https://www.gnu.org/software/a2ps/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bennofs ];
     platforms = platforms.linux;

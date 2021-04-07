@@ -1,44 +1,53 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, less
-, Security, libiconv, installShellFiles, makeWrapper
+{ lib, stdenv
+, nixosTests
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, less
+, Security
+, libiconv
+, installShellFiles
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname   = "bat";
-  version = "0.12.1";
+  pname = "bat";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "1cpa8dal4c27pnbmmrar4vqzcl4h0zf8x1zx1dlf0riavdg9n56y";
-    fetchSubmodules = true;
+    owner = "sharkdp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "113i11sgna82i4c4zk66qmbypmnmzh0lzp4kkgqnxxcdvyj00rb8";
   };
 
-  cargoSha256 = "17xyb84axkn341nd5rm7jza1lrn8wcnl6jirhyv63r5k6mswy39i";
+  cargoSha256 = "12z7y303fmga91daf2w356qiqdqa7b8dz6nrrpnjdf0slyz0w3x4";
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
-    installManPage doc/bat.1
-    installShellCompletion assets/completions/bat.fish
+    installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{fish,zsh}
   '';
 
   # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
   # expected with certain flag combinations.
   postFixup = ''
     wrapProgram "$out/bin/bat" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
+      --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
-  meta = with stdenv.lib; {
+  checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
+
+  passthru.tests = { inherit (nixosTests) bat; };
+
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
-    homepage    = https://github.com/sharkdp/bat;
-    license     = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir lilyball ];
-    platforms   = platforms.all;
+    homepage = "https://github.com/sharkdp/bat";
+    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir lilyball zowoq ];
   };
 }

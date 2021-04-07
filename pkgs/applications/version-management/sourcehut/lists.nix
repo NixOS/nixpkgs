@@ -1,20 +1,15 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , srht, asyncpg, aiosmtpd, pygit2, emailthreads }:
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.40.3";
+  version = "0.45.15";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     rev = version;
-    sha256 = "1s736i5wm04pqa5k7455bdjdi7vjgvq32q1v6mdsp1w7jhgy1ags";
+    sha256 = "0f3yl5nf385j7mhcrmda7zk58i1y6fm00i479js90xxhjifmqkq6";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -28,11 +23,12 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/lists.sr.ht;
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

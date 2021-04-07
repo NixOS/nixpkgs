@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
 fetchFromGitHub rec {
   rev = "7e8f02dadcc23ba42b491b39e5bdf16e7b383031";
@@ -13,7 +13,7 @@ fetchFromGitHub rec {
     cp -t $out/share/fonts/truetype et-book-${rev}/source/4-ttf/*.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The typeface used in Edward Tufte’s books.";
     license = licenses.mit;
     platforms = platforms.all;

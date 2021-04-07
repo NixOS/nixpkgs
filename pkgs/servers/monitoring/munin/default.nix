@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
+{ lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
 , python, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.49";
+  version = "2.0.66";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "13m56wh5cq82pwvv4ngav1zyn2sajxxjigljrz8ycjriw0wvncsf";
+    sha256 = "sha256-1aikMRY1YiSQNUnYqsw1Eew9D9JHbkX+BXNCof6YK50=";
   };
 
   buildInputs = [
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Networked resource monitoring tool";
     longDescription = ''
       Munin is a monitoring tool that surveys all your computers and remembers
@@ -134,9 +134,9 @@ stdenv.mkDerivation rec {
       interface. Munin can help analyze resource trends and 'what just happened
       to kill our performance?' problems.
     '';
-    homepage = http://munin-monitoring.org/;
+    homepage = "http://munin-monitoring.org/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.domenkozar maintainers.bjornfor ];
+    maintainers = [ maintainers.bjornfor ];
     platforms = platforms.linux;
   };
 }

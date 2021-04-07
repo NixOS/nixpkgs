@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
 
 let generic = { major, version, src }:
 
@@ -30,7 +30,7 @@ let generic = { major, version, src }:
       cp -r ${desktopItem}/share/applications $out/share
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Language & tool for relational models";
       longDescription = ''
         Alloy is a language for describing structures and a tool for exploring
@@ -41,11 +41,11 @@ let generic = { major, version, src }:
         finds structures that satisfy them. Structures are displayed graphically,
         and their appearance can be customized for the domain at hand.
       '';
-      homepage = http://alloytools.org/;
-      downloadPage = http://alloytools.org/download.html;
+      homepage = "http://alloytools.org/";
+      downloadPage = "http://alloytools.org/download.html";
       license = licenses.mit;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ aminb ];
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ notbandali ];
     };
   };
 

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   # FIXME
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/coderanger/pychef;
+  meta = with lib; {
+    homepage = "https://github.com/coderanger/pychef";
     description = "Python implementation of a Chef API client";
     license = licenses.bsd0;
   };

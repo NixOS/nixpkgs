@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "acct-6.6.4";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU Accounting Utilities, login and process accounting utilities";
 
     longDescription = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/acct/;
+    homepage = "https://www.gnu.org/software/acct/";
 
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

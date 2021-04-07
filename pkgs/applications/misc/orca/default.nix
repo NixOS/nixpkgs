@@ -1,5 +1,5 @@
-{ stdenv
-, pkgconfig
+{ lib
+, pkg-config
 , fetchurl
 , buildPythonApplication
 , autoreconfHook
@@ -35,13 +35,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "3.34.2";
+  version = "3.38.2";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0aaagz8mxvfigrsdbmg22q44vf5yhkbw4rh4cnizysbfvijk4dan";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "UAX/LhHdH3E/WswZA6JwEZvFjDD9uMn4K8rHFJfGwjw=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     autoreconfHook
     wrapGAppsHook
-    pkgconfig
+    pkg-config
     libxmlxx3
     gettext
     yelp-tools
@@ -97,7 +97,7 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Orca";
     description = "Screen reader";
     longDescription = ''
@@ -110,7 +110,7 @@ buildPythonApplication rec {
 
       Needs `services.gnome3.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ] ++ gnome3.maintainers;
+    maintainers = with maintainers; [ berce ] ++ teams.gnome.members;
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

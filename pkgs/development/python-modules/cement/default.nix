@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "cement";
@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  meta = with stdenv.lib; {
-    homepage = https://builtoncement.com/;
+  meta = with lib; {
+    homepage = "https://builtoncement.com/";
     description = "A CLI Application Framework for Python.";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.bsd3;

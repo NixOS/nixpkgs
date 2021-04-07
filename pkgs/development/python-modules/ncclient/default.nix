@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , paramiko
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.7";
+  version = "0.6.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efdf3c868cd9f104d4e9fe4c233df78bfbbed4b3d78ba19dc27cec3cf6a63680";
+    sha256 = "67b1eba5a6c7c6075746d8c33d4e8f4ded17604034c1fcd1c78996ef52bf66ff";
   };
 
   checkInputs = [ nose rednose ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   #Unfortunately the test hangs at te end
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ncclient/ncclient";
     description = "Python library for NETCONF clients";
     license = licenses.asl20;

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     comment = "G-code generator for 3D printers";
     desktopName = "Slic3r";
     genericName = "3D printer tool";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
 
   prePatch = ''
@@ -75,16 +75,16 @@ stdenv.mkDerivation rec {
     cp "$desktopItem"/share/applications/* "$out/share/applications/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "G-code generator for 3D printers";
     longDescription = ''
       Slic3r is the tool you need to convert a digital 3D model into printing
       instructions for your 3D printer. It cuts the model into horizontal
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
-    homepage = https://slic3r.org/;
+    homepage = "https://slic3r.org/";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor the-kenny ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

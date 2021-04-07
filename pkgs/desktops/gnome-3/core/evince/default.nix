@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , libxml2
 , appstream
@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "3.34.2";
+  version = "3.38.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05q6v9lssd21623mnj2p49clj9v9csw9kay7n4nklki025grbh1w";
+    url = "mirror://gnome/sources/evince/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "J9QZ1f7WMF4HRijtz94MtzT//aIF1jysMjORwEkDvZQ=";
   };
 
   postPatch = ''
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     yelp-tools
@@ -94,8 +94,8 @@ stdenv.mkDerivation rec {
     poppler
     t1lib
     texlive.bin.core # kpathsea for DVI support
-  ] ++ stdenv.lib.optional supportXPS libgxps
-    ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
+  ] ++ lib.optional supportXPS libgxps
+    ++ lib.optionals supportMultimedia (with gst_all_1; [
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
   mesonFlags = [
@@ -115,8 +115,8 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Evince;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Apps/Evince";
     description = "GNOME's document viewer";
 
     longDescription = ''
@@ -126,8 +126,8 @@ stdenv.mkDerivation rec {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers ++ [ maintainers.vcunat ];
+    maintainers = teams.gnome.members;
   };
 }

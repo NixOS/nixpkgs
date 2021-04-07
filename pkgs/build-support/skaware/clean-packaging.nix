@@ -3,12 +3,12 @@
 # files were either discarded or moved to outputs.
 # This ensures nothing is forgotten and new files
 # are correctly handled on update.
-{ stdenv, file, writeScript }:
+{ lib, stdenv, file, writeScript }:
 
 let
-  globWith = stdenv.lib.concatMapStringsSep "\n";
+  globWith = lib.concatMapStringsSep "\n";
   rmNoise = noiseGlobs: globWith (f:
-    ''rm -rf ${f}'') noiseGlobs;
+    "rm -rf ${f}") noiseGlobs;
   mvDoc = docGlobs: globWith
     (f: ''mv ${f} "$DOCDIR" 2>/dev/null || true'')
     docGlobs;
@@ -26,11 +26,11 @@ let
     writeScript "common-file-actions.sh" ''
       #!${stdenv.shell}
       set -e
-      DOCDIR="$1"
+      DOCDIR="''${1?commonFileActions: DOCDIR as argv[1] required}"
       shopt -s globstar extglob nullglob
-      ${rmNoise noiseFiles}
       mkdir -p "$DOCDIR"
       ${mvDoc docFiles}
+      ${rmNoise noiseFiles}
     '';
 
   # Shell script to check whether the build directory is empty.

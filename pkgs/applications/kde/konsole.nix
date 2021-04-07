@@ -8,10 +8,10 @@
 }:
 
 mkDerivation {
-  name = "konsole";
+  pname = "konsole";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel turion ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

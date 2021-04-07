@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   fetchDB = src: sha256: fetchurl {
@@ -29,9 +29,9 @@ stdenv.mkDerivation {
     "asnum/GeoIPASNumv6.dat.gz"
     "1qyq4h8cja62giv6q1qqc502vsq53wzz1kx80mgvwngmycrxa21k";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GeoLite Legacy IP geolocation databases";
-    homepage = https://geolite.maxmind.com/download/geoip;
+    homepage = "https://geolite.maxmind.com/download/geoip";
     license = licenses.cc-by-sa-30;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
