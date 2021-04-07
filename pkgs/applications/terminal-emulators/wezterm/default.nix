@@ -13,11 +13,13 @@
 , CoreGraphics
 , Cocoa
 , Foundation
+, libiconv
 
 , dbus
 , libX11
 , xcbutil
 , libxcb
+, xcbutilimage
 , xcbutilkeysyms
 , xcbutilwm # contains xcb-ewmh among others
 , libxkbcommon
@@ -38,6 +40,7 @@ let
     libX11
     xcbutil
     libxcb
+    xcbutilimage
     xcbutilkeysyms
     xcbutilwm
     libxkbcommon
@@ -51,22 +54,23 @@ let
     Foundation
     CoreGraphics
     Cocoa
+    libiconv
   ];
   pname = "wezterm";
 in
 
 rustPlatform.buildRustPackage {
   inherit pname;
-  version = "unstable-2020-11-22";
+  version = "20210314";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
-    rev = "3bd8d8c84591f4d015ff9a47ddb478e55c231fda";
-    sha256 = "13xf3685kir4p159hsxrqkj9p2lwgfp0n13h9zadslrd44l8b8j8";
+    rev = "20210314-114017-04b7cedd";
+    sha256 = "sha256-EwoJLwOgoXtTEBbf/4pM+pCCG8fGkVruHVYh2HivCd0=";
     fetchSubmodules = true;
   };
-  cargoSha256 = "1ghjpyd3f5dqi6bblr6d2lihdschpyj5djfd1600hvb41x75lmhx";
+  cargoSha256 = "sha256-OHbWgnlul9VfbPcMdzbuRJG59+myiukkzmnWohj5v2k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -77,21 +81,17 @@ rustPlatform.buildRustPackage {
 
   buildInputs = runtimeDeps;
 
-  installPhase = "" + lib.optionalString stdenv.isLinux ''
+  preFixup = "" + lib.optionalString stdenv.isLinux ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do
-      patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $releaseDir/$artifact
-      install -D $releaseDir/$artifact -t $out/bin
+      patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $out/bin/$artifact
     done
   '' + lib.optionalString stdenv.isDarwin ''
-  mkdir -p "$out/Applications"
-  OUT_APP="$out/Applications/WezTerm.app"
-  cp -r assets/macos/WezTerm.app "$OUT_APP"
-  rm $OUT_APP/*.dylib
-  cp -r assets/shell-integration/* "$OUT_APP"
-  cp $releaseDir/wezterm "$OUT_APP"
-  cp $releaseDir/wezterm-mux-server "$OUT_APP"
-  cp $releaseDir/wezterm-gui "$OUT_APP"
-  cp $releaseDir/strip-ansi-escapes "$OUT_APP"
+    mkdir -p "$out/Applications"
+    OUT_APP="$out/Applications/WezTerm.app"
+    cp -r assets/macos/WezTerm.app "$OUT_APP"
+    rm $OUT_APP/*.dylib
+    cp -r assets/shell-integration/* "$OUT_APP"
+    ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
   '';
 
   # prevent further changes to the RPATH
