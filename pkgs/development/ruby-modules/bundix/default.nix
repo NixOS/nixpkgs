@@ -38,7 +38,7 @@ buildRubyGem rec {
     '';
     homepage = "https://github.com/manveru/bundix";
     license = "MIT";
-    maintainers = with lib.maintainers; [ manveru zimbatm ];
+    maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
     platforms = lib.platforms.all;
   };
 }
