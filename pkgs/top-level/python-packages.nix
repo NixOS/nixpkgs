@@ -9031,6 +9031,8 @@ in {
 
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
 
+  yalexs = callPackage ../development/python-modules/yalexs { };
+
   yamale = callPackage ../development/python-modules/yamale { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
