@@ -96,6 +96,15 @@ stdenv.mkDerivation rec {
       sha256 = "ZUXKZS4T0o0hzrApxaqcR0txCRv5zBgqeQ9K9fLNX1o=";
     })
 
+    # GDM fails to find g-s with the following error in the journal.
+    # gdm-x-session[976]: dbus-run-session: failed to exec 'gnome-session': No such file or directory
+    # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/92
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/ccecd9c975d04da80db4cd547b67a1a94fa83292.patch";
+      sha256 = "5hKS9wjjhuSAYwXct5vS0dPbmPRIINJoLC0Zm1naz6Q=";
+      revert = true;
+    })
+
     # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
