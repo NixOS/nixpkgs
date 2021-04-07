@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "bokeh";
-  version = "2.2.3";
+  version = "2.2.3";  # update together with panel which is not straightforward
 
   src = fetchPypi {
     inherit pname version;
