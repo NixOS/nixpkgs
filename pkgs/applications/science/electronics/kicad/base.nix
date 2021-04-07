@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
-  version = kicadVersion;
+  version = if (stable) then kicadVersion else builtins.substring 0 10 src.rev;
 
   src = kicadSrc;
 

@@ -155,11 +155,8 @@ in
 stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
-  passthru.libraries = callPackages ./libraries.nix { inherit libSrc libVersion; };
-  passthru.i18n = callPackage ./i18n.nix {
-    src = i18nSrc;
-    version = i18nVersion;
-  };
+  passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  passthru.i18n = callPackage ./i18n.nix { src = i18nSrc; };
   base = callPackage ./base.nix {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
@@ -169,7 +166,7 @@ stdenv.mkDerivation rec {
   };
 
   inherit pname;
-  version = kicadVersion;
+  version = if (stable) then kicadVersion else builtins.substring 0 10 src.src.rev;
 
   src = base;
   dontUnpack = true;
