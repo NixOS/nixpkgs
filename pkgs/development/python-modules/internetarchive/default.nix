@@ -53,7 +53,7 @@ buildPythonPackage rec {
     description = "A Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
     changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = [ maintainers.marsam ];
   };
 }
