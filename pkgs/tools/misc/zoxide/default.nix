@@ -15,14 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "v${version}";
-    sha256 = "143lh94mw31pm9q7ib63h2k842g3h222mdabhf25hpb19lka2w5y";
+    sha256 = "ZeGFsVBpEhKi4EIhpQlCuriFzmHAgLYw3qE/zqfyqgU=";
   };
+
+  cargoSha256 = "Hzn01+OhdBrZD1woXN4Pwf/S72Deln1gyyBOWyDC6iM=";
 
   # tests are broken on darwin
   doCheck = !stdenv.isDarwin;
@@ -45,8 +47,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/fzf.rs \
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
-
-  cargoSha256 = "05mp101yk1zkjj1gwbkldizq6f9f8089gqgvq42c4ngq88pc7v9a";
 
   meta = with lib; {
     description = "A fast cd command that learns your habits";
