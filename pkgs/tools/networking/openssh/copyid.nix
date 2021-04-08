@@ -8,5 +8,5 @@ runCommandNoCC "ssh-copy-id-${openssh.version}" {
   };
 } ''
   install -Dm 755 {${openssh},$out}/bin/ssh-copy-id
-  installManPage ${openssh}/share/man/man1/ssh-copy-id.1.gz
+  install -Dm 644 {${openssh},$out}/share/man/man1/ssh-copy-id.1.gz
 ''
