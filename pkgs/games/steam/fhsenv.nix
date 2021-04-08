@@ -86,6 +86,8 @@ in buildFHSUserEnv rec {
     steamPackages.steam
     # License agreement
     gnome3.zenity
+
+    gtk3 # 32 bit version of tracker does not like to build, see https://github.com/NixOS/nixpkgs/issues/118155
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
@@ -113,7 +115,6 @@ in buildFHSUserEnv rec {
     udev # shadow of the tomb raider
 
     ## screeps dependencies
-    gtk3
     dbus
     zlib
     glib
