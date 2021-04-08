@@ -7113,6 +7113,8 @@ in
     etcDir = "/etc/ssh";
   };
 
+  ssh-copy-id = callPackage ../tools/networking/openssh/copyid.nix { };
+
   opensp = callPackage ../tools/text/sgml/opensp { };
 
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
