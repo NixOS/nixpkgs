@@ -19983,6 +19983,8 @@ in
 
     v86d = callPackage ../os-specific/linux/v86d { };
 
+    vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
+
     vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
 
     virtualbox = callPackage ../os-specific/linux/virtualbox {
