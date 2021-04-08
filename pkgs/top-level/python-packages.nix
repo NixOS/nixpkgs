@@ -655,6 +655,8 @@ in {
 
   awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
 
+  awslambdaric = callPackage ../development/python-modules/awslambdaric { };
+
   axis = callPackage ../development/python-modules/axis { };
 
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
@@ -4117,6 +4119,8 @@ in {
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  makefun = callPackage ../development/python-modules/makefun { };
 
   Mako = callPackage ../development/python-modules/Mako { };
 

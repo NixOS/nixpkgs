@@ -8167,6 +8167,12 @@
     githubId = 16779;
     name = "Rickard Nilsson";
   };
+  riey = {
+    email = "creeper844@gmail.com";
+    github = "Riey";
+    githubId = 14910534;
+    name = "Riey";
+  };
   rika = {
     email = "rika@paymentswit.ch";
     github = "NekomimiScience";

@@ -44,7 +44,9 @@ buildPythonPackage rec {
 
   # Relax version constraint
   postPatch = ''
-    sed -i 's/coverage < 4/coverage/' setup.py
+    substituteInPlace setup.py \
+      --replace 'coverage < 4' 'coverage' \
+      --replace 'fido2>=0.8.1,<0.9.0' 'fido2>=0.8.1,<1.0.0'
   '';
 
   # Test suite writes files to $HOME/.aws/, or /homeless-shelter if unset
