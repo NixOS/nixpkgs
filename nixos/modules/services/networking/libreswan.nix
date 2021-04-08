@@ -91,7 +91,7 @@ in
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";
       path = [
         "${pkgs.libreswan}"
-        "${pkgs.iproute}"
+        "${pkgs.iproute2}"
         "${pkgs.procps}"
         "${pkgs.nssTools}"
         "${pkgs.iptables}"
@@ -115,8 +115,8 @@ in
         ExecStart = "${libexec}/pluto --config ${configFile} --nofork \$PLUTO_OPTIONS";
         ExecStop = "${libexec}/whack --shutdown";
         ExecStopPost = [
-          "${pkgs.iproute}/bin/ip xfrm policy flush"
-          "${pkgs.iproute}/bin/ip xfrm state flush"
+          "${pkgs.iproute2}/bin/ip xfrm policy flush"
+          "${pkgs.iproute2}/bin/ip xfrm state flush"
           "${ipsec} --stopnflog"
         ];
         ExecReload = "${libexec}/whack --listen";
