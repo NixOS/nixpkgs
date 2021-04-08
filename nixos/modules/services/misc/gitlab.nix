@@ -155,6 +155,7 @@ let
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
+    MALLOC_ARENA_MAX = "2";
   };
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
