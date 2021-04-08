@@ -52,7 +52,7 @@ in
       description = "List of settings.js overrides to pass via -D to Node-RED.";
       example = literalExample ''
         {
-          "logging.console.level=" = "trace";
+          "logging.console.level" = "trace";
         }
       '';
     };
