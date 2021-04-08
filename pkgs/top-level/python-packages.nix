@@ -7347,6 +7347,8 @@ in {
 
   roombapy = callPackage ../development/python-modules/roombapy { };
 
+  ronin = callPackage ../development/python-modules/ronin { };
+
   rope = callPackage ../development/python-modules/rope { };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
