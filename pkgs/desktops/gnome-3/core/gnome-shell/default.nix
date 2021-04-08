@@ -96,6 +96,18 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
+
+    # Fix copying technical details when extension crashes.
+    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1795
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/1b5d71130e3a48d8f636542f979346add7829544.patch";
+      sha256 = "WXRG/+u/N7KTTG1HutcMvw5HU2XWUmqFExmOXrOkeeA=";
+    })
+    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1796
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f337878286518418dbeab360768fba8e291b15d.patch";
+      sha256 = "xD0iIjlUGDLM5tTNDNtx6ZgxL25EKYgaBEH4JOZh8AM=";
+    })
   ];
 
   nativeBuildInputs = [
