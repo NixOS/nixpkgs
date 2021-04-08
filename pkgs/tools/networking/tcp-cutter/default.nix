@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "cutter-1.04";
+  pname = "tcp-cutter";
+  version = "1.04";
 
   src = fetchurl {
-    url = "http://www.digitage.co.uk/digitage/files/cutter/${name}.tgz";
+    url = "http://www.digitage.co.uk/digitage/files/cutter/${pname}-${version}.tgz";
     sha256 = "100iy31a3njif6vh9gfsqrm14hac05rrflla275gd4rkxdlnqcqv";
   };
 
