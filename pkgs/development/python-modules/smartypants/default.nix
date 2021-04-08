@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchhg
+, fetchFromGitHub
 , isPyPy
 }:
 
@@ -9,15 +9,21 @@ buildPythonPackage rec {
   pname = "smartypants";
   disabled = isPyPy;
 
-  src = fetchhg {
-    url = "https://bitbucket.org/livibetter/smartypants.py";
+  src = fetchFromGitHub {
+    owner = "leohemsted";
+    repo = "smartypants.py";
     rev = "v${version}";
     sha256 = "1cmzz44d2hm6y8jj2xcq1wfr26760gi7iq92ha8xbhb1axzd7nq6";
+    # remove this file and the name on the next version update
+    extraPostFetch = ''
+      cp ${./hgtags} "$out"/.hgtags
+    '';
+    name = "hg-archive";
   };
 
   meta = with stdenv.lib; {
     description = "Python with the SmartyPants";
-    homepage = "https://bitbucket.org/livibetter/smartypants.py";
+    homepage = "https://github.com/leohemsted/smartypants.py";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
