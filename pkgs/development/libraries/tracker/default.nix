@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -44,6 +45,9 @@ stdenv.mkDerivation rec {
       inherit asciidoc;
     })
     ./fix-docs.patch
+    # Fix 32bit datetime issue, use this upstream patch until 3.1.2 lands
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/292
+    ./fix-datetime.patch
   ];
 
   nativeBuildInputs = [

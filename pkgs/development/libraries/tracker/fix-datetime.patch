@@ -1,0 +1,1150 @@
+diff --git a/docs/reference/libtracker-sparql/limits.xml b/docs/reference/libtracker-sparql/limits.xml
+index 6119fe9ac2ac19e0956b7e5646fa74af2d17f1e3..4e269cf5f38e6d3a9c2765c292d6c5748e7ef1df 100644
+--- a/docs/reference/libtracker-sparql/limits.xml
++++ b/docs/reference/libtracker-sparql/limits.xml
+@@ -126,7 +126,7 @@
+     <para>
+       Integers are 64 bit wide. Floating point numbers have IEEE764
+       double precision. Dates/times have microsecond precision, and may
+-      range between 0000-01-01 00:00:00 and 9999-12-31 23:59:59.
++      range between 0001-01-01 00:00:00 and 9999-12-31 23:59:59.
+     </para>
+   </sect2>
+ </part>
+diff --git a/src/libtracker-common/tracker-date-time.c b/src/libtracker-common/tracker-date-time.c
+index 003239f6af8d9912faa17b1d3ff3a99c92245cee..bfc05c7827994c13539359d3423e8391e38dc907 100644
+--- a/src/libtracker-common/tracker-date-time.c
++++ b/src/libtracker-common/tracker-date-time.c
+@@ -20,17 +20,6 @@
+ 
+ #include "config.h"
+ 
+-/* For timegm usage on __GLIBC__ we need _GNU_SOURCE, should be
+- * defined in config.h based on configure checks...
+- */
+-
+-#include <strings.h>
+-#include <string.h>
+-#include <math.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <time.h>
+-
+ #include <glib.h>
+ 
+ #include "tracker-date-time.h"
+@@ -39,313 +28,34 @@ GQuark tracker_date_error_quark (void) {
+ 	return g_quark_from_static_string ("tracker_date_error-quark");
+ }
+ 
+-gdouble
+-tracker_string_to_date (const gchar *date_string,
+-                        gint        *offset_p,
+-                        GError      **error)
++GDateTime *
++tracker_date_new_from_iso8601 (const gchar  *string,
++			       GError      **error)
+ {
+-	/* TODO Add more checks.
+-	 */
+-
+-	static GRegex *regex = NULL;
+-
+-	GMatchInfo *match_info;
+-	gchar      *match;
+-	struct tm tm;
+-	gdouble t;
+-	gint offset;
+-	gboolean timezoned;
++	GDateTime *datetime;
++	GTimeZone *tz;
+ 
+-	if (!date_string) {
+-		g_set_error (error, TRACKER_DATE_ERROR, TRACKER_DATE_ERROR_EMPTY,
+-		             "Empty date string");
+-		return -1;
+-	}
+-
+-	/* We should have a valid iso 8601 date in format
+-	 * YYYY-MM-DDThh:mm:ss with optional TZ
+-	 */
++	tz = g_time_zone_new_local ();
++	datetime = g_date_time_new_from_iso8601 (string, tz);
++	g_time_zone_unref (tz);
+ 
+-	if (!regex) {
+-		GError *e = NULL;
+-		regex = g_regex_new ("^(-?[0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])T([0-9][0-9]):([0-9][0-9]):([0-9][0-9])(\\.[0-9]+)?(Z|(\\+|-)([0-9][0-9]):?([0-9][0-9]))?$", 0, 0, &e);
+-		if (e) {
+-			g_error ("%s", e->message);
+-		}
++	if (!datetime) {
++		g_set_error (error,
++			     TRACKER_DATE_ERROR,
++			     TRACKER_DATE_ERROR_INVALID_ISO8601,
++		             "'%s' is not a ISO 8601 date string. "
++			     "Allowed form is CCYY-MM-DDThh:mm:ss[.ssssss][Z|(+|-)hh:mm]",
++			     string);
+ 	}
+ 
+-	if (!g_regex_match (regex, date_string, 0, &match_info)) {
+-		g_match_info_free (match_info);
+-		g_set_error (error, TRACKER_DATE_ERROR, TRACKER_DATE_ERROR_INVALID_ISO8601,
+-		             "Not a ISO 8601 date string. Allowed form is [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm]");
+-		return -1;
+-	}
+-
+-	memset (&tm, 0, sizeof (struct tm));
+-
+-	/* year */
+-	match = g_match_info_fetch (match_info, 1);
+-	tm.tm_year = atoi (match) - 1900;
+-	g_free (match);
+-
+-	/* month */
+-	match = g_match_info_fetch (match_info, 2);
+-	tm.tm_mon = atoi (match) - 1;
+-	g_free (match);
+-
+-	/* day of month */
+-	match = g_match_info_fetch (match_info, 3);
+-	tm.tm_mday = atoi (match);
+-	g_free (match);
+-
+-	/* hour */
+-	match = g_match_info_fetch (match_info, 4);
+-	tm.tm_hour = atoi (match);
+-	g_free (match);
+-
+-	/* minute */
+-	match = g_match_info_fetch (match_info, 5);
+-	tm.tm_min = atoi (match);
+-	g_free (match);
+-
+-	/* second */
+-	match = g_match_info_fetch (match_info, 6);
+-	tm.tm_sec = atoi (match);
+-	g_free (match);
+-
+-	match = g_match_info_fetch (match_info, 8);
+-	timezoned = (match && strlen (match) > 0);
+-	g_free (match);
+-
+-	if (timezoned) {
+-		/* timezoned */
+-
+-		/* mktime() always assumes that "tm" is in locale time but we
+-		 * want to keep control on time, so we go to UTC
+-		 */
+-#if !(defined(__FreeBSD__) || defined(__OpenBSD__) || defined (__GLIBC__))
+-		t  = mktime (&tm);
+-		t -= timezone;
+-#else
+-		t = timegm (&tm);
+-#endif
+-
+-		offset = 0;
+-
+-		match = g_match_info_fetch (match_info, 9);
+-		if (match && strlen (match) > 0) {
+-			/* non-UTC timezone */
+-
+-			gboolean positive_offset;
+-
+-			positive_offset = (match[0] == '+');
+-			g_free (match);
+-
+-			match = g_match_info_fetch (match_info, 10);
+-			offset = atoi (match) * 3600;
+-			g_free (match);
+-
+-			match = g_match_info_fetch (match_info, 11);
+-			offset += atoi (match) * 60;
+-			g_free (match);
+-
+-			if (!positive_offset) {
+-				offset = -offset;
+-			}
+-
+-			if (offset < -14 * 3600 || offset > 14 * 3600) {
+-				g_set_error (error, TRACKER_DATE_ERROR, TRACKER_DATE_ERROR_OFFSET,
+-				             "UTC offset too large: %d seconds", offset);
+-				g_match_info_free (match_info);
+-				return -1;
+-			}
+-
+-			t -= offset;
+-		}
+-	} else {
+-		time_t t2;
+-
+-		/* local time */
+-		tm.tm_isdst = -1;
+-
+-		t = mktime (&tm);
+-
+-		/* calculate UTC offset, requires timegm for correct result
+-		   with past times when timezone had different UTC offset */
+-#if !(defined(__FreeBSD__) || defined(__OpenBSD__) || defined (__GLIBC__))
+-		offset = -timezone + (tm.tm_isdst > 0 ? 3600 : 0);
+-#else
+-		t2 = timegm (&tm);
+-		offset = t2 - (time_t) t;
+-#endif
+-	}
+-
+-	match = g_match_info_fetch (match_info, 7);
+-	if (match && strlen (match) > 0) {
+-		char milliseconds[4] = "000\0";
+-		/* first character of match is decimal point
+-		   we're interested in a maximum of 3 decimal places (milliseconds) */
+-		memcpy (milliseconds, match + 1, MIN (3, strlen (match + 1)));
+-		t += (gdouble) atoi (milliseconds) / 1000;
+-	}
+-	g_free (match);
+-
+-	g_match_info_free (match_info);
+-
+-	if (offset_p) {
+-		*offset_p = offset;
+-	}
+-
+-	return t;
++	return datetime;
+ }
+ 
+ gchar *
+-tracker_date_to_string (gdouble date_time,
+-                        gint    offset)
+-{
+-	gchar buffer[35];
+-	time_t seconds;
+-	gint64 total_milliseconds;
+-	gint milliseconds;
+-	struct tm utc_time;
+-	size_t count, size;
+-
+-	memset (buffer, '\0', sizeof (buffer));
+-	memset (&utc_time, 0, sizeof (struct tm));
+-
+-	total_milliseconds = (gint64) round (date_time * 1000);
+-	milliseconds = total_milliseconds % 1000;
+-	if (milliseconds < 0) {
+-		milliseconds += 1000;
+-	}
+-	seconds = (time_t) ((total_milliseconds - milliseconds) / 1000) + offset;
+-	gmtime_r (&seconds, &utc_time);
+-
+-	/* Output is ISO 8601 format : "YYYY-MM-DDThh:mm:ss" */
+-	count = strftime (buffer, sizeof (buffer), "%4Y-%m-%dT%T", &utc_time);
+-
+-	/* Append milliseconds (if non-zero) and time zone */
+-	if (milliseconds > 0) {
+-		size = snprintf (buffer + count, sizeof (buffer) - count, ".%03d", milliseconds);
+-		count += size;
+-	}
+-
+-	if (offset != 0) {
+-		gint hours, mins;
+-
+-		hours = ABS (offset) / 3600;
+-		mins = (ABS (offset) % 3600) / 60;
+-		size = snprintf (buffer + count, sizeof (buffer) - count, "%c%.2d:%.2d",
+-		                 offset < 0 ? '-' : '+',
+-		                 hours, mins);
+-		count += size;
+-	} else {
+-		buffer[count++] = 'Z';
+-	}
+-
+-	g_assert (count <= sizeof (buffer));
+-
+-	return count > 0 ? g_strdup (buffer) : NULL;
+-}
+-
+-static void
+-date_time_value_init (GValue *value)
+-{
+-	value->data[0].v_double = 0;
+-	value->data[1].v_int = 0;
+-}
+-
+-static void
+-date_time_value_copy (const GValue *src_value,
+-                      GValue       *dest_value)
++tracker_date_format_iso8601 (GDateTime *datetime)
+ {
+-	dest_value->data[0].v_double = src_value->data[0].v_double;
+-	dest_value->data[1].v_int = src_value->data[1].v_int;
+-}
+-
+-GType
+-tracker_date_time_get_type (void)
+-{
+-	static GType tracker_date_time_type_id = 0;
+-	if (G_UNLIKELY (tracker_date_time_type_id == 0)) {
+-		static const GTypeValueTable value_table = {
+-			date_time_value_init,
+-			NULL,
+-			date_time_value_copy
+-		};
+-		static const GTypeInfo type_info = {
+-			0,
+-			NULL,
+-			NULL,
+-			NULL,
+-			NULL,
+-			NULL,
+-			0,
+-			0,
+-			NULL,
+-			&value_table
+-		};
+-		static const GTypeFundamentalInfo fundamental_info = {
+-			0
+-		};
+-		tracker_date_time_type_id = g_type_register_fundamental (
+-			g_type_fundamental_next (),
+-			"TrackerDateTime",
+-			&type_info,
+-			&fundamental_info,
+-			0);
+-	}
+-	return tracker_date_time_type_id;
+-}
+-
+-void
+-tracker_date_time_set (GValue  *value,
+-                       gdouble  time,
+-                       gint     offset)
+-{
+-	g_return_if_fail (G_VALUE_HOLDS (value, TRACKER_TYPE_DATE_TIME));
+-	g_return_if_fail (offset >= -14 * 3600 && offset <= 14 * 3600);
+-
+-	value->data[0].v_double = time;
+-	value->data[1].v_int = offset;
+-}
+-
+-void
+-tracker_date_time_set_from_string (GValue      *value,
+-                                   const gchar *date_time_string,
+-                                   GError     **error)
+-{
+-	gdouble time;
+-	gint offset;
+-	GError *new_error = NULL;
+-
+-	g_return_if_fail (G_VALUE_HOLDS (value, TRACKER_TYPE_DATE_TIME));
+-	g_return_if_fail (date_time_string != NULL);
+-
+-	time = tracker_string_to_date (date_time_string, &offset, &new_error);
+-
+-	if (new_error != NULL) {
+-		g_propagate_error (error, new_error);
+-		return;
+-	}
+-
+-	tracker_date_time_set (value, time, offset);
+-}
+-
+-gdouble
+-tracker_date_time_get_time (const GValue *value)
+-{
+-	g_return_val_if_fail (G_VALUE_HOLDS (value, TRACKER_TYPE_DATE_TIME), 0);
+-
+-	/* UTC timestamp */
+-	return value->data[0].v_double;
+-}
+-
+-gint
+-tracker_date_time_get_offset (const GValue *value)
+-{
+-	g_return_val_if_fail (G_VALUE_HOLDS (value, TRACKER_TYPE_DATE_TIME), 0);
+-
+-	/* UTC offset */
+-	return value->data[1].v_int;
++	if (g_date_time_get_utc_offset (datetime) == 0)
++		return g_date_time_format (datetime, "%C%y-%m-%dT%TZ");
++	else
++		return g_date_time_format (datetime, "%C%y-%m-%dT%T%:z");
+ }
+diff --git a/src/libtracker-common/tracker-date-time.h b/src/libtracker-common/tracker-date-time.h
+index cd3111b49110208c8e52b5deaf56e3a9581149e6..34ddbf3187bce75d67e07246b07022ac0ce6f999 100644
+--- a/src/libtracker-common/tracker-date-time.h
++++ b/src/libtracker-common/tracker-date-time.h
+@@ -41,22 +41,9 @@ typedef enum  {
+ 
+ GQuark   tracker_date_error_quark              (void);
+ 
+-GType    tracker_date_time_get_type            (void);
+-
+-void     tracker_date_time_set                 (GValue       *value,
+-                                                gdouble       time,
+-                                                gint          offset);
+-void     tracker_date_time_set_from_string     (GValue       *value,
+-                                                const gchar  *date_time_string,
+-                                                GError      **error);
+-gdouble  tracker_date_time_get_time            (const GValue *value);
+-gint     tracker_date_time_get_offset          (const GValue *value);
+-
+-gdouble  tracker_string_to_date                (const gchar  *date_string,
+-                                                gint         *offset,
+-                                                GError      **error);
+-gchar *  tracker_date_to_string                (gdouble       date_time,
+-                                                gint          offset);
++GDateTime * tracker_date_new_from_iso8601 (const gchar  *string,
++					   GError      **error);
++gchar * tracker_date_format_iso8601 (GDateTime *datetime);
+ 
+ G_END_DECLS
+ 
+diff --git a/src/libtracker-data/tracker-data-manager.c b/src/libtracker-data/tracker-data-manager.c
+index 2be94685d1dab6ec0acbc99d448310059c307350..264f6a5eae40efbf23e12d9e458f80276830dac9 100644
+--- a/src/libtracker-data/tracker-data-manager.c
++++ b/src/libtracker-data/tracker-data-manager.c
+@@ -1243,6 +1243,8 @@ tracker_data_ontology_load_statement (TrackerDataManager  *manager,
+ 		tracker_namespace_set_prefix (namespace, object);
+ 	} else if (g_strcmp0 (predicate, NRL_LAST_MODIFIED) == 0) {
+ 		TrackerOntology *ontology;
++		GDateTime *datetime;
++		GError *error = NULL;
+ 
+ 		ontology = tracker_ontologies_get_ontology_by_uri (manager->ontologies, subject);
+ 		if (ontology == NULL) {
+@@ -1254,7 +1256,16 @@ tracker_data_ontology_load_statement (TrackerDataManager  *manager,
+ 			return;
+ 		}
+ 
+-		tracker_ontology_set_last_modified (ontology, tracker_string_to_date (object, NULL, NULL));
++		datetime = tracker_date_new_from_iso8601 (object, &error);
++		if (!datetime) {
++			g_critical ("%s: error parsing nrl:lastModified: %s",
++				    ontology_path, error->message);
++			g_error_free (error);
++			return;
++		}
++
++		tracker_ontology_set_last_modified (ontology, g_date_time_to_unix (datetime));
++		g_date_time_unref (datetime);
+ 	}
+ }
+ 
+@@ -1856,6 +1867,8 @@ get_ontology_from_file (TrackerDataManager *manager,
+ 			}
+ 		} else if (g_strcmp0 (predicate, NRL_LAST_MODIFIED) == 0) {
+ 			TrackerOntology *ontology;
++			GDateTime *datetime;
++			GError *error = NULL;
+ 
+ 			ontology = g_hash_table_lookup (ontology_uris, subject);
+ 			if (ontology == NULL) {
+@@ -1865,7 +1878,16 @@ get_ontology_from_file (TrackerDataManager *manager,
+ 				return NULL;
+ 			}
+ 
+-			tracker_ontology_set_last_modified (ontology, tracker_string_to_date (object, NULL, NULL));
++			datetime = tracker_date_new_from_iso8601 (object, NULL);
++			if (!datetime) {
++				g_critical ("%s: error parsing nrl:lastModified: %s",
++					    subject, error->message);
++				g_error_free (error);
++				return NULL;
++			}
++
++			tracker_ontology_set_last_modified (ontology, g_date_time_to_unix (datetime));
++			g_date_time_unref (datetime);
+ 
+ 			/* This one is here because lower ontology_uris is destroyed, and
+ 			 * else would this one's reference also be destroyed with it */
+diff --git a/src/libtracker-data/tracker-data-update.c b/src/libtracker-data/tracker-data-update.c
+index 150792adc94ab9df399a88166ad41670e4a2cf0c..7ed6beed2e8b5335d0c42b7417dd0a7cd4dffdf5 100644
+--- a/src/libtracker-data/tracker-data-update.c
++++ b/src/libtracker-data/tracker-data-update.c
+@@ -770,21 +770,22 @@ statement_bind_gvalue (TrackerDBStatement *stmt,
+ 		tracker_db_statement_bind_double (stmt, (*idx)++, g_value_get_double (value));
+ 		break;
+ 	default:
+-		if (type == TRACKER_TYPE_DATE_TIME) {
+-			gdouble time = tracker_date_time_get_time (value);
+-			int offset = tracker_date_time_get_offset (value);
++		if (type == G_TYPE_DATE_TIME) {
++			GDateTime *datetime = g_value_get_boxed (value);
+ 
+ 			/* If we have anything that prevents a unix timestamp to be
+ 			 * lossless, we use the ISO8601 string.
+ 			 */
+-			if (offset != 0 || floor (time) != time) {
++			if (g_date_time_get_utc_offset (datetime) != 0 ||
++			    g_date_time_get_microsecond (datetime) != 0) {
+ 				gchar *str;
+ 
+-				str = tracker_date_to_string (time, offset);
++				str = tracker_date_format_iso8601 (datetime);
+ 				tracker_db_statement_bind_text (stmt, (*idx)++, str);
+ 				g_free (str);
+ 			} else {
+-				tracker_db_statement_bind_int (stmt, (*idx)++, round (time));
++				tracker_db_statement_bind_int (stmt, (*idx)++,
++				                               g_date_time_to_unix (datetime));
+ 			}
+ 		} else if (type == G_TYPE_BYTES) {
+ 			GBytes *bytes;
+@@ -1390,12 +1391,12 @@ value_equal (GValue *value1,
+ 		/* does RDF define equality for floating point values? */
+ 		return g_value_get_double (value1) == g_value_get_double (value2);
+ 	default:
+-		if (type == TRACKER_TYPE_DATE_TIME) {
+-			/* ignore UTC offset for comparison, irrelevant for comparison according to xsd:dateTime spec
++		if (type == G_TYPE_DATE_TIME) {
++			/* UTC offset is ignored for comparison, irrelevant according to xsd:dateTime spec
+ 			 * http://www.w3.org/TR/xmlschema-2/#dateTime
+-			 * also ignore sub-millisecond as this is a floating point comparison
+ 			 */
+-			return fabs (tracker_date_time_get_time (value1) - tracker_date_time_get_time (value2)) < 0.001;
++			return g_date_time_compare (g_value_get_boxed (value1),
++			                            g_value_get_boxed (value2)) == 0;
+ 		}
+ 		g_assert_not_reached ();
+ 	}
+@@ -1513,29 +1514,27 @@ get_property_values (TrackerData      *data,
+ 
+ 				if (G_VALUE_TYPE (&gvalue)) {
+ 					if (tracker_property_get_data_type (property) == TRACKER_PROPERTY_TYPE_DATETIME) {
+-						if (G_VALUE_TYPE (&gvalue) == G_TYPE_INT64) {
+-							gdouble time;
++						GDateTime *datetime;
+ 
+-							time = g_value_get_int64 (&gvalue);
++						if (G_VALUE_TYPE (&gvalue) == G_TYPE_INT64) {
++							datetime = g_date_time_new_from_unix_utc (g_value_get_int64 (&gvalue));
+ 							g_value_unset (&gvalue);
+-							g_value_init (&gvalue, TRACKER_TYPE_DATE_TIME);
+-							/* UTC offset is irrelevant for comparison */
+-							tracker_date_time_set (&gvalue, time, 0);
++							g_value_init (&gvalue, G_TYPE_DATE_TIME);
++							g_value_take_boxed (&gvalue, datetime);
+ 						} else {
+-							gchar *time;
+-
+-							time = g_value_dup_string (&gvalue);
++							datetime = tracker_date_new_from_iso8601 (g_value_get_string (&gvalue),
++												  &inner_error);
+ 							g_value_unset (&gvalue);
+-							g_value_init (&gvalue, TRACKER_TYPE_DATE_TIME);
+-							tracker_date_time_set_from_string (&gvalue, time, &inner_error);
+-							g_free (time);
+ 
+ 							if (inner_error) {
+ 								g_propagate_prefixed_error (error,
+ 								                            inner_error,
+-								                            "Error in date conversion:");
++											    "Error in date conversion:");
+ 								return NULL;
+ 							}
++
++							g_value_init (&gvalue, G_TYPE_DATE_TIME);
++							g_value_take_boxed (&gvalue, datetime);
+ 						}
+ 					}
+ 
+@@ -1664,7 +1663,8 @@ bytes_to_gvalue (GBytes              *bytes,
+                  GError             **error)
+ {
+ 	gint object_id;
+-	gchar *datetime;
++	gchar *datetime_str;
++	GDateTime *datetime;
+ 	const gchar *value;
+ 
+ 	value = g_bytes_get_data (bytes, NULL);
+@@ -1694,13 +1694,21 @@ bytes_to_gvalue (GBytes              *bytes,
+ 		break;
+ 	case TRACKER_PROPERTY_TYPE_DATE:
+ 		g_value_init (gvalue, G_TYPE_INT64);
+-		datetime = g_strdup_printf ("%sT00:00:00Z", value);
+-		g_value_set_int64 (gvalue, tracker_string_to_date (datetime, NULL, error));
+-		g_free (datetime);
++		datetime_str = g_strdup_printf ("%sT00:00:00Z", value);
++		datetime = tracker_date_new_from_iso8601 (datetime_str, error);
++		g_free (datetime_str);
++
++		if (datetime) {
++			g_value_set_int64 (gvalue, g_date_time_to_unix (datetime));
++			g_date_time_unref (datetime);
++		}
+ 		break;
+ 	case TRACKER_PROPERTY_TYPE_DATETIME:
+-		g_value_init (gvalue, TRACKER_TYPE_DATE_TIME);
+-		tracker_date_time_set_from_string (gvalue, value, error);
++		g_value_init (gvalue, G_TYPE_DATE_TIME);
++		datetime = tracker_date_new_from_iso8601 (value, error);
++
++		if (datetime)
++			g_value_take_boxed (gvalue, datetime);
+ 		break;
+ 	case TRACKER_PROPERTY_TYPE_RESOURCE:
+ 		object_id = tracker_data_update_ensure_resource (data, value, NULL, error);
+@@ -1813,15 +1821,13 @@ bytes_from_gvalue (GValue       *gvalue,
+ 		}
+ 
+ 		*bytes = g_bytes_new (object, strlen (object) + 1);
+-	} else if (G_VALUE_HOLDS (gvalue, TRACKER_TYPE_DATE_TIME)) {
+-		gdouble time;
+-		gint offset;
+-
+-		time = tracker_date_time_get_time (gvalue);
+-		offset = tracker_date_time_get_offset (gvalue);
+-		str = tracker_date_to_string (time, offset);
++	} else if (G_VALUE_HOLDS (gvalue, G_TYPE_DATE_TIME)) {
++		GDateTime *datetime;
+ 
++		datetime = g_value_get_boxed (gvalue);
++		str = tracker_date_format_iso8601 (datetime);
+ 		*bytes = g_bytes_new_take (str, strlen (str) + 1);
++		g_free (str);
+ 	} else {
+ 		g_set_error (error,
+ 		             TRACKER_SPARQL_ERROR,
+diff --git a/src/libtracker-data/tracker-db-interface-sqlite.c b/src/libtracker-data/tracker-db-interface-sqlite.c
+index 36758519241151d82d586663c32437bdab3199a1..2615c140378137d8cad6ab7c8179ecd2aadb26fb 100644
+--- a/src/libtracker-data/tracker-db-interface-sqlite.c
++++ b/src/libtracker-data/tracker-db-interface-sqlite.c
+@@ -442,12 +442,20 @@ function_sparql_format_time (sqlite3_context *context,
+ 		sqlite3_result_null (context);
+ 		return;
+ 	} else if (sqlite3_value_numeric_type (argv[0]) == SQLITE_INTEGER) {
+-		gdouble seconds;
+-		gchar *str;
++		GDateTime *datetime;
++		gint64 timestamp;
+ 
+-		seconds = sqlite3_value_double (argv[0]);
+-		str = tracker_date_to_string (seconds, 0);
+-		sqlite3_result_text (context, str, -1, g_free);
++		timestamp = sqlite3_value_int64 (argv[0]);
++		datetime = g_date_time_new_from_unix_utc (timestamp);
++
++		if (datetime) {
++			sqlite3_result_text (context,
++					     tracker_date_format_iso8601 (datetime),
++					     -1, g_free);
++			g_date_time_unref (datetime);
++		} else {
++			result_context_function_error (context, fn, "Datetime conversion error");
++		}
+ 	} else if (sqlite3_value_type (argv[0]) == SQLITE_TEXT) {
+ 		const gchar *str;
+ 
+@@ -480,20 +488,21 @@ function_sparql_timestamp (sqlite3_context *context,
+ 		sqlite3_result_double (context, seconds);
+ 	} else if (sqlite3_value_type (argv[0]) == SQLITE_TEXT) {
+ 		GError *error = NULL;
++		GDateTime *datetime;
+ 		const gchar *str;
+-		gdouble time;
+-		gint offset;
+ 
+ 		str = sqlite3_value_text (argv[0]);
+-		time = tracker_string_to_date (str, &offset, &error);
+-
++		datetime = tracker_date_new_from_iso8601 (str, &error);
+ 		if (error) {
+ 			result_context_function_error (context, fn, "Failed time string conversion");
+ 			g_error_free (error);
+ 			return;
+ 		}
+ 
+-		sqlite3_result_double (context, time + offset);
++		sqlite3_result_int64 (context,
++				      g_date_time_to_unix (datetime) +
++				      (g_date_time_get_utc_offset (datetime) / G_USEC_PER_SEC));
++		g_date_time_unref (datetime);
+ 	} else {
+ 		result_context_function_error (context, fn, "Invalid argument type");
+ 	}
+@@ -522,20 +531,21 @@ function_sparql_time_sort (sqlite3_context *context,
+ 		value = sqlite3_value_double (argv[0]);
+ 		sort_key = (gint64) (value * G_USEC_PER_SEC);
+ 	} else if (sqlite3_value_type (argv[0]) == SQLITE_TEXT) {
++		GDateTime *datetime;
+ 		const gchar *value;
+-		gdouble time;
+ 		GError *error = NULL;
+ 
+ 		value = sqlite3_value_text (argv[0]);
+-		time = tracker_string_to_date (value, NULL, &error);
+-
++		datetime = tracker_date_new_from_iso8601 (value, &error);
+ 		if (error) {
+ 			result_context_function_error (context, fn, error->message);
+ 			g_error_free (error);
+ 			return;
+ 		}
+ 
+-		sort_key = (gint64) (time * G_USEC_PER_SEC);
++		sort_key = ((g_date_time_to_unix (datetime) * G_USEC_PER_SEC) +
++			    g_date_time_get_microsecond (datetime));
++		g_date_time_unref (datetime);
+ 	} else {
+ 		result_context_function_error (context, fn, "Invalid argument type");
+ 		return;
+@@ -562,19 +572,21 @@ function_sparql_time_zone_duration (sqlite3_context *context,
+ 		sqlite3_result_int (context, 0);
+ 	} else if (sqlite3_value_type (argv[0]) == SQLITE_TEXT) {
+ 		GError *error = NULL;
++		GDateTime *datetime;
+ 		const gchar *str;
+-		gint offset;
+ 
+ 		str = sqlite3_value_text (argv[0]);
+-		tracker_string_to_date (str, &offset, &error);
+-
++		datetime = tracker_date_new_from_iso8601 (str, &error);
+ 		if (error) {
+ 			result_context_function_error (context, fn, "Invalid date");
+ 			g_error_free (error);
+ 			return;
+ 		}
+ 
+-		sqlite3_result_int (context, offset);
++		sqlite3_result_int64 (context,
++				      g_date_time_get_utc_offset (datetime) /
++				      G_USEC_PER_SEC);
++		g_date_time_unref (datetime);
+ 	} else {
+ 		result_context_function_error (context, fn, "Invalid argument type");
+ 	}
+@@ -668,21 +680,22 @@ function_sparql_time_zone (sqlite3_context *context,
+ 		sqlite3_result_text (context, "PT0S", -1, NULL);
+ 	} else if (sqlite3_value_type (argv[0]) == SQLITE_TEXT) {
+ 		GError *error = NULL;
++		GDateTime *datetime;
+ 		const gchar *str;
+ 		gchar *duration;
+-		gint offset;
+ 
+ 		str = sqlite3_value_text (argv[0]);
+-		tracker_string_to_date (str, &offset, &error);
+-
++		datetime = tracker_date_new_from_iso8601 (str, &error);
+ 		if (error) {
+ 			result_context_function_error (context, fn, "Invalid date");
+ 			g_error_free (error);
+ 			return;
+ 		}
+ 
+-		duration = offset_to_duration (offset);
++		duration = offset_to_duration (g_date_time_get_utc_offset (datetime) /
++					       G_USEC_PER_SEC);
+ 		sqlite3_result_text (context, g_strdup (duration), -1, g_free);
++		g_date_time_unref (datetime);
+ 	} else {
+ 		result_context_function_error (context, fn, "Invalid argument type");
+ 	}
+diff --git a/src/libtracker-data/tracker-ontology.c b/src/libtracker-data/tracker-ontology.c
+index edfc143942e3dc2db9dcf4ce95a72e66a089d314..a050755b3cedd3d39fab69b4d6d7329fc28d444f 100644
+--- a/src/libtracker-data/tracker-ontology.c
++++ b/src/libtracker-data/tracker-ontology.c
+@@ -32,7 +32,7 @@ typedef struct _TrackerOntologyPrivate TrackerOntologyPrivate;
+ 
+ struct _TrackerOntologyPrivate {
+ 	gchar *uri;
+-	time_t last_modified;
++	gint64 last_modified;
+ 	gboolean is_new;
+ 	TrackerOntologies *ontologies;
+ };
+@@ -76,7 +76,7 @@ tracker_ontology_new (void)
+ 	return ontology;
+ }
+ 
+-time_t
++gint64
+ tracker_ontology_get_last_modified (TrackerOntology *ontology)
+ {
+ 	TrackerOntologyPrivate *priv;
+@@ -103,7 +103,7 @@ tracker_ontology_get_is_new (TrackerOntology *ontology)
+ 
+ void
+ tracker_ontology_set_last_modified (TrackerOntology *ontology,
+-                                    time_t           value)
++                                    gint64           value)
+ {
+ 	TrackerOntologyPrivate *priv;
+ 
+diff --git a/src/libtracker-data/tracker-ontology.h b/src/libtracker-data/tracker-ontology.h
+index b1978b9d9196ec5fcd524c6e86ae4ce47033c102..f1cad56ee82020321e39f9f0f307093119e573f0 100644
+--- a/src/libtracker-data/tracker-ontology.h
++++ b/src/libtracker-data/tracker-ontology.h
+@@ -51,9 +51,9 @@ struct _TrackerOntologyClass {
+ 
+ GType             tracker_ontology_get_type          (void) G_GNUC_CONST;
+ TrackerOntology  *tracker_ontology_new               (void);
+-time_t            tracker_ontology_get_last_modified (TrackerOntology *ontology);
++gint64            tracker_ontology_get_last_modified (TrackerOntology *ontology);
+ void              tracker_ontology_set_last_modified (TrackerOntology *ontology,
+-                                                      time_t           value);
++                                                      gint64           value);
+ const gchar *     tracker_ontology_get_uri           (TrackerOntology *ontology);
+ gboolean          tracker_ontology_get_is_new        (TrackerOntology *ontology);
+ 
+diff --git a/src/libtracker-data/tracker-sparql.c b/src/libtracker-data/tracker-sparql.c
+index fd9ca99dcbba3442bcc51ff38712fc9d544f176f..5314cbae7984dc18e69099c85553b8dd8b9a526b 100644
+--- a/src/libtracker-data/tracker-sparql.c
++++ b/src/libtracker-data/tracker-sparql.c
+@@ -9542,10 +9542,10 @@ prepare_query (TrackerSparql         *sparql,
+ 		} else if (prop_type == TRACKER_PROPERTY_TYPE_DATE) {
+ 			GError *inner_error = NULL;
+ 			gchar *full_str;
+-			gdouble datetime;
++			GDateTime *datetime;
+ 
+ 			full_str = g_strdup_printf ("%sT00:00:00Z", binding->literal);
+-			datetime = tracker_string_to_date (full_str, NULL, &inner_error);
++			datetime = tracker_date_new_from_iso8601 (full_str, &inner_error);
+ 			g_free (full_str);
+ 
+ 			if (inner_error) {
+@@ -9554,13 +9554,14 @@ prepare_query (TrackerSparql         *sparql,
+ 				return NULL;
+ 			}
+ 
+-			tracker_db_statement_bind_int (stmt, i, (int) datetime);
++			tracker_db_statement_bind_int (stmt, i,
++						       g_date_time_to_unix (datetime));
++			g_date_time_unref (datetime);
+ 		} else if (prop_type == TRACKER_PROPERTY_TYPE_DATETIME) {
+ 			GError *inner_error = NULL;
+-			gdouble datetime;
+-			gint offset = 0;
++			GDateTime *datetime;
+ 
+-			datetime = tracker_string_to_date (binding->literal, &offset, &inner_error);
++			datetime = tracker_date_new_from_iso8601 (binding->literal, &inner_error);
+ 			if (inner_error) {
+ 				g_propagate_error (error, inner_error);
+ 				g_object_unref (stmt);
+@@ -9570,11 +9571,15 @@ prepare_query (TrackerSparql         *sparql,
+ 			/* If we have anything that prevents a unix timestamp to be
+ 			 * lossless, we use the ISO8601 string.
+ 			 */
+-			if (offset != 0 || floor (datetime) != datetime) {
++			if (g_date_time_get_utc_offset (datetime) != 0 ||
++			    g_date_time_get_microsecond (datetime) != 0) {
+ 				tracker_db_statement_bind_text (stmt, i, binding->literal);
+ 			} else {
+-				tracker_db_statement_bind_int (stmt, i, datetime);
++				tracker_db_statement_bind_int (stmt, i,
++							       g_date_time_to_unix (datetime));
+ 			}
++
++			g_date_time_unref (datetime);
+ 		} else if (prop_type == TRACKER_PROPERTY_TYPE_INTEGER) {
+ 			tracker_db_statement_bind_int (stmt, i, atoi (binding->literal));
+ 		} else if (prop_type == TRACKER_PROPERTY_TYPE_LANGSTRING &&
+diff --git a/tests/libtracker-common/meson.build b/tests/libtracker-common/meson.build
+index a748e57f15d4addb84352441190f29d85bbd4745..57fc32927254bebb41f182956de90ed387f620e0 100644
+--- a/tests/libtracker-common/meson.build
++++ b/tests/libtracker-common/meson.build
+@@ -1,5 +1,4 @@
+ libtracker_common_tests = [
+-    'date-time',
+     'file-utils',
+     'utils',
+ ]
+diff --git a/tests/libtracker-common/tracker-date-time-test.c b/tests/libtracker-common/tracker-date-time-test.c
+deleted file mode 100644
+index 88826912074a1d24264ee5e03a2c9d76b9b6d369..0000000000000000000000000000000000000000
+--- a/tests/libtracker-common/tracker-date-time-test.c
++++ /dev/null
+@@ -1,274 +0,0 @@
+-/*
+- * Copyright (C) 2011, Nokia <ivan.frade@nokia.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public
+- * License as published by the Free Software Foundation; either
+- * version 2 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public
+- * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+- * Boston, MA  02110-1301, USA.
+- */
+-
+-#include <time.h>
+-#include <string.h>
+-
+-#include <glib.h>
+-#include <glib-object.h>
+-
+-#include <libtracker-common/tracker-date-time.h>
+-
+-/* This define was committed in glib 18.07.2011
+- * https://bugzilla.gnome.org/show_bug.cgi?id=577231
+- */
+-#ifndef G_VALUE_INIT
+-#define G_VALUE_INIT { 0, { { 0 } } }
+-#endif
+-
+-static void
+-test_string_to_date_failures_subprocess ()
+-{
+-	GError *error = NULL;
+-
+-	tracker_string_to_date (NULL, NULL, &error);
+-
+-	if (error) {
+-		g_warning ("%s", error->message);
+-		g_error_free (error);
+-	}
+-}
+-
+-static void
+-test_string_to_date_failures ()
+-{
+-	g_test_trap_subprocess ("/libtracker-common/date-time/string_to_date_failures/subprocess", 0, 0);
+-	g_test_trap_assert_failed ();
+-	g_test_trap_assert_stderr ("*Empty date string*");
+-}
+-
+-static void
+-test_string_to_date (void)
+-{
+-	GDate     *expected;
+-	GDate     *result;
+-	time_t     result_time_t;
+-	const gchar  *input = "2008-06-16T11:10:10+0600";
+-	gchar  *timezone = g_strdup (g_getenv ("TZ"));
+-	GError *error = NULL;
+-
+-	if (! g_setenv ("TZ", "UTC", TRUE)) {
+-		g_test_message ("unable to set timezone, test results are invalid, skipping\n");
+-		if (timezone) {
+-			g_free (timezone);
+-		}
+-		return;
+-	}
+-
+-	expected = g_date_new_dmy (16, G_DATE_JUNE, 2008);
+-
+-	result_time_t = tracker_string_to_date (input, NULL, &error);
+-	g_assert_no_error (error);
+-
+-	result = g_date_new ();
+-	g_date_set_time_t (result, result_time_t);
+-
+-	if (timezone) {
+-		g_setenv ("TZ", timezone, TRUE);
+-		g_free (timezone);
+-	} else {
+-		g_unsetenv ("TZ");
+-	}
+-
+-	g_assert_cmpint (g_date_get_year (expected), ==, g_date_get_year (result));
+-	g_assert_cmpint (g_date_get_day (expected), ==, g_date_get_day (result));
+-	g_assert_cmpint (g_date_get_month (expected), ==, g_date_get_month (result));
+-
+-	g_date_free (expected);
+-	g_date_free (result);
+-
+-
+-	result_time_t = tracker_string_to_date ("", NULL, &error);
+-	g_assert_cmpint (result_time_t, ==, -1);
+-	g_assert_error (error, TRACKER_DATE_ERROR, TRACKER_DATE_ERROR_INVALID_ISO8601);
+-	g_error_free (error);
+-	error = NULL;
+-
+-	result_time_t = tracker_string_to_date ("i am not a date", NULL, &error);
+-	g_assert_cmpint (result_time_t, ==, -1);
+-	g_assert_error (error, TRACKER_DATE_ERROR, TRACKER_DATE_ERROR_INVALID_ISO8601);
+-	g_error_free (error);
+-	error = NULL;
+-
+-	/* Fails! Check the code
+-	   result_time_t = tracker_string_to_date ("2008-06-32T04:23:10+0000", NULL);
+-	   g_assert_cmpint (result_time_t, ==, -1);
+-	*/
+-
+-        /* More cases of string->date are tested in tracker_date_time_from_string...
+-         *  it is more convinient to test them there
+-         */
+-}
+-
+-static void
+-test_date_to_string (void)
+-{
+-	struct tm *original;
+-	time_t     input;
+-	gchar     *result;
+-
+-	original = g_new0 (struct tm, 1);
+-	original->tm_sec = 10;
+-	original->tm_min = 53;
+-	original->tm_hour = 23;
+-	original->tm_mday = 16;
+-	original->tm_mon = 5;
+-	original->tm_year = 108;
+-	original->tm_isdst = 0;
+-
+-#if !(defined(__FreeBSD__) || defined(__OpenBSD__))
+-	input = mktime (original) - timezone;
+-#else
+-	input = timegm (original);
+-#endif
+-
+-	result = tracker_date_to_string (input, 0);
+-	g_assert_true (result != NULL && strncmp (result, "2008-06-16T23:53:10Z", 19) == 0);
+-	g_free (result);
+-
+-	result = tracker_date_to_string (input, 7200);
+-	g_assert_cmpstr (result, ==, "2008-06-17T01:53:10+02:00");
+-	g_free (result);
+-
+-	result = tracker_date_to_string (input, -7200);
+-	g_assert_cmpstr (result, ==, "2008-06-16T21:53:10-02:00");
+-	g_free (result);
+-
+-	result = tracker_date_to_string (input, -9000);
+-	g_assert_cmpstr (result, ==, "2008-06-16T21:23:10-02:30");
+-	g_free (result);
+-
+-	g_free (original);
+-}
+-
+-static void
+-test_date_time_get_set ()
+-{
+-        GValue value = G_VALUE_INIT;
+-        GValue copy = G_VALUE_INIT;
+-
+-        g_value_init (&value, TRACKER_TYPE_DATE_TIME);
+-        g_value_init (&copy, TRACKER_TYPE_DATE_TIME);
+-
+-        tracker_date_time_set (&value, 123456789, 3600);
+-
+-        g_assert_cmpint (tracker_date_time_get_time (&value), ==, 123456789);
+-        g_assert_cmpint (tracker_date_time_get_offset (&value), ==, 3600);
+-
+-        g_value_copy (&value, &copy);
+-
+-        g_assert_cmpint (tracker_date_time_get_time (&copy), ==, 123456789);
+-        g_assert_cmpint (tracker_date_time_get_offset (&copy), ==, 3600);
+-}
+-
+-static void
+-test_date_time_from_string ()
+-{
+-        GValue value = G_VALUE_INIT;
+-        GError *error = NULL;
+-
+-        g_value_init (&value, TRACKER_TYPE_DATE_TIME);
+-
+-        tracker_date_time_set_from_string (&value, "2011-10-28T17:43:00+03:00", &error);
+-        g_assert_true (!error);
+-        g_assert_cmpint (tracker_date_time_get_time (&value), ==, 1319812980);
+-        g_assert_cmpint (tracker_date_time_get_offset (&value), ==, 10800);
+-
+-
+-        /* Negative offset */
+-        tracker_date_time_set_from_string (&value, "2011-10-28T17:43:00-03:00", &error);
+-        g_assert_true (!error);
+-        g_assert_cmpint (tracker_date_time_get_time (&value), ==, 1319834580);
+-        g_assert_cmpint (tracker_date_time_get_offset (&value), ==, -10800);
+-
+-        /* No offset */
+-        tracker_date_time_set_from_string (&value, "2011-10-28T17:43:00Z", &error);
+-        g_assert_true (!error);
+-        g_assert_cmpint (tracker_date_time_get_time (&value), ==, 1319823780);
+-        g_assert_cmpint (tracker_date_time_get_offset (&value), ==, 0);
+-
+-        /* Invalid format */
+-        tracker_date_time_set_from_string (&value, "2011-10-28T17:43:00Z0900", &error);
+-        g_assert_true (error);
+-        g_error_free (error);
+-        error = NULL;
+-
+-        /* There are no 28 months... */
+-        tracker_date_time_set_from_string (&value, "2011-28-10T17:43:00Z0900", &error);
+-        g_assert_true (error);
+-        g_error_free (error);
+-        error = NULL;
+-
+-        /* ... nor more than +-12 offsets */
+-        tracker_date_time_set_from_string (&value, "2011-28-10T17:43:00+17:00", &error);
+-        g_assert_true (error);
+-        g_error_free (error);
+-        error = NULL;
+-
+-        /* ... the same for the glory of the branch % */
+-        tracker_date_time_set_from_string (&value, "2011-28-10T17:43:00-17:00", &error);
+-        g_assert_true (error);
+-        g_error_free (error);
+-        error = NULL;
+-}
+-
+-static void
+-test_date_time_conversions (void)
+-{
+-        GError *error = NULL;
+-        time_t time;
+-        int offset;
+-        const gchar *date_str;
+-        gchar *result;
+-
+-        date_str = "2011-10-28T17:43:00+03:00";
+-
+-	time = tracker_string_to_date (date_str, &offset, &error);
+-        g_assert_true (!error);
+-
+-        g_assert_cmpint (time, ==, 1319812980);
+-        g_assert_cmpint (offset, ==, 10800);
+-
+-        result = tracker_date_to_string (time, offset);
+-        g_assert_cmpstr (result, ==, date_str);
+-	g_free (result);
+-}
+-
+-gint
+-main (gint argc, gchar **argv) 
+-{
+-        g_test_init (&argc, &argv, NULL);
+-
+-        g_test_add_func ("/libtracker-common/date-time/date_to_string",
+-                         test_date_to_string);
+-        g_test_add_func ("/libtracker-common/date-time/string_to_date",
+-                         test_string_to_date);
+-        g_test_add_func ("/libtracker-common/date-time/string_to_date_failures",
+-                         test_string_to_date_failures);
+-        g_test_add_func ("/libtracker-common/date-time/string_to_date_failures/subprocess",
+-                         test_string_to_date_failures_subprocess);
+-        g_test_add_func ("/libtracker-common/date-time/get_set",
+-                         test_date_time_get_set);
+-        g_test_add_func ("/libtracker-common/date-time/from_string",
+-                         test_date_time_from_string);
+-        g_test_add_func ("/libtracker-common/date-time/conversions",
+-                         test_date_time_conversions);
+-
+-        return g_test_run ();
+-}
+diff --git a/tests/libtracker-data/datetime/direct-1.out b/tests/libtracker-data/datetime/direct-1.out
+index 566938b9de196f6c9417933c889c148b767d35fb..a26f106729c51158a12e2cfeea8e8742138e158b 100644
+--- a/tests/libtracker-data/datetime/direct-1.out
++++ b/tests/libtracker-data/datetime/direct-1.out
+@@ -1 +1 @@
+-"0000-01-01T00:00:00Z"	"2020-01-01T00:00:00Z"	"9999-01-01T00:00:00Z"
++"0001-01-01T00:00:00Z"	"2020-01-01T00:00:00Z"	"9999-01-01T00:00:00Z"
+diff --git a/tests/libtracker-data/datetime/direct-1.rq b/tests/libtracker-data/datetime/direct-1.rq
+index 51de510705b55a7f5c022bb4016550fb81902c3f..a9f90e7a3164b196572231eef5e55b4e83d61c9c 100644
+--- a/tests/libtracker-data/datetime/direct-1.rq
++++ b/tests/libtracker-data/datetime/direct-1.rq
+@@ -1 +1 @@
+-SELECT ("0000-01-01T00:00:00Z"^^xsd:dateTime AS ?d1) ("2020-01-01T00:00:00Z"^^xsd:dateTime AS ?d2) ("9999-01-01T00:00:00Z"^^xsd:dateTime AS ?d3) {}
+\ No newline at end of file
++SELECT ("0001-01-01T00:00:00Z"^^xsd:dateTime AS ?d1) ("2020-01-01T00:00:00Z"^^xsd:dateTime AS ?d2) ("9999-01-01T00:00:00Z"^^xsd:dateTime AS ?d3) {}
+\ No newline at end of file
