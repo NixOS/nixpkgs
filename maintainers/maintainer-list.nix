@@ -7631,6 +7631,16 @@
     githubId = 610615;
     name = "Chih-Mao Chen";
   };
+  plabadens = {
+    name = "Pierre Labadens";
+    email = "labadens.pierre+nixpkgs@gmail.com";
+    github = "plabadens";
+    githubId = 4303706;
+    keys = [{
+      longkeyid = "rsa2048/0xF55814E4D6874375";
+      fingerprint = "B00F E582 FD3F 0732 EA48  3937 F558 14E4 D687 4375";
+    }];
+  };
   plchldr = {
     email = "mail@oddco.de";
     github = "plchldr";
