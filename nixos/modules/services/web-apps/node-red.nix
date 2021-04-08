@@ -42,7 +42,7 @@ in
 
     safe = mkOption {
       type = types.bool;
-      default = "false";
+      default = false;
       description = "Whether to launch Node-RED in --safe mode.";
     };
 
