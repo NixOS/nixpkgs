@@ -28,6 +28,7 @@ in {
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.openresolv ];
       serviceConfig.Environment = "PORT=${toString cfg.port}";
     };
   };

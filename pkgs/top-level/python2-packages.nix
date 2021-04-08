@@ -578,7 +578,9 @@ with self; with super; {
 
   sympy = callPackage ../development/python-modules/sympy/1_5.nix { };
 
-  tables = callPackage ../development/python-modules/tables/3.5.nix { };
+  tables = callPackage ../development/python-modules/tables/3.5.nix {
+    hdf5 = pkgs.hdf5_1_10;
+  };
 
   tarman = callPackage ../development/python-modules/tarman { };
 

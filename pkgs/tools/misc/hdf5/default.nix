@@ -10,6 +10,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , javaSupport ? false
 , jdk
+, usev110Api ? false
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -50,7 +51,8 @@ stdenv.mkDerivation rec {
     ++ optional (szip != null) "--with-szlib=${szip}"
     ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared"
-    ++ optional javaSupport "--enable-java";
+    ++ optional javaSupport "--enable-java"
+    ++ optional usev110Api "--with-default-api-version=v110";
 
   patches = [
     ./bin-mv.patch

@@ -392,6 +392,14 @@ in with py.pkgs; buildPythonApplication rec {
   preCheck = ''
     # the tests require the existance of a media dir
     mkdir /build/media
+
+    # error out when component test directory is missing, otherwise hidden by xdist execution :(
+    for component in ${lib.concatStringsSep " " (map lib.escapeShellArg componentTests)}; do
+      test -d "tests/components/$component" || {
+        >2& echo "ERROR: Tests for component '$component' were enabled, but they do not exist!"
+        exit 1
+      }
+    done
   '';
 
   passthru = {
@@ -405,7 +413,7 @@ in with py.pkgs; buildPythonApplication rec {
     homepage = "https://home-assistant.io/";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin mic92 hexa ];
+    maintainers = teams.home-assistant.members;
     platforms = platforms.linux;
   };
 }

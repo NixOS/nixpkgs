@@ -20,6 +20,16 @@ buildPythonPackage rec {
 
   checkInputs = [ mock pyfakefs ];
 
+  # Testing with `python setup.py test` doesn't work:
+  # https://github.com/Yubico/python-fido2/issues/108#issuecomment-763513576
+  checkPhase = ''
+    runHook preCheck
+
+    python -m unittest discover -v
+
+    runHook postCheck
+  '';
+
   pythonImportsCheck = [ "fido2" ];
 
   meta = with lib; {

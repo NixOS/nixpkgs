@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TelZDuCah8KC1Vhzf/tbYXXMv9JtWArdEN9E0PBH9sI=";
   };
 
-  patches = lib.optional isStatic ./no-shared-lib.patch;
-
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ lib.optional usePam "pam";
 
@@ -31,7 +29,7 @@ stdenv.mkDerivation rec {
     "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
-  ];
+  ] ++ lib.optional isStatic "SHARED=no";
 
   prePatch = ''
     # use full path to bash

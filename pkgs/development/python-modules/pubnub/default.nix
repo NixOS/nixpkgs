@@ -13,16 +13,17 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "python";
     rev = "v${version}";
-    sha256 = "0f6r439bfz58ddikqj5cx56vv7gxrpja9rcdg0j1mlng8ry581f3";
+    sha256 = "sha256-ir8f8A6XuN1ZQIYQbArChLzTlYu4ZKpkoOXQtSLOvKg=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
     cbor2
     pycryptodomex
     requests
@@ -30,19 +31,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    aiohttp
-    pycryptodomex
     pytest-asyncio
     pytestCheckHook
     pytest-vcr
-
   ];
 
-  # Some tests don't pass with recent releases of tornado/twisted
-  pytestFlagsArray = [
-    "--ignore tests/integrational"
-    "--ignore tests/manual/asyncio"
-    "--ignore tests/manual/tornado/test_reconnections.py"
+  # Some tests don't pass with recent releases of twisted
+  disabledTestPaths = [
+    "tests/integrational"
+    "tests/manual/asyncio"
   ];
 
   pythonImportsCheck = [ "pubnub" ];

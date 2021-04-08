@@ -36,6 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command-line tool for Home Assistant";
     homepage = "https://github.com/home-assistant/home-assistant-cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.home-assistant.members;
   };
 }

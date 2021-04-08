@@ -154,6 +154,8 @@ in
 
   ankisyncd = callPackage ../servers/ankisyncd { };
 
+  antsimulator = callPackage ../games/antsimulator { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
@@ -2804,6 +2806,8 @@ in
 
   nix-template = callPackage ../tools/package-management/nix-template { };
 
+  nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
+
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
@@ -3670,7 +3674,7 @@ in
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
 
-  cutter = callPackage ../tools/networking/cutter { };
+  tcp-cutter = callPackage ../tools/networking/tcp-cutter { };
 
   cwebbin = callPackage ../development/tools/misc/cwebbin { };
 
@@ -5325,6 +5329,8 @@ in
     gfortran = null;
     szip = null;
   };
+
+  hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
 
   hdf5-mpi = appendToName "mpi" (hdf5.override {
     szip = null;
@@ -9033,9 +9039,7 @@ in
     inherit lib udisks2 python3;
   };
 
-  viking = callPackage ../applications/misc/viking {
-    inherit (gnome2) scrollkeeper;
-  };
+  viking = callPackage ../applications/misc/viking { };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
 
@@ -11242,6 +11246,7 @@ in
   };
   cargo-embed = callPackage ../development/tools/rust/cargo-embed { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
+  cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
   cargo-flash = callPackage ../development/tools/rust/cargo-flash { };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -12775,6 +12780,7 @@ in
   gradle_4 = gradle_4_10;
   gradle_5 = res.gradleGen.gradle_5_6;
   gradle_6 = res.gradleGen.gradle_6_8;
+  gradle_7 = res.gradleGen.gradle_7;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -13154,12 +13160,14 @@ in
 
   r10k = callPackage ../tools/system/r10k { };
 
-  inherit (callPackages ../development/tools/analysis/radare2 ({
+  radare2 = callPackage ../development/tools/analysis/radare2 ({
     inherit (gnome2) vte;
     lua = lua5;
-  } // (config.radare or {}))) radare2 r2-for-cutter;
+  } // (config.radare or {}));
 
-  radare2-cutter = libsForQt515.callPackage ../development/tools/analysis/radare2/cutter.nix { };
+  rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
+
+  cutter = libsForQt515.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
   ragel = ragelStable;
 
@@ -17659,7 +17667,9 @@ in
     inherit (llvmPackages) openmp;
   };
 
-  vigra = callPackage ../development/libraries/vigra { };
+  vigra = callPackage ../development/libraries/vigra {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
@@ -19234,7 +19244,6 @@ in
 
   zabbix50 = recurseIntoAttrs (zabbixFor "v50");
   zabbix40 = dontRecurseIntoAttrs (zabbixFor "v40");
-  zabbix30 = dontRecurseIntoAttrs (zabbixFor "v30");
 
   zabbix = zabbix50;
 
@@ -19987,6 +19996,8 @@ in
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
+
+    vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
     vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
 

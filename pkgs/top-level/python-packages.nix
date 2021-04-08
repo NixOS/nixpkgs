@@ -237,6 +237,8 @@ in {
 
   aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
 
+  aiodiscover = callPackage ../development/python-modules/aiodiscover { };
+
   aiodns = callPackage ../development/python-modules/aiodns { };
 
   aioeafm = callPackage ../development/python-modules/aioeafm { };
@@ -525,6 +527,8 @@ in {
 
   async_generator = callPackage ../development/python-modules/async_generator { };
 
+  async-dns = callPackage ../development/python-modules/async-dns { };
+
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
@@ -634,6 +638,8 @@ in {
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
   awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
+
+  awslambdaric = callPackage ../development/python-modules/awslambdaric { };
 
   axis = callPackage ../development/python-modules/axis { };
 
@@ -2959,6 +2965,8 @@ in {
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
+  homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
+
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
     inherit python;
   });
@@ -3775,6 +3783,8 @@ in {
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
+  localimport = callPackage ../development/python-modules/localimport { };
+
   localzone = callPackage ../development/python-modules/localzone { };
 
   locket = callPackage ../development/python-modules/locket { };
@@ -3872,6 +3882,8 @@ in {
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  makefun = callPackage ../development/python-modules/makefun { };
 
   Mako = callPackage ../development/python-modules/Mako { };
 
@@ -4318,6 +4330,8 @@ in {
   nocaselist = callPackage ../development/python-modules/nocaselist { };
 
   nodeenv = callPackage ../development/python-modules/nodeenv { };
+
+  nodepy-runtime = callPackage ../development/python-modules/nodepy-runtime { };
 
   node-semver = callPackage ../development/python-modules/node-semver { };
 
@@ -6117,6 +6131,8 @@ in {
   pytest-quickcheck = self.pytestquickcheck;
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
+  pytest-raises = callPackage ../development/python-modules/pytest-raises { };
+
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
@@ -6849,6 +6865,8 @@ in {
 
   roombapy = callPackage ../development/python-modules/roombapy { };
 
+  ronin = callPackage ../development/python-modules/ronin { };
+
   rope = callPackage ../development/python-modules/rope { };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
@@ -7015,6 +7033,8 @@ in {
   scrapy-splash = callPackage ../development/python-modules/scrapy-splash { };
 
   screeninfo = callPackage ../development/python-modules/screeninfo { };
+
+  screenlogicpy = callPackage ../development/python-modules/screenlogicpy { };
 
   scripttest = callPackage ../development/python-modules/scripttest { };
 
@@ -7550,7 +7570,9 @@ in {
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
-  tables = callPackage ../development/python-modules/tables { };
+  tables = callPackage ../development/python-modules/tables {
+    hdf5 = pkgs.hdf5_1_10;
+  };
 
   tablib = callPackage ../development/python-modules/tablib { };
 
@@ -8405,6 +8427,8 @@ in {
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
+
+  yalexs = callPackage ../development/python-modules/yalexs { };
 
   yamale = callPackage ../development/python-modules/yamale { };
 
