@@ -59,6 +59,26 @@ let
     substArgs = lib.concatMap (x: [ "--subst-var-by" x deps'."${x}" ]) (lib.attrNames deps');
   in lib.escapeShellArgs substArgs;
 
+  fixAndCheckReexports = name: deps: ''
+    # Fix and check tbd re-export references
+    find $out -name '*.tbd' | while read tbd; do
+      echo "Fixing re-exports in $tbd"
+      substituteInPlace "$tbd" ${mkFrameworkSubs name deps}
+
+      echo "Checking re-exports in $tbd"
+      print-reexports "$tbd" | while read target; do
+        local expected="''${target%.dylib}.tbd"
+        if ! [ -e "$expected" ]; then
+          echo -e "Re-export missing:\n\t$target\n\t(expected $expected)"
+          echo -e "While processing\n\t$tbd"
+          exit 1
+        else
+          echo "Re-exported target $target ok"
+        fi
+      done
+    done
+  '';
+
   framework = name: deps: stdenv.mkDerivation {
     name = "apple-framework-${name}";
 
@@ -146,23 +166,7 @@ let
         cp -v "$tbd_source/$tbd" "$tbd_dest_dir"
       done
 
-      # Fix and check tbd re-export references
-      find $out -name '*.tbd' | while read tbd; do
-        echo "Fixing re-exports in $tbd"
-        substituteInPlace "$tbd" ${mkFrameworkSubs name deps}
-
-        echo "Checking re-exports in $tbd"
-        print-reexports "$tbd" | while read target; do
-          local expected="''${target%.dylib}.tbd"
-          if ! [ -e "$expected" ]; then
-            echo -e "Re-export missing:\n\t$target\n\t(expected $expected)"
-            echo -e "While processing\n\t$tbd"
-            exit 1
-          else
-            echo "Re-exported target $target ok"
-          fi
-        done
-      done
+      ${fixAndCheckReexports name deps}
     '';
 
     propagatedBuildInputs = builtins.attrValues deps;
@@ -185,14 +189,17 @@ let
     };
   };
 
-  tbdOnlyFramework = name: { private ? true }: stdenv.mkDerivation {
+  tbdOnlyFramework = name: { private ? true, deps ? {} }: stdenv.mkDerivation {
     name = "apple-framework-${name}";
     dontUnpack = true;
+    nativeBuildInputs = [ print-reexports ];
     installPhase = ''
       mkdir -p $out/Library/Frameworks/
       cp -r ${darwin-stubs}/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework \
         $out/Library/Frameworks
       # NOTE there's no re-export checking here, this is probably wrong
+
+      ${fixAndCheckReexports name deps}
     '';
   };
 in rec {
@@ -312,7 +319,11 @@ in rec {
         "Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy.tbd"
       ];
     });
-  } // lib.genAttrs [ "ContactsPersistence" "UIFoundation" "GameCenter" ] (x: tbdOnlyFramework x {});
+
+    GameCenter = tbdOnlyFramework "GameCenter" {
+      deps = { inherit (frameworks) GameCenterFoundation GameCenterUI; };
+    };
+  } // lib.genAttrs [ "ContactsPersistence" "UIFoundation" "Network" "GameCenterFoundation" "GameCenterUI" ] (x: tbdOnlyFramework x {});
 
   bareFrameworks = lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
