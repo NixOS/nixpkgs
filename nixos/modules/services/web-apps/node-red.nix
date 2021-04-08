@@ -37,7 +37,7 @@ in
     userDir = mkOption {
       type = types.path;
       default = "/var/lib/node-red";
-      description = "the directory to store all user data, such as flow and credential files and all library data.";
+      description = "The directory to store all user data, such as flow and credential files and all library data.";
     };
 
     safe = mkOption {
