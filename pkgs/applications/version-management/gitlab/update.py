@@ -69,6 +69,9 @@ class GitLabRepo:
 
         passthru = {v: self.get_file(v, rev).strip() for v in ['GITALY_SERVER_VERSION', 'GITLAB_PAGES_VERSION',
                                                                'GITLAB_SHELL_VERSION']}
+
+        passthru["GITLAB_WORKHORSE_VERSION"] = version
+
         return dict(version=self.rev2version(rev),
                     repo_hash=self.get_git_hash(rev),
                     owner=self.owner,
@@ -186,7 +189,7 @@ def update_gitlab_shell():
 def update_gitlab_workhorse():
     """Update gitlab-workhorse"""
     data = _get_data_json()
-    gitlab_workhorse_version = data['version']
+    gitlab_workhorse_version = data['passthru']['GITLAB_WORKHORSE_VERSION']
     _call_nix_update('gitlab-workhorse', gitlab_workhorse_version)
 
 
