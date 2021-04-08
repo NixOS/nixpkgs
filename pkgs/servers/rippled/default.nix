@@ -31,8 +31,8 @@ let
 
   nudb = fetchgit rec {
     url = "https://github.com/CPPAlliance/NuDB.git";
-    rev = "2.0.3";
-    sha256 = "0imd9sh6knydwa3pxa5bbvjs3bmb8650dnsvj04qgns6bynwlqh1";
+    rev = "2.0.5";
+    sha256 = "02zbd07qvdjjsm4ivvhxah5n466bncvm6m03vmq0qdbbrlnp6s37";
     leaveDotGit = true;
     fetchSubmodules = true;
     postFetch = "cd $out && git tag ${rev}";
@@ -40,8 +40,8 @@ let
 
   rocksdb = fetchgit rec {
     url = "https://github.com/facebook/rocksdb.git";
-    rev = "v6.5.3";
-    sha256 = "11kbwqph1i3w6rbhr0kl2aq4jidhai24gw420y9qi9ab7zl0zcqg";
+    rev = "v6.7.3";
+    sha256 = "16qb636qs2yxqmz30hmvq8mllf038s80p37b0vyc0bazwlr93d9z";
     deepClone = true;
     fetchSubmodules = false;
     leaveDotGit = true;
@@ -116,12 +116,12 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "rippled";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchgit {
     url = "https://github.com/ripple/rippled.git";
     rev = version;
-    sha256 = "176i3dm98zp5jllslpzfhh52bd2lapq9i8r7m45v8sg9icvsmyz7";
+    sha256 = "1rr5kxks9hsxyxrz90dw259b6fs9lywdlqv0bj2g21a6f7g60v2v";
     leaveDotGit = true;
     fetchSubmodules = true;
   };
