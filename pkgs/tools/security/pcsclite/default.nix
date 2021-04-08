@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 ] ++ lib.optionals stdenv.isLinux [
     dbus
+    polkit
     (if stdenv.hostPlatform.isMusl then libusb1 else systemd)
   ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
