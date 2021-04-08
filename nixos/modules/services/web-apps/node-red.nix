@@ -68,7 +68,7 @@ in
         Environment = [
           "HOME=${cfg.userDir}"
         ];
-        ExecStart = "${cfg.package}/bin/node-red --settings ${cfg.configFile} --port ${toString cfg.port} --userDir ${cfg.userDir} ${concatStringsSep " " (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)}";
+        ExecStart = "${cfg.package}/bin/node-red ${pkgs.lib.optionalString safe "--safe"} --settings ${cfg.configFile} --port ${toString cfg.port} --userDir ${cfg.userDir} ${concatStringsSep " " (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)}";
         PrivateTmp = true;
         Restart = "always";
         StateDirectory = "node-red";
