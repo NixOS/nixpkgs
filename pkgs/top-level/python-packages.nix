@@ -3609,6 +3609,8 @@ in {
 
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
+  jupyterlab-widgets = callPackage ../development/python-modules/jupyterlab-widgets { };
+
   jupyter-packaging = callPackage ../development/python-modules/jupyter-packaging { };
 
   jupyter-repo2docker = callPackage ../development/python-modules/jupyter-repo2docker {
