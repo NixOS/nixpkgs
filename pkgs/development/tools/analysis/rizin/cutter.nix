@@ -35,8 +35,6 @@ mkDerivation rec {
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Free and Open Source Reverse Engineering Platform powered by rizin";
     homepage = src.meta.homepage;

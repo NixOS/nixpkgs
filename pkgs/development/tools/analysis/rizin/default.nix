@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
     "-Duse_sys_tree_sitter=true"
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkg-config meson ninja cmake ];
 
   buildInputs = [
