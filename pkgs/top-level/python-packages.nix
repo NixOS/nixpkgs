@@ -652,6 +652,8 @@ in {
 
   awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
 
+  awslambdaric = callPackage ../development/python-modules/awslambdaric { };
+
   axis = callPackage ../development/python-modules/axis { };
 
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
