@@ -33,7 +33,7 @@ let
       buildHex = callPackage ./build-hex.nix { };
       buildErlangMk = callPackage ./build-erlang-mk.nix { };
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
-      buildMix = callPackage ./build-mix.nix { };
+      mixRelease = callPackage ./mix-release.nix { };
 
       # BEAM-based languages.
       elixir = elixir_1_11;
