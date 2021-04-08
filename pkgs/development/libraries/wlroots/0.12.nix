@@ -1,18 +1,20 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland
 , libGL, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg, libuuid, xcbutilrenderutil, xwayland
+, libpng, ffmpeg
 }:
 
+# Fixed version derivation.
+# nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.13.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "01plhbnsp5yg18arz0v8fr0pr9l4w4pdzwkg9px486qdvb3s1vgy";
+    sha256 = "01j38lmgs2c6fq68v8b75pkilia2wsgzgp46ivfbi9hhx47kgcfn";
   };
 
   # $out for the library and $examples for the example programs (in examples):
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGL wayland wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg libuuid xcbutilrenderutil xwayland
+    libpng ffmpeg
   ];
 
   mesonFlags = [ "-Dlogind-provider=systemd" "-Dlibseat=disabled" ];
