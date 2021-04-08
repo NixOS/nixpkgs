@@ -1,15 +1,15 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, re2, openssl, protobuf
-, gflags, abseil-cpp, libnsl
+, abseil-cpp, libnsl
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.36.4"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.37.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1zxvdg5vgjgkq5wmzwbxj2zydaj90ja074axs26yzd9x08j0bjxz";
+    sha256 = "0q3hcnq351j0qm0gsbaxbsnz1gd9w3bk4cazkvq4l2lfmmiw7z56";
     fetchSubmodules = true;
   };
   patches = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
-  buildInputs = [ c-ares.cmake-config openssl protobuf gflags ]
+  buildInputs = [ c-ares.cmake-config openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags =
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
       "-DgRPC_RE2_PROVIDER=package"
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"
-      "-DgRPC_GFLAGS_PROVIDER=package"
       "-DgRPC_ABSL_PROVIDER=package"
       "-DBUILD_SHARED_LIBS=ON"
       "-DCMAKE_SKIP_BUILD_RPATH=OFF"
