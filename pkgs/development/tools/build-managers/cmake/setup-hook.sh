@@ -4,10 +4,14 @@ addCMakeParams() {
 
 fixCmakeFiles() {
     # Replace occurences of /usr and /opt by /var/empty.
+    # However, avoid replacing when /usr appears in the middle of a path with
+    # _CMAKE_OSX_SYSROOT_PATH or sdk_path variables preceding it. Those cases
+    # happen in the files related to the Darwin platform, and they relate to
+    # the Xcode SDK. Replacing by /var/empty in those cases would be incorrect.
     echo "fixing cmake files..."
     find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
         while read fn; do
-            sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
+            sed -e '/\${\(_CMAKE_OSX_SYSROOT_PATH\|sdk_path\)}\/usr/! s^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
             mv "$fn.tmp" "$fn"
         done
 }
