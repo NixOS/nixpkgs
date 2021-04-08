@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, jupyter-packaging }:
 
 buildPythonPackage rec {
-  pname = "jupyterlab_widgets";
+  pname = "jupyterlab-widgets";
   version = "1.0.0";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "jupyterlab_widgets";
     sha256 = "0y7vhhas3qndiypcpcfnhrj9n92v2w4hdc86nn620s9h9nl2j6jw";
   };
 
