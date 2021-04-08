@@ -57,7 +57,7 @@ let
           gdbLibPath=$out/clion-${version}/bin/gdb/linux/lib
           patchelf \
             --set-rpath "$gdbLibPath" \
-            bin/gdb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+            bin/gdb/linux/lib/python3.*/lib-dynload/zlib.cpython-*-x86_64-linux-gnu.so
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$gdbLibPath" \
             bin/gdb/linux/bin/gdb
