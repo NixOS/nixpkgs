@@ -27,7 +27,7 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "tracker";
   version = "3.0.3";
 
@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
     "-Ddocs=true"
   ];
 
-  doCheck = true;
+  # https://gitlab.gnome.org/GNOME/tracker/-/issues/292#note_1075369
+  doCheck = !stdenv.isi686;
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
@@ -133,3 +134,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
+  // lib.optionalAttrs stdenv.isi686 {
+    # TMP: fatal error: libtracker-sparql/tracker-sparql-enum-types.h: No such file or directory
+    enableParallelBuilding = false;
+  }
+)
