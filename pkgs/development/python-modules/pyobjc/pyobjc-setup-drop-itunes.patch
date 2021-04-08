@@ -1,0 +1,14 @@
+diff --git a/pyobjc/setup.py b/pyobjc/setup.py
+index f9b5c3cc4..0ed41bdee 100644
+--- a/pyobjc/setup.py
++++ b/pyobjc/setup.py
+@@ -154,9 +154,6 @@ FRAMEWORK_WRAPPERS = [
+     ("VideoToolbox", "10.8", None),
+     ("Virtualization", "10.16", None),
+     ("Vision", "10.13", None),
+-    # iTunes library is shipped with iTunes, not part of macOS 'core'
+-    # Requires iTunes 11 or later, which is not available on 10.5
+-    ("iTunesLibrary", "10.6", None),
+ ]
+ 
+ MACOS_TO_DARWIN = {

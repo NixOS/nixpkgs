@@ -1,0 +1,37 @@
+diff --git a/pyobjc/setup.py b/pyobjc/setup.py
+index df29c8316..f9b5c3cc4 100644
+--- a/pyobjc/setup.py
++++ b/pyobjc/setup.py
+@@ -9,6 +9,8 @@ import subprocess
+ import sys
+ import tarfile
+ 
++from packaging import version
++
+ from setuptools import setup, Command
+ from setuptools.command import egg_info
+ 
+@@ -190,13 +192,23 @@ def framework_requires():
+ 
+     result = []
+ 
++    sdk_version = version.parse(os.environ["NIX_MACOS_SDK_VERSION"])
++
+     for name, introduced, removed in FRAMEWORK_WRAPPERS:
+ 
+         marker = []
+         if introduced is not None:
++            introduced_version = version.parse(introduced)
++            if introduced_version > sdk_version:
++                # nixpkgs hack: just skip things which don't match up with our SDK
++                continue
+             marker.append('platform_release>="%s"' % (MACOS_TO_DARWIN[introduced],))
+ 
+         if removed is not None:
++            removed_version = version.parse(removed)
++            if removed_version < sdk_version:
++                # nixpkgs hack: just skip things which don't match up with our SDK
++                continue
+             marker.append('platform_release<"%s"' % (MACOS_TO_DARWIN[removed],))
+ 
+         if marker:

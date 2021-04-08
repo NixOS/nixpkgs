@@ -1,0 +1,26 @@
+diff --git a/pyobjc-framework-CoreServices/Lib/CoreServices/LaunchServices/__init__.py b/pyobjc-framework-CoreServices/Lib/CoreServices/LaunchServices/__init__.py
+index d63c4532c..fcd9119c6 100644
+--- a/pyobjc-framework-CoreServices/Lib/CoreServices/LaunchServices/__init__.py
++++ b/pyobjc-framework-CoreServices/Lib/CoreServices/LaunchServices/__init__.py
+@@ -14,7 +14,7 @@ sys.modules["CoreServices.LaunchServices"] = mod = objc.ObjCLazyModule(
+     "LaunchServices",
+     "com.apple.CoreServices",
+     objc.pathForFramework(
+-        "/System/Library/Frameworks/CoreServices.framework/CoreServices"
++        "/System/Library/Frameworks/CoreServices.framework"
+     ),
+     _metadata.__dict__,
+     None,
+diff --git a/pyobjc-framework-LaunchServices/Lib/LaunchServices/__init__.py b/pyobjc-framework-LaunchServices/Lib/LaunchServices/__init__.py
+index 2caaab5e6..0591c8b92 100644
+--- a/pyobjc-framework-LaunchServices/Lib/LaunchServices/__init__.py
++++ b/pyobjc-framework-LaunchServices/Lib/LaunchServices/__init__.py
+@@ -19,7 +19,7 @@ sys.modules["LaunchServices"] = mod = objc.ObjCLazyModule(
+     "LaunchServices",
+     "com.apple.CoreServices",
+     objc.pathForFramework(
+-        "/System/Library/Frameworks/CoreServices.framework/CoreServices"
++        "/System/Library/Frameworks/CoreServices.framework"
+     ),
+     {},
+     None,

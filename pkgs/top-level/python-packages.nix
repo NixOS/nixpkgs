@@ -6062,7 +6062,10 @@ in {
   pynzb = callPackage ../development/python-modules/pynzb { };
 
   pyobjc = if stdenv.isDarwin then
-    callPackage ../development/python-modules/pyobjc { }
+    callPackage ../development/python-modules/pyobjc {
+      inherit (pkgs.darwin.apple_sdk) frameworks;
+      inherit (pkgs.darwin) libdispatch libobjc;
+    }
   else
     throw "pyobjc can only be built on Mac OS";
 
