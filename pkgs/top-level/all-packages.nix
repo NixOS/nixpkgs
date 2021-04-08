@@ -2806,6 +2806,8 @@ in
 
   nix-template = callPackage ../tools/package-management/nix-template { };
 
+  nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
+
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
