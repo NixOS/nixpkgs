@@ -52,6 +52,14 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
+  dontWrapGApps = true;
+
+  # defined in gappsWrapperHook
+  wrapPrefixVariables = [ "PYTHONPATH" "LD_LIBRARY_PATH" ];
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
+
   preFixup = ''
     wrapPythonPrograms
   '';
