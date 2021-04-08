@@ -2,18 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ODD5XwLYVUJOHQCETVUqMUojL4Y8eWJ/xhmfzV9Cp3k=";
+    sha256 = "sha256-+X1ibnYAUB34u8+oNBSkjLtsArxlrg0Nq5zJrXi7Rfk=";
   };
 
-  cargoSha256 = "sha256-PJOlXFx+MYfq7daaOEZ5wPuWD7gAr8gc/5AJG2SYTq4=";
+  cargoSha256 = "sha256-ZVu7wQFe+FHWX2wevVYct1dQSE9rFET8bkmv85wNV8A=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  checkFlags = [
+    # Username and Password use the same ports and causes collision
+    # https://github.com/mbrubeck/agate/issues/50
+    "--skip username"
+    "--skip password"
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''
