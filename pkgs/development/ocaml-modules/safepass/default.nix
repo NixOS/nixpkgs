@@ -2,13 +2,15 @@
 
 buildDunePackage rec {
   pname = "safepass";
-  version = "3.0";
+  version = "3.1";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "darioteixeira";
     repo = "ocaml-safepass";
     rev = "v${version}";
-    sha256 = "0i127gs9x23wzwa1q3dxa2j6hby07hvxdg1c98fc3j09rg6vy2bs";
+    sha256 = "1cwslwdb1774lfmhcclj9kymvidbcpjx1vp16jnjirqdqgl4zs5q";
   };
 
   meta = {
