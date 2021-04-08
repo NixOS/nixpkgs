@@ -269,6 +269,7 @@ in buildPythonPackage rec {
 
     mkdir $lib
     cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
+    rm -r $out/${python.sitePackages}/torch/test
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
