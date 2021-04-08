@@ -72,7 +72,7 @@ in
         PrivateTmp = true;
         Restart = "always";
         StateDirectory = "node-red";
-        WorkingDirectory = "${cfg.userDir}";
+        WorkingDirectory = cfg.userDir;
       };
     };
   };
