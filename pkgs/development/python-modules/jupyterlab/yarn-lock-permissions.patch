@@ -1,0 +1,13 @@
+diff --git a/jupyterlab/commands.py b/jupyterlab/commands.py
+index 154ceb307..d14485ea1 100644
+--- a/jupyterlab/commands.py
++++ b/jupyterlab/commands.py
+@@ -1248,6 +1248,8 @@ class _AppHandler(object):
+                 f.write(template)
+         elif not osp.exists(lock_path):
+             shutil.copy(lock_template, lock_path)
++            import stat
++            os.chmod(lock_path, stat.S_IWRITE | stat.S_IREAD)
+ 
+     def _get_package_template(self, silent=False):
+         """Get the template the for staging package.json file.
