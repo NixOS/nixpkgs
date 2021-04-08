@@ -7,14 +7,14 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "sha256-wDZLcCBbWjG6wIcEj02eqwWVfAYy1TuAo/xvJB8tt+0=";
+    sha256 = "sha256-j/80AIIJdRSisu2fNXcqazb4oIzAQP5CfxHX3l6yijY=";
   };
 
   buildInputs = [ ruby ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
-  vendorSha256 = "16fa3bka0008x2yazahc6xxcv4fa6yqg74kk64v8lrp7snbvjf4d";
+  vendorSha256 = "sha256-/jJTMtS5fcbQroWuaPPfvYxy6znNS0FOXVN7IcE/spQ=";
 
   postInstall = ''
     cp -r "$NIX_BUILD_TOP/source"/bin/* $out/bin
