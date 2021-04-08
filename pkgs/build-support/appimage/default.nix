@@ -129,6 +129,7 @@ rec {
       xorg.libXt
       xorg.libXmu
       xorg.libxcb
+      xorg.libxshmfence
       xorg.xcbutil
       xorg.xcbutilwm
       xorg.xcbutilimage
