@@ -44,7 +44,7 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.20.4+k3s1";     # k3s git tag
+  k3sVersion = "1.20.5+k3s1";     # k3s git tag
   traefikChartVersion = "1.81.0"; # taken from ./scripts/download at the above k3s tag
   k3sRootVersion = "0.8.1";       # taken from ./scripts/download at the above k3s tag
   k3sCNIVersion = "0.8.6-k3s1";   # taken from ./scripts/version.sh at the above k3s tag
@@ -79,7 +79,7 @@ let
       owner = "rancher";
       repo = "plugins";
       rev = "v${version}";
-      sha256 = "13kx9msn5y9rw8v1p717wx0wbjqln59g6y3qfb1760aiwknva35q";
+      sha256 = "sha256-uAy17eRRAXPCcnh481KxFMvFQecnnBs24jn5YnVNfY4=";
     };
 
     meta = {
@@ -96,7 +96,7 @@ let
     url = "https://github.com/k3s-io/k3s";
     rev = "v${k3sVersion}";
     leaveDotGit = true; # ./scripts/version.sh depends on git
-    sha256 = "0rmn3nh8a94axv6lb2xjnn3gpq0scnvj69bvcs74azvw62fvq016";
+    sha256 = "sha256-7RAZkSTh15BEZ3p6u2xE9vd5fpy4KBYrl2TjtpIiStM=";
   };
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
@@ -243,15 +243,16 @@ stdenv.mkDerivation rec {
     iproute2
     bridge-utils
     ethtool
-    util-linux
+    util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     ipset
     conntrack-tools
   ];
 
   buildInputs = [
     k3sBin
-    makeWrapper
   ] ++ k3sRuntimeDeps;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   unpackPhase = "true";
 
