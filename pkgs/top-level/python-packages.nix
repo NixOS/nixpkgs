@@ -1303,6 +1303,10 @@ in {
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
 
+  cjkwrap = callPackage ../development/python-modules/cjkwrap { };
+
+  cjson = callPackage ../development/python-modules/cjson { };
+
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
   class-registry = callPackage ../development/python-modules/class-registry { };
@@ -3945,6 +3949,8 @@ in {
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
+  md2gemini = callPackage ../development/python-modules/md2gemini { };
+
   MDP = callPackage ../development/python-modules/mdp { };
 
   measurement = callPackage ../development/python-modules/measurement { };
@@ -4020,7 +4026,11 @@ in {
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
-  mistune = callPackage ../development/python-modules/mistune { };
+  inherit (import ../development/python-modules/mistune self)
+    mistune
+    mistune_0_8
+    mistune_2_0
+  ;
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
 
