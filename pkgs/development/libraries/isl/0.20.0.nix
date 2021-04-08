@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
+  configureFlags = [
+    "--with-gcc-arch=generic" # don't guess -march=/mtune=
+  ];
+
   enableParallelBuilding = true;
 
   meta = {
