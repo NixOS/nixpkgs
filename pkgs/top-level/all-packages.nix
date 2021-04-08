@@ -25135,6 +25135,8 @@ in
 
   pioneers = callPackage ../games/pioneers { };
 
+  place-cursor-at = callPackage ../applications/misc/place-cursor-at {};
+
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
   pong3d = callPackage ../games/pong3d { };
