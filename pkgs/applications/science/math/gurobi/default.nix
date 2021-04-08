@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, python2 }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, python3 }:
 
 let
-  majorVersion = "8.1";
+  majorVersion = "9.1";
 in stdenv.mkDerivation rec {
   pname = "gurobi";
-  version = "${majorVersion}.0";
+  version = "${majorVersion}.2";
 
   src = with lib; fetchurl {
     url = "http://packages.gurobi.com/${versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
-    sha256 = "1yjqbzqnq4jjkjm616d36bgd3rmqr0a1ii17n0prpdjzmdlq63dz";
+    sha256 = "7f60bd675f79476bb2b32cd632aa1d470f8246f2b033b7652d8de86f6e7e429b";
   };
 
   sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";
 
   nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ (python2.withPackages (ps: [ ps.gurobipy ])) ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.gurobipy ])) ];
 
   strictDeps = true;
 
@@ -27,9 +27,8 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp bin/* $out/bin/
-    rm $out/bin/gurobi.env
     rm $out/bin/gurobi.sh
-    rm $out/bin/python2.7
+    rm $out/bin/python3.7
 
     cp lib/gurobi.py $out/bin/gurobi.sh
 
