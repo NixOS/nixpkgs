@@ -708,6 +708,49 @@ in {
         '';
       };
 
+      sidekiq.memoryKiller.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the Sidekiq MemoryKiller should be turned
+          on. MemoryKiller kills Sidekiq when its memory consumption
+          exceeds a certain limit.
+
+          See <link xlink:href="https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html"/>
+          for details.
+        '';
+      };
+
+      sidekiq.memoryKiller.maxMemory = mkOption {
+        type = types.int;
+        default = 2000;
+        apply = x: builtins.toString (x * 1024);
+        description = ''
+          The maximum amount of memory, in MiB, a Sidekiq worker is
+          allowed to consume before being killed.
+        '';
+      };
+
+      sidekiq.memoryKiller.graceTime = mkOption {
+        type = types.int;
+        default = 900;
+        apply = x: builtins.toString x;
+        description = ''
+          The time MemoryKiller waits after noticing excessive memory
+          consumption before killing Sidekiq.
+        '';
+      };
+
+      sidekiq.memoryKiller.shutdownWait = mkOption {
+        type = types.int;
+        default = 30;
+        apply = x: builtins.toString x;
+        description = ''
+          The time allowed for all jobs to finish before Sidekiq is
+          killed forcefully.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
@@ -1049,7 +1092,11 @@ in {
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      environment = gitlabEnv;
+      environment = gitlabEnv // (optionalAttrs cfg.sidekiq.memoryKiller.enable {
+        SIDEKIQ_MEMORY_KILLER_MAX_RSS = cfg.sidekiq.memoryKiller.maxMemory;
+        SIDEKIQ_MEMORY_KILLER_GRACE_TIME = cfg.sidekiq.memoryKiller.graceTime;
+        SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT = cfg.sidekiq.memoryKiller.shutdownWait;
+      });
       path = with pkgs; [
         postgresqlPackage
         git
@@ -1061,13 +1108,15 @@ in {
         # Needed for GitLab project imports
         gnutar
         gzip
+
+        procps # Sidekiq MemoryKiller
       ];
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "infinity";
-        Restart = "on-failure";
+        Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
       };
