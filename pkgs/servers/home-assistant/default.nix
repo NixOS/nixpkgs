@@ -42,6 +42,21 @@ let
       });
     })
 
+    # Pinned due to API changes in pylilterbot>=2021.3.0
+    (self: super: {
+      pylitterbot = super.pylitterbot.overridePythonAttrs (oldAttrs: rec {
+        version = "2021.2.8";
+        src = fetchFromGitHub {
+          owner = "natekspencer";
+          repo = "pylitterbot";
+          rev = version;
+          sha256 = "142lhijm51v11cd0lhcfdnjdd143jxi2hjsrqdq0rrbbnmj6mymp";
+        };
+        # had no tests before 2021.3.0
+        doCheck = false;
+      });
+    })
+
     # Pinned due to bug in ring-doorbell 0.7.0
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
     (mkOverride "ring-doorbell" "0.6.2"
