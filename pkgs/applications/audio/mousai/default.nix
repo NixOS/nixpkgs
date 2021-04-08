@@ -24,6 +24,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "10g3wj9yy15yzyfa1l96i97i3k6blm064p49hn7hp001cmc3w045";
   };
 
+  postPatch = ''
+    chmod +x build-aux/meson/postinstall.py
+    patchShebangs build-aux/meson/postinstall.py
+  '';
+
   nativeBuildInputs = [
     meson
     ninja
