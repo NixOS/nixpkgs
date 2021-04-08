@@ -1,7 +1,7 @@
 { stdenv, lib, zlib, glib, alsaLib, dbus, gtk3, atk, pango, freetype, fontconfig
 , libgnome-keyring3, gdk-pixbuf, cairo, cups, expat, libgpgerror, nspr
 , gconf, nss, xorg, libcap, systemd, libnotify, libsecret, libuuid, at-spi2-atk
-, at-spi2-core, libdbusmenu
+, at-spi2-core, libdbusmenu, mesa
 }:
 
 let
@@ -12,6 +12,7 @@ let
     xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
     xorg.libXcursor xorg.libxkbfile xorg.libXScrnSaver libcap systemd libnotify
     xorg.libxcb libsecret libuuid at-spi2-atk at-spi2-core libdbusmenu
+    mesa # required for libgbm
   ];
 
   libPathNative = lib.makeLibraryPath packages;
