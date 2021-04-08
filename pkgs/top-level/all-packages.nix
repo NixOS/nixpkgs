@@ -23479,7 +23479,9 @@ in
 
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
-  wlroots = callPackage ../development/libraries/wlroots { };
+  wlroots = callPackage ../development/libraries/wlroots {
+    inherit (xorg) xcbutilrenderutil;
+  };
 
   wlroots_0_12 = callPackage ../development/libraries/wlroots/0.12.nix {};
 
