@@ -5330,6 +5330,8 @@ in
     szip = null;
   };
 
+  hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
+
   hdf5-mpi = appendToName "mpi" (hdf5.override {
     szip = null;
     mpiSupport = true;
@@ -17659,7 +17661,9 @@ in
     inherit (llvmPackages) openmp;
   };
 
-  vigra = callPackage ../development/libraries/vigra { };
+  vigra = callPackage ../development/libraries/vigra {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
