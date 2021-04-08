@@ -1695,9 +1695,11 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/7163
   pandoc = dontCheck super.pandoc;
 
-  # test suite triggers some kind of linking bug at runtime
-  # https://github.com/noinia/hgeometry/issues/132
-  hgeometry-combinatorial = dontCheck super.hgeometry-combinatorial;
+  # * doctests don't work without cabal
+  #   https://github.com/noinia/hgeometry/issues/132
+  # * Too strict version bound on vector-builder
+  #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
+  hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
 
   # Too strict version bounds on ansi-terminal
   # https://github.com/kowainik/co-log/pull/218
