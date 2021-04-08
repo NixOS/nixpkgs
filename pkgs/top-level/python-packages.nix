@@ -239,6 +239,8 @@ in {
 
   aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
 
+  aiodiscover = callPackage ../development/python-modules/aiodiscover { };
+
   aiodns = callPackage ../development/python-modules/aiodns { };
 
   aioeafm = callPackage ../development/python-modules/aioeafm { };
@@ -540,6 +542,8 @@ in {
   astunparse = callPackage ../development/python-modules/astunparse { };
 
   async_generator = callPackage ../development/python-modules/async_generator { };
+
+  async-dns = callPackage ../development/python-modules/async-dns { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
@@ -3114,6 +3118,8 @@ in {
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
+
+  homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
 
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
     inherit python;
@@ -6579,6 +6585,8 @@ in {
   pytest-quickcheck = self.pytestquickcheck;
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
+  pytest-raises = callPackage ../development/python-modules/pytest-raises { };
+
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
@@ -7351,6 +7359,8 @@ in {
 
   roombapy = callPackage ../development/python-modules/roombapy { };
 
+  ronin = callPackage ../development/python-modules/ronin { };
+
   rope = callPackage ../development/python-modules/rope { };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
@@ -7545,6 +7555,8 @@ in {
   scrapy-splash = callPackage ../development/python-modules/scrapy-splash { };
 
   screeninfo = callPackage ../development/python-modules/screeninfo { };
+
+  screenlogicpy = callPackage ../development/python-modules/screenlogicpy { };
 
   scripttest = callPackage ../development/python-modules/scripttest { };
 
@@ -9036,6 +9048,8 @@ in {
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
+
+  yalexs = callPackage ../development/python-modules/yalexs { };
 
   yamale = callPackage ../development/python-modules/yamale { };
 

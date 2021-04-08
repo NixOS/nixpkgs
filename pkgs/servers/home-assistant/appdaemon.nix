@@ -82,6 +82,6 @@ in python.pkgs.buildPythonApplication rec {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
     homepage = "https://github.com/AppDaemon/appdaemon";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = teams.home-assistant.members;
   };
 }

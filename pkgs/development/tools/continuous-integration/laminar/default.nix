@@ -28,7 +28,7 @@ let
     sha256 = "1jh4h12qchsba03dx03mrvs4r8g9qfjn56xm56jqzgqf7r209xq9";
   };
 in stdenv.mkDerivation rec {
-  name = "laminar";
+  pname = "laminar";
   version = "1.0";
   src = fetchurl {
     url = "https://github.com/ohwgiles/laminar/archive/${version}.tar.gz";

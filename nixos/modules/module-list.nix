@@ -74,7 +74,6 @@
   ./hardware/sata.nix
   ./hardware/wooting.nix
   ./hardware/uinput.nix
-  ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
   ./hardware/video/capture/mwprocapture.nix
