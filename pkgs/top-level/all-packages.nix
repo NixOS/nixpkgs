@@ -2252,6 +2252,14 @@ in
 
   discount = callPackage ../tools/text/discount { };
 
+  discourse = callPackage ../servers/web-apps/discourse {
+    ruby = ruby_2_7;
+  };
+
+  discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail_receiver {
+    ruby = ruby_2_7;
+  };
+
   discocss = callPackage ../tools/misc/discocss { };
 
   disfetch = callPackage ../tools/misc/disfetch { };
@@ -17625,12 +17633,8 @@ in
     stdenv = gcc6Stdenv;
   });
 
-  v8_6_x = v8;
   v8 = callPackage ../development/libraries/v8 {
     inherit (python2Packages) python;
-  } // lib.optionalAttrs stdenv.isLinux {
-    # doesn't build with gcc7
-    stdenv = gcc6Stdenv;
   };
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
