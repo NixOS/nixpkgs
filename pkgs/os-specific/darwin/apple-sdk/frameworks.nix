@@ -20,8 +20,11 @@ with frameworks; with libs; {
   Automator               = {};
   CFNetwork               = {};
   CalendarStore           = {};
+  CloudKit                = {};
   Cocoa                   = { inherit AppKit CoreData; };
   Collaboration           = {};
+  Contacts                = {};
+  ContactsUI              = { inherit AppKit; };
   # Impure version of CoreFoundation, this should not be used unless another
   # framework includes headers that are not available in the pure version.
   CoreFoundation          = {};
@@ -38,6 +41,7 @@ with frameworks; with libs; {
   CoreText                = { inherit CoreGraphics; };
   CoreVideo               = { inherit ApplicationServices CoreGraphics IOSurface OpenGL; };
   CoreWLAN                = { inherit SecurityFoundation; };
+  CryptoTokenKit          = { inherit Foundation Security; };
   DVDPlayback             = {};
   DirectoryService        = {};
   DiscRecording           = { inherit libobjc CoreServices IOKit; };
@@ -46,6 +50,7 @@ with frameworks; with libs; {
   EventKit                = {};
   ExceptionHandling       = {};
   FWAUserLib              = {};
+  FinderSync              = {};
   ForceFeedback           = { inherit IOKit; };
   Foundation              = { inherit libobjc CoreFoundation Security ApplicationServices SystemConfiguration; };
   GLKit                   = {};
@@ -58,6 +63,7 @@ with frameworks; with libs; {
   Hypervisor              = {};
   ICADevices              = { inherit libobjc Carbon IOBluetooth; };
   IMServicePlugIn         = {};
+  Intents                 = {};
   IOBluetoothUI           = { inherit IOBluetooth; };
   IOKit                   = {};
   IOSurface               = { inherit IOKit xpc; };
@@ -78,21 +84,28 @@ with frameworks; with libs; {
   MapKit                  = {};
   MediaAccessibility      = { inherit CoreGraphics CoreText QuartzCore; };
   MediaPlayer             = {};
+  MediaLibrary            = {};
   MediaToolbox            = { inherit AudioToolbox AudioUnit CoreMedia; };
   Metal                   = {};
   MetalKit                = { inherit ModelIO Metal; };
+  MultipeerConnectivity   = { inherit Cocoa Foundation; };
   ModelIO                 = {};
+  NetworkExtension        = { inherit Foundation Network Security; };
   NetFS                   = {};
+  NotificationCenter      = {};
   OSAKit                  = { inherit Carbon; };
   OpenAL                  = {};
   OpenCL                  = { inherit IOSurface OpenGL; };
   OpenGL                  = {};
   PCSC                    = { inherit CoreData; };
+  Photos                  = { inherit AVFoundation CoreGraphics CoreImage CoreLocation CoreMedia Foundation ImageIO; };
+  PhotosUI                = { inherit AppKit Foundation MapKit Photos; };
   PreferencePanes         = {};
   PubSub                  = {};
   QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox; };
   QuickLook               = { inherit ApplicationServices; };
-  SceneKit                = {};
+  SafariServices          = { };
+  SceneKit                = { inherit GLKit; };
   ScreenSaver             = {};
   Scripting               = {};
   ScriptingBridge         = {};
