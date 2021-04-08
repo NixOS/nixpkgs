@@ -61,11 +61,6 @@ python3.pkgs.buildPythonApplication rec {
     wrapPythonPrograms
   '';
 
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-  '';
-
   meta = with lib; {
     description = "Simple application for identifying songs";
     homepage = "https://github.com/SeaDve/Mousai";
