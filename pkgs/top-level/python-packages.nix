@@ -5626,6 +5626,11 @@ in {
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
+  pyobjc = callPackage ../development/python-modules/pyobjc {
+    inherit (pkgs.darwin.apple_sdk) frameworks;
+    inherit (pkgs.darwin) libdispatch libobjc;
+  };
+
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
   };
