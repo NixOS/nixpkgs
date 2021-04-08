@@ -1471,6 +1471,8 @@ in
 
   hwi = with python3Packages; toPythonApplication hwi;
 
+  hyperpotamus = callPackage ../tools/networking/hyperpotamus { };
+
   ili2c = callPackage ../tools/misc/ili2c { };
 
   imageworsener = callPackage ../tools/graphics/imageworsener { };
