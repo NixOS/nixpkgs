@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6sV2e/m0qVSRWgdvVZ9VxEL/J57nTcTClxHF5X8/8PQ=";
+    sha256 = "sha256-lB9ELa/okNvtKFDP/vImEdYFJCKRgtAcpBG1kIoAysE=";
   };
 
   deleteVendor = true;
-  vendorSha256 = "sha256-NPE3YHulqllWDGrxQgPmy/KKE7xFPOUorLQNIU8cP50=";
+  vendorSha256 = "sha256-VxKUYD92DssoSjWxR+1gZLq34vCVM/4U2ju5felLWzI=";
 
   nativeBuildInputs = [ go-bindata ];
 
@@ -36,7 +36,7 @@ buildGoModule rec {
     export HOME="$TMPDIR"
 
     $out/bin/waypoint --help
-    $out/bin/waypoint version # | grep "Waypoint v${version}"
+    $out/bin/waypoint version | grep "Waypoint v${version}"
     runHook postInstallCheck
   '';
 
