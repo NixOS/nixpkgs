@@ -21993,6 +21993,10 @@ in
 
   blogc = callPackage ../applications/misc/blogc { };
 
+  blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
+    inherit (haskellPackages) ghcWithPackages;
+  };
+
   bluefish = callPackage ../applications/editors/bluefish {
     gtk = gtk3;
   };
