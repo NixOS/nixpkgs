@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, SDL2_ttf, libsodium, pkg-config }:
 stdenv.mkDerivation rec {
   pname = "devilutionx";
-  version = "unstable-2020-10-20";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
-    rev = "432fbc8ef7b98e567b08e44ce91b198374a5ff01";
+    rev = version;
     sha256 = "03w3bgmzwsbycx3fzvn47fsmabl069gw77yn2fqg89wlgaw1yrr9";
   };
 
