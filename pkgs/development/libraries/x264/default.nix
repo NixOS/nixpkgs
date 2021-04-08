@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     export AS=$CC
   '';
 
-  configureFlags = lib.optional enableShared [ "--enable-shared" ]
+  configureFlags = lib.optional enableShared "--enable-shared"
     ++ lib.optional (!stdenv.isi686) "--enable-pic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
