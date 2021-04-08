@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , gettext
 , fetchurl
 , fetchpatch
@@ -10,16 +11,13 @@
 , glib
 , clutter-gtk
 , clutter-gst
-, udev
 , gst_all_1
 , itstool
-, libgudev
 , vala
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , appstream-glib
 , libxslt
-, gnome-common
 , gtk-doc
 , adwaita-icon-theme
 , librsvg
@@ -38,6 +36,8 @@ stdenv.mkDerivation rec {
   pname = "cheese";
   version = "3.38.0";
 
+  outputs = [ "out" "man" "devdoc" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
@@ -51,31 +51,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "cheese"; attrPath = "gnome3.cheese"; };
-  };
-
   nativeBuildInputs = [
     appstream-glib
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     gettext
-    gnome-common
     gtk-doc
     itstool
     libxml2
-    libxslt
+    libxslt # for xsltproc
     meson
     ninja
     pkg-config
     python3
     vala
     wrapGAppsHook
+    glib # for glib-compile-schemas
   ];
 
   buildInputs = [
@@ -93,12 +84,13 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gtk3
     libcanberra-gtk3
-    libgudev
     librsvg
-    udev
   ];
 
-  outputs = [ "out" "man" "devdoc" ];
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -112,13 +104,18 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "cheese";
+      attrPath = "gnome3.cheese";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     maintainers = teams.gnome.members;
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
