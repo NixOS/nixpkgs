@@ -60,6 +60,7 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
+    rustc.config = "armv7-linux-androideabi";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;
@@ -67,6 +68,7 @@ rec {
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
+    rustc.config = "aarch64-linux-android";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;

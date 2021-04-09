@@ -8,13 +8,13 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.1";
   pname = "h5py";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e2516f190652beedcb8c7acfa1c6fa92d99b42331cbef5e5c7ec2d65b0fc3c2";
+    sha256 = "sha256-iUdL6RG/zbNMvw2YuOxItXjCeon9sa5O51E/HvjZJJ4=";
   };
 
   # avoid strict pinning of numpy
@@ -49,6 +49,7 @@ in buildPythonPackage rec {
   meta = with lib; {
     description = "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
-    license = licenses.bsd2;
+    license = licenses.bsd3;
+    maintainers = [ ];
   };
 }
