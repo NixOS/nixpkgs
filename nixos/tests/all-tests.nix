@@ -389,6 +389,7 @@ in
   systemd = handleTest ./systemd.nix {};
   systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
+  systemd-binfmt-argv0 = handleTestOn ["x86_64-linux"] ./systemd-binfmt-argv0.nix {};
   systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
