@@ -5008,6 +5008,8 @@ in {
 
   pathtools = callPackage ../development/python-modules/pathtools { };
 
+  pathvalidate = callPackage ../development/python-modules/pathvalidate { };
+
   patiencediff = callPackage ../development/python-modules/patiencediff { };
 
   patool = callPackage ../development/python-modules/patool { };
@@ -6270,6 +6272,8 @@ in {
   pysaml2 = callPackage ../development/python-modules/pysaml2 {
     inherit (pkgs) xmlsec;
   };
+
+  pysatochip = callPackage ../development/python-modules/pysatochip { };
 
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
