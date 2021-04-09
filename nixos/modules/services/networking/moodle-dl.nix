@@ -19,6 +19,14 @@ in {
         '';
       };
 
+      notifyOnly = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to notify about changes without downloading any files.
+        '';
+      };
+
       startAt = mkOption {
         type = with types; either str (listOf str);
         description = "When to run moodle-dl. See systemd.time(7) for the format.";
@@ -61,7 +69,7 @@ in {
           User = config.users.users.moodle-dl.name;
           Group = config.users.groups.moodle-dl.name;
           WorkingDirectory = cfg.directory;
-          ExecStart = "${cfg.package}/bin/moodle-dl";
+          ExecStart = "${cfg.package}/bin/moodle-dl ${lib.optionalString cfg.notifyOnly "--without-downloading-files"}";
           ExecStartPre = "${pkgs.coreutils}/bin/ln -sfn ${toString moodle-dl-json} ${cfg.directory}/config.json";
         }
         (mkIf (cfg.directory == stateDirectoryDefault) { StateDirectory = "moodle-dl"; })
