@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-development/${pname}-${version}.tar.gz";
-    sha256 = "0d586c8mbk50hjslq32n70sdp2a7lbsjv9zhky4w6jy950rrdfqh";
+    sha256 = "sha256-UxQx/wnKnCB3uC9xEfq1F0l3kHAJjp9GzbeRugKyFsk=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       - Shell (nbdsh) for command line and scripting.
     '';
     license = with licenses; lgpl21Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres humancalico ];
     platforms = with platforms; linux;
   };
 }
