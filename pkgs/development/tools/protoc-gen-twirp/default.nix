@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "protoc-gen-twirp";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "twitchtv";
     repo = "twirp";
     rev = "v${version}";
-    sha256 = "sha256-GN7akAp0zzS8wVhgXlT1ceFUFKH4Sz74XQ8ofIE8T/k=";
+    sha256 = "sha256-W7t36F1St0YLPowHaZSboVNnvX7E2Lg5tPWeyeUSabA=";
   };
 
   goPackagePath = "github.com/twitchtv/twirp";
@@ -17,6 +17,8 @@ buildGoPackage rec {
     "protoc-gen-twirp"
     "protoc-gen-twirp_python"
   ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A simple RPC framework with protobuf service definitions";
