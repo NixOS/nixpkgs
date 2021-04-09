@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , gmp
 , mpir
 , mpfr
@@ -13,10 +12,10 @@ assert withBlas -> openblas != null && blas.implementation == "openblas" && lapa
 
 stdenv.mkDerivation rec {
   pname = "flint";
-  version = "2.5.2"; # remove libflint.so.MAJOR patch when updating
+  version = "2.7.1";
   src = fetchurl {
     url = "http://www.flintlib.org/flint-${version}.tar.gz";
-    sha256 = "11syazv1a8rrnac3wj3hnyhhflpqcmq02q8pqk2m6g2k6h0gxwfb";
+    sha256 = "07j8r96kdzp19cy3a5yvpjxf90mkd6103yr2n42qmpv7mgcjyvhq";
   };
   buildInputs = [
     gmp
@@ -41,14 +40,6 @@ stdenv.mkDerivation rec {
   # issues with ntl -- https://github.com/wbhart/flint2/issues/487
   NIX_CXXSTDLIB_COMPILE = "-std=c++11";
 
-  patches = [
-    (fetchpatch {
-      # Always produce libflint.so.MAJOR; will be included in the next flint version
-      # See https://github.com/wbhart/flint2/pull/347
-      url = "https://github.com/wbhart/flint2/commit/49fbcd8f736f847d3f9667f9f7d5567ef4550ecb.patch";
-      sha256 = "09w09bpq85kjf752bd3y3i5lvy59b8xjiy7qmrcxzibx2a21pj73";
-    })
-  ];
   doCheck = true;
   meta = {
     inherit version;
