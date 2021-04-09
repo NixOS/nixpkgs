@@ -1396,6 +1396,10 @@ self: super: {
           pkgs.lib.makeBinPath deps
         }"
       '';
+
+      # 2021-04-09: test failure
+      # PR pending https://github.com/expipiplus1/update-nix-fetchgit/pull/60
+      doCheck = false;
     }));
 
   # Our quickcheck-instances is too old for the newer binary-instances, but
