@@ -7574,7 +7574,6 @@ broken-packages:
   - language-hcl
   - language-java-classfile
   - language-kort
-  - language-lua
   - language-lua-qq
   - language-lua2
   - language-mixal
