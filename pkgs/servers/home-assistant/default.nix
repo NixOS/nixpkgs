@@ -241,6 +241,7 @@ in with py.pkgs; buildPythonApplication rec {
     "homekit_controller"
     "homeassistant"
     "homematic"
+    "homematicip_cloud"
     "html5"
     "http"
     "hue"
