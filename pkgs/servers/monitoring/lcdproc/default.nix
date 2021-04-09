@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       --replace server/drivers/ $out/lib/lcdproc/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client/server suite for controlling a wide variety of LCD devices";
     homepage = "http://lcdproc.org/";
     license = licenses.gpl2;
