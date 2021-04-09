@@ -4051,7 +4051,6 @@ broken-packages:
   - cereal-io-streams
   - cereal-plus
   - cereal-streams
-  - cereal-time
   - certificate
   - cf
   - cfenv

@@ -1802,4 +1802,8 @@ self: super: {
   # PR pending https://github.com/glguy/language-lua/pull/6
   language-lua = doJailbreak super.language-lua;
 
+  # 2021-04-09: too strict time bound
+  # PR pending https://github.com/zohl/cereal-time/pull/2
+  cereal-time = doJailbreak super.cereal-time;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
