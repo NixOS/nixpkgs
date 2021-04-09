@@ -300,6 +300,12 @@
     githubId = 335271;
     name = "James Alexander Feldman-Crough";
   };
+  afontain = {
+    email = "antoine.fontaine@epfl.ch";
+    github = "necessarily-equal";
+    githubId = 59283660;
+    name = "Antoine Fontaine";
+  };
   aforemny = {
     email = "aforemny@posteo.de";
     github = "aforemny";
