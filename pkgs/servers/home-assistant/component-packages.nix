@@ -397,7 +397,7 @@
     "integration" = ps: with ps; [ ];
     "intent" = ps: with ps; [ aiohttp-cors ];
     "intent_script" = ps: with ps; [ ];
-    "intesishome" = ps: with ps; [ ]; # missing inputs: pyintesishome
+    "intesishome" = ps: with ps; [ pyintesishome ];
     "ios" = ps: with ps; [ aiohttp-cors zeroconf ];
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
