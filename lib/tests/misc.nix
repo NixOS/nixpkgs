@@ -410,8 +410,10 @@ runTests {
   };
 
   testToINIDuplicateKeys = {
-    expr = generators.toINI { listsAsDuplicateKeys = true; } { foo.bar = true; baz.qux = [ 1 false ]; };
+    expr = generators.toINI { listsAsDuplicateKeys = true; } { top = [ 3 5 ]; foo.bar = true; baz.qux = [ 1 false ]; };
     expected = ''
+      top=3
+      top=5
       [baz]
       qux=1
       qux=false
@@ -453,6 +455,18 @@ runTests {
       attribute1=5
       boolean=false
       x=Me-se JarJar Binx
+    '';
+  };
+
+  testToINIToplevelKeys = {
+    expr = generators.toINI {} {
+      "toplevel" = "bar";
+      "foo" = { "bar" = "baz"; };
+    };
+    expected = ''
+      toplevel=bar
+      [foo]
+      bar=baz
     '';
   };
 
