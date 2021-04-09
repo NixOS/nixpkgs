@@ -138,6 +138,7 @@ in
   gnome3 = handleTest ./gnome3.nix {};
   gnome3-xorg = handleTest ./gnome3-xorg.nix {};
   go-neb = handleTest ./go-neb.nix {};
+  gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
