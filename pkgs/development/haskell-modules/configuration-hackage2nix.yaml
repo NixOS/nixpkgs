@@ -3982,7 +3982,6 @@ broken-packages:
   - cao
   - cap
   - Capabilities
-  - capability
   - capnp
   - capped-list
   - capri
