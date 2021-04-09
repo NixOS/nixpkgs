@@ -28,14 +28,6 @@ qtModule {
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
-
-    # qmake looks for syncqt instead of syncqt.pl and fails with a cryptic
-    # error if it can't find it. syncqt.pl also has a /usr/bin/env shebang, so
-    # it can't be directly used in a sandboxed build environment.
-    (writeScriptBin "syncqt" ''
-      #!${stdenv.shell}
-      exec ${perl}/bin/perl ${qtbase.dev}/bin/syncqt.pl "$@"
-    '')
   ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
