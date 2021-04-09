@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "6.6.0";
+  version = "7.0.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "13zw9gyaqna9d82mwrglab4dfx5y9faqf36d6xplq0z6vnzig1rg";
+    sha256 = "0ad578fqbijw8yf0c92c33inpqam1cfhbwcwinzlmc22h0d4bv5h";
   };
 
   # don't remove runtime deps
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
 
   buildInputs = with xorg; [
-    libXScrnSaver libXdamage libXtst
+    libXScrnSaver libXdamage libXtst libxshmfence
   ] ++ [
     nss gtk2 alsaLib gnome2.GConf gtk3 unzip
   ];
