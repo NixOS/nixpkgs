@@ -8257,8 +8257,10 @@ broken-packages:
   - morfeusz
   - morley
   - morloc
+  - morpheus-graphql
   - morpheus-graphql-app
   - morpheus-graphql-cli
+  - morpheus-graphql-subscriptions
   - morphisms-functors
   - morphisms-functors-inventory
   - morphisms-objects
