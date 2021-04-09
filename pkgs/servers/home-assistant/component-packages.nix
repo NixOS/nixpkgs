@@ -238,7 +238,7 @@
     "eufy" = ps: with ps; [ ]; # missing inputs: lakeside
     "everlights" = ps: with ps; [ pyeverlights ];
     "evohome" = ps: with ps; [ evohome-async ];
-    "ezviz" = ps: with ps; [ ]; # missing inputs: pyezviz
+    "ezviz" = ps: with ps; [ pyezviz ];
     "faa_delays" = ps: with ps; [ faadelays ];
     "facebook" = ps: with ps; [ ];
     "facebox" = ps: with ps; [ ];
