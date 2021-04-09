@@ -936,6 +936,8 @@ in {
 
   base58 = callPackage ../development/python-modules/base58 { };
 
+  baseline = callPackage ../development/python-modules/baseline { };
+
   baselines = callPackage ../development/python-modules/baselines { };
 
   basemap = callPackage ../development/python-modules/basemap { };
@@ -2247,6 +2249,8 @@ in {
   executing = callPackage ../development/python-modules/executing { };
 
   executor = callPackage ../development/python-modules/executor { };
+
+  exif = callPackage ../development/python-modules/exif { };
 
   exifread = callPackage ../development/python-modules/exifread { };
 
@@ -5231,6 +5235,8 @@ in {
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
   plugwise = callPackage ../development/python-modules/plugwise { };
+
+  plum-py = callPackage ../development/python-modules/plum-py { };
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
