@@ -1475,7 +1475,8 @@ self: super: {
   # https://github.com/obsidiansystems/dependent-sum/issues/55
   dependent-sum = doJailbreak super.dependent-sum;
 
-  dependent-sum-aeson-orphans = appendPatch super.dependent-sum-aeson-orphans (pkgs.fetchpatch {
+  # Overspecified constraint on 'constraints'. Kinda funny, huh?
+  dependent-sum-aeson-orphans = appendPatch (doJailbreak super.dependent-sum-aeson-orphans) (pkgs.fetchpatch {
     # 2020-11-18: https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/9
     # Bump version bounds for ghc 8.10
     url = https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/e1f5898116222a1bc557d41f3395066f83736093.patch;
