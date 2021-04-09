@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
+  buildInputs = [ libuuid thin-provisioning-tools libaio ]
+                ++ lib.optional (!stdenv.hostPlatform.isMusl) udev;
 
   configureFlags = [
     "--disable-readline"
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ] ++
-  lib.optionals (udev != null) [
+  lib.optionals (!stdenv.hostPlatform.isMusl && udev != null) [
     "--enable-udev_rules"
     "--enable-udev_sync"
   ];
@@ -68,27 +69,25 @@ stdenv.mkDerivation rec {
   '';
 
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = let
+    # you can get the latest commit id from here: https://git.alpinelinux.org/aports/log/
+    version = "eae8e06eee6e93e59139cf4d06e8414f681e20c9";
+  in [
     (fetchpatch {
       name = "fix-stdio-usage.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/fix-stdio-usage.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "0m6wr6qrvxqi2d2h054cnv974jq1v65lqxy05g1znz946ga73k3p";
+      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/fix-stdio-usage.patch?id=${version}";
+      sha256 = "sha256-YNKMmyrbK69N9uGMP+sJ4CMhOqCxthZ/Fg8O+1jMSWI=";
     })
     (fetchpatch {
       name = "mallinfo.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
-    })
-    (fetchpatch {
-      name = "mlockall-default-config.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mlockall-default-config.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "1ivbj3sphgf8n1ykfiv5rbw7s8dgnj5jcr9jl2v8cwf28lkacw5l";
+      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?id=${version}";
+      sha256 = "sha256-QNLe8+mcE+Psuut5u4Y/QueuDkd2LrvA0CWWICKm3Dw=";
     })
   ];
 
   doCheck = false; # requires root
 
-  makeFlags = lib.optionals (udev != null) [
+  makeFlags = [
     "SYSTEMD_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
   ];
 
@@ -96,7 +95,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "OWNER=" "GROUP=" "confdir=$(out)/etc" ];
 
   # Install systemd stuff.
-  installTargets = [ "install" ] ++ lib.optionals (udev != null) [
+  installTargets = [ "install" ] ++ lib.optionals (!stdenv.hostPlatform.isMusl && udev != null) [
     "install_systemd_generators"
     "install_systemd_units"
     "install_tmpfiles_configuration"

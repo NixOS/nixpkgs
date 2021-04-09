@@ -37,7 +37,8 @@ common =
 
       VERSION_SUFFIX = suffix;
 
-      outputs = [ "out" "dev" "man" "doc" ];
+      outputs = [ "out" "dev" ]
+        ++ lib.optionals (!stdenv.targetPlatform.isMusl) [ "man" "doc" ];
 
       nativeBuildInputs =
         [ pkg-config ]
@@ -46,9 +47,12 @@ common =
           [ autoreconfHook
             autoconf-archive
             bison flex
-            (lib.getBin lowdown) mdbook
+            (lib.getBin lowdown)
             jq
-           ];
+          ] ++ lib.optionals (is24 && !stdenv.targetPlatform.isMusl) [
+            # rust is currently broken for musl
+            mdbook
+          ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
@@ -126,6 +130,9 @@ common =
         ++ lib.optionals stdenv.isLinux [
           "--with-sandbox-shell=${sh}/bin/busybox"
         ]
+        ++ lib.optional (stdenv.targetPlatform.isMusl) [
+          "--disable-doc-gen"
+        ]
         ++ lib.optional (
             stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
         ) "--with-system=${stdenv.hostPlatform.nix.system}"
@@ -137,7 +144,7 @@ common =
 
       installFlags = [ "sysconfdir=$(out)/etc" ];
 
-      doInstallCheck = true; # not cross
+      doInstallCheck = !stdenv.targetPlatform.isMusl; # not cross
 
       # socket path becomes too long otherwise
       preInstallCheck = lib.optionalString stdenv.isDarwin ''
@@ -161,7 +168,7 @@ common =
         license = lib.licenses.lgpl2Plus;
         maintainers = [ lib.maintainers.eelco ];
         platforms = lib.platforms.unix;
-        outputsToInstall = [ "out" "man" ];
+        outputsToInstall = lib.optionals (!stdenv.targetPlatform.isMusl) [ "out" "man" ];
       };
 
       passthru = {
