@@ -1423,7 +1423,7 @@ self: super: {
 
   # 2021-03-09: Golden tests seem to be missing in hackage release:
   # https://github.com/haskell/haskell-language-server/issues/1536
-  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
+  hls-tactics-plugin = dontCheck (super.hls-tactics-plugin.override { refinery = self.refinery_0_3_0_0; });
 
   # 2021-03-24: hlint 3.3 is for ghc 9 compat, but hls only supports ghc 8.10
   hls-hlint-plugin = super.hls-hlint-plugin.override {
