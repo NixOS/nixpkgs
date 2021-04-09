@@ -9382,6 +9382,8 @@ in
 
   untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
 
+  unvanquished = callPackage ../games/unvanquished { };
+
   up = callPackage ../tools/misc/up { };
 
   upterm = callPackage ../tools/misc/upterm { };
