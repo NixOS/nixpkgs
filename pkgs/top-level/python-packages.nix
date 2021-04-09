@@ -8834,6 +8834,8 @@ in {
 
   webencodings = callPackage ../development/python-modules/webencodings { };
 
+  webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
+
   webhelpers = callPackage ../development/python-modules/webhelpers { };
 
   webob = callPackage ../development/python-modules/webob { };
