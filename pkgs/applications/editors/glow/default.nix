@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=" "-X=main.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags= -s -w -X=main.Version=${version}" ];
 
   meta = with lib; {
     description = "Render markdown on the CLI, with pizzazz!";
