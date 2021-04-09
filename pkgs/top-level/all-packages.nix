@@ -23933,6 +23933,8 @@ in
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
+  kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
+
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
