@@ -3,6 +3,7 @@
 , fetchurl
 , fetchpatch
 , makeWrapper
+, nixosTests
 , pkg-config
 , file
 , linuxHeaders
@@ -183,6 +184,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   doInstallCheck = true;
   enableParallelBuilding = true;
+
+  passthru.tests = { inherit (nixosTests) trafficserver; };
 
   meta = with lib; {
     homepage = "https://trafficserver.apache.org";
