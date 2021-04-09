@@ -20,7 +20,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "01sp24z63r3nqxx57zc4873b8i5dqipy7yrxzrwjns531vznhiy2";
   };
 
-  KERNEL_SRC_DIR = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
+
+  KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   nativeBuildInputs = [
     libelf
@@ -32,7 +34,19 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.pytestCheckHook
   ];
 
-  setupPyBuildFlags = lib.optional (!withDriver) "--skip-driver";
+  preBuild = lib.optionalString withDriver ''
+    export CHIPSEC_BUILD_LIB=$(mktemp -d)
+    mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
+  '';
+
+  preInstall = lib.optionalString withDriver ''
+    mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
+    mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \
+      $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
+  '';
+
+  setupPyBuildFlags = [ "--build-lib=$CHIPSEC_BUILD_LIB" ]
+                   ++ lib.optional (!withDriver) "--skip-driver";
 
   pythonImportsCheck = [ "chipsec" ];
 
