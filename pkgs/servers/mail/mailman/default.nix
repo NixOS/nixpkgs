@@ -2,6 +2,7 @@
 , flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
 , requests, zope_configuration, click, falcon, importlib-resources
 , zope_component, lynx, postfix, authheaders, gunicorn
+, docutils, sphinx
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     importlib-resources lazr_config passlib requests zope_configuration
     zope_component authheaders gunicorn
   ];
+
+  checkInputs = [ docutils sphinx ];
 
   patches = [
     (fetchpatch {
@@ -47,8 +50,6 @@ buildPythonPackage rec {
   # has all the necessary search paths to execute unwrapped 'master' and
   # 'runner' scripts.
   dontWrapPythonPrograms = true;
-
-  doCheck = false;
 
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
