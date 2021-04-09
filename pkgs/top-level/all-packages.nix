@@ -25493,7 +25493,9 @@ in
 
   rtl-ais = callPackage ../applications/radio/rtl-ais { };
 
+  # librtlsdr is a friendly fork with additional features
   rtl-sdr = callPackage ../applications/radio/rtl-sdr { };
+  librtlsdr = callPackage ../development/libraries/librtlsdr { };
 
   rtv = callPackage ../applications/misc/rtv { };
 
