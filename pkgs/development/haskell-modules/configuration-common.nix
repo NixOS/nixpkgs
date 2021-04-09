@@ -1741,9 +1741,6 @@ self: super: {
       preConfigure = ''substituteInPlace iCalendar.cabal --replace "network >=2.6 && <2.7" "network -any"'';
   };
 
-  # Too strict bounds on base: https://github.com/runarorama/fuzzyfind/issues/1
-  fuzzyfind = doJailbreak super.fuzzyfind;
-
   # Apply patch from master relaxing the version bounds on tasty.
   # Can be removed at next release (current is 0.10.1.0).
   ginger = appendPatch super.ginger
