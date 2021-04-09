@@ -4798,6 +4798,8 @@ in {
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
+  omnilogic = callPackage ../development/python-modules/omnilogic { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   onnx = callPackage ../development/python-modules/onnx { };
