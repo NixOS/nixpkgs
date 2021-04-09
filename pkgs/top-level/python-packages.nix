@@ -276,6 +276,8 @@ in {
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
 
+  aiohttp-wsgi = callPackage ../development/python-modules/aiohttp-wsgi { };
+
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
   aiobotocore = callPackage ../development/python-modules/aiobotocore { };
