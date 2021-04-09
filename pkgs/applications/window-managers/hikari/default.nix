@@ -1,7 +1,7 @@
 { lib, stdenv, fetchzip,
   pkg-config, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
-  libucl, wayland, wayland-protocols, wlroots,
+  libucl, wayland, wayland-protocols, wlroots, mesa,
   features ? {
     gammacontrol = true;
     layershell   = true;
@@ -35,6 +35,7 @@ stdenv.mkDerivation {
     pango
     pixman
     libucl
+    mesa # for libEGL
     wayland
     wayland-protocols
     wlroots
