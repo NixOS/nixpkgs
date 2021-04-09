@@ -224,6 +224,17 @@ in rec {
   );
 
 
+  # A virtualbox base image to use with nixops
+  nixopsVboxImage =
+
+    with import ./.. { system = "x86_64-linux"; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [ ./modules/virtualisation/virtualbox-image.nix ];
+    }).config.system.build.nixopsVboxImage);
+
+
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (import lib/eval-config.nix {
