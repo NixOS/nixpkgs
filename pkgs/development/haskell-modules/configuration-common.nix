@@ -1798,4 +1798,8 @@ self: super: {
     ];
   });
 
+  # 2021-04-09: outdated base and alex-tools
+  # PR pending https://github.com/glguy/language-lua/pull/6
+  language-lua = doJailbreak super.language-lua;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
