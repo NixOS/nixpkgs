@@ -413,7 +413,7 @@
     "itach" = ps: with ps; [ ]; # missing inputs: pyitachip2ir
     "itunes" = ps: with ps; [ ];
     "izone" = ps: with ps; [ ]; # missing inputs: python-izone
-    "jewish_calendar" = ps: with ps; [ ]; # missing inputs: hdate
+    "jewish_calendar" = ps: with ps; [ hdate ];
     "joaoapps_join" = ps: with ps; [ ]; # missing inputs: python-join-api
     "juicenet" = ps: with ps; [ ]; # missing inputs: python-juicenet
     "kaiterra" = ps: with ps; [ ]; # missing inputs: kaiterra-async-client
