@@ -38,7 +38,7 @@
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals trackerSupport [
     tracker
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [

@@ -10,6 +10,7 @@
 , wayland
 , wayland-protocols
 , wlroots
+, mesa
 , xwayland
 , makeWrapper
 }:
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wlroots
+    mesa # for libEGL
     xwayland
   ];
 

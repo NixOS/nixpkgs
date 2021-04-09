@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland, scdoc, makeWrapper
 , wlroots, wayland-protocols, pixman, libxkbcommon
-, cairo , pango, fontconfig, pandoc, systemd
+, cairo , pango, fontconfig, pandoc, systemd, mesa
 , withXwayland ? true, xwayland
 , nixosTests
 }:
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon cairo
     pango fontconfig pandoc systemd
+    mesa # for libEGL headers
   ];
 
   outputs = [ "out" "contrib" ];
