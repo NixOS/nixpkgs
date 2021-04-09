@@ -1,8 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch, buildPackages
-, pkg-config, intltool, ninja, meson
-, file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
+, meson, pkg-config, ninja
+, intltool, bison, flex, file, python3Packages
+, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, python3Packages
+, libelf, libvdpau
 , libglvnd
 , enableRadv ? true
 , galliumDrivers ? ["auto"]
@@ -31,7 +32,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.3.4";
+  version = "21.0.1";
   branch  = versions.major version;
 in
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1120kf280hg4h0a2505vxf6rdw8r2ydl3cg4iwkmpx0zxj3sj8fw";
+    sha256 = "1fqj2xhhd1ary0pfg31jq6fqcnd6qgyrw1445nmz554k8n2ck7rp";
   };
 
   prePatch = "patchShebangs .";
@@ -113,7 +114,8 @@ stdenv.mkDerivation {
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
     "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
-    "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
+    "-Dosmesa=${boolToString enableOSMesa}" # used by wine
+    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
   ];
@@ -130,7 +132,7 @@ stdenv.mkDerivation {
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    pkg-config meson ninja
+    meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [

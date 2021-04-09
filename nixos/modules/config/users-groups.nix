@@ -556,10 +556,8 @@ in {
         install -m 0700 -d /root
         install -m 0755 -d /home
 
-        ${pkgs.perl}/bin/perl -w \
-          -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} \
-          -I${pkgs.perlPackages.JSON}/${pkgs.perl.libPrefix} \
-          ${./update-users-groups.pl} ${spec}
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
+        -w ${./update-users-groups.pl} ${spec}
       '';
 
     # for backwards compatibility

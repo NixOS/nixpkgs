@@ -10,7 +10,8 @@
 with lib;
 
 let
-  version = "3.60";
+  version = "3.63";
+
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 in
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/nss-${version}.tar.gz";
-    sha256 = "hKvVV1q4dMU65RG9Rh5dCGjRobOE7kB1MVTN0dWQ/j0=";
+    sha256 = "0892xbjcaw6g4rd2rs4qa37nbda248cjrgxa4faaw0licbpjyb8q";
   };
 
   certdata2pem = fetchurl {

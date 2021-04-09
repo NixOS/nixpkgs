@@ -755,11 +755,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXaw = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXmu, libXpm, libXt }: stdenv.mkDerivation {
-    name = "libXaw-1.0.13";
+    name = "libXaw-1.0.14";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXaw-1.0.13.tar.bz2";
-      sha256 = "1kdhxplwrn43d9jp3v54llp05kwx210lrsdvqb6944jp29rhdy4f";
+      url = "mirror://xorg/individual/lib/libXaw-1.0.14.tar.bz2";
+      sha256 = "13kg59r3086383g1dyhnwxanhp2frssh9062mrgn34nzlf7gkbkn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -1002,11 +1002,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXres = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libXres-1.2.0";
+    name = "libXres-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXres-1.2.0.tar.bz2";
-      sha256 = "1m0jr0lbz9ixpp9ihk68349q0i7ry2379lnfzdy4mrl86ijc2xgz";
+      url = "mirror://xorg/individual/lib/libXres-1.2.1.tar.bz2";
+      sha256 = "049b7dk6hx47161hg47ryjrm6pwsp27r5pby05b0wqb1pcggprmn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -2679,11 +2679,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt }: stdenv.mkDerivation {
-    name = "xorgproto-2020.1";
+    name = "xorgproto-2021.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xorgproto-2020.1.tar.bz2";
-      sha256 = "1llrnrkq6iprgiqakmwlv89745s9h02xsiaq0xn3fnh377qm78al";
+      url = "mirror://xorg/individual/proto/xorgproto-2021.3.tar.bz2";
+      sha256 = "0dypp7cvjf0rvwa7cn1zp7djw5ynhs1rwk9p0r1vczbwzha2nwsc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];

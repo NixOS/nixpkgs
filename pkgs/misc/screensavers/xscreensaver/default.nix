@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, bc, perl, perlPackages, pam, libXext, libXScrnSaver, libX11
+{ lib, stdenv, fetchurl, pkg-config, bc, perl, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU, libGL, gtk2
 , libxml2, libglade, intltool, xorg, makeWrapper, gle, gdk-pixbuf, gdk-pixbuf-xlib
 , forceInstallAllHacks ? false
@@ -38,11 +38,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
       wrapProgram $out/bin/xscreensaver-text \
         --prefix PATH : ${lib.makeBinPath [xorg.appres]}
-      wrapProgram $out/bin/xscreensaver-getimage-file \
-        --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-              EncodeLocale HTTPDate HTTPMessage IOSocketSSL LWP LWPProtocolHttps
-              MozillaCA NetHTTP NetSSLeay TryTiny URI
-              ]}"
+
+      substituteInPlace $out/bin/xscreensaver-getimage-file \
+        --replace '${perl}' '${perl.withPackages (p: with p;
+          [ EncodeLocale HTTPDate HTTPMessage IOSocketSSL
+            LWP LWPProtocolHttps MozillaCA NetHTTP
+            NetSSLeay TryTiny URI
+          ])}'
   ''
   + lib.optionalString forceInstallAllHacks ''
     make -C hacks/glx dnalogo
