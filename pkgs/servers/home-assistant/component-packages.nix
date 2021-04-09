@@ -115,7 +115,7 @@
     "circuit" = ps: with ps; [ ]; # missing inputs: circuit-webhook
     "cisco_ios" = ps: with ps; [ pexpect ];
     "cisco_mobility_express" = ps: with ps; [ ciscomobilityexpress ];
-    "cisco_webex_teams" = ps: with ps; [ ]; # missing inputs: webexteamssdk
+    "cisco_webex_teams" = ps: with ps; [ webexteamssdk ];
     "citybikes" = ps: with ps; [ ];
     "clementine" = ps: with ps; [ ]; # missing inputs: python-clementine-remote
     "clickatell" = ps: with ps; [ ];
