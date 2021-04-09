@@ -41,6 +41,7 @@ let
       });
     } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "90") {
       llvmPackages = llvmPackages_12;
+      stdenv = llvmPackages_12.stdenv;
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
