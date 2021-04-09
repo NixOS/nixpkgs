@@ -4,15 +4,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "exa";
-  version = "unstable-2021-01-14";
+  version = "0.10.0";
 
-  cargoSha256 = "1lmjh0grpnx20y6raxnxgjkr92h395r6jk8mm2ypc4cxpxczdqvl";
+  cargoSha256 = "sha256-hslQZkmZ023gKxBbfgwqazBPUk0qWyy51uRJtr3QvWE=";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = pname;
-    rev = "13b91cced4cab012413b25c9d3e30c63548639d0";
-    sha256 = "18y4v1s102lh3gvgjwdd66qlsr75wpwpcj8zsk5y5r95a405dkfm";
+    rev = "v${version}";
+    sha256 = "sha256-xolanu4zhAwsbSPdGKgY2/uHtP30DSpr/7Vv1z4jEnQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://the.exa.website";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehegnes lilyball globin ];
+    maintainers = with maintainers; [ ehegnes lilyball globin fortuneteller2k ];
   };
 }

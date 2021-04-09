@@ -3,35 +3,45 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.2.0";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = version;
-    sha256 = "0ixsx4224jilc5zis6wbsbxqxv10mm5sksrzq15xp30zz0bzb6md";
+    sha256 = "sha256-hiOS0cTaPqllb31p+6nU4GYvw/E1Hdn8yd3sppzGkqg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    dnspython
-    ecdsa
-    jsonrpclib-pelix
-    matplotlib
-    pbkdf2
+    # requirements
     pyaes
-    pycrypto
-    pyqt5
-    pysocks
-    qrcode
+    ecdsa
     requests
-    tlslite-ng
+    qrcode
+    protobuf
+    jsonrpclib-pelix
+    pysocks
     qdarkstyle
+    python-dateutil
     stem
+    certifi
+    pathvalidate
+    dnspython
 
-    # plugins
-    keepkey
+    # requirements-binaries
+    pyqt5
+    psutil
+    pycryptodomex
+    cryptography
+
+    # requirements-hw
+    cython
     trezor
+    keepkey
     btchip
+    hidapi
+    pyscard
+    pysatochip
   ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -83,7 +93,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://www.electroncash.org/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus nyanloutre ];
+    maintainers = with maintainers; [ lassulus nyanloutre oxalica ];
     license = licenses.mit;
   };
 }

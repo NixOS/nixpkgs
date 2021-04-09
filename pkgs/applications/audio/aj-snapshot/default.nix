@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, jack2Full, minixml, pkg-config }:
+{ lib, stdenv, fetchurl, alsaLib, jack2, minixml, pkg-config }:
 
 stdenv.mkDerivation rec {
   name =  packageName + "-" + version ;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib minixml jack2Full ];
+  buildInputs = [ alsaLib minixml jack2 ];
 
   meta = with lib; {
     description = "Tool for storing/restoring JACK and/or ALSA connections to/from cml files";

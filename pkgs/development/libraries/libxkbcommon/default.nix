@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, yacc, doxygen
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, bison, doxygen
 , xkeyboard_config, libxcb, libxml2
 , python3
 , libX11
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config yacc doxygen ]
+  nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
     ++ lib.optional withWaylandSupport wayland;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandSupport [ wayland wayland-protocols ];

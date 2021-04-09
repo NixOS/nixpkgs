@@ -266,7 +266,7 @@ in
           gitMinimal
           openssh
           util-linux
-          iproute
+          iproute2
           ethtool
           thin-provisioning-tools
           iptables

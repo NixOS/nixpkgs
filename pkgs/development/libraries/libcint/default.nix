@@ -4,7 +4,7 @@
 , cmake
 , blas
   # Check Inputs
-, python
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=" # ends up double-adding /nix/store/... prefix, this avoids issue
   ];
 
+  strictDeps = true;
+
   doCheck = true;
-  checkInputs = [ python.pkgs.numpy ];
+  checkInputs = [ python3.pkgs.numpy ];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";

@@ -1144,7 +1144,7 @@ in
 
     environment.systemPackages =
       [ pkgs.host
-        pkgs.iproute
+        pkgs.iproute2
         pkgs.iputils
         pkgs.nettools
       ]
@@ -1171,7 +1171,7 @@ in
         wantedBy = [ "network.target" ];
         after = [ "network-pre.target" ];
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-        path = [ pkgs.iproute ];
+        path = [ pkgs.iproute2 ];
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         script = ''
@@ -1249,7 +1249,7 @@ in
               ${optionalString (current.type == "mesh" && current.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${current.meshID}"}
               ${optionalString (current.type == "monitor" && current.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${current.flags}"}
               ${optionalString (current.type == "managed" && current.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if current.fourAddr then "on" else "off"}"}
-              ${optionalString (current.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${current.mac}"}
+              ${optionalString (current.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${device} address ${current.mac}"}
             '';
 
             # Udev script to execute for a new WLAN interface. The script configures the new WLAN interface.
@@ -1260,7 +1260,7 @@ in
               ${optionalString (new.type == "mesh" && new.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${new.meshID}"}
               ${optionalString (new.type == "monitor" && new.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${new.flags}"}
               ${optionalString (new.type == "managed" && new.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if new.fourAddr then "on" else "off"}"}
-              ${optionalString (new.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${new.mac}"}
+              ${optionalString (new.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${device} address ${new.mac}"}
             '';
 
             # Udev attributes for systemd to name the device and to create a .device target.

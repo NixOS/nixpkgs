@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, htslib, zlib, bzip2, lzma, ncurses, boost }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
 
 stdenv.mkDerivation rec {
   pname = "delly";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-DWwC35r8cQbePUzppkFQlev0YZdxk2+BSrNTW/DOY3M=";
   };
 
-  buildInputs = [ zlib htslib bzip2 lzma ncurses boost ];
+  buildInputs = [ zlib htslib bzip2 xz ncurses boost ];
 
   EBROOTHTSLIB = htslib;
 

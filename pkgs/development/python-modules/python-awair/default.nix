@@ -2,7 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-awair";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -20,10 +20,10 @@ buildPythonPackage rec {
     owner = "ahayworth";
     repo = "python_awair";
     rev = version;
-    sha256 = "1fqjigc1a0lr9q6bjjq3j8pa39wg1cbkb0l67w94a0i4dkdfri8r";
+    sha256 = "sha256-5+s1aSvt+rXyumvf/qZ58Uvmq0p45mu23Djbwgih3qI=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp

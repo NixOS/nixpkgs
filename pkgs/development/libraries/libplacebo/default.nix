@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "3.120.0";
+  version = "3.120.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vjcp703h0a8z70bqkx1fawhpyv3zl11c7rczyky8v4cmcihscgg";
+    sha256 = "0x7jyzsdf884jrky4yci151pk4nzsz1w88wz8sk0cqing7bpaq16";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
+    "-Ddemos=false"
   ];
 
   meta = with lib; {

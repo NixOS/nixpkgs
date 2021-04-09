@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     # Add pkg-config file so that Meson projects can find this.
     # https://gitlab.gnome.org/ebassi/gi-docgen/merge_requests/26
     (fetchpatch {
-      url = "https://gitlab.gnome.org/ebassi/gi-docgen/commit/d65ed2e4827c4129d26e3c1df9a48054b4e72c50.patch";
+      url = "https://gitlab.gnome.org/jtojnar/gi-docgen/commit/d65ed2e4827c4129d26e3c1df9a48054b4e72c50.patch";
       sha256 = "BEefcHiAd/HTW5zo39J2WtfQjGXUkNFB6MDJj8/Ge80=";
     })
 

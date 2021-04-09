@@ -4,7 +4,7 @@
 , makeWrapper
 , pkg-config
 , which
-, yacc
+, bison
 , gnuplot
 , libxls
 , libxml2
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     which
-    yacc
+    bison
   ];
 
   buildInputs = [

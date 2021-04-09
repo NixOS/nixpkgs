@@ -15,10 +15,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01a8asbgkr7f1gp50ikzr1zzmvwv50da389943hrrqzxwd202268";
+      sha256 = "0bvn0swyzzhl9x8hlgaz7m7s1jqmpdi2c4klarix0hiyapy2il9y";
       type = "gem";
     };
-    version = "2.0.1";
+    version = "2.0.2";
   };
   sqlint = {
     dependencies = ["pg_query"];

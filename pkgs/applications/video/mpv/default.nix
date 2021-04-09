@@ -95,13 +95,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.33.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner  = "mpv-player";
     repo   = "mpv";
     rev    = "v${version}";
-    sha256 = "sha256-3l32qQBpvWVjbLp5CZtO039oDQeH7C/cNAKtJxrzlRk=";
+    sha256 = "06rw1f55zcsj78ql8w70j9ljp2qb1pv594xj7q9cmq7i92a7hq45";
   };
 
   patches = [

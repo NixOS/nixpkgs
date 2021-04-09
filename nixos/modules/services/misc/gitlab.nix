@@ -119,8 +119,9 @@ let
       backup = {
         path = cfg.backup.path;
         keep_time = cfg.backup.keepTime;
+      } // (optionalAttrs (cfg.backup.uploadOptions != {}) {
         upload = cfg.backup.uploadOptions;
-      };
+      });
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
         hooks_path = "${cfg.statePath}/shell/hooks";

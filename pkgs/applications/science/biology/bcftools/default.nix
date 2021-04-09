@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, python3, bash }:
+{ lib, stdenv, fetchurl, htslib, zlib, bzip2, xz, curl, perl, python3, bash }:
 
 stdenv.mkDerivation rec {
   pname = "bcftools";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [ htslib zlib bzip2 lzma curl ];
+  buildInputs = [ htslib zlib bzip2 xz curl ];
 
   strictDeps = true;
 

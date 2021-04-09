@@ -136,6 +136,24 @@ let
       '';
     };
 
+    bitcoin = {
+      exporterConfig = {
+        enable = true;
+        rpcUser = "bitcoinrpc";
+        rpcPasswordFile = pkgs.writeText "password" "hunter2";
+      };
+      metricProvider = {
+        services.bitcoind.default.enable = true;
+        services.bitcoind.default.rpc.users.bitcoinrpc.passwordHMAC = "e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-bitcoin-exporter.service")
+        wait_for_unit("bitcoind-default.service")
+        wait_for_open_port(9332)
+        succeed("curl -sSf http://localhost:9332/metrics | grep -q '^bitcoin_blocks '")
+      '';
+    };
+
     blackbox = {
       exporterConfig = {
         enable = true;
@@ -198,6 +216,22 @@ let
         wait_for_unit("prometheus-dnsmasq-exporter.service")
         wait_for_open_port(9153)
         succeed("curl -sSf http://localhost:9153/metrics | grep -q 'dnsmasq_leases 0'")
+      '';
+    };
+
+    # Access to WHOIS server is required to properly test this exporter, so
+    # just perform basic sanity check that the exporter is running and returns
+    # a failure.
+    domain = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-domain-exporter.service")
+        wait_for_open_port(9222)
+        succeed(
+            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep -q 'domain_probe_success 0'"
+        )
       '';
     };
 
@@ -599,6 +633,66 @@ let
         wait_for_open_port(9100)
         succeed(
             "curl -sSf http://localhost:9100/metrics | grep -q 'node_exporter_build_info{.\\+} 1'"
+        )
+      '';
+    };
+
+    openldap = {
+      exporterConfig = {
+        enable = true;
+        ldapCredentialFile = "${pkgs.writeText "exporter.yml" ''
+          ldapUser: "cn=root,dc=example"
+          ldapPass: "notapassword"
+        ''}";
+      };
+      metricProvider = {
+        services.openldap = {
+          enable = true;
+          settings.children = {
+            "cn=schema".includes = [
+              "${pkgs.openldap}/etc/schema/core.ldif"
+              "${pkgs.openldap}/etc/schema/cosine.ldif"
+              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              "${pkgs.openldap}/etc/schema/nis.ldif"
+            ];
+            "olcDatabase={1}mdb" = {
+              attrs = {
+                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+                olcDatabase = "{1}mdb";
+                olcDbDirectory = "/var/db/openldap";
+                olcSuffix = "dc=example";
+                olcRootDN = {
+                  # cn=root,dc=example
+                  base64 = "Y249cm9vdCxkYz1leGFtcGxl";
+                };
+                olcRootPW = {
+                  path = "${pkgs.writeText "rootpw" "notapassword"}";
+                };
+              };
+            };
+            "olcDatabase={2}monitor".attrs = {
+              objectClass = [ "olcDatabaseConfig" ];
+              olcDatabase = "{2}monitor";
+              olcAccess = [ "to dn.subtree=cn=monitor by users read" ];
+            };
+          };
+          declarativeContents."dc=example" = ''
+            dn: dc=example
+            objectClass: domain
+            dc: example
+
+            dn: ou=users,dc=example
+            objectClass: organizationalUnit
+            ou: users
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-openldap-exporter.service")
+        wait_for_open_port(389)
+        wait_for_open_port(9330)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9330/metrics | grep -q 'openldap_scrape{result=\"ok\"} 1'"
         )
       '';
     };

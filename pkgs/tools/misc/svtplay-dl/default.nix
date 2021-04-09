@@ -4,7 +4,7 @@
 let
 
   inherit (python3Packages)
-    python nose pycrypto pyyaml requests mock python-dateutil setuptools;
+    python nose cryptography pyyaml requests mock python-dateutil setuptools;
 
 in stdenv.mkDerivation rec {
   pname = "svtplay-dl";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "00pz5vv39qjsw67fdlj6942371lyvv368lc82z17nnh723ck54yy";
   };
 
-  pythonPaths = [ pycrypto pyyaml requests ];
+  pythonPaths = [ cryptography pyyaml requests ];
   buildInputs = [ python perl nose mock python-dateutil setuptools ] ++ pythonPaths;
   nativeBuildInputs = [ gitMinimal zip makeWrapper ];
 

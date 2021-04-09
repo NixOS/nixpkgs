@@ -10,11 +10,11 @@
 stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
-  version = "1.37.4";
+  version = "1.37.8";
 
   src = fetchurl {
     url = "https://github.com/OmniSharp/omnisharp-roslyn/releases/download/v${version}/omnisharp-mono.tar.gz";
-    sha256 = "0pknphydf194n7rjyax4mh8n7j8679j0jflw63gfgh37daxry0r2";
+    sha256 = "0kgv4l15rli9a7grmcsbv72csmxi7vqa7lrrr8bd4cq9ighh54q3";
   };
 
   nativeBuildInputs = [ makeWrapper dotnet-sdk dotnetPackages.Nuget ];

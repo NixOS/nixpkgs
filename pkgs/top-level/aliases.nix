@@ -225,6 +225,7 @@ mapAliases ({
   fwupdate = throw "fwupdate was merged into fwupd"; # added 2020-05-19
   g4py = python3Packages.geant4; # added 2020-06-06
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
+  gdal_1_11 = throw "gdal_1_11 was removed. Use gdal instead."; # added 2021-04-03
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
@@ -268,6 +269,7 @@ mapAliases ({
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
+  gmock = gtest; # moved from top-level 2021-03-14
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobby5 = gobby; # added 2021-02-01
@@ -309,7 +311,9 @@ mapAliases ({
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   inter-ui = inter; # added 2021-03-27
+  iproute = iproute2; # moved from top-level 2021-03-14
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
+  jack2Full = jack2; # moved from top-level 2021-03-14
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
   jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
   jbuilder = dune_1; # added 2018-09-09
@@ -334,6 +338,7 @@ mapAliases ({
   kicad-with-packages3d = kicad; # added 2019-11-25
   kindlegen = throw "kindlegen has been removed from nixpkgs, as it's abandoned and no longer available for download."; # 2021-03-09
   krename-qt5 = krename; # added 2017-02-18
+  kerberos = libkrb5; # moved from top-level 2021-03-14
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
   kvm = qemu_kvm; # added 2018-04-25
   latinmodern-math = lmmath;
@@ -394,10 +399,12 @@ mapAliases ({
   lua5_expat = luaPackages.luaexpat; # added 2017-05-02
   lua5_sec = luaPackages.luasec; # added 2017-05-02
   lxappearance-gtk3 = throw "lxappearance-gtk3 has been removed. Use lxappearance instead, which now defaults to Gtk3";  # added 2020-06-03
+  lzma = xz; # moved from top-level 2021-03-14
   m3d-linux = m33-linux; # added 2016-08-13
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   marathon = throw "marathon has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
+  mysql = mariadb; # moved from top-level 2021-03-14
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
   matcha = throw "matcha was renamed to matcha-gtk-theme"; # added 2020-05-09
   mathics = throw "mathics has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
@@ -584,6 +591,7 @@ mapAliases ({
   python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead."; # added 2021-03-08
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05
+  qmk_firmware = throw "qmk_firmware has been removed because it was broken"; # added 2021-04-02
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
   qvim = throw "qvim has been removed."; # added 2020-08-31
@@ -612,6 +620,7 @@ mapAliases ({
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # added 2021-02-15
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
+  radare2-cutter = cutter; # added 2021-03-30
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
@@ -823,12 +832,15 @@ mapAliases ({
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   xv = xxv; # added 2020-02-22
+  yacc = bison; # moved from top-level 2021-03-14
   youtubeDL = youtube-dl;  # added 2014-10-26
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
   yubikey-neo-manager = throw "yubikey-neo-manager has been removed because it was broken. Use yubikey-manager-qt instead."; # added 2021-03-08
   yuzu = yuzu-mainline; # added 2021-01-25
+  zabbix30 = throw "Zabbix 3.0.x is end of life, see https://www.zabbix.com/documentation/5.0/manual/installation/upgrade/sources for a direct upgrade path to 5.0.x"; # added 2021-04-07
   zimreader = throw "zimreader has been removed from nixpkgs as it has been replaced by kiwix-serve and stopped working with modern zimlib versions."; # added 2021-03-28
   zdfmediathk = mediathekview; # added 2019-01-19
+
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
   # spidermonkey is not ABI upwards-ompatible, so only allow this for nix-shell
   spidermonkey = spidermonkey_78; # added 2020-10-09
@@ -981,6 +993,7 @@ mapAliases ({
     plasma-vault
     plasma-workspace plasma-workspace-wallpapers
     polkit-kde-agent powerdevil
+    qqc2-breeze-style
     sddm-kcm systemsettings
     xdg-desktop-portal-kde
   ;

@@ -36,7 +36,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'croniter = "^0"' 'croniter = "*"' \
-      --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
+      --replace 'defusedxml = "^0.6"' 'defusedxml = "*"' \
+      --replace 'zeroconf = "^0.28"' 'zeroconf = "*"'
   '';
 
   nativeBuildInputs = [

@@ -93,7 +93,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   ltrace = linux;
   lvm2 = linux;
   lynx = linux;
-  lzma = linux;
+  xz = linux;
   man = linux;
   man-pages = linux;
   mc = all;

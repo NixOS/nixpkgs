@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "cockatrice";
-  version = "2021-01-26-Release-2.8.0";
+  version = "2021-02-03-Development-2.8.1-beta";
 
   src = fetchFromGitHub {
     owner = "Cockatrice";
     repo = "Cockatrice";
     rev = version;
-    sha256 = "0q8ffcklb2b7hcqhy3d2f9kz9aw22pp04pc9y4sslyqmf17pwnz9";
+    sha256 = "0g1d7zq4lh4jf08mvvgp6m2r2gdvy4y1mhf46c0s8607h2l8vavh";
   };
 
   buildInputs = [
@@ -22,7 +22,7 @@ mkDerivation rec {
   meta = {
     homepage = "https://github.com/Cockatrice/Cockatrice";
     description = "A cross-platform virtual tabletop for multiplayer card games";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ evanjs ];
     platforms = with lib.platforms; linux;
   };

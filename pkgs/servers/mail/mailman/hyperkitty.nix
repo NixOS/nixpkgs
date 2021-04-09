@@ -7,6 +7,8 @@
 
 buildPythonPackage rec {
   pname = "HyperKitty";
+  # Note: Mailman core must be on the latest version before upgrading HyperKitty.
+  # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
   version = "1.3.3";
   disabled = !isPy3k;
 

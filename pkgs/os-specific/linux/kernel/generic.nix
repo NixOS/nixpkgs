@@ -55,7 +55,7 @@
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
-
+, kernelTests ? []
 , ...
 }:
 
@@ -178,10 +178,11 @@ let
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig isXen isZen isHardened isLibre;
+    inherit commonStructuredConfig isXen isZen isHardened isLibre modDirVersion;
     kernelOlder = lib.versionOlder version;
     kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
+    tests = kernelTests;
   };
 
 in lib.extendDerivation true passthru kernel

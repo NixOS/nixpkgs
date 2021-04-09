@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication rec {
     librsync
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  pythonPath = with pythonPackages; [
     b2sdk
     boto
     boto3
