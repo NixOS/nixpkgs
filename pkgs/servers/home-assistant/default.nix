@@ -258,6 +258,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent_script"
     "ipp"
     "kmtronic"
+    "kodi"
     "light"
     "litterrobot"
     "local_file"
