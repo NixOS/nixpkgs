@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, p11-kit, libp11 ? null, stoken, zlib, fetchgit, darwin } :
+{ lib, stdenv, fetchurl, pkg-config, openssl ? null, gnutls ? null, gmp, libxml2, p11-kit, libp11, stoken, zlib, fetchgit, darwin } :
 
 assert (openssl != null) == (gnutls == null);
 assert (openssl != null) -> (libp11 != null);
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ openssl gnutls gmp libxml2 p11-kit stoken zlib ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC
     ++ lib.optional (openssl != null) libp11;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
