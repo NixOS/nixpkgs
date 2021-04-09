@@ -357,7 +357,7 @@
     "homekit" = ps: with ps; [ HAP-python pyqrcode pyturbojpeg aiohttp-cors base36 fnvhash ha-ffmpeg zeroconf ];
     "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
-    "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
+    "homematicip_cloud" = ps: with ps; [ homematicip ];
     "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
     "honeywell" = ps: with ps; [ ]; # missing inputs: somecomfort
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
