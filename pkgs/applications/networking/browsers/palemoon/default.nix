@@ -16,14 +16,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.1.0";
+  version = "29.1.1";
 
   src = fetchFromGitHub {
     githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "02blhk3v7gpnicd7s5l5fpqvdvj2279g3rq8xyhcd4sw6qnms8m6";
+    sha256 = "1ppdmj816zwccb0l0mgpq14ckdwg785wmqz41wran0nl63fg6i1x";
     fetchSubmodules = true;
   };
 

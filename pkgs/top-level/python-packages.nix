@@ -533,6 +533,8 @@ in {
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
 
+  asyncio-nats-client = callPackage ../development/python-modules/asyncio-nats-client { };
+
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
@@ -4221,6 +4223,8 @@ in {
 
   nassl = callPackage ../development/python-modules/nassl { };
 
+  nats-python = callPackage ../development/python-modules/nats-python { };
+
   natsort = callPackage ../development/python-modules/natsort { };
 
   naturalsort = callPackage ../development/python-modules/naturalsort { };
@@ -6700,6 +6704,10 @@ in {
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
+
+  recoll = disabledIf (!isPy3k) (toPythonModule (pkgs.recoll.override {
+    python3Packages = self;
+  }));
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 

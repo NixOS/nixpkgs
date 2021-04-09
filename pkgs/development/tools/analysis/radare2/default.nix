@@ -13,22 +13,17 @@
 , file
 , libzip
 , xxHash
-, gtk2 ? null
-, vte ? null
-, gtkdialog ? null
-, python3 ? null
-, ruby ? null
-, lua ? null
+, gtk2
+, vte
+, gtkdialog
+, python3
+, ruby
+, lua
 , useX11 ? false
 , rubyBindings ? false
 , pythonBindings ? false
 , luaBindings ? false
 }:
-
-assert useX11 -> (gtk2 != null && vte != null && gtkdialog != null);
-assert rubyBindings -> ruby != null;
-assert pythonBindings -> python3 != null;
-
 
 let
   inherit (lib) optional;

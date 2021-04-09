@@ -118,6 +118,16 @@
        <xref linkend="opt-services.samba-wsdd.enable" /> Web Services Dynamic Discovery host daemon
      </para>
    </listitem>
+   <listitem>
+     <para>
+       <link xlink:href="https://www.discourse.org/">Discourse</link>, a
+       modern and open source discussion platform.
+     </para>
+     <para>
+       See the <link linkend="module-services-discourse">Discourse
+       section of the NixOS manual</link> for more information.
+     </para>
+   </listitem>
   </itemizedlist>
 
  </section>

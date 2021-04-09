@@ -10,23 +10,15 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.3.2";
+  version = "1.3.3";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qg2wm6ddsfai788chylr5ynrvakwg91q3dszz7dxzbkfdcxixj3";
+    sha256 = "186agrjx818vn00d3pqlka5ir48rgpbfyn1cifkn9ylsxg9cz3ph";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-entry_point.patch";
-      url = "https://github.com/bdraco/aiodiscover/commit/4c497fb7d4c8685a78209c710e92e0bd17f46bb2.patch";
-      sha256 = "0py9alhg6qdncbn6a04mrnjhs4j19kg759dv69knpqzryikcfa63";
-    })
-  ];
 
   propagatedBuildInputs = [
     async-dns

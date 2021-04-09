@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.11.0";
+  version = "0.12.0";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    sha256 = "sha256-nqvFJriNMK3SvAsNzhE8MCzVNR8j/TjYU+f1PbuxkuI=";
+    sha256 = "sha256-8NgKr5uRVFBD1pARaD+vH9wPA5gUNltwMe0i0icED1c=";
     stripRoot = false;
   };
 in
@@ -19,10 +19,10 @@ buildGoModule rec {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "sha256-V4cZuRlC1Hu4gBG5/8ZNBKlSBFLgOtSJ3GbpjW5/8xM=";
+    sha256 = "sha256-idHMijca1lYQF4aW+RPyzRraLDNdVavMuj4TP6z90Oo=";
   };
 
-  vendorSha256 = "sha256-aVVvrOjCKxzFer5uZRSu1LCQKkGkPcBdKdebN5uHUUg=";
+  vendorSha256 = "sha256-VrDO8y6omRKf3mPRAnRMZsSMwQHxQxShUa9HZ3dfCgM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

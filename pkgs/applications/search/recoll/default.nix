@@ -46,10 +46,12 @@ mkDerivation rec {
     ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
     ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    file pkg-config python3Packages.setuptools which
+  ];
 
-  buildInputs = with python3Packages; [
-    bison chmlib file python setuptools which xapian zlib
+  buildInputs = [
+    bison chmlib python3Packages.python xapian zlib
   ] ++ lib.optional withGui qtbase
     ++ lib.optional stdenv.isDarwin libiconv;
 
@@ -98,6 +100,6 @@ mkDerivation rec {
     homepage = "https://www.lesbonscomptes.com/recoll/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.jcumming ];
+    maintainers = with maintainers; [ jcumming kiyengar ];
   };
 }

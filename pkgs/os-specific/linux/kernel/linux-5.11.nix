@@ -1,4 +1,4 @@
-{ lib, buildPackages, fetchurl, perl, buildLinux, modDirVersionArg ? null, ... } @ args:
+{ lib, buildPackages, fetchurl, perl, buildLinux, nixosTests, modDirVersionArg ? null, ... } @ args:
 
 with lib;
 
@@ -15,4 +15,6 @@ buildLinux (args // rec {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
     sha256 = "1fc3yl4srzla3cbihgnry0pqmgcc17zv0zlkk9zpx99371hpay0a";
   };
+
+  kernelTests = args.kernelTests or [ nixosTests.kernel-generic.linux_5_11 ];
 } // (args.argsOverride or {}))
