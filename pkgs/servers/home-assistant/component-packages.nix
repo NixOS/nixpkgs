@@ -581,7 +581,7 @@
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
-    "omnilogic" = ps: with ps; [ ]; # missing inputs: omnilogic
+    "omnilogic" = ps: with ps; [ omnilogic ];
     "onboarding" = ps: with ps; [ aiohttp-cors pillow ];
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ]; # missing inputs: ondilo
     "onewire" = ps: with ps; [ ]; # missing inputs: pi1wire pyownet
