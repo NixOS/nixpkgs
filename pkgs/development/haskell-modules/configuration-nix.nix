@@ -659,9 +659,7 @@ self: super: builtins.intersectAttrs super {
     let
       # spago requires an older version of megaparsec, but it appears to work
       # fine with newer versions.
-      spagoWithOverrides = doJailbreak (super.spago.override {
-        dhall = self.dhall_1_37_1;
-      });
+      spagoWithOverrides = doJailbreak super.spago;
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
