@@ -42,6 +42,9 @@ project(calamares-extensions
     LANGUAGES CXX
 )
 
+set( CMAKE_CXX_STANDARD 17 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+
 # On developer's machine, the user package registry breaks
 # consumers by loading the developer's config from a build
 # directory (which doesn't have the rest of the config
