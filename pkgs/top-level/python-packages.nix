@@ -5724,6 +5724,8 @@ in {
 
   pyext = callPackage ../development/python-modules/pyext { };
 
+  pyezviz = callPackage ../development/python-modules/pyezviz { };
+
   pyface = callPackage ../development/python-modules/pyface { };
 
   pyfaidx = callPackage ../development/python-modules/pyfaidx { };
