@@ -20,11 +20,13 @@ let
                  optionalString fixBinary "F";
   in ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
-  activationSnippet = name: { interpreter, ... }: ''
+  activationSnippet = name: { interpreter, preserveArgvZero, ... }: ''
     rm -f /run/binfmt/${name}
     cat > /run/binfmt/${name} << 'EOF'
     #!${pkgs.bash}/bin/sh
-    exec -- ${interpreter} "$@"
+    ${if preserveArgvZero && interpreter == getEmulator name
+    then ''exec -- ${interpreter} -0 "$2" "$1" "''${@:3}"'' # Correctly handle argv0 for the default QEMU emulator.
+    else ''exec -- ${interpreter} "$@"''}
     EOF
     chmod +x /run/binfmt/${name}
   '';
