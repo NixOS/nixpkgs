@@ -6273,6 +6273,8 @@ in {
 
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
+  pyruckus = callPackage ../development/python-modules/pyruckus { };
+
   pysam = callPackage ../development/python-modules/pysam { };
 
   pysaml2 = callPackage ../development/python-modules/pysaml2 {
