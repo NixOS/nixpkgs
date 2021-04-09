@@ -18308,6 +18308,10 @@ in
     python3Packages = python36Packages;
   };
 
+  doh-proxy-rust = callPackage ../servers/dns/doh-proxy-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   dgraph = callPackage ../servers/dgraph { };
 
   dico = callPackage ../servers/dico { };

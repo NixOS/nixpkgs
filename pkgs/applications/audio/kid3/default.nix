@@ -1,25 +1,67 @@
-{ lib, stdenv, fetchurl
-, pkg-config, cmake, python3, ffmpeg_3, phonon, automoc4
-, chromaprint, docbook_xml_dtd_45, docbook_xsl, libxslt
-, id3lib, taglib, mp4v2, flac, libogg, libvorbis
-, zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols
+{ lib
+, stdenv
+, fetchurl
+, automoc4
+, chromaprint
+, cmake
+, docbook_xml_dtd_45
+, docbook_xsl
+, ffmpeg_3
+, flac
+, id3lib
+, libogg
+, libvorbis
+, libxslt
+, mp4v2
+, phonon
+, pkg-config
+, python3
+, qtbase
+, qtmultimedia
+, qtquickcontrols
+, qttools
+, readline
+, taglib
 , wrapQtAppsHook
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "kid3";
-  version = "3.8.5";
+  version = "3.8.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-DEZ5J1QendgXJ1gBZ3h0LwsVTLL1vPznJ7Nc+97jFB8=";
+    sha256 = "sha256-ce+MWCJzAnN+u+07f0dvn0jnbqiUlS2RbcM9nAj5bgg=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ python3 ffmpeg_3 phonon automoc4 chromaprint
-    docbook_xml_dtd_45 docbook_xsl libxslt id3lib taglib mp4v2 flac
-    libogg libvorbis zlib readline qtbase qttools qtmultimedia
-    qtquickcontrols ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    automoc4
+    chromaprint
+    docbook_xml_dtd_45
+    docbook_xsl
+    ffmpeg_3
+    flac
+    id3lib
+    libogg
+    libvorbis
+    libxslt
+    mp4v2
+    phonon
+    python3
+    qtbase
+    qtmultimedia
+    qtquickcontrols
+    qttools
+    readline
+    taglib
+    zlib
+  ];
 
   cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
