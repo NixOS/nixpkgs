@@ -8398,6 +8398,8 @@ in
 
   srcml = callPackage ../applications/version-management/srcml { };
 
+  srcpy = callPackage ../applications/misc/srcpy { };
+
   srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };
 
   sourcehut = callPackage ../applications/version-management/sourcehut { };
