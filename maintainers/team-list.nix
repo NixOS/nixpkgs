@@ -36,6 +36,7 @@ with lib.maintainers; {
       DianaOlympos
       gleber
       happysalada
+      minijackson
       yurrriq
     ];
     scope = "Maintain BEAM-related packages and modules.";
