@@ -10,6 +10,7 @@ in
     description = "YAML/JSON automation scripting";
     homepage = "https://github.com/pmarkert/hyperpotamus";
     license = lib.licenses.mit;
+    maintainers = with maintainers; [ onny ];
   };
 }
 
