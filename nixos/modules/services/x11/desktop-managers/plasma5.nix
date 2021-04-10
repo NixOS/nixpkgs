@@ -13,7 +13,6 @@ let
 
   pulseaudio = config.hardware.pulseaudio;
   pactl = "${getBin pulseaudio.package}/bin/pactl";
-  startplasma-x11 = "${getBin plasma5.plasma-workspace}/bin/startplasma-x11";
   sed = "${getBin pkgs.gnused}/bin/sed";
 
   gtkrc2 = writeText "gtkrc-2.0" ''
