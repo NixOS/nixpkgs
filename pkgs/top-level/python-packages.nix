@@ -1553,6 +1553,8 @@ in {
 
   dftfit = callPackage ../development/python-modules/dftfit { };
 
+  diagrams = callPackage ../development/python-modules/diagrams { };
+
   diceware = callPackage ../development/python-modules/diceware { };
 
   dicom2nifti = callPackage ../development/python-modules/dicom2nifti { };
