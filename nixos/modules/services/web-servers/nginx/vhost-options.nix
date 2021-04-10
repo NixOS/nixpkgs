@@ -119,15 +119,23 @@ with lib;
     };
 
     sslCertificate = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       example = "/var/host.cert";
-      description = "Path to server SSL certificate.";
+      description = ''
+        Path to server SSL certificate. Can be left unset, for example if
+        <literal>ssl_reject_handshake</literal> is used.
+      '';
     };
 
     sslCertificateKey = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       example = "/var/host.key";
-      description = "Path to server SSL certificate key.";
+      description = ''
+        Path to server SSL certificate key. Can be left unset, for example if
+        <literal>ssl_reject_handshake</literal> is used.
+      '';
     };
 
     sslTrustedCertificate = mkOption {

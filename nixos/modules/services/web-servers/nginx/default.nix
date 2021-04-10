@@ -289,11 +289,15 @@ let
             return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
           ''}
           ${optionalString hasSSL ''
-            ssl_certificate ${vhost.sslCertificate};
-            ssl_certificate_key ${vhost.sslCertificateKey};
-          ''}
-          ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
-            ssl_trusted_certificate ${vhost.sslTrustedCertificate};
+            ${optionalString (vhost.sslCertificate != null) ''
+              ssl_certificate ${vhost.sslCertificate};
+            ''}
+            ${optionalString (vhost.sslCertificateKey != null) ''
+              ssl_certificate_key ${vhost.sslCertificateKey};
+            ''}
+            ${optionalString (vhost.sslTrustedCertificate != null) ''
+              ssl_trusted_certificate ${vhost.sslTrustedCertificate};
+            ''}
           ''}
 
           ${mkBasicAuth vhostName vhost}
