@@ -16025,6 +16025,8 @@ in
 
   libtgvoip = callPackage ../development/libraries/libtgvoip { };
 
+  libtransmission = callPackage ../development/libraries/libtransmission { };
+
   libtsm = callPackage ../development/libraries/libtsm { };
 
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
