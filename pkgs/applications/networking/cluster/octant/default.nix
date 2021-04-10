@@ -15,12 +15,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "octant";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchsrc version {
-    x86_64-linux = "sha256-D/pHOXR7XQoJCGqUep1lBAY4239HH35m+evFd21pcK0=";
-    aarch64-linux = "sha256-aL1axz3ebqrKQ3xK2UgDMQ+o6ZKgIvwy6Phici7WT2c=";
-    x86_64-darwin = "sha256-MFxOAAEnLur0LJJNU0SSlO+bH4f18zOfZNA49fKEQEw=";
+    x86_64-linux = "sha256-TKvUBof4TLcHr9hg6AOLjVd1NcAX9HHVuuABdFKRNQA=";
+    aarch64-linux = "sha256-BJb7h6kJZ3QhdlEqNHkiFp91uYLXzYHvKftxEAhjY38=";
+    x86_64-darwin = "sha256-Ig98IqLmlN9D4iXrP9SXYwTrQOvbtQ/tQW+uEmntm+I=";
   };
 
   dontConfigure = true;
