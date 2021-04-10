@@ -2254,6 +2254,8 @@ in {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  expects = callPackage ../development/python-modules/expects { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   exrex = callPackage ../development/python-modules/exrex { };
