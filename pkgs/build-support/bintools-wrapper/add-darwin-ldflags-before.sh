@@ -21,7 +21,7 @@ havePlatformVersionFlag=
 haveDarwinSDKVersion=
 haveDarwinPlatformVersion=
 
-mangleVarSingle MACOSX_DEPLOYMENT_TARGET ${role_suffixes[@]+"${role_suffixes[@]}"}
+mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
 
 n=0
 nParams=${#params[@]}
@@ -61,12 +61,12 @@ done
 if [ ! "$havePlatformVersionFlag" ]; then
     if [ ! "$haveDarwinSDKVersion" ] && [ ! "$haveDarwinPlatformVersion" ]; then
         # Nothing provided. Use the modern "-platform_version" to set both.
-        extraBefore+=(-platform_version @darwinPlatform@ "${MACOSX_DEPLOYMENT_TARGET_@suffixSalt@:-@darwinMinVersion@}" @darwinSdkVersion@)
+        extraBefore+=(-platform_version @darwinPlatform@ "${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@}" @darwinSdkVersion@)
     elif [ ! "$haveDarwinSDKVersion" ]; then
         # Add missing sdk version
         extraBefore+=(-sdk_version @darwinSdkVersion@)
     elif [ ! "$haveDarwinPlatformVersion" ]; then
         # Add missing platform version
-        extraBefore+=(-@darwinPlatform@_version_min "${MACOSX_DEPLOYMENT_TARGET_@suffixSalt@:-@darwinMinVersion@}")
+        extraBefore+=(-@darwinPlatform@_version_min "${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@}")
     fi
 fi

@@ -109,6 +109,9 @@ let
   darwinMinVersion = optionalString stdenv.targetPlatform.isDarwin (
     stdenv.targetPlatform.darwinMinVersion
   );
+
+  darwinMinVersionVariable = optionalString stdenv.targetPlatform.isDarwin
+    stdenv.targetPlatform.darwinMinVersionVariable;
 in
 
 # Ensure bintools matches
@@ -131,7 +134,7 @@ stdenv.mkDerivation {
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix suffixSalt;
-  inherit darwinPlatformForCC darwinMinVersion;
+  inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 

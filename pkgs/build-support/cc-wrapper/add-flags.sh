@@ -68,9 +68,9 @@ fi
 # Only add darwin min version flag if a default darwin min version is set,
 # which is a signal that we're targetting darwin.
 if [ "@darwinMinVersion@" ]; then
-    mangleVarSingle MACOSX_DEPLOYMENT_TARGET ${role_suffixes[@]+"${role_suffixes[@]}"}
+    mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
 
-    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="-m@darwinPlatformForCC@-version-min=${MACOSX_DEPLOYMENT_TARGET_@suffixSalt@:-@darwinMinVersion@} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
+    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="-m@darwinPlatformForCC@-version-min=${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
 fi
 
 # That way forked processes will not extend these environment variables again.

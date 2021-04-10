@@ -327,11 +327,14 @@ stdenv.mkDerivation {
     ###
     + optionalString stdenv.targetPlatform.isDarwin (
       let
-        inherit (stdenv.targetPlatform) darwinMinVersion darwinPlatform darwinSdkVersion;
+        inherit (stdenv.targetPlatform)
+          darwinPlatform darwinSdkVersion
+          darwinMinVersion darwinMinVersionVariable;
       in ''
         export darwinPlatform=${darwinPlatform}
         export darwinMinVersion=${darwinMinVersion}
         export darwinSdkVersion=${darwinSdkVersion}
+        export darwinMinVersionVariable=${darwinMinVersionVariable}
         substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
       ''
     )
