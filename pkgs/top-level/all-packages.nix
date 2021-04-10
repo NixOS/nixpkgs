@@ -4888,6 +4888,8 @@ in
 
   github-backup = callPackage ../tools/misc/github-backup { };
 
+  github-runner = callPackage ../development/tools/continuous-integration/github-runner { };
+
   gitin = callPackage ../applications/version-management/git-and-tools/gitin { };
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
