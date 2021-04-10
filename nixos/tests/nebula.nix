@@ -88,6 +88,26 @@ in
         }];
 
         services.nebula.networks.smoke = {
+          enable = true;
+          staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
+          isLighthouse = false;
+          lighthouses = [ "10.0.100.1" ];
+          firewall = {
+            outbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
+            inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
+          };
+        };
+      };
+
+    node5 = { ... } @ args:
+      makeNebulaNode args "node5" {
+        networking.interfaces.eth1.ipv4.addresses = [{
+          address = "192.168.1.5";
+          prefixLength = 24;
+        }];
+
+        services.nebula.networks.smoke = {
+          enable = false;
           staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
@@ -170,9 +190,16 @@ in
     ${signKeysFor "node4" "10.0.100.4/24"}
     ${restartAndCheckNebula "node4" "10.0.100.4"}
 
-    # The lighthouse can ping node2 and node3
+    # Create keys for node4's nebula service and test that it does not come up.
+    ${setUpPrivateKey "node5"}
+    ${signKeysFor "node5" "10.0.100.5/24"}
+    node5.fail("systemctl status nebula@smoke.service")
+    node5.fail("ping -c5 10.0.100.5")
+
+    # The lighthouse can ping node2 and node3 but not node5
     lighthouse.succeed("ping -c3 10.0.100.2")
     lighthouse.succeed("ping -c3 10.0.100.3")
+    lighthouse.fail("ping -c3 10.0.100.5")
 
     # node2 can ping the lighthouse, but not node3 because of its inbound firewall
     node2.succeed("ping -c3 10.0.100.1")

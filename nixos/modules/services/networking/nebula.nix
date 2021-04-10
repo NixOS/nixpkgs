@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.nebula;
+  enabledNetworks = filterAttrs (n: v: v.enable) cfg.networks;
 
   format = pkgs.formats.yaml {};
 
@@ -20,6 +21,12 @@ in
         default = {};
         type = types.attrsOf (types.submodule {
           options = {
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Enable or disable this network.";
+            };
+
             package = mkOption {
               type = types.package;
               default = pkgs.nebula;
@@ -137,11 +144,11 @@ in
   };
 
   # Implementation
-  config = mkIf (cfg.networks != {}) {
-    systemd.services = mkMerge (lib.mapAttrsToList (netName: netCfg:
+  config = mkIf (enabledNetworks != {}) {
+    systemd.services = mkMerge (mapAttrsToList (netName: netCfg:
       let
         networkId = nameToId netName;
-        settings = lib.recursiveUpdate {
+        settings = recursiveUpdate {
           pki = {
             ca = netCfg.ca;
             cert = netCfg.cert;
@@ -188,25 +195,25 @@ in
               })
             ];
           };
-        }) cfg.networks);
+        }) enabledNetworks);
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
-      lib.unique (lib.mapAttrsToList (netName: netCfg: netCfg.listen.port) cfg.networks);
+      unique (mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks);
 
     # Create the service users and groups.
-    users.users = mkMerge (lib.mapAttrsToList (netName: netCfg:
+    users.users = mkMerge (mapAttrsToList (netName: netCfg:
       mkIf netCfg.tun.disable {
         ${nameToId netName} = {
           group = nameToId netName;
           description = "Nebula service user for network ${netName}";
           isSystemUser = true;
         };
-      }) cfg.networks);
+      }) enabledNetworks);
 
-    users.groups = mkMerge (lib.mapAttrsToList (netName: netCfg:
+    users.groups = mkMerge (mapAttrsToList (netName: netCfg:
       mkIf netCfg.tun.disable {
         ${nameToId netName} = {};
-      }) cfg.networks);
+      }) enabledNetworks);
   };
 }
