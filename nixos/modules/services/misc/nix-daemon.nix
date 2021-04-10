@@ -555,6 +555,22 @@ in
             + "\n"
           ) cfg.buildMachines;
       };
+    assertions =
+      let badMachine = m: m.system == null && m.systems == [];
+      in [
+        {
+          assertion = !(builtins.any badMachine cfg.buildMachines);
+          message = ''
+            At least one system type (via <varname>system</varname> or
+              <varname>systems</varname>) must be set for every build machine.
+              Invalid machine specifications:
+          '' + "      " +
+          (builtins.concatStringsSep "\n      "
+            (builtins.map (m: m.hostName)
+              (builtins.filter (badMachine) cfg.buildMachines)));
+        }
+      ];
+
 
     systemd.packages = [ nix ];
 
