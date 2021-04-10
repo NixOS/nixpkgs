@@ -227,7 +227,7 @@
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
-    "envisalink" = ps: with ps; [ ]; # missing inputs: pyenvisalink
+    "envisalink" = ps: with ps; [ pyenvisalink ];
     "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
     "epson" = ps: with ps; [ ]; # missing inputs: epson-projector
     "epsonworkforce" = ps: with ps; [ ]; # missing inputs: epsonprinter
