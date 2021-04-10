@@ -5654,6 +5654,18 @@ let
     meta.homepage = "https://github.com/xolox/vim-easytags/";
   };
 
+  vim-easytags = buildVimPluginFrom2Nix {
+    pname = "vim-easytags";
+    version = "2015-07-01";
+    src = fetchFromGitHub {
+      owner = "xolox";
+      repo = "vim-easytags";
+      rev = "72a8753b5d0a951e547c51b13633f680a95b5483";
+      sha256 = "0i8ha1fa5d860b1mi0xp8kwsgb0b9vbzcg1bldzv6s5xd9yyi12i";
+    };
+    meta.homepage = "https://github.com/xolox/vim-easytags/";
+  };
+
   vim-eighties = buildVimPluginFrom2Nix {
     pname = "vim-eighties";
     version = "2016-12-15";
