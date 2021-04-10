@@ -4,6 +4,7 @@
 , cmake
 , meson
 , vim
+, neovim
 , ruby
 , which
 , fetchFromGitHub
@@ -298,6 +299,16 @@ self: super: {
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
       substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
+    '';
+    # ${vim}/bin/vim -N -u NONE -i NONE -n -E -s -V1 +quit!;
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      echo "Hello world"
+      export HOME=$TMPDIR
+      echo $HOME
+      set -x
+      ${neovim}/bin/nvim -n -u NONE -i NONE -V1 -E --cmd "set rtp+=$out/share/vim-plugins/minimap-vim" --cmd "set loadplugins" -c "MinimapToggle"  +quit!
     '';
   });
 
