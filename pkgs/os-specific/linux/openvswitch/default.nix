@@ -8,12 +8,12 @@ let
   _kernel = kernel;
   pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.13.0";
+  version = "2.13.3";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "0cd5vmfr6zwgcnkwys6rag6cmz68v0librpaplianv734xs74pyx";
+    sha256 = "1wc5zspy9aln7di7m9a1qy4lv3h05gmhgd1nffhb9nxdcxqgnpgp";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
