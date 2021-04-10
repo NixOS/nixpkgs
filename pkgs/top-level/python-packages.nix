@@ -279,6 +279,8 @@ in {
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
 
+  aiohttp-wsgi = callPackage ../development/python-modules/aiohttp-wsgi { };
+
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
   aiobotocore = callPackage ../development/python-modules/aiobotocore { };
@@ -3126,6 +3128,8 @@ in {
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
+
+  homematicip = callPackage ../development/python-modules/homematicip { };
 
   homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
 
