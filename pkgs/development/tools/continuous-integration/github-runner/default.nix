@@ -8,7 +8,7 @@
 , git
 , glibc
 , icu
-, kerberos
+, libkrb5
 , lib
 , linkFarm
 , lttng-ust
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl # libcurl.so.4
-    kerberos # libgssapi_krb5.so.2
+    libkrb5 # libgssapi_krb5.so.2
     lttng-ust # liblttng-ust.so.0
     stdenv.cc.cc.lib # libstdc++.so.6
     zlib # libz.so.1
