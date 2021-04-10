@@ -27313,6 +27313,8 @@ in
 
   cbonsai = callPackage ../games/cbonsai { };
 
+  cdogs-sdl = callPackage ../games/cdogs-sdl { };
+
   chessdb = callPackage ../games/chessdb { };
 
   chessx = libsForQt5.callPackage ../games/chessx { };
