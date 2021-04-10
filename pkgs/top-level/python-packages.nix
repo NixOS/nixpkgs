@@ -334,6 +334,8 @@ in {
 
   aioswitcher = callPackage ../development/python-modules/aioswitcher { };
 
+  aiosyncthing = callPackage ../development/python-modules/aiosyncthing { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
