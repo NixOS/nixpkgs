@@ -56,9 +56,6 @@ buildPythonPackage rec {
 
   passthru.config = {
     directories = { basedirlist = "."; };
-    libs = {
-      system_freetype = true;
-    };
   };
   setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
   preBuild = ''
