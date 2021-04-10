@@ -134,7 +134,7 @@ stdenv.mkDerivation (rec {
     platforms = platforms.linux;
   };
 }
-  // lib.optionalAttrs stdenv.isi686 {
+  // {
     # TMP: fatal error: libtracker-sparql/tracker-sparql-enum-types.h: No such file or directory
     enableParallelBuilding = false;
   }
