@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyramid_chameleon";
+  pname = "pyramid_tm";
   version = "2.4";
 
   src = fetchPypi {
