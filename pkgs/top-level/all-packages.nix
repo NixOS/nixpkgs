@@ -562,6 +562,7 @@ in
   ociTools = callPackage ../build-support/oci-tools { };
 
   octant = callPackage ../applications/networking/cluster/octant { };
+  octant-desktop = callPackage ../applications/networking/cluster/octant/desktop.nix { };
   starboard-octant-plugin = callPackage ../applications/networking/cluster/octant/plugins/starboard-octant-plugin.nix { };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -19108,6 +19109,9 @@ in
 
   sogo = callPackage ../servers/web-apps/sogo { };
 
+  spacecookie =
+    haskell.lib.justStaticExecutables haskellPackages.spacecookie;
+
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
@@ -27308,6 +27312,8 @@ in
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
   cbonsai = callPackage ../games/cbonsai { };
+
+  cdogs-sdl = callPackage ../games/cdogs-sdl { };
 
   chessdb = callPackage ../games/chessdb { };
 

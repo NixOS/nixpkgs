@@ -156,7 +156,10 @@ let
       # To fix the build of chromiumBeta and chromiumDev:
       "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
       "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
-    );
+    ) ++ optional (versionRange "89" "90.0.4422.0") (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/61b0ab526d2aa3c62fa20bb756461ca9a482f6c6/trunk/chromium-fix-libva-redef.patch";
+      sha256 = "1qj4sn1ngz0p1l1w3346kanr1sqlr3xdzk1f1i86lqa45mhv77ny";
+    });
 
     postPatch = ''
       # remove unused third-party

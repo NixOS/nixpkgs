@@ -6,7 +6,7 @@ let
     x86_64-linux = "Linux-64bit";
     aarch64-linux = "Linux-arm64";
     x86_64-darwin = "macOS-64bit";
-  }."${system}" or (throw "Unsupported system: ${system}");
+  }.${system} or (throw "Unsupported system: ${system}");
   baseurl = "https://github.com/vmware-tanzu/octant/releases/download";
   fetchsrc = version: sha256: fetchzip {
       url = "${baseurl}/v${version}/octant_${version}_${suffix}.tar.gz";
@@ -48,12 +48,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://octant.dev/";
     changelog = "https://github.com/vmware-tanzu/octant/blob/v${version}/CHANGELOG.md";
-    description = "Highly extensible platform for developers to better understand the complexity of Kubernetes clusters.";
+    description = "Highly extensible platform for developers to better understand the complexity of Kubernetes clusters";
     longDescription = ''
-      Octant is a tool for developers to understand how applications run on a Kubernetes cluster.
-      It aims to be part of the developer's toolkit for gaining insight and approaching complexity found in Kubernetes.
-      Octant offers a combination of introspective tooling, cluster navigation, and object management along with a
-      plugin system to further extend its capabilities.
+      Octant is a tool for developers to understand how applications run on a
+      Kubernetes cluster.
+      It aims to be part of the developer's toolkit for gaining insight and
+      approaching complexity found in Kubernetes. Octant offers a combination of
+      introspective tooling, cluster navigation, and object management along
+      with a plugin system to further extend its capabilities.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
