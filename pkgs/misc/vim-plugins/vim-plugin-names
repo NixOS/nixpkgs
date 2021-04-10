@@ -66,6 +66,7 @@ cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
 cohama/lexima.vim
+craigemery/vim-autotag
 crusoexia/vim-monokai
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim

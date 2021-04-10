@@ -5066,6 +5066,18 @@ let
     meta.homepage = "https://github.com/gioele/vim-autoswap/";
   };
 
+  vim-autotag = buildVimPluginFrom2Nix {
+    pname = "vim-autotag";
+    version = "2020-05-21";
+    src = fetchFromGitHub {
+      owner = "craigemery";
+      repo = "vim-autotag";
+      rev = "066ad1b04e2d82347869f536e323605f5eb709a7";
+      sha256 = "1yh4nm56rdr262a154mk1jfdl17if66z6jx2wrqn6fwl4wb18bw3";
+    };
+    meta.homepage = "https://github.com/craigemery/vim-autotag/";
+  };
+
   vim-bazel = buildVimPluginFrom2Nix {
     pname = "vim-bazel";
     version = "2021-01-31";
