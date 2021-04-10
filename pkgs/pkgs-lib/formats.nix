@@ -188,9 +188,9 @@ rec {
           toEntry = name: value: "${toElixir name} => ${toElixir value}";
           entries = concatStringsSep ", " (mapAttrsToList toEntry set);
         in
-        "%{" + entries + "}";
+        "%{${entries}}";
 
-      tuple = values: "{" + (listContent values) + "}";
+      tuple = values: "{${listContent values}}";
 
       toConf = values:
         let
