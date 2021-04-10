@@ -286,6 +286,7 @@ in with py.pkgs; buildPythonApplication rec {
     "notify"
     "notion"
     "number"
+    "omnilogic"
     "ozw"
     "panel_custom"
     "panel_iframe"
