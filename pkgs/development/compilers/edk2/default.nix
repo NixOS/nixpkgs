@@ -16,24 +16,10 @@
 let
   pythonEnv = python3.withPackages (ps: [ps.tkinter]);
 
-targetArch = if stdenv.isi686 then
-  "IA32"
-else if stdenv.isx86_64 then
-  "X64"
-else if stdenv.isAarch64 then
-  "AARCH64"
-else
-  throw "Unsupported architecture";
-
 buildStdenv = if stdenv.isDarwin then
   overrideCC clangStdenv [ clang_9 llvmPackages_9.llvm llvmPackages_9.lld ]
 else
   stdenv;
-
-buildType = if stdenv.isDarwin then
-    "CLANGPDB"
-  else
-    "GCC5";
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
@@ -71,7 +57,7 @@ edk2 = buildStdenv.mkDerivation {
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrs: buildStdenv.mkDerivation ({
+    mkDerivation = projectDscPath: targetArch: buildType: attrs: buildStdenv.mkDerivation ({
       inherit (edk2) src;
 
       buildInputs = [ bc pythonEnv ] ++ attrs.buildInputs or [];
