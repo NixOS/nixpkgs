@@ -29,6 +29,16 @@ in
         default = "jellyfin";
         description = "Group under which jellyfin runs.";
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open the default ports in the firewall for the media server. The
+          HTTP/HTTPS ports can be changed in the Web UI, so this option should
+          only be used if they are unchanged.
+        '';
+      };
     };
   };
 
@@ -102,6 +112,12 @@ in
 
     users.groups = mkIf (cfg.group == "jellyfin") {
       jellyfin = {};
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      # from https://jellyfin.org/docs/general/networking/index.html
+      allowedTCPPorts = [ 8096 8920 ];
+      allowedUDPPorts = [ 1900 7359 ];
     };
 
   };
