@@ -122,7 +122,7 @@
     "clickatell" = ps: with ps; [ ];
     "clicksend" = ps: with ps; [ ];
     "clicksend_tts" = ps: with ps; [ ];
-    "climacell" = ps: with ps; [ ]; # missing inputs: pyclimacell
+    "climacell" = ps: with ps; [ pyclimacell ];
     "climate" = ps: with ps; [ ];
     "cloud" = ps: with ps; [ aiohttp-cors hass-nabucasa ];
     "cloudflare" = ps: with ps; [ pycfdns ];
