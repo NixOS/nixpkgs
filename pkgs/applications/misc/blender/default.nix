@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper ] ++ optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs =
+    [ cmake makeWrapper python3Packages.wrapPython ]
+    ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
     ++ optional cudaSupport cudatoolkit
     ++ optional colladaSupport opencollada
     ++ optional spaceNavSupport libspnav;
+  pythonPath = with python3Packages; [ numpy requests ];
 
   postPatch = ''
     # allow usage of dynamically linked embree
@@ -109,6 +112,7 @@ stdenv.mkDerivation rec {
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
       "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python.sitePackages}"
       "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python.sitePackages}/numpy/core/include"
+      "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
       "-DWITH_OPENVDB=ON"
       "-DWITH_TBB=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
@@ -137,10 +141,11 @@ stdenv.mkDerivation rec {
 
   blenderExecutable =
     placeholder "out" + (if stdenv.isDarwin then "/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
-  # --python-expr is used to workaround https://developer.blender.org/T74304
   postInstall = ''
+    buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
-      --prefix PYTHONPATH : ${python3Packages.numpy}/${python.sitePackages} \
+      --prefix PATH : $program_PATH \
+      --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --add-flags '--python-use-system-env'
   '';
 
