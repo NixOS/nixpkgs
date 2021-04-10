@@ -25012,6 +25012,8 @@ in
     gtksharp = gtk-sharp-2_0;
   };
 
+  pista = callPackage ../tools/misc/pista { };
+
   pistol = callPackage ../tools/misc/pistol { };
 
   piston-cli = callPackage ../tools/misc/piston-cli { };
