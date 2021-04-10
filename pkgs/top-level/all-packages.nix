@@ -4626,6 +4626,8 @@ in
 
   gdmap = callPackage ../tools/system/gdmap { };
 
+  gdtoolkit = callPackage ../development/tools/gdtoolkit { };
+
   gelasio = callPackage ../data/fonts/gelasio { };
 
   gen-oath-safe = callPackage ../tools/security/gen-oath-safe { };
