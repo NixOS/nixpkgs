@@ -5704,6 +5704,8 @@ in {
     inherit (pkgs) enchant2;
   };
 
+  pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
+
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
