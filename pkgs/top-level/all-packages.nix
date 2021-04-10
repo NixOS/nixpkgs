@@ -859,6 +859,8 @@ in
 
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
+  pikchr = callPackage ../tools/graphics/pikchr { };
+
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
 
   rxvt = callPackage ../applications/terminal-emulators/rxvt { };
