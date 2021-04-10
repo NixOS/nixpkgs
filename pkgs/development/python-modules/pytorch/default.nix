@@ -164,6 +164,9 @@ in buildPythonPackage rec {
   BUILD_NAMEDTENSOR = setBool true;
   BUILD_DOCS = setBool buildDocs;
 
+  # We only do an imports check, so do not build tests either.
+  BUILD_TEST = setBool false;
+
   USE_MKL = setBool (blas.implementation == "mkl");
 
   # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
