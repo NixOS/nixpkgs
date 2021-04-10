@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper pkg-config ];
 
   buildInputs = [
-    zlib wxGTK perl cryptopp libupnp
+    zlib wxGTK perl cryptopp.dev libupnp
   ] ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-crypto-prefix=${cryptopp}"
+    "--with-crypto-prefix=${cryptopp.dev}"
     "--disable-debug"
     "--enable-optimize"
     (lib.enableFeature monolithic   "monolithic")
@@ -75,7 +75,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom ];
     platforms = platforms.unix;
-    # Could not find crypto++ installation or sources.
-    broken = true;
   };
 }
