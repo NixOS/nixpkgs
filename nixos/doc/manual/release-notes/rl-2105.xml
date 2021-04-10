@@ -98,6 +98,12 @@
   <itemizedlist>
    <listitem>
     <para>
+     The X11 Plasma session name is now <literal>plasma</literal>, not <literal>plasma5</literal>.
+     Please update <option>services.xserver.displayManager.defaultSession</option> accordingly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      If you are using <option>services.udev.extraRules</option> to assign
      custom names to network interfaces, this may stop working due to a change
      in the initialisation of dhcpcd and systemd networkd. To avoid this, either
