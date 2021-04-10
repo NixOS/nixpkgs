@@ -8,17 +8,17 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4lHT0P8Euau0AJNtg1YstJJRQ58WTUlIH+HCKEjCq/s=";
+    sha256 = "sha256-PJaJ9fCva9UUBcQrnVa2c7dk4koi6AyX6bj3JStUMwM=";
   };
 
   runVend = true;
-  vendorSha256 = "sha256-DgyOvplk1JWn6D/z4zbXHLNLuAVQ5beEHi0NuSv236A=";
+  vendorSha256 = "sha256-qLpwrV9NkmUO0yoK2/gwb5oe/lky/w/P0QVoFSTNuMU=";
 
   doCheck = false;
 
