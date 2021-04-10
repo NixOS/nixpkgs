@@ -22593,6 +22593,8 @@ in
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
+  foliate = callPackage ../applications/office/foliate { };
+
   fondo = callPackage ../applications/graphics/fondo { };
 
   font-manager = callPackage ../applications/misc/font-manager { };
