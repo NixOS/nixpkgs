@@ -1,6 +1,6 @@
 { lib, stdenv, fetchPypi, writeText, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
+, freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk3 ? false, cairo
@@ -20,14 +20,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
-  version = "3.3.4";
+  version = "3.4.1";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e477db76c22929e4c6876c44f88d790aacdf3c3f8f3a90cb1975c0bf37825b0";
+    sha256 = "84d4c4f650f356678a5d658a43ca21a41fca13f9b8b00169c0b76e6a6a948908";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -39,8 +39,8 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
-      certifi libpng mock pytz pillow ]
+    [ cycler dateutil numpy pyparsing tornado freetype qhull
+      kiwisolver certifi libpng mock pytz pillow ]
     ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ lib.optionals enableQt [ pyqt5 ];
@@ -49,6 +49,7 @@ buildPythonPackage rec {
     directories = { basedirlist = "."; };
     libs = {
       system_freetype = true;
+      system_qhull = true;
     } // lib.optionalAttrs stdenv.isDarwin {
       # LTO not working in darwin stdenv, see #19312
       enable_lto = false;
