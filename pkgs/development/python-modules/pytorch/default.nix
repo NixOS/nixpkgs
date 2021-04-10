@@ -167,8 +167,6 @@ in buildPythonPackage rec {
   # We only do an imports check, so do not build tests either.
   BUILD_TEST = setBool false;
 
-  USE_MKL = setBool (blas.implementation == "mkl");
-
   # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
   # it by default. PyTorch currently uses its own vendored version
   # of oneDNN through Intel iDeep.
