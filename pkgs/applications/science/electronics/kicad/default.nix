@@ -259,7 +259,7 @@ stdenv.mkDerivation rec {
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = lib.licenses.agpl3;
+    license = lib.licenses.gpl3Plus;
     # berce seems inactive...
     maintainers = with lib.maintainers; [ evils kiwi berce ];
     # kicad is cross platform
