@@ -1707,6 +1707,12 @@
     githubId = 3086255;
     name = "Barry Moore II";
   };
+  chivay = {
+    email = "hubert.jasudowicz@gmail.com";
+    github = "chivay";
+    githubId = 14790226;
+    name = "Hubert Jasudowicz";
+  };
   chkno = {
     email = "chuck@intelligence.org";
     github = "chkno";
