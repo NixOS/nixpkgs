@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
+{ lib, stdenv, fetchPypi, writeText, python, buildPythonPackage, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
 , fetchpatch
@@ -54,7 +54,13 @@ buildPythonPackage rec {
     ++ lib.optionals enableQt [ pyqt4 ]
     ++ lib.optionals python.isPy2 [ functools32 subprocess32 ];
 
-  setup_cfg = ./setup.cfg;
+  passthru.config = {
+    directories = { basedirlist = "."; };
+    libs = {
+      system_freetype = true;
+    };
+  };
+  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';

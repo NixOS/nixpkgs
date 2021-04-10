@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
+{ lib, stdenv, fetchPypi, writeText, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
@@ -45,7 +45,16 @@ buildPythonPackage rec {
     ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ lib.optionals enableQt [ pyqt5 ];
 
-  setup_cfg = if stdenv.isDarwin then ./setup-darwin.cfg else ./setup.cfg;
+  passthru.config = {
+    directories = { basedirlist = "."; };
+    libs = {
+      system_freetype = true;
+    } // lib.optionalAttrs stdenv.isDarwin {
+      # LTO not working in darwin stdenv, see #19312
+      enable_lto = false;
+    };
+  };
+  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';
