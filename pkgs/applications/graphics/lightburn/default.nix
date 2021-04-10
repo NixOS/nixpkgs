@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lightburn";
-  version = "0.9.22";
+  version = "0.9.23";
 
   nativeBuildInputs = [
     p7zip
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/LightBurnSoftware/deployment/releases/download/${version}/LightBurn-Linux64-v${version}.7z";
-    sha256 = "sha256-DOiO36suytukkviqYyLL47DFVzsJt2ZfSnnni95CLaA=";
+    sha256 = "sha256-OiW9UBophyEF3J0FOSMkbwDJ6d8SEDNrr+H0B4Ndo/Y=";
   };
 
   buildInputs = [
