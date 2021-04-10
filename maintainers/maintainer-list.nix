@@ -2731,6 +2731,12 @@
     githubId = 18535642;
     name = "Emily";
   };
+  enderger = {
+    email = "endergeryt@gmail.com";
+    github = "enderger";
+    githubId = 36283171;
+    name = "Daniel";
+  };
   endocrimes = {
     email = "dani@builds.terrible.systems";
     github = "endocrimes";
