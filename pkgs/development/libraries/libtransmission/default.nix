@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , openssl
 , curl
 , libevent
@@ -13,12 +13,9 @@
 , enableSystemd ? stdenv.isLinux
 }:
 
-let
-  version = "3.00";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "libtransmission";
-  inherit version;
+  version = "3.00";
 
   src = fetchFromGitHub {
     owner = "transmission";
@@ -40,7 +37,7 @@ in stdenv.mkDerivation {
     ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 
@@ -50,16 +47,14 @@ in stdenv.mkDerivation {
     libevent
     zlib
     pcre
-  ]
-  ++ lib.optionals enableSystemd [ systemd ]
-  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ;
+  ] ++ lib.optionals enableSystemd [ systemd ]
+  ++ lib.optionals stdenv.isLinux [ inotify-tools ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   installFlags = [ "-C" "libtransmission" ];
 
-  meta = {
+  meta = with lib; {
     description = "A fast, easy and free BitTorrent client";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
@@ -73,10 +68,9 @@ in stdenv.mkDerivation {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "http://www.transmissionbt.com/";
-    license = lib.licenses.gpl2; # parts are under MIT
+    license = with licenses; [ gpl2Only mit ];
     platforms = lib.platforms.unix;
     maintainers = with maintainers; [ onny ];
   };
-
 }
 
