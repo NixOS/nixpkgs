@@ -246,9 +246,7 @@ rec {
             _elixirType = "atom";
           };
 
-          /* Make an Elixir atom.
-
-            Note: lowercase atoms still need to be prefixed by ':'
+          /* Make an Elixir tuple out of a list.
           */
           mkTuple = value: {
             inherit value;
