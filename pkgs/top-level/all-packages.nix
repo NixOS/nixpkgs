@@ -16843,8 +16843,6 @@ in
 
   proj = callPackage ../development/libraries/proj { };
 
-  proj_5 = callPackage ../development/libraries/proj/5.2.nix { };
-
   proj-datumgrid = callPackage ../development/libraries/proj-datumgrid { };
 
   proselint = callPackage ../tools/text/proselint {

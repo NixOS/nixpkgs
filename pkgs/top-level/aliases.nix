@@ -577,6 +577,7 @@ mapAliases ({
   ppl-address-book = throw "ppl-address-book deprecated on 2019-05-02: abandoned by upstream.";
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
+  proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead."; # added 2021-04-12
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
   pyload = throw "pyload has been removed from nixpkgs, as it was unmaintained."; # added 2021-03-21
