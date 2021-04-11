@@ -380,6 +380,7 @@ motus/pig.vim
 mpickering/hlint-refactor-vim
 ms-jpq/chadtree@chad
 mtikekar/vim-bsv
+mzlogin/vim-markdown-toc
 nanotech/jellybeans.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides

@@ -6785,6 +6785,18 @@ let
     meta.homepage = "https://github.com/euclio/vim-markdown-composer/";
   };
 
+  vim-markdown-toc = buildVimPluginFrom2Nix {
+    pname = "vim-markdown-toc";
+    version = "2021-03-02";
+    src = fetchFromGitHub {
+      owner = "mzlogin";
+      repo = "vim-markdown-toc";
+      rev = "b7bb6c37033d3a6c93906af48dc0e689bd948638";
+      sha256 = "026xf2gid4qivwawh7if3nfk7zja9di0flhdzdx82lvil9x48lyz";
+    };
+    meta.homepage = "https://github.com/mzlogin/vim-markdown-toc/";
+  };
+
   vim-matchup = buildVimPluginFrom2Nix {
     pname = "vim-matchup";
     version = "2021-04-03";
