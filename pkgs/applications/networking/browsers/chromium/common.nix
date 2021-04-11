@@ -156,7 +156,9 @@ let
       # To fix the build of chromiumBeta and chromiumDev:
       "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
       "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
-    );
+    ) ++ optional (chromiumVersionAtLeast "90")
+      ./fix-missing-atspi2-dependency.patch
+    ;
 
     postPatch = ''
       # remove unused third-party
