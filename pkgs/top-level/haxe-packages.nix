@@ -162,4 +162,14 @@ in
       description = "Scripting engine for a subset of the Haxe language";
     };
   };
+
+  lime = buildHaxeLib rec {
+    libname = "lime";
+    version = "7.9.0";
+    sha256 = "0n2qkvfbwgk35py26vlnmgga711x37rik32dca63jhh46j1m4h7d";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Flexible, lightweight layer for Haxe cross-platform developers";
+    };
+  };
 }
