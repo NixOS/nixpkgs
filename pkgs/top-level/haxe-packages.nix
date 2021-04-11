@@ -152,4 +152,14 @@ in
         description = "Extern definitions for node.js 6.9";
       };
     };
+
+  hscript = buildHaxeLib {
+    libname = "hscript";
+    version = "2.4.0";
+    sha256 = "0qdxgqb75j1v125l9xavs1d32wwzi60rhfymngdhjqhdvq72bhxx";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Scripting engine for a subset of the Haxe language";
+    };
+  };
 }
