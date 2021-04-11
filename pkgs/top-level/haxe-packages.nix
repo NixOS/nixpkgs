@@ -193,6 +193,22 @@ in
     };
   };
 
+  discord_rpc = buildHaxeLib {
+    libname = "discord_rpc";
+    version = "unstable-2021-03-26";
+    src = fetchFromGitHub {
+      owner = "Aidan63";
+      repo = "linc_discord-rpc";
+      rev = "2d83fa863ef0c1eace5f1cf67c3ac315d1a3a8a5";
+      fetchSubmodules = true;
+      sha256 = "0w3f9772ypqil348dq8xvhh5g1z5dii5rrwlmmvcdr2gs2c28c7k";
+    };
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Native bindings for discord-rpc";
+    };
+  };
+
   polymod = buildHaxeLib {
     libname = "polymod";
     version = "1.5.2";
