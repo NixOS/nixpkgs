@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ribqaxl8g1i83fxbn288afwbzzls48ni57xqi07d19p9ka892mr";
   };
 
-  nativeBuildInputs =
-    [ meson ninja python3 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     echo "fixing wrapper"
-    sed -i "1 a imports.package._findEffectiveEntryPointName = () => 'com.github.johnfactotum.Foliate';" $out/bin/.com.github.johnfactotum.Foliate-wrapped 
+    sed -i "1 a imports.package._findEffectiveEntryPointName = () => 'com.github.johnfactotum.Foliate';" $out/bin/.com.github.johnfactotum.Foliate-wrapped
     ln -s $out/bin/com.github.johnfactotum.Foliate $out/bin/foliate
   '';
 
@@ -40,6 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple and modern GTK eBook reader";
     homepage = "https://johnfactotum.github.io/foliate/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onny ];
   };
 }
