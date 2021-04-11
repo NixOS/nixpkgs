@@ -7786,6 +7786,8 @@ in {
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
+  sleepyq = callPackage ../development/python-modules/sleepyq { };
+
   slicedimage = callPackage ../development/python-modules/slicedimage { };
 
   slicer = callPackage ../development/python-modules/slicer { };
