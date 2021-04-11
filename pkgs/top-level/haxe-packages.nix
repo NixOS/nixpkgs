@@ -178,5 +178,15 @@ let
       };
     };
 
+    newgrounds = buildHaxeLib {
+      libname = "newgrounds";
+      version = "1.1.4";
+      sha256 = "0lk4wiqj3k209qfxc1c6qs038m6a3hd1mhjk0z40y90r13n3hfzj";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Newgrounds API for haxe";
+      };
+    };
+
   };
 in self
