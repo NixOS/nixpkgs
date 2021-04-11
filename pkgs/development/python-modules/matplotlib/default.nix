@@ -2,22 +2,14 @@
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
-, enableGhostscript ? true, ghostscript ? null, gtk3
+, enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt5 ? null
+, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter, libX11
+, enableQt ? false, pyqt5
 , Cocoa
 , pythonOlder
 }:
-
-assert enableGhostscript -> ghostscript != null;
-assert enableTk -> (tcl != null)
-                && (tk != null)
-                && (tkinter != null)
-                && (libX11 != null)
-                ;
-assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
   version = "3.4.1";
