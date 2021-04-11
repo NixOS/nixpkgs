@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "r2mod_cli";
     rev = "v${version}";
-    sha256 = "0as3nl9qiyf9daf2n78lyish319qclf2gbhr20mdd5wnqmxpk276";
+    sha256 = "sha256-iCA8/LrNM15xDci2yrgia0iQWOoDAU9MthCtp1/ywo4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
