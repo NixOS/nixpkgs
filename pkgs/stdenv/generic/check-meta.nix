@@ -134,7 +134,8 @@ let
         { allow${allow_attr} = true; }
       to ~/.config/nixpkgs/config.nix.
 
-      d) If you are using `nix run`, in addition to one of the fixes above, you
+      d) If you are using the unstable `nix` commands (e.g., `nix run`, `nix
+      build`, `nix shell`, etc.), in addition to one of the fixes above, you
       may need to use the `--impure` flag as well.
     '';
 
