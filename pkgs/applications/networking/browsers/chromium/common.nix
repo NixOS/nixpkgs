@@ -7,7 +7,7 @@
 , xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, perl, pkgconfig
+, python2Packages, python3Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -130,6 +130,8 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
+    ] ++ optionals (chromiumVersionAtLeast "91") [
+      python3Packages.python
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -158,6 +160,8 @@ let
       "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
     ) ++ optional (chromiumVersionAtLeast "90")
       ./fix-missing-atspi2-dependency.patch
+    ++ optional (chromiumVersionAtLeast "91")
+      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
     ;
 
     postPatch = ''
