@@ -705,7 +705,7 @@
     "rpi_rf" = ps: with ps; [ ]; # missing inputs: rpi-rf
     "rss_feed_template" = ps: with ps; [ aiohttp-cors ];
     "rtorrent" = ps: with ps; [ ];
-    "ruckus_unleashed" = ps: with ps; [ ]; # missing inputs: pyruckus
+    "ruckus_unleashed" = ps: with ps; [ pyruckus ];
     "russound_rio" = ps: with ps; [ ]; # missing inputs: russound_rio
     "russound_rnet" = ps: with ps; [ ]; # missing inputs: russound
     "sabnzbd" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: pysabnzbd
