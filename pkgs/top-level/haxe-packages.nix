@@ -163,6 +163,15 @@ in
     };
   };
 
+  flixel = buildHaxeLib {
+    libname = "flixel";
+    version = "4.11.0";
+    sha256 = "sha256-xgiBzXu+ieXbT8nxRuEqft3p4sYTOF+weQqzcYsf+o0=";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "2D game engine based on OpenFL that delivers cross-platform games";
+    };
+  };
 
   openfl = buildHaxeLib {
     libname = "openfl";
