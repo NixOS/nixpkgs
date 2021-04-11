@@ -11323,10 +11323,10 @@ in
   rustracerd = callPackage ../development/tools/rust/racerd {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  inherit (callPackage ../development/tools/rust/rust-analyzer {
+  rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-  })
-    rust-analyzer-unwrapped rust-analyzer;
+  };
+  rust-analyzer = callPackage ../development/tools/rust/rust-analyzer/wrapper.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
