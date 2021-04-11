@@ -5226,6 +5226,8 @@ in {
 
   pyshark = callPackage ../development/python-modules/pyshark { };
 
+  pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
