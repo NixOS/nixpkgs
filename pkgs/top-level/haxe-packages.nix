@@ -188,5 +188,20 @@ let
       };
     };
 
+    polymod = buildHaxeLib {
+      libname = "polymod";
+      version = "unstable-2021-04-06";
+      src = fetchFromGitHub {
+        owner = "larsiusprime";
+        repo = "polymod";
+        rev = "bb5f0a120419ac3a7132d96aff1e6f7a36b97d67";
+        sha256 = "1afrajf4mcw0kqz64gsa8h71r54c4i6hhb2pn6kw6z4rg3ilixlf";
+      };
+      meta = with lib; {
+        license = licenses.mit;
+        description = "Atomic modding framework for Haxe games/apps";
+      };
+    };
+
   };
 in self
