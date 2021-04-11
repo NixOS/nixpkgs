@@ -48,7 +48,7 @@ let ccache = stdenv.mkDerivation rec {
   checkPhase = ''
     export HOME=$(mktemp -d)
     ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.modules|test.basedir|test.multi_arch)$'
+      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
     ''}
   '';
 
