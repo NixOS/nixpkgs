@@ -202,7 +202,7 @@
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
     "ecoal_boiler" = ps: with ps; [ ]; # missing inputs: ecoaliface
     "ecobee" = ps: with ps; [ ]; # missing inputs: python-ecobee-api
-    "econet" = ps: with ps; [ ]; # missing inputs: pyeconet
+    "econet" = ps: with ps; [ pyeconet ];
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
     "edimax" = ps: with ps; [ pyedimax ];

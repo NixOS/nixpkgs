@@ -5718,6 +5718,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyeconet = callPackage ../development/python-modules/pyeconet { };
+
   pyedimax = callPackage ../development/python-modules/pyedimax { };
 
   pyee = callPackage ../development/python-modules/pyee { };
