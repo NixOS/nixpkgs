@@ -6748,6 +6748,8 @@ in {
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
 
+  pythonegardia = callPackage ../development/python-modules/pythonegardia { };
+
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
   python-engineio_3 = callPackage ../development/python-modules/python-engineio/3.nix { };
