@@ -7490,7 +7490,6 @@ broken-packages:
   - kparams
   - kqueue
   - kraken
-  - krank
   - krapsh
   - Kriens
   - krpc
@@ -9330,7 +9329,6 @@ broken-packages:
   - puzzle-draw
   - puzzle-draw-cmdline
   - pvd
-  - PyF
   - pyffi
   - pyfi
   - python-pickle
