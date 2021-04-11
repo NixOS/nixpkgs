@@ -209,7 +209,7 @@
     "edl21" = ps: with ps; [ ]; # missing inputs: pysml
     "ee_brightbox" = ps: with ps; [ ]; # missing inputs: eebrightbox
     "efergy" = ps: with ps; [ ];
-    "egardia" = ps: with ps; [ ]; # missing inputs: pythonegardia
+    "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ ]; # missing inputs: elgato
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
