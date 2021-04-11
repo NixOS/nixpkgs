@@ -1,4 +1,5 @@
 { lib
+, pythonOlder
 , fetchFromGitHub
 , meson
 , ninja
@@ -6,12 +7,14 @@
 , pytestCheckHook
 , pkg-config
 , cairo
-, isPy3k
+, python
 }:
 
 buildPythonPackage rec {
   pname = "pycairo";
   version = "1.20.0";
+
+  disabled = pythonOlder "3.6";
 
   format = "other";
 
@@ -37,11 +40,11 @@ buildPythonPackage rec {
   ];
 
   mesonFlags = [
-    "-Dpython=${if isPy3k then "python3" else "python"}"
+    "-Dpython=${python.interpreter}"
   ];
 
   meta = with lib; {
-    description = "Python 2/3 bindings for cairo";
+    description = "Python 3 bindings for cairo";
     homepage = "https://pycairo.readthedocs.io/";
     license = with licenses; [ lgpl21Only mpl11 ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
