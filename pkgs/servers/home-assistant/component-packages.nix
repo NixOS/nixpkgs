@@ -215,7 +215,7 @@
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
     "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
     "elv" = ps: with ps; [ ]; # missing inputs: pypca
-    "emby" = ps: with ps; [ ]; # missing inputs: pyemby
+    "emby" = ps: with ps; [ pyemby ];
     "emoncms" = ps: with ps; [ ];
     "emoncms_history" = ps: with ps; [ ];
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];

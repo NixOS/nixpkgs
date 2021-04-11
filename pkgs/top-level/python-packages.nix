@@ -5724,6 +5724,8 @@ in {
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
+  pyemby = callPackage ../development/python-modules/pyemby { };
+
   pyemd = callPackage ../development/python-modules/pyemd { };
 
   pyenchant = callPackage ../development/python-modules/pyenchant {
