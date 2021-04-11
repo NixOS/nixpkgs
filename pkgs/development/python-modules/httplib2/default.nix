@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "04y2bc2yv3q84llxnafqrciqxjqpxbrd8glbnvvr16c20fwc3r4q";
+    sha256 = "sha256-e0Mq9AVJEWQ9GEtYFXk2fMIs7GtAUsyJN6XheqAnD3I=";
   };
 
   postPatch = ''
