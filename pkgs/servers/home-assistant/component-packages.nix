@@ -147,7 +147,7 @@
     "cups" = ps: with ps; [ pycups ];
     "currencylayer" = ps: with ps; [ ];
     "daikin" = ps: with ps; [ pydaikin ];
-    "danfoss_air" = ps: with ps; [ ]; # missing inputs: pydanfossair
+    "danfoss_air" = ps: with ps; [ pydanfossair ];
     "darksky" = ps: with ps; [ python-forecastio ];
     "datadog" = ps: with ps; [ datadog ];
     "ddwrt" = ps: with ps; [ ];
