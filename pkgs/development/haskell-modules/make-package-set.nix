@@ -204,6 +204,17 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
       let
+        # Haskell package names must consist of one or more dash separated
+        # groups (that are not only numbers, hence the middle match of one
+        # alphabetic character before allowing any other legal character).
+        # See https://www.haskell.org/cabal/release/latest/doc/users-guide/developing-packages.html#package-names-and-versions
+        #
+        # If this constraint is violated, cabal2nix can fail in unfortunate
+        # ways or change the name of the package to fit the format.  It's
+        # better to fail and tell the user what happened.
+        nameRe = "^[[:digit:]]*[[:alpha:]][[:alnum:]]*(-[[:digit:]]*[[:alpha:]][[:alnum:]]*)*$";
+        nameIsOk = name: builtins.isList (builtins.match nameRe name);
+
         filter = path: type:
                    pkgs.lib.hasSuffix "${name}.cabal" path ||
                    baseNameOf path == "package.yaml";
@@ -213,9 +224,11 @@ in package-set { inherit pkgs lib callPackage; } self // {
                   then pkgs.lib.cleanSourceWith { inherit src filter; }
                 else src;
         };
-      in overrideCabal (callPackageKeepDeriver expr args) (orig: {
-           inherit src;
-         });
+      in
+        assert (lib.assertMsg (nameIsOk name) "Invalid name of Haskell package: ${name}");
+          overrideCabal (callPackageKeepDeriver expr args) (orig: {
+            inherit src;
+          });
 
     callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
