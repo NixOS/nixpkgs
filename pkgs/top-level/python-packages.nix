@@ -5615,6 +5615,8 @@ in {
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
+  pyclimacell = callPackage ../development/python-modules/pyclimacell { };
+
   pyclipper = callPackage ../development/python-modules/pyclipper { };
 
   pycm = callPackage ../development/python-modules/pycm { };
