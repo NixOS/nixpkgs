@@ -21,6 +21,15 @@ havePlatformVersionFlag=
 haveDarwinSDKVersion=
 haveDarwinPlatformVersion=
 
+# Roles will set by add-flags.sh, but add-flags.sh can be skipped when the
+# cc-wrapper has added the linker flags. Both the cc-wrapper and the binutils
+# wrapper mangle the same variable (MACOSX_DEPLOYMENT_TARGET), so if roles are
+# empty due to being run through the cc-wrapper then the mangle here is a no-op
+# and we still do the right thing.
+#
+# To be robust, make sure we always have the correct set of roles.
+accumulateRoles
+
 mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
 
 n=0
