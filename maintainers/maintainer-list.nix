@@ -7535,6 +7535,12 @@
     githubId = 3438604;
     name = "Petter Storvik";
   };
+  p-h = {
+    email = "p@hurlimann.org";
+    github = "p-h";
+    githubId = 645664;
+    name = "Philippe Hürlimann";
+  };
   philandstuff = {
     email = "philip.g.potter@gmail.com";
     github = "philandstuff";
