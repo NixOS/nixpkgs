@@ -303,6 +303,8 @@ in {
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
 
+  aiolip = callPackage ../development/python-modules/aiolip { };
+
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
@@ -5990,6 +5992,8 @@ in {
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
+
+  pylutron-caseta = callPackage ../development/python-modules/pylutron-caseta { };
 
   pylxd = callPackage ../development/python-modules/pylxd { };
 

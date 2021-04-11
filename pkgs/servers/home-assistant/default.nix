@@ -269,6 +269,7 @@ in with py.pkgs; buildPythonApplication rec {
     "logentries"
     "logger"
     "lovelace"
+    "lutron_caseta"
     "manual"
     "manual_mqtt"
     "mazda"
