@@ -1,11 +1,10 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, substituteAll
 , python
 , gcc10
 , cmake
-, boost172
+, boost17x
 , icu
 , swig
 , pcre
@@ -16,29 +15,21 @@
 
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "0.6.0b0";
+  version = "210410";
   format = "other";
 
   src = fetchFromGitHub {
     owner  = "IfcOpenShell";
     repo   = "IfcOpenShell";
-    rev    = "v${version}";
+    rev    = "blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "1ad1s9az41z2f46rbi1jnr46mgc0q4h5kz1jm9xdlwifqv9y04g1";
+    sha256 = "1g52asxrqcfj01iqvf03k3bb6rg3v04hh1wc3nmn329a2lwjbxpw";
   };
-
-  patches = [
-    (substituteAll {
-      name = "site-packages.patch";
-      src = ./site-packages.patch;
-      site_packages = "lib/${python.libPrefix}/site-packages";
-    })
-  ];
 
   nativeBuildInputs = [ gcc10 cmake ];
 
   buildInputs = [
-    boost172
+    boost17x
     icu
     pcre
     libxml2
@@ -48,7 +39,9 @@ buildPythonPackage rec {
     cd cmake
   '';
 
+  PYTHONUSERBASE=".";
   cmakeFlags = [
+    "-DUSERSPACE_PYTHON_PREFIX=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     "-DOCC_LIBRARY_DIR=${opencascade-occt}/lib"
     "-DOPENCOLLADA_INCLUDE_DIR=${opencollada}/include/opencollada"

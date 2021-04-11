@@ -5488,6 +5488,8 @@ in
 
   idle3tools = callPackage ../tools/system/idle3tools { };
 
+  ifcopenshell = with python3Packages; toPythonApplication ifcopenshell;
+
   iftop = callPackage ../tools/networking/iftop { };
 
   ifuse = callPackage ../tools/filesystems/ifuse { };
