@@ -3667,6 +3667,8 @@ in {
 
   kaptan = callPackage ../development/python-modules/kaptan { };
 
+  karton-core = callPackage ../development/python-modules/karton-core { };
+
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
