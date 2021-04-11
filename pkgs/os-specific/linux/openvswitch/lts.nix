@@ -7,12 +7,12 @@ with stdenv.lib;
 let
   _kernel = kernel;
 in stdenv.mkDerivation rec {
-  version = "2.5.9";
+  version = "2.5.12";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "0iv0ncwl6s4qyyb655yj5xvqrjr1zbymmab96q259wa09xnyw7b7";
+    sha256 = "0a8wa1lj5p28x3vq0yaxjhqmppp4hvds6hhm0j3czpp8mc09fsfq";
   };
 
   patches = [ ./patches/lts-ssl.patch ];
