@@ -301,6 +301,8 @@ in {
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
 
+  aiolip = callPackage ../development/python-modules/aiolip { };
+
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
