@@ -2,10 +2,10 @@
 
 {
   rust-analyzer-unwrapped = callPackage ./generic.nix rec {
-    rev = "2021-03-22";
+    rev = "2021-04-05";
     version = "unstable-${rev}";
-    sha256 = "sha256-Q8yr5x4+R9UCk5kw/nJgBtGVBeZTDwyuwpyNJUKSPzA=";
-    cargoSha256 = "sha256-cJ5KPNrX1H4IfHENDGyU2rgxl5TTqvoeXk7558oqwuA=";
+    sha256 = "sha256-ZDxy87F3uz8bTF1/2LIy5r4Nv/M3xe97F7mwJNEFcUs=";
+    cargoSha256 = "sha256-kDwdKa08E0h24lOOa7ALeNqHlMjMry/ru1qwCIyKmuE=";
 
     inherit CoreServices;
   };
