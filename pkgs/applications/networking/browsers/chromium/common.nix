@@ -159,7 +159,9 @@ let
     ) ++ optional (versionRange "89" "90.0.4422.0") (fetchpatch {
       url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/61b0ab526d2aa3c62fa20bb756461ca9a482f6c6/trunk/chromium-fix-libva-redef.patch";
       sha256 = "1qj4sn1ngz0p1l1w3346kanr1sqlr3xdzk1f1i86lqa45mhv77ny";
-    });
+    }) ++ optional (chromiumVersionAtLeast "90")
+      ./fix-missing-atspi2-dependency.patch
+    ;
 
     postPatch = ''
       # remove unused third-party

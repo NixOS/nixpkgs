@@ -1,21 +1,21 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, installShellFiles }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0m4hipjgg64572lzqy9hz4iq9c4awc93c9rmnpap5iyi855x7idj";
+    sha256 = "1b0ds04q4g8xcgwkziwb5hsi7v73w9y0prvhxz880zzh930652n2";
   };
 
-  cargoSha256 = "0035pqr61mdx699hd4f8hnxknvsdg67l6ys7gxym3fzd9dcmqqff";
+  cargoSha256 = "0jpfgyz5l4fdb5cnqmadzjzrvc6dwgray4b0mx80pghpjw8a8qfb";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   postInstall = ''
     installManPage doc/watchexec.1
@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/watchexec/watchexec";
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
