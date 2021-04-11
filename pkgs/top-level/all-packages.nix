@@ -23722,6 +23722,8 @@ in
 
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
 
+  kooha = callPackage ../applications/video/kooha { };
+
   kotatogram-desktop = libsForQt514.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
