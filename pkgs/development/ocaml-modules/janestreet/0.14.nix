@@ -1,30 +1,11 @@
-{ janePackage
-, alcotest
-, angstrom
-, angstrom-async
-, base64
-, cryptokit
-, ctypes
-, dune-configurator
-, faraday
-, inotify
-, js_of_ocaml
-, js_of_ocaml-ppx
-, lambdasoup
-, magic-mime
-, num
-, octavius
-, ppxlib
-, re
-, tyxml
-, uri-sexp
-, zarith
+{ self
 , openssl
-, ounit
 , zstd
 }:
 
-rec {
+with self;
+
+{
 
   accessor = janePackage {
     pname = "accessor";
