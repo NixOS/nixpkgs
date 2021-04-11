@@ -2,7 +2,7 @@
 , stdenv
 , fetchgit
 , wrapLisp
-, sbcl
+, sbcl_2_0_9
 , openssl
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (wrapLisp sbcl)
+    (wrapLisp sbcl_2_0_9)
     openssl
   ];
 
