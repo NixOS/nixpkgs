@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -9,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "2.0.0";
+  version = "2.0.1";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -17,7 +16,7 @@ buildPythonPackage rec {
     owner = "remcohaszing";
     repo = "pywakeonlan";
     rev = version;
-    sha256 = "0p9jyiv0adcymbnmbay72g9phlbhsr4kmrwxscbdjq81gcmxsi0y";
+    sha256 = "sha256-WgoL8ntfEaHcvVbJjdewe0wE31Lq7WBj8Bppeq1uJx8=";
   };
 
   nativeBuildInputs = [
@@ -26,15 +25,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/remcohaszing/pywakeonlan/pull/19
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/remcohaszing/pywakeonlan/commit/6aa5050ed94ef718dfcd0b946546b6a738f47ee3.patch";
-      sha256 = "1xzj2464ziwm7bp05bzbjwjp9whmgp1py3isr41d92qvnil86vm6";
-    })
   ];
 
   pytestFlagsArray = [ "test_wakeonlan.py" ];
