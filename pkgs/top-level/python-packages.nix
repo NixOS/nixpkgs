@@ -341,6 +341,8 @@ in {
 
   aioswitcher = callPackage ../development/python-modules/aioswitcher { };
 
+  aiosyncthing = callPackage ../development/python-modules/aiosyncthing { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
@@ -2260,6 +2262,8 @@ in {
   exif = callPackage ../development/python-modules/exif { };
 
   exifread = callPackage ../development/python-modules/exifread { };
+
+  expects = callPackage ../development/python-modules/expects { };
 
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
