@@ -1,16 +1,16 @@
 { buildPythonPackage, lib, fetchgit, isPy3k
-, git, makeWrapper, sassc, hyperkitty, postorius, whoosh
+, git, makeWrapper, sassc, hyperkitty, postorius, whoosh, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "mailman-web-unstable";
-  version = "2019-09-29";
+  version = "2021-04-10";
   disabled = !isPy3k;
 
   src = fetchgit {
     url = "https://gitlab.com/mailman/mailman-web";
-    rev = "d17203b4d6bdc71c2b40891757f57a32f3de53d5";
-    sha256 = "124cxr4vfi1ibgxygk4l74q4fysx0a6pga1kk9p5wq2yvzwg9z3n";
+    rev = "19a7abe27dd3bc39c0250440de073f0adecd4da1";
+    sha256 = "0h25140n2jaisl0ri5x7gdmbypiys8vlq8dql1zmaxvq459ybxkn";
     leaveDotGit = true;
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ git makeWrapper ];
-  propagatedBuildInputs = [ hyperkitty postorius whoosh ];
+  propagatedBuildInputs = [ hyperkitty postorius whoosh setuptools-scm ];
 
   # Tries to check runtime configuration.
   doCheck = false;
@@ -39,6 +39,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ peti qyliss ];
+    maintainers = with maintainers; [ peti qyliss m1cr0man ];
   };
 }
