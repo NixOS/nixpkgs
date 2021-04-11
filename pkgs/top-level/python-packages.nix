@@ -245,6 +245,8 @@ in {
 
   aioeafm = callPackage ../development/python-modules/aioeafm { };
 
+  aioemonitor = callPackage ../development/python-modules/aioemonitor { };
+
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
@@ -3664,6 +3666,8 @@ in {
   Kajiki = callPackage ../development/python-modules/kajiki { };
 
   kaptan = callPackage ../development/python-modules/kaptan { };
+
+  karton-core = callPackage ../development/python-modules/karton-core { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
 

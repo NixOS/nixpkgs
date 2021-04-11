@@ -5491,6 +5491,8 @@ in
 
   idle3tools = callPackage ../tools/system/idle3tools { };
 
+  ifcopenshell = with python3Packages; toPythonApplication ifcopenshell;
+
   iftop = callPackage ../tools/networking/iftop { };
 
   ifuse = callPackage ../tools/filesystems/ifuse { };
@@ -6029,7 +6031,9 @@ in
     inherit (python3Packages) ansi2html;
   };
 
-  medfile = callPackage ../development/libraries/medfile { };
+  medfile = callPackage ../development/libraries/medfile {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   meilisearch = callPackage ../servers/search/meilisearch {
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
@@ -14757,6 +14761,8 @@ in
   haxor-news = callPackage ../applications/misc/haxor-news { };
 
   hdt = callPackage ../misc/hdt {};
+
+  hfinger = callPackage ../tools/security/hfinger { };
 
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
@@ -25880,7 +25886,6 @@ in
 
   inherit (callPackages ../applications/networking/syncthing { })
     syncthing
-    syncthing-cli
     syncthing-discovery
     syncthing-relay;
 
@@ -30574,6 +30579,8 @@ in
     inherit (gnome2) gtksourceview;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
+
+  yapesdl = callPackage ../misc/emulators/yapesdl { };
 
   x16-emulator = callPackage ../misc/emulators/commander-x16/emulator.nix { };
   x16-rom = callPackage ../misc/emulators/commander-x16/rom.nix { };

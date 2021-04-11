@@ -18,29 +18,42 @@
 , ninja
 , capstone
 , tree-sitter
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchurl {
-    url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-${version}.tar.xz";
-    sha256 = "sha256-npUp8wJiKAaQKSigXtndhJLTJ4+pyFqa0FwDLBqR/sE=";
+    url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
+    sha256 = "sha256-CGHeo247syha+rVtiAQz0XkEYK9p4DHTnLK2FhBOvE8=";
   };
 
   mesonFlags = [
-    "-Duse_sys_capstone=true"
-    "-Duse_sys_magic=true"
-    "-Duse_sys_libzip=true"
-    "-Duse_sys_zlib=true"
-    "-Duse_sys_xxhash=true"
-    "-Duse_sys_lz4=true"
-    "-Duse_sys_openssl=true"
-    "-Duse_sys_tree_sitter=true"
+    "-Duse_sys_capstone=enabled"
+    "-Duse_sys_magic=enabled"
+    "-Duse_sys_libzip=enabled"
+    "-Duse_sys_zlib=enabled"
+    "-Duse_sys_xxhash=enabled"
+    "-Duse_sys_lz4=enabled"
+    "-Duse_sys_openssl=enabled"
+    "-Duse_sys_tree_sitter=enabled"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja cmake ];
+  nativeBuildInputs = [ pkg-config meson ninja cmake (python3.withPackages (ps: [ ps.setuptools ])) ];
+
+  # meson's find_library seems to not use our compiler wrapper if static paraemter
+  # is either true/false... We work around by also providing LIBRARY_PATH
+  preConfigure = ''
+    LIBRARY_PATH=""
+    for b in ${toString (map lib.getLib buildInputs)}; do
+      if [[ -d "$b/lib" ]]; then
+        LIBRARY_PATH="$b/lib''${LIBRARY_PATH:+:}$LIBRARY_PATH"
+      fi
+    done
+    export LIBRARY_PATH
+  '';
 
   buildInputs = [
     file
