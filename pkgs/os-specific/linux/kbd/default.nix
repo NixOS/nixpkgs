@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook,
+{ lib, stdenv, fetchurl, nixosTests, autoreconfHook,
   pkg-config, flex, check, pam, coreutils
 }:
 
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ check pam ];
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
+
+  passthru.tests = nixosTests.keymap;
 
   meta = with lib; {
     homepage = "https://kbd-project.org/";
