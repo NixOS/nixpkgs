@@ -23282,6 +23282,8 @@ in
 
   googleearth = callPackage ../applications/misc/googleearth { };
 
+  googleearth-pro = callPackage ../applications/misc/googleearth-pro { };
+
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
