@@ -315,6 +315,7 @@ in with py.pkgs; buildPythonApplication rec {
     "shopping_list"
     "simplisafe"
     "simulated"
+    "sleepiq"
     "sma"
     "sensor"
     "smarttub"

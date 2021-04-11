@@ -751,7 +751,7 @@
     "skybeacon" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
     "skybell" = ps: with ps; [ skybellpy ];
     "slack" = ps: with ps; [ ]; # missing inputs: slackclient
-    "sleepiq" = ps: with ps; [ ]; # missing inputs: sleepyq
+    "sleepiq" = ps: with ps; [ sleepyq ];
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
     "smappee" = ps: with ps; [ aiohttp-cors pysmappee ];
