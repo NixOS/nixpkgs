@@ -163,6 +163,17 @@ in
     };
   };
 
+
+  openfl = buildHaxeLib {
+    libname = "openfl";
+    version = "9.1.0";
+    sha256 = "0ri9s8d7973d2jz6alhl5i4fx4ijh0kb27mvapq28kf02sp8kgim";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Open Flash Library for fast 2D development";
+    };
+  };
+
   lime = buildHaxeLib rec {
     libname = "lime";
     version = "7.9.0";
