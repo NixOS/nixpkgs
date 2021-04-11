@@ -2,19 +2,22 @@
 , libiconv
 , useMimalloc ? false
 , doCheck ? true
-
-# Version specific args
-, rev, version, sha256, cargoSha256
 }:
+
+let
+  rev = "2021-04-05";
+in
 
 rustPlatform.buildRustPackage {
   pname = "rust-analyzer-unwrapped";
-  inherit version cargoSha256;
+  version = "unstable-${rev}";
+  cargoSha256 = "sha256-kDwdKa08E0h24lOOa7ALeNqHlMjMry/ru1qwCIyKmuE=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
-    inherit rev sha256;
+    inherit rev;
+    sha256 = "sha256-ZDxy87F3uz8bTF1/2LIy5r4Nv/M3xe97F7mwJNEFcUs=";
   };
 
   buildAndTestSubdir = "crates/rust-analyzer";
