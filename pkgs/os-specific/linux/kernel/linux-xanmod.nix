@@ -1,7 +1,7 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.11.12";
+  version = "5.11.13";
   suffix = "xanmod1-cacule";
 in
   buildLinux (args // rec {
@@ -12,7 +12,7 @@ in
       owner = "xanmod";
       repo = "linux";
       rev = modDirVersion;
-      sha256 = "sha256-omRZ9oAmW3mauUolPf/lgMFMwUCYU4YaZ+OS75Ag+lM=";
+      sha256 = "sha256-LUbkccAfDS0/FnNhHn64bkC8qwBD0NKcdZRzNoSw4uA=";
       extraPostFetch = ''
         rm $out/.config
       '';
