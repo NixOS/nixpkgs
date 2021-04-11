@@ -10300,6 +10300,12 @@
     githubId = 13378502;
     name = "Wulfsta";
   };
+  wunderbrick = {
+    name = "Andrew Phipps";
+    email = "lambdafuzz@tutanota.com";
+    github = "wunderbrick";
+    githubId = 52174714;
+  };
   wyvie = {
     email = "elijahrum@gmail.com";
     github = "wyvie";
