@@ -8663,6 +8663,8 @@ in
 
   tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
+  tf2pulumi = callPackage ../development/tools/tf2pulumi { };
+
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
