@@ -6,6 +6,7 @@
 , git
 , cmake
 , gnumake
+, nixosTests
 }:
 
 let
@@ -38,6 +39,10 @@ mixRelease rec {
     # Install the compiled js part
     cp -a "${js}/libexec/mobilizon/deps/priv/static" ./priv
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.mobilizon;
+  };
 
   meta = with lib; {
     description = "Mobilizon is an online tool to help manage your events, your profiles and your groups";
