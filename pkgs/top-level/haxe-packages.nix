@@ -168,5 +168,15 @@ let
       };
     };
 
+    flixel-ui = buildHaxeLib {
+      libname = "flixel-ui";
+      version = "2.3.3";
+      sha256 = "1xrsjzcg1wv7j9fbifcg5v9zvfr1vhs0spar8nmi86liiqv1iwka";
+      meta = with lib; {
+        license = licenses.mit;
+        description = "UI library for Flixel";
+      };
+    };
+
   };
 in self
