@@ -4532,6 +4532,8 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
+  nad-receiver = callPackage ../development/python-modules/nad-receiver { };
+
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
 
   namebench = callPackage ../development/python-modules/namebench { };
