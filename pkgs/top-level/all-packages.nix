@@ -14758,6 +14758,8 @@ in
 
   hdt = callPackage ../misc/hdt {};
 
+  hfinger = callPackage ../tools/security/hfinger { };
+
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
   hidapi = callPackage ../development/libraries/hidapi {
