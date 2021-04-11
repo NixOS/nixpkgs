@@ -6032,7 +6032,7 @@ in
   };
 
   medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5_1_10;
+    hdf5 = hdf5.override { usev110Api = true; };
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
