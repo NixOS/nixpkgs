@@ -4622,6 +4622,8 @@ in {
 
   nevow = callPackage ../development/python-modules/nevow { };
 
+  nexia = callPackage ../development/python-modules/nexia { };
+
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
     inherit (self) python cython setuptools;
     inherit (pkgs) ncurses;
