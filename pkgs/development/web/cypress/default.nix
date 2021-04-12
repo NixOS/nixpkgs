@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
 
   buildInputs = with xorg; [
     libXScrnSaver libXdamage libXtst libxshmfence
   ] ++ [
-    nss gtk2 alsaLib gnome2.GConf gtk3 unzip
+    nss gtk2 alsaLib gnome2.GConf gtk3
   ];
 
   runtimeDependencies = [ (lib.getLib udev) ];
