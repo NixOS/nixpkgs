@@ -2170,6 +2170,18 @@ let
     meta.homepage = "https://github.com/latex-box-team/latex-box/";
   };
 
+  LeaderF = buildVimPluginFrom2Nix {
+    pname = "LeaderF";
+    version = "2021-04-16";
+    src = fetchFromGitHub {
+      owner = "Yggdroot";
+      repo = "LeaderF";
+      rev = "6c49ab524b883495193ff3a4eab5c7846aba4261";
+      sha256 = "19dyd148silyaiprjrcd23y62kcsp6hpvpansmpxri55x53a772w";
+    };
+    meta.homepage = "https://github.com/Yggdroot/LeaderF/";
+  };
+
   lean-vim = buildVimPluginFrom2Nix {
     pname = "lean-vim";
     version = "2021-01-02";
