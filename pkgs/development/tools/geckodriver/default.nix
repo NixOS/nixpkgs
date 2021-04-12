@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   });
 
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1fxm4jgg95igqadi97dzhrw7bhi5hfh7ww81c3z4yk0lznbzv6mx";
+  cargoSha256 = "1vajlcpyk77v6nvhs737yi8hs7ids9kz0sbwy29rm1vmmfjp2b27";
 
   buildInputs = [ libiconv ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
