@@ -9,7 +9,7 @@ let
 
     webserver:
       https: ${toString (if cfg.enableWebHttps then "true" else "false")}
-      hostname: '${cfg.LocalDomain}'
+      hostname: '${cfg.localDomain}'
       port: ${toString cfg.listenWeb}
 
     database:
@@ -87,7 +87,7 @@ in {
 
     localDomain = lib.mkOption {
       type = lib.types.str;
-      default = "example.com";
+      example = "peertube.example.com";
       description = "The domain serving your PeerTube instance.";
     };
 
