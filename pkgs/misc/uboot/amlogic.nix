@@ -1,8 +1,10 @@
 { buildUBoot
+, buildPackages
 , armTrustedFirmwareS905
+, armTrustedFirmwareTools
 , firmwareOdroidC2
 , firmwareOdroidC4
-, buildPackages
+, meson-tools
 }:
 
 # The Amlogic builds of U-Boot are more involved than the usual other simpler 
@@ -15,11 +17,19 @@
   ubootOdroidC2 = buildUBoot {
     defconfig = "odroid-c2_defconfig";
 
+    nativeBuildInputs = [
+      armTrustedFirmwareTools
+      meson-tools
+    ];
+
+    FIPDIR = firmwareOdroidC2;
+    BL31 = "${armTrustedFirmwareS905}/bl31.bin";
+
     postBuild = ''
       # BL301 image needs at least 64 bytes of padding after it to place
       # signing headers (with amlbootsig)
       truncate -s 64 bl301.padding.bin
-      cat ${firmwareOdroidC2}/bl301.bin bl301.padding.bin > bl301.padded.bin
+      cat $FIPDIR/bl301.bin bl301.padding.bin > bl301.padded.bin
 
       # The downstream fip_create tool adds a custom TOC entry with UUID
       # AABBCCDD-ABCD-EFEF-ABCD-12345678ABCD for the BL301 image. It turns out
@@ -33,22 +43,44 @@
       #
       # See https://github.com/afaerber/meson-tools/issues/3 for more
       # information.
-      ${buildPackages.armTrustedFirmwareTools}/bin/fiptool create \
+      fiptool create \
         --align 0x4000 \
-        --tb-fw ${firmwareOdroidC2}/bl30.bin \
+        --tb-fw $FIPDIR/bl30.bin \
         --scp-fw bl301.padded.bin \
-        --soc-fw ${armTrustedFirmwareS905}/bl31.bin \
+        --soc-fw $BL31 \
         --nt-fw u-boot.bin \
         fip.bin
-      cat ${firmwareOdroidC2}/bl2.package fip.bin > boot_new.bin
-      ${buildPackages.meson-tools}/bin/amlbootsig boot_new.bin u-boot.img
+      cat $FIPDIR/bl2.package fip.bin > boot_new.bin
+      amlbootsig boot_new.bin u-boot.img
 
+      # Extract u-boot from the image
       dd if=u-boot.img of=u-boot.bin bs=512 skip=96
+
+      # Ensure we're not accidentally re-using this transient u-boot image
+      rm u-boot.img
+
+      # Pick bl1.bin.hardkernel from FIPDIR so it can be installed in filesToInstall.
+      cp $FIPDIR/bl1.bin.hardkernel ./
+
+      # Create the .img file to flash from sector 0x01 (bs=512 seek=1)
+      # It contains the remainder of bl1.bin.hardkernel and u-boot
+      dd if=bl1.bin.hardkernel of=u-boot.img conv=notrunc bs=512 skip=1 seek=0
+      dd if=u-boot.bin         of=u-boot.img conv=notrunc bs=512 seek=96
+
+      # Help out the user a little.
+      cat > README.md <<EOF
+      Since the GXB boot flow starts at sector 0x00, the user needs to
+      flash the first 442 bytes themselves.
+
+          $ dd if=bl1.bin.hardkernel of=... conv=fsync,notrunc bs=1 count=442
+          $ dd if=u-boot.img         of=... conv=fsync,notrunc bs=512 seek=1
+      EOF
     '';
 
     filesToInstall = [
-      "u-boot.bin"
-      "${firmwareOdroidC2}/sd_fusing.sh" "${firmwareOdroidC2}/bl1.bin.hardkernel"
+      "README.md"
+      "u-boot.img"
+      "bl1.bin.hardkernel"
     ];
     extraMeta.platforms = ["aarch64-linux"];
   };
