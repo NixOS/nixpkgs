@@ -8987,6 +8987,8 @@ in {
 
   wled = callPackage ../development/python-modules/wled { };
 
+  woob = callPackage ../development/python-modules/woob { };
+
   word2vec = callPackage ../development/python-modules/word2vec { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
