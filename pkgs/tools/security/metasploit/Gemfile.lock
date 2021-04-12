@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 4c7a221f3d186b0cd65d2a765533fda54f0848f4
-  ref: refs/tags/6.0.38
+  revision: 5cba6ecd3c745f45290400f0705400f26913852e
+  ref: refs/tags/6.0.39
   specs:
-    metasploit-framework (6.0.38)
+    metasploit-framework (6.0.39)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -27,11 +27,11 @@ GIT
       jsobfu
       json
       metasm
-      metasploit-concern
-      metasploit-credential
-      metasploit-model
+      metasploit-concern (~> 3.0.0)
+      metasploit-credential (~> 4.0.0)
+      metasploit-model (~> 3.1.0)
       metasploit-payloads (= 2.0.41)
-      metasploit_data_models
+      metasploit_data_models (~> 4.1.0)
       metasploit_payloads-mettle (= 1.0.8)
       mqtt
       msgpack
@@ -123,13 +123,13 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.1)
-    aws-partitions (1.441.0)
+    aws-partitions (1.443.0)
     aws-sdk-core (3.113.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.232.0)
+    aws-sdk-ec2 (1.234.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.52.0)
@@ -190,7 +190,7 @@ GEM
     jsobfu (0.4.2)
       rkelly-remix
     json (2.5.1)
-    loofah (2.9.0)
+    loofah (2.9.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     metasm (1.0.4)
@@ -213,7 +213,7 @@ GEM
       activesupport (~> 5.2.2)
       railties (~> 5.2.2)
     metasploit-payloads (2.0.41)
-    metasploit_data_models (4.1.2)
+    metasploit_data_models (4.1.3)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
       arel-helpers
@@ -238,7 +238,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.7)
-    nokogiri (1.11.2)
+    nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     octokit (4.20.0)
@@ -330,15 +330,15 @@ GEM
       rex-socket
       rex-text
     rex-struct2 (0.1.3)
-    rex-text (0.2.33)
+    rex-text (0.2.34)
     rex-zip (0.1.4)
       rex-text
-    rexml (3.2.4)
+    rexml (3.2.5)
     rkelly-remix (0.0.7)
     ruby-macho (2.5.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.4)
-    ruby_smb (2.0.7)
+    ruby_smb (2.0.8)
       bindata
       openssl-ccm
       openssl-cmac
