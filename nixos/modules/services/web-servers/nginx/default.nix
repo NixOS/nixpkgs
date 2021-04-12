@@ -684,7 +684,7 @@ in
               keepalive 16;
             '';
           };
-        ''
+        '';
       };
 
       virtualHosts = mkOption {
