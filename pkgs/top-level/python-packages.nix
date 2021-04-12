@@ -303,6 +303,8 @@ in {
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
 
+  aiolip = callPackage ../development/python-modules/aiolip { };
+
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
@@ -340,6 +342,8 @@ in {
   aiostream = callPackage ../development/python-modules/aiostream { };
 
   aioswitcher = callPackage ../development/python-modules/aioswitcher { };
+
+  aiosyncthing = callPackage ../development/python-modules/aiosyncthing { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
@@ -490,6 +494,8 @@ in {
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
 
   arrow = callPackage ../development/python-modules/arrow { };
+
+  arrow_1 = callPackage ../development/python-modules/arrow/1.nix { };
 
   arviz = callPackage ../development/python-modules/arviz { };
 
@@ -2261,6 +2267,8 @@ in {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  expects = callPackage ../development/python-modules/expects { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   exrex = callPackage ../development/python-modules/exrex { };
@@ -3667,6 +3675,8 @@ in {
 
   kaptan = callPackage ../development/python-modules/kaptan { };
 
+  karton-classifier = callPackage ../development/python-modules/karton-classifier { };
+
   karton-core = callPackage ../development/python-modules/karton-core { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
@@ -4524,6 +4534,8 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
+  nad-receiver = callPackage ../development/python-modules/nad-receiver { };
+
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
 
   namebench = callPackage ../development/python-modules/namebench { };
@@ -4611,6 +4623,8 @@ in {
   neuronpy = callPackage ../development/python-modules/neuronpy { };
 
   nevow = callPackage ../development/python-modules/nevow { };
+
+  nexia = callPackage ../development/python-modules/nexia { };
 
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
     inherit (self) python cython setuptools;
@@ -5214,6 +5228,8 @@ in {
 
   pyshark = callPackage ../development/python-modules/pyshark { };
 
+  pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
@@ -5611,6 +5627,8 @@ in {
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
+  pyclimacell = callPackage ../development/python-modules/pyclimacell { };
+
   pyclipper = callPackage ../development/python-modules/pyclipper { };
 
   pycm = callPackage ../development/python-modules/pycm { };
@@ -5664,6 +5682,8 @@ in {
 
   pydaikin = callPackage ../development/python-modules/pydaikin { };
 
+  pydanfossair = callPackage ../development/python-modules/pydanfossair { };
+
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydash = callPackage ../development/python-modules/pydash { };
@@ -5706,6 +5726,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyeconet = callPackage ../development/python-modules/pyeconet { };
+
   pyedimax = callPackage ../development/python-modules/pyedimax { };
 
   pyee = callPackage ../development/python-modules/pyee { };
@@ -5713,6 +5735,8 @@ in {
   pyeight = callPackage ../development/python-modules/pyeight { };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
+
+  pyemby = callPackage ../development/python-modules/pyemby { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };
 
@@ -5741,6 +5765,8 @@ in {
   pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 { }));
 
   pyext = callPackage ../development/python-modules/pyext { };
+
+  pyezviz = callPackage ../development/python-modules/pyezviz { };
 
   pyface = callPackage ../development/python-modules/pyface { };
 
@@ -5881,6 +5907,8 @@ in {
 
   pyinsteon = callPackage ../development/python-modules/pyinsteon { };
 
+  pyintesishome = callPackage ../development/python-modules/pyintesishome { };
+
   pyipp = callPackage ../development/python-modules/pyipp { };
 
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
@@ -5978,6 +6006,8 @@ in {
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
+
+  pylutron-caseta = callPackage ../development/python-modules/pylutron-caseta { };
 
   pylxd = callPackage ../development/python-modules/pylxd { };
 
@@ -6290,6 +6320,8 @@ in {
   PyRSS2Gen = callPackage ../development/python-modules/pyrss2gen { };
 
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
+
+  pyruckus = callPackage ../development/python-modules/pyruckus { };
 
   pysam = callPackage ../development/python-modules/pysam { };
 
@@ -6735,6 +6767,8 @@ in {
   python-editor = callPackage ../development/python-modules/python-editor { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
+
+  pythonegardia = callPackage ../development/python-modules/pythonegardia { };
 
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
@@ -7790,6 +7824,8 @@ in {
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
+  sleepyq = callPackage ../development/python-modules/sleepyq { };
+
   slicedimage = callPackage ../development/python-modules/slicedimage { };
 
   slicer = callPackage ../development/python-modules/slicer { };
@@ -7928,6 +7964,8 @@ in {
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp { };
 
   sphinxcontrib-autoapi = callPackage ../development/python-modules/sphinxcontrib-autoapi { };
+
+  sphinxcontrib-bayesnet = callPackage ../development/python-modules/sphinxcontrib-bayesnet { };
 
   sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex { };
 

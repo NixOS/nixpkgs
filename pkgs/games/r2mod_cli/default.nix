@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, bashInteractive
 , jq
 , makeWrapper
 , p7zip
@@ -7,14 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "r2mod_cli";
     rev = "v${version}";
-    sha256 = "0as3nl9qiyf9daf2n78lyish319qclf2gbhr20mdd5wnqmxpk276";
+    sha256 = "13n2y9gsgb8hnr64y083x9c90j3b4awcmdn81mqmwcydpby3q848";
   };
+
+  buildInputs = [ bashInteractive ];
 
   nativeBuildInputs = [ makeWrapper ];
 

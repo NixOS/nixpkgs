@@ -62,6 +62,19 @@ let
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
 
+    # Pinned due to API changes in pyruckus>0.12
+    (self: super: {
+      pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
+        version = "0.12";
+        src = fetchFromGitHub {
+          owner = "gabe565";
+          repo = "pyruckus";
+          rev = version;
+          sha256 = "0ykv6r6blbj3fg9fplk9i7xclkv5d93rwvx0fm5s8ms9f2s9ih8z";
+        };
+      });
+    })
+
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
@@ -213,6 +226,7 @@ in with py.pkgs; buildPythonApplication rec {
     "devolo_home_control"
     "dhcp"
     "discovery"
+    "econet"
     "emulated_hue"
     "esphome"
     "fan"
@@ -269,6 +283,7 @@ in with py.pkgs; buildPythonApplication rec {
     "logentries"
     "logger"
     "lovelace"
+    "lutron_caseta"
     "manual"
     "manual_mqtt"
     "mazda"
@@ -306,6 +321,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rituals_perfume_genie"
     "rmvtransport"
     "rss_feed_template"
+    "ruckus_unleashed"
     "safe_mode"
     "scene"
     "screenlogic"
@@ -315,6 +331,7 @@ in with py.pkgs; buildPythonApplication rec {
     "shopping_list"
     "simplisafe"
     "simulated"
+    "sleepiq"
     "sma"
     "sensor"
     "smarttub"
