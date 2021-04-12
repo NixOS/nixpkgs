@@ -10656,6 +10656,8 @@ in
 
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
 
+  protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
+
   openjdk8-bootstrap =
     if adoptopenjdk-hotspot-bin-8.meta.available then
       adoptopenjdk-hotspot-bin-8

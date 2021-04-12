@@ -4942,6 +4942,12 @@
     githubId = 6544084;
     name = "Kai Harries";
   };
+  kaiserkarel = {
+      email = "k.l.kubat@gmail.com";
+      github = "kaiserkarel";
+      githubId = 28512997;
+      name = "Karel Kubat";
+    };
   kalbasit = {
     email = "wael.nasreddine@gmail.com";
     github = "kalbasit";
