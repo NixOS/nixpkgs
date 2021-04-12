@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-        
+
     mkdir -p $out/bin $out/opt/cypress
     cp -vr * $out/opt/cypress/
     # Let's create the file binary_state ourselves to make the npm package happy on initial verification.
