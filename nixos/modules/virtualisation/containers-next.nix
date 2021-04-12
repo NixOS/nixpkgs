@@ -139,7 +139,7 @@ let
       };
 
   mkImage = name: config:
-    { container = import "${config.nixpkgs}/nixos/lib/eval-config.nix" {
+    { container = import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
         system = pkgs.system;
         modules = [
           ({ pkgs, ... }: {
@@ -284,7 +284,7 @@ in {
           };
 
           nixpkgs = mkOption {
-            default = pkgs.path;
+            default = ../../..;
             type = types.path;
             description = ''
               Path to the `nixpkgs`-checkout or channel to use for the container.

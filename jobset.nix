@@ -1,6 +1,8 @@
+{ nixpkgs }:
 let
   release = import ./nixos/release.nix {
     supportedSystems = [ "x86_64-linux" ];
+    inherit nixpkgs;
   };
 in
 
