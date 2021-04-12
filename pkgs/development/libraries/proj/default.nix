@@ -1,21 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook, libtiff, curl }:
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "6.3.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "1ildcp57qsa01kvv2qxd05nqw5mg0wfkksiv9l138dbhp0s7rkxp";
+    sha256 = "0mymvfvs8xggl4axvlj7kc1ksd9g94kaz6w1vdv0x2y5mqk93gx9";
   };
 
   outputs = [ "out" "dev"];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [ sqlite libtiff curl ];
 
   doCheck = stdenv.is64bit;
 
