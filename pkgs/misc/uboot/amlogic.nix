@@ -2,7 +2,7 @@
 , buildPackages
 , armTrustedFirmwareS905
 , armTrustedFirmwareTools
-, firmwareOdroidC2
+, firmwareAmlogic
 , firmwareOdroidC4
 , meson-tools
 }:
@@ -22,7 +22,7 @@
       meson-tools
     ];
 
-    FIPDIR = firmwareOdroidC2;
+    FIPDIR = "${firmwareAmlogic}/odroid-c2";
     BL31 = "${armTrustedFirmwareS905}/bl31.bin";
 
     postBuild = ''
