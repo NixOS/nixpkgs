@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     description = "The pattern matching swiss knife for malware researchers";
     homepage = "http://Virustotal.github.io/yara/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
     platforms = platforms.all;
   };
 }
