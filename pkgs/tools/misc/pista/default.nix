@@ -9,6 +9,7 @@ rustPlatform.buildRustPackage rec {
     repo = "pista";
     rev = "v${version}";
     sha256 = "1nrqgl5r5ja95g5xhfvkvfz72g318pqc7yj4fwl6xnad19smvms0";
+    fetchSubmodules = true;
   };
 
   cargoSha256 = "1qjg4z4nfqmiawczs4p4rf4mq250aqb5brd3hd2jcjdhqajksr90";
