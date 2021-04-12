@@ -20754,6 +20754,8 @@ in
     firmwareOdroidC4
   ;
 
+  firmwareAmlogic = callPackage ../misc/uboot/amlogic-firmware.nix {};
+
   # Upstream Barebox:
   inherit (callPackage ../misc/barebox {})
     buildBarebox
