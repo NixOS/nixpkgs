@@ -17,12 +17,12 @@ let
 
   auto-pairs-kak = buildKakounePluginFrom2Nix {
     pname = "auto-pairs-kak";
-    version = "2020-10-04";
+    version = "2021-03-28";
     src = fetchFromGitHub {
       owner = "alexherbo2";
       repo = "auto-pairs.kak";
-      rev = "fd735ec149ef0d9ca5f628a95b1e52858b5afbdc";
-      sha256 = "07795kv9njlnp6mckwv141ny2ns6wyf5r0dfjaxh9ngd105zgif1";
+      rev = "526779a26a5cf5f48e7c4f5c5fecca274968a737";
+      sha256 = "0gkhvwxyh8pdfydrj7zkfidk0drrbhvdi1fq3pkzllna3vz8q181";
     };
     meta.homepage = "https://github.com/alexherbo2/auto-pairs.kak/";
   };
@@ -41,14 +41,39 @@ let
 
   fzf-kak = buildKakounePluginFrom2Nix {
     pname = "fzf-kak";
-    version = "2021-03-15";
+    version = "2021-03-19";
     src = fetchFromGitHub {
       owner = "andreyorst";
       repo = "fzf.kak";
-      rev = "4e6c9a857511fccdbbc835a1c9acb205b6486a4c";
-      sha256 = "0syhhdlsm7vg6hcd2n2acag9g562z49rbb5smh5p2gnplhmp93i0";
+      rev = "435cc240f3732770b19cc7dce9bdf65e22d6ed6a";
+      sha256 = "0ahcz7z5i8bngjnkd6yr782wah873yxgm8xrwa9g8gkddvj3q6rw";
     };
     meta.homepage = "https://github.com/andreyorst/fzf.kak/";
+  };
+
+  kak-tree = buildKakounePluginFrom2Nix {
+    pname = "kak-tree";
+    version = "2021-01-24";
+    src = fetchFromGitHub {
+      owner = "ul";
+      repo = "kak-tree";
+      rev = "863924d21c7bba970b33faab84ff12136ff4ad1a";
+      sha256 = "0nsq2qnli8zsvqxgwwrlizcdk9i2013cxc11xssakrvqylx4wbi2";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/ul/kak-tree/";
+  };
+
+  kakboard = buildKakounePluginFrom2Nix {
+    pname = "kakboard";
+    version = "2020-05-09";
+    src = fetchFromGitHub {
+      owner = "lePerdu";
+      repo = "kakboard";
+      rev = "2f13f5cd99591b76ad5cba230815b80138825120";
+      sha256 = "1kvnbsv20y09rlnyar87qr0h26i16qsq801krswvxcwhid7ijlvd";
+    };
+    meta.homepage = "https://github.com/lePerdu/kakboard/";
   };
 
   kakoune-buffer-switcher = buildKakounePluginFrom2Nix {
@@ -75,6 +100,18 @@ let
     meta.homepage = "https://github.com/Delapouite/kakoune-buffers/";
   };
 
+  kakoune-colors = buildKakounePluginFrom2Nix {
+    pname = "kakoune-colors";
+    version = "2020-09-03";
+    src = fetchFromGitHub {
+      owner = "Delapouite";
+      repo = "kakoune-colors";
+      rev = "f506944c9d0149cec59582ad048ce08f8e965ac2";
+      sha256 = "1vrzm2klbrdhxv4q5lx8xjzw2xbnyfr0gkqzfz65qplycm2j37kp";
+    };
+    meta.homepage = "https://github.com/Delapouite/kakoune-colors/";
+  };
+
   kakoune-easymotion = buildKakounePluginFrom2Nix {
     pname = "kakoune-easymotion";
     version = "2020-03-09";
@@ -97,6 +134,54 @@ let
       sha256 = "1vkff8xbycfgxv8x09cvc79qcg5fdzn2x77mbmifmkq236khrwrg";
     };
     meta.homepage = "https://github.com/kakoune-editor/kakoune-extra-filetypes/";
+  };
+
+  kakoune-find = buildKakounePluginFrom2Nix {
+    pname = "kakoune-find";
+    version = "2021-03-30";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-find";
+      rev = "cd6efb6da4ab7460ff8d87e27a4bf134b4632244";
+      sha256 = "0y0bz65wmv9yswp63367w3fziy5k9ckzxy1m9bm1vn523a8ipc1f";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-find/";
+  };
+
+  kakoune-gdb = buildKakounePluginFrom2Nix {
+    pname = "kakoune-gdb";
+    version = "2021-03-03";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-gdb";
+      rev = "e24d0eabbd0b6b277385448ff158434d249b9690";
+      sha256 = "17g5bd7yk3d8j6qlbrz1knphjls2s47k6sj2c7a9nyzyiw8821yp";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-gdb/";
+  };
+
+  kakoune-palette = buildKakounePluginFrom2Nix {
+    pname = "kakoune-palette";
+    version = "2019-09-16";
+    src = fetchFromGitHub {
+      owner = "Delapouite";
+      repo = "kakoune-palette";
+      rev = "052cab5f48578679d94717ed5f62429be9865d5d";
+      sha256 = "1p9mpzx6i816pcw9sala2kvy0ky39kwccxgsf3y3bpw6m8pi6kby";
+    };
+    meta.homepage = "https://github.com/Delapouite/kakoune-palette/";
+  };
+
+  kakoune-phantom-selection = buildKakounePluginFrom2Nix {
+    pname = "kakoune-phantom-selection";
+    version = "2021-03-30";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-phantom-selection";
+      rev = "034d7a79f7f07e659e632468ef64c48ae82730f2";
+      sha256 = "0bwa6r7nqysjchsfjpj6jbxwvqb3dflh1ygij3pnyn29jplc8068";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-phantom-selection/";
   };
 
   kakoune-rainbow = buildKakounePluginFrom2Nix {
@@ -123,6 +208,54 @@ let
     meta.homepage = "https://github.com/Delapouite/kakoune-registers/";
   };
 
+  kakoune-snippets = buildKakounePluginFrom2Nix {
+    pname = "kakoune-snippets";
+    version = "2019-07-02";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-snippets";
+      rev = "94931c20fa009e2a1cb2f115d8885c257582851c";
+      sha256 = "1ia2c2zpid691h2r703d3q4pyshl2l63xniw93s7s50kabcldibc";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-snippets/";
+  };
+
+  kakoune-sudo-write = buildKakounePluginFrom2Nix {
+    pname = "kakoune-sudo-write";
+    version = "2020-07-07";
+    src = fetchFromGitHub {
+      owner = "occivink";
+      repo = "kakoune-sudo-write";
+      rev = "abe6bd6d6e111957d7e84e790e682955b8b319c6";
+      sha256 = "05b6hxsqvh3kmi7f139rihx0i9fn2j5fjz7yzy1g4flm8lb0h129";
+    };
+    meta.homepage = "https://github.com/occivink/kakoune-sudo-write/";
+  };
+
+  kakoune-surround = buildKakounePluginFrom2Nix {
+    pname = "kakoune-surround";
+    version = "2018-09-17";
+    src = fetchFromGitHub {
+      owner = "h-youhei";
+      repo = "kakoune-surround";
+      rev = "efe74c6f434d1e30eff70d4b0d737f55bf6c5022";
+      sha256 = "09fd7qhlsazf4bcl3z7xh9z0fklw69c5j32hminphihq74qrry6h";
+    };
+    meta.homepage = "https://github.com/h-youhei/kakoune-surround/";
+  };
+
+  kakoune-text-objects = buildKakounePluginFrom2Nix {
+    pname = "kakoune-text-objects";
+    version = "2019-10-12";
+    src = fetchFromGitHub {
+      owner = "Delapouite";
+      repo = "kakoune-text-objects";
+      rev = "aacd554982ba9a7a77a788817bb8ee2e1b380ee7";
+      sha256 = "0qdzl0z32wgw6k4ssy598sdqk2jh13lwvczslzyg4x5d6z8jwhyf";
+    };
+    meta.homepage = "https://github.com/Delapouite/kakoune-text-objects/";
+  };
+
   kakoune-vertical-selection = buildKakounePluginFrom2Nix {
     pname = "kakoune-vertical-selection";
     version = "2019-04-11";
@@ -135,6 +268,42 @@ let
     meta.homepage = "https://github.com/occivink/kakoune-vertical-selection/";
   };
 
+  kakoune-wiki = buildKakounePluginFrom2Nix {
+    pname = "kakoune-wiki";
+    version = "2020-09-21";
+    src = fetchFromGitHub {
+      owner = "TeddyDD";
+      repo = "kakoune-wiki";
+      rev = "910734f3eeeddb0eb7f608b81704ca353e328704";
+      sha256 = "1j5k69sf1dvjv6d4z1189zp1lyi3nzk3yj5v7zz15r3xdpfqyfi8";
+    };
+    meta.homepage = "https://github.com/TeddyDD/kakoune-wiki/";
+  };
+
+  kaktree = buildKakounePluginFrom2Nix {
+    pname = "kaktree";
+    version = "2021-02-26";
+    src = fetchFromGitHub {
+      owner = "andreyorst";
+      repo = "kaktree";
+      rev = "34ae50bb2f1234a37cfdcd29fb647792ecd3010a";
+      sha256 = "0l1gvg1b973bsgpzdi7klpgf05h2nc13gdmbb0lh13fsk8knr66i";
+    };
+    meta.homepage = "https://github.com/andreyorst/kaktree/";
+  };
+
+  luar = buildKakounePluginFrom2Nix {
+    pname = "luar";
+    version = "2021-02-11";
+    src = fetchFromGitHub {
+      owner = "gustavo-hms";
+      repo = "luar";
+      rev = "7c74e7cac64aac58d15d399a0a7239f63e02b074";
+      sha256 = "1ymcxfig3w75dj848l73vffinirjy2yczvjrvinq2iqgrfaslp1a";
+    };
+    meta.homepage = "https://github.com/gustavo-hms/luar/";
+  };
+
   openscad-kak = buildKakounePluginFrom2Nix {
     pname = "openscad-kak";
     version = "2020-12-10";
@@ -145,6 +314,18 @@ let
       sha256 = "15dybd6dnnwla6mj8sw83nwd62para1syxzifznl6rz6kp8vqjjj";
     };
     meta.homepage = "https://github.com/mayjs/openscad.kak/";
+  };
+
+  plug-kak = buildKakounePluginFrom2Nix {
+    pname = "plug-kak";
+    version = "2021-03-06";
+    src = fetchFromGitHub {
+      owner = "andreyorst";
+      repo = "plug.kak";
+      rev = "d2162d4deba8ec071148f35d666b7675243bcd6b";
+      sha256 = "06kz66m77c9sd8jb2x1wq4bki70a1xcmq1x4yh2fmrj7pwxdcqvy";
+    };
+    meta.homepage = "https://github.com/andreyorst/plug.kak/";
   };
 
   powerline-kak = buildKakounePluginFrom2Nix {
@@ -193,6 +374,30 @@ let
       sha256 = "0g41c0038fpmihqva71xl4vfbmvsp13i47gp6fnmaikajpynzc51";
     };
     meta.homepage = "https://github.com/alexherbo2/sleuth.kak/";
+  };
+
+  smarttab-kak = buildKakounePluginFrom2Nix {
+    pname = "smarttab-kak";
+    version = "2021-02-24";
+    src = fetchFromGitHub {
+      owner = "andreyorst";
+      repo = "smarttab.kak";
+      rev = "1dd3f33c4f65da5c13aee5d44b2e77399595830f";
+      sha256 = "0g49k47ggppng95nwanv2rqmcfsjsgy3z1764wrl5b49h9wifhg2";
+    };
+    meta.homepage = "https://github.com/andreyorst/smarttab.kak/";
+  };
+
+  snippets-kak = buildKakounePluginFrom2Nix {
+    pname = "snippets-kak";
+    version = "2021-02-23";
+    src = fetchFromGitHub {
+      owner = "alexherbo2";
+      repo = "snippets.kak";
+      rev = "3cde27f99605e6c680f4e60c2779ef3d2b77cadd";
+      sha256 = "0z55v5bvhqgzvn9qcaxlylhigi72y2jpr56zqmbp98rgsy542fps";
+    };
+    meta.homepage = "https://github.com/alexherbo2/snippets.kak/";
   };
 
   tabs-kak = buildKakounePluginFrom2Nix {

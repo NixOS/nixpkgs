@@ -71,6 +71,8 @@ def make_request(url: str) -> urllib.request.Request:
     headers = {}
     if token is not None:
         headers["Authorization"] = f"token {token}"
+    if "api.github" in url:
+        headers["Accept"] = "Accept: application/vnd.github.mercy-preview+json"
     return urllib.request.Request(url, headers=headers)
 
 
@@ -187,6 +189,7 @@ class Editor:
         root: Path,
         get_plugins: str,
         generate_nix: Callable[[List[Tuple[str, str, Plugin]], str], None],
+        blocklist: Optional[Path] = None,
         default_in: Optional[Path] = None,
         default_out: Optional[Path] = None,
         deprecated: Optional[Path] = None,
@@ -196,6 +199,7 @@ class Editor:
         self.root = root
         self.get_plugins = get_plugins
         self.generate_nix = generate_nix
+        self.blocklist = blocklist or root.joinpath(f"{name}-search-blocklist")
         self.default_in = default_in or root.joinpath(f"{name}-plugin-names")
         self.default_out = default_out or root.joinpath("generated.nix")
         self.deprecated = deprecated or root.joinpath("deprecated.json")
@@ -460,6 +464,12 @@ def parse_args(editor: Editor):
         default=30,
         help="Number of concurrent processes to spawn.",
     )
+    parser.add_argument(
+        "--search",
+        "-s",
+        action="store_true",
+        help=f"Search GitHub for plugins with 'topic:{editor.name} topic:plugin'",
+    )
     return parser.parse_args()
 
 
@@ -495,6 +505,25 @@ def get_update(input_file: str, outfile: str, proc: int, editor: Editor):
     return update
 
 
+def search_github(editor: Editor):
+    endpoint = "https://api.github.com/search/repositories"
+    query = f"?q=topic:{editor.name}+topic:plugin"
+    search_req = make_request(endpoint + query)
+    with urllib.request.urlopen(search_req, timeout=10) as req:
+        items = json.loads(req.read().decode("utf-8"))["items"]
+        with open(editor.blocklist, "r") as f:
+            blocked_repos = {line.strip("\n") for line in f.readlines()}
+            live_repos = filter(
+                lambda repo: not repo["archived"]
+                and not repo["disabled"]
+                and not repo["fork"]
+                and not repo["private"]
+                and repo["full_name"] not in blocked_repos,
+                items,
+            )
+            return {*map(lambda repo: repo["full_name"], live_repos)}
+
+
 def update_plugins(editor: Editor):
     """The main entry function of this module. All input arguments are grouped in the `Editor`."""
 
@@ -513,6 +542,14 @@ def update_plugins(editor: Editor):
             f"{editor.name}Plugins: resolve github repository redirects",
             [args.outfile, args.input_file, editor.deprecated],
         )
+
+    if args.search:
+        results = search_github(editor)
+        with open(args.input_file, "r") as f:
+            lines = {line.strip("\n") for line in f.readlines()}
+            for plugin in results.intersection(lines):
+                results.remove(plugin)
+            args.add_plugins.extend(results)
 
     for plugin_line in args.add_plugins:
         rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
