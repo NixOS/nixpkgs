@@ -13,7 +13,8 @@ let
   configFile = settingsFormat.generate "mobilizon-config.exs" cfg.settings;
 
   # Make a package containing launchers with the correct envirenment, instead of
-  # setting it systemd services, so that the user can also use them without troubles
+  # setting it with systemd services, so that the user can also use them without
+  # troubles
   launchers = pkgs.stdenv.mkDerivation rec {
     pname = "${cfg.package.pname}-launchers";
     inherit (cfg.package) version;
@@ -31,13 +32,15 @@ let
         $src/bin/mobilizon \
         $out/bin/mobilizon \
         --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}"
+        --set MOBILIZON_CONFIG_PATH "${configFile}" \
+        --set-default RELEASE_TMP "/tmp"
 
       makeWrapper \
         $src/bin/mobilizon_ctl \
         $out/bin/mobilizon_ctl \
         --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}"
+        --set MOBILIZON_CONFIG_PATH "${configFile}" \
+        --set-default RELEASE_TMP "/tmp"
     '';
   };
 
@@ -46,8 +49,7 @@ let
 
   isLocalPostgres = repoSettings.socket_dir != null;
 
-  dbuser =
-    if repoSettings.username != null then repoSettings.username else "mobilizon";
+  dbUser = if repoSettings.username != null then repoSettings.username else "mobilizon";
 
   postgresql = config.services.postgresql.package;
   postgresqlSocketDir = "/var/run/postgresql";
@@ -82,8 +84,9 @@ in
                 "Mobilizon.Web.Endpoint" = {
                   url.host = mkOption {
                     type = elixirTypes.str;
-                    defaultText =
-                      literalExample ''''${settings.":mobilizon".":instance".hostname}'';
+                    defaultText = literalExample ''
+                      ''${settings.":mobilizon".":instance".hostname}
+                    '';
                     description = ''
                       Your instance's hostname for generating URLs throughout the app
                     '';
@@ -123,7 +126,9 @@ in
 
                   email_from = mkOption {
                     type = elixirTypes.str;
-                    defaultText = literalExample ''noreply@''${settings.":mobilizon".":instance".hostname}'';
+                    defaultText = literalExample ''
+                      noreply@''${settings.":mobilizon".":instance".hostname}
+                    '';
                     description = ''
                       The email for the From: header in emails
                     '';
@@ -131,7 +136,9 @@ in
 
                   email_reply_to = mkOption {
                     type = elixirTypes.str;
-                    defaultText = literalExample "\${email_from}";
+                    defaultText = literalExample ''
+                      ''${email_from}
+                    '';
                     description = ''
                       The email for the Reply-To: header in emails
                     '';
@@ -171,9 +178,7 @@ in
                       Name of the database
                     '';
                   };
-
                 };
-
               };
             };
           };
@@ -243,8 +248,6 @@ in
 
         ReadWritePaths = mkIf isLocalPostgres postgresqlSocketDir;
       };
-
-      environment.RELEASE_TMP = "/tmp";
     };
 
     # Create the needed secrets before running Mobilizon, so that they are not
@@ -309,8 +312,7 @@ in
       # https://framagit.org/framasoft/mobilizon/-/blob/1.1.0/priv/templates/setup_db.eex
       script =
         let
-          pgSu =
-            "${pkgs.util-linux}/bin/runuser -u ${config.services.postgresql.superUser}";
+          pgSu = "${pkgs.util-linux}/bin/runuser -u ${config.services.postgresql.superUser}";
           psql = "${pgSu} -- ${postgresql}/bin/psql";
         in
         ''
@@ -328,7 +330,7 @@ in
       ensureDatabases = [ repoSettings.database ];
       ensureUsers = [
         {
-          name = dbuser;
+          name = dbUser;
           ensurePermissions = {
             "DATABASE ${repoSettings.database}" = "ALL PRIVILEGES";
           };
@@ -345,7 +347,10 @@ in
 
     users.groups.${group} = { };
 
-    # So that we have the `mobilizon` and `mobilizon_ctl` commands
+    # So that we have the `mobilizon` and `mobilizon_ctl` commands.
+    # The `mobilizon remote` command is useful for dropping a shell into the
+    # running Mobilizon instance, and `mobilizon_ctl` is used for common
+    # management tasks (e.g. adding users).
     environment.systemPackages = [ launchers ];
   };
 
