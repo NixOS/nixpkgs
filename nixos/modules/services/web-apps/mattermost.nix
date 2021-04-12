@@ -6,23 +6,18 @@ let
 
   cfg = config.services.mattermost;
 
-  defaultConfig = builtins.fromJSON (builtins.replaceStrings [ "\\u0026" ] [ "&" ]
-    (readFile "${pkgs.mattermost}/config/config.json")
-  );
-
   database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
 
-  mattermostConf = foldl recursiveUpdate defaultConfig
-    [ { ServiceSettings.SiteURL = cfg.siteUrl;
-        ServiceSettings.ListenAddress = cfg.listenAddress;
-        TeamSettings.SiteName = cfg.siteName;
-        SqlSettings.DriverName = "postgres";
-        SqlSettings.DataSource = database;
-      }
-      cfg.extraConfig
-    ];
+  mattermostConf = recursiveUpdate
+    { ServiceSettings.SiteURL = cfg.siteUrl;
+      ServiceSettings.ListenAddress = cfg.listenAddress;
+      TeamSettings.SiteName = cfg.siteName;
+      SqlSettings.DriverName = "postgres";
+      SqlSettings.DataSource = database;
+    }
+    cfg.extraConfig;
 
-  mattermostConfJSON = pkgs.writeText "mattermost-config-raw.json" (builtins.toJSON mattermostConf);
+  mattermostConfJSON = pkgs.writeText "mattermost-config.json" (builtins.toJSON mattermostConf);
 
 in
 
@@ -74,6 +69,16 @@ in
           If this option is disabled, changes in the system console won't
           be possible (default). If an config.json is present, it will be
           overwritten!
+        '';
+      };
+
+      preferNixConfig = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If both mutableConfig and this option are set, the Nix configuration
+          will take precedence over any settings configured in the server
+          console.
         '';
       };
 
@@ -180,14 +185,19 @@ in
           ln -sf ${pkgs.mattermost}/{bin,fonts,i18n,templates,client} ${cfg.statePath}
         '' + lib.optionalString (!cfg.mutableConfig) ''
           rm -f ${cfg.statePath}/config/config.json
-          cp ${mattermostConfJSON} ${cfg.statePath}/config/config.json
+          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${pkgs.mattermost}/config/config.json ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
           ${pkgs.mattermost}/bin/mattermost config migrate ${cfg.statePath}/config/config.json ${database}
         '' + lib.optionalString cfg.mutableConfig ''
           if ! test -e "${cfg.statePath}/config/.initial-created"; then
             rm -f ${cfg.statePath}/config/config.json
-            cp ${mattermostConfJSON} ${cfg.statePath}/config/config.json
+            ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${pkgs.mattermost}/config/config.json ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
             touch ${cfg.statePath}/config/.initial-created
           fi
+        '' + lib.optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
+          newConfig="$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.statePath}/config/config.json ${mattermostConfJSON})"
+
+          rm -f ${cfg.statePath}/config/config.json
+          echo "$newConfig" > ${cfg.statePath}/config/config.json
         '' + lib.optionalString cfg.localDatabaseCreate ''
           if ! test -e "${cfg.statePath}/.db-created"; then
             ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
