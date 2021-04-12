@@ -1,10 +1,11 @@
 { buildUBoot
-, buildPackages
 , armTrustedFirmwareS905
 , armTrustedFirmwareTools
 , firmwareAmlogic
 , firmwareOdroidC4
+, libfaketime
 , meson-tools
+, meson64-tools
 }:
 
 # The Amlogic builds of U-Boot are more involved than the usual other simpler 
@@ -88,38 +89,52 @@
   ubootOdroidC4 = buildUBoot {
     defconfig = "odroid-c4_defconfig";
 
-    postBuild = ''
-      ${buildPackages.meson64-tools}/bin/pkg --type bl30 --output bl30_new.bin \
-        ${firmwareOdroidC4}/bl30.bin ${firmwareOdroidC4}/bl301.bin
-      ${buildPackages.meson64-tools}/bin/pkg --type bl2 --output bl2_new.bin \
-        ${firmwareOdroidC4}/bl2.bin ${firmwareOdroidC4}/acs.bin
+    FIPDIR = "${firmwareOdroidC4}";
 
-      ${buildPackages.meson64-tools}/bin/bl30sig --input bl30_new.bin \
+    nativeBuildInputs = [
+      libfaketime
+      meson64-tools
+    ];
+
+    postBuild = ''
+      pkg --type bl30 --output bl30_new.bin \
+        $FIPDIR/bl30.bin $FIPDIR/bl301.bin
+
+      pkg --type bl2 --output bl2_new.bin \
+        $FIPDIR/bl2.bin $FIPDIR/acs.bin
+
+      bl30sig --input bl30_new.bin \
         --output bl30_new.bin.g12a.enc --level v3
-      ${buildPackages.meson64-tools}/bin/bl3sig --input  bl30_new.bin.g12a.enc \
+
+      bl3sig --input  bl30_new.bin.g12a.enc \
         --output bl30_new.bin.enc --level v3 --type bl30
-      ${buildPackages.meson64-tools}/bin/bl3sig --input ${firmwareOdroidC4}/bl31.img \
+
+      bl3sig --input $FIPDIR/bl31.img \
         --output bl31.img.enc --level v3 --type bl31
-      ${buildPackages.meson64-tools}/bin/bl3sig --input u-boot.bin --compress lz4 \
+
+      # The lz4 compression here introduces a timestamp in the build.
+      faketime -f "1970-01-01 00:00:01" \
+      bl3sig --input u-boot.bin --compress lz4 \
         --output bl33.bin.enc --level v3 --type bl33 --compress lz4
-      ${buildPackages.meson64-tools}/bin/bl2sig --input bl2_new.bin \
+
+      bl2sig --input bl2_new.bin \
         --output bl2.n.bin.sig
 
-      ${buildPackages.meson64-tools}/bin/bootmk --output u-boot.bin \
+      bootmk --output u-boot.bin \
         --bl2 bl2.n.bin.sig --bl30 bl30_new.bin.enc --bl31 bl31.img.enc --bl33 bl33.bin.enc \
-        --ddrfw1 ${firmwareOdroidC4}/ddr4_1d.fw \
-        --ddrfw2 ${firmwareOdroidC4}/ddr4_2d.fw \
-        --ddrfw3 ${firmwareOdroidC4}/ddr3_1d.fw \
-        --ddrfw4 ${firmwareOdroidC4}/piei.fw \
-        --ddrfw5 ${firmwareOdroidC4}/lpddr4_1d.fw \
-        --ddrfw6 ${firmwareOdroidC4}/lpddr4_2d.fw \
-        --ddrfw7 ${firmwareOdroidC4}/diag_lpddr4.fw \
-        --ddrfw8 ${firmwareOdroidC4}/aml_ddr.fw \
-        --ddrfw9 ${firmwareOdroidC4}/lpddr3_1d.fw \
+        --ddrfw1 $FIPDIR/ddr4_1d.fw \
+        --ddrfw2 $FIPDIR/ddr4_2d.fw \
+        --ddrfw3 $FIPDIR/ddr3_1d.fw \
+        --ddrfw4 $FIPDIR/piei.fw \
+        --ddrfw5 $FIPDIR/lpddr4_1d.fw \
+        --ddrfw6 $FIPDIR/lpddr4_2d.fw \
+        --ddrfw7 $FIPDIR/diag_lpddr4.fw \
+        --ddrfw8 $FIPDIR/aml_ddr.fw \
+        --ddrfw9 $FIPDIR/lpddr3_1d.fw \
         --level v3
     '';
 
-    filesToInstall = [ "u-boot.bin" "${firmwareOdroidC4}/sd_fusing.sh"];
+    filesToInstall = [ "u-boot.bin" ];
     extraMeta.platforms = ["aarch64-linux"];
   };
 }
