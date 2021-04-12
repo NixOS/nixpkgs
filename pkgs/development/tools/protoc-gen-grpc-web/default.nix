@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/grpc/grpc-web";
     maintainers = with lib.maintainers; [ kaiserkarel ];
     license = licenses.asl20;
-    platforms = platforms.linux;
   };
 }
