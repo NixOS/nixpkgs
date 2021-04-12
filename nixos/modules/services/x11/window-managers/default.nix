@@ -15,6 +15,7 @@ in
     ./cwm.nix
     ./clfswm.nix
     ./dwm.nix
+    ./e16.nix
     ./evilwm.nix
     ./exwm.nix
     ./fluxbox.nix
