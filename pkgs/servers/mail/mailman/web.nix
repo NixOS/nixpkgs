@@ -3,8 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mailman-web-unstable";
-  version = "2021-04-10";
+  pname = "mailman-web";
+  version = "unstable-2021-04-10";
   disabled = !isPy3k;
 
   src = fetchgit {
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     sed -i '/^  Django/d' setup.cfg
   '';
 
-  nativeBuildInputs = [ git makeWrapper ];
-  propagatedBuildInputs = [ hyperkitty postorius whoosh setuptools-scm ];
+  nativeBuildInputs = [ git setuptools-scm makeWrapper ];
+  propagatedBuildInputs = [ hyperkitty postorius whoosh ];
 
   # Tries to check runtime configuration.
   doCheck = false;
