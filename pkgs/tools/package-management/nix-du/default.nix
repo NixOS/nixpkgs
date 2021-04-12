@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     boost
     nix
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ pkg-config ];
 
