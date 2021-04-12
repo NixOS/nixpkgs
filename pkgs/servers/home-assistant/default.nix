@@ -367,6 +367,7 @@ in with py.pkgs; buildPythonApplication rec {
     "weather"
     "webhook"
     "websocket_api"
+    "wemo"
     "wled"
     "workday"
     "worldclock"

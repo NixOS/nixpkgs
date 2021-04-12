@@ -433,6 +433,7 @@ in
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
+  wmderland = handleTest ./wmderland.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};

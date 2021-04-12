@@ -3675,6 +3675,8 @@ in {
 
   kaptan = callPackage ../development/python-modules/kaptan { };
 
+  karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
+
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
   karton-core = callPackage ../development/python-modules/karton-core { };
@@ -4872,6 +4874,11 @@ in {
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
+
+  openvino = disabledIf isPy27 (toPythonModule (pkgs.openvino.override {
+    inherit (self) python;
+    enablePython = true;
+  }));
 
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
@@ -7092,6 +7099,8 @@ in {
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
   pywebview = callPackage ../development/python-modules/pywebview { };
+
+  pywemo = callPackage ../development/python-modules/pywemo { };
 
   pywick = callPackage ../development/python-modules/pywick { };
 

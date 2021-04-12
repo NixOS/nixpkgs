@@ -4926,6 +4926,12 @@
     email = "jwilberding@afiniate.com";
     name = "Jordan Wilberding";
   };
+  jwygoda = {
+    email = "jaroslaw@wygoda.me";
+    github = "jwygoda";
+    githubId = 20658981;
+    name = "Jarosław Wygoda";
+  };
   jyp = {
     email = "jeanphilippe.bernardy@gmail.com";
     github = "jyp";
@@ -6590,6 +6596,16 @@
     github = "mogria";
     githubId = 754512;
     name = "Mogria";
+  };
+  mohe2015 = {
+    name = "Moritz Hedtke";
+    email = "Moritz.Hedtke@t-online.de";
+    github = "mohe2015";
+    githubId = 13287984;
+    keys = [{
+      longkeyid = "rsa4096/0x6794D45A488C2EDE";
+      fingerprint = "1248 D3E1 1D11 4A85 75C9  8934 6794 D45A 488C 2EDE";
+    }];
   };
   monsieurp = {
     email = "monsieurp@gentoo.org";
@@ -9497,6 +9513,12 @@
     githubId = 321799;
     name = "Paul Colomiets";
   };
+  takagiy = {
+    email = "takagiy.4dev@gmail.com";
+    github = "takagiy";
+    githubId = 18656090;
+    name = "Yuki Takagi";
+  };
   taketwo = {
     email = "alexandrov88@gmail.com";
     github = "taketwo";
@@ -10481,6 +10503,12 @@
     github = "winterqt";
     githubId = 78392041;
     name = "Winter";
+  };
+  wirew0rm = {
+    email = "alex@wirew0rm.de";
+    github = "wirew0rm";
+    githubId = 1202371;
+    name = "Alexander Krimm";
   };
   wishfort36 = {
     email = "42300264+wishfort36@users.noreply.github.com";

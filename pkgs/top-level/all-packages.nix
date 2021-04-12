@@ -11050,6 +11050,8 @@ in
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
+  roslyn = callPackage ../development/compilers/roslyn { mono = mono6; };
+
   msbuild = callPackage ../development/tools/build-managers/msbuild { mono = mono6; };
 
   mosml = callPackage ../development/compilers/mosml { };
@@ -13293,6 +13295,10 @@ in
   shellharden = callPackage ../development/tools/shellharden {};
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
+
+  scenebuilder = callPackage ../development/tools/scenebuilder { };
+
+  scenic-view = callPackage ../development/tools/scenic-view { };
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
@@ -26580,6 +26586,10 @@ in
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
 
+  wmderland = callPackage ../applications/window-managers/wmderland { };
+
+  wmderlandc = callPackage ../applications/window-managers/wmderlandc { };
+
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
   wofi = callPackage ../applications/misc/wofi { };
@@ -27936,6 +27946,8 @@ in
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
+  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
+
   sienna = callPackage ../games/sienna { love = love_0_10; };
 
   sil = callPackage ../games/sil { };
@@ -29231,7 +29243,6 @@ in
 
   celestia = callPackage ../applications/science/astronomy/celestia {
     autoreconfHook = buildPackages.autoreconfHook269;
-    lua = lua5_1;
     inherit (pkgs.gnome2) gtkglext;
   };
 
@@ -30725,6 +30736,10 @@ in
   opengrm-ngram = callPackage ../development/libraries/opengrm-ngram {};
 
   openring = callPackage ../applications/misc/openring { };
+
+  openvino = callPackage ../development/libraries/openvino {
+    python = python3;
+  };
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
