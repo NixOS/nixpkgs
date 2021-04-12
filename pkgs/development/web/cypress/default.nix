@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [ (lib.getLib udev) ];
 
   installPhase = ''
+    runHook preInstall
+        
     mkdir -p $out/bin $out/opt/cypress
     cp -vr * $out/opt/cypress/
     # Let's create the file binary_state ourselves to make the npm package happy on initial verification.
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
     # Cypress now looks for binary_state.json in bin
     echo '{"verified": true}' > $out/binary_state.json
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
+
+    runHook postInstall
   '';
 
   meta = with lib; {
