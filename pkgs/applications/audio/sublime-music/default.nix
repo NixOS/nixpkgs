@@ -1,4 +1,11 @@
-{ fetchFromGitLab, lib, python3Packages, gobject-introspection, gtk3, pango, wrapGAppsHook
+{ fetchFromGitLab
+, lib
+, python3Packages
+, gobject-introspection
+, gtk3
+, pango
+, wrapGAppsHook
+, xvfb_run
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
@@ -8,18 +15,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.10";
+  version = "0.11.11";
+  format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "sublime-music";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1g78gmiywg07kaywfc9q0yab2bzxs936vb3157ni1z0flbmcwrry";
+    sha256 = "sha256-r4Tn/7CGDny8Aa4kF4PM5ZKMYthMJ7801X3zPdvXh4Q=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.setuptools
+    python3Packages.poetry
     wrapGAppsHook
   ];
 
@@ -53,8 +61,14 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  # no tests
-  doCheck = false;
+  # Use the test suite provided by the upstream project.
+  checkInputs = with python3Packages; [
+    pytest
+    pytest-cov
+  ];
+  checkPhase = "${xvfb_run}/bin/xvfb-run pytest";
+
+  # Also run the python import check for sanity
   pythonImportsCheck = [ "sublime_music" ];
 
   postInstall = ''
