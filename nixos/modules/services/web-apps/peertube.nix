@@ -291,7 +291,7 @@ in {
           #!/bin/sh
           umask 077
           cat > /var/lib/peertube/config/local.yaml <<EOF
-          ${lib.optionalString ((!cfg.database.createLocally) && (cfg.database.passwordFile != null)) ''
+          ${lib.optionalString (cfg.database.passwordFile != null) ''
           database:
             password: '$(cat ${cfg.database.passwordFile})'
           ''}
@@ -322,7 +322,7 @@ in {
         # Environment
         EnvironmentFile = cfg.serviceEnvironmentFile;
         # Sandboxing
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         MemoryDenyWriteExecute = false;
         # System Call Filtering
         SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @privileged @raw-io @reboot @setuid @swap";
@@ -338,7 +338,7 @@ in {
         enable = true;
       })
       (lib.mkIf (cfg.redis.createLocally && cfg.settings.redis.socket != null) {
-        unixSocket = "/run/redis/redis.sock";
+        unixSocket = cfg.settings.redis.socket;
         unixSocketPerm = 770;
       })
     ];
