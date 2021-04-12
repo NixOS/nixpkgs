@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
         vitalium
         wolpertinger
     '';
-    license = with licenses; [ gpl2Only gpl3Onlu gpl2Plus lgpl2Plus lgpl3Only mit ];
+    license = with licenses; [ gpl2Only gpl3Only gpl2Plus lgpl2Plus lgpl3Only mit ];
     maintainers = [ maintainers.goibhniu ];
     platforms = [ "x86_64-linux" ];
   };
