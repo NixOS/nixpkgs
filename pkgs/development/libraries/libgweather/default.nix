@@ -1,5 +1,24 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, libxml2, glib, gtk3, gettext, libsoup
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gobject-introspection, python3, tzdata, geocode-glib, vala, gnome3 }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, libxml2
+, glib
+, gtk3
+, gettext
+, libsoup
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gobject-introspection
+, python3
+, tzdata
+, geocode-glib
+, vala
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
@@ -12,19 +31,37 @@ stdenv.mkDerivation rec {
     sha256 = "0l74hc02rvzm4p530y539a67jwb080fqdaazdl8j0fr3xvq0j9yy";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext vala gtk-doc docbook_xsl docbook_xml_dtd_43 gobject-introspection python3 ];
-  buildInputs = [ glib gtk3 libsoup libxml2 geocode-glib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    vala
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    gobject-introspection
+    python3
+  ];
 
-  postPatch = ''
-    chmod +x meson/meson_post_install.py
-    patchShebangs meson/meson_post_install.py
-  '';
+  buildInputs = [
+    glib
+    gtk3
+    libsoup
+    libxml2
+    geocode-glib
+  ];
 
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
     "-Denable_vala=true"
     "-Dgtk_doc=true"
   ];
+
+  postPatch = ''
+    chmod +x meson/meson_post_install.py
+    patchShebangs meson/meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
