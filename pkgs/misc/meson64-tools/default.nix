@@ -19,6 +19,16 @@ stdenv.mkDerivation rec {
     substituteInPlace mbedtls/tests/Makefile --replace "python2" "python"
   '';
 
+  # Also prefix tool names since some names are really generic (e.g. `pkg`).
+  # Otherwise something could shadow those generic names in other builds.
+  postInstall = ''
+    (cd $out/bin
+      for bin in *; do
+        ln -s $bin meson64-$bin
+      done
+    )
+  '';
+
   makeFlags = [ "PREFIX=$(out)/bin" ];
 
   meta = with lib; {
