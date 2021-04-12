@@ -2,7 +2,6 @@
 , armTrustedFirmwareS905
 , armTrustedFirmwareTools
 , firmwareAmlogic
-, firmwareOdroidC4
 , libfaketime
 , meson-tools
 , meson64-tools
@@ -179,6 +178,6 @@ in
   ubootOdroidC4 = buildUBootMesonG12A {
     # Amlogic S905X3 / SM1, G12A compatible build
     defconfig = "odroid-c4_defconfig";
-    FIPDIR = "${firmwareOdroidC4}";
+    FIPDIR = "${firmwareAmlogic}/odroid-c4";
   };
 }
