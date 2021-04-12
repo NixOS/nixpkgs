@@ -95,6 +95,30 @@ in {
             description = "Use Unix socket";
           };
         };
+
+        options.database = {
+          hostname = lib.mkOption {
+            type = lib.types.str;
+            default = if cfg.database.createLocally then "/run/postgresql" else null;
+            example = "192.168.15.47";
+            description = "Database host address or unix socket";
+          };
+          port = lib.mkOption {
+            type = lib.types.port;
+            default = 5432;
+            description = "Database host port";
+          };
+          name = lib.mkOption {
+            type = lib.types.str;
+            default = "peertube";
+            description = "Database name";
+          };
+          username = lib.mkOption {
+            type = lib.types.str;
+            default = "peertube";
+            description = "Database user";
+          };
+        };
       };
       default = {};
       description = ''
@@ -133,31 +157,6 @@ in {
         type = lib.types.bool;
         default = false;
         description = "Configure local PostgreSQL database server for PeerTube";
-      };
-
-      host = lib.mkOption {
-        type = lib.types.str;
-        default = if cfg.database.createLocally then "/run/postgresql" else null;
-        example = "192.168.15.47";
-        description = "Database host address or unix socket";
-      };
-
-      port = lib.mkOption {
-        type = lib.types.int;
-        default = 5432;
-        description = "Database host port";
-      };
-
-      name = lib.mkOption {
-        type = lib.types.str;
-        default = "peertube";
-        description = "Database name";
-      };
-
-      user = lib.mkOption {
-        type = lib.types.str;
-        default = "peertube";
-        description = "Database user";
       };
 
       passwordFile = lib.mkOption {
@@ -219,12 +218,6 @@ in {
     ];
 
     services.peertube.settings = {
-      database = {
-        hostname = cfg.database.host;
-        port = cfg.database.port;
-        name = cfg.database.name;
-        username = cfg.database.user;
-      };
       storage = {
         tmp = "/var/lib/peertube/storage/tmp/";
         avatars = "/var/lib/peertube/storage/avatars/";
@@ -256,9 +249,9 @@ in {
 
       script = let
         psqlSetupCommands = pkgs.writeText "peertube-init.sql" ''
-          SELECT 'CREATE USER "${cfg.database.user}"' WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${cfg.database.user}')\gexec
-          SELECT 'CREATE DATABASE "${cfg.database.name}" OWNER "${cfg.database.user}" TEMPLATE template0 ENCODING UTF8' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${cfg.database.name}')\gexec
-          \c '${cfg.database.name}'
+          SELECT 'CREATE USER "${cfg.settings.database.username}"' WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${cfg.settings.database.username}')\gexec
+          SELECT 'CREATE DATABASE "${cfg.settings.database.name}" OWNER "${cfg.settings.database.username}" TEMPLATE template0 ENCODING UTF8' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${cfg.settings.database.name}')\gexec
+          \c '${cfg.settings.database.name}'
           CREATE EXTENSION IF NOT EXISTS pg_trgm;
           CREATE EXTENSION IF NOT EXISTS unaccent;
         '';
