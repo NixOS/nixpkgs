@@ -1,7 +1,6 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , terminaltables
 , colorclass
@@ -13,30 +12,22 @@
 let
 
   spec = fetchurl {
-    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v4.67.0/openapi.yaml";
-    sha256 = "0vsblprkqlr9508x5rkm0wj6lc3w72xiwiqxia9asgr5k45hhfnr";
+    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v4.89.0/openapi.yaml";
+    sha256 = "sha256-R7Dmq8ifGEjh47ftuoGrbymYBsPCj/ULz0j1OqJDcwY=";
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "2.15.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = "06iz9xjj6h1ry176558488fl9j18a5vf724zh4cxlcksdy72dnna";
+    sha256 = "sha256-zelopRaHaDCnbYA/y7dNMBh70g0+wuc6t9LH/VLaUIk=";
   };
-
-  patches = [
-    # make enum34 depend on python version
-    ( fetchpatch {
-        url = "https://github.com/linode/linode-cli/pull/184/commits/4cf55759c5da33fbc49b9ba664698875d67d4f76.patch";
-        sha256 = "04n9a6yh0abyyymvfzajhav6qxwvzjl2vs8jnqp3yqrma7kl0slj";
-    })
-  ];
 
   # remove need for git history
   prePatch = ''

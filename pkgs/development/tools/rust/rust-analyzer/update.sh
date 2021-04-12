@@ -25,7 +25,7 @@ echo "$old_rev -> $rev"
 sha256=$(nix-prefetch -f "$nixpkgs" rust-analyzer-unwrapped.src --rev "$rev")
 # Clear cargoSha256 to avoid inconsistency.
 sed -e "s#rev = \".*\"#rev = \"$rev\"#" \
-    -e "s#sha256 = \".*\"#sha256 = \"$sha256\"#" \
+    -e "/fetchFromGitHub/,/}/ s#sha256 = \".*\"#sha256 = \"$sha256\"#" \
     -e "s#cargoSha256 = \".*\"#cargoSha256 = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\"#" \
     --in-place ./default.nix
 node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"

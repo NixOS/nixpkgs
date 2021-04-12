@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
+{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
 , writeScriptBin, makeWrapper, runtimeShell
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig libxdg_basedir ]
+  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
     ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";

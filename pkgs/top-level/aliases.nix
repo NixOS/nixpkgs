@@ -179,6 +179,7 @@ mapAliases ({
   emacsPackages = emacs.pkgs; # added 2020-12-18
   emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
+  esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
@@ -735,6 +736,7 @@ mapAliases ({
   sup = throw "sup was deprecated on 2019-09-10: abandoned by upstream";
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   swtpm-tpm2 = swtpm; # added 2021-02-26
+  syncthing-cli = syncthing; # added 2021-04-06
   system_config_printer = system-config-printer;  # added 2016-01-03
   systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
   systemd_with_lvm2 = throw "systemd_with_lvm2 is obsolete, enabled by default via the lvm module"; # added 2020-07-12

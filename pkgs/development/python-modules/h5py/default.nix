@@ -14,7 +14,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89474be911bfcdb34cbf0d98b8ec48b578c27a89fdb1ae4ee7513f1ef8d9249e";
+    sha256 = "sha256-iUdL6RG/zbNMvw2YuOxItXjCeon9sa5O51E/HvjZJJ4=";
   };
 
   # avoid strict pinning of numpy
@@ -49,6 +49,7 @@ in buildPythonPackage rec {
   meta = with lib; {
     description = "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
-    license = licenses.bsd2;
+    license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -1255,32 +1255,31 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
-      inherit alcotest angstrom angstrom-async base64 cryptokit ctypes
-        dune-configurator faraday inotify janePackage js_of_ocaml
-        js_of_ocaml-ppx lambdasoup magic-mime num octavius ounit
-        ppxlib re tyxml uri-sexp zarith;
+      inherit self;
       inherit (pkgs) openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
-      inherit ctypes janePackage num octavius re;
+      self = self // {
+        ppxlib = ppxlib.override { version = "0.8.1"; };
+      };
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { version = "0.8.1"; };
     }
     else import ../development/ocaml-modules/janestreet {
-      inherit janePackage ocamlbuild angstrom ctypes cryptokit;
-      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re;
+      self = self // {
+        ppxlib = ppxlib.override { version = "0.8.1"; };
+      };
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { version = "0.8.1"; };
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
-      janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix { defaultVersion = "0.9.0"; };
-      inherit lib ocaml ocamlbuild ctypes cryptokit;
-      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith;
-      inherit (pkgs) stdenv openssl;
+      self = self.janeStreet_0_9_0;
+      super = self // {
+        janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {
+          defaultVersion = "0.9.0";
+        };
+      };
+      inherit (pkgs) stdenv lib openssl;
     };
 
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};

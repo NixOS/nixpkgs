@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "git-review";
-  version = "1.28.0";
+  version = "2.0.0";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
@@ -10,7 +10,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://opendev.org/opendev/${pname}/archive/${version}.tar.gz";
-    sha256 = "1y1jzb0hlprynwwr4q5y4x06641qrhj0k69mclabnmhfam9g8ygm";
+    sha256 = "0dkyd5g2xmvsa114is3cd9qmki3hi6c06wjnra0f4xq3aqm0ajnj";
   };
 
   propagatedBuildInputs = [ pbr requests setuptools ];

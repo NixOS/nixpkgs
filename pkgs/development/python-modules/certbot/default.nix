@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cwhhybj2fjalhhyd184ndn3bid3qib1yy5a93m146cqqgwpw4j6";
+    sha256 = "sha256-J514zgmIcHpwySChFBXGKR4552wS9z5x8Berk/irHSU=";
   };
 
   sourceRoot = "source/${pname}";

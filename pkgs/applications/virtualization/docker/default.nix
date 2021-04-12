@@ -132,10 +132,10 @@ rec {
 
     goPackagePath = "github.com/docker/cli";
 
-    nativeBuildInputs = [ pkg-config go-md2man go libtool installShellFiles ];
-    buildInputs = [
-      makeWrapper
-    ] ++ optionals (stdenv.isLinux) [
+    nativeBuildInputs = [
+      makeWrapper pkg-config go-md2man go libtool installShellFiles
+    ];
+    buildInputs = optionals (stdenv.isLinux) [
       sqlite lvm2 btrfs-progs systemd libseccomp
     ] ++ optionals (buildxSupport) [ docker-buildx ];
 

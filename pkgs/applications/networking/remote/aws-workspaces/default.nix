@@ -5,15 +5,15 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
-  version = "3.1.3.925";
+  version = "3.1.5.1105";
 
   src = fetchurl {
     # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/Packages
     urls = [
       "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
-      "https://web.archive.org/web/20210307233836/https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
+      "https://web.archive.org/web/20210411145948/https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
     ];
-    sha256 = "5b57edb4f6f8c950164fd8104bf62df4c452ab5b16cb65d48db3636959a0f0ad";
+    sha256 = "08c8912502d27e61cc2399bf99947e26c1daa1f317d5aa8cc7348d7bf8734e1b";
   };
 
   nativeBuildInputs = [

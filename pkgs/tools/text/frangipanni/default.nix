@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "frangipanni";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "birchb1024";
     repo = "frangipanni";
     rev = "v${version}";
-    sha256 = "sha256-NgRDXrAsfnj1cqO+2AN8nSuxS9KGNIl+pJkCADmDOqY=";
+    sha256 = "sha256-RzXfsaT/CUyWCpB5JGgl511gxgvzerqgwjpORgzyPCQ=";
   };
 
   vendorSha256 = "sha256-TSN5M/UCTtfoTf1hDCfrJMCFdSwL/NVXssgt4aefom8=";

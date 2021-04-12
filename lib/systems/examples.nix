@@ -21,14 +21,10 @@ rec {
     config = "powerpc64le-unknown-linux-musl";
   };
 
-  ppc64-elfv1 = {
-    config = "powerpc64-unknown-linux-elfv1";
+  ppc64 = {
+    config = "powerpc64-unknown-linux-gnu";
+    gcc = { abi = "elfv2"; }; # for gcc configuration
   };
-  ppc64-elfv2 = {
-    config = "powerpc64-unknown-linux-elfv2";
-  };
-  ppc64 = ppc64-elfv2; # default to modern elfv2
-
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
     gcc = { abi = "elfv2"; }; # for gcc configuration
@@ -60,6 +56,7 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
+    rustc.config = "armv7-linux-androideabi";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;
@@ -67,6 +64,7 @@ rec {
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
+    rustc.config = "aarch64-linux-android";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;
