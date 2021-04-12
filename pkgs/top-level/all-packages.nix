@@ -23906,6 +23906,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
+
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };

@@ -3711,6 +3711,12 @@
     githubId = 201997;
     name = "Eric Seidel";
   };
+  gspia = {
+    email = "iahogsp@gmail.com";
+    github = "gspia";
+    githubId = 3320792;
+    name = "gspia";
+  };
   guibert = {
     email = "david.guibert@gmail.com";
     github = "dguibert";
