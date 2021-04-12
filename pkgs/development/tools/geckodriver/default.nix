@@ -2,7 +2,7 @@
 , fetchzip
 , rustPlatform
 , stdenv
-, darwin
+, Security
 , libiconv
 }:
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
   cargoPatches = [ ./cargo-lock.patch ];
   cargoSha256 = "1vajlcpyk77v6nvhs737yi8hs7ids9kz0sbwy29rm1vmmfjp2b27";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";
