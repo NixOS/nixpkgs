@@ -1,4 +1,4 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests, fetchpatch }:
 
 let
   common = { stname, target, postInstall ? "" }:
@@ -19,6 +19,11 @@ let
 
       patches = [
         ./add-stcli-target.patch
+        (fetchpatch {
+          name = "CVE-2021-21404.patch";
+          url = "https://github.com/syncthing/syncthing/commit/fb4fdaf4c0a79c22cad000c42ac1394e3ccb6a97.patch";
+          sha256 = "0xjh500fi50570dkf3xdaj2367ynn1cs95lypq6b0wi81kp7m540";
+        })
       ];
       BUILD_USER="nix";
       BUILD_HOST="nix";
