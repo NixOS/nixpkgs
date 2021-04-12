@@ -26947,9 +26947,7 @@ in
 
   xscope = callPackage ../applications/misc/xscope { };
 
-  xscreensaver = callPackage ../misc/screensavers/xscreensaver {
-    inherit (gnome2) libglade;
-  };
+  xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
 
   xsuspender = callPackage ../applications/misc/xsuspender {  };
 
