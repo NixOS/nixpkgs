@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     })
     # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1796
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f337878286518418dbeab360768fba8e291b15d.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/53dd291aba24e9eab3994b0ffeadec05e0150470.patch";
       sha256 = "xD0iIjlUGDLM5tTNDNtx6ZgxL25EKYgaBEH4JOZh8AM=";
     })
   ];
