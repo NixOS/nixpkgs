@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -27,6 +28,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "1swvazfc2ydc52njfrxdd0ns2apb2k54dq8vlj81y1vlwcqhgw3p";
   };
+
+  patches = [
+    # Fix launching with desktop file
+    # https://gitlab.gnome.org/GNOME/swell-foop/-/issues/22
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/swell-foop/commit/614239dbe0f82e8de836cc5780e971366e09f035.patch";
+      sha256 = "GyIDJ/dG6A2T5Ls6LjCy9Che5KP3H2LAVOOzH+mlQsM=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
