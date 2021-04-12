@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
-  version = "0.23";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "ctmarinas";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "1r9y8qnl6kdvq61788pnfhhgyv2xrnyrizbhy4qz4l1bpqkwfr2r";
+    sha256 = "0nc388hi362rks9q60yvs2gbbf9v6qp031c0linv29wdqvavwva1";
   };
 
   nativeBuildInputs = [ installShellFiles ];
