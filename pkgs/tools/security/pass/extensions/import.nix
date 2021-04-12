@@ -1,17 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, makeWrapper, fetchpatch }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+, gnupg
+, pass
+}:
 
-let
-  pythonEnv = pythonPackages.python.withPackages (p: [
-    p.defusedxml
-    p.setuptools
-    p.pyaml
-    p.pykeepass
-    p.filemagic
-    p.cryptography
-    p.secretstorage
-  ]);
-
-in stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "pass-import";
   version = "3.1";
 
@@ -22,26 +17,43 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-nH2xAqWfMT+Brv3z9Aw6nbvYqArEZjpM28rKsRPihqA=";
   };
 
-  patches = [ ./0001-Fix-installation-with-Nix.patch ];
+  # by default, tries to install scripts/pimport, which is a bash wrapper around "python -m pass_import ..."
+  # This is a better way to do the same, and takes advantage of the existing Nix python environments
+  patches = [
+    # from https://github.com/roddhjav/pass-import/pull/138
+    (fetchpatch {
+      name = "pass-import-pr-138-pimport-entrypoint.patch";
+      url = "https://github.com/roddhjav/pass-import/commit/ccdb6995bee6436992dd80d7b3101f0eb94c59bb.patch";
+      sha256 = "sha256-CO8PyWxa4eLuTQBB+jKTImFPlPn+1yt6NBsIp+SPk94=";
+    })
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = with python3Packages; [
+    cryptography
+    defusedxml
+    pyaml
+    pykeepass
+    python_magic  # similar API to "file-magic", but already in nixpkgs.
+    secretstorage
+  ];
 
-  buildInputs = [ pythonEnv ];
+  checkInputs = [
+    gnupg
+    pass
+    python3Packages.pytestCheckHook
+  ];
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/pimport \
-      --prefix PATH : "${pythonEnv}/bin" \
-      --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
-    wrapProgram $out/lib/password-store/extensions/import.bash \
-      --prefix PATH : "${pythonEnv}/bin" \
-      --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
+  disabledTests = [
+    "test_import_gnome_keyring" # requires dbus, which pytest doesn't support
+  ];
+  postCheck = ''
+    $out/bin/pimport --list-exporters --list-importers
   '';
 
   meta = with lib; {
     description = "Pass extension for importing data from existing password managers";
     homepage = "https://github.com/roddhjav/pass-import";
+    changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
     platforms = platforms.unix;
