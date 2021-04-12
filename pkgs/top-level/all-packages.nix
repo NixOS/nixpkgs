@@ -6043,6 +6043,8 @@ in
 
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
 
+  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
+
   mhonarc = perlPackages.MHonArc;
 
   minergate = callPackage ../applications/misc/minergate { };

@@ -10668,6 +10668,12 @@
     githubId = 11824817;
     name = "Marti Serra";
   };
+  xworld21 = {
+    email = "1962985+xworld21@users.noreply.github.com";
+    github = "xworld21";
+    githubId = 1962985;
+    name = "Vincenzo Mantova";
+  };
   xwvvvvwx = {
     email = "davidterry@posteo.de";
     github = "xwvvvvwx";
