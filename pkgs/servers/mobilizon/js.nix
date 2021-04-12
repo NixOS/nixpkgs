@@ -24,7 +24,7 @@ mkYarnPackage rec {
     '';
   };
 
-  packageJSON = "${src}/package.json";
+  packageJSON = ./package.json;
   yarnLock = "${src}/yarn.lock";
 
   buildPhase = ''
