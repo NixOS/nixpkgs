@@ -677,14 +677,14 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
-        example = {
+        example = literalExample ''
           "backend_server" = {
             servers = { "127.0.0.1:8000" = {}; };
             extraConfig = ''
               keepalive 16;
             '';
           };
-        };
+        ''
       };
 
       virtualHosts = mkOption {
