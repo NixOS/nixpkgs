@@ -3695,6 +3695,8 @@ in {
 
   karton-core = callPackage ../development/python-modules/karton-core { };
 
+  karton-dashboard = callPackage ../development/python-modules/karton-dashboard { };
+
   karton-mwdb-reporter = callPackage ../development/python-modules/karton-mwdb-reporter { };
 
   karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
