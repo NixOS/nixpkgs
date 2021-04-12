@@ -50,7 +50,7 @@ mkDerivation {
   meta = with lib; {
     description = "Graphical disk usage analyzer";
     homepage = src.meta.homepage;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gnidorah ];
     platforms = platforms.linux;
   };
