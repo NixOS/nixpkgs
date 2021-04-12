@@ -6043,6 +6043,8 @@ in
 
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
 
+  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
+
   mhonarc = perlPackages.MHonArc;
 
   minergate = callPackage ../applications/misc/minergate { };
@@ -8667,6 +8669,8 @@ in
 
   tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
+  tf2pulumi = callPackage ../development/tools/tf2pulumi { };
+
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
@@ -10821,6 +10825,8 @@ in
   };
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
+
+  juniper = callPackage ../development/compilers/juniper/default.nix { };
 
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
@@ -22691,6 +22697,8 @@ in
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
+  foliate = callPackage ../applications/office/foliate { };
+
   fondo = callPackage ../applications/graphics/fondo { };
 
   font-manager = callPackage ../applications/misc/font-manager { };
@@ -23904,6 +23912,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
+
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
@@ -23919,6 +23929,8 @@ in
   kondo = callPackage ../applications/misc/kondo { };
 
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
+
+  kooha = callPackage ../applications/video/kooha { };
 
   kotatogram-desktop = libsForQt514.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
