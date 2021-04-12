@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, bashInteractive
 , jq
 , makeWrapper
 , p7zip
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0as3nl9qiyf9daf2n78lyish319qclf2gbhr20mdd5wnqmxpk276";
   };
+
+  buildInputs = [ bashInteractive ];
 
   nativeBuildInputs = [ makeWrapper ];
 
