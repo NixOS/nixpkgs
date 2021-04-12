@@ -141,6 +141,7 @@
 , "karma"
 , "lcov-result-merger"
 , "leetcode-cli"
+, "vsc-leetcode-cli"
 , "lerna"
 , "less"
 , "less-plugin-clean-css"
