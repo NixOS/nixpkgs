@@ -1,11 +1,12 @@
 { fetchurl, stdenv, libjpeg, libpng, libtiff, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libpano13-2.9.19";
+  pname = "libpano13";
+  version = "2.9.20";
 
   src = fetchurl {
-    url = "mirror://sourceforge/panotools/${name}.tar.gz";
-    sha256 = "1a4m3plmfcrrplqs9zfzhc5apibn10m5sajpizm1sd3q74w5fwq3";
+    url = "mirror://sourceforge/panotools/${pname}-${version}.tar.gz";
+    sha256 = "12cv4886l1czfjwy7k6ipgf3zjksgwhdjzr2s9fdg33vqcv2hlrv";
   };
 
   buildInputs = [ perl libjpeg libpng libtiff ];
