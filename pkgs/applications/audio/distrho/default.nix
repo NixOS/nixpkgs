@@ -1,26 +1,23 @@
-{ stdenv
+{ lib
+, stdenv
 , alsaLib
-, curl
 , fetchFromGitHub
 , fftwFloat
 , freetype
-, glib
-, lib
 , libGL
 , libX11
 , libXcursor
 , libXext
-, libXinerama
-, libXrandr
 , libXrender
-, libgcc
-, libglvnd
-, libsecret
 , meson
 , ninja
 , pkg-config
 }:
 
+let rpathLibs = [
+  fftwFloat
+];
+in
 stdenv.mkDerivation rec {
   pname = "distrho-ports";
   version = "2021-03-15";
@@ -34,23 +31,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config meson ninja ];
 
-  buildInputs = [
+  buildInputs = rpathLibs ++ [
     alsaLib
-    curl
-    fftwFloat
     freetype
-    glib
     libGL
     libX11
     libXcursor
     libXext
-    libXinerama
-    libXrandr
     libXrender
-    libgcc
-    libglvnd
-    libsecret
   ];
+
+  postFixup = ''
+    for file in \
+      $out/lib/lv2/vitalium.lv2/vitalium.so \
+      $out/lib/vst/vitalium.so \
+      $out/lib/vst3/vitalium.vst3/Contents/x86_64-linux/vitalium.so
+    do
+      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $file)" $file
+    done
+  '';
 
   meta = with lib; {
     homepage = "http://distrho.sourceforge.net/ports";
