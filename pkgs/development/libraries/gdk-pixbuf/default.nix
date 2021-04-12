@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.42.4";
+  version = "2.42.6";
 
   outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0k9f9177qxaryaxprwrhqnv5p2gdq4a8i6y05gm98qa8izc5v77y";
+    sha256 = "0zz7pmw2z46g7mr1yjxbsdldd5pd03xbjc58inj8rxfqgrdvg9n4";
   };
 
   patches = [
@@ -87,8 +87,7 @@ stdenv.mkDerivation rec {
 
       # So that devhelp can find this.
       mkdir -p "$devdoc/share/devhelp"
-      mv "$out/share/doc/gdk-pixbuf/reference" "$devdoc/share/devhelp/books"
-      rmdir -p --ignore-fail-on-non-empty "$out/share/doc/gdk-pixbuf"
+      mv "$out/share/doc" "$devdoc/share/devhelp/books"
     '' + lib.optionalString stdenv.isDarwin ''
       # meson erroneously installs loaders with .dylib extension on Darwin.
       # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
