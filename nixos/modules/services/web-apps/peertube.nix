@@ -48,32 +48,36 @@ in {
       description = "Group under which Peertube runs";
     };
 
-    localDomain = lib.mkOption {
-      type = lib.types.str;
-      example = "peertube.example.com";
-      description = "The domain serving your PeerTube instance.";
-    };
-
-    listenHttp = lib.mkOption {
-      type = lib.types.int;
-      default = 9000;
-      description = "listen port for HTTP server";
-    };
-
-    listenWeb = lib.mkOption {
-      type = lib.types.int;
-      default = 443;
-      description = "listen port for WEB server";
-    };
-
-    enableWebHttps = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable or disable HTTPS protocol";
-    };
-
     settings = lib.mkOption {
-      type = settingsFormat.type;
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
+
+        options.listen = {
+          port = lib.mkOption {
+            type = lib.types.port;
+            default = 9000;
+            description = "listen port for HTTP server";
+          };
+        };
+
+        options.webserver = {
+          https = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Enable or disable HTTPS protocol";
+          };
+          hostname = lib.mkOption {
+            type = lib.types.str;
+            default = null;
+            description = "Server name of reverse proxy";
+          };
+          port = lib.mkOption {
+            type = lib.types.port;
+            default = 443;
+            description = "listen port for WEB server";
+          };
+        };
+      };
       default = {};
       description = ''
         <link xlink:href="https://example.com/docs/foo">Configuration for peertube</link>
@@ -215,14 +219,6 @@ in {
     ];
 
     services.peertube.settings = {
-      listen = {
-        port = cfg.listenHttp;
-      };
-      webserver = {
-        https = cfg.enableWebHttps;
-        hostname = cfg.hostname;
-        port = cfg.listenWeb;
-      };
       redis = {
         hostname = cfg.redis.host;
         port = cfg.redis.port;
