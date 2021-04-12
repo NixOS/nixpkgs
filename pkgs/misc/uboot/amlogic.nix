@@ -97,30 +97,30 @@
     ];
 
     postBuild = ''
-      pkg --type bl30 --output bl30_new.bin \
+      meson64-pkg --type bl30 --output bl30_new.bin \
         $FIPDIR/bl30.bin $FIPDIR/bl301.bin
 
-      pkg --type bl2 --output bl2_new.bin \
+      meson64-pkg --type bl2 --output bl2_new.bin \
         $FIPDIR/bl2.bin $FIPDIR/acs.bin
 
-      bl30sig --input bl30_new.bin \
+      meson64-bl30sig --input bl30_new.bin \
         --output bl30_new.bin.g12a.enc --level v3
 
-      bl3sig --input  bl30_new.bin.g12a.enc \
+      meson64-bl3sig --input  bl30_new.bin.g12a.enc \
         --output bl30_new.bin.enc --level v3 --type bl30
 
-      bl3sig --input $FIPDIR/bl31.img \
+      meson64-bl3sig --input $FIPDIR/bl31.img \
         --output bl31.img.enc --level v3 --type bl31
 
       # The lz4 compression here introduces a timestamp in the build.
       faketime -f "1970-01-01 00:00:01" \
-      bl3sig --input u-boot.bin --compress lz4 \
+      meson64-bl3sig --input u-boot.bin --compress lz4 \
         --output bl33.bin.enc --level v3 --type bl33 --compress lz4
 
-      bl2sig --input bl2_new.bin \
+      meson64-bl2sig --input bl2_new.bin \
         --output bl2.n.bin.sig
 
-      bootmk --output u-boot.bin \
+      meson64-bootmk --output u-boot.bin \
         --bl2 bl2.n.bin.sig --bl30 bl30_new.bin.enc --bl31 bl31.img.enc --bl33 bl33.bin.enc \
         --ddrfw1 $FIPDIR/ddr4_1d.fw \
         --ddrfw2 $FIPDIR/ddr4_2d.fw \
