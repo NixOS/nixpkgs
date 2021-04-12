@@ -5,7 +5,6 @@
 , fetchFromGitLab
 , git
 , cmake
-, gnumake
 , nixosTests
 }:
 
@@ -25,7 +24,7 @@ mixRelease rec {
     sha256 = "1cmqpakjlafsnbk6c1vb6xzi5d2gwfihqxavbznjljk88wr2p4hr";
   };
 
-  nativeBuildInputs = [ git cmake gnumake ];
+  nativeBuildInputs = [ git cmake ];
 
   mixDeps = fetchMixDeps {
     inherit src pname version;

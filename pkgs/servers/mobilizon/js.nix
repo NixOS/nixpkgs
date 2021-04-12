@@ -1,13 +1,10 @@
-{ stdenv, lib, yarn, mkYarnPackage, mobilizon, ncurses, imagemagick }:
+{ stdenv, lib, yarn, mkYarnPackage, mobilizon, imagemagick }:
 
 mkYarnPackage rec {
-
   src = stdenv.mkDerivation {
     name = "mobilizon-js-src";
 
     src = "${mobilizon.src}/js";
-
-    phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
     patches = [
       # Due to the unsupported "resolution" parameter of "package.json"
@@ -40,7 +37,7 @@ mkYarnPackage rec {
     runHook postBuild
   '';
 
-  nativeBuildInputs = [ ncurses imagemagick ];
+  nativeBuildInputs = [ imagemagick ];
 
   meta = with lib; {
     description = "Frontend for the Mobilizon server";
