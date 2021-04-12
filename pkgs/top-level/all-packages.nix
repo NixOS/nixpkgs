@@ -5852,6 +5852,8 @@ in
 
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
+  kubepug = callPackage ../development/tools/kubepug { };
+
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
