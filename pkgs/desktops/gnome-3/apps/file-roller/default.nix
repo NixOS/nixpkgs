@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
-  version = "3.38.0";
+  version = "3.39.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06ikvjjcgb8nxabkn2rywy76a1c7s6w8dszaxvaxldbxarp1qgbj";
+    sha256 = "1jbm0vbvl0jbylal634i2xnxxxvb0z5x6n8m091y3rk4sq9dpakv";
   };
 
   LANG = "en_US.UTF-8"; # postinstall.py
