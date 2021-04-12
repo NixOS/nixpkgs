@@ -4926,6 +4926,12 @@
     email = "jwilberding@afiniate.com";
     name = "Jordan Wilberding";
   };
+  jwygoda = {
+    email = "jaroslaw@wygoda.me";
+    github = "jwygoda";
+    githubId = 20658981;
+    name = "Jarosław Wygoda";
+  };
   jyp = {
     email = "jeanphilippe.bernardy@gmail.com";
     github = "jyp";
