@@ -77,6 +77,24 @@ in {
             description = "listen port for WEB server";
           };
         };
+
+        options.redis = {
+          hostname = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = if cfg.redis.createLocally && cfg.settings.redis.socket == null then "127.0.0.1" else null;
+            description = "Redis host";
+          };
+          port = lib.mkOption {
+            type = lib.types.nullOr lib.types.port;
+            default = if cfg.redis.createLocally && cfg.settings.redis.socket != null then null else 6379;
+            description = "Redis port";
+          };
+          socket = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = if cfg.redis.createLocally then "/run/redis/redis.sock" else null;
+            description = "Use Unix socket";
+          };
+        };
       };
       default = {};
       description = ''
@@ -93,6 +111,21 @@ in {
         For example write to file:
         PT_INITIAL_ROOT_PASSWORD=changeme
       '';
+    };
+
+    redis = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Configure local Redis server for PeerTube";
+      };
+
+      passwordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/run/keys/peertube/password-redis-db";
+        description = "Password for redis database";
+      };
     };
 
     database = {
@@ -135,39 +168,6 @@ in {
       };
     };
 
-    redis = {
-      createLocally = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Configure local Redis server for PeerTube";
-      };
-
-      host = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = if cfg.redis.createLocally && !cfg.redis.enableUnixSocket then "127.0.0.1" else null;
-        description = "Redis host";
-      };
-
-      port = lib.mkOption {
-        type = lib.types.nullOr lib.types.port;
-        default = if cfg.redis.createLocally && cfg.redis.enableUnixSocket then null else 6379;
-        description = "Redis port";
-      };
-
-      passwordFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        example = "/run/keys/peertube/password-redis-db";
-        description = "Password for redis database";
-      };
-
-      enableUnixSocket = lib.mkOption {
-        type = lib.types.bool;
-        default = cfg.redis.createLocally;
-        description = "Use Unix socket";
-      };
-    };
-
     smtp = {
       createLocally = lib.mkOption {
         type = lib.types.bool;
@@ -192,14 +192,14 @@ in {
             prevent this.
           '';
       }
-      { assertion = !(cfg.redis.enableUnixSocket && (cfg.redis.host != null || cfg.redis.port != null));
+      { assertion = !(cfg.settings.redis.socket != null && (cfg.settings.redis.hostname != null || cfg.settings.redis.port != null));
           message = ''
-            <option>services.peertube.redis.createLocally</option> and redis network connection (<option>services.peertube.redis.host</option> or <option>services.peertube.redis.port</option>) enabled. Disable either of them.
+            <option>services.peertube.redis.createLocally</option> and redis network connection (<option>services.peertube.settings.redis.hostname</option> or <option>services.peertube.settings.redis.port</option>) enabled. Disable either of them.
         '';
       }
-      { assertion = cfg.redis.enableUnixSocket || (cfg.redis.host != null && cfg.redis.port != null);
+      { assertion = cfg.settings.redis.socket != null || (cfg.settings.redis.hostname != null && cfg.settings.redis.port != null);
           message = ''
-            <option>services.peertube.redis.host</option> and <option>services.peertube.redis.port</option> needs to be set if <option>services.peertube.redis.enableUnixSocket</option> is not enabled.
+            <option>services.peertube.settings.redis.hostname</option> and <option>services.peertube.settings.redis.port</option> needs to be set if <option>services.peertube.settings.redis.socket</option> is not set..
         '';
       }
       { assertion = cfg.redis.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.redis.passwordFile;
@@ -219,11 +219,6 @@ in {
     ];
 
     services.peertube.settings = {
-      redis = {
-        hostname = cfg.redis.host;
-        port = cfg.redis.port;
-        socket = if cfg.redis.enableUnixSocket then "/run/redis/redis.sock" else null;
-      };
       database = {
         hostname = cfg.database.host;
         port = cfg.database.port;
@@ -349,7 +344,7 @@ in {
       (lib.mkIf cfg.redis.createLocally {
         enable = true;
       })
-      (lib.mkIf (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {
+      (lib.mkIf (cfg.redis.createLocally && cfg.settings.redis.socket != null) {
         unixSocket = "/run/redis/redis.sock";
         unixSocketPerm = 770;
       })
@@ -367,7 +362,7 @@ in {
           group = cfg.group;
         };
       })
-      (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis" ];})
+      (lib.mkIf (cfg.settings.redis.socket != null) {${config.services.peertube.user}.extraGroups = [ "redis" ];})
     ];
 
     users.groups = lib.optionalAttrs (cfg.group == "peertube") {
