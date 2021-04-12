@@ -1,0 +1,124 @@
+diff --git a/pyobjc-core/Tools/pyobjc_setup.py b/pyobjc-core/Tools/pyobjc_setup.py
+index 669c77a79..dace5e3fd 100644
+--- a/pyobjc-core/Tools/pyobjc_setup.py
++++ b/pyobjc-core/Tools/pyobjc_setup.py
+@@ -204,46 +204,11 @@ def get_os_level():
+ 
+ 
+ def get_sdk():
+-    env_cflags = os.environ.get("CFLAGS", "")
+-    config_cflags = get_config_var("CFLAGS")
+-    sdk = None
+-    for cflags_str in [env_cflags, config_cflags]:
+-        cflags = shlex.split(cflags_str)
+-        for i, val in enumerate(cflags):
+-            if val == "-isysroot":
+-                sdk = cflags[i + 1]
+-                break
+-            elif val.find("-isysroot") == 0:
+-                sdk = val[len("-isysroot") :]
+-                break
+-        if sdk:
+-            break
+-
+-    return sdk
++    return None
+ 
+ 
+ def get_sdk_level():
+-    sdk = get_sdk()
+-
+-    if not sdk:
+-        return None
+-
+-    if sdk == "/":
+-        return get_os_level()
+-
+-    sdk = sdk.rstrip("/")
+-    sdkname = os.path.basename(sdk)
+-    assert sdkname.startswith("MacOSX")
+-    assert sdkname.endswith(".sdk")
+-    if sdkname == "MacOSX.sdk":
+-        try:
+-            with open(os.path.join(sdk, "SDKSettings.plist"), "rb") as fp:
+-                pl = plistlib.load(fp)
+-            return pl["Version"]
+-        except Exception:
+-            raise SystemExit("Cannot determine SDK version")
+-    else:
+-        return sdkname[6:-4]
++    return os.environ["NIX_MACOS_SDK_VERSION"]
+ 
+ 
+ class pyobjc_install_lib(install_lib.install_lib):
+@@ -418,39 +383,9 @@ def Extension(*args, **kwds):
+     if "clang" in get_config_var("CC"):
+         cflags.append("-Wno-deprecated-declarations")
+ 
+-    sdk = get_sdk()
+-    if not sdk:  
+-        # We're likely on a system with the Xcode Command Line Tools.
+-        # Explicitly use the most recent SDK to avoid compile problems.
+-        data = subprocess.check_output(
+-            ["/usr/bin/xcrun", "-sdk", "macosx", "--show-sdk-path"],
+-            universal_newlines=True,
+-        ).strip()
+-            
+-        if data:
+-            sdk_settings_path = os.path.join(data, 'SDKSettings.plist')
+-            if os.path.exists(sdk_settings_path):
+-                 with open(sdk_settings_path, 'rb') as fp:
+-                     sdk_settings = plistlib.load(fp)
+-                 version = sdk_settings['Version']
+-            else:
+-                 version = os.path.basename(data)[6:-4]
+-
+-            cflags.append("-isysroot")
+-            cflags.append(data)
+-            cflags.append(
+-                "-DPyObjC_BUILD_RELEASE=%02d%02d"
+-                % (tuple(map(int, version.split("."))))
+-            )
+-        else:
+-            cflags.append(
+-                "-DPyObjC_BUILD_RELEASE=%02d%02d" % (tuple(map(int, os_level.split("."))))
+-            )
+-
+-    else:
+-        cflags.append(
+-            "-DPyObjC_BUILD_RELEASE=%02d%02d" % (tuple(map(int, os_level.split("."))))
+-        )
++    cflags.append(
++        "-DPyObjC_BUILD_RELEASE=%02d%02d" % (tuple(map(int, os_level.split("."))))
++    )
+ 
+     if os_level == "10.4":
+         cflags.append("-DNO_OBJC2_RUNTIME")
+diff --git a/pyobjc-core/setup.py b/pyobjc-core/setup.py
+index eb2ded7a4..48ef2dc59 100644
+--- a/pyobjc-core/setup.py
++++ b/pyobjc-core/setup.py
+@@ -42,22 +42,7 @@ def get_os_level():
+ 
+ 
+ def get_sdk_level(sdk):
+-    if sdk == "/":
+-        return get_os_level()
+-
+-    sdk = sdk.rstrip("/")
+-    sdkname = os.path.basename(sdk)
+-    assert sdkname.startswith("MacOSX")
+-    assert sdkname.endswith(".sdk")
+-    if sdkname == "MacOSX.sdk":
+-        try:
+-            with open(os.path.join(sdk, "SDKSettings.plist"), "rb") as fp:
+-                pl = plistlib.load(fp)
+-            return pl["Version"]
+-        except Exception:
+-            raise SystemExit("Cannot determine SDK version")
+-    else:
+-        return sdkname[6:-4]
++    return os.environ["NIX_MACOS_SDK_VERSION"]
+ 
+ 
+ # CFLAGS for the objc._objc extension:
