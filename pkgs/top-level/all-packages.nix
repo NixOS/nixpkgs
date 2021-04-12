@@ -562,6 +562,7 @@ in
   ociTools = callPackage ../build-support/oci-tools { };
 
   octant = callPackage ../applications/networking/cluster/octant { };
+  octant-desktop = callPackage ../applications/networking/cluster/octant/desktop.nix { };
   starboard-octant-plugin = callPackage ../applications/networking/cluster/octant/plugins/starboard-octant-plugin.nix { };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -4888,6 +4889,8 @@ in
 
   github-backup = callPackage ../tools/misc/github-backup { };
 
+  github-runner = callPackage ../development/tools/continuous-integration/github-runner { };
+
   gitin = callPackage ../applications/version-management/git-and-tools/gitin { };
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
@@ -5488,6 +5491,8 @@ in
 
   idle3tools = callPackage ../tools/system/idle3tools { };
 
+  ifcopenshell = with python3Packages; toPythonApplication ifcopenshell;
+
   iftop = callPackage ../tools/networking/iftop { };
 
   ifuse = callPackage ../tools/filesystems/ifuse { };
@@ -6026,7 +6031,9 @@ in
     inherit (python3Packages) ansi2html;
   };
 
-  medfile = callPackage ../development/libraries/medfile { };
+  medfile = callPackage ../development/libraries/medfile {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   meilisearch = callPackage ../servers/search/meilisearch {
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
@@ -6035,6 +6042,8 @@ in
   memtester = callPackage ../tools/system/memtester { };
 
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
+
+  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
 
   mhonarc = perlPackages.MHonArc;
 
@@ -8660,6 +8669,8 @@ in
 
   tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
+  tf2pulumi = callPackage ../development/tools/tf2pulumi { };
+
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
@@ -10815,6 +10826,8 @@ in
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
+  juniper = callPackage ../development/compilers/juniper/default.nix { };
+
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
@@ -11316,10 +11329,10 @@ in
   rustracerd = callPackage ../development/tools/rust/racerd {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  inherit (callPackage ../development/tools/rust/rust-analyzer {
+  rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-  })
-    rust-analyzer-unwrapped rust-analyzer;
+  };
+  rust-analyzer = callPackage ../development/tools/rust/rust-analyzer/wrapper.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -14755,6 +14768,8 @@ in
 
   hdt = callPackage ../misc/hdt {};
 
+  hfinger = callPackage ../tools/security/hfinger { };
+
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
   hidapi = callPackage ../development/libraries/hidapi {
@@ -17267,6 +17282,7 @@ in
     s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };
     s6-rc = callPackage ../tools/system/s6-rc { };
 
+    mdevd = callPackage ../os-specific/linux/mdevd { };
     nsss = callPackage ../development/libraries/nsss { };
     utmps = callPackage ../development/libraries/utmps { };
     sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
@@ -19106,6 +19122,9 @@ in
 
   sogo = callPackage ../servers/web-apps/sogo { };
 
+  spacecookie =
+    haskell.lib.justStaticExecutables haskellPackages.spacecookie;
+
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
@@ -19279,6 +19298,8 @@ in
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
   alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
+
+  alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
@@ -20256,6 +20277,8 @@ in
 
   mdadm = mdadm4;
   mdadm4 = callPackage ../os-specific/linux/mdadm { };
+
+  inherit (skawarePackages) mdevd;
 
   metastore = callPackage ../os-specific/linux/metastore { };
 
@@ -21738,6 +21761,8 @@ in
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
+  foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
+
   aeolus = callPackage ../applications/audio/aeolus { };
 
   aewan = callPackage ../applications/editors/aewan { };
@@ -22671,6 +22696,8 @@ in
   fmsynth = callPackage ../applications/audio/fmsynth { };
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
+
+  foliate = callPackage ../applications/office/foliate { };
 
   fondo = callPackage ../applications/graphics/fondo { };
 
@@ -23885,6 +23912,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
+
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
@@ -23900,6 +23929,8 @@ in
   kondo = callPackage ../applications/misc/kondo { };
 
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
+
+  kooha = callPackage ../applications/video/kooha { };
 
   kotatogram-desktop = libsForQt514.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
@@ -24861,6 +24892,8 @@ in
   obs-gstreamer = callPackage ../applications/video/obs-studio/obs-gstreamer.nix { };
 
   obs-move-transition = callPackage ../applications/video/obs-studio/obs-move-transition.nix { };
+
+  obs-multi-rtmp = libsForQt5.callPackage ../applications/video/obs-studio/obs-multi-rtmp.nix { };
 
   obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
 
@@ -25871,7 +25904,6 @@ in
 
   inherit (callPackages ../applications/networking/syncthing { })
     syncthing
-    syncthing-cli
     syncthing-discovery
     syncthing-relay;
 
@@ -27306,6 +27338,8 @@ in
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
   cbonsai = callPackage ../games/cbonsai { };
+
+  cdogs-sdl = callPackage ../games/cdogs-sdl { };
 
   chessdb = callPackage ../games/chessdb { };
 
@@ -29456,6 +29490,8 @@ in
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
+  deepspeech = callPackage ../misc/deepspeech { };
+
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
   demjson = with python3Packages; toPythonApplication demjson;
@@ -30563,6 +30599,8 @@ in
     inherit (gnome2) gtksourceview;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
+
+  yapesdl = callPackage ../misc/emulators/yapesdl { };
 
   x16-emulator = callPackage ../misc/emulators/commander-x16/emulator.nix { };
   x16-rom = callPackage ../misc/emulators/commander-x16/rom.nix { };
