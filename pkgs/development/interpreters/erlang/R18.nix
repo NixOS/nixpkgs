@@ -22,8 +22,8 @@ let
   };
 
 in mkDerivation {
-  version = "18.3.4.8";
-  sha256 = "16c0h25hh5yvkv436ks5jbd7qmxzb6ndvk64mr404347a20iib0g";
+  version = "18.3.4.11";
+  sha256 = "190xbv77v5x2g8xkzdg9bpwa1ylkc18d03ag2a0frcwcv76x53k1";
 
   patches = [
     rmAndPwdPatch

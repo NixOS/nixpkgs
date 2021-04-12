@@ -2,7 +2,7 @@
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
-, shared-mime-info, haskellPackages, libhandy
+, shared-mime-info, libhandy
 }:
 
 let
@@ -38,7 +38,6 @@ in stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
       --prefix PATH : "${texlive}/bin"
-      --prefix PATH : "${haskellPackages.pandoc-citeproc}/bin"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';

@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.8.29";
+  version = "0.8.30";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-O5GIbX7qp+Te5QQuqytC9rsQJ5FuXtUl5h2DZXsfMPk=";
+    sha256 = "sha256-9GCk1gqlQJhuoiKRi7J1qcJlZjlq2ObGicp5tGGDhrY=";
   };
 
-  cargoSha256 = "sha256-4VmRIrd79odnYrHuBLdFwere+7bvtUI3daVs3ZUKsdY=";
+  cargoSha256 = "sha256-pWqbcargCEkisdGnj08VQdRqjocR7zZhWukhYjfZDqI=";
 
   nativeBuildInputs = [ clang ];
 

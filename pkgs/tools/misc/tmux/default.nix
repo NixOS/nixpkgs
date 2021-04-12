@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, makeWrapper
 , bison
 , ncurses
 , libevent
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-    makeWrapper
   ];
 
   configureFlags = [

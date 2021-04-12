@@ -1165,11 +1165,14 @@ self: super: {
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
-  # * jailbreak can be removed at the next release (current is 0.13.0.0)
-  # * patch fixes compilation with pandoc >= 2.12, can be removed if a
-  #   release contains https://github.com/jgm/gitit/pull/670 or equivalent.
-  #   Patch is vendored in as it may change upstream in the future.
-  gitit = doJailbreak (appendPatch super.gitit ./patches/gitit-pandoc-2.12.patch);
+  # jailbreak and patch (for pandoc >= 2.12) ensure compilation with newer dependencies.
+  # can both be removed at the next release (current is 0.13.0.0)
+  gitit = doJailbreak (appendPatch super.gitit
+    (pkgs.fetchpatch {
+      url = "https://github.com/jgm/gitit/commit/e8c9d94be332e2f73de9b0eee222a2a09f191faf.patch";
+      sha256 = "1rl2c3sz8cd2c3qwv9b640853s4bblcknvfv29k472wqhs62mwz1";
+      includes = [ "src/**" ];
+    }));
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
@@ -1239,7 +1242,7 @@ self: super: {
   patch = doJailbreak super.patch;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
-  reflex-dom-core = doDistribute (unmarkBroken (dontCheck (appendPatch super.reflex-dom-core (pkgs.fetchpatch {
+  reflex-dom-core = doDistribute (unmarkBroken (dontCheck (appendPatch (doJailbreak super.reflex-dom-core) (pkgs.fetchpatch {
     url = https://github.com/reflex-frp/reflex-dom/commit/6aed7b7ebb70372778f1a29a724fcb4de815ba04.patch;
     sha256 = "1g7lgwj7rpziilif2gian412iy05gqbzwx9w0m6ajq3clxs5zs7l";
     stripLen = 2;
@@ -1393,6 +1396,10 @@ self: super: {
           pkgs.lib.makeBinPath deps
         }"
       '';
+
+      # 2021-04-09: test failure
+      # PR pending https://github.com/expipiplus1/update-nix-fetchgit/pull/60
+      doCheck = false;
     }));
 
   # Our quickcheck-instances is too old for the newer binary-instances, but
@@ -1416,7 +1423,7 @@ self: super: {
 
   # 2021-03-09: Golden tests seem to be missing in hackage release:
   # https://github.com/haskell/haskell-language-server/issues/1536
-  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
+  hls-tactics-plugin = dontCheck (super.hls-tactics-plugin.override { refinery = self.refinery_0_3_0_0; });
 
   # 2021-03-24: hlint 3.3 is for ghc 9 compat, but hls only supports ghc 8.10
   hls-hlint-plugin = super.hls-hlint-plugin.override {
@@ -1468,7 +1475,8 @@ self: super: {
   # https://github.com/obsidiansystems/dependent-sum/issues/55
   dependent-sum = doJailbreak super.dependent-sum;
 
-  dependent-sum-aeson-orphans = appendPatch super.dependent-sum-aeson-orphans (pkgs.fetchpatch {
+  # Overspecified constraint on 'constraints'. Kinda funny, huh?
+  dependent-sum-aeson-orphans = appendPatch (doJailbreak super.dependent-sum-aeson-orphans) (pkgs.fetchpatch {
     # 2020-11-18: https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/9
     # Bump version bounds for ghc 8.10
     url = https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/e1f5898116222a1bc557d41f3395066f83736093.patch;
@@ -1692,9 +1700,11 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/7163
   pandoc = dontCheck super.pandoc;
 
-  # test suite triggers some kind of linking bug at runtime
-  # https://github.com/noinia/hgeometry/issues/132
-  hgeometry-combinatorial = dontCheck super.hgeometry-combinatorial;
+  # * doctests don't work without cabal
+  #   https://github.com/noinia/hgeometry/issues/132
+  # * Too strict version bound on vector-builder
+  #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
+  hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
 
   # Too strict version bounds on ansi-terminal
   # https://github.com/kowainik/co-log/pull/218
@@ -1716,19 +1726,16 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict version bounds on ansi-terminal
-  # This patch will be contained with the next release (current is 0.1.0.0).
-  colourista = appendPatch super.colourista
-    (pkgs.fetchpatch {
-      url = "https://github.com/kowainik/colourista/commit/15ace92105b56eba4ea3717bd55f733afe5be401.patch";
-      sha256 = "sha256-9gJFlyWUkO5sJodDRNuH10I66j8/0ZZIv6nJQkhlA0s=";
-    });
-
   # Too strict version bounds on base16-bytestring and http-link-header.
   # This patch will be merged when next release comes.
   github = appendPatch super.github (pkgs.fetchpatch {
     url = "https://github.com/phadej/github/commit/514b175851dd7c4a9722ff203dd6f652a15d33e8.patch";
     sha256 = "0pmx54xd7ah85y9mfi5366wbnwrp918j0wbx8yw8hrdac92qi4gh";
+  });
+
+  # list `modbus` in librarySystemDepends, correct to `libmodbus`
+  libmodbus = overrideCabal super.libmodbus (drv: {
+    librarySystemDepends = [ pkgs.libmodbus ];
   });
 
   # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
@@ -1743,9 +1750,6 @@ self: super: {
       # Overriding bounds behind a cabal flag
       preConfigure = ''substituteInPlace iCalendar.cabal --replace "network >=2.6 && <2.7" "network -any"'';
   };
-
-  # Too strict bounds on base: https://github.com/runarorama/fuzzyfind/issues/1
-  fuzzyfind = doJailbreak super.fuzzyfind;
 
   # Apply patch from master relaxing the version bounds on tasty.
   # Can be removed at next release (current is 0.10.1.0).
@@ -1779,5 +1783,32 @@ self: super: {
   # https://github.com/smallhadroncollider/taskell/issues/100
   # May be possible to remove at the next release (1.11.0)
   taskell = doJailbreak super.taskell;
+
+  # ghc-bignum is not buildable if none of the three backends
+  # is explicitly enabled. We enable Native for now as it doesn't
+  # depend on anything else as oppossed to GMP and FFI.
+  # Apply patch which fixes a compilation failure we encountered.
+  # Can be removed if the following issue is resolved / the patch
+  # is merged and released:
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19638
+  # * https://gitlab.haskell.org/ghc/ghc/-/merge_requests/5454
+  ghc-bignum = overrideCabal super.ghc-bignum (old: {
+    configureFlags = (old.configureFlags or []) ++ [ "-f" "Native" ];
+    patches = (old.patches or []) ++ [
+      (pkgs.fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
+        sha256 = "1qx4r031y72px291vz38bng9sb23r8zb35s03v5hhawlmgzfzcb5";
+        stripLen = 2;
+      })
+    ];
+  });
+
+  # 2021-04-09: outdated base and alex-tools
+  # PR pending https://github.com/glguy/language-lua/pull/6
+  language-lua = doJailbreak super.language-lua;
+
+  # 2021-04-09: too strict time bound
+  # PR pending https://github.com/zohl/cereal-time/pull/2
+  cereal-time = doJailbreak super.cereal-time;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

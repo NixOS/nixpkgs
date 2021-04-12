@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , buildPythonPackage
+, cryptography
 , fetchPypi
 , cryptography
 , pythonOlder
@@ -8,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pymazda";
-  version = "0.1.0";
+  version = "0.1.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "174c58e6e78081af3105524074ae26e62be683389e495ab85a30e2adbf7ba365";
+    sha256 = "sha256-Z0sRfLkOxYmPDZiSKqqbd68dcTDU+x8QhPe/Oo43KEA=";
   };
 
   propagatedBuildInputs = [

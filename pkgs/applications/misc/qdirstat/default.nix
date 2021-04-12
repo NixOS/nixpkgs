@@ -4,13 +4,13 @@
 
 let
   pname = "qdirstat";
-  version = "1.7";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = pname;
     rev = version;
-    sha256 = "163x3fxra0l3vvrzm25mh7jvcwjbmwsqlpppkxx76mkz9a1769fy";
+    sha256 = "sha256-i1xHMwSnBULJbOA/ykQK9WBd+6TBNBRI9hnU1FDGQlY=";
   };
 in
 
@@ -50,7 +50,7 @@ mkDerivation {
   meta = with lib; {
     description = "Graphical disk usage analyzer";
     homepage = src.meta.homepage;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gnidorah ];
     platforms = platforms.linux;
   };
