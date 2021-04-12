@@ -219,19 +219,19 @@ in {
 
     services.peertube.settings = {
       storage = {
-        tmp = "/var/lib/peertube/storage/tmp/";
-        avatars = "/var/lib/peertube/storage/avatars/";
-        videos = "/var/lib/peertube/storage/videos/";
-        streaming_playlists = "/var/lib/peertube/storage/streaming-playlists/";
-        redundancy = "/var/lib/peertube/storage/redundancy/";
-        logs = "/var/lib/peertube/storage/logs/";
-        previews = "/var/lib/peertube/storage/previews/";
-        thumbnails = "/var/lib/peertube/storage/thumbnails/";
-        torrents = "/var/lib/peertube/storage/torrents/";
-        captions = "/var/lib/peertube/storage/captions/";
-        cache = "/var/lib/peertube/storage/cache/";
-        plugins = "/var/lib/peertube/storage/plugins/";
-        client_overrides = "/var/lib/peertube/storage/client-overrides/";
+        tmp = lib.mkDefault "/var/lib/peertube/storage/tmp/";
+        avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
+        videos = lib.mkDefault "/var/lib/peertube/storage/videos/";
+        streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
+        redundancy = lib.mkDefault "/var/lib/peertube/storage/redundancy/";
+        logs = lib.mkDefault "/var/lib/peertube/storage/logs/";
+        previews = lib.mkDefault "/var/lib/peertube/storage/previews/";
+        thumbnails = lib.mkDefault "/var/lib/peertube/storage/thumbnails/";
+        torrents = lib.mkDefault "/var/lib/peertube/storage/torrents/";
+        captions = lib.mkDefault "/var/lib/peertube/storage/captions/";
+        cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
+        plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
+        client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
       };
     };
 
