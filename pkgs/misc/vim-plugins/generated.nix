@@ -4284,6 +4284,18 @@ let
     meta.homepage = "https://github.com/darfink/starsearch.vim/";
   };
 
+  suda-vim = buildVimPluginFrom2Nix {
+    pname = "suda-vim";
+    version = "2021-02-20";
+    src = fetchFromGitHub {
+      owner = "lambdalisue";
+      repo = "suda.vim";
+      rev = "fbb138f5090c3db4dabeba15326397a09df6b73b";
+      sha256 = "01kys8q3gycxqf760ydq1k8wq20brjvl1gxpl8j87jvnyx87kmnf";
+    };
+    meta.homepage = "https://github.com/lambdalisue/suda.vim/";
+  };
+
   SudoEdit-vim = buildVimPluginFrom2Nix {
     pname = "SudoEdit-vim";
     version = "2020-02-27";
