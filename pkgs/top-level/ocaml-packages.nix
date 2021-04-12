@@ -932,6 +932,8 @@ let
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
+    path_glob = callPackage ../development/ocaml-modules/path_glob { };
+
     pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
     pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
