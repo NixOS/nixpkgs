@@ -7093,6 +7093,8 @@ in {
 
   pywebview = callPackage ../development/python-modules/pywebview { };
 
+  pywemo = callPackage ../development/python-modules/pywemo { };
+
   pywick = callPackage ../development/python-modules/pywick { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };

@@ -937,7 +937,7 @@
     "webhook" = ps: with ps; [ aiohttp-cors ];
     "webostv" = ps: with ps; [ aiopylgtv ];
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
-    "wemo" = ps: with ps; [ ]; # missing inputs: pywemo
+    "wemo" = ps: with ps; [ pywemo ];
     "whois" = ps: with ps; [ python-whois ];
     "wiffi" = ps: with ps; [ wiffi ];
     "wilight" = ps: with ps; [ pywilight ];
