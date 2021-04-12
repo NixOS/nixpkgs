@@ -236,6 +236,8 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    dap =  callPackage ../development/ocaml-modules/dap { };
+
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };
