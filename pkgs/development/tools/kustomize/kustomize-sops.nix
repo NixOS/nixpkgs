@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kustomize-sops";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "viaduct-ai";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XZoevXYSlBj8umxC8UNucE21pjDNaeX1c65QAwEuqWQ=";
+    sha256 = "sha256-c8v9O3ufTZ7/rWwLNoak0ITlEVlOg9MvheRjQIxPwKc=";
   };
 
   vendorSha256 = "sha256-kJtJ2ut+yhgNoPIY5i3dKmQV0g+8RvcGnxCyay7wy2A=";
