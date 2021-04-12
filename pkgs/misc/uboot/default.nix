@@ -31,6 +31,7 @@ let
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , nativeBuildInputs ? []
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
@@ -58,7 +59,7 @@ let
         p.setuptools # for pkg_resources
       ]))
       swig
-    ];
+    ] ++ nativeBuildInputs;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     hardeningDisable = [ "all" ];
@@ -100,7 +101,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" "nativeBuildInputs" ]);
 
 in {
   inherit buildUBoot;
