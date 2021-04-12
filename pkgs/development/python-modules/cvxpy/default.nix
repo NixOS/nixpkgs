@@ -9,6 +9,7 @@
 , osqp
 , scipy
 , scs
+, useOpenmp ? true
   # Check inputs
 , pytestCheckHook
 }:
@@ -33,6 +34,12 @@ buildPythonPackage rec {
     scipy
     scs
   ];
+
+  # Required flags from https://github.com/cvxgrp/cvxpy/releases/tag/v1.1.11
+  preBuild = lib.optional useOpenmp ''
+    export CFLAGS="-fopenmp"
+    export LDFLAGS="-lgomp"
+  '';
 
   checkInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "./cvxpy" ];
