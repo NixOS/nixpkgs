@@ -20749,12 +20749,6 @@ in
     ubootOdroidC4
   ;
 
-  # Hardkernel Odroid devices firmware:
-  inherit (callPackage ../misc/uboot/hardkernel-firmware.nix {})
-    firmwareOdroidC2
-    firmwareOdroidC4
-  ;
-
   firmwareAmlogic = callPackage ../misc/uboot/amlogic-firmware.nix {};
 
   # Upstream Barebox:
