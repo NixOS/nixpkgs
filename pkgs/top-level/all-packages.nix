@@ -22475,6 +22475,8 @@ in
 
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
 
+  e16 = callPackage ../applications/window-managers/e16 { };
+
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
   ebumeter = callPackage ../applications/audio/ebumeter { };
