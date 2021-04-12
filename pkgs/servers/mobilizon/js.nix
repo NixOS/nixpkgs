@@ -26,6 +26,7 @@ mkYarnPackage rec {
 
   packageJSON = ./package.json;
   yarnLock = "${src}/yarn.lock";
+  yarnNix = ./yarn.nix;
 
   buildPhase = ''
     runHook preBuild
