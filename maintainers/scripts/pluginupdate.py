@@ -461,9 +461,8 @@ def parse_args(editor: Editor):
         help="Number of concurrent processes to spawn.",
     )
     parser.add_argument(
-        "--no-commit", "-n", action="store_false", default=True,
-        dest="autocommit",
-        help="Wether to autocommit"
+        "--no-commit", "-n", action="store_true", default=False,
+        help="Whether to autocommit changes"
     )
     return parser.parse_args()
 
@@ -510,12 +509,14 @@ def update_plugins(editor: Editor):
     redirects = update()
     rewrite_input(args.input_file, editor.deprecated, redirects)
 
-    if args.autocommit:
+    autocommit = not args.no_commit
+
+    if autocommit:
         commit(nixpkgs_repo, f"{editor.name}Plugins: update", [args.outfile])
 
     if redirects:
         update()
-        if args.autocommit:
+        if autocommit:
             commit(
                 nixpkgs_repo,
                 f"{editor.name}Plugins: resolve github repository redirects",
@@ -526,7 +527,7 @@ def update_plugins(editor: Editor):
         rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
         update()
         plugin = fetch_plugin_from_pluginline(plugin_line)
-        if args.autocommit:
+        if autocommit:
             commit(
                 nixpkgs_repo,
                 "{editor}Plugins.{name}: init at {version}".format(
