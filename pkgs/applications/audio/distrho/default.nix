@@ -1,12 +1,21 @@
-{ lib, stdenv
+{ stdenv
 , alsaLib
+, curl
 , fetchFromGitHub
+, fftwFloat
 , freetype
+, glib
+, lib
 , libGL
 , libX11
 , libXcursor
 , libXext
+, libXinerama
+, libXrandr
 , libXrender
+, libgcc
+, libglvnd
+, libsecret
 , meson
 , ninja
 , pkg-config
@@ -14,25 +23,33 @@
 
 stdenv.mkDerivation rec {
   pname = "distrho-ports";
-  version = "2020-07-14";
+  version = "2021-03-15";
 
   src = fetchFromGitHub {
     owner = "DISTRHO";
     repo = "DISTRHO-Ports";
     rev = version;
-    sha256 = "03ji41i6dpknws1vjwfxnl8c8bgisv2ng8xa4vqy2473k7wgdw4v";
+    sha256 = "00fgqwayd20akww3n2imyqscmyrjyc9jj0ar13k9dhpaxqk2jxbf";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
 
   buildInputs = [
     alsaLib
+    curl
+    fftwFloat
     freetype
+    glib
     libGL
     libX11
     libXcursor
     libXext
+    libXinerama
+    libXrandr
     libXrender
+    libgcc
+    libglvnd
+    libsecret
   ];
 
   meta = with lib; {
@@ -61,6 +78,7 @@ stdenv.mkDerivation rec {
         pitchedDelay
         refine
         stereosourceseparation
+        swankyamp
         tal-dub-3
         tal-filter
         tal-filter-2
@@ -71,9 +89,10 @@ stdenv.mkDerivation rec {
         tal-vocoder-2
         temper
         vex
+        vitalium
         wolpertinger
     '';
-    license = with licenses; [ gpl2 gpl3 gpl2Plus lgpl3 mit ];
+    license = with licenses; [ gpl2Only gpl3Only gpl2Plus lgpl2Plus lgpl3Only mit ];
     maintainers = [ maintainers.goibhniu ];
     platforms = [ "x86_64-linux" ];
   };
