@@ -20714,8 +20714,6 @@ in
     ubootJetsonTK1
     ubootNanoPCT4
     ubootNovena
-    ubootOdroidC2
-    ubootOdroidC4
     ubootOdroidXU3
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
@@ -20743,6 +20741,12 @@ in
     ubootUtilite
     ubootWandboard
     ;
+
+  # Upstream U-Boot, for Amlogic
+  inherit (callPackage ../misc/uboot/amlogic.nix {})
+    ubootOdroidC2
+    ubootOdroidC4
+  ;
 
   # Hardkernel Odroid devices firmware:
   inherit (callPackage ../misc/uboot/hardkernel-firmware.nix {})
