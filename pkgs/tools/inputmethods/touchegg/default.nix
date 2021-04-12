@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "JoseExposito";
     repo = pname;
     rev = version;
-    sha256 = "1v1sskyxmvbc6j4l31zbabiklfmy2pm77bn0z0baj1dl3wy7xcj2";
+    sha256 = "1adnqlb88yljwjybz0gsb948f7svyv01k2v5x2hhwgr0k85q8ic9";
   };
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
