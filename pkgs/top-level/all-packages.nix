@@ -2673,6 +2673,8 @@ in
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+  lady-heather = callPackage ../applications/science/electronics/lady-heather { };
+
   lepton = callPackage ../tools/graphics/lepton { };
 
   lexicon = callPackage ../tools/admin/lexicon { };
