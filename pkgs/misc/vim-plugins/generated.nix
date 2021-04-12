@@ -8911,6 +8911,18 @@ let
     meta.homepage = "https://github.com/mattn/webapi-vim/";
   };
 
+  wildfire-vim = buildVimPluginFrom2Nix {
+    pname = "wildfire-vim";
+    version = "2014-11-16";
+    src = fetchFromGitHub {
+      owner = "gcmt";
+      repo = "wildfire.vim";
+      rev = "e2baded7162260e05d2527f5bca9fca81f0bc8f2";
+      sha256 = "01i12x8brsnqicj5vclg57nv6ha7nz70gilphf6sr14xr741ra1y";
+    };
+    meta.homepage = "https://github.com/gcmt/wildfire.vim/";
+  };
+
   wmgraphviz-vim = buildVimPluginFrom2Nix {
     pname = "wmgraphviz-vim";
     version = "2018-04-26";
