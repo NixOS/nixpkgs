@@ -33,23 +33,28 @@ in
 
     boot.growPartition = cfg.hvm;
 
-    fileSystems."/" = {
+    fileSystems."/" = mkIf (!cfg.zfsRoot) {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf cfg.efi {
+    fileSystems."/boot" = if cfg.efi then {
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
-    };
+    } else if cfg.zfsRoot then {
+      device = "boot/boot";
+      fsType = "zfs";
+    } else {};
+
+    boot.zfs.devNodes = mkIf cfg.zfsRoot "/dev/";
 
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
-    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" "random.trust_cpu=on" ];
+    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
@@ -66,6 +71,32 @@ in
     boot.loader.timeout = 0;
 
     boot.initrd.network.enable = true;
+    boot.initrd.postDeviceCommands = lib.mkMerge [
+      (lib.mkBefore ''
+        (
+          set -x
+          PATH=${pkgs.jq}/bin/:${pkgs.cloud-utils}/bin/:$PATH
+          lsblk --json -O --all \
+            | jq -cf ${./amazon-image-zfs.jq} \
+            | (while read -r line; do
+                part_path=$(echo "$line" | jq -r .part_path);
+                disk_path=$(echo "$line" | jq -r .disk_path);
+                growpart "$disk_path" "$(cat "$part_path")";
+              done)
+        )
+      '')
+      # zfs mounts within postDeviceCommands so mkBefore and mkAfter must be used
+      (lib.mkAfter ''
+        (
+          set -x
+          for pool in $(zpool list -H | awk '{print $1}'); do
+            for vdev in $(zpool list -vLPH "$pool" | awk '($1 ~ "^/dev" && $10 = "ONLINE") {print $1;}'); do
+              zpool online -e "$pool" "$vdev";
+            done
+          done
+        )
+      '')
+    ];
 
     # Mount all formatted ephemeral disks and activate all swap devices.
     # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options

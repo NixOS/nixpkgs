@@ -222,6 +222,20 @@ in rec {
     }).config.system.build.amazonImage)
 
   );
+  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image-zfs.nix
+        ];
+    }).config.system.build.amazonImage)
+
+  );
 
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
