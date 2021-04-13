@@ -1,36 +1,12 @@
-diff -ru old/libunity/src/unity-aggregator-scope.vala libunity/src/unity-aggregator-scope.vala
---- old/libunity/src/unity-aggregator-scope.vala	1969-12-31 19:00:01.000000000 -0500
-+++ libunity/src/unity-aggregator-scope.vala	2019-09-21 17:06:12.663864891 -0400
-@@ -51,7 +51,7 @@
-    */
-   public abstract int category_index_for_scope_id (string scope_id);
- 
--  public AggregatorScope (string dbus_path_, string id_, MergeMode merge_mode = AggregatorScope.MergeMode.OWNER_SCOPE, bool proxy_filter_hints = false)
-+  protected AggregatorScope (string dbus_path_, string id_, MergeMode merge_mode = AggregatorScope.MergeMode.OWNER_SCOPE, bool proxy_filter_hints = false)
-   {
-     Object (dbus_path: dbus_path_, id: id_, is_master: true,
-             merge_mode: merge_mode, proxy_filter_hints: proxy_filter_hints);
-diff -ru old/libunity/src/unity-deprecated-scope.vala libunity/src/unity-deprecated-scope.vala
---- old/libunity/src/unity-deprecated-scope.vala	1969-12-31 19:00:01.000000000 -0500
-+++ libunity/src/unity-deprecated-scope.vala	2019-09-21 17:06:39.721627805 -0400
-@@ -61,7 +61,7 @@
-   internal CategorySet _categories;
-   internal FilterSet _filters;
-    
--  public DeprecatedScopeBase (string dbus_path_, string id_)
-+  protected DeprecatedScopeBase (string dbus_path_, string id_)
-   {
-     Object (dbus_path: dbus_path_, id: id_);
+--- a/protocol/protocol-icon.vala	2013-08-27 12:53:57 +0000
++++ b/protocol/protocol-icon.vala	2021-04-13 22:34:41 +0000
+@@ -185,7 +185,7 @@
    }
-diff -ru old/libunity/tools/preview-renderer.vala libunity/tools/preview-renderer.vala
---- old/libunity/tools/preview-renderer.vala	1969-12-31 19:00:01.000000000 -0500
-+++ libunity/tools/preview-renderer.vala	2019-09-21 17:09:16.201522110 -0400
-@@ -63,7 +63,7 @@
-      */
-     public abstract class GridRenderer: PreviewRenderer
-     {
--        public GridRenderer()
-+        protected GridRenderer()
-         {
-             Object();
-         }
+ 
+   /* Added to GIcon interface in 2.37 */
+-  private Variant serialize ()
++  private Variant? serialize ()
+   {
+     Variant? ret = null;
+     return ret;
+
