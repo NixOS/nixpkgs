@@ -27196,6 +27196,10 @@ with pkgs;
 
   peek = callPackage ../applications/video/peek { };
 
+  peertube = callPackage ../servers/peertube {
+    nodejs = nodejs-16_x;
+  };
+
   pflask = callPackage ../os-specific/linux/pflask {};
 
   pfsshell = callPackage ../tools/misc/pfsshell { };
