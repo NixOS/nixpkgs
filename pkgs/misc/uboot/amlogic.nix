@@ -2,6 +2,7 @@
 , armTrustedFirmwareS905
 , armTrustedFirmwareTools
 , firmwareAmlogic
+, gxlimg
 , libfaketime
 , meson-tools
 , meson64-tools
@@ -95,6 +96,74 @@ let
     '';
 
     filesToInstall = [ "u-boot.bin" "README.md" ];
+    extraMeta.platforms = ["aarch64-linux"];
+  } // args);
+
+  # Recognizable by the use of `aml_encrypt_gxl`
+  buildUBootMesonGXL =
+    { FIPDIR, ... } @ args: buildUBoot ({
+    nativeBuildInputs = [
+      gxlimg
+    ];
+    
+    postBuild = ''
+      # Sign BL2
+      python3 $FIPDIR/acs_tool.py $FIPDIR/bl2.bin ./bl2_acs.bin $FIPDIR/acs.bin 0
+      sh $FIPDIR/blx_fix.sh \
+        ./bl2_acs.bin \
+        ./tmp.zero \
+        ./tmp.bl2.zero.bin \
+        $FIPDIR/bl21.bin \
+        ./tmp.bl21.zero.bin \
+        ./bl2_new.bin \
+        bl2
+      gxlimg -t bl2 -s bl2_new.bin bl2.bin.enc
+
+      # Sign Bl3*
+      sh $FIPDIR/blx_fix.sh \
+        $FIPDIR/bl30.bin \
+        ./tmp.zero \
+        ./tmp.bl30.zero.bin \
+        $FIPDIR/bl301.bin \
+        ./tmp.bl301.zero.bin \
+        ./bl30_new.bin \
+        bl30
+      gxlimg -t bl3x -c bl30_new.bin     bl30.bin.enc
+      gxlimg -t bl3x -c $FIPDIR/bl31.img bl31.img.enc
+
+      # Encrypt U-Boot
+      gxlimg -t bl3x -c u-boot.bin u-boot.bin.enc
+      gxlimg -t fip \
+        --bl2 ./bl2.bin.enc \
+        --bl30 ./bl30.bin.enc \
+        --bl31 ./bl31.img.enc \
+        --bl33 ./u-boot.bin.enc \
+        ./gxl-boot.bin
+      mv -v gxl-boot.bin u-boot.bin
+
+      # Prepare USB boot files
+      dd if=u-boot.bin of=u-boot.bin.usb.bl2 bs=49152 count=1
+      dd if=u-boot.bin of=u-boot.bin.usb.tpl skip=49152 bs=1
+
+      # Help out the user a little.
+      cat > README.md <<EOF
+      This firmware can be installed to the SPI Flash if your board has one.
+      Installing to the SPI Flash is preferred.
+
+      Alternatively, the boot firmware can be installed in the "unused" space
+      after the MBR of either the SD card or the eMMC.
+
+          $ dd if=u-boot.bin of=... conv=fsync,notrunc bs=512 seek=1
+
+      * * *
+
+      The `u-boot.bin.usb.*` files are meant to be booted through USB.
+      Look at [pyamlboot](https://github.com/superna9999/pyamlboot) for more
+      information. End-users generally don't need to care about these files.
+      EOF
+    '';
+
+    filesToInstall = [ "u-boot.bin" "u-boot.bin.usb.bl2" "u-boot.bin.usb.tpl" "README.md" ];
     extraMeta.platforms = ["aarch64-linux"];
   } // args);
 in

@@ -20747,6 +20747,7 @@ in
   # Upstream U-Boot, for Amlogic
   inherit (callPackage ../misc/uboot/amlogic.nix {})
     buildUBootMesonG12A
+    buildUBootMesonGXL
     ubootOdroidC2
     ubootOdroidC4
   ;
