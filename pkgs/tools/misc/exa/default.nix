@@ -4,16 +4,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "exa";
-  version = "0.10.0";
-
-  cargoSha256 = "sha256-hslQZkmZ023gKxBbfgwqazBPUk0qWyy51uRJtr3QvWE=";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xolanu4zhAwsbSPdGKgY2/uHtP30DSpr/7Vv1z4jEnQ=";
+    sha256 = "sha256-vChsy/FrJEzTO5O+XFycPMP3jqOeea/hfsC0jJbqUVI=";
   };
+
+  # Cargo.lock is outdated
+  cargoPatches = [ ./update-cargo-lock.diff ];
+
+  cargoSha256 = "sha256-ah8IjShmivS6IWL3ku/4/j+WNr/LdUnh1YJnPdaFdcM=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
@@ -44,6 +47,7 @@ rustPlatform.buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
+    changelog = "https://github.com/ogham/exa/releases/tag/v${version}";
     homepage = "https://the.exa.website";
     license = licenses.mit;
     maintainers = with maintainers; [ ehegnes lilyball globin fortuneteller2k ];
