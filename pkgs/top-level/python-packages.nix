@@ -3685,6 +3685,8 @@ in {
 
   karton-core = callPackage ../development/python-modules/karton-core { };
 
+  karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
+
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
