@@ -493,6 +493,14 @@
     "vendorSha256": "08wg16g4mvn6kl8xwn89195a826cb132ijvrgf32c6p7zp4lgmjd",
     "version": "0.2.12"
   },
+  "keycloak": {
+    "owner": "mrparkers",
+    "repo": "terraform-provider-keycloak",
+    "rev": "v3.0.0",
+    "sha256": "1q9vzmj9c7mznv6al58d3rs5kk1fh28k1qccx46hcbk82z52da3a",
+    "vendorSha256": "0kh6lljvqd577s19gx0fmfsmx9wm3ikla3jz16lbwwb8ahbqcw1f",
+    "version": "3.0.0"
+  },
   "ksyun": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-ksyun",

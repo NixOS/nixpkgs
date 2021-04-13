@@ -58,7 +58,6 @@ let
     cloudfoundry = callPackage ./cloudfoundry {};
     gandi = callPackage ./gandi {};
     hcloud = callPackage ./hcloud {};
-    keycloak = callPackage ./keycloak {};
     libvirt = callPackage ./libvirt {};
     linuxbox = callPackage ./linuxbox {};
     lxd = callPackage ./lxd {};
