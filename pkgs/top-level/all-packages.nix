@@ -22182,6 +22182,8 @@ in
 
   bookworm = callPackage ../applications/office/bookworm { };
 
+  CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
+
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
