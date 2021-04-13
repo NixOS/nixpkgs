@@ -1,4 +1,4 @@
-{ lib, fetchpatch, fetchurl, fetchzip, python3
+{ lib, fetchurl, fetchzip, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
@@ -31,12 +31,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "2.1.1";
+  version = "2.2.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-txsArX1JiRGXjlu9FTpt0EUKxq3j5b85j8luFTKDQs4=";
+    sha256 = "sha256:0anxhrkxqb35mxr7jr820xcfw0v514s92wffsiqap2a2sqaj0pgs";
   };
 
   # Needs tox
@@ -69,12 +69,6 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
 
   patches = [
     ./fix-restart.patch
-    (fetchpatch {
-      name = "fix-version-parsing.patch";
-      url = "https://github.com/qutebrowser/qutebrowser/commit/c3d1b71c6f08607f47353f406aca0168bb3062a1.patch";
-      excludes = [ "doc/changelog.asciidoc" ];
-      sha256 = "1vm2yjvmrw4cyn8mpwfwvvcihn74f60ql3qh1rjj8n0wak8z1ir6";
-    })
   ];
 
   dontWrapGApps = true;
