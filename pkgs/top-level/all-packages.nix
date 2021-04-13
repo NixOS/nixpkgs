@@ -2597,6 +2597,8 @@ in
 
   gti = callPackage ../tools/misc/gti { };
 
+  gxlimg = callPackage ../misc/gxlimg { };
+
   hdate = callPackage ../applications/misc/hdate { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
