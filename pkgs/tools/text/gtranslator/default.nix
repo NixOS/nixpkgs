@@ -9,6 +9,7 @@
 , wrapGAppsHook
 , libxml2
 , libgda
+, libhandy
 , libsoup
 , json-glib
 , gspell
@@ -22,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "3.38.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "282puBoi2SM74Y6Z/VxEj2qwV1nR6UwQWAu4McotdjU=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0d48nc11z0m91scy21ah56ysxns82zvswx8lglvlkig1vqvblgpc";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     libdazzle
     gtksourceview4
     libgda
+    libhandy
     libsoup
     json-glib
     gettext
