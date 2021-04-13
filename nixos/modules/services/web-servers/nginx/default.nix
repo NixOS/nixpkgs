@@ -680,9 +680,9 @@ in
         example = literalExample ''
           "backend_server" = {
             servers = { "127.0.0.1:8000" = {}; };
-            extraConfig = ''
+            extraConfig = ''''
               keepalive 16;
-            '';
+            '''';
           };
         '';
       };
