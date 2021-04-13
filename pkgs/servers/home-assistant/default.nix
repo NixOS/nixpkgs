@@ -108,7 +108,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.4.3";
+  hassVersion = "2021.4.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -127,7 +127,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "00jgnk8vssvk7mdnlijwddwaj56hs1hcyw83r1jqhn5nk5qj3b7q";
+    sha256 = "1p36ymjhirl32ax3xxdg9ia089jw1klww5imq18r6ksajafr78ys";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -300,6 +300,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mqtt_room"
     "mqtt_statestream"
     "mullvad"
+    "nexia"
     "notify"
     "notion"
     "number"
