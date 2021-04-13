@@ -29906,7 +29906,9 @@ in
   nix-deploy = haskell.lib.justStaticExecutables haskellPackages.nix-deploy;
   nix-diff = haskell.lib.justStaticExecutables haskellPackages.nix-diff;
 
-  nix-du = callPackage ../tools/package-management/nix-du { };
+  nix-du = callPackage ../tools/package-management/nix-du {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };
