@@ -14,9 +14,10 @@ in {
     environment.systemPackages = with pkgs; [ mosquitto ];
     services.mosquitto = {
       enable = true;
+      checkPasswords = true;
       users = {
         "${mqttUsername}" = {
-          acl = [ "pattern readwrite #" ];
+          acl = [ "topic readwrite #" ];
           password = mqttPassword;
         };
       };
@@ -77,12 +78,9 @@ in {
         hass.wait_for_open_port(8123)
         hass.succeed("curl --fail http://localhost:8123/lovelace")
     with subtest("Toggle a binary sensor using MQTT"):
-        # wait for broker to become available
-        hass.wait_until_succeeds(
-            "mosquitto_sub -V mqttv311 -t home-assistant/test -u ${mqttUsername} -P '${mqttPassword}' -W 1 -t '*'"
-        )
+        hass.wait_for_open_port(1883)
         hass.succeed(
-            "mosquitto_pub -V mqttv311 -t home-assistant/test -u ${mqttUsername} -P '${mqttPassword}' -m let_there_be_light"
+            "mosquitto_pub -V mqttv5 -t home-assistant/test -u ${mqttUsername} -P '${mqttPassword}' -m let_there_be_light"
         )
     with subtest("Print log to ease debugging"):
         output_log = hass.succeed("cat ${configDir}/home-assistant.log")

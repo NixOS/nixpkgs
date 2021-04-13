@@ -115,8 +115,7 @@ let
                 };
               }
             ) {} extensions;
-          } //
-          {
+          } // lib.optionalAttrs usesNixExtensions {
             Extensions = {
               Install = lib.foldr (e: ret:
                 ret ++ [ "${e.outPath}/${e.extid}.xpi" ]

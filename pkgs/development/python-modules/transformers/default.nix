@@ -8,6 +8,7 @@
 , regex
 , requests
 , numpy
+, packaging
 , protobuf
 , sacremoses
 , tokenizers
@@ -24,6 +25,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-kl1Z2FBo+yqVXUqLaUtet6IycmdcAtfydNTI4MNNrkc=";
   };
+
+  nativeBuildInputs = [ packaging ];
 
   propagatedBuildInputs = [
     cookiecutter

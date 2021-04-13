@@ -110,6 +110,7 @@ let
     ps.jsonpatch
     ps.pecan
     ps.prettytable
+    ps.pyopenssl
     ps.pyjwt
     ps.webob
     ps.bcrypt
@@ -122,10 +123,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.8";
+  version = "15.2.10";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "1nmrras3g2zapcd06qr5m7y4zkymnr0r53jkpicjw2g4q7wfmib4";
+    sha256 = "1xfijynfb56gydpwh6h4q781xymwxih6nx26idnkcjqih48nsn01";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -134,7 +135,6 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [

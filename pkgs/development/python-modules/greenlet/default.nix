@@ -13,13 +13,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "719e169c79255816cdcf6dccd9ed2d089a72a9f6c42273aae12d55e8d35bdcf8";
+    sha256 = "1y6wbg9yhm9dw6m768n4yslp56h85pnxkk3drz6icn15g6f1d7ki";
   };
 
   propagatedBuildInputs = [ six ];
-
-  # No tests in archive
-  doCheck = false;
 
   meta = {
     homepage = "https://pypi.python.org/pypi/greenlet";

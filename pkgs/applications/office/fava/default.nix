@@ -13,17 +13,17 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     Babel
-    cheroot
-    flaskbabel
-    flask
-    jinja2
     beancount
+    cheroot
     click
+    flask
+    flaskbabel
+    jaraco_functools
+    jinja2
     markdown2
     ply
     simplejson
     werkzeug
-    jaraco_functools
   ];
 
   checkInputs = with python3.pkgs; [
@@ -39,10 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_cli"
   ];
 
-  meta = {
-    homepage = "https://beancount.github.io/fava";
+  meta = with lib; {
     description = "Web interface for beancount";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    homepage = "https://beancount.github.io/fava";
+    changelog = "https://beancount.github.io/fava/changelog.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

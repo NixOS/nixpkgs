@@ -1,12 +1,14 @@
-{ lib, python3 }:
+{ lib
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1a31ky2p5w8byf0bjgma6xi328jj690qqksm3dwbi3v8dpqvghgf";
+    sha256 = "18h6bc99skzb0a1pffb6lr2z04928srrcz1w2zy66bndasic5yfs";
   };
 
   postPatch = ''
@@ -15,7 +17,17 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
-    requests netdisco click click-log tabulate jsonpath_rw jinja2 dateparser regex ruamel_yaml aiohttp
+    aiohttp
+    click
+    click-log
+    dateparser
+    jinja2
+    jsonpath-ng
+    netdisco
+    regex
+    requests
+    ruamel-yaml
+    tabulate
   ];
 
   postInstall = ''
@@ -25,16 +37,14 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   checkInputs = with python3.pkgs; [
-    pytest requests-mock
+    pytestCheckHook
+    requests-mock
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "Command-line tool for Home Assistant";
     homepage = "https://github.com/home-assistant/home-assistant-cli";
+    changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

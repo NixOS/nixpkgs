@@ -1,29 +1,33 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, cmake, alsaLib, mesa_glu, libXcursor, libXinerama, libXrandr, xorgserver }:
+{ lib, stdenv, fetchFromGitHub
+, cmake, makeWrapper
+, alsaLib, fontconfig, mesa_glu, libXcursor, libXinerama, libXrandr, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "bonzomatic";
-  version = "2018-03-29";
+  version = "2021-03-07";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = pname;
     rev = version;
-    sha256 = "12mdfjvbhdqz1585772rj4cap8m4ijfci6ib62jysxjf747k41fg";
+    sha256 = "0gbh7kj7irq2hyvlzjgbs9fcns9kamz7g5p6msv12iw75z9yi330";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ alsaLib mesa_glu libXcursor libXinerama libXrandr xorgserver ];
+  buildInputs = [
+    alsaLib fontconfig mesa_glu
+    libXcursor libXinerama libXrandr xorg.xinput xorg.libXi xorg.libXext
+  ];
 
   postFixup = ''
-    wrapProgram $out/bin/Bonzomatic --prefix LD_LIBRARY_PATH : "${alsaLib}/lib"
+    wrapProgram $out/bin/bonzomatic --prefix LD_LIBRARY_PATH : "${alsaLib}/lib"
   '';
 
   meta = with lib; {
-    description = "A live-coding tool for writing 2D fragment/pixel shaders";
-    license = with licenses; [
-      unlicense
-      unfreeRedistributable # contains libbass.so in repository
-    ];
+    description = "Live shader coding tool and Shader Showdown workhorse";
+    homepage = "https://github.com/gargaj/bonzomatic";
+    license = licenses.unlicense;
     maintainers = [ maintainers.ilian ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

@@ -133,7 +133,7 @@ true
 <programlisting>
 { config, pkgs, ... }:
 
-let netConfig = { hostName }: {
+let netConfig = hostName: {
   networking.hostName = hostName;
   networking.useDHCP = false;
 };

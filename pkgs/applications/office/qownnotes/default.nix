@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "qownnotes";
-  version = "21.3.2";
+  version = "21.4.0";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Can grab official version like so:
-    # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-21.3.2.tar.xz.sha256
-    sha256 = "a8e8ab2ca1ef6684407adeb8fc63abcafff407a367471e053c583a1c4215e5ee";
+    # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-21.4.0.tar.xz.sha256
+    sha256 = "bda454031a79a768b472677036ada7501ea430482277f1694757066922428eec";
   };
 
   nativeBuildInputs = [ qmake qttools ];

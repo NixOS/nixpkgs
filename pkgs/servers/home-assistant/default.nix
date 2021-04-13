@@ -70,6 +70,19 @@ let
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
 
+    # Pinned due to API changes in pyruckus>0.12
+    (self: super: {
+      pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
+        version = "0.12";
+        src = fetchFromGitHub {
+          owner = "gabe565";
+          repo = "pyruckus";
+          rev = version;
+          sha256 = "0ykv6r6blbj3fg9fplk9i7xclkv5d93rwvx0fm5s8ms9f2s9ih8z";
+        };
+      });
+    })
+
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
@@ -103,7 +116,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.4.0";
+  hassVersion = "2021.4.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -122,7 +135,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1gkbkyxqsw3isdyskzi0ib07fgqvirnr20jkhrz86vl0k9ix8hwf";
+    sha256 = "00jgnk8vssvk7mdnlijwddwaj56hs1hcyw83r1jqhn5nk5qj3b7q";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -221,6 +234,7 @@ in with py.pkgs; buildPythonApplication rec {
     "devolo_home_control"
     "dhcp"
     "discovery"
+    "econet"
     "emulated_hue"
     "esphome"
     "fan"
@@ -249,6 +263,7 @@ in with py.pkgs; buildPythonApplication rec {
     "homekit_controller"
     "homeassistant"
     "homematic"
+    "homematicip_cloud"
     "html5"
     "http"
     "hue"
@@ -266,6 +281,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent_script"
     "ipp"
     "kmtronic"
+    "kodi"
     "light"
     "litterrobot"
     "local_file"
@@ -275,6 +291,7 @@ in with py.pkgs; buildPythonApplication rec {
     "logentries"
     "logger"
     "lovelace"
+    "lutron_caseta"
     "manual"
     "manual_mqtt"
     "mazda"
@@ -294,6 +311,7 @@ in with py.pkgs; buildPythonApplication rec {
     "notify"
     "notion"
     "number"
+    "omnilogic"
     "ozw"
     "panel_custom"
     "panel_iframe"
@@ -311,6 +329,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rituals_perfume_genie"
     "rmvtransport"
     "rss_feed_template"
+    "ruckus_unleashed"
     "safe_mode"
     "scene"
     "screenlogic"
@@ -320,6 +339,7 @@ in with py.pkgs; buildPythonApplication rec {
     "shopping_list"
     "simplisafe"
     "simulated"
+    "sleepiq"
     "sma"
     "sensor"
     "smarttub"
@@ -355,6 +375,7 @@ in with py.pkgs; buildPythonApplication rec {
     "weather"
     "webhook"
     "websocket_api"
+    "wemo"
     "wled"
     "workday"
     "worldclock"

@@ -163,7 +163,7 @@ in
               '';
               example = literalExample ''
                 {
-                  "DATABASE nextcloud" = "ALL PRIVILEGES";
+                  "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
                   "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
                 }
               '';
