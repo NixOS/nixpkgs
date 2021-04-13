@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "swisshydrodata";
-  version = "0.0.3";
+  version = "0.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1adpy6k2bknffzl5rckqpvaqyrvc00d6a4a4541438dqasx61npl";
+    sha256 = "0z8divdpdrjllf6y19kdrv19m7aqkbyxz43ml3d7hgaa6mj91mg5";
   };
 
   propagatedBuildInputs = [ requests ];
