@@ -413,8 +413,8 @@ let
             name = "github-vscode-theme";
             publisher = "github";
             version = "3.0.0";
-            sha256 =
-              "1a77mbx75xfsfdlhgzghj9i7ik080bppc3jm8c00xp6781987fpa";
+            sha256 = "1a77mbx75xfsfdlhgzghj9i7ik080bppc3jm8c00xp6781987fpa";
+
           };
           meta = with lib; {
             description = "GitHub theme for VS Code";
