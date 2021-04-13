@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, nixosTests, autoreconfHook,
-  pkg-config, flex, check, pam, coreutils
+{ lib
+, stdenv
+, fetchurl
+, nixosTests
+, autoreconfHook
+, pkg-config
+, flex
+, check
+, pam
+, coreutils
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +57,6 @@ stdenv.mkDerivation rec {
     description = "Linux keyboard tools and keyboard maps";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ ];
   };
 }
