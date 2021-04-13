@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python2Packages
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3Packages
 , glib, jansson }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    [ autoreconfHook python2Packages.python python2Packages.simplejson ];
+    [ autoreconfHook python3Packages.python python3Packages.simplejson ];
   propagatedBuildInputs = [ glib jansson ];
 
   meta = with lib; {
