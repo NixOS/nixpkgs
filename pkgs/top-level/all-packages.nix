@@ -2514,7 +2514,9 @@ in
 
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
-  geckodriver = callPackage ../development/tools/geckodriver { };
+  geckodriver = callPackage ../development/tools/geckodriver {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   geekbench = callPackage ../tools/misc/geekbench { };
 
@@ -2664,8 +2666,6 @@ in
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
   klaus = with python3Packages; toPythonApplication klaus;
-
-  kramdown-rfc2629 = callPackage ../tools/text/kramdown-rfc2629 { };
 
   klipper = callPackage ../servers/klipper { };
 
@@ -4378,8 +4378,6 @@ in
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
-  feeds = callPackage ../applications/networking/feedreaders/feeds {};
-
   fend = callPackage ../tools/misc/fend { };
 
   ferm = callPackage ../tools/networking/ferm { };
@@ -4962,6 +4960,8 @@ in
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
+
+  gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
@@ -22181,6 +22181,8 @@ in
   };
 
   bookworm = callPackage ../applications/office/bookworm { };
+
+  CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 

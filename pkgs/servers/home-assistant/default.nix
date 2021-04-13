@@ -372,6 +372,7 @@ in with py.pkgs; buildPythonApplication rec {
     "wled"
     "workday"
     "worldclock"
+    "yeelight"
     "zeroconf"
     "zha"
     "zone"

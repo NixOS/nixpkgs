@@ -1,7 +1,7 @@
 { system ? builtins.currentSystem
 , config ? { }
 , pkgs ? import ../.. { inherit system config; }
-}:
+}@args:
 
 with pkgs.lib;
 
@@ -22,7 +22,7 @@ let
         assert "Linux" in machine.succeed("uname -s")
         assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
       '';
-  }));
+  }) args);
 in
 with pkgs; {
   linux_4_4 = makeKernelTest "4.4" linuxPackages_4_4;
