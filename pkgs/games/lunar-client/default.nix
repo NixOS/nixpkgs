@@ -35,7 +35,7 @@ in appimageTools.wrapType1 rec {
     description = "Minecraft 1.7.10 & 1.8.9 PVP Client";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ zyansheep ];
+    maintainers = with maintainers; [ zyansheep Technical27 ];
     platforms = [ "x86_64-linux" ];
   };
 }
