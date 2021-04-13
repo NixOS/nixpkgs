@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     chmod -R +w _deps/theora_content-src
   '';
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ alsaLib dumb libjack2 libogg SDL2 libtheora libvorbis libXext libXxf86vm libX11 ];
 
