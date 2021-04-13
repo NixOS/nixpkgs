@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
 
 let
-  version = "6.6.7-build-529";
+  version = "6.9.3-build-305";
   name = "frostwire-desktop-${version}";
 
   src = fetchFromGitHub {
     owner = "frostwire";
     repo = "frostwire";
     rev = name;
-    sha256 = "03wdj2kr8akzx8m1scvg98132zbaxh81qjdsxn2645b3gahjwz0m";
+    sha256 = "0xkvvmqy9kb2swgb466kqabw764f6acglmqidd4i9q2jck422xq3";
   };
 
   desktopItem = makeDesktopItem {
