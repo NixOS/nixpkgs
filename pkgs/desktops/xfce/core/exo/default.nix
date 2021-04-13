@@ -4,9 +4,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "exo";
-  version = "4.16.1";
+  version = "4.16.2";
 
-  sha256 = "1220mq8gs5s8l0d1p92j6icldzqj6zaisp27ss5jm7hwkkcnms9n";
+  sha256 = "0rsp92j4hkr5jrkrj8anzw9fwd96xbxzpzqzqiyjjwdiq7b29l1v";
 
   nativeBuildInputs = [
     libxslt
