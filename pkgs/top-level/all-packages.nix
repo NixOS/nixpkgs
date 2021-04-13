@@ -6101,8 +6101,6 @@ in
 
   mxt-app = callPackage ../misc/mxt-app { };
 
-  mxisd = callPackage ../servers/mxisd { };
-
   naabu = callPackage ../tools/security/naabu { };
 
   nagstamon = callPackage ../tools/misc/nagstamon {
