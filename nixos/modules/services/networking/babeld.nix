@@ -102,7 +102,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET6" "AF_INET" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
