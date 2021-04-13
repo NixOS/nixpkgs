@@ -253,7 +253,7 @@ let
   '';
 
   canonicalizePortList =
-    ports: lib.unique (builtins.sort builtins.lessThan ports);
+    ports: lib.fastUnique builtins.lessThan ports;
 
   commonOptions = {
     allowedTCPPorts = mkOption {
