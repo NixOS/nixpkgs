@@ -4378,8 +4378,6 @@ in
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
-  feeds = callPackage ../applications/networking/feedreaders/feeds {};
-
   fend = callPackage ../tools/misc/fend { };
 
   ferm = callPackage ../tools/networking/ferm { };
@@ -4962,6 +4960,8 @@ in
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
+
+  gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
