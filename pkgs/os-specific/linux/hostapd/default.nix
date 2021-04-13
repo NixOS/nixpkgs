@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl openssl sqlite ];
 
   patches = [
-    (fetchurl {
+    (fetchpatch {
       # Note: fetchurl seems to be unhappy with openwrt git
       # server's URLs containing semicolons. Using the github mirror instead.
       url = "https://raw.githubusercontent.com/openwrt/openwrt/master/package/network/services/hostapd/patches/300-noscan.patch";
