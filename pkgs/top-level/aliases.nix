@@ -341,6 +341,7 @@ mapAliases ({
   krename-qt5 = krename; # added 2017-02-18
   kerberos = libkrb5; # moved from top-level 2021-03-14
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
+  kramdown-rfc2629 = rubyPackages.kramdown-rfc2629; # added 2021-03-23
   kvm = qemu_kvm; # added 2018-04-25
   latinmodern-math = lmmath;
   letsencrypt = certbot; # added 2016-05-16

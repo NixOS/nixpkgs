@@ -235,6 +235,16 @@
     };
     version = "2.1.532";
   };
+  certified = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1706p6p0a8adyvd943af2a3093xakvislgffw3v9dvp7j07dyk5a";
+      type = "gem";
+    };
+    version = "1.0.0";
+  };
   CFPropertyList = {
     groups = ["default"];
     platforms = [];
@@ -1222,6 +1232,16 @@
     };
     version = "2.5.1";
   };
+  json_pure = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "030hmc268wchqsccbjk41hvbyg99krpa72i3q0y3wwqzfh8hi736";
+      type = "gem";
+    };
+    version = "2.5.1";
+  };
   jwt = {
     groups = ["default"];
     platforms = [];
@@ -1253,6 +1273,17 @@
       type = "gem";
     };
     version = "1.1.0";
+  };
+  kramdown-rfc2629 = {
+    dependencies = ["certified" "json_pure" "kramdown"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1p1iviq8q9za2hg0vqyrarrc3mqfskgp7spxp37xj0kl3g89vswq";
+      type = "gem";
+    };
+    version = "1.4.1";
   };
   libv8 = {
     groups = ["default"];

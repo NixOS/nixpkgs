@@ -2665,8 +2665,6 @@ in
 
   klaus = with python3Packages; toPythonApplication klaus;
 
-  kramdown-rfc2629 = callPackage ../tools/text/kramdown-rfc2629 { };
-
   klipper = callPackage ../servers/klipper { };
 
   klog = qt5.callPackage ../applications/radio/klog { };
