@@ -14081,6 +14081,8 @@ in
 
   cl = callPackage ../development/libraries/cl { };
 
+  clanlib = callPackage ../development/libraries/clanlib { };
+
   classads = callPackage ../development/libraries/classads { };
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
