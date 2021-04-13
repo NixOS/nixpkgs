@@ -14,8 +14,7 @@ let cross = if crossSystem != null
 in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
 
 let
-  llvmPackageSet = if stdenv.hostPlatform.isAarch64 then "llvmPackages_11" else "llvmPackages_7";
-  llvmPackages = pkgs."${llvmPackageSet}";
+  llvmPackages = llvmPackages_11;
   storePrefixLen = builtins.stringLength builtins.storeDir;
 in rec {
   coreutils_ = coreutils.override (args: {
