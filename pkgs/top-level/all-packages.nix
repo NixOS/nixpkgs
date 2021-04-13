@@ -29752,7 +29752,14 @@ in
     nixUnstable
     nixFlakes;
 
-  nixStatic = pkgsStatic.nix;
+  nixStatic = pkgsStatic.nix.overrideAttrs (attrs: rec {
+    # workaround: make sure that the derivation's name is
+    # not too similar to pkgs.nix, so nix-env -u doesn't
+    # interpret the host suffix of nixStatic as a newer
+    # version than 2.3.10 and “upgrade” nix to nixStatic,
+    # breaking users' setups in the process.
+    pname = "nix-static";
+  });
 
   nixops = callPackage ../tools/package-management/nixops { };
 
