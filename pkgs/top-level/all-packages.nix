@@ -961,6 +961,8 @@ in
     lua = lua5_3;
   };
 
+  apkid = callPackage ../development/tools/apkid { };
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };

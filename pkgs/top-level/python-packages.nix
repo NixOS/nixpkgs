@@ -9160,6 +9160,8 @@ in {
 
   Yapsy = callPackage ../development/python-modules/yapsy { };
 
+  yara-python = callPackage ../development/python-modules/yara-python { };
+
   yarg = callPackage ../development/python-modules/yarg { };
 
   yarl = callPackage ../development/python-modules/yarl { };
