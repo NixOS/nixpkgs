@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -6,7 +7,7 @@
 , gobject-introspection
 , vala
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 , gtk3
 , glade
@@ -18,6 +19,7 @@
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
+, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     gobject-introspection
     gtk-doc
     libxml2
@@ -78,6 +80,12 @@ stdenv.mkDerivation rec {
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";
