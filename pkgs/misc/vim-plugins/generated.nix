@@ -483,18 +483,6 @@ let
     meta.homepage = "https://github.com/neoclide/coc-denite/";
   };
 
-  coc-explorer = buildVimPluginFrom2Nix {
-    pname = "coc-explorer";
-    version = "2021-04-12";
-    src = fetchFromGitHub {
-      owner = "weirongxu";
-      repo = "coc-explorer";
-      rev = "252b48bdd55e494fae8dce07526c0efa33ad069d";
-      sha256 = "1f6pxszy7gvlz2sh9477gbxhkvjrl0ni3l8n2d6109k7lww40a3n";
-    };
-    meta.homepage = "https://github.com/weirongxu/coc-explorer/";
-  };
-
   coc-fzf = buildVimPluginFrom2Nix {
     pname = "coc-fzf";
     version = "2021-03-21";
