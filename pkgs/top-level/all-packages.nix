@@ -20636,7 +20636,7 @@ in
 
   bookworm = callPackage ../applications/office/bookworm { };
 
-  CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel {};
+  CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 

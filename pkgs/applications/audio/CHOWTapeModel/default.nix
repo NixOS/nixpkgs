@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     description = "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ magnetophon ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }
