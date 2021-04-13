@@ -196,8 +196,9 @@ in rec {
         // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
           name =
             let
+              staticMarker = lib.optionalString stdenv.hostPlatform.isStatic "-static";
               name' = attrs.name or
-                "${attrs.pname}-${attrs.version}";
+                "${attrs.pname}${staticMarker}-${attrs.version}";
               # Fixed-output derivations like source tarballs shouldn't get a host
               # suffix. But we have some weird ones with run-time deps that are
               # just used for their side-affects. Those might as well since the
