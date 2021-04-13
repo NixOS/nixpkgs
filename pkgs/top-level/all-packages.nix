@@ -5852,6 +5852,8 @@ in
 
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
+  kubepug = callPackage ../development/tools/kubepug { };
+
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
@@ -6388,7 +6390,9 @@ in
 
   lzip = callPackage ../tools/compression/lzip { };
 
-  luxcorerender = callPackage ../tools/graphics/luxcorerender { };
+  luxcorerender = callPackage ../tools/graphics/luxcorerender {
+    openimagedenoise = openimagedenoise_1_2_x;
+  };
 
   xz = callPackage ../tools/compression/xz { };
 
@@ -7090,6 +7094,8 @@ in
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
   openimagedenoise = callPackage ../development/libraries/openimagedenoise { };
+
+  openimagedenoise_1_2_x = callPackage ../development/libraries/openimagedenoise/1_2_x.nix { };
 
   openmvg = callPackage ../applications/science/misc/openmvg { };
 
@@ -16861,8 +16867,6 @@ in
 
   proj = callPackage ../development/libraries/proj { };
 
-  proj_5 = callPackage ../development/libraries/proj/5.2.nix { };
-
   proj-datumgrid = callPackage ../development/libraries/proj-datumgrid { };
 
   proselint = callPackage ../tools/text/proselint {
@@ -17127,8 +17131,6 @@ in
   qgnomeplatform =  libsForQt514.callPackage ../development/libraries/qgnomeplatform { };
 
   randomx = callPackage ../development/libraries/randomx { };
-
-  redkite = callPackage ../development/libraries/redkite { };
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
@@ -22481,6 +22483,8 @@ in
 
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
 
+  e16 = callPackage ../applications/window-managers/e16 { };
+
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
   ebumeter = callPackage ../applications/audio/ebumeter { };
@@ -26943,9 +26947,7 @@ in
 
   xscope = callPackage ../applications/misc/xscope { };
 
-  xscreensaver = callPackage ../misc/screensavers/xscreensaver {
-    inherit (gnome2) libglade;
-  };
+  xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
 
   xsuspender = callPackage ../applications/misc/xsuspender {  };
 

@@ -10,14 +10,14 @@
 
 pythonPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "431";
+  version = "434";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "v${version}";
-    sha256 = "0mfql27n725k6ynvhkgzmxxpfbjlzil2fjpy082gz257kb0880zy";
+    sha256 = "sha256-7Allc9zawja8DO2idv+MAYZ/cBRTCMd0mbgBLfEVii8=";
   };
 
   nativeBuildInputs = [
@@ -75,11 +75,11 @@ pythonPackages.buildPythonPackage rec {
     -e TestServer \
   '';
 
-  extraOutputsToLink = [ "doc" ];
+  outputs = [ "out" "doc" ];
 
   postPatch = ''
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${miniupnpc_2}/bin/upnpc";' \
-      -i ./hydrus/core/HydrusNATPunch.py
+      -i ./hydrus/core/networking/HydrusNATPunch.py
 
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${swftools}/bin/swfrender";' \
       -i ./hydrus/core/HydrusFlashHandling.py

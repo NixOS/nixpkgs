@@ -379,6 +379,8 @@ in {
 
   amcrest = callPackage ../development/python-modules/amcrest { };
 
+  amiibo-py = callPackage ../development/python-modules/amiibo-py { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
