@@ -800,6 +800,7 @@ self: super: {
       "coc-diagnostic"
       "coc-emmet"
       "coc-eslint"
+      "coc-explorer"
       "coc-git"
       "coc-go"
       "coc-highlight"
