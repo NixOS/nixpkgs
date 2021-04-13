@@ -26862,6 +26862,11 @@ with pkgs;
 
   peek = callPackage ../applications/video/peek { };
 
+  peertube = callPackage ../servers/peertube {
+    # until v15 is supported but using default version
+    nodejs = pkgs.nodejs-14_x;
+  };
+
   pflask = callPackage ../os-specific/linux/pflask {};
 
   pfsshell = callPackage ../tools/misc/pfsshell { };
