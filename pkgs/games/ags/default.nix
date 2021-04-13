@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     mkdir -p _deps
     cp -a $libAllegro _deps/allegro_content-src
-    cp -a $libOgg _deps/ogg_content-src
+    cp -a ${libogg.src} _deps/ogg_content-src
     cp -a $libVorbis _deps/vorbis_content-src
     cp -a $libTheora _deps/theora_content-src
     chmod -R +w _deps/allegro_content-src
