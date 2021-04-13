@@ -29,8 +29,8 @@
 , withCrosstalkPass ? false
 , z3
   # Classical function -> Quantum Circuit compiler
-, withClassicalFunctionCompiler ? false
-, tweedledum ? null
+, withClassicalFunctionCompiler ? true
+, tweedledum
   # test requirements
 , ddt
 , hypothesis
@@ -56,7 +56,7 @@ in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.16.4";
+  version = "0.17.0";
 
   disabled = pythonOlder "3.6";
 
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/rWlPfpAHoMedKG42jfUYt0Ezq7i+9dkyPllavkg4cc=";
+    hash = "sha256-LbNbaHAWAVG5YLc9juuwcOlrREBW6OjEl7VPtACfl3I=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -100,15 +100,17 @@ buildPythonPackage rec {
     "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
-  ] ++ lib.optionals (!withClassicalFunctionCompiler ) [
-    "--ignore=test/python/classical_function_compiler/"
+  disabledTestPaths = [
+    "test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
+  ] ++ lib.optionals (!withClassicalFunctionCompiler) [
+    "test/python/classical_function_compiler/"
   ];
   disabledTests = [
     # Flaky tests
     "test_cx_equivalence"
     "test_pulse_limits"
+  ] ++ lib.optionals (!withClassicalFunctionCompiler) [
+    "TestPhaseOracle"
   ]
   # Disabling slow tests for build constraints
   ++ [
@@ -130,6 +132,14 @@ buildPythonPackage rec {
     "test_block_collection_reduces_1q_gate"
     "test_multi_controlled_rotation_gate_matrices"
     "test_block_collection_runs_for_non_cx_bases"
+    "test_with_two_qubit_reduction"
+    "test_basic_aer_qasm"
+    "test_hhl"
+    "test_H2_hamiltonian"
+    "test_max_evals_grouped_2"
+    "test_qaoa_qc_mixer_4"
+    "test_abelian_grouper_random_2"
+    "test_pauli_two_design"
   ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding

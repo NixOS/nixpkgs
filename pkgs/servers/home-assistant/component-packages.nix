@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.4.3";
+  version = "2021.4.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -549,7 +549,7 @@
     "netgear_lte" = ps: with ps; [ ]; # missing inputs: eternalegypt
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
     "neurio_energy" = ps: with ps; [ ]; # missing inputs: neurio
-    "nexia" = ps: with ps; [ ]; # missing inputs: nexia
+    "nexia" = ps: with ps; [ nexia ];
     "nextbus" = ps: with ps; [ ]; # missing inputs: py_nextbusnext
     "nextcloud" = ps: with ps; [ ]; # missing inputs: nextcloudmonitor
     "nfandroidtv" = ps: with ps; [ ];

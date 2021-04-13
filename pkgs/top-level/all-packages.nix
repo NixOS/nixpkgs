@@ -257,6 +257,8 @@ in
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
+  probe-run = callPackage ../development/tools/rust/probe-run {};
+
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
@@ -958,6 +960,8 @@ in
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
+
+  apkid = callPackage ../development/tools/apkid { };
 
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
@@ -17151,6 +17155,8 @@ in
 
   rote = callPackage ../development/libraries/rote { };
 
+  round = callPackage ../applications/graphics/round { };
+
   ronn = callPackage ../development/tools/ronn { };
 
   rshell = python3.pkgs.callPackage ../development/tools/rshell { };
@@ -28009,6 +28015,8 @@ in
     inherit (gnome3) zenity;
   };
 
+  sdlpop = callPackage ../games/sdlpop { };
+
   stepmania = callPackage ../games/stepmania {
     ffmpeg = ffmpeg_2;
   };
@@ -29900,7 +29908,9 @@ in
   nix-deploy = haskell.lib.justStaticExecutables haskellPackages.nix-deploy;
   nix-diff = haskell.lib.justStaticExecutables haskellPackages.nix-diff;
 
-  nix-du = callPackage ../tools/package-management/nix-du { };
+  nix-du = callPackage ../tools/package-management/nix-du {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };
