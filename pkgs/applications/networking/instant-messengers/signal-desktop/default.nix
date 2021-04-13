@@ -96,6 +96,8 @@ in stdenv.mkDerivation rec {
   dontAutoPatchelf = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
 
     mv usr/share $out/share
@@ -109,6 +111,8 @@ in stdenv.mkDerivation rec {
     # Symlink to bin
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
+
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -136,7 +140,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://signal.org/";
     changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license     = lib.licenses.gpl3;
+    license     = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];
   };
