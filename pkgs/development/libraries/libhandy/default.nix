@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -6,7 +7,7 @@
 , gobject-introspection
 , vala
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 , gtk3
 , glade
@@ -18,23 +19,24 @@
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
+, gnome3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.2.0";
+  version = "1.2.1";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-OfWQriCRDnb+HAYHsuvliXUPRWENau7Fww4u5gKiCyU=";
+    sha256 = "sha256-QRtMak1fntXkZZS0q7BMVK8pTjJCzzZJQgKfXgtvUQs=";
   };
 
   nativeBuildInputs = [
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     gobject-introspection
     gtk-doc
     libxml2
@@ -78,6 +80,12 @@ stdenv.mkDerivation rec {
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";
