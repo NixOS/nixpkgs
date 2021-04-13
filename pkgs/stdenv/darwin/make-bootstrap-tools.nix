@@ -33,10 +33,7 @@ in rec {
   curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
 
   # Avoid stdenv rebuild.
-  Libsystem_ = (darwin.Libsystem.override (args:
-    { xnu = darwin.xnu.overrideAttrs (oldAttrs:
-      { patches = [ ./fixed-xnu-python3.patch ]; });
-    })).overrideAttrs (oldAttrs:
+  Libsystem_ = darwin.Libsystem.overrideAttrs (oldAttrs:
     { installPhase = oldAttrs.installPhase + ''
         cat <<EOF > $out/include/TargetConditionals.h
         #ifndef __TARGETCONDITIONALS__
