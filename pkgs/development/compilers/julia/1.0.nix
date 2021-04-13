@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   ;
 
   patches = [
-    ./use-system-utf8proc-julia-1.0.patch
+    ./patches/1.0/use-system-utf8proc-julia-1.0.patch
   ];
 
   postPatch = ''
