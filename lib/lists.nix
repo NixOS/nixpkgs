@@ -692,6 +692,31 @@ rec {
     "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
     (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
+  /* Remove duplicate adjacent elements from the list, using the supplied
+     equality predicate. O(n) complexity.
+
+     Type: uniqBy :: (a -> a -> bool) -> [a] -> [a]
+
+     Example:
+       uniqBy (x: y: x == y) [ 1 2 2 3 1 1 1 3 1 1 2 ]
+       => [ 1 2 3 1 3 1 2 ]
+  */
+  uniqBy =
+    pred:
+    list:
+    let eAt = elemAt list; in
+    # The first element is never considered a duplicate.
+    ifilter0 (n: e: n == 0 || !(pred (eAt (n - 1)) e)) list;
+
+  /* Remove duplicate adjacent elements from the list. O(n) complexity.
+
+     Type: uniq :: [a] -> [a]
+
+     Example:
+       uniq [ 1 2 2 3 1 1 3 1 1 2 ]
+       => [ 1 2 3 1 3 1 2 ]
+  */
+  uniq = uniqBy (a: b: a == b);
 
   /* Remove duplicate elements from the list. O(n^2) complexity.
 
@@ -700,8 +725,8 @@ rec {
      Example:
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
-   */
- unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
+  */
+  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 
