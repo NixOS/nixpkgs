@@ -12,17 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "18i5zvrp6dv6vygxx5nc93mai2p2x786n5lnf5avrin6xiz2j6hd";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ autoreconfHook python3Packages.python python3Packages.simplejson ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = with python3Packages; [ python simplejson ];
   propagatedBuildInputs = [ glib jansson ];
 
   meta = with lib; {
     homepage = "https://github.com/haiwen/libsearpc";
-    description =
-      "A simple and easy-to-use C language RPC framework (including both server side & client side) based on GObject System";
+    description = "A simple and easy-to-use C language RPC framework based on GObject System";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ greizgh ];
   };
 }
