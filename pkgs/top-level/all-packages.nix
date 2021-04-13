@@ -6036,6 +6036,8 @@ in
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
+  mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
