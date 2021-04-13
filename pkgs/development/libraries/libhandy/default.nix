@@ -10,6 +10,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gtk3
+, enableGlade ? false
 , glade
 , dbus
 , xvfb_run
@@ -20,13 +21,21 @@
 , at-spi2-atk
 , at-spi2-core
 , gnome3
+, libhandy
+, replaceDependency
 }:
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
   version = "1.2.1";
 
-  outputs = [ "out" "dev" "devdoc" "glade" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ] ++ lib.optionals enableGlade [
+    "glade"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -48,9 +57,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdk-pixbuf
-    glade
     gtk3
     libxml2
+  ] ++ lib.optionals enableGlade [
+    glade
   ];
 
   checkInputs = [
@@ -64,6 +74,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dglade_catalog=${if enableGlade then "enabled" else "disabled"}"
   ];
 
   # Uses define_variable in pkg-config, but we still need it to use the glade output
@@ -85,6 +96,17 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
     };
+  } // lib.optionalAttrs (!enableGlade) {
+    glade =
+      let
+        libhandyWithGlade = libhandy.override {
+          enableGlade = true;
+        };
+      in (replaceDependency {
+        drv = libhandyWithGlade.glade;
+        oldDependency = libhandyWithGlade.out;
+        newDependency = libhandy.out;
+      });
   };
 
   meta = with lib; {
