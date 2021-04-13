@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     "--enable-fastjet=${fastjet}"
     "--enable-lhapdf=${lhapdf}"
     "--enable-rivet=${rivet}"
+    "--enable-pythia"
   ];
 
   meta = with lib; {
