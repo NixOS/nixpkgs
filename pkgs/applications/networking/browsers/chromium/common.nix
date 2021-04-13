@@ -7,7 +7,7 @@
 , xdg-utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, perl, pkg-config
+, python2Packages, python3Packages, perl, pkg-config
 , nspr, systemd, libkrb5
 , util-linux, alsaLib
 , bison, gperf
@@ -130,6 +130,8 @@ let
       ninja which python2Packages.python perl pkg-config
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
+    ] ++ optionals (chromiumVersionAtLeast "91") [
+      python3Packages.python
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -160,7 +162,9 @@ let
       url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/61b0ab526d2aa3c62fa20bb756461ca9a482f6c6/trunk/chromium-fix-libva-redef.patch";
       sha256 = "1qj4sn1ngz0p1l1w3346kanr1sqlr3xdzk1f1i86lqa45mhv77ny";
     }) ++ optional (chromiumVersionAtLeast "90")
-      ./fix-missing-atspi2-dependency.patch
+      ./patches/fix-missing-atspi2-dependency.patch
+    ++ optional (chromiumVersionAtLeast "91")
+      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
     ;
 
     postPatch = ''
