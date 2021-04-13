@@ -170,6 +170,12 @@ in
 {
   inherit buildUBootMesonG12A;
 
+  ubootLibretechAC = buildUBootMesonGXL {
+    # Amlogic S805X
+    defconfig = "libretech-ac_defconfig";
+    FIPDIR = "${firmwareAmlogic}/lafrite";
+  };
+
   ubootOdroidC2 = buildUBoot {
     # Amlogic S905 / GXBB
     # This uses a bespoke build because while it's GXBB, the binaries from the

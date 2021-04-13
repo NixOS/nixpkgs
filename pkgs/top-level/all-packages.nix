@@ -20748,6 +20748,7 @@ in
   inherit (callPackage ../misc/uboot/amlogic.nix {})
     buildUBootMesonG12A
     buildUBootMesonGXL
+    ubootLibretechAC
     ubootOdroidC2
     ubootOdroidC4
   ;
