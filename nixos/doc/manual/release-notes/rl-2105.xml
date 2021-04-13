@@ -669,6 +669,12 @@ environment.systemPackages = [
      Environment variables can be set using <option>environment.variables</option>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <option>services.minio.dataDir</option> changed type to a list of paths, required for specifiyng multiple data directories for using with erasure coding.
+     Currently, the service doesn't enforce nor checks the correct number of paths to correspond to minio requirements.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
