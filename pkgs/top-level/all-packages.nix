@@ -17155,6 +17155,8 @@ in
 
   rote = callPackage ../development/libraries/rote { };
 
+  round = callPackage ../applications/graphics/round { };
+
   ronn = callPackage ../development/tools/ronn { };
 
   rshell = python3.pkgs.callPackage ../development/tools/rshell { };
