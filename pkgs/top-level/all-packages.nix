@@ -257,6 +257,8 @@ in
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
+  probe-run = callPackage ../development/tools/rust/probe-run {};
+
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
