@@ -1240,8 +1240,6 @@ in
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
-  fedora-coreos-config-transpiler = callPackage ../development/tools/fedora-coreos-config-transpiler { };
-
   ccextractor = callPackage ../applications/video/ccextractor { };
 
   cconv = callPackage ../tools/text/cconv { };
@@ -1747,6 +1745,8 @@ in
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
   blur-effect = callPackage ../tools/graphics/blur-effect { };
+
+  butane = callPackage ../development/tools/butane { };
 
   charles = charles4;
   inherit (callPackage ../applications/networking/charles {})
