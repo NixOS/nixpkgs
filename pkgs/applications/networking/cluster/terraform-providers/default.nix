@@ -3,7 +3,6 @@
 , buildGoPackage
 , fetchFromGitHub
 , callPackage
-, runtimeShell
 }:
 let
   list = lib.importJSON ./providers.json;
