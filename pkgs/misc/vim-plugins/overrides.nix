@@ -1,81 +1,87 @@
 { lib
 , stdenv
-, python
-, cmake
-, meson
-, vim
-, ruby
-, which
-, fetchFromGitHub
-, fetchurl
-, fetchpatch
-, llvmPackages
-, rustPlatform
+
+  # nixpkgs functions
 , buildGoModule
-, pkg-config
-, curl
-, openssl
-, libgit2
-, libiconv
-, xkb-switch
-, fzf
-, skim
-, stylish-haskell
+, buildVimPluginFrom2Nix
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, substituteAll
+
+  # Language dependencies
+, python
 , python3
+, rustPlatform
+
+  # Misc dependencies
+, Cocoa
+, code-minimap
+, dasht
+, direnv
+, fzf
+, gnome3
+, khard
+, languagetool
+, llvmPackages
+, meson
+, nim
+, nodePackages
+, skim
+, sqlite
+, stylish-haskell
+, tabnine
+, vim
+, which
+, xkb-switch
+, ycmd
+
+  # command-t dependencies
+, rake
+, ruby
+
+  # cpsm dependencies
 , boost
+, cmake
 , icu
 , ncurses
-, ycmd
-, rake
-, gobject-introspection
-, glib
-, wrapGAppsHook
-, substituteAll
-, languagetool
-, tabnine
 
-, Cocoa
+  # LanguageClient-neovim dependencies
 , CoreFoundation
 , CoreServices
 
-, buildVimPluginFrom2Nix
-, nodePackages
-, dasht
-, sqlite
-, code-minimap
+  # sved dependencies
+, glib
+, gobject-introspection
+, wrapGAppsHook
 
-  # deoplete-khard dependency
-, khard
+  # vim-clap dependencies
+, curl
+, libgit2
+, libiconv
+, openssl
+, pkg-config
 
-  # vim-go dependencies
+# vim-go dependencies
 , asmfmt
 , delve
 , errcheck
-, godef
-, golint
-, gomodifytags
-, gotags
-, gotools
-, go-motion
 , gnused
-, reftools
-, gogetdoc
-, golangci-lint
-, impl
-, iferr
+, go-motion
+, go-tools
 , gocode
 , gocode-gomod
-, go-tools
+, godef
+, gogetdoc
+, golangci-lint
+, golint
+, gomodifytags
 , gopls
-
-  # direnv-vim dependencies
-, direnv
-
-  # vCoolor dependency
-, gnome3
-
-  # fruzzy dependency
-, nim
+, gotags
+, gotools
+, iferr
+, impl
+, reftools
 }:
 
 self: super: {
