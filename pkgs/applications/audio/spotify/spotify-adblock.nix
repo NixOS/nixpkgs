@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   pname = "spotify-adblock";
   version = "1.4";
-  name = "${pname}-${version}";
+  #name = "${pname}-${version}"; # FIXME cannot coerce a set to a string
+  name = "spotify-adblock-1.4"; # FIXME cannot coerce a set to a string
 
   src = fetchFromGitHub {
     owner = "abba23";
@@ -39,12 +40,11 @@ stdenv.mkDerivation rec {
     sha256 = cef-sha256;
   };
 
-  # sample spotify.version: "1.1.26.501.gbe11e53b-15"
-  # FIXME attribute 'version' missing -> (why) is `pkgs.spotify` not eval-ed at this point?
-  spotify-version-short = builtins.elemAt (builtins.match "^([^.]+\.[^.]+\.[^.]+)\." pkgs.spotify.version) 0; # -> 1.1.26
+  spotify-version = (builtins.parseDrvName pkgs.spotify.name).version; # sample: "1.1.26.501.gbe11e53b"
+  spotify-version-short = builtins.elemAt (builtins.match "([^.]+\.[^.]+\.[^.]+)\..+" spotify-version) 0; # -> 1.1.26
 
   cef-branch = builtins.getAttr spotify-version-short chromium-branch-of-spotify-version;
-  cef-sha256 = builtins.getAttr spotify-version-short cef-sha256-of-branch;
+  cef-sha256 = builtins.getAttr cef-branch cef-sha256-of-branch;
 
   buildInputs = [
     pkgs.spotify
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     # debug
     echo install: spotify = ${pkgs.spotify}
-    echo install: spotify.version = ${pkgs.spotify.version}
+    echo install: spotify.version = ${spotify-version}
     echo install: ls ${pkgs.spotify}
     ls ${pkgs.spotify}
     echo install: ls -l ${pkgs.spotify}/bin
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   cef-sha256-of-branch = {
-    "3945" = "0000000000000000000000000000000000000000000000000000"; # TODO
+    "4183" = "0000000000000000000000000000000000000000000000000000"; # TODO
   };
 
   /*
