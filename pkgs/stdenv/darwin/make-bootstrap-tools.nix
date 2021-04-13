@@ -26,6 +26,12 @@ in rec {
   # Avoid messing with libkrb5 and libnghttp2.
   curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
 
+  # Avoid stdenv rebuild.
+  Libsystem_ = darwin.Libsystem.override (args:
+    { xnu = darwin.xnu.overrideAttrs (oldAttrs:
+      { patches = [ ./fixed-xnu-python3.patch ]; });
+    });
+
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
@@ -37,12 +43,12 @@ in rec {
 
       ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
         # Copy libSystem's .o files for various low-level boot stuff.
-        cp -d ${darwin.Libsystem}/lib/*.o $out/lib
+        cp -d ${Libsystem_}/lib/*.o $out/lib
 
         # Resolv is actually a link to another package, so let's copy it properly
-        cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
+        cp -L ${Libsystem_}/lib/libresolv.9.dylib $out/lib
 
-        cp -rL ${darwin.Libsystem}/include $out
+        cp -rL ${Libsystem_}/include $out
         chmod -R u+w $out/include
         cp -rL ${darwin.ICU}/include*             $out/include
         cp -rL ${libiconv}/include/*       $out/include
