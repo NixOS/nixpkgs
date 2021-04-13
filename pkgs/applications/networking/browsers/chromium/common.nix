@@ -7,7 +7,7 @@
 , xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, python3Packages, perl, pkgconfig
+, python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -130,8 +130,6 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
-    ] ++ optionals (chromiumVersionAtLeast "91") [
-      python3Packages.python
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -159,10 +157,15 @@ let
       "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
       "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
     ) ++ optional (chromiumVersionAtLeast "90")
-      ./fix-missing-atspi2-dependency.patch
-    ++ optional (chromiumVersionAtLeast "91")
+      ./patches/fix-missing-atspi2-dependency.patch
+    ++ optionals (chromiumVersionAtLeast "91") [
       ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
-    ;
+      (githubPatch
+        # Revert "Reland #7 of "Force Python 3 to be used in build.""
+        "38b6a9a8e5901766613879b6976f207aa163588a"
+        "1lvxbd7rl6hz5j6kh6q83yb6vd9g7anlqbai8g1w1bp6wdpgwvp9"
+      )
+    ];
 
     postPatch = ''
       # remove unused third-party
