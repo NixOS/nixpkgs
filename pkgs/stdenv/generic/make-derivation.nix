@@ -193,15 +193,21 @@ in rec {
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
-          name = "${attrs.pname}-${attrs.version}";
-        } // (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
-          # Fixed-output derivations like source tarballs shouldn't get a host
-          # suffix. But we have some weird ones with run-time deps that are
-          # just used for their side-affects. Those might as well since the
-          # hash can't be the same. See #32986.
-          name = "${attrs.name or "${attrs.pname}-${attrs.version}"}-${stdenv.hostPlatform.config}";
-        } // {
+        // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
+          name =
+            let
+              staticMarker = lib.optionalString stdenv.hostPlatform.isStatic "-static";
+              name' = attrs.name or
+                "${attrs.pname}${staticMarker}-${attrs.version}";
+              # Fixed-output derivations like source tarballs shouldn't get a host
+              # suffix. But we have some weird ones with run-time deps that are
+              # just used for their side-affects. Those might as well since the
+              # hash can't be the same. See #32986.
+              hostSuffix = lib.optionalString
+                (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
+                "-${stdenv.hostPlatform.config}";
+            in name' + hostSuffix;
+        }) // {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;

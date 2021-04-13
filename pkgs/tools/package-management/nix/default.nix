@@ -24,14 +24,13 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
-  , name, suffix ? "", src
+  , pname, version, suffix ? "", src
   , patches ? [ ]
   }:
   let
      sh = busybox-sandbox-shell;
      nix = stdenv.mkDerivation rec {
-      inherit name src patches;
-      version = lib.getVersion name;
+      inherit pname version src patches;
 
       is24 = lib.versionAtLeast version "2.4pre";
 
@@ -196,9 +195,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.10";
+    pname = "nix";
+    version = "2.3.10";
     src = fetchurl {
-      url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
       sha256 = "a8a85e55de43d017abbf13036edfb58674ca136691582f17080c1cd12787b7ab";
     };
 
@@ -213,7 +213,8 @@ in rec {
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
+    pname = "nix";
+    version = "2.4${suffix}";
     suffix = "pre20210326_dd77f71";
 
     src = fetchFromGitHub {
