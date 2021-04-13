@@ -21,7 +21,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes scheduler extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
