@@ -1,6 +1,6 @@
 { buildVersion, aarch64sha256, x64sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ lib, fetchurl, stdenv, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
 , writeScript, common-updater-scripts, curl, jq, gnugrep
 , openssl, bzip2, bash, unzip, zip
@@ -14,7 +14,7 @@ let
   primaryBinaryAliases = [ "subl" "sublime" "sublime4" ];
   downloadUrl = "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://www.sublimetext.com/updates/4/dev_update_check";
-  versionFile = builtins.toString ./packages.nix;
+  versionFile = lib.toString ./packages.nix;
   archSha256 = {
     "aarch64-linux" = aarch64sha256;
     "x86_64-linux" = x64sha256;
@@ -24,7 +24,7 @@ let
     "x86_64-linux" = "x64";
   }.${stdenv.hostPlatform.system};
 
-  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib libglvnd openssl gtk3 cairo pango ];
+  libPath = lib.makeLibraryPath [ xorg.libX11 glib libglvnd openssl gtk3 cairo pango ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ];
 in let
   binaryPackage = stdenv.mkDerivation {
@@ -62,10 +62,10 @@ in let
     buildPhase = ''
       runHook preBuild
 
-      for binary in ${ builtins.concatStringsSep " " binaries }; do
+      for binary in ${lib.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
           $binary
       done
 
@@ -92,7 +92,7 @@ in let
 
     postFixup = ''
       wrapProgram $out/sublime_bash \
-        --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
+        --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
 
       wrapProgram $out/${primaryBinary} \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
@@ -102,15 +102,13 @@ in let
 
       # Without this, plugin_host crashes, even though it has the rpath
       for host in $out/plugin_host-{3.3,3.8}; do
-          wrapProgram $host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
+          wrapProgram $host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
       done
     '';
   };
 in stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
-
-  phases = [ "installPhase" ];
 
   ${primaryBinary} = binaryPackage;
 
@@ -132,7 +130,7 @@ in stdenv.mkDerivation (rec {
   passthru.updateScript = writeScript "${pname}-update-script" ''
     #!${stdenv.shell}
     set -o errexit
-    PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl jq gnugrep ]}
+    PATH=${lib.makeBinPath [ common-updater-scripts curl jq gnugrep ]}
 
     latestVersion=$(curl -s ${versionUrl} | jq .latest_version)
 
@@ -141,7 +139,7 @@ in stdenv.mkDerivation (rec {
         exit 0
     fi
 
-    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+    for platform in ${lib.concatStringsSep " " meta.platforms}; do
         # The script will not perform an update when the version attribute is up to date from previous platform run
         # We need to clear it before each run
         update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
@@ -149,7 +147,7 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
     maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
