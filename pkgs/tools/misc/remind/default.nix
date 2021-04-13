@@ -7,10 +7,6 @@
 , tkremind ? true
 }:
 
-assert tkremind -> tk != null;
-assert tkremind -> tcllib != null;
-assert tkremind -> makeWrapper != null;
-
 let
   inherit (lib) optional optionalString;
   tclLibraries = lib.optionals tkremind [ tcllib tk ];
