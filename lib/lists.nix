@@ -728,6 +728,17 @@ rec {
   */
   unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
+  /* Sort and remove duplicate elements from the list.
+     O(n) complexity on top of `sort`.
+
+     Type: fastUnique :: (a -> a -> bool) -> [a] -> [a]
+
+     Example:
+       fastUnique (a: b: a < b) [ 3 2 3 4 ]
+       => [ 2 3 4 ]
+  */
+  fastUnique = comparator: list: uniq (sort comparator list);
+
   /* Intersects list 'e' and another list. O(nm) complexity.
 
      Example:
