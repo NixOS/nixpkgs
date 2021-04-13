@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "0.8.252";
+  version = "1.0.0-alpha.15.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m7i8f5y3lvkbflys0iblkl6ksw6kn2b64k6gy10yd549n8adx69";
+    sha256 = "0ps5rvpb21ndi4ja487j478r80ha68id75xp30ck2wvcv8i18z9l";
   };
 
   nativeBuildInputs = [
