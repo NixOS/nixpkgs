@@ -27197,6 +27197,8 @@ in
 
   megaglest = callPackage ../games/megaglest {};
 
+  methane = callPackage ../games/methane { };
+
   mindustry = callPackage ../games/mindustry { };
   mindustry-wayland = callPackage ../games/mindustry { glew = glew-egl; };
 
