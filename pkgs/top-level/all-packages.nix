@@ -23555,7 +23555,7 @@ in
     withPortAudio = stdenv.isDarwin;
   };
 
-  super-productivity = callPackage ../applications/networking/super-productivity { };
+  super-productivity = callPackage ../applications/office/super-productivity { };
 
   wlroots = callPackage ../development/libraries/wlroots {
     inherit (xorg) xcbutilrenderutil;
