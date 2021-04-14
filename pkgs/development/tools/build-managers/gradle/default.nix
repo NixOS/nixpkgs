@@ -61,13 +61,12 @@ in rec {
     };
   };
 
-  # NOTE: Gradle 7 is a release candidate, so point to 6.8.
-  gradle_latest = gradle_6_8;
+  gradle_latest = gradle_7;
 
   gradle_7 = gradleGen (gradleSpec {
-    version = "7.0-rc-2";
+    version = "7.0";
     nativeVersion = "0.22-milestone-11";
-    sha256 = "0gzvigyvwwizx90vnzhdnbm5rdaki11inxna11s4y67xkn8hrnx5";
+    sha256 = "eb8b89184261025b0430f5b2233701ff1377f96da1ef5e278af6ae8bac5cc305";
   });
 
   gradle_6_8 = gradleGen (gradleSpec {
