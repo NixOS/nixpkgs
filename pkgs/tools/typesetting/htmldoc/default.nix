@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0660829zjfdm6vzx14z7gvsfipsb7h0z74gbkyp2ncg3g2432s4n";
   };
   buildInputs = [ zlib libpng ]
-      ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
+    ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
 
   meta = with lib; {
     description = "Converts HTML files to PostScript and PDF";
