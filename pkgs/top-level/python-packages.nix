@@ -1481,6 +1481,8 @@ in {
 
   cocotb = callPackage ../development/python-modules/cocotb { };
 
+  cocotb-bus = callPackage ../development/python-modules/cocotb-bus { };
+
   codecov = callPackage ../development/python-modules/codecov { };
 
   codespell = callPackage ../development/python-modules/codespell { };
