@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
-  version = "2.5.6";
+  version = "2.5.7";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "13fk6n4j74lvcsrg3kwbw1mkxgcr3iy9dnysmy0pclfsym8z5m5m";
+    sha256 = "1mv1vs4q94bqkmgkj53jcsw1x31kczwydyy3r27a7fycgzmii1pj";
   };
 
   patches = [
