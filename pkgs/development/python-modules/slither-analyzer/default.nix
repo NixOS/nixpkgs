@@ -35,6 +35,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ asymmetric arturcygan ];
+    maintainers = with maintainers; [ arturcygan fab ];
   };
 }
