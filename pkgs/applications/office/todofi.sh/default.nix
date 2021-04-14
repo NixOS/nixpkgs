@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     patchShebangs $out/bin
-    wrapProgram $out/bin/todofi.sh --prefix PATH : "${lib.makeBinPath [ coreutils gawk gnugrep gnused rofi todo-txt-cli ];
-}"
+    wrapProgram $out/bin/todofi.sh --prefix PATH : "${lib.makeBinPath [ coreutils gawk gnugrep gnused rofi todo-txt-cli ]}"
   '';
 
   meta = with lib; {
