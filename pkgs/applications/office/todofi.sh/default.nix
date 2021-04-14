@@ -27,18 +27,10 @@ stdenv.mkDerivation rec {
     install -Dm 755 todofi.sh -t $out/bin
   '';
 
-  wrapperPath = with lib; makeBinPath [
-    coreutils
-    gawk
-    gnugrep
-    gnused
-    rofi
-    todo-txt-cli
-  ];
-
-  fixupPhase = ''
+  postFixup = ''
     patchShebangs $out/bin
-    wrapProgram $out/bin/todofi.sh --prefix PATH : "${wrapperPath}"
+    wrapProgram $out/bin/todofi.sh --prefix PATH : "${lib.makeBinPath [ coreutils gawk gnugrep gnused rofi todo-txt-cli ];
+}"
   '';
 
   meta = with lib; {
