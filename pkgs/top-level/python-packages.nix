@@ -8231,6 +8231,8 @@ in {
   else
     callPackage ../development/python-modules/sympy/1_5.nix { };
 
+  systembridge = callPackage ../development/python-modules/systembridge { };
+
   systemd = callPackage ../development/python-modules/systemd {
     inherit (pkgs) systemd;
   };
