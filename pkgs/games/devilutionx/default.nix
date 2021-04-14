@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "devilutionx";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
     rev = version;
-    sha256 = "034xkz0a7j2nba17mh44r0kamcblvykdwfsjvjwaz2mrcsmzkr9z";
+    sha256 = "sha256-PgYlNO1p78d0uiL474bDJOL++SxJfeBLK65czdaylHU=";
   };
 
   postPatch = ''
