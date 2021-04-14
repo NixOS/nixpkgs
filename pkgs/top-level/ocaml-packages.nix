@@ -1195,6 +1195,8 @@ let
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
+    wayland = callPackage ../development/ocaml-modules/wayland { };
+
     webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
 
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
