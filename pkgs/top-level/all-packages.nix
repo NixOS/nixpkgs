@@ -2340,8 +2340,6 @@ in
     enableSSH = true;
   };
 
-  dylibbundler = callPackage ../tools/misc/dylibbundler { };
-
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   dyncall = callPackage ../development/libraries/dyncall { };
