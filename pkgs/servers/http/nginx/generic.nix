@@ -142,7 +142,10 @@ stdenv.mkDerivation {
 
   passthru = {
     modules = modules;
-    tests.nginx = nixosTests.nginx;
+    tests = {
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
+      variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
+    };
   };
 
   meta = if meta != null then meta else {

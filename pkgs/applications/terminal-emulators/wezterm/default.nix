@@ -22,7 +22,7 @@
 , libGL
 , freetype
 , zlib
-# Apple frameworks
+  # Apple frameworks
 , CoreGraphics
 , Cocoa
 , Foundation
@@ -67,6 +67,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "4tVjrdDlrDPKzcbTYK9vRlzfC9tfvkD+D0aN19A8RWE=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    echo ${version} > .tag
+  '';
 
   cargoSha256 = "sha256-UaXeeuRuQk+CWF936mEAaWTjZuTSRPmxbQ/9E2oZIqg=";
 
