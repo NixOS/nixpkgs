@@ -3683,6 +3683,8 @@ in {
 
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
+  karton-config-extractor = callPackage ../development/python-modules/karton-config-extractor { };
+
   karton-core = callPackage ../development/python-modules/karton-core { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
