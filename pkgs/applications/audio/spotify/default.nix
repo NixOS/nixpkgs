@@ -63,6 +63,8 @@ let
     zlib
   ];
 
+  spotify-adblock = callPackage ./spotify-adblock.nix {};
+
 in
 
 stdenv.mkDerivation {
