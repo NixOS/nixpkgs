@@ -263,8 +263,7 @@ in {
       # settings_local.json is loaded.
       os.environ["SECRET_KEY"] = ""
 
-      from mailman_web.settings.base import *
-      from mailman_web.settings.mailman import *
+      from mailman_web.settings import *
 
       import json
 
