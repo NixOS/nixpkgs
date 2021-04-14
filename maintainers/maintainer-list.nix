@@ -5391,6 +5391,12 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  larsr = {
+    email = "Lars.Rasmusson@gmail.com";
+    github = "larsr";
+    githubId = 182024;
+    name = "Lars Rasmusson";
+  };
   lasandell = {
     email = "lasandell@gmail.com";
     github = "lasandell";

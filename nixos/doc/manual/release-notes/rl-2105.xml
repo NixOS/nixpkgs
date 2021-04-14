@@ -941,6 +941,13 @@ environment.systemPackages = [
      option.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Prior to this release, systemd would also read system units from an undocumented <literal>/etc/systemd-mutable/system</literal> path.
+     This path has been dropped from the defaults. That path (or others) can be re-enabled by adding it to the
+     <link linkend="opt-boot.extraSystemdUnitPaths">boot.extraSystemdUnitPaths</link> list.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
