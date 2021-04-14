@@ -3397,7 +3397,7 @@ in {
 
   ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
 
-  ipfsapi = callPackage ../development/python-modules/ipfsapi { };
+  ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
   iptools = callPackage ../development/python-modules/iptools { };
 
@@ -3684,6 +3684,8 @@ in {
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
   karton-core = callPackage ../development/python-modules/karton-core { };
+
+  karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
 
@@ -8986,6 +8988,8 @@ in {
   winsspi = callPackage ../development/python-modules/winsspi { };
 
   wled = callPackage ../development/python-modules/wled { };
+
+  woob = callPackage ../development/python-modules/woob { };
 
   word2vec = callPackage ../development/python-modules/word2vec { };
 

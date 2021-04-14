@@ -2,22 +2,23 @@
 , async-dns
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , ifaddr
 , pyroute2
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.3.3";
+  version = "1.3.4";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "186agrjx818vn00d3pqlka5ir48rgpbfyn1cifkn9ylsxg9cz3ph";
+    sha256 = "sha256-TmWl5d5HwyqWPUjwtEvc5FzVfxV/K1pekljcMkGN0Ag=";
   };
 
   propagatedBuildInputs = [
@@ -30,9 +31,21 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace '"pytest-runner>=5.2",' ""
   '';
 
-  # Tests require access to /etc/resolv.conf
-  # pythonImportsCheck doesn't work as async-dns wants to create its CONFIG_DIR
-  doCheck = false;
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
+
+  disabledTests = [
+    # Tests require access to /etc/resolv.conf
+    "test_async_discover_hosts"
+  ];
+
+  pythonImportsCheck = ["aiodiscover"];
 
   meta = with lib; {
     description = "Python module to discover hosts via ARP and PTR lookup";
