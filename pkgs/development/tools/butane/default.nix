@@ -3,14 +3,14 @@
 with lib;
 
 buildGoModule rec {
-  pname = "fcct";
-  version = "0.10.0";
+  pname = "butane";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
-    repo = "fcct";
+    repo = "butane";
     rev = "v${version}";
-    sha256 = "0gxaj2fy889fl5vhb4s89rhih9a65aqjsz2yffhi5z4fa2im8szv";
+    sha256 = "1s4rkq7mj1lyi8h47jyfy3qygfxhrmpihdy8rcnn55gcy04lm0qc";
   };
 
   vendorSha256 = null;
@@ -20,17 +20,17 @@ buildGoModule rec {
   subPackages = [ "internal" ];
 
   buildFlagsArray = ''
-    -ldflags=-X github.com/coreos/fcct/internal/version.Raw=v${version}
+    -ldflags=-X github.com/coreos/butane/internal/version.Raw=v${version}
   '';
 
   postInstall = ''
-    mv $out/bin/{internal,fcct}
+    mv $out/bin/{internal,butane}
   '';
 
   meta = {
-    description = "Translates Fedora CoreOS configs into Ignition configs";
+    description = "Translates human-readable Butane configs into machine-readable Ignition configs";
     license = licenses.asl20;
-    homepage = "https://github.com/coreos/fcct";
+    homepage = "https://github.com/coreos/butane";
     maintainers = with maintainers; [ elijahcaine ruuda ];
     platforms = platforms.unix;
   };

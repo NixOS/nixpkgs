@@ -144,7 +144,7 @@ let
       inherit name version src wmClass jdk;
       product = "MPS";
       meta = with lib; {
-        homepage = https://www.jetbrains.com/mps/;
+        homepage = "https://www.jetbrains.com/mps/";
         inherit license description;
         longDescription = ''
           A metaprogramming system which uses projectional editing

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, jre, git, gradle, perl, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jre, git, gradle_6, perl, makeWrapper }:
 
 let
   name = "mxisd-${version}";
@@ -16,7 +16,7 @@ let
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src;
-    nativeBuildInputs = [ gradle perl git ];
+    nativeBuildInputs = [ gradle_6 perl git ];
 
     buildPhase = ''
       export MXISD_BUILD_VERSION=${rev}
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation {
   inherit name src version;
-  nativeBuildInputs = [ gradle perl makeWrapper ];
+  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
   buildInputs = [ jre ];
 
   patches = [ ./0001-gradle.patch ];

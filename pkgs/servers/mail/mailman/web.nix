@@ -14,18 +14,25 @@ buildPythonPackage rec {
     leaveDotGit = true;
   };
 
-  # This is just so people installing from pip also get uwsgi
-  # installed, AFAICT.
-
-  # Django is depended on transitively by hyperkitty and postorius,
-  # and mailman_web has overly restrictive version bounds on it, so
-  # let's remove it.
   postPatch = ''
+    # This is just so people installing from pip also get uwsgi
+    # installed, AFAICT.
     sed -i '/^  uwsgi$/d' setup.cfg
+
+    # Django is depended on transitively by hyperkitty and postorius,
+    # and mailman_web has overly restrictive version bounds on it, so
+    # let's remove it.
     sed -i '/^  Django/d' setup.cfg
+
+    # Upstream seems to mostly target installing on top of existing
+    # distributions, and uses a path appropriate for that, but we are
+    # a distribution, so use a state directory appropriate for a
+    # distro package.
+    substituteInPlace mailman_web/settings/base.py \
+        --replace /opt/mailman/web /var/lib/mailman-web
   '';
 
-  nativeBuildInputs = [ git setuptools-scm makeWrapper ];
+  nativeBuildInputs = [ git makeWrapper setuptools-scm ];
   propagatedBuildInputs = [ hyperkitty postorius whoosh ];
 
   # Tries to check runtime configuration.
