@@ -20563,6 +20563,8 @@ in
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
+  courier-prime = callPackage ../data/fonts/courier-prime { };
+
   cozette = callPackage ../data/fonts/cozette { };
 
   culmus = callPackage ../data/fonts/culmus { };
