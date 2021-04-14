@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , intltool
 , meson
 , ninja
@@ -38,6 +39,17 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Make the Mozilla API key configurable
+    # https://gitlab.freedesktop.org/geoclue/geoclue/merge_requests/54 (only partially backported)
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/95c9ad4dc176860c85a07d0db4cb4179929bdb54.patch";
+      sha256 = "/lq/dLBJl2vf16tt7emYoTtXY6iUw+4s2XcABUHp3Kc=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/1a00809a0d89b0849a57647c878d192354247a33.patch";
+      sha256 = "6FuiukgFWg2cEKt8LlKP4E0rfSH/ZQgk6Ip1mGJpNFQ=";
+    })
+
     ./add-option-for-installation-sysconfdir.patch
   ];
 
@@ -77,6 +89,7 @@ stdenv.mkDerivation rec {
     "-Ddemo-agent=${lib.boolToString withDemoAgent}"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    "-Dmozilla-api-key=5c28d1f4-9511-47ff-b11a-2bef80fc177c"
     "-Ddbus-srv-user=geoclue"
     "-Ddbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
   ] ++ lib.optionals stdenv.isDarwin [
