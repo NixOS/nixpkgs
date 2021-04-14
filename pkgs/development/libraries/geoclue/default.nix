@@ -1,13 +1,33 @@
-{ lib, stdenv, fetchFromGitLab, intltool, meson, ninja, pkg-config, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk-pixbuf
-, modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobject-introspection, vala
+{ lib
+, stdenv
+, fetchFromGitLab
+, intltool
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_412
+, glib
+, json-glib
+, libsoup
+, libnotify
+, gdk-pixbuf
+, modemmanager
+, avahi
+, glib-networking
+, python3
+, wrapGAppsHook
+, gobject-introspection
+, vala
 , withDemoAgent ? false
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
   version = "2.5.6";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -21,30 +41,45 @@ stdenv.mkDerivation rec {
     ./add-option-for-installation-sysconfdir.patch
   ];
 
-  outputs = [ "out" "dev" "devdoc" ];
-
   nativeBuildInputs = [
-    pkg-config intltool meson ninja wrapGAppsHook python3 vala gobject-introspection
+    pkg-config
+    intltool
+    meson
+    ninja
+    wrapGAppsHook
+    python3
+    vala
+    gobject-introspection
     # devdoc
-    gtk-doc docbook_xsl docbook_xml_dtd_412
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_412
   ];
 
   buildInputs = [
-    glib json-glib libsoup avahi
-  ] ++ optionals withDemoAgent [
+    glib
+    json-glib
+    libsoup
+    avahi
+  ] ++ lib.optionals withDemoAgent [
     libnotify gdk-pixbuf
-  ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    modemmanager
+  ];
 
-  propagatedBuildInputs = [ glib glib-networking ];
+  propagatedBuildInputs = [
+    glib
+    glib-networking
+  ];
 
   mesonFlags = [
     "-Dsystemd-system-unit-dir=${placeholder "out"}/etc/systemd/system"
-    "-Ddemo-agent=${boolToString withDemoAgent}"
+    "-Ddemo-agent=${lib.boolToString withDemoAgent}"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Ddbus-srv-user=geoclue"
     "-Ddbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"
     "-Dmodem-gps-source=false"
