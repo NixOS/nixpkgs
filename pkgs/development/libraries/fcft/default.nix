@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fcft";
     description = "Simple library for font loading and glyph rasterization";
-    maintainers = with maintainers; [ fionera ];
+    maintainers = with maintainers; [
+      fionera
+      sternenseemann
+    ];
     license = licenses.mit;
     platforms = with platforms; linux;
   };
