@@ -1364,6 +1364,12 @@
     githubId = 302429;
     name = "Marton Boros";
   };
+  branwright1 = {
+    email = "branwright@protonmail.com";
+    github = "branwright1";
+    githubId = 71175207;
+    name = "Brandon Wright";
+  };
   bramd = {
     email = "bram@bramd.nl";
     github = "bramd";
