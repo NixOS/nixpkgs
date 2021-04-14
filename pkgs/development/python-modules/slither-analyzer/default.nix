@@ -1,7 +1,15 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
-, crytic-compile, prettytable, setuptools
-# solc is currently broken on Darwin, default to false
-, solc, withSolc ? !stdenv.isDarwin
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, makeWrapper
+, pythonOlder
+, crytic-compile
+, prettytable
+, setuptools
+, solc
+  # solc is currently broken on Darwin, default to false
+, withSolc ? !stdenv.isDarwin
 }:
 
 buildPythonPackage rec {
@@ -35,6 +43,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ asymmetric arturcygan ];
+    maintainers = with maintainers; [ arturcygan ];
   };
 }
