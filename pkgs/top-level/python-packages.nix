@@ -4813,6 +4813,8 @@ in {
     graphvizPkgs = pkgs.graphviz;
   };
 
+  oci = callPackage ../development/python-modules/oci { };
+
   od = callPackage ../development/python-modules/od { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
