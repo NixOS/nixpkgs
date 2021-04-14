@@ -4154,6 +4154,8 @@ in {
 
   Mako = callPackage ../development/python-modules/Mako { };
 
+  malduck= callPackage ../development/python-modules/malduck { };
+
   managesieve = callPackage ../development/python-modules/managesieve { };
 
   manhole = callPackage ../development/python-modules/manhole { };
