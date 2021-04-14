@@ -1,17 +1,15 @@
-{ lib, stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
+{ lib, stdenv, fetchurl, unzip, jdk, jdk11, jdk8, makeWrapper }:
 
-let
-  gradleSpec = { version, nativeVersion, sha256 }: rec {
-    inherit nativeVersion;
-    name = "gradle-${version}";
+rec {
+  gradleGen = { version, nativeVersion, jdk, src, sha256 } : stdenv.mkDerivation {
+    inherit version nativeVersion;
+
+    pname = "gradle";
+
     src = fetchurl {
       inherit sha256;
-      url = "https://services.gradle.org/distributions/${name}-bin.zip";
+      url = "https://services.gradle.org/distributions/gradle-${version}-bin.zip";
     };
-  };
-in rec {
-  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
-    inherit name src nativeVersion;
 
     dontBuild = true;
 
@@ -21,8 +19,8 @@ in rec {
 
       gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
       test -f $gradle_launcher_jar
-      makeWrapper ${java}/bin/java $out/bin/gradle \
-        --set JAVA_HOME ${java} \
+      makeWrapper ${jdk}/bin/java $out/bin/gradle \
+        --set JAVA_HOME ${jdk} \
         --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
     '';
 
@@ -43,7 +41,7 @@ in rec {
       '';
 
     nativeBuildInputs = [ makeWrapper unzip ];
-    buildInputs = [ java ];
+    buildInputs = [ jdk ];
 
     meta = {
       description = "Enterprise-grade build system";
@@ -63,27 +61,31 @@ in rec {
 
   gradle_latest = gradle_7;
 
-  gradle_7 = gradleGen (gradleSpec {
+  gradle_7 = gradleGen {
     version = "7.0";
     nativeVersion = "0.22-milestone-11";
     sha256 = "01f3bjn8pbpni8kmxvx1dpwpf4zz04vj7cpm6025n0k188c8k2zb";
-  });
+    jdk = jdk11;
+  };
 
-  gradle_6_8 = gradleGen (gradleSpec {
+  gradle_6_8 = gradleGen {
     version = "6.8.3";
     nativeVersion = "0.22-milestone-9";
     sha256 = "01fjrk5nfdp6mldyblfmnkq2gv1rz1818kzgr0k2i1wzfsc73akz";
-  });
+    jdk = jdk11;
+  };
 
-  gradle_5_6 = gradleGen (gradleSpec {
+  gradle_5_6 = gradleGen {
     version = "5.6.4";
     nativeVersion = "0.18";
     sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
-  });
+    jdk = jdk11;
+  };
 
-  gradle_4_10 = gradleGen (gradleSpec {
+  gradle_4_10 = gradleGen {
     version = "4.10.3";
     nativeVersion = "0.14";
     sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-  });
+    jdk = jdk8;
+  };
 }

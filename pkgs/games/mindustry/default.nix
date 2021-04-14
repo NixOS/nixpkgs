@@ -3,7 +3,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, gradleGen
+, gradle_6_8
 , jdk
 , perl
 
@@ -87,8 +87,7 @@ let
     popd
   '';
 
-  # The default one still uses jdk8 (#89731)
-  gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_8;
+  gradle_6 = gradle_6_8.override { inherit jdk; };
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
