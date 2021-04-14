@@ -18,10 +18,14 @@ let this = stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D "$src" "$out/share/java/${jarfilename}"
 
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${jarfilename}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
