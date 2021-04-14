@@ -111,6 +111,10 @@ stdenv.mkDerivation rec {
     mv $out/sbin $out/bin
   '';
 
+  passthru = {
+    inherit modules;
+  };
+
   meta = {
     description = "A web server based on Nginx and has many advanced features, originated by Taobao";
     homepage    = "https://tengine.taobao.org";
