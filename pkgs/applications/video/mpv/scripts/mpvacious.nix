@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpvacious";
-  version = "0.12";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "1xz4qh2ibfv03m3pfdasim9byvlm78wigx1linmih19vgg99vky2";
+    sha256 = "0r031hh3hpim9dli15m9q4cwka4ljvwg0hdgyp36r1n097q44r5f";
   };
 
   postPatch = ''
