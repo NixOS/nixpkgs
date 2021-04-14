@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
 buildGoModule rec {
   pname = "podgrab";
@@ -18,6 +18,8 @@ buildGoModule rec {
     cp -r $src/client $out/share/
     cp -r $src/webassets $out/share/
   '';
+
+  passthru.tests = { inherit (nixosTests) podgrab; };
 
   meta = with lib; {
     description = "A self-hosted podcast manager to download episodes as soon as they become live";
