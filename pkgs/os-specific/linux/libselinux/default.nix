@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = lib.optional stdenv.hostPlatform.isMusl ''
-    sed -i 's,#include <unistd.h>,,g' src/procattr.c
+    substituteInPlace src/procattr.c \
+      --replace "#include <unistd.h>" ""
   '';
 
   preInstall = ''
