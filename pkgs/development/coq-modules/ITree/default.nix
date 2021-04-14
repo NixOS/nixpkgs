@@ -1,7 +1,7 @@
 { lib, mkCoqDerivation, coq, version ? null , paco, coq-ext-lib }:
 
 with lib; mkCoqDerivation rec {
-  pname = "ITree";
+  pname = "InteractionTrees";
   owner = "DeepSpec";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
