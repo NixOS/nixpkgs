@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, lib, stdenv, newScope, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
@@ -63,6 +63,7 @@ let
     zlib
   ];
 
+  callPackage = newScope spotify;
   spotify-adblock = callPackage ./spotify-adblock.nix {};
 
 in
