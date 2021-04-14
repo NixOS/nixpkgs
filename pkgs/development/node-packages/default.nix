@@ -22,7 +22,7 @@ let
       '';
       postInstall = ''
         wrapProgram $out/bin/aws-azure-login \
-            --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+            --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
       '';
     };
 
