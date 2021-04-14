@@ -492,6 +492,12 @@
     githubId = 15623522;
     name = "Amar Paul";
   };
+  ambroisie = {
+    email = "bruno.nixpkgs@belanyi.fr";
+    github = "ambroisie";
+    githubId = 12465195;
+    name = "Bruno BELANYI";
+  };
   ambrop72 = {
     email = "ambrop7@gmail.com";
     github = "ambrop72";
