@@ -27961,7 +27961,10 @@ in
     tk = tk-8_6;
   };
 
-  scummvm = callPackage ../games/scummvm { };
+  scummvm = callPackage ../games/scummvm {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AudioToolbox Carbon CoreMIDI AudioUnit;
+  };
 
   inherit (callPackage ../games/scummvm/games.nix { })
     beneath-a-steel-sky
