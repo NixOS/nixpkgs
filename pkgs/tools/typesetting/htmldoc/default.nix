@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, zlib, libpng, SystemConfiguration, Foundation }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.11";
   pname = "htmldoc";
+  version = "1.9.11";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
