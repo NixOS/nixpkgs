@@ -12,6 +12,7 @@
 , "@webassemblyjs/wast-refmt"
 , "alloy"
 , "asar"
+, "aws-azure-login"
 , "balanceofsatoshis"
 , "bash-language-server"
 , "bower"

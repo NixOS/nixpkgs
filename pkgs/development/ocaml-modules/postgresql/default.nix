@@ -1,8 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, postgresql }:
+{ lib, fetchFromGitHub, buildDunePackage, dune-configurator, postgresql }:
 
 buildDunePackage rec {
   pname = "postgresql";
-  version = "4.6.3";
+  version = "5.0.0";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.08";
 
@@ -10,10 +12,10 @@ buildDunePackage rec {
     owner = "mmottl";
     repo = "postgresql-ocaml";
     rev = version;
-    sha256 = "0fd96qqwkwjhv6pawk4wivwncszkif0sq05f0g5gd28jzwrsvpqr";
+    sha256 = "1i4pnh2v00i0s7s9pcwz1x6s4xcd77d08gjjkvy0fmda6mqq6ghn";
   };
 
-  buildInputs = [ postgresql ];
+  buildInputs = [ dune-configurator postgresql ];
 
   meta = {
     description = "Bindings to the PostgreSQL library";

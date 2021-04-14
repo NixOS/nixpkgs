@@ -846,6 +846,13 @@ environment.systemPackages = [
     </para>
    </listitem>
    <listitem>
+    <para>
+      When defining a new user, one of <xref linkend="opt-users.users._name_.isNormalUser" /> and <xref linkend="opt-users.users._name_.isSystemUser" /> is now required.
+      This is to prevent accidentally giving a UID above 1000 to system users, which could have unexpected consequences, like running user activation scripts for system users.
+      Note that users defined with an explicit UID below 500 are exempted from this check, as <xref linkend="opt-users.users._name_.isSystemUser" /> has no effect for those.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        The GNOME desktop manager once again installs <package>gnome3.epiphany</package> by default.
      </para>
