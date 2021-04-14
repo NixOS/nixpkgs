@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchgit, isPy3k
-, git, makeWrapper, sassc, hyperkitty, postorius, whoosh
+, git, makeWrapper, sassc, hyperkitty, postorius, whoosh, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sed -i '/^  Django/d' setup.cfg
   '';
 
-  nativeBuildInputs = [ git makeWrapper ];
+  nativeBuildInputs = [ git makeWrapper setuptools-scm ];
   propagatedBuildInputs = [ hyperkitty postorius whoosh ];
 
   # Tries to check runtime configuration.
@@ -40,6 +40,5 @@ buildPythonPackage rec {
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peti qyliss ];
-    broken = true;
   };
 }
