@@ -161,9 +161,6 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    # Make sure Domain 0 gets the required configuration
-    #boot.kernelPackages = pkgs.boot.kernelPackages.override { features={xen_dom0=true;}; };
-
     boot.kernelModules =
       [ "xen-evtchn" "xen-gntdev" "xen-gntalloc" "xen-blkback" "xen-netback"
         "xen-pciback" "evtchn" "gntdev" "netbk" "blkbk" "xen-scsibk"

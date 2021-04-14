@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "0.9.95";
+  version = "0.9.97";
 
   disabled = isPy27;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1msvs1j3n47762ahm21bnkk2qqabxw8diiyi7s420x4zg24mr23g";
+    sha256 = "1hipby54swwpfw50wlxzgbphzqkk1fbs5x44smz4rrngqpsp3g67";
   };
 
   propagatedBuildInputs = [

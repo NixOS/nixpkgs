@@ -6030,6 +6030,8 @@ in
 
   m2r = python3Packages.callPackage ../tools/text/m2r { };
 
+  md2gemini = with python3.pkgs; toPythonApplication md2gemini;
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -17771,6 +17773,7 @@ in
   wavpack = callPackage ../development/libraries/wavpack { };
 
   wayland = callPackage ../development/libraries/wayland { };
+  wayland-scanner = wayland.bin;
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
@@ -19873,7 +19876,7 @@ in
     inherit (kernel) stdenv; # in particular, use the same compiler by default
 
     # to help determine module compatibility
-    inherit (kernel) isXen isZen isHardened isLibre;
+    inherit (kernel) isZen isHardened isLibre;
     inherit (kernel) kernelOlder kernelAtLeast;
 
     # Obsolete aliases (these packages do not depend on the kernel).
@@ -20135,11 +20138,6 @@ in
   # Build a kernel with bcachefs module
   linuxPackages_testing_bcachefs = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_bcachefs);
 
-  # Build a kernel for Xen dom0
-  linuxPackages_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
-
-  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
-
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
@@ -20162,10 +20160,6 @@ in
 
   linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { });
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
-
-  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { features.xen_dom0=true; });
-
-  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { features.xen_dom0=true; });
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);

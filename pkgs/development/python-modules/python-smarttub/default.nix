@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mdz/python-smarttub";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    broken = pyjwt.version != "1.7.1";
   };
 }

@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "0.6.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "python-seabreeze-v${version}";
-    sha256 = "0bc2s9ic77gz9m40w89snixphxlzib60xa4f49n4zasjrddfz1l8";
+    rev = "v${version}";
+    sha256 = "1lna3w1vsci35dhyi7qjvbb99gxvzk23k195c7by7kkrps844q1j";
   };
 
   postInstall = ''

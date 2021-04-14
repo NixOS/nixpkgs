@@ -3,7 +3,7 @@
 , fetchPypi
 , python
 , azure-common
-, futures
+, futures ? null
 , dateutil
 , requests
 , isPy3k

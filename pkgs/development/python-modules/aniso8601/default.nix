@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "aniso8601";
-  version = "8.1.1";
+  version = "9.0.1";
 
   meta = with lib; {
     description = "Parses ISO 8601 strings.";
@@ -17,6 +17,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be08b19c19ca527af722f2d4ba4dc569db292ec96f7de963746df4bb0bff9250";
+    sha256 = "72e3117667eedf66951bb2d93f4296a56b94b078a8a95905a052611fb3f1b973";
   };
 }

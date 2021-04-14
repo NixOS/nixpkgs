@@ -2,23 +2,22 @@
 , buildPythonPackage
 , fetchPypi
 , docutils
-, pytestCheckHook
-, doCheck ? true
 }:
 
 buildPythonPackage rec {
   pname = "Pygments";
-  version = "2.7.4";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df49d09b498e83c1a73128295860250b0b7edd4c723a32e9bc0d295c7c2ec337";
+    sha256 = "153zyxigm879sk2n71lfv03y2pgxb7dl0dlsbwkz9aydxnkf2mi6";
   };
 
   propagatedBuildInputs = [ docutils ];
 
-  inherit doCheck;
-  checkInputs = [ pytestCheckHook ];
+  # Circular dependency with sphinx
+  doCheck = false;
+  pythonImportsCheck = [ "pygments" ];
 
   meta = {
     homepage = "https://pygments.org/";

@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fde5f188da2d593bd5bc0be98d9abc46c95bb8a9dde93429570192ee6cc2d4a";
+    sha256 = "d84e126e2a29e4fde8931ff8131240bbf30a0e7dbcc3897a8dbd8ea5ac11419c";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/libfuse/libfuse/releases/tag/fuse-${version}";
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Only lgpl21Only ];
     maintainers = [ maintainers.primeos ];
   };
 }

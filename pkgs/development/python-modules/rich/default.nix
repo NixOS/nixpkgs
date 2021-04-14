@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "9.10.0";
+  version = "9.13.0";
 
   # tests not included in pypi tarball
   src = fetchFromGitHub {
     owner = "willmcgugan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m1rswg16r4pxv7504nk7lpyxrwf16xw4w55rs3jisryx14ccic6";
+    sha256 = "0si3rzhg8wfxw4aakkp8sr6nbzfa54rl0w92macd1338q90ha4ly";
   };
   format = "pyproject";
 

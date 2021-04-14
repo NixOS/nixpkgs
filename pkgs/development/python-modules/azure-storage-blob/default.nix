@@ -6,7 +6,7 @@
 , azure-storage-common
 , msrest
 , isPy3k
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
