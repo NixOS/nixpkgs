@@ -28561,6 +28561,8 @@ in
 
   macse = callPackage ../applications/science/biology/macse { };
 
+  MACS2 = callPackage ../applications/science/biology/MACS2 { };
+
   migrate = callPackage ../applications/science/biology/migrate { };
 
   minia = callPackage ../applications/science/biology/minia {
