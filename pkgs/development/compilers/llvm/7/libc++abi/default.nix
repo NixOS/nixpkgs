@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, fetch, libcxx, llvm, version
+{ lib, stdenv, cmake, fetch, libcxx, libunwind, llvm, version
 , standalone ? false
   # on musl the shared objects don't build
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   src = fetch "libcxxabi" "1zcqxsdjhawgz1cvpk07y3jl6fg9p3ay4nl69zsirqb2ghgyhhb2";
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
   postUnpack = ''
     unpackFile ${libcxx.src}
