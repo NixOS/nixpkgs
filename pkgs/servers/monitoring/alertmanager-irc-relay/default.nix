@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "alertmanager-irc-relay";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "alertmanager-irc-relay";
     rev = "v${version}";
-    sha256 = "sha256-SmyKk0vSXfHzRxOdbULD2Emju/VjDcXZZ7cgVbZxGIA=";
+    sha256 = "sha256-IlWXsQZtDXG8sJBV+82BzEFj+JtUbfTOZyqYOrZFTXA=";
   };
 
-  vendorSha256 = "sha256-aJVA9MJ9DK/dCo7aSB9OLfgKGN5L6Sw2k2aOR4J2LE4=";
+  vendorSha256 = "sha256-VLG15IXS/fXFMTCJKEqGW6qZ9aOLPhazidVsOywG+w4=";
 
   buildFlagsArray = [ "-ldflags=-s -w" ];
 
