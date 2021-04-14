@@ -2097,6 +2097,8 @@ in
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
+  wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
+
   wev = callPackage ../tools/wayland/wev { };
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
