@@ -1,5 +1,5 @@
-{ lib, fetchurl, fetchzip, python3
-, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
+{ lib, fetchurl, fetchzip, python3, substituteAll
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader      ? true
@@ -69,6 +69,10 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
 
   patches = [
     ./fix-restart.patch
+    (substituteAll {
+      src = ./qtwebengine-library-path.patch;
+      qtwebengine = qtwebengine.out;
+    })
   ];
 
   dontWrapGApps = true;
