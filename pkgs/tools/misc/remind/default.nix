@@ -1,10 +1,11 @@
-{lib, stdenv, fetchurl, tk, tcllib, makeWrapper
+{ lib
+, stdenv
+, fetchurl
+, tk
+, tcllib
+, makeWrapper
 , tkremind ? true
-} :
-
-assert tkremind -> tk != null;
-assert tkremind -> tcllib != null;
-assert tkremind -> makeWrapper != null;
+}:
 
 let
   inherit (lib) optional optionalString;
@@ -14,13 +15,14 @@ let
   tkremindPatch = optionalString tkremind ''
     substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "remind";
-  version = "03.03.05";
+  version = "03.03.06";
 
   src = fetchurl {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    sha256 = "sha256-Ye0X2Gvek/pyaNVxGKL773OWJvC4I6F5nEsRQgzWbsE=";
+    sha256 = "sha256-lpoMAXDJxwODY0/aoo25GRBYWFhE4uf11pR5/ITZX1s=";
   };
 
   nativeBuildInputs = optional tkremind makeWrapper;
@@ -39,11 +41,11 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/tkremind --set TCLLIBPATH "${tclLibPaths}"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [raskin kovirobi];
-    platforms = with lib.platforms; unix;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ raskin kovirobi ];
+    platforms = platforms.unix;
   };
 }

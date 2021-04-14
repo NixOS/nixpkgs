@@ -341,6 +341,7 @@ mapAliases ({
   krename-qt5 = krename; # added 2017-02-18
   kerberos = libkrb5; # moved from top-level 2021-03-14
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
+  kramdown-rfc2629 = rubyPackages.kramdown-rfc2629; # added 2021-03-23
   kvm = qemu_kvm; # added 2018-04-25
   latinmodern-math = lmmath;
   letsencrypt = certbot; # added 2016-05-16
@@ -584,6 +585,7 @@ mapAliases ({
   ppl-address-book = throw "ppl-address-book deprecated on 2019-05-02: abandoned by upstream.";
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
+  proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead."; # added 2021-04-12
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
   pyload = throw "pyload has been removed from nixpkgs, as it was unmaintained."; # added 2021-03-21
@@ -628,6 +630,7 @@ mapAliases ({
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
   radare2-cutter = cutter; # added 2021-03-30
+  redkite = throw "redkite was archived by upstream"; # added 2021-04-12
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";

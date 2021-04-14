@@ -6,8 +6,11 @@
 , pkg-config
 , protobufc
 , withCrypto ? true, openssl
-, enableMagic ? true, file
 , enableCuckoo ? true, jansson
+, enableDex ? true
+, enableDotNet ? true
+, enableMacho ? true
+, enableMagic ? true, file
 }:
 
 stdenv.mkDerivation rec {
@@ -46,14 +49,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (lib.withFeature withCrypto "crypto")
-    (lib.enableFeature enableMagic "magic")
     (lib.enableFeature enableCuckoo "cuckoo")
+    (lib.enableFeature enableDex "dex")
+    (lib.enableFeature enableDotNet "dotnet")
+    (lib.enableFeature enableMacho "macho")
+    (lib.enableFeature enableMagic "magic")
   ];
 
   meta = with lib; {
     description = "The pattern matching swiss knife for malware researchers";
     homepage = "http://Virustotal.github.io/yara/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
     platforms = platforms.all;
   };
 }

@@ -1,62 +1,55 @@
-{ lib, stdenv, fetchurl, pkg-config, bc, perl, pam, libXext, libXScrnSaver, libX11
-, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU, libGL, gtk2
-, libxml2, libglade, intltool, xorg, makeWrapper, gle, gdk-pixbuf, gdk-pixbuf-xlib
+{ lib, stdenv, fetchurl
+, pkg-config, intltool
+, perl, gettext, libX11, libXext, libXi, libXt
+, libXft, libXinerama, libXrandr, libXxf86vm, libGL, libGLU, gle
+, gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
+, systemd
 , forceInstallAllHacks ? false
+, withSystemd ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.44";
+  version = "6.00";
   pname = "xscreensaver";
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "15bv05vpfjwsrqbazrjmm382jd7vvw0mp6y9vasn6wvxzjf0in3k";
+    sha256 = "WFCIl0chuCjr1x/T67AZ0b8xITPJVurJZy1h9rSddwY=";
   };
 
-  buildInputs =
-    [ pkg-config bc perl libjpeg libGLU libGL gtk2 libxml2 libglade pam
-      libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
-      libXxf86misc intltool xorg.appres makeWrapper gle gdk-pixbuf
-      gdk-pixbuf-xlib
-    ];
+  nativeBuildInputs = [
+    pkg-config intltool
+  ];
 
-  preConfigure =
-    ''
-      # Fix installation paths for GTK resources.
-      sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
-          -i driver/Makefile.in po/Makefile.in.in
-    '';
+  buildInputs = [
+    perl gettext libX11 libXext libXi libXt
+    libXft libXinerama libXrandr libXxf86vm libGL libGLU gle
+    gtk2 gdk-pixbuf gdk-pixbuf-xlib libxml2 pam
+  ] ++ lib.optional withSystemd systemd;
 
-  configureFlags =
-    [ "--with-gl" "--with-pam" "--with-pixbuf" "--with-proc-interrupts"
-      "--with-dpms-ext" "--with-randr-ext" "--with-xinerama-ext"
-      "--with-xf86vmode-ext" "--with-xf86gamma-ext" "--with-randr-ext"
-      "--with-xshm-ext" "--with-xdbe-ext"
-      "--with-x-app-defaults=\${out}/share/xscreensaver/app-defaults"
-    ];
+  preConfigure = ''
+    # Fix installation paths for GTK resources.
+    sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
+      -i driver/Makefile.in po/Makefile.in.in
+  '';
 
-  postInstall = ''
-      wrapProgram $out/bin/xscreensaver-text \
-        --prefix PATH : ${lib.makeBinPath [xorg.appres]}
+  configureFlags = [
+    "--with-app-defaults=${placeholder "out"}/share/xscreensaver/app-defaults"
+  ];
 
-      substituteInPlace $out/bin/xscreensaver-getimage-file \
-        --replace '${perl}' '${perl.withPackages (p: with p;
-          [ EncodeLocale HTTPDate HTTPMessage IOSocketSSL
-            LWP LWPProtocolHttps MozillaCA NetHTTP
-            NetSSLeay TryTiny URI
-          ])}'
-  ''
-  + lib.optionalString forceInstallAllHacks ''
-    make -C hacks/glx dnalogo
-    cat hacks/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks
-    cat hacks/glx/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks/glx
-    cp -f $(find hacks -type f -perm -111 "!" -name "*.*" )  "$out/libexec/xscreensaver"
-  ''
-  ;
+  postInstall = lib.optionalString forceInstallAllHacks ''
+    make -j$NIX_BUILD_CORES -C hacks/glx dnalogo
+    cat hacks/Makefile.in \
+      | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks
+    cat hacks/glx/Makefile.in \
+      | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks/glx
+    cp -f $(find hacks -type f -perm -111 "!" -name "*.*" ) "$out/libexec/xscreensaver"
+  '';
 
   meta = {
     homepage = "https://www.jwz.org/xscreensaver/";
     description = "A set of screensavers";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix; # Once had cygwin problems
     inherit version;

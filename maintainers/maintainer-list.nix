@@ -224,6 +224,12 @@
     githubId = 1773511;
     name = "Adrien Devresse";
   };
+  addict3d = {
+    email = "nickbathum@gmail.com";
+    github = "addict3d";
+    githubId = 49227;
+    name = "Nick Bathum";
+  };
   adisbladis = {
     email = "adisbladis@gmail.com";
     github = "adisbladis";
@@ -2730,6 +2736,12 @@
     github = "emilazy";
     githubId = 18535642;
     name = "Emily";
+  };
+  enderger = {
+    email = "endergeryt@gmail.com";
+    github = "enderger";
+    githubId = 36283171;
+    name = "Daniel";
   };
   endocrimes = {
     email = "dani@builds.terrible.systems";
@@ -5378,6 +5390,12 @@
     github = "laikq";
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
+  };
+  larsr = {
+    email = "Lars.Rasmusson@gmail.com";
+    github = "larsr";
+    githubId = 182024;
+    name = "Lars Rasmusson";
   };
   lasandell = {
     email = "lasandell@gmail.com";

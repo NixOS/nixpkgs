@@ -5,6 +5,9 @@
 , requests
 , matrix-client
 , distro
+, cryptography
+, pyopenssl
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -26,11 +29,21 @@ buildPythonPackage rec {
     requests
     matrix-client
     distro
+
+    # from requests[security]
+    cryptography
+    pyopenssl
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   preCheck = ''
     export COLUMNS=80
   '';
+
+  pythonImportsCheck = [ "zulip" ];
 
   meta = with lib; {
     description = "Bindings for the Zulip message API";

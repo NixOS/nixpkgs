@@ -377,6 +377,8 @@ in {
 
   amcrest = callPackage ../development/python-modules/amcrest { };
 
+  amiibo-py = callPackage ../development/python-modules/amiibo-py { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
@@ -1740,6 +1742,8 @@ in {
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
   dftfit = callPackage ../development/python-modules/dftfit { };
+
+  diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
 
@@ -3224,7 +3228,7 @@ in {
 
   ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
 
-  ipfsapi = callPackage ../development/python-modules/ipfsapi { };
+  ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
   iptools = callPackage ../development/python-modules/iptools { };
 
@@ -3490,6 +3494,8 @@ in {
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
   karton-core = callPackage ../development/python-modules/karton-core { };
+
+  karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
 
@@ -7968,6 +7974,8 @@ in {
 
   tvnamer = callPackage ../development/python-modules/tvnamer { };
 
+  tweedledum = callPackage ../development/python-modules/tweedledum { };
+
   tweepy = callPackage ../development/python-modules/tweepy { };
 
   twentemilieu = callPackage ../development/python-modules/twentemilieu { };
@@ -8366,6 +8374,8 @@ in {
 
   wled = callPackage ../development/python-modules/wled { };
 
+  woob = callPackage ../development/python-modules/woob { };
+
   word2vec = callPackage ../development/python-modules/word2vec { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
@@ -8530,6 +8540,8 @@ in {
   yappi = callPackage ../development/python-modules/yappi { };
 
   Yapsy = callPackage ../development/python-modules/yapsy { };
+
+  yara-python = callPackage ../development/python-modules/yara-python { };
 
   yarg = callPackage ../development/python-modules/yarg { };
 

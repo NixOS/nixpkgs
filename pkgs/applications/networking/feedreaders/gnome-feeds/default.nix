@@ -17,8 +17,9 @@
 , webkitgtk
 , python3
 }:
+
 python3.pkgs.buildPythonApplication rec {
-  pname = "feeds";
+  pname = "gnome-feeds";
   version = "0.16.1";
 
   src = fetchFromGitLab {

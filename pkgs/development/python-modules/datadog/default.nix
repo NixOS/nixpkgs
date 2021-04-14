@@ -43,12 +43,11 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "tests/unit/dogstatsd/test_statsd.py" # does not work in sandbox
+    "tests/performance"
   ];
 
   disabledTests = [
     "test_default_settings_set"
-    "test_threadstats_thread_safety"
   ];
 
   pythonImportsCheck = [ "datadog" ];

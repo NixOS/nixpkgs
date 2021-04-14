@@ -20,7 +20,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.1c";
+  version = "3.2";
 
   outputs = [ "out" "man" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "1fqgpzfas85dn0sxlvvg6rj488jwgnxs8d3gqcm8lgs211m9qhcf";
+    sha256 = "0alq81h1rz1f0zsy8qb2dvsl47axpa86j4bplngwkph0ksqqgr3p";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
           * Terminal locking, manually or after a timeout.
           * A clean, easily extended, BSD-licensed codebase, under active development.
       '';
-
+    changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
     license = lib.licenses.bsd3;
 
     platforms = lib.platforms.unix;

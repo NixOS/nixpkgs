@@ -257,6 +257,8 @@ in
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
+  probe-run = callPackage ../development/tools/rust/probe-run {};
+
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
@@ -958,6 +960,8 @@ in
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
+
+  apkid = callPackage ../development/tools/apkid { };
 
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
@@ -2510,7 +2514,9 @@ in
 
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
-  geckodriver = callPackage ../development/tools/geckodriver { };
+  geckodriver = callPackage ../development/tools/geckodriver {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   geekbench = callPackage ../tools/misc/geekbench { };
 
@@ -2660,8 +2666,6 @@ in
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
   klaus = with python3Packages; toPythonApplication klaus;
-
-  kramdown-rfc2629 = callPackage ../tools/text/kramdown-rfc2629 { };
 
   klipper = callPackage ../servers/klipper { };
 
@@ -4352,6 +4356,8 @@ in
 
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { };
 
+  fcitx5-m17n = callPackage ../tools/inputmethods/fcitx5/fcitx5-m17n.nix { };
+
   fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
 
   fcitx5-rime = callPackage ../tools/inputmethods/fcitx5/fcitx5-rime.nix { };
@@ -4373,8 +4379,6 @@ in
   featherpad = qt5.callPackage ../applications/editors/featherpad {};
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
-
-  feeds = callPackage ../applications/networking/feedreaders/feeds {};
 
   fend = callPackage ../tools/misc/fend { };
 
@@ -4958,6 +4962,8 @@ in
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
+
+  gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
@@ -5852,6 +5858,8 @@ in
 
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
+  kubepug = callPackage ../development/tools/kubepug { };
+
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
@@ -6025,6 +6033,10 @@ in
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
   mdbook = callPackage ../tools/text/mdbook {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mdbook-mermaid = callPackage ../tools/text/mdbook-mermaid {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -6390,7 +6402,9 @@ in
 
   lzip = callPackage ../tools/compression/lzip { };
 
-  luxcorerender = callPackage ../tools/graphics/luxcorerender { };
+  luxcorerender = callPackage ../tools/graphics/luxcorerender {
+    openimagedenoise = openimagedenoise_1_2_x;
+  };
 
   xz = callPackage ../tools/compression/xz { };
 
@@ -7092,6 +7106,8 @@ in
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
   openimagedenoise = callPackage ../development/libraries/openimagedenoise { };
+
+  openimagedenoise_1_2_x = callPackage ../development/libraries/openimagedenoise/1_2_x.nix { };
 
   openmvg = callPackage ../applications/science/misc/openmvg { };
 
@@ -16863,8 +16879,6 @@ in
 
   proj = callPackage ../development/libraries/proj { };
 
-  proj_5 = callPackage ../development/libraries/proj/5.2.nix { };
-
   proj-datumgrid = callPackage ../development/libraries/proj-datumgrid { };
 
   proselint = callPackage ../tools/text/proselint {
@@ -17130,8 +17144,6 @@ in
 
   randomx = callPackage ../development/libraries/randomx { };
 
-  redkite = callPackage ../development/libraries/redkite { };
-
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
   rhino = callPackage ../development/libraries/java/rhino {
@@ -17150,6 +17162,8 @@ in
   rotate-backups = with python3Packages; toPythonApplication rotate-backups;
 
   rote = callPackage ../development/libraries/rote { };
+
+  round = callPackage ../applications/graphics/round { };
 
   ronn = callPackage ../development/tools/ronn { };
 
@@ -22168,6 +22182,8 @@ in
 
   bookworm = callPackage ../applications/office/bookworm { };
 
+  CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
+
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
@@ -22474,6 +22490,8 @@ in
   };
 
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
+
+  e16 = callPackage ../applications/window-managers/e16 { };
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
@@ -24033,6 +24051,8 @@ in
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
 
   lbdb = callPackage ../tools/misc/lbdb { abook = null; gnupg = null; goobook = null; khard = null; mu = null; };
+
+  lbry = callPackage ../applications/video/lbry { };
 
   lbzip2 = callPackage ../tools/compression/lbzip2 { };
 
@@ -26937,9 +26957,7 @@ in
 
   xscope = callPackage ../applications/misc/xscope { };
 
-  xscreensaver = callPackage ../misc/screensavers/xscreensaver {
-    inherit (gnome2) libglade;
-  };
+  xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
 
   xsuspender = callPackage ../applications/misc/xsuspender {  };
 
@@ -28000,6 +28018,8 @@ in
     inherit winetricks;
     inherit (gnome3) zenity;
   };
+
+  sdlpop = callPackage ../games/sdlpop { };
 
   stepmania = callPackage ../games/stepmania {
     ffmpeg = ffmpeg_2;
@@ -29892,7 +29912,9 @@ in
   nix-deploy = haskell.lib.justStaticExecutables haskellPackages.nix-deploy;
   nix-diff = haskell.lib.justStaticExecutables haskellPackages.nix-diff;
 
-  nix-du = callPackage ../tools/package-management/nix-du { };
+  nix-du = callPackage ../tools/package-management/nix-du {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };

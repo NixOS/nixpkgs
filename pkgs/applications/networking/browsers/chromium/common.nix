@@ -161,8 +161,15 @@ let
       url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/61b0ab526d2aa3c62fa20bb756461ca9a482f6c6/trunk/chromium-fix-libva-redef.patch";
       sha256 = "1qj4sn1ngz0p1l1w3346kanr1sqlr3xdzk1f1i86lqa45mhv77ny";
     }) ++ optional (chromiumVersionAtLeast "90")
-      ./fix-missing-atspi2-dependency.patch
-    ;
+      ./patches/fix-missing-atspi2-dependency.patch
+    ++ optionals (chromiumVersionAtLeast "91") [
+      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
+      (githubPatch
+        # Revert "Reland #7 of "Force Python 3 to be used in build.""
+        "38b6a9a8e5901766613879b6976f207aa163588a"
+        "1lvxbd7rl6hz5j6kh6q83yb6vd9g7anlqbai8g1w1bp6wdpgwvp9"
+      )
+    ];
 
     postPatch = ''
       # remove unused third-party
