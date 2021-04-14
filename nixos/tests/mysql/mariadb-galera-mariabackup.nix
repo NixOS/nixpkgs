@@ -31,7 +31,7 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { };
+      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };
@@ -89,7 +89,7 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { };
+      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };
@@ -136,7 +136,7 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { };
+      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };

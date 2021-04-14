@@ -22,11 +22,10 @@ in
         users.users."member" = {
           createHome = false;
           description = "A member of the redis group";
+          isNormalUser = true;
           extraGroups = [
             "redis"
           ];
-          group = "users";
-          shell = "/bin/sh";
         };
       };
   };
