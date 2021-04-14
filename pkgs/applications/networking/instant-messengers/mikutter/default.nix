@@ -1,82 +1,109 @@
-{ lib, stdenv, fetchurl
-, bundlerEnv, ruby
-, alsaUtils, libnotify, which, wrapGAppsHook, gtk2, atk, gobject-introspection
+{ lib
+, stdenv
+, fetchurl
+, bundlerEnv
+, alsaUtils
+, atk
+, bundix
+, bundler
+, common-updater-scripts
+, curl
+, desktop-file-utils
+, gobject-introspection
+, gtk2
+, jq
+, ruby
+, libnotify
+, which
+, wrapGAppsHook
+, writers
 }:
 
-# how to update:
-# find latest version at: http://mikutter.hachune.net/download#download
-# run these commands:
-#
-# wget http://mikutter.hachune.net/bin/mikutter.4.0.0.tar.gz
-# mkdir mikutter
-# cd mikutter
-# tar xvf ../mikutter.4.0.0.tar.gz
-# find . -not -name Gemfile -exec rm {} \;
-# find . -type d -exec rmdir -p --ignore-fail-on-non-empty {} \;
-# cd ..
-# mv mikutter/* .
-# rm mikutter.4.0.0.tar.gz
-# rm gemset.nix Gemfile.lock; nix-shell -p bundler bundix --run 'bundle lock && bundix'
+let
+  version = "4.1.4";
 
-stdenv.mkDerivation rec {
-  pname = "mikutter";
-  version = "4.0.0";
+  gems = bundlerEnv {
+    name = "mikutter-${version}-gems";
+    gemdir = ./deps;
+    groups = [ "default" "plugin" ];
+    inherit ruby;
 
-  src = fetchurl {
-    url = "https://mikutter.hachune.net/bin/mikutter.${version}.tar.gz";
-    sha256 = "0nx14vlp7p69m2vw0s6kbiyymsfq0r2jd4nm0v5c4xb9avkpgc8g";
+    # Avoid the following error:
+    # > `<module:Moneta>': uninitialized constant Moneta::Builder (NameError)
+    #
+    # Related:
+    # https://github.com/NixOS/nixpkgs/pull/76510
+    # https://github.com/NixOS/nixpkgs/pull/76765
+    # https://github.com/NixOS/nixpkgs/issues/83442
+    # https://github.com/NixOS/nixpkgs/issues/106545
+    copyGemFiles = true;
   };
 
-  buildInputs = [ alsaUtils libnotify which gtk2 ruby atk gobject-introspection ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  inherit (gems) wrappedRuby;
+in
+stdenv.mkDerivation rec {
+  pname = "mikutter";
+  inherit version;
 
-  unpackPhase = ''
-    mkdir source
-    cd source
-    unpackFile $src
-    rm -rf vendor
-  '';
+  src = fetchurl {
+    url = "https://mikutter.hachune.net/bin/mikutter-${version}.tar.gz";
+    sha256 = "05253nz4i1lmnq6czj48qdab2ny4vx2mznj6nsn2l1m2z6zqkwk3";
+  };
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "mikutter-${version}-gems";
-      gemdir = ./.;
+  nativeBuildInputs = [ desktop-file-utils wrapGAppsHook ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    atk
+    gtk2
+    gobject-introspection
+    libnotify
+    which # some plugins use it at runtime
+    wrappedRuby
+  ] ++ lib.optionals stdenv.isLinux [ alsaUtils ];
 
-      inherit ruby;
-    };
-  in ''
+  postUnpack = "rm -rf vendor";
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/applications $out/opt/mikutter
+
     install -v -D -m644 README $out/share/doc/mikutter/README
     install -v -D -m644 LICENSE $out/share/doc/mikutter/LICENSE
-    rm -v README LICENSE
+    desktop-file-install --dir $out/share/applications \
+      --set-key Exec --set-value $out/bin/mikutter \
+      --set-key Icon --set-value $out/opt/mikutter/core/skin/data/icon.png \
+      deployment/appimage/mikutter.desktop
+    rm -rv README LICENSE deployment
 
-    cp -rv . $out
-    mkdir $out/bin/
-    # hack wrapGAppsHook wants a file not a symlink
-    mv $out/mikutter.rb $out/bin/mikutter
+    cp -rv . $out/opt/mikutter
+
+    # HACK: wrapGAppsHook wants a file not a symlink. postFixup puts it back
+    # where back in place.
+    mv $out/opt/mikutter/mikutter.rb $out/bin/mikutter
 
     gappsWrapperArgs+=(
-      --prefix PATH : "${ruby}/bin:${alsaUtils}/bin:${libnotify}/bin"
-      --prefix GEM_HOME : "${env}/${env.ruby.gemPath}"
+      --prefix PATH : "${lib.makeBinPath [ wrappedRuby alsaUtils libnotify]}"
       --set DISABLE_BUNDLER_SETUP 1
     )
-      # --prefix GIO_EXTRA_MODULES : "$prefix/lib/gio/modules"
 
-    mkdir -p $out/share/mikutter $out/share/applications
-    ln -sv $out/core/skin $out/share/mikutter/skin
-    substituteAll ${./mikutter.desktop} $out/share/applications/mikutter.desktop
+    runHook postInstall
   '';
 
   postFixup = ''
-    mv $out/bin/.mikutter-wrapped $out/mikutter.rb
+    mv $out/bin/.mikutter-wrapped $out/opt/mikutter/mikutter.rb
     substituteInPlace $out/bin/mikutter \
-      --replace "$out/bin/.mikutter-wrapped" "$out/mikutter.rb"
+      --replace "$out/bin/.mikutter-wrapped" "$out/opt/mikutter/mikutter.rb"
   '';
 
+  passthru.updateScript = import ./update.nix {
+    inherit lib pname version writers bundix bundler common-updater-scripts curl
+      jq;
+  };
+
   meta = with lib; {
-    description = "An extensible Twitter client";
+    description = "An extensible Mastodon client";
     homepage = "https://mikutter.hachune.net";
     platforms = ruby.meta.platforms;
     license = licenses.mit;
-    broken = true;
   };
 }
