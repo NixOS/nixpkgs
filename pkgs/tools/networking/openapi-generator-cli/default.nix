@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ callPackage, lib, stdenv, fetchurl, jre, makeWrapper }:
 
-stdenv.mkDerivation rec {
+let this = stdenv.mkDerivation rec {
   version = "5.1.0";
   pname = "openapi-generator-cli";
 
@@ -30,4 +30,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];
   };
-}
+
+  passthru.tests.example = callPackage ./example.nix {
+    openapi-generator-cli = this;
+  };
+};
+in this
