@@ -1,37 +1,57 @@
-{ fetchFromGitHub, lib, pythonPackages
-, mp3Support ? true, lame ? null
-, opusSupport ? true, opusTools ? null
-, faacSupport ? false, faac ? null
-, flacSupport ? true, flac ? null
-, soxSupport ? true, sox ? null
-, vorbisSupport ? true, vorbis-tools ? null
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, chardet
+, dbus-python
+, docopt
+, lxml
+, netifaces
+, notify2
+, protobuf
+, psutil
+, PyChromecast
+, pygobject2
+, pyroute2
+, requests
+, setproctitle
+, setuptools
+, zeroconf
+, mp3Support ? true, lame
+, opusSupport ? true, opusTools
+, faacSupport ? false, faac
+, flacSupport ? true, flac
+, soxSupport ? true, sox
+, vorbisSupport ? true, vorbis-tools
 }:
 
-assert mp3Support -> lame != null;
-assert opusSupport -> opusTools != null;
-assert faacSupport -> faac != null;
-assert flacSupport -> flac != null;
-assert soxSupport -> sox != null;
-assert vorbisSupport -> vorbis-tools != null;
-
-let
-  zeroconf = pythonPackages.callPackage ./zeroconf.nix { };
-in
-pythonPackages.buildPythonApplication {
+buildPythonApplication rec {
   pname = "pulseaudio-dlna";
-  version = "unstable-2017-11-01";
+  version = "unstable-2019-02-09";
 
   src = fetchFromGitHub {
     owner = "masmu";
     repo = "pulseaudio-dlna";
-    rev = "4472928dd23f274193f14289f59daec411023ab0";
-    sha256 = "1dfn7036vrq49kxv4an7rayypnm5dlawsf02pfsldw877hzdamqk";
+    rev = "b0db8137224f5a293329a60187365168304c3768";  # HEAD of "python3" branch
+    sha256 = "109dhww3vq87apwrbl82ylcvl595vm1aw04y217fidd854xbh07h";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
-    dbus-python docopt requests setproctitle protobuf psutil futures
-    chardet notify2 netifaces pyroute2 pygobject2 lxml setuptools ]
-    ++ [ zeroconf ]
+  propagatedBuildInputs = [
+    chardet
+    dbus-python
+    docopt
+    lxml
+    netifaces
+    notify2
+    protobuf
+    psutil
+    PyChromecast
+    pygobject2
+    pyroute2
+    requests
+    setproctitle
+    setuptools
+    zeroconf
+  ]
     ++ lib.optional mp3Support lame
     ++ lib.optional opusSupport opusTools
     ++ lib.optional faacSupport faac
