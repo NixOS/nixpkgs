@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
+  prePatch = lib.optional stdenv.hostPlatform.isMusl ''
+    sed -i 's,#include <unistd.h>,,g' src/procattr.c
+  '';
+
   preInstall = ''
     mkdir -p $py/${python3.sitePackages}/selinux
   '';
