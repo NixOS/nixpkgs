@@ -25,8 +25,7 @@
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libselinux ? null, libsepol ? null, shared-mime-info, libthai
-, libdatrie
+, bundler, libsass, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 }@args:
 
 let
@@ -42,7 +41,8 @@ in
 {
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
-    nativeBuildInputs = [ rake bundler pkg-config ];
+    nativeBuildInputs = [ rake bundler pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook atk ];
   };
 
@@ -62,12 +62,14 @@ in
     };
 
   cairo = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
@@ -190,7 +192,8 @@ in
   };
 
   gdk_pixbuf2 = attrs: {
-    nativeBuildInputs = [ pkg-config bundler rake ];
+    nativeBuildInputs = [ pkg-config bundler rake ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
   };
 
@@ -200,7 +203,8 @@ in
   };
 
   gio2 = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
@@ -236,7 +240,8 @@ in
   };
 
   glib2 = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     buildInputs = [ gtk2 pcre ];
   };
 
@@ -245,7 +250,7 @@ in
       binutils pkg-config
     ] ++ lib.optionals stdenv.isLinux [
       util-linux libselinux libsepol
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
@@ -259,12 +264,12 @@ in
       xorg.libpthreadstubs
       xorg.libXdmcp
     ];
-    # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
-    # CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
+    dontStrip = stdenv.isDarwin;
   };
 
   gobject-introspection = attrs: {
-    nativeBuildInputs = [ pkg-config pcre ];
+    nativeBuildInputs = [ pkg-config pcre ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
 
@@ -456,7 +461,7 @@ in
       pcre
       xorg.libpthreadstubs
       xorg.libXdmcp
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
     buildInputs = [ libdatrie libthai ] ++ lib.optionals stdenv.isLinux [
       libselinux
       libsepol

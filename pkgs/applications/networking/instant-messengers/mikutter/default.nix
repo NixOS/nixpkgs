@@ -4,26 +4,31 @@
 , bundlerEnv
 , alsaUtils
 , atk
-, bundix
-, bundler
-, common-updater-scripts
-, curl
-, desktop-file-utils
+, copyDesktopItems
 , gobject-introspection
 , gtk2
-, jq
 , ruby
+, libicns
 , libnotify
+, makeDesktopItem
 , which
 , wrapGAppsHook
 , writers
+, writeText
 }:
 
 let
-  version = "4.1.4";
+  # NOTE: $out may have different values depending on context
+  mikutterPaths = rec {
+    optPrefixDir = "$out/opt/mikutter";
+    appPrefixDir = "$out/Applications/mikutter.app/Contents";
+    appBinDir = "${appPrefixDir}/MacOS";
+    appResourceDir = "${appPrefixDir}/Resources";
+    iconPath = "${optPrefixDir}/core/skin/data/icon.png";
+  };
 
   gems = bundlerEnv {
-    name = "mikutter-${version}-gems";
+    name = "mikutter-gems"; # leave the version out to enable package reuse
     gemdir = ./deps;
     groups = [ "default" "plugin" ];
     inherit ruby;
@@ -39,19 +44,44 @@ let
     copyGemFiles = true;
   };
 
+  mkDesktopItem = { description }:
+    makeDesktopItem {
+      name = "mikutter";
+      desktopName = "mikutter";
+      exec = "mikutter";
+      icon = "mikutter";
+      categories = "Network;";
+      comment = description;
+      extraDesktopEntries.Keywords = "Mastodon;";
+    };
+
+  mkInfoPlist = { version }:
+    writeText "Info.plist" (lib.generators.toPlist { } {
+      CFBundleName = "mikutter";
+      CFBundleDisplayName = "mikutter";
+      CFBundleExecutable = "mikutter";
+      CFBundleIconFile = "mikutter";
+      CFBundleIdentifier = "net.hachune.mikutter";
+      CFBundleInfoDictionaryVersion = "6.0";
+      CFBundlePackageType = "APPL";
+      CFBundleVersion = version;
+      CFBundleShortVersionString = version;
+    });
+
   inherit (gems) wrappedRuby;
 in
-stdenv.mkDerivation rec {
+with mikutterPaths; stdenv.mkDerivation rec {
   pname = "mikutter";
-  inherit version;
+  version = "4.1.4";
 
   src = fetchurl {
     url = "https://mikutter.hachune.net/bin/mikutter-${version}.tar.gz";
     sha256 = "05253nz4i1lmnq6czj48qdab2ny4vx2mznj6nsn2l1m2z6zqkwk3";
   };
 
-  nativeBuildInputs = [ desktop-file-utils wrapGAppsHook ];
-  buildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook ]
+    ++ lib.optionals stdenv.isDarwin [ libicns ];
+  buildInputs = [
     atk
     gtk2
     gobject-introspection
@@ -60,45 +90,67 @@ stdenv.mkDerivation rec {
     wrappedRuby
   ] ++ lib.optionals stdenv.isLinux [ alsaUtils ];
 
-  postUnpack = "rm -rf vendor";
+  scriptPath = lib.makeBinPath (
+    [ wrappedRuby libnotify which ]
+    ++ lib.optionals stdenv.isLinux [ alsaUtils ]
+  );
+
+  postUnpack = ''
+    rm -rf vendor
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/applications $out/opt/mikutter
+    mkdir -p $out/bin ${optPrefixDir}
 
-    install -v -D -m644 README $out/share/doc/mikutter/README
-    install -v -D -m644 LICENSE $out/share/doc/mikutter/LICENSE
-    desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value $out/bin/mikutter \
-      --set-key Icon --set-value $out/opt/mikutter/core/skin/data/icon.png \
-      deployment/appimage/mikutter.desktop
-    rm -rv README LICENSE deployment
+    install -Dm644 README $out/share/doc/mikutter/README
+    install -Dm644 LICENSE $out/share/doc/mikutter/LICENSE
+    rm -r README LICENSE deployment
 
-    cp -rv . $out/opt/mikutter
+    cp -r . ${optPrefixDir}
 
-    # HACK: wrapGAppsHook wants a file not a symlink. postFixup puts it back
-    # where back in place.
-    mv $out/opt/mikutter/mikutter.rb $out/bin/mikutter
-
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ wrappedRuby alsaUtils libnotify]}"
+    gappsWrapperArgsHook # FIXME: currently runs at preFixup
+    wrapGApp ${optPrefixDir}/mikutter.rb \
+      --prefix PATH : "${scriptPath}" \
       --set DISABLE_BUNDLER_SETUP 1
-    )
+    mv ${optPrefixDir}/mikutter.rb $out/bin/mikutter
+
+    install -Dm644 ${iconPath} $out/share/icons/hicolor/256x256/apps/mikutter.png
 
     runHook postInstall
   '';
 
-  postFixup = ''
-    mv $out/bin/.mikutter-wrapped $out/opt/mikutter/mikutter.rb
-    substituteInPlace $out/bin/mikutter \
-      --replace "$out/bin/.mikutter-wrapped" "$out/opt/mikutter/mikutter.rb"
+  postInstall =
+    let
+      infoPlist = mkInfoPlist { inherit version; };
+    in
+    lib.optionalString stdenv.isDarwin ''
+      mkdir -p ${appBinDir} ${appResourceDir}
+      install -Dm644 ${infoPlist} ${appPrefixDir}/Info.plist
+      ln -s $out/bin/mikutter ${appBinDir}/mikutter
+      png2icns ${appResourceDir}/mikutter.icns ${iconPath}
+    '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    testDir="$(mktemp -d)"
+    install -Dm644 ${./test_plugin.rb} "$testDir/plugin/test_plugin/test_plugin.rb"
+
+    $out/bin/mikutter --confroot="$testDir" --plugin=test_plugin --debug
+
+    runHook postInstallCheck
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib pname version writers bundix bundler common-updater-scripts curl
-      jq;
-  };
+  desktopItems = [
+    (mkDesktopItem { inherit (meta) description; })
+  ];
+
+  doInstallCheck = true;
+  dontWrapGApps = true; # the target is placed outside of bin/
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "An extensible Mastodon client";
