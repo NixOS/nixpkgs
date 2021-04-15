@@ -273,6 +273,7 @@ in
       services.accounts-daemon.enable = true;
       services.dleyna-renderer.enable = mkDefault true;
       services.dleyna-server.enable = mkDefault true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.gnome3.at-spi2-core.enable = true;
       services.gnome3.evolution-data-server.enable = true;
       services.gnome3.gnome-keyring.enable = true;
