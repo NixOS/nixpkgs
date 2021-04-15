@@ -2843,6 +2843,8 @@ in
 
   nwipe = callPackage ../tools/security/nwipe { };
 
+  nx2elf = callPackage ../tools/compression/nx2elf { };
+
   nx-libs = callPackage ../tools/X11/nx-libs { };
 
   nyx = callPackage ../tools/networking/nyx { };
