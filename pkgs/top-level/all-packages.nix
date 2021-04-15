@@ -23506,6 +23506,8 @@ in
     wxGTK = wxGTK30;
   };
 
+  haunt = callPackage ../applications/misc/haunt { };
+
   hugo = callPackage ../applications/misc/hugo { };
 
   go-org = callPackage ../applications/misc/go-org { };
