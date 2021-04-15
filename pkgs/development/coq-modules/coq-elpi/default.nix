@@ -13,7 +13,7 @@ in mkCoqDerivation {
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
     { case = "8.13"; out = "1.9.7"; }
-    { case = "8.12"; out = "1.8.2_8.12"; }
+    { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.2_8.11"; }
   ] null;
   release."1.9.7".sha256      = "0rvn12h9dpk9s4pxy32p8j0a1h7ib7kg98iv1cbrdg25y5vs85n1";
@@ -21,6 +21,8 @@ in mkCoqDerivation {
   release."1.9.4".sha256      = "0nii7238mya74f9g6147qmpg6gv6ic9b54x5v85nb6q60d9jh0jq";
   release."1.9.3".sha256      = "198irm800fx3n8n56vx1c6f626cizp1d7jfkrc6ba4iqhb62ma0z";
   release."1.9.2".sha256      = "1rr2fr8vjkc0is7vh1461aidz2iwkigdkp6bqss4hhv0c3ijnn07";
+  release."1.8.3_8.12".sha256  = "15z2l4zy0qpw0ws7bvsmpmyv543aqghrfnl48nlwzn9q0v89p557";
+  release."1.8.3_8.12".version = "1.8.3";
   release."1.8.2_8.12".sha256  = "1n6jwcdazvjgj8vsv2r9zgwpw5yqr5a1ndc2pwhmhqfl04b5dk4y";
   release."1.8.2_8.12".version = "1.8.2";
   release."1.8.1".sha256      = "1fbbdccdmr8g4wwpihzp4r2xacynjznf817lhijw6kqfav75zd0r";
