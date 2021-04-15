@@ -4,7 +4,7 @@ with builtins; with lib; let
   elpi = coq.ocamlPackages.elpi.override (lib.switch coq.coq-version [
     { case = "8.11"; out = { version = "1.11.4"; };}
     { case = "8.12"; out = { version = "1.12.0"; };}
-    { case = "8.13"; out = { version = "1.13.0"; };}
+    { case = "8.13"; out = { version = "1.13.1"; };}
   ] {});
 in mkCoqDerivation {
   pname = "elpi";
@@ -12,10 +12,11 @@ in mkCoqDerivation {
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
-    { case = "8.13"; out = "1.9.5"; }
+    { case = "8.13"; out = "1.9.7"; }
     { case = "8.12"; out = "1.8.2_8.12"; }
     { case = "8.11"; out = "1.6.2_8.11"; }
   ] null;
+  release."1.9.7".sha256      = "0rvn12h9dpk9s4pxy32p8j0a1h7ib7kg98iv1cbrdg25y5vs85n1";
   release."1.9.5".sha256      = "0gjdwmb6bvb5gh0a6ra48bz5fb3pr5kpxijb7a8mfydvar5i9qr6";
   release."1.9.4".sha256      = "0nii7238mya74f9g6147qmpg6gv6ic9b54x5v85nb6q60d9jh0jq";
   release."1.9.3".sha256      = "198irm800fx3n8n56vx1c6f626cizp1d7jfkrc6ba4iqhb62ma0z";
