@@ -8200,6 +8200,8 @@ in {
 
   surepy = callPackage ../development/python-modules/surepy { };
 
+  surt = callPackage ../development/python-modules/surt { };
+
   survey = callPackage ../development/python-modules/survey { };
 
   suseapi = callPackage ../development/python-modules/suseapi { };
