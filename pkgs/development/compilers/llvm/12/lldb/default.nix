@@ -25,7 +25,7 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "0q4p4s5ws1zszs3i4da5w5fnxkpny0q3fr1s1sh7jp9wcwxbxiqq";
+  src = fetch pname "1v85qyq3snk81vjmwq5q7xikyyqsfpqy2c4qmr81mps4avsw1g0l";
 
   patches = [ ./lldb-procfs.patch ];
 
