@@ -12,19 +12,18 @@
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 #
+# Check the latest release for compatible models:
+#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.11
 
 python3Packages.buildPythonApplication rec {
   pname = "tts";
-  # until https://github.com/mozilla/TTS/issues/424 is resolved
-  # we treat released models as released versions:
-  # https://github.com/mozilla/TTS/wiki/Released-Models
-  version = "0.0.9";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
-    owner = "mozilla";
+    owner = "coqui-ai";
     repo = "TTS";
-    rev = "df5899daf4ba4ec89544edf94f9c2e105c544461";
-    sha256 = "sha256-lklG8DqG04LKJY93z2axeYhW8gtpbRG41o9ow2gJjuA=";
+    rev = "v${version}";
+    sha256 = "0kk9bgiw2x5ybwz0v3zrfaxajl3lnccc9xmrwc295n2rfkmwxsis";
   };
 
   preBuild = ''
@@ -37,6 +36,8 @@ python3Packages.buildPythonApplication rec {
     sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt setup.py
     sed -i -e 's!bokeh==[^"]*!bokeh!' requirements.txt setup.py
     sed -i -e 's!numba==[^"]*!numba!' requirements.txt setup.py
+    sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt setup.py
+    sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt setup.py
     # Not required for building/installation but for their development/ci workflow
     sed -i -e '/pylint/d' requirements.txt
     sed -i -e '/cardboardlint/d' requirements.txt setup.py
@@ -45,24 +46,25 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ python3Packages.cython ];
 
   propagatedBuildInputs = with python3Packages; [
-    matplotlib
-    scipy
-    pytorch
-    flask
     attrdict
     bokeh
-    soundfile
-    tqdm
-    librosa
-    unidecode
-    umap-learn
-    phonemizer
-    tensorboardx
+    flask
     fuzzywuzzy
-    inflect
     gdown
+    inflect
+    jieba
+    librosa
+    matplotlib
+    phonemizer
+    pypinyin
     pysbd
-    pyworld
+    pytorch
+    scipy
+    soundfile
+    tensorboardx
+    tqdm
+    umap-learn
+    unidecode
   ];
 
   postInstall = ''
@@ -92,16 +94,17 @@ python3Packages.buildPythonApplication rec {
     mv TTS{,.old}
   '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requires tensorflow
-    "--ignore=tests/test_tacotron2_tf_model.py"
-    "--ignore=tests/test_vocoder_tf_melgan_generator.py"
-    "--ignore=tests/test_vocoder_tf_pqmf.py"
+    "tests/test_tacotron2_tf_model.py"
+    "tests/test_vocoder_tf_melgan_generator.py"
+    "tests/test_vocoder_tf_pqmf.py"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mozilla/TTS";
-    description = "Deep learning for Text to Speech";
+    homepage = "https://github.com/coqui-ai/TTS";
+    changelog = "https://github.com/coqui-ai/TTS/releases/tag/v${version}";
+    description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa mic92 ];
   };
