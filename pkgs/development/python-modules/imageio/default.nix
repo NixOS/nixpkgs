@@ -10,7 +10,7 @@
 , numpy
 , isPy3k
 , ffmpeg_3
-, futures
+, futures ? null
 , enum34
 }:
 

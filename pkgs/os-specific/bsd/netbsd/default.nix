@@ -1,5 +1,5 @@
-{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, bison, flex
-, writeText, buildPackages, splicePackages, symlinkJoin }:
+{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, byacc, flex
+, makeSetupHook, writeText, buildPackages, splicePackages, symlinkJoin }:
 
 let
   fetchNetBSD = path: version: sha256: fetchcvs {
@@ -30,7 +30,7 @@ let
 
     extraPaths = [ ];
 
-    nativeBuildInputs = [ makeMinimal install tsort lorder mandoc groff stat ];
+    nativeBuildInputs = [ makeMinimal install tsort lorder mandoc groff statHook ];
     buildInputs = [ compat ];
     # depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -243,12 +243,24 @@ let
     ];
   };
 
+  # Don't add this to nativeBuildInputs directly.  Use statHook instead.
   stat = mkDerivation {
     path = "usr.bin/stat";
     version = "8.0";
     sha256 = "0z4r96id2r4cfy443rw2s1n52n186xm0lqvs8s3qjf4314z7r7yh";
     nativeBuildInputs = [ makeMinimal install mandoc groff ];
   };
+
+  # stat isn't in POSIX, and NetBSD stat supports a completely
+  # different range of flags than GNU stat, so including it in PATH
+  # breaks stdenv.  Work around that with a hook that will point
+  # NetBSD's build system and NetBSD stat without including it in
+  # PATH.
+  statHook = makeSetupHook {
+    name = "netbsd-stat-hook";
+  } (writeText "netbsd-stat-hook-impl" ''
+    makeFlagsArray+=(TOOL_STAT=${netbsd.stat}/bin/stat)
+  '');
 
   tsort = mkDerivation {
     path = "usr.bin/tsort";
@@ -563,7 +575,7 @@ let
     sha256 = "0630lbvz6v4ic13bfg8ccwfhqkgcv76bfdw9f36rfsnwfgpxqsmq";
     meta.platforms = lib.platforms.netbsd;
     nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          bison genassym gencat lorder tsort stat ];
+                          byacc genassym gencat lorder tsort statHook ];
     extraPaths = [ sys.src ld_elf_so.src ];
   };
 
@@ -587,7 +599,7 @@ let
                    librpcsvc.src libutil.src librt.src libcrypt.src ];
     buildInputs = [ buildPackages.netbsd.headers csu ];
     nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          bison genassym gencat lorder tsort stat ];
+                          byacc genassym gencat lorder tsort statHook rpcgen ];
     NIX_CFLAGS_COMPILE = "-B${csu}/lib";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -617,8 +629,8 @@ let
       make -C $NETBSDSRCDIR/lib/libresolv $makeFlags
       make -C $NETBSDSRCDIR/lib/libresolv $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/librpcsv $makeFlags
-      make -C $NETBSDSRCDIR/lib/librpcsv $makeFlags install
+      make -C $NETBSDSRCDIR/lib/librpcsvc $makeFlags
+      make -C $NETBSDSRCDIR/lib/librpcsvc $makeFlags install
 
       make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags
       make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags install
@@ -633,8 +645,8 @@ let
       make -C $NETBSDSRCDIR/lib/libcrypt $makeFlags install
     '';
     postPatch = ''
-      substituteInPlace sys/Makefile.inc \
-        --replace /usr/include/sys/syscall.h ${buildPackages.netbsd.headers}/include/sys/syscall.h
+      sed -i 's,/usr\(/include/sys/syscall.h\),${buildPackages.netbsd.headers}\1,g' \
+        sys/Makefile.inc ../librt/sys/Makefile.inc
     '';
   };
   #

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
+{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "cypress";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver libXdamage libXtst libxshmfence
   ] ++ [
     nss gtk2 alsaLib gnome2.GConf gtk3
+    mesa # for libgbm
   ];
 
   runtimeDependencies = [ (lib.getLib udev) ];

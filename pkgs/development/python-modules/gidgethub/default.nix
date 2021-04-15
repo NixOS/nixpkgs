@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "4.2.0";
+  version = "5.0.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5526cc2a06bfad707d10ec118393e0d33c2aa524605255d96958c22c93e8e7aa";
+    sha256 = "a4a8d8b1ab629757b557d3bcb98a5a77790a3d00b320f5f881a1754cf0e21086";
   };
 
   nativeBuildInputs = [ setuptools pytestrunner ];

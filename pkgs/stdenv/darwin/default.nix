@@ -1,7 +1,5 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-# Minimum required macOS version, used both for compatibility as well as reproducability.
-, macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
@@ -35,8 +33,6 @@ in rec {
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
     unset SDKROOT
-
-    export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
 
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
@@ -147,9 +143,6 @@ in rec {
         __stdenvImpureHostDeps = commonImpureHostDeps;
         __extraImpureHostDeps = commonImpureHostDeps;
 
-        extraAttrs = {
-          inherit macosVersionMin;
-        };
         overrides  = self: super: (overrides self super) // {
           inherit ccNoLibcxx;
           fetchurl = thisStdenv.fetchurlBoot;
@@ -523,7 +516,7 @@ in rec {
     extraAttrs = {
       libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-      inherit macosVersionMin bootstrapTools;
+      inherit bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [

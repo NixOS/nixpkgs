@@ -8,7 +8,6 @@
 
 mkDerivation {
   name = "kscreenlocker";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcmutils kcrash kdeclarative kdelibs4support kglobalaccel kidletime kwayland

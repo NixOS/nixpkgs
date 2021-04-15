@@ -125,6 +125,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalUC = spdx {
+    spdxId = "BSD-4-Clause-UC";
+    fullName = "BSD 4-Clause University of California-Specific";
+  };
+
   bsdProtection = spdx {
     spdxId = "BSD-Protection";
     fullName = "BSD Protection License";

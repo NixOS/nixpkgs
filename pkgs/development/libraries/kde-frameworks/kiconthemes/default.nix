@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   breeze-icons, karchive, kcoreaddons, kconfigwidgets, ki18n, kitemviews,
   qtbase, qtsvg, qttools,
@@ -7,7 +7,6 @@
 
 mkDerivation {
   name = "kiconthemes";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   patches = [
     ./default-theme-breeze.patch
   ];

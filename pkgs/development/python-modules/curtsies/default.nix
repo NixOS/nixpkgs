@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, blessings, mock, nose, pyte, wcwidth, typing }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, blessings, mock, nose, pyte, wcwidth, typing ? null}:
 
 buildPythonPackage rec {
   pname = "curtsies";

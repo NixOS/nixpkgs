@@ -11,6 +11,14 @@ let
 
   python3 = pkgs.python3.override {
     packageOverrides = self: super: {
+      cypari2 = super.cypari2.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "df1ef62e771ec36e5a456f5fc8b51bc6745b70f0efdd0c7a30c3f0b5f1fb93db";
+        };
+      });
+
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;

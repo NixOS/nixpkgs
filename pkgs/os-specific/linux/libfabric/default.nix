@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfabric";
-  version = "1.12.0";
+  version = "1.12.1";
 
   enableParallelBuilding = true;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "ofiwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OFp6nEW5D8vjglqLRbEgKryb2/KFuJD8Zn6rkpcuPh0=";
+    sha256 = "sha256-J2PoDwjPWYpagX4M2k9E1xitBzgRUZzwX9Gf00H+Tdc=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ] ;

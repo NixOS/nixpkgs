@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "jaraco.functools";
-  version = "3.0.1";
+  version = "3.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fedc4be3117512ca3e03e1b2ffa7a6a6ffa589bfb7d02bfb324e55d493b94f4";
+    sha256 = "97cf88b46ab544c266e2d81fa17bb183622268722a7dd1a3711ea426e9c26f94";
   };
 
   nativeBuildInputs = [ setuptools_scm toml ];

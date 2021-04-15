@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland, scdoc, makeWrapper
 , wlroots, wayland-protocols, pixman, libxkbcommon
-, systemd, libGL, libX11
+, systemd, libGL, libX11, mesa
 , xwayland ? null
 , nixosTests
 }:
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon
+    mesa # for libEGL headers
     systemd libGL libX11
   ];
 

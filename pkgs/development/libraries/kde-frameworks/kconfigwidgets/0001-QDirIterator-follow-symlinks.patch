@@ -1,8 +1,17 @@
+From 05c0eb5d803ac52c0dd97a98f6d2821650c3c14c Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 28 Mar 2021 06:09:47 -0500
+Subject: [PATCH] QDirIterator follow symlinks
+
+---
+ src/khelpclient.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 diff --git a/src/khelpclient.cpp b/src/khelpclient.cpp
-index fbbc0fa..cb78741 100644
+index a053cd7..787d375 100644
 --- a/src/khelpclient.cpp
 +++ b/src/khelpclient.cpp
-@@ -48,7 +48,7 @@ void KHelpClient::invokeHelp(const QString &anchor, const QString &_appname)
+@@ -34,7 +34,7 @@ void KHelpClient::invokeHelp(const QString &anchor, const QString &_appname)
      QString docPath;
      const QStringList desktopDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
      for (const QString &dir : desktopDirs) {
@@ -11,8 +20,6 @@ index fbbc0fa..cb78741 100644
          while (it.hasNext()) {
              const QString desktopPath(it.next());
              KDesktopFile desktopFile(desktopPath);
-@@ -75,4 +75,3 @@ void KHelpClient::invokeHelp(const QString &anchor, const QString &_appname)
-     // launch khelpcenter, or a browser for URIs not handled by khelpcenter
-     QDesktopServices::openUrl(url);
- }
--
+-- 
+2.30.1
+

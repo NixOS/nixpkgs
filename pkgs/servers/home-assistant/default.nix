@@ -42,6 +42,14 @@ let
       });
     })
 
+    # Pinned due to API changes in pyjwt>=2.0
+    (mkOverride "pyjwt" "1.7.1"
+      "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd")
+
+    # Pinned due to API changes in pykmtronic>=0.2.0
+    (mkOverride "pykmtronic" "0.0.3"
+      "sha256-8bxn27DU1XUQUxQFJklEge29DHx1DMu7pJG4hVE1jDU=")
+
     # Pinned due to API changes in pylilterbot>=2021.3.0
     (self: super: {
       pylitterbot = super.pylitterbot.overridePythonAttrs (oldAttrs: rec {

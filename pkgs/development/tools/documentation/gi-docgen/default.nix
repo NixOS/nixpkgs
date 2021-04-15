@@ -61,6 +61,13 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://gitlab.gnome.org/jtojnar/gi-docgen/commit/08dcc31f62be1a5af9bd9f8f702f321f4b5cffde.patch";
       sha256 = "vAT8s7zQ9zCoZWK+6PsxcD5/48ZAfIOl4RSNljRCGWQ=";
     })
+    # make DevHelp sections & index.json have stable ordering
+    # already merged upstream, so patch can removed when we update
+    # beyond 2021.2
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/cc21241d4386d4f78dbcb087fd9a92899935cb5c.patch";
+      sha256 = "0wna8mzrlbsv7f3bc7ndqll9l105kp8kdmhbbjhbdhzzzyvh6vcw";
+    })
   ];
 
   nativeBuildInputs = [

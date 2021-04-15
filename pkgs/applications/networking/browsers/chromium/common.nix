@@ -138,6 +138,7 @@ let
       bison gperf libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
+      mesa # required for libgbm
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
       pipewire

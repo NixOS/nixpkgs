@@ -32,6 +32,13 @@ python3.pkgs.buildPythonApplication rec {
     passthru.respect_xml_catalog_files_var_patch
   ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    python3
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gettext

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , eventlet
-, trollius
+, trollius ? null
 , mock
 , python
 }:
