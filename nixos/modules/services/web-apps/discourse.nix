@@ -726,7 +726,8 @@ in
           export ADMIN_EMAIL="${cfg.admin.email}"
           export ADMIN_NAME="${cfg.admin.fullName}"
           export ADMIN_USERNAME="${cfg.admin.username}"
-          export ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
+          ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
+          export ADMIN_PASSWORD
           discourse-rake admin:create_noninteractively
 
           discourse-rake themes:update
@@ -938,7 +939,8 @@ in
               set -o errexit -o pipefail -o nounset -o errtrace
               shopt -s inherit_errexit
 
-              export api_key=$(<'${apiKeyPath}')
+              api_key=$(<'${apiKeyPath}')
+              export api_key
 
               jq <${mail-receiver-json} \
                  '.DISCOURSE_API_KEY = $ENV.api_key' \
