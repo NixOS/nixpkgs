@@ -38,9 +38,8 @@ with lib;
     };
 
     users.users.rpc = {
-      group = "nogroup";
+      group = "rpc";
       uid = config.ids.uids.rpc;
     };
   };
-
 }
