@@ -23,7 +23,7 @@ in
       type = types.port;
       default = 5005;
       description = ''
-        Port to run the "dispatch" module on.
+        Port on which the "dispatch" module should listen.
       '';
     };
 
@@ -49,6 +49,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           description = "dispatch.sr.ht user";
         };

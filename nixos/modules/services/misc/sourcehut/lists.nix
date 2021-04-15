@@ -27,7 +27,7 @@ in
       type = types.port;
       default = 5006;
       description = ''
-        Port to run the "lists" module on.
+        Port on which the "lists" module should listen.
       '';
     };
 
@@ -52,6 +52,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           extraGroups = [ "postfix" ];
           description = "lists.sr.ht user";

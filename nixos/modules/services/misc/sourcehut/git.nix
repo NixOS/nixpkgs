@@ -26,7 +26,7 @@ in
       type = types.port;
       default = 5001;
       description = ''
-        Port to run the "git" module on.
+        Port on which the "git" module should listen.
       '';
     };
 
@@ -72,6 +72,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           # https://stackoverflow.com/questions/22314298/git-push-results-in-fatal-protocol-error-bad-line-length-character-this
           # Probably could use gitsrht-shell if output is restricted to just parameters...
@@ -162,7 +163,7 @@ in
       "git.sr.ht".webhooks = mkDefault "redis://${rcfg.bind}:${toString rcfg.port}/1";
 
       # A post-update script which is installed in every git repo.
-      "git.sr.ht".post-update-script = mkDefault "${pkgs.sourcehut.gitsrht.updateHook}/bin/gitsrht-update-hook";
+      "git.sr.ht".post-update-script = mkDefault "${pkgs.sourcehut.gitsrht}/bin/gitsrht-update-hook";
 
       # git.sr.ht's OAuth client ID and secret for meta.sr.ht
       # Register your client at meta.example.org/oauth

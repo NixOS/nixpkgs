@@ -24,7 +24,7 @@ in
       type = types.port;
       default = 5000;
       description = ''
-        Port to run the "meta" module on.
+        Port on which the "meta" module should listen.
       '';
     };
 
@@ -56,7 +56,8 @@ in
 
     users = {
       users = {
-        "${user}" = {
+        ${user} = {
+          isSystemUser = true;
           group = user;
           description = "meta.sr.ht user";
         };

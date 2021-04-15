@@ -49,7 +49,6 @@ in {
         global-domain = "${fqdn}";
         origin = "https://${fqdn}";
         # Produce keys with srht-keygen.
-        secret-key= "SECRET";
         network-key = "SECRET";
         service-key = "SECRET";
         private-key= "SECRET";

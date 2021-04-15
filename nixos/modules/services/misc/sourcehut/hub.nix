@@ -23,7 +23,7 @@ in
       type = types.port;
       default = 5014;
       description = ''
-        Port to run the "hub" module on.
+        Port on which the "hub" module should listen.
       '';
     };
 
@@ -48,6 +48,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           description = "hub.sr.ht user";
         };

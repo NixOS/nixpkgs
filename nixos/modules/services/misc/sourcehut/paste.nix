@@ -24,7 +24,7 @@ in
       type = types.port;
       default = 5011;
       description = ''
-        Port to run the "paste" module on.
+        Port on which the "paste" module should listen.
       '';
     };
 
@@ -49,6 +49,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           description = "paste.sr.ht user";
         };

@@ -23,7 +23,7 @@ in
       type = types.port;
       default = 5002;
       description = ''
-        Port to run the "builds" module on.
+        Port on which the "builds" module should listen.
       '';
     };
 
@@ -107,6 +107,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           extraGroups = lib.optionals cfg.builds.enableWorker [ "docker" ];
           description = "builds.sr.ht user";

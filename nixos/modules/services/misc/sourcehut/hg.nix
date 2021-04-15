@@ -25,7 +25,7 @@ in
       type = types.port;
       default = 5010;
       description = ''
-        Port to run the "hg" module on.
+        Port on which the "hg" module should listen.
       '';
     };
 
@@ -67,19 +67,19 @@ in
     environment.systemPackages = [ pkgs.mercurial ];
 
     users = {
-      users = [
-        {
-          name = user;
+      users = {
+        "${user}" = {
+          isSystemUser = true;
           group = user;
           # Assuming hg.sr.ht needs this too
           shell = pkgs.bash;
           description = "hg.sr.ht user";
-        }
-      ];
+        };
+      };
 
-      groups = [
-        { name = user; }
-      ];
+      groups = {
+        "${user}" = { };
+      };
     };
 
     services = {
@@ -88,7 +88,7 @@ in
 
       openssh.authorizedKeysCommand = ''/etc/ssh/hgsrht-dispatch "%u" "%h" "%t" "%k"'';
       openssh.authorizedKeysCommandUser = "root";
-      openssh.extraConfig = '
+      openssh.extraConfig = ''
         PermitUserEnvironment SRHT_*
       '';
 

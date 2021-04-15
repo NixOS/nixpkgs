@@ -24,7 +24,7 @@ in
       type = types.port;
       default = 5003;
       description = ''
-        Port to run the "todo" module on.
+        Port on which the "todo" module should listen.
       '';
     };
 
@@ -49,6 +49,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           extraGroups = [ "postfix" ];
           description = "todo.sr.ht user";

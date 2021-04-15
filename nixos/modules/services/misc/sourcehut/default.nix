@@ -54,7 +54,7 @@ in
       default = false;
       description = ''
         Enable sourcehut - git hosting, continuous integration, mailing list, ticket tracking,
-        task dispatching, wiki and account management services.
+        task dispatching, wiki and account management services
       '';
     };
 
@@ -119,14 +119,14 @@ in
     assertions =
       [
         {
-          assertion = with cfgIni."sr.ht"; secret-key != null && stringLength secret-key == 32;
-          message = "sr.ht's secret key must be defined and of a 32 byte length.";
+          assertion = with cfgIni."sr.ht"; private-key != null && stringLength private-key == 44;
+          message = "sr.ht's private key must be defined and of a 44 byte length.";
         }
 
         # Is it always 44 characters...? At least from the times I've generated one...
         {
           assertion = with cfgIni.webhooks; private-key != null && stringLength private-key == 44;
-          message = "The webhook's private key must be defined and of a 44 byte length."
+          message = "The webhook's private key must be defined and of a 44 byte length.";
         }
 
         {

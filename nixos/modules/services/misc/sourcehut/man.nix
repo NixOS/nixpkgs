@@ -23,7 +23,7 @@ in
       type = types.port;
       default = 5004;
       description = ''
-        Port to run the "man" module on.
+        Port on which the "man" module should listen.
       '';
     };
 
@@ -56,6 +56,7 @@ in
     users = {
       users = {
         "${user}" = {
+          isSystemUser = true;
           group = user;
           description = "man.sr.ht user";
         };
