@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex ];
 
   enableParallelBuilding = true;
+  
+  outputs = [ "out" "man" ];
 
   meta = with lib; {
     homepage = "https://www.atnf.csiro.au/people/mcalabre/WCS/";
