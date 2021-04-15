@@ -3889,6 +3889,10 @@ in {
 
   liblarch = callPackage ../development/python-modules/liblarch { };
 
+  liblzfse = callPackage ../development/python-modules/liblzfse {
+    inherit (pkgs) lzfse;
+  };
+
   libmodulemd = pipe pkgs.libmodulemd [
     toPythonModule
     (p:
