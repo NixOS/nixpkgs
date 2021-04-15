@@ -150,7 +150,7 @@ with mikutterPaths; stdenv.mkDerivation rec {
   doInstallCheck = true;
   dontWrapGApps = true; # the target is placed outside of bin/
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = [ ./update.sh version (toString ./.) ];
 
   meta = with lib; {
     description = "An extensible Mastodon client";

@@ -1,12 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i bash -I nixpkgs=../../../../.. -p bundler bundix curl jq common-updater-scripts
+#!nix-shell -i bash -p bundler bundix curl jq common-updater-scripts
 # shellcheck shell=bash
 
 set -euxo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 main() {
+    local currentVer="$1"
+    local scriptDir="$2"
     local latestVer
     local srcDir
 
@@ -18,15 +18,20 @@ main() {
     fi
 
     latestVer="$(queryLatestVersion)"
+    if [[ "$currentVer" == "$latestVer" ]]; then
+        echo "[INFO] mikutter is already up to date" >&2
+        exit
+    fi
+
     update-source-version "$UPDATE_NIX_ATTR_PATH" "$latestVer"
 
-    cd "$SCRIPT_DIR"
+    cd "$scriptDir"
 
     rm -rf deps
     mkdir deps
     cd deps
 
-    srcDir="$(nix-build ../../../../.. --no-out-link -A mikutter.src)"
+    srcDir="$(nix-build ../../../../../.. --no-out-link -A mikutter.src)"
     tar xvf "$srcDir" --strip-components=1
     find . -not -name Gemfile -exec rm {} \;
     find . -type d -exec rmdir -p --ignore-fail-on-non-empty {} \; || true
