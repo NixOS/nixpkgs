@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sanvl2a52ff4shj62nw395zzgdgywplqvwip74ky8q7s6qjf5qy";
   };
 
-  configureFlags = [ "--with-gcc-arch=unknown" ];
+  configureFlags = [ "--without-gcc-arch" ];
 
   enableParallelBuilding = true;
 
