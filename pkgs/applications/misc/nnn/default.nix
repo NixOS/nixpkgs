@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, readline
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, ncurses, readline
+, archivemount, atool, fzf, libarchive, rclone, sshfs, unzip, vlock
 , conf ? null, withIcons ? false, withNerdIcons ? false }:
 
 # Mutually exclusive options
@@ -7,19 +8,19 @@ assert withNerdIcons -> withIcons == false;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
-  version = "3.6";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hwv7ncp8pmzdir30877ni4qlmczmb3yjdkbfd1pssr08y1srsc7";
+    sha256 = "0cbxgss9j0bvsp3czjx1kpm9id7c5xxmjfnvjyk3pfd69ygif2kl";
   };
 
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ readline ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ]
@@ -31,6 +32,9 @@ stdenv.mkDerivation rec {
     install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
     install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
     install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+
+    wrapProgram $out/bin/nnn \
+      --prefix PATH : ${lib.makeBinPath [ archivemount atool fzf libarchive rclone sshfs unzip vlock ]}
   '';
 
   meta = with lib; {

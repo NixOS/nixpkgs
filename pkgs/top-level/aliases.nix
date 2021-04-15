@@ -946,6 +946,8 @@ mapAliases ({
 
   zplugin = zinit; # Added 2021-01-30
 
+  posix_man_pages = man-pages-posix; # Added 2021-04-15
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */

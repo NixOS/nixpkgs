@@ -21295,6 +21295,8 @@ in
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
+  man-pages-posix = callPackage ../data/documentation/man-pages-posix { };
+
   manrope = callPackage ../data/fonts/manrope { };
 
   marwaita = callPackage ../data/themes/marwaita { };
@@ -21467,8 +21469,6 @@ in
   pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
-
-  posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
@@ -23973,7 +23973,7 @@ in
 
   kooha = callPackage ../applications/video/kooha { };
 
-  kotatogram-desktop = libsForQt514.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
+  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
@@ -26113,6 +26113,8 @@ in
   };
 
   timewarrior = callPackage ../applications/misc/timewarrior { };
+
+  timg = callPackage ../tools/graphics/timg { };
 
   timidity = callPackage ../tools/misc/timidity { };
 
@@ -30325,6 +30327,7 @@ in
     terraform_0_12
     terraform_0_13
     terraform_0_14
+    terraform_0_15
     terraform_plugins_test
     ;
 

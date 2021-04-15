@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenv, llvm_meta
 , fetch
 , cmake
 , python3
@@ -32,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "088dyv7hppidl3rqfsjdibvn4d3a74896fg2sz4dwaxlg19way93";
-  polly_src = fetch "polly" "1qj7gkfr1yrsrz6j086l9p6d2kyyln15fmfiab4isn96g1dhsfb5";
+  src = fetch pname "0l4b79gwfvxild974aigcq1yigypjsk2j5p59syhl6ksd744gp29";
+  polly_src = fetch "polly" "1ixl9yj526n8iqh9ckyiah2vzravs9d1akybqq7rvy32n9vgr6hd";
 
   unpackPhase = ''
     unpackFile $src
@@ -73,7 +73,7 @@ in stdenv.mkDerivation (rec {
       --replace "PassBuilderCallbacksTest.cpp" ""
     rm unittests/IR/PassBuilderCallbacksTest.cpp
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../TLI-musl.patch}
+    patch -p1 -i ${../../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -160,12 +160,23 @@ in stdenv.mkDerivation (rec {
   checkTarget = "check-all";
 
   requiredSystemFeatures = [ "big-parallel" ];
-  meta = {
-    description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = "https://llvm.org/";
-    license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = lib.platforms.all;
+  meta = llvm_meta // {
+    homepage = "https://llvm.org/";
+    description = "A collection of modular and reusable compiler and toolchain technologies";
+    longDescription = ''
+      The LLVM Project is a collection of modular and reusable compiler and
+      toolchain technologies. Despite its name, LLVM has little to do with
+      traditional virtual machines. The name "LLVM" itself is not an acronym; it
+      is the full name of the project.
+      LLVM began as a research project at the University of Illinois, with the
+      goal of providing a modern, SSA-based compilation strategy capable of
+      supporting both static and dynamic compilation of arbitrary programming
+      languages. Since then, LLVM has grown to be an umbrella project consisting
+      of a number of subprojects, many of which are being used in production by
+      a wide variety of commercial and open source projects as well as being
+      widely used in academic research. Code in the LLVM project is licensed
+      under the "Apache 2.0 License with LLVM exceptions".
+    '';
   };
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -185,5 +196,7 @@ in stdenv.mkDerivation (rec {
 
   doCheck = false;
 
-  meta.description = "man pages for LLVM ${version}";
+  meta = llvm_meta // {
+    description = "man pages for LLVM ${version}";
+  };
 })
