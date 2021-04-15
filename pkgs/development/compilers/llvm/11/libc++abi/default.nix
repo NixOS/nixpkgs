@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d libcxx -i ${../libcxx-0001-musl-hacks.patch}
+    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
     patch -p1 -d llvm -i ${./wasm.patch}
   '';

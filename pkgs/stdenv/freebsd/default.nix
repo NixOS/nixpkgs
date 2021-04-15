@@ -238,7 +238,7 @@ in
         buildPlatform hostPlatform targetPlatform
         initialPath shell fetchurlBoot;
 
-      cc = import ../../build-support/cc-wrapper {
+      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         inherit lib;
         nativeTools  = true;
         nativePrefix = "/usr";
