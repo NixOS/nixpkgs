@@ -599,7 +599,7 @@ let
                    librpcsvc.src libutil.src librt.src libcrypt.src ];
     buildInputs = [ buildPackages.netbsd.headers csu ];
     nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          byacc genassym gencat lorder tsort statHook ];
+                          byacc genassym gencat lorder tsort statHook rpcgen ];
     NIX_CFLAGS_COMPILE = "-B${csu}/lib";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -629,8 +629,8 @@ let
       make -C $NETBSDSRCDIR/lib/libresolv $makeFlags
       make -C $NETBSDSRCDIR/lib/libresolv $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/librpcsv $makeFlags
-      make -C $NETBSDSRCDIR/lib/librpcsv $makeFlags install
+      make -C $NETBSDSRCDIR/lib/librpcsvc $makeFlags
+      make -C $NETBSDSRCDIR/lib/librpcsvc $makeFlags install
 
       make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags
       make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags install
@@ -645,8 +645,8 @@ let
       make -C $NETBSDSRCDIR/lib/libcrypt $makeFlags install
     '';
     postPatch = ''
-      substituteInPlace sys/Makefile.inc \
-        --replace /usr/include/sys/syscall.h ${buildPackages.netbsd.headers}/include/sys/syscall.h
+      sed -i 's,/usr\(/include/sys/syscall.h\),${buildPackages.netbsd.headers}\1,g' \
+        sys/Makefile.inc ../librt/sys/Makefile.inc
     '';
   };
   #
