@@ -4,7 +4,7 @@
 , config
 , overlays
 , crossOverlays ? [ ]
-, bootstrapLlvmVersion ? if localSystem.isAarch64 then "11.1.0" else "7.1.0"
+, bootstrapLlvmVersion ? "11.1.0"
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? if localSystem.isAarch64 then
     let
