@@ -1563,9 +1563,9 @@ self: super: {
   );
 
   # 2020-12-05: http-client is fixed on too old version
-  essence-of-live-coding-warp = super.essence-of-live-coding-warp.override {
-    http-client = self.http-client_0_7_6;
-  };
+  essence-of-live-coding-warp = doJailbreak (super.essence-of-live-coding-warp.override {
+    http-client = self.http-client_0_7_7;
+  });
 
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
