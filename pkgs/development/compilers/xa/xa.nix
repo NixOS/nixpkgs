@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, perl
 }:
 
 stdenv.mkDerivation rec {
@@ -8,22 +9,39 @@ stdenv.mkDerivation rec {
   version = "2.3.11";
 
   src = fetchurl {
-    url = "https://www.floodgap.com/retrotech/xa/dists/${pname}-${version}.tar.gz";
+    urls = [
+      "https://www.floodgap.com/retrotech/xa/dists/${pname}-${version}.tar.gz"
+      "https://www.floodgap.com/retrotech/xa/dists/unsupported/${pname}-${version}.tar.gz"
+    ];
     hash = "sha256-MvIWTJnjBSGOmSlwhW3Y4jCbXLasR1jXsq/jv+vJAS0=";
   };
+
+  checkInputs = [ perl ];
 
   dontConfigure = true;
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "DESTDIR" "PREFIX" \
       --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
-      --replace "LDD = gcc" "LDD = ${stdenv.cc.targetPrefix}cc" \
+      --replace "LD = gcc" "LD = ${stdenv.cc.targetPrefix}cc" \
       --replace "CFLAGS = -O2" "CFLAGS ?=" \
       --replace "LDFLAGS = -lc" "LDFLAGS ?= -lc"
   '';
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "DESTDIR:=${placeholder "out"}"
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
+
+  # Running tests in parallel does not work
+  enableParallelChecking = false;
+
+  preCheck = ''
+    patchShebangs tests
+  '';
 
   meta = with lib; {
     homepage = "https://www.floodgap.com/retrotech/xa/";
