@@ -1,7 +1,7 @@
-{ fetchFromGitHub, spotify, spotify-unwrapped,
-  gtk3, libxkbcommon, # spotify-unwrapped-1.1.55.498
+{ fetchFromGitHub, spotify, spotify-unwrapped
+, gtk3, libxkbcommon # spotify-unwrapped-1.1.55.498
   # copy paste from spotify/default.nix:
-  fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
+, fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa
@@ -14,8 +14,7 @@ let
   # 520: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@CURL_GNUTLS_3 (19)
 
   # copy paste from spotify/default.nix:
-  deps =
-    [
+  deps = [
     alsaLib
     atk
     at-spi2-atk
