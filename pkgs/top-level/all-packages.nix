@@ -12082,6 +12082,8 @@ in
 
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
+  guile-commonmark = callPackage ../development/guile-modules/guile-commonmark { };
+
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
 
   guile-gnome = callPackage ../development/guile-modules/guile-gnome {
