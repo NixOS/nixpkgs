@@ -13,7 +13,6 @@
 , makeDesktopItem
 , which
 , wrapGAppsHook
-, writers
 , writeText
 }:
 
