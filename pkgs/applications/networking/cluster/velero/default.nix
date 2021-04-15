@@ -2,24 +2,27 @@
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.5.4";
+  # When updating, change the commit underneath
+  version = "1.6.0";
+  commit = "5bd70fd8eef316d220317245e46dc6016c348dce";
+
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "vmware-tanzu";
     repo = "velero";
-    sha256 = "sha256-YHBqIM3NV2L13w9WCzldUWmdBMec7ZndzYgGHblS8Dg=";
+    sha256 = "sha256-2d4xsffh5DpxGahmzXpgUBRFAt5CsDnHCm8xU1ksqyQ=";
   };
 
   buildFlagsArray = ''
     -ldflags=
       -s -w
       -X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=${version}
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=456eb19668f8da603756353d9179b59b5a7bfa04
+      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=${commit}
       -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean
   '';
 
-  vendorSha256 = "sha256-m/zShJeclZ1k8Fr9faK2x1Mpwbwun674iMPJhMw/9Mc=";
+  vendorSha256 = "sha256-aQjtebIyV69nRwc/zvK/9v0mX3pAPKfOunSL/FpFZJU=";
 
   excludedPackages = [ "issue-template-gen" ];
 
