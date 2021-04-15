@@ -1,5 +1,3 @@
-#
-#
 { vimUtils, vim_configurable, neovim, vimPlugins
 , lib, fetchFromGitHub,
 }:

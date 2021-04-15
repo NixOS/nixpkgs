@@ -196,7 +196,7 @@ let
       depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
       startWithDeps = findDependenciesRecursively start;
     in
-      ["mkdir -p $out/pack/${packageName}/start"]
+      [ "mkdir -p $out/pack/${packageName}/start" ]
       # To avoid confusion, even dependencies of optional plugins are added
       # to `start` (except if they are explicitly listed as optional plugins).
       ++ (builtins.map (link packageName "start") (lib.unique (startWithDeps ++ depsOfOptionalPlugins)))
@@ -207,9 +207,7 @@ let
       stdenv.mkDerivation {
         name = "vim-pack-dir";
         src = ./.;
-        installPhase = lib.concatStringsSep
-                          "\n"
-                          (lib.flatten (lib.mapAttrsToList packageLinks packages));
+        installPhase = lib.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList packageLinks packages));
         preferLocalBuild = true;
       }
     );
