@@ -369,6 +369,7 @@ in
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
+        pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
         pkgs.nixos-artwork.wallpapers.simple-dark-gray
         pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom
         pkgs.gnome-user-docs
