@@ -1,4 +1,4 @@
-{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, bison, flex
+{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, byacc, flex
 , makeSetupHook, writeText, buildPackages, splicePackages, symlinkJoin }:
 
 let
@@ -575,7 +575,7 @@ let
     sha256 = "0630lbvz6v4ic13bfg8ccwfhqkgcv76bfdw9f36rfsnwfgpxqsmq";
     meta.platforms = lib.platforms.netbsd;
     nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          bison genassym gencat lorder tsort statHook ];
+                          byacc genassym gencat lorder tsort statHook ];
     extraPaths = [ sys.src ld_elf_so.src ];
   };
 
@@ -599,7 +599,7 @@ let
                    librpcsvc.src libutil.src librt.src libcrypt.src ];
     buildInputs = [ buildPackages.netbsd.headers csu ];
     nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          bison genassym gencat lorder tsort statHook ];
+                          byacc genassym gencat lorder tsort statHook ];
     NIX_CFLAGS_COMPILE = "-B${csu}/lib";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
