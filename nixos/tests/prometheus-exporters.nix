@@ -132,7 +132,9 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-bird-exporter.service")
         wait_for_open_port(9324)
-        succeed("curl -sSf http://localhost:9324/metrics | grep -q 'MyObviousTestString'")
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9324/metrics | grep -q 'MyObviousTestString'"
+        )
       '';
     };
 
