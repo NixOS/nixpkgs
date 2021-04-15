@@ -971,6 +971,8 @@ in {
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
+  beautifultable = callPackage ../development/python-modules/beautifultable { };
+
   bedup = callPackage ../development/python-modules/bedup { };
 
   behave = callPackage ../development/python-modules/behave { };
@@ -3497,6 +3499,8 @@ in {
 
   karton-core = callPackage ../development/python-modules/karton-core { };
 
+  karton-mwdb-reporter = callPackage ../development/python-modules/karton-mwdb-reporter { };
+
   karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
@@ -4216,6 +4220,8 @@ in {
   mutatormath = callPackage ../development/python-modules/mutatormath { };
 
   mwclient = callPackage ../development/python-modules/mwclient { };
+
+  mwdblib = callPackage ../development/python-modules/mwdblib { };
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
@@ -7626,6 +7632,8 @@ in {
   sure = callPackage ../development/python-modules/sure { };
 
   surepy = callPackage ../development/python-modules/surepy { };
+
+  surt = callPackage ../development/python-modules/surt { };
 
   survey = callPackage ../development/python-modules/survey { };
 

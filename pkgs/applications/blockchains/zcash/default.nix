@@ -1,25 +1,26 @@
 { rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
-, fetchpatch, cargo, pkg-config, curl, coreutils, boost174, db62, hexdump
-, libsodium, libevent, utf8cpp, util-linux, withWallet ? true, withDaemon ? true
-, withUtils ? true
+, cargo, pkg-config, curl, coreutils, boost174, db62, hexdump, libsodium
+, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
+, withUtils ? true, withWallet ? true, withZmq ? true, zeromq
 }:
 
 rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   pname = "zcash";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "00pn1jw8j90y7i8nc92b51znz4gczphvdzbkbcjx63cf6vk7v4ks";
+    sha256 = "19vhblyqkaf1lapx8s4v88xjpslqmrd1jnar46rschzcz0mm9sq4";
   };
 
-  cargoSha256 = "1rl9sjbvpfrv1mlyb04vw1935qx0kz9cs177xl7izdva1ixk9blr";
+  cargoSha256 = "1yiy1506ijndxb9bx79p7fkfvw1c5zdsljil4m55xz1mv8dzhbgm";
 
   nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
   buildInputs = [ boost174 libevent libsodium utf8cpp ]
-    ++ lib.optional withWallet db62;
+    ++ lib.optional withWallet db62
+    ++ lib.optional withZmq zeromq;
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.
@@ -27,14 +28,6 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   buildPhase = "buildPhase";
   checkPhase = "checkPhase";
   installPhase = "installPhase";
-
-  patches = [
-    # See https://github.com/zcash/zcash/pull/5015
-    (fetchpatch {
-      url = "https://github.com/zcash/zcash/commit/a0ac27ec6ed434a233c7ad2468258f6e6e7e9688.patch";
-      sha256 = "0pmx1spql9p8vvpjgw7qf3qy46f4mh9ni16bq4ss1xz1z9zgjc4k";
-    })
-  ];
 
   postPatch = ''
     # Have to do this here instead of in preConfigure because
@@ -49,7 +42,8 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
     "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
   ] ++ lib.optional (!withWallet) "--disable-wallet"
     ++ lib.optional (!withDaemon) "--without-daemon"
-    ++ lib.optional (!withUtils) "--without-utils";
+    ++ lib.optional (!withUtils) "--without-utils"
+    ++ lib.optional (!withMining) "--disable-mining";
 
   enableParallelBuilding = true;
 
