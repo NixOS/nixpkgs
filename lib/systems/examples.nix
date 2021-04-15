@@ -250,9 +250,18 @@ rec {
 
   # BSDs
 
-  amd64-netbsd = {
+  # Deprecate
+  amd64-netbsd = x86_64-netbsd;
+
+  x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";
     libc = "nblibc";
+  };
+
+  x86_64-netbsd-llvm = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
+    useLLVM = true;
   };
 
   #
