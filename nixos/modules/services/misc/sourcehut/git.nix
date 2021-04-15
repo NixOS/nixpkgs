@@ -51,7 +51,7 @@ in
       default = pkgs.git;
       example = literalExample "pkgs.gitFull";
       description = ''
-        Git pacakge for git.sr.ht. This can help silence collisions.
+        Git package for git.sr.ht. This can help silence collisions.
       '';
     };
   };
@@ -75,7 +75,7 @@ in
           group = user;
           # https://stackoverflow.com/questions/22314298/git-push-results-in-fatal-protocol-error-bad-line-length-character-this
           # Probably could use gitsrht-shell if output is restricted to just parameters...
-          shell = "${pkgs.bash}/bin/bash";
+          shell = pkgs.bash;
           description = "git.sr.ht user";
         };
       };
@@ -89,9 +89,9 @@ in
       cron.systemCronJobs = [ "*/20 * * * * ${cfg.python}/bin/gitsrht-periodic" ];
       fcgiwrap.enable = true;
 
+      openssh.authorizedKeysCommand = ''/etc/ssh/gitsrht-dispatch "%u" "%h" "%t" "%k"'';
+      openssh.authorizedKeysCommandUser = "root";
       openssh.extraConfig = ''
-        AuthorizedKeysCommand /etc/ssh/gitsrht-dispatch "%u" "%h" "%t" "%k"
-        AuthorizedKeysCommandUser root
         PermitUserEnvironment SRHT_*
       '';
 

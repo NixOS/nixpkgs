@@ -108,7 +108,7 @@ in
       users = {
         "${user}" = {
           group = user;
-          extraGroups = if cfg.builds.enableWorker then [ "docker" ] else [ ];
+          extraGroups = lib.optionals cfg.builds.enableWorker [ "docker" ];
           description = "builds.sr.ht user";
         };
       };

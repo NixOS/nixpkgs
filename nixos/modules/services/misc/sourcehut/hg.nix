@@ -49,7 +49,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        generate clonebundles (which require more disk space but dramatically speed up cloning large repositories)
+        Generate clonebundles (which require more disk space but dramatically speed up cloning large repositories).
       '';
     };
   };
@@ -72,7 +72,7 @@ in
           name = user;
           group = user;
           # Assuming hg.sr.ht needs this too
-          shell = "${pkgs.bash}/bin/bash";
+          shell = pkgs.bash;
           description = "hg.sr.ht user";
         }
       ];
@@ -86,9 +86,9 @@ in
       cron.systemCronJobs = [ "*/20 * * * * ${cfg.python}/bin/hgsrht-periodic" ]
         ++ optional cloneBundles "0 * * * * ${cfg.python}/bin/hgsrht-clonebundles";
 
-      openssh.extraConfig = ''
-        AuthorizedKeysCommand /etc/ssh/hgsrht-dispatch "%u" "%h" "%t" "%k"
-        AuthorizedKeysCommandUser root
+      openssh.authorizedKeysCommand = ''/etc/ssh/hgsrht-dispatch "%u" "%h" "%t" "%k"'';
+      openssh.authorizedKeysCommandUser = "root";
+      openssh.extraConfig = '
         PermitUserEnvironment SRHT_*
       '';
 

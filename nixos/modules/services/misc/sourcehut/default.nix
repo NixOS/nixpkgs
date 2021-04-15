@@ -98,7 +98,7 @@ in
       default = "/var/lib/sourcehut";
       description = ''
         Root state path for the sourcehut network. If left as the default value
-        this directory will automatically be created before the MPD server
+        this directory will automatically be created before the sourcehut server
         starts, otherwise the sysadmin is responsible for ensuring the
         directory exists with appropriate ownership and permissions.
       '';
@@ -126,7 +126,7 @@ in
         # Is it always 44 characters...? At least from the times I've generated one...
         {
           assertion = with cfgIni.webhooks; private-key != null && stringLength private-key == 44;
-          message = "The webhook's private key must be defined.";
+          message = "The webhook's private key must be defined and of a 44 byte length."
         }
 
         {

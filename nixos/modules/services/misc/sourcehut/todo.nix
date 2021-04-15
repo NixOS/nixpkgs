@@ -50,7 +50,8 @@ in
       users = {
         "${user}" = {
           group = user;
-          description = "meta.sr.ht user";
+          extraGroups = [ "postfix" ];
+          description = "todo.sr.ht user";
         };
       };
       groups = {
@@ -86,6 +87,21 @@ in
 
           script = "${cfg.python}/bin/gunicorn ${drv.pname}.app:app -b ${cfg.address}:${toString port}";
         };
+
+       todosrht-lmtp = {
+         after = [ "postgresql.service" "network.target" ];
+         bindsTo = [ "postgresql.service" ];
+         wantedBy = [ "multi-user.target" ];
+
+         description = "todo.sr.ht process service";
+         serviceConfig = {
+           Type = "simple";
+           User = user;
+           Restart = "always";
+         };
+
+         script = "${cfg.python}/bin/todosrht-lmtp";
+       };
 
         todosrht-webhooks = {
           after = [ "postgresql.service" "network.target" ];
