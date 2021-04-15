@@ -365,7 +365,6 @@ in
         gnome-bluetooth
         gnome-color-manager
         gnome-control-center
-        gnome-getting-started-docs
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
