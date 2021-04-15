@@ -8,20 +8,22 @@
 , nose
 , pyopenssl
 , pytestCheckHook
-, pythonOlder
+, pythonAtLeast
 , pytz
 , tzlocal
 }:
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "0.7.18";
+  version = "0.8.0";
+
+  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "bamthomas";
     repo = pname;
     rev = version;
-    sha256 = "037fxwmkdfb95cqcykrhn37p138wg9pvlsgdf45vyn1mhz5crky5";
+    sha256 = "sha256-ume25EwLNB6szokHXonDXHGKVK76CiZYOBXVUf37/x8=";
   };
 
   checkInputs = [
@@ -36,9 +38,6 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  # Project is using asynctest with doesn't work with Python 3.8 and above
-  # https://github.com/bamthomas/aioimaplib/issues/54
-  doCheck = pythonOlder "3.8";
   pythonImportsCheck = [ "aioimaplib" ];
 
   meta = with lib; {
