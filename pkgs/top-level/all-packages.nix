@@ -3620,6 +3620,8 @@ in
 
   cpio = callPackage ../tools/archivers/cpio { };
 
+  cpufetch = callPackage ../tools/misc/cpufetch { };
+
   crackxls = callPackage ../tools/security/crackxls { };
 
   create-cycle-app = nodePackages.create-cycle-app;
