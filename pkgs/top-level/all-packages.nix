@@ -30331,6 +30331,7 @@ in
     terraform_0_12
     terraform_0_13
     terraform_0_14
+    terraform_0_15
     terraform_plugins_test
     ;
 
