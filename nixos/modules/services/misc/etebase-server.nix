@@ -211,6 +211,7 @@ in
 
     users = optionalAttrs (cfg.user == defaultUser) {
       users.${defaultUser} = {
+        isSystemUser = true;
         group = defaultUser;
         home = cfg.dataDir;
       };
