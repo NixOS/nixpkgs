@@ -10176,8 +10176,8 @@ in
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
   gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
 
-  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then ../development/compilers/gcc/6
+  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then ../development/compilers/gcc/6
+    else if stdenv.targetPlatform.isAarch64 then ../development/compilers/gcc/9
     else ../development/compilers/gcc/10);
   gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
     then gcc6 else
