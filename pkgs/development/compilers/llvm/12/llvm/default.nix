@@ -73,7 +73,7 @@ in stdenv.mkDerivation (rec {
       --replace "PassBuilderCallbacksTest.cpp" ""
     rm unittests/IR/PassBuilderCallbacksTest.cpp
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../TLI-musl.patch}
+    patch -p1 -i ${../../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
