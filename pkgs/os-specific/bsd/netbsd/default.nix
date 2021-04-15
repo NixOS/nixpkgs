@@ -664,7 +664,7 @@ let
     path = "share/man";
     noCC = true;
     version = "8.0";
-    sha256 = "0d34b3irjbqsqfk8v8aaj36fjyvwyx410igl26jcx2ryh3ispch0";
+    sha256 = "0yp48syf3y5psm0mymxp6va6spym5izjym0ybr628iqwji21cqdz";
     makeFlags = [ "FILESDIR=$(out)/share" ];
   };
   #
