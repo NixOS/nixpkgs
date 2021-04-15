@@ -4518,6 +4518,8 @@ in {
 
   mwclient = callPackage ../development/python-modules/mwclient { };
 
+  mwdblib = callPackage ../development/python-modules/mwdblib { };
+
   mwlib = callPackage ../development/python-modules/mwlib { };
 
   mwlib-ext = callPackage ../development/python-modules/mwlib-ext { };
