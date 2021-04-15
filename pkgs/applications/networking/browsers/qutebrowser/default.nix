@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchzip, python3, substituteAll
+{ lib, fetchurl, fetchzip, fetchpatch, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
@@ -69,9 +69,10 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
 
   patches = [
     ./fix-restart.patch
-    (substituteAll {
-      src = ./qtwebengine-library-path.patch;
-      qtwebengine = qtwebengine.out;
+    (fetchpatch {
+      name = "add-qtwebengine-version-override.patch";
+      url = "https://github.com/qutebrowser/qutebrowser/commit/febb921040b6670d9b1694a6ce55ae39384d1306.patch";
+      sha256 = "15p11kk8via7c7m14jiqgzc63qwxxzayr2bkl93jd10l2gx7pk9v";
     })
   ];
 
@@ -121,6 +122,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
+      --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
     )
   '';
 
