@@ -7106,6 +7106,8 @@ in {
     inherit python;
   });
 
+  rpmfile = callPackage ../development/python-modules/rpmfile { };
+
   rpmfluff = callPackage ../development/python-modules/rpmfluff { };
 
   rpy2 = callPackage ../development/python-modules/rpy2 { };
