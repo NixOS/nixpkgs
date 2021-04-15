@@ -21301,6 +21301,8 @@ in
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
+  man-pages-posix = callPackage ../data/documentation/man-pages-posix { };
+
   manrope = callPackage ../data/fonts/manrope { };
 
   marwaita = callPackage ../data/themes/marwaita { };
@@ -21473,8 +21475,6 @@ in
   pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
-
-  posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
