@@ -20,6 +20,12 @@ let
 
   clang-tools-extra_src = fetch "clang-tools-extra" "0p3dzr0qa7mar83y66xa5m5apynf6ia0lsdsq6axwnm64ysy0hdd";
 
+  llvm_meta = {
+    license     = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
+    platforms   = lib.platforms.all;
+  };
+
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
     mkExtraBuildCommands = cc: ''
@@ -30,13 +36,16 @@ let
       ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
+
   in {
 
-    llvm = callPackage ./llvm { };
+    llvm = callPackage ./llvm {
+      inherit llvm_meta;
+    };
 
     clang-unwrapped = callPackage ./clang {
       inherit (tools) lld;
-      inherit clang-tools-extra_src;
+      inherit clang-tools-extra_src llvm_meta;
     };
 
     # disabled until recommonmark supports sphinx 3
@@ -81,10 +90,12 @@ let
     };
 
     lld = callPackage ./lld {
+      inherit llvm_meta;
       libunwind = libraries.libunwind;
     };
 
     lldb = callPackage ./lldb {
+      inherit llvm_meta;
       inherit (darwin) libobjc bootstrap_cmds;
       inherit (darwin.apple_sdk.libs) xpc;
       inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
@@ -172,7 +183,7 @@ let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt = callPackage ./compiler-rt ({} //
+    compiler-rt = callPackage ./compiler-rt ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt;
       }));
@@ -181,20 +192,20 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libc++ ({} //
+    libcxx = callPackage ./libc++ ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
 
-    libcxxabi = callPackage ./libc++abi ({} //
+    libcxxabi = callPackage ./libc++abi ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
         libunwind = libraries.libunwind;
       }));
 
-    openmp = callPackage ./openmp.nix {};
+    openmp = callPackage ./openmp.nix { inherit llvm_meta; };
 
-    libunwind = callPackage ./libunwind ({} //
+    libunwind = callPackage ./libunwind ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
