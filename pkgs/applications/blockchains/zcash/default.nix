@@ -1,6 +1,6 @@
 { rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
-, fetchpatch, cargo, pkg-config, curl, coreutils, boost174, db62, hexdump
-, libsodium, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
+, cargo, pkg-config, curl, coreutils, boost174, db62, hexdump, libsodium
+, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
 , withUtils ? true, withWallet ? true, withZmq ? true, zeromq
 }:
 
