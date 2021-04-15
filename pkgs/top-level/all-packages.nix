@@ -9035,9 +9035,7 @@ in
 
   uwsgi = callPackage ../servers/uwsgi { };
 
-  v2ray = callPackage ../tools/networking/v2ray {
-    buildGoModule = buildGo115Module;
-  };
+  v2ray = callPackage ../tools/networking/v2ray { };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
