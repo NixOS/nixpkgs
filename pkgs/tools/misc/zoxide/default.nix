@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  doCheck = true;
-
   postPatch = lib.optionalString withFzf ''
     substituteInPlace src/fzf.rs \
       --replace '"fzf"' '"${fzf}/bin/fzf"'
