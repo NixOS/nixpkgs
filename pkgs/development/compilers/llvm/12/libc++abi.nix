@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "libc++abi";
   inherit version;
 
-  src = fetch "libcxxabi" "0mjj4f63ix4j1b72bgzpcki7mzf3qszrq7snqhiq0c5s73skkwx0";
+  src = fetch "libcxxabi" "1cbmzspwjlr8f6sp73pw6ivf4dpg6rpc61by0q1m2zca2k6yif3a";
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d libcxx -i ${../libcxx-0001-musl-hacks.patch}
+    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
     patch -p1 -d llvm -i ${./libcxxabi-wasm.patch}
   '';
