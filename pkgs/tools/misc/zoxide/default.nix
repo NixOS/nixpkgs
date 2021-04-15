@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , withFzf ? true
+, fzf
 , libiconv
 }:
 
