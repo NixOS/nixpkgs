@@ -5460,7 +5460,9 @@ in
 
   infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
 
-  innernet = callPackage ../tools/networking/innernet { };
+  innernet = callPackage ../tools/networking/innernet {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   innoextract = callPackage ../tools/archivers/innoextract { };
 

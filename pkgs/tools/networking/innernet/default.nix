@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, linuxHeaders, sqlite, darwin ? null }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, linuxHeaders, sqlite, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   nativeBuildInputs = with llvmPackages; [ llvm clang ];
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security ];
   cargoSha256 = "sha256-xNw3IMnWKMlOijohurLoaYmSnqY/+doTm9wDIl5AMxc=";
 
   meta = with lib; {
