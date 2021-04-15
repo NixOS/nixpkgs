@@ -30,14 +30,14 @@ let
 in
 buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "11.6.0";
+  version = "11.7.3";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "0inmmpam0vcm5n4sm6lh9p5swk44clknvm1cdwk9cax01mdqljza";
+    sha256 = "0gs2w9kl5wwrs0hx2sivq3pdvpf3lkaifblwfbz5g31yl770blji";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -85,5 +85,6 @@ buildPythonApplication rec {
     license = with licenses; [ mpl20 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.kiwi ];
+    changelog  = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };
 }

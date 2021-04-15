@@ -306,6 +306,7 @@ in {
         description = "PulseAudio system service user";
         home = stateDir;
         createHome = true;
+        isSystemUser = true;
       };
 
       users.groups.pulse.gid = gid;

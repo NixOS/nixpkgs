@@ -264,6 +264,7 @@ in
 
       users.users.privacyidea = mkIf (cfg.user == "privacyidea") {
         group = cfg.group;
+        isSystemUser = true;
       };
 
       users.groups.privacyidea = mkIf (cfg.group == "privacyidea") {};
@@ -294,6 +295,7 @@ in
 
       users.users.pi-ldap-proxy = mkIf (cfg.ldap-proxy.user == "pi-ldap-proxy") {
         group = cfg.ldap-proxy.group;
+        isSystemUser = true;
       };
 
       users.groups.pi-ldap-proxy = mkIf (cfg.ldap-proxy.group == "pi-ldap-proxy") {};

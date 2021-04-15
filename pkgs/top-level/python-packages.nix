@@ -1367,6 +1367,8 @@ in {
 
   clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash {};
 
+  clickhouse-cli = callPackage ../development/python-modules/clickhouse-cli { };
+
   clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver {};
 
   cliff = callPackage ../development/python-modules/cliff { };
@@ -4477,6 +4479,8 @@ in {
     # requires both the graphviz package and python package
     graphvizPkgs = pkgs.graphviz;
   };
+
+  oci = callPackage ../development/python-modules/oci { };
 
   od = callPackage ../development/python-modules/od { };
 
@@ -7650,6 +7654,8 @@ in {
   };
 
   sympy = callPackage ../development/python-modules/sympy { };
+
+  systembridge = callPackage ../development/python-modules/systembridge { };
 
   systemd = callPackage ../development/python-modules/systemd {
     inherit (pkgs) systemd;

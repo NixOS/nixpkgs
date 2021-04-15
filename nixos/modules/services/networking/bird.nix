@@ -73,6 +73,7 @@ let
           users.${variant} = {
             description = "BIRD Internet Routing Daemon user";
             group = variant;
+            isSystemUser = true;
           };
           groups.${variant} = {};
         };

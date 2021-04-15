@@ -375,7 +375,10 @@ in
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
-  fetchcvs = callPackage ../build-support/fetchcvs { };
+  fetchcvs = if stdenv.buildPlatform != stdenv.hostPlatform
+    # hack around splicing being crummy with things that (correctly) don't eval.
+    then buildPackages.fetchcvs
+    else callPackage ../build-support/fetchcvs { };
 
   fetchdarcs = callPackage ../build-support/fetchdarcs { };
 
@@ -427,7 +430,10 @@ in
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
-  fetchsvn = callPackage ../build-support/fetchsvn { };
+  fetchsvn = if stdenv.buildPlatform != stdenv.hostPlatform
+    # hack around splicing being crummy with things that (correctly) don't eval.
+    then buildPackages.fetchsvn
+    else callPackage ../build-support/fetchsvn { };
 
   fetchsvnrevision = import ../build-support/fetchsvnrevision runCommand subversion;
 
@@ -2840,6 +2846,8 @@ in
   nx-libs = callPackage ../tools/X11/nx-libs { };
 
   nyx = callPackage ../tools/networking/nyx { };
+
+  oci-cli = callPackage ../tools/admin/oci-cli { };
 
   ocrmypdf = callPackage ../tools/text/ocrmypdf { };
 
@@ -18332,6 +18340,8 @@ in
     inherit (llvmPackages_10) clang-unwrapped lld lldClang llvm;
   };
 
+  clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
+
   couchdb = callPackage ../servers/http/couchdb {
     sphinx = python27Packages.sphinx;
     erlang = erlangR19;
@@ -23336,6 +23346,8 @@ in
 
   googleearth = callPackage ../applications/misc/googleearth { };
 
+  googleearth-pro = callPackage ../applications/misc/googleearth-pro { };
+
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
@@ -26130,6 +26142,8 @@ in
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
+  todofi-sh = callPackage ../applications/office/todofi.sh { };
+
   todoman = callPackage ../applications/office/todoman { };
 
   toggldesktop = libsForQt514.callPackage ../applications/misc/toggldesktop { };
@@ -27949,7 +27963,10 @@ in
     tk = tk-8_6;
   };
 
-  scummvm = callPackage ../games/scummvm { };
+  scummvm = callPackage ../games/scummvm {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AudioToolbox Carbon CoreMIDI AudioUnit;
+  };
 
   inherit (callPackage ../games/scummvm/games.nix { })
     beneath-a-steel-sky
@@ -28552,6 +28569,8 @@ in
   lumpy = callPackage ../applications/science/biology/lumpy { };
 
   macse = callPackage ../applications/science/biology/macse { };
+
+  MACS2 = callPackage ../applications/science/biology/MACS2 { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
 

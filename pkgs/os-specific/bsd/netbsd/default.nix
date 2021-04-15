@@ -1,8 +1,8 @@
-{ stdenv, stdenvNoCC, lib, groff, mandoc, zlib, bison, flex
+{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, bison, flex
 , writeText, buildPackages, splicePackages, symlinkJoin }:
 
 let
-  fetchNetBSD = path: version: sha256: buildPackages.fetchcvs {
+  fetchNetBSD = path: version: sha256: fetchcvs {
     cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
     module = "src/${path}";
     inherit sha256;
