@@ -351,7 +351,7 @@
     "hitron_coda" = ps: with ps; [ ];
     "hive" = ps: with ps; [ ]; # missing inputs: pyhiveapi
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
-    "home_connect" = ps: with ps; [ aiohttp-cors ]; # missing inputs: homeconnect
+    "home_connect" = ps: with ps; [ aiohttp-cors homeconnect ];
     "home_plus_control" = ps: with ps; [ aiohttp-cors homepluscontrol ];
     "homeassistant" = ps: with ps; [ ];
     "homekit" = ps: with ps; [ HAP-python pyqrcode pyturbojpeg aiohttp-cors base36 fnvhash ha-ffmpeg zeroconf ];

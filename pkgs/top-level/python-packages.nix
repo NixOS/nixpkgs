@@ -3147,6 +3147,8 @@ in {
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
+  homeconnect = callPackage ../development/python-modules/homeconnect { };
+
   homematicip = callPackage ../development/python-modules/homematicip { };
 
   homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
