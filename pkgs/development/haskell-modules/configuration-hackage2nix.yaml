@@ -82,6 +82,8 @@ default-package-overrides:
   - hls-retrie-plugin < 1.0.0.1
   - lsp < 1.2
   - lsp-types < 1.2
+  - hls-plugin-api < 1.1.0.0
+  - hls-explicit-imports-plugin < 1.0.0.1
   # 2021-04-02: Stackage Nighlty has haskell-gi* < 0.25,
   # so we need to restrict these to compatible versions
   # Remove these as soon as haskell-gi{,-base} are 0.25.*
@@ -99,7 +101,7 @@ default-package-overrides:
   - gi-secret < 0.0.13
   - gi-vte < 2.91.28
 
-  # Stackage Nightly 2021-04-02
+  # Stackage Nightly 2021-04-06
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -330,7 +332,7 @@ default-package-overrides:
   - bech32 ==1.1.0
   - bech32-th ==1.0.2
   - bench ==1.0.12
-  - benchpress ==0.2.2.15
+  - benchpress ==0.2.2.16
   - between ==0.11.0.0
   - bibtex ==0.1.0.6
   - bifunctors ==5.5.10
@@ -381,7 +383,7 @@ default-package-overrides:
   - boolsimplifier ==0.1.8
   - boots ==0.2.0.1
   - bordacount ==0.1.0.0
-  - boring ==0.1.3
+  - boring ==0.2
   - both ==0.1.1.1
   - bound ==2.0.3
   - BoundedChan ==1.0.3.0
@@ -535,7 +537,7 @@ default-package-overrides:
   - composite-hashable ==0.7.4.0
   - composite-tuple ==0.1.2.0
   - composite-xstep ==0.1.0.0
-  - composition ==1.0.2.1
+  - composition ==1.0.2.2
   - composition-extra ==2.0.0
   - concise ==0.1.0.1
   - concurrency ==1.11.0.1
@@ -661,7 +663,7 @@ default-package-overrides:
   - data-ordlist ==0.4.7.0
   - data-ref ==0.0.2
   - data-reify ==0.6.3
-  - data-serializer ==0.3.4.1
+  - data-serializer ==0.3.5
   - data-textual ==0.3.0.3
   - dataurl ==0.1.0.0
   - DAV ==1.3.4
@@ -708,7 +710,7 @@ default-package-overrides:
   - distributed-closure ==0.4.2.0
   - distribution-opensuse ==1.1.1
   - distributive ==0.6.2.1
-  - dl-fedora ==0.7.6
+  - dl-fedora ==0.7.7
   - dlist ==0.8.0.8
   - dlist-instances ==0.1.1.1
   - dlist-nonempty ==0.1.1
@@ -873,7 +875,7 @@ default-package-overrides:
   - fix-whitespace ==0.0.5
   - flac ==0.2.0
   - flac-picture ==0.1.2
-  - flags-applicative ==0.1.0.2
+  - flags-applicative ==0.1.0.3
   - flat ==0.4.4
   - flat-mcmc ==1.5.2
   - flexible-defaults ==0.0.3
@@ -1043,7 +1045,7 @@ default-package-overrides:
   - graphite ==0.10.0.1
   - graphql-client ==1.1.1
   - graphs ==0.7.1
-  - graphula ==2.0.0.3
+  - graphula ==2.0.0.4
   - graphviz ==2999.20.1.0
   - graph-wrapper ==0.2.6.0
   - gravatar ==0.8.0
@@ -1126,7 +1128,7 @@ default-package-overrides:
   - hformat ==0.3.3.1
   - hfsevents ==0.1.6
   - hgrev ==0.2.6
-  - hidapi ==0.1.6
+  - hidapi ==0.1.7
   - hie-bios ==0.7.5
   - hi-file-parser ==0.1.1.0
   - higher-leveldb ==0.6.0.0
@@ -1162,7 +1164,7 @@ default-package-overrides:
   - hp2pretty ==0.10
   - hpack ==0.34.4
   - hpack-dhall ==0.5.2
-  - hpc-codecov ==0.2.0.2
+  - hpc-codecov ==0.3.0.0
   - hpc-lcov ==1.0.1
   - hprotoc ==2.4.17
   - hruby ==0.3.8.1
@@ -1185,7 +1187,7 @@ default-package-overrides:
   - hslua-module-path ==0.1.0.1
   - hslua-module-system ==0.2.2.1
   - hslua-module-text ==0.3.0.1
-  - HsOpenSSL ==0.11.6
+  - HsOpenSSL ==0.11.6.1
   - HsOpenSSL-x509-system ==0.1.0.4
   - hsp ==0.10.0
   - hspec ==2.7.9
@@ -1465,7 +1467,7 @@ default-package-overrides:
   - liboath-hs ==0.0.1.2
   - libyaml ==0.1.2
   - LibZip ==1.0.1
-  - lifted-async ==0.10.1.3
+  - lifted-async ==0.10.2
   - lifted-base ==0.2.3.12
   - lift-generics ==0.2
   - line ==4.0.1
@@ -1629,7 +1631,7 @@ default-package-overrides:
   - mono-traversable ==1.0.15.1
   - mono-traversable-instances ==0.1.1.0
   - mono-traversable-keys ==0.1.0
-  - more-containers ==0.2.2.0
+  - more-containers ==0.2.2.2
   - morpheus-graphql ==0.17.0
   - morpheus-graphql-app ==0.17.0
   - morpheus-graphql-client ==0.17.0
@@ -2069,7 +2071,7 @@ default-package-overrides:
   - rhine-gloss ==0.7.0
   - rigel-viz ==0.2.0.0
   - rio ==0.1.20.0
-  - rio-orphans ==0.1.1.0
+  - rio-orphans ==0.1.2.0
   - rio-prettyprint ==0.1.1.0
   - roc-id ==0.1.0.0
   - rocksdb-haskell ==1.0.1
@@ -2163,7 +2165,7 @@ default-package-overrides:
   - servant-swagger ==1.1.10
   - servant-swagger-ui ==0.3.4.3.37.2
   - servant-swagger-ui-core ==0.3.4
-  - serverless-haskell ==0.12.5
+  - serverless-haskell ==0.12.6
   - serversession ==1.0.2
   - serversession-frontend-wai ==1.0
   - ses-html ==0.4.0.0
@@ -2234,7 +2236,7 @@ default-package-overrides:
   - soap-tls ==0.1.1.4
   - socket ==0.8.3.0
   - socks ==0.6.1
-  - some ==1.0.2
+  - some ==1.0.3
   - sop-core ==0.5.0.1
   - sort ==1.0.0.0
   - sorted-list ==0.2.1.0
@@ -2309,7 +2311,7 @@ default-package-overrides:
   - string-conversions ==0.4.0.1
   - string-interpolate ==0.3.1.0
   - string-qq ==0.0.4
-  - string-random ==0.1.4.0
+  - string-random ==0.1.4.1
   - stringsearch ==0.3.6.6
   - string-transform ==1.1.1
   - stripe-concepts ==1.0.2.6
@@ -2362,7 +2364,7 @@ default-package-overrides:
   - tardis ==0.4.3.0
   - tasty ==1.4.1
   - tasty-ant-xml ==1.1.8
-  - tasty-bench ==0.2.4
+  - tasty-bench ==0.2.5
   - tasty-dejafu ==2.0.0.7
   - tasty-discover ==4.2.2
   - tasty-expected-failure ==0.12.3
@@ -2741,7 +2743,7 @@ default-package-overrides:
   - yesod-sitemap ==1.6.0
   - yesod-static ==1.6.1.0
   - yesod-test ==1.6.12
-  - yesod-websockets ==0.3.0.2
+  - yesod-websockets ==0.3.0.3
   - yes-precure5-command ==5.5.3
   - yi-rope ==0.11
   - yjsvg ==0.2.0.1
@@ -5694,6 +5696,7 @@ broken-packages:
   - ghcjs-xhr
   - ghclive
   - ghcprofview
+  - ghcup
   - ght
   - gi-cairo-again
   - gi-graphene
@@ -7490,7 +7493,6 @@ broken-packages:
   - kparams
   - kqueue
   - kraken
-  - krank
   - krapsh
   - Kriens
   - krpc
@@ -9330,7 +9332,6 @@ broken-packages:
   - puzzle-draw
   - puzzle-draw-cmdline
   - pvd
-  - PyF
   - pyffi
   - pyfi
   - python-pickle
@@ -10379,6 +10380,7 @@ broken-packages:
   - sorted
   - sorting
   - sorty
+  - souffle-dsl
   - souffle-haskell
   - sound-collage
   - sounddelay
@@ -11454,6 +11456,7 @@ broken-packages:
   - wai-graceful
   - wai-handler-devel
   - wai-handler-fastcgi
+  - wai-handler-hal
   - wai-handler-scgi
   - wai-handler-snap
   - wai-handler-webkit
