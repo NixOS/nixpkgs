@@ -1777,6 +1777,8 @@ in {
 
   debugpy = callPackage ../development/python-modules/debugpy { };
 
+  debut = callPackage ../development/python-modules/debut { };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   deep_merge = callPackage ../development/python-modules/deep_merge { };
