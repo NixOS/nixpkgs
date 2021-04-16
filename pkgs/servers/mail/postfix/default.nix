@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.5.6";
+  version = "3.5.10";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0shyxk83adv4pbfilmskyrgjpb57vyhmvqbmfqawxbc22mksmh4f";
+    sha256 = "sha256-W7TX1y11ErWPOjFCbcvTlP01TgpD3iHaiUZrBXoCKPg=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -101,7 +101,6 @@ in stdenv.mkDerivation rec {
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rickynils globin ];
+    maintainers = with maintainers; [ rickynils globin dotlambda ];
   };
-
 }
