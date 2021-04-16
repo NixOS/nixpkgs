@@ -6357,6 +6357,8 @@ in {
 
   pysmb = callPackage ../development/python-modules/pysmb { };
 
+  pysmart-smartx = callPackage ../development/python-modules/pysmart-smartx { };
+
   pysmbc = callPackage ../development/python-modules/pysmbc { };
 
   pysmf = callPackage ../development/python-modules/pysmf { };
