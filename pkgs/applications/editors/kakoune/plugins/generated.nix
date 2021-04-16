@@ -17,12 +17,12 @@ let
 
   auto-pairs-kak = buildKakounePluginFrom2Nix {
     pname = "auto-pairs-kak";
-    version = "2020-10-04";
+    version = "2021-03-28";
     src = fetchFromGitHub {
       owner = "alexherbo2";
       repo = "auto-pairs.kak";
-      rev = "fd735ec149ef0d9ca5f628a95b1e52858b5afbdc";
-      sha256 = "07795kv9njlnp6mckwv141ny2ns6wyf5r0dfjaxh9ngd105zgif1";
+      rev = "526779a26a5cf5f48e7c4f5c5fecca274968a737";
+      sha256 = "0gkhvwxyh8pdfydrj7zkfidk0drrbhvdi1fq3pkzllna3vz8q181";
     };
     meta.homepage = "https://github.com/alexherbo2/auto-pairs.kak/";
   };
@@ -41,12 +41,12 @@ let
 
   fzf-kak = buildKakounePluginFrom2Nix {
     pname = "fzf-kak";
-    version = "2021-03-15";
+    version = "2021-04-03";
     src = fetchFromGitHub {
       owner = "andreyorst";
       repo = "fzf.kak";
-      rev = "4e6c9a857511fccdbbc835a1c9acb205b6486a4c";
-      sha256 = "0syhhdlsm7vg6hcd2n2acag9g562z49rbb5smh5p2gnplhmp93i0";
+      rev = "1b3a3beebbe7134e671fde2ef2f4242b34ae2c60";
+      sha256 = "0rsd65zcizbq3isy8576gqw7mcml5ixw84padaz6ndwfif5fv701";
     };
     meta.homepage = "https://github.com/andreyorst/fzf.kak/";
   };
@@ -65,12 +65,12 @@ let
 
   kakoune-buffers = buildKakounePluginFrom2Nix {
     pname = "kakoune-buffers";
-    version = "2020-06-11";
+    version = "2021-04-02";
     src = fetchFromGitHub {
       owner = "Delapouite";
       repo = "kakoune-buffers";
-      rev = "67959fbad727ba8470fe8cd6361169560f4fb532";
-      sha256 = "09prhzz4yzf6ryw0npd1gpcfp77681vgawpp1ilfvbf25xgbbz33";
+      rev = "7832ea7a4528363482f5684f16cbcebcbec0adfd";
+      sha256 = "196d36jww6asf5zr03l1rwg49kkv16s2d4zyryb2m3zvy7prf2bb";
     };
     meta.homepage = "https://github.com/Delapouite/kakoune-buffers/";
   };
@@ -147,14 +147,26 @@ let
     meta.homepage = "https://github.com/mayjs/openscad.kak/";
   };
 
+  pandoc-kak = buildKakounePluginFrom2Nix {
+    pname = "pandoc-kak";
+    version = "2020-11-30";
+    src = fetchFromGitHub {
+      owner = "basbebe";
+      repo = "pandoc.kak";
+      rev = "63979f7e08b86d80436bbe2d9dba173a56057b97";
+      sha256 = "16pmmnpyxf8r7gpj8g1lwa960nscjmcl52n1a7s6xcqkp9856wxs";
+    };
+    meta.homepage = "https://github.com/basbebe/pandoc.kak/";
+  };
+
   powerline-kak = buildKakounePluginFrom2Nix {
     pname = "powerline-kak";
-    version = "2021-02-25";
+    version = "2021-04-06";
     src = fetchFromGitHub {
       owner = "andreyorst";
       repo = "powerline.kak";
-      rev = "64ad98b6c85e63345563671b043960464d51c4b0";
-      sha256 = "09w2sk19qi64hgsyg4gb407vyppnlgk272mqbinz2r3apy6szkl3";
+      rev = "6fa5ad383f2884f201d6e3ef07a4687c606df525";
+      sha256 = "1s7ggjby0bymq48njzhdvkkarmzl44803xv0dlnzrj7q9c3xv27a";
     };
     meta.homepage = "https://github.com/andreyorst/powerline.kak/";
   };
@@ -197,12 +209,12 @@ let
 
   tabs-kak = buildKakounePluginFrom2Nix {
     pname = "tabs-kak";
-    version = "2021-02-16";
+    version = "2021-04-14";
     src = fetchFromGitHub {
       owner = "enricozb";
       repo = "tabs.kak";
-      rev = "1aaa8cd89e404cbbd76d44ff8089de0951612fbf";
-      sha256 = "0dfz6j6yxl65jbh4xvpiy2abr2sdjyalynzhl28y7l1gzqv4ni3j";
+      rev = "048f83455ea7c671ab06e9b9578ac25e5de1d6fb";
+      sha256 = "0xswpsdf1bj54inl6vf2lzbjkxfc6g0fyv5kd6y9ahlh5irij8z0";
     };
     meta.homepage = "https://github.com/enricozb/tabs.kak/";
   };
