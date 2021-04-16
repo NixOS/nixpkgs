@@ -33,7 +33,7 @@ buildPythonPackage rec {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "1wisxmq26b8ml144m2458sgcbk8jpv419j01qmffsrfy50x9i1yw";
+    sha256 = "1m6smky4nahwlp4hn6yzibrcxlbsw4nx162dsq48vlw8h1lgjl62";
   };
 
   cargoRoot = "src/rust";
