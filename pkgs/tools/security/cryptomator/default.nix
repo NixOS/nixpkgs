@@ -6,20 +6,20 @@
 
 let
   pname = "cryptomator";
-  version = "1.5.13";
+  version = "1.5.14";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "1s9jl3nl6yfjzmilz9b8azk8592nd39xflzfdf38v6s4iiq86r8j";
+    sha256 = "05zgan1i2dzipzw8x510lg2l40dz9hvk43nrwpi0kg9l1qs9sxrq";
   };
 
   icons = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator-linux";
     rev = version;
-    sha256 = "1x6h6wp6yxnj576874xj3d2jm8jmb7918wprqvlz4sryxhlcssa7";
+    sha256 = "0gb5sd5bkpxv4hff1i09rxr90pi5d15vjsfrk9m8221xiypqmccp";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -44,7 +44,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "06q8bqdz3c4i84wxl9z5861zwdsw8jzcvsbgxqrnh8rwi7500sa7";
+    outputHash = "0gvpjc77g99vcwk77nknvg8z33xbskcfwx3015nhhc089b2frq02";
   };
 
 in stdenv.mkDerivation rec {
