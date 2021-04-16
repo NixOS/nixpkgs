@@ -22317,9 +22317,7 @@ in
 
   caerbannog = callPackage ../applications/misc/caerbannog { };
 
-  cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_12;
-  };
+  cage = callPackage ../applications/window-managers/cage { };
 
   calf = callPackage ../applications/audio/calf {
       inherit (gnome2) libglade;
