@@ -46,10 +46,6 @@ rec {
       sha256 = "1jm6rajlh8nm1b1331pyvp20vxxfwi4nb8wgqlkznf0kkdvfa78a";
     };
 
-    # I'm not sure why we don't find PyQt5 here but there's a similar
-    # sed on many of the platforms Plover builds for
-    postPatch = "sed -i /PyQt5/d setup.cfg";
-
     checkInputs           = [ pytest mock ];
     propagatedBuildInputs = [
       Babel pyqt5 xlib pyserial
