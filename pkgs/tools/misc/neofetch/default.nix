@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash }:
+{ lib, stdenvNoCC, fetchFromGitHub, bash, makeWrapper, pciutils }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "neofetch";
@@ -13,8 +13,14 @@ stdenvNoCC.mkDerivation rec {
 
   strictDeps = true;
   buildInputs = [ bash ];
+  nativeBuildInputs = [ makeWrapper ];
   postPatch = ''
     patchShebangs --host neofetch
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/neofetch \
+      --prefix PATH : ${lib.makeBinPath [ pciutils ]}
   '';
 
   makeFlags = [

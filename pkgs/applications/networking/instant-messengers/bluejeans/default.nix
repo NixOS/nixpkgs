@@ -35,16 +35,17 @@
 , alsaLib
 , pulseaudio
 , makeWrapper
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.19.0";
-  buildNumber = "61";
+  version = "2.21.3";
+  buildNumber = "2";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
-    sha256 = "163p67dqry256d454qzk4k4b692kz8s9fcvaxd6gi7zvnsd48ikr";
+    sha256 = "sha256-a/REuxkqZmLLa7N3CUgUAdq74VMD9D10a/Sx2jOj1QA=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
@@ -100,6 +101,7 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
+
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
@@ -108,7 +110,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
-      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
+      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
       --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"

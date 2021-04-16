@@ -5280,6 +5280,8 @@ in {
 
   pycollada = callPackage ../development/python-modules/pycollada { };
 
+  pycomfoconnect = callPackage ../development/python-modules/pycomfoconnect { };
+
   pycontracts = callPackage ../development/python-modules/pycontracts { };
 
   pycosat = callPackage ../development/python-modules/pycosat { };
