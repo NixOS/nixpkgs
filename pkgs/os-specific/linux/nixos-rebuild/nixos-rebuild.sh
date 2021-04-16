@@ -247,9 +247,7 @@ nixFlakeBuild() {
         local drv="$(nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildArgs[@]}")"
         if [ -a "$drv" ]; then
             NIX_SSHOPTS=$SSHOPTS nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
-            # The 'nix-command flakes' part in "${flakeFlags[@]}" is seen as two separate args over SSH
-            buildHostCmd nix --experimental-features "'nix-command flakes'" build "${buildArgs[@]}" --out-link "${tmpDir}/result" "$drv"
-            buildHostCmd readlink -f "${tmpDir}/result"
+            buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             echo "nix eval failed"
             exit 1
@@ -358,14 +356,8 @@ fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
-if [ -n "$buildHost" -a -n "$flake" ]; then
-    buildHostCmd mkdir -p "$tmpDir"
-fi
 
 cleanup() {
-    if [ -n "$buildHost" -a -n "$flake" ]; then
-        buildHostCmd rm -rf "$tmpDir"
-    fi
     for ctrl in "$tmpDir"/ssh-*; do
         ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
     done
