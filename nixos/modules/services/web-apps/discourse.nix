@@ -702,7 +702,7 @@ in
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
           cp -r ${cfg.package}/share/discourse/plugins.dist/* /run/discourse/plugins/
-          ${lib.concatMapStrings (p: "ln -sf ${p} /run/discourse/plugins/") cfg.plugins}
+          ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} /run/discourse/plugins/") cfg.plugins}
           ln -sf /var/lib/discourse/uploads /run/discourse/public/uploads
           ln -sf /var/lib/discourse/backups /run/discourse/public/backups
 
