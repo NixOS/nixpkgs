@@ -8652,7 +8652,9 @@ in
 
   soundkonverter = libsForQt5.soundkonverter;
 
-  sozu = callPackage ../servers/sozu { };
+  sozu = callPackage ../servers/sozu {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
