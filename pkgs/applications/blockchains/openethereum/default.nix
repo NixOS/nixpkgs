@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "1j7wfgpnvf9pcprd53sbd3pa7yz9588z81i1bx12wmj1fja3xa0j";
+    sha256 = "143w0b0ff1s73qzr844l25w90d2y2z0b3w2fr5kkbc1wsnpcq7jp";
   };
 
-  cargoSha256 = "0ha18caw8mxzrh984y2z148cmdijrjxf0rc8j4ccwvmrbdsaz1xn";
+  cargoSha256 = "1gm02pcfll362add8a0dcb0sk0mag8z0q23b87yb6fs870bqvhib";
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
   nativeBuildInputs = [
