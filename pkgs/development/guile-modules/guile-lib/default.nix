@@ -4,13 +4,13 @@ assert stdenv ? cc && stdenv.cc.isGNU;
 
 let
   name = "guile-lib-${version}";
-  version = "0.2.6.1";
+  version = "0.2.7";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://savannah/guile-lib/${name}.tar.gz";
-    sha256 = "0aizxdif5dpch9cvs8zz5g8ds5s4xhfnwza2il5ji7fv2h7ks7bd";
+    sha256 = "sha256-5O87hF8SGILHwM8E+BocuP02DG9ktWuGjeVUYhT5BN4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
