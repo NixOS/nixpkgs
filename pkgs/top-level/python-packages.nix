@@ -5995,6 +5995,8 @@ in {
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
+  pymdstat = callPackage ../development/python-modules/pymdstat { };
+
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
