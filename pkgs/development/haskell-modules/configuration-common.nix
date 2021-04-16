@@ -1811,4 +1811,8 @@ self: super: {
   # PR pending https://github.com/zohl/cereal-time/pull/2
   cereal-time = doJailbreak super.cereal-time;
 
+  # 2021-04-16: too strict bounds on QuickCheck and tasty
+  # https://github.com/hasufell/lzma-static/issues/1
+  lzma-static = doJailbreak super.lzma-static;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
