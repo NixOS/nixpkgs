@@ -5,18 +5,17 @@
 , electron
 , common-updater-scripts
 , writeShellScript
-, jq
 , makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
 
   pname = "stretchly";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-    sha256 = "19czwmwqsn82zdzln9zqqyl9sb3dm95gp58dqn1459gyinkzpvda";
+    sha256 = "1q0ihp6cd65lnscbr7xj3yyb06qds77r4s6m1xbk5l9vs2rw923d";
   };
 
   icon = fetchurl {
