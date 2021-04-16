@@ -13,7 +13,10 @@ import ./make-test-python.nix (pkgs: {
 
       networking.firewall.allowedTCPPorts = [ 4444 ];
 
-      systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l 4444 -k";
+      systemd.services.listener.script = ''
+        cp ${pkgs.pkgsStatic.netcat}/bin/nc /tmp/nc
+        exec /tmp/nc -k -l 4444
+      '';
     };
 
     probe = { pkgs, ...}: {
@@ -25,18 +28,22 @@ import ./make-test-python.nix (pkgs: {
   # Therefore, machine just hangs on any Nix store access.
   # To work around it we run a daemon which listens to a TCP connection and
   # try to connect to it as a test.
+  # To make absolutely sure that we don't depend on paging things in from the
+  # now-inaccessible Nix store, we use a statically-linked version of netcat
+  # that we copy to /tmp.
 
   testScript =
     ''
       machine.start()
+      probe.start()
       machine.wait_for_unit("multi-user.target")
       machine.succeed("mkswap /dev/vdb")
       machine.succeed("swapon -a")
       machine.start_job("listener")
       machine.wait_for_open_port(4444)
+      probe.wait_for_unit("multi-user.target")
       machine.succeed("systemctl hibernate &")
       machine.wait_for_shutdown()
-      probe.wait_for_unit("multi-user.target")
       machine.start()
       probe.wait_until_succeeds("echo test | nc machine 4444 -N")
     '';
