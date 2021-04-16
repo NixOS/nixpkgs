@@ -6359,6 +6359,8 @@ in {
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
+  python-string-utils = callPackage ../development/python-modules/python-string-utils { };
+
   pytest-socket = callPackage ../development/python-modules/pytest-socket { };
 
   pytest-subtesthack = callPackage ../development/python-modules/pytest-subtesthack { };
