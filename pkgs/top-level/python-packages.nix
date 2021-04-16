@@ -3497,6 +3497,8 @@ in {
 
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
+  karton-config-extractor = callPackage ../development/python-modules/karton-config-extractor { };
+
   karton-core = callPackage ../development/python-modules/karton-core { };
 
   karton-mwdb-reporter = callPackage ../development/python-modules/karton-mwdb-reporter { };
@@ -3926,6 +3928,8 @@ in {
   makefun = callPackage ../development/python-modules/makefun { };
 
   Mako = callPackage ../development/python-modules/Mako { };
+
+  malduck= callPackage ../development/python-modules/malduck { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
 
