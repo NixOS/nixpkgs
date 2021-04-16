@@ -131,9 +131,6 @@ stdenv.mkDerivation rec {
     # fix test output with sympy 1.7 (https://trac.sagemath.org/ticket/30985)
     ./patches/sympy-1.7-update.patch
 
-    # updated eclib output has punctuation changes and tidier whitespace
-    ./patches/eclib-20210223-test-formatting.patch
-
     # upgrade arb to 2.18.1 (https://trac.sagemath.org/ticket/28623)
     (fetchSageDiff {
       base = "9.3.beta3";
