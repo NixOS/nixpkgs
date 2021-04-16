@@ -4,7 +4,7 @@
 , wmctrl, qtbase, mkDerivationWith
 }:
 
-{
+rec {
   stable = with python27Packages; buildPythonPackage rec {
     pname = "plover";
     version = "3.1.1";
@@ -62,5 +62,37 @@
     preFixup = ''
       makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     '';
+  };
+
+  plugins-manager = with python3Packages; buildPythonPackage rec {
+    pname = "plover-plugins-manager";
+    version = "0.6.1";
+
+    src = fetchFromGitHub {
+      owner = "benoit-pierre";
+      repo = "plover_plugins_manager";
+      rev = version;
+      sha256 = "sha256-7OyGmSwOvoqwbBgXdfUUmwvjszUNRPlD4XyBeJ29vBg=";
+    };
+
+    propagatedBuildInputs = [
+      # plover.dev
+      dev
+
+      pip pkginfo pygments
+      readme_renderer requests
+      requests-cache requests-futures
+      setuptools wheel
+    ];
+
+    # tests try to instantiate a virtualenv and lack permission
+    doCheck = false;
+
+    meta = with lib; {
+      description = "OpenSteno Plover stenography software plugin manager";
+      homepage = "https://github.com/benoit-pierre/plover_plugins_manager";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ evils ];
+    };
   };
 }
