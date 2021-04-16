@@ -8407,6 +8407,8 @@ in {
 
   termstyle = callPackage ../development/python-modules/termstyle { };
 
+  tern = callPackage ../development/python-modules/tern { };
+
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
 
   tess = callPackage ../development/python-modules/tess { };
