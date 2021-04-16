@@ -2,7 +2,7 @@
 , pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools, zeroad-data
+, gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK
 }:
 
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     "-I${fmt.dev}/include"
   ];
 
+  patches = [ ./rootdir_env.patch ];
+
   configurePhase = ''
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
@@ -62,7 +64,6 @@ stdenv.mkDerivation rec {
       ${lib.optionalString withEditor "--enable-atlas"} \
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \
-      --datadir="$out"/share/0ad/data \
       --without-tests \
       -j $NIX_BUILD_CORES
     popd
@@ -84,11 +85,6 @@ stdenv.mkDerivation rec {
 
     # Copy l10n data.
     install -Dm755 -t $out/share/0ad/data/l10n binaries/data/l10n/*
-
-    # Link in game data from package
-    ln -s ${zeroad-data}/share/0ad/data/config $out/share/0ad/data/config
-    ln -s ${zeroad-data}/share/0ad/data/mods $out/share/0ad/data/mods
-    ln -s ${zeroad-data}/share/0ad/data/tools $out/share/0ad/data/tools
 
     # Copy libraries.
     install -Dm644 -t $out/lib/0ad        binaries/system/*.so
