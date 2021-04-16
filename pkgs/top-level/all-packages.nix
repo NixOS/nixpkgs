@@ -2753,6 +2753,8 @@ in
 
   meritous = callPackage ../games/meritous { };
 
+  oh-my-git = callPackage ../games/oh-my-git { };
+
   opendune = callPackage ../games/opendune { };
 
   merriweather = callPackage ../data/fonts/merriweather { };
