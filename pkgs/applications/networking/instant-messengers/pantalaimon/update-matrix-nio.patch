@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index b9d3320..e0587f2 100644
+--- a/setup.py
++++ b/setup.py
+@@ -29,7 +29,7 @@ setup(
+         "cachetools >= 3.0.0",
+         "prompt_toolkit > 2, < 4",
+         "typing;python_version<'3.5'",
+-        "matrix-nio[e2e] >= 0.14, < 0.17"
++        "matrix-nio[e2e] >= 0.14, < 0.18"
+     ],
+     extras_require={
+         "ui": [

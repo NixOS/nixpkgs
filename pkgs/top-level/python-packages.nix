@@ -3165,6 +3165,8 @@ in {
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
 
+  hsluv = callPackage ../development/python-modules/hsluv { };
+
   hstspreload = callPackage ../development/python-modules/hstspreload { };
 
   html2text = if isPy3k then
@@ -5301,6 +5303,8 @@ in {
 
   ply = callPackage ../development/python-modules/ply { };
 
+  plyer = callPackage ../development/python-modules/plyer { };
+
   plyfile = callPackage ../development/python-modules/plyfile { };
 
   plyplus = callPackage ../development/python-modules/plyplus { };
@@ -6954,6 +6958,8 @@ in {
   python-socketio = callPackage ../development/python-modules/python-socketio { };
 
   python-socketio_4 = callPackage ../development/python-modules/python-socketio/4.nix { };
+
+  python-socks = callPackage ../development/python-modules/python-socks { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
@@ -8932,6 +8938,8 @@ in {
   watchdog = callPackage ../development/python-modules/watchdog {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  watchgod = callPackage ../development/python-modules/watchgod { };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
