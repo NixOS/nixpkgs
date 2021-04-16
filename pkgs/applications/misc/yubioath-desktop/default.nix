@@ -44,7 +44,7 @@ mkDerivation rec {
       cp resources/icons/*.{icns,ico,png,svg} $out/share/yubioath/icons
       substituteInPlace $out/share/applications/com.yubico.yubioath.desktop \
         --replace 'Exec=yubioath-desktop' "Exec=$out/bin/yubioath-desktop" \
-        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/com.yubico.yubioath.png"
+        --replace 'Icon=com.yubico.yubioath' "Icon=$out/share/yubioath/icons/com.yubico.yubioath.png"
   '';
 
   meta = with lib; {
