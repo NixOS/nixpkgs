@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
       gpl2 lgpl21 mit cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib
     ];
+    maintainers = with maintainers; [ chvp ];
     platforms = subtractLists platforms.i686 platforms.linux;
   };
 }
