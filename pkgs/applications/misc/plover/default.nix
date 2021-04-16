@@ -75,10 +75,12 @@ rec {
       sha256 = "sha256-7OyGmSwOvoqwbBgXdfUUmwvjszUNRPlD4XyBeJ29vBg=";
     };
 
-    propagatedBuildInputs = [
+    buildInputs = [
       # plover.dev
       dev
+    ];
 
+    propagatedBuildInputs = [
       pip pkginfo pygments
       readme_renderer requests
       requests-cache requests-futures
@@ -95,4 +97,12 @@ rec {
       maintainers = with maintainers; [ evils ];
     };
   };
+
+  dev-with-plugins = dev.overrideAttrs (old: {
+    pname = "plover-with-plugins";
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [ plugins-manager ];
+
+    # the plugin manager installs plugins as local python packages
+    permitUserSite = true;
+  });
 }
