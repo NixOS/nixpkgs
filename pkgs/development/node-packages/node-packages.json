@@ -195,6 +195,7 @@
 , "react-tools"
 , "readability-cli"
 , "redoc-cli"
+, "remod-cli"
 , "reveal.js"
 , "rimraf"
 , "rollup"
