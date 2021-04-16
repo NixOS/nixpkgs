@@ -210,6 +210,7 @@ in with py.pkgs; buildPythonApplication rec {
     "cast"
     "climate"
     "cloud"
+    "comfoconnect"
     "command_line"
     "config"
     "configurator"

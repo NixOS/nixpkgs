@@ -131,7 +131,7 @@
     "coinbase" = ps: with ps; [ ]; # missing inputs: coinbase
     "color_extractor" = ps: with ps; [ ]; # missing inputs: colorthief
     "comed_hourly_pricing" = ps: with ps; [ ];
-    "comfoconnect" = ps: with ps; [ ]; # missing inputs: pycomfoconnect
+    "comfoconnect" = ps: with ps; [ pycomfoconnect ];
     "command_line" = ps: with ps; [ ];
     "concord232" = ps: with ps; [ ]; # missing inputs: concord232
     "config" = ps: with ps; [ aiohttp-cors ];
