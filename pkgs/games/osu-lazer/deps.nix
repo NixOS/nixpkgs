@@ -261,8 +261,8 @@
   })
   (fetchNuGet {
     name = "JetBrains.Annotations";
-    version = "2020.3.0";
-    sha256 = "04xlfqnfg3069f014q8f0vx7y70m8nldbf9fia4b50bp3rry2lv2";
+    version = "2021.1.0";
+    sha256 = "07pnhxxlgx8spmwmakz37nmbvgyb6yjrbrhad5rrn6y767z5r1gb";
   })
   (fetchNuGet {
     name = "ManagedBass";
@@ -296,8 +296,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.AspNetCore.App.Runtime.linux-x64";
-    version = "5.0.0";
-    sha256 = "14njzl0907wzcbsnxl62m4y6mv9pdirm68bj8qbbip0q5a6xgidw";
+    version = "5.0.5";
+    sha256 = "026m19pddhkx5idwpi6mp1yl9yfcfgm2qjp1jh54mdja1d7ng0vk";
   })
   (fetchNuGet {
     name = "Microsoft.AspNetCore.Connections.Abstractions";
@@ -551,8 +551,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.ObjectPool";
-    version = "5.0.4";
-    sha256 = "07kyqbm7f7k4bv3fa54b826b87z00385pqgjzd4s8l26j6p39rrm";
+    version = "5.0.5";
+    sha256 = "0hh0xm14hp479dsd0gb9igz0vbbn3sak27v39phpyilxvk7ky5z1";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Options";
@@ -576,8 +576,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.App.Runtime.linux-x64";
-    version = "5.0.0";
-    sha256 = "1k9yxklzdnjfkqysg54dz0mr75yg29fhlls9alh5qlfpsfpk32yq";
+    version = "5.0.5";
+    sha256 = "1h5yry6k9bpqqis2fb1901csb8kipm7anm174fjj41r317vzfjfa";
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.Platforms";
@@ -721,8 +721,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2021.330.0";
-    sha256 = "01v319nd9szq5z5qq6pa348y1mv93pnhw0vrgbrjwvcs797h7mjl";
+    version = "2021.410.0";
+    sha256 = "1vwdrspdpal44hyspv3rsax8mkszvbnc2xl1xswczx9mzj6qs4by";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
@@ -731,8 +731,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Game.Resources";
-    version = "2021.211.1";
-    sha256 = "0rqv5blmyzvcpk0b1r6fzr1bla62kr2fwkr1f9ahir9zafvk2wmm";
+    version = "2021.410.0";
+    sha256 = "1a5qia4595n0b21dj63sl71ar56m9x1glqwky7a9bb0dqpvfivya";
   })
   (fetchNuGet {
     name = "ppy.osuTK.NS20";
@@ -741,8 +741,8 @@
   })
   (fetchNuGet {
     name = "ppy.SDL2-CS";
-    version = "1.0.82";
-    sha256 = "0hdfih1hjpqxgblwc947inyfhskkj85f061cagf8gdl69xsp2l1b";
+    version = "1.0.225-alpha";
+    sha256 = "1x8hvk9kikwi7wrvwxdxk3pkbs491iss2mvqgiw844zld5izihqc";
   })
   (fetchNuGet {
     name = "ppy.squirrel.windows";
