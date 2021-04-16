@@ -6428,6 +6428,8 @@ in {
 
   pysmappee = callPackage ../development/python-modules/pysmappee { };
 
+  pysmartapp = callPackage ../development/python-modules/pysmartapp { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
