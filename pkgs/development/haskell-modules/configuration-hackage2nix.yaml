@@ -5696,6 +5696,7 @@ broken-packages:
   - ghcjs-xhr
   - ghclive
   - ghcprofview
+  - ghcup
   - ght
   - gi-cairo-again
   - gi-graphene
@@ -10379,6 +10380,7 @@ broken-packages:
   - sorted
   - sorting
   - sorty
+  - souffle-dsl
   - souffle-haskell
   - sound-collage
   - sounddelay
@@ -11454,6 +11456,7 @@ broken-packages:
   - wai-graceful
   - wai-handler-devel
   - wai-handler-fastcgi
+  - wai-handler-hal
   - wai-handler-scgi
   - wai-handler-snap
   - wai-handler-webkit
