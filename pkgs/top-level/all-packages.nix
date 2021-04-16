@@ -22667,6 +22667,8 @@ in
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
+  haruna = libsForQt5.callPackage ../applications/video/haruna { };
+
   icesl = callPackage ../applications/misc/icesl { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
