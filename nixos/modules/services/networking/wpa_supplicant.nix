@@ -3,7 +3,7 @@
 with lib;
 
 let
-  package = if cfg.allowDeclarativeAndImperativeNetworks
+  package = if cfg.allowAuxiliaryImperativeNetworks
     then pkgs.wpa_supplicant_ro_ssids
     else pkgs.wpa_supplicant;
 
@@ -51,7 +51,7 @@ in {
         description = "Force a specific wpa_supplicant driver.";
       };
 
-      allowDeclarativeAndImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
+      allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
         description = ''
           Whether to allow configuring networks "imperatively" (e.g. via
           <package>wpa_supplicant_gui</package>) and declaratively via
@@ -247,7 +247,7 @@ in {
       path = [ package ];
 
       script = let
-        configStr = if cfg.allowDeclarativeAndImperativeNetworks
+        configStr = if cfg.allowAuxiliaryImperativeNetworks
           then "-c /etc/wpa_supplicant.conf -I ${configFile}"
           else "-c ${configFile}";
       in ''

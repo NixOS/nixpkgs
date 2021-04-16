@@ -56,7 +56,7 @@ index 77c326df5..d5ed051b9 100644
  
  	for (ssid = config->ssid; ssid; ssid = ssid->next) {
 -		if (ssid->key_mgmt == WPA_KEY_MGMT_WPS || ssid->temporary)
-+		if (ssid->key_mgmt == WPA_KEY_MGMT_WPS || ssid->temporary || ssid->ro == 1)
++		if (ssid->key_mgmt == WPA_KEY_MGMT_WPS || ssid->temporary || ssid->ro)
  			continue; /* do not save temporary networks */
  		if (wpa_key_mgmt_wpa_psk(ssid->key_mgmt) && !ssid->psk_set &&
  		    !ssid->passphrase)
