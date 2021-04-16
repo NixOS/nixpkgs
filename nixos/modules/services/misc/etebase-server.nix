@@ -192,8 +192,8 @@ in
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
         if [[ $(cat "$versionFile" 2>/dev/null) != ${pkgs.etebase-server} ]]; then
-          ${pythonEnv}/bin/etebase-server migrate
-          ${pythonEnv}/bin/etebase-server collectstatic
+          ${pythonEnv}/bin/etebase-server migrate --no-input
+          ${pythonEnv}/bin/etebase-server collectstatic --no-input --clear
           echo ${pkgs.etebase-server} > "$versionFile"
         fi
       '';
