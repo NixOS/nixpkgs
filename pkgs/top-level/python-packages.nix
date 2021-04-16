@@ -3996,6 +3996,10 @@ in {
 
   license-expression = callPackage ../development/python-modules/license-expression { };
 
+  lief = (toPythonModule (pkgs.lief.override {
+    inherit python;
+  })).py;
+
   lightblue = callPackage ../development/python-modules/lightblue { };
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
