@@ -8779,6 +8779,8 @@ in
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
+  tmpmail = callPackage ../applications/networking/tmpmail { };
+
   tmux = callPackage ../tools/misc/tmux { };
 
   tmux-cssh = callPackage ../tools/misc/tmux-cssh { };
