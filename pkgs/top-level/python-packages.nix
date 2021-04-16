@@ -6220,6 +6220,8 @@ in {
 
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
+  pypinyin = callPackage ../development/python-modules/pypinyin { };
+
   pyplaato  = callPackage ../development/python-modules/pyplaato { };
 
   pyplatec = callPackage ../development/python-modules/pyplatec { };
