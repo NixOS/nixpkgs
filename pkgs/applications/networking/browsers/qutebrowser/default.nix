@@ -1,5 +1,5 @@
-{ lib, fetchpatch, fetchurl, fetchzip, python3
-, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
+{ lib, fetchurl, fetchzip, fetchpatch, python3
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader      ? true
@@ -12,12 +12,12 @@ assert withMediaPlayback -> gst_all_1 != null;
 let
   python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.6.347";
+    version = "2.8.335";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "0d016fyg81cq464li01xlkf9rxrb3rpsvmk5gh9m4d5yzmcakkfm";
+    sha256 = "1zschfpxnhdinn9nasl5in4s62ad0h1g369cglamjgxx36x27zly";
     stripRoot = false;
   };
 
@@ -31,12 +31,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "2.1.1";
+  version = "2.2.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-txsArX1JiRGXjlu9FTpt0EUKxq3j5b85j8luFTKDQs4=";
+    sha256 = "sha256:0anxhrkxqb35mxr7jr820xcfw0v514s92wffsiqap2a2sqaj0pgs";
   };
 
   # Needs tox
@@ -70,10 +70,9 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   patches = [
     ./fix-restart.patch
     (fetchpatch {
-      name = "fix-version-parsing.patch";
-      url = "https://github.com/qutebrowser/qutebrowser/commit/c3d1b71c6f08607f47353f406aca0168bb3062a1.patch";
-      excludes = [ "doc/changelog.asciidoc" ];
-      sha256 = "1vm2yjvmrw4cyn8mpwfwvvcihn74f60ql3qh1rjj8n0wak8z1ir6";
+      name = "add-qtwebengine-version-override.patch";
+      url = "https://github.com/qutebrowser/qutebrowser/commit/febb921040b6670d9b1694a6ce55ae39384d1306.patch";
+      sha256 = "15p11kk8via7c7m14jiqgzc63qwxxzayr2bkl93jd10l2gx7pk9v";
     })
   ];
 
@@ -123,6 +122,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
+      --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
     )
   '';
 

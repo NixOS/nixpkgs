@@ -321,5 +321,48 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed(
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
         )
+
+    with subtest("Ensure docker load on merged images loads all of the constituent images"):
+        docker.succeed(
+            "docker load --input='${examples.mergedBashAndRedis}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.bash.imageName}-${examples.bash.imageTag}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.redis.imageName}-${examples.redis.imageTag}'"
+        )
+        docker.succeed("docker run --rm ${examples.bash.imageName} bash --version")
+        docker.succeed("docker run --rm ${examples.redis.imageName} redis-cli --version")
+        docker.succeed("docker rmi ${examples.bash.imageName}")
+        docker.succeed("docker rmi ${examples.redis.imageName}")
+
+    with subtest(
+        "Ensure docker load on merged images loads all of the constituent images (missing tags)"
+    ):
+        docker.succeed(
+            "docker load --input='${examples.mergedBashNoTagAndRedis}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.bashNoTag.imageName}-${examples.bashNoTag.imageTag}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.redis.imageName}-${examples.redis.imageTag}'"
+        )
+        # we need to explicitly specify the generated tag here
+        docker.succeed(
+            "docker run --rm ${examples.bashNoTag.imageName}:${examples.bashNoTag.imageTag} bash --version"
+        )
+        docker.succeed("docker run --rm ${examples.redis.imageName} redis-cli --version")
+        docker.succeed("docker rmi ${examples.bashNoTag.imageName}:${examples.bashNoTag.imageTag}")
+        docker.succeed("docker rmi ${examples.redis.imageName}")
+
+    with subtest("mergeImages preserves owners of the original images"):
+        docker.succeed(
+            "docker load --input='${examples.mergedBashFakeRoot}'"
+        )
+        docker.succeed(
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+        )
   '';
 })

@@ -22661,6 +22661,8 @@ in
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
+  haruna = libsForQt5.callPackage ../applications/video/haruna { };
+
   icesl = callPackage ../applications/misc/icesl { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
@@ -26825,7 +26827,9 @@ in
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
-  kodi = callPackage ../applications/video/kodi { };
+  kodi = callPackage ../applications/video/kodi {
+    jre_headless = jdk11_headless;
+  };
 
   kodi-wayland = callPackage ../applications/video/kodi {
     waylandSupport = true;
