@@ -2315,6 +2315,8 @@ in
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
 
+  earlybird = callPackage ../tools/security/earlybird { };
+
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
   EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
