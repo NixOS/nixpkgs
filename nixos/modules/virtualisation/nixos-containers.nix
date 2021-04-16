@@ -272,7 +272,13 @@ let
   };
 
   system = config.nixpkgs.localSystem.system;
-  kernelVersion = config.boot.kernelPackages.kernel.version;
+
+  # Sometimes ^1 the `kernel.version` property is not present; when it happens,
+  # we want for all kernel-based assertions to pass and, in the worst case,
+  # error-out at runtime.
+  #
+  # [1]: https://github.com/NixOS/nixpkgs/issues/38509#issuecomment-817200996
+  kernelVersion = config.boot.kernelPackages.kernel.version or null;
 
   bindMountOpts = { name, ... }: {
 
@@ -482,7 +488,8 @@ in
                           assertions = [
                             {
                               assertion =
-                                (builtins.compareVersions kernelVersion "5.8" <= 0)
+                                kernelVersion != null
+                                -> builtins.compareVersions kernelVersion "5.8" <= 0
                                 -> config.privateNetwork
                                 -> stringLength name <= 11;
                               message = ''
