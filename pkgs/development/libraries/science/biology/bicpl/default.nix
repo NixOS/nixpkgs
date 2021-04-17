@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bicpl";
-  version = "unstable-2017-09-10";
-
-  owner = "BIC-MNI";
+  version = "unstable-2020-10-15";
 
   # current master is significantly ahead of most recent release, so use Git version:
   src = fetchFromGitHub {
-    inherit owner;
+    owner  = "BIC-MNI";
     repo   = pname;
-    rev    = "612a63e740fadb162fcf27ee00da6a18dec4d5a9";
-    sha256 = "1vv9gi184bkvp3f99v9xmmw1ly63ip5b09y7zdjn39g7kmwzrga7";
+    rev    = "a58af912a71a4c62014975b89ef37a8e72de3c9d";
+    sha256 = "0iw0pmr8xrifbx5l8a0xidfqbm1v8hwzqrw0lcmimxlzdihyri0g";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
   # internal_volume_io.h: No such file or directory
 
   meta = with lib; {
-    homepage = "https://github.com/${owner}/${pname}";
+    homepage = "https://github.com/BIC-MNI/bicpl";
     description = "Brain Imaging Centre programming library";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
