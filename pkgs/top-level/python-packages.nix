@@ -1343,6 +1343,8 @@ in {
 
   cleo = callPackage ../development/python-modules/cleo { };
 
+  clevercsv = callPackage ../development/python-modules/clevercsv { };
+
   clf = callPackage ../development/python-modules/clf { };
 
   click = callPackage ../development/python-modules/click { };

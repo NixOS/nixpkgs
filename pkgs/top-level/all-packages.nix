@@ -2017,6 +2017,8 @@ in
 
   clasp = callPackage ../tools/misc/clasp { };
 
+  clevercsv = with python3Packages; toPythonApplication clevercsv;
+
   clevis = callPackage ../tools/security/clevis {
     asciidoc = asciidoc-full;
   };
