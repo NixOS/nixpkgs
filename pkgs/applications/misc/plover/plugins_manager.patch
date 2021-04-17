@@ -1,0 +1,22 @@
+diff --git a/plover_plugins_manager/__main__.py b/plover_plugins_manager/__main__.py
+index 9e03097..6204472 100644
+--- a/plover_plugins_manager/__main__.py
++++ b/plover_plugins_manager/__main__.py
+@@ -42,16 +42,7 @@ def pip(args, stdin=None, stdout=None, stderr=None, **kwargs):
+            'plover_plugins_manager.pip_wrapper',
+            '--disable-pip-version-check']
+     env = dict(os.environ)
+-    # Make sure user plugins are handled
+-    # even if user site is not enabled.
+-    if not running_under_virtualenv() and not site.ENABLE_USER_SITE:
+-        pypath = env.get('PYTHONPATH')
+-        if pypath is None:
+-            pypath = []
+-        else:
+-            pypath = pypath.split(os.pathsep)
+-        pypath.insert(0, site.USER_SITE)
+-        env['PYTHONPATH'] = os.pathsep.join(pypath)
++    env['PYTHONPATH'] = os.pathsep.join(sys.path + [site.USER_SITE])
+     command = args.pop(0)
+     if command == 'check':
+         cmd.append('check')

@@ -71,6 +71,8 @@ rec {
       sha256 = "sha256-7OyGmSwOvoqwbBgXdfUUmwvjszUNRPlD4XyBeJ29vBg=";
     };
 
+    patches = [ ./plugins_manager.patch ];
+
     buildInputs = [
       # plover.dev
       dev
