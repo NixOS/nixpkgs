@@ -6,7 +6,7 @@
 , runtimeShell
 , zfs ? null
 , efiSupport ? false
-, zfsSupport ? false
+, zfsSupport ? true
 , xenSupport ? false
 , kbdcompSupport ? false, ckbcomp
 }:
