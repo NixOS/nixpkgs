@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = with llvmPackages; [ llvm clang ];
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security ];
-  cargoSha256 = "sha256-xNw3IMnWKMlOijohurLoaYmSnqY/+doTm9wDIl5AMxc=";
+  cargoSha256 = "sha256-GYNk3j8fjKSo3Qk6Qy0l6kNINK3FxlSYoEkJSx7kVpk=";
 
   meta = with lib; {
     description = "A private network system that uses WireGuard under the hood";
