@@ -31,7 +31,8 @@ in
     postBuild = ''
       mkdir -p $out/share/pixmaps/ $out/share/applications
       cp ${appimage-contents}/usr/share/icons/hicolor/1024x1024/apps/runway.png $out/share/pixmaps/runway.png
-      sed 's:Exec=AppRun:Exec=runwayml:' ${appimage-contents}/runway.desktop > $out/share/applications/runway.desktop
+      substituteInPlace ${appimage-contents}/runway.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
 
   meta = with lib; {
