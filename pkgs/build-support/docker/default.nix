@@ -63,6 +63,7 @@ let
   # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
   # mapping from the go package.
   defaultArch = go.GOARCH;
+  defaultVariant = go.GOARM;
 
 in
 rec {
@@ -501,6 +502,7 @@ rec {
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
             architecture = defaultArch;
+            variant = if defaultVariant != "" then "v${defaultVariant}" else null;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
