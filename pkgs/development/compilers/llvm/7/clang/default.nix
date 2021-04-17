@@ -43,6 +43,9 @@ let
       ./purity.patch
       # make clang -xhip use $PATH to find executables
       ./HIP-use-PATH-7.patch
+      # Backport for the `--unwindlib=[libgcc|compiler-rt]` flag, which is
+      # needed for our bootstrapping to not interfere with C.
+      ./unwindlib.patch
     ];
 
     postPatch = ''
