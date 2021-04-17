@@ -1,4 +1,4 @@
-{ lib, pandoc, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "passphrase2pgp";
