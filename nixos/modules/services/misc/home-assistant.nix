@@ -202,6 +202,7 @@ in {
         Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
         If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
         to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
+        Avoid <literal>home-assistant.overridePythonAttrs</literal> if you use <literal>autoExtraComponents</literal>.
       '';
     };
 
