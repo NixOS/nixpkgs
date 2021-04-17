@@ -203,6 +203,7 @@ with lib;
     users = {
       users.${cfg.user} = {
         description = "Nullmailer relay-only mta user";
+        isSystemUser = true;
         group = cfg.group;
       };
 
