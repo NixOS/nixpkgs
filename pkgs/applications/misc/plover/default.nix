@@ -46,11 +46,6 @@ rec {
       sha256 = "1jm6rajlh8nm1b1331pyvp20vxxfwi4nb8wgqlkznf0kkdvfa78a";
     };
 
-    # upstream recommendation
-    postPatch = ''
-      sed -i 's/^\(\s*plover = plover.\)main:main$/\1dist_main:main/' setup.cfg
-    '';
-
     checkInputs           = [ pytest mock ];
     propagatedBuildInputs = [
       Babel pyqt5 xlib pyserial
