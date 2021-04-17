@@ -20,6 +20,7 @@
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
+, installLib ? false
 }:
 
 let
@@ -47,6 +48,7 @@ in stdenv.mkDerivation {
       "-DENABLE_QT=${mkFlag enableQt}"
       "-DENABLE_DAEMON=${mkFlag enableDaemon}"
       "-DENABLE_CLI=${mkFlag enableCli}"
+      "-DINSTALL_LIB=${mkFlag installLib}"
     ];
 
   nativeBuildInputs = [
