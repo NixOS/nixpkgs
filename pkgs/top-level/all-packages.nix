@@ -3462,6 +3462,8 @@ in
 
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
 
+  kime = callPackage ../tools/inputmethods/kime { };
+
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
   libskk = callPackage ../development/libraries/libskk {
