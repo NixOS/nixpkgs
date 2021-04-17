@@ -38,7 +38,7 @@ buildBazelPackage rec {
 
   patches = [
     # Quiche needs to be updated to compile under newer GCC.
-    # This is a manual backport of http://github.com/envoyproxy/envoy/pull/13949.
+    # This is a manual backport of https://github.com/envoyproxy/envoy/pull/13949.
     ./0001-quiche-update-QUICHE-tar-13949.patch
 
     # upb needs to be updated to compile under newer GCC.

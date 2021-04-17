@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
-    homepage = "http://github.com/librtlsdr/librtlsdr";
+    homepage = "https://github.com/librtlsdr/librtlsdr";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux ++ platforms.darwin;
