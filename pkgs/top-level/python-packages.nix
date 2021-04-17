@@ -7689,6 +7689,8 @@ in {
 
   tabulate = callPackage ../development/python-modules/tabulate { };
 
+  tabview = callPackage ../development/python-modules/tabview { };
+
   tadasets = callPackage ../development/python-modules/tadasets { };
 
   tag-expressions = callPackage ../development/python-modules/tag-expressions { };

@@ -7501,6 +7501,8 @@ in
 
   tab = callPackage ../tools/text/tab { };
 
+  tabview = with python3Packages; toPythonApplication tabview;
+
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
   pleroma-otp = callPackage ../servers/pleroma-otp { };
