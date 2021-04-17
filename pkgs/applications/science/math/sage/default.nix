@@ -38,14 +38,16 @@ let
     logo64 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
   };
 
+  three = callPackage ./threejs-sage.nix { };
+
   # A bash script setting various environment variables to tell sage where
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data;
     inherit singular maxima-ecl;
+    inherit three;
     ecl = maxima-ecl.ecl;
     cysignals = python3.pkgs.cysignals;
-    three = nodePackages.three;
     mathjax = nodePackages.mathjax;
   };
 
@@ -70,8 +72,8 @@ let
     inherit python3 pythonEnv;
     inherit sage-env;
     inherit pynac singular maxima-ecl;
+    inherit three;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
-    three = nodePackages.three;
   };
 
   # Doesn't actually build anything, just runs sages testsuite. This is a
