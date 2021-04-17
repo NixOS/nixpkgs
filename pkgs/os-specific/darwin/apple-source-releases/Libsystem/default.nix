@@ -31,9 +31,11 @@ appleDerivation {
 
     mkdir -p $out/include/os
 
-    cp ${darling.src}/src/libc/os/activity.h $out/include/os
-    cp ${darling.src}/src/libc/os/log.h $out/include/os
-    cp ${darling.src}/src/duct/include/os/trace.h $out/include/os
+    (cd ${darling.src}/platform-include && (xargs -n1 echo | cpio -pdm --quiet $out/include) <<<"
+      os/activity.h
+      os/log.h
+      os/trace.h
+    ")
 
     cat <<EOF > $out/include/os/availability.h
     #ifndef __OS_AVAILABILITY__
