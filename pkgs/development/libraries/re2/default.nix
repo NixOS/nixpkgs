@@ -1,14 +1,18 @@
 { lib, stdenv, fetchFromGitHub }:
 
+let
+  rev = "2021-04-01";
+in
+
 stdenv.mkDerivation {
   pname = "re2";
-  version = "20201001";
+  version = builtins.replaceStrings [ "-" ] [ "" ] rev;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
-    rev = "2020-10-01";
-    sha256 = "0a5f7av1pk6p3jxc2w6prl00lyrplap97m68hnhw7jllnwljk0bx";
+    inherit rev;
+    sha256 = "1iia0883lssj7ckbsr0n7yb3gdw24c8wnl2q5hhzlml23h4ipbh3";
   };
 
   preConfigure = ''
