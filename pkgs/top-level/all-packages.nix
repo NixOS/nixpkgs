@@ -30636,6 +30636,8 @@ in
 
   yara = callPackage ../tools/security/yara { };
 
+  yarGen = callPackage ../tools/security/yarGen { };
+
   yaxg = callPackage ../tools/graphics/yaxg {};
 
   yuzu-mainline = import ../misc/emulators/yuzu {
