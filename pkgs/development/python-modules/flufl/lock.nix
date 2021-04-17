@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
 , atpublic, psutil, pytestcov, sybil
 }:
 
@@ -13,4 +13,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ atpublic psutil ];
   checkInputs = [ pytestCheckHook pytestcov sybil ];
+
+  meta = with lib; {
+    homepage = "https://flufllock.readthedocs.io/";
+    description = "NFS-safe file locking with timeouts for POSIX and Windows";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+  };
 }
