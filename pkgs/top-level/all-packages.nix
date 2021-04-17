@@ -28559,6 +28559,8 @@ in
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
+  deepdiff = with python3Packages; toPythonApplication deepdiff;
+
   deepsea = callPackage ../tools/security/deepsea { };
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };

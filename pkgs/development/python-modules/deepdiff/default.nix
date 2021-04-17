@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "5.2.3";
+  version = "5.3.0";
   format = "setuptools";
 
   # pypi source does not contain all fixtures required for tests
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = version;
-    sha256 = "0j3il23n3yfny6kzy2n67s0zsrqckck7x1ambqh29nzi0bqwslzk";
+    sha256 = "1izw2qpd93nj948zakamjn7q7dlmmr7sapg0c65hxvs0nmij8sl4";
   };
 
   propagatedBuildInputs = [
