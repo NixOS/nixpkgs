@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , arpack
 , bison
 , blas
@@ -22,22 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "sha256-i6Zg6bfHZ9NHwqCouX9m9YqD0VtiWW8DEkxS0hdUyIE=";
+    sha256 = "sha256-Ylw02Mz9H4wIWfq59za/X7xfhgW9o0DNU55nLFqeUeo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "pkg-config-paths.patch";
-      url = "https://github.com/igraph/igraph/commit/980521cc948777df471893f7b6de8f3e3916a3c0.patch";
-      sha256 = "0mbq8v5h90c3dhgmyjazjvva3rn57qhnv7pkc9hlbqdln9gpqg0g";
-    })
-  ];
 
   # Normally, igraph wants us to call bootstrap.sh, which will call
   # tools/getversion.sh. Instead, we're going to put the version directly
@@ -55,7 +46,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [
+    bison
     cmake
+    flex
     fop
     libxml2
     libxslt
@@ -67,9 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     arpack
-    bison
     blas
-    flex
     glpk
     gmp
     lapack

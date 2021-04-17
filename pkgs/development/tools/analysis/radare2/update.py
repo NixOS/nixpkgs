@@ -32,7 +32,7 @@ def prefetch_github(owner: str, repo: str, ref: str) -> str:
 
 
 def get_radare2_rev() -> str:
-    feed_url = "http://github.com/radareorg/radare2/releases.atom"
+    feed_url = "https://github.com/radareorg/radare2/releases.atom"
     with urllib.request.urlopen(feed_url) as resp:
         tree = ET.fromstring(resp.read())
     releases = tree.findall(".//{http://www.w3.org/2005/Atom}entry")

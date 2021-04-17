@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A microframework based on uvloop, httptools, and learnings of flask";
-    homepage = "http://github.com/channelcat/sanic/";
+    homepage = "https://github.com/channelcat/sanic/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

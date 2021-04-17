@@ -55,6 +55,12 @@ in stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  patches = [
+    # Force a test to evaluate the saved benchmark for a CPU for which LLVM has
+    # an execution model. See NixOS/nixpkgs#119673.
+    ../../exegesis-force-bdver2.patch
+  ];
+
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
