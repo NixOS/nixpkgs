@@ -34,10 +34,7 @@ stdenv.mkDerivation {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch
-    # fix gnulib tests on 32-bit ARM. Included on gnutls master.
-    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
+    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -50,7 +47,7 @@ stdenv.mkDerivation {
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
   '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
-    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool
+    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
   '';
 
   preConfigure = "patchShebangs .";

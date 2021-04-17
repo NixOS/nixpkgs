@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenv, llvm_meta
 , fetch
 , cmake
 , zlib
@@ -25,7 +25,7 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "0q4p4s5ws1zszs3i4da5w5fnxkpny0q3fr1s1sh7jp9wcwxbxiqq";
+  src = fetch pname "1v85qyq3snk81vjmwq5q7xikyyqsfpqy2c4qmr81mps4avsw1g0l";
 
   patches = [ ./lldb-procfs.patch ];
 
@@ -72,11 +72,15 @@ stdenv.mkDerivation (rec {
     ln -s $out/bin/lldb-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
-  meta = with lib; {
+  meta = llvm_meta // {
+    homepage = "https://lldb.llvm.org/";
     description = "A next-generation high-performance debugger";
-    homepage = "https://lldb.llvm.org";
-    license = licenses.ncsa;
-    platforms = platforms.all;
+    longDescription = ''
+      LLDB is a next generation, high-performance debugger. It is built as a set
+      of reusable components which highly leverage existing libraries in the
+      larger LLVM Project, such as the Clang expression parser and LLVM
+      disassembler.
+    '';
   };
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";
@@ -99,5 +103,7 @@ stdenv.mkDerivation (rec {
 
   doCheck = false;
 
-  meta.description = "man pages for LLDB ${version}";
+  meta = llvm_meta // {
+    description = "man pages for LLDB ${version}";
+  };
 })

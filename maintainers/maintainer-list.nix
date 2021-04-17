@@ -4067,6 +4067,12 @@
     githubId = 12491746;
     name = "Masato Yonekawa";
   };
+  hzeller = {
+    email = "h.zeller@acm.org";
+    github = "hzeller";
+    githubId = 140937;
+    name = "Henner Zeller";
+  };
   i077 = {
     email = "nixpkgs@imranhossa.in";
     github = "i077";

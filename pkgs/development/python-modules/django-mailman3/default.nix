@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin peti ];
+    maintainers = with maintainers; [ globin peti qyliss ];
   };
 }

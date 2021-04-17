@@ -165,7 +165,7 @@ in {
 
         baseUrl = mkOption {
           type = types.str;
-          default = "http://localhost/hyperkitty/";
+          default = "http://localhost:18507/archives/";
           description = ''
             Where can Mailman connect to Hyperkitty's internal API, preferably on
             localhost?
@@ -391,6 +391,7 @@ in {
           plugins = ["python3"];
           home = pythonEnv;
           module = "mailman_web.wsgi";
+          http = "127.0.0.1:18507";
         };
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
@@ -453,7 +454,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann ];
+    maintainers = with lib.maintainers; [ lheckemann qyliss ];
     doc = ./mailman.xml;
   };
 

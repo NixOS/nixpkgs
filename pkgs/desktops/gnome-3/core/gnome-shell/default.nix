@@ -57,6 +57,7 @@
 , gnome-autoar
 , asciidoc-full
 , bash-completion
+, mesa
 }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
@@ -147,6 +148,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome-settings-daemon
     gobject-introspection
+    mesa
 
     # recording
     pipewire

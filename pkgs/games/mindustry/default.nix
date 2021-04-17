@@ -191,6 +191,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin
+    # does not work with any maintained java version (https://github.com/Anuken/Mindustry/issues/5114)
+      || true;
   };
 }

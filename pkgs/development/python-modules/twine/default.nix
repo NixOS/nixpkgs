@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [
+    importlib-metadata
     keyring
     pkginfo
     pyblake2
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     tqdm
     colorama
     rfc3986
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # Requires network
   doCheck = false;

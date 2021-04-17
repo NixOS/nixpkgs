@@ -1,4 +1,4 @@
-{ lib, stdenv, fetch, fetchpatch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
+{ lib, stdenv, llvm_meta, fetch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "01abh553dvjgk5cjzzp0ghmg00laqbr4ar4frdhyhpbwhhmwc880";
+  src = fetch "libcxx" "1wf3ww29xkx7prs7pdwicy5qqfapib26110jgmkjrbka9z57bjvx";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -40,10 +40,15 @@ stdenv.mkDerivation {
     isLLVM = true;
   };
 
-  meta = {
+  meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";
-    description = "A new implementation of the C++ standard library, targeting C++11";
-    license = with lib.licenses; [ ncsa mit ];
-    platforms = lib.platforms.all;
+    description = "C++ standard library";
+    longDescription = ''
+      libc++ is an implementation of the C++ standard library, targeting C++11,
+      C++14 and above.
+    '';
+    # "All of the code in libc++ is dual licensed under the MIT license and the
+    # UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
   };
 }

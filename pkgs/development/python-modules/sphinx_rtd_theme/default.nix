@@ -12,12 +12,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eda689eda0c7301a80cf122dad28b1861e5605cbf455558f3775e1e8200e83a5";
+    sha256 = "19c31qhfiqbm6y7mamglrc2mc7l6n4lasb8jry01lc67l3nqk9pd";
   };
 
   propagatedBuildInputs = [ sphinx ];
 
   checkInputs = [ readthedocs-sphinx-ext pytest ];
+  CI=1; # Don't use NPM to fetch assets. Assets are included in sdist.
 
   checkPhase = ''
     py.test
@@ -25,8 +26,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ReadTheDocs.org theme for Sphinx";
-    homepage = "https://github.com/snide/sphinx_rtd_theme/";
-    license = licenses.bsd3;
+    homepage = "https://github.com/readthedocs/sphinx_rtd_theme";
+    license = licenses.mit;
     platforms = platforms.unix;
   };
 

@@ -971,6 +971,8 @@ in {
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
+  beautifultable = callPackage ../development/python-modules/beautifultable { };
+
   bedup = callPackage ../development/python-modules/bedup { };
 
   behave = callPackage ../development/python-modules/behave { };
@@ -3495,7 +3497,11 @@ in {
 
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
+  karton-config-extractor = callPackage ../development/python-modules/karton-config-extractor { };
+
   karton-core = callPackage ../development/python-modules/karton-core { };
+
+  karton-mwdb-reporter = callPackage ../development/python-modules/karton-mwdb-reporter { };
 
   karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
 
@@ -3923,6 +3929,8 @@ in {
 
   Mako = callPackage ../development/python-modules/Mako { };
 
+  malduck= callPackage ../development/python-modules/malduck { };
+
   managesieve = callPackage ../development/python-modules/managesieve { };
 
   manhole = callPackage ../development/python-modules/manhole { };
@@ -4216,6 +4224,8 @@ in {
   mutatormath = callPackage ../development/python-modules/mutatormath { };
 
   mwclient = callPackage ../development/python-modules/mwclient { };
+
+  mwdblib = callPackage ../development/python-modules/mwdblib { };
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
@@ -5270,6 +5280,8 @@ in {
 
   pycollada = callPackage ../development/python-modules/pycollada { };
 
+  pycomfoconnect = callPackage ../development/python-modules/pycomfoconnect { };
+
   pycontracts = callPackage ../development/python-modules/pycontracts { };
 
   pycosat = callPackage ../development/python-modules/pycosat { };
@@ -5771,6 +5783,8 @@ in {
   pyphotonfile = callPackage ../development/python-modules/pyphotonfile { };
 
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
+
+  pypinyin = callPackage ../development/python-modules/pypinyin { };
 
   pyplaato  = callPackage ../development/python-modules/pyplaato { };
 
@@ -7626,6 +7640,8 @@ in {
   sure = callPackage ../development/python-modules/sure { };
 
   surepy = callPackage ../development/python-modules/surepy { };
+
+  surt = callPackage ../development/python-modules/surt { };
 
   survey = callPackage ../development/python-modules/survey { };
 

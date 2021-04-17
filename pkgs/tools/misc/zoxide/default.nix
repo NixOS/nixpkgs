@@ -5,13 +5,6 @@
 , withFzf ? true
 , fzf
 , libiconv
-  # checkInputs
-, fish
-, powershell
-, shellcheck
-, shfmt
-, xonsh
-, zsh
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,23 +19,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
-  # tests are broken on darwin
-  doCheck = !stdenv.isDarwin;
-
-  # fish needs a writable HOME for whatever reason
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  checkInputs = [
-    fish
-    powershell
-    shellcheck
-    shfmt
-    xonsh
-    zsh
-  ];
 
   postPatch = lib.optionalString withFzf ''
     substituteInPlace src/fzf.rs \

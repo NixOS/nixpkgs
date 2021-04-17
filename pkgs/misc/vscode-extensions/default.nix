@@ -427,8 +427,8 @@ let
           mktplcRef = {
             name = "github-vscode-theme";
             publisher = "github";
-            version = "3.0.0";
-            sha256 = "1a77mbx75xfsfdlhgzghj9i7ik080bppc3jm8c00xp6781987fpa";
+            version = "4.0.2";
+            sha256 = "06mysdwjh7km874rrk0xc0xxaqx15b4a7x1i8dly440h8w3ng5bs";
           };
           meta = with lib; {
             description = "GitHub theme for VS Code";
@@ -479,8 +479,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.209";
-          sha256 = "1i0wq8zwax4kmy69hh0hclx9a47ycm3qp3gspjq8xpmcq3nmbfaq";
+          version = "0.0.211";
+          sha256 = "1di2v1bhlhl1yi9rrmbq0r9gypiydl8xvj24yw64vsnkqs9yxbp3";
         };
         meta = with lib; {
           license = licenses.mit;

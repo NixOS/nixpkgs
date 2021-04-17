@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    sha256 = "BtzYcHN87qH7s3GiBrsDfmuy9v2xdhCeSShu8+T9T3E=";
+    sha256 = "ISwNFR8M377+J7WoG9MlblF8r5yRTgCxEGszZCjqW/k=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +34,7 @@ stdenv.mkDerivation rec {
     alsaLib
     db
     glib
-    # We don't know why with trackerSupport the executable fail to launch, See:
-    # https://github.com/NixOS/nixpkgs/issues/106732
-    (gtk3.override {trackerSupport = false; })
+    gtk3
     libkrb5
     libsecret
     nss
@@ -52,10 +50,16 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     dpkg -x $src .
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib}
     cp -ar ./usr/share $out
 
@@ -64,11 +68,13 @@ stdenv.mkDerivation rec {
 
     ln -s $out/share/mailspring/mailspring $out/bin/mailspring
     ln -s ${openssl.out}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
+
+    runHook postInstall
   '';
 
   postFixup = /* sh */ ''
-    substituteInPlace $out/share/applications/mailspring.desktop \
-      --replace /usr/bin $out/bin
+    substituteInPlace $out/share/applications/Mailspring.desktop \
+      --replace Exec=mailspring Exec=$out/bin/mailspring
   '';
 
   meta = with lib; {
@@ -77,8 +83,8 @@ stdenv.mkDerivation rec {
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.
       Mailspring's sync engine runs locally, but its source is not open.
     '';
-    license = licenses.unfree;
-    maintainers = with maintainers; [ toschmidt ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ toschmidt doronbehar ];
     homepage = "https://getmailspring.com";
     downloadPage = "https://github.com/Foundry376/Mailspring";
     platforms = platforms.x86_64;

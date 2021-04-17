@@ -67,6 +67,9 @@ buildPythonPackage rec {
     "TestQuickStartTemplates"
     # requires git directory
     "test_update_docs"
+    # Tests depend on network access (fails in getaddrinfo)
+    "test_update_resource_specs_python_2"
+    "test_update_resource_specs_python_3"
   ];
 
   pythonImportsCheck = [

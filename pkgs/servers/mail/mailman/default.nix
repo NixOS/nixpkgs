@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ peti ];
+    maintainers = with lib.maintainers; [ peti qyliss ];
   };
 }
