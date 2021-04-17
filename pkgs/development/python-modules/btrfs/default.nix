@@ -1,16 +1,22 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "btrfs";
-  version = "11";
+  version = "12";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1w92sj47wy53ygz725xr613k32pk5khi0g9lrpp6img871241hrx";
+  src = fetchFromGitHub {
+    owner = "knorrie";
+    repo = "python-btrfs";
+    rev = "v${version}";
+    sha256 = "sha256-ZQSp+pbHABgBTrCwC2YsUUXAf/StP4ny7MEhBgCRqgE=";
   };
+
+  # no tests (in v12)
+  doCheck = false;
+  pythonImportsCheck = [ "btrfs" ];
 
   meta = with lib; {
     description = "Inspect btrfs filesystems";
