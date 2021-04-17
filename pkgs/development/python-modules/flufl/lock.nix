@@ -1,13 +1,16 @@
-{ buildPythonPackage, fetchPypi, atpublic }:
+{ buildPythonPackage, fetchPypi, pytestCheckHook
+, atpublic, psutil, pytestcov, sybil
+}:
 
 buildPythonPackage rec {
   pname = "flufl.lock";
-  version = "3.2";
-
-  propagatedBuildInputs = [ atpublic ];
+  version = "5.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nzzd6l30ff6cwsrlrb94xzfja4wkyrqv3ydc6cz0hdbr766mmm8";
+    sha256 = "1bnapkg99r6mixn3kh314bqcfk8q54y0cvhjpj87j7dhjpsakfpz";
   };
+
+  propagatedBuildInputs = [ atpublic psutil ];
+  checkInputs = [ pytestCheckHook pytestcov sybil ];
 }
