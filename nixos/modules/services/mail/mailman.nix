@@ -454,7 +454,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann ];
+    maintainers = with lib.maintainers; [ lheckemann qyliss ];
     doc = ./mailman.xml;
   };
 

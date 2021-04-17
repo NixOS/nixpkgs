@@ -26203,6 +26203,11 @@ in
   transcode = callPackage ../applications/audio/transcode { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
+  libtransmission = transmission.override {
+    installLib = true;
+    enableDaemon = false;
+    enableCli = false;
+  };
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
 
