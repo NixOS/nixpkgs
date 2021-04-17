@@ -35,7 +35,8 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     install -m 444 -D ${appimageContents}/resources/images/icons/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-    substituteInPlace $out/share/applications/trezor-suite.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
 
     # symlink system binaries instead bundled ones
     mkdir -p $out/share/${pname}/resources/bin/{bridge,tor}

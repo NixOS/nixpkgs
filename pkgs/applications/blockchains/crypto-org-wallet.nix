@@ -20,7 +20,7 @@ in appimageTools.wrapType2 rec {
     ${imagemagick}/bin/convert ${appimageContents}/${pname}.png -resize 512x512 ${pname}_512.png
     install -m 444 -D ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun --no-sandbox %U' "Exec=$out/bin/${pname}"
+      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
   '';
 
   meta = with lib; {

@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = "pvr-hts";
   namespace = "pvr.hts";
-  version = "8.2.4";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.hts";
     rev = "${version}-${rel}";
-    sha256 = "sha256-05RSB4ZwwZSzY2b1/MRw6zzl/HhMbeVhCVCOj3gSTWA=";
+    sha256 = "1lqd0kkfv06n8ax8ywsi1rx9glvx3pwi9yj9yb3fdf39xmd3hz7y";
   };
 
   meta = with lib; {
