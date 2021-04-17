@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , protobuf
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
