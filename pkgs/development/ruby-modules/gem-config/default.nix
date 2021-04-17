@@ -20,12 +20,13 @@
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
+, cmake, libssh2, openssl, libmysqlclient, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libselinux ? null, libsepol ? null, shared-mime-info
+, bundler, libsass, libselinux, libsepol, shared-mime-info, libthai, libdatrie
+, CoreServices, DarwinTools, cctools
 }@args:
 
 let
@@ -41,7 +42,8 @@ in
 {
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
-    nativeBuildInputs = [ rake bundler pkg-config ];
+    nativeBuildInputs = [ rake bundler pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook atk ];
   };
 
@@ -61,12 +63,14 @@ in
     };
 
   cairo = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
@@ -189,7 +193,8 @@ in
   };
 
   gdk_pixbuf2 = attrs: {
-    nativeBuildInputs = [ pkg-config bundler rake ];
+    nativeBuildInputs = [ pkg-config bundler rake ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
   };
 
@@ -199,7 +204,8 @@ in
   };
 
   gio2 = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
@@ -235,7 +241,8 @@ in
   };
 
   glib2 = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre ];
   };
 
@@ -244,7 +251,7 @@ in
       binutils pkg-config
     ] ++ lib.optionals stdenv.isLinux [
       util-linux libselinux libsepol
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
@@ -252,16 +259,18 @@ in
       gobject-introspection
       gtk2
       harfbuzz
+      libdatrie
+      libthai
       pcre
       xorg.libpthreadstubs
       xorg.libXdmcp
     ];
-    # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
-    # CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
+    dontStrip = stdenv.isDarwin;
   };
 
   gobject-introspection = attrs: {
-    nativeBuildInputs = [ pkg-config pcre ];
+    nativeBuildInputs = [ pkg-config pcre ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
 
@@ -287,9 +296,7 @@ in
   };
 
   hitimes = attrs: {
-    buildInputs =
-      lib.optionals stdenv.isDarwin
-        [ darwin.apple_sdk.frameworks.CoreServices ];
+    buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
   };
 
   iconv = attrs: {
@@ -453,7 +460,9 @@ in
       pcre
       xorg.libpthreadstubs
       xorg.libXdmcp
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    buildInputs = [ libdatrie libthai ]
+      ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gtk2 ];
   };
 
@@ -661,7 +670,7 @@ in
   };
 
   zookeeper = attrs: {
-    buildInputs = lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    buildInputs = lib.optionals stdenv.isDarwin [ cctools ];
     dontBuild = false;
     postPatch = ''
       sed -i ext/extconf.rb -e "4a \

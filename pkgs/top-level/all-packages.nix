@@ -11986,7 +11986,10 @@ in
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
 
   buildRubyGem = callPackage ../development/ruby-modules/gem { };
-  defaultGemConfig = callPackage ../development/ruby-modules/gem-config { };
+  defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
+    inherit (darwin) DarwinTools cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
   bundix = callPackage ../development/ruby-modules/bundix { };
   bundler = callPackage ../development/ruby-modules/bundler { };
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
