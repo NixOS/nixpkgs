@@ -8,22 +8,19 @@
 , nose
 , pyopenssl
 , pytestCheckHook
-, pythonAtLeast
 , pytz
 , tzlocal
 }:
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "0.8.0";
-
-  disabled = pythonAtLeast "3.9";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bamthomas";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ume25EwLNB6szokHXonDXHGKVK76CiZYOBXVUf37/x8=";
+    sha256 = "sha256-xxZAeJDuqrPv4kGgDr0ypFuZJk1zcs/bmgeEzI0jpqY=";
   };
 
   checkInputs = [
