@@ -94,6 +94,8 @@ let self = rec {
 
   vfs-libarchive = callPackage ../applications/video/kodi-packages/vfs-libarchive { };
 
+  youtube = callPackage ../applications/video/kodi-packages/youtube { };
+
   # addon packages (dependencies)
 
   certifi = callPackage ../applications/video/kodi-packages/certifi { };
