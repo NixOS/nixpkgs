@@ -140,6 +140,7 @@
 , "json-server"
 , "jsonlint"
 , "kaput-cli"
+, "katex"
 , "karma"
 , "lcov-result-merger"
 , "leetcode-cli"
