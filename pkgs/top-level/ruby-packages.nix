@@ -1863,10 +1863,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "06r2kjl4ylfgw08gjxvlwqdy1lgmgsylwnysk1d0qr6q3nd0nvg6";
+      sha256 = "1yl6wy2gfvjkq0457plwadk7jwx5sbpqxl9aycbphskisis9g238";
       type = "gem";
     };
-    version = "6.1.0";
+    version = "6.1.3.1";
   };
   rails-dom-testing = {
     dependencies = ["activesupport" "nokogiri"];
