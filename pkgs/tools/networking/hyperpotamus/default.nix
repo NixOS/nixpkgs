@@ -1,16 +1,16 @@
-{ lib, stdenv, pkgs }:
+{ pkgs, nodejs, stdenv, lib, ... }:
+
 let
-  version = "0.38.2";
+  nodePackages = import ./node-composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
 in
-(import ./hyperpotamus.nix {
-  inherit pkgs;
-  inherit (stdenv.hostPlatform) system;
-})."hyperpotamus-${version}".override {
-  meta = {
+nodePackages.hyperpotamus.override {
+  meta = with lib; {
     description = "YAML/JSON automation scripting";
-    homepage = "https://github.com/pmarkert/hyperpotamus";
-    license = lib.licenses.mit;
     maintainers = with maintainers; [ onny ];
+    license = licenses.mit;
+    homepage = "https://github.com/pmarkert/hyperpotamus";
   };
 }
-

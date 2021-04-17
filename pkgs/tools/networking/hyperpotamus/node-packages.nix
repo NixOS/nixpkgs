@@ -22,13 +22,13 @@ let
         sha512 = "uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==";
       };
     };
-    "@types/node-14.14.37" = {
+    "@types/node-14.14.41" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "14.14.37";
+      version = "14.14.41";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-14.14.37.tgz";
-        sha512 = "XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==";
+        url = "https://registry.npmjs.org/@types/node/-/node-14.14.41.tgz";
+        sha512 = "dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==";
       };
     };
     "ajv-6.12.6" = {
@@ -121,13 +121,13 @@ let
         sha1 = "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79";
       };
     };
-    "aws-sdk-2.882.0" = {
+    "aws-sdk-2.888.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.882.0";
+      version = "2.888.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.882.0.tgz";
-        sha512 = "MC1tKQdvIBmSQmyFmS6McGGPrN6yvHmhP0SS0ovx+zF/BbvHPTpi5hIgqPSAkdb8/s0I16QtbwiLQgPT2pf1tA==";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.888.0.tgz";
+        sha512 = "9Rg14eneXnrs5Wh5FL42qGEXf7QaqaV/gMHU9SfvAA0SEM390QnwVjCSKF5YAReWjSuJriKJTDiodMI39J+Nrg==";
       };
     };
     "aws-sign2-0.7.0" = {
@@ -1021,13 +1021,13 @@ let
         sha1 = "d0225373aeb652adc1bc82e4945339a842754773";
       };
     };
-    "marked-2.0.1" = {
+    "marked-2.0.3" = {
       name = "marked";
       packageName = "marked";
-      version = "2.0.1";
+      version = "2.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/marked/-/marked-2.0.1.tgz";
-        sha512 = "5+/fKgMv2hARmMW7DOpykr2iLhl0NgjyELk5yn92iE7z8Se1IS9n3UsFm86hFXIkvMBmVxki8+ckcpjBeyo/hw==";
+        url = "https://registry.npmjs.org/marked/-/marked-2.0.3.tgz";
+        sha512 = "5otztIIcJfPc2qGTN8cVtOJEjNJZ0jwa46INMagrYfk0EvqtRuEHLsEe0LrFS0/q+ZRKT0+kXK7P2T1AN5lWRA==";
       };
     };
     "mime-db-1.47.0" = {
@@ -1663,7 +1663,7 @@ let
   };
 in
 {
-  "hyperpotamus-0.38.2" = nodeEnv.buildNodePackage {
+  hyperpotamus = nodeEnv.buildNodePackage {
     name = "hyperpotamus";
     packageName = "hyperpotamus";
     version = "0.38.2";
@@ -1674,7 +1674,7 @@ in
     dependencies = [
       sources."@fast-csv/format-4.3.5"
       sources."@fast-csv/parse-4.3.6"
-      sources."@types/node-14.14.37"
+      sources."@types/node-14.14.41"
       sources."ajv-6.12.6"
       sources."ansi-regex-5.0.0"
       sources."ansi-styles-4.3.0"
@@ -1683,7 +1683,7 @@ in
       sources."assert-plus-1.0.0"
       sources."async-2.6.3"
       sources."asynckit-0.4.0"
-      sources."aws-sdk-2.882.0"
+      sources."aws-sdk-2.888.0"
       sources."aws-sign2-0.7.0"
       sources."aws4-1.11.0"
       sources."balanced-match-1.0.2"
@@ -1789,7 +1789,7 @@ in
       sources."lodash.reject-4.6.0"
       sources."lodash.some-4.6.0"
       sources."lodash.uniq-4.5.0"
-      sources."marked-2.0.1"
+      sources."marked-2.0.3"
       sources."mime-db-1.47.0"
       sources."mime-types-2.1.30"
       sources."minimatch-3.0.4"
