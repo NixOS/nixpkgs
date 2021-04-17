@@ -23091,6 +23091,10 @@ in
     inherit buildPythonApplication;
   };
 
+  foxotron = callPackage ../applications/graphics/foxotron {
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Carbon Cocoa CoreAudio Kernel OpenGL;
+  };
+
   foxtrotgps = callPackage ../applications/misc/foxtrotgps { };
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
