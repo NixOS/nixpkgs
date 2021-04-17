@@ -37,7 +37,8 @@ stdenv.mkDerivation {
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
-  ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+    ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
 
   passthru = {
     isLLVM = true;
