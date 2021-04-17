@@ -1,9 +1,9 @@
 # This module creates a virtual machine from the NixOS configuration.
 # Building the `config.system.build.vm' attribute gives you a command
 # that starts a KVM/QEMU VM running the NixOS configuration defined in
-# `config'.  The Nix store is shared read-only with the host, which
-# makes (re)building VMs very efficient.  However, it also means you
-# can't reconfigure the guest inside the guest - you need to rebuild
+# `config'.  The Nix store is typically shared read-only with the host,
+# which makes (re)building VMs very efficient.  However, it also means
+# you can't reconfigure the guest inside the guest - you need to rebuild
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
@@ -155,9 +155,13 @@ let
           -smp ${toString config.virtualisation.cores} \
           -device virtio-rng-pci \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
-          -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
-          -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-          -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
+          ${optionalString cfg.shareNixStore ''
+            -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
+          ''} \
+          ${optionalString cfg.shareExchangeDir ''
+            -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+            -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
+          ''} \
           ${drivesCmdLine config.virtualisation.qemu.drives} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS \
@@ -354,16 +358,41 @@ in
           '';
       };
 
+    virtualisation.shareExchangeDir =
+      mkOption {
+        default = true;
+        type = types.bool;
+        description =
+          ''
+            Share /tmp/shared and /tmp/xchg with the host.  These are used
+            for runInMachine, copy_from_{host,vm}, and coverage-data.
+          '';
+      };
+
+    virtualisation.shareNixStore =
+      mkOption {
+        default = true;
+        type = types.bool;
+        description =
+          ''
+            Allow the guest to see the host's Nix store.  Recommended --
+            this makes building the VM much faster requires less disk
+            space.  Disable to give the guest a separate, fresh store
+            in a squashfs that contains only the closure of the guest's
+            dependencies.
+          '';
+      };
+
     virtualisation.pathsInNixDB =
       mkOption {
         default = [];
         description =
           ''
             The list of paths whose closure is registered in the Nix
-            database in the VM.  All other paths in the host Nix store
-            appear in the guest Nix store as well, but are considered
-            garbage (because they are not registered in the Nix
-            database in the guest).
+            database in the VM.  If virtualisation.shareNixStore is true,
+            all other paths in the host Nix store appear in the guest Nix
+            store as well, but are considered garbage (because they are
+            not registered in the Nix database in the guest).
           '';
       };
 
@@ -390,7 +419,7 @@ in
         description =
           ''
             If enabled, the Nix store in the VM is made writable by
-            layering an overlay filesystem on top of the host's Nix
+            layering an overlay filesystem on top of the read-only Nix
             store.
           '';
       };
@@ -612,11 +641,16 @@ in
 
     boot.initrd.availableKernelModules =
       optional cfg.writableStore "overlay"
+      ++ optional (!cfg.shareNixStore) "squashfs"
       ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
     virtualisation.bootDevice = mkDefault (driveDeviceName 1);
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
+
+    system.build.squashfsStore = pkgs.callPackage ../../lib/make-squashfs.nix {
+      storeContents = cfg.pathsInNixDB;
+    };
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
@@ -660,6 +694,18 @@ in
           deviceExtraOpts.bootindex = "1";
         }
       ])
+      (mkIf (!cfg.shareNixStore) [
+        {
+          name = "nixstore";
+          file = "${config.system.build.squashfsStore}";
+          driveExtraOpts = {
+            format = "raw";
+            read-only = "on";
+            werror = "report";
+          };
+          deviceExtraOpts.bootindex = "1";
+        }
+      ])
       (imap0 (idx: _: {
         file = "$(pwd)/empty${toString idx}.qcow2";
         driveExtraOpts.werror = "report";
@@ -676,9 +722,15 @@ in
       cfg.fileSystems //
       { "/".device = cfg.bootDevice;
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
-          { device = "store";
+          if cfg.shareNixStore then {
+            device = "store";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
+            neededForBoot = true;
+          } else {
+            device = lookupDriveDeviceName "nixstore" cfg.qemu.drives;
+            fsType = "squashfs";
+            options = [ "ro" ];
             neededForBoot = true;
           };
         "/tmp" = mkIf config.boot.tmpOnTmpfs
@@ -688,7 +740,8 @@ in
             # Sync with systemd's tmp.mount;
             options = [ "mode=1777" "strictatime" "nosuid" "nodev" ];
           };
-        "/tmp/xchg" =
+      } // optionalAttrs cfg.shareExchangeDir
+      { "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
