@@ -90,8 +90,8 @@ let
 
   snapshot = {
     year = "2021";
-    month = "04";
-    day = "08";
+    month = "03";
+    day = "24";
   };
 
   # create a derivation that contains an unpacked upstream TL package
@@ -112,11 +112,12 @@ let
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
         # tlnet-final snapshot
-        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
-        #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
+        "https://pi.kwarc.info/historic/systems/texlive/2020/tlnet-final/archive"
+        "ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
+        #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
       src = fetchurl { inherit urls sha512; };
