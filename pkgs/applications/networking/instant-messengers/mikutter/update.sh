@@ -2,7 +2,7 @@
 #!nix-shell -i bash -p bundler bundix curl jq common-updater-scripts
 # shellcheck shell=bash
 
-set -euxo pipefail
+set -euo pipefail
 
 main() {
     local currentVer="$1"
