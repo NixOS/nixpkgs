@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     # https://github.com/Edward-Wu/srt-live-server/pull/94
     ./fix-insecure-printfs.patch
   ];
+
   buildInputs = [ srt zlib ];
 
   makeFlags = [
