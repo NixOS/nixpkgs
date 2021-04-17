@@ -29006,6 +29006,8 @@ in
 
   hologram = callPackage ../tools/security/hologram { };
 
+  honeytrap = callPackage ../tools/security/honeytrap { };
+
   tini = callPackage ../applications/virtualization/tini {};
 
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
