@@ -1,5 +1,6 @@
 { lib, mkDerivation, cmake, hunspell, pkg-config, qttools, qtbase, qtsvg, qtx11extras
 , fetchFromGitHub }:
+
 mkDerivation rec {
   pname = "featherpad";
   version = "0.18.0";
