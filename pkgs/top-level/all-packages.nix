@@ -6436,6 +6436,8 @@ in
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
+  macchina = callPackage ../tools/misc/macchina { };
+
   madlang = haskell.lib.justStaticExecutables haskellPackages.madlang;
 
   maeparser = callPackage ../development/libraries/maeparser { };
