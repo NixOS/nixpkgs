@@ -379,6 +379,13 @@ let
       (fetchNetBSD "tools/Makefile.host" "8.0" "1p23dsc4qrv93vc6gzid9w2479jwswry9qfn88505s0pdd7h6nvp")
     ];
   };
+
+  uudecode = mkDerivation {
+    path = "usr.bin/uudecode";
+    version = "8.0";
+    sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
+    NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
+  };
   ##
   ## END COMMAND LINE TOOLS
   ##
@@ -410,9 +417,11 @@ let
     version = "8.0";
     sha256 = "123ilg8fqmp69bw6bs6nh98fpi1v2n9lamrzar61p27ji6sj7g0w";
     propagatedBuildInputs = [ include ];
-    #meta.platforms = lib.platforms.netbsd;
+    nativeBuildInputs = [ makeMinimal install tsort lorder statHook uudecode ];
+    meta.platforms = lib.platforms.netbsd;
     extraPaths = [ common.src ];
     MKKMOD = "no";
+    makeFlags = [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
   };
 
   headers = symlinkJoin {

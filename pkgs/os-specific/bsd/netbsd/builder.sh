@@ -105,9 +105,10 @@ moveUsrDir() {
   if [ -d $prefix ]; then
     # Remove lingering /usr references
     if [ -d $prefix/usr ]; then
-      cd $prefix/usr
+      pushd $prefix/usr
       find . -type d -exec mkdir -p $out/\{} \;
       find . \( -type f -o -type l \) -exec mv \{} $out/\{} \;
+      popd
     fi
 
     find $prefix -type d -empty -delete
