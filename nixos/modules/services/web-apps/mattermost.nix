@@ -8,7 +8,112 @@ let
 
   database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
 
-  mattermostConf = recursiveUpdate
+  postgresPackage = config.services.postgresql.package;
+
+  createDb = {
+    statePath ? cfg.statePath,
+    localDatabaseUser ? cfg.localDatabaseUser,
+    localDatabasePassword ? cfg.localDatabasePassword,
+    localDatabaseName ? cfg.localDatabaseName,
+    useSudo ? true
+  }: ''
+    if ! test -e "${statePath}/.db-created"; then
+      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \\"}
+        ${postgresPackage}/bin/psql postgres -c \
+          "CREATE ROLE ${localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${localDatabasePassword}'"
+      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \\"}
+        ${postgresPackage}/bin/createdb \
+          --owner ${localDatabaseUser} ${localDatabaseName}
+      touch ${statePath}/.db-created
+    fi
+  '';
+
+  mattermostPluginDerivations = with pkgs;
+    if cfg.plugins == null then null
+    else map (plugin: stdenv.mkDerivation {
+      name = "mattermost-plugin";
+      installPhase = ''
+        mkdir -p $out/share
+        cp ${plugin} $out/share/plugin.tar.gz
+      '';
+      dontUnpack = true;
+      dontPatch = true;
+      dontConfigure = true;
+      dontBuild = true;
+      preferLocalBuild = true;
+    }) cfg.plugins;
+
+  mattermostPlugins = with pkgs;
+    if cfg.plugins == null then null
+    else stdenv.mkDerivation {
+      name = "${cfg.package.name}-plugins";
+      nativeBuildInputs = [
+        autoPatchelfHook
+        postgresPackage
+      ] ++ mattermostPluginDerivations;
+      buildInputs = [
+        cfg.package
+      ];
+      installPhase = ''
+        # Create a temporary Mattermost install to unpack plugins
+        ln -sf ${cfg.package}/{bin,fonts,i18n,templates,client} .
+        mkdir -p ./{data,logs}
+
+        # Create the database
+        db_dir="$(pwd)/db"
+        db_socket_dir="$db_dir/run"
+        initdb --no-locale --encoding=utf8 --pgdata="$db_dir"
+        mkdir -p "$db_socket_dir"
+        echo "unix_socket_directories = '$db_socket_dir'" >> db/postgresql.conf
+        echo "listen_addresses = '''" >> db/postgresql.conf
+
+        # Start it
+        pg_ctl start --pgdata="$db_dir"
+        cleanup() {
+          pg_ctl stop --pgdata="$db_dir"
+        }
+        trap cleanup EXIT
+
+        # Create the Mattermost user
+        export PGHOST="$db_socket_dir"
+        ${createDb {
+          statePath = ".";
+          localDatabaseUser = "mattermost";
+          localDatabasePassword = "mattermost";
+          localDatabaseName = "mattermost";
+          useSudo = false;
+        }}
+
+        # Create destination paths for client and server plugins
+        mkdir -p $out/client $out/server
+
+        # Create the Mattermost config
+        ${jq}/bin/jq -s \
+          --arg serverPlugins $out/server \
+          --arg clientPlugins $out/client \
+          --arg socketDir "$db_socket_dir" \ '
+          .[0] |
+          .PluginSettings.Directory = $serverPlugins |
+          .PluginSettings.ClientDirectory = $clientPlugins |
+          .SqlSettings.DriverName = "postgres" |
+          .SqlSettings.DataSource = "postgres://mattermost:mattermost@/mattermost?host=" + $socketDir
+        ' ${cfg.package}/config/config.json > $out/config.json
+
+        # Add the plugins
+        plugins=(${escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)})
+        if [ ''${#plugins[@]} -gt 0 ]; then
+          mattermost plugin add "''${plugins[@]}" --config $out/config.json
+        fi
+      '';
+
+      dontUnpack = true;
+      dontPatch = true;
+      dontConfigure = true;
+      dontBuild = true;
+      preferLocalBuild = true;
+    };
+
+  mattermostConfWithoutPlugins = recursiveUpdate
     { ServiceSettings.SiteURL = cfg.siteUrl;
       ServiceSettings.ListenAddress = cfg.listenAddress;
       TeamSettings.SiteName = cfg.siteName;
@@ -16,6 +121,20 @@ let
       SqlSettings.DataSource = database;
     }
     cfg.extraConfig;
+
+  mattermostConf = recursiveUpdate
+    mattermostConfWithoutPlugins
+    (
+      if mattermostPlugins == null then {}
+      else {
+        PluginSettings = {
+          Enable = true;
+          EnableUploads = false;
+          Directory = "${mattermostPlugins}/server";
+          ClientDirectory = "${mattermostPlugins}/client";
+        };
+      }
+    );
 
   mattermostConfJSON = pkgs.writeText "mattermost-config.json" (builtins.toJSON mattermostConf);
 
@@ -25,6 +144,13 @@ in
   options = {
     services.mattermost = {
       enable = mkEnableOption "Mattermost chat server";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.mattermost;
+        defaultText = "pkgs.mattermost";
+        description = "Mattermost derivation to use.";
+      };
 
       statePath = mkOption {
         type = types.str;
@@ -90,6 +216,17 @@ in
         '';
       };
 
+      plugins = mkOption {
+        type = types.nullOr (types.listOf (types.oneOf [types.path types.package]));
+        default = null;
+        example = "[ ./com.github.moussetc.mattermost.plugin.giphy-2.0.0.tar.gz ]";
+        description = ''
+          Plugins to add to the configuration. Overrides any installed if non-null.
+          This is a list of paths to .tar.gz files or derivations evaluating to
+          .tar.gz files. All entries will be passed to `mattermost plugin add`.
+        '';
+      };
+
       localDatabaseCreate = mkOption {
         type = types.bool;
         default = true;
@@ -140,6 +277,12 @@ in
 
       matterircd = {
         enable = mkEnableOption "Mattermost IRC bridge";
+        package = mkOption {
+          type = types.package;
+          default = pkgs.matterircd;
+          defaultText = "pkgs.matterircd";
+          description = "matterircd derivation to use.";
+        };
         parameters = mkOption {
           type = types.listOf types.str;
           default = [ ];
@@ -182,15 +325,15 @@ in
 
         preStart = ''
           mkdir -p ${cfg.statePath}/{data,config,logs}
-          ln -sf ${pkgs.mattermost}/{bin,fonts,i18n,templates,client} ${cfg.statePath}
+          ln -sf ${cfg.package}/{bin,fonts,i18n,templates,client} ${cfg.statePath}
         '' + lib.optionalString (!cfg.mutableConfig) ''
           rm -f ${cfg.statePath}/config/config.json
-          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${pkgs.mattermost}/config/config.json ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
-          ${pkgs.mattermost}/bin/mattermost config migrate ${cfg.statePath}/config/config.json ${database}
+          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
+          ${cfg.package}/bin/mattermost config migrate ${cfg.statePath}/config/config.json ${database}
         '' + lib.optionalString cfg.mutableConfig ''
           if ! test -e "${cfg.statePath}/config/.initial-created"; then
             rm -f ${cfg.statePath}/config/config.json
-            ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${pkgs.mattermost}/config/config.json ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
+            ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
             touch ${cfg.statePath}/config/.initial-created
           fi
         '' + lib.optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
@@ -198,17 +341,7 @@ in
 
           rm -f ${cfg.statePath}/config/config.json
           echo "$newConfig" > ${cfg.statePath}/config/config.json
-        '' + lib.optionalString cfg.localDatabaseCreate ''
-          if ! test -e "${cfg.statePath}/.db-created"; then
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/psql postgres -c \
-                "CREATE ROLE ${cfg.localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.localDatabasePassword}'"
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/createdb \
-                --owner ${cfg.localDatabaseUser} ${cfg.localDatabaseName}
-            touch ${cfg.statePath}/.db-created
-          fi
-        '' + ''
+        '' + lib.optionalString cfg.localDatabaseCreate (createDb {}) + ''
           chown ${cfg.user}:${cfg.group} -R ${cfg.statePath}
           chmod u+rw,g+r,o-rwx -R ${cfg.statePath}
         '';
@@ -217,8 +350,10 @@ in
           PermissionsStartOnly = true;
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${pkgs.mattermost}/bin/mattermost" +
-            (lib.optionalString (!cfg.mutableConfig) " -c ${database}");
+          ExecStart = "${cfg.package}/bin/mattermost " + (
+            escapeShellArgs
+            (lib.optionals (!cfg.mutableConfig) ["-c" database])
+          );
           WorkingDirectory = "${cfg.statePath}";
           Restart = "always";
           RestartSec = "10";
@@ -234,7 +369,7 @@ in
         serviceConfig = {
           User = "nobody";
           Group = "nogroup";
-          ExecStart = "${pkgs.matterircd}/bin/matterircd ${concatStringsSep " " cfg.matterircd.parameters}";
+          ExecStart = "${cfg.matterircd.package}/bin/matterircd ${escapeShellArgs cfg.matterircd.parameters}";
           WorkingDirectory = "/tmp";
           PrivateTmp = true;
           Restart = "always";
