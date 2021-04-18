@@ -43,6 +43,10 @@ mkDerivation rec {
   patches = [ ./fix-application-path.patch ];
 
   postPatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/119766
+    substituteInPlace lxqtbacklight/linux_backend/driver/libbacklight_backend.c \
+      --replace "pkexec lxqt-backlight_backend" "pkexec $out/bin/lxqt-backlight_backend"
+
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';
 
