@@ -36,7 +36,8 @@ stdenv.mkDerivation {
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
       --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
       --prefix JAVA_HOME : ${jdk.home} \
-      --add-flags "--jdkhome ${jdk.home}"
+      --add-flags "--jdkhome ${jdk.home} \
+      -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
 
     # Extract pngs from the Apple icon image and create
     # the missing ones from the 1024x1024 image.
