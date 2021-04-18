@@ -268,6 +268,7 @@ let
             --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString forceWayland ''
               --set MOZ_ENABLE_WAYLAND "1" \
+              --unset GDK_BACKEND \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
