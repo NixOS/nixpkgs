@@ -1,17 +1,9 @@
 { callPackage
-, cudatoolkit_9_2
 , cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2
 , cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2
 }:
 
 rec {
-  cuda-samples_cudatoolkit_9_2 = callPackage ./generic.nix {
-    cudatoolkit = cudatoolkit_9_2;
-    sha256 = "1ydankhyigcg99h0rqnmz1z4vc0sl6p9s1s0hbdxh5l1sx9141j6";
-  };
-
-  cuda-samples_cudatoolkit_9 = cuda-samples_cudatoolkit_9_2;
-
   ##
 
   cuda-samples_cudatoolkit_10_0 = callPackage ./generic.nix {
