@@ -123,8 +123,6 @@ let
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
           rm "$out/lib/"*.a
       fi
-
-      mkdir -p $bin
     '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
       # Fix bin/c_rehash's perl interpreter line
       #
@@ -140,7 +138,8 @@ let
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
     '' +
     ''
-      mv $out/bin $bin/
+      mkdir -p $bin
+      mv $out/bin $bin/bin
 
       mkdir $dev
       mv $out/include $dev/
