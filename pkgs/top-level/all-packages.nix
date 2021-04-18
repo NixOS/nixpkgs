@@ -30689,6 +30689,8 @@ in
 
   xortool = python3Packages.callPackage ../tools/security/xortool { };
 
+  xorex = callPackage ../tools/security/xorex { };
+
   xow = callPackage ../misc/drivers/xow { };
 
   xbps = callPackage ../tools/package-management/xbps { };
