@@ -879,6 +879,7 @@ in
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {
         group = cfg.group;
+        isSystemUser = true;
         uid = config.ids.uids.nginx;
       };
     };
