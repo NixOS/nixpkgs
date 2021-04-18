@@ -16,6 +16,7 @@
 , pathlib
 , plac
 , preshed
+, pydantic
 , srsly
 , tqdm
 , wasabi
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     preshed
     srsly
     tqdm
+    pydantic
     wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
@@ -61,11 +63,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace setup.cfg \
       --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
-      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
-      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
-      --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
+      --replace "pydantic>=1.7.1,<1.8.0" "pydantic~=1.7"
   '';
 
   checkPhase = ''
