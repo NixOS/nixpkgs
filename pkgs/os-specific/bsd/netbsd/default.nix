@@ -421,6 +421,7 @@ let
     #meta.platforms = lib.platforms.netbsd;
     extraPaths = [ common.src ];
     MKKMOD = "no";
+    makeFlags = [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
   };
 
   headers = symlinkJoin {
