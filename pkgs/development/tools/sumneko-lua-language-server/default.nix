@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "1.16.0";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "1fqhvmz7a4qgz3zq6qgpcjhhhm2j4wpx0385n3zcphd9h9s3a9xa";
+    sha256 = "sha256-7Ishq/TonJsteHBGDTNjImIwGPdeRgPS1g60d8bhTYg=";
     fetchSubmodules = true;
   };
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   ninjaFlags = [
-    "-f ninja/linux.ninja"
-    ];
+    "-fninja/linux.ninja"
+  ];
 
   postBuild = ''
     cd ../..
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/extras
     cp -r ./{locale,meta,script,*.lua} $out/extras/
     cp ./bin/Linux/{bee.so,lpeglabel.so} $out/extras
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
       --add-flags "-E $out/extras/main.lua \
       --logpath='~/.cache/sumneko_lua/log' \
       --metapath='~/.cache/sumneko_lua/meta'"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
