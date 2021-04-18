@@ -30,6 +30,10 @@ buildPythonPackage rec {
     sha256 = "4d0840a5c16b535f9b6e56fb4421a43f88760e6cabcf7fd44bdd0436107b61dc";
   };
 
+  patches = [
+    ./1.18.0-CVE-2021-29421.patch
+  ];
+
   buildInputs = [
     pybind11
     qpdf
