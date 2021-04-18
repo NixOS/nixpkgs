@@ -7005,6 +7005,8 @@ in {
 
   pyx = callPackage ../development/python-modules/pyx { };
 
+  pyxbe = callPackage ../development/python-modules/pyxbe { };
+
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
