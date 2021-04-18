@@ -192,6 +192,7 @@
 , "pyright"
 , "quicktype"
 , "react-native-cli"
+, "react-static"
 , "react-tools"
 , "readability-cli"
 , "redoc-cli"
