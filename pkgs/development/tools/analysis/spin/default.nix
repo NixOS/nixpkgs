@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
     description = "Formal verification tool for distributed software systems";
     homepage = "http://spinroot.com/";
     license = licenses.free;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
 }

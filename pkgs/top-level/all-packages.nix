@@ -9314,6 +9314,8 @@ in
 
   tradcpp = callPackage ../development/tools/tradcpp { };
 
+  traitor = callPackage ../tools/security/traitor { };
+
   tre = callPackage ../development/libraries/tre { };
 
   tremor-rs = callPackage ../tools/misc/tremor-rs { };
@@ -24232,6 +24234,8 @@ in
     libsoundio = null;
     portaudio = null;
   };
+
+  losslesscut-bin = callPackage ../applications/video/losslesscut-bin { };
 
   loxodo = callPackage ../applications/misc/loxodo { };
 

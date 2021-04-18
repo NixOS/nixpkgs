@@ -1280,10 +1280,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1p1iviq8q9za2hg0vqyrarrc3mqfskgp7spxp37xj0kl3g89vswq";
+      sha256 = "1nw1gscax8zsv1m682h9f8vys26385nrwpkbigiifs5bsz6272rk";
       type = "gem";
     };
-    version = "1.4.1";
+    version = "1.4.2";
   };
   libv8 = {
     groups = ["default"];
