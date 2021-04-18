@@ -417,6 +417,7 @@ let
     version = "8.0";
     sha256 = "123ilg8fqmp69bw6bs6nh98fpi1v2n9lamrzar61p27ji6sj7g0w";
     propagatedBuildInputs = [ include ];
+    nativeBuildInputs = [ makeMinimal install tsort lorder statHook uudecode ];
     #meta.platforms = lib.platforms.netbsd;
     extraPaths = [ common.src ];
     MKKMOD = "no";
