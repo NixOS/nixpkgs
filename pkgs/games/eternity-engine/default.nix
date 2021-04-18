@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/local/share/eternity/base" "$out/share/eternity/base" \
       --replace "/usr/share/eternity/base" "$out/share/eternity/base"
   '';
-  
+
   meta = {
     homepage = "http://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
