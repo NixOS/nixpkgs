@@ -77,9 +77,7 @@ let
                                      (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
-          then (if stdenv.hostPlatform.isx86_64
-            then "./Configure linux-x86_64"
-            else "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}")
+          then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isiOS
           then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
         else
