@@ -7376,6 +7376,8 @@ in {
 
   requirements-detector = callPackage ../development/python-modules/requirements-detector { };
 
+  requirements-parser = callPackage ../development/python-modules/requirements-parser { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   responses = callPackage ../development/python-modules/responses { };
