@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "042fxw5mnsfhpc0z9lxfsw88kdkm32pwrxacp88kj2n2dy0814a8";
   };
 
-  buildInputs = [ autoconf bison boost flex gputils texinfo zlib ];
+  buildInputs = [ boost gputils texinfo zlib ];
+
+  nativeBuildInputs = [ autoconf bison flex ];
 
   configureFlags = map (f: "--disable-${f}-port") excludedPorts;
 
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
       PIC18 targets. It can be retargeted for other microprocessors.
     '';
     homepage = "http://sdcc.sourceforge.net/";
-    license = with licenses; if (gputils == null) then gpl2 else unfreeRedistributable;
+    license = with licenses; if (gputils == null) then gpl2Plus else unfreeRedistributable;
     maintainers = with maintainers; [ bjornfor yorickvp ];
     platforms = platforms.all;
   };
