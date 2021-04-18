@@ -37,6 +37,14 @@ in
     mostlyMutable = makeMattermost {
       mutableConfig = true;
       preferNixConfig = true;
+      plugins = let
+        mattermostDemoPlugin = pkgs.fetchurl {
+          url = "https://github.com/mattermost/mattermost-plugin-demo/releases/download/v0.9.0/com.mattermost.demo-plugin-0.9.0.tar.gz";
+          sha256 = "1h4qi34gcxcx63z8wiqcf2aaywmvv8lys5g8gvsk13kkqhlmag25";
+        };
+      in [
+        mattermostDemoPlugin
+      ];
     };
     immutable = makeMattermost {
       mutableConfig = false;
