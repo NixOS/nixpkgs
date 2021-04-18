@@ -7,7 +7,7 @@
 }:
 
 let
-  usesX11 = stdenv.isLinux || stdenv.hostPlatform.isBSD;
+  usesX11 = stdenv.isLinux || stdenv.isBSD;
 in
 
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
