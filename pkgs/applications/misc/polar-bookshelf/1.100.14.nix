@@ -85,6 +85,6 @@ stdenv.mkDerivation rec {
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.noneucat ];
+    maintainers = [ ];
   };
 }
