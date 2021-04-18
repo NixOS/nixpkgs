@@ -5951,7 +5951,6 @@ broken-packages:
   - gw
   - gyah-bin
   - gym-http-api
-  - H
   - h-booru
   - h-gpgme
   - h-reversi
@@ -7193,7 +7192,6 @@ broken-packages:
   - inject-function
   - inline-asm
   - inline-java
-  - inline-r
   - inserts
   - inspector-wrecker
   - instana-haskell-trace-sdk
