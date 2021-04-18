@@ -386,6 +386,13 @@ let
     sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
     NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
   };
+
+  cksum = mkDerivation {
+    path = "usr.bin/cksum";
+    version = "8.0";
+    sha256 = "0327820171djn9dzb2q1arypxw2zsxiixnd1ahy34dagd9cwcphj";
+    meta.platforms = lib.platforms.netbsd;
+  };
   ##
   ## END COMMAND LINE TOOLS
   ##
